@@ -403,7 +403,6 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 17304))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
@@ -2196,10 +2195,6 @@
   local.get $0
   local.get $1
   call $~lib/string/String.fromCharCode
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $~lib/string/String.fromCodePoint (param $0 i32) (result i32)
   (local $1 i32)
@@ -8722,7 +8717,7 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<~lib/string/String>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -8748,7 +8743,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<~lib/string/String>#__unchecked_get
+  call $~lib/array/Array<~lib/string/String>#__uget
   local.set $2
   i32.const 1
   drop
@@ -8758,8 +8753,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/pure/__release
    i32.const 12240
    i32.const 12128
    i32.const 108

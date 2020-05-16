@@ -11,8 +11,11 @@ export enum DiagnosticCode {
   Operation_is_unsafe = 101,
   User_defined_0 = 102,
   Feature_0_is_not_enabled = 103,
-  Function_0_is_possibly_called_virtually_which_is_not_yet_supported = 104,
-  Low_memory_limit_exceeded_by_static_data_0_1 = 105,
+  Low_memory_limit_exceeded_by_static_data_0_1 = 104,
+  Module_requires_at_least_0_pages_of_initial_memory = 105,
+  Module_requires_at_least_0_pages_of_maximum_memory = 106,
+  Shared_memory_requires_maximum_memory_to_be_defined = 107,
+  Shared_memory_requires_feature_threads_to_be_enabled = 108,
   Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
   Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
   Type_0_cannot_be_changed_to_type_1 = 202,
@@ -24,7 +27,7 @@ export enum DiagnosticCode {
   Unmanaged_classes_cannot_implement_interfaces = 208,
   Invalid_regular_expression_flags = 209,
   Expression_is_never_null = 210,
-  Class_0_is_sealed_and_cannot_be_extended = 211,
+  Class_0_is_final_and_cannot_be_extended = 211,
   Decorator_0_is_not_valid_here = 212,
   Duplicate_decorator = 213,
   Type_0_is_illegal_in_this_context = 214,
@@ -44,11 +47,13 @@ export enum DiagnosticCode {
   Function_0_is_virtual_and_will_not_be_inlined = 228,
   Property_0_only_has_a_setter_and_is_missing_a_getter = 229,
   _0_keyword_cannot_be_used_here = 230,
+  A_class_with_a_constructor_explicitly_returning_something_else_than_this_must_be_final = 231,
   Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
   Expression_compiles_to_a_dynamic_check_at_runtime = 903,
   Indexed_access_may_involve_bounds_checking = 904,
+  Explicitly_returning_constructor_drops_this_allocation = 905,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -179,8 +184,11 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 101: return "Operation is unsafe.";
     case 102: return "User-defined: {0}";
     case 103: return "Feature '{0}' is not enabled.";
-    case 104: return "Function '{0}' is possibly called virtually, which is not yet supported.";
-    case 105: return "Low memory limit exceeded by static data: {0} > {1}";
+    case 104: return "Low memory limit exceeded by static data: {0} > {1}";
+    case 105: return "Module requires at least '{0}' pages of initial memory.";
+    case 106: return "Module requires at least '{0}' pages of maximum memory.";
+    case 107: return "Shared memory requires maximum memory to be defined.";
+    case 108: return "Shared memory requires feature 'threads' to be enabled.";
     case 200: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
     case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
     case 202: return "Type '{0}' cannot be changed to type '{1}'.";
@@ -192,7 +200,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 208: return "Unmanaged classes cannot implement interfaces.";
     case 209: return "Invalid regular expression flags.";
     case 210: return "Expression is never 'null'.";
-    case 211: return "Class '{0}' is sealed and cannot be extended.";
+    case 211: return "Class '{0}' is final and cannot be extended.";
     case 212: return "Decorator '{0}' is not valid here.";
     case 213: return "Duplicate decorator.";
     case 214: return "Type '{0}' is illegal in this context.";
@@ -212,11 +220,13 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 228: return "Function '{0}' is virtual and will not be inlined.";
     case 229: return "Property '{0}' only has a setter and is missing a getter.";
     case 230: return "'{0}' keyword cannot be used here.";
+    case 231: return "A class with a constructor explicitly returning something else than 'this' must be '@final'.";
     case 900: return "Type '{0}' is cyclic. Module will include deferred garbage collection.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";
     case 903: return "Expression compiles to a dynamic check at runtime.";
     case 904: return "Indexed access may involve bounds checking.";
+    case 905: return "Explicitly returning constructor drops 'this' allocation.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

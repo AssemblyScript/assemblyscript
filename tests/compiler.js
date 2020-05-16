@@ -145,7 +145,6 @@ function runTest(basename) {
   var cmd = [
     basename + ".ts",
     "--baseDir", basedir,
-    "--validate",
     "--measure",
     "--debug",
     "--pedantic",
@@ -166,12 +165,10 @@ function runTest(basename) {
       const stderrString = stderr.toString();
       if (typeof expectStderr === "string") expectStderr = [ expectStderr ];
       let lastIndex = 0;
-      let failed = false;
       expectStderr.forEach((substr, i) => {
         var index = stderrString.indexOf(substr, lastIndex);
         if (index < 0) {
           console.log("Missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
-          failedTests.add(basename);
           failed = true;
         } else {
           lastIndex = index + substr.length;
@@ -224,7 +221,6 @@ function runTest(basename) {
     var cmd = [
       basename + ".ts",
       "--baseDir", basedir,
-      "--validate",
       "--measure",
       "--pedantic",
       "--binaryFile", // -> stdout

@@ -1,7 +1,6 @@
 (module
  (type $f32_=>_f32 (func (param f32) (result f32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $f64_=>_f64 (func (param f64) (result f64)))
@@ -10,7 +9,6 @@
  (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00i\00n\00f\00e\00r\00r\00e\00d\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $call-inferred/foo<i32> (param $0 i32) (result i32)
@@ -39,10 +37,6 @@
   end
   local.get $0
   call $call-inferred/bar<f32>
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $start:call-inferred
   i32.const 42

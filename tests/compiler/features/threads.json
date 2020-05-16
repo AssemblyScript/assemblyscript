@@ -5,6 +5,7 @@
   "asc_flags": [
     "--runtime none",
     "--memoryBase 8",
-    "--sharedMemory 1"
+    "--maximumMemory 10",
+    "--sharedMemory"
   ]
 }

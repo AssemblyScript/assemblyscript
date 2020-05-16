@@ -1,6 +1,5 @@
 (module
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -10,12 +9,8 @@
  (data (i32.const 1104) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
  (data (i32.const 1136) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
- (func $~setArgumentsLength (param $0 i32)
-  nop
- )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16

@@ -24,9 +24,19 @@
  (data (i32.const 1392) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/rt/pure/__release (param $0 i32)
+  local.get $0
+  i32.const 1440
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+ )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1493,21 +1503,28 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/pure/__release (param $0 i32)
-  local.get $0
-  i32.const 1440
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 12
+   i32.const 2
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
   i32.const 1
   i32.const 1073741808
   local.get $1
@@ -1530,24 +1547,6 @@
   local.tee $2
   local.get $3
   call $~lib/memory/memory.fill
-  local.get $0
-  i32.eqz
-  if
-   i32.const 12
-   i32.const 2
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   local.set $0
-  end
-  local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
   local.get $2
   local.tee $1
   local.get $0
@@ -1571,9 +1570,6 @@
   local.get $3
   i32.store offset=8
   local.get $0
- )
- (func $~setArgumentsLength (param $0 i32)
-  nop
  )
  (func $start:std/arraybuffer
   (local $0 i32)
@@ -1612,7 +1608,7 @@
   i32.const 0
   i32.const 1073741808
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.tee $1
+  local.tee $0
   i32.const 16
   i32.sub
   i32.load offset=12
@@ -1626,7 +1622,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   local.get $9
   i32.eq
   if
@@ -1641,10 +1637,9 @@
   i32.const 1
   i32.const 1073741808
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $0
-  local.get $1
-  call $~lib/rt/pure/__release
   local.get $0
+  call $~lib/rt/pure/__release
+  local.tee $0
   i32.const 16
   i32.sub
   i32.load offset=12
@@ -1828,17 +1823,32 @@
   call $~lib/rt/pure/__retain
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.set $3
+  local.set $4
   local.get $6
   i32.load
   local.tee $1
   i32.const 16
   i32.sub
   i32.load offset=12
-  local.tee $5
+  local.tee $0
+  local.set $3
+  i32.const 12
+  i32.const 15
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $8
+  i32.const 0
+  i32.store
+  local.get $8
+  i32.const 0
+  i32.store offset=4
+  local.get $8
+  i32.const 0
+  i32.store offset=8
+  local.get $0
   i32.const 1073741808
   i32.gt_u
-  local.get $5
+  local.get $0
   local.get $1
   i32.const 16
   i32.sub
@@ -1853,19 +1863,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 12
-  i32.const 15
-  call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
-  local.tee $8
-  i32.const 0
-  i32.store
-  local.get $8
-  i32.const 0
-  i32.store offset=4
-  local.get $8
-  i32.const 0
-  i32.store offset=8
   local.get $1
   local.set $0
   local.get $1
@@ -1887,7 +1884,7 @@
   local.get $1
   i32.store offset=4
   local.get $8
-  local.get $5
+  local.get $3
   i32.store offset=8
   local.get $9
   call $~lib/rt/pure/__release
@@ -1896,7 +1893,7 @@
   local.get $6
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release
-  local.get $3
+  local.get $4
   call $~lib/rt/pure/__release
   local.get $8
   call $~lib/rt/pure/__release

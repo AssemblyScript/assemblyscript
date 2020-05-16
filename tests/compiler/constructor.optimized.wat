@@ -90,6 +90,7 @@
   local.get $4
  )
  (func $~start
+  (local $0 i32)
   i32.const 1024
   global.set $~lib/rt/stub/offset
   i32.const 0
@@ -106,17 +107,26 @@
   call $~lib/rt/stub/__alloc
   i32.const 0
   i32.store
-  i32.const 0
+  i32.const 4
   i32.const 6
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 1
+  i32.store
+  i32.const 0
+  i32.const 7
   call $~lib/rt/stub/__alloc
   drop
   i32.const 4
-  i32.const 7
+  i32.const 8
   call $~lib/rt/stub/__alloc
   i32.const 1
   i32.store
   i32.const 4
-  i32.const 8
+  i32.const 9
   call $~lib/rt/stub/__alloc
   i32.const 0
   i32.store
@@ -127,12 +137,6 @@
   i32.const 0
   i32.const 12
   call $~lib/rt/stub/__alloc
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 12
-   call $~lib/rt/stub/__alloc
-   drop
-  end
+  drop
  )
 )

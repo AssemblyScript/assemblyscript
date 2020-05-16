@@ -39,7 +39,6 @@
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (export "_start" (func $~start))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1103,6 +1102,17 @@
   end
   local.get $0
  )
+ (func $~lib/rt/pure/__release (param $0 i32)
+  local.get $0
+  i32.const 1876
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+ )
  (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
@@ -1282,17 +1292,7 @@
   call $~lib/memory/memory.fill
   local.get $1
   call $~lib/rt/pure/__retain
- )
- (func $~lib/rt/pure/__release (param $0 i32)
-  local.get $0
-  i32.const 1876
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
+  local.tee $0
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
@@ -1930,12 +1930,6 @@
   i32.store offset=4
   local.get $2
   global.set $rt/finalize/registry
-  i32.const 0
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.tee $0
-  i32.const 0
-  call $~lib/memory/memory.fill
   i32.const 16
   i32.const 5
   call $~lib/rt/tlsf/__alloc
@@ -1952,6 +1946,12 @@
   local.get $1
   i32.const 0
   i32.store offset=12
+  i32.const 0
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 0
+  call $~lib/memory/memory.fill
   local.get $0
   local.set $2
   local.get $0
@@ -2078,9 +2078,6 @@
    i32.const 2
    call $~lib/rt/__visit_members
   end
- )
- (func $~setArgumentsLength (param $0 i32)
-  nop
  )
  (func $rt/finalize/FinalizationRegistry#finalize (param $0 i32) (param $1 i32)
   (local $2 i32)

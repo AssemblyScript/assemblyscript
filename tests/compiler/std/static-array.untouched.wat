@@ -41,7 +41,7 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<i32>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -66,7 +66,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<i32>#__unchecked_get
+  call $~lib/array/Array<i32>#__uget
   local.set $2
   i32.const 0
   drop
@@ -1837,7 +1837,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i32>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 0
   drop
   local.get $0
@@ -1881,13 +1881,13 @@
   local.get $0
   local.get $1
   local.get $2
-  call $~lib/array/Array<i32>#__unchecked_set
+  call $~lib/array/Array<i32>#__uset
  )
  (func $~lib/array/Array<i64>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<i64>#__unchecked_get (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<i64>#__uget (param $0 i32) (param $1 i32) (result i64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1912,13 +1912,13 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<i64>#__unchecked_get
+  call $~lib/array/Array<i64>#__uget
   local.set $2
   i32.const 0
   drop
   local.get $2
  )
- (func $~lib/array/Array<i64>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/array/Array<i64>#__uset (param $0 i32) (param $1 i32) (param $2 i64)
   i32.const 0
   drop
   local.get $0
@@ -1962,13 +1962,13 @@
   local.get $0
   local.get $1
   local.get $2
-  call $~lib/array/Array<i64>#__unchecked_set
+  call $~lib/array/Array<i64>#__uset
  )
  (func $~lib/array/Array<f32>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<f32>#__unchecked_get (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__uget (param $0 i32) (param $1 i32) (result f32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1993,13 +1993,13 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<f32>#__unchecked_get
+  call $~lib/array/Array<f32>#__uget
   local.set $2
   i32.const 0
   drop
   local.get $2
  )
- (func $~lib/array/Array<f32>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $~lib/array/Array<f32>#__uset (param $0 i32) (param $1 i32) (param $2 f32)
   i32.const 0
   drop
   local.get $0
@@ -2043,13 +2043,13 @@
   local.get $0
   local.get $1
   local.get $2
-  call $~lib/array/Array<f32>#__unchecked_set
+  call $~lib/array/Array<f32>#__uset
  )
  (func $~lib/array/Array<f64>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<f64>#__unchecked_get (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__uget (param $0 i32) (param $1 i32) (result f64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2074,13 +2074,13 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<f64>#__unchecked_get
+  call $~lib/array/Array<f64>#__uget
   local.set $2
   i32.const 0
   drop
   local.get $2
  )
- (func $~lib/array/Array<f64>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $~lib/array/Array<f64>#__uset (param $0 i32) (param $1 i32) (param $2 f64)
   i32.const 0
   drop
   local.get $0
@@ -2124,7 +2124,7 @@
   local.get $0
   local.get $1
   local.get $2
-  call $~lib/array/Array<f64>#__unchecked_set
+  call $~lib/array/Array<f64>#__uset
  )
  (func $start:std/static-array
   (local $0 i32)

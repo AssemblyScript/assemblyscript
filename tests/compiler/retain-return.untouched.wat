@@ -29,7 +29,6 @@
  (global $retain-return/returnGlobalFnBlock (mut i32) (i32.const 6))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 176))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -1562,10 +1561,6 @@
  (func $start:retain-return~anonymous|0 (result i32)
   i32.const 0
   call $retain-return/Ref#constructor
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $start:retain-return~anonymous|1 (param $0 i32) (result i32)
   local.get $0

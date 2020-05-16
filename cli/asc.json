@@ -88,11 +88,11 @@
     "type": "s",
     "alias": "t"
   },
-  "asmjsFile": {
+  "jsFile": {
     "category": "Output",
-    "description": "Specifies the asm.js output file (.js).",
+    "description": "Specifies the JavaScript (via wasm2js) output file (.js).",
     "type": "s",
-    "alias": "a"
+    "alias": "j"
   },
   "idlFile": {
     "category": "Output",
@@ -128,11 +128,29 @@
     "type": "b",
     "default": false
   },
-  "sharedMemory": {
+  "noExportMemory": {
     "category": "Features",
-    "description": "Declare memory as shared by settings the max shared memory.",
+    "description": "Does not export the memory as 'memory'.",
+    "type": "b",
+    "default": false
+  },
+  "initialMemory": {
+    "category": "Features",
+    "description": "Sets the initial memory size in pages.",
     "type": "i",
     "default": 0
+  },
+  "maximumMemory": {
+    "category": "Features",
+    "description": "Sets the maximum memory size in pages.",
+    "type": "i",
+    "default": 0
+  },
+  "sharedMemory": {
+    "category": "Features",
+    "description": "Declare memory as shared. Requires maximumMemory.",
+    "type": "b",
+    "default": false
   },
   "importTable": {
     "category": "Features",
@@ -218,13 +236,6 @@
     "type": "S"
   },
 
-  "validate": {
-    "category": "Binaryen",
-    "description": "Validates the module using Binaryen. Exits if invalid.",
-    "type": "b",
-    "alias": "c",
-    "default": false
-  },
   "trapMode": {
     "category": "Binaryen",
     "description": [
@@ -245,6 +256,12 @@
       "optimizations, if any. See: Binaryen/src/passes/pass.cpp"
     ],
     "type": "s"
+  },
+  "noValidate": {
+    "category": "Binaryen",
+    "description": "Skips validating the module using Binaryen.",
+    "type": "b",
+    "default": false
   },
 
   "baseDir": {
@@ -301,11 +318,6 @@
   },
   "listFiles": {
     "description": "Lists files to be compiled and exits.",
-    "type": "b",
-    "default": false
-  },
-  "printrtti": {
-    "description": "Prints the module's runtime type information to stderr.",
     "type": "b",
     "default": false
   },

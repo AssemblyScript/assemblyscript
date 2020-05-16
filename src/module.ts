@@ -392,17 +392,21 @@ export enum BinaryOp {
   DivF32x4 = 159 /* _BinaryenDivVecF32x4 */,
   MinF32x4 = 160 /* _BinaryenMinVecF32x4 */,
   MaxF32x4 = 161 /* _BinaryenMaxVecF32x4 */,
-  AddF64x2 = 162 /* _BinaryenAddVecF64x2 */,
-  SubF64x2 = 163 /* _BinaryenSubVecF64x2 */,
-  MulF64x2 = 164 /* _BinaryenMulVecF64x2 */,
-  DivF64x2 = 165 /* _BinaryenDivVecF64x2 */,
-  MinF64x2 = 166 /* _BinaryenMinVecF64x2 */,
-  MaxF64x2 = 167 /* _BinaryenMaxVecF64x2 */,
-  NarrowI16x8ToI8x16 = 168 /* _BinaryenNarrowSVecI16x8ToVecI8x16 */,
-  NarrowU16x8ToU8x16 = 169 /* _BinaryenNarrowUVecI16x8ToVecI8x16 */,
-  NarrowI32x4ToI16x8 = 170 /* _BinaryenNarrowSVecI32x4ToVecI16x8 */,
-  NarrowU32x4ToU16x8 = 171 /* _BinaryenNarrowUVecI32x4ToVecI16x8 */,
-  SwizzleV8x16 = 172 /* _BinaryenSwizzleVec8x16 */
+  PminF32x4 = 162 /* _BinaryenPMinVecF32x4 */,
+  PmaxF32x4 = 163 /* _BinaryenPMaxVecF32x4 */,
+  AddF64x2 = 164 /* _BinaryenAddVecF64x2 */,
+  SubF64x2 = 165 /* _BinaryenSubVecF64x2 */,
+  MulF64x2 = 166 /* _BinaryenMulVecF64x2 */,
+  DivF64x2 = 167 /* _BinaryenDivVecF64x2 */,
+  MinF64x2 = 168 /* _BinaryenMinVecF64x2 */,
+  MaxF64x2 = 169 /* _BinaryenMaxVecF64x2 */,
+  PminF64x2 = 170 /* _BinaryenPMinVecF64x2 */,
+  PmaxF64x2 = 171 /* _BinaryenPMaxVecF64x2 */,
+  NarrowI16x8ToI8x16 = 172 /* _BinaryenNarrowSVecI16x8ToVecI8x16 */,
+  NarrowU16x8ToU8x16 = 173 /* _BinaryenNarrowUVecI16x8ToVecI8x16 */,
+  NarrowI32x4ToI16x8 = 174 /* _BinaryenNarrowSVecI32x4ToVecI16x8 */,
+  NarrowU32x4ToU16x8 = 175 /* _BinaryenNarrowUVecI32x4ToVecI16x8 */,
+  SwizzleV8x16 = 176 /* _BinaryenSwizzleVec8x16 */
 }
 
 export enum HostOp {
@@ -1776,6 +1780,10 @@ export class Module {
       }
     }
     return 0;
+  }
+
+  copyExpression(expr: ExpressionRef): ExpressionRef {
+    return binaryen._BinaryenExpressionCopy(expr, this.ref);
   }
 
   runExpression(expr: ExpressionRef, flags: ExpressionRunnerFlags, maxDepth: i32 = 50, maxLoopIterations: i32 = 1): ExpressionRef {

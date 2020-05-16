@@ -992,9 +992,9 @@ export class Program extends DiagnosticEmitter {
       if (thisPrototype.kind == ElementKind.CLASS_PROTOTYPE) {
         if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
           let basePrototype = <ClassPrototype>baseElement;
-          if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
+          if (basePrototype.hasDecorator(DecoratorFlags.FINAL)) {
             this.error(
-              DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
+              DiagnosticCode.Class_0_is_final_and_cannot_be_extended,
               extendsNode.range, basePrototype.identifierNode.text
             );
           }
@@ -1557,7 +1557,7 @@ export class Program extends DiagnosticEmitter {
       declaration,
       this.checkDecorators(declaration.decorators,
         DecoratorFlags.GLOBAL |
-        DecoratorFlags.SEALED |
+        DecoratorFlags.FINAL |
         DecoratorFlags.UNMANAGED
       )
     );
@@ -2419,8 +2419,8 @@ export enum DecoratorFlags {
   OPERATOR_POSTFIX = 1 << 3,
   /** Is an unmanaged class. */
   UNMANAGED = 1 << 4,
-  /** Is a sealed class. */
-  SEALED = 1 << 5,
+  /** Is a final class. */
+  FINAL = 1 << 5,
   /** Is always inlined. */
   INLINE = 1 << 6,
   /** Is using a different external name. */
@@ -2444,7 +2444,7 @@ export namespace DecoratorFlags {
       case DecoratorKind.OPERATOR_PREFIX: return DecoratorFlags.OPERATOR_PREFIX;
       case DecoratorKind.OPERATOR_POSTFIX: return DecoratorFlags.OPERATOR_POSTFIX;
       case DecoratorKind.UNMANAGED: return DecoratorFlags.UNMANAGED;
-      case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
+      case DecoratorKind.FINAL: return DecoratorFlags.FINAL;
       case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
       case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
       case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
@@ -3210,7 +3210,10 @@ export class FunctionPrototype extends DeclaredElement {
   get isBound(): bool {
     var parent = this.parent;
     return parent.kind == ElementKind.CLASS
-        || parent.kind == ElementKind.PROPERTY_PROTOTYPE && parent.parent.kind == ElementKind.CLASS;
+        || parent.kind == ElementKind.PROPERTY_PROTOTYPE && (
+             parent.parent.kind == ElementKind.CLASS ||
+             parent.parent.kind == ElementKind.INTERFACE
+           );
   }
 
   /** Creates a clone of this prototype that is bound to a concrete class instead. */
@@ -3415,8 +3418,9 @@ export class Function extends TypedElement {
   /** Finalizes the function once compiled, releasing no longer needed resources. */
   finalize(module: Module, ref: FunctionRef): void {
     this.ref = ref;
-    assert(!this.breakStack || !this.breakStack.length); // internal error
-    this.breakStack = null;
+    var breakStack = this.breakStack;
+    assert(!breakStack || !breakStack.length); // internal error
+    this.breakStack = breakStack = null;
     this.breakLabel = null;
     this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
     if (this.program.options.sourceMap) {
@@ -3571,13 +3575,18 @@ export class PropertyPrototype extends DeclaredElement {
   getterPrototype: FunctionPrototype | null = null;
   /** Setter prototype. */
   setterPrototype: FunctionPrototype | null = null;
+  /** Property instance, if resolved. */
+  instance: Property | null = null;
+
+  /** Clones of this prototype that are bound to specific classes. */
+  private boundPrototypes: Map<Class,PropertyPrototype> | null = null;
 
   /** Constructs a new property prototype. */
   constructor(
     /** Simple name. */
     name: string,
-    /** Parent class. */
-    parent: ClassPrototype,
+    /** Parent element. Either a class prototype or instance. */
+    parent: Element,
     /** Declaration of the getter or setter introducing the property. */
     firstDeclaration: FunctionDeclaration
   ) {
@@ -3595,6 +3604,42 @@ export class PropertyPrototype extends DeclaredElement {
   /* @override */
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
+  }
+
+  /** Tests if this prototype is bound to a class. */
+  get isBound(): bool {
+    switch (this.parent.kind) {
+      case ElementKind.CLASS:
+      case ElementKind.INTERFACE: return true;
+    }
+    return false;
+  }
+
+  /** Creates a clone of this prototype that is bound to a concrete class instead. */
+  toBound(classInstance: Class): PropertyPrototype {
+    assert(this.is(CommonFlags.INSTANCE));
+    assert(!this.isBound);
+    var boundPrototypes = this.boundPrototypes;
+    if (!boundPrototypes) this.boundPrototypes = boundPrototypes = new Map();
+    else if (boundPrototypes.has(classInstance)) return assert(boundPrototypes.get(classInstance));
+    var firstDeclaration = this.declaration;
+    assert(firstDeclaration.kind == NodeKind.METHODDECLARATION);
+    var bound = new PropertyPrototype(
+      this.name,
+      classInstance, // !
+      <MethodDeclaration>firstDeclaration
+    );
+    bound.flags = this.flags;
+    var getterPrototype = this.getterPrototype;
+    if (getterPrototype) {
+      bound.getterPrototype = getterPrototype.toBound(classInstance);
+    }
+    var setterPrototype = this.setterPrototype;
+    if (setterPrototype) {
+      bound.setterPrototype = setterPrototype.toBound(classInstance);
+    }
+    boundPrototypes.set(classInstance, bound);
+    return bound;
   }
 }
 
@@ -3631,7 +3676,9 @@ export class Property extends VariableLikeElement {
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
-    registerConcreteElement(this.program, this);
+    if (this.is(CommonFlags.INSTANCE)) {
+      registerConcreteElement(this.program, this);
+    }
   }
 
   /* @override */
@@ -3860,8 +3907,8 @@ export class Class extends TypedElement {
     return lengthField !== null && (
       lengthField.kind == ElementKind.FIELD ||
       (
-        lengthField.kind == ElementKind.PROPERTY &&
-        (<Property>lengthField).getterInstance !== null // TODO: resolve & check type?
+        lengthField.kind == ElementKind.PROPERTY_PROTOTYPE &&
+        (<PropertyPrototype>lengthField).getterPrototype !== null // TODO: resolve & check type?
       )
     ) && (
       this.lookupOverload(OperatorKind.INDEXED_GET) !== null ||
@@ -3908,9 +3955,10 @@ export class Class extends TypedElement {
         throw new Error("type argument count mismatch");
       }
       if (numTypeArguments) {
-        if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
+        let contextualTypeArguments = this.contextualTypeArguments;
+        if (!contextualTypeArguments) this.contextualTypeArguments = contextualTypeArguments = new Map();
         for (let i = 0; i < numTypeArguments; ++i) {
-          this.contextualTypeArguments.set(typeParameters[i].name.text, typeArguments[i]);
+          contextualTypeArguments.set(typeParameters[i].name.text, typeArguments[i]);
         }
       }
     } else if (typeParameters !== null && typeParameters.length > 0) {
@@ -4402,8 +4450,8 @@ export function mangleInternalName(name: string, parent: Element, isInstance: bo
       assert(!isInstance);
       return parent.internalName + INNER_DELIMITER + name;
     }
-    case ElementKind.PROPERTY_PROTOTYPE:
-    case ElementKind.PROPERTY: {
+    case ElementKind.PROPERTY_PROTOTYPE: // properties are just containers
+    case ElementKind.PROPERTY: {         //
       parent = parent.parent;
       // fall-through
     }

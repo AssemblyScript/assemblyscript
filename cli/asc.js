@@ -272,7 +272,10 @@ exports.main = function main(argv, options, callback) {
   const compilerOptions = assemblyscript.newOptions();
   assemblyscript.setTarget(compilerOptions, 0);
   assemblyscript.setNoAssert(compilerOptions, args.noAssert);
+  assemblyscript.setExportMemory(compilerOptions, !args.noExportMemory);
   assemblyscript.setImportMemory(compilerOptions, args.importMemory);
+  assemblyscript.setInitialMemory(compilerOptions, args.initialMemory >>> 0);
+  assemblyscript.setMaximumMemory(compilerOptions, args.maximumMemory >>> 0);
   assemblyscript.setSharedMemory(compilerOptions, args.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, args.importTable);
   assemblyscript.setExportTable(compilerOptions, args.exportTable);
@@ -638,7 +641,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Validate the module if requested
-  if (args.validate) {
+  if (!args.noValidate) {
     stats.validateCount++;
     stats.validateTime += measure(() => {
       if (!module.validate()) {
@@ -711,8 +714,8 @@ exports.main = function main(argv, options, callback) {
     if (args.outFile != null) {
       if (/\.was?t$/.test(args.outFile) && args.textFile == null) {
         args.textFile = args.outFile;
-      } else if (/\.js$/.test(args.outFile) && args.asmjsFile == null) {
-        args.asmjsFile = args.outFile;
+      } else if (/\.js$/.test(args.outFile) && args.jsFile == null) {
+        args.jsFile = args.outFile;
       } else if (args.binaryFile == null) {
         args.binaryFile = args.outFile;
       }
@@ -763,21 +766,21 @@ exports.main = function main(argv, options, callback) {
       }
     }
 
-    // Write asm.js
-    if (args.asmjsFile != null) {
-      let asm;
-      if (args.asmjsFile.length) {
+    // Write JS
+    if (args.jsFile != null) {
+      let js;
+      if (args.jsFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          asm = module.toAsmjs();
+          js = module.toAsmjs();
         });
-        writeFile(args.asmjsFile, asm, baseDir);
+        writeFile(args.jsFile, js, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          asm = module.toAsmjs();
+          js = module.toAsmjs();
         });
-        writeStdout(asm);
+        writeStdout(js);
         hasStdout = true;
       }
       hasOutput = true;
@@ -846,9 +849,7 @@ exports.main = function main(argv, options, callback) {
   if (args.measure) {
     printStats(stats, stderr);
   }
-  if (args.printrtti) {
-    printRTTI(program, stderr);
-  }
+
   return callback(null);
 
   function readFileNode(filename, baseDir) {
@@ -1000,15 +1001,6 @@ function printStats(stats, output) {
 }
 
 exports.printStats = printStats;
-
-/** Prints runtime type information. */
-function printRTTI(program, output) {
-  if (!output) output = process.stderr;
-  output.write("# Runtime type information (RTTI)\n");
-  output.write(assemblyscript.buildRTTI(program));
-}
-
-exports.printRTTI = printRTTI;
 
 var allocBuffer = typeof global !== "undefined" && global.Buffer
   ? global.Buffer.allocUnsafe || function(len) { return new global.Buffer(len); }

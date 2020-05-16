@@ -57,13 +57,28 @@ export function setNoAssert(options: Options, noAssert: bool): void {
   options.noAssert = noAssert;
 }
 
+/** Sets the `exportMemory` option. */
+export function setExportMemory(options: Options, exportMemory: bool): void {
+  options.exportMemory = exportMemory;
+}
+
 /** Sets the `importMemory` option. */
 export function setImportMemory(options: Options, importMemory: bool): void {
   options.importMemory = importMemory;
 }
 
+/** Sets the `initialMemory` option. */
+export function setInitialMemory(options: Options, initialMemory: u32): void {
+  options.initialMemory = initialMemory;
+}
+
+/** Sets the `maximumMemory` option. */
+export function setMaximumMemory(options: Options, maximumMemory: u32): void {
+  options.maximumMemory = maximumMemory;
+}
+
 /** Sets the `sharedMemory` option. */
-export function setSharedMemory(options: Options, sharedMemory: i32): void {
+export function setSharedMemory(options: Options, sharedMemory: bool): void {
   options.sharedMemory = sharedMemory;
 }
 
@@ -240,38 +255,6 @@ export function buildIDL(program: Program): string {
 /** Builds TypeScript definitions for the specified program. */
 export function buildTSD(program: Program): string {
   return TSDBuilder.build(program);
-}
-
-/** Builds a JSON file of a program's runtime type information. */
-export function buildRTTI(program: Program): string {
-  var sb = new Array<string>();
-  sb.push("{\n  \"names\": [\n");
-  // TODO: for (let cls of program.managedClasses.values()) {
-  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
-    let cls = unchecked(_values[i]);
-    sb.push("    \"");
-    sb.push(cls.internalName);
-    sb.push("\",\n");
-  }
-  sb.push("  ],\n  \"base\": [\n");
-  // TODO: for (let cls of program.managedClasses.values()) {
-  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
-    let cls = unchecked(_values[i]);
-    let base = cls.base;
-    sb.push("    ");
-    sb.push(base ? base.id.toString() : "0");
-    sb.push(",\n");
-  }
-  sb.push("  ],\n  \"flags\": [\n");
-  // TODO: for (let cls of program.managedClasses.values()) {
-  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
-    let cls = unchecked(_values[i]);
-    sb.push("    ");
-    sb.push(cls.rttiFlags.toString());
-    sb.push(",\n");
-  }
-  sb.push("  ]\n}\n");
-  return sb.join("");
 }
 
 // Full API

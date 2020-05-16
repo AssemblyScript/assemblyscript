@@ -711,7 +711,7 @@ function valuesEqual<T extends ArrayBufferView>(target: T, compare: valueof<T>[]
   let len = target.length;
   assert(len == compare.length);
   for (let i = 0; i < len; i++) {
-    let vala = target[i];
+    let vala = unchecked(target[i]);
     let valb = unchecked(compare[i]);
     if (vala != valb) {
       trace(nameof<T>(), 3, i, <f64>vala, <f64>valb);

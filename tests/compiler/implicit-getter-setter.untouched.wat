@@ -1570,9 +1570,6 @@
   i32.store
  )
  (func $implicit-getter-setter/Managed#constructor (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.set $1
   local.get $0
   i32.eqz
   if
@@ -1586,6 +1583,9 @@
   local.get $1
   call $~lib/rt/pure/__retain
   i32.store
+  local.get $1
+  call $~lib/rt/pure/__retain
+  local.set $1
   local.get $1
   call $~lib/rt/pure/__release
   local.get $0

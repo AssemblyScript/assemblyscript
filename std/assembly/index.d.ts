@@ -112,7 +112,7 @@ declare function trunc<T = f32 | f64>(value: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
-declare function store<T>(ptr: usize, value: any, immOffset?: usize, immAlign?: usize): void;
+declare function store<T>(ptr: usize, value: T, immOffset?: usize, immAlign?: usize): void;
 /** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression. */
 declare function unreachable(): never;
 
@@ -597,6 +597,10 @@ declare namespace v128 {
   export function min<T>(a: v128, b: v128): v128;
   /** Computes the maximum of each lane. */
   export function max<T>(a: v128, b: v128): v128;
+  /** Computes the pseudo-minimum of each lane. */
+  export function pmin<T>(a: v128, b: v128): v128;
+  /** Computes the pseudo-maximum of each lane. */
+  export function pmax<T>(a: v128, b: v128): v128;
   /** Computes the dot product of two lanes each, yielding lanes one size wider than the input. */
   export function dot<T = i16>(a: v128, b: v128): v128;
   /** Computes the average of each lane. */
@@ -933,6 +937,10 @@ declare namespace f32x4 {
   export function min(a: v128, b: v128): v128;
   /** Computes the maximum of each 32-bit float lane. */
   export function max(a: v128, b: v128): v128;
+  /** Computes the pseudo-minimum of each 32-bit float lane. */
+  export function pmin(a: v128, b: v128): v128;
+  /** Computes the pseudo-maximum of each 32-bit float lane. */
+  export function pmax(a: v128, b: v128): v128;
   /** Computes the absolute value of each 32-bit float lane. */
   export function abs(a: v128): v128;
   /** Computes the square root of each 32-bit float lane. */
@@ -981,6 +989,10 @@ declare namespace f64x2 {
   export function min(a: v128, b: v128): v128;
   /** Computes the maximum of each 64-bit float lane. */
   export function max(a: v128, b: v128): v128;
+  /** Computes the pseudo-minimum of each 64-bit float lane. */
+  export function pmin(a: v128, b: v128): v128;
+  /** Computes the pseudo-maximum of each 64-bit float lane. */
+  export function pmax(a: v128, b: v128): v128;
   /** Computes the absolute value of each 64-bit float lane. */
   export function abs(a: v128): v128;
   /** Computes the square root of each 64-bit float lane. */
@@ -1422,7 +1434,7 @@ declare class Array<T> {
   toString(): string;
 }
 
-/** Class representing a static (not resizable) sequence of values of type `T`. This class is @sealed. */
+/** Class representing a static (not resizable) sequence of values of type `T`. This class is @final. */
 declare class StaticArray<T> {
   [key: number]: T;
   static fromArray<T>(source: Array<T>): StaticArray<T>;
@@ -1791,8 +1803,8 @@ declare function global(...args: any[]): any;
 /** Annotates a class as being unmanaged with limited capabilities. */
 declare function unmanaged(constructor: Function): void;
 
-/** Annotates a class as being sealed / non-derivable. */
-declare function sealed(constructor: Function): void;
+/** Annotates a class as being final / non-derivable. */
+declare function final(constructor: Function): void;
 
 /** Annotates a method, function or constant global as always inlined. */
 declare function inline(...args: any[]): any;
