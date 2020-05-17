@@ -12,5 +12,6 @@ declare function __visit_globals(cookie: u32): void;
 declare function __visit_members(ref: usize, cookie: u32): void;
 declare function __allocBuffer(size: usize, id: u32, data?: usize): usize;
 declare function __allocArray(length: i32, alignLog2: usize, id: u32, data?: usize): usize;
+declare function __finalize(ref: usize): void;
 declare const ASC_RTRACE: bool;
 declare const __GC_ALL_ACYCLIC: bool;
