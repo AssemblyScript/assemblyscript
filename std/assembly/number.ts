@@ -32,9 +32,8 @@ export abstract class I8 {
     return <i8>strtol<i32>(value, radix);
   }
 
-  toString(this: i8): String {
-    // TODO: radix
-    return itoa(this);
+  toString(this: i8, radix: i32 = 10): String {
+    return itoa(this, radix);
   }
 }
 
@@ -53,9 +52,8 @@ export abstract class I16 {
     return <i16>strtol<i32>(value, radix);
   }
 
-  toString(this: i16): String {
-    // TODO: radix
-    return itoa(this);
+  toString(this: i16, radix: i32 = 10): String {
+    return itoa(this, radix);
   }
 }
 
@@ -74,9 +72,8 @@ export abstract class I32 {
     return <i32>strtol<i32>(value, radix);
   }
 
-  toString(this: i32): String {
-    // TODO: radix
-    return itoa(this);
+  toString(this: i32, radix: i32 = 10): String {
+    return itoa(this, radix);
   }
 }
 
@@ -95,9 +92,8 @@ export abstract class I64 {
     return strtol<i64>(value, radix);
   }
 
-  toString(this: i64): String {
-    // TODO: radix
-    return itoa(this);
+  toString(this: i64, radix: i32 = 10): String {
+    return itoa(this, radix);
   }
 }
 
@@ -116,9 +112,8 @@ export abstract class Isize {
     return <isize>strtol<i64>(value, radix);
   }
 
-  toString(this: isize): String {
-    // TODO: radix
-    return itoa(this);
+  toString(this: isize, radix: i32 = 10): String {
+    return itoa(this, radix);
   }
 }
 
@@ -137,9 +132,8 @@ export abstract class U8 {
     return <u8>strtol<i32>(value, radix);
   }
 
-  toString(this: u8): String {
-    // TODO: radix
-    return itoa(this);
+  toString(this: u8, radix: i32 = 10): String {
+    return itoa(this, radix);
   }
 }
 
@@ -158,9 +152,8 @@ export abstract class U16 {
     return <u16>strtol<i32>(value, radix);
   }
 
-  toString(this: u16): String {
-    // TODO: radix
-    return itoa(this);
+  toString(this: u16, radix: i32 = 10): String {
+    return itoa(this, radix);
   }
 }
 
@@ -179,9 +172,8 @@ export abstract class U32 {
     return <u32>strtol<i32>(value, radix);
   }
 
-  toString(this: u32): String {
-    // TODO: radix
-    return itoa(this);
+  toString(this: u32, radix: i32 = 10): String {
+    return itoa(this, radix);
   }
 }
 
@@ -200,9 +192,8 @@ export abstract class U64 {
     return <u64>strtol<i64>(value, radix);
   }
 
-  toString(this: u64): String {
-    // TODO: radix
-    return itoa(this);
+  toString(this: u64, radix: i32 = 10): String {
+    return itoa(this, radix);
   }
 }
 
@@ -221,9 +212,8 @@ export abstract class Usize {
     return <usize>strtol<i64>(value, radix);
   }
 
-  toString(this: usize): String {
-    // TODO: radix
-    return itoa(this);
+  toString(this: usize, radix: i32 = 10): String {
+    return itoa(this, radix);
   }
 }
 
@@ -238,8 +228,7 @@ export abstract class Bool {
   @lazy
   static readonly MAX_VALUE: bool = bool.MAX_VALUE;
 
-  toString(this: bool): String {
-    // TODO: radix?
+  toString(this: bool, radix: i32 = 0): String {
     return this ? "true" : "false";
   }
 }
@@ -305,8 +294,7 @@ export abstract class F32 {
     return <f32>parseFloat(value);
   }
 
-  toString(this: f32): String {
-    // TODO: radix
+  toString(this: f32, radix: i32 = 10): String {
     return dtoa(this);
   }
 }
@@ -370,8 +358,7 @@ export abstract class F64 {
     return parseFloat(value);
   }
 
-  toString(this: f64, radix: i32 = 0): String {
-    // TODO: radix
+  toString(this: f64, radix: i32 = 10): String {
     return dtoa(this);
   }
 }

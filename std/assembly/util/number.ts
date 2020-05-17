@@ -236,81 +236,112 @@ export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
   }
 }
 
-export function utoa32(value: u32): String {
+export function utoa32(value: u32, radix: i32): String {
   if (!value) return "0";
+  if (radix == 10) {
+    let decimals = decimalCount32(value);
+    let out = __alloc(decimals << 1, idof<String>());
+    utoa32_core(out, value, decimals);
+    return changetype<String>(out); // retains
+  } else if (radix == 16) {
 
-  var decimals = decimalCount32(value);
-  var out = __alloc(decimals << 1, idof<String>());
+  } else if (radix == 2) {
 
-  utoa32_core(out, value, decimals);
-  return changetype<String>(out); // retains
+  } else {
+
+  }
 }
 
-export function itoa32(value: i32): String {
+export function itoa32(value: i32, radix: i32): String {
   if (!value) return "0";
 
   var sign = value >>> 31;
   if (sign) value = -value;
 
-  var decimals = decimalCount32(value) + sign;
-  var out = __alloc(decimals << 1, idof<String>());
+  if (radix == 10) {
+    let decimals = decimalCount32(value) + sign;
+    let out = __alloc(decimals << 1, idof<String>());
+    utoa32_core(out, value, decimals);
+    if (sign) store<u16>(out, CharCode.MINUS);
+    return changetype<String>(out); // retains
+  } else if (radix == 16) {
 
-  utoa32_core(out, value, decimals);
-  if (sign) store<u16>(out, CharCode.MINUS);
-  return changetype<String>(out); // retains
-}
+  } else if (radix == 2) {
 
-export function utoa64(value: u64): String {
-  if (!value) return "0";
-
-  var out: usize;
-  if (value <= u32.MAX_VALUE) {
-    let val32    = <u32>value;
-    let decimals = decimalCount32(val32);
-    out = __alloc(decimals << 1, idof<String>());
-    utoa32_core(out, val32, decimals);
   } else {
-    let decimals = decimalCount64High(value);
-    out = __alloc(decimals << 1, idof<String>());
-    utoa64_core(out, value, decimals);
+
   }
-  return changetype<String>(out); // retains
 }
 
-export function itoa64(value: i64): String {
+export function utoa64(value: u64, radix: i32): String {
+  if (!value) return "0";
+  if (radix == 10) {
+    let out: usize;
+    if (value <= u32.MAX_VALUE) {
+      let val32    = <u32>value;
+      let decimals = decimalCount32(val32);
+      out = __alloc(decimals << 1, idof<String>());
+      utoa32_core(out, val32, decimals);
+    } else {
+      let decimals = decimalCount64High(value);
+      out = __alloc(decimals << 1, idof<String>());
+      utoa64_core(out, value, decimals);
+    }
+    return changetype<String>(out); // retains
+  } else if (radix == 16) {
+
+  } else if (radix == 2) {
+
+  } else {
+
+  }
+}
+
+export function itoa64(value: i64, radix: i32): String {
   if (!value) return "0";
 
   var sign = u32(value >>> 63);
   if (sign) value = -value;
 
-  var out: usize;
-  if (<u64>value <= <u64>u32.MAX_VALUE) {
-    let val32    = <u32>value;
-    let decimals = decimalCount32(val32) + sign;
-    out = __alloc(decimals << 1, idof<String>());
-    utoa32_core(out, val32, decimals);
+  if (radix == 10) {
+    let out: usize;
+    if (<u64>value <= <u64>u32.MAX_VALUE) {
+      let val32    = <u32>value;
+      let decimals = decimalCount32(val32) + sign;
+      out = __alloc(decimals << 1, idof<String>());
+      utoa32_core(out, val32, decimals);
+    } else {
+      let decimals = decimalCount64High(value) + sign;
+      out = __alloc(decimals << 1, idof<String>());
+      utoa64_core(out, value, decimals);
+    }
+    if (sign) store<u16>(out, CharCode.MINUS);
+    return changetype<String>(out); // retains
+  } else if (radix == 16) {
+
+  } else if (radix == 2) {
+
   } else {
-    let decimals = decimalCount64High(value) + sign;
-    out = __alloc(decimals << 1, idof<String>());
-    utoa64_core(out, value, decimals);
+
   }
-  if (sign) store<u16>(out, CharCode.MINUS);
-  return changetype<String>(out); // retains
 }
 
-export function itoa<T extends number>(value: T): String {
+export function itoa<T extends number>(value: T, radix: i32): String {
   if (!isInteger<T>()) ERROR("integer type expected");
+  if (radix < 2 || radix > 36) {
+    throw new RangeError("toString() radix argument must be between 2 and 36");
+  }
   if (isSigned<T>()) {
     if (sizeof<T>() <= 4) {
-      return itoa32(<i32>value);
+      return itoa32(<i32>value, radix);
     } else {
-      return itoa64(<i64>value);
+      return itoa64(<i64>value, radix);
     }
   } else {
     if (sizeof<T>() <= 4) {
-      return utoa32(<u32>value);
+      return utoa32(<u32>value, radix);
     } else {
-      return utoa64(<u64>value);
+      return utoa64(<u64>value, radix);
     }
   }
 }
