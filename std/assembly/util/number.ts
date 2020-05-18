@@ -61,6 +61,27 @@ const DIGITS = memory.data<u32>([
   0x00350039, 0x00360039, 0x00370039, 0x00380039, 0x00390039
 ]);
 
+// Lookup table for pairwise char codes in range [0x00-0xFF]
+// @ts-ignore: decorator
+@lazy @inline
+const HEX_DIGITS =
+"000102030405060708090a0b0c0d0e0f\
+101112131415161718191a1b1c1d1e1f\
+202122232425262728292a2b2c2d2e2f\
+303132333435363738393a3b3c3d3e3f\
+404142434445464748494a4b4c4d4e4f\
+505152535455565758595a5b5c5d5e5f\
+606162636465666768696a6b6c6d6e6f\
+707172737475767778797a7b7c7d7e7f\
+808182838485868788898a8b8c8d8e8f\
+909192939495969798999a9b9c9d9e9f\
+a0a1a2a3a4a5a6a7a8a9aaabacadaeaf\
+b0b1b2b3b4b5b6b7b8b9babbbcbdbebf\
+c0c1c2c3c4c5c6c7c8c9cacbcccdcecf\
+d0d1d2d3d4d5d6d7d8d9dadbdcdddedf\
+e0e1e2e3e4e5e6e7e8e9eaebecedeeef\
+f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff";
+
 // @ts-ignore: decorator
 @lazy @inline
 const EXP_POWERS = memory.data<i16>([
@@ -206,19 +227,41 @@ function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
   utoa32_lut(buffer, <u32>num, offset);
 }
 
+function utoa_hex_lut(buffer: usize, num: u64, offset: usize): void {
+  const lut = changetype<usize>(HEX_DIGITS);
+  while (offset >= 2) {
+    offset -= 2;
+    store<u32>(buffer + (offset << 1), load<u32>(lut + ((<usize>num & 0xFF) << 2)));
+    num >>= 8;
+  }
+  if (offset & 1) {
+    store<u16>(buffer, load<u16>(lut + (<usize>num << 6)));
+  }
+}
+
 function utoa_simple<T extends number>(buffer: usize, num: T, offset: usize): void {
   do {
     let t = num / 10;
     let r = <u32>(num % 10);
     num = changetype<T>(t);
-    offset -= 1;
+    offset--;
     store<u16>(buffer + (offset << 1), CharCode._0 + r);
+  } while (num);
+}
+
+function utoa_hex_simple<T extends number>(buffer: usize, num: u64, offset: usize): void {
+  do {
+    let d = changetype<T>(num) & 0x0F | CharCode._0;
+    d += select<u32>(0x27, 0, d > CharCode._9);
+    offset--;
+    store<u16>(buffer + (offset << 1), d);
+    num >>= 4;
   } while (num);
 }
 
 // @ts-ignore: decorator
 @inline
-export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
+export function utoa32_core(buffer: usize, num: u32, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
     utoa_simple(buffer, num, offset);
   } else {
@@ -228,11 +271,31 @@ export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
 
 // @ts-ignore: decorator
 @inline
-export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
+export function utoa32_hex_core(buffer: usize, num: u32, offset: usize): void {
+  if (ASC_SHRINK_LEVEL >= 1) {
+    utoa_hex_simple(buffer, num, offset);
+  } else {
+    utoa_hex_lut(buffer, num, offset);
+  }
+}
+
+// @ts-ignore: decorator
+@inline
+export function utoa64_core(buffer: usize, num: u64, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
     utoa_simple(buffer, num, offset);
   } else {
     utoa64_lut(buffer, num, offset);
+  }
+}
+
+// @ts-ignore: decorator
+@inline
+export function utoa64_hex_core(buffer: usize, num: u64, offset: usize): void {
+  if (ASC_SHRINK_LEVEL >= 1) {
+    utoa_hex_simple(buffer, num, offset);
+  } else {
+    utoa_hex_lut(buffer, num, offset);
   }
 }
 
@@ -241,18 +304,22 @@ export function utoa32(value: u32, radix: i32): String {
     throw new RangeError("toString() radix argument must be between 2 and 36");
   }
   if (!value) return "0";
+  var out: usize = 0;
+
   if (radix == 10) {
     let decimals = decimalCount32(value);
-    let out = __alloc(decimals << 1, idof<String>());
+    out = __alloc(decimals << 1, idof<String>());
     utoa32_core(out, value, decimals);
-    return changetype<String>(out); // retains
   } else if (radix == 16) {
-
+    let decimals = (31 - clz(value) >> 2) + 1;
+    out = __alloc(decimals << 1, idof<String>());
+    utoa32_hex_core(out, value, decimals);
   } else if (radix == 2) {
 
   } else {
 
   }
+  return changetype<String>(out); // retains
 }
 
 export function itoa32(value: i32, radix: i32): String {
@@ -263,20 +330,24 @@ export function itoa32(value: i32, radix: i32): String {
 
   var sign = value >>> 31;
   if (sign) value = -value;
+  var out: usize = 0;
 
   if (radix == 10) {
     let decimals = decimalCount32(value) + sign;
-    let out = __alloc(decimals << 1, idof<String>());
+    out = __alloc(decimals << 1, idof<String>());
     utoa32_core(out, value, decimals);
     if (sign) store<u16>(out, CharCode.MINUS);
-    return changetype<String>(out); // retains
   } else if (radix == 16) {
-
+    let decimals = (31 - clz(value) >> 2) + 1 + sign;
+    out = __alloc(decimals << 1, idof<String>());
+    utoa32_hex_core(out, value, decimals);
+    if (sign) store<u16>(out, CharCode.MINUS);
   } else if (radix == 2) {
 
   } else {
 
   }
+  return changetype<String>(out); // retains
 }
 
 export function utoa64(value: u64, radix: i32): String {
@@ -284,8 +355,9 @@ export function utoa64(value: u64, radix: i32): String {
     throw new RangeError("toString() radix argument must be between 2 and 36");
   }
   if (!value) return "0";
+  var out: usize = 0;
+
   if (radix == 10) {
-    let out: usize;
     if (value <= u32.MAX_VALUE) {
       let val32    = <u32>value;
       let decimals = decimalCount32(val32);
@@ -296,14 +368,16 @@ export function utoa64(value: u64, radix: i32): String {
       out = __alloc(decimals << 1, idof<String>());
       utoa64_core(out, value, decimals);
     }
-    return changetype<String>(out); // retains
   } else if (radix == 16) {
-
+    let decimals = (63 - usize(clz(value)) >> 2) + 1;
+    out = __alloc(decimals << 1, idof<String>());
+    utoa64_hex_core(out, value, decimals);
   } else if (radix == 2) {
 
   } else {
 
   }
+  return changetype<String>(out); // retains
 }
 
 export function itoa64(value: i64, radix: i32): String {
@@ -314,9 +388,9 @@ export function itoa64(value: i64, radix: i32): String {
 
   var sign = u32(value >>> 63);
   if (sign) value = -value;
+  var out: usize = 0;
 
   if (radix == 10) {
-    let out: usize;
     if (<u64>value <= <u64>u32.MAX_VALUE) {
       let val32    = <u32>value;
       let decimals = decimalCount32(val32) + sign;
@@ -328,14 +402,17 @@ export function itoa64(value: i64, radix: i32): String {
       utoa64_core(out, value, decimals);
     }
     if (sign) store<u16>(out, CharCode.MINUS);
-    return changetype<String>(out); // retains
   } else if (radix == 16) {
-
+    let decimals = (63 - usize(clz(value)) >> 2) + 1 + sign;
+    out = __alloc(decimals << 1, idof<String>());
+    utoa64_hex_core(out, value, decimals);
+    if (sign) store<u16>(out, CharCode.MINUS);
   } else if (radix == 2) {
 
   } else {
 
   }
+  return changetype<String>(out); // retains
 }
 
 // @ts-ignore: decorator
