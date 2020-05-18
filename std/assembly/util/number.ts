@@ -237,6 +237,9 @@ export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
 }
 
 export function utoa32(value: u32, radix: i32): String {
+  if (radix < 2 || radix > 36) {
+    throw new RangeError("toString() radix argument must be between 2 and 36");
+  }
   if (!value) return "0";
   if (radix == 10) {
     let decimals = decimalCount32(value);
@@ -253,6 +256,9 @@ export function utoa32(value: u32, radix: i32): String {
 }
 
 export function itoa32(value: i32, radix: i32): String {
+  if (radix < 2 || radix > 36) {
+    throw new RangeError("toString() radix argument must be between 2 and 36");
+  }
   if (!value) return "0";
 
   var sign = value >>> 31;
@@ -274,6 +280,9 @@ export function itoa32(value: i32, radix: i32): String {
 }
 
 export function utoa64(value: u64, radix: i32): String {
+  if (radix < 2 || radix > 36) {
+    throw new RangeError("toString() radix argument must be between 2 and 36");
+  }
   if (!value) return "0";
   if (radix == 10) {
     let out: usize;
@@ -298,6 +307,9 @@ export function utoa64(value: u64, radix: i32): String {
 }
 
 export function itoa64(value: i64, radix: i32): String {
+  if (radix < 2 || radix > 36) {
+    throw new RangeError("toString() radix argument must be between 2 and 36");
+  }
   if (!value) return "0";
 
   var sign = u32(value >>> 63);
@@ -323,26 +335,6 @@ export function itoa64(value: i64, radix: i32): String {
 
   } else {
 
-  }
-}
-
-export function itoa<T extends number>(value: T, radix: i32): String {
-  if (!isInteger<T>()) ERROR("integer type expected");
-  if (radix < 2 || radix > 36) {
-    throw new RangeError("toString() radix argument must be between 2 and 36");
-  }
-  if (isSigned<T>()) {
-    if (sizeof<T>() <= 4) {
-      return itoa32(<i32>value, radix);
-    } else {
-      return itoa64(<i64>value, radix);
-    }
-  } else {
-    if (sizeof<T>() <= 4) {
-      return utoa32(<u32>value, radix);
-    } else {
-      return utoa64(<u64>value, radix);
-    }
   }
 }
 

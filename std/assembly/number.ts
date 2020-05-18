@@ -1,4 +1,4 @@
-import { itoa, dtoa } from "./util/number";
+import { itoa32, utoa32, itoa64, utoa64, dtoa } from "./util/number";
 import { strtol } from "./util/string";
 
 // @ts-ignore: decorator
@@ -33,7 +33,7 @@ export abstract class I8 {
   }
 
   toString(this: i8, radix: i32 = 10): String {
-    return itoa(this, radix);
+    return itoa32(this, radix);
   }
 }
 
@@ -53,7 +53,7 @@ export abstract class I16 {
   }
 
   toString(this: i16, radix: i32 = 10): String {
-    return itoa(this, radix);
+    return itoa32(this, radix);
   }
 }
 
@@ -73,7 +73,7 @@ export abstract class I32 {
   }
 
   toString(this: i32, radix: i32 = 10): String {
-    return itoa(this, radix);
+    return itoa32(this, radix);
   }
 }
 
@@ -93,7 +93,7 @@ export abstract class I64 {
   }
 
   toString(this: i64, radix: i32 = 10): String {
-    return itoa(this, radix);
+    return itoa64(this, radix);
   }
 }
 
@@ -113,7 +113,11 @@ export abstract class Isize {
   }
 
   toString(this: isize, radix: i32 = 10): String {
-    return itoa(this, radix);
+    if (sizeof<isize>() == 4) {
+      return itoa32(this, radix);
+    } else {
+      return itoa64(this, radix);
+    }
   }
 }
 
@@ -133,7 +137,7 @@ export abstract class U8 {
   }
 
   toString(this: u8, radix: i32 = 10): String {
-    return itoa(this, radix);
+    return utoa32(this, radix);
   }
 }
 
@@ -153,7 +157,7 @@ export abstract class U16 {
   }
 
   toString(this: u16, radix: i32 = 10): String {
-    return itoa(this, radix);
+    return utoa32(this, radix);
   }
 }
 
@@ -173,7 +177,7 @@ export abstract class U32 {
   }
 
   toString(this: u32, radix: i32 = 10): String {
-    return itoa(this, radix);
+    return utoa32(this, radix);
   }
 }
 
@@ -193,7 +197,7 @@ export abstract class U64 {
   }
 
   toString(this: u64, radix: i32 = 10): String {
-    return itoa(this, radix);
+    return utoa64(this, radix);
   }
 }
 
@@ -213,7 +217,11 @@ export abstract class Usize {
   }
 
   toString(this: usize, radix: i32 = 10): String {
-    return itoa(this, radix);
+    if (sizeof<isize>() == 4) {
+      return utoa32(this, radix);
+    } else {
+      return utoa64(this, radix);
+    }
   }
 }
 
