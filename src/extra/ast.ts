@@ -823,13 +823,13 @@ export class ASTBuilder {
 
   // statements
 
-  visitNodeAndTerminate(statement: Statement): void {
-    this.visitNode(statement);
+  visitNodeAndTerminate(node: Node): void {
+    this.visitNode(node);
     var sb = this.sb;
     if (
-      !sb.length ||                          // leading EmptyStatement
-      statement.kind == NodeKind.VARIABLE || // potentially assigns a FunctionExpression
-      statement.kind == NodeKind.EXPRESSION  // potentially assigns a FunctionExpression
+      !sb.length ||                     // leading EmptyStatement
+      node.kind == NodeKind.VARIABLE || // potentially assigns a FunctionExpression
+      node.kind == NodeKind.EXPRESSION  // potentially assigns a FunctionExpression
     ) {
       sb.push(";\n");
     } else {
