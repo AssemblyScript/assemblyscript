@@ -336,17 +336,16 @@ export function itoa32(value: i32, radix: i32): String {
     let decimals = decimalCount32(value) + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa32_core(out, value, decimals);
-    if (sign) store<u16>(out, CharCode.MINUS);
   } else if (radix == 16) {
     let decimals = (31 - clz(value) >> 2) + 1 + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa32_hex_core(out, value, decimals);
-    if (sign) store<u16>(out, CharCode.MINUS);
   } else if (radix == 2) {
 
   } else {
 
   }
+  if (sign) store<u16>(out, CharCode.MINUS);
   return changetype<String>(out); // retains
 }
 
@@ -401,17 +400,16 @@ export function itoa64(value: i64, radix: i32): String {
       out = __alloc(decimals << 1, idof<String>());
       utoa64_core(out, value, decimals);
     }
-    if (sign) store<u16>(out, CharCode.MINUS);
   } else if (radix == 16) {
     let decimals = (63 - usize(clz(value)) >> 2) + 1 + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa64_hex_core(out, value, decimals);
-    if (sign) store<u16>(out, CharCode.MINUS);
   } else if (radix == 2) {
 
   } else {
 
   }
+  if (sign) store<u16>(out, CharCode.MINUS);
   return changetype<String>(out); // retains
 }
 
