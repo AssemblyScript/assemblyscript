@@ -160,7 +160,7 @@ export function decimalCount64High(value: u64): u32 {
   }
 }
 
-function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
+function utoa32_dec_lut(buffer: usize, num: u32, offset: usize): void {
   while (num >= 10000) {
     // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
     let t = num / 10000;
@@ -197,7 +197,7 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
   }
 }
 
-function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
+function utoa64_dec_lut(buffer: usize, num: u64, offset: usize): void {
   while (num >= 100000000) {
     let t = num / 100000000;
     let r = <usize>(num - t * 100000000);
@@ -224,7 +224,7 @@ function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
   }
 
-  utoa32_lut(buffer, <u32>num, offset);
+  utoa32_dec_lut(buffer, <u32>num, offset);
 }
 
 function utoa_hex_lut(buffer: usize, num: u64, offset: usize): void {
@@ -239,7 +239,7 @@ function utoa_hex_lut(buffer: usize, num: u64, offset: usize): void {
   }
 }
 
-function utoa_simple<T extends number>(buffer: usize, num: T, offset: usize): void {
+function utoa_dec_simple<T extends number>(buffer: usize, num: T, offset: usize): void {
   do {
     let t = num / 10;
     let r = <u32>(num % 10);
@@ -261,11 +261,11 @@ function utoa_hex_simple<T extends number>(buffer: usize, num: u64, offset: usiz
 
 // @ts-ignore: decorator
 @inline
-export function utoa32_core(buffer: usize, num: u32, offset: usize): void {
+export function utoa32_dec_core(buffer: usize, num: u32, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa_simple(buffer, num, offset);
+    utoa_dec_simple(buffer, num, offset);
   } else {
-    utoa32_lut(buffer, num, offset);
+    utoa32_dec_lut(buffer, num, offset);
   }
 }
 
@@ -281,11 +281,11 @@ export function utoa32_hex_core(buffer: usize, num: u32, offset: usize): void {
 
 // @ts-ignore: decorator
 @inline
-export function utoa64_core(buffer: usize, num: u64, offset: usize): void {
+export function utoa64_dec_core(buffer: usize, num: u64, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa_simple(buffer, num, offset);
+    utoa_dec_simple(buffer, num, offset);
   } else {
-    utoa64_lut(buffer, num, offset);
+    utoa64_dec_lut(buffer, num, offset);
   }
 }
 
@@ -309,7 +309,7 @@ export function utoa32(value: u32, radix: i32): String {
   if (radix == 10) {
     let decimals = decimalCount32(value);
     out = __alloc(decimals << 1, idof<String>());
-    utoa32_core(out, value, decimals);
+    utoa32_dec_core(out, value, decimals);
   } else if (radix == 16) {
     let decimals = (31 - clz(value) >> 2) + 1;
     out = __alloc(decimals << 1, idof<String>());
@@ -333,7 +333,7 @@ export function itoa32(value: i32, radix: i32): String {
   if (radix == 10) {
     let decimals = decimalCount32(value) + sign;
     out = __alloc(decimals << 1, idof<String>());
-    utoa32_core(out, value, decimals);
+    utoa32_dec_core(out, value, decimals);
   } else if (radix == 16) {
     let decimals = (31 - clz(value) >> 2) + 1 + sign;
     out = __alloc(decimals << 1, idof<String>());
@@ -357,11 +357,11 @@ export function utoa64(value: u64, radix: i32): String {
       let val32    = <u32>value;
       let decimals = decimalCount32(val32);
       out = __alloc(decimals << 1, idof<String>());
-      utoa32_core(out, val32, decimals);
+      utoa32_dec_core(out, val32, decimals);
     } else {
       let decimals = decimalCount64High(value);
       out = __alloc(decimals << 1, idof<String>());
-      utoa64_core(out, value, decimals);
+      utoa64_dec_core(out, value, decimals);
     }
   } else if (radix == 16) {
     let decimals = (63 - usize(clz(value)) >> 2) + 1;
@@ -388,11 +388,11 @@ export function itoa64(value: i64, radix: i32): String {
       let val32    = <u32>value;
       let decimals = decimalCount32(val32) + sign;
       out = __alloc(decimals << 1, idof<String>());
-      utoa32_core(out, val32, decimals);
+      utoa32_dec_core(out, val32, decimals);
     } else {
       let decimals = decimalCount64High(value) + sign;
       out = __alloc(decimals << 1, idof<String>());
-      utoa64_core(out, value, decimals);
+      utoa64_dec_core(out, value, decimals);
     }
   } else if (radix == 16) {
     let decimals = (63 - usize(clz(value)) >> 2) + 1 + sign;
@@ -607,7 +607,7 @@ function genExponent(buffer: usize, k: i32): i32 {
   var sign = k < 0;
   if (sign) k = -k;
   var decimals = decimalCount32(k) + 1;
-  utoa32_core(buffer, k, decimals);
+  utoa32_dec_core(buffer, k, decimals);
   store<u16>(buffer, <u16>select<u32>(CharCode.MINUS, CharCode.PLUS, sign));
   return decimals;
 }
@@ -727,15 +727,15 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
   var decimals = sign;
   if (sizeof<T>() <= 4) {
     decimals += decimalCount32(value);
-    utoa32_core(buffer, value, decimals);
+    utoa32_dec_core(buffer, value, decimals);
   } else {
     if (<u64>value <= <u64>u32.MAX_VALUE) {
       let val32 = <u32>value;
       decimals += decimalCount32(val32);
-      utoa32_core(buffer, val32, decimals);
+      utoa32_dec_core(buffer, val32, decimals);
     } else {
       decimals += decimalCount64High(value);
-      utoa64_core(buffer, value, decimals);
+      utoa64_dec_core(buffer, value, decimals);
     }
   }
   return decimals;
