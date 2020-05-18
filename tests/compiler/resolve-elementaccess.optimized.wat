@@ -30,10 +30,12 @@
  (data (i32.const 2416) "0\00\00\00\01\00\00\00\01\00\00\000\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00e\00l\00e\00m\00e\00n\00t\00a\00c\00c\00e\00s\00s\00.\00t\00s")
  (data (i32.const 2480) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\002\00.\000")
  (data (i32.const 2512) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\001\001\00.\000")
- (data (i32.const 2544) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
- (data (i32.const 2576) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
- (data (i32.const 2608) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
- (data (i32.const 2640) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001")
+ (data (i32.const 2544) "d\00\00\00\01\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006")
+ (data (i32.const 2672) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s")
+ (data (i32.const 2736) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
+ (data (i32.const 2768) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
+ (data (i32.const 2800) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
+ (data (i32.const 2832) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001")
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $resolve-elementaccess/arr (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
@@ -995,7 +997,7 @@
    end
   end
  )
- (func $~lib/util/number/utoa_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_dec_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -1194,7 +1196,7 @@
       i32.const 1
       i32.add
       local.tee $0
-      call $~lib/util/number/utoa_simple<u32>
+      call $~lib/util/number/utoa_dec_simple<u32>
       local.get $1
       i32.const 45
       i32.const 43
@@ -1250,7 +1252,7 @@
       i32.const 1
       i32.add
       local.tee $0
-      call $~lib/util/number/utoa_simple<u32>
+      call $~lib/util/number/utoa_dec_simple<u32>
       local.get $2
       i32.const 45
       i32.const 43
@@ -1889,30 +1891,34 @@
  (func $~lib/number/U8#toString (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  i32.const 2560
-  local.set $1
-  local.get $0
-  i32.const 255
-  i32.and
-  local.tee $0
-  if
+  block $__inlined_func$~lib/util/number/utoa32
    local.get $0
+   i32.const 255
+   i32.and
+   local.tee $1
+   i32.eqz
+   if
+    i32.const 2752
+    local.set $0
+    br $__inlined_func$~lib/util/number/utoa32
+   end
+   local.get $1
    call $~lib/util/number/decimalCount32
    local.tee $2
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/stub/__alloc
-   local.tee $1
-   local.get $0
+   local.tee $0
+   local.get $1
    local.get $2
-   call $~lib/util/number/utoa_simple<u32>
+   call $~lib/util/number/utoa_dec_simple<u32>
   end
-  local.get $1
+  local.get $0
  )
  (func $start:resolve-elementaccess
   (local $0 i32)
-  i32.const 2672
+  i32.const 2864
   global.set $~lib/rt/stub/offset
   i32.const 12
   i32.const 3
@@ -2029,7 +2035,7 @@
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  i32.const 2592
+  i32.const 2784
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2044,7 +2050,7 @@
   i32.const 1
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  i32.const 2624
+  i32.const 2816
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2068,7 +2074,7 @@
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  i32.const 2656
+  i32.const 2848
   call $~lib/string/String.__eq
   i32.eqz
   if

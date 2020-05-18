@@ -294,12 +294,14 @@
  (data (i32.const 18112) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00A\00\be\02")
  (data (i32.const 18144) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00L\00o\00w\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00L\00o\00w\00e\00r\00C\00o\00d\00e")
  (data (i32.const 18224) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00 \00o\00r\00i\00g\00L\00o\00w\00e\00r\00C\00o\00d\00e\00 \00=\00 ")
- (data (i32.const 18288) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
- (data (i32.const 18320) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l")
- (data (i32.const 18352) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00 \00e\00x\00p\00e\00c\00t\00L\00o\00w\00e\00r\00C\00o\00d\00e\00 \00=\00 ")
- (data (i32.const 18416) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e")
- (data (i32.const 18496) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00 \00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00=\00 ")
- (data (i32.const 18560) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00=\00 ")
+ (data (i32.const 18288) "d\00\00\00\01\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006")
+ (data (i32.const 18416) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s")
+ (data (i32.const 18480) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
+ (data (i32.const 18512) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l")
+ (data (i32.const 18544) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00 \00e\00x\00p\00e\00c\00t\00L\00o\00w\00e\00r\00C\00o\00d\00e\00 \00=\00 ")
+ (data (i32.const 18608) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e")
+ (data (i32.const 18688) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00 \00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00=\00 ")
+ (data (i32.const 18752) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00=\00 ")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
@@ -317,7 +319,7 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 18616
+  i32.const 18808
   i32.gt_u
   if
    local.get $0
@@ -944,11 +946,11 @@
    if
     unreachable
    end
-   i32.const 18624
+   i32.const 18816
    local.tee $0
    i32.const 0
    i32.store
-   i32.const 20192
+   i32.const 20384
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -959,7 +961,7 @@
      local.get $1
      i32.const 2
      i32.shl
-     i32.const 18624
+     i32.const 18816
      i32.add
      i32.const 0
      i32.store offset=4
@@ -977,7 +979,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 18624
+       i32.const 18816
        i32.add
        i32.const 0
        i32.store offset=96
@@ -995,13 +997,13 @@
      br $for-loop|0
     end
    end
-   i32.const 18624
-   i32.const 20208
+   i32.const 18816
+   i32.const 20400
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 18624
+   i32.const 18816
    global.set $~lib/rt/tlsf/ROOT
   end
   local.get $0
@@ -1810,7 +1812,7 @@
   local.get $2
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 18616
+  i32.const 18808
   i32.ge_u
   if
    local.get $1
@@ -2177,7 +2179,7 @@
  )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
-  i32.const 18616
+  i32.const 18808
   i32.gt_u
   if
    local.get $0
@@ -2915,7 +2917,7 @@
   local.get $0
   i64.eqz
   if
-   i32.const 18304
+   i32.const 18496
    return
   end
   local.get $0
@@ -3039,12 +3041,12 @@
    i64.const 1000000000000000
    i64.lt_u
    select
-   local.tee $1
+   local.tee $2
    i32.const 1
    i32.shl
    call $~lib/rt/tlsf/__alloc
    local.tee $4
-   local.set $2
+   local.set $1
    loop $do-continue|00
     local.get $0
     i64.const 10
@@ -3055,11 +3057,11 @@
     i64.const 10
     i64.div_u
     local.set $0
-    local.get $2
     local.get $1
+    local.get $2
     i32.const 1
     i32.sub
-    local.tee $1
+    local.tee $2
     i32.const 1
     i32.shl
     i32.add
@@ -3082,7 +3084,7 @@
   (local $4 i32)
   block $__inlined_func$~lib/string/String#concat (result i32)
    local.get $0
-   i32.const 18336
+   i32.const 18528
    local.get $0
    select
    local.set $2
@@ -3092,13 +3094,13 @@
    i32.eqz
    if
     local.get $0
-    i32.const 18336
+    i32.const 18528
     i32.ne
     if
      local.get $0
      call $~lib/rt/pure/__release
     end
-    i32.const 18336
+    i32.const 18528
     local.set $0
    end
    local.get $2
@@ -4561,7 +4563,7 @@
      f64.const 0
      f64.const 0
      call $~lib/builtins/trace
-     i32.const 18368
+     i32.const 18560
      local.get $1
      call $~lib/util/number/utoa64
      local.tee $10
@@ -4587,7 +4589,7 @@
     local.get $2
     i64.ne
     if
-     i32.const 18432
+     i32.const 18624
      i32.const 1
      local.get $3
      f64.convert_i32_s
@@ -4596,7 +4598,7 @@
      f64.const 0
      f64.const 0
      call $~lib/builtins/trace
-     i32.const 18512
+     i32.const 18704
      local.get $0
      call $~lib/util/number/utoa64
      local.tee $8
@@ -4609,7 +4611,7 @@
      f64.const 0
      f64.const 0
      call $~lib/builtins/trace
-     i32.const 18576
+     i32.const 18768
      local.get $2
      call $~lib/util/number/utoa64
      local.tee $10
@@ -4868,7 +4870,7 @@
      local.tee $1
      if
       local.get $1
-      i32.const 18616
+      i32.const 18808
       i32.ge_u
       if
        local.get $1

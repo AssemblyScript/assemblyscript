@@ -249,12 +249,13 @@ function utoa_dec_simple<T extends number>(buffer: usize, num: T, offset: usize)
   } while (num);
 }
 
-function utoa_hex_simple<T extends number>(buffer: usize, num: u64, offset: usize): void {
+function utoa_hex_simple<T extends number>(buffer: usize, num: T, offset: usize): void {
   do {
     let d = changetype<T>(num) & 0x0F | CharCode._0;
-    d += select<u32>(0x27, 0, d > CharCode._9);
+    d += select<T>(<T>0x27, <T>0, d > <T>CharCode._9);
     offset--;
     store<u16>(buffer + (offset << 1), d);
+    // @ts-ignore: type
     num >>= 4;
   } while (num);
 }
@@ -263,7 +264,7 @@ function utoa_hex_simple<T extends number>(buffer: usize, num: u64, offset: usiz
 @inline
 export function utoa32_dec_core(buffer: usize, num: u32, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa_dec_simple(buffer, num, offset);
+    utoa_dec_simple<u32>(buffer, num, offset);
   } else {
     utoa32_dec_lut(buffer, num, offset);
   }
@@ -273,7 +274,7 @@ export function utoa32_dec_core(buffer: usize, num: u32, offset: usize): void {
 @inline
 export function utoa32_hex_core(buffer: usize, num: u32, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa_hex_simple(buffer, num, offset);
+    utoa_hex_simple<u32>(buffer, num, offset);
   } else {
     utoa_hex_lut(buffer, num, offset);
   }
@@ -283,7 +284,7 @@ export function utoa32_hex_core(buffer: usize, num: u32, offset: usize): void {
 @inline
 export function utoa64_dec_core(buffer: usize, num: u64, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa_dec_simple(buffer, num, offset);
+    utoa_dec_simple<u64>(buffer, num, offset);
   } else {
     utoa64_dec_lut(buffer, num, offset);
   }
@@ -293,7 +294,7 @@ export function utoa64_dec_core(buffer: usize, num: u64, offset: usize): void {
 @inline
 export function utoa64_hex_core(buffer: usize, num: u64, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
-    utoa_hex_simple(buffer, num, offset);
+    utoa_hex_simple<u64>(buffer, num, offset);
   } else {
     utoa_hex_lut(buffer, num, offset);
   }
@@ -364,7 +365,7 @@ export function utoa64(value: u64, radix: i32): String {
       utoa64_dec_core(out, value, decimals);
     }
   } else if (radix == 16) {
-    let decimals = (63 - usize(clz(value)) >> 2) + 1;
+    let decimals = (63 - u32(clz(value)) >> 2) + 1;
     out = __alloc(decimals << 1, idof<String>());
     utoa64_hex_core(out, value, decimals);
   } else {
@@ -395,7 +396,7 @@ export function itoa64(value: i64, radix: i32): String {
       utoa64_dec_core(out, value, decimals);
     }
   } else if (radix == 16) {
-    let decimals = (63 - usize(clz(value)) >> 2) + 1 + sign;
+    let decimals = (63 - u32(clz(value)) >> 2) + 1 + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa64_hex_core(out, value, decimals);
   } else {
