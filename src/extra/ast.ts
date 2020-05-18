@@ -932,14 +932,15 @@ export class ASTBuilder {
       }
     }
     var indexSignature = node.indexSignature;
-    if (indexSignature) {
-      this.visitIndexSignature(indexSignature);
-    }
     var members = node.members;
     var numMembers = members.length;
-    if (numMembers) {
+    if (indexSignature !== null || numMembers) {
       sb.push(" {\n");
       let indentLevel = ++this.indentLevel;
+      if (indexSignature) {
+        indent(sb, indentLevel);
+        this.visitNodeAndTerminate(indexSignature);
+      }
       for (let i = 0, k = members.length; i < k; ++i) {
         let member = members[i];
         if (member.kind != NodeKind.FIELDDECLARATION || (<FieldDeclaration>member).parameterIndex < 0) {
