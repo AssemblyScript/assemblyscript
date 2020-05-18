@@ -415,6 +415,23 @@ export namespace OperatorKind {
 /** Represents an AssemblyScript program. */
 export class Program extends DiagnosticEmitter {
 
+  /** Constructs a new program, optionally inheriting parser diagnostics. */
+  constructor(
+    /** Compiler options. */
+    public options: Options,
+    /** Shared array of diagnostic messages (emitted so far). */
+    diagnostics: DiagnosticMessage[] | null = null
+  ) {
+    super(diagnostics);
+    var nativeSource = new Source(SourceKind.LIBRARY_ENTRY, LIBRARY_SUBST + ".wasm", "[native code]");
+    this.nativeSource = nativeSource;
+    var nativeFile = new File(this, nativeSource);
+    this.nativeFile = nativeFile;
+    this.filesByName.set(nativeFile.internalName, nativeFile);
+    this.parser = new Parser(this.diagnostics, this.sources);
+    this.resolver = new Resolver(this);
+  }
+
   /** Parser instance. */
   parser: Parser;
   /** Resolver instance. */
@@ -423,14 +440,18 @@ export class Program extends DiagnosticEmitter {
   sources: Source[] = [];
   /** Diagnostic offset used where successively obtaining the next diagnostic. */
   diagnosticsOffset: i32 = 0;
-  /** Compiler options. */
-  options: Options;
   /** Special native code source. */
   nativeSource: Source;
   /** Special native code file. */
   nativeFile: File;
+  /** Next class id. */
+  nextClassId: u32 = 0;
+  /** Next signature id. */
+  nextSignatureId: i32 = 0;
+  /** An indicator if the program has been initialized. */
+  initialized: bool = false;
 
-  // lookup maps
+  // Lookup maps
 
   /** Files by unique internal name. */
   filesByName: Map<string,File> = new Map();
@@ -447,100 +468,252 @@ export class Program extends DiagnosticEmitter {
   /** A set of unique function signatures contained in the program, by id. */
   uniqueSignatures: Signature[] = new Array<Signature>(0);
 
-  // standard references
+  // Standard library
 
-  /** ArrayBufferView reference. */
-  arrayBufferViewInstance: Class;
-  /** ArrayBuffer instance reference. */
-  arrayBufferInstance: Class;
-  /** Array prototype reference. */
-  arrayPrototype: ClassPrototype;
-  /** Static array prototype reference. */
-  staticArrayPrototype: ClassPrototype;
-  /** Set prototype reference. */
-  setPrototype: ClassPrototype;
-  /** Map prototype reference. */
-  mapPrototype: ClassPrototype;
-  /** Int8Array prototype. */
-  i8ArrayPrototype: ClassPrototype;
-  /** Int16Array prototype. */
-  i16ArrayPrototype: ClassPrototype;
-  /** Int32Array prototype. */
-  i32ArrayPrototype: ClassPrototype;
-  /** Int64Array prototype. */
-  i64ArrayPrototype: ClassPrototype;
-  /** Uint8Array prototype. */
-  u8ArrayPrototype: ClassPrototype;
-  /** Uint8ClampedArray prototype. */
-  u8ClampedArrayPrototype: ClassPrototype;
-  /** Uint16Array prototype. */
-  u16ArrayPrototype: ClassPrototype;
-  /** Uint32Array prototype. */
-  u32ArrayPrototype: ClassPrototype;
-  /** Uint64Array prototype. */
-  u64ArrayPrototype: ClassPrototype;
-  /** Float32Array prototype. */
-  f32ArrayPrototype: ClassPrototype;
-  /** Float64Array prototype. */
-  f64ArrayPrototype: ClassPrototype;
-  /** String instance reference. */
-  stringInstance: Class;
-  /** Abort function reference, if not explicitly disabled. */
-  abortInstance: Function | null;
+  /** Gets the standard `ArrayBufferView` instance. */
+  get arrayBufferViewInstance(): Class {
+    var cached = this._arrayBufferViewInstance;
+    if (!cached) this._arrayBufferViewInstance = cached = this.requireClass(CommonNames.ArrayBufferView);
+    return cached;
+  }
+  private _arrayBufferViewInstance: Class | null = null;
 
-  // runtime references
+  /** Gets the standard `ArrayBuffer` instance. */
+  get arrayBufferInstance(): Class {
+    var cached = this._arrayBufferInstance;
+    if (!cached) this._arrayBufferInstance = cached = this.requireClass(CommonNames.ArrayBuffer);
+    return cached;
+  }
+  private _arrayBufferInstance: Class | null = null;
 
-  /** RT `__alloc(size: usize, id: u32): usize` */
-  allocInstance: Function;
-  /** RT `__realloc(ptr: usize, newSize: usize): usize` */
-  reallocInstance: Function;
-  /** RT `__free(ptr: usize): void` */
-  freeInstance: Function;
-  /** RT `__retain(ptr: usize): usize` */
-  retainInstance: Function;
-  /** RT `__release(ptr: usize): void` */
-  releaseInstance: Function;
-  /** RT `__collect(): void` */
-  collectInstance: Function;
-  /** RT `__visit(ptr: usize, cookie: u32): void` */
-  visitInstance: Function;
-  /** RT `__typeinfo(id: u32): RTTIFlags` */
-  typeinfoInstance: Function;
-  /** RT `__instanceof(ptr: usize, superId: u32): bool` */
-  instanceofInstance: Function;
-  /** RT `__allocBuffer(size: usize, id: u32, data: usize = 0): usize` */
-  allocBufferInstance: Function;
-  /** RT `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` */
-  allocArrayInstance: Function;
+  /** Gets the standard `Array` prototype. */
+  get arrayPrototype(): ClassPrototype {
+    var cached = this._arrayPrototype;
+    if (!cached) this._arrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _arrayPrototype: ClassPrototype | null = null;
 
-  /** Next class id. */
-  nextClassId: u32 = 0;
-  /** Next signature id. */
-  nextSignatureId: i32 = 0;
-  /** An indicator if the program has been initialized. */
-  initialized: bool = false;
+  /** Gets the standard `StaticArray` prototype. */
+  get staticArrayPrototype(): ClassPrototype {
+    var cached = this._staticArrayPrototype;
+    if (!cached) this._staticArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.StaticArray, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _staticArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Set` prototype. */
+  get setPrototype(): ClassPrototype {
+    var cached = this._setPrototype;
+    if (!cached) this._setPrototype = cached = <ClassPrototype>this.require(CommonNames.Set, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _setPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Map` prototype. */
+  get mapPrototype(): ClassPrototype {
+    var cached = this._mapPrototype;
+    if (!cached) this._mapPrototype = cached = <ClassPrototype>this.require(CommonNames.Map, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _mapPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Int8Array` prototype. */
+  get int8ArrayPrototype(): ClassPrototype {
+    var cached = this._int8ArrayPrototype;
+    if (!cached) this._int8ArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Int8Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _int8ArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Int16Array` prototype. */
+  get int16ArrayPrototype(): ClassPrototype {
+    var cached = this._int16ArrayPrototype;
+    if (!cached) this._int16ArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Int16Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _int16ArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Int32Array` prototype. */
+  get int32ArrayPrototype(): ClassPrototype {
+    var cached = this._int32ArrayPrototype;
+    if (!cached) this._int32ArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Int32Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _int32ArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Int64Array` prototype. */
+  get int64ArrayPrototype(): ClassPrototype {
+    var cached = this._int64ArrayPrototype;
+    if (!cached) this._int64ArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Int64Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _int64ArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Uint8Array` prototype. */
+  get uint8ArrayPrototype(): ClassPrototype {
+    var cached = this._uint8ArrayPrototype;
+    if (!cached) this._uint8ArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Uint8Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _uint8ArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Uint8ClampedArray` prototype. */
+  get uint8ClampedArrayPrototype(): ClassPrototype {
+    var cached = this._uint8ClampedArrayPrototype;
+    if (!cached) this._uint8ClampedArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Uint8ClampedArray, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _uint8ClampedArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Uint16Array` prototype. */
+  get uint16ArrayPrototype(): ClassPrototype {
+    var cached = this._uint16ArrayPrototype;
+    if (!cached) this._uint16ArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Uint16Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _uint16ArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Uint32Array` prototype. */
+  get uint32ArrayPrototype(): ClassPrototype {
+    var cached = this._uint32ArrayPrototype;
+    if (!cached) this._uint32ArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Uint32Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _uint32ArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Uint64Array` prototype. */
+  get uint64ArrayPrototype(): ClassPrototype {
+    var cached = this._uint64ArrayPrototype;
+    if (!cached) this._uint64ArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Uint64Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _uint64ArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Float32Array` prototype. */
+  get float32ArrayPrototype(): ClassPrototype {
+    var cached = this._float32ArrayPrototype;
+    if (!cached) this._float32ArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Float32Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _float32ArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `Float64Array` prototype. */
+  get float64ArrayPrototype(): ClassPrototype {
+    var cached = this._float64ArrayPrototype;
+    if (!cached) this._float64ArrayPrototype = cached = <ClassPrototype>this.require(CommonNames.Float64Array, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _float64ArrayPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `String` instance. */
+  get stringInstance(): Class {
+    var cached = this._stringInstance;
+    if (!cached) this._stringInstance = cached = this.requireClass(CommonNames.String);
+    return cached;
+  }
+  private _stringInstance: Class | null = null;
+
+  /** Gets the standard `abort` instance, if not explicitly disabled. */
+  get abortInstance(): Function | null {
+    return this.lookupFunction(CommonNames.abort);
+  }
+
+  // Runtime interface
+
+  /** Gets the runtime `__alloc(size: usize, id: u32): usize` instance. */
+  get allocInstance(): Function {
+    var cached = this._allocInstance;
+    if (!cached) this._allocInstance = cached = this.requireFunction(CommonNames.alloc);
+    return cached;
+  }
+  private _allocInstance: Function | null = null;
+
+  /** Gets the runtime `__realloc(ptr: usize, newSize: usize): usize` instance. */
+  get reallocInstance(): Function {
+    var cached = this._reallocInstance;
+    if (!cached) this._reallocInstance = cached = this.requireFunction(CommonNames.realloc);
+    return cached;
+  }
+  private _reallocInstance: Function | null = null;
+
+  /** Gets the runtime `__free(ptr: usize): void` instance. */
+  get freeInstance(): Function {
+    var cached = this._freeInstance;
+    if (!cached) this._freeInstance = cached = this.requireFunction(CommonNames.free);
+    return cached;
+  }
+  private _freeInstance: Function | null = null;
+
+  /** Gets the runtime `__retain(ptr: usize): usize` instance. */
+  get retainInstance(): Function {
+    var cached = this._retainInstance;
+    if (!cached) this._retainInstance = cached = this.requireFunction(CommonNames.retain);
+    return cached;
+  }
+  private _retainInstance: Function | null = null;
+
+  /** Gets the runtime `__release(ptr: usize): void` instance. */
+  get releaseInstance(): Function {
+    var cached = this._releaseInstance;
+    if (!cached) this._releaseInstance = cached = this.requireFunction(CommonNames.release);
+    return cached;
+  }
+  private _releaseInstance: Function | null = null;
+
+  /** Gets the runtime `__collect(): void` instance. */
+  get collectInstance(): Function {
+    var cached = this._collectInstance;
+    if (!cached) this._collectInstance = cached = this.requireFunction(CommonNames.collect);
+    return cached;
+  }
+  private _collectInstance: Function | null = null;
+
+  /** Gets the runtime `__visit(ptr: usize, cookie: u32): void` instance. */
+  get visitInstance(): Function {
+    var cached = this._visitInstance;
+    if (!cached) this._visitInstance = cached = this.requireFunction(CommonNames.visit);
+    return cached;
+  }
+  private _visitInstance: Function | null = null;
+
+  /** Gets the runtime `__typeinfo(id: u32): RTTIFlags` instance. */
+  get typeinfoInstance(): Function {
+    var cached = this._typeinfoInstance;
+    if (!cached) this._typeinfoInstance = cached = this.requireFunction(CommonNames.typeinfo);
+    return cached;
+  }
+  private _typeinfoInstance: Function | null = null;
+
+  /** Gets the runtime `__instanceof(ptr: usize, superId: u32): bool` instance. */
+  get instanceofInstance(): Function {
+    var cached = this._instanceofInstance;
+    if (!cached) this._instanceofInstance = cached = this.requireFunction(CommonNames.instanceof_);
+    return cached;
+  }
+  private _instanceofInstance: Function | null = null;
+
+  /** Gets the runtime `__allocBuffer(size: usize, id: u32, data: usize = 0): usize` instance. */
+  get allocBufferInstance(): Function {
+    var cached = this._allocBufferInstance;
+    if (!cached) this._allocBufferInstance = cached = this.requireFunction(CommonNames.allocBuffer);
+    return cached;
+  }
+  private _allocBufferInstance: Function | null = null;
+
+  /** Gets the runtime `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` instance. */
+  get allocArrayInstance(): Function {
+    var cached = this._allocArrayInstance;
+    if (!cached) this._allocArrayInstance = cached = this.requireFunction(CommonNames.allocArray);
+    return cached;
+  }
+  private _allocArrayInstance: Function | null = null;
+
+  // Utility
 
   /** Tests whether this is a WASI program. */
   get isWasi(): bool {
     return this.elementsByName.has(CommonNames.ASC_WASI);
-  }
-
-  /** Constructs a new program, optionally inheriting parser diagnostics. */
-  constructor(
-    /** Compiler options. */
-    options: Options,
-    /** Shared array of diagnostic messages (emitted so far). */
-    diagnostics: DiagnosticMessage[] | null = null
-  ) {
-    super(diagnostics);
-    this.options = options;
-    var nativeSource = new Source(LIBRARY_SUBST + ".wasm", "[native code]", SourceKind.LIBRARY_ENTRY);
-    this.nativeSource = nativeSource;
-    var nativeFile = new File(this, nativeSource);
-    this.nativeFile = nativeFile;
-    this.filesByName.set(nativeFile.internalName, nativeFile);
-    this.parser = new Parser(this.diagnostics, this.sources);
-    this.resolver = new Resolver(this);
   }
 
   /** Obtains the source matching the specified internal path. */
@@ -583,7 +756,7 @@ export class Program extends DiagnosticEmitter {
     var range = this.nativeSource.range;
     return Node.createVariableDeclaration(
       Node.createIdentifierExpression(name, range),
-      null, null, null, flags, range
+      null, flags, null, null, range
     );
   }
 
@@ -598,9 +771,9 @@ export class Program extends DiagnosticEmitter {
     var identifier = Node.createIdentifierExpression(name, range);
     return Node.createTypeDeclaration(
       identifier,
-      null,
+      null, flags, null,
       Node.createOmittedType(range),
-      null, flags, range
+      range
     );
   }
 
@@ -627,7 +800,7 @@ export class Program extends DiagnosticEmitter {
     }
     return Node.createFunctionDeclaration(
       Node.createIdentifierExpression(name, range),
-      null, signature, null, null, flags, ArrowKind.NONE, range
+      null, flags, null, signature, null, ArrowKind.NONE, range
     );
   }
 
@@ -641,7 +814,7 @@ export class Program extends DiagnosticEmitter {
     var range = this.nativeSource.range;
     return Node.createNamespaceDeclaration(
       Node.createIdentifierExpression(name, range),
-      [], null, flags, range
+      null, flags, [], range
     );
   }
 
@@ -944,12 +1117,8 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register ArrayBuffer (id=0), String (id=1), ArrayBufferView (id=2)
-    assert(this.nextClassId == 0);
-    this.arrayBufferInstance = this.requireClass(CommonNames.ArrayBuffer);
     assert(this.arrayBufferInstance.id == 0);
-    this.stringInstance = this.requireClass(CommonNames.String);
     assert(this.stringInstance.id == 1);
-    this.arrayBufferViewInstance = this.requireClass(CommonNames.ArrayBufferView);
     assert(this.arrayBufferViewInstance.id == 2);
 
     // register classes backing basic types
@@ -968,19 +1137,6 @@ export class Program extends DiagnosticEmitter {
     this.registerWrapperClass(Type.f64, CommonNames.F64);
     if (options.hasFeature(Feature.SIMD)) this.registerWrapperClass(Type.v128, CommonNames.V128);
     if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
-
-    // register views but don't instantiate them yet
-    this.i8ArrayPrototype = <ClassPrototype>this.require(CommonNames.Int8Array, ElementKind.CLASS_PROTOTYPE);
-    this.i16ArrayPrototype = <ClassPrototype>this.require(CommonNames.Int16Array, ElementKind.CLASS_PROTOTYPE);
-    this.i32ArrayPrototype = <ClassPrototype>this.require(CommonNames.Int32Array, ElementKind.CLASS_PROTOTYPE);
-    this.i64ArrayPrototype = <ClassPrototype>this.require(CommonNames.Int64Array, ElementKind.CLASS_PROTOTYPE);
-    this.u8ArrayPrototype = <ClassPrototype>this.require(CommonNames.Uint8Array, ElementKind.CLASS_PROTOTYPE);
-    this.u8ClampedArrayPrototype = <ClassPrototype>this.require(CommonNames.Uint8ClampedArray, ElementKind.CLASS_PROTOTYPE);
-    this.u16ArrayPrototype = <ClassPrototype>this.require(CommonNames.Uint16Array, ElementKind.CLASS_PROTOTYPE);
-    this.u32ArrayPrototype = <ClassPrototype>this.require(CommonNames.Uint32Array, ElementKind.CLASS_PROTOTYPE);
-    this.u64ArrayPrototype = <ClassPrototype>this.require(CommonNames.Uint64Array, ElementKind.CLASS_PROTOTYPE);
-    this.f32ArrayPrototype = <ClassPrototype>this.require(CommonNames.Float32Array, ElementKind.CLASS_PROTOTYPE);
-    this.f64ArrayPrototype = <ClassPrototype>this.require(CommonNames.Float64Array, ElementKind.CLASS_PROTOTYPE);
 
     // resolve prototypes of extended classes or interfaces
     var resolver = this.resolver;
@@ -1124,24 +1280,6 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // register stdlib components
-    this.arrayPrototype = <ClassPrototype>this.require(CommonNames.Array, ElementKind.CLASS_PROTOTYPE);
-    this.staticArrayPrototype = <ClassPrototype>this.require(CommonNames.StaticArray, ElementKind.CLASS_PROTOTYPE);
-    this.setPrototype = <ClassPrototype>this.require(CommonNames.Set, ElementKind.CLASS_PROTOTYPE);
-    this.mapPrototype = <ClassPrototype>this.require(CommonNames.Map, ElementKind.CLASS_PROTOTYPE);
-    this.abortInstance = this.lookupFunction(CommonNames.abort); // can be disabled
-    this.allocInstance = this.requireFunction(CommonNames.alloc);
-    this.reallocInstance = this.requireFunction(CommonNames.realloc);
-    this.freeInstance = this.requireFunction(CommonNames.free);
-    this.retainInstance = this.requireFunction(CommonNames.retain);
-    this.releaseInstance = this.requireFunction(CommonNames.release);
-    this.collectInstance = this.requireFunction(CommonNames.collect);
-    this.typeinfoInstance = this.requireFunction(CommonNames.typeinfo);
-    this.instanceofInstance = this.requireFunction(CommonNames.instanceof_);
-    this.visitInstance = this.requireFunction(CommonNames.visit);
-    this.allocBufferInstance = this.requireFunction(CommonNames.allocBuffer);
-    this.allocArrayInstance = this.requireFunction(CommonNames.allocArray);
-
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
     // TODO: for (let file of this.filesByName.values()) {
     for (let _values = Map_values(this.filesByName), i = 0, k = _values.length; i < k; ++i) {
@@ -1257,8 +1395,8 @@ export class Program extends DiagnosticEmitter {
   /** Requires that a global library element of the specified kind is present and returns it. */
   private require(name: string, kind: ElementKind): Element {
     var element = this.lookupGlobal(name);
-    if (!element) throw new Error("missing " + name);
-    if (element.kind != kind) throw new Error("unexpected " + name);
+    if (!element) throw new Error("Missing standard library component: " + name);
+    if (element.kind != kind) throw Error("Invalid standard library component: " + name);
     return element;
   }
 
@@ -1266,7 +1404,7 @@ export class Program extends DiagnosticEmitter {
   private requireClass(name: string): Class {
     var prototype = this.require(name, ElementKind.CLASS_PROTOTYPE);
     var resolved = this.resolver.resolveClass(<ClassPrototype>prototype, null);
-    if (!resolved) throw new Error("invalid " + name);
+    if (!resolved) throw new Error("Invalid standard library class: " + name);
     return resolved;
   }
 
@@ -1281,7 +1419,7 @@ export class Program extends DiagnosticEmitter {
   private requireFunction(name: string, typeArguments: Type[] | null = null): Function {
     var prototype = <FunctionPrototype>this.require(name, ElementKind.FUNCTION_PROTOTYPE);
     var resolved = this.resolver.resolveFunction(prototype, typeArguments);
-    if (!resolved) throw new Error("invalid " + name);
+    if (!resolved) throw new Error("Invalid standard library function: " + name);
     return resolved;
   }
 
@@ -1607,7 +1745,7 @@ export class Program extends DiagnosticEmitter {
           }
           break;
         }
-        case NodeKind.INDEXSIGNATUREDECLARATION: break; // ignored for now
+        case NodeKind.INDEXSIGNATURE: break; // ignored for now
         default: assert(false); // class member expected
       }
     }
@@ -1704,10 +1842,10 @@ export class Program extends DiagnosticEmitter {
           case DecoratorKind.OPERATOR_BINARY:
           case DecoratorKind.OPERATOR_PREFIX:
           case DecoratorKind.OPERATOR_POSTFIX: {
-            let args = decorator.arguments;
+            let args = decorator.args;
             let numArgs = args ? args.length : 0;
             if (numArgs == 1) {
-              let firstArg = (<Expression[]>decorator.arguments)[0];
+              let firstArg = (<Expression[]>decorator.args)[0];
               if (firstArg.isLiteralKind(LiteralKind.STRING)) {
                 let text = (<StringLiteralExpression>firstArg).value;
                 let kind = OperatorKind.fromDecorator(decorator.decoratorKind, text);
@@ -2175,6 +2313,8 @@ export class Program extends DiagnosticEmitter {
     this.initializeProperty(
       Node.createMethodDeclaration(
         declaration.name,
+        declaration.decorators,
+        declaration.flags | CommonFlags.GET,
         null,
         Node.createFunctionType(
           [],
@@ -2184,8 +2324,6 @@ export class Program extends DiagnosticEmitter {
           declaration.range
         ),
         null,
-        declaration.decorators,
-        declaration.flags | CommonFlags.GET,
         declaration.range
       ),
       parent
@@ -2194,14 +2332,16 @@ export class Program extends DiagnosticEmitter {
       this.initializeProperty(
         Node.createMethodDeclaration(
           declaration.name,
+          declaration.decorators,
+          declaration.flags | CommonFlags.SET,
           null,
           Node.createFunctionType(
             [
               Node.createParameter(
+                ParameterKind.DEFAULT,
                 declaration.name,
                 typeNode,
                 null,
-                ParameterKind.DEFAULT,
                 declaration.name.range
               )
             ],
@@ -2211,8 +2351,6 @@ export class Program extends DiagnosticEmitter {
             declaration.range
           ),
           null,
-          declaration.decorators,
-          declaration.flags | CommonFlags.SET,
           declaration.range
         ),
         parent
@@ -2988,9 +3126,9 @@ export abstract class VariableLikeElement extends TypedElement {
   /** Constant value kind. */
   constantValueKind: ConstantValueKind = ConstantValueKind.NONE;
   /** Constant integer value, if applicable. */
-  constantIntegerValue: i64;
+  constantIntegerValue: i64 = i64_zero;
   /** Constant float value, if applicable. */
-  constantFloatValue: f64;
+  constantFloatValue: f64 = 0;
 
   /** Constructs a new variable-like element. */
   protected constructor(
@@ -3352,7 +3490,7 @@ export class Function extends TypedElement {
         this.localsByIndex[local.index] = local;
       }
     }
-    this.flow = Flow.create(this);
+    this.flow = Flow.createParent(this);
     registerConcreteElement(program, this);
   }
 
@@ -3666,10 +3804,11 @@ export class Property extends VariableLikeElement {
       parent,
       Node.createVariableDeclaration(
         prototype.identifierNode,
-        null, null, null,
+        null,
         prototype.is(CommonFlags.INSTANCE)
           ? CommonFlags.INSTANCE
           : CommonFlags.NONE,
+        null, null,
         prototype.identifierNode.range
       )
     );
@@ -4141,23 +4280,23 @@ export class Class extends TypedElement {
     var prototype = current.prototype;
     switch (prototype.name.charCodeAt(0)) {
       case CharCode.F: {
-        if (prototype == program.f32ArrayPrototype) return Type.f32;
-        if (prototype == program.f64ArrayPrototype) return Type.f64;
+        if (prototype == program.float32ArrayPrototype) return Type.f32;
+        if (prototype == program.float64ArrayPrototype) return Type.f64;
         break;
       }
       case CharCode.I: {
-        if (prototype == program.i8ArrayPrototype) return Type.i8;
-        if (prototype == program.i16ArrayPrototype) return Type.i16;
-        if (prototype == program.i32ArrayPrototype) return Type.i32;
-        if (prototype == program.i64ArrayPrototype) return Type.i64;
+        if (prototype == program.int8ArrayPrototype) return Type.i8;
+        if (prototype == program.int16ArrayPrototype) return Type.i16;
+        if (prototype == program.int32ArrayPrototype) return Type.i32;
+        if (prototype == program.int64ArrayPrototype) return Type.i64;
         break;
       }
       case CharCode.U: {
-        if (prototype == program.u8ArrayPrototype) return Type.u8;
-        if (prototype == program.u8ClampedArrayPrototype) return Type.u8;
-        if (prototype == program.u16ArrayPrototype) return Type.u16;
-        if (prototype == program.u32ArrayPrototype) return Type.u32;
-        if (prototype == program.u64ArrayPrototype) return Type.u64;
+        if (prototype == program.uint8ArrayPrototype) return Type.u8;
+        if (prototype == program.uint8ClampedArrayPrototype) return Type.u8;
+        if (prototype == program.uint16ArrayPrototype) return Type.u16;
+        if (prototype == program.uint32ArrayPrototype) return Type.u32;
+        if (prototype == program.uint64ArrayPrototype) return Type.u64;
         break;
       }
     }

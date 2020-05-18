@@ -1,6 +1,6 @@
 {
   "extends": "./lib/lint",
-  "defaultSeverity": "warning",
+  "defaultSeverity": "error",
   "rules": {
     "as-internal-case": {},
     "as-internal-diagnostics": {},

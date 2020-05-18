@@ -398,6 +398,12 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.REFERENCE_TYPES)) featureFlags |= FeatureFlags.ReferenceTypes;
     if (options.hasFeature(Feature.MULTI_VALUE)) featureFlags |= FeatureFlags.MultiValue;
     module.setFeatures(featureFlags);
+
+    // set up the main start function
+    var startFunctionInstance = program.makeNativeFunction(BuiltinNames.start, new Signature(program, [], Type.void));
+    startFunctionInstance.internalName = BuiltinNames.start;
+    this.currentFlow = startFunctionInstance.flow;
+    this.currentBody = new Array<ExpressionRef>();
   }
 
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
@@ -409,12 +415,11 @@ export class Compiler extends DiagnosticEmitter {
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize();
 
-    // set up the main start function
-    var startFunctionInstance = program.makeNativeFunction(BuiltinNames.start, new Signature(program, [], Type.void));
-    startFunctionInstance.internalName = BuiltinNames.start;
-    var startFunctionBody = new Array<ExpressionRef>();
-    this.currentFlow = startFunctionInstance.flow;
-    this.currentBody = startFunctionBody;
+    // obtain the main start function
+    var startFunctionInstance = this.currentFlow.actualFunction;
+    assert(startFunctionInstance.internalName == BuiltinNames.start);
+    var startFunctionBody = this.currentBody;
+    assert(startFunctionBody.length == 0);
 
     // add mutable heap and rtti base dummies
     if (options.isWasm64) {
@@ -1774,7 +1779,7 @@ export class Compiler extends DiagnosticEmitter {
   addMemorySegment(buffer: Uint8Array, alignment: i32 = 16): MemorySegment {
     assert(isPowerOf2(alignment));
     var memoryOffset = i64_align(this.memoryOffset, alignment);
-    var segment = MemorySegment.create(buffer, memoryOffset);
+    var segment = new MemorySegment(buffer, memoryOffset);
     this.memorySegments.push(segment);
     this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length, 0));
     return segment;
@@ -2014,7 +2019,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.FUNCTIONDECLARATION:
       case NodeKind.METHODDECLARATION:
       case NodeKind.INTERFACEDECLARATION:
-      case NodeKind.INDEXSIGNATUREDECLARATION:
+      case NodeKind.INDEXSIGNATURE:
       case NodeKind.TYPEDECLARATION: break;
       default: { // otherwise a top-level statement that is part of the start function's body
         let stmt = this.compileStatement(statement);
@@ -2889,7 +2894,7 @@ export class Compiler extends DiagnosticEmitter {
     var value = statement.value;
     var message: Expression | null = null;
     if (value.kind == NodeKind.NEW) {
-      let newArgs = (<NewExpression>value).arguments;
+      let newArgs = (<NewExpression>value).args;
       if (newArgs.length) message = newArgs[0]; // FIXME: naively assumes type string
     }
     stmts.push(
@@ -6400,7 +6405,7 @@ export class Compiler extends DiagnosticEmitter {
 
       let superCall = this.compileCallDirect(
         this.ensureConstructor(baseClassInstance, expression),
-        expression.arguments,
+        expression.args,
         expression,
         module.local_get(thisLocal.index, nativeSizeType),
         Constraints.WILL_RETAIN
@@ -6456,7 +6461,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         return this.compileCallDirect(
           functionInstance,
-          expression.arguments,
+          expression.args,
           expression,
           thisArg,
           constraints
@@ -6574,7 +6579,7 @@ export class Compiler extends DiagnosticEmitter {
     return this.compileCallIndirect(
       assert(signature), // FIXME: bootstrap can't see this yet
       indexArg,
-      expression.arguments,
+      expression.args,
       expression,
       0,
       contextualType == Type.void
@@ -6609,18 +6614,18 @@ export class Compiler extends DiagnosticEmitter {
         expression
       );
     }
-    var ctx = new BuiltinContext();
-    ctx.compiler = this;
-    ctx.prototype = prototype;
-    ctx.typeArguments = typeArguments;
-    ctx.operands = expression.arguments;
-    ctx.contextualType = contextualType;
-    ctx.reportNode = expression;
-    ctx.contextIsExact = false;
     var internalName = prototype.internalName;
     if (builtins.has(internalName)) {
       let fn = assert(builtins.get(internalName));
-      return fn(ctx);
+      return fn(new BuiltinContext(
+        this,
+        prototype,
+        typeArguments,
+        expression.args,
+        contextualType,
+        expression,
+        false
+      ));
     }
     this.error(
       DiagnosticCode.Not_implemented,
@@ -9059,7 +9064,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (!classInstance) return module.unreachable();
     if (contextualType == Type.void) constraints |= Constraints.WILL_DROP;
-    return this.compileInstantiate(classInstance, expression.arguments, constraints, expression);
+    return this.compileInstantiate(classInstance, expression.args, constraints, expression);
   }
 
   /** Gets the compiled constructor of the specified class or generates one if none is present. */
@@ -10608,7 +10613,7 @@ function mangleImportName(
 
   var program = element.program;
   var decorator = assert(findDecorator(DecoratorKind.EXTERNAL, declaration.decorators));
-  var args = decorator.arguments;
+  var args = decorator.args;
   if (args !== null && args.length > 0) {
     let arg = args[0];
     // if one argument is given, override just the element name
