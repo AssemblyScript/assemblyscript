@@ -314,8 +314,6 @@ export function utoa32(value: u32, radix: i32): String {
     let decimals = (31 - clz(value) >> 2) + 1;
     out = __alloc(decimals << 1, idof<String>());
     utoa32_hex_core(out, value, decimals);
-  } else if (radix == 2) {
-
   } else {
 
   }
@@ -340,8 +338,6 @@ export function itoa32(value: i32, radix: i32): String {
     let decimals = (31 - clz(value) >> 2) + 1 + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa32_hex_core(out, value, decimals);
-  } else if (radix == 2) {
-
   } else {
 
   }
@@ -371,8 +367,6 @@ export function utoa64(value: u64, radix: i32): String {
     let decimals = (63 - usize(clz(value)) >> 2) + 1;
     out = __alloc(decimals << 1, idof<String>());
     utoa64_hex_core(out, value, decimals);
-  } else if (radix == 2) {
-
   } else {
 
   }
@@ -404,8 +398,6 @@ export function itoa64(value: i64, radix: i32): String {
     let decimals = (63 - usize(clz(value)) >> 2) + 1 + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa64_hex_core(out, value, decimals);
-  } else if (radix == 2) {
-
   } else {
 
   }
