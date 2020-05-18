@@ -33,9 +33,10 @@
  (data (i32.const 2544) "d\00\00\00\01\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006")
  (data (i32.const 2672) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s")
  (data (i32.const 2736) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
- (data (i32.const 2768) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
- (data (i32.const 2800) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
- (data (i32.const 2832) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001")
+ (data (i32.const 2768) "H\00\00\00\01\00\00\00\01\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z")
+ (data (i32.const 2864) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
+ (data (i32.const 2896) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
+ (data (i32.const 2928) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001")
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $resolve-elementaccess/arr (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
@@ -1918,7 +1919,7 @@
  )
  (func $start:resolve-elementaccess
   (local $0 i32)
-  i32.const 2864
+  i32.const 2960
   global.set $~lib/rt/stub/offset
   i32.const 12
   i32.const 3
@@ -2035,7 +2036,7 @@
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  i32.const 2784
+  i32.const 2880
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2050,7 +2051,7 @@
   i32.const 1
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  i32.const 2816
+  i32.const 2912
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2074,7 +2075,7 @@
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  i32.const 2848
+  i32.const 2944
   call $~lib/string/String.__eq
   i32.eqz
   if

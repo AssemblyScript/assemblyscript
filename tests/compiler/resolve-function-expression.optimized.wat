@@ -10,7 +10,8 @@
  (data (i32.const 1104) "d\00\00\00\01\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006")
  (data (i32.const 1232) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s")
  (data (i32.const 1296) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
- (data (i32.const 1328) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
+ (data (i32.const 1328) "H\00\00\00\01\00\00\00\01\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z")
+ (data (i32.const 1424) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
@@ -121,7 +122,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 1344
+  i32.const 1440
   local.set $3
   local.get $0
   i32.const 7
@@ -195,13 +196,13 @@
  (func $~start
   (local $0 i32)
   (local $1 i32)
-  i32.const 1360
+  i32.const 1456
   global.set $~lib/rt/stub/offset
   block $__inlined_func$~lib/string/String.__eq (result i32)
    i32.const 1
    call $~lib/util/number/itoa32
    local.tee $0
-   i32.const 1344
+   i32.const 1440
    i32.eq
    br_if $__inlined_func$~lib/string/String.__eq
    drop
@@ -214,7 +215,7 @@
     local.get $0
     call $~lib/string/String#get:length
     local.tee $1
-    i32.const 1344
+    i32.const 1440
     call $~lib/string/String#get:length
     i32.ne
     br_if $folding-inner0
