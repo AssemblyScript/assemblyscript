@@ -175,8 +175,8 @@ function ulogBase(n: u64, base: i32): u32 {
   if ((base & (base - 1)) == 0) { // if base is pow of two
     return (63 - <u32>clz(n)) / (31 - <u32>clz(base)) + 1;
   }
-  var b = u64(base), e: u32 = 1;
-  while (n > 1) {
+  var b = u64(base), e: u32 = 0;
+  while (n >= 1) {
     n /= b; e++;
   }
   return e;

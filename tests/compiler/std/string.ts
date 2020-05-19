@@ -542,6 +542,20 @@ assert(utoa32(0b11111111111111111111111111111111, 2) == "11111111111111111111111
 
 assert(itoa32(-0b11111111111, 2) == "-11111111111");
 
+// 32-bit radix random
+
+assert(utoa32(0xffffffff,  3) == "102002022201221111210");
+assert(utoa32(0xffffffff,  4) == "3333333333333333");
+assert(utoa32(0xffffffff,  5) == "32244002423140");
+assert(utoa32(0xffffffff,  8) == "37777777777");
+assert(utoa32(0xffffffff, 11) == "1904440553");
+assert(utoa32(0xffffffff, 15) == "1a20dcd80");
+assert(utoa32(0xffffffff, 17) == "a7ffda90");
+assert(utoa32(0xffffffff, 21) == "281d55i3");
+assert(utoa32(0xffffffff, 27) == "b28jpdl");
+assert(utoa32(0xffffffff, 32) == "3vvvvvv");
+assert(utoa32(0xffffffff, 36) == "1z141z3");
+
 // 64-bit radix 10
 
 assert(utoa64(0, 10) == "0");
@@ -613,6 +627,20 @@ assert(utoa64(0b1111111111111111111111111111111111111111111111111, 2) == "111111
 assert(utoa64(0xffffffffffffffff, 2) == "1111111111111111111111111111111111111111111111111111111111111111");
 
 assert(itoa64(-0b111111111111111111111111111111111, 2) == "-111111111111111111111111111111111");
+
+// 64-bit radix random
+
+assert(utoa64(0xffffffffffffffff,  3) == "11112220022122120101211020120210210211220");
+assert(utoa64(0xffffffffffffffff,  4) == "33333333333333333333333333333333");
+assert(utoa64(0xffffffffffffffff,  5) == "2214220303114400424121122430");
+assert(utoa64(0xffffffffffffffff,  8) == "1777777777777777777777");
+assert(utoa64(0xffffffffffffffff, 11) == "335500516a429071284");
+assert(utoa64(0xffffffffffffffff, 15) == "2c1d56b648c6cd110");
+assert(utoa64(0xffffffffffffffff, 17) == "67979g60f5428010");
+assert(utoa64(0xffffffffffffffff, 21) == "5e8g4ggg7g56dif");
+assert(utoa64(0xffffffffffffffff, 27) == "4eo8hfam6fllmo");
+assert(utoa64(0xffffffffffffffff, 32) == "fvvvvvvvvvvvv");
+assert(utoa64(0xffffffffffffffff, 36) == "3w5e11264sgsf");
 
 // special cases
 assert(dtoa(0.0) == "0.0");
