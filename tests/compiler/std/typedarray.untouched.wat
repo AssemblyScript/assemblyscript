@@ -32102,12 +32102,12 @@
   local.get $1
   i64.extend_i32_s
   local.set $2
-  i32.const 1
+  i32.const 0
   local.set $3
   loop $while-continue|0
    local.get $0
    i64.const 1
-   i64.gt_u
+   i64.ge_u
    local.set $4
    local.get $4
    if
