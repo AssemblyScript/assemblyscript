@@ -61,18 +61,22 @@ function ENTRY_SIZE<T>(): usize {
 export class Set<T> {
 
   // buckets holding references to the respective first entry within
-  private buckets: ArrayBuffer; // usize[bucketsMask + 1]
+  private buckets: ArrayBuffer | null; // usize[bucketsMask + 1], never null
   private bucketsMask: u32;
 
   // entries in insertion order
-  private entries: ArrayBuffer; // SetEntry<K>[entriesCapacity]
+  private entries: ArrayBuffer | null; // SetEntry<K>[entriesCapacity], never null
   private entriesCapacity: i32;
   private entriesOffset: i32;
   private entriesCount: i32;
 
-  get size(): i32 { return this.entriesCount; }
+  constructor() {
+    this.clear();
+  }
 
-  constructor() { this.clear(); }
+  get size(): i32 {
+    return this.entriesCount;
+  }
 
   clear(): void {
     const bucketsSize = INITIAL_CAPACITY * <i32>BUCKET_SIZE;
