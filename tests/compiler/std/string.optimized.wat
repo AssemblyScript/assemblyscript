@@ -5587,27 +5587,20 @@
  )
  (func $~lib/util/number/ulogBase (param $0 i64) (param $1 i32) (result i32)
   (local $2 i64)
-  (local $3 i64)
   local.get $1
   i64.extend_i32_s
-  local.tee $3
   local.set $2
   i32.const 1
   local.set $1
   loop $while-continue|0
-   local.get $1
-   i32.const 64
-   i32.lt_u
-   i32.const 0
-   local.get $2
    local.get $0
-   i64.le_u
-   select
+   i64.const 1
+   i64.gt_u
    if
+    local.get $0
     local.get $2
-    local.get $3
-    i64.mul
-    local.set $2
+    i64.div_u
+    local.set $0
     local.get $1
     i32.const 1
     i32.add
@@ -5713,7 +5706,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 362
+   i32.const 368
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -5818,7 +5811,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 339
+   i32.const 345
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -6011,7 +6004,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 389
+   i32.const 395
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -6113,7 +6106,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 419
+   i32.const 425
    i32.const 5
    call $~lib/builtins/abort
    unreachable
