@@ -164,7 +164,7 @@ export function decimalCount64High(value: u64): u32 {
   }
 }
 
-// TODO improve this
+// TODO: improve this
 function ulogBase(n: u64, base: i32): u32 {
   if ((base & (base - 1)) == 0) { // if base power of two
     // ilog(n) / ilog(base) + 1
