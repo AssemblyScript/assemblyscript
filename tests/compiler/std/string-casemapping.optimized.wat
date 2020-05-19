@@ -3042,12 +3042,12 @@
    i64.const 1000000000000000
    i64.lt_u
    select
-   local.tee $2
+   local.tee $1
    i32.const 1
    i32.shl
    call $~lib/rt/tlsf/__alloc
    local.tee $4
-   local.set $1
+   local.set $2
    loop $do-continue|00
     local.get $0
     i64.const 10
@@ -3058,11 +3058,11 @@
     i64.const 10
     i64.div_u
     local.set $0
-    local.get $1
     local.get $2
+    local.get $1
     i32.const 1
     i32.sub
-    local.tee $2
+    local.tee $1
     i32.const 1
     i32.shl
     i32.add

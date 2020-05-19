@@ -165,8 +165,12 @@ export function decimalCount64High(value: u64): u32 {
 }
 
 // TODO improve this
-function ulogBase(n: u64, base: i32): i32 {
-  var b = u64(base), t = b, e = 1;
+function ulogBase(n: u64, base: i32): u32 {
+  if ((base & (base - 1)) == 0) { // if base power of two
+    // ilog(n) / ilog(base) + 1
+    return (31 - <u32>clz(n)) / (31 - <u32>clz(base)) + 1;
+  }
+  var b = u64(base), t = b, e: u32 = 1;
   while (t <= n) {
     t *= b; e++;
   }
