@@ -4084,7 +4084,7 @@
   global.get $resolve-elementaccess/arr
   i32.const 0
   call $~lib/typedarray/Float32Array#__get
-  i32.const 10
+  i32.const 0
   call $~lib/number/F32#toString
   local.tee $0
   i32.const 1792
@@ -4101,7 +4101,7 @@
   global.get $resolve-elementaccess/arr
   i32.const 1
   call $~lib/typedarray/Float32Array#__get
-  i32.const 10
+  i32.const 0
   call $~lib/number/F32#toString
   local.tee $1
   i32.const 1888
@@ -4128,7 +4128,7 @@
   local.get $2
   local.get $3
   call $~lib/typedarray/Float32Array#__get
-  i32.const 10
+  i32.const 0
   call $~lib/number/F32#toString
   local.tee $2
   i32.const 1920

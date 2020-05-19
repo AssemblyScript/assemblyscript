@@ -5110,7 +5110,7 @@
   else
    f64.const 2
   end
-  i32.const 10
+  i32.const 0
   call $~lib/number/F64#toString
   local.tee $1
   i32.const 3120

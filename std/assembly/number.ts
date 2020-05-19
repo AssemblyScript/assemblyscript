@@ -302,7 +302,7 @@ export abstract class F32 {
     return <f32>parseFloat(value);
   }
 
-  toString(this: f32, radix: i32 = 10): String {
+  toString(this: f32, radix: i32 = 0): String {
     return dtoa(this);
   }
 }
@@ -366,7 +366,7 @@ export abstract class F64 {
     return parseFloat(value);
   }
 
-  toString(this: f64, radix: i32 = 10): String {
+  toString(this: f64, radix: i32 = 0): String {
     return dtoa(this);
   }
 }

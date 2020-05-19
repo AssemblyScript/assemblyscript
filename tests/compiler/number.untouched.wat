@@ -3762,7 +3762,7 @@
    unreachable
   end
   f64.const 2
-  i32.const 10
+  i32.const 0
   call $~lib/number/F64#toString
   local.tee $1
   i32.const 2992

@@ -5123,7 +5123,7 @@
   call $~lib/math/NativeMath.pow
   global.set $resolve-binary/f
   global.get $resolve-binary/f
-  i32.const 10
+  i32.const 0
   call $~lib/number/F64#toString
   local.tee $12
   i32.const 9280
@@ -5379,7 +5379,7 @@
   f64.const 2
   f64.const 2
   call $~lib/math/NativeMath.pow
-  i32.const 10
+  i32.const 0
   call $~lib/number/F64#toString
   local.tee $26
   i32.const 9280
