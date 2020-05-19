@@ -517,10 +517,12 @@ assert(utoa32(0x80000000, 16) == "80000000");
 assert(utoa32(0xffffffff, 16) == "ffffffff");
 
 assert(itoa32( 0, 16) == "0");
+assert(itoa32(-0x1000, 16) == "-1000");
 assert(itoa32( 0x7fffffff, 16) == "7fffffff");
 assert(itoa32(-0x7fffffff, 16) == "-7fffffff");
 assert(itoa32(-0x0fffffff, 16) == "-fffffff");
-assert(itoa32(-0x1000, 16) == "-1000");
+assert(itoa32( 0x80000000, 16) == "-80000000");
+assert(itoa32(-0x80000000, 16) == "-80000000");
 
 // 64-bit radix 10
 
@@ -545,6 +547,27 @@ assert(utoa64(19999868719476735, 10) == "19999868719476735");
 assert(utoa64(129999868719476735, 10) == "129999868719476735");
 assert(utoa64(1239999868719476735, 10) == "1239999868719476735");
 assert(utoa64(u64.MAX_VALUE, 10)       == "18446744073709551615");
+
+// 64-bit radix 16
+
+assert(utoa64(0x0000000000000000, 16) == "0");
+assert(utoa64(0x0000000000000001, 16) == "1");
+assert(utoa64(0x000000000000000c, 16) == "c");
+assert(utoa64(0x00000000000004d2, 16) == "4d2");
+assert(utoa64(0x000000000010f447, 16) == "10f447");
+assert(utoa64(0x00000001ffffffff, 16) == "1ffffffff");
+assert(utoa64(0x0000056789abcde1, 16) == "56789abcde1");
+assert(utoa64(0x0000456789abcde1, 16) == "456789abcde1");
+assert(utoa64(0x0003456789abcdef, 16) == "3456789abcdef");
+assert(utoa64(0x0023456789abcdef, 16) == "23456789abcdef");
+assert(utoa64(0x0123456789abcdef, 16) == "123456789abcdef");
+assert(utoa64(0x123456789abcdef0, 16) == "123456789abcdef0");
+assert(utoa64(0x7fffffffffffffff, 16) == "7fffffffffffffff");
+assert(utoa64(0xffffffffffffffff, 16) == "ffffffffffffffff");
+
+assert(itoa64(-0x7fffffffffffffff, 16) == "-7fffffffffffffff");
+assert(itoa64( 0x8000000000000000, 16) == "-8000000000000000");
+assert(itoa64(-0x8000000000000000, 16) == "-8000000000000000");
 
 // 64-bit radix 10
 
