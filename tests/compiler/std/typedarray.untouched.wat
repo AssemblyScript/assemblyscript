@@ -32075,8 +32075,9 @@
  )
  (func $~lib/util/number/ulogBase (param $0 i64) (param $1 i32) (result i32)
   (local $2 i64)
-  (local $3 i32)
+  (local $3 i64)
   (local $4 i32)
+  (local $5 i32)
   local.get $1
   local.get $1
   i32.const 1
@@ -32102,27 +32103,53 @@
   local.get $1
   i64.extend_i32_s
   local.set $2
-  i32.const 0
+  local.get $2
   local.set $3
+  i32.const 1
+  local.set $4
   loop $while-continue|0
+   local.get $0
+   local.get $3
+   i64.ge_u
+   local.set $5
+   local.get $5
+   if
+    local.get $0
+    local.get $3
+    i64.div_u
+    local.set $0
+    local.get $3
+    local.get $3
+    i64.mul
+    local.set $3
+    local.get $4
+    i32.const 1
+    i32.shl
+    local.set $4
+    br $while-continue|0
+   end
+  end
+  loop $while-continue|1
    local.get $0
    i64.const 1
    i64.ge_u
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    if
     local.get $0
     local.get $2
     i64.div_u
     local.set $0
-    local.get $3
+    local.get $4
     i32.const 1
     i32.add
-    local.set $3
-    br $while-continue|0
+    local.set $4
+    br $while-continue|1
    end
   end
-  local.get $3
+  local.get $4
+  i32.const 1
+  i32.sub
  )
  (func $~lib/util/number/utoa64_any_core (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i32)
   (local $4 i64)
@@ -32239,7 +32266,7 @@
   if
    i32.const 1936
    i32.const 2064
-   i32.const 371
+   i32.const 377
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -33043,7 +33070,7 @@
   if
    i32.const 1936
    i32.const 2064
-   i32.const 348
+   i32.const 354
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -35051,7 +35078,7 @@
   if
    i32.const 1936
    i32.const 2064
-   i32.const 428
+   i32.const 434
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -35592,7 +35619,7 @@
   if
    i32.const 1936
    i32.const 2064
-   i32.const 398
+   i32.const 404
    i32.const 5
    call $~lib/builtins/abort
    unreachable
