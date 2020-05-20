@@ -935,22 +935,24 @@
     call $~lib/util/number/utoa_hex_lut
    else
     local.get $0
-    i64.extend_i32_s
+    local.set $4
+    local.get $4
+    i64.extend_i32_u
     local.get $1
     call $~lib/util/number/ulogBase
     local.get $2
     i32.add
-    local.set $4
-    local.get $4
+    local.set $7
+    local.get $7
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/stub/__alloc
     local.set $3
     local.get $3
-    local.get $0
-    i64.extend_i32_s
     local.get $4
+    i64.extend_i32_u
+    local.get $7
     local.get $1
     call $~lib/util/number/utoa64_any_core
    end
