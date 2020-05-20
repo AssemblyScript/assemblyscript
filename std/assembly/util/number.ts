@@ -174,7 +174,6 @@ function ulogBase(num: u64, base: i32): u32 {
     b *= b;
     e <<= 1;
   }
-  if (num == 2) return e;
   while (num >= 1) {
     num /= b64;
     e++;

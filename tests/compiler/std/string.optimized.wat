@@ -5657,13 +5657,6 @@
     br $while-continue|0
    end
   end
-  local.get $0
-  i64.const 2
-  i64.eq
-  if
-   local.get $1
-   return
-  end
   loop $while-continue|1
    local.get $0
    i64.const 1
@@ -5780,7 +5773,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 371
+   i32.const 370
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -5885,7 +5878,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 348
+   i32.const 347
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -6078,7 +6071,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 398
+   i32.const 397
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -6180,7 +6173,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 428
+   i32.const 427
    i32.const 5
    call $~lib/builtins/abort
    unreachable
