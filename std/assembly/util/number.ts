@@ -384,9 +384,10 @@ export function itoa32(value: i32, radix: i32): String {
     out = __alloc(decimals << 1, idof<String>());
     utoa32_hex_core(out, value, decimals);
   } else {
-    let decimals = ulogBase(value, radix) + sign;
+    let val32 = u32(value);
+    let decimals = ulogBase(val32, radix) + sign;
     out = __alloc(decimals << 1, idof<String>());
-    utoa64_any_core(out, value, decimals, radix);
+    utoa64_any_core(out, val32, decimals, radix);
   }
   if (sign) store<u16>(out, CharCode.MINUS);
   return changetype<String>(out); // retains

@@ -5837,7 +5837,7 @@
     call $~lib/util/number/utoa_hex_simple<u32>
    else
     local.get $0
-    i64.extend_i32_s
+    i64.extend_i32_u
     local.get $1
     call $~lib/util/number/ulogBase
     local.get $2
@@ -5849,7 +5849,7 @@
     call $~lib/rt/tlsf/__alloc
     local.tee $3
     local.get $0
-    i64.extend_i32_s
+    i64.extend_i32_u
     local.get $4
     local.get $1
     call $~lib/util/number/utoa64_any_core
@@ -6071,7 +6071,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 397
+   i32.const 398
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -6173,7 +6173,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 427
+   i32.const 428
    i32.const 5
    call $~lib/builtins/abort
    unreachable
