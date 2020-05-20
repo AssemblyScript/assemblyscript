@@ -1964,6 +1964,13 @@
     br $while-continue|0
    end
   end
+  local.get $0
+  i64.const 2
+  i64.eq
+  if
+   local.get $4
+   return
+  end
   loop $while-continue|1
    local.get $0
    i64.const 1
@@ -2102,7 +2109,7 @@
   if
    i32.const 176
    i32.const 304
-   i32.const 404
+   i32.const 405
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -2318,7 +2325,7 @@
   if
    i32.const 176
    i32.const 304
-   i32.const 354
+   i32.const 355
    i32.const 5
    call $~lib/builtins/abort
    unreachable
