@@ -164,14 +164,7 @@ export function decimalCount64High(value: u64): u32 {
   }
 }
 
-// TODO: improve this
 function ulogBase(num: u64, base: i32): u32 {
-  // // this approsh required overflow checking
-  // var b = u64(base), t = b, e: u32 = 1;
-  // while (t <= num) {
-  //   t *= b; e++;
-  // }
-  // return e;
   if ((base & (base - 1)) == 0) { // if base is pow of two
     return (63 - <u32>clz(num)) / (31 - <u32>clz(base)) + 1;
   }

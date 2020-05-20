@@ -850,7 +850,7 @@
   if
    i32.const 192
    i32.const 320
-   i32.const 378
+   i32.const 371
    i32.const 5
    call $~lib/builtins/abort
    unreachable
