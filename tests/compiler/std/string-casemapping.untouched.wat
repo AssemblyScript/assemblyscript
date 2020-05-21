@@ -5027,6 +5027,7 @@
  )
  (func $~lib/util/number/utoa_hex_lut (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
   loop $while-continue|0
    local.get $2
    i32.const 2
@@ -5038,11 +5039,6 @@
     i32.const 2
     i32.sub
     local.set $2
-    local.get $0
-    local.get $2
-    i32.const 1
-    i32.shl
-    i32.add
     i32.const 18176
     local.get $1
     i32.wrap_i64
@@ -5052,6 +5048,13 @@
     i32.shl
     i32.add
     i32.load
+    local.set $4
+    local.get $0
+    local.get $2
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $4
     i32.store
     local.get $1
     i64.const 8
@@ -5269,7 +5272,7 @@
   if
    i32.const 17552
    i32.const 17680
-   i32.const 398
+   i32.const 399
    i32.const 5
    call $~lib/builtins/abort
    unreachable

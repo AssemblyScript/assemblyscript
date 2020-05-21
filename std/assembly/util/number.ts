@@ -252,7 +252,8 @@ function utoa_hex_lut(buffer: usize, num: u64, offset: usize): void {
   const lut = changetype<usize>(HEX_DIGITS);
   while (offset >= 2) {
     offset -= 2;
-    store<u32>(buffer + (offset << 1), load<u32>(lut + ((<usize>num & 0xFF) << 2)));
+    let digits = load<u32>(lut + ((<usize>num & 0xFF) << alignof<u32>()));
+    store<u32>(buffer + (offset << 1), digits);
     num >>= 8;
   }
   if (offset & 1) {
