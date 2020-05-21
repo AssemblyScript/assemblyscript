@@ -5607,7 +5607,7 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/ulogBase (param $0 i64) (param $1 i32) (result i32)
+ (func $~lib/util/number/ulog_base (param $0 i64) (param $1 i32) (result i32)
   (local $2 i64)
   (local $3 i64)
   local.get $1
@@ -5773,7 +5773,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 371
+   i32.const 373
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -5839,7 +5839,7 @@
     local.get $0
     i64.extend_i32_u
     local.get $1
-    call $~lib/util/number/ulogBase
+    call $~lib/util/number/ulog_base
     local.get $2
     i32.add
     local.tee $4
@@ -5878,7 +5878,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 348
+   i32.const 350
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -5930,7 +5930,7 @@
     local.get $0
     i64.extend_i32_u
     local.get $1
-    call $~lib/util/number/ulogBase
+    call $~lib/util/number/ulog_base
     local.tee $3
     i32.const 1
     i32.shl
@@ -6071,7 +6071,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 399
+   i32.const 401
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -6142,7 +6142,7 @@
    else
     local.get $0
     local.get $1
-    call $~lib/util/number/ulogBase
+    call $~lib/util/number/ulog_base
     local.tee $3
     i32.const 1
     i32.shl
@@ -6173,7 +6173,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 429
+   i32.const 431
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -6261,7 +6261,7 @@
    else
     local.get $0
     local.get $1
-    call $~lib/util/number/ulogBase
+    call $~lib/util/number/ulog_base
     local.get $2
     i32.add
     local.tee $4

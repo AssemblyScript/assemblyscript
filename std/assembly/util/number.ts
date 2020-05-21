@@ -164,7 +164,7 @@ export function decimalCount64High(value: u64): u32 {
   }
 }
 
-function ulogBase(num: u64, base: i32): u32 {
+function ulog_base(num: u64, base: i32): u32 {
   if ((base & (base - 1)) == 0) { // if base is pow of two
     return (63 - <u32>clz(num)) / (31 - <u32>clz(base)) + 1;
   }
@@ -252,8 +252,10 @@ function utoa_hex_lut(buffer: usize, num: u64, offset: usize): void {
   const lut = changetype<usize>(HEX_DIGITS);
   while (offset >= 2) {
     offset -= 2;
-    let digits = load<u32>(lut + ((<usize>num & 0xFF) << alignof<u32>()));
-    store<u32>(buffer + (offset << 1), digits);
+    store<u32>(
+      buffer + (offset << 1),
+      load<u32>(lut + ((<usize>num & 0xFF) << alignof<u32>()))
+    );
     num >>= 8;
   }
   if (offset & 1) {
@@ -359,7 +361,7 @@ export function utoa32(value: u32, radix: i32): String {
     out = __alloc(decimals << 1, idof<String>());
     utoa32_hex_core(out, value, decimals);
   } else {
-    let decimals = ulogBase(value, radix);
+    let decimals = ulog_base(value, radix);
     out = __alloc(decimals << 1, idof<String>());
     utoa64_any_core(out, value, decimals, radix);
   }
@@ -386,7 +388,7 @@ export function itoa32(value: i32, radix: i32): String {
     utoa32_hex_core(out, value, decimals);
   } else {
     let val32 = u32(value);
-    let decimals = ulogBase(val32, radix) + sign;
+    let decimals = ulog_base(val32, radix) + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa64_any_core(out, val32, decimals, radix);
   }
@@ -417,7 +419,7 @@ export function utoa64(value: u64, radix: i32): String {
     out = __alloc(decimals << 1, idof<String>());
     utoa64_hex_core(out, value, decimals);
   } else {
-    let decimals = ulogBase(value, radix);
+    let decimals = ulog_base(value, radix);
     out = __alloc(decimals << 1, idof<String>());
     utoa64_any_core(out, value, decimals, radix);
   }
@@ -450,7 +452,7 @@ export function itoa64(value: i64, radix: i32): String {
     out = __alloc(decimals << 1, idof<String>());
     utoa64_hex_core(out, value, decimals);
   } else {
-    let decimals = ulogBase(value, radix) + sign;
+    let decimals = ulog_base(value, radix) + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa64_any_core(out, value, decimals, radix);
   }
