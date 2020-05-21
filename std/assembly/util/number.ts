@@ -275,7 +275,7 @@ function utoa_dec_simple<T extends number>(buffer: usize, num: T, offset: usize)
 
 function utoa_hex_simple<T extends number>(buffer: usize, num: T, offset: usize): void {
   do {
-    let d = changetype<T>(num) & 0x0F | CharCode._0;
+    let d = num & 0x0F | CharCode._0;
     d += select<T>(<T>0x27, <T>0, d > <T>CharCode._9);
     offset--;
     store<u16>(buffer + (offset << 1), d);
