@@ -7267,7 +7267,7 @@ export class Compiler extends DiagnosticEmitter {
     /** Old value being replaced. */
     oldExpr: ExpressionRef,
     /** The type shared between expressions. */
-    type: Type
+    type: Type,
     /** Whether the new value is already retained. */
     alreadyRetained: bool = false,
   ): ExpressionRef {
