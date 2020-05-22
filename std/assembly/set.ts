@@ -60,18 +60,17 @@ function ENTRY_SIZE<T>(): usize {
 
 export class Set<T> {
 
-  // buckets holding references to the respective first entry within
-  private buckets: ArrayBuffer | null; // usize[bucketsMask + 1], never null
-  private bucketsMask: u32;
+  // buckets referencing their respective first entry, usize[bucketsMask + 1]
+  private buckets: ArrayBuffer = new ArrayBuffer(INITIAL_CAPACITY * <i32>BUCKET_SIZE);
+  private bucketsMask: u32 = INITIAL_CAPACITY - 1;
 
-  // entries in insertion order
-  private entries: ArrayBuffer | null; // SetEntry<K>[entriesCapacity], never null
-  private entriesCapacity: i32;
-  private entriesOffset: i32;
-  private entriesCount: i32;
+  // entries in insertion order, SetEntry<K>[entriesCapacity]
+  private entries: ArrayBuffer = new ArrayBuffer(INITIAL_CAPACITY * <i32>ENTRY_SIZE<T>());
+  private entriesCapacity: i32 = INITIAL_CAPACITY;
+  private entriesOffset: i32 = 0;
+  private entriesCount: i32 = 0;
 
   constructor() {
-    this.clear();
   }
 
   get size(): i32 {
@@ -79,11 +78,9 @@ export class Set<T> {
   }
 
   clear(): void {
-    const bucketsSize = INITIAL_CAPACITY * <i32>BUCKET_SIZE;
-    this.buckets = new ArrayBuffer(bucketsSize);
+    this.buckets = new ArrayBuffer(INITIAL_CAPACITY * <i32>BUCKET_SIZE);
     this.bucketsMask = INITIAL_CAPACITY - 1;
-    const entriesSize = INITIAL_CAPACITY * <i32>ENTRY_SIZE<T>();
-    this.entries = new ArrayBuffer(entriesSize);
+    this.entries = new ArrayBuffer(INITIAL_CAPACITY * <i32>ENTRY_SIZE<T>());
     this.entriesCapacity = INITIAL_CAPACITY;
     this.entriesOffset = 0;
     this.entriesCount = 0;
