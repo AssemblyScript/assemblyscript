@@ -6195,8 +6195,8 @@ export class Compiler extends DiagnosticEmitter {
         valueExpr = this.makeReplace(
           valueExpr,
           module.local_get(localIndex, type.toNativeType()),
-          alreadyRetained,
-          type
+          type,
+          alreadyRetained
         );
         if (tee) { // local = REPLACE(local, value)
           this.currentType = type;
@@ -6252,8 +6252,8 @@ export class Compiler extends DiagnosticEmitter {
         this.makeReplace(
           valueExpr,
           module.global_get(global.internalName, nativeType),
-          alreadyRetained,
-          type
+          type,
+          alreadyRetained
         )
       );
       if (tee) { // (global = REPLACE(global, value))), global
@@ -6326,8 +6326,8 @@ export class Compiler extends DiagnosticEmitter {
                 module.local_get(tempThis.index, nativeThisType),
                 nativeFieldType, field.memoryOffset
               ),
-              alreadyRetained,
-              fieldType
+              fieldType,
+              alreadyRetained
             ),
             nativeFieldType, field.memoryOffset
           ),
@@ -6344,8 +6344,8 @@ export class Compiler extends DiagnosticEmitter {
               module.local_get(tempThis.index, nativeThisType),
               nativeFieldType, field.memoryOffset
             ),
-            alreadyRetained,
-            fieldType
+            fieldType,
+            alreadyRetained
           ),
           nativeFieldType, field.memoryOffset
         );
@@ -7266,10 +7266,10 @@ export class Compiler extends DiagnosticEmitter {
     newExpr: ExpressionRef,
     /** Old value being replaced. */
     oldExpr: ExpressionRef,
-    /** Whether the new value is already retained. */
-    alreadyRetained: bool = false,
     /** The type shared between expressions. */
     type: Type
+    /** Whether the new value is already retained. */
+    alreadyRetained: bool = false,
   ): ExpressionRef {
     var module = this.module;
     var flow = this.currentFlow;
