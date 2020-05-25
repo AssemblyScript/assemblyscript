@@ -5759,7 +5759,7 @@ export class Compiler extends DiagnosticEmitter {
               rightStmts.unshift(
                 this.makeRelease(
                   module.local_get(temp.index, leftType.toNativeType()),
-                  rightType
+                  leftType
                 )
               );
             }
@@ -8589,7 +8589,7 @@ export class Compiler extends DiagnosticEmitter {
             : module.i32(i64_low(bufferAddress))
         ], expression);
         this.currentType = arrayType;
-        expr = this.makeRetain(expr, elementType);
+        expr = this.makeRetain(expr, arrayType);
         if (arrayType.isManaged) {
           if (!(constraints & Constraints.WILL_RETAIN)) {
             expr = this.makeAutorelease(expr, arrayType);
