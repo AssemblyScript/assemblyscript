@@ -1,4 +1,4 @@
-import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
+import { itoa32, utoa32, itoa64, utoa64, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
 
 // All tables are stored as two staged lookup tables (static tries)
@@ -865,8 +865,26 @@ export function joinBooleanArray(dataStart: usize, length: i32, separator: strin
 export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: string): string {
   var lastIndex = length - 1;
   if (lastIndex < 0) return "";
-  // @ts-ignore: type
-  if (!lastIndex) return changetype<string>(itoa<T>(load<T>(dataStart))); // retains
+  if (!lastIndex) {
+    let value = load<T>(dataStart);
+    if (isSigned<T>()) {
+      if (sizeof<T>() <= 4) {
+        // @ts-ignore: type
+        return changetype<string>(itoa32(<i32>value, 10)); // retains
+      } else {
+        // @ts-ignore: type
+        return changetype<string>(itoa64(<i32>value, 10)); // retains
+      }
+    } else {
+      if (sizeof<T>() <= 4) {
+        // @ts-ignore: type
+        return changetype<string>(utoa32(<u32>value, 10)); // retains
+      } else {
+        // @ts-ignore: type
+        return changetype<string>(utoa64(<u64>value, 10)); // retains
+      }
+    }
+  }
 
   var sepLen = separator.length;
   const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
