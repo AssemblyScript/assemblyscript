@@ -57,7 +57,7 @@ export abstract class ExportsWalker {
   /** Constructs a new Element walker. */
   constructor(program: Program, includePrivate: bool = false) {
     this.program = program;
-    this.includePrivate;
+    this.includePrivate = includePrivate;
   }
 
   /** Walks all elements and calls the respective handlers. */

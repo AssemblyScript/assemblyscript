@@ -66,13 +66,13 @@ import {
   VariableStatement,
   WhileStatement,
 
+  DeclarationStatement,
   ClassDeclaration,
   EnumDeclaration,
   EnumValueDeclaration,
   FieldDeclaration,
   FunctionDeclaration,
   ImportDeclaration,
-  IndexSignatureDeclaration,
   InterfaceDeclaration,
   MethodDeclaration,
   NamespaceDeclaration,
@@ -84,7 +84,7 @@ import {
   ParameterKind,
   ExportMember,
   SwitchCase,
-  DeclarationStatement,
+  IndexSignatureNode,
 
   isTypeOmitted
 } from "../ast";
@@ -315,10 +315,6 @@ export class ASTBuilder {
         this.visitImportDeclaration(<ImportDeclaration>node);
         break;
       }
-      case NodeKind.INDEXSIGNATUREDECLARATION: {
-        this.visitIndexSignatureDeclaration(<IndexSignatureDeclaration>node);
-        break;
-      }
       case NodeKind.INTERFACEDECLARATION: {
         this.visitInterfaceDeclaration(<InterfaceDeclaration>node);
         break;
@@ -356,6 +352,10 @@ export class ASTBuilder {
       }
       case NodeKind.SWITCHCASE: {
         this.visitSwitchCase(<SwitchCase>node);
+        break;
+      }
+      case NodeKind.INDEXSIGNATURE: {
+        this.visitIndexSignature(<IndexSignatureNode>node);
         break;
       }
       default: assert(false);
@@ -556,7 +556,7 @@ export class ASTBuilder {
 
   visitCallExpression(node: CallExpression): void {
     this.visitNode(node.expression);
-    this.visitArguments(node.typeArguments, node.arguments);
+    this.visitArguments(node.typeArguments, node.args);
   }
 
   private visitArguments(typeArguments: TypeNode[] | null, args: Expression[]): void {
@@ -772,7 +772,7 @@ export class ASTBuilder {
   visitNewExpression(node: NewExpression): void {
     this.sb.push("new ");
     this.visitTypeName(node.typeName);
-    this.visitArguments(node.typeArguments, node.arguments);
+    this.visitArguments(node.typeArguments, node.args);
   }
 
   visitParenthesizedExpression(node: ParenthesizedExpression): void {
@@ -823,13 +823,13 @@ export class ASTBuilder {
 
   // statements
 
-  visitNodeAndTerminate(statement: Statement): void {
-    this.visitNode(statement);
+  visitNodeAndTerminate(node: Node): void {
+    this.visitNode(node);
     var sb = this.sb;
     if (
-      !sb.length ||                          // leading EmptyStatement
-      statement.kind == NodeKind.VARIABLE || // potentially assigns a FunctionExpression
-      statement.kind == NodeKind.EXPRESSION  // potentially assigns a FunctionExpression
+      !sb.length ||                     // leading EmptyStatement
+      node.kind == NodeKind.VARIABLE || // potentially assigns a FunctionExpression
+      node.kind == NodeKind.EXPRESSION  // potentially assigns a FunctionExpression
     ) {
       sb.push(";\n");
     } else {
@@ -931,11 +931,16 @@ export class ASTBuilder {
         }
       }
     }
+    var indexSignature = node.indexSignature;
     var members = node.members;
     var numMembers = members.length;
-    if (numMembers) {
+    if (indexSignature !== null || numMembers) {
       sb.push(" {\n");
       let indentLevel = ++this.indentLevel;
+      if (indexSignature) {
+        indent(sb, indentLevel);
+        this.visitNodeAndTerminate(indexSignature);
+      }
       for (let i = 0, k = members.length; i < k; ++i) {
         let member = members[i];
         if (member.kind != NodeKind.FIELDDECLARATION || (<FieldDeclaration>member).parameterIndex < 0) {
@@ -1305,7 +1310,7 @@ export class ASTBuilder {
     this.visitStringLiteralExpression(node.path);
   }
 
-  visitIndexSignatureDeclaration(node: IndexSignatureDeclaration): void {
+  visitIndexSignature(node: IndexSignatureNode): void {
     var sb = this.sb;
     sb.push("[key: ");
     this.visitTypeNode(node.keyType);
@@ -1576,7 +1581,7 @@ export class ASTBuilder {
     var sb = this.sb;
     sb.push("@");
     this.visitNode(node.name);
-    var args = node.arguments;
+    var args = node.args;
     if (args) {
       sb.push("(");
       let numArgs = args.length;

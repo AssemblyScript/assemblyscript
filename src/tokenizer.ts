@@ -988,11 +988,14 @@ export class Tokenizer extends DiagnosticEmitter {
 
   mark(): State {
     var state = reusableState;
-    if (state) reusableState = null;
-    else state = new State();
-    state.pos = this.pos;
-    state.token = this.token;
-    state.tokenPos = this.tokenPos;
+    if (state) {
+      reusableState = null;
+      state.pos = this.pos;
+      state.token = this.token;
+      state.tokenPos = this.tokenPos;
+    } else {
+      state = new State(this.pos, this.token, this.tokenPos);
+    }
     return state;
   }
 
@@ -1570,12 +1573,14 @@ export class Tokenizer extends DiagnosticEmitter {
 
 /** Tokenizer state as returned by {@link Tokenizer#mark} and consumed by {@link Tokenizer#reset}. */
 export class State {
-  /** Current position. */
-  pos: i32;
-  /** Current token. */
-  token: Token;
-  /** Current token's position. */
-  tokenPos: i32;
+  constructor(
+    /** Current position. */
+    public pos: i32,
+    /** Current token. */
+    public token: Token,
+    /** Current token's position. */
+    public tokenPos: i32
+  ) {}
 }
 
 // Reusable state object to reduce allocations
