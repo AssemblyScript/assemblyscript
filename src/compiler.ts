@@ -1274,7 +1274,7 @@ export class Compiler extends DiagnosticEmitter {
         if (initInStart) {
           module.addGlobal(enumValue.internalName, NativeType.I32, true, module.i32(0));
           this.currentBody.push(
-            this.makeGlobalAssignment(enumValue, initExpr, false)
+            this.makeGlobalAssignment(enumValue, initExpr, Type.i32, false)
           );
           previousValueIsMut = true;
         } else {
@@ -1512,7 +1512,8 @@ export class Compiler extends DiagnosticEmitter {
             ),
             module.local_set(thisLocal.index,
               this.makeRetain(
-                this.makeAllocation(classInstance)
+                this.makeAllocation(classInstance),
+                classInstance.type
               )
             )
           )
@@ -6026,7 +6027,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = tee ? global.type : Type.void;
           return module.unreachable();
         }
-        return this.makeGlobalAssignment(global, valueExpr, tee);
+        return this.makeGlobalAssignment(global, valueExpr, global.type, tee);
       }
       case ElementKind.FIELD: {
         let fieldInstance = <Field>target;
@@ -6048,6 +6049,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(fieldParent.kind == ElementKind.CLASS);
         return this.makeFieldAssignment(fieldInstance,
           valueExpr,
+          valueType,
           this.compileExpression(
             assert(thisExpression),
             (<Class>fieldParent).type,
@@ -6196,6 +6198,7 @@ export class Compiler extends DiagnosticEmitter {
           valueExpr,
           module.local_get(localIndex, type.toNativeType()),
           type,
+          valueType,
           alreadyRetained
         );
         if (tee) { // local = REPLACE(local, value)
@@ -6208,7 +6211,7 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         flow.unsetLocalFlag(localIndex, LocalFlags.CONDITIONALLY_RETAINED);
         flow.setLocalFlag(localIndex, LocalFlags.RETAINED);
-        if (!alreadyRetained) valueExpr = this.makeRetain(valueExpr, type);
+        if (!alreadyRetained) valueExpr = this.makeRetain(valueExpr, valueType);
         if (tee) { // local = __retain(value, local)
           this.currentType = type;
           return module.local_tee(localIndex, valueExpr);
@@ -6238,6 +6241,8 @@ export class Compiler extends DiagnosticEmitter {
     global: VariableLikeElement,
     /** The value to assign. */
     valueExpr: ExpressionRef,
+    /** The type of the value to assign. */
+    valueType: Type,
     /** Whether to tee the value. */
     tee: bool
   ): ExpressionRef {
@@ -6253,6 +6258,7 @@ export class Compiler extends DiagnosticEmitter {
           valueExpr,
           module.global_get(global.internalName, nativeType),
           type,
+          valueType,
           alreadyRetained
         )
       );
@@ -6289,6 +6295,8 @@ export class Compiler extends DiagnosticEmitter {
     field: Field,
     /** The value to assign. */
     valueExpr: ExpressionRef,
+    /** The type of the value to assign. */
+    valueType: Type,
     /** The value of `this`. */
     thisExpr: ExpressionRef,
     /** Whether to tee the value. */
@@ -6327,6 +6335,7 @@ export class Compiler extends DiagnosticEmitter {
                 nativeFieldType, field.memoryOffset
               ),
               fieldType,
+              valueType, // TODOFIX
               alreadyRetained
             ),
             nativeFieldType, field.memoryOffset
@@ -6345,6 +6354,7 @@ export class Compiler extends DiagnosticEmitter {
               nativeFieldType, field.memoryOffset
             ),
             fieldType,
+            fieldType, // TODOFIX
             alreadyRetained
           ),
           nativeFieldType, field.memoryOffset
@@ -7247,14 +7257,14 @@ export class Compiler extends DiagnosticEmitter {
   // <reference-counting>
 
   /** Makes a retain call, retaining the expression's value. */
-  makeRetain(expr: ExpressionRef, type: Type | null = null): ExpressionRef {
+  makeRetain(expr: ExpressionRef, type: Type): ExpressionRef {
     var retainInstance = this.program.retainInstance;
     this.compileFunction(retainInstance);
     return this.module.call(retainInstance.internalName, [ expr ], this.options.nativeSizeType);
   }
 
   /** Makes a release call, releasing the expression's value. Changes the current type to void.*/
-  makeRelease(expr: ExpressionRef, type: Type | null = null): ExpressionRef {
+  makeRelease(expr: ExpressionRef, type: Type): ExpressionRef {
     var releaseInstance = this.program.releaseInstance;
     this.compileFunction(releaseInstance);
     return this.module.call(releaseInstance.internalName, [ expr ], NativeType.None);
@@ -7266,8 +7276,10 @@ export class Compiler extends DiagnosticEmitter {
     newExpr: ExpressionRef,
     /** Old value being replaced. */
     oldExpr: ExpressionRef,
-    /** The type shared between expressions. */
-    type: Type,
+    /** The type of the new expression. */
+    newType: Type,
+    /** The type of the old expression. */
+    oldType: Type,
     /** Whether the new value is already retained. */
     alreadyRetained: bool = false,
   ): ExpressionRef {
@@ -7280,7 +7292,7 @@ export class Compiler extends DiagnosticEmitter {
       let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(oldExpr));
       let ret = module.block(null, [
         module.local_set(temp.index, newExpr),
-        this.makeRelease(oldExpr, type),
+        this.makeRelease(oldExpr, oldType),
         module.local_get(temp.index, nativeSizeType)
       ], nativeSizeType);
       flow.freeTempLocal(temp);
@@ -7301,9 +7313,9 @@ export class Compiler extends DiagnosticEmitter {
           ),
           module.block(null, [
             module.local_set(temp1.index,
-              this.makeRetain(module.local_get(temp1.index, nativeSizeType), type)
+              this.makeRetain(module.local_get(temp1.index, nativeSizeType), newType)
             ),
-            this.makeRelease(module.local_get(temp2.index, nativeSizeType), type)
+            this.makeRelease(module.local_get(temp2.index, nativeSizeType), oldType)
           ])
         ),
         module.local_get(temp1.index, nativeSizeType)
@@ -8629,7 +8641,8 @@ export class Compiler extends DiagnosticEmitter {
             program.options.isWasm64
               ? module.i64(0)
               : module.i32(0)
-          ], expression)
+          ], expression),
+          program.options.isWasm64 ? Type.i64 : Type.i32
         )
       )
     );
@@ -8651,7 +8664,7 @@ export class Compiler extends DiagnosticEmitter {
       if (isManaged) {
         // value = __retain(value)
         if (!this.skippedAutoreleases.has(valueExpr)) {
-          valueExpr = this.makeRetain(valueExpr);
+          valueExpr = this.makeRetain(valueExpr, elementType);
         }
       }
       // store<T>(tempData, value, immOffset)
@@ -8761,7 +8774,8 @@ export class Compiler extends DiagnosticEmitter {
             isWasm64
               ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
               : module.i32(i64_low(bufferAddress))
-          ], expression)
+          ], expression),
+          isWasm64 ? Type.i64 : Type.i32
         );
         if (arrayType.isManaged) {
           if (constraints & Constraints.WILL_RETAIN) {
@@ -8798,7 +8812,8 @@ export class Compiler extends DiagnosticEmitter {
               ? module.i64(bufferSize)
               : module.i32(bufferSize),
             module.i32(arrayInstance.id)
-          ], expression)
+          ], expression),
+          isWasm64 ? Type.i64 : Type.i32
         )
       )
     );
@@ -9149,7 +9164,7 @@ export class Compiler extends DiagnosticEmitter {
     //   return this
     // }
     var allocExpr = this.makeAllocation(classInstance);
-    if (classInstance.type.isManaged) allocExpr = this.makeRetain(allocExpr);
+    if (classInstance.type.isManaged) allocExpr = this.makeRetain(allocExpr, classInstance.type);
     stmts.push(
       module.if(
         module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
