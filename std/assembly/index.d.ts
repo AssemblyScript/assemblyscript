@@ -38,8 +38,6 @@ declare type v128 = object;
 /** A host reference. */
 declare type anyref = object;
 
-declare type anyint =
-
 // Compiler hints
 
 /** Compiler target. 0 = JS, 1 = WASM32, 2 = WASM64. */
