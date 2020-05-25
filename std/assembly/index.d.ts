@@ -1052,11 +1052,11 @@ declare type returnof<T extends (...args: any) => any> = ReturnType<T>;
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {
   /** Smallest representable value. */
-  static readonly MIN_VALUE: number;
+  static readonly MIN_VALUE: i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64;
   /** Largest representable value. */
-  static readonly MAX_VALUE: number;
+  static readonly MAX_VALUE: i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64;
   /** Converts a string to an integer of this type. */
-  static parseInt(value: string, radix?: number): number;
+  static parseInt(value: string, radix?: number): i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64;
   /** Converts this integer to a string. */
   toString(radix?: number): string;
 }
