@@ -1092,7 +1092,7 @@ declare class _Float {
   /** Converts a string to a floating-point number. */
   static parseFloat(value: string): f32 | f64;
   /** Converts this floating-point number to a string. */
-  toString(this: f64, radix?: number): string;
+  toString(radix?: number): string;
 }
 
 /** Backing class of signed 8-bit integers. */
