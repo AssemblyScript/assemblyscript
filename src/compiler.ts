@@ -6196,8 +6196,8 @@ export class Compiler extends DiagnosticEmitter {
       if (flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
         valueExpr = this.makeReplace(
           valueExpr,
-          module.local_get(localIndex, type.toNativeType()),
           type,
+          module.local_get(localIndex, type.toNativeType()),
           valueType,
           alreadyRetained
         );
@@ -6256,8 +6256,8 @@ export class Compiler extends DiagnosticEmitter {
       valueExpr = module.global_set(global.internalName,
         this.makeReplace(
           valueExpr,
-          module.global_get(global.internalName, nativeType),
           type,
+          module.global_get(global.internalName, nativeType),
           valueType,
           alreadyRetained
         )
@@ -6330,11 +6330,11 @@ export class Compiler extends DiagnosticEmitter {
             module.local_tee(tempThis.index, thisExpr),
             this.makeReplace(
               module.local_tee(tempValue.index, valueExpr),
+              fieldType,
               module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
                 module.local_get(tempThis.index, nativeThisType),
                 nativeFieldType, field.memoryOffset
               ),
-              fieldType,
               valueType, // TODOFIX
               alreadyRetained
             ),
@@ -6349,12 +6349,12 @@ export class Compiler extends DiagnosticEmitter {
           module.local_tee(tempThis.index, thisExpr),
           this.makeReplace(
             valueExpr,
+            fieldType,
             module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
               module.local_get(tempThis.index, nativeThisType),
               nativeFieldType, field.memoryOffset
             ),
-            fieldType,
-            fieldType, // TODOFIX
+            valueType,
             alreadyRetained
           ),
           nativeFieldType, field.memoryOffset
@@ -7274,10 +7274,10 @@ export class Compiler extends DiagnosticEmitter {
   makeReplace(
     /** New value being assigned. */
     newExpr: ExpressionRef,
-    /** Old value being replaced. */
-    oldExpr: ExpressionRef,
     /** The type of the new expression. */
     newType: Type,
+    /** Old value being replaced. */
+    oldExpr: ExpressionRef,
     /** The type of the old expression. */
     oldType: Type,
     /** Whether the new value is already retained. */
@@ -8642,7 +8642,7 @@ export class Compiler extends DiagnosticEmitter {
               ? module.i64(0)
               : module.i32(0)
           ], expression),
-          program.options.isWasm64 ? Type.i64 : Type.i32
+          arrayType
         )
       )
     );
@@ -8775,7 +8775,7 @@ export class Compiler extends DiagnosticEmitter {
               ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
               : module.i32(i64_low(bufferAddress))
           ], expression),
-          isWasm64 ? Type.i64 : Type.i32
+          program.arrayBufferInstance.type
         );
         if (arrayType.isManaged) {
           if (constraints & Constraints.WILL_RETAIN) {
@@ -8813,7 +8813,7 @@ export class Compiler extends DiagnosticEmitter {
               : module.i32(bufferSize),
             module.i32(arrayInstance.id)
           ], expression),
-          isWasm64 ? Type.i64 : Type.i32
+          program.arrayBufferInstance.type
         )
       )
     );
