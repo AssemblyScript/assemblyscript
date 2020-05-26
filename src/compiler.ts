@@ -6335,7 +6335,7 @@ export class Compiler extends DiagnosticEmitter {
                 module.local_get(tempThis.index, nativeThisType),
                 nativeFieldType, field.memoryOffset
               ),
-              valueType, // TODOFIX
+              valueType,
               alreadyRetained
             ),
             nativeFieldType, field.memoryOffset
