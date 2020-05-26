@@ -6027,7 +6027,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = tee ? global.type : Type.void;
           return module.unreachable();
         }
-        return this.makeGlobalAssignment(global, valueExpr, global.type, tee);
+        return this.makeGlobalAssignment(global, valueExpr, valueType, tee);
       }
       case ElementKind.FIELD: {
         let fieldInstance = <Field>target;
@@ -9164,7 +9164,8 @@ export class Compiler extends DiagnosticEmitter {
     //   return this
     // }
     var allocExpr = this.makeAllocation(classInstance);
-    if (classInstance.type.isManaged) allocExpr = this.makeRetain(allocExpr, classInstance.type);
+    let classType = classInstance.type;
+    if (classType.isManaged) allocExpr = this.makeRetain(allocExpr, classType);
     stmts.push(
       module.if(
         module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
