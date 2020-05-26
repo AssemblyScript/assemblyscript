@@ -6196,9 +6196,9 @@ export class Compiler extends DiagnosticEmitter {
       if (flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
         valueExpr = this.makeReplace(
           valueExpr,
-          type,
-          module.local_get(localIndex, type.toNativeType()),
           valueType,
+          module.local_get(localIndex, type.toNativeType()),
+          type,
           alreadyRetained
         );
         if (tee) { // local = REPLACE(local, value)
@@ -6256,9 +6256,9 @@ export class Compiler extends DiagnosticEmitter {
       valueExpr = module.global_set(global.internalName,
         this.makeReplace(
           valueExpr,
-          type,
-          module.global_get(global.internalName, nativeType),
           valueType,
+          module.global_get(global.internalName, nativeType),
+          type,
           alreadyRetained
         )
       );
