@@ -2917,7 +2917,7 @@ export class Compiler extends DiagnosticEmitter {
     this.error(
       DiagnosticCode.Not_implemented_0,
       statement.range,
-      ""
+      "Try Statements"
     );
     return this.module.unreachable();
   }
