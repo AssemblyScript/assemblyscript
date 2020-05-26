@@ -233,7 +233,9 @@ export class Flow {
     return flow;
   }
 
-  private constructor() { }
+  private constructor() {
+    /* nop */
+  }
 
   /** Tests if this is an inline flow. */
   get isInline(): bool {
@@ -1228,7 +1230,8 @@ export class Flow {
                   getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
                   getConstValueI32(operand) > shift // must clear MSB
                 )
-              : this.canOverflow(getBinaryLeft(expr), type) && !(
+              : this.canOverflow(getBinaryLeft(expr), type) &&
+                !(
                   getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
                   getConstValueI32(operand) >= shift // can leave MSB
                 );

@@ -38,7 +38,7 @@ import {
 
 import {
   SourceKind
- } from "./ast";
+} from "./ast";
 
 import {
   indent

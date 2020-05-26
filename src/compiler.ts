@@ -2816,9 +2816,9 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise br to default respectively out of the switch if there is no default case
     breaks[breakIndex] = module.br((defaultIndex >= 0
-        ? "case" + defaultIndex.toString()
-        : "break"
-      ) + "|" + context);
+      ? "case" + defaultIndex.toString()
+      : "break"
+    ) + "|" + context);
 
     // nest blocks in order
     var currentBlock = module.block("case0|" + context, breaks, NativeType.None);
@@ -4226,7 +4226,7 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
-         // check operator overload
+        // check operator overload
         if (operator == Token.EQUALS_EQUALS && this.currentType.is(TypeFlags.REFERENCE)) {
           let classReference = leftType.classReference;
           if (classReference) {
@@ -4326,7 +4326,7 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
-         // check operator overload
+        // check operator overload
         if (operator == Token.EXCLAMATION_EQUALS && this.currentType.is(TypeFlags.REFERENCE)) {
           let classReference = leftType.classReference;
           if (classReference) {

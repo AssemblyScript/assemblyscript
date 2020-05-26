@@ -520,7 +520,9 @@ export class Module {
     return module;
   }
 
-  private constructor() { }
+  private constructor() {
+    /* nop */
+  }
 
   // constants
 
@@ -846,7 +848,7 @@ export class Module {
     var ret = isReturn
       ? binaryen._BinaryenReturnCall(this.ref, cStr, cArr, operands ? operands.length : 0, returnType)
       : binaryen._BinaryenCall(this.ref, cStr, cArr, operands ? operands.length : 0, returnType);
-      binaryen._free(cArr);
+    binaryen._free(cArr);
     return ret;
   }
 
@@ -2111,7 +2113,9 @@ export class Relooper {
     return relooper;
   }
 
-  private constructor() {}
+  private constructor() {
+    /* nop */
+  }
 
   addBlock(code: ExpressionRef): RelooperBlockRef {
     return binaryen._RelooperAddBlock(this.ref, code);

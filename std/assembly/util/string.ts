@@ -12,8 +12,7 @@ import { ipow32 } from "../math";
 // See: https://git.musl-libc.org/cgit/musl/tree/src/ctype/alpha.h
 // size: 3904 bytes
 // @ts-ignore
-@inline @lazy
-const ALPHA_TABLE = memory.data<u8>([
+@inline @lazy const ALPHA_TABLE = memory.data<u8>([
   18,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,17,34,35,36,17,37,38,39,40,
   41,42,43,44,17,45,46,47,16,16,48,16,16,16,16,16,16,16,49,50,51,16,52,53,16,16,
   17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,54,
@@ -194,8 +193,7 @@ const ALPHA_TABLE = memory.data<u8>([
 
 // size: 1568 bytes (compressed to ~1380 bytes after binaryen)
 // @ts-ignore: decorator
-@lazy @inline
-const CASED = memory.data<u8>([
+@lazy @inline const CASED = memory.data<u8>([
   18,19,20,21,22,23,16,16,16,16,16,16,16,16,16,16,
   24,16,16,25,16,16,16,16,16,16,16,16,26,27,17,28,
   29,30,16,16,31,16,16,16,16,16,16,16,32,33,16,16,
@@ -278,8 +276,7 @@ const CASED = memory.data<u8>([
 
 // size: 2976 bytes (compressed to ~2050 bytes after binaryen)
 // @ts-ignore: decorator
-@lazy @inline
-const CASE_IGNORABLES = memory.data<u8>([
+@lazy @inline const CASE_IGNORABLES = memory.data<u8>([
   18,16,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
   33,16,16,34,16,16,16,35,36,37,38,39,40,41,16,42,
   43,16,16,16,16,16,16,16,16,16,16,16,44,45,46,16,
@@ -421,8 +418,7 @@ const CASE_IGNORABLES = memory.data<u8>([
 ]);
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOWER127 = memory.data<u8>([
+@lazy @inline const LOWER127 = memory.data<u8>([
   0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
   16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
   32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -437,8 +433,7 @@ const LOWER127 = memory.data<u8>([
 ]);
 
 // @ts-ignore: decorator
-@lazy @inline
-const UPPER127 = memory.data<u8>([
+@lazy @inline const UPPER127 = memory.data<u8>([
   0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
   16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
   32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -454,8 +449,7 @@ const UPPER127 = memory.data<u8>([
 
 // 23 * 8 = 184 bytes
 // @ts-ignore: decorator
-@lazy @inline
-const POWERS10 = memory.data<f64>([
+@lazy @inline const POWERS10 = memory.data<f64>([
   1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
   1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
   1e20, 1e21, 1e22
@@ -1112,8 +1106,7 @@ function parseExp(ptr: usize, len: i32): i32 {
 }
 
 // @ts-ignore: decorator
-@lazy
-var __fixmulShift: u64 = 0;
+@lazy var __fixmulShift: u64 = 0;
 
 // Adopted from metallic lib:
 // https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h

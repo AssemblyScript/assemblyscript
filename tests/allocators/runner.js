@@ -22,7 +22,7 @@ function runner(exports, runs, allocs) {
   function preciseFree(ptr) {
     var idx = ptrs.indexOf(ptr);
     if (idx < 0) throw Error("unknown pointer");
-    var ptr = ptrs[idx];
+    ptr = ptrs[idx];
     ptrs.splice(idx, 1);
     if (typeof ptr !== "number") throw Error();
     free(ptr);
@@ -75,15 +75,15 @@ function runner(exports, runs, allocs) {
 
       try {
         reset();
-        var ptr = alloc(64, 0);
+        let ptr = alloc(64, 0);
         if (ptr !== base) throw Error("expected " + base + " but got " + ptr);
         reset();
       } catch (e) {
         // should now be possible to reuse the entire memory
         // just try a large portion of the memory here, for example because of
         // SL+1 for allocations in TLSF
-        var size = ((exports.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
-        var ptr = alloc(size, 0);
+        let size = ((exports.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
+        let ptr = alloc(size, 0);
         // if (fill) fill(ptr, 0xac, size);
         if (ptr !== base) throw Error("expected " + base + " but got " + ptr);
         free(ptr);
@@ -95,11 +95,11 @@ function runner(exports, runs, allocs) {
   }
 }
 
-function mem(memory, offset, count) {
+/* function mem(memory, offset, count) {
   if (!offset) offset = 0;
   if (!count) count = 1024;
   var mem = new Uint8Array(memory.buffer, offset);
-  var stackTop = new Uint32Array(memory.buffer, 4, 1)[0];
+  // var stackTop = new Uint32Array(memory.buffer, 4, 1)[0];
   var hex = [];
   for (var i = 0; i < count; ++i) {
     var o = (offset + i).toString(16);
@@ -112,6 +112,6 @@ function mem(memory, offset, count) {
     hex.push(h);
   }
   console.log(hex.join(" ") + " ...");
-}
+} */
 
 if (typeof module === "object" && typeof exports === "object") module.exports = runner;

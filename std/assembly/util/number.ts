@@ -8,8 +8,7 @@ import { CharCode } from "./string";
 export const MAX_DOUBLE_LENGTH = 28;
 
 // @ts-ignore: decorator
-@lazy @inline
-const POWERS10 = memory.data<u32>([
+@lazy @inline const POWERS10 = memory.data<u32>([
   1,
   10,
   100,
@@ -37,8 +36,7 @@ const POWERS10 = memory.data<u32>([
   "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"
 */
 // @ts-ignore: decorator
-@lazy @inline
-const DIGITS = memory.data<u32>([
+@lazy @inline const DIGITS = memory.data<u32>([
   0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030,
   0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
   0x00300031, 0x00310031, 0x00320031, 0x00330031, 0x00340031,
@@ -62,8 +60,7 @@ const DIGITS = memory.data<u32>([
 ]);
 
 // @ts-ignore: decorator
-@lazy @inline
-const EXP_POWERS = memory.data<i16>([
+@lazy @inline const EXP_POWERS = memory.data<i16>([/* eslint-disable indent */
   -1220, -1193, -1166, -1140, -1113, -1087, -1060, -1034, -1007,  -980,
    -954,  -927,  -901,  -874,  -847,  -821,  -794,  -768,  -741,  -715,
    -688,  -661,  -635,  -608,  -582,  -555,  -529,  -502,  -475,  -449,
@@ -73,12 +70,11 @@ const EXP_POWERS = memory.data<i16>([
     375,   402,   428,   455,   481,   508,   534,   561,   588,   614,
     641,   667,   694,   720,   747,   774,   800,   827,   853,   880,
     907,   933,   960,   986,  1013,  1039,  1066
-]);
+/* eslint-enable indent */]);
 
 // 1e-348, 1e-340, ..., 1e340
 // @ts-ignore: decorator
-@lazy @inline
-const FRC_POWERS = memory.data<u64>([
+@lazy @inline const FRC_POWERS = memory.data<u64>([
   0xFA8FD5A0081C0288, 0xBAAEE17FA23EBF76, 0x8B16FB203055AC76, 0xCF42894A5DCE35EA,
   0x9A6BB0AA55653B2D, 0xE61ACF033D1A45DF, 0xAB70FE17C79AC6CA, 0xFF77B1FCBEBCDC4F,
   0xBE5691EF416BD60C, 0x8DD01FAD907FFC3C, 0xD3515C2831559A83, 0x9D71AC8FADA6C9B5,
@@ -316,32 +312,26 @@ export function itoa<T extends number>(value: T): String {
 }
 
 // @ts-ignore: decorator
-@lazy
-var _K: i32 = 0;
+@lazy var _K: i32 = 0;
 
 // // @ts-ignore: decorator
 // @lazy
 // var _frc: u64 = 0;
 
 // @ts-ignore: decorator
-@lazy
-var _exp: i32 = 0;
+@lazy var _exp: i32 = 0;
 
 // @ts-ignore: decorator
-@lazy
-var _frc_minus: u64 = 0;
+@lazy var _frc_minus: u64 = 0;
 
 // @ts-ignore: decorator
-@lazy
-var _frc_plus:  u64 = 0;
+@lazy var _frc_plus:  u64 = 0;
 
 // @ts-ignore: decorator
-@lazy
-var _frc_pow: u64 = 0;
+@lazy var _frc_pow: u64 = 0;
 
 // @ts-ignore: decorator
-@lazy
-var _exp_pow: i32 = 0;
+@lazy var _exp_pow: i32 = 0;
 
 // @ts-ignore: decorator
 @inline
@@ -410,7 +400,7 @@ function getCachedPower(minExp: i32): void {
   const c = reinterpret<f64>(0x3FD34413509F79FE); // 1 / lg(10) = 0.30102999566398114
   var dk = (-61 - minExp) * c + 347;	            // dk must be positive, so can do ceiling in positive
   var k = <i32>dk;
-      k += i32(k != dk); // conversion with ceil
+  k += i32(k != dk); // conversion with ceil
 
   var index = (k >> 3) + 1;
   _K = 348 - (index << 3);	// decimal exponent no need lookup table
@@ -427,7 +417,7 @@ function grisu2(value: f64, buffer: usize, sign: i32): i32 {
   var exp = i32((uv & 0x7FF0000000000000) >>> 52);
   var sid = uv & 0x000FFFFFFFFFFFFF;
   var frc = (u64(exp != 0) << 52) + sid;
-      exp = select<i32>(exp, 1, exp) - (0x3FF + 52);
+  exp = select<i32>(exp, 1, exp) - (0x3FF + 52);
 
   normalizedBoundaries(frc, exp);
   getCachedPower(_exp);
@@ -458,7 +448,6 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
   var mask    = one_frc - 1;
 
   var wp_w_frc = mp_frc - w_frc;
-  var wp_w_exp = mp_exp;
 
   var p1 = u32(mp_frc >> one_exp);
   var p2 = mp_frc & mask;
@@ -586,7 +575,7 @@ export function dtoa_core(buffer: usize, value: f64): i32 {
   }
   // assert(value > 0 && value <= 1.7976931348623157e308);
   var len = grisu2(value, buffer, sign);
-      len = prettify(buffer + (sign << 1), len - sign, _K);
+  len = prettify(buffer + (sign << 1), len - sign, _K);
   return len + sign;
 }
 

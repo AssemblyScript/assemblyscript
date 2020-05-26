@@ -28,4 +28,4 @@ exports.postInstantiate = function(instance) {
   }
   if (!thrown) failed = "unexpected missing throw";
   if (failed) throw Error(failed);
-}
+};

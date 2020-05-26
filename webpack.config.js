@@ -103,7 +103,7 @@ const bin = {
       },
       __dirname: JSON.stringify(".")
     }),
-    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob)$/)
+    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts-node|glob)$/)
   ],
   optimization: {
     minimize: true,

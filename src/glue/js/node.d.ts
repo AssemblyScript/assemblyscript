@@ -3,5 +3,5 @@
  * @license Apache-2.0
  */
 
-declare const global: any;
-declare function require(name: string): any;
+declare const global: Record<string,unknown>;
+declare function require(name: string): unknown;

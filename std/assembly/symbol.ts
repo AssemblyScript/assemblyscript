@@ -1,16 +1,13 @@
 import { Map } from "./map";
 
 // @ts-ignore: decorator
-@lazy
-var stringToId: Map<string, usize>;
+@lazy var stringToId: Map<string, usize>;
 
 // @ts-ignore: decorator
-@lazy
-var idToString: Map<usize, string>;
+@lazy var idToString: Map<usize, string>;
 
 // @ts-ignore: decorator
-@lazy
-var nextId: usize = 12; // Symbol.unscopables + 1
+@lazy var nextId: usize = 12; // Symbol.unscopables + 1
 
 @unmanaged @final abstract class _Symbol {
 

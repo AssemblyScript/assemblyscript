@@ -3,6 +3,8 @@
  * @license Apache-2.0
  */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 // @ts-ignore: decorator
 @global
 function Map_keys<K,V>(map: Map<K,V>): K[] {

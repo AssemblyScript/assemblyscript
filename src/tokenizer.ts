@@ -1258,7 +1258,7 @@ export class Tokenizer extends DiagnosticEmitter {
           i64_shl(value, i64_4),
           i64_new(c - CharCode._0)
         );
-       } else if (c >= CharCode.A && c <= CharCode.F) {
+      } else if (c >= CharCode.A && c <= CharCode.F) {
         // value = (value << 4) + 10 + c - CharCode.A;
         value = i64_add(
           i64_shl(value, i64_4),
@@ -1562,9 +1562,6 @@ export class Tokenizer extends DiagnosticEmitter {
         ((value32 - 0x10000) >>> 10) | 0xD800,
         ((value32 - 0x10000) & 1023) | 0xDC00
       );
-  }
-
-  finish(): void {
   }
 }
 

@@ -31,7 +31,7 @@ export function receiveRefDrop(): void {
   // A straight forward optimization here is to detect immediate drops and skip
   // the temp local.
 
-  /*__release( */ returnRef() /* ) */;
+  /* __release( */ returnRef() /* ) */;
 }
 
 export function receiveRefRetain(): void {

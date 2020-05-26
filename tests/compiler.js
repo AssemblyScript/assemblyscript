@@ -267,7 +267,7 @@ function runTest(basename) {
     if (failed) return 1;
   });
   if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
-  if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".untouched.wasm"), err => {});
+  if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".untouched.wasm"), err => { /* nop */ });
   if (cluster.isWorker) process.send({ cmd: "done", failed: failed, message: failedMessages.get(basename) });
 }
 

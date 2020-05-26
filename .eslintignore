@@ -1,0 +1,6 @@
+dist/
+lib/lint/
+lib/parse/index.js
+out/
+raw/
+tests/parser/

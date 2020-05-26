@@ -966,6 +966,7 @@ export class ASTBuilder {
   }
 
   visitEmptyStatement(node: EmptyStatement): void {
+    /* nop */
   }
 
   visitEnumDeclaration(node: EnumDeclaration, isDefault: bool = false): void {
