@@ -2298,7 +2298,7 @@
    end
   end
  )
- (func $~lib/util/number/utoa32_lut (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_dec_lut (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2664,7 +2664,7 @@
       local.get $10
       local.get $9
       local.get $8
-      call $~lib/util/number/utoa32_lut
+      call $~lib/util/number/utoa32_dec_lut
       local.get $5
       i32.const 45
       i32.const 43
@@ -2740,7 +2740,7 @@
       local.get $11
       local.get $6
       local.get $10
-      call $~lib/util/number/utoa32_lut
+      call $~lib/util/number/utoa32_dec_lut
       local.get $9
       i32.const 45
       i32.const 43

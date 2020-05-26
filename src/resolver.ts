@@ -764,7 +764,7 @@ export class Resolver extends DiagnosticEmitter {
 
       let parameterNodes = prototype.functionTypeNode.parameters;
       let numParameters = parameterNodes.length;
-      let argumentNodes = node.arguments;
+      let argumentNodes = node.args;
       let numArguments = argumentNodes.length;
 
       // infer types with generic components while updating contextual types
@@ -2400,9 +2400,9 @@ export class Resolver extends DiagnosticEmitter {
         // `unchecked` behaves like parenthesized
         if (
           functionPrototype.internalName == BuiltinNames.unchecked &&
-          node.arguments.length > 0
+          node.args.length > 0
         ) {
-          return this.resolveExpression(node.arguments[0], ctxFlow, ctxType, reportMode);
+          return this.resolveExpression(node.args[0], ctxFlow, ctxType, reportMode);
         }
         let instance = this.maybeInferCall(node, functionPrototype, ctxFlow, reportMode);
         if (!instance) return null;
