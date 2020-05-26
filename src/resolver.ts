@@ -1036,7 +1036,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Not_implemented,
+        DiagnosticCode.Not_implemented_0,
         node.range
       );
     }
@@ -1160,7 +1160,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Not_implemented,
+        DiagnosticCode.Not_implemented_0,
         node.range
       );
     }
@@ -1658,7 +1658,7 @@ export class Resolver extends DiagnosticEmitter {
         //   return this.resolveClass(this.program.readonlyArrayPrototype, [ elementType ]);
         // }
         this.error(
-          DiagnosticCode.Not_implemented,
+          DiagnosticCode.Not_implemented_0,
           node.range
         );
         return null;
@@ -1884,7 +1884,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Not_implemented,
+        DiagnosticCode.Not_implemented_0,
         node.range
       );
     }
@@ -2108,7 +2108,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Not_implemented,
+        DiagnosticCode.Not_implemented_0,
         node.range
       );
     }
@@ -2318,7 +2318,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Not_implemented,
+        DiagnosticCode.Not_implemented_0,
         node.range
       );
     }

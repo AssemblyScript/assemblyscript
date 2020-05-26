@@ -2606,7 +2606,7 @@ export class Parser extends DiagnosticEmitter {
       if (tn.skip(Token.COMMA)) {
         // TODO: default + star, default + members
         this.error(
-          DiagnosticCode.Not_implemented,
+          DiagnosticCode.Not_implemented_0,
           tn.range()
         );
         return null;

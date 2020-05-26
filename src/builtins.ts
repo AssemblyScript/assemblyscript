@@ -2838,7 +2838,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.error(
-    DiagnosticCode.Not_implemented,
+    DiagnosticCode.Not_implemented_0,
     ctx.reportNode.typeArgumentsRange
   );
   return abort;

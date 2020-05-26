@@ -2107,7 +2107,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.TYPEDECLARATION: {
         // TODO: integrate inner type declaration into flow
         this.error(
-          DiagnosticCode.Not_implemented,
+          DiagnosticCode.Not_implemented_0,
           statement.range
         );
         stmt = module.unreachable();
@@ -2182,7 +2182,7 @@ export class Compiler extends DiagnosticEmitter {
     var labelNode = statement.label;
     if (labelNode) {
       this.error(
-        DiagnosticCode.Not_implemented,
+        DiagnosticCode.Not_implemented_0,
         labelNode.range
       );
       return module.unreachable();
@@ -2216,7 +2216,7 @@ export class Compiler extends DiagnosticEmitter {
     var label = statement.label;
     if (label) {
       this.error(
-        DiagnosticCode.Not_implemented,
+        DiagnosticCode.Not_implemented_0,
         label.range
       );
       return module.unreachable();
@@ -2581,7 +2581,7 @@ export class Compiler extends DiagnosticEmitter {
     statement: ForOfStatement
   ): ExpressionRef {
     this.error(
-      DiagnosticCode.Not_implemented,
+      DiagnosticCode.Not_implemented_0,
       statement.range
     );
     return this.module.unreachable();
@@ -2915,8 +2915,9 @@ export class Compiler extends DiagnosticEmitter {
     // TODO: can't yet support something like: try { return ... } finally { ... }
     // worthwhile to investigate lowering returns to block results (here)?
     this.error(
-      DiagnosticCode.Not_implemented,
-      statement.range
+      DiagnosticCode.Not_implemented_0,
+      statement.range,
+      ""
     );
     return this.module.unreachable();
   }
@@ -3454,7 +3455,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: {
         this.error(
-          DiagnosticCode.Not_implemented,
+          DiagnosticCode.Not_implemented_0,
           expression.range
         );
         expr = this.module.unreachable();
@@ -3782,7 +3783,7 @@ export class Compiler extends DiagnosticEmitter {
         //   }
         // }
         this.error(
-          DiagnosticCode.Not_implemented,
+          DiagnosticCode.Not_implemented_0,
           expression.range
         );
         return this.module.unreachable();
@@ -4312,7 +4313,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.ANYREF: {
             // TODO: ref.eq
             this.error(
-              DiagnosticCode.Not_implemented,
+              DiagnosticCode.Not_implemented_0,
               expression.range
             );
             expr = module.unreachable();
@@ -4412,7 +4413,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.ANYREF: {
             // TODO: !ref.eq
             this.error(
-              DiagnosticCode.Not_implemented,
+              DiagnosticCode.Not_implemented_0,
               expression.range
             );
             expr = module.unreachable();
@@ -5951,7 +5952,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: {
         this.error(
-          DiagnosticCode.Not_implemented,
+          DiagnosticCode.Not_implemented_0,
           expression.range
         );
         return this.module.unreachable();
@@ -6155,7 +6156,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.error(
-      DiagnosticCode.Not_implemented,
+      DiagnosticCode.Not_implemented_0,
       valueExpression.range
     );
     return module.unreachable();
@@ -6628,7 +6629,7 @@ export class Compiler extends DiagnosticEmitter {
       ));
     }
     this.error(
-      DiagnosticCode.Not_implemented,
+      DiagnosticCode.Not_implemented_0,
       expression.expression.range
     );
     return this.module.unreachable();
@@ -6659,7 +6660,7 @@ export class Compiler extends DiagnosticEmitter {
     var hasRest = signature.hasRest;
     if (hasRest) {
       this.error(
-        DiagnosticCode.Not_implemented,
+        DiagnosticCode.Not_implemented_0,
         reportNode.range
       );
       return false;
@@ -8148,7 +8149,7 @@ export class Compiler extends DiagnosticEmitter {
         if (target.parent != flow.parentFunction) {
           // TODO: closures
           this.error(
-            DiagnosticCode.Not_implemented,
+            DiagnosticCode.Not_implemented_0,
             expression.range
           );
           return module.unreachable();
@@ -8213,7 +8214,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.error(
-      DiagnosticCode.Not_implemented,
+      DiagnosticCode.Not_implemented_0,
       expression.range
     );
     return this.module.unreachable();
@@ -8468,7 +8469,7 @@ export class Compiler extends DiagnosticEmitter {
       // case LiteralKind.REGEXP:
     }
     this.error(
-      DiagnosticCode.Not_implemented,
+      DiagnosticCode.Not_implemented_0,
       expression.range
     );
     this.currentType = contextualType;
@@ -9319,7 +9320,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.error(
-      DiagnosticCode.Not_implemented,
+      DiagnosticCode.Not_implemented_0,
       expression.range
     );
     return module.unreachable();
