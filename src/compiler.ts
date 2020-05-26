@@ -9164,7 +9164,7 @@ export class Compiler extends DiagnosticEmitter {
     //   return this
     // }
     var allocExpr = this.makeAllocation(classInstance);
-    let classType = classInstance.type;
+    var classType = classInstance.type;
     if (classType.isManaged) allocExpr = this.makeRetain(allocExpr, classType);
     stmts.push(
       module.if(
