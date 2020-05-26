@@ -1,4 +1,5 @@
 dist/
+docs/
 lib/parse/index.js
 out/
 raw/
