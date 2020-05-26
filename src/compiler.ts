@@ -6330,12 +6330,12 @@ export class Compiler extends DiagnosticEmitter {
             module.local_tee(tempThis.index, thisExpr),
             this.makeReplace(
               module.local_tee(tempValue.index, valueExpr),
-              fieldType,
+              valueType,
               module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
                 module.local_get(tempThis.index, nativeThisType),
                 nativeFieldType, field.memoryOffset
               ),
-              valueType,
+              fieldType,
               alreadyRetained
             ),
             nativeFieldType, field.memoryOffset
@@ -6349,12 +6349,12 @@ export class Compiler extends DiagnosticEmitter {
           module.local_tee(tempThis.index, thisExpr),
           this.makeReplace(
             valueExpr,
-            fieldType,
+            valueType,
             module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
               module.local_get(tempThis.index, nativeThisType),
               nativeFieldType, field.memoryOffset
             ),
-            valueType,
+            fieldType,
             alreadyRetained
           ),
           nativeFieldType, field.memoryOffset
