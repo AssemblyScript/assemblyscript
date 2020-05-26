@@ -70,7 +70,7 @@ import {
   IfStatement,
   ImportDeclaration,
   ImportStatement,
-  IndexSignatureDeclaration,
+  IndexSignatureNode,
   NamespaceDeclaration,
   ParameterNode,
   ParameterKind,
@@ -101,7 +101,7 @@ export class Parser extends DiagnosticEmitter {
   /** Optional handler to intercept comments while tokenizing. */
   onComment: CommentHandler | null = null;
   /** Current file being parsed. */
-  currentSource: Source;
+  currentSource: Source | null = null;
   /** Dependency map **/
   dependees: Map<string, Source> = new Map();
   /** An array of parsed sources. */
@@ -135,15 +135,15 @@ export class Parser extends DiagnosticEmitter {
 
     // create the source element
     var source = new Source(
-      normalizedPath,
-      text,
       isEntry
         ? SourceKind.USER_ENTRY
         : path.startsWith(LIBRARY_PREFIX)
           ? path.indexOf(PATH_DELIMITER, LIBRARY_PREFIX.length) < 0
             ? SourceKind.LIBRARY_ENTRY
             : SourceKind.LIBRARY
-          : SourceKind.USER
+          : SourceKind.USER,
+      normalizedPath,
+      text
     );
 
     this.sources.push(source);
@@ -662,13 +662,16 @@ export class Parser extends DiagnosticEmitter {
     } else {
       isSignature = false; // not yet known
       do {
+        let paramStart: i32 = -1;
         let kind = ParameterKind.DEFAULT;
         if (tn.skip(Token.DOT_DOT_DOT)) {
+          paramStart = tn.tokenPos;
           isSignature = true;
           tn.discard(state);
           kind = ParameterKind.REST;
         }
         if (tn.skip(Token.THIS)) {
+          if (paramStart < 0) paramStart = tn.tokenPos;
           if (tn.skip(Token.COLON)) {
             isSignature = true;
             tn.discard(state);
@@ -689,6 +692,7 @@ export class Parser extends DiagnosticEmitter {
             return null;
           }
         } else if (tn.skipIdentifier()) {
+          if (paramStart < 0) paramStart = tn.tokenPos;
           let name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range(tn.tokenPos, tn.pos));
           if (tn.skip(Token.QUESTION)) {
             isSignature = true;
@@ -710,10 +714,7 @@ export class Parser extends DiagnosticEmitter {
               this.tryParseSignatureIsSignature = isSignature;
               return null;
             }
-            let param = new ParameterNode();
-            param.parameterKind = kind;
-            param.name = name;
-            param.type = type;
+            let param = Node.createParameter(kind, name, type, null, tn.range(paramStart, tn.pos));
             if (!parameters) parameters = [ param ];
             else parameters.push(param);
           } else {
@@ -724,10 +725,7 @@ export class Parser extends DiagnosticEmitter {
               }
             }
             if (isSignature) {
-              let param = new ParameterNode();
-              param.parameterKind = kind;
-              param.name = name;
-              param.type = Node.createOmittedType(tn.range().atEnd);
+              let param = Node.createParameter(kind, name, Node.createOmittedType(tn.range(tn.pos)), null, tn.range(paramStart, tn.pos));
               if (!parameters) parameters = [ param ];
               else parameters.push(param);
               this.error(
@@ -775,10 +773,13 @@ export class Parser extends DiagnosticEmitter {
         isSignature = true;
         tn.discard(state);
         if (firstParamNameNoType) { // now we know
-          let param = new ParameterNode();
-          param.parameterKind = firstParamKind;
-          param.name = firstParamNameNoType;
-          param.type = Node.createOmittedType(firstParamNameNoType.range.atEnd);
+          let param = Node.createParameter(
+            firstParamKind,
+            firstParamNameNoType,
+            Node.createOmittedType(firstParamNameNoType.range.atEnd),
+            null,
+            firstParamNameNoType.range
+          );
           if (!parameters) parameters = [ param ];
           else parameters.push(param);
           this.error(
@@ -871,14 +872,14 @@ export class Parser extends DiagnosticEmitter {
 
     // at ('const' | 'let' | 'var'): VariableDeclaration (',' VariableDeclaration)* ';'?
 
-    var members = new Array<VariableDeclaration>();
+    var declarations = new Array<VariableDeclaration>();
     do {
-      let member = this.parseVariableDeclaration(tn, flags, decorators, isFor);
-      if (!member) return null;
-      members.push(member);
+      let declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);
+      if (!declaration) return null;
+      declarations.push(declaration);
     } while (tn.skip(Token.COMMA));
 
-    var ret = Node.createVariableStatement(members, decorators, tn.range(startPos, tn.pos));
+    var ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
     tn.skip(Token.SEMICOLON);
     return ret;
   }
@@ -950,10 +951,10 @@ export class Parser extends DiagnosticEmitter {
     }
     return Node.createVariableDeclaration(
       identifier,
-      type,
-      initializer,
       parentDecorators,
       flags,
+      type,
+      initializer,
       range
     );
   }
@@ -1001,9 +1002,9 @@ export class Parser extends DiagnosticEmitter {
     }
     var ret = Node.createEnumDeclaration(
       identifier,
-      members,
       decorators,
       flags,
+      members,
       tn.range(startPos, tn.pos)
     );
     tn.skip(Token.SEMICOLON);
@@ -1032,8 +1033,8 @@ export class Parser extends DiagnosticEmitter {
     }
     return Node.createEnumValueDeclaration(
       identifier,
-      value,
       parentFlags,
+      value,
       Range.join(identifier.range, tn.range())
     );
   }
@@ -1331,14 +1332,14 @@ export class Parser extends DiagnosticEmitter {
         if (!initializer) return null;
       }
       let param = Node.createParameter(
-        identifier,
-        type,
-        initializer,
         isRest
           ? ParameterKind.REST
           : isOptional
             ? ParameterKind.OPTIONAL
             : ParameterKind.DEFAULT,
+        identifier,
+        type,
+        initializer,
         Range.join(assert(startRange), tn.range())
       );
       param.flags |= accessFlags;
@@ -1472,11 +1473,11 @@ export class Parser extends DiagnosticEmitter {
 
     var ret = Node.createFunctionDeclaration(
       name,
+      decorators,
+      flags,
       typeParameters,
       signature,
       body,
-      decorators,
-      flags,
       ArrowKind.NONE,
       tn.range(startPos, tn.pos)
     );
@@ -1587,10 +1588,10 @@ export class Parser extends DiagnosticEmitter {
     var declaration = Node.createFunctionDeclaration(
       name,
       null,
+      CommonFlags.NONE,
+      null,
       signature,
       body,
-      null,
-      CommonFlags.NONE,
       arrowKind,
       tn.range(startPos, tn.pos)
     );
@@ -1686,30 +1687,37 @@ export class Parser extends DiagnosticEmitter {
       assert(!implementsTypes);
       declaration = Node.createInterfaceDeclaration(
         identifier,
-        typeParameters,
-        extendsType,
-        members,
         decorators,
         flags,
+        typeParameters,
+        extendsType,
+        null,
+        members,
         tn.range(startPos, tn.pos)
       );
     } else {
       declaration = Node.createClassDeclaration(
         identifier,
+        decorators,
+        flags,
         typeParameters,
         extendsType,
         implementsTypes,
         members,
-        decorators,
-        flags,
         tn.range(startPos, tn.pos)
       );
     }
     if (!tn.skip(Token.CLOSEBRACE)) {
       do {
         let member = this.parseClassMember(tn, declaration);
-        if (member) members.push(member);
-        else {
+        if (member) {
+          if (member.kind == NodeKind.INDEXSIGNATURE) {
+            declaration.indexSignature = <IndexSignatureNode>member;
+          } else {
+            assert(member instanceof DeclarationStatement);
+            members.push(<DeclarationStatement>member);
+          }
+        } else {
           this.skipStatement(tn);
           if (tn.skip(Token.ENDOFFILE)) {
             this.error(
@@ -1749,19 +1757,25 @@ export class Parser extends DiagnosticEmitter {
     var members = new Array<DeclarationStatement>();
     var declaration = Node.createClassDeclaration(
       name,
-      [],
+      null,
+      CommonFlags.NONE,
+      null,
       null,
       null,
       members,
-      null,
-      CommonFlags.NONE,
       tn.range(startPos, tn.pos)
     );
     if (!tn.skip(Token.CLOSEBRACE)) {
       do {
         let member = this.parseClassMember(tn, declaration);
-        if (member) members.push(member);
-        else {
+        if (member) {
+          if (member.kind == NodeKind.INDEXSIGNATURE) {
+            declaration.indexSignature = <IndexSignatureNode>member;
+          } else {
+            assert(declaration instanceof DeclarationStatement);
+            members.push(<DeclarationStatement>member);
+          }
+        } else {
           this.skipStatement(tn);
           if (tn.skip(Token.ENDOFFILE)) {
             this.error(
@@ -1780,7 +1794,7 @@ export class Parser extends DiagnosticEmitter {
   parseClassMember(
     tn: Tokenizer,
     parent: ClassDeclaration
-  ): DeclarationStatement | null {
+  ): Node | null {
 
     // before:
     //   ('public' | 'private' | 'protected')?
@@ -2006,7 +2020,7 @@ export class Parser extends DiagnosticEmitter {
             tn.range(abstractStart, abstractEnd), "abstract"
           ); // recoverable
         }
-        let retIndex = this.parseIndexSignatureDeclaration(tn, flags, decorators);
+        let retIndex = this.parseIndexSignature(tn, flags, decorators);
         if (!retIndex) {
           if (flags & CommonFlags.READONLY) {
             this.error(
@@ -2066,10 +2080,10 @@ export class Parser extends DiagnosticEmitter {
           )) {
             let implicitFieldDeclaration = Node.createFieldDeclaration(
               parameter.name,
-              parameter.type,
-              null, // initialized via parameter
               null,
               parameter.flags | CommonFlags.INSTANCE,
+              parameter.type,
+              null, // initialized via parameter
               parameter.range
             );
             implicitFieldDeclaration.parameterIndex = i;
@@ -2166,11 +2180,11 @@ export class Parser extends DiagnosticEmitter {
 
       let retMethod = Node.createMethodDeclaration(
         name,
+        decorators,
+        flags,
         typeParameters,
         signature,
         body,
-        decorators,
-        flags,
         tn.range(startPos, tn.pos)
       );
       tn.skip(Token.SEMICOLON);
@@ -2244,10 +2258,10 @@ export class Parser extends DiagnosticEmitter {
       }
       let retField = Node.createFieldDeclaration(
         name,
-        type,
-        initializer,
         decorators,
         flags,
+        type,
+        initializer,
         range
       );
       tn.skip(Token.SEMICOLON);
@@ -2256,11 +2270,11 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  parseIndexSignatureDeclaration(
+  parseIndexSignature(
     tn: Tokenizer,
     flags: CommonFlags,
     decorators: DecoratorNode[] | null,
-  ): IndexSignatureDeclaration | null {
+  ): IndexSignatureNode | null {
 
     // at: '[': 'key' ':' Type ']' ':' Type
 
@@ -2296,7 +2310,7 @@ export class Parser extends DiagnosticEmitter {
                 );
                 return null;
               }
-              return Node.createIndexSignatureDeclaration(<NamedTypeNode>keyType, valueType, flags, tn.range(start, tn.pos));
+              return Node.createIndexSignature(<NamedTypeNode>keyType, valueType, flags, tn.range(start, tn.pos));
             } else {
               this.error(
                 DiagnosticCode._0_expected,
@@ -2345,9 +2359,9 @@ export class Parser extends DiagnosticEmitter {
         let members = new Array<Statement>();
         let declaration = Node.createNamespaceDeclaration(
           identifier,
-          members,
           decorators,
           flags,
+          members,
           tn.range(startPos, tn.pos)
         );
         while (!tn.skip(Token.CLOSEBRACE)) {
@@ -2391,6 +2405,7 @@ export class Parser extends DiagnosticEmitter {
     // at 'export': '{' ExportMember (',' ExportMember)* }' ('from' StringLiteral)? ';'?
 
     var path: StringLiteralExpression | null = null;
+    var currentSource = assert(this.currentSource);
     if (tn.skip(Token.OPENBRACE)) {
       let members = new Array<ExportMember>();
       while (!tn.skip(Token.CLOSEBRACE)) {
@@ -2423,7 +2438,7 @@ export class Parser extends DiagnosticEmitter {
       let ret = Node.createExportStatement(members, path, isDeclare, tn.range(startPos, tn.pos));
       let internalPath = ret.internalPath;
       if (internalPath !== null && !this.seenlog.has(internalPath)) {
-        this.dependees.set(internalPath, this.currentSource);
+        this.dependees.set(internalPath, currentSource);
         this.backlog.push(internalPath);
         this.seenlog.add(internalPath);
       }
@@ -2440,7 +2455,7 @@ export class Parser extends DiagnosticEmitter {
           if (!exportPaths) source.exportPaths = [ internalPath ];
           else if (!exportPaths.includes(internalPath)) exportPaths.push(internalPath);
           if (!this.seenlog.has(internalPath)) {
-            this.dependees.set(internalPath, this.currentSource);
+            this.dependees.set(internalPath, currentSource);
             this.backlog.push(internalPath);
           }
           tn.skip(Token.SEMICOLON);
@@ -2605,13 +2620,13 @@ export class Parser extends DiagnosticEmitter {
         let ret: ImportStatement;
         if (namespaceName) {
           assert(!members);
-          ret = Node.createImportStatementWithWildcard(namespaceName, path, tn.range(startPos, tn.pos));
+          ret = Node.createWildcardImportStatement(namespaceName, path, tn.range(startPos, tn.pos));
         } else {
           ret = Node.createImportStatement(members, path, tn.range(startPos, tn.pos));
         }
         let internalPath = ret.internalPath;
         if (!this.seenlog.has(internalPath)) {
-          this.dependees.set(internalPath, this.currentSource);
+          this.dependees.set(internalPath, assert(this.currentSource));
           this.backlog.push(internalPath);
         }
         tn.skip(Token.SEMICOLON);
@@ -3356,10 +3371,10 @@ export class Parser extends DiagnosticEmitter {
         if (!type) return null;
         let ret = Node.createTypeDeclaration(
           name,
-          typeParameters,
-          type,
           decorators,
           flags,
+          typeParameters,
+          type,
           tn.range(startPos, tn.pos)
         );
         tn.skip(Token.SEMICOLON);
@@ -3699,10 +3714,10 @@ export class Parser extends DiagnosticEmitter {
             Node.createEmptyIdentifierExpression(tn.range(startPos)),
             [
               Node.createParameter(
+                ParameterKind.DEFAULT,
                 identifier,
                 Node.createOmittedType(identifier.range.atEnd),
                 null,
-                ParameterKind.DEFAULT,
                 identifier.range
               )
             ],

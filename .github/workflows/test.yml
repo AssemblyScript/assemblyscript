@@ -50,6 +50,8 @@ jobs:
       run: npm ci --no-audit
     - name: Clean distribution files
       run: npm run clean
+    - name: Check sources
+      run: npm run check
     - name: Test sources
       run: |
         if [[ `node bin/asc --version` != *"-dev" ]]; then

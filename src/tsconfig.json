@@ -4,7 +4,8 @@
     "outDir": "../out",
     "allowJs": false,
     "sourceMap": true,
-    "target": "ES2016"
+    "target": "ES2016",
+    "strict": true
   },
   "include": [
     "./**/*.ts"

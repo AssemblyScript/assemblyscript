@@ -486,42 +486,33 @@ export enum ExpressionRunnerFlags {
 }
 
 export class MemorySegment {
-
-  buffer: Uint8Array;
-  offset: i64;
-
-  static create(buffer: Uint8Array, offset: i64): MemorySegment {
-    var segment = new MemorySegment();
-    segment.buffer = buffer;
-    segment.offset = offset;
-    return segment;
-  }
+  constructor(
+    /** Segment data. */
+    public buffer: Uint8Array,
+    /** Segment offset. */
+    public offset: i64
+  ) {}
 }
 
 export class Module {
-
-  ref: ModuleRef;
+  constructor(
+    /** Binaryen module reference. */
+    public ref: ModuleRef
+  ) {
+    this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
+  }
 
   private lit: usize;
 
   static create(): Module {
-    var module = new Module();
-    module.ref = binaryen._BinaryenModuleCreate();
-    module.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
-    return module;
+    return new Module(binaryen._BinaryenModuleCreate());
   }
 
   static createFrom(buffer: Uint8Array): Module {
-    var module = new Module();
     var cArr = allocU8Array(buffer);
-    module.ref = binaryen._BinaryenModuleRead(cArr, buffer.length);
+    var module = new Module(binaryen._BinaryenModuleRead(cArr, buffer.length));
     binaryen._free(changetype<usize>(cArr));
-    module.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
     return module;
-  }
-
-  private constructor() {
-    /* nop */
   }
 
   // constants
@@ -1645,13 +1636,11 @@ export class Module {
     binaryPtr = assert(binaryen.__i32_load(out));
     var binaryLen = binaryen.__i32_load(out + 4);
     sourceMapPtr = binaryen.__i32_load(out + 8); // may be NULL
-    var ret = new BinaryModule();
-    ret.output = readBuffer(binaryPtr, binaryLen);
-    ret.sourceMap = readString(sourceMapPtr);
+    var binary = new BinaryModule(readBuffer(binaryPtr, binaryLen), readString(sourceMapPtr));
     if (cStr) binaryen._free(cStr);
     binaryen._free(binaryPtr);
     if (sourceMapPtr) binaryen._free(sourceMapPtr);
-    return ret;
+    return binary;
   }
 
   toText(): string {
@@ -2102,19 +2091,15 @@ export function getEventResults(event: EventRef): NativeType {
 }
 
 export class Relooper {
-
-  module: Module;
-  ref: RelooperRef;
+  constructor(
+    /** Module this relooper belongs to. */
+    public module: Module,
+    /** Binaryen relooper reference. */
+    public ref: RelooperRef
+  ) {}
 
   static create(module: Module): Relooper {
-    var relooper = new Relooper();
-    relooper.module = module;
-    relooper.ref = binaryen._RelooperCreate(module.ref);
-    return relooper;
-  }
-
-  private constructor() {
-    /* nop */
+    return new Relooper(module, binaryen._RelooperCreate(module.ref));
   }
 
   addBlock(code: ExpressionRef): RelooperBlockRef {
@@ -2439,10 +2424,12 @@ export function readString(ptr: usize): string | null {
 
 /** Result structure of {@link Module#toBinary}. */
 export class BinaryModule {
-  /** WebAssembly binary. */
-  output: Uint8Array;
-  /** Source map, if generated. */
-  sourceMap: string | null;
+  constructor(
+    /** WebAssembly binary. */
+    public output: Uint8Array,
+    /** Source map, if generated. */
+    public sourceMap: string | null
+  ) {}
 }
 
 /** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */

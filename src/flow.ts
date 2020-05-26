@@ -184,58 +184,42 @@ export const enum ConditionKind {
 /** A control flow evaluator. */
 export class Flow {
 
-  /** Parent flow. */
-  parent: Flow | null;
-  /** Flow flags indicating specific conditions. */
-  flags: FlowFlags;
-  /** Function this flow belongs to. */
-  parentFunction: Function;
-  /** The label we break to when encountering a continue statement. */
-  continueLabel: string | null;
-  /** The label we break to when encountering a break statement. */
-  breakLabel: string | null;
-  /** The current return type. */
-  returnType: Type;
-  /** The current contextual type arguments. */
-  contextualTypeArguments: Map<string,Type> | null;
-  /** Scoped local variables. */
-  scopedLocals: Map<string,Local> | null = null;
-  /** Local flags. */
-  localFlags: LocalFlags[];
-  /** Function being inlined, when inlining. */
-  inlineFunction: Function | null;
-  /** The label we break to when encountering a return statement, when inlining. */
-  inlineReturnLabel: string | null;
-
   /** Creates the parent flow of the specified function. */
-  static create(parentFunction: Function): Flow {
-    var flow = new Flow();
-    flow.parent = null;
-    flow.flags = FlowFlags.NONE;
-    flow.parentFunction = parentFunction;
-    flow.continueLabel = null;
-    flow.breakLabel = null;
-    flow.returnType = parentFunction.signature.returnType;
-    flow.contextualTypeArguments = parentFunction.contextualTypeArguments;
-    flow.localFlags = [];
-    flow.inlineFunction = null;
-    flow.inlineReturnLabel = null;
-    return flow;
+  static createParent(parentFunction: Function): Flow {
+    return new Flow(parentFunction);
   }
 
   /** Creates an inline flow within `parentFunction`. */
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
-    var flow = Flow.create(parentFunction);
+    var flow = new Flow(parentFunction);
     flow.inlineFunction = inlineFunction;
     flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString();
-    flow.returnType = inlineFunction.signature.returnType;
-    flow.contextualTypeArguments = inlineFunction.contextualTypeArguments;
     return flow;
   }
 
-  private constructor() {
+  private constructor(
+    /** Function this flow belongs to. */
+    public parentFunction: Function
+  ) {
     /* nop */
   }
+
+  /** Parent flow. */
+  parent: Flow | null = null;
+  /** Flow flags indicating specific conditions. */
+  flags: FlowFlags = FlowFlags.NONE;
+  /** The label we break to when encountering a continue statement. */
+  continueLabel: string | null = null;
+  /** The label we break to when encountering a break statement. */
+  breakLabel: string | null = null;
+  /** Scoped local variables. */
+  scopedLocals: Map<string,Local> | null = null;
+  /** Local flags. */
+  localFlags: LocalFlags[] = [];
+  /** Function being inlined, when inlining. */
+  inlineFunction: Function | null = null;
+  /** The label we break to when encountering a return statement, when inlining. */
+  inlineReturnLabel: string | null = null;
 
   /** Tests if this is an inline flow. */
   get isInline(): bool {
@@ -249,6 +233,16 @@ export class Flow {
     return this.parentFunction;
   }
 
+  /** Gets the current return type. */
+  get returnType(): Type {
+    return this.actualFunction.signature.returnType;
+  }
+
+  /** Gets the current contextual type arguments. */
+  get contextualTypeArguments(): Map<string,Type> | null {
+    return this.actualFunction.contextualTypeArguments;
+  }
+
   /** Tests if this flow has the specified flag or flags. */
   is(flag: FlowFlags): bool { return (this.flags & flag) == flag; }
   /** Tests if this flow has one of the specified flags. */
@@ -260,9 +254,8 @@ export class Flow {
 
   /** Forks this flow to a child flow. */
   fork(resetBreakContext: bool = false): Flow {
-    var branch = new Flow();
+    var branch = new Flow(this.parentFunction);
     branch.parent = this;
-    branch.parentFunction = this.parentFunction;
     if (resetBreakContext) {
       branch.flags = this.flags & ~(
         FlowFlags.BREAKS |
@@ -275,8 +268,6 @@ export class Flow {
       branch.continueLabel = this.continueLabel;
       branch.breakLabel = this.breakLabel;
     }
-    branch.returnType = this.returnType;
-    branch.contextualTypeArguments = this.contextualTypeArguments;
     branch.localFlags = this.localFlags.slice();
     branch.inlineFunction = this.inlineFunction;
     branch.inlineReturnLabel = this.inlineReturnLabel;
