@@ -1034,12 +1034,7 @@ export class Resolver extends DiagnosticEmitter {
         );
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Not_implemented,
-        node.range
-      );
-    }
+    assert(false);
     return null;
   }
 
@@ -1158,12 +1153,7 @@ export class Resolver extends DiagnosticEmitter {
         );
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Not_implemented,
-        node.range
-      );
-    }
+    assert(false);
     return null;
   }
 
@@ -1658,13 +1648,14 @@ export class Resolver extends DiagnosticEmitter {
         //   return this.resolveClass(this.program.readonlyArrayPrototype, [ elementType ]);
         // }
         this.error(
-          DiagnosticCode.Not_implemented,
-          node.range
+          DiagnosticCode.Not_implemented_0,
+          node.range,
+          "Const assertion"
         );
         return null;
       }
-      default: assert(false);
     }
+    assert(false);
     return null;
   }
 
@@ -1882,12 +1873,7 @@ export class Resolver extends DiagnosticEmitter {
         return type;
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Not_implemented,
-        node.range
-      );
-    }
+    assert(false);
     return null;
   }
 
@@ -2106,12 +2092,7 @@ export class Resolver extends DiagnosticEmitter {
         return this.resolveExpression(left, ctxFlow, ctxType, reportMode);
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Not_implemented,
-        node.range
-      );
-    }
+    assert(false);
     return null;
   }
 
@@ -2316,12 +2297,7 @@ export class Resolver extends DiagnosticEmitter {
         return assert(this.resolveClass(this.program.arrayPrototype, [ elementType ]));
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Not_implemented,
-        node.range
-      );
-    }
+    assert(false);
     return null;
   }
 
