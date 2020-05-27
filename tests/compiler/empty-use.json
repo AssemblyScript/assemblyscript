@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+    "--runtime none",
+    "--use Date="
+  ],
+  "stderr": [
+    "TS2304: Cannot find name 'Date'.",
+    "EOF"
+  ]
+}
