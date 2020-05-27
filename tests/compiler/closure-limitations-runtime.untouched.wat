@@ -155,7 +155,7 @@
   local.set $2
   local.get $2
   local.get $0
-  i32.store offset=1
+  i32.store offset=4
   local.get $2
   i32.const 4
   i32.shr_s

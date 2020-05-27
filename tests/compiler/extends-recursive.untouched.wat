@@ -159,6 +159,7 @@
   local.get $0
  )
  (func $extends-recursive/Parent#get:child (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   i32.load
   call $~lib/rt/stub/__retain
