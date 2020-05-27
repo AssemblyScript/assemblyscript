@@ -1265,7 +1265,10 @@ export class Program extends DiagnosticEmitter {
         let alias = unchecked(_keys[i]);
         let name = changetype<string>(globalAliases.get(alias));
         assert(name != null);
-        if (!name.length) continue; // explicitly disabled
+        if (!name.length) {
+          this.elementsByName.delete(alias);
+          continue;
+        }
         let firstChar = name.charCodeAt(0);
         if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
           this.registerConstantInteger(alias, Type.i32, i64_new(<i32>parseInt(name, 10)));

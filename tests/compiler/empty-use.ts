@@ -1,0 +1,3 @@
+Date.now();
+
+ERROR("EOF");
