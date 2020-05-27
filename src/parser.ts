@@ -2606,8 +2606,9 @@ export class Parser extends DiagnosticEmitter {
       if (tn.skip(Token.COMMA)) {
         // TODO: default + star, default + members
         this.error(
-          DiagnosticCode.Not_implemented,
-          tn.range()
+          DiagnosticCode.Not_implemented_0,
+          tn.range(),
+          "Mixed default and named imports"
         );
         return null;
       }

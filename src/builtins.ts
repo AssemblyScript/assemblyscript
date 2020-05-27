@@ -2838,8 +2838,9 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.error(
-    DiagnosticCode.Not_implemented,
-    ctx.reportNode.typeArgumentsRange
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange,
+    "assert", compiler.currentType.toString()
   );
   return abort;
 }

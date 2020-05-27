@@ -79,16 +79,37 @@ function getTests() {
   if (argv.length) { // run matching tests only
     tests = tests.filter(filename => argv.indexOf(filename.replace(/\.ts$/, "")) >= 0);
     if (!tests.length) {
-      console.error("No matching tests: " + argv.join(" "));
+      console.log(colorsUtil.red("FAILURE: ") + colorsUtil.white("No matching tests: " + argv.join(" ") + "\n"));
       process.exit(1);
     }
   }
   return tests;
 }
 
+// Starts a new section within a test
+function section(title) {
+  var start = process.hrtime();
+  console.log("- " + title);
+  return {
+    title,
+    end: function(code) {
+      const times = process.hrtime(start);
+      const time = asc.formatTime(times[0] * 1e9 + times[1]);
+      switch (code) {
+        case SUCCESS: console.log("  " + colorsUtil.green ("SUCCESS") + " (" + time + ")\n"); break;
+        default: console.log("  " + colorsUtil.red("FAILURE") + " (" + time + ")\n"); break;
+        case SKIPPED: console.log("  " + colorsUtil.yellow("SKIPPED") + " (" + time + ")\n"); break;
+      }
+    }
+  }
+}
+const SUCCESS = 0;
+const FAILURE = 1;
+const SKIPPED = 2;
+
 // Runs a single test
 function runTest(basename) {
-  console.log(colorsUtil.white("Testing compiler/" + basename) + "\n");
+  console.log(colorsUtil.white("# compiler/" + basename) + "\n");
 
   const configPath = path.join(basedir, basename + ".json");
   const config = fs.existsSync(configPath)
@@ -141,34 +162,45 @@ function runTest(basename) {
 
   var failed = false;
 
-  // Build unoptimized
+  // Build untouched
   var cmd = [
     basename + ".ts",
     "--baseDir", basedir,
-    "--measure",
     "--debug",
-    "--pedantic",
     "--textFile" // -> stdout
   ];
   if (asc_flags)
     Array.prototype.push.apply(cmd, asc_flags);
   cmd.push("--binaryFile", basename + ".untouched.wasm");
+  const compileUntouched = section("compile untouched");
   asc.main(cmd, {
     stdout: stdout,
     stderr: stderr
   }, err => {
-    console.log();
+    let expectStderr = config.stderr;
+    if (err) {
+      stderr.write("---\n");
+      stderr.write(err.stack);
+      stderr.write("\n---\n");
+      if (expectStderr) {
+        compileUntouched.end(SKIPPED);
+      } else {
+        compileUntouched.end(FAILURE);
+      }
+    } else {
+      compileUntouched.end(SUCCESS);
+    }
 
     // check expected stderr patterns in order
-    let expectStderr = config.stderr;
     if (expectStderr) {
+      const compareStderr = section("compare stderr");
       const stderrString = stderr.toString();
       if (typeof expectStderr === "string") expectStderr = [ expectStderr ];
       let lastIndex = 0;
       expectStderr.forEach((substr, i) => {
         var index = stderrString.indexOf(substr, lastIndex);
         if (index < 0) {
-          console.log("Missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
+          console.log("  missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
           failed = true;
         } else {
           lastIndex = index + substr.length;
@@ -177,42 +209,41 @@ function runTest(basename) {
       if (failed) {
         failedTests.add(basename);
         failedMessages.set(basename, "stderr mismatch");
-        console.log("\n- " + colorsUtil.red("stderr MISMATCH") + "\n");
+        compareStderr.end(FAILURE);
       } else {
-        console.log("- " + colorsUtil.green("stderr MATCH") + "\n");
+        compareStderr.end(SUCCESS);
       }
       return 1;
     }
 
-    if (err)
-      stderr.write(err + os.EOL);
+    const compareFixture = section("compare fixture");
     var actual = stdout.toString().replace(/\r\n/g, "\n");
     if (args.create) {
       fs.writeFileSync(path.join(basedir, basename + ".untouched.wat"), actual, { encoding: "utf8" });
-      console.log("- " + colorsUtil.yellow("Created fixture"));
+      console.log("  " + colorsUtil.yellow("Created fixture"));
+      compareFixture.end(SKIPPED);
     } else {
       let expected = fs.readFileSync(path.join(basedir, basename + ".untouched.wat"), { encoding: "utf8" }).replace(/\r\n/g, "\n");
       if (args.noDiff) {
         if (expected != actual) {
-          console.log("- " + colorsUtil.red("compare ERROR"));
           failed = true;
           failedTests.add(basename);
+          compareFixture.end(FAILURE);
         } else {
-          console.log("- " + colorsUtil.green("compare OK"));
+          compareFixture.end(SUCCESS);
         }
       } else {
         let diffs = diff(basename + ".untouched.wat", expected, actual);
         if (diffs !== null) {
           console.log(diffs);
-          console.log("- " + colorsUtil.red("diff ERROR"));
           failed = true;
           failedTests.add(basename);
+          compareFixture.end(FAILURE);
         } else {
-          console.log("- " + colorsUtil.green("diff OK"));
+          compareFixture.end(SUCCESS);
         }
       }
     }
-    console.log();
 
     stdout.length = 0;
     stderr.length = 0;
@@ -221,8 +252,6 @@ function runTest(basename) {
     var cmd = [
       basename + ".ts",
       "--baseDir", basedir,
-      "--measure",
-      "--pedantic",
       "--binaryFile", // -> stdout
       "-O"
     ];
@@ -230,17 +259,22 @@ function runTest(basename) {
       Array.prototype.push.apply(cmd, asc_flags);
     if (args.create)
       cmd.push("--textFile", basename + ".optimized.wat");
+    const compileOptimized = section("compile optimized");
     asc.main(cmd, {
       stdout: stdout,
       stderr: stderr
     }, err => {
-      console.log();
       if (err) {
-        stderr.write(err.stack + os.EOL);
+        stderr.write("---\n");
+        stderr.write(err.stack);
+        stderr.write("\n---\n");
         failed = true;
         failedMessages.set(basename, err.message);
         failedTests.add(basename);
+        compileOptimized.end(FAILURE);
         return 1;
+      } else {
+        compileOptimized.end(SUCCESS);
       }
       let untouchedBuffer = fs.readFileSync(path.join(basedir, basename + ".untouched.wasm"));
       let optimizedBuffer = stdout.toBuffer();
@@ -248,20 +282,25 @@ function runTest(basename) {
       var glue = {};
       if (fs.existsSync(gluePath)) glue = require(gluePath);
 
+      const instantiateUntouched = section("instantiate untouched");
       if (!config.skipInstantiate) {
         if (!testInstantiate(basename, untouchedBuffer, "untouched", glue)) {
           failed = true;
           failedTests.add(basename);
+          instantiateUntouched.end(FAILURE);
         } else {
-          console.log();
+          instantiateUntouched.end(SUCCESS);
+          const instantiateOptimized = section("instantiate optimized");
           if (!testInstantiate(basename, optimizedBuffer, "optimized", glue)) {
             failed = true;
             failedTests.add(basename);
+            instantiateOptimized.end(FAILURE);
+          } else {
+            instantiateOptimized.end(SUCCESS);
           }
         }
-        console.log();
       } else {
-        console.log("- " + colorsUtil.yellow("instantiate SKIPPED") + "\n");
+        instantiateUntouched.end(SKIPPED);
       }
     });
     if (failed) return 1;
@@ -300,53 +339,49 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
 
     let rtr = rtrace(onerror, args.rtraceVerbose ? oninfo : null);
 
-    let runTime = asc.measure(() => {
-      var imports = {
-        rtrace: rtr,
-        env: {
-          memory,
-          abort: function(msg, file, line, column) {
-            console.log(colorsUtil.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
-          },
-          trace: function(msg, n) {
-            console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
-          },
-          seed: function() {
-            return 0xA5534817; // make tests deterministic
-          }
+    var imports = {
+      rtrace: rtr,
+      env: {
+        memory,
+        abort: function(msg, file, line, column) {
+          console.log(colorsUtil.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
         },
-        Math,
-        Date,
-        Reflect
-      };
-      if (glue.preInstantiate) {
-        console.log(colorsUtil.white("  [preInstantiate]"));
-        glue.preInstantiate(imports, exports);
-      }
-      var instance = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), imports);
-      Object.setPrototypeOf(exports, instance.exports);
-      if (glue.postInstantiate) {
-        console.log(colorsUtil.white("  [postInstantiate]"));
-        glue.postInstantiate(instance);
-      }
-      if (exports._start) {
-        console.log(colorsUtil.white("  [start]"));
-        exports._start();
-      }
-      if (glue.postStart) {
-        console.log(colorsUtil.white("  [postStart]"));
-        glue.postStart(instance);
-      }
-    });
+        trace: function(msg, n) {
+          console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
+        },
+        seed: function() {
+          return 0xA5534817; // make tests deterministic
+        }
+      },
+      Math,
+      Date,
+      Reflect
+    };
+    if (glue.preInstantiate) {
+      console.log("  [call preInstantiate]");
+      glue.preInstantiate(imports, exports);
+    }
+    var instance = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), imports);
+    Object.setPrototypeOf(exports, instance.exports);
+    if (glue.postInstantiate) {
+      console.log("  [call postInstantiate]");
+      glue.postInstantiate(instance);
+    }
+    if (exports._start) {
+      console.log("  [call start]");
+      exports._start();
+    }
+    if (glue.postStart) {
+      console.log("  [call postStart]");
+      glue.postStart(instance);
+    }
     let leakCount = rtr.check();
     if (leakCount) {
       let msg = "memory leak detected: " + leakCount + " leaking";
-      console.log("- " + colorsUtil.red("rtrace " + name + " ERROR: ") + msg);
       failed = true;
       failedMessages.set(basename, msg);
     }
     if (!failed) {
-      console.log("- " + colorsUtil.green("instantiate " + name + " OK") + " (" + asc.formatTime(runTime) + ")");
       if (rtr.active) {
         console.log("  " +
           rtr.allocCount + " allocs, " +
@@ -355,14 +390,12 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
           rtr.decrementCount + " decrements"
         );
       }
-      console.log("");
-      for (let key in exports) {
-        console.log("  [" + (typeof exports[key]).substring(0, 3) + "] " + key + " = " + exports[key]);
-      }
       return true;
     }
   } catch (e) {
-    console.log("- " + colorsUtil.red("instantiate " + name + " ERROR: ") + e.stack);
+    stderr.write("---\n");
+    stderr.write(e.stack);
+    stderr.write("\n---\n");
     failed = true;
     failedMessages.set(basename, e.message);
   }
@@ -381,7 +414,7 @@ function evaluateResult() {
   }
   if (failedTests.size) {
     process.exitCode = 1;
-    console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.size + " compiler tests had failures:\n"));
+    console.log(colorsUtil.red("FAILURE: ") + colorsUtil.white(failedTests.size + " compiler tests had failures:\n"));
     failedTests.forEach(name => {
       var message = failedMessages.has(name) ? colorsUtil.gray("[" + failedMessages.get(name) + "]") : "";
       console.log("  " + name + " " + message);
@@ -390,7 +423,7 @@ function evaluateResult() {
   }
   console.log("Time: " + (Date.now() - startTime) + " ms\n");
   if (!process.exitCode) {
-    console.log("[ " + colorsUtil.white("OK") + " ]");
+    console.log("[ " + colorsUtil.white("SUCCESS") + " ]");
   }
 }
 
