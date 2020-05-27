@@ -3567,8 +3567,9 @@ export class Function extends TypedElement {
       if (parentResult === null) return null;
       if (parentFunction.closedLocals.size > 0) { //TODO allow nested closure definitions
         this.program.error(
-          DiagnosticCode.Not_implemented,
-          this.identifierNode.range, this.identifierNode.text
+          DiagnosticCode.Not_implemented_0,
+          this.identifierNode.range,
+          "Nested Closure Declarations"
         );
         return null;
       }
