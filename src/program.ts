@@ -3277,7 +3277,7 @@ export class Local extends VariableLikeElement {
     /** Declaration reference. */
     declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name),
     /** Offset of this variable within closure context, if it's value is held there */
-    public closureContextOffset: usize = 0,
+    public closureContextOffset: u32 = 0,
   ) {
     super(
       ElementKind.LOCAL,
@@ -3291,7 +3291,7 @@ export class Local extends VariableLikeElement {
     this.closureContextOffset = closureContextOffset;
   }
 
-  close(offset: usize): Local {
+  close(offset: u32): Local {
     return new Local(
       this.name,
       this.index,
