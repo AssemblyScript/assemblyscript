@@ -1,5 +1,6 @@
 const webpack = require("webpack");
+const config = require("../webpack.config.js");
 
-webpack(require("../webpack.config.js"), (err, stats) => {
+webpack(config, err => {
   if (err) throw err;
 });

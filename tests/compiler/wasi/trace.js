@@ -1,4 +1,5 @@
 var memory;
+var failed;
 
 exports.preInstantiate = function(imports, exports) {
   imports["wasi_snapshot_preview1"] = {
@@ -18,4 +19,5 @@ exports.preInstantiate = function(imports, exports) {
 exports.postInstantiate = function(instance) {
   const exports = instance.exports;
   memory = exports.memory;
-}
+  if (failed) throw Error(failed);
+};

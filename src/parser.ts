@@ -157,7 +157,6 @@ export class Parser extends DiagnosticEmitter {
       let statement = this.parseTopLevelStatement(tn, null);
       if (statement) statements.push(statement);
     }
-    tn.finish();
   }
 
   /** Parses a top-level statement. */
@@ -1510,9 +1509,9 @@ export class Parser extends DiagnosticEmitter {
         return null;
       }
 
-    // or at '(' of arrow function:
-    //  Parameters (':' Type)?
-    //  Statement
+      // or at '(' of arrow function:
+      //  Parameters (':' Type)?
+      //  Statement
 
     } else {
       arrowKind = ArrowKind.ARROW_PARENTHESIZED;
@@ -3213,7 +3212,7 @@ export class Parser extends DiagnosticEmitter {
         );
       }
 
-    // 'default' ':' Statement*
+      // 'default' ':' Statement*
 
     } else if (tn.skip(Token.DEFAULT)) {
       if (tn.skip(Token.COLON)) {
@@ -3577,7 +3576,7 @@ export class Parser extends DiagnosticEmitter {
                   }
                   again = false; // parenthesized
                   break;
-                  }
+                }
                 case Token.COMMA: {
                   break; // continue
                 }

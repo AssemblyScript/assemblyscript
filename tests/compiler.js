@@ -101,7 +101,7 @@ function section(title) {
         case SKIPPED: console.log("  " + colorsUtil.yellow("SKIPPED") + " (" + time + ")\n"); break;
       }
     }
-  }
+  };
 }
 const SUCCESS = 0;
 const FAILURE = 1;
@@ -284,14 +284,14 @@ function runTest(basename) {
 
       const instantiateUntouched = section("instantiate untouched");
       if (!config.skipInstantiate) {
-        if (!testInstantiate(basename, untouchedBuffer, "untouched", glue)) {
+        if (!testInstantiate(basename, untouchedBuffer, glue, stderr)) {
           failed = true;
           failedTests.add(basename);
           instantiateUntouched.end(FAILURE);
         } else {
           instantiateUntouched.end(SUCCESS);
           const instantiateOptimized = section("instantiate optimized");
-          if (!testInstantiate(basename, optimizedBuffer, "optimized", glue)) {
+          if (!testInstantiate(basename, optimizedBuffer, glue, stderr)) {
             failed = true;
             failedTests.add(basename);
             instantiateOptimized.end(FAILURE);
@@ -306,12 +306,12 @@ function runTest(basename) {
     if (failed) return 1;
   });
   if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
-  if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".untouched.wasm"), err => {});
+  if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".untouched.wasm"), err => { /* nop */ });
   if (cluster.isWorker) process.send({ cmd: "done", failed: failed, message: failedMessages.get(basename) });
 }
 
 // Tests if instantiation of a module succeeds
-function testInstantiate(basename, binaryBuffer, name, glue) {
+function testInstantiate(basename, binaryBuffer, glue, stderr) {
   var failed = false;
   try {
     let memory = new WebAssembly.Memory({ initial: 10 });
@@ -380,6 +380,7 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
       let msg = "memory leak detected: " + leakCount + " leaking";
       failed = true;
       failedMessages.set(basename, msg);
+      console.log("  " + msg);
     }
     if (!failed) {
       if (rtr.active) {

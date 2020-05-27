@@ -38,7 +38,7 @@ function usingBranches() {
 }
 usingBranches();
 
-function usingSwitch() {
+/* function usingSwitch() {
   var module = new binaryen.Module();
   var rl = new binaryen.Relooper(module);
   var entry = rl.addBlockWithSwitch(module.nop(), module.local.get(0, binaryen.i32));
@@ -68,4 +68,4 @@ function usingSwitch() {
   module.optimize();
   console.log(module.emitText());
 }
-// usingSwitch();
+usingSwitch(); */

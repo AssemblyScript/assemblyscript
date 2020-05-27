@@ -23,60 +23,60 @@
 */
 // see: https://github.com/maurobringolf/webassembly-floating-point-hex-parser
 function parse(input) {
-	input = input.toUpperCase();
-	const splitIndex = input.indexOf('P');
-	let mantissa, exponent;
+  input = input.toUpperCase();
+  const splitIndex = input.indexOf('P');
+  let mantissa, exponent;
 
-	if (splitIndex !== -1) {
-		mantissa = input.substring(0, splitIndex);
-		exponent = parseInt(input.substring(splitIndex + 1));
-	} else {
-		mantissa = input;
-		exponent = 0;
-	}
+  if (splitIndex !== -1) {
+    mantissa = input.substring(0, splitIndex);
+    exponent = parseInt(input.substring(splitIndex + 1));
+  } else {
+    mantissa = input;
+    exponent = 0;
+  }
 
-	const dotIndex = mantissa.indexOf('.');
+  const dotIndex = mantissa.indexOf('.');
 
-	if (dotIndex !== -1) {
-		let integerPart = parseInt(mantissa.substring(0,dotIndex), 16);
-		let sign = Math.sign(integerPart);
-		integerPart = sign * integerPart;
-		const fractionLength = mantissa.length - dotIndex - 1;
-		const fractionalPart = parseInt(mantissa.substring(dotIndex + 1), 16);
-		const fraction = fractionLength > 0 ? fractionalPart / Math.pow(16, fractionLength) : 0;
-		if (sign === 0) {
-			if (fraction === 0) {
-				mantissa = sign;
-			} else {
-				if (Object.is(sign, -0)) {
-					mantissa = - fraction;
-				} else {
-					mantissa = fraction;
-				}
-			}
-		} else {
-			mantissa = sign * (integerPart + fraction);
-		}
-	} else {
-		mantissa = parseInt(mantissa, 16);
-	}
+  if (dotIndex !== -1) {
+    let integerPart = parseInt(mantissa.substring(0, dotIndex), 16);
+    let sign = Math.sign(integerPart);
+    integerPart = sign * integerPart;
+    const fractionLength = mantissa.length - dotIndex - 1;
+    const fractionalPart = parseInt(mantissa.substring(dotIndex + 1), 16);
+    const fraction = fractionLength > 0 ? fractionalPart / Math.pow(16, fractionLength) : 0;
+    if (sign === 0) {
+      if (fraction === 0) {
+        mantissa = sign;
+      } else {
+        if (Object.is(sign, -0)) {
+          mantissa = - fraction;
+        } else {
+          mantissa = fraction;
+        }
+      }
+    } else {
+      mantissa = sign * (integerPart + fraction);
+    }
+  } else {
+    mantissa = parseInt(mantissa, 16);
+  }
 
-	return mantissa * (splitIndex !== -1 ? Math.pow(2, exponent) : 1);
+  return mantissa * (splitIndex !== -1 ? Math.pow(2, exponent) : 1);
 }
 
 if (typeof process !== "undefined") {
-	if (process.argv.length < 3) {
-		console.error("Usage: hexfloat 0x1p1023");
-		process.exit(1);
-	}
+  if (process.argv.length < 3) {
+    console.error("Usage: hexfloat 0x1p1023");
+    process.exit(1);
+  }
 
-	var output = parse(process.argv[2]);
-	var double = output.toPrecision(18); // 17
-	var single = output.toPrecision(10); // 9
+  var output = parse(process.argv[2]);
+  var double = output.toPrecision(18); // 17
+  var single = output.toPrecision(10); // 9
 
-	console.log("<f64>" + double);
-	console.log("<f32>" + single);
+  console.log("<f64>" + double);
+  console.log("<f32>" + single);
 
-	if (!(parseFloat(double) === output)) throw Error("double precision error");
-	if (!(Math.fround(parseFloat(single)) === Math.fround(output))) throw Error("single precision error");
+  if (!(parseFloat(double) === output)) throw Error("double precision error");
+  if (!(Math.fround(parseFloat(single)) === Math.fround(output))) throw Error("single precision error");
 }

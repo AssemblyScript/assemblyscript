@@ -19,7 +19,7 @@ const colorsUtil = require("./colors");
 function parse(argv, config) {
   var options = {};
   var unknown = [];
-  var arguments = [];
+  var args = [];
   var trailing = [];
   var provided = new Set();
 
@@ -39,7 +39,7 @@ function parse(argv, config) {
   for (var i = 0, k = (argv = argv.slice()).length; i < k; ++i) {
     let arg = argv[i];
     if (arg == "--") { ++i; break; }
-    let match = /^(?:(\-\w)(?:=(.*))?|(\-\-\w{2,})(?:=(.*))?)$/.exec(arg), option, key;
+    let match = /^(?:(-\w)(?:=(.*))?|(--\w{2,})(?:=(.*))?)$/.exec(arg), option, key;
     if (match) {
       if (config[arg]) option = config[key = arg]; // exact
       else if (match[1] != null) { // alias
@@ -51,7 +51,7 @@ function parse(argv, config) {
       }
     } else {
       if (arg.charCodeAt(0) == 45) option = config[key = arg]; // exact
-      else { arguments.push(arg); continue; } // argument
+      else { args.push(arg); continue; } // argument
     }
     if (option) {
       if (option.type == null || option.type === "b") {
@@ -87,7 +87,7 @@ function parse(argv, config) {
   }
   while (i < k) trailing.push(argv[i++]); // trailing
 
-  return { options, unknown, arguments, trailing, provided };
+  return { options, unknown, arguments: args, trailing, provided };
 }
 
 exports.parse = parse;

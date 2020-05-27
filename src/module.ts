@@ -839,7 +839,7 @@ export class Module {
     var ret = isReturn
       ? binaryen._BinaryenReturnCall(this.ref, cStr, cArr, operands ? operands.length : 0, returnType)
       : binaryen._BinaryenCall(this.ref, cStr, cArr, operands ? operands.length : 0, returnType);
-      binaryen._free(cArr);
+    binaryen._free(cArr);
     return ret;
   }
 

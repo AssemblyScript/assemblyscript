@@ -2,7 +2,6 @@
 
 // Common constants shared between AssemblyScript and TypeScript
 import {
-  Type,
   SectionId,
   ExternalKind,
   NameType,
@@ -118,7 +117,7 @@ export function parse(begin: usize, end: usize): void {
   var mem_space_index: u32 = 0;
   var tbl_space_index: u32 = 0;
   while (off < end) {
-    let section_off = off;
+    // let section_off = off;
     let id = readVaruint(7);
     let payload_len = readVaruint(32);
     let name_off = 0;

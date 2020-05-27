@@ -28,6 +28,8 @@
  * in the build step. See dist/asc.js for the bundle and webpack.config.js for building details.
  */
 
+/* global BUNDLE_VERSION, BUNDLE_LIBRARY, BUNDLE_DEFINITIONS */
+
 // Use "." instead of "/" as cwd in browsers
 if (process.browser) process.cwd = function() { return "."; };
 
@@ -77,7 +79,7 @@ var isDev = false;
       return eval("require")(...args);
     }
     try { // `asc` on the command line
-    assemblyscript = dynRequire("../dist/assemblyscript.js");
+      assemblyscript = dynRequire("../dist/assemblyscript.js");
     } catch (e) {
       try { // `asc` on the command line without dist files
         dynRequire("ts-node").register({
@@ -124,8 +126,9 @@ exports.defaultShrinkLevel = 1;
 exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if not a bundle
   const libDir = path.join(__dirname, "..", "std", "assembly");
   const bundled = {};
-  find.files(libDir, defaultExtension.re_except_d)
-      .forEach(file => bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
+  find
+    .files(libDir, defaultExtension.re_except_d)
+    .forEach(file => bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
   return bundled;
 })();
 
@@ -162,12 +165,12 @@ exports.compileString = (sources, options) => {
   exports.main(argv.concat(Object.keys(sources)), {
     stdout: output.stdout,
     stderr: output.stderr,
-    readFile: name => sources.hasOwnProperty(name) ? sources[name] : null,
+    readFile: name => Object.prototype.hasOwnProperty.call(sources, name) ? sources[name] : null,
     writeFile: (name, contents) => output[name] = contents,
     listFiles: () => []
   });
   return output;
-}
+};
 
 /** Runs the command line utility using the specified arguments array. */
 exports.main = function main(argv, options, callback) {
@@ -307,7 +310,7 @@ exports.main = function main(argv, options, callback) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
-      let flag = assemblyscript["FEATURE_" + name.replace(/\-/g, "_").toUpperCase()];
+      let flag = assemblyscript["FEATURE_" + name.replace(/-/g, "_").toUpperCase()];
       if (!flag) return callback(Error("Feature '" + name + "' is unknown."));
       assemblyscript.disableFeature(compilerOptions, flag);
     }
@@ -318,7 +321,7 @@ exports.main = function main(argv, options, callback) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
-      let flag = assemblyscript["FEATURE_" + name.replace(/\-/g, "_").toUpperCase()];
+      let flag = assemblyscript["FEATURE_" + name.replace(/-/g, "_").toUpperCase()];
       if (!flag) return callback(Error("Feature '" + name + "' is unknown."));
       assemblyscript.enableFeature(compilerOptions, flag);
     }
@@ -451,10 +454,10 @@ exports.main = function main(argv, options, callback) {
     } else {
       const plainName = internalPath.substring(libraryPrefix.length);
       const indexName = plainName + "/index";
-      if (libraryFiles.hasOwnProperty(plainName)) {
+      if (Object.prototype.hasOwnProperty.call(libraryFiles, plainName)) {
         sourceText = libraryFiles[plainName];
         sourcePath = libraryPrefix + plainName + extension.ext;
-      } else if (libraryFiles.hasOwnProperty(indexName)) {
+      } else if (Object.prototype.hasOwnProperty.call(libraryFiles, indexName)) {
         sourceText = libraryFiles[indexName];
         sourcePath = libraryPrefix + indexName + extension.ext;
       } else { // custom lib dirs
@@ -470,7 +473,7 @@ exports.main = function main(argv, options, callback) {
           }
         }
         if (sourceText == null) { // paths
-          const match = internalPath.match(/^~lib\/((?:@[^\/]+\/)?[^\/]+)(?:\/(.+))?/); // ~lib/(pkg)/(path), ~lib/(@org/pkg)/(path)
+          const match = internalPath.match(/^~lib\/((?:@[^/]+\/)?[^/]+)(?:\/(.+))?/); // ~lib/(pkg)/(path), ~lib/(@org/pkg)/(path)
           if (match) {
             const packageName = match[1];
             const isPackageRoot = match[2] === undefined;
@@ -497,7 +500,7 @@ exports.main = function main(argv, options, callback) {
                       mainPath = json.ascMain.replace(extension.re_index, "");
                       packageMains.set(packageName, mainPath);
                     }
-                  } catch (e) { }
+                  } catch (e) { /* nop */ }
                 }
               }
               const mainDir = path.join(currentPath, packageName, mainPath);
@@ -531,7 +534,7 @@ exports.main = function main(argv, options, callback) {
     var internalPath;
     while ((internalPath = assemblyscript.nextFile(program)) != null) {
       let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
-      if (!file) return callback(Error("Import '" + internalPath + "' not found."))
+      if (!file) return callback(Error("Import '" + internalPath + "' not found."));
       stats.parseCount++;
       stats.parseTime += measure(() => {
         assemblyscript.parse(program, file.sourceText, file.sourcePath, false);
@@ -565,7 +568,7 @@ exports.main = function main(argv, options, callback) {
   for (let i = 0, k = argv.length; i < k; ++i) {
     const filename = argv[i];
 
-    let sourcePath = String(filename).replace(/\\/g, "/").replace(extension.re, "").replace(/[\\\/]$/, "");
+    let sourcePath = String(filename).replace(/\\/g, "/").replace(extension.re, "").replace(/[\\/]$/, "");
     
     // Setting the path to relative path
     sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath) : sourcePath;
@@ -838,7 +841,7 @@ exports.main = function main(argv, options, callback) {
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          wat = module.toText()
+          wat = module.toText();
         });
         writeStdout(wat);
       }
@@ -891,7 +894,7 @@ exports.main = function main(argv, options, callback) {
     try {
       stats.readCount++;
       stats.readTime += measure(() => {
-        files = fs.readdirSync(path.join(baseDir, dirname)).filter(file => extension.re_except_d.test(file))
+        files = fs.readdirSync(path.join(baseDir, dirname)).filter(file => extension.re_except_d.test(file));
       });
       return files;
     } catch (e) {
@@ -912,7 +915,7 @@ exports.main = function main(argv, options, callback) {
       }
     });
   }
-}
+};
 
 /** Checks diagnostics emitted so far for errors. */
 function checkDiagnostics(program, stderr) {
@@ -1004,7 +1007,7 @@ exports.printStats = printStats;
 
 var allocBuffer = typeof global !== "undefined" && global.Buffer
   ? global.Buffer.allocUnsafe || function(len) { return new global.Buffer(len); }
-  : function(len) { return new Uint8Array(len) };
+  : function(len) { return new Uint8Array(len); };
 
 /** Creates a memory stream that can be used in place of stdout/stderr. */
 function createMemoryStream(fn) {

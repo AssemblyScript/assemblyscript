@@ -3,6 +3,8 @@
  * @license Apache-2.0
  */
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 // @ts-ignore: decorator
 @global
 function f32_as_i32(value: f32): i32 {

@@ -4,4 +4,4 @@ function notNullable(a: Example): void {}
 
 notNullable(null);
 
-ERROR("EOF")
+ERROR("EOF");
