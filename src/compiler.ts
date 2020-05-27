@@ -1674,13 +1674,20 @@ export class Compiler extends DiagnosticEmitter {
     var type = instance.type;
     var nativeThisType = this.options.nativeSizeType;
     var nativeValueType = type.toNativeType();
+    var varTypes: NativeType[] | null = null;
     var module = this.module;
     var valueExpr = module.load(type.byteSize, type.is(TypeFlags.SIGNED),
       module.local_get(0, nativeThisType),
       nativeValueType, instance.memoryOffset
     );
-    if (type.isManaged) valueExpr = this.makeRetain(valueExpr, type);
-    instance.getterRef = module.addFunction(instance.internalGetterName, nativeThisType, nativeValueType, null, valueExpr);
+
+    // We need to hardcode the local index used by makeRetain because there is no corresponding flow
+    if (type.isManaged) {
+      valueExpr = this.makeRetain(valueExpr, type, 1);
+      varTypes = [ NativeType.I32 ]
+    }
+
+    instance.getterRef = module.addFunction(instance.internalGetterName, nativeThisType, nativeValueType, varTypes, valueExpr);
     if (instance.setterRef) {
       instance.set(CommonFlags.COMPILED);
     } else {
@@ -1700,7 +1707,7 @@ export class Compiler extends DiagnosticEmitter {
     var valueExpr: ExpressionRef;
     var varTypes: NativeType[] | null = null;
     if (type.isManaged) {
-      // Can't use makeReplace here since there's no corresponding flow, so
+      // Can't use makeReplace, makeRetain, or makeRelease here since there's no corresponding flow, so
       // 0: this, 1: value, 2: oldValue (temp)
       valueExpr = module.block(null, [
         module.if(
@@ -1716,9 +1723,9 @@ export class Compiler extends DiagnosticEmitter {
           ),
           module.block(null, [
             module.drop(
-              this.makeRetain(module.local_get(1, nativeValueType), type)
+              this.makeRetain(module.local_get(1, nativeValueType), type, 1)
             ),
-            this.makeRelease(module.local_get(2, nativeValueType), type)
+            this.makeRelease(module.local_get(2, nativeValueType), type, 2)
           ])
         ),
         module.local_get(1, nativeValueType)
@@ -7383,15 +7390,18 @@ export class Compiler extends DiagnosticEmitter {
   /** Makes a retain call, retaining the expression's value. */
   makeRetain(
     expr: ExpressionRef,
-    type: Type | null = null
+    type: Type | null = null,
+    exprLocalIndex: i32 = -1
   ): ExpressionRef {
     var module = this.module;
 
     var retainInstance = this.program.retainInstance;
     this.compileFunction(retainInstance);
     if (type !== null && type.isFunctionIndex) {
-      var exprLocal = this.currentFlow.getTempLocal(type);
-      var exprLocalIndex = exprLocal.index;
+      if (exprLocalIndex < 0) {
+        var exprLocal = this.currentFlow.getTempLocal(type);
+        exprLocalIndex = exprLocal.index;
+      }
       var nativeType = type.toNativeType();
       var usize = this.options.nativeSizeType;
       var functionRetainCall = module.block(null, [
@@ -7421,15 +7431,17 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Makes a release call, releasing the expression's value. Changes the current type to void.*/
-  makeRelease(expr: ExpressionRef, type: Type | null = null): ExpressionRef {
+  makeRelease(expr: ExpressionRef, type: Type | null = null, exprLocalIndex: i32 = -1): ExpressionRef {
     var module = this.module;
 
     var releaseInstance = this.program.releaseInstance;
     this.compileFunction(releaseInstance);
 
     if (type !== null && type.isFunctionIndex) {
-      var exprLocal = this.currentFlow.getTempLocal(type);
-      var exprLocalIndex = exprLocal.index;
+      if (exprLocalIndex < 0) {
+        var exprLocal = this.currentFlow.getTempLocal(type);
+        exprLocalIndex = exprLocal.index;
+      }
       var nativeType = type.toNativeType()
       var functionReleaseCall = module.block(null, [
         module.local_set(exprLocalIndex, expr),
