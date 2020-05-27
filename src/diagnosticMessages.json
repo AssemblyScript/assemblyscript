@@ -1,5 +1,5 @@
 {
-  "Not implemented.": 100,
+  "Not implemented: {0}": 100,
   "Operation is unsafe.": 101,
   "User-defined: {0}": 102,
   "Feature '{0}' is not enabled.": 103,

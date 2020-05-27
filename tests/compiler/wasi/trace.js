@@ -8,7 +8,7 @@ exports.preInstantiate = function(imports, exports) {
       const messagePtr = new Uint32Array(memory.buffer)[ iov >>> 2     ];
       const messageLen = new Uint32Array(memory.buffer)[(iov >>> 2) + 1];
       const message = Array.from(new Uint8Array(memory.buffer, messagePtr, messageLen)).map(c => String.fromCharCode(c)).join("");
-      process.stdout.write(message);
+      process.stderr.write(message);
     },
     proc_exit: function(code) {
       console.log("exit: " + code);
