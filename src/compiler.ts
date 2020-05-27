@@ -6050,8 +6050,9 @@ export class Compiler extends DiagnosticEmitter {
         if (local.closureContextOffset > 0) {
           // TODO: ability to update closed over locals
           this.error(
-            DiagnosticCode.Not_implemented,
-            valueExpression.range
+            DiagnosticCode.Not_implemented_0,
+            valueExpression.range,
+            "Updating closed locals"
           );
           return module.unreachable();
         }
@@ -6557,8 +6558,9 @@ export class Compiler extends DiagnosticEmitter {
         if (local.type.is(TypeFlags.IN_SCOPE_CLOSURE)) {
           if (this.currentFlow.parentFunction.parent.kind == ElementKind.FUNCTION) {
             this.error(
-              DiagnosticCode.Not_implemented,
-              expression.expression.range
+              DiagnosticCode.Not_implemented_0,
+              expression.expression.range,
+              "Calling a Closure from an anonymous function that shares the same parent."
             );
             return module.unreachable();
           }
