@@ -11,12 +11,12 @@ function inScopeNestedCalls(): (value: i32) => i32 {
   var x = 0;
   var f = (): i32 => {
     return x;
-  }
+  };
   var p = (value: i32): i32 => {
     return f();
-  }
+  };
   return p;
 }
 inScopeNestedCalls();
 
-ERROR("EOF")
+ERROR("EOF");

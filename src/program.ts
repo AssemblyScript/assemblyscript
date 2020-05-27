@@ -3565,7 +3565,7 @@ export class Function extends TypedElement {
       var parentFunction = <Function>this.parent;
       var parentResult = parentFunction.flow.lookup(name);
       if (parentResult === null) return null;
-      if (parentFunction.closedLocals.size > 0) { //TODO allow nested closure definitions
+      if (parentFunction.closedLocals.size > 0) { // TODO allow nested closure definitions
         this.program.error(
           DiagnosticCode.Not_implemented_0,
           this.identifierNode.range,

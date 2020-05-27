@@ -27,7 +27,7 @@ function nestedExecutionTest(arg: i32): i32 {
   var g = (fn: (x3: i32) => i32): i32 => {
     var first = fn(arg);
     return x;
-  }
+  };
   return g(f);
 }
 nestedExecutionTest(1);
@@ -35,32 +35,32 @@ nestedExecutionTest(1);
 function passItAround(arg: i32): usize {
   return runClosure(createClosure(arg));
 }
-passItAround(1)
+passItAround(1);
 
 function runInline(arg: i32, foo: i32, bar: i32): i32 {
   return ((): i32 => { return arg + foo + bar; } )();
 }
-runInline(1,1,1)
+runInline(1,1,1);
 
 function fallOutOfScope(arg: i32): i32 {
   var releaseMe = createClosure(arg);
   return 10;
 }
-fallOutOfScope(1)
+fallOutOfScope(1);
 
 function createClosure(arg: i32): (x3: i32) => i32 {
-  var closure = (x3: i32): i32 => { return arg + x3 }
+  var closure = (x3: i32): i32 => { return arg + x3; };
   return closure;
 }
 
 function complexCreateClosure(arg: i32): (x3: i32) => i32 {
-  var foo = 2
-  var bar = 3
-  var baz = 4
-  var f = (x1: i32): i32 => { return foo + bar - baz; }
-  var g = (x2: i32): i32 => { return (bar - baz) + foo; }
-  foo = 7
-  bar = 11
+  var foo = 2;
+  var bar = 3;
+  var baz = 4;
+  var f = (x1: i32): i32 => { return foo + bar - baz; };
+  var g = (x2: i32): i32 => { return (bar - baz) + foo; };
+  foo = 7;
+  bar = 11;
   return g;
 }
 
@@ -70,6 +70,6 @@ function runClosure(closureToRun: (x3: i32) => i32): i32 {
 
 // Ensure that non-closures do not abort upon returning
 export function returnOverBoundary(): () => i32 {
-  return function(): i32 { return 6; }
+  return function(): i32 { return 6; };
 }
 returnOverBoundary();
