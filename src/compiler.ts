@@ -1531,10 +1531,12 @@ export class Compiler extends DiagnosticEmitter {
 
         // Just prepended allocation is dropped when returning non-'this'
         if (flow.is(FlowFlags.MAY_RETURN_NONTHIS)) {
-          this.pedantic(
-            DiagnosticCode.Explicitly_returning_constructor_drops_this_allocation,
-            instance.identifierNode.range
-          );
+          if (this.options.pedantic) {
+            this.pedantic(
+              DiagnosticCode.Explicitly_returning_constructor_drops_this_allocation,
+              instance.identifierNode.range
+            );
+          }
         }
       }
 
