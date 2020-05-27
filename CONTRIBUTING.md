@@ -35,6 +35,7 @@ Submitting Pull Requests
 
 Instructions are similar to those for bug reports. Please provide the following information:
 
+* Consider **creating an issue to discuss first** and **later link to it from the PR** if this is not a trivial fix.
 * Use a **clear and descriptive title** for the pull request.
 * Provide a **description of the suggested changes** in as many details as necessary.
 * **Document your new code** where necessary.
@@ -47,3 +48,7 @@ Before submitting your pull request, please make sure that the following conditi
 * Your new code **passes all existing and new tests** through running `npm run test`.
 * Your PR **excludes distribution files** in `dist/**`.
 * You appended yourself to the **list of contributors** in the [NOTICE](./NOTICE) file.
+
+Please note that if a pull request is rather complicated, i.e. touches lots of internals, or became stale, it is not uncommon that a core contributor performs the final integration to get it done in good conscience while naming you as a co-author.
+
+Thank you!
