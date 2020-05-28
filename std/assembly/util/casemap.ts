@@ -2,8 +2,7 @@
 // See: https://git.musl-libc.org/cgit/musl/tree/src/ctype/casemap.h
 
 // @ts-ignore: decorator
-@lazy @inline
-const TAB = memory.data<u8>([
+@lazy @inline const TAB = memory.data<u8>([
   7, 8, 9, 10, 11, 12, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
   13, 6, 6, 14, 6, 6, 6, 6, 6, 6, 6, 6, 15, 16, 17, 18,
   6, 19, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 20, 21, 6, 6,
@@ -174,8 +173,7 @@ const TAB = memory.data<u8>([
 ]);
 
 // @ts-ignore: decorator
-@lazy @inline
-const RULES = memory.data<i32>([
+@lazy @inline const RULES = memory.data<i32>([
   0x0, 0x2001, -0x2000, 0x1dbf00, 0x2e700, 0x7900,
   0x2402, 0x101, -0x100, 0x0, 0x201, -0x200,
   -0xc6ff, -0xe800, -0x78ff, -0x12c00, 0xc300, 0xd201,
@@ -219,8 +217,7 @@ const RULES = memory.data<i32>([
 ]);
 
 // @ts-ignore: decorator
-@lazy @inline
-const RULE_BASES = memory.data<u8>([
+@lazy @inline const RULE_BASES = memory.data<u8>([
   0, 6, 39, 81, 111, 119, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   124, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 131, 142, 146, 151,
   0, 170, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 180, 196, 0, 0,
@@ -256,8 +253,7 @@ const RULE_BASES = memory.data<u8>([
 ]);
 
 // @ts-ignore: decorator
-@lazy @inline
-const EXCEPTIONS = memory.data<u8>([
+@lazy @inline const EXCEPTIONS = memory.data<u8>([
   48, 12,  49, 13,  120, 14,  127, 15,
   128, 16,  129, 17,  134, 18,  137, 19,
   138, 19,  142, 20,  143, 21,  144, 22,
@@ -430,8 +426,7 @@ export const SPECIALS_UPPER: StaticArray<u16> = [
 ];
 
 // @ts-ignore: decorator
-@lazy @inline
-const MT = memory.data<i32>([
+@lazy @inline const MT = memory.data<i32>([
   2048, 342, 57
 ]);
 

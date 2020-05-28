@@ -49,7 +49,7 @@ asc.main([
   stderr: stderr,
   readFile: (name, baseDir) => {
     console.log("readFile: " + name + ", baseDir=" + baseDir);
-    if (files.hasOwnProperty(name)) return files[name];
+    if (Object.prototype.hasOwnProperty.call(files, name)) return files[name];
     return null;
   },
   writeFile: (name, data, baseDir) => {

@@ -1,12 +1,10 @@
 import { AL_MASK, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE, AL_SIZE, DEBUG } from "rt/common";
 
 // @ts-ignore: decorator
-@lazy
-var startOffset: usize = (__heap_base + AL_MASK) & ~AL_MASK;
+@lazy var startOffset: usize = (__heap_base + AL_MASK) & ~AL_MASK;
 
 // @ts-ignore: decorator
-@lazy
-var offset: usize = startOffset;
+@lazy var offset: usize = startOffset;
 
 function maybeGrowMemory(newOffset: usize): void {
   // assumes newOffset is aligned
@@ -90,14 +88,17 @@ export function __retain(ref: usize): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __release(ref: usize): void {
+  /* nop */
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-function __visit(ref: usize, cookie: u32): void {
+function __visit(ref: usize, cookie: u32): void { // eslint-disable-line @typescript-eslint/no-unused-vars
+  /* nop */
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __collect(): void {
+  /* nop */
 }

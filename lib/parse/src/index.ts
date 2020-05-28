@@ -92,7 +92,7 @@ export function parse(binary: Uint8Array, options?: ParseOptions): void {
     "onModuleName",
     "onFunctionName",
     "onLocalName"
-  ].forEach((name: string): void => imports.options[name] = options[name] || function() {});
+  ].forEach((name: string) => imports.options[name] = options[name] || function() { /* nop */ });
   var instance = new WebAssembly.Instance(compiled, imports);
   instance.exports.parse(0, nBytes);
 }
@@ -106,10 +106,8 @@ export declare namespace parse {
 function utf8_read(buffer: Uint8Array, start: number, end: number): string {
   var len = end - start;
   if (len < 1) return "";
-  var parts: string[] | null = null,
-      chunk: number[] = [],
-      i = 0, // char offset
-      t = 0; // temporary
+  var parts: string[] | null = null, chunk: number[] = [];
+  var i = 0, t = 0; // char offset and temporary
   while (start < end) {
     t = buffer[start++];
     if (t < 128) {
@@ -124,23 +122,22 @@ function utf8_read(buffer: Uint8Array, start: number, end: number): string {
       chunk[i++] = (t & 15) << 12 | (buffer[start++] & 63) << 6 | buffer[start++] & 63;
     }
     if (i > 8191) {
-      (parts || (parts = [])).push(String.fromCharCode.apply(String, chunk));
+      (parts || (parts = [])).push(String.fromCharCode(...chunk));
       i = 0;
     }
   }
   if (parts) {
-    if (i) parts.push(String.fromCharCode.apply(String, chunk.slice(0, i)));
+    if (i) parts.push(String.fromCharCode(...chunk.slice(0, i)));
     return parts.join("");
   }
-  return String.fromCharCode.apply(String, chunk.slice(0, i));
+  return String.fromCharCode(...chunk.slice(0, i));
 }
 
 // see: https://github.com/dcodeIO/protobuf.js/tree/master/lib/base64
 function base64_decode(string: string): Uint8Array {
   var length = string.length;
   if (length) {
-    let n = 0,
-        p = length;
+    let n = 0, p = length;
     while (--p % 4 > 1 && string.charCodeAt(p) === 61) ++n;
     length = Math.ceil(length * 3) / 4 - n;
   }

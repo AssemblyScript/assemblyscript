@@ -3,12 +3,10 @@
 //
 
 // @ts-ignore: decorator
-@inline
-const EXP2F_TABLE_BITS = 5;
+@inline const EXP2F_TABLE_BITS = 5;
 
 // @ts-ignore: decorator
-@lazy @inline
-const EXP2F_DATA_TAB = memory.data<u64>([
+@lazy @inline const EXP2F_DATA_TAB = memory.data<u64>([
   // exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
   // used for computing 2^(k/N) for an int |k| < 150 N as
   // double(tab[k%N] + (k << 52-BITS))
@@ -124,12 +122,10 @@ export function expf_lut(x: f32): f32 {
 //
 
 // @ts-ignore: decorator
-@inline
-const LOG2F_TABLE_BITS = 4;
+@inline const LOG2F_TABLE_BITS = 4;
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG2F_DATA_TAB = memory.data<f64>([
+@lazy @inline const LOG2F_DATA_TAB = memory.data<f64>([
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019), // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4), // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
   reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD7418B0A1FB77B), // 0x1.49539f0f010bp+0 , -0x1.7418b0a1fb77bp-2,
@@ -207,12 +203,10 @@ export function log2f_lut(x: f32): f32 {
 //
 
 // @ts-ignore: decorator
-@inline
-const LOGF_TABLE_BITS = 4;
+@inline const LOGF_TABLE_BITS = 4;
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOGF_DATA_TAB = memory.data<f64>([
+@lazy @inline const LOGF_DATA_TAB = memory.data<f64>([
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFD57BF7808CAADE), // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFD2BEF0A7C06DDB), // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
   reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD01EAE7F513A67), // 0x1.49539f0f010bp+0 , -0x1.01eae7f513a67p-2,
@@ -461,12 +455,10 @@ export function powf_lut(x: f32, y: f32): f32 {
 //
 
 // @ts-ignore: decorator
-@inline
-const EXP_TABLE_BITS = 7;
+@inline const EXP_TABLE_BITS = 7;
 
 // @ts-ignore: decorator
-@lazy @inline
-const EXP_DATA_TAB = memory.data<u64>([
+@lazy @inline const EXP_DATA_TAB = memory.data<u64>([
   0x0000000000000000, 0x3FF0000000000000,
   0x3C9B3B4F1A88BF6E, 0x3FEFF63DA9FB3335,
   0xBC7160139CD8DC5D, 0x3FEFEC9A3E778061,
@@ -687,7 +679,7 @@ export function exp_lut(x: f64): f64 {
   var kd = z + shift;
   var ki = reinterpret<u64>(kd);
   kd -= shift;
-// #endif
+  // #endif
   var r = x + kd * NegLn2hiN + kd * NegLn2loN;
   // 2^(k/N) ~= scale * (1 + tail).
   var idx = <usize>((ki & N_MASK) << 1);
@@ -808,8 +800,7 @@ export function exp2_lut(x: f64): f64 {
 //
 
 // @ts-ignore: decorator
-@inline
-const LOG2_TABLE_BITS = 6;
+@inline const LOG2_TABLE_BITS = 6;
 
 /* Algorithm:
 
@@ -839,8 +830,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 |log2(x)| < 0x1p-4, this is not enough so that is special cased. */
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG2_DATA_TAB1 = memory.data<f64>([
+@lazy @inline const LOG2_DATA_TAB1 = memory.data<f64>([
   //            invc                  ,                logc
   reinterpret<f64>(0x3FF724286BB1ACF8), reinterpret<f64>(0xBFE1095FEECDB000),
   reinterpret<f64>(0x3FF6E1F766D2CCA1), reinterpret<f64>(0xBFE08494BD76D000),
@@ -909,8 +899,7 @@ const LOG2_DATA_TAB1 = memory.data<f64>([
 ]);
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG2_DATA_TAB2 = memory.data<f64>([
+@lazy @inline const LOG2_DATA_TAB2 = memory.data<f64>([
   //              chi                 ,                 clo
   reinterpret<f64>(0x3FE6200012B90A8E), reinterpret<f64>(0x3C8904AB0644B605),
   reinterpret<f64>(0x3FE66000045734A6), reinterpret<f64>(0x3C61FF9BEA62F7A9),
@@ -1015,15 +1004,15 @@ export function log2_lut(x: f64): f64 {
   var ix = reinterpret<u64>(x);
   if (ix - LO < HI - LO) {
     let r = x - 1.0;
-// #if __FP_FAST_FMA
-//     hi = r * InvLn2hi;
-//     lo = r * InvLn2lo + __builtin_fma(r, InvLn2hi, -hi);
-// #else
+    // #if __FP_FAST_FMA
+    //     hi = r * InvLn2hi;
+    //     lo = r * InvLn2lo + __builtin_fma(r, InvLn2hi, -hi);
+    // #else
     let rhi = reinterpret<f64>(reinterpret<u64>(r) & 0xFFFFFFFF00000000);
     let rlo = r - rhi;
     let hi  = rhi * InvLn2hi;
     let lo  = rlo * InvLn2hi + r * InvLn2lo;
-// #endif
+    // #endif
     let r2 = r * r; // rounding error: 0x1p-62
     let r4 = r2 * r2;
     // Worst-case error is less than 0.54 ULP (0.55 ULP without fma)
@@ -1060,12 +1049,12 @@ export function log2_lut(x: f64): f64 {
 
   // log2(x) = log2(z/c) + log2(c) + k.
   // r ~= z/c - 1, |r| < 1/(2*N).
-// #if __FP_FAST_FMA
-// 	// rounding error: 0x1p-55/N.
-// 	r = __builtin_fma(z, invc, -1.0);
-// 	t1 = r * InvLn2hi;
-// 	t2 = r * InvLn2lo + __builtin_fma(r, InvLn2hi, -t1);
-// #else
+  // #if __FP_FAST_FMA
+  // 	// rounding error: 0x1p-55/N.
+  // 	r = __builtin_fma(z, invc, -1.0);
+  // 	t1 = r * InvLn2hi;
+  // 	t2 = r * InvLn2lo + __builtin_fma(r, InvLn2hi, -t1);
+  // #else
   // rounding error: 0x1p-55/N + 0x1p-65.
   var chi = load<f64>(LOG2_DATA_TAB2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].chi;
   var clo = load<f64>(LOG2_DATA_TAB2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].clo;
@@ -1075,7 +1064,7 @@ export function log2_lut(x: f64): f64 {
   var rlo = r - rhi;
   var t1  = rhi * InvLn2hi;
   var t2  = rlo * InvLn2hi + r * InvLn2lo;
-// #endif
+  // #endif
 
   // hi + lo = r/ln2 + log2(c) + k
   var t3 = kd + logc;
@@ -1096,8 +1085,7 @@ export function log2_lut(x: f64): f64 {
 //
 
 // @ts-ignore: decorator
-@inline
-const LOG_TABLE_BITS = 7;
+@inline const LOG_TABLE_BITS = 7;
 
 /* Algorithm:
 
@@ -1127,8 +1115,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 |log(x)| < 0x1p-4, this is not enough so that is special cased.*/
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG_DATA_TAB1 = memory.data<f64>([
+@lazy @inline const LOG_DATA_TAB1 = memory.data<f64>([
   //              invc                ,                 logc
   reinterpret<f64>(0x3FF734F0C3E0DE9F), reinterpret<f64>(0xBFD7CC7F79E69000),
   reinterpret<f64>(0x3FF713786A2CE91F), reinterpret<f64>(0xBFD76FEEC20D0000),
@@ -1261,8 +1248,7 @@ const LOG_DATA_TAB1 = memory.data<f64>([
 ]);
 
 // @ts-ignore: decorator
-@lazy @inline
-const LOG_DATA_TAB2 = memory.data<f64>([
+@lazy @inline const LOG_DATA_TAB2 = memory.data<f64>([
   //               chi                ,                  clo
   reinterpret<f64>(0x3FE61000014FB66B), reinterpret<f64>(0x3C7E026C91425B3C),
   reinterpret<f64>(0x3FE63000034DB495), reinterpret<f64>(0x3C8DBFEA48005D41),
@@ -1473,15 +1459,15 @@ export function log_lut(x: f64): f64 {
 
   // log(x) = log1p(z/c-1) + log(c) + k*Ln2.
   // r ~= z/c - 1, |r| < 1/(2*N)
-// #if __FP_FAST_FMA
-// 	// rounding error: 0x1p-55/N
-// 	r = __builtin_fma(z, invc, -1.0);
-// #else
+  // #if __FP_FAST_FMA
+  // 	// rounding error: 0x1p-55/N
+  // 	r = __builtin_fma(z, invc, -1.0);
+  // #else
   // rounding error: 0x1p-55/N + 0x1p-66
   const chi = load<f64>(LOG_DATA_TAB2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T2[i].chi
   const clo = load<f64>(LOG_DATA_TAB2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T2[i].clo
   var r = (z - chi - clo) * invc;
-// #endif
+  // #endif
   var kd = <f64>k;
 
   // hi + lo = r + log(c) + k*Ln2
@@ -1503,8 +1489,7 @@ export function log_lut(x: f64): f64 {
 //
 
 // @ts-ignore: decorator
-@inline
-const POW_LOG_TABLE_BITS = 7;
+@inline const POW_LOG_TABLE_BITS = 7;
 
 /* Algorithm:
 
@@ -1530,8 +1515,7 @@ error and the interval for z is selected such that near x == 1, where log(x)
 is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 
 // @ts-ignore: decorator
-@lazy @inline
-const POW_LOG_DATA_TAB = memory.data<f64>([
+@lazy @inline const POW_LOG_DATA_TAB = memory.data<f64>([
   //             invc                 ,pad,               logc                 ,               logctail
   reinterpret<f64>(0x3FF6A00000000000), 0, reinterpret<f64>(0xBFD62C82F2B9C800), reinterpret<f64>(0x3CFAB42428375680),
   reinterpret<f64>(0x3FF6800000000000), 0, reinterpret<f64>(0xBFD5D1BDBF580800), reinterpret<f64>(0xBD1CA508D8E0F720),
@@ -1703,8 +1687,7 @@ function zeroinfnan(u: u64): bool {
 }
 
 // @ts-ignore: decorator
-@lazy
-var log_tail: f64 = 0;
+@lazy var log_tail: f64 = 0;
 
 // Compute y+TAIL = log(x) where the rounded result is y and TAIL has about
 // additional 15 bits precision. IX is the bit representation of x, but
@@ -1779,8 +1762,7 @@ function log_inline(ix: u64): f64 {
 }
 
 // @ts-ignore: decorator
-@inline
-const SIGN_BIAS = 0x800 << EXP_TABLE_BITS;
+@inline const SIGN_BIAS = 0x800 << EXP_TABLE_BITS;
 
 // Computes sign*exp(x+xtail) where |xtail| < 2^-8/N and |xtail| <= |x|.
 // The sign_bias argument is SIGN_BIAS or 0 and sets the sign to -1 or 1.
@@ -1828,20 +1810,20 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   // x = ln2/N*k + r, with int k and r in [-ln2/2N, ln2/2N].
   z = InvLn2N * x;
 
-// #if TOINT_INTRINSICS
-//   kd = roundtoint(z);
-//   ki = converttoint(z);
-// #elif EXP_USE_TOINT_NARROW
-//   // z - kd is in [-0.5-2^-16, 0.5] in all rounding modes.
-//   kd = eval_as_double(z + shift);
-//   ki = asuint64(kd) >> 16;
-//   kd = (double_t)(int32_t)ki;
-// #else
+  // #if TOINT_INTRINSICS
+  //   kd = roundtoint(z);
+  //   ki = converttoint(z);
+  // #elif EXP_USE_TOINT_NARROW
+  //   // z - kd is in [-0.5-2^-16, 0.5] in all rounding modes.
+  //   kd = eval_as_double(z + shift);
+  //   ki = asuint64(kd) >> 16;
+  //   kd = (double_t)(int32_t)ki;
+  // #else
   // z - kd is in [-1, 1] in non-nearest rounding modes
   kd  = z + shift;
   ki  = reinterpret<u64>(kd);
   kd -= shift;
-// #endif
+  // #endif
   r = x + kd * NegLn2hiN + kd * NegLn2loN;
   // The code assumes 2^-200 < |xtail| < 2^-8/N
   r += xtail;
@@ -1920,16 +1902,16 @@ export function pow_lut(x: f64, y: f64): f64 {
   var hi = log_inline(ix);
   var lo = log_tail;
   var ehi: f64, elo: f64;
-// #if __FP_FAST_FMA
-//   ehi = y * hi;
-//   elo = y * lo + __builtin_fma(y, hi, -ehi);
-// #else
+  // #if __FP_FAST_FMA
+  //   ehi = y * hi;
+  //   elo = y * lo + __builtin_fma(y, hi, -ehi);
+  // #else
   var yhi = reinterpret<f64>(iy & 0xFFFFFFFFF8000000);
   var ylo = y - yhi;
   var lhi = reinterpret<f64>(reinterpret<u64>(hi) & 0xFFFFFFFFF8000000);
   var llo = hi - lhi + lo;
   ehi = yhi * lhi;
   elo = ylo * lhi + y * llo; // |elo| < |ehi| * 2^-25.
-// #endif
+  // #endif
   return exp_inline(ehi, elo, sign_bias);
 }

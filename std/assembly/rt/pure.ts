@@ -3,8 +3,8 @@ import { Block, freeBlock, ROOT } from "rt/tlsf";
 import { TypeinfoFlags } from "shared/typeinfo";
 import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 
-/////////////////////////// A Pure Reference Counting Garbage Collector ///////////////////////////
-// see:     https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
+// === A Pure Reference Counting Garbage Collector ===
+// see: https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
 
 // ╒══════════════════════ GC Info structure ══════════════════════╕
 // │  3                   2                   1                    │
@@ -63,7 +63,7 @@ import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 
 // @ts-ignore: decorator
 @global @unsafe @lazy
-function __visit(ref: usize, cookie: i32): void {
+function __visit(ref: usize, cookie: i32): void { // eslint-disable-line @typescript-eslint/no-unused-vars
   if (ref < __heap_base) return;
   if (isDefined(__GC_ALL_ACYCLIC)) {
     if (DEBUG) assert(cookie == VISIT_DECREMENT);

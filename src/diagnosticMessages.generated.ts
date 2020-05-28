@@ -7,7 +7,7 @@
 
 /** Enum of available diagnostic codes. */
 export enum DiagnosticCode {
-  Not_implemented = 100,
+  Not_implemented_0 = 100,
   Operation_is_unsafe = 101,
   User_defined_0 = 102,
   Feature_0_is_not_enabled = 103,
@@ -180,7 +180,7 @@ export enum DiagnosticCode {
 /** Translates a diagnostic code to its respective string. */
 export function diagnosticCodeToString(code: DiagnosticCode): string {
   switch (code) {
-    case 100: return "Not implemented.";
+    case 100: return "Not implemented: {0}";
     case 101: return "Operation is unsafe.";
     case 102: return "User-defined: {0}";
     case 103: return "Feature '{0}' is not enabled.";

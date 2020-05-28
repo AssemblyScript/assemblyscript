@@ -200,7 +200,9 @@ export class Flow {
   private constructor(
     /** Function this flow belongs to. */
     public parentFunction: Function
-  ) {}
+  ) {
+    /* nop */
+  }
 
   /** Parent flow. */
   parent: Flow | null = null;
@@ -1219,7 +1221,8 @@ export class Flow {
                   getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
                   getConstValueI32(operand) > shift // must clear MSB
                 )
-              : this.canOverflow(getBinaryLeft(expr), type) && !(
+              : this.canOverflow(getBinaryLeft(expr), type) &&
+                !(
                   getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
                   getConstValueI32(operand) >= shift // can leave MSB
                 );

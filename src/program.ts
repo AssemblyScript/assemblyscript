@@ -1265,7 +1265,10 @@ export class Program extends DiagnosticEmitter {
         let alias = unchecked(_keys[i]);
         let name = changetype<string>(globalAliases.get(alias));
         assert(name != null);
-        if (!name.length) continue; // explicitly disabled
+        if (!name.length) {
+          this.elementsByName.delete(alias);
+          continue;
+        }
         let firstChar = name.charCodeAt(0);
         if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
           this.registerConstantInteger(alias, Type.i32, i64_new(<i32>parseInt(name, 10)));
@@ -1588,10 +1591,10 @@ export class Program extends DiagnosticEmitter {
   ): File | null {
     var filesByName = this.filesByName;
     return filesByName.has(foreignPath)
-         ? assert(filesByName.get(foreignPath))
-         : filesByName.has(foreignPathAlt)
-         ? assert(filesByName.get(foreignPathAlt))
-         : null;
+      ? assert(filesByName.get(foreignPath))
+      : filesByName.has(foreignPathAlt)
+        ? assert(filesByName.get(foreignPathAlt))
+        : null;
   }
 
   /** Tries to locate a foreign element by traversing exports and queued exports. */
@@ -3347,8 +3350,8 @@ export class FunctionPrototype extends DeclaredElement {
   /** Tests if this prototype is bound to a class. */
   get isBound(): bool {
     var parent = this.parent;
-    return parent.kind == ElementKind.CLASS
-        || parent.kind == ElementKind.PROPERTY_PROTOTYPE && (
+    return parent.kind == ElementKind.CLASS ||
+           parent.kind == ElementKind.PROPERTY_PROTOTYPE && (
              parent.parent.kind == ElementKind.CLASS ||
              parent.parent.kind == ElementKind.INTERFACE
            );

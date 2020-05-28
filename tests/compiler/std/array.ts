@@ -518,7 +518,7 @@ var i: i32;
 
   // Test side effect pop
   every = arr.every((value: i32, _: i32, array: Array<i32>) => {
-    array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
+    array.pop(); // popped items shouldn't be looked up, and we shouldn't go out of bounds
     return value < 3;
   });
   // only 2 first items was looked up, since last 2 was removed by .pop()
@@ -556,7 +556,7 @@ var i: i32;
 
   // Test side effect pop
   some = arr.some((value: i32, _: i32, array: Array<i32>) => {
-    array.pop(); // poped items shouldn't be looked up, and we shouldn't go out of bounds
+    array.pop(); // popped items shouldn't be looked up, and we shouldn't go out of bounds
     return value > 3;
   });
   // only 2 first items was looked up, since last 2 was removed by .pop()
@@ -577,7 +577,7 @@ var i: i32;
   // Test side effect push
   i = 0;
   arr.forEach((value: i32, _: i32, array: Array<i32>) => {
-    array.push(100); //push side effect should not affect this method by spec
+    array.push(100); // push side effect should not affect this method by spec
     i += value;
   });
   // array should be changed, but this method result should be calculated for old array length
@@ -595,7 +595,7 @@ var i: i32;
   // Test side effect pop
   i = 0;
   arr.forEach((value: i32, _: i32, array: Array<i32>) => {
-    array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
+    array.pop(); // popped items shouldn't be looked up, and we shouldn't go out of bounds
     i += value;
   });
   // only 2 first items was looked up, since last 2 was removed by .pop()
@@ -645,7 +645,7 @@ var i: i32;
   // Test side effect push
   i = 0;
   arr.map<i32>((value: i32, _: i32, array: Array<i32>) => {
-    array.push(100); //push side effect should not affect this method by spec
+    array.push(100); // push side effect should not affect this method by spec
     i += value;
     return value;
   });
@@ -667,7 +667,7 @@ var i: i32;
   // Test side effect pop
   i = 0;
   arr.map<i32>((value: i32, _: i32, array: Array<i32>) => {
-    array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
+    array.pop(); // popped items shouldn't be looked up, and we shouldn't go out of bounds
     i += value;
     return value;
   });
@@ -688,7 +688,7 @@ var i: i32;
   // Test side effect push
   i = 0;
   arr.filter((value: i32, _: i32, array: Array<i32>) => {
-    array.push(100); //push side effect should not affect this method by spec
+    array.push(100); // push side effect should not affect this method by spec
     i += value;
     return value >= 2;
   });
@@ -710,7 +710,7 @@ var i: i32;
   // Test side effect pop
   i = 0;
   arr.filter((value: i32, _: i32, array: Array<i32>) => {
-    array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
+    array.pop(); // popped items shouldn't be looked up, and we shouldn't go out of bounds
     i += value;
     return value >= 2;
   });
@@ -756,7 +756,7 @@ var i: i32;
 
   // Test side effect pop
   i = arr.reduce(((prev: i32, current: i32, _: i32, array: Array<i32>): i32 => {
-    array.pop(); //poped items shouldn't be reduced, and we shouldn't go out of bounds
+    array.pop(); // popped items shouldn't be reduced, and we shouldn't go out of bounds
     return prev + current;
   }), 0);
   // only 2 first items was reduced, since last 2 was removed by .pop()
@@ -801,7 +801,7 @@ var i: i32;
 
   // Test side effect pop
   i = arr.reduceRight(((prev: i32, current: i32, _: i32, array: Array<i32>): i32 => {
-    array.pop(); // poped items should be reduced
+    array.pop(); // popped items should be reduced
     return prev + current;
   }), 0);
 

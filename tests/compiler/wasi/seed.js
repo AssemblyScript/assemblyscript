@@ -1,4 +1,5 @@
 var memory;
+var failed;
 
 exports.preInstantiate = function(imports, exports) {
   imports["wasi_snapshot_preview1"] = {
@@ -22,4 +23,5 @@ exports.postInstantiate = function(instance) {
   const exports = instance.exports;
   memory = exports.memory;
   console.log("Math.random = " + exports.test());
-}
+  if (failed) throw Error(failed);
+};

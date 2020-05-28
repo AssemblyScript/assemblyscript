@@ -12,10 +12,9 @@ import {
 } from "util/number";
 
 // @ts-ignore: decorator
-@global @inline
-const ASC_WASI = true;
+@global @inline const ASC_WASI = true; // eslint-disable-line @typescript-eslint/no-unused-vars
 
-function abort(
+function abort( // eslint-disable-line @typescript-eslint/no-unused-vars
   message: string | null = null,
   fileName: string | null = null,
   lineNumber: u32 = 0,
@@ -58,7 +57,7 @@ function abort(
   proc_exit(255);
 }
 
-function trace(
+function trace( // eslint-disable-line @typescript-eslint/no-unused-vars
   message: string,
   n: i32 = 0,
   a0: f64 = 0,
@@ -108,7 +107,7 @@ function trace(
   __free(iovPtr);
 }
 
-function seed(): f64 {
+function seed(): f64 { // eslint-disable-line @typescript-eslint/no-unused-vars
   var temp = load<u64>(0);
   var rand: u64;
   do {
