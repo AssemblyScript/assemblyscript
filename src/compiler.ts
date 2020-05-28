@@ -695,8 +695,9 @@ export class Compiler extends DiagnosticEmitter {
 
       // traverse instances
       case ElementKind.FUNCTION_PROTOTYPE: {
-        let functionInstances = (<FunctionPrototype>element).instances;
-        if (functionInstances) {
+        let functionPrototype = <FunctionPrototype>element;
+        let functionInstances = functionPrototype.instances;
+        if (functionInstances !== null && functionInstances.size > 0) {
           // TODO: for (let instance of instances.values()) {
           for (let _values = Map_values(functionInstances), i = 0, k = _values.length; i < k; ++i) {
             let instance = unchecked(_values[i]);
@@ -707,12 +708,18 @@ export class Compiler extends DiagnosticEmitter {
             }
             this.ensureModuleExport(instanceName, instance, prefix);
           }
+        } else if (functionPrototype.is(CommonFlags.GENERIC)) {
+          this.warning(
+            DiagnosticCode.Exported_generic_function_or_class_has_no_concrete_instances,
+            functionPrototype.identifierNode.range
+          );
         }
         break;
       }
       case ElementKind.CLASS_PROTOTYPE: {
-        let classInstances = (<ClassPrototype>element).instances;
-        if (classInstances) {
+        let classPrototype = <ClassPrototype>element;
+        let classInstances = classPrototype.instances;
+        if (classInstances !== null && classInstances.size > 0) {
           // TODO: for (let instance of instances.values()) {
           for (let _values = Map_values(classInstances), i = 0, k = _values.length; i < k; ++i) {
             let instance = unchecked(_values[i]);
@@ -723,6 +730,11 @@ export class Compiler extends DiagnosticEmitter {
             }
             this.ensureModuleExport(instanceName, instance, prefix);
           }
+        } else if (classPrototype.is(CommonFlags.GENERIC)) {
+          this.warning(
+            DiagnosticCode.Exported_generic_function_or_class_has_no_concrete_instances,
+            classPrototype.identifierNode.range
+          );
         }
         break;
       }
