@@ -1,10 +1,4 @@
 <!--
  Thanks for submitting an issue to AssemblyScript! Please take a moment to
- review the contributing guidelines linked below, and confirm with an [x] 🙂
+ review the contributing guidelines linked below 🙂
 -->
-
-⯈
-⯈
-⯈
-
-- [ ] I've read the contributing guidelines
