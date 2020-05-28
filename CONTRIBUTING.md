@@ -33,7 +33,7 @@ Instructions are similar to those for bug reports. Please provide the following 
 Submitting Pull Requests
 ------------------------
 
-Instructions are similar to those for bug reports:
+Instructions are similar to those for bug reports. Please provide the following information:
 
 * If this is not a trivial fix, consider **creating an issue to discuss first** and **later link to it from the PR**.
 * Use a **clear and descriptive title** for the pull request.
