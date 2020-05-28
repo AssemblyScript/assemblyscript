@@ -1,6 +1,6 @@
 {
-  "name": "assemblyscript",
-  "description": "A TypeScript to WebAssembly compiler.",
+  "name": "assemblyscript-closures-beta",
+  "description": "AssemblyScript, but with Closures! (experimental).",
   "keywords": [
     "typescript",
     "webassembly",
@@ -15,10 +15,10 @@
   "homepage": "https://assemblyscript.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AssemblyScript/assemblyscript.git"
+    "url": "https://github.com/DuncanUszkay1/assemblyscript.git"
   },
   "bugs": {
-    "url": "https://github.com/AssemblyScript/assemblyscript/issues"
+    "url": "https://github.com/DuncanUszkay1/assemblyscript/issues"
   },
   "dependencies": {
     "binaryen": "93.0.0-nightly.20200514",
