@@ -35,7 +35,7 @@ Submitting Pull Requests
 
 Instructions are similar to those for bug reports. Please provide the following information:
 
-* Consider **creating an issue to discuss first** and **later link to it from the PR** if this is not a trivial fix.
+* If this is not a trivial fix, consider **creating an issue to discuss first** and **later link to it from the PR**.
 * Use a **clear and descriptive title** for the pull request.
 * Provide a **description of the suggested changes** in as many details as necessary.
 * **Document your new code** where necessary.
