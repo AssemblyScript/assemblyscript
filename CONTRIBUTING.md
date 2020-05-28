@@ -33,16 +33,16 @@ Instructions are similar to those for bug reports. Please provide the following 
 Submitting Pull Requests
 ------------------------
 
-Instructions are similar to those for bug reports. Please provide the following information:
+Instructions are similar to those for bug reports:
 
 * If this is not a trivial fix, consider **creating an issue to discuss first** and **later link to it from the PR**.
 * Use a **clear and descriptive title** for the pull request.
-* Provide a **description of the suggested changes** in as many details as necessary.
+* Provide a **description of the changes** in as many details as necessary.
 * **Document your new code** where necessary.
 * Please **refrain from refactoring (unrelated code)** as it makes your pull request easier to review.
 * **Create tests for your new code** where necessary. For creating or updating tests, please see the [Test Instructions](./tests).
 
-Before submitting your pull request, please make sure that the following conditions are met:
+Before submitting your pull request, also make sure that the following conditions are met:
 
 * Your new code **adheres to the code style** through running `npm run check`.
 * Your new code **passes all existing and new tests** through running `npm run test`.
