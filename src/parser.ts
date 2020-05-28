@@ -560,7 +560,6 @@ export class Parser extends DiagnosticEmitter {
       let name = this.parseTypeName(tn);
       if (!name) return null;
       let parameters: TypeNode[] | null = null;
-      let nullable = false;
 
       // Name<T>
       if (tn.skip(Token.LESSTHAN)) {
@@ -580,32 +579,32 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      // ... | null
-      while (tn.skip(Token.BAR)) {
-        if (tn.skip(Token.NULL)) {
-          nullable = true;
-        } else {
-          let notNullStart = tn.pos;
-          let notNull = this.parseType(tn, false, true);
-          if (!suppressErrors) {
-            this.error(
-              DiagnosticCode._0_expected,
-              notNull ? notNull.range : tn.range(notNullStart), "null"
-            );
-          }
-          return null;
-        }
-      }
       if (!parameters) parameters = [];
-      type = Node.createNamedType(name, parameters, nullable, tn.range(startPos, tn.pos));
+      type = Node.createNamedType(name, parameters, false, tn.range(startPos, tn.pos));
     } else {
       if (!suppressErrors) {
         this.error(
-          DiagnosticCode.Identifier_expected,
+          DiagnosticCode.Type_expected,
           tn.range()
         );
       }
       return null;
+    }
+    // ... | null
+    while (tn.skip(Token.BAR)) {
+      if (tn.skip(Token.NULL)) {
+        type.isNullable = true;
+      } else {
+        let notNullStart = tn.pos;
+        let notNull = this.parseType(tn, false, true);
+        if (!suppressErrors) {
+          this.error(
+            DiagnosticCode._0_expected,
+            notNull ? notNull.range : tn.range(notNullStart), "null"
+          );
+        }
+        return null;
+      }
     }
     // ... [][]
     while (tn.skip(Token.OPENBRACKET)) {
