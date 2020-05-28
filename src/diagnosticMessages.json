@@ -13,7 +13,7 @@
   "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.": 201,
   "Type '{0}' cannot be changed to type '{1}'.": 202,
   "Operation '{0}' cannot be applied to type '{1}'.": 203,
-  "Basic type '{0}' cannot be nullable.": 204,
+  "Type '{0}' cannot be nullable.": 204,
   "Cannot export a mutable global.": 205,
   "Mutable value cannot be inlined.": 206,
   "Unmanaged classes cannot extend managed classes and vice-versa.": 207,
