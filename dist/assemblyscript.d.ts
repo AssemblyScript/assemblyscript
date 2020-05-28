@@ -218,7 +218,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
      */
     /** Enum of available diagnostic codes. */
     export enum DiagnosticCode {
-        Not_implemented = 100,
+        Not_implemented_0 = 100,
         Operation_is_unsafe = 101,
         User_defined_0 = 102,
         Feature_0_is_not_enabled = 103,
@@ -903,7 +903,6 @@ declare module "assemblyscript/src/tokenizer" {
         readHexadecimalEscape(remain?: number): string;
         readUnicodeEscape(): string;
         private readExtendedUnicodeEscape;
-        finish(): void;
     }
     /** Tokenizer state as returned by {@link Tokenizer#mark} and consumed by {@link Tokenizer#reset}. */
     export class State {
@@ -5161,15 +5160,19 @@ declare module "assemblyscript/src/compiler" {
         /** Finalizes the virtual stub of the specified function. */
         private finalizeVirtualStub;
         /** Makes a retain call, retaining the expression's value. */
-        makeRetain(expr: ExpressionRef): ExpressionRef;
+        makeRetain(expr: ExpressionRef, type: Type): ExpressionRef;
         /** Makes a release call, releasing the expression's value. Changes the current type to void.*/
-        makeRelease(expr: ExpressionRef): ExpressionRef;
+        makeRelease(expr: ExpressionRef, type: Type): ExpressionRef;
         /** Makes a replace, retaining the new expression's value and releasing the old expression's value, in this order. */
         makeReplace(
         /** New value being assigned. */
         newExpr: ExpressionRef, 
+        /** The type of the new expression. */
+        newType: Type, 
         /** Old value being replaced. */
         oldExpr: ExpressionRef, 
+        /** The type of the old expression. */
+        oldType: Type, 
         /** Whether the new value is already retained. */
         alreadyRetained?: boolean): ExpressionRef;
         /** Makes an autorelease call at the end of the specified `flow`. */
