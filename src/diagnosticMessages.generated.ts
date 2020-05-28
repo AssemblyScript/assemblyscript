@@ -20,7 +20,7 @@ export enum DiagnosticCode {
   Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
   Type_0_cannot_be_changed_to_type_1 = 202,
   Operation_0_cannot_be_applied_to_type_1 = 203,
-  Basic_type_0_cannot_be_nullable = 204,
+  Type_0_cannot_be_nullable = 204,
   Cannot_export_a_mutable_global = 205,
   Mutable_value_cannot_be_inlined = 206,
   Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa = 207,
@@ -193,7 +193,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
     case 202: return "Type '{0}' cannot be changed to type '{1}'.";
     case 203: return "Operation '{0}' cannot be applied to type '{1}'.";
-    case 204: return "Basic type '{0}' cannot be nullable.";
+    case 204: return "Type '{0}' cannot be nullable.";
     case 205: return "Cannot export a mutable global.";
     case 206: return "Mutable value cannot be inlined.";
     case 207: return "Unmanaged classes cannot extend managed classes and vice-versa.";
