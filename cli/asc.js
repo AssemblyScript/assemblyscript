@@ -534,7 +534,14 @@ exports.main = function main(argv, options, callback) {
     var internalPath;
     while ((internalPath = assemblyscript.nextFile(program)) != null) {
       let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
-      if (!file) return callback(Error("Import '" + internalPath + "' not found."));
+      if (!file) {
+        const searchPaths = [
+          path.join(baseDir, internalPath + ".ts"),
+          path.join(baseDir, internalPath, "index.ts"),
+          path.join(baseDir, internalPath + ".d.ts")
+        ];
+        return callback(Error("Import '" + internalPath + "' not found.\n  No such file '" + searchPaths.join("'\n  No such file '") + "'"));
+      }
       stats.parseCount++;
       stats.parseTime += measure(() => {
         assemblyscript.parse(program, file.sourceText, file.sourcePath, false);
