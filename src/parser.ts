@@ -155,7 +155,11 @@ export class Parser extends DiagnosticEmitter {
     var statements = source.statements;
     while (!tn.skip(Token.ENDOFFILE)) {
       let statement = this.parseTopLevelStatement(tn, null);
-      if (statement) statements.push(statement);
+      if (statement) {
+        statements.push(statement);
+      } else {
+        this.skipStatement(tn);
+      }
     }
   }
 
@@ -538,6 +542,12 @@ export class Parser extends DiagnosticEmitter {
         Node.createSimpleTypeName("bool", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
+    // 'null'
+    } else if (token == Token.NULL) {
+      type = Node.createNamedType(
+        Node.createSimpleTypeName("null", tn.range()), [], false, tn.range(startPos, tn.pos)
+      );
+
     // StringLiteral
     } else if (token == Token.STRINGLITERAL) {
       tn.readString();
@@ -575,10 +585,12 @@ export class Parser extends DiagnosticEmitter {
         if (tn.skip(Token.NULL)) {
           nullable = true;
         } else {
+          let notNullStart = tn.pos;
+          let notNull = this.parseType(tn, false, true);
           if (!suppressErrors) {
             this.error(
               DiagnosticCode._0_expected,
-              tn.range(tn.pos), "null"
+              notNull ? notNull.range : tn.range(notNullStart), "null"
             );
           }
           return null;

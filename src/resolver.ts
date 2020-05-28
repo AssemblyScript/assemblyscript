@@ -2716,6 +2716,15 @@ export class Resolver extends DiagnosticEmitter {
         reportMode
       );
       if (!parameterType) return null;
+      if (parameterType == Type.void) {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_expected,
+            typeNode.range
+          );
+        }
+        return null;
+      }
       parameterTypes[i] = parameterType;
       parameterNames[i] = parameterDeclaration.name.text;
     }
@@ -3078,6 +3087,15 @@ export class Resolver extends DiagnosticEmitter {
                 instance.contextualTypeArguments,
                 reportMode
               );
+              if (fieldType == Type.void) {
+                if (reportMode == ReportMode.REPORT) {
+                  this.error(
+                    DiagnosticCode.Type_expected,
+                    fieldTypeNode.range
+                  );
+                }
+                break;
+              }
             }
             if (!fieldType) break; // did report above
             let fieldInstance = new Field(fieldPrototype, instance, fieldType);
