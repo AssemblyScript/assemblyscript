@@ -533,14 +533,15 @@ exports.main = function main(argv, options, callback) {
   function parseBacklog() {
     var internalPath;
     while ((internalPath = assemblyscript.nextFile(program)) != null) {
-      let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
+      let dependee = assemblyscript.getDependee(program, internalPath);
+      let file = getFile(internalPath, dependee);
       if (!file) {
         const searchPaths = [
-          path.join(baseDir, internalPath + ".ts"),
-          path.join(baseDir, internalPath, "index.ts"),
-          path.join(baseDir, internalPath + ".d.ts")
+          path.resolve(baseDir, internalPath + extension.ext),
+          path.resolve(baseDir, internalPath, "index" + extension.ext),
+          path.resolve(baseDir, internalPath + extension.ext_d)
         ];
-        return callback(Error("Import '" + internalPath + "' not found.\n  No such file '" + searchPaths.join("'\n  No such file '") + "'"));
+        return callback(Error("Import path '" + internalPath + "' in '" + dependee + "' not found.\n  No such file '" + searchPaths.join("'\n  No such file '") + "'"));
       }
       stats.parseCount++;
       stats.parseTime += measure(() => {
