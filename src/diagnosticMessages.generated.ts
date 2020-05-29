@@ -20,7 +20,7 @@ export enum DiagnosticCode {
   Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
   Type_0_cannot_be_changed_to_type_1 = 202,
   Operation_0_cannot_be_applied_to_type_1 = 203,
-  Basic_type_0_cannot_be_nullable = 204,
+  Type_0_cannot_be_nullable = 204,
   Cannot_export_a_mutable_global = 205,
   Mutable_value_cannot_be_inlined = 206,
   Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa = 207,
@@ -48,6 +48,7 @@ export enum DiagnosticCode {
   Property_0_only_has_a_setter_and_is_missing_a_getter = 229,
   _0_keyword_cannot_be_used_here = 230,
   A_class_with_a_constructor_explicitly_returning_something_else_than_this_must_be_final = 231,
+  Exported_generic_function_or_class_has_no_concrete_instances = 232,
   Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
@@ -193,7 +194,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
     case 202: return "Type '{0}' cannot be changed to type '{1}'.";
     case 203: return "Operation '{0}' cannot be applied to type '{1}'.";
-    case 204: return "Basic type '{0}' cannot be nullable.";
+    case 204: return "Type '{0}' cannot be nullable.";
     case 205: return "Cannot export a mutable global.";
     case 206: return "Mutable value cannot be inlined.";
     case 207: return "Unmanaged classes cannot extend managed classes and vice-versa.";
@@ -221,6 +222,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 229: return "Property '{0}' only has a setter and is missing a getter.";
     case 230: return "'{0}' keyword cannot be used here.";
     case 231: return "A class with a constructor explicitly returning something else than 'this' must be '@final'.";
+    case 232: return "Exported generic function or class has no concrete instances.";
     case 900: return "Type '{0}' is cyclic. Module will include deferred garbage collection.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";

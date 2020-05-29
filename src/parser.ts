@@ -155,7 +155,11 @@ export class Parser extends DiagnosticEmitter {
     var statements = source.statements;
     while (!tn.skip(Token.ENDOFFILE)) {
       let statement = this.parseTopLevelStatement(tn, null);
-      if (statement) statements.push(statement);
+      if (statement) {
+        statements.push(statement);
+      } else {
+        this.skipStatement(tn);
+      }
     }
   }
 
@@ -538,6 +542,12 @@ export class Parser extends DiagnosticEmitter {
         Node.createSimpleTypeName("bool", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
+    // 'null'
+    } else if (token == Token.NULL) {
+      type = Node.createNamedType(
+        Node.createSimpleTypeName("null", tn.range()), [], false, tn.range(startPos, tn.pos)
+      );
+
     // StringLiteral
     } else if (token == Token.STRINGLITERAL) {
       tn.readString();
@@ -550,7 +560,6 @@ export class Parser extends DiagnosticEmitter {
       let name = this.parseTypeName(tn);
       if (!name) return null;
       let parameters: TypeNode[] | null = null;
-      let nullable = false;
 
       // Name<T>
       if (tn.skip(Token.LESSTHAN)) {
@@ -570,30 +579,32 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      // ... | null
-      while (tn.skip(Token.BAR)) {
-        if (tn.skip(Token.NULL)) {
-          nullable = true;
-        } else {
-          if (!suppressErrors) {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(tn.pos), "null"
-            );
-          }
-          return null;
-        }
-      }
       if (!parameters) parameters = [];
-      type = Node.createNamedType(name, parameters, nullable, tn.range(startPos, tn.pos));
+      type = Node.createNamedType(name, parameters, false, tn.range(startPos, tn.pos));
     } else {
       if (!suppressErrors) {
         this.error(
-          DiagnosticCode.Identifier_expected,
+          DiagnosticCode.Type_expected,
           tn.range()
         );
       }
       return null;
+    }
+    // ... | null
+    while (tn.skip(Token.BAR)) {
+      if (tn.skip(Token.NULL)) {
+        type.isNullable = true;
+      } else {
+        let notNullStart = tn.pos;
+        let notNull = this.parseType(tn, false, true);
+        if (!suppressErrors) {
+          this.error(
+            DiagnosticCode._0_expected,
+            notNull ? notNull.range : tn.range(notNullStart), "null"
+          );
+        }
+        return null;
+      }
     }
     // ... [][]
     while (tn.skip(Token.OPENBRACKET)) {

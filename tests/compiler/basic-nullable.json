@@ -3,7 +3,7 @@
     "--runtime none"
   ],
   "stderr": [
-    "AS204: Basic type 'i32' cannot be nullable.",
+    "AS204: Type 'i32' cannot be nullable.",
     "EOF"
   ]
 }
