@@ -89,6 +89,14 @@ import {
   mangleInternalPath
 } from "./ast";
 
+/** Represents a dependee. */
+class Dependee {
+  constructor(
+    public source: Source,
+    public reportNode: Node
+  ) {}
+}
+
 /** Parser interface. */
 export class Parser extends DiagnosticEmitter {
 
@@ -102,8 +110,8 @@ export class Parser extends DiagnosticEmitter {
   onComment: CommentHandler | null = null;
   /** Current file being parsed. */
   currentSource: Source | null = null;
-  /** Dependency map **/
-  dependees: Map<string, Source> = new Map();
+  /** Map of dependees being depended upon by a source, by path. */
+  dependees: Map<string, Dependee> = new Map();
   /** An array of parsed sources. */
   sources: Source[];
 
@@ -118,8 +126,8 @@ export class Parser extends DiagnosticEmitter {
 
   /** Parses a file and adds its definitions to the program. */
   parseFile(
-    /** Source text of the file. */
-    text: string,
+    /** Source text of the file, or `null` to indicate not found. */
+    text: string | null,
     /** Normalized path of the file. */
     path: string,
     /** Whether this is an entry file. */
@@ -127,11 +135,27 @@ export class Parser extends DiagnosticEmitter {
   ): void {
     // the frontend gives us paths with file extensions
     var normalizedPath = normalizePath(path);
-    var internalPath = mangleInternalPath(normalizedPath);
+    var internalPath = mangleInternalPath(path);
+
     // check if already processed
     if (this.donelog.has(internalPath)) return;
     this.donelog.add(internalPath); // do not parse again
     this.seenlog.add(internalPath); // do not request again
+
+    // check if this is an error
+    if (text === null) {
+      let dependees = this.dependees;
+      let dependee: Dependee | null = null;
+      if (dependees.has(internalPath)) dependee = assert(dependees.get(internalPath));
+      this.error(
+        DiagnosticCode.File_0_not_found,
+        dependee
+          ? dependee.reportNode.range
+          : null,
+        path
+      );
+      return;
+    }
 
     // create the source element
     var source = new Source(
@@ -402,10 +426,13 @@ export class Parser extends DiagnosticEmitter {
     return backlog.length ? assert(backlog.shift()) : null;
   }
 
-  /** Obtains the dependee of the given imported file. */
+  /** Obtains the path of the dependee of the given imported file. */
   getDependee(dependent: string): string | null {
-    var source = this.dependees.get(dependent);
-    if (source) return source.internalPath;
+    var dependees = this.dependees;
+    if (dependees.has(dependent)) {
+      let dependee = assert(dependees.get(dependent));
+      return dependee.source.internalPath;
+    }
     return null;
   }
 
@@ -2447,11 +2474,13 @@ export class Parser extends DiagnosticEmitter {
         }
       }
       let ret = Node.createExportStatement(members, path, isDeclare, tn.range(startPos, tn.pos));
-      let internalPath = ret.internalPath;
-      if (internalPath !== null && !this.seenlog.has(internalPath)) {
-        this.dependees.set(internalPath, currentSource);
-        this.backlog.push(internalPath);
-        this.seenlog.add(internalPath);
+      if (path !== null) {
+        let internalPath = assert(ret.internalPath);
+        if (!this.seenlog.has(internalPath)) {
+          this.dependees.set(internalPath, new Dependee(currentSource, path));
+          this.backlog.push(internalPath);
+          this.seenlog.add(internalPath);
+        }
       }
       tn.skip(Token.SEMICOLON);
       return ret;
@@ -2466,7 +2495,7 @@ export class Parser extends DiagnosticEmitter {
           if (!exportPaths) source.exportPaths = [ internalPath ];
           else if (!exportPaths.includes(internalPath)) exportPaths.push(internalPath);
           if (!this.seenlog.has(internalPath)) {
-            this.dependees.set(internalPath, currentSource);
+            this.dependees.set(internalPath, new Dependee(currentSource, path));
             this.backlog.push(internalPath);
           }
           tn.skip(Token.SEMICOLON);
@@ -2638,7 +2667,7 @@ export class Parser extends DiagnosticEmitter {
         }
         let internalPath = ret.internalPath;
         if (!this.seenlog.has(internalPath)) {
-          this.dependees.set(internalPath, assert(this.currentSource));
+          this.dependees.set(internalPath, new Dependee(assert(this.currentSource), path));
           this.backlog.push(internalPath);
         }
         tn.skip(Token.SEMICOLON);
