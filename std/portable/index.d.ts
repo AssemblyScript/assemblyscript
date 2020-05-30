@@ -303,3 +303,48 @@ declare function unmanaged(constructor: Function): void;
 
 /** Environmental tracing function. */
 declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
+
+declare interface Int8ArrayConstructor {
+  /** Equivalent to calling `new Int8Array` with multiple arguments. */
+  wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int8Array;
+}
+
+declare interface Uint8ArrayConstructor {
+  /** Equivalent to calling `new Uint8Array` with multiple arguments. */
+  wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint8Array;
+}
+
+declare interface Uint8ClampedArrayConstructor {
+  /** Equivalent to calling `new Uint8ClampedArray` with multiple arguments. */
+  wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint8ClampedArray;
+}
+
+declare interface Int16ArrayConstructor {
+  /** Equivalent to calling `new Int16Array` with multiple arguments. */
+  wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int16Array;
+}
+
+declare interface Uint16ArrayConstructor {
+  /** Equivalent to calling `new Uint16Array` with multiple arguments. */
+  wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint16Array;
+}
+
+declare interface Int32ArrayConstructor {
+  /** Equivalent to calling `new Int32Array` with multiple arguments. */
+  wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int32Array;
+}
+
+declare interface Uint32ArrayConstructor {
+  /** Equivalent to calling `new Uint32Array` with multiple arguments. */
+  wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint32Array;
+}
+
+declare interface Float32ArrayConstructor {
+  /** Equivalent to calling `new Float32Array` with multiple arguments. */
+  wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float32Array;
+}
+
+declare interface Float64ArrayConstructor {
+  /** Equivalent to calling `new Float64Array` with multiple arguments. */
+  wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float64Array;
+}

@@ -1,17 +1,16 @@
 #!/usr/bin/env node
-let asc = require("../../../../cli/asc");
+const asc = require("../../../../cli/asc");
 
-let argv = [
+const stderr = asc.createMemoryStream();
+asc.main([
   "assembly/index.ts",
   "--noEmit",
   "--runtime", "stub",
   "--traceResolution"
-];
-
-asc.main(argv, error => {
-  if (/Import .*lib\/a.* not found/g.test(error.message)) {
+], { stderr }, err => {
+  if (stderr.toString().includes("File '~lib/a.ts' not found.")) {
     process.exit(0);
   }
-  console.error("Failed!\n" + error);
+  console.error("Failed!\n" + err);
   process.exit(1);
 });

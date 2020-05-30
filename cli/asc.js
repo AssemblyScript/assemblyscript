@@ -207,20 +207,20 @@ exports.main = function main(argv, options, callback) {
   // Check for unknown arguments
   if (opts.unknown.length) {
     opts.unknown.forEach(arg => {
-      stderr.write(colorsUtil.stderr.yellow("WARN: ") + "Unknown option '" + arg + "'" + EOL);
+      stderr.write(colorsUtil.stderr.yellow("WARNING ") + "Unknown option '" + arg + "'" + EOL);
     });
   }
 
   // Check for trailing arguments
   if (opts.trailing.length) {
-    stderr.write(colorsUtil.stderr.yellow("WARN: ") + "Unsupported trailing arguments: " + opts.trailing.join(" ") + EOL);
+    stderr.write(colorsUtil.stderr.yellow("WARNING ") + "Unsupported trailing arguments: " + opts.trailing.join(" ") + EOL);
   }
 
   // Use default callback if none is provided
   if (!callback) callback = function defaultCallback(err) {
     var code = 0;
     if (err) {
-      stderr.write(colorsUtil.stderr.red("ERROR: ") + err.stack.replace(/^ERROR: /i, "") + EOL);
+      stderr.write(colorsUtil.stderr.red("FAILURE ") + err.stack.replace(/^ERROR: /i, "") + EOL);
       code = 1;
     }
     return code;
@@ -534,15 +534,20 @@ exports.main = function main(argv, options, callback) {
     var internalPath;
     while ((internalPath = assemblyscript.nextFile(program)) != null) {
       let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
-      if (!file) return callback(Error("Import '" + internalPath + "' not found."));
-      stats.parseCount++;
-      stats.parseTime += measure(() => {
-        assemblyscript.parse(program, file.sourceText, file.sourcePath, false);
-      });
+      if (file) {
+        stats.parseCount++;
+        stats.parseTime += measure(() => {
+          assemblyscript.parse(program, file.sourceText, file.sourcePath, false);
+        });
+      } else {
+        assemblyscript.parse(program, null, internalPath + extension.ext, false);
+      }
     }
     var numErrors = checkDiagnostics(program, stderr);
     if (numErrors) {
-      return callback(Error(numErrors + " parse error(s)"));
+      const err = Error(numErrors + " parse error(s)");
+      err.stack = err.message; // omit stack
+      return callback(err);
     }
   }
 
@@ -577,8 +582,8 @@ exports.main = function main(argv, options, callback) {
     let sourceText = readFile(sourcePath + extension.ext, baseDir);
     if (sourceText == null) {
       sourceText = readFile(sourcePath + "/index" + extension.ext, baseDir);
-      if (sourceText == null) return callback(Error("Entry file '" + sourcePath + extension.ext + "' not found."));
-      sourcePath += "/index" + extension.ext;
+      if (sourceText != null) sourcePath += "/index" + extension.ext;
+      else sourcePath += extension.ext;
     } else {
       sourcePath += extension.ext;
     }
@@ -634,7 +639,9 @@ exports.main = function main(argv, options, callback) {
   var numErrors = checkDiagnostics(program, stderr);
   if (numErrors) {
     if (module) module.dispose();
-    return callback(Error(numErrors + " compile error(s)"));
+    const err = Error(numErrors + " compile error(s)");
+    err.stack = err.message; // omit stack
+    return callback(err);
   }
 
   // Call afterCompile transform hook

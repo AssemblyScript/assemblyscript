@@ -214,8 +214,8 @@ export function isError(message: DiagnosticMessage): bool {
 export function parse(
   /** Program reference. */
   program: Program,
-  /** Source text of the file. */
-  text: string,
+  /** Source text of the file, or `null` to indicate not found. */
+  text: string | null,
   /** Normalized path of the file. */
   path: string,
   /** Whether this is an entry file. */
