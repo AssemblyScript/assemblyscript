@@ -3697,6 +3697,11 @@ declare module "assemblyscript/src/parser" {
     import { Tokenizer, CommentHandler } from "assemblyscript/src/tokenizer";
     import { DiagnosticEmitter, DiagnosticMessage } from "assemblyscript/src/diagnostics";
     import { Node, Source, TypeNode, TypeName, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForOfStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureNode, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from "assemblyscript/src/ast";
+    class Dependee {
+        source: Source;
+        reportNode: Node;
+        constructor(source: Source, reportNode: Node);
+    }
     /** Parser interface. */
     export class Parser extends DiagnosticEmitter {
         /** Source file names to be requested next. */
@@ -3709,16 +3714,16 @@ declare module "assemblyscript/src/parser" {
         onComment: CommentHandler | null;
         /** Current file being parsed. */
         currentSource: Source | null;
-        /** Dependency map **/
-        dependees: Map<string, Source>;
+        /** Map of dependees being depended upon by a source, by path. */
+        dependees: Map<string, Dependee>;
         /** An array of parsed sources. */
         sources: Source[];
         /** Constructs a new parser. */
         constructor(diagnostics?: DiagnosticMessage[] | null, sources?: Source[] | null);
         /** Parses a file and adds its definitions to the program. */
         parseFile(
-        /** Source text of the file. */
-        text: string, 
+        /** Source text of the file, or `null` to indicate not found. */
+        text: string | null, 
         /** Normalized path of the file. */
         path: string, 
         /** Whether this is an entry file. */
@@ -3727,7 +3732,7 @@ declare module "assemblyscript/src/parser" {
         parseTopLevelStatement(tn: Tokenizer, namespace?: NamespaceDeclaration | null): Statement | null;
         /** Obtains the next file to parse. */
         nextFile(): string | null;
-        /** Obtains the dependee of the given imported file. */
+        /** Obtains the path of the dependee of the given imported file. */
         getDependee(dependent: string): string | null;
         /** Finishes parsing. */
         finish(): void;
@@ -3815,6 +3820,7 @@ declare module "assemblyscript/src/parser" {
         MEMBERACCESS = 20,
         GROUPING = 21
     }
+    export {};
 }
 declare module "assemblyscript/src/program" {
     /**
@@ -6150,8 +6156,8 @@ declare module "assemblyscript/src/index" {
     export function parse(
     /** Program reference. */
     program: Program, 
-    /** Source text of the file. */
-    text: string, 
+    /** Source text of the file, or `null` to indicate not found. */
+    text: string | null, 
     /** Normalized path of the file. */
     path: string, 
     /** Whether this is an entry file. */
