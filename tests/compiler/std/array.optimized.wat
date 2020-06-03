@@ -1305,7 +1305,7 @@
        end
        local.get $0
        local.get $1
-       i32.store8 offset=1
+       i32.store8
        br $~lib/util/memory/memset|inlined.0
       end
       local.get $0

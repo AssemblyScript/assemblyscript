@@ -202,10 +202,10 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
     // fill head and tail with minimal branching
     switch (n) {
       case 0: return;
-      case 1: store<u8>(dest, c, 1); return;
-      case 2: store<u16>(dest, <u16>-1 / 255 * c); return;
-      case 4: store<u32>(dest, <u32>-1 / 255 * c); return;
-      case 8: store<u64>(dest, <u64>-1 / 255 * c); return;
+      case 1: store<u8>(dest, c); return;
+      case 2: store<u16>(dest, <u16>0x0101 * c); return;
+      case 4: store<u32>(dest, <u32>0x01010101 * c); return;
+      case 8: store<u64>(dest, <u64>0x0101010101010101 * c); return;
       default: break;
     }
     let dend = dest + n - 4;
