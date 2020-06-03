@@ -5,7 +5,6 @@ export interface ResultObject {
   instance: WebAssembly.Instance;
 }
 
-
 /** WebAssembly imports with an optional env object and two levels of nesting. */
 export type Imports = {
   [key: string]: Record<string,unknown>;

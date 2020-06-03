@@ -42,6 +42,7 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },
+  "type": "commonjs",
   "main": "index.js",
   "types": "index.d.ts",
   "bin": {

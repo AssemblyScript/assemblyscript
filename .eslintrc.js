@@ -94,6 +94,9 @@ module.exports = {
         // to become activated once compatibility doesn't suck anymore.
         "@typescript-eslint/no-var-requires": "off",
 
+        // There are no types in JavaScript
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+
         // Enforcing to remove function parameters on stubs makes code less
         // maintainable, so we instead allow unused function parameters.
         "no-unused-vars": [
