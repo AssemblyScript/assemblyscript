@@ -1130,6 +1130,36 @@
    local.get $1
    i32.eqz
    br_if $~lib/util/memory/memset|inlined.0
+   block $break|0
+    block $case4|0
+     block $case3|0
+      block $case2|0
+       block $case1|0
+        local.get $1
+        i32.const 1
+        i32.sub
+        br_table $case1|0 $case2|0 $break|0 $case3|0 $break|0 $break|0 $break|0 $case4|0 $break|0
+       end
+       local.get $0
+       i32.const 0
+       i32.store8 offset=1
+       br $~lib/util/memory/memset|inlined.0
+      end
+      local.get $0
+      i32.const 0
+      i32.store16
+      br $~lib/util/memory/memset|inlined.0
+     end
+     local.get $0
+     i32.const 0
+     i32.store
+     br $~lib/util/memory/memset|inlined.0
+    end
+    local.get $0
+    i64.const 0
+    i64.store
+    br $~lib/util/memory/memset|inlined.0
+   end
    local.get $0
    i32.const 0
    i32.store8
@@ -1252,7 +1282,7 @@
    local.get $1
    i32.sub
    local.set $1
-   loop $while-continue|0
+   loop $while-continue|1
     local.get $1
     i32.const 32
     i32.ge_u
@@ -1277,7 +1307,7 @@
      i32.const 32
      i32.add
      local.set $0
-     br $while-continue|0
+     br $while-continue|1
     end
    end
   end

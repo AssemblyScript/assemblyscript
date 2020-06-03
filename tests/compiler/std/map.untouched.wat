@@ -1574,10 +1574,81 @@
    i32.const 1
    i32.gt_s
    drop
-   local.get $3
-   i32.eqz
-   if
-    br $~lib/util/memory/memset|inlined.0
+   block $break|0
+    block $case5|0
+     block $case4|0
+      block $case3|0
+       block $case2|0
+        block $case1|0
+         block $case0|0
+          local.get $3
+          local.set $6
+          local.get $6
+          i32.const 0
+          i32.eq
+          br_if $case0|0
+          local.get $6
+          i32.const 1
+          i32.eq
+          br_if $case1|0
+          local.get $6
+          i32.const 2
+          i32.eq
+          br_if $case2|0
+          local.get $6
+          i32.const 4
+          i32.eq
+          br_if $case3|0
+          local.get $6
+          i32.const 8
+          i32.eq
+          br_if $case4|0
+          br $case5|0
+         end
+         br $~lib/util/memory/memset|inlined.0
+        end
+        local.get $5
+        local.get $4
+        i32.store8 offset=1
+        br $~lib/util/memory/memset|inlined.0
+       end
+       local.get $5
+       i32.const -1
+       i32.const 65535
+       i32.and
+       i32.const 255
+       i32.div_u
+       local.get $4
+       i32.const 255
+       i32.and
+       i32.mul
+       i32.store16
+       br $~lib/util/memory/memset|inlined.0
+      end
+      local.get $5
+      i32.const -1
+      i32.const 255
+      i32.div_u
+      local.get $4
+      i32.const 255
+      i32.and
+      i32.mul
+      i32.store
+      br $~lib/util/memory/memset|inlined.0
+     end
+     local.get $5
+     i64.const -1
+     i64.const 255
+     i64.div_u
+     local.get $4
+     i32.const 255
+     i32.and
+     i64.extend_i32_u
+     i64.mul
+     i64.store
+     br $~lib/util/memory/memset|inlined.0
+    end
+    br $break|0
    end
    local.get $5
    local.get $3
@@ -1735,7 +1806,7 @@
    i64.shl
    i64.or
    local.set $9
-   loop $while-continue|0
+   loop $while-continue|1
     local.get $3
     i32.const 32
     i32.ge_u
@@ -1762,7 +1833,7 @@
      i32.const 32
      i32.add
      local.set $5
-     br $while-continue|0
+     br $while-continue|1
     end
    end
   end
