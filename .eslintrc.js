@@ -93,7 +93,7 @@ module.exports = {
       ],
       rules: {
         // Node's support for ESM is still not great, but this rule is likely
-        // to become activated once compatibility doesn't suck anymore.
+        // to become activated once ESM-by-default becomes generally usable.
         "@typescript-eslint/no-var-requires": "off",
 
         // There are no types in JavaScript
