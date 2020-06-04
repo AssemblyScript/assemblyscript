@@ -22,13 +22,12 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "type": "module",
-  "main": "./index.cjs",
+  "main": "./umd/index.js",
   "exports": {
     ".": {
-      "require": "./index.cjs",
+      "require": "./umd/index.js",
       "import": "./index.js"
-    },
-    "./module": "./index.js"
+    }
   },
   "types": "./index.d.ts",
   "module": "./index.js",
@@ -37,14 +36,15 @@
     "asbuild:default": "node ../../bin/asc tests/assembly/index.ts -b tests/build/default.wasm",
     "asbuild:legacy": "node ../../bin/asc tests/assembly/index.ts --disable mutable-globals -b tests/build/legacy.wasm",
     "test": "node tests",
-    "build": "npx esm2umd loader index.js > index.cjs",
+    "build": "npx esm2umd loader index.js > umd/index.js",
     "prepublishOnly": "npm run build"
   },
   "files": [
     "index.js",
-    "index.cjs",
     "index.d.ts",
     "package.json",
-    "README.md"
+    "README.md",
+    "umd/index.js",
+    "umd/package.json"
   ]
 }
