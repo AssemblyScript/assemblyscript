@@ -1,38 +1,41 @@
-import * as fs from "fs";
-import * as path from "path";
-import * as binaryen from "binaryen";
-import * as util from "util";
-import * as loader from "../../lib/loader";
-import * as find from "../../cli/util/find";
-import AssemblyScript from "../../out/assemblyscript";
+import fs from "fs";
+import path from "path";
+import util from "util";
+import { fileURLToPath } from 'url';
+import find from "../../cli/util/find.js";
+
+import binaryen from "binaryen";
+import loader from "../../lib/loader/index.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 Error.stackTraceLimit = Infinity;
 
 // Load stdlib
 const libDir = path.join(__dirname, "..", "..", "std", "assembly");
 const libraryFiles = {};
-find.files(libDir, /^(?!.*\.d\.ts$).*\.ts$/).forEach((file: string) => {
+find.files(libDir, /^(?!.*\.d\.ts$).*\.ts$/).forEach(file => {
   libraryFiles[file.replace(/\.ts$/, "")] = fs.readFileSync(path.join(libDir, file), "utf8" );
 });
 
-async function test(build: string): Promise<void> {
+async function test(build) {
   await binaryen.ready;
 
-  const { exports: asc } = await loader.instantiate<typeof AssemblyScript>(
+  const { exports: asc } = await loader.instantiate(
     fs.promises.readFile(`${ __dirname }/../../out/assemblyscript.${ build }.wasm`),
     { binaryen }
   );
   console.log(util.inspect(asc, true));
 
-  const cachedStrings = new Map<string,number>();
-  function cachedString(text: string): number {
+  const cachedStrings = new Map();
+  function cachedString(text) {
     if (cachedStrings.has(text)) return cachedStrings.get(text);
     var ptr = asc.__retain(asc.__allocString(text));
     cachedStrings.set(text, ptr);
     return ptr;
   }
 
-  const programPtr = ((): number => {
+  const programPtr = (() => {
     const optionsPtr = asc.newOptions();
     const ptr = asc.newProgram(optionsPtr);
     asc.__release(optionsPtr);
@@ -40,7 +43,7 @@ async function test(build: string): Promise<void> {
   })();
 
   console.log("\nParsing standard library ...");
-  Object.keys(libraryFiles).forEach((libPath: string) => {
+  Object.keys(libraryFiles).forEach((libPath) => {
     if (libPath.indexOf("/") >= 0) return;
     const textPtr = cachedString(libraryFiles[libPath]);
     const pathPtr = cachedString("~lib/" + libPath + ".ts");

@@ -72,7 +72,7 @@
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "asbuild:untouched": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.untouched.wat -b out/assemblyscript.untouched.wasm -d out/assemblyscript.d.ts --debug --measure --runtime stub",
     "asbuild:optimized": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.optimized.wat -b out/assemblyscript.optimized.wasm -O3 --measure --runtime stub",
-    "astest": "ts-node tests/bootstrap"
+    "astest": "node tests/bootstrap/index.js"
   },
   "releaseFiles": [
     "lib/rtrace/index.d.ts",
