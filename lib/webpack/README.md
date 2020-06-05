@@ -1,7 +1,6 @@
-![AS](https://avatars1.githubusercontent.com/u/28916798?s=48) webpack
-=================
+# Webpack loader
 
-[webpack](https://webpack.js.org/) loader for [AssemblyScript](http://assemblyscript.org) modules.
+An experimental [webpack](https://webpack.js.org/) loader for [AssemblyScript](http://assemblyscript.org) modules.
 
 Usage
 -----
