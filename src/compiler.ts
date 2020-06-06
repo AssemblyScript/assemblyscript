@@ -4812,7 +4812,10 @@ export class Compiler extends DiagnosticEmitter {
             if (!instance || !this.compileFunction(instance)) {
               expr = module.unreachable();
             } else {
-              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
+              expr = this.ensureSmallIntegerWrap(
+                this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression),
+                commonType
+              );
             }
             break;
           }
@@ -4901,7 +4904,6 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           // Math.pow otherwise (result is f64)
-          // TODO: should the result be converted back?
           case TypeKind.F64: {
             instance = this.f64PowInstance;
             if (!instance) {

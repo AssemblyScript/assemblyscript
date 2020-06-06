@@ -48484,6 +48484,8 @@
   i32.const 1
   i32.const 3
   call $~lib/math/ipow32
+  i32.const 255
+  i32.and
   i32.const 1
   i32.ne
   if
@@ -48497,7 +48499,9 @@
   i32.const -2
   i32.const 3
   call $~lib/math/ipow32
-  i32.const -8
+  i32.const 255
+  i32.and
+  i32.const 248
   i32.ne
   if
    i32.const 0
@@ -48510,6 +48514,8 @@
   i32.const 4
   i32.const 7
   call $~lib/math/ipow32
+  i32.const 65535
+  i32.and
   i32.const 16384
   i32.ne
   if
@@ -48523,12 +48529,40 @@
   i32.const 4
   i32.const 8
   call $~lib/math/ipow32
-  i32.const 65536
-  i32.ne
+  i32.const 65535
+  i32.and
   if
    i32.const 0
    i32.const 1040
    i32.const 4110
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 4
+  i32.const 9
+  call $~lib/math/ipow32
+  i32.const 65535
+  i32.and
+  if
+   i32.const 0
+   i32.const 1040
+   i32.const 4111
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 5
+  i32.const 10
+  call $~lib/math/ipow32
+  i32.const 65535
+  i32.and
+  i32.const 761
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1040
+   i32.const 4112
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -48541,7 +48575,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 4113
+   i32.const 4114
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -48554,7 +48588,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 4114
+   i32.const 4115
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -48567,7 +48601,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 4115
+   i32.const 4116
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -48580,7 +48614,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 4116
+   i32.const 4117
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -48593,7 +48627,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 4117
+   i32.const 4118
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -48606,7 +48640,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 4118
+   i32.const 4119
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -48615,19 +48649,6 @@
   i64.const 8
   call $~lib/math/ipow64
   i64.const -15762478437236735
-  i64.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 4119
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i64.const 61731
-  i64.const 4
-  call $~lib/math/ipow64
-  i64.const -3925184889716469295
   i64.ne
   if
    i32.const 0
@@ -48650,6 +48671,19 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i64.const 61731
+  i64.const 4
+  call $~lib/math/ipow64
+  i64.const -3925184889716469295
+  i64.ne
+  if
+   i32.const 0
+   i32.const 1040
+   i32.const 4122
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i64.const 57055
   i64.const 3
   call $~lib/math/ipow64
@@ -48664,7 +48698,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 4123
+   i32.const 4124
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -48681,7 +48715,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 4124
+   i32.const 4125
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -48690,24 +48724,24 @@
   f64.const 0.5
   call $~lib/math/NativeMath.pow
   f64.const 1
-  f64.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 4126
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0.5
-  call $~lib/math/NativeMath.pow
-  f64.const 0
   f64.ne
   if
    i32.const 0
    i32.const 1040
    i32.const 4127
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0
+  f64.const 0.5
+  call $~lib/math/NativeMath.pow
+  f64.const 0
+  f64.ne
+  if
+   i32.const 0
+   i32.const 1040
+   i32.const 4128
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -48720,26 +48754,13 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 4128
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  f64.const 0
-  call $~lib/math/NativeMath.pow
-  f64.const 1
-  f64.ne
-  if
-   i32.const 0
-   i32.const 1040
    i32.const 4129
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1
-  f64.const 1
+  f64.const 0
+  f64.const 0
   call $~lib/math/NativeMath.pow
   f64.const 1
   f64.ne
@@ -48747,6 +48768,19 @@
    i32.const 0
    i32.const 1040
    i32.const 4130
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 1
+  f64.const 1
+  call $~lib/math/NativeMath.pow
+  f64.const 1
+  f64.ne
+  if
+   i32.const 0
+   i32.const 1040
+   i32.const 4131
    i32.const 1
    call $~lib/builtins/abort
    unreachable

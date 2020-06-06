@@ -4107,8 +4107,9 @@ assert(true **  2 == 1);
 assert((<i8> 1) ** 3 ==  1);
 assert((<i8>-2) ** 3 == -8);
 assert((<u16>4) ** 7 ==  16384);
-assert((<u16>4) ** 8 ==  65536);
-// assert((<u16>4) ** 9 ==  0); // should overflow   fail!
+assert((<u16>4) ** 8 ==  0);   // should overflow
+assert((<u16>4) ** 9 ==  0);   // should overflow
+assert((<u16>5) ** 10 == 761); // should overflow
 
 assert((<u64>0) ** 0 == 1);
 assert((<u64>0) ** 1 == 0);
