@@ -11,8 +11,7 @@
 @global const i64_one: i64 = 1;
 
 // @ts-ignore: decorator
-@global
-const i64_neg_one: i64 = -1;
+@global const i64_neg_one: i64 = -1;
 
 // @ts-ignore: decorator
 @global
