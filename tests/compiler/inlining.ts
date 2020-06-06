@@ -40,7 +40,7 @@ function func_iv(a: i32): void {
 
 @inline
 function func_fe(): (a: i32) => i32 {
-   return (a: i32): i32 => a;
+  return (a: i32): i32 => a;
 }
 
 

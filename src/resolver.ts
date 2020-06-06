@@ -205,7 +205,7 @@ export class Resolver extends DiagnosticEmitter {
           if (type.is(TypeFlags.REFERENCE)) return type.asNullable();
           if (reportMode == ReportMode.REPORT) {
             this.error(
-              DiagnosticCode.Basic_type_0_cannot_be_nullable,
+              DiagnosticCode.Type_0_cannot_be_nullable,
               node.range, type.toString()
             );
           }
@@ -238,7 +238,7 @@ export class Resolver extends DiagnosticEmitter {
         if (node.isNullable) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
-              DiagnosticCode.Basic_type_0_cannot_be_nullable,
+              DiagnosticCode.Type_0_cannot_be_nullable,
               node.range, element.name + "/i32"
             );
           }
@@ -283,7 +283,7 @@ export class Resolver extends DiagnosticEmitter {
           if (!type.is(TypeFlags.REFERENCE)) {
             if (reportMode == ReportMode.REPORT) {
               this.error(
-                DiagnosticCode.Basic_type_0_cannot_be_nullable,
+                DiagnosticCode.Type_0_cannot_be_nullable,
                 nameNode.range, nameNode.identifier.text
               );
             }
@@ -333,7 +333,7 @@ export class Resolver extends DiagnosticEmitter {
         if (!type.is(TypeFlags.REFERENCE)) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
-              DiagnosticCode.Basic_type_0_cannot_be_nullable,
+              DiagnosticCode.Type_0_cannot_be_nullable,
               nameNode.range, nameNode.identifier.text
             );
           }
@@ -764,7 +764,7 @@ export class Resolver extends DiagnosticEmitter {
 
       let parameterNodes = prototype.functionTypeNode.parameters;
       let numParameters = parameterNodes.length;
-      let argumentNodes = node.arguments;
+      let argumentNodes = node.args;
       let numArguments = argumentNodes.length;
 
       // infer types with generic components while updating contextual types
@@ -1034,12 +1034,7 @@ export class Resolver extends DiagnosticEmitter {
         );
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Not_implemented,
-        node.range
-      );
-    }
+    assert(false);
     return null;
   }
 
@@ -1158,12 +1153,7 @@ export class Resolver extends DiagnosticEmitter {
         );
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Not_implemented,
-        node.range
-      );
-    }
+    assert(false);
     return null;
   }
 
@@ -1658,13 +1648,14 @@ export class Resolver extends DiagnosticEmitter {
         //   return this.resolveClass(this.program.readonlyArrayPrototype, [ elementType ]);
         // }
         this.error(
-          DiagnosticCode.Not_implemented,
-          node.range
+          DiagnosticCode.Not_implemented_0,
+          node.range,
+          "Const assertion"
         );
         return null;
       }
-      default: assert(false);
     }
+    assert(false);
     return null;
   }
 
@@ -1882,12 +1873,7 @@ export class Resolver extends DiagnosticEmitter {
         return type;
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Not_implemented,
-        node.range
-      );
-    }
+    assert(false);
     return null;
   }
 
@@ -2106,12 +2092,7 @@ export class Resolver extends DiagnosticEmitter {
         return this.resolveExpression(left, ctxFlow, ctxType, reportMode);
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Not_implemented,
-        node.range
-      );
-    }
+    assert(false);
     return null;
   }
 
@@ -2316,12 +2297,7 @@ export class Resolver extends DiagnosticEmitter {
         return assert(this.resolveClass(this.program.arrayPrototype, [ elementType ]));
       }
     }
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Not_implemented,
-        node.range
-      );
-    }
+    assert(false);
     return null;
   }
 
@@ -2400,9 +2376,9 @@ export class Resolver extends DiagnosticEmitter {
         // `unchecked` behaves like parenthesized
         if (
           functionPrototype.internalName == BuiltinNames.unchecked &&
-          node.arguments.length > 0
+          node.args.length > 0
         ) {
-          return this.resolveExpression(node.arguments[0], ctxFlow, ctxType, reportMode);
+          return this.resolveExpression(node.args[0], ctxFlow, ctxType, reportMode);
         }
         let instance = this.maybeInferCall(node, functionPrototype, ctxFlow, reportMode);
         if (!instance) return null;
@@ -2740,6 +2716,15 @@ export class Resolver extends DiagnosticEmitter {
         reportMode
       );
       if (!parameterType) return null;
+      if (parameterType == Type.void) {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_expected,
+            typeNode.range
+          );
+        }
+        return null;
+      }
       parameterTypes[i] = parameterType;
       parameterNames[i] = parameterDeclaration.name.text;
     }
@@ -3102,6 +3087,15 @@ export class Resolver extends DiagnosticEmitter {
                 instance.contextualTypeArguments,
                 reportMode
               );
+              if (fieldType == Type.void) {
+                if (reportMode == ReportMode.REPORT) {
+                  this.error(
+                    DiagnosticCode.Type_expected,
+                    fieldTypeNode.range
+                  );
+                }
+                break;
+              }
             }
             if (!fieldType) break; // did report above
             let fieldInstance = new Field(fieldPrototype, instance, fieldType);

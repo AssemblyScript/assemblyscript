@@ -2,7 +2,7 @@ var binaryen = require("binaryen");
 
 var mod = new binaryen.Module();
 var ii = binaryen.createType([ binaryen.i32, binaryen.i32 ]);
-var func = mod.addFunction("test", ii, ii, [],
+mod.addFunction("test", ii, ii, [],
   mod.unreachable()
 );
 mod.addExport("test", "test");

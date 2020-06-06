@@ -1058,7 +1058,7 @@ declare class _Integer {
   /** Converts a string to an integer of this type. */
   static parseInt(value: string, radix?: number): number;
   /** Converts this integer to a string. */
-  toString(): string;
+  toString(radix?: number): string;
 }
 
 /** Pseudo-class representing the backing class of floating-point types. */
@@ -1092,7 +1092,7 @@ declare class _Float {
   /** Converts a string to a floating-point number. */
   static parseFloat(value: string): f32 | f64;
   /** Converts this floating-point number to a string. */
-  toString(this: f64): string;
+  toString(radix?: number): string;
 }
 
 /** Backing class of signed 8-bit integers. */
@@ -1430,7 +1430,7 @@ declare class Array<T> {
   join(separator?: string): string;
   reverse(): T[];
   /** Flattens an array of arrays. If any null entries exist in the array, they are ignored, unlike JavaScript's version of Array#flat(). */
-  flat(): valueof<T>[];
+  flat(): T extends unknown[] ? T : never;
   toString(): string;
 }
 
@@ -1571,7 +1571,7 @@ declare class TypeError extends Error { }
 declare class SyntaxError extends Error { }
 
 interface Boolean {
-  toString(): string;
+  toString(radix?: number): string;
 }
 
 interface Number {

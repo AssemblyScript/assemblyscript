@@ -3,6 +3,8 @@
  * @license Apache-2.0
  */
 
+/* eslint-disable no-undef */
+
 const Long = global.Long || require("long");
 
 global.i64_zero    = Long.ZERO;

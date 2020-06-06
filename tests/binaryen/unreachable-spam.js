@@ -22,4 +22,4 @@ mod.addExport("0", "0");
 if (!mod.validate())
   console.log("-> does not validate");
 console.log(mod.emitText());
-console.log(mod.emitStackIR(/*true*/)); // optimize-stack-ir fixes this
+console.log(mod.emitStackIR(/* true */)); // optimize-stack-ir fixes this

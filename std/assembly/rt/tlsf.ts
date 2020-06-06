@@ -2,8 +2,8 @@ import { AL_BITS, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "r
 import { onfree, onalloc, onrealloc } from "./rtrace";
 import { REFCOUNT_MASK } from "./pure";
 
-/////////////////////// The TLSF (Two-Level Segregate Fit) memory allocator ///////////////////////
-//                             see: http://www.gii.upv.es/tlsf/
+// === The TLSF (Two-Level Segregate Fit) memory allocator ===
+// see: http://www.gii.upv.es/tlsf/
 
 // - `ffs(x)` is equivalent to `ctz(x)` with x != 0
 // - `fls(x)` is equivalent to `sizeof(x) * 8 - clz(x) - 1`
@@ -174,7 +174,7 @@ import { REFCOUNT_MASK } from "./pure";
 /** Sets the head of the free list for the specified combination of first and second level. */
 // @ts-ignore: decorator
 @inline function SETHEAD(root: Root, fl: usize, sl: u32, head: Block | null): void {
-  store<Block>(
+  store<Block | null>(
     changetype<usize>(root) + (((fl << SL_BITS) + <usize>sl) << alignof<usize>()),
     head,
     HL_START
@@ -493,8 +493,7 @@ export function maybeInitialize(): Root {
 }
 
 // @ts-ignore: decorator
-@lazy
-var collectLock: bool = false;
+@lazy var collectLock: bool = false;
 
 /** Allocates a block of the specified size. */
 export function allocateBlock(root: Root, size: usize, id: u32): Block {

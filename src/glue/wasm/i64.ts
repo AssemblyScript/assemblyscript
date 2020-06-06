@@ -3,13 +3,12 @@
  * @license Apache-2.0
  */
 
-// @ts-ignore: decorator
-@global
-const i64_zero: i64 = 0;
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+@global const i64_zero: i64 = 0;
 
 // @ts-ignore: decorator
-@global
-const i64_one: i64 = 1;
+@global const i64_one: i64 = 1;
 
 // @ts-ignore: decorator
 @global

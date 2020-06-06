@@ -1357,7 +1357,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 501
+   i32.const 500
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1404,7 +1404,7 @@
      if
       i32.const 0
       i32.const 128
-      i32.const 513
+      i32.const 512
       i32.const 20
       call $~lib/builtins/abort
       unreachable
@@ -1425,7 +1425,7 @@
     if
      i32.const 0
      i32.const 128
-     i32.const 518
+     i32.const 517
      i32.const 18
      call $~lib/builtins/abort
      unreachable
@@ -1446,7 +1446,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 521
+   i32.const 520
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1880,7 +1880,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 581
+   i32.const 580
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3396,7 +3396,7 @@
   if
    i32.const 288
    i32.const 80
-   i32.const 299
+   i32.const 300
    i32.const 21
    call $~lib/builtins/abort
    unreachable
@@ -3962,6 +3962,13 @@
  (func $~start
   call $start:retain-release-sanity
  )
+ (func $~lib/rt/pure/finalize (param $0 i32)
+  i32.const 0
+  drop
+  global.get $~lib/rt/tlsf/ROOT
+  local.get $0
+  call $~lib/rt/tlsf/freeBlock
+ )
  (func $~lib/rt/__typeinfo (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/rt/__rtti_base
@@ -4121,9 +4128,8 @@
    i32.and
    i32.eqz
    if
-    global.get $~lib/rt/tlsf/ROOT
     local.get $0
-    call $~lib/rt/tlsf/freeBlock
+    call $~lib/rt/pure/finalize
    else
     local.get $0
     i32.const -2147483648
@@ -4303,9 +4309,8 @@
    i32.add
    i32.const 5
    call $~lib/rt/__visit_members
-   global.get $~lib/rt/tlsf/ROOT
    local.get $0
-   call $~lib/rt/tlsf/freeBlock
+   call $~lib/rt/pure/finalize
   end
  )
  (func $~lib/rt/pure/__collect
@@ -4378,9 +4383,8 @@
       i32.const 0
      end
      if
-      global.get $~lib/rt/tlsf/ROOT
       local.get $5
-      call $~lib/rt/tlsf/freeBlock
+      call $~lib/rt/pure/finalize
      else
       local.get $5
       local.get $6

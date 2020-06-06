@@ -988,11 +988,14 @@ export class Tokenizer extends DiagnosticEmitter {
 
   mark(): State {
     var state = reusableState;
-    if (state) reusableState = null;
-    else state = new State();
-    state.pos = this.pos;
-    state.token = this.token;
-    state.tokenPos = this.tokenPos;
+    if (state) {
+      reusableState = null;
+      state.pos = this.pos;
+      state.token = this.token;
+      state.tokenPos = this.tokenPos;
+    } else {
+      state = new State(this.pos, this.token, this.tokenPos);
+    }
     return state;
   }
 
@@ -1258,7 +1261,7 @@ export class Tokenizer extends DiagnosticEmitter {
           i64_shl(value, i64_4),
           i64_new(c - CharCode._0)
         );
-       } else if (c >= CharCode.A && c <= CharCode.F) {
+      } else if (c >= CharCode.A && c <= CharCode.F) {
         // value = (value << 4) + 10 + c - CharCode.A;
         value = i64_add(
           i64_shl(value, i64_4),
@@ -1563,19 +1566,18 @@ export class Tokenizer extends DiagnosticEmitter {
         ((value32 - 0x10000) & 1023) | 0xDC00
       );
   }
-
-  finish(): void {
-  }
 }
 
 /** Tokenizer state as returned by {@link Tokenizer#mark} and consumed by {@link Tokenizer#reset}. */
 export class State {
-  /** Current position. */
-  pos: i32;
-  /** Current token. */
-  token: Token;
-  /** Current token's position. */
-  tokenPos: i32;
+  constructor(
+    /** Current position. */
+    public pos: i32,
+    /** Current token. */
+    public token: Token,
+    /** Current token's position. */
+    public tokenPos: i32
+  ) {}
 }
 
 // Reusable state object to reduce allocations

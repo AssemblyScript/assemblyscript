@@ -15,6 +15,8 @@ export interface OptionDescription {
   alias?: string
   /** The default value, if any. */
   default?: string | number | boolean | string[] | number[];
+  /** The category this option belongs in. */
+  category?: string;
 }
 
 /** Configuration object. */

@@ -17,75 +17,84 @@ var F64 = new Float64Array(1);
 var U64 = new Uint32Array(F64.buffer);
 
 Object.defineProperties(
-  globalScope["i8"] = function i8(value) { return value << 24 >> 24; }
-, {
-  "MIN_VALUE": { value: -128, writable: false },
-  "MAX_VALUE": { value:  127, writable: false }
-});
+  globalScope["i8"] = function i8(value) { return value << 24 >> 24; },
+  {
+    "MIN_VALUE": { value: -128, writable: false },
+    "MAX_VALUE": { value:  127, writable: false }
+  }
+);
 
 Object.defineProperties(
-  globalScope["i16"] = function i16(value) { return value << 16 >> 16; }
-, {
-  "MIN_VALUE": { value: -32768, writable: false },
-  "MAX_VALUE": { value:  32767, writable: false }
-});
+  globalScope["i16"] = function i16(value) { return value << 16 >> 16; },
+  {
+    "MIN_VALUE": { value: -32768, writable: false },
+    "MAX_VALUE": { value:  32767, writable: false }
+  }
+);
 
 Object.defineProperties(
-  globalScope["i32"] = globalScope["isize"] = function i32(value) { return value | 0; }
-, {
-  "MIN_VALUE": { value: -2147483648, writable: false },
-  "MAX_VALUE": { value:  2147483647, writable: false }
-});
+  globalScope["i32"] = globalScope["isize"] = function i32(value) { return value | 0; },
+  {
+    "MIN_VALUE": { value: -2147483648, writable: false },
+    "MAX_VALUE": { value:  2147483647, writable: false }
+  }
+);
 
 Object.defineProperties(
-  globalScope["u8"] = function u8(value) { return value & 0xff; }
-, {
-  "MIN_VALUE": { value:   0, writable: false },
-  "MAX_VALUE": { value: 255, writable: false }
-});
+  globalScope["u8"] = function u8(value) { return value & 0xff; },
+  {
+    "MIN_VALUE": { value:   0, writable: false },
+    "MAX_VALUE": { value: 255, writable: false }
+  }
+);
 
 Object.defineProperties(
-  globalScope["u16"] = function u16(value) { return value & 0xffff; }
-, {
-  "MIN_VALUE": { value:     0, writable: false },
-  "MAX_VALUE": { value: 65535, writable: false }
-});
+  globalScope["u16"] = function u16(value) { return value & 0xffff; },
+  {
+    "MIN_VALUE": { value:     0, writable: false },
+    "MAX_VALUE": { value: 65535, writable: false }
+  }
+);
 
 Object.defineProperties(
-  globalScope["u32"] = globalScope["usize"] = function u32(value) { return value >>> 0; }
-, {
-  "MIN_VALUE": { value:          0, writable: false },
-  "MAX_VALUE": { value: 4294967295, writable: false }
-});
+  globalScope["u32"] = globalScope["usize"] = function u32(value) { return value >>> 0; },
+  {
+    "MIN_VALUE": { value:          0, writable: false },
+    "MAX_VALUE": { value: 4294967295, writable: false }
+  }
+);
 
 Object.defineProperties(
-  globalScope["bool"] = function bool(value) { return !!value; }
-, {
-  "MIN_VALUE": { value: false, writable: false },
-  "MAX_VALUE": { value: true,  writable: false }
-});
+  globalScope["bool"] = function bool(value) { return !!value; },
+  {
+    "MIN_VALUE": { value: false, writable: false },
+    "MAX_VALUE": { value: true,  writable: false }
+  }
+);
 
 Object.defineProperties(
-  globalScope["f32"] = function f32(value) { return Math.fround(value); }
-, {
-  "EPSILON":   { value: Math.fround(1.1920929e-07), writable: false },
-  "MIN_VALUE": { value: Math.fround(1.4012985e-45), writable: false },
-  "MAX_VALUE": { value: Math.fround(3.4028235e+38), writable: false },
-  "MIN_NORMAL_VALUE":  { value:  Math.fround(1.17549435e-38), writable: false },
-  "MIN_SAFE_INTEGER":  { value: -16777215, writable: false },
-  "MAX_SAFE_INTEGER":  { value:  16777215, writable: false }
-});
+  globalScope["f32"] = function f32(value) { return Math.fround(value); },
+  {
+    "EPSILON":   { value: Math.fround(1.1920929e-07), writable: false },
+    "MIN_VALUE": { value: Math.fround(1.4012985e-45), writable: false },
+    "MAX_VALUE": { value: Math.fround(3.4028235e+38), writable: false },
+    "MIN_NORMAL_VALUE":  { value:  Math.fround(1.17549435e-38), writable: false },
+    "MIN_SAFE_INTEGER":  { value: -16777215, writable: false },
+    "MAX_SAFE_INTEGER":  { value:  16777215, writable: false }
+  }
+);
 
 Object.defineProperties(
-  globalScope["f64"] = function f64(value) { return +value; }
-, {
-  "EPSILON":   { value: 2.2204460492503131e-16,  writable: false },
-  "MIN_VALUE": { value:                  5e-324, writable: false },
-  "MAX_VALUE": { value: 1.7976931348623157e+308, writable: false },
-  "MIN_NORMAL_VALUE":  { value: 2.2250738585072014e-308 , writable: false },
-  "MIN_SAFE_INTEGER":  { value: -9007199254740991, writable: false },
-  "MAX_SAFE_INTEGER":  { value:  9007199254740991, writable: false }
-});
+  globalScope["f64"] = function f64(value) { return +value; },
+  {
+    "EPSILON":   { value: 2.2204460492503131e-16,  writable: false },
+    "MIN_VALUE": { value:                  5e-324, writable: false },
+    "MAX_VALUE": { value: 1.7976931348623157e+308, writable: false },
+    "MIN_NORMAL_VALUE":  { value: 2.2250738585072014e-308 , writable: false },
+    "MIN_SAFE_INTEGER":  { value: -9007199254740991, writable: false },
+    "MAX_SAFE_INTEGER":  { value:  9007199254740991, writable: false }
+  }
+);
 
 globalScope["clz"] = Math.clz32;
 
@@ -232,7 +241,7 @@ globalScope["isFloat"] = function isFloat(arg) {
 
 globalScope["isNullable"] = function isNullable(arg) {
   return true;
-}
+};
 
 globalScope["isReference"] = function isReference(arg) {
   return typeof arg === "object" || typeof arg === "string";
@@ -240,7 +249,7 @@ globalScope["isReference"] = function isReference(arg) {
 
 globalScope["isFunction"] = function isFunction(arg) {
   return typeof arg === "function";
-}
+};
 
 globalScope["isString"] = function isString(arg) {
   return typeof arg === "string" || arg instanceof String;
@@ -257,7 +266,7 @@ globalScope["isArrayLike"] = function isArrayLike(expr) {
 
 globalScope["isDefined"] = function isDefined(expr) {
   return typeof expr !== "undefined";
-}
+};
 
 globalScope["isConstant"] = function isConstant(expr) {
   return false;
@@ -298,9 +307,63 @@ Object.defineProperties(globalScope["JSMath"], {
   }
 });
 
-globalScope["unmanaged"] = function() {};
+globalScope["unmanaged"] = function() { /* nop */ };
 
 globalScope["trace"] = function(message, n) {
   if (n) message += Array.prototype.slice.call(arguments, 2, 2 + n);
   console.error("trace: " + message);
 };
+
+Object.defineProperty(Int8Array, "wrap", {
+  value: function wrap(buffer, byteOffset, length) {
+    return new Int8Array(buffer, byteOffset, length);
+  }
+});
+
+Object.defineProperty(Uint8Array, "wrap", {
+  value: function wrap(buffer, byteOffset, length) {
+    return new Uint8Array(buffer, byteOffset, length);
+  }
+});
+
+Object.defineProperty(Uint8ClampedArray, "wrap", {
+  value: function wrap(buffer, byteOffset, length) {
+    return new Uint8ClampedArray(buffer, byteOffset, length);
+  }
+});
+
+Object.defineProperty(Int16Array, "wrap", {
+  value: function wrap(buffer, byteOffset, length) {
+    return new Int16Array(buffer, byteOffset, length);
+  }
+});
+
+Object.defineProperty(Uint16Array, "wrap", {
+  value: function wrap(buffer, byteOffset, length) {
+    return new Uint16Array(buffer, byteOffset, length);
+  }
+});
+
+Object.defineProperty(Int32Array, "wrap", {
+  value: function wrap(buffer, byteOffset, length) {
+    return new Int32Array(buffer, byteOffset, length);
+  }
+});
+
+Object.defineProperty(Uint32Array, "wrap", {
+  value: function wrap(buffer, byteOffset, length) {
+    return new Uint32Array(buffer, byteOffset, length);
+  }
+});
+
+Object.defineProperty(Float32Array, "wrap", {
+  value: function wrap(buffer, byteOffset, length) {
+    return new Float32Array(buffer, byteOffset, length);
+  }
+});
+
+Object.defineProperty(Float64Array, "wrap", {
+  value: function wrap(buffer, byteOffset, length) {
+    return new Float64Array(buffer, byteOffset, length);
+  }
+});

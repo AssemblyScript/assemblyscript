@@ -42,8 +42,8 @@ assert(
 assert("ß".toUpperCase().toLowerCase() == "ss");
 assert("ﬁ".toUpperCase().toLowerCase() == "fi");
 assert(
-  "𠜎 𠜱 𠝹 𠱓 𠱸 𠲖 𠳏 𠳕 𠴕 𠵼 𠵿 𠸎 𠸏 𠹷 𠺝 𠺢 𠻗 𠻹 𠻺 𠼭 𠼮 𠽌 𠾴 𠾼 𠿪 𡁜 𡁯 𡁵 𡁶 𡁻 𡃁"
-  .toUpperCase().toLowerCase() ==
+  "𠜎 𠜱 𠝹 𠱓 𠱸 𠲖 𠳏 𠳕 𠴕 𠵼 𠵿 𠸎 𠸏 𠹷 𠺝 𠺢 𠻗 𠻹 𠻺 𠼭 𠼮 𠽌 𠾴 𠾼 𠿪 𡁜 𡁯 𡁵 𡁶 𡁻 𡃁".toUpperCase().toLowerCase()
+  ==
   "𠜎 𠜱 𠝹 𠱓 𠱸 𠲖 𠳏 𠳕 𠴕 𠵼 𠵿 𠸎 𠸏 𠹷 𠺝 𠺢 𠻗 𠻹 𠻺 𠼭 𠼮 𠽌 𠾴 𠾼 𠿪 𡁜 𡁯 𡁵 𡁶 𡁻 𡃁"
 );
 
@@ -147,7 +147,7 @@ for (let i = 0; i <= 0x10FFFF; i++) {
     trace("origUpperCode != expectUpperCode", 1, i);
     trace(" origUpperCode = " + origUpperCode.toString());
     trace(" expectUpperCode = " + expectUpperCode.toString());
- }
+  }
 
   // FIXME: enable these again once issue #1195 has been solved
   // assert(origLowerCode == expectLowerCode);

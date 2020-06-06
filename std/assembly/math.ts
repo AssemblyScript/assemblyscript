@@ -29,15 +29,11 @@ import {
 
 /** @internal */
 // @ts-ignore: decorator
-@lazy
-var rempio2_y0: f64,
-    rempio2_y1: f64,
-    res128_hi: u64;
+@lazy var rempio2_y0: f64, rempio2_y1: f64, res128_hi: u64;
 
 /** @internal */
 // @ts-ignore: decorator
-@lazy @inline
-const PIO2_TABLE = memory.data<u64>([
+@lazy @inline const PIO2_TABLE = memory.data<u64>([
   0x00000000A2F9836E, 0x4E441529FC2757D1, 0xF534DDC0DB629599, 0x3C439041FE5163AB,
   0xDEBBC561B7246E3A, 0x424DD2E006492EEA, 0x09D1921CFE1DEB1C, 0xB129A73EE88235F5,
   0x2EBB4484E99C7026, 0xB45F7E413991D639, 0x835339F49C845F8B, 0xBDF9283B1FF897FF,
@@ -385,24 +381,13 @@ function dtoi32(x: f64): i32 {
 }
 
 // @ts-ignore: decorator
-@lazy
-var random_seeded = false;
+@lazy var random_seeded = false;
 
 // @ts-ignore: decorator
-@lazy
-var random_state0_64: u64;
+@lazy var random_state0_64: u64, random_state1_64: u64;
 
 // @ts-ignore: decorator
-@lazy
-var random_state1_64: u64;
-
-// @ts-ignore: decorator
-@lazy
-var random_state0_32: u32;
-
-// @ts-ignore: decorator
-@lazy
-var random_state1_32: u32;
+@lazy var random_state0_32: u32, random_state1_32: u32;
 
 function murmurHash3(h: u64): u64 { // Force all bits of a hash block to avalanche
   h ^= h >> 33;                     // see: https://github.com/aappleby/smhasher
@@ -985,8 +970,11 @@ export namespace NativeMath {
         x *= Ox1p54;
         u = reinterpret<u64>(x);
         hx = <u32>(u >> 32);
-      } else if (hx >= 0x7FF00000) return x;
-        else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
+      } else if (hx >= 0x7FF00000) {
+        return x;
+      } else if (hx == 0x3FF00000 && u << 32 == 0) {
+        return 0;
+      }
       hx += 0x3FF00000 - 0x3FE6A09E;
       k += (<i32>hx >> 20) - 0x3FF;
       hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
@@ -1029,8 +1017,11 @@ export namespace NativeMath {
       x *= Ox1p54;
       u = reinterpret<u64>(x);
       hx = <u32>(u >> 32);
-    } else if (hx >= 0x7FF00000) return x;
-      else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
+    } else if (hx >= 0x7FF00000) {
+      return x;
+    } else if (hx == 0x3FF00000 && u << 32 == 0) {
+      return 0;
+    }
     hx += 0x3FF00000 - 0x3FE6A09E;
     k += <i32>(hx >> 20) - 0x3FF;
     hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
@@ -1135,8 +1126,11 @@ export namespace NativeMath {
         x *= Ox1p54;
         u = reinterpret<u64>(x);
         hx = <u32>(u >> 32);
-      } else if (hx >= 0x7FF00000) return x;
-        else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
+      } else if (hx >= 0x7FF00000) {
+        return x;
+      } else if (hx == 0x3FF00000 && u << 32 == 0) {
+        return 0;
+      }
       hx += 0x3FF00000 - 0x3FE6A09E;
       k += <i32>(hx >> 20) - 0x3FF;
       hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
@@ -1682,7 +1676,7 @@ export namespace NativeMath {
       }
       break;
     } while (false);
-  // end:
+    // end:
     if (ex > 0) {
       uxi -= 1 << 52;
       uxi |= ex << 52;
@@ -1743,12 +1737,10 @@ export namespace NativeMath {
 }
 
 // @ts-ignore: decorator
-@lazy
-var rempio2f_y: f64;
+@lazy var rempio2f_y: f64;
 
 // @ts-ignore: decorator
-@lazy @inline
-const PIO2F_TABLE = memory.data<u64>([
+@lazy @inline const PIO2F_TABLE = memory.data<u64>([
   0xA2F9836E4E441529,
   0xFC2757D1F534DDC0,
   0xDB6295993C439041,
@@ -2453,8 +2445,11 @@ export namespace NativeMathf {
         k -= 25;
         x *= Ox1p25f;
         u = reinterpret<u32>(x);
-      } else if (u >= 0x7F800000) return x;
-        else if (u == 0x3F800000) return 0;
+      } else if (u >= 0x7F800000) {
+        return x;
+      } else if (u == 0x3F800000) {
+        return 0;
+      }
       u += 0x3F800000 - 0x3F3504F3;
       k += <u32>(<i32>u >> 23) - 0x7F;
       u = (u & 0x007FFFFF) + 0x3F3504F3;
@@ -2491,8 +2486,11 @@ export namespace NativeMathf {
       k -= 25;
       x *= Ox1p25f;
       ix = reinterpret<u32>(x);
-    } else if (ix >= 0x7F800000) return x;
-      else if (ix == 0x3F800000) return 0;
+    } else if (ix >= 0x7F800000) {
+      return x;
+    } else if (ix == 0x3F800000) {
+      return 0;
+    }
     ix += 0x3F800000 - 0x3F3504F3;
     k += <i32>(ix >> 23) - 0x7F;
     ix = (ix & 0x007FFFFF) + 0x3F3504F3;
@@ -2580,8 +2578,11 @@ export namespace NativeMathf {
         k -= 25;
         x *= Ox1p25f;
         ix = reinterpret<u32>(x);
-      } else if (ix >= 0x7F800000) return x;
-        else if (ix == 0x3F800000) return 0;
+      } else if (ix >= 0x7F800000) {
+        return x;
+      } else if (ix == 0x3F800000) {
+        return 0;
+      }
       ix += 0x3F800000 - 0x3F3504F3;
       k += <i32>(ix >> 23) - 0x7F;
       ix = (ix & 0x007FFFFF) + 0x3F3504F3;
@@ -2977,7 +2978,7 @@ export namespace NativeMathf {
       }
       break;
     } while (false);
-  // end
+    // end:
     if (ex > 0) {
       uxi -= 1 << 23;
       uxi |= <u32>ex << 23;

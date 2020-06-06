@@ -1681,7 +1681,7 @@ assert(test_floorf(-7.888609052e-31, -1.0, 0.0, INEXACT));
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function test_hypot(value1: f64, value2: f64, expected: f64, error: f64, flags: i32): bool {
-  return  check<f64>(NativeMath.hypot(value1, value2), expected, error, flags) /*&&
+  return check<f64>(NativeMath.hypot(value1, value2), expected, error, flags) /* &&
   (!js || check<f64>(    JSMath.hypot(value1, value2), expected, error, flags))*/;
   // ^ FIXME: Math.hypot is broken in v8 7.7 (node 12.11) due to
   //   https://bugs.chromium.org/p/v8/issues/detail?id=9546

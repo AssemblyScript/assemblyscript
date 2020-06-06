@@ -979,7 +979,7 @@
    end
   end
  )
- (func $~lib/util/number/utoa_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_dec_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -1178,7 +1178,7 @@
       i32.const 1
       i32.add
       local.tee $0
-      call $~lib/util/number/utoa_simple<u32>
+      call $~lib/util/number/utoa_dec_simple<u32>
       local.get $1
       i32.const 45
       i32.const 43
@@ -1234,7 +1234,7 @@
       i32.const 1
       i32.add
       local.tee $0
-      call $~lib/util/number/utoa_simple<u32>
+      call $~lib/util/number/utoa_dec_simple<u32>
       local.get $2
       i32.const 45
       i32.const 43
@@ -1899,7 +1899,7 @@
   select
   i32.eqz
   if
-   i32.const 70
+   i32.const 68
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
@@ -1912,7 +1912,7 @@
   i32.const 1
   i32.ne
   if
-   i32.const 72
+   i32.const 70
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable

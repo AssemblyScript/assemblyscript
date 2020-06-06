@@ -6,24 +6,19 @@ import { E_KEYNOTFOUND } from "util/error";
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
 
 // @ts-ignore: decorator
-@inline
-const INITIAL_CAPACITY = 4;
+@inline const INITIAL_CAPACITY = 4;
 
 // @ts-ignore: decorator
-@inline
-const FILL_FACTOR_N = 8;
+@inline const FILL_FACTOR_N = 8;
 
 // @ts-ignore: decorator
-@inline
-const FILL_FACTOR_D = 3;
+@inline const FILL_FACTOR_D = 3;
 
 // @ts-ignore: decorator
-@inline
-const FREE_FACTOR_N = 3;
+@inline const FREE_FACTOR_N = 3;
 
 // @ts-ignore: decorator
-@inline
-const FREE_FACTOR_D = 4;
+@inline const FREE_FACTOR_D = 4;
 
 /** Structure of a map entry. */
 @unmanaged class MapEntry<K,V> {
@@ -34,13 +29,11 @@ const FREE_FACTOR_D = 4;
 
 /** Empty bit. */
 // @ts-ignore: decorator
-@inline
-const EMPTY: usize = 1 << 0;
+@inline const EMPTY: usize = 1 << 0;
 
 /** Size of a bucket. */
 // @ts-ignore: decorator
-@inline
-const BUCKET_SIZE = sizeof<usize>();
+@inline const BUCKET_SIZE = sizeof<usize>();
 
 /** Computes the alignment of an entry. */
 // @ts-ignore: decorator
@@ -63,28 +56,28 @@ function ENTRY_SIZE<K,V>(): usize {
 
 export class Map<K,V> {
 
-  // buckets holding references to the respective first entry within
-  private buckets: ArrayBuffer; // usize[bucketsMask + 1]
-  private bucketsMask: u32;
+  // buckets referencing their respective first entry, usize[bucketsMask + 1]
+  private buckets: ArrayBuffer = new ArrayBuffer(INITIAL_CAPACITY * <i32>BUCKET_SIZE);
+  private bucketsMask: u32 = INITIAL_CAPACITY - 1;
 
-  // entries in insertion order
-  private entries: ArrayBuffer; // MapEntry<K,V>[entriesCapacity]
-  private entriesCapacity: i32;
-  private entriesOffset: i32;
-  private entriesCount: i32;
-
-  get size(): i32 { return this.entriesCount; }
+  // entries in insertion order, MapEntry<K,V>[entriesCapacity]
+  private entries: ArrayBuffer = new ArrayBuffer(INITIAL_CAPACITY * <i32>ENTRY_SIZE<K,V>());
+  private entriesCapacity: i32 = INITIAL_CAPACITY;
+  private entriesOffset: i32 = 0;
+  private entriesCount: i32 = 0;
 
   constructor() {
-    this.clear();
+    /* nop */
+  }
+
+  get size(): i32 {
+    return this.entriesCount;
   }
 
   clear(): void {
-    const bucketsSize = INITIAL_CAPACITY * <i32>BUCKET_SIZE;
-    this.buckets = new ArrayBuffer(bucketsSize);
+    this.buckets = new ArrayBuffer(INITIAL_CAPACITY * <i32>BUCKET_SIZE);
     this.bucketsMask = INITIAL_CAPACITY - 1;
-    const entriesSize = INITIAL_CAPACITY * <i32>ENTRY_SIZE<K,V>();
-    this.entries = new ArrayBuffer(entriesSize);
+    this.entries = new ArrayBuffer(INITIAL_CAPACITY * <i32>ENTRY_SIZE<K,V>());
     this.entriesCapacity = INITIAL_CAPACITY;
     this.entriesOffset = 0;
     this.entriesCount = 0;

@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -1408,7 +1408,7 @@
   if
    i32.const 0
    i32.const 320
-   i32.const 501
+   i32.const 500
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1455,7 +1455,7 @@
      if
       i32.const 0
       i32.const 320
-      i32.const 513
+      i32.const 512
       i32.const 20
       call $~lib/builtins/abort
       unreachable
@@ -1476,7 +1476,7 @@
     if
      i32.const 0
      i32.const 320
-     i32.const 518
+     i32.const 517
      i32.const 18
      call $~lib/builtins/abort
      unreachable
@@ -1497,7 +1497,7 @@
   if
    i32.const 0
    i32.const 320
-   i32.const 521
+   i32.const 520
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -3165,6 +3165,13 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
+ (func $~lib/rt/pure/finalize (param $0 i32)
+  i32.const 0
+  drop
+  global.get $~lib/rt/tlsf/ROOT
+  local.get $0
+  call $~lib/rt/tlsf/freeBlock
+ )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3221,9 +3228,8 @@
     call $~lib/builtins/abort
     unreachable
    end
-   global.get $~lib/rt/tlsf/ROOT
    local.get $0
-   call $~lib/rt/tlsf/freeBlock
+   call $~lib/rt/pure/finalize
   else
    i32.const 1
    drop

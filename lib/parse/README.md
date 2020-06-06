@@ -1,4 +1,4 @@
-# ![AS](https://avatars1.githubusercontent.com/u/28916798?s=48) parse
+# WebAssembly Parser
 
 A WebAssembly binary parser in WebAssembly. Super small, super fast, with TypeScript support.
 

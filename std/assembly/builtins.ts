@@ -1,3 +1,5 @@
+type auto = i32;
+
 // @ts-ignore: decorator
 @builtin
 export declare function isInteger<T>(value?: T): bool;
@@ -40,11 +42,11 @@ export declare function isNullable<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
-export declare function isDefined(expression: void): bool;
+export declare function isDefined(expression: auto): bool;
 
 // @ts-ignore: decorator
 @builtin
-export declare function isConstant(expression: void): bool;
+export declare function isConstant(expression: auto): bool;
 
 // @ts-ignore: decorator
 @builtin
@@ -124,7 +126,7 @@ export declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize)
 
 // @ts-ignore: decorator
 @unsafe @builtin
-export declare function store<T>(ptr: usize, value: void, immOffset?: usize, immAlign?: usize): void;
+export declare function store<T>(ptr: usize, value: auto, immOffset?: usize, immAlign?: usize): void;
 
 // @ts-ignore: decorator
 @builtin
@@ -156,7 +158,7 @@ export declare function unreachable(): void;
 
 // @ts-ignore: decorator
 @builtin
-export declare function changetype<T>(value: void): T;
+export declare function changetype<T>(value: auto): T;
 
 // @ts-ignore: decorator
 @builtin
@@ -168,7 +170,7 @@ export declare function unchecked<T>(expr: T): T;
 
 // @ts-ignore: decorator
 @builtin
-export declare function instantiate<T>(...args: void[]): T;
+export declare function instantiate<T>(...args: auto[]): T;
 
 export namespace atomic {
   // @ts-ignore: decorator
@@ -230,7 +232,7 @@ export const enum AtomicWaitResult {
 
 // @ts-ignore: decorator
 @builtin
-export declare function i8(value: void): i8;
+export declare function i8(value: auto): i8;
 
 export namespace i8 {
 
@@ -245,7 +247,7 @@ export namespace i8 {
 
 // @ts-ignore: decorator
 @builtin
-export declare function i16(value: void): i16;
+export declare function i16(value: auto): i16;
 
 export namespace i16 {
 
@@ -260,7 +262,7 @@ export namespace i16 {
 
 // @ts-ignore: decorator
 @builtin
-export declare function i32(value: void): i32;
+export declare function i32(value: auto): i32;
 
 export namespace i32 {
 
@@ -455,7 +457,7 @@ export namespace i32 {
 
 // @ts-ignore: decorator
 @builtin
-export declare function i64(value: void): i64;
+export declare function i64(value: auto): i64;
 
 export namespace i64 {
 
@@ -701,7 +703,7 @@ export namespace i64 {
 
 // @ts-ignore: decorator
 @builtin
-export declare function isize(value: void): isize;
+export declare function isize(value: auto): isize;
 
 export namespace isize {
 
@@ -720,7 +722,7 @@ export namespace isize {
 
 // @ts-ignore: decorator
 @builtin
-export declare function u8(value: void): u8;
+export declare function u8(value: auto): u8;
 
 export namespace u8 {
 
@@ -735,7 +737,7 @@ export namespace u8 {
 
 // @ts-ignore: decorator
 @builtin
-export declare function u16(value: void): u16;
+export declare function u16(value: auto): u16;
 
 export namespace u16 {
 
@@ -750,7 +752,7 @@ export namespace u16 {
 
 // @ts-ignore: decorator
 @builtin
-export declare function u32(value: void): u32;
+export declare function u32(value: auto): u32;
 
 export namespace u32 {
 
@@ -765,7 +767,7 @@ export namespace u32 {
 
 // @ts-ignore: decorator
 @builtin
-export declare function u64(value: void): u64;
+export declare function u64(value: auto): u64;
 
 export namespace u64 {
 
@@ -780,7 +782,7 @@ export namespace u64 {
 
 // @ts-ignore: decorator
 @builtin
-export declare function usize(value: void): usize;
+export declare function usize(value: auto): usize;
 
 export namespace usize {
 
@@ -797,7 +799,7 @@ export namespace usize {
 
 // @ts-ignore: decorator
 @builtin
-export declare function bool(value: void): bool;
+export declare function bool(value: auto): bool;
 
 export namespace bool {
 
@@ -812,7 +814,7 @@ export namespace bool {
 
 // @ts-ignore: decorator
 @builtin
-export declare function f32(value: void): f32;
+export declare function f32(value: auto): f32;
 
 export namespace f32 {
 
@@ -891,7 +893,7 @@ export namespace f32 {
 
 // @ts-ignore: decorator
 @builtin
-export declare function f64(value: void): f64;
+export declare function f64(value: auto): f64;
 
 export namespace f64 {
 

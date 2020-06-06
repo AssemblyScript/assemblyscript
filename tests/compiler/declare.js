@@ -1,8 +1,8 @@
 exports.preInstantiate = function(imports, exports) {
   imports.declare = {
-    externalFunction: function() { },
+    externalFunction: function() { /* nop */ },
     externalConstant: 1,
-    "my.externalFunction": function() { },
+    "my.externalFunction": function() { /* nop */ },
     "my.externalConstant": 2
   };
 };

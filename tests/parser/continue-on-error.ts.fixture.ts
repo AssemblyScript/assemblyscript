@@ -1,7 +1,3 @@
-;
-a;
-from;
-"./other";
 do {
   ;
 } while (false);

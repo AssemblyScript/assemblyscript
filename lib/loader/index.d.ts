@@ -8,7 +8,7 @@ export interface ResultObject {
 
 /** WebAssembly imports with an optional env object and two levels of nesting. */
 export type Imports = {
-  [key: string]: any;
+  [key: string]: Record<string,unknown>;
   env?: {
     memory?: WebAssembly.Memory;
     table?: WebAssembly.Table;
@@ -100,22 +100,25 @@ export interface ASUtil {
 }
 
 /** Asynchronously instantiates an AssemblyScript module from anything that can be instantiated. */
-export declare function instantiate<T extends {}>(
+export declare function instantiate<T extends Record<string,unknown>>(
   source: WebAssembly.Module | BufferSource | Response | PromiseLike<WebAssembly.Module | BufferSource | Response>,
   imports?: Imports
 ): Promise<ResultObject & { exports: ASUtil & T }>;
 
 /** Synchronously instantiates an AssemblyScript module from a WebAssembly.Module or binary buffer. */
-export declare function instantiateSync<T extends {}>(
+export declare function instantiateSync<T extends Record<string,unknown>>(
   source: WebAssembly.Module | BufferSource,
   imports?: Imports
 ): ResultObject & { exports: ASUtil & T };
 
 /** Asynchronously instantiates an AssemblyScript module from a response, i.e. as obtained by `fetch`. */
-export declare function instantiateStreaming<T extends {}>(
+export declare function instantiateStreaming<T extends Record<string,unknown>>(
   source: Response | PromiseLike<Response>,
   imports?: Imports
 ): Promise<ResultObject & { exports: ASUtil & T }>;
 
 /** Demangles an AssemblyScript module's exports to a friendly object structure. */
-export declare function demangle<T extends {}>(exports: {}, extendedExports?: {}): T;
+export declare function demangle<T extends Record<string,unknown>>(
+  exports: Record<string,unknown>,
+  extendedExports?: Record<string,unknown>
+): T;

@@ -275,7 +275,8 @@ export abstract class DiagnosticEmitter {
 
   /** Initializes this diagnostic emitter. */
   protected constructor(diagnostics: DiagnosticMessage[] | null = null) {
-    this.diagnostics = diagnostics ? <DiagnosticMessage[]>diagnostics : new Array();
+    if (!diagnostics) diagnostics = new Array();
+    this.diagnostics = diagnostics;
   }
 
   /** Emits a diagnostic message of the specified category. */

@@ -254,7 +254,8 @@ export class Array<T> {
     var dataStart = this.dataStart;
     var len = this.length_;
 
-        end   = min<i32>(end, len);
+    end = min<i32>(end, len);
+
     var to    = target < 0 ? max(len + target, 0) : min(target, len);
     var from  = start < 0 ? max(len + start, 0) : min(start, len);
     var last  = end < 0 ? max(len + end, 0) : min(end, len);
@@ -366,7 +367,7 @@ export class Array<T> {
       base + sizeof<T>(),
       <usize>lastIndex << alignof<T>()
     );
-    store<T>(base + (<usize>lastIndex << alignof<T>()), isReference<T>() ? null : 0);
+    store<T>(base + (<usize>lastIndex << alignof<T>()), changetype<T>(0));
     this.length_ = lastIndex;
     return element; // no need to retain -> is moved
   }

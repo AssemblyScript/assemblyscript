@@ -176,7 +176,7 @@ export function main(argv: string[], options: APIOptions, callback?: (err: Error
 export function main(argv: string[], callback?: (err: Error | null) => number): number;
 
 /** Checks diagnostics emitted so far for errors. */
-export function checkDiagnostics(emitter: any, stderr?: OutputStream): boolean;
+export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream): boolean;
 
 /** An object of stats for the current task. */
 export interface Stats {
@@ -200,7 +200,7 @@ export interface Stats {
 export function createStats(): Stats;
 
 /** Measures the execution time of the specified function.  */
-export function measure(fn: Function): number;
+export function measure(fn: () => void): number;
 
 /** Formats a high resolution time to a human readable string. */
 export function formatTime(time: number): string;
@@ -212,4 +212,4 @@ export function printStats(stats: Stats, output: OutputStream): void;
 export function createMemoryStream(fn?: (chunk: Uint8Array | string) => void): MemoryStream;
 
 /** Compatible TypeScript compiler options for syntax highlighting etc. */
-export const tscOptions: { [key: string]: any };
+export const tscOptions: Record<string,unknown>;

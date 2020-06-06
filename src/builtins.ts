@@ -613,20 +613,22 @@ export namespace BuiltinNames {
 
 /** Builtin compilation context. */
 export class BuiltinContext {
-  /** Compiler reference. */
-  compiler: Compiler;
-  /** Prototype being called. */
-  prototype: FunctionPrototype;
-  /** Provided type arguments. */
-  typeArguments: Type[] | null;
-  /** Provided operands. */
-  operands: Expression[];
-  /** Contextual type. */
-  contextualType: Type;
-  /** Respective call expression. */
-  reportNode: CallExpression;
-  /** Whether originating from inline assembly. */
-  contextIsExact: bool;
+  constructor(
+    /** Compiler reference. */
+    public compiler: Compiler,
+    /** Prototype being called. */
+    public prototype: FunctionPrototype,
+    /** Provided type arguments. */
+    public typeArguments: Type[] | null,
+    /** Provided operands. */
+    public operands: Expression[],
+    /** Contextual type. */
+    public contextualType: Type,
+    /** Respective call expression. */
+    public reportNode: CallExpression,
+    /** Whether originating from inline assembly. */
+    public contextIsExact: bool
+  ) {}
 }
 
 /** Global builtins map. */
@@ -2549,7 +2551,6 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
       compiler.currentType = usizeType;
       return module.unreachable();
     }
-    let nativeElementType = elementType.toNativeType();
     let valuesOperand = operands[0];
     if (valuesOperand.kind != NodeKind.LITERAL || (<LiteralExpression>valuesOperand).literalKind != LiteralKind.ARRAY) {
       compiler.error(
@@ -2836,8 +2837,9 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.error(
-    DiagnosticCode.Not_implemented,
-    ctx.reportNode.typeArgumentsRange
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange,
+    "assert", compiler.currentType.toString()
   );
   return abort;
 }
@@ -4118,20 +4120,20 @@ function builtin_v128_eq(ctx: BuiltinContext): ExpressionRef {
   if (!type.is(TypeFlags.REFERENCE)) {
     switch (type.kind) {
       case TypeKind.I8:
-        case TypeKind.U8: return module.binary(BinaryOp.EqI8x16, arg0, arg1);
-        case TypeKind.I16:
-        case TypeKind.U16: return module.binary(BinaryOp.EqI16x8, arg0, arg1);
-        case TypeKind.I32:
-        case TypeKind.U32: return module.binary(BinaryOp.EqI32x4, arg0, arg1);
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          if (!compiler.options.isWasm64) {
-            return module.binary(BinaryOp.EqI32x4, arg0, arg1);
-          }
-          break;
+      case TypeKind.U8: return module.binary(BinaryOp.EqI8x16, arg0, arg1);
+      case TypeKind.I16:
+      case TypeKind.U16: return module.binary(BinaryOp.EqI16x8, arg0, arg1);
+      case TypeKind.I32:
+      case TypeKind.U32: return module.binary(BinaryOp.EqI32x4, arg0, arg1);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
+        if (!compiler.options.isWasm64) {
+          return module.binary(BinaryOp.EqI32x4, arg0, arg1);
         }
-        case TypeKind.F32: return module.binary(BinaryOp.EqF32x4, arg0, arg1);
-        case TypeKind.F64: return module.binary(BinaryOp.EqF64x2, arg0, arg1);
+        break;
+      }
+      case TypeKind.F32: return module.binary(BinaryOp.EqF32x4, arg0, arg1);
+      case TypeKind.F64: return module.binary(BinaryOp.EqF64x2, arg0, arg1);
     }
   }
   compiler.error(
@@ -4162,20 +4164,20 @@ function builtin_v128_ne(ctx: BuiltinContext): ExpressionRef {
   if (!type.is(TypeFlags.REFERENCE)) {
     switch (type.kind) {
       case TypeKind.I8:
-        case TypeKind.U8: return module.binary(BinaryOp.NeI8x16, arg0, arg1);
-        case TypeKind.I16:
-        case TypeKind.U16: return module.binary(BinaryOp.NeI16x8, arg0, arg1);
-        case TypeKind.I32:
-        case TypeKind.U32: return module.binary(BinaryOp.NeI32x4, arg0, arg1);
-        case TypeKind.ISIZE:
-        case TypeKind.USIZE: {
-          if (!compiler.options.isWasm64) {
-            return module.binary(BinaryOp.NeI32x4, arg0, arg1);
-          }
-          break;
+      case TypeKind.U8: return module.binary(BinaryOp.NeI8x16, arg0, arg1);
+      case TypeKind.I16:
+      case TypeKind.U16: return module.binary(BinaryOp.NeI16x8, arg0, arg1);
+      case TypeKind.I32:
+      case TypeKind.U32: return module.binary(BinaryOp.NeI32x4, arg0, arg1);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
+        if (!compiler.options.isWasm64) {
+          return module.binary(BinaryOp.NeI32x4, arg0, arg1);
         }
-        case TypeKind.F32: return module.binary(BinaryOp.NeF32x4, arg0, arg1);
-        case TypeKind.F64: return module.binary(BinaryOp.NeF64x2, arg0, arg1);
+        break;
+      }
+      case TypeKind.F32: return module.binary(BinaryOp.NeF32x4, arg0, arg1);
+      case TypeKind.F64: return module.binary(BinaryOp.NeF64x2, arg0, arg1);
     }
   }
   compiler.error(
