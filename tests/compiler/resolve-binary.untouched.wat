@@ -5610,9 +5610,10 @@
   i32.const 2
   i32.const 2
   call $~lib/math/ipow32
+  i32.const 10
   call $~lib/number/I32#toString
   local.tee $26
-  i32.const 9280
+  i32.const 9312
   call $~lib/string/String.__eq
   i32.eqz
   if
