@@ -4067,19 +4067,13 @@ assert(ipow64(-2, 2) ==  4);
 assert(ipow64(-2, 3) == -8);
 
 assert(ipow64(2,  63) ==  9223372036854775808);
-assert(ipow64(2,  64) ==  0);                   // should overflow
 assert(ipow64(3,  40) ==  12157665459056928801);
+assert(ipow64(2,  64) ==  0);                   // should overflow
 assert(ipow64(3,  41) == -420491770248316829);  // should overflow
-assert(ipow64(3,  42) == -1261475310744950487); // should overflow
-assert(ipow64(3,  43) == -3784425932234851461); // should overflow
-assert(ipow64(3,  63) == -3237885987332494933); // should overflow
-assert(ipow64(3,  64) ==  8733086111712066817); // should overflow
 assert(ipow64(3, 128) == -9204772141784466943); // should overflow
 
 assert(ipow64(1, -1) == 1);
 assert(ipow64(2, -1) == 0);
-
-assert(ipow64(57055, 3) + ipow64(339590, 3) == 39347712995520375);
 
 // integer pow operators
 
@@ -4108,7 +4102,6 @@ assert((<i8> 1) ** 3 ==  1);
 assert((<i8>-2) ** 3 == -8);
 assert((<u16>4) ** 7 ==  16384);
 assert((<u16>4) ** 8 ==  0);   // should overflow
-assert((<u16>4) ** 9 ==  0);   // should overflow
 assert((<u16>5) ** 10 == 761); // should overflow
 
 assert((<u64>0) ** 0 == 1);
