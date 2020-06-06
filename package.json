@@ -1,6 +1,6 @@
 {
   "name": "assemblyscript",
-  "description": "A TypeScript to WebAssembly compiler.",
+  "description": "Definitely not a TypeScript to WebAssembly compiler.",
   "keywords": [
     "typescript",
     "webassembly",

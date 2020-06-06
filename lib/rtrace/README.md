@@ -1,4 +1,4 @@
-# ![AS](https://avatars1.githubusercontent.com/u/28916798?s=48) rtrace
+# RTrace
 
 A tiny utility that records allocations, retains, releases and frees performed by the runtime and emits an error if something is off. Also checks for leaks.
 
