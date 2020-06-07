@@ -4812,10 +4812,10 @@ export class Compiler extends DiagnosticEmitter {
             if (!instance || !this.compileFunction(instance)) {
               expr = module.unreachable();
             } else {
-              expr = this.ensureSmallIntegerWrap(
-                this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression),
-                commonType
-              );
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
+              if (commonType.size != 32) {
+                expr = this.ensureSmallIntegerWrap(expr, commonType);
+              }
             }
             break;
           }
