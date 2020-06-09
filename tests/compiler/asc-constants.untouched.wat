@@ -20,7 +20,7 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $start:asc-constants
-  i32.const 0
+  i32.const 1
   drop
   i32.const 0
   drop
