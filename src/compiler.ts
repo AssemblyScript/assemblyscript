@@ -361,6 +361,8 @@ export class Compiler extends DiagnosticEmitter {
   pendingClassInstanceOf: Set<ClassPrototype> = new Set();
   /** Functions potentially involving a virtual call. */
   virtualCalls: Set<Function> = new Set();
+  /** Set of globals that failed to compile. */
+  failedGlobals: Set<Global> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -993,8 +995,13 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Compiles a global variable. */
   compileGlobal(global: Global): bool {
-    if (global.is(CommonFlags.COMPILED)) return true;
+    var failedGlobals = this.failedGlobals;
+    if (global.is(CommonFlags.COMPILED)) return !failedGlobals.has(global);
     global.set(CommonFlags.COMPILED);
+
+    // Assume that compilation will fail, and undo once we succeed to compile
+    // it. Means: Referencing a global in its initializer becomes a `false`.
+    failedGlobals.add(global);
 
     var module = this.module;
     var initExpr: ExpressionRef = 0;
@@ -1050,6 +1057,7 @@ export class Compiler extends DiagnosticEmitter {
     if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
       if (global.internalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
       else if (global.internalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
+      failedGlobals.delete(global);
       return true;
     }
 
@@ -1072,7 +1080,7 @@ export class Compiler extends DiagnosticEmitter {
           nativeType,
           !isDeclaredConstant
         );
-        global.set(CommonFlags.COMPILED);
+        failedGlobals.delete(global);
         return true;
 
       // Importing mutable globals is not supported in the MVP
@@ -1200,6 +1208,7 @@ export class Compiler extends DiagnosticEmitter {
     } else if (!isDeclaredInline) { // compile normally
       module.addGlobal(internalName, nativeType, !isDeclaredConstant, initExpr);
     }
+    failedGlobals.delete(global);
     return true;
   }
 
