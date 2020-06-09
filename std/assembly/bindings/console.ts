@@ -1,10 +1,10 @@
-export declare function assert(value: anyref): void;
+export declare function assert(value: externref): void;
 export declare function clear(): void;
-export declare function error(value: anyref): void;
-export declare function info(value: anyref): void;
-export declare function log(value: anyref): void;
-export declare function time(label: anyref): anyref;
-export declare function timeEnd(label: anyref): void;
-export declare function timeLog(label: anyref): void;
+export declare function error(value: externref): void;
+export declare function info(value: externref): void;
+export declare function log(value: externref): void;
+export declare function time(label: externref): externref;
+export declare function timeEnd(label: externref): void;
+export declare function timeLog(label: externref): void;
 export declare function trace(): void;
-export declare function warn(value: anyref): void;
+export declare function warn(value: externref): void;

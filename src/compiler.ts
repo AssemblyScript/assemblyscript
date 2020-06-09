@@ -4328,7 +4328,7 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
           }
-          case TypeKind.ANYREF: {
+          case TypeKind.EXTERNREF: {
             // TODO: ref.eq
             this.error(
               DiagnosticCode.Not_implemented_0,
@@ -4429,7 +4429,7 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
           }
-          case TypeKind.ANYREF: {
+          case TypeKind.EXTERNREF: {
             // TODO: !ref.eq
             this.error(
               DiagnosticCode.Not_implemented_0,
@@ -8241,7 +8241,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
         if (contextualType.is(TypeFlags.HOST | TypeFlags.REFERENCE)) {
-          this.currentType = Type.anyref;
+          this.currentType = Type.externref;
           return module.ref_func(functionInstance.internalName);
         }
         let index = this.ensureFunctionTableEntry(functionInstance);
@@ -10147,7 +10147,7 @@ export class Compiler extends DiagnosticEmitter {
                     typeString = "object";
                   }
                 } else {
-                  typeString = "anyref"; // TODO?
+                  typeString = "externref"; // TODO?
                 }
               }
             } else if (type == Type.bool) {
@@ -10258,7 +10258,7 @@ export class Compiler extends DiagnosticEmitter {
   checkTypeSupported(type: Type, reportNode: Node): bool {
     switch (type.kind) {
       case TypeKind.V128: return this.checkFeatureEnabled(Feature.SIMD, reportNode);
-      case TypeKind.ANYREF: return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode);
+      case TypeKind.EXTERNREF: return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode);
     }
     if (type.is(TypeFlags.REFERENCE)) {
       let classReference = type.classReference;
@@ -10331,7 +10331,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(0);
       case TypeKind.F64: return module.f64(0);
       case TypeKind.V128: return module.v128(v128_zero);
-      case TypeKind.ANYREF: return module.ref_null();
+      case TypeKind.EXTERNREF: return module.ref_null();
     }
   }
 
@@ -10430,7 +10430,7 @@ export class Compiler extends DiagnosticEmitter {
         flow.freeTempLocal(temp);
         return ret;
       }
-      case TypeKind.ANYREF: {
+      case TypeKind.EXTERNREF: {
         // TODO: non-null object might still be considered falseish
         // i.e. a ref to Boolean(false), Number(0), String("") etc.
         return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));

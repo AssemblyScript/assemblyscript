@@ -959,7 +959,7 @@ function builtin_nameof(ctx: BuiltinContext): ExpressionRef {
       if (signatureReference) {
         value = "Function";
       } else {
-        value = "Anyref";
+        value = "Externref";
       }
     }
   } else {
@@ -978,7 +978,7 @@ function builtin_nameof(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.ISIZE: { value = "isize"; break; }
       case TypeKind.USIZE: { value = "usize"; break; }
       case TypeKind.V128: { value = "v128"; break; }
-      case TypeKind.ANYREF: { value = "anyref"; break; }
+      case TypeKind.EXTERNREF: { value = "externref"; break; }
       default: assert(false);
       case TypeKind.VOID: { value = "void"; break; }
     }

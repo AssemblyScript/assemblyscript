@@ -1,23 +1,23 @@
 (module
  (type $none_=>_none (func))
- (type $anyref_=>_anyref (func (param anyref) (result anyref)))
+ (type $externref_=>_externref (func (param externref) (result externref)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $anyref_=>_none (func (param anyref)))
- (type $anyref_anyref_=>_i32 (func (param anyref anyref) (result i32)))
- (type $anyref_anyref_=>_anyref (func (param anyref anyref) (result anyref)))
- (import "reference-types" "someObject" (global $features/reference-types/someObject anyref))
- (import "reference-types" "someKey" (global $features/reference-types/someKey anyref))
- (import "Reflect" "has" (func $~lib/bindings/Reflect/has (param anyref anyref) (result i32)))
+ (type $externref_=>_none (func (param externref)))
+ (type $externref_externref_=>_i32 (func (param externref externref) (result i32)))
+ (type $externref_externref_=>_externref (func (param externref externref) (result externref)))
+ (import "reference-types" "someObject" (global $features/reference-types/someObject externref))
+ (import "reference-types" "someKey" (global $features/reference-types/someKey externref))
+ (import "Reflect" "has" (func $~lib/bindings/Reflect/has (param externref externref) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "console" "log" (func $~lib/bindings/console/log (param anyref)))
- (import "Reflect" "get" (func $~lib/bindings/Reflect/get (param anyref anyref) (result anyref)))
- (import "reference-types" "external" (func $features/reference-types/external (param anyref) (result anyref)))
+ (import "console" "log" (func $~lib/bindings/console/log (param externref)))
+ (import "Reflect" "get" (func $~lib/bindings/Reflect/get (param externref externref) (result externref)))
+ (import "reference-types" "external" (func $features/reference-types/external (param externref) (result externref)))
  (memory $0 1)
  (data (i32.const 16) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s\00")
  (table $0 1 funcref)
- (global $features/reference-types/nullGlobal (mut anyref) (ref.null))
- (global $features/reference-types/nullGlobalInit (mut anyref) (ref.null))
- (global $features/reference-types/funcGlobal (mut anyref) (ref.null))
+ (global $features/reference-types/nullGlobal (mut externref) (ref.null))
+ (global $features/reference-types/nullGlobalInit (mut externref) (ref.null))
+ (global $features/reference-types/funcGlobal (mut externref) (ref.null))
  (export "memory" (memory $0))
  (export "external" (func $features/reference-types/external))
  (export "internal" (func $features/reference-types/internal))
@@ -26,8 +26,8 @@
   nop
  )
  (func $start:features/reference-types
-  (local $0 anyref)
-  (local $1 anyref)
+  (local $0 externref)
+  (local $1 externref)
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
@@ -141,10 +141,10 @@
   ref.func $features/reference-types/someFunc
   local.set $1
  )
- (func $features/reference-types/internal (param $0 anyref) (result anyref)
-  (local $1 anyref)
-  (local $2 anyref)
-  (local $3 anyref)
+ (func $features/reference-types/internal (param $0 externref) (result externref)
+  (local $1 externref)
+  (local $2 externref)
+  (local $3 externref)
   local.get $0
   call $features/reference-types/external
   local.set $1

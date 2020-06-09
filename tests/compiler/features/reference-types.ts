@@ -1,24 +1,24 @@
-// can use anyref as a parameter or return type
+// can use externref as a parameter or return type
 
-export declare function external(a: anyref): anyref;
+export declare function external(a: externref): externref;
 
-export function internal(a: anyref): anyref {
+export function internal(a: externref): externref {
   const b = external(a);
   let c = external(b);
   var d = external(c);
   return d;
 }
 
-// can use reflection to work with anyref values
+// can use reflection to work with externref values
 
 import * as Reflect from "bindings/Reflect";
 
-declare const someObject: anyref;
-declare const someKey: anyref;
+declare const someObject: externref;
+declare const someKey: externref;
 
 assert(Reflect.has(someObject, someKey));
 
-// can call JS bindings with anyref values
+// can call JS bindings with externref values
 
 import * as console from "bindings/console";
 
@@ -28,25 +28,25 @@ console.log(Reflect.get(someObject, someKey));
 
 // can represent and recognize 'null'
 
-var nullGlobal: anyref;
+var nullGlobal: externref;
 assert(!nullGlobal);
 nullGlobal = null;
 assert(!nullGlobal);
-var nullGlobalInit: anyref = null;
+var nullGlobalInit: externref = null;
 assert(!nullGlobalInit);
 {
-  let nullLocal: anyref;
+  let nullLocal: externref;
   assert(!nullLocal);
   nullLocal = null;
   assert(!nullLocal);
-  let nullLocalInit: anyref = null;
+  let nullLocalInit: externref = null;
   assert(!nullLocalInit);
 }
 
 // can represent function references
 
 function someFunc(): void {}
-var funcGlobal: anyref = someFunc;
+var funcGlobal: externref = someFunc;
 {
-  let funcLocal: anyref = someFunc;
+  let funcLocal: externref = someFunc;
 }

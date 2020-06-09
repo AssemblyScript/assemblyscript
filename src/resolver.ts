@@ -1222,7 +1222,7 @@ export class Resolver extends DiagnosticEmitter {
         let classReference = ctxType.classReference;
         return ctxType.is(TypeFlags.REFERENCE) && classReference !== null
           ? classReference.type.asNullable()
-          : this.program.options.usizeType; // TODO: anyref context?
+          : this.program.options.usizeType; // TODO: externref context?
       }
     }
     var element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
@@ -2290,7 +2290,7 @@ export class Resolver extends DiagnosticEmitter {
         if (
           numNullLiterals > 0 &&
           elementType.is(TypeFlags.REFERENCE) &&
-          !elementType.is(TypeFlags.HOST) // TODO: anyref isn't nullable as-is
+          !elementType.is(TypeFlags.HOST) // TODO: externref isn't nullable as-is
         ) {
           elementType = elementType.asNullable();
         }

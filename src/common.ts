@@ -121,7 +121,7 @@ export namespace CommonNames {
   export const f32 = "f32";
   export const f64 = "f64";
   export const v128 = "v128";
-  export const anyref = "anyref";
+  export const externref = "externref";
   export const i8x16 = "i8x16";
   export const u8x16 = "u8x16";
   export const i16x8 = "i16x8";
@@ -183,7 +183,7 @@ export namespace CommonNames {
   export const F32 = "F32";
   export const F64 = "F64";
   export const V128 = "V128";
-  export const Anyref = "Anyref";
+  export const Externref = "Externref";
   export const String = "String";
   export const Array = "Array";
   export const StaticArray = "StaticArray";

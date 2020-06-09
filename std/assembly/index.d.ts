@@ -36,7 +36,7 @@ declare type f64 = number;
 /** A 128-bit vector. */
 declare type v128 = object;
 /** A host reference. */
-declare type anyref = object;
+declare type externref = object;
 
 // Compiler hints
 

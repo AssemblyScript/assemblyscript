@@ -905,7 +905,7 @@ export class Program extends DiagnosticEmitter {
     // compiler needs to check this condition whenever such a value is created
     // respectively stored or loaded.
     this.registerNativeType(CommonNames.v128, Type.v128);
-    this.registerNativeType(CommonNames.anyref, Type.anyref);
+    this.registerNativeType(CommonNames.externref, Type.externref);
 
     // register compiler hints
     this.registerConstantInteger(CommonNames.ASC_TARGET, Type.i32,
@@ -1136,7 +1136,7 @@ export class Program extends DiagnosticEmitter {
     this.registerWrapperClass(Type.f32, CommonNames.F32);
     this.registerWrapperClass(Type.f64, CommonNames.F64);
     if (options.hasFeature(Feature.SIMD)) this.registerWrapperClass(Type.v128, CommonNames.V128);
-    if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
+    if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerWrapperClass(Type.externref, CommonNames.Externref);
 
     // resolve prototypes of extended classes or interfaces
     var resolver = this.resolver;
@@ -3548,7 +3548,7 @@ export class Function extends TypedElement {
   tempF32s: Local[] | null = null;
   tempF64s: Local[] | null = null;
   tempV128s: Local[] | null = null;
-  tempAnyrefs: Local[] | null = null;
+  tempExternrefs: Local[] | null = null;
   tempExnrefs: Local[] | null = null;
 
   // used by flows to keep track of break labels

@@ -284,7 +284,7 @@ export class Flow {
       case <u32>NativeType.F32: { temps = parentFunction.tempF32s; break; }
       case <u32>NativeType.F64: { temps = parentFunction.tempF64s; break; }
       case <u32>NativeType.V128: { temps = parentFunction.tempV128s; break; }
-      case <u32>NativeType.Anyref: { temps = parentFunction.tempAnyrefs; break; }
+      case <u32>NativeType.Externref: { temps = parentFunction.tempExternrefs; break; }
       case <u32>NativeType.Exnref: { temps = parentFunction.tempExnrefs; break; }
       default: throw new Error("concrete type expected");
     }
@@ -367,10 +367,10 @@ export class Flow {
         else parentFunction.tempV128s = temps = [];
         break;
       }
-      case <u32>NativeType.Anyref: {
-        let tempAnyrefs = parentFunction.tempAnyrefs;
-        if (tempAnyrefs) temps = tempAnyrefs;
-        else parentFunction.tempAnyrefs = temps = [];
+      case <u32>NativeType.Externref: {
+        let tempExternrefs = parentFunction.tempExternrefs;
+        if (tempExternrefs) temps = tempExternrefs;
+        else parentFunction.tempExternrefs = temps = [];
         break;
       }
       case <u32>NativeType.Exnref: {

@@ -1,6 +1,6 @@
 /**
  * @fileoverview Portable definitions for Binaryen's C-API.
- * 
+ *
  * tsc uses the .js file next to it, while asc makes it a Wasm import.
  *
  * See: https://github.com/WebAssembly/binaryen/blob/master/src/binaryen-c.h
@@ -34,7 +34,7 @@ export declare function _BinaryenTypeFloat32(): BinaryenType;
 export declare function _BinaryenTypeFloat64(): BinaryenType;
 export declare function _BinaryenTypeVec128(): BinaryenType;
 export declare function _BinaryenTypeFuncref(): BinaryenType;
-export declare function _BinaryenTypeAnyref(): BinaryenType;
+export declare function _BinaryenTypeExternref(): BinaryenType;
 export declare function _BinaryenTypeNullref(): BinaryenType;
 export declare function _BinaryenTypeExnref(): BinaryenType;
 export declare function _BinaryenTypeUnreachable(): BinaryenType;

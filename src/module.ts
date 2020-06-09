@@ -38,7 +38,7 @@ export namespace NativeType {
   export const F64: NativeType = 5 /* _BinaryenTypeFloat64 */;
   export const V128: NativeType = 6 /* _BinaryenTypeVec128 */;
   export const Funcref: NativeType = 7 /* _BinaryenTypeFuncref */;
-  export const Anyref: NativeType = 8 /* _BinaryenTypeAnyref */;
+  export const Externref: NativeType = 8 /* _BinaryenTypeExternref */;
   export const Nullref: NativeType = 9 /* _BinaryenTypeNullref */;
   export const Exnref: NativeType = 10 /* _BinaryenTypeExnref */;
   export const Auto: NativeType = -1 /* _BinaryenTypeAuto */;
@@ -1712,8 +1712,8 @@ export class Module {
             // TODO
             return 0;
           }
-          // Not possible to clone an anyref as it is opaque
-          case <u32>NativeType.Anyref: {
+          // Not possible to clone an externref as it is opaque
+          case <u32>NativeType.Externref: {
             return 0;
           }
           default: {
