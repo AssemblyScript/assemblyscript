@@ -2016,7 +2016,7 @@ export class Resolver extends DiagnosticEmitter {
         return commonType;
       }
 
-      // pow: result is f32 if LHS is f32, otherwise f64, preferring overloads
+      // pow: result is common type of LHS and RHS, preferring overloads
 
       case Token.ASTERISK_ASTERISK: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
