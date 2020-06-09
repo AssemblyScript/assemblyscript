@@ -2028,7 +2028,18 @@ export class Resolver extends DiagnosticEmitter {
             if (overload) return overload.signature.returnType;
           }
         }
-        return leftType;
+        let rightType = this.resolveExpression(right, ctxFlow, leftType, reportMode);
+        if (!rightType) return null;
+        let commonType = Type.commonDenominator(leftType, rightType, false);
+        if (!commonType) {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              node.range, leftType.toString(), rightType.toString()
+            );
+          }
+        }
+        return commonType;
       }
 
       // shift: result is LHS (RHS is converted to LHS), preferring overloads
