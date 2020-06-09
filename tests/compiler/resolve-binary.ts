@@ -140,11 +140,25 @@ assert(
   "1"
 );
 
-// pow
+// pow i32 only
 assert(
   (2 ** 2).toString()
   ==
   "4"
+);
+
+// pow mixed i32 and f64
+assert(
+  (2 ** 2.0).toString()
+  ==
+  "4.0"
+);
+
+// pow mixed f64 and i32
+assert(
+  (2.0 ** 2).toString()
+  ==
+  "4.0"
 );
 
 // shift
