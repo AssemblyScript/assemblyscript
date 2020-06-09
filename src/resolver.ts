@@ -2024,7 +2024,7 @@ export class Resolver extends DiagnosticEmitter {
         if (leftType.is(TypeFlags.REFERENCE)) {
           let classReference = leftType.classReference;
           if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.POW);
+            let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
             if (overload) return overload.signature.returnType;
           }
         }
