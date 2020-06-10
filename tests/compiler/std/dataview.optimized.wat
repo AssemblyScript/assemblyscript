@@ -1229,6 +1229,8 @@
   local.get $2
   i32.add
   local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $0
   i32.const 16
   i32.sub
   i32.load offset=12
@@ -1267,6 +1269,8 @@
   local.get $4
   local.get $2
   i32.store offset=8
+  local.get $0
+  call $~lib/rt/pure/__release
   local.get $4
  )
  (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (param $0 i32) (result i32)

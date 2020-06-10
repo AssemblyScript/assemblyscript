@@ -977,6 +977,16 @@
    call $~lib/rt/pure/decrement
   end
  )
+ (func $managed-cast/testDowncastToNullable (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  call $~lib/rt/pure/__retain
+  local.get $0
+  call $~lib/rt/pure/__release
+  call $~lib/rt/pure/__release
+ )
  (func $~lib/rt/__instanceof (param $0 i32) (result i32)
   local.get $0
   i32.const 16
@@ -1016,9 +1026,13 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   call $managed-cast/Cat#constructor
   call $managed-cast/Cat#constructor
   local.tee $3
+  call $~lib/rt/pure/__retain
+  local.tee $0
   i32.eqz
   if
    i32.const 0
@@ -1028,12 +1042,18 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/rt/pure/__release
   call $managed-cast/Cat#constructor
-  local.set $4
+  local.tee $4
+  call $managed-cast/testDowncastToNullable
   call $managed-cast/Cat#constructor
-  local.set $5
+  local.tee $5
+  call $managed-cast/testDowncastToNullable
   call $managed-cast/Cat#constructor
   local.tee $6
+  call $~lib/rt/pure/__retain
+  local.tee $0
   call $~lib/rt/__instanceof
   i32.eqz
   if
@@ -1044,18 +1064,24 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/rt/pure/__release
   call $managed-cast/Cat#constructor
-  local.tee $1
-  local.set $0
+  local.tee $7
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  local.set $1
   block $__inlined_func$managed-cast/testUpcastFromNullable
    block $folding-inner0
-    local.get $1
+    local.get $0
     i32.eqz
     br_if $folding-inner0
-    local.get $0
+    local.get $1
     call $~lib/rt/__instanceof
     i32.eqz
     br_if $folding-inner0
+    local.get $0
+    call $~lib/rt/pure/__release
     br $__inlined_func$managed-cast/testUpcastFromNullable
    end
    i32.const 0
@@ -1066,7 +1092,10 @@
    unreachable
   end
   call $managed-cast/Cat#constructor
-  local.tee $0
+  local.tee $8
+  call $~lib/rt/pure/__retain
+  local.tee $1
+  local.get $1
   call $~lib/rt/__instanceof
   i32.eqz
   if
@@ -1077,8 +1106,15 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/pure/__retain
+  local.get $1
+  call $~lib/rt/pure/__release
+  call $~lib/rt/pure/__release
   call $managed-cast/Cat#constructor
-  local.tee $7
+  local.tee $9
+  call $~lib/rt/pure/__retain
+  local.tee $1
+  local.get $1
   call $~lib/rt/__instanceof
   i32.eqz
   if
@@ -1089,6 +1125,10 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/pure/__retain
+  local.get $1
+  call $~lib/rt/pure/__release
+  call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release
   local.get $3
   call $~lib/rt/pure/__release
@@ -1098,11 +1138,11 @@
   call $~lib/rt/pure/__release
   local.get $6
   call $~lib/rt/pure/__release
-  local.get $1
-  call $~lib/rt/pure/__release
-  local.get $0
-  call $~lib/rt/pure/__release
   local.get $7
+  call $~lib/rt/pure/__release
+  local.get $8
+  call $~lib/rt/pure/__release
+  local.get $9
   call $~lib/rt/pure/__release
  )
  (func $~start

@@ -2192,10 +2192,18 @@
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $4
+  local.tee $3
   i32.const 7
   i32.and
   local.get $1
+  call $~lib/rt/pure/__retain
+  local.tee $5
+  local.tee $1
   i32.const 7
   i32.and
   i32.or
@@ -2207,16 +2215,16 @@
   select
   if
    loop $do-continue|0
-    local.get $0
+    local.get $3
     i64.load
     local.get $1
     i64.load
     i64.eq
     if
-     local.get $0
+     local.get $3
      i32.const 8
      i32.add
-     local.set $0
+     local.set $3
      local.get $1
      i32.const 8
      i32.add
@@ -2233,29 +2241,33 @@
   end
   loop $while-continue|1
    local.get $2
-   local.tee $3
+   local.tee $0
    i32.const 1
    i32.sub
    local.set $2
-   local.get $3
+   local.get $0
    if
-    local.get $0
+    local.get $3
     i32.load16_u
-    local.tee $3
+    local.tee $0
     local.get $1
     i32.load16_u
-    local.tee $4
+    local.tee $6
     i32.ne
     if
-     local.get $3
      local.get $4
+     call $~lib/rt/pure/__release
+     local.get $5
+     call $~lib/rt/pure/__release
+     local.get $0
+     local.get $6
      i32.sub
      return
     end
-    local.get $0
+    local.get $3
     i32.const 2
     i32.add
-    local.set $0
+    local.set $3
     local.get $1
     i32.const 2
     i32.add
@@ -2263,14 +2275,26 @@
     br $while-continue|1
    end
   end
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
   i32.const 0
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $0
   local.get $1
+  call $~lib/rt/pure/__retain
+  local.tee $1
   i32.eq
   if
+   local.get $0
+   call $~lib/rt/pure/__release
+   local.get $1
+   call $~lib/rt/pure/__release
    i32.const 1
    return
   end
@@ -2293,8 +2317,16 @@
    local.get $2
    call $~lib/util/string/compareImpl
    i32.eqz
+   local.get $0
+   call $~lib/rt/pure/__release
+   local.get $1
+   call $~lib/rt/pure/__release
    return
   end
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
   i32.const 0
  )
  (func $~lib/util/string/stagedBinaryLookup (param $0 i32) (param $1 i32) (result i32)
@@ -3083,13 +3115,19 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   block $__inlined_func$~lib/string/String#concat (result i32)
    local.get $0
+   call $~lib/rt/pure/__retain
+   local.tee $2
    i32.const 18624
-   local.get $0
+   local.get $2
    select
-   local.set $2
+   local.set $3
    local.get $1
+   call $~lib/rt/pure/__retain
+   local.tee $5
    call $~lib/rt/pure/__retain
    local.tee $0
    i32.eqz
@@ -3104,16 +3142,16 @@
     i32.const 18624
     local.set $0
    end
-   local.get $2
-   call $~lib/string/String#get:length
-   i32.const 1
-   i32.shl
-   local.tee $3
-   local.get $0
+   local.get $3
    call $~lib/string/String#get:length
    i32.const 1
    i32.shl
    local.tee $4
+   local.get $0
+   call $~lib/string/String#get:length
+   i32.const 1
+   i32.shl
+   local.tee $6
    i32.add
    local.tee $1
    i32.eqz
@@ -3127,19 +3165,23 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.tee $1
-   local.get $2
    local.get $3
+   local.get $4
    call $~lib/memory/memory.copy
    local.get $1
-   local.get $3
+   local.get $4
    i32.add
    local.get $0
-   local.get $4
+   local.get $6
    call $~lib/memory/memory.copy
    local.get $0
    call $~lib/rt/pure/__release
    local.get $1
   end
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
  )
  (func $start:std/string-casemapping
   (local $0 i64)

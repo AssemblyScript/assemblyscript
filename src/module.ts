@@ -1488,12 +1488,13 @@ export class Module {
         passes.push("rse");
         passes.push("vacuum");
       }
-      if (usesARC) {
-        if (optimizeLevel < 3) {
-          passes.push("flatten");
-        }
-        passes.push("post-assemblyscript");
-      }
+      // FIXME: see issue #1288
+      // if (usesARC) {
+      //   if (optimizeLevel < 3) {
+      //     passes.push("flatten");
+      //   }
+      //   passes.push("post-assemblyscript");
+      // }
       passes.push("optimize-instructions");
       passes.push("inlining");
       passes.push("dce");
