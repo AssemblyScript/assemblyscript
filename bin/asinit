@@ -316,7 +316,9 @@ function ensureIndexJs() {
     fs.writeFileSync(indexFile, [
       "const fs = require(\"fs\");",
       "const loader = require(\"@assemblyscript/loader\");",
-      "module.exports = loader.instantiateSync(fs.readFileSync(__dirname + \"/build/optimized.wasm\"), { /* imports */ })"
+      "const imports = { /* imports go here */ };",
+      "const wasmModule = loader.instantiateSync(fs.readFileSync(__dirname + \"/build/optimized.wasm\"), imports);",
+      "module.exports = wasmModule.exports;"
     ].join("\n") + "\n");
     console.log(colors.green("  Created: ") + indexFile);
   } else {
