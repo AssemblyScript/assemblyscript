@@ -1515,7 +1515,7 @@
   i32.const 24
   i32.shr_s
   call $~lib/util/hash/hash8
-  local.tee $4
+  local.tee $5
   call $~lib/map/Map<i8,i32>#find
   local.tee $3
   if
@@ -1554,14 +1554,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $4
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $5
+   local.get $4
+   local.get $3
    i32.const 12
    i32.mul
    i32.add
@@ -1580,7 +1583,7 @@
    local.get $3
    local.get $0
    i32.load
-   local.get $4
+   local.get $5
    local.get $0
    i32.load offset=4
    i32.and
@@ -1593,6 +1596,8 @@
    local.get $1
    local.get $3
    i32.store
+   local.get $4
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -2615,14 +2620,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $5
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $1
    i32.const 1
    i32.add
    i32.store offset=16
    local.get $5
+   local.get $1
    i32.const 3
    i32.shl
    i32.add
@@ -2654,6 +2662,8 @@
    local.get $2
    local.get $1
    i32.store
+   local.get $5
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -2873,7 +2883,7 @@
   local.get $1
   local.get $1
   call $~lib/util/hash/hash32
-  local.tee $4
+  local.tee $5
   call $~lib/map/Map<i32,i32>#find
   local.tee $3
   if
@@ -2912,14 +2922,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $4
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $5
+   local.get $4
+   local.get $3
    i32.const 12
    i32.mul
    i32.add
@@ -2938,7 +2951,7 @@
    local.get $3
    local.get $0
    i32.load
-   local.get $4
+   local.get $5
    local.get $0
    i32.load offset=4
    i32.and
@@ -2951,6 +2964,8 @@
    local.get $1
    local.get $3
    i32.store
+   local.get $4
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3730,7 +3745,7 @@
   i32.const 255
   i32.and
   call $~lib/util/hash/hash8
-  local.tee $4
+  local.tee $5
   call $~lib/map/Map<i8,i32>#find
   local.tee $3
   if
@@ -3769,14 +3784,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $4
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $5
+   local.get $4
+   local.get $3
    i32.const 12
    i32.mul
    i32.add
@@ -3795,7 +3813,7 @@
    local.get $3
    local.get $0
    i32.load
-   local.get $4
+   local.get $5
    local.get $0
    i32.load offset=4
    i32.and
@@ -3808,6 +3826,8 @@
    local.get $1
    local.get $3
    i32.store
+   local.get $4
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -4169,14 +4189,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $5
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $1
    i32.const 1
    i32.add
    i32.store offset=16
    local.get $5
+   local.get $1
    i32.const 3
    i32.shl
    i32.add
@@ -4208,6 +4231,8 @@
    local.get $2
    local.get $1
    i32.store
+   local.get $5
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -4992,7 +5017,7 @@
   i32.const 16
   i32.shr_s
   call $~lib/util/hash/hash16
-  local.tee $4
+  local.tee $5
   call $~lib/map/Map<i16,i32>#find
   local.tee $3
   if
@@ -5031,14 +5056,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $4
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $5
+   local.get $4
+   local.get $3
    i32.const 12
    i32.mul
    i32.add
@@ -5057,7 +5085,7 @@
    local.get $3
    local.get $0
    i32.load
-   local.get $4
+   local.get $5
    local.get $0
    i32.load offset=4
    i32.and
@@ -5070,6 +5098,8 @@
    local.get $1
    local.get $3
    i32.store
+   local.get $4
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -5489,14 +5519,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $5
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $1
    i32.const 1
    i32.add
    i32.store offset=16
    local.get $5
+   local.get $1
    i32.const 3
    i32.shl
    i32.add
@@ -5528,6 +5561,8 @@
    local.get $2
    local.get $1
    i32.store
+   local.get $5
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -6277,7 +6312,7 @@
   i32.const 65535
   i32.and
   call $~lib/util/hash/hash16
-  local.tee $4
+  local.tee $5
   call $~lib/map/Map<i16,i32>#find
   local.tee $3
   if
@@ -6316,14 +6351,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $4
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $5
+   local.get $4
+   local.get $3
    i32.const 12
    i32.mul
    i32.add
@@ -6342,7 +6380,7 @@
    local.get $3
    local.get $0
    i32.load
-   local.get $4
+   local.get $5
    local.get $0
    i32.load offset=4
    i32.and
@@ -6355,6 +6393,8 @@
    local.get $1
    local.get $3
    i32.store
+   local.get $4
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -6720,14 +6760,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $5
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $1
    i32.const 1
    i32.add
    i32.store offset=16
    local.get $5
+   local.get $1
    i32.const 3
    i32.shl
    i32.add
@@ -6759,6 +6802,8 @@
    local.get $2
    local.get $1
    i32.store
+   local.get $5
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -8718,7 +8763,7 @@
   local.get $1
   local.get $1
   call $~lib/util/hash/hash64
-  local.tee $4
+  local.tee $5
   call $~lib/map/Map<i64,i32>#find
   local.tee $3
   if
@@ -8757,14 +8802,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $4
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $5
+   local.get $4
+   local.get $3
    i32.const 4
    i32.shl
    i32.add
@@ -8783,7 +8831,7 @@
    local.get $3
    local.get $0
    i32.load
-   local.get $4
+   local.get $5
    local.get $0
    i32.load offset=4
    i32.and
@@ -8796,6 +8844,8 @@
    local.get $2
    local.get $3
    i32.store
+   local.get $4
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -9277,14 +9327,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $5
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
    local.get $5
+   local.get $3
    i32.const 24
    i32.mul
    i32.add
@@ -9316,6 +9369,8 @@
    local.get $4
    local.get $3
    i32.store
+   local.get $5
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -10672,7 +10727,7 @@
   local.get $1
   i32.reinterpret_f32
   call $~lib/util/hash/hash32
-  local.tee $4
+  local.tee $5
   call $~lib/map/Map<f32,i32>#find
   local.tee $3
   if
@@ -10711,14 +10766,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $4
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $5
+   local.get $4
+   local.get $3
    i32.const 12
    i32.mul
    i32.add
@@ -10737,7 +10795,7 @@
    local.get $3
    local.get $0
    i32.load
-   local.get $4
+   local.get $5
    local.get $0
    i32.load offset=4
    i32.and
@@ -10750,6 +10808,8 @@
    local.get $2
    local.get $3
    i32.store
+   local.get $4
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -11070,7 +11130,7 @@
   local.get $1
   i32.reinterpret_f32
   call $~lib/util/hash/hash32
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<f32,i32>#find
   local.tee $3
   if
@@ -11109,14 +11169,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $5
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $4
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $4
+   local.get $5
+   local.get $3
    i32.const 12
    i32.mul
    i32.add
@@ -11135,7 +11198,7 @@
    local.get $3
    local.get $0
    i32.load
-   local.get $5
+   local.get $4
    local.get $0
    i32.load offset=4
    i32.and
@@ -11148,6 +11211,8 @@
    local.get $4
    local.get $3
    i32.store
+   local.get $5
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -11898,7 +11963,7 @@
   local.get $1
   i64.reinterpret_f64
   call $~lib/util/hash/hash64
-  local.tee $4
+  local.tee $5
   call $~lib/map/Map<f64,i32>#find
   local.tee $3
   if
@@ -11937,14 +12002,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $4
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $5
+   local.get $4
+   local.get $3
    i32.const 4
    i32.shl
    i32.add
@@ -11963,7 +12031,7 @@
    local.get $3
    local.get $0
    i32.load
-   local.get $4
+   local.get $5
    local.get $0
    i32.load offset=4
    i32.and
@@ -11976,6 +12044,8 @@
    local.get $2
    local.get $3
    i32.store
+   local.get $4
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
@@ -12371,14 +12441,17 @@
    end
    local.get $0
    i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $5
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $5
+   local.tee $3
    i32.const 1
    i32.add
    i32.store offset=16
    local.get $5
+   local.get $3
    i32.const 24
    i32.mul
    i32.add
@@ -12410,6 +12483,8 @@
    local.get $4
    local.get $3
    i32.store
+   local.get $5
+   call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain

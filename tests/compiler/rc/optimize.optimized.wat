@@ -28,15 +28,15 @@
  (export "getRef" (func $rc/optimize/getRef))
  (export "OptimizeARC.eliminates.linearArgument" (func $rc/optimize/eliminated_vi))
  (export "OptimizeARC.eliminates.linearLocal" (func $rc/optimize/eliminated_vi))
- (export "OptimizeARC.eliminates.linearChain" (func $rc/optimize/eliminated_vi))
+ (export "OptimizeARC.eliminates.linearChain" (func $rc/optimize/OptimizeARC.eliminates.linearChain))
  (export "OptimizeARC.eliminates.balancedReleases" (func $rc/optimize/eliminated_vii))
- (export "OptimizeARC.eliminates.partialReleases" (func $rc/optimize/eliminated_vii))
+ (export "OptimizeARC.eliminates.partialReleases" (func $rc/optimize/OptimizeARC.eliminates.partialReleases))
  (export "OptimizeARC.eliminates.balancedRetains" (func $rc/optimize/eliminated_viii))
- (export "OptimizeARC.eliminates.balancedInsideLoop" (func $rc/optimize/eliminated_vii))
+ (export "OptimizeARC.eliminates.balancedInsideLoop" (func $rc/optimize/OptimizeARC.eliminates.balancedInsideLoop))
  (export "OptimizeARC.eliminates.balancedOutsideLoop" (func $rc/optimize/eliminated_vii))
- (export "OptimizeARC.eliminates.balancedInsideOutsideLoop" (func $rc/optimize/eliminated_vii))
+ (export "OptimizeARC.eliminates.balancedInsideOutsideLoop" (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoop))
  (export "OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch" (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch))
- (export "OptimizeARC.eliminates.replace" (func $rc/optimize/eliminated_vii))
+ (export "OptimizeARC.eliminates.replace" (func $rc/optimize/OptimizeARC.eliminates.replace))
  (export "OptimizeARC.eliminates.replaceAlreadyRetained" (func $rc/optimize/eliminated_rr))
  (export "OptimizeARC.keeps.partialRetains" (func $rc/optimize/OptimizeARC.keeps.partialRetains))
  (export "OptimizeARC.keeps.reachesReturn" (func $rc/optimize/OptimizeARC.keeps.reachesReturn))
@@ -1000,23 +1000,113 @@
   end
  )
  (func $rc/optimize/eliminated_rr (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
   call $~lib/rt/tlsf/maybeInitialize
   call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
   call $~lib/rt/pure/__retain
+  local.set $1
+  call $~lib/rt/pure/__release
+  local.get $1
+ )
+ (func $rc/optimize/OptimizeARC.eliminates.linearChain (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  call $~lib/rt/pure/__retain
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+ )
+ (func $rc/optimize/OptimizeARC.eliminates.partialReleases (param $0 i32) (param $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  local.get $1
+  if
+   local.get $0
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $rc/optimize/OptimizeARC.eliminates.balancedInsideLoop (param $0 i32) (param $1 i32)
+  loop $while-continue|0
+   local.get $1
+   if
+    local.get $0
+    call $~lib/rt/pure/__retain
+    local.tee $0
+    call $~lib/rt/pure/__release
+    br $while-continue|0
+   end
+  end
+ )
+ (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoop (param $0 i32) (param $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  loop $while-continue|0
+   local.get $1
+   if
+    local.get $0
+    call $~lib/rt/pure/__release
+    local.get $0
+    call $~lib/rt/pure/__retain
+    local.set $0
+    br $while-continue|0
+   end
+  end
+  local.get $0
+  call $~lib/rt/pure/__release
  )
  (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
   loop $while-continue|0
    local.get $1
    if
     local.get $2
     if
+     local.get $0
+     call $~lib/rt/pure/__release
      return
     end
+    local.get $0
+    call $~lib/rt/pure/__release
+    local.get $0
+    call $~lib/rt/pure/__retain
+    local.set $0
     br $while-continue|0
    end
   end
+  local.get $0
+  call $~lib/rt/pure/__release
+ )
+ (func $rc/optimize/OptimizeARC.eliminates.replace (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  local.get $1
+  call $~lib/rt/pure/__retain
+  local.tee $2
+  local.tee $1
+  i32.ne
+  if
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $1
+   local.get $0
+   call $~lib/rt/pure/__release
+  end
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
  )
  (func $rc/optimize/OptimizeARC.keeps.partialRetains (param $0 i32) (param $1 i32)
   local.get $1
