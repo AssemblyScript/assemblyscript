@@ -609,6 +609,14 @@ declare namespace v128 {
   export function abs<T = f32 | f64>(a: v128): v128;
   /** Computes the square root of each lane. */
   export function sqrt<T = f32 | f64>(a: v128): v128;
+  /** Performs the ceiling operation on each lane. */
+  export function ceil<T = f32 | f64>(a: v128): v128;
+  /** Performs the floor operation on each lane. */
+  export function floor<T = f32 | f64>(a: v128): v128;
+  /** Rounds to the nearest integer towards zero of each lane. */
+  export function trunc<T = f32 | f64>(a: v128): v128;
+  /** Rounds to the nearest integer tied to even of each lane. */
+  export function nearest<T = f32 | f64>(a: v128): v128;
   /** Computes which lanes are equal. */
   export function eq<T>(a: v128, b: v128): v128;
   /** Computes which lanes are not equal. */
@@ -945,6 +953,14 @@ declare namespace f32x4 {
   export function abs(a: v128): v128;
   /** Computes the square root of each 32-bit float lane. */
   export function sqrt(a: v128): v128;
+  /** Performs the ceiling operation on each 32-bit float lane. */
+  export function ceil(a: v128): v128;
+  /** Performs the floor operation on each each 32-bit float lane. */
+  export function floor(a: v128): v128;
+  /** Rounds to the nearest integer towards zero of each 32-bit float lane. */
+  export function trunc(a: v128): v128;
+  /** Rounds to the nearest integer tied to even of each 32-bit float lane. */
+  export function nearest(a: v128): v128;
   /** Computes which 32-bit float lanes are equal. */
   export function eq(a: v128, b: v128): v128;
   /** Computes which 32-bit float lanes are not equal. */
@@ -997,6 +1013,14 @@ declare namespace f64x2 {
   export function abs(a: v128): v128;
   /** Computes the square root of each 64-bit float lane. */
   export function sqrt(a: v128): v128;
+  /** Performs the ceiling operation on each 64-bit float lane. */
+  export function ceil(a: v128): v128;
+  /** Performs the floor operation on each each 64-bit float lane. */
+  export function floor(a: v128): v128;
+  /** Rounds to the nearest integer towards zero of each 64-bit float lane. */
+  export function trunc(a: v128): v128;
+  /** Rounds to the nearest integer tied to even of each 64-bit float lane. */
+  export function nearest(a: v128): v128;
   /** Computes which 64-bit float lanes are equal. */
   export function eq(a: v128, b: v128): v128;
   /** Computes which 64-bit float lanes are not equal. */
