@@ -69,15 +69,15 @@ jobs:
         cd lib/loader
         npm publish --tag $CHANNEL --access public
         cd ../..
-    - name: Publish to gpr
-      env:
-        NPM_REGISTRY: "npm.pkg.github.com"
-        NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        npm config set "//${NPM_REGISTRY}/:_authToken=${NPM_AUTH_TOKEN}"
-        sed -i 's/"assemblyscript"/"@assemblyscript\/assemblyscript"/' package.json
-        sed -i 's/"assemblyscript"/"@assemblyscript\/assemblyscript"/' package-lock.json
-        npm publish --registry=https://${NPM_REGISTRY}
-        cd lib/loader
-        npm publish --registry=https://${NPM_REGISTRY}
-        cd ../..
+    # - name: Publish to gpr
+    #   env:
+    #     NPM_REGISTRY: "npm.pkg.github.com"
+    #     NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   run: |
+    #     npm config set "//${NPM_REGISTRY}/:_authToken=${NPM_AUTH_TOKEN}"
+    #     sed -i 's/"assemblyscript"/"@assemblyscript\/assemblyscript"/' package.json
+    #     sed -i 's/"assemblyscript"/"@assemblyscript\/assemblyscript"/' package-lock.json
+    #     npm publish --registry=https://${NPM_REGISTRY}
+    #     cd lib/loader
+    #     npm publish --registry=https://${NPM_REGISTRY}
+    #     cd ../..
