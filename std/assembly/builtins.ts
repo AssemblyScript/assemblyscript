@@ -1121,6 +1121,22 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
+  export declare function ceil<T>(a: v128): v128; // f32, f64 only
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function floor<T>(a: v128): v128; // f32, f64 only
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function trunc<T>(a: v128): v128; // f32, f64 only
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function nearest<T>(a: v128): v128; // f32, f64 only
+
+  // @ts-ignore: decorator
+  @builtin
   export declare function eq<T>(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
@@ -1791,6 +1807,22 @@ export namespace f32x4 {
 
   // @ts-ignore: decorator
   @builtin
+  export declare function ceil(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function floor(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function trunc(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function nearest(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
   export declare function eq(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
@@ -1891,6 +1923,22 @@ export namespace f64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function sqrt(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function ceil(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function floor(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function trunc(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function nearest(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin

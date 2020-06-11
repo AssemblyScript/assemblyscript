@@ -108,7 +108,6 @@ export declare function _BinaryenRethrowId(): BinaryenExpressionId;
 export declare function _BinaryenBrOnExnId(): BinaryenExpressionId;
 export declare function _BinaryenTupleMakeId(): BinaryenExpressionId;
 export declare function _BinaryenTupleExtractId(): BinaryenExpressionId;
-export declare function _BinaryenPushId(): BinaryenExpressionId;
 export declare function _BinaryenPopId(): BinaryenExpressionId;
 
 type BinaryenModuleRef = usize;
@@ -526,7 +525,6 @@ export declare function _BinaryenTupleExtract(module: BinaryenModuleRef, tuple: 
 export declare function _BinaryenTupleExtractGetTuple(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenTupleExtractGetIndex(expr: BinaryenExpressionRef): BinaryenIndex;
 
-export declare function _BinaryenPush(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenPop(module: BinaryenModuleRef, type: BinaryenType): BinaryenExpressionRef;
 
 export declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): BinaryenExpressionId;
@@ -694,8 +692,6 @@ export declare function _BinaryenRethrowGetExnref(expr: BinaryenExpressionRef): 
 export declare function _BinaryenBrOnExnGetEvent(expr: BinaryenExpressionRef): usize;
 export declare function _BinaryenBrOnExnGetName(expr: BinaryenExpressionRef): usize;
 export declare function _BinaryenBrOnExnGetExnref(expr: BinaryenExpressionRef): BinaryenExpressionRef;
-
-export declare function _BinaryenPushGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 type BinaryenFunctionRef = usize;
 

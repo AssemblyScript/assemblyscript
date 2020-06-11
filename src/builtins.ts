@@ -358,6 +358,10 @@ export namespace BuiltinNames {
   export const v128_avgr = "~lib/builtins/v128.avgr";
   export const v128_abs = "~lib/builtins/v128.abs";
   export const v128_sqrt = "~lib/builtins/v128.sqrt";
+  export const v128_ceil = "~lib/builtins/v128.ceil";
+  export const v128_floor = "~lib/builtins/v128.floor";
+  export const v128_trunc = "~lib/builtins/v128.trunc";
+  export const v128_nearest = "~lib/builtins/v128.nearest";
   export const v128_eq = "~lib/builtins/v128.eq";
   export const v128_ne = "~lib/builtins/v128.ne";
   export const v128_lt = "~lib/builtins/v128.lt";
@@ -527,6 +531,10 @@ export namespace BuiltinNames {
   export const f32x4_pmax = "~lib/builtins/f32x4.pmax";
   export const f32x4_abs = "~lib/builtins/f32x4.abs";
   export const f32x4_sqrt = "~lib/builtins/f32x4.sqrt";
+  export const f32x4_ceil = "~lib/builtins/f32x4.ceil";
+  export const f32x4_floor = "~lib/builtins/f32x4.floor";
+  export const f32x4_trunc = "~lib/builtins/f32x4.trunc";
+  export const f32x4_nearest = "~lib/builtins/f32x4.nearest";
   export const f32x4_eq = "~lib/builtins/f32x4.eq";
   export const f32x4_ne = "~lib/builtins/f32x4.ne";
   export const f32x4_lt = "~lib/builtins/f32x4.lt";
@@ -552,6 +560,10 @@ export namespace BuiltinNames {
   export const f64x2_pmax = "~lib/builtins/f64x2.pmax";
   export const f64x2_abs = "~lib/builtins/f64x2.abs";
   export const f64x2_sqrt = "~lib/builtins/f64x2.sqrt";
+  export const f64x2_ceil = "~lib/builtins/f64x2.ceil";
+  export const f64x2_floor = "~lib/builtins/f64x2.floor";
+  export const f64x2_trunc = "~lib/builtins/f64x2.trunc";
+  export const f64x2_nearest = "~lib/builtins/f64x2.nearest";
   export const f64x2_eq = "~lib/builtins/f64x2.eq";
   export const f64x2_ne = "~lib/builtins/f64x2.ne";
   export const f64x2_lt = "~lib/builtins/f64x2.lt";
@@ -4538,6 +4550,126 @@ function builtin_v128_sqrt(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v128_sqrt, builtin_v128_sqrt);
 
+// v128.ceil<T!>(a: v128) -> v128
+function builtin_v128_ceil(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  if (!type.is(TypeFlags.REFERENCE)) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.unary(UnaryOp.CeilF32x4, arg0);
+      case TypeKind.F64: return module.unary(UnaryOp.CeilF64x2, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.ceil", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_ceil, builtin_v128_ceil);
+
+// v128.floor<T!>(a: v128) -> v128
+function builtin_v128_floor(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  if (!type.is(TypeFlags.REFERENCE)) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.unary(UnaryOp.FloorF32x4, arg0);
+      case TypeKind.F64: return module.unary(UnaryOp.FloorF64x2, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.floor", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_floor, builtin_v128_floor);
+
+// v128.trunc<T!>(a: v128) -> v128
+function builtin_v128_trunc(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  if (!type.is(TypeFlags.REFERENCE)) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.unary(UnaryOp.TruncF32x4, arg0);
+      case TypeKind.F64: return module.unary(UnaryOp.TruncF64x2, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.trunc", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_trunc, builtin_v128_trunc);
+
+// v128.nearest<T!>(a: v128) -> v128
+function builtin_v128_nearest(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  if (!type.is(TypeFlags.REFERENCE)) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.unary(UnaryOp.NearestF32x4, arg0);
+      case TypeKind.F64: return module.unary(UnaryOp.NearestF64x2, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.nearest", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_nearest, builtin_v128_nearest);
+
 // v128.convert<T!>(a: v128) -> v128
 function builtin_v128_convert(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
@@ -7550,6 +7682,42 @@ function builtin_f32x4_sqrt(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_sqrt, builtin_f32x4_sqrt);
 
+// f32x4.ceil -> v128.ceil<f32>
+function builtin_f32x4_ceil(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_ceil(ctx);
+}
+builtins.set(BuiltinNames.f32x4_ceil, builtin_f32x4_ceil);
+
+// f32x4.floor -> v128.floor<f32>
+function builtin_f32x4_floor(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_floor(ctx);
+}
+builtins.set(BuiltinNames.f32x4_floor, builtin_f32x4_floor);
+
+// f32x4.trunc -> v128.trunc<f32>
+function builtin_f32x4_trunc(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_trunc(ctx);
+}
+builtins.set(BuiltinNames.f32x4_trunc, builtin_f32x4_trunc);
+
+// f32x4.nearest -> v128.nearest<f32>
+function builtin_f32x4_nearest(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_nearest(ctx);
+}
+builtins.set(BuiltinNames.f32x4_nearest, builtin_f32x4_nearest);
+
 // f32x4.eq -> v128.eq<f32>
 function builtin_f32x4_eq(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -7765,6 +7933,42 @@ function builtin_f64x2_sqrt(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_sqrt(ctx);
 }
 builtins.set(BuiltinNames.f64x2_sqrt, builtin_f64x2_sqrt);
+
+// f64x2.ceil -> v128.ceil<f64>
+function builtin_f64x2_ceil(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_ceil(ctx);
+}
+builtins.set(BuiltinNames.f64x2_ceil, builtin_f64x2_ceil);
+
+// f64x2.floor -> v128.floor<f64>
+function builtin_f64x2_floor(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_floor(ctx);
+}
+builtins.set(BuiltinNames.f64x2_floor, builtin_f64x2_floor);
+
+// f64x2.trunc -> v128.trunc<f64>
+function builtin_f64x2_trunc(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_trunc(ctx);
+}
+builtins.set(BuiltinNames.f64x2_trunc, builtin_f64x2_trunc);
+
+// f64x2.nearest -> v128.nearest<f64>
+function builtin_f64x2_nearest(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_nearest(ctx);
+}
+builtins.set(BuiltinNames.f64x2_nearest, builtin_f64x2_nearest);
 
 // f64x2.eq -> v128.eq<f64>
 function builtin_f64x2_eq(ctx: BuiltinContext): ExpressionRef {
