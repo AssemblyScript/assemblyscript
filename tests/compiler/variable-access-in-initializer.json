@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "TS2448: Variable 'variable-access-in-initializer/a' used before its declaration.",
+    "TS2448: Variable 'variable-access-in-initializer/test~b' used before its declaration.",
+    "EOF"
+  ]
+}

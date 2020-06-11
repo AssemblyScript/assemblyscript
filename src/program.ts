@@ -3267,6 +3267,9 @@ export class Parameter {
 /** A local variable. */
 export class Local extends VariableLikeElement {
 
+  /** Original name of the (temporary) local. */
+  private originalName: string;
+
   /** Constructs a new local variable. */
   constructor(
     /** Simple name. */
@@ -3286,9 +3289,23 @@ export class Local extends VariableLikeElement {
       parent,
       declaration
     );
+    this.originalName = name;
     this.index = index;
     assert(type != Type.void);
     this.setType(type);
+  }
+
+  /** Sets the temporary name of this local. */
+  setTemporaryName(name: string): void {
+    this.name = name;
+    this.internalName = mangleInternalName(name, this.parent, false);
+  }
+
+  /** Resets the temporary name of this local. */
+  resetTemporaryName(): void {
+    var name = this.originalName;
+    this.name = name;
+    this.internalName = mangleInternalName(name, this.parent, false);
   }
 }
 
