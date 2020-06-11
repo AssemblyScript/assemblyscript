@@ -62,21 +62,23 @@ export enum CommonFlags {
   RESOLVED = 1 << 21,
   /** Is compiled. */
   COMPILED = 1 << 22,
+  /** Did error. */
+  ERRORED = 1 << 23,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 23,
+  INLINED = 1 << 24,
   /** Is scoped. */
-  SCOPED = 1 << 24,
+  SCOPED = 1 << 25,
   /** Is a stub. */
-  STUB = 1 << 25,
+  STUB = 1 << 26,
   /** Is a virtual method. */
-  VIRTUAL = 1 << 26,
+  VIRTUAL = 1 << 27,
   /** Is (part of) a closure. */
-  CLOSURE = 1 << 27,
+  CLOSURE = 1 << 28,
 
   // Other
 
   /** Is quoted. */
-  QUOTED = 1 << 28
+  QUOTED = 1 << 29
 }
 
 /** Path delimiter inserted between file system levels. */

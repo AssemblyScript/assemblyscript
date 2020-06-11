@@ -13,7 +13,7 @@ binaryen.ready.then(() => {
       var match = val.match(/\b(_(?:Binaryen|Relooper|ExpressionRunner)\w+)\b/);
       if (match) {
         let fn = match[1];
-        if (typeof binaryen[fn] !== "function") throw Error("API mismatch: Is Binaryen up to date?");
+        if (typeof binaryen[fn] !== "function") throw Error("API mismatch on '" + fn + "': Is Binaryen up to date?");
         let id = binaryen[fn]();
         console.log(fn + " = " + id);
         return key + " = " + id + " /* " + fn + " */";

@@ -87,7 +87,8 @@ module.exports = {
         "es6": true
       },
       files: [
-        "**/*.js"
+        "**/*.js",
+        "bin/*"
       ],
       rules: {
         // Node's support for ESM is still not great, but this rule is likely

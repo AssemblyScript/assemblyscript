@@ -336,6 +336,7 @@ export class Flow {
     var parentFunction = this.parentFunction;
     var temps: Local[];
     assert(local.type != null); // internal error
+    local.resetTemporaryName();
     switch (<u32>local.type.toNativeType()) {
       case <u32>NativeType.I32: {
         let tempI32s = parentFunction.tempI32s;
@@ -395,12 +396,24 @@ export class Flow {
   /** Adds a new scoped local of the specified name. */
   addScopedLocal(name: string, type: Type, except: Set<i32> | null = null): Local {
     var scopedLocal = this.getTempLocal(type, except);
+    scopedLocal.setTemporaryName(name);
     var scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     else assert(!scopedLocals.has(name));
     scopedLocal.set(CommonFlags.SCOPED);
     scopedLocals.set(name, scopedLocal);
     return scopedLocal;
+  }
+
+  /** Adds a new scoped dummy local of the specified name. */
+  addScopedDummyLocal(name: string, type: Type): Local {
+    var scopedDummy = new Local(name, -1, type, this.parentFunction);
+    var scopedLocals = this.scopedLocals;
+    if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
+    else assert(!scopedLocals.has(name));
+    scopedDummy.set(CommonFlags.SCOPED);
+    scopedLocals.set(name, scopedDummy);
+    return scopedDummy;
   }
 
   /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
@@ -448,6 +461,15 @@ export class Flow {
       }
     }
     return false;
+  }
+
+  /** Frees a single scoped local by its name. */
+  freeScopedDummyLocal(name: string): void {
+    var scopedLocals = assert(this.scopedLocals);
+    assert(scopedLocals.has(name));
+    let local = assert(scopedLocals.get(name));
+    assert(local.index == -1);
+    scopedLocals.delete(name);
   }
 
   /** Frees this flow's scoped variables and returns its parent flow. */

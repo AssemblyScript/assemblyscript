@@ -2395,6 +2395,17 @@ export class Resolver extends DiagnosticEmitter {
         if (!instance) return null;
         return instance.signature.returnType;
       }
+      case ElementKind.GLOBAL:
+      case ElementKind.LOCAL:
+      case ElementKind.FIELD: {
+        let varType = (<VariableLikeElement>target).type;
+        let varElement = this.getElementOfType(varType);
+        if (!varElement || varElement.kind != ElementKind.FUNCTION_TARGET) {
+          break;
+        }
+        target = varElement;
+        // fall-through
+      }
       case ElementKind.FUNCTION_TARGET: {
         return (<FunctionTarget>target).signature.returnType;
       }

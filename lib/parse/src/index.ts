@@ -5,7 +5,10 @@ export { Type, SectionId, ExternalKind };
 var compiled: WebAssembly.Module | null = null;
 
 declare var WASM_DATA: string; // injected by webpack
-if (typeof WASM_DATA !== "string") WASM_DATA = require("fs").readFileSync(__dirname + "/../build/index.wasm", "base64");
+if (typeof WASM_DATA !== "string") {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  WASM_DATA = require("fs").readFileSync(__dirname + "/../build/index.wasm", "base64");
+}
 
 /** Options specified to the parser. The `onSection` callback determines the sections being evaluated in detail. */
 export interface ParseOptions {
