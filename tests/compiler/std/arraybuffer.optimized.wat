@@ -1784,6 +1784,42 @@
    call $~lib/builtins/abort
    unreachable
   end
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null> (result i32)
+   i32.const 0
+   call $~lib/rt/pure/__release
+   i32.const 0
+   br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null>
+  end
+  if
+   i32.const 0
+   i32.const 1312
+   i32.const 43
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $~lib/rt/pure/__release
+  i32.const 0
+  if
+   i32.const 0
+   i32.const 1312
+   i32.const 44
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $~lib/rt/pure/__release
+  i32.const 0
+  if
+   i32.const 0
+   i32.const 1312
+   i32.const 45
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 12
   i32.const 5
   call $~lib/rt/tlsf/__alloc
@@ -1826,11 +1862,11 @@
   local.set $4
   local.get $6
   i32.load
-  local.tee $1
+  local.tee $0
   i32.const 16
   i32.sub
   i32.load offset=12
-  local.tee $0
+  local.tee $1
   local.set $3
   i32.const 12
   i32.const 15
@@ -1845,11 +1881,13 @@
   local.get $8
   i32.const 0
   i32.store offset=8
-  local.get $0
+  local.get $1
   i32.const 1073741808
   i32.gt_u
-  local.get $0
   local.get $1
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $1
   i32.const 16
   i32.sub
   i32.load offset=12
@@ -1886,6 +1924,8 @@
   local.get $8
   local.get $3
   i32.store offset=8
+  local.get $1
+  call $~lib/rt/pure/__release
   local.get $9
   call $~lib/rt/pure/__release
   local.get $7

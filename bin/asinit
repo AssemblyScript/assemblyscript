@@ -42,7 +42,11 @@ const compilerDir = path.join(__dirname, "..");
 const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
 const tsconfigFile = path.join(assemblyDir, "tsconfig.json");
-const tsconfigBase = path.relative(assemblyDir, path.join(compilerDir, "std", "assembly.json"));
+let tsconfigBase = path.relative(assemblyDir, path.join(compilerDir, "std", "assembly.json"));
+if (/^(\.\.[/\\])*node_modules[/\\]assemblyscript[/\\]/.test(tsconfigBase)) {
+  // Use node resolution if the compiler is a normal dependency
+  tsconfigBase = "assemblyscript/std/assembly.json";
+}
 const entryFile = path.join(assemblyDir, "index.ts");
 const buildDir = path.join(projectDir, "build");
 const testsDir = path.join(projectDir, "tests");
@@ -247,7 +251,7 @@ function ensureGitignore() {
 }
 
 function ensurePackageJson() {
-  console.log("- Making sure that 'package.json' contains the build commands...")
+  console.log("- Making sure that 'package.json' contains the build commands...");
   const entryPath = path.relative(projectDir, entryFile).replace(/\\/g, "/");
   const buildUntouched = "asc " + entryPath + " -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug";
   const buildOptimized = "asc " + entryPath + " -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize";
