@@ -2239,6 +2239,7 @@ export enum SideEffects {
   ImplicitTrap = 256 /* _BinaryenSideEffectImplicitTrap */,
   IsAtomic = 512 /* _BinaryenSideEffectIsAtomic */,
   Throws = 1024 /* _BinaryenSideEffectThrows */,
+  DanglingPop = 2048 /* _BinaryenSideEffectDanglingPop */,
   Any = 4095 /* _BinaryenSideEffectAny */
 }
 
