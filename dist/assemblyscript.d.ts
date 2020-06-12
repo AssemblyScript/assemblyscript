@@ -56,18 +56,20 @@ declare module "assemblyscript/src/common" {
         RESOLVED = 2097152,
         /** Is compiled. */
         COMPILED = 4194304,
+        /** Did error. */
+        ERRORED = 8388608,
         /** Has a constant value and is therefore inlined. */
-        INLINED = 8388608,
+        INLINED = 16777216,
         /** Is scoped. */
-        SCOPED = 16777216,
+        SCOPED = 33554432,
         /** Is a stub. */
-        STUB = 33554432,
+        STUB = 67108864,
         /** Is a virtual method. */
-        VIRTUAL = 67108864,
+        VIRTUAL = 134217728,
         /** Is (part of) a closure. */
-        CLOSURE = 134217728,
+        CLOSURE = 268435456,
         /** Is quoted. */
-        QUOTED = 268435456
+        QUOTED = 536870912
     }
     /** Path delimiter inserted between file system levels. */
     export const PATH_DELIMITER = "/";
@@ -358,6 +360,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         A_class_can_only_implement_an_interface = 2422,
         A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
         Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses = 2445,
+        Variable_0_used_before_its_declaration = 2448,
         The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
         Type_0_has_no_property_1 = 2460,
         The_0_operator_cannot_be_applied_to_type_1 = 2469,
@@ -2381,17 +2384,16 @@ declare module "assemblyscript/src/module" {
         DataDrop = 35,
         MemoryCopy = 36,
         MemoryFill = 37,
-        Push = 38,
-        Pop = 39,
-        RefNull = 40,
-        RefIsNull = 41,
-        RefFunc = 42,
-        Try = 43,
-        Throw = 44,
-        Rethrow = 45,
-        BrOnExn = 46,
-        TupleMake = 47,
-        TupleExtract = 48
+        Pop = 38,
+        RefNull = 39,
+        RefIsNull = 40,
+        RefFunc = 41,
+        Try = 42,
+        Throw = 43,
+        Rethrow = 44,
+        BrOnExn = 45,
+        TupleMake = 46,
+        TupleExtract = 47
     }
     export enum UnaryOp {
         ClzI32 = 0,
@@ -2482,25 +2484,33 @@ declare module "assemblyscript/src/module" {
         AbsF32x4 = 85,
         NegF32x4 = 86,
         SqrtF32x4 = 87,
-        AbsF64x2 = 88,
-        NegF64x2 = 89,
-        SqrtF64x2 = 90,
-        TruncSatF32x4ToI32x4 = 91,
-        TruncSatF32x4ToU32x4 = 92,
-        TruncSatF64x2ToI64x2 = 93,
-        TruncSatF64x2ToU64x2 = 94,
-        ConvertI32x4ToF32x4 = 95,
-        ConvertU32x4ToF32x4 = 96,
-        ConvertI64x2ToF64x2 = 97,
-        ConvertU64x2ToF64x2 = 98,
-        WidenLowI8x16ToI16x8 = 99,
-        WidenHighI8x16ToI16x8 = 100,
-        WidenLowU8x16ToU16x8 = 101,
-        WidenHighU8x16ToU16x8 = 102,
-        WidenLowI16x8ToI32x4 = 103,
-        WidenHighI16x8ToI32x4 = 104,
-        WidenLowU16x8ToU32x4 = 105,
-        WidenHighU16x8ToU32x4 = 106
+        CeilF32x4 = 88,
+        FloorF32x4 = 89,
+        TruncF32x4 = 90,
+        NearestF32x4 = 91,
+        AbsF64x2 = 92,
+        NegF64x2 = 93,
+        SqrtF64x2 = 94,
+        CeilF64x2 = 95,
+        FloorF64x2 = 96,
+        TruncF64x2 = 97,
+        NearestF64x2 = 98,
+        TruncSatF32x4ToI32x4 = 99,
+        TruncSatF32x4ToU32x4 = 100,
+        TruncSatF64x2ToI64x2 = 101,
+        TruncSatF64x2ToU64x2 = 102,
+        ConvertI32x4ToF32x4 = 103,
+        ConvertU32x4ToF32x4 = 104,
+        ConvertI64x2ToF64x2 = 105,
+        ConvertU64x2ToF64x2 = 106,
+        WidenLowI8x16ToI16x8 = 107,
+        WidenHighI8x16ToI16x8 = 108,
+        WidenLowU8x16ToU16x8 = 109,
+        WidenHighU8x16ToU16x8 = 110,
+        WidenLowI16x8ToI32x4 = 111,
+        WidenHighI16x8ToI32x4 = 112,
+        WidenLowU16x8ToU32x4 = 113,
+        WidenHighU16x8ToU32x4 = 114
     }
     export enum BinaryOp {
         AddI32 = 0,
@@ -2659,27 +2669,27 @@ declare module "assemblyscript/src/module" {
         DotI16x8 = 153,
         AddI64x2 = 154,
         SubI64x2 = 155,
-        AddF32x4 = 156,
-        SubF32x4 = 157,
-        MulF32x4 = 158,
-        DivF32x4 = 159,
-        MinF32x4 = 160,
-        MaxF32x4 = 161,
-        PminF32x4 = 162,
-        PmaxF32x4 = 163,
-        AddF64x2 = 164,
-        SubF64x2 = 165,
-        MulF64x2 = 166,
-        DivF64x2 = 167,
-        MinF64x2 = 168,
-        MaxF64x2 = 169,
-        PminF64x2 = 170,
-        PmaxF64x2 = 171,
-        NarrowI16x8ToI8x16 = 172,
-        NarrowU16x8ToU8x16 = 173,
-        NarrowI32x4ToI16x8 = 174,
-        NarrowU32x4ToU16x8 = 175,
-        SwizzleV8x16 = 176
+        AddF32x4 = 157,
+        SubF32x4 = 158,
+        MulF32x4 = 159,
+        DivF32x4 = 160,
+        MinF32x4 = 161,
+        MaxF32x4 = 162,
+        PminF32x4 = 163,
+        PmaxF32x4 = 164,
+        AddF64x2 = 165,
+        SubF64x2 = 166,
+        MulF64x2 = 167,
+        DivF64x2 = 168,
+        MinF64x2 = 169,
+        MaxF64x2 = 170,
+        PminF64x2 = 171,
+        PmaxF64x2 = 172,
+        NarrowI16x8ToI8x16 = 173,
+        NarrowU16x8ToU8x16 = 174,
+        NarrowI32x4ToI16x8 = 175,
+        NarrowU32x4ToU16x8 = 176,
+        SwizzleV8x16 = 177
     }
     export enum HostOp {
         MemorySize = 0,
@@ -2815,8 +2825,9 @@ declare module "assemblyscript/src/module" {
         throw(eventName: string, operands: ExpressionRef[]): ExpressionRef;
         rethrow(exnref: ExpressionRef): ExpressionRef;
         br_on_exn(name: string, eventName: string, exnref: ExpressionRef): ExpressionRef;
-        push(value: ExpressionRef): ExpressionRef;
         pop(type: NativeType): ExpressionRef;
+        tuple_make(operands: ExpressionRef[]): ExpressionRef;
+        tuple_extract(tuple: ExpressionRef, index: Index): ExpressionRef;
         simd_extract(op: SIMDExtractOp, vec: ExpressionRef, idx: number): ExpressionRef;
         simd_replace(op: SIMDReplaceOp, vec: ExpressionRef, idx: number, value: ExpressionRef): ExpressionRef;
         simd_shuffle(vec1: ExpressionRef, vec2: ExpressionRef, mask: Uint8Array): ExpressionRef;
@@ -2825,8 +2836,6 @@ declare module "assemblyscript/src/module" {
         simd_load(op: SIMDLoadOp, ptr: ExpressionRef, offset: number, align: number): ExpressionRef;
         ref_is_null(expr: ExpressionRef): ExpressionRef;
         ref_func(name: string): ExpressionRef;
-        tuple_make(operands: ExpressionRef[]): ExpressionRef;
-        tuple_extract(tuple: ExpressionRef, index: Index): ExpressionRef;
         addGlobal(name: string, type: NativeType, mutable: boolean, initializer: ExpressionRef): GlobalRef;
         getGlobal(name: string): GlobalRef;
         removeGlobal(name: string): void;
@@ -3005,7 +3014,8 @@ declare module "assemblyscript/src/module" {
         ImplicitTrap = 256,
         IsAtomic = 512,
         Throws = 1024,
-        Any = 2047
+        DanglingPop = 2048,
+        Any = 4095
     }
     export function getSideEffects(expr: ExpressionRef, features?: FeatureFlags): SideEffects;
     export function hasSideEffects(expr: ExpressionRef, features?: FeatureFlags): boolean;
@@ -3382,10 +3392,14 @@ declare module "assemblyscript/src/flow" {
         getScopedLocal(name: string): Local | null;
         /** Adds a new scoped local of the specified name. */
         addScopedLocal(name: string, type: Type, except?: Set<number> | null): Local;
+        /** Adds a new scoped dummy local of the specified name. */
+        addScopedDummyLocal(name: string, type: Type): Local;
         /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
         addScopedAlias(name: string, type: Type, index: number, reportNode?: Node | null): Local;
         /** Tests if this flow has any scoped locals that must be free'd. */
         get hasScopedLocals(): boolean;
+        /** Frees a single scoped local by its name. */
+        freeScopedDummyLocal(name: string): void;
         /** Frees this flow's scoped variables and returns its parent flow. */
         freeScopedLocals(): void;
         /** Looks up the local of the specified name in the current scope. */
@@ -4499,6 +4513,8 @@ declare module "assemblyscript/src/program" {
     export class Local extends VariableLikeElement {
         /** Zero-based index within the enclosing function. `-1` indicates a virtual local. */
         index: number;
+        /** Original name of the (temporary) local. */
+        private originalName;
         /** Constructs a new local variable. */
         constructor(
         /** Simple name. */
@@ -4511,6 +4527,10 @@ declare module "assemblyscript/src/program" {
         parent: Function, 
         /** Declaration reference. */
         declaration?: VariableLikeDeclarationStatement);
+        /** Sets the temporary name of this local. */
+        setTemporaryName(name: string): void;
+        /** Resets the temporary name of this local. */
+        resetTemporaryName(): void;
     }
     /** A yet unresolved function prototype. */
     export class FunctionPrototype extends DeclaredElement {
@@ -5009,6 +5029,8 @@ declare module "assemblyscript/src/compiler" {
         pendingClassInstanceOf: Set<ClassPrototype>;
         /** Functions potentially involving a virtual call. */
         virtualCalls: Set<Function>;
+        /** Elements currently undergoing compilation. */
+        pendingElements: Set<Element>;
         /** Compiles a {@link Program} to a {@link Module} using the specified options. */
         static compile(program: Program): Module;
         /** Constructs a new compiler for a {@link Program} using the specified options. */
@@ -5596,6 +5618,10 @@ declare module "assemblyscript/src/builtins" {
         const v128_avgr = "~lib/builtins/v128.avgr";
         const v128_abs = "~lib/builtins/v128.abs";
         const v128_sqrt = "~lib/builtins/v128.sqrt";
+        const v128_ceil = "~lib/builtins/v128.ceil";
+        const v128_floor = "~lib/builtins/v128.floor";
+        const v128_trunc = "~lib/builtins/v128.trunc";
+        const v128_nearest = "~lib/builtins/v128.nearest";
         const v128_eq = "~lib/builtins/v128.eq";
         const v128_ne = "~lib/builtins/v128.ne";
         const v128_lt = "~lib/builtins/v128.lt";
@@ -5759,6 +5785,10 @@ declare module "assemblyscript/src/builtins" {
         const f32x4_pmax = "~lib/builtins/f32x4.pmax";
         const f32x4_abs = "~lib/builtins/f32x4.abs";
         const f32x4_sqrt = "~lib/builtins/f32x4.sqrt";
+        const f32x4_ceil = "~lib/builtins/f32x4.ceil";
+        const f32x4_floor = "~lib/builtins/f32x4.floor";
+        const f32x4_trunc = "~lib/builtins/f32x4.trunc";
+        const f32x4_nearest = "~lib/builtins/f32x4.nearest";
         const f32x4_eq = "~lib/builtins/f32x4.eq";
         const f32x4_ne = "~lib/builtins/f32x4.ne";
         const f32x4_lt = "~lib/builtins/f32x4.lt";
@@ -5783,6 +5813,10 @@ declare module "assemblyscript/src/builtins" {
         const f64x2_pmax = "~lib/builtins/f64x2.pmax";
         const f64x2_abs = "~lib/builtins/f64x2.abs";
         const f64x2_sqrt = "~lib/builtins/f64x2.sqrt";
+        const f64x2_ceil = "~lib/builtins/f64x2.ceil";
+        const f64x2_floor = "~lib/builtins/f64x2.floor";
+        const f64x2_trunc = "~lib/builtins/f64x2.trunc";
+        const f64x2_nearest = "~lib/builtins/f64x2.nearest";
         const f64x2_eq = "~lib/builtins/f64x2.eq";
         const f64x2_ne = "~lib/builtins/f64x2.ne";
         const f64x2_lt = "~lib/builtins/f64x2.lt";
