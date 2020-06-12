@@ -35,6 +35,7 @@
     "eslint": "^7.2.0",
     "glob": "^7.1.6",
     "physical-cpu-count": "^2.0.0",
+    "semantic-release": "^17.0.8",
     "source-map-support": "^0.5.19",
     "ts-loader": "^7.0.5",
     "ts-node": "^6.2.0",
