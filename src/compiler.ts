@@ -361,6 +361,8 @@ export class Compiler extends DiagnosticEmitter {
   pendingClassInstanceOf: Set<ClassPrototype> = new Set();
   /** Functions potentially involving a virtual call. */
   virtualCalls: Set<Function> = new Set();
+  /** Elements currently undergoing compilation. */
+  pendingElements: Set<Element> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -993,8 +995,11 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Compiles a global variable. */
   compileGlobal(global: Global): bool {
-    if (global.is(CommonFlags.COMPILED)) return true;
+    if (global.is(CommonFlags.COMPILED)) return !global.is(CommonFlags.ERRORED);
     global.set(CommonFlags.COMPILED);
+
+    var pendingElements = this.pendingElements;
+    pendingElements.add(global);
 
     var module = this.module;
     var initExpr: ExpressionRef = 0;
@@ -1006,12 +1011,18 @@ export class Compiler extends DiagnosticEmitter {
       // Resolve type if annotated
       if (typeNode) {
         let resolvedType = this.resolver.resolveType(typeNode, global.parent); // reports
-        if (!resolvedType) return false;
+        if (!resolvedType) {
+          global.set(CommonFlags.ERRORED);
+          pendingElements.delete(global);
+          return false;
+        }
         if (resolvedType == Type.void) {
           this.error(
             DiagnosticCode.Type_expected,
             typeNode.range
           );
+          global.set(CommonFlags.ERRORED);
+          pendingElements.delete(global);
           return false;
         }
         global.setType(resolvedType);
@@ -1032,6 +1043,8 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             initializerNode.range, this.currentType.toString(), "<auto>"
           );
+          global.set(CommonFlags.ERRORED);
+          pendingElements.delete(global);
           return false;
         }
         global.setType(this.currentType);
@@ -1042,6 +1055,8 @@ export class Compiler extends DiagnosticEmitter {
           DiagnosticCode.Type_expected,
           global.identifierNode.range.atEnd
         );
+        global.set(CommonFlags.ERRORED);
+        pendingElements.delete(global);
         return false;
       }
     }
@@ -1050,6 +1065,7 @@ export class Compiler extends DiagnosticEmitter {
     if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
       if (global.internalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
       else if (global.internalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
+      pendingElements.delete(global);
       return true;
     }
 
@@ -1072,16 +1088,17 @@ export class Compiler extends DiagnosticEmitter {
           nativeType,
           !isDeclaredConstant
         );
-        global.set(CommonFlags.COMPILED);
+        pendingElements.delete(global);
         return true;
+      }
 
       // Importing mutable globals is not supported in the MVP
-      } else {
-        this.error(
-          DiagnosticCode.Feature_0_is_not_enabled,
-          global.declaration.range, "mutable-globals"
-        );
-      }
+      this.error(
+        DiagnosticCode.Feature_0_is_not_enabled,
+        global.declaration.range, "mutable-globals"
+      );
+      global.set(CommonFlags.ERRORED);
+      pendingElements.delete(global);
       return false;
     }
 
@@ -1167,6 +1184,8 @@ export class Compiler extends DiagnosticEmitter {
             }
             default: {
               assert(false);
+              global.set(CommonFlags.ERRORED);
+              pendingElements.delete(global);
               return false;
             }
           }
@@ -1200,6 +1219,7 @@ export class Compiler extends DiagnosticEmitter {
     } else if (!isDeclaredInline) { // compile normally
       module.addGlobal(internalName, nativeType, !isDeclaredConstant, initExpr);
     }
+    pendingElements.delete(global);
     return true;
   }
 
@@ -1207,8 +1227,11 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Compiles an enum. */
   compileEnum(element: Enum): bool {
-    if (element.is(CommonFlags.COMPILED)) return true;
+    if (element.is(CommonFlags.COMPILED)) return !element.is(CommonFlags.ERRORED);
     element.set(CommonFlags.COMPILED);
+
+    var pendingElements = this.pendingElements;
+    pendingElements.add(element);
 
     var module = this.module;
     var previousParent = this.currentParent;
@@ -1305,6 +1328,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.currentParent = previousParent;
+    pendingElements.delete(element);
     return true;
   }
 
@@ -1317,7 +1341,8 @@ export class Compiler extends DiagnosticEmitter {
     /** Force compilation of stdlib alternative if a builtin. */
     forceStdAlternative: bool = false
   ): bool {
-    if (instance.is(CommonFlags.COMPILED)) return true;
+    if (instance.is(CommonFlags.COMPILED)) return !instance.is(CommonFlags.ERRORED);
+
     if (!forceStdAlternative) {
       if (instance.hasDecorator(DecoratorFlags.BUILTIN)) return true;
       if (instance.hasDecorator(DecoratorFlags.LAZY)) {
@@ -1326,9 +1351,11 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    var previousType = this.currentType;
     instance.set(CommonFlags.COMPILED);
+    var pendingElements = this.pendingElements;
+    pendingElements.add(instance);
 
+    var previousType = this.currentType;
     var module = this.module;
     var signature = instance.signature;
     var bodyNode = instance.prototype.bodyNode;
@@ -1443,10 +1470,12 @@ export class Compiler extends DiagnosticEmitter {
         instance.identifierNode.range
       );
       funcRef = 0; // TODO?
+      instance.set(CommonFlags.ERRORED);
     }
 
     instance.finalize(module, funcRef);
     this.currentType = previousType;
+    pendingElements.delete(instance);
     return true;
   }
 
@@ -2973,18 +3002,29 @@ export class Compiler extends DiagnosticEmitter {
         this.checkTypeSupported(type, typeNode);
 
         if (initializerNode) {
+          let pendingElements = this.pendingElements;
+          let dummy = flow.addScopedDummyLocal(name, type); // pending dummy
+          pendingElements.add(dummy);
           initExpr = this.compileExpression(initializerNode, type, // reports
             Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
           );
           initAutoreleaseSkipped = this.skippedAutoreleases.has(initExpr);
+          pendingElements.delete(dummy);
+          flow.freeScopedDummyLocal(name);
         }
 
       // Otherwise infer type from initializer
       } else if (initializerNode) {
+        let pendingElements = this.pendingElements;
+        let temp = flow.addScopedDummyLocal(name, Type.auto); // pending dummy
+        pendingElements.add(temp);
         initExpr = this.compileExpression(initializerNode, Type.auto,
           Constraints.WILL_RETAIN
         ); // reports
         initAutoreleaseSkipped = this.skippedAutoreleases.has(initExpr);
+        pendingElements.delete(temp);
+        flow.freeScopedDummyLocal(name);
+
         if (this.currentType == Type.void) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
@@ -5916,6 +5956,14 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.LOCAL:
       case ElementKind.FIELD: {
+        if (this.pendingElements.has(target)) {
+          this.error(
+            DiagnosticCode.Variable_0_used_before_its_declaration,
+            expression.range,
+            target.internalName
+          );
+          return this.module.unreachable();
+        }
         targetType = (<VariableLikeElement>target).type;
         if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
@@ -8171,6 +8219,15 @@ export class Compiler extends DiagnosticEmitter {
         let local = <Local>target;
         let localType = local.type;
         assert(localType != Type.void);
+        if (this.pendingElements.has(local)) {
+          this.error(
+            DiagnosticCode.Variable_0_used_before_its_declaration,
+            expression.range,
+            local.internalName
+          );
+          this.currentType = localType;
+          return module.unreachable();
+        }
         if (local.is(CommonFlags.INLINED)) {
           return this.compileInlineConstant(local, contextualType, constraints);
         }
@@ -8198,6 +8255,15 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         let globalType = global.type;
+        if (this.pendingElements.has(global)) {
+          this.error(
+            DiagnosticCode.Variable_0_used_before_its_declaration,
+            expression.range,
+            global.internalName
+          );
+          this.currentType = globalType;
+          return module.unreachable();
+        }
         assert(globalType != Type.void);
         if (global.is(CommonFlags.INLINED)) {
           return this.compileInlineConstant(global, contextualType, constraints);
@@ -9266,6 +9332,15 @@ export class Compiler extends DiagnosticEmitter {
         if (!this.compileGlobal(global)) return module.unreachable(); // reports
         let globalType = global.type;
         assert(globalType != Type.void);
+        if (this.pendingElements.has(global)) {
+          this.error(
+            DiagnosticCode.Variable_0_used_before_its_declaration,
+            expression.range,
+            global.internalName
+          );
+          this.currentType = globalType;
+          return module.unreachable();
+        }
         if (global.is(CommonFlags.INLINED)) {
           return this.compileInlineConstant(global, ctxType, constraints);
         }

@@ -147,6 +147,7 @@ export enum DiagnosticCode {
   A_class_can_only_implement_an_interface = 2422,
   A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
   Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses = 2445,
+  Variable_0_used_before_its_declaration = 2448,
   The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
   Type_0_has_no_property_1 = 2460,
   The_0_operator_cannot_be_applied_to_type_1 = 2469,
@@ -321,6 +322,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2422: return "A class can only implement an interface.";
     case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
     case 2445: return "Property '{0}' is protected and only accessible within class '{1}' and its subclasses.";
+    case 2448: return "Variable '{0}' used before its declaration.";
     case 2453: return "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.";
     case 2460: return "Type '{0}' has no property '{1}'.";
     case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";

@@ -22,7 +22,7 @@
 <h2 align="center">Contributors</h2>
 
 <p align="center">
-  <a href="https://assemblyscript.org/#contributors"><img src="https://assemblyscript.org/contributors.svg" alt="Contributor logos" /></a>
+  <a href="https://assemblyscript.org/#contributors"><img src="https://assemblyscript.org/contributors.svg" alt="Contributor logos" width="720" /></a>
 </p>
 
 <h2 align="center">Thanks to our sponsors!</h2>
@@ -30,5 +30,5 @@
 <p align="justify">Most of the core team members and most contributors do this open source work in their free time. If you use AssemblyScript for a serious task or plan to do so, and you'd like us to invest more time on it, <a href="https://opencollective.com/assemblyscript/donate" target="_blank" rel="noopener">please donate</a> to our <a href="https://opencollective.com/assemblyscript" target="_blank" rel="noopener">OpenCollective</a>. By sponsoring this project, your logo will show up below. Thank you so much for your support!</p>
 
 <p align="center">
-  <a href="https://assemblyscript.org/#sponsors"><img src="https://assemblyscript.org/sponsors.svg" alt="Sponsor logos" /></a>
+  <a href="https://assemblyscript.org/#sponsors"><img src="https://assemblyscript.org/sponsors.svg" alt="Sponsor logos" width="720" /></a>
 </p>
