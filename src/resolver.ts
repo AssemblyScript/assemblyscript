@@ -2016,7 +2016,7 @@ export class Resolver extends DiagnosticEmitter {
         return commonType;
       }
 
-      // pow: result is f32 if LHS is f32, otherwise f64, preferring overloads
+      // pow: result is common type of LHS and RHS, preferring overloads
 
       case Token.ASTERISK_ASTERISK: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
@@ -2024,11 +2024,22 @@ export class Resolver extends DiagnosticEmitter {
         if (leftType.is(TypeFlags.REFERENCE)) {
           let classReference = leftType.classReference;
           if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.POW);
+            let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
             if (overload) return overload.signature.returnType;
           }
         }
-        return leftType == Type.f32 ? Type.f32 : Type.f64;
+        let rightType = this.resolveExpression(right, ctxFlow, leftType, reportMode);
+        if (!rightType) return null;
+        let commonType = Type.commonDenominator(leftType, rightType, false);
+        if (!commonType) {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              node.range, leftType.toString(), rightType.toString()
+            );
+          }
+        }
+        return commonType;
       }
 
       // shift: result is LHS (RHS is converted to LHS), preferring overloads

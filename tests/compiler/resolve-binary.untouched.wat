@@ -4682,6 +4682,211 @@
   local.get $0
   call $~lib/util/number/dtoa
  )
+ (func $~lib/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 1
+  local.set $2
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
+  local.get $1
+  i32.const 0
+  i32.le_s
+  if
+   local.get $0
+   i32.const -1
+   i32.eq
+   if
+    i32.const -1
+    i32.const 1
+    local.get $1
+    i32.const 1
+    i32.and
+    select
+    return
+   end
+   local.get $1
+   i32.const 0
+   i32.eq
+   local.get $0
+   i32.const 1
+   i32.eq
+   i32.or
+   return
+  else
+   local.get $1
+   i32.const 1
+   i32.eq
+   if
+    local.get $0
+    return
+   else
+    local.get $1
+    i32.const 2
+    i32.eq
+    if
+     local.get $0
+     local.get $0
+     i32.mul
+     return
+    else
+     local.get $1
+     i32.const 32
+     i32.lt_s
+     if
+      i32.const 32
+      local.get $1
+      i32.clz
+      i32.sub
+      local.set $3
+      block $break|0
+       block $case4|0
+        block $case3|0
+         block $case2|0
+          block $case1|0
+           block $case0|0
+            local.get $3
+            local.set $4
+            local.get $4
+            i32.const 5
+            i32.eq
+            br_if $case0|0
+            local.get $4
+            i32.const 4
+            i32.eq
+            br_if $case1|0
+            local.get $4
+            i32.const 3
+            i32.eq
+            br_if $case2|0
+            local.get $4
+            i32.const 2
+            i32.eq
+            br_if $case3|0
+            local.get $4
+            i32.const 1
+            i32.eq
+            br_if $case4|0
+            br $break|0
+           end
+           local.get $1
+           i32.const 1
+           i32.and
+           if
+            local.get $2
+            local.get $0
+            i32.mul
+            local.set $2
+           end
+           local.get $1
+           i32.const 1
+           i32.shr_u
+           local.set $1
+           local.get $0
+           local.get $0
+           i32.mul
+           local.set $0
+          end
+          local.get $1
+          i32.const 1
+          i32.and
+          if
+           local.get $2
+           local.get $0
+           i32.mul
+           local.set $2
+          end
+          local.get $1
+          i32.const 1
+          i32.shr_u
+          local.set $1
+          local.get $0
+          local.get $0
+          i32.mul
+          local.set $0
+         end
+         local.get $1
+         i32.const 1
+         i32.and
+         if
+          local.get $2
+          local.get $0
+          i32.mul
+          local.set $2
+         end
+         local.get $1
+         i32.const 1
+         i32.shr_u
+         local.set $1
+         local.get $0
+         local.get $0
+         i32.mul
+         local.set $0
+        end
+        local.get $1
+        i32.const 1
+        i32.and
+        if
+         local.get $2
+         local.get $0
+         i32.mul
+         local.set $2
+        end
+        local.get $1
+        i32.const 1
+        i32.shr_u
+        local.set $1
+        local.get $0
+        local.get $0
+        i32.mul
+        local.set $0
+       end
+       local.get $1
+       i32.const 1
+       i32.and
+       if
+        local.get $2
+        local.get $0
+        i32.mul
+        local.set $2
+       end
+      end
+      local.get $2
+      return
+     end
+    end
+   end
+  end
+  loop $while-continue|1
+   local.get $1
+   local.set $3
+   local.get $3
+   if
+    local.get $1
+    i32.const 1
+    i32.and
+    if
+     local.get $2
+     local.get $0
+     i32.mul
+     local.set $2
+    end
+    local.get $1
+    i32.const 1
+    i32.shr_u
+    local.set $1
+    local.get $0
+    local.get $0
+    i32.mul
+    local.set $0
+    br $while-continue|1
+   end
+  end
+  local.get $2
+ )
  (func $resolve-binary/Foo#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
@@ -4922,6 +5127,8 @@
   (local $61 i32)
   (local $62 i32)
   (local $63 i32)
+  (local $64 i32)
+  (local $65 i32)
   i32.const 1
   i32.const 2
   i32.lt_s
@@ -5402,13 +5609,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 2
-  f64.const 2
-  call $~lib/math/NativeMath.pow
-  i32.const 0
-  call $~lib/number/F64#toString
+  i32.const 2
+  i32.const 2
+  call $~lib/math/ipow32
+  i32.const 10
+  call $~lib/number/I32#toString
   local.tee $26
-  i32.const 9280
+  i32.const 9312
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5419,13 +5626,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  i32.const 1
-  i32.shl
-  i32.const 10
-  call $~lib/number/I32#toString
+  f64.const 2
+  f64.const 2
+  call $~lib/math/NativeMath.pow
+  i32.const 0
+  call $~lib/number/F64#toString
   local.tee $27
-  i32.const 9312
+  i32.const 9280
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -5436,43 +5643,43 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  i32.const 1
-  i32.shr_s
-  i32.const 10
-  call $~lib/number/I32#toString
+  f64.const 2
+  f64.const 2
+  call $~lib/math/NativeMath.pow
+  i32.const 0
+  call $~lib/number/F64#toString
   local.tee $28
-  i32.const 1952
+  i32.const 9280
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 156
+   i32.const 158
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const -1
-  i32.const 30
-  i32.shr_u
+  i32.const 2
+  i32.const 1
+  i32.shl
   i32.const 10
   call $~lib/number/I32#toString
   local.tee $29
-  i32.const 9344
+  i32.const 9312
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 161
+   i32.const 165
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
+  i32.const 2
   i32.const 1
-  i32.and
+  i32.shr_s
   i32.const 10
   call $~lib/number/I32#toString
   local.tee $30
@@ -5482,14 +5689,14 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 168
+   i32.const 170
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 2
-  i32.or
+  i32.const -1
+  i32.const 30
+  i32.shr_u
   i32.const 10
   call $~lib/number/I32#toString
   local.tee $31
@@ -5499,7 +5706,41 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 173
+   i32.const 175
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 3
+  i32.const 1
+  i32.and
+  i32.const 10
+  call $~lib/number/I32#toString
+  local.tee $32
+  i32.const 1952
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 182
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32.const 2
+  i32.or
+  i32.const 10
+  call $~lib/number/I32#toString
+  local.tee $33
+  i32.const 9344
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 187
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5509,14 +5750,14 @@
   i32.xor
   i32.const 10
   call $~lib/number/I32#toString
-  local.tee $32
+  local.tee $34
   i32.const 1984
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 178
+   i32.const 192
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5529,14 +5770,14 @@
   end
   i32.const 10
   call $~lib/number/I32#toString
-  local.tee $33
+  local.tee $35
   i32.const 1984
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 185
+   i32.const 199
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5549,14 +5790,14 @@
   end
   i32.const 10
   call $~lib/number/I32#toString
-  local.tee $34
+  local.tee $36
   i32.const 384
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 190
+   i32.const 204
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5569,14 +5810,14 @@
   end
   i32.const 10
   call $~lib/number/I32#toString
-  local.tee $35
+  local.tee $37
   i32.const 1952
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 195
+   i32.const 209
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5589,14 +5830,14 @@
   end
   i32.const 10
   call $~lib/number/I32#toString
-  local.tee $36
+  local.tee $38
   i32.const 1984
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 200
+   i32.const 214
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5607,16 +5848,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#lt
-  local.tee $37
+  local.tee $39
   call $~lib/string/String#toString
-  local.tee $38
+  local.tee $40
   i32.const 9408
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 261
+   i32.const 275
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5624,16 +5865,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#gt
-  local.tee $39
+  local.tee $41
   call $~lib/string/String#toString
-  local.tee $40
+  local.tee $42
   i32.const 9440
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 266
+   i32.const 280
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5641,16 +5882,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#le
-  local.tee $41
+  local.tee $43
   call $~lib/string/String#toString
-  local.tee $42
+  local.tee $44
   i32.const 9472
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 271
+   i32.const 285
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5658,16 +5899,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#ge
-  local.tee $43
+  local.tee $45
   call $~lib/string/String#toString
-  local.tee $44
+  local.tee $46
   i32.const 9504
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 276
+   i32.const 290
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5675,16 +5916,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#eq
-  local.tee $45
+  local.tee $47
   call $~lib/string/String#toString
-  local.tee $46
+  local.tee $48
   i32.const 9536
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 281
+   i32.const 295
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5692,16 +5933,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#ne
-  local.tee $47
+  local.tee $49
   call $~lib/string/String#toString
-  local.tee $48
+  local.tee $50
   i32.const 9568
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 286
+   i32.const 300
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5709,16 +5950,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#add
-  local.tee $49
+  local.tee $51
   call $~lib/string/String#toString
-  local.tee $50
+  local.tee $52
   i32.const 9600
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 291
+   i32.const 305
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5726,16 +5967,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo.sub
-  local.tee $51
+  local.tee $53
   call $~lib/string/String#toString
-  local.tee $52
+  local.tee $54
   i32.const 9632
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 296
+   i32.const 310
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5743,16 +5984,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#mul
-  local.tee $53
+  local.tee $55
   call $~lib/string/String#toString
-  local.tee $54
+  local.tee $56
   i32.const 9664
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 301
+   i32.const 315
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5760,16 +6001,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#div
-  local.tee $55
+  local.tee $57
   call $~lib/string/String#toString
-  local.tee $56
+  local.tee $58
   i32.const 9696
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 306
+   i32.const 320
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5777,16 +6018,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#rem
-  local.tee $57
+  local.tee $59
   call $~lib/string/String#toString
-  local.tee $58
+  local.tee $60
   i32.const 9728
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 311
+   i32.const 325
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5794,16 +6035,16 @@
   global.get $resolve-binary/foo
   global.get $resolve-binary/foo
   call $resolve-binary/Foo#pow
-  local.tee $59
+  local.tee $61
   call $~lib/string/String#toString
-  local.tee $60
+  local.tee $62
   i32.const 9760
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 316
+   i32.const 330
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5817,30 +6058,30 @@
   global.get $resolve-binary/bar
   global.get $resolve-binary/bar2
   call $resolve-binary/Bar#add
-  local.tee $61
-  local.tee $62
-  global.get $resolve-binary/bar
   local.tee $63
+  local.tee $64
+  global.get $resolve-binary/bar
+  local.tee $65
   i32.ne
   if
-   local.get $62
+   local.get $64
    call $~lib/rt/stub/__retain
-   local.set $62
-   local.get $63
+   local.set $64
+   local.get $65
    call $~lib/rt/stub/__release
   end
-  local.get $62
+  local.get $64
   global.set $resolve-binary/bar
   global.get $resolve-binary/bar
   call $resolve-binary/Bar#self
-  local.tee $62
+  local.tee $64
   global.get $resolve-binary/bar2
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 334
+   i32.const 348
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5852,7 +6093,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 339
+   i32.const 353
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -5982,6 +6223,10 @@
   local.get $61
   call $~lib/rt/stub/__release
   local.get $62
+  call $~lib/rt/stub/__release
+  local.get $63
+  call $~lib/rt/stub/__release
+  local.get $64
   call $~lib/rt/stub/__release
  )
  (func $~start

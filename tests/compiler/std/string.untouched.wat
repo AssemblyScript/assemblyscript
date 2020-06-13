@@ -5482,80 +5482,137 @@
   drop
   local.get $1
   i32.const 0
-  i32.lt_s
-  if
-   i32.const 0
-   return
-  end
-  block $break|0
-   block $case2|0
-    block $case1|0
-     block $case0|0
-      local.get $1
-      local.set $3
-      local.get $3
-      i32.const 0
-      i32.eq
-      br_if $case0|0
-      local.get $3
-      i32.const 1
-      i32.eq
-      br_if $case1|0
-      local.get $3
-      i32.const 2
-      i32.eq
-      br_if $case2|0
-      br $break|0
-     end
-     i32.const 1
-     return
-    end
-    local.get $0
-    return
-   end
-   local.get $0
-   local.get $0
-   i32.mul
-   return
-  end
-  i32.const 32
-  local.get $1
-  i32.clz
-  i32.sub
-  local.set $3
-  local.get $3
-  i32.const 5
   i32.le_s
   if
-   block $break|1
-    block $case4|1
-     block $case3|1
-      block $case2|1
-       block $case1|1
-        block $case0|1
-         local.get $3
-         local.set $4
-         local.get $4
-         i32.const 5
-         i32.eq
-         br_if $case0|1
-         local.get $4
-         i32.const 4
-         i32.eq
-         br_if $case1|1
-         local.get $4
-         i32.const 3
-         i32.eq
-         br_if $case2|1
-         local.get $4
-         i32.const 2
-         i32.eq
-         br_if $case3|1
-         local.get $4
+   local.get $0
+   i32.const -1
+   i32.eq
+   if
+    i32.const -1
+    i32.const 1
+    local.get $1
+    i32.const 1
+    i32.and
+    select
+    return
+   end
+   local.get $1
+   i32.const 0
+   i32.eq
+   local.get $0
+   i32.const 1
+   i32.eq
+   i32.or
+   return
+  else
+   local.get $1
+   i32.const 1
+   i32.eq
+   if
+    local.get $0
+    return
+   else
+    local.get $1
+    i32.const 2
+    i32.eq
+    if
+     local.get $0
+     local.get $0
+     i32.mul
+     return
+    else
+     local.get $1
+     i32.const 32
+     i32.lt_s
+     if
+      i32.const 32
+      local.get $1
+      i32.clz
+      i32.sub
+      local.set $3
+      block $break|0
+       block $case4|0
+        block $case3|0
+         block $case2|0
+          block $case1|0
+           block $case0|0
+            local.get $3
+            local.set $4
+            local.get $4
+            i32.const 5
+            i32.eq
+            br_if $case0|0
+            local.get $4
+            i32.const 4
+            i32.eq
+            br_if $case1|0
+            local.get $4
+            i32.const 3
+            i32.eq
+            br_if $case2|0
+            local.get $4
+            i32.const 2
+            i32.eq
+            br_if $case3|0
+            local.get $4
+            i32.const 1
+            i32.eq
+            br_if $case4|0
+            br $break|0
+           end
+           local.get $1
+           i32.const 1
+           i32.and
+           if
+            local.get $2
+            local.get $0
+            i32.mul
+            local.set $2
+           end
+           local.get $1
+           i32.const 1
+           i32.shr_u
+           local.set $1
+           local.get $0
+           local.get $0
+           i32.mul
+           local.set $0
+          end
+          local.get $1
+          i32.const 1
+          i32.and
+          if
+           local.get $2
+           local.get $0
+           i32.mul
+           local.set $2
+          end
+          local.get $1
+          i32.const 1
+          i32.shr_u
+          local.set $1
+          local.get $0
+          local.get $0
+          i32.mul
+          local.set $0
+         end
+         local.get $1
          i32.const 1
-         i32.eq
-         br_if $case4|1
-         br $break|1
+         i32.and
+         if
+          local.get $2
+          local.get $0
+          i32.mul
+          local.set $2
+         end
+         local.get $1
+         i32.const 1
+         i32.shr_u
+         local.set $1
+         local.get $0
+         local.get $0
+         i32.mul
+         local.set $0
         end
         local.get $1
         i32.const 1
@@ -5568,7 +5625,7 @@
         end
         local.get $1
         i32.const 1
-        i32.shr_s
+        i32.shr_u
         local.set $1
         local.get $0
         local.get $0
@@ -5584,68 +5641,15 @@
         i32.mul
         local.set $2
        end
-       local.get $1
-       i32.const 1
-       i32.shr_s
-       local.set $1
-       local.get $0
-       local.get $0
-       i32.mul
-       local.set $0
       end
-      local.get $1
-      i32.const 1
-      i32.and
-      if
-       local.get $2
-       local.get $0
-       i32.mul
-       local.set $2
-      end
-      local.get $1
-      i32.const 1
-      i32.shr_s
-      local.set $1
-      local.get $0
-      local.get $0
-      i32.mul
-      local.set $0
-     end
-     local.get $1
-     i32.const 1
-     i32.and
-     if
       local.get $2
-      local.get $0
-      i32.mul
-      local.set $2
+      return
      end
-     local.get $1
-     i32.const 1
-     i32.shr_s
-     local.set $1
-     local.get $0
-     local.get $0
-     i32.mul
-     local.set $0
-    end
-    local.get $1
-    i32.const 1
-    i32.and
-    if
-     local.get $2
-     local.get $0
-     i32.mul
-     local.set $2
     end
    end
-   local.get $2
-   return
   end
-  loop $while-continue|2
+  loop $while-continue|1
    local.get $1
-   i32.const 0
-   i32.gt_s
    local.set $3
    local.get $3
    if
@@ -5660,13 +5664,13 @@
     end
     local.get $1
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.set $1
     local.get $0
     local.get $0
     i32.mul
     local.set $0
-    br $while-continue|2
+    br $while-continue|1
    end
   end
   local.get $2

@@ -4066,50 +4066,59 @@ assert(ipow64(-2, 1) == -2);
 assert(ipow64(-2, 2) ==  4);
 assert(ipow64(-2, 3) == -8);
 
+assert(ipow64(2,  63) ==  9223372036854775808);
 assert(ipow64(3,  40) ==  12157665459056928801);
+assert(ipow64(2,  64) ==  0);                   // should overflow
 assert(ipow64(3,  41) == -420491770248316829);  // should overflow
-assert(ipow64(3,  42) == -1261475310744950487); // should overflow
-assert(ipow64(3,  43) == -3784425932234851461); // should overflow
-assert(ipow64(3,  63) == -3237885987332494933); // should overflow
-assert(ipow64(3,  64) ==  8733086111712066817); // should overflow
 assert(ipow64(3, 128) == -9204772141784466943); // should overflow
 
-assert(ipow64(57055, 3) + ipow64(339590, 3) == 39347712995520375); // add Buterin's twit example
+assert(ipow64(1, -1) == 1);
+assert(ipow64(2, -1) == 0);
 
-// ipow32f /////////////////////////////////////////////////////////////////////////////////////
+// integer pow operators
 
-assert(ipow32f(0, 0) == <f32>1.0);
-assert(ipow32f(<f32>NaN, 0) == <f32>1.0);
-assert(isNaN<f32>(ipow32f(<f32>NaN, 1)));
-assert(isNaN<f32>(ipow32f(<f32>NaN, -1)));
-assert(isNaN<f32>(ipow32f(<f32>NaN, 2)));
-assert(ipow32f(<f32>Infinity, 0) == <f32>1.0);
-assert(ipow32f(<f32>Infinity, 1) == <f32>Infinity);
-assert(ipow32f(<f32>-Infinity, 0) == <f32>1.0);
-assert(ipow32f(<f32>-Infinity, 1) == <f32>-Infinity);
-assert(ipow32f(<f32>-Infinity, 2) == <f32>Infinity);
-assert(ipow32f(<f32>1.0, 0) == <f32>1.0);
-assert(ipow32f(f32.MAX_VALUE, 2) == <f32>Infinity);
-assert(ipow32f(f32.MIN_VALUE, 2) == <f32>0.0);
-assert(ipow32f(f32.MAX_VALUE, -1) == <f32>2.938735877055719e-39);
-assert(ipow32f(<f32>10.0, 36) == <f32>1.0000000409184788e+36);
-assert(ipow32f(<f32>10.0,-36) == <f32>9.999999462560281e-37);
+assert(  0  ** 0 ==  1);
+assert(  0  ** 1 ==  0);
+assert(  1  ** 3 ==  1);
+assert((-2) ** 3 == -8);
+assert((-1) ** 0 ==  1);
+assert((-1) ** -1 == -1);
+assert((-1) ** -2 ==  1);
+assert((-1) ** -3 == -1);
 
-// ipow64f /////////////////////////////////////////////////////////////////////////////////////
+assert(false ** -2 == 0);
+assert(false ** -1 == 0);
+assert(false **  0 == 1);
+assert(false **  1 == 0);
+assert(false **  2 == 0);
 
-assert(ipow64f(0, 0) == 1.0);
-assert(ipow64f(NaN, 0) == 1.0);
-assert(isNaN(ipow64f(NaN, 1)));
-assert(isNaN(ipow64f(NaN, -1)));
-assert(isNaN(ipow64f(NaN, 2)));
-assert(ipow64f(Infinity, 0) == 1.0);
-assert(ipow64f(Infinity, 1) == Infinity);
-assert(ipow64f(-Infinity, 0) == 1.0);
-assert(ipow64f(-Infinity, 1) == -Infinity);
-assert(ipow64f(-Infinity, 2) == Infinity);
-assert(ipow64f(1.0, 0) == 1.0);
-assert(ipow64f(f64.MAX_VALUE, 2) == Infinity);
-assert(ipow64f(f64.MIN_VALUE, 2) == 0.0);
-assert(ipow64f(f64.MAX_VALUE, -1) == 5.562684646268003e-309);
-assert(ipow64f(10.0, 127) == 1.0000000000000002e+127);
-assert(ipow64f(10.0,-127) == 9.999999999999998e-128);
+assert(true ** -2 == 1);
+assert(true ** -1 == 1);
+assert(true **  0 == 1);
+assert(true **  1 == 1);
+assert(true **  2 == 1);
+
+assert((<i8> 1) ** 3 ==  1);
+assert((<i8>-2) ** 3 == -8);
+assert((<u16>4) ** 7 ==  16384);
+assert((<u16>4) ** 8 ==  0);   // should overflow
+assert((<u16>5) ** 10 == 761); // should overflow
+
+assert((<u64>0) ** 0 == 1);
+assert((<u64>0) ** 1 == 0);
+assert((<u64>1) ** 3 == 1);
+assert((<u64>2) ** 3 == 8);
+assert((<u64>0xFFFFFFFF) ** 3 == 12884901887);
+assert((<u64>0xFFFF) ** 3 == 281462092005375);
+assert((<u64>0xFFFF) ** 8 == 18430981595272314881);
+assert(0xF123 ** 4 as u64 == 14521559183993082321);
+assert(0xF123 as u64 ** 4 == 14521559183993082321);
+// Fermat's Last Theorem
+assert((<u64>57055) ** 3 + (<u64>339590) ** 3 != (<u64>340126) ** 3); // On JS it return false
+assert((<u64>57055) ** 3 + (<u64>339590) ** 3 == 39347712995520375);
+
+assert(1 ** 0.5 == 1.0);
+assert(0 ** 0.5 == 0.0);
+assert(0 ** -1.0 == Infinity);
+assert(0.0 ** 0 == 1.0);
+assert(1.0 ** 1 == 1.0);

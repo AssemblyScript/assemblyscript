@@ -7,9 +7,9 @@
 
 const Long = global.Long || require("long");
 
-global.i64_zero = Long.ZERO;
-
-global.i64_one = Long.ONE;
+global.i64_zero    = Long.ZERO;
+global.i64_one     = Long.ONE;
+global.i64_neg_one = Long.fromInt(-1);
 
 global.i64_new = function(lo, hi) {
   return Long.fromBits(lo, hi);
@@ -33,6 +33,31 @@ global.i64_sub = function(left, right) {
 
 global.i64_mul = function(left, right) {
   return left.mul(right);
+};
+
+global.i64_pow = function(left, right) {
+  var rightLo = right.low;
+  var rightHi = right.high;
+  if (rightHi <= 0) {
+    if (rightHi < 0) {
+      if (left.eq(global.i64_neg_one)) {
+        return rightLo & 1 ? left : Long.ONE;
+      }
+      return left.eq(Long.ONE) ? left : Long.ZERO;
+    }
+    if (rightLo == 0) return Long.ONE;
+    if (rightLo == 1) return left;
+    if (rightLo == 2) return left.mul(left);
+  }
+  var result = Long.ONE;
+  while (rightLo | rightHi) {
+    if (rightLo & 1) result = result.mul(left);
+    right = right.shru(1);
+    left  = left.mul(left);
+    rightLo = right.low;
+    rightHi = right.high;
+  }
+  return result;
 };
 
 global.i64_div = function(left, right) {

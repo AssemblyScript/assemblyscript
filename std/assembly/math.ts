@@ -3077,37 +3077,35 @@ export namespace NativeMathf {
 export function ipow32(x: i32, e: i32): i32 {
   var out = 1;
   if (ASC_SHRINK_LEVEL < 1) {
-    if (e < 0) return 0;
-
-    switch (e) {
-      case 0: return 1;
-      case 1: return x;
-      case 2: return x * x;
+    if (e <= 0) {
+      if (x == -1) return select<i32>(-1, 1, e & 1);
+      return i32(e == 0) | i32(x == 1);
     }
-
-    let log = 32 - clz(e);
-    if (log <= 5) {
+    else if (e == 1) return x;
+    else if (e == 2) return x * x;
+    else if (e < 32) {
+      let log = 32 - clz(e);
       // 32 = 2 ^ 5, so need only five cases.
       // But some extra cases needs for properly overflowing
       switch (log) {
         case 5: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 4: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 3: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 2: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 1: {
@@ -3117,53 +3115,51 @@ export function ipow32(x: i32, e: i32): i32 {
       return out;
     }
   }
-
-  while (e > 0) {
+  while (e) {
     if (e & 1) out *= x;
-    e >>= 1;
+    e >>>= 1;
     x *= x;
   }
   return out;
 }
 
-export function ipow64(x: i64, e: i32): i64 {
+export function ipow64(x: i64, e: i64): i64 {
   var out: i64 = 1;
   if (ASC_SHRINK_LEVEL < 1) {
-    if (e < 0) return 0;
-    switch (e) {
-      case 0: return 1;
-      case 1: return x;
-      case 2: return x * x;
+    if (e <= 0) {
+      if (x == -1) return select<i64>(-1, 1, e & 1);
+      return i64(e == 0) | i64(x == 1);
     }
-
-    let log = 32 - clz(e);
-    if (log <= 6) {
+    else if (e == 1) return x;
+    else if (e == 2) return x * x;
+    else if (e < 64) {
+      let log = 64 - <i32>clz(e);
       // 64 = 2 ^ 6, so need only six cases.
       // But some extra cases needs for properly overflowing
       switch (log) {
         case 6: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 5: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 4: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 3: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 2: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 1: {
@@ -3173,35 +3169,60 @@ export function ipow64(x: i64, e: i32): i64 {
       return out;
     }
   }
-
-  while (e > 0) {
+  while (e) {
     if (e & 1) out *= x;
-    e >>= 1;
+    e >>>= 1;
     x *= x;
   }
   return out;
 }
 
-export function ipow32f(x: f32, e: i32): f32 {
-  var sign = e >> 31;
-  e = (e + sign) ^ sign; // abs(e)
-  var out: f32 = 1;
-  while (e) {
-    out *= select<f32>(x, 1.0, e & 1);
-    e >>= 1;
-    x *= x;
-  }
-  return sign ? <f32>1.0 / out : out;
+/*
+TODO:
+In compile time if only exponent is constant we could replace ipow32/ipow64 by shortest addition chains
+which usually faster than exponentiation by squaring
+
+for ipow32 and e < 32:
+
+let b: i32, c: i32, d: i32, h: i32, k: i32, g: i32;
+switch (e) {
+  case  1: return x;
+  case  2: return x * x;
+  case  3: return x * x * x;
+  case  4: return (b = x * x) * b;
+  case  5: return (b = x * x) * b * x;
+  case  6: return (b = x * x) * b * b;
+  case  7: return (b = x * x) * b * b * x;
+  case  8: return (d = (b = x * x) * b) * d;
+  case  9: return (c = x * x * x) * c * c;
+  case 10: return (d = (b = x * x) * b) * d * b;
+  case 11: return (d = (b = x * x) * b) * d * b * x;
+  case 12: return (d = (b = x * x) * b) * d * d;
+  case 13: return (d = (b = x * x) * b) * d * d * x;
+  case 14: return (d = (b = x * x) * b) * d * d * b;
+  case 15: return (k = (b = x * x) * b * x) * k * k;
+  case 16: return (h = (d = (b = x * x) * b) * d) * h;
+  case 17: return (h = (d = (b = x * x) * b) * d) * h * x;
+  case 18: return (h = (d = (b = x * x) * b) * d * x) * h;
+  case 19: return (h = (d = (b = x * x) * b) * d * x) * h * x;
+  case 20: return (h = (k = (b = x * x) * b * x) * k) * h;
+  case 21: return (h = (k = (b = x * x) * b * x) * k) * h * x;
+  case 22: return (g = (h = (k = (b = x * x) * b * x) * k) * x) * g;
+  case 23: return (h = (d = (c = (b = x * x) * x) * b) * d) * h * c;
+  case 24: return (h = (d = (c = x * x * x) * c) * d) * h;
+  case 25: return (h = (d = (c = x * x * x) * c) * d) * h * x;
+  case 26: return (g = (h = (d = (c = x * x * x) * c) * d) * x) * g;
+  case 27: return (h = (d = (c = x * x * x) * c) * d) * h * c;
+  case 28: return (h = (d = (c = x * x * x) * c * x) * d) * h;
+  case 29: return (h = (d = (c = x * x * x) * c * x) * d) * h * x;
+  case 30: return (h = (d = (c = x * x * x) * c) * d * c) * h;
+  case 31: return (h = (d = (c = x * x * x) * c) * d * c) * h * x;
 }
 
-export function ipow64f(x: f64, e: i32): f64 {
-  var sign = e >> 31;
-  e = (e + sign) ^ sign; // abs(e)
-  var out = 1.0;
-  while (e) {
-    out *= select(x, 1.0, e & 1);
-    e >>= 1;
-    x *= x;
-  }
-  return sign ? 1.0 / out : out;
+for ipow64: TODO
+switch (e) {
+  case 32:
+  ...
+  case 63:
 }
+*/

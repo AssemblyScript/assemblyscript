@@ -214,6 +214,8 @@ export namespace CommonNames {
   export const trace = "trace";
   export const seed = "seed";
   export const pow = "pow";
+  export const ipow32 = "ipow32";
+  export const ipow64 = "ipow64";
   export const mod = "mod";
   export const alloc = "__alloc";
   export const realloc = "__realloc";

@@ -15,6 +15,7 @@ declare function i64_high(value: i64): i32;
 declare function i64_add(left: i64, right: i64): i64;
 declare function i64_sub(left: i64, right: i64): i64;
 declare function i64_mul(left: i64, right: i64): i64;
+declare function i64_pow(left: i64, right: i64): i64;
 declare function i64_div(left: i64, right: i64): i64;
 declare function i64_div_u(left: i64, right: i64): i64;
 declare function i64_rem(left: i64, right: i64): i64;

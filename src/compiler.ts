@@ -3855,6 +3855,8 @@ export class Compiler extends DiagnosticEmitter {
   private f64ModInstance: Function | null = null;
   private f32PowInstance: Function | null = null;
   private f64PowInstance: Function | null = null;
+  private i32PowInstance: Function | null = null;
+  private i64PowInstance: Function | null = null;
 
   private compileBinaryExpression(
     expression: BinaryExpression,
@@ -4786,82 +4788,198 @@ export class Compiler extends DiagnosticEmitter {
           );
           return this.module.unreachable();
         }
-
-        let targetType = leftType;
-        let instance: Function | null;
-
-        // Mathf.pow if lhs is f32 (result is f32)
-        if (this.currentType.kind == TypeKind.F32) {
-          rightExpr = this.compileExpression(right, Type.f32, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
-          instance = this.f32PowInstance;
-          if (!instance) {
-            let namespace = this.program.lookupGlobal(CommonNames.Mathf);
-            if (!namespace) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "Mathf"
-              );
-              expr = module.unreachable();
-              break;
-            }
-            let namespaceMembers = namespace.members;
-            if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "Mathf.pow"
-              );
-              expr = module.unreachable();
-              break;
-            }
-            let prototype = assert(namespaceMembers.get(CommonNames.pow));
-            assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-            this.f32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-          }
-
-        // Math.pow otherwise (result is f64)
-        // TODO: should the result be converted back?
+        if (compound) {
+          leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
+          rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
+          rightType = commonType = this.currentType;
         } else {
-          leftExpr = this.convertExpression(leftExpr,
-            this.currentType, Type.f64,
-            false, false,
-            left
-          );
-          leftType = this.currentType;
-          rightExpr = this.compileExpression(right, Type.f64, Constraints.CONV_IMPLICIT);
+          rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          instance = this.f64PowInstance;
-          if (!instance) {
-            let namespace = this.program.lookupGlobal(CommonNames.Math);
-            if (!namespace) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "Math"
-              );
-              expr = module.unreachable();
-              break;
-            }
-            let namespaceMembers = namespace.members;
-            if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "Math.pow"
-              );
-              expr = module.unreachable();
-              break;
-            }
-            let prototype = assert(namespaceMembers.get(CommonNames.pow));
-            assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-            this.f64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
+            leftExpr = this.convertExpression(leftExpr,
+              leftType, commonType,
+              false, true, // !
+              left
+            );
+            leftType = commonType;
+            rightExpr = this.convertExpression(rightExpr,
+              rightType, commonType,
+              false, true, // !
+              right
+            );
+            rightType = commonType;
+          } else {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "**", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return module.unreachable();
           }
         }
-        if (!instance || !this.compileFunction(instance)) {
-          expr = module.unreachable();
-        } else {
-          expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
-          if (compound && targetType != this.currentType) {
-            // this yields a proper error if target is i32 for example
-            expr = this.convertExpression(expr, this.currentType, targetType, false, false, expression);
+
+        let instance: Function | null;
+        switch (commonType.kind) {
+          case TypeKind.BOOL: {
+            expr = module.select(
+              module.i32(1),
+              module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
+              leftExpr
+            );
+            break;
+          }
+          case TypeKind.I8:
+          case TypeKind.U8:
+          case TypeKind.I16:
+          case TypeKind.U16:
+          case TypeKind.I32:
+          case TypeKind.U32: {
+            instance = this.i32PowInstance;
+            if (!instance) {
+              let prototype = this.program.lookupGlobal(CommonNames.ipow32);
+              if (!prototype) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "ipow32"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              this.i32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+            }
+            if (!instance || !this.compileFunction(instance)) {
+              expr = module.unreachable();
+            } else {
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
+              if (commonType.size != 32) {
+                expr = this.ensureSmallIntegerWrap(expr, commonType);
+              }
+            }
+            break;
+          }
+          case TypeKind.I64:
+          case TypeKind.U64: {
+            instance = this.i64PowInstance;
+            if (!instance) {
+              let prototype = this.program.lookupGlobal(CommonNames.ipow64);
+              if (!prototype) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "ipow64"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              this.i64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+            }
+            if (!instance || !this.compileFunction(instance)) {
+              expr = module.unreachable();
+            } else {
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
+            }
+            break;
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            let isWasm64 = this.options.isWasm64;
+            instance = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
+            if (!instance) {
+              let prototype = this.program.lookupGlobal(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
+              if (!prototype) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, isWasm64 ? "ipow64" : "ipow32"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+              if (isWasm64) {
+                this.i64PowInstance = instance;
+              } else {
+                this.i32PowInstance = instance;
+              }
+            }
+            if (!instance || !this.compileFunction(instance)) {
+              expr = module.unreachable();
+            } else {
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
+            }
+            break;
+          }
+          case TypeKind.F32: {
+            instance = this.f32PowInstance;
+            if (!instance) {
+              let namespace = this.program.lookupGlobal(CommonNames.Mathf);
+              if (!namespace) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Mathf"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              let namespaceMembers = namespace.members;
+              if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Mathf.pow"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              let prototype = assert(namespaceMembers.get(CommonNames.pow));
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              this.f32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+            }
+            if (!instance || !this.compileFunction(instance)) {
+              expr = module.unreachable();
+            } else {
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
+            }
+            break;
+          }
+          // Math.pow otherwise (result is f64)
+          case TypeKind.F64: {
+            instance = this.f64PowInstance;
+            if (!instance) {
+              let namespace = this.program.lookupGlobal(CommonNames.Math);
+              if (!namespace) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Math"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              let namespaceMembers = namespace.members;
+              if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Math.pow"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              let prototype = assert(namespaceMembers.get(CommonNames.pow));
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              this.f64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+            }
+            if (!instance || !this.compileFunction(instance)) {
+              expr = module.unreachable();
+            } else {
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
+            }
+            break;
+          }
+          default: {
+            assert(false);
+            expr = module.unreachable();
+            break;
           }
         }
         break;

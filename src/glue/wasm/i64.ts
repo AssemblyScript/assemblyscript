@@ -11,6 +11,9 @@
 @global const i64_one: i64 = 1;
 
 // @ts-ignore: decorator
+@global const i64_neg_one: i64 = -1;
+
+// @ts-ignore: decorator
 @global
 function i64_new(lo: i32, hi: i32 = 0): i64 {
   return lo | (hi << 32);
@@ -44,6 +47,24 @@ function i64_sub(left: i64, right: i64): i64 {
 @global
 function i64_mul(left: i64, right: i64): i64 {
   return left * right;
+}
+
+// @ts-ignore: decorator
+@global
+function i64_pow(left: i64, right: i64): i64 {
+  if (right <= 0) {
+    if (left == -1) return select<i64>(-1, 1, right & 1);
+    return i64(right == 0) | i64(left == 1);
+  }
+  if (right == 1) return left;
+  if (right == 2) return left * left;
+  var result: i64 = 1;
+  while (right) {
+    if (right & 1) result *= left;
+    right >>>= 1;
+    left *= left;
+  }
+  return result;
 }
 
 // @ts-ignore: decorator
