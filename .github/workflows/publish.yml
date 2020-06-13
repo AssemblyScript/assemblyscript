@@ -3,26 +3,17 @@ on:
   schedule:
   - cron: '0 0 * * *'
 jobs:
-  publish:
-    name: "Packages"
+  release:
+    name: Packages
     if: github.repository == 'AssemblyScript/assemblyscript'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
       with:
-        ref: release
+        ref: master
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: current
-    - name: Merge master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        git remote set-url origin "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-        git fetch origin
-        git merge origin/master
     - name: Install dependencies
       run: npm ci
     - name: Build distribution files
@@ -31,8 +22,8 @@ jobs:
         npm run build
     - name: Test distribution files
       run: npm test
-    - name: Release
+    - name: Make semantic release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      run: npx semantic-release --dry-run
+      run: node node_modules/semantic-release/bin/semantic-release.js --prev1 --dry-run
