@@ -1,8 +1,5 @@
 name: Publish
 on:
-  push:
-    branches:
-    - master
   schedule:
   - cron: '0 0 * * *'
 jobs:
@@ -29,4 +26,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      run: node node_modules/semantic-release/bin/semantic-release.js --unstable --dry-run
+      run: node node_modules/semantic-release/bin/semantic-release.js --unstable
