@@ -69,10 +69,10 @@ module.exports = {
     // Quite common in scenarios where an iteration starts at `current = this`.
     "@typescript-eslint/no-this-alias": "off",
 
-    // Disabled here, but enabled again for JavaScript files
+    // Disabled here, but enabled again for JavaScript files.
     "no-unused-vars": "off",
 
-    // Disabled here, but enabled again for TypeScript files
+    // Disabled here, but enabled again for TypeScript files.
     "@typescript-eslint/no-unused-vars": "off"
   },
   overrides: [
