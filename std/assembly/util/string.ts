@@ -889,7 +889,7 @@ export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: st
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
     // @ts-ignore: type
-    offset += itoa_buffered<T>(changetype<usize>(result), offset, value);
+    offset += itoa_buffered<T>(changetype<usize>(result) + (<usize>offset << 1), value);
     if (sepLen) {
       memory.copy(
         changetype<usize>(result) + (<usize>offset << 1),
@@ -901,7 +901,7 @@ export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: st
   }
   value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
   // @ts-ignore: type
-  offset += itoa_buffered<T>(changetype<usize>(result), offset, value);
+  offset += itoa_buffered<T>(changetype<usize>(result) + (<usize>offset << 1), value);
   if (estLen > offset) return result.substring(0, offset);
   return result;
 }
@@ -924,10 +924,8 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
   var value: T;
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
-    offset += dtoa_buffered(changetype<usize>(result), offset,
-      // @ts-ignore: type
-      value
-    );
+    // @ts-ignore: type
+    offset += dtoa_buffered(changetype<usize>(result) + (<usize>offset << 1), value);
     if (sepLen) {
       memory.copy(
         changetype<usize>(result) + (<usize>offset << 1),
@@ -938,10 +936,8 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
     }
   }
   value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
-  offset += dtoa_buffered(changetype<usize>(result), offset,
-    // @ts-ignore: type
-    value
-  );
+  // @ts-ignore: type
+  offset += dtoa_buffered(changetype<usize>(result) + (<usize>offset << 1), value);
   if (estLen > offset) return result.substring(0, offset);
   return result;
 }

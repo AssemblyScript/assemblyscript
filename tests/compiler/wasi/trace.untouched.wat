@@ -5,12 +5,11 @@
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_i32_f64_=>_i32 (func (param i32 i32 f64) (result i32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
- (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (memory $0 1)
@@ -3186,15 +3185,9 @@
   local.get $2
   i32.add
  )
- (func $~lib/util/number/dtoa_buffered (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
-  (local $3 i32)
-  local.get $0
+ (func $~lib/util/number/dtoa_buffered (param $0 i32) (param $1 f64) (result i32)
+  (local $2 i32)
   local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  local.set $0
-  local.get $2
   f64.const 0
   f64.eq
   if
@@ -3210,15 +3203,15 @@
    i32.const 3
    return
   end
-  local.get $2
-  local.get $2
+  local.get $1
+  local.get $1
   f64.sub
   f64.const 0
   f64.eq
   i32.eqz
   if
-   local.get $2
-   local.get $2
+   local.get $1
+   local.get $1
    f64.ne
    if
     local.get $0
@@ -3233,11 +3226,11 @@
     i32.const 3
     return
    else
-    local.get $2
+    local.get $1
     f64.const 0
     f64.lt
-    local.set $3
-    local.get $3
+    local.set $2
+    local.get $2
     if
      local.get $0
      i32.const 45
@@ -3254,14 +3247,14 @@
     i64.const 34058970405077102
     i64.store offset=8
     i32.const 8
-    local.get $3
+    local.get $2
     i32.add
     return
    end
    unreachable
   end
   local.get $0
-  local.get $2
+  local.get $1
   call $~lib/util/number/dtoa_core
  )
  (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
@@ -3563,7 +3556,6 @@
    i32.const 1
    local.get $11
    local.get $11
-   i32.const 0
    local.get $2
    call $~lib/util/number/dtoa_buffered
    local.get $11
@@ -3585,7 +3577,6 @@
     i32.const 1
     local.get $11
     local.get $11
-    i32.const 0
     local.get $3
     call $~lib/util/number/dtoa_buffered
     local.get $11
@@ -3607,7 +3598,6 @@
      i32.const 1
      local.get $11
      local.get $11
-     i32.const 0
      local.get $4
      call $~lib/util/number/dtoa_buffered
      local.get $11
@@ -3629,7 +3619,6 @@
       i32.const 1
       local.get $11
       local.get $11
-      i32.const 0
       local.get $5
       call $~lib/util/number/dtoa_buffered
       local.get $11
@@ -3651,7 +3640,6 @@
        i32.const 1
        local.get $11
        local.get $11
-       i32.const 0
        local.get $6
        call $~lib/util/number/dtoa_buffered
        local.get $11
