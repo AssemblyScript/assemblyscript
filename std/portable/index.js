@@ -208,7 +208,7 @@ String["fromCharCodes"] = function fromCharCodes(arr) {
 String["fromCodePoints"] = function fromCodePoints(arr) {
   let str = '';
   for (let i = 0, l = arr.length; i < l; i++) {
-    str += String.fromCodePoints(arr[i]);
+    str += String.fromCodePoint(arr[i]);
   }
   return str;
 };
