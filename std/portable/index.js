@@ -198,11 +198,38 @@ globalScope["changetype"] = function changetype(value) {
 };
 
 String["fromCharCodes"] = function fromCharCodes(arr) {
-  return String.fromCharCode.apply(String, arr);
+  const CHUNKSIZE = 1 << 14;
+  const len = arr.length;
+  if (len <= CHUNKSIZE) {
+    return String.fromCodePoint.apply(String, arr);
+  }
+  let index = 0;
+  let parts = '';
+  while (index < len) {
+    parts += String.fromCharCode.apply(
+      String,
+      arr.slice(index, Math.min(index + CHUNKSIZE, len))
+    );
+    index += CHUNKSIZE;
+  }
+  return parts;
 };
 
 String["fromCodePoints"] = function fromCodePoints(arr) {
-  return String.fromCodePoint.apply(String, arr);
+  const CHUNKSIZE = 1 << 14;
+  let len = arr.length;
+  if (len <= CHUNKSIZE) {
+    return String.fromCharCode.apply(String, arr);
+  }
+  let index = 0;
+  let parts = '';
+  do {
+    const last = arr[index + CHUNKSIZE - 1];
+    const size = last >= 0xD800 && last < 0xDC00 ? CHUNKSIZE - 1 : CHUNKSIZE;
+    parts += String.fromCharCode.apply(String, arr.slice(index, index += size));
+    len -= size;
+  } while (len > CHUNKSIZE);
+  return parts + String.fromCharCode.apply(String, arr.slice(index, index + len));
 };
 
 if (!String.prototype.replaceAll) {
