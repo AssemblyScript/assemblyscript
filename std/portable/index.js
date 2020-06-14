@@ -217,19 +217,20 @@ String["fromCharCodes"] = function fromCharCodes(arr) {
 
 String["fromCodePoints"] = function fromCodePoints(arr) {
   const CHUNKSIZE = 1 << 15;
-  let len = arr.length;
+  const len = arr.length;
   if (len <= CHUNKSIZE) {
-    return String.fromCodePoints.apply(String, arr);
+    return String.fromCodePoint.apply(String, arr);
   }
   let index = 0;
   let parts = '';
-  do {
-    const last = arr[index + CHUNKSIZE - 1];
-    const size = last >= 0xD800 && last < 0xDC00 ? CHUNKSIZE - 1 : CHUNKSIZE;
-    parts += String.fromCharCode.apply(String, arr.slice(index, index += size));
-    len -= size;
-  } while (len > CHUNKSIZE);
-  return parts + String.fromCharCode.apply(String, arr.slice(index, index + len));
+  while (index < len) {
+    parts += String.fromCodePoint.apply(
+      String,
+      arr.slice(index, Math.min(index + CHUNKSIZE, len))
+    );
+    index += CHUNKSIZE;
+  }
+  return parts;
 };
 
 if (!String.prototype.replaceAll) {
