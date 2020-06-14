@@ -9,13 +9,12 @@
  (type $none_=>_i32 (func (result i32)))
  (type $none_=>_f64 (func (result f64)))
  (type $none_=>_none (func))
- (type $i32_i32_i64_=>_i32 (func (param i32 i32 i64) (result i32)))
+ (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
+ (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i64_=>_none (func (param i64)))
- (type $i32_i32_f64_=>_i32 (func (param i32 i32 f64) (result i32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
- (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
@@ -6391,49 +6390,44 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/itoa_stream<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
+ (func $~lib/util/number/itoa_buffered<i32> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  local.set $0
-  local.get $2
   i32.const 0
   i32.lt_s
-  local.tee $1
+  local.tee $2
   if
    local.get $0
    i32.const 45
    i32.store16
    i32.const 0
-   local.get $2
+   local.get $1
    i32.sub
-   local.set $2
+   local.set $1
   end
-  local.get $2
+  local.get $1
   i32.const 10
   i32.lt_u
   if
    local.get $0
-   local.get $1
+   local.get $2
    i32.const 1
    i32.shl
    i32.add
-   local.get $2
+   local.get $1
    i32.const 48
    i32.or
    i32.store16
-   local.get $1
+   local.get $2
    i32.const 1
    i32.add
    return
   end
   local.get $0
-  local.get $2
-  local.get $2
-  call $~lib/util/number/decimalCount32
   local.get $1
+  local.get $1
+  call $~lib/util/number/decimalCount32
+  local.get $2
   i32.add
   local.tee $0
   call $~lib/util/number/utoa_dec_simple<u32>
@@ -6493,13 +6487,16 @@
    if
     local.get $1
     local.get $3
+    i32.const 1
+    i32.shl
+    i32.add
     local.get $0
     local.get $6
     i32.const 2
     i32.shl
     i32.add
     i32.load
-    call $~lib/util/number/itoa_stream<i32>
+    call $~lib/util/number/itoa_buffered<i32>
     local.get $3
     i32.add
     local.set $3
@@ -6530,13 +6527,16 @@
   local.get $7
   local.get $1
   local.get $3
+  i32.const 1
+  i32.shl
+  i32.add
   local.get $0
   local.get $4
   i32.const 2
   i32.shl
   i32.add
   i32.load
-  call $~lib/util/number/itoa_stream<i32>
+  call $~lib/util/number/itoa_buffered<i32>
   local.get $3
   i32.add
   local.tee $0
@@ -6591,19 +6591,13 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/itoa_stream<u32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
+ (func $~lib/util/number/itoa_buffered<u32> (param $0 i32) (param $1 i32) (result i32)
   local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  local.set $0
-  local.get $2
   i32.const 10
   i32.lt_u
   if
    local.get $0
-   local.get $2
+   local.get $1
    i32.const 48
    i32.or
    i32.store16
@@ -6611,8 +6605,8 @@
    return
   end
   local.get $0
-  local.get $2
-  local.get $2
+  local.get $1
+  local.get $1
   call $~lib/util/number/decimalCount32
   local.tee $0
   call $~lib/util/number/utoa_dec_simple<u32>
@@ -6672,13 +6666,16 @@
    if
     local.get $1
     local.get $3
+    i32.const 1
+    i32.shl
+    i32.add
     local.get $0
     local.get $6
     i32.const 2
     i32.shl
     i32.add
     i32.load
-    call $~lib/util/number/itoa_stream<u32>
+    call $~lib/util/number/itoa_buffered<u32>
     local.get $3
     i32.add
     local.set $3
@@ -6709,13 +6706,16 @@
   local.get $7
   local.get $1
   local.get $3
+  i32.const 1
+  i32.shl
+  i32.add
   local.get $0
   local.get $4
   i32.const 2
   i32.shl
   i32.add
   i32.load
-  call $~lib/util/number/itoa_stream<u32>
+  call $~lib/util/number/itoa_buffered<u32>
   local.get $3
   i32.add
   local.tee $0
@@ -7674,14 +7674,9 @@
   local.get $8
   i32.add
  )
- (func $~lib/util/number/dtoa_stream (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
-  local.get $0
+ (func $~lib/util/number/dtoa_buffered (param $0 i32) (param $1 f64) (result i32)
+  (local $2 i32)
   local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  local.set $0
-  local.get $2
   f64.const 0
   f64.eq
   if
@@ -7697,14 +7692,14 @@
    i32.const 3
    return
   end
-  local.get $2
-  local.get $2
+  local.get $1
+  local.get $1
   f64.sub
   f64.const 0
   f64.ne
   if
-   local.get $2
-   local.get $2
+   local.get $1
+   local.get $1
    f64.ne
    if
     local.get $0
@@ -7719,10 +7714,10 @@
     i32.const 3
     return
    else
-    local.get $2
+    local.get $1
     f64.const 0
     f64.lt
-    local.tee $1
+    local.tee $2
     if
      local.get $0
      i32.const 45
@@ -7738,7 +7733,7 @@
     local.get $0
     i64.const 34058970405077102
     i64.store offset=8
-    local.get $1
+    local.get $2
     i32.const 8
     i32.add
     return
@@ -7746,7 +7741,7 @@
    unreachable
   end
   local.get $0
-  local.get $2
+  local.get $1
   call $~lib/util/number/dtoa_core
  )
  (func $~lib/util/string/joinFloatArray<f64> (param $0 i32) (param $1 i32) (result i32)
@@ -7862,13 +7857,16 @@
    if
     local.get $1
     local.get $2
+    i32.const 1
+    i32.shl
+    i32.add
     local.get $0
     local.get $7
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    call $~lib/util/number/dtoa_stream
+    call $~lib/util/number/dtoa_buffered
     local.get $2
     i32.add
     local.set $2
@@ -7899,13 +7897,16 @@
   local.get $8
   local.get $1
   local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
   local.get $0
   local.get $5
   i32.const 3
   i32.shl
   i32.add
   f64.load
-  call $~lib/util/number/dtoa_stream
+  call $~lib/util/number/dtoa_buffered
   local.get $2
   i32.add
   local.tee $0
@@ -8285,31 +8286,26 @@
   i32.const 6304
   call $~lib/rt/pure/__release
  )
- (func $~lib/util/number/itoa_stream<i8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
+ (func $~lib/util/number/itoa_buffered<i8> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  local.set $0
-  local.get $2
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
   i32.const 0
   i32.lt_s
-  local.tee $1
+  local.tee $2
   if
    local.get $0
    i32.const 45
    i32.store16
    i32.const 0
-   local.get $2
+   local.get $1
    i32.sub
-   local.set $2
+   local.set $1
   end
-  local.get $2
+  local.get $1
   i32.const 24
   i32.shl
   i32.const 24
@@ -8318,11 +8314,11 @@
   i32.lt_u
   if
    local.get $0
-   local.get $1
+   local.get $2
    i32.const 1
    i32.shl
    i32.add
-   local.get $2
+   local.get $1
    i32.const 24
    i32.shl
    i32.const 24
@@ -8330,19 +8326,19 @@
    i32.const 48
    i32.or
    i32.store16
-   local.get $1
+   local.get $2
    i32.const 1
    i32.add
    return
   end
   local.get $2
+  local.get $1
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
   local.tee $2
   call $~lib/util/number/decimalCount32
-  local.get $1
   i32.add
   local.set $1
   local.get $0
@@ -8406,11 +8402,14 @@
    if
     local.get $1
     local.get $2
+    i32.const 1
+    i32.shl
+    i32.add
     local.get $0
     local.get $6
     i32.add
     i32.load8_s
-    call $~lib/util/number/itoa_stream<i8>
+    call $~lib/util/number/itoa_buffered<i8>
     local.get $2
     i32.add
     local.set $2
@@ -8441,11 +8440,14 @@
   local.get $7
   local.get $1
   local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
   local.get $0
   local.get $4
   i32.add
   i32.load8_s
-  call $~lib/util/number/itoa_stream<i8>
+  call $~lib/util/number/itoa_buffered<i8>
   local.get $2
   i32.add
   local.tee $0
@@ -8464,21 +8466,16 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/util/number/itoa_stream<u16> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
+ (func $~lib/util/number/itoa_buffered<u16> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  local.set $0
-  local.get $2
   i32.const 65535
   i32.and
   i32.const 10
   i32.lt_u
   if
    local.get $0
-   local.get $2
+   local.get $1
    i32.const 65535
    i32.and
    i32.const 48
@@ -8487,7 +8484,7 @@
    i32.const 1
    return
   end
-  local.get $2
+  local.get $1
   i32.const 65535
   i32.and
   local.tee $2
@@ -8554,13 +8551,16 @@
    if
     local.get $1
     local.get $2
+    i32.const 1
+    i32.shl
+    i32.add
     local.get $0
     local.get $6
     i32.const 1
     i32.shl
     i32.add
     i32.load16_u
-    call $~lib/util/number/itoa_stream<u16>
+    call $~lib/util/number/itoa_buffered<u16>
     local.get $2
     i32.add
     local.set $2
@@ -8591,13 +8591,16 @@
   local.get $7
   local.get $1
   local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
   local.get $0
   local.get $4
   i32.const 1
   i32.shl
   i32.add
   i32.load16_u
-  call $~lib/util/number/itoa_stream<u16>
+  call $~lib/util/number/itoa_buffered<u16>
   local.get $2
   i32.add
   local.tee $0
@@ -8692,48 +8695,43 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/itoa_stream<u64> (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/util/number/itoa_buffered<u64> (param $0 i32) (param $1 i64) (result i32)
+  (local $2 i32)
   (local $3 i32)
   local.get $1
-  i32.const 1
-  i32.shl
-  local.get $0
-  i32.add
-  local.set $0
-  local.get $2
   i64.const 10
   i64.lt_u
   if
    local.get $0
-   local.get $2
+   local.get $1
    i64.const 48
    i64.or
    i64.store16
    i32.const 1
    return
   end
-  local.get $2
+  local.get $1
   i64.const 4294967295
   i64.le_u
   if
-   local.get $2
+   local.get $1
    i32.wrap_i64
    local.tee $3
    call $~lib/util/number/decimalCount32
-   local.set $1
+   local.set $2
    local.get $0
    local.get $3
-   local.get $1
+   local.get $2
    call $~lib/util/number/utoa_dec_simple<u32>
   else
    local.get $0
-   local.get $2
-   local.get $2
+   local.get $1
+   local.get $1
    call $~lib/util/number/decimalCount64High
-   local.tee $1
+   local.tee $2
    call $~lib/util/number/utoa_dec_simple<u64>
   end
-  local.get $1
+  local.get $2
  )
  (func $~lib/util/string/joinIntegerArray<u64> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -8829,13 +8827,16 @@
    if
     local.get $1
     local.get $2
+    i32.const 1
+    i32.shl
+    i32.add
     local.get $0
     local.get $7
     i32.const 3
     i32.shl
     i32.add
     i64.load
-    call $~lib/util/number/itoa_stream<u64>
+    call $~lib/util/number/itoa_buffered<u64>
     local.get $2
     i32.add
     local.set $2
@@ -8866,13 +8867,16 @@
   local.get $8
   local.get $1
   local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
   local.get $0
   local.get $4
   i32.const 3
   i32.shl
   i32.add
   i64.load
-  call $~lib/util/number/itoa_stream<u64>
+  call $~lib/util/number/itoa_buffered<u64>
   local.get $2
   i32.add
   local.tee $0
@@ -8891,71 +8895,66 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/util/number/itoa_stream<i64> (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/util/number/itoa_buffered<i64> (param $0 i32) (param $1 i64) (result i32)
+  (local $2 i32)
   (local $3 i32)
   local.get $1
-  i32.const 1
-  i32.shl
-  local.get $0
-  i32.add
-  local.set $1
-  local.get $2
   i64.const 0
   i64.lt_s
-  local.tee $0
+  local.tee $2
   if
-   local.get $1
+   local.get $0
    i32.const 45
    i32.store16
    i64.const 0
-   local.get $2
+   local.get $1
    i64.sub
-   local.set $2
+   local.set $1
   end
-  local.get $2
+  local.get $1
   i64.const 10
   i64.lt_u
   if
-   local.get $0
+   local.get $2
    i32.const 1
    i32.shl
-   local.get $1
+   local.get $0
    i32.add
-   local.get $2
+   local.get $1
    i64.const 48
    i64.or
    i64.store16
-   local.get $0
+   local.get $2
    i32.const 1
    i32.add
    return
   end
-  local.get $2
+  local.get $1
   i64.const 4294967295
   i64.le_u
   if
    local.get $2
-   i32.wrap_i64
-   local.tee $3
-   call $~lib/util/number/decimalCount32
-   local.get $0
-   i32.add
-   local.set $0
    local.get $1
-   local.get $3
+   i32.wrap_i64
+   local.tee $2
+   call $~lib/util/number/decimalCount32
+   i32.add
+   local.set $3
    local.get $0
+   local.get $2
+   local.get $3
    call $~lib/util/number/utoa_dec_simple<u32>
   else
-   local.get $1
-   local.get $2
-   local.get $2
-   call $~lib/util/number/decimalCount64High
    local.get $0
+   local.get $1
+   local.get $1
+   call $~lib/util/number/decimalCount64High
+   local.get $2
    i32.add
-   local.tee $0
+   local.tee $3
    call $~lib/util/number/utoa_dec_simple<u64>
   end
-  local.get $0
+  local.get $3
  )
  (func $~lib/util/string/joinIntegerArray<i64> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9074,13 +9073,16 @@
    if
     local.get $1
     local.get $2
+    i32.const 1
+    i32.shl
+    i32.add
     local.get $0
     local.get $7
     i32.const 3
     i32.shl
     i32.add
     i64.load
-    call $~lib/util/number/itoa_stream<i64>
+    call $~lib/util/number/itoa_buffered<i64>
     local.get $2
     i32.add
     local.set $2
@@ -9111,13 +9113,16 @@
   local.get $8
   local.get $1
   local.get $2
+  i32.const 1
+  i32.shl
+  i32.add
   local.get $0
   local.get $5
   i32.const 3
   i32.shl
   i32.add
   i64.load
-  call $~lib/util/number/itoa_stream<i64>
+  call $~lib/util/number/itoa_buffered<i64>
   local.get $2
   i32.add
   local.tee $0
@@ -9313,21 +9318,16 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/util/number/itoa_stream<u8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
+ (func $~lib/util/number/itoa_buffered<u8> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  local.set $0
-  local.get $2
   i32.const 255
   i32.and
   i32.const 10
   i32.lt_u
   if
    local.get $0
-   local.get $2
+   local.get $1
    i32.const 255
    i32.and
    i32.const 48
@@ -9336,7 +9336,7 @@
    i32.const 1
    return
   end
-  local.get $2
+  local.get $1
   i32.const 255
   i32.and
   local.tee $2
@@ -9402,11 +9402,14 @@
    if
     local.get $1
     local.get $3
+    i32.const 1
+    i32.shl
+    i32.add
     local.get $0
     local.get $6
     i32.add
     i32.load8_u
-    call $~lib/util/number/itoa_stream<u8>
+    call $~lib/util/number/itoa_buffered<u8>
     local.get $3
     i32.add
     local.set $3
@@ -9437,11 +9440,14 @@
   local.get $7
   local.get $1
   local.get $3
+  i32.const 1
+  i32.shl
+  i32.add
   local.get $0
   local.get $4
   i32.add
   i32.load8_u
-  call $~lib/util/number/itoa_stream<u8>
+  call $~lib/util/number/itoa_buffered<u8>
   local.get $3
   i32.add
   local.tee $0
