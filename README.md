@@ -11,14 +11,12 @@
 
 <p align="justify"><strong>AssemblyScript</strong> compiles a strict variant of <a href="http://www.typescriptlang.org">TypeScript</a> (basically JavaScript with types) to <a href="http://webassembly.org">WebAssembly</a> using <a href="https://github.com/WebAssembly/binaryen">Binaryen</a>. It generates lean and mean WebAssembly modules while being just an <code>npm install</code> away.</p>
 
-<b>
-  <p align="center">
-    <a href="https://assemblyscript.org">About</a>&nbsp;&nbsp;·&nbsp;
-    <a href="https://assemblyscript.org/introduction.html">Introduction</a>&nbsp;&nbsp;·&nbsp;
-    <a href="https://assemblyscript.org/quick-start.html">Quick start</a>&nbsp;&nbsp;·&nbsp;
-    <a href="https://assemblyscript.org/development.html">Development instructions</a>
-  </p>
-</b>
+<h3 align="center">
+  <a href="https://assemblyscript.org">About</a>&nbsp;&nbsp;·&nbsp;
+  <a href="https://assemblyscript.org/introduction.html">Introduction</a>&nbsp;&nbsp;·&nbsp;
+  <a href="https://assemblyscript.org/quick-start.html">Quick start</a>&nbsp;&nbsp;·&nbsp;
+  <a href="https://assemblyscript.org/development.html">Development instructions</a>
+</h3>
 <br>
 
 <h2 align="center">Contributors</h2>
