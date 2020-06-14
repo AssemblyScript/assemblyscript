@@ -6391,7 +6391,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/itoa_stream<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_buffered<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -6499,7 +6499,7 @@
     i32.shl
     i32.add
     i32.load
-    call $~lib/util/number/itoa_stream<i32>
+    call $~lib/util/number/itoa_buffered<i32>
     local.get $3
     i32.add
     local.set $3
@@ -6536,7 +6536,7 @@
   i32.shl
   i32.add
   i32.load
-  call $~lib/util/number/itoa_stream<i32>
+  call $~lib/util/number/itoa_buffered<i32>
   local.get $3
   i32.add
   local.tee $0
@@ -6591,7 +6591,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/itoa_stream<u32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_buffered<u32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -6678,7 +6678,7 @@
     i32.shl
     i32.add
     i32.load
-    call $~lib/util/number/itoa_stream<u32>
+    call $~lib/util/number/itoa_buffered<u32>
     local.get $3
     i32.add
     local.set $3
@@ -6715,7 +6715,7 @@
   i32.shl
   i32.add
   i32.load
-  call $~lib/util/number/itoa_stream<u32>
+  call $~lib/util/number/itoa_buffered<u32>
   local.get $3
   i32.add
   local.tee $0
@@ -7674,7 +7674,7 @@
   local.get $8
   i32.add
  )
- (func $~lib/util/number/dtoa_stream (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
+ (func $~lib/util/number/dtoa_buffered (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -7868,7 +7868,7 @@
     i32.shl
     i32.add
     f64.load
-    call $~lib/util/number/dtoa_stream
+    call $~lib/util/number/dtoa_buffered
     local.get $2
     i32.add
     local.set $2
@@ -7905,7 +7905,7 @@
   i32.shl
   i32.add
   f64.load
-  call $~lib/util/number/dtoa_stream
+  call $~lib/util/number/dtoa_buffered
   local.get $2
   i32.add
   local.tee $0
@@ -8285,7 +8285,7 @@
   i32.const 6304
   call $~lib/rt/pure/__release
  )
- (func $~lib/util/number/itoa_stream<i8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_buffered<i8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -8410,7 +8410,7 @@
     local.get $6
     i32.add
     i32.load8_s
-    call $~lib/util/number/itoa_stream<i8>
+    call $~lib/util/number/itoa_buffered<i8>
     local.get $2
     i32.add
     local.set $2
@@ -8445,7 +8445,7 @@
   local.get $4
   i32.add
   i32.load8_s
-  call $~lib/util/number/itoa_stream<i8>
+  call $~lib/util/number/itoa_buffered<i8>
   local.get $2
   i32.add
   local.tee $0
@@ -8464,7 +8464,7 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/util/number/itoa_stream<u16> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_buffered<u16> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -8560,7 +8560,7 @@
     i32.shl
     i32.add
     i32.load16_u
-    call $~lib/util/number/itoa_stream<u16>
+    call $~lib/util/number/itoa_buffered<u16>
     local.get $2
     i32.add
     local.set $2
@@ -8597,7 +8597,7 @@
   i32.shl
   i32.add
   i32.load16_u
-  call $~lib/util/number/itoa_stream<u16>
+  call $~lib/util/number/itoa_buffered<u16>
   local.get $2
   i32.add
   local.tee $0
@@ -8692,7 +8692,7 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/itoa_stream<u64> (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/util/number/itoa_buffered<u64> (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   local.get $1
   i32.const 1
@@ -8835,7 +8835,7 @@
     i32.shl
     i32.add
     i64.load
-    call $~lib/util/number/itoa_stream<u64>
+    call $~lib/util/number/itoa_buffered<u64>
     local.get $2
     i32.add
     local.set $2
@@ -8872,7 +8872,7 @@
   i32.shl
   i32.add
   i64.load
-  call $~lib/util/number/itoa_stream<u64>
+  call $~lib/util/number/itoa_buffered<u64>
   local.get $2
   i32.add
   local.tee $0
@@ -8891,7 +8891,7 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/util/number/itoa_stream<i64> (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/util/number/itoa_buffered<i64> (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   local.get $1
   i32.const 1
@@ -9080,7 +9080,7 @@
     i32.shl
     i32.add
     i64.load
-    call $~lib/util/number/itoa_stream<i64>
+    call $~lib/util/number/itoa_buffered<i64>
     local.get $2
     i32.add
     local.set $2
@@ -9117,7 +9117,7 @@
   i32.shl
   i32.add
   i64.load
-  call $~lib/util/number/itoa_stream<i64>
+  call $~lib/util/number/itoa_buffered<i64>
   local.get $2
   i32.add
   local.tee $0
@@ -9313,7 +9313,7 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/util/number/itoa_stream<u8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_buffered<u8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -9406,7 +9406,7 @@
     local.get $6
     i32.add
     i32.load8_u
-    call $~lib/util/number/itoa_stream<u8>
+    call $~lib/util/number/itoa_buffered<u8>
     local.get $3
     i32.add
     local.set $3
@@ -9441,7 +9441,7 @@
   local.get $4
   i32.add
   i32.load8_u
-  call $~lib/util/number/itoa_stream<u8>
+  call $~lib/util/number/itoa_buffered<u8>
   local.get $3
   i32.add
   local.tee $0

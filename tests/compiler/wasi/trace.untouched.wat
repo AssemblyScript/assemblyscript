@@ -3186,7 +3186,7 @@
   local.get $2
   i32.add
  )
- (func $~lib/util/number/dtoa_stream (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
+ (func $~lib/util/number/dtoa_buffered (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -3565,7 +3565,7 @@
    local.get $11
    i32.const 0
    local.get $2
-   call $~lib/util/number/dtoa_stream
+   call $~lib/util/number/dtoa_buffered
    local.get $11
    i32.const 0
    call $~lib/string/String.UTF8.encodeUnsafe
@@ -3587,7 +3587,7 @@
     local.get $11
     i32.const 0
     local.get $3
-    call $~lib/util/number/dtoa_stream
+    call $~lib/util/number/dtoa_buffered
     local.get $11
     i32.const 0
     call $~lib/string/String.UTF8.encodeUnsafe
@@ -3609,7 +3609,7 @@
      local.get $11
      i32.const 0
      local.get $4
-     call $~lib/util/number/dtoa_stream
+     call $~lib/util/number/dtoa_buffered
      local.get $11
      i32.const 0
      call $~lib/string/String.UTF8.encodeUnsafe
@@ -3631,7 +3631,7 @@
       local.get $11
       i32.const 0
       local.get $5
-      call $~lib/util/number/dtoa_stream
+      call $~lib/util/number/dtoa_buffered
       local.get $11
       i32.const 0
       call $~lib/string/String.UTF8.encodeUnsafe
@@ -3653,7 +3653,7 @@
        local.get $11
        i32.const 0
        local.get $6
-       call $~lib/util/number/dtoa_stream
+       call $~lib/util/number/dtoa_buffered
        local.get $11
        i32.const 0
        call $~lib/string/String.UTF8.encodeUnsafe

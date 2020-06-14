@@ -736,7 +736,7 @@ export function dtoa(value: f64): String {
   return result;
 }
 
-export function itoa_stream<T extends number>(buffer: usize, offset: usize, value: T): u32 {
+export function itoa_buffered<T extends number>(buffer: usize, offset: usize, value: T): u32 {
   buffer += offset << 1;
   var sign: u32 = 0;
   if (isSigned<T>()) {
@@ -783,7 +783,7 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
   return decimals;
 }
 
-export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
+export function dtoa_buffered(buffer: usize, offset: usize, value: f64): u32 {
   buffer += offset << 1;
   if (value == 0) {
     store<u16>(buffer, CharCode._0);

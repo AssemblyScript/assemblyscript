@@ -1,4 +1,4 @@
-import { itoa32, utoa32, itoa64, utoa64, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
+import { itoa32, utoa32, itoa64, utoa64, dtoa, itoa_buffered, dtoa_buffered, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
 
 // All tables are stored as two staged lookup tables (static tries)
@@ -889,7 +889,7 @@ export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: st
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
     // @ts-ignore: type
-    offset += itoa_stream<T>(changetype<usize>(result), offset, value);
+    offset += itoa_buffered<T>(changetype<usize>(result), offset, value);
     if (sepLen) {
       memory.copy(
         changetype<usize>(result) + (<usize>offset << 1),
@@ -901,7 +901,7 @@ export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: st
   }
   value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
   // @ts-ignore: type
-  offset += itoa_stream<T>(changetype<usize>(result), offset, value);
+  offset += itoa_buffered<T>(changetype<usize>(result), offset, value);
   if (estLen > offset) return result.substring(0, offset);
   return result;
 }
@@ -924,7 +924,7 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
   var value: T;
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
-    offset += dtoa_stream(changetype<usize>(result), offset,
+    offset += dtoa_buffered(changetype<usize>(result), offset,
       // @ts-ignore: type
       value
     );
@@ -938,7 +938,7 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
     }
   }
   value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
-  offset += dtoa_stream(changetype<usize>(result), offset,
+  offset += dtoa_buffered(changetype<usize>(result), offset,
     // @ts-ignore: type
     value
   );

@@ -8,7 +8,7 @@ import {
 import {
   MAX_DOUBLE_LENGTH,
   decimalCount32,
-  dtoa_stream
+  dtoa_buffered
 } from "util/number";
 
 // @ts-ignore: decorator
@@ -81,19 +81,19 @@ function trace( // eslint-disable-line @typescript-eslint/no-unused-vars
   fd_write(2, iovPtr, 1, lenPtr);
   if (n) {
     store<u8>(bufPtr++, 0x20); // space
-    changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a0), bufPtr);
+    changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_buffered(bufPtr, 0, a0), bufPtr);
     fd_write(2, iovPtr, 1, lenPtr);
     if (n > 1) {
-      changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a1), bufPtr);
+      changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_buffered(bufPtr, 0, a1), bufPtr);
       fd_write(2, iovPtr, 1, lenPtr);
       if (n > 2) {
-        changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a2), bufPtr);
+        changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_buffered(bufPtr, 0, a2), bufPtr);
         fd_write(2, iovPtr, 1, lenPtr);
         if (n > 3) {
-          changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a3), bufPtr);
+          changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_buffered(bufPtr, 0, a3), bufPtr);
           fd_write(2, iovPtr, 1, lenPtr);
           if (n > 4) {
-            changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a4), bufPtr);
+            changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_buffered(bufPtr, 0, a4), bufPtr);
             fd_write(2, iovPtr, 1, lenPtr);
           }
         }
