@@ -201,7 +201,7 @@ String["fromCharCodes"] = function fromCharCodes(arr) {
   const CHUNKSIZE = 1 << 13;
   const len = arr.length;
   if (len <= CHUNKSIZE) {
-    return String.fromCodePoint.apply(String, arr);
+    return String.fromCharCode.apply(String, arr);
   }
   let index = 0;
   let parts = '';
@@ -219,7 +219,7 @@ String["fromCodePoints"] = function fromCodePoints(arr) {
   const CHUNKSIZE = 1 << 13;
   let len = arr.length;
   if (len <= CHUNKSIZE) {
-    return String.fromCharCode.apply(String, arr);
+    return String.fromCodePoints.apply(String, arr);
   }
   let index = 0;
   let parts = '';
