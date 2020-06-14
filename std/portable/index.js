@@ -198,19 +198,38 @@ globalScope["changetype"] = function changetype(value) {
 };
 
 String["fromCharCodes"] = function fromCharCodes(arr) {
-  let str = '';
-  for (let i = 0, l = arr.length; i < l; i++) {
-    str += String.fromCharCode(arr[i]);
+  const CHUNKSIZE = 1 << 15;
+  const len = arr.length;
+  if (len <= CHUNKSIZE) {
+    return String.fromCharCode.apply(String, arr);
   }
-  return str;
+  let index = 0;
+  let parts = '';
+  while (index < len) {
+    parts += String.fromCharCode.apply(
+      String,
+      arr.slice(index, Math.min(index + CHUNKSIZE, len))
+    );
+    index += CHUNKSIZE;
+  }
+  return parts;
 };
 
 String["fromCodePoints"] = function fromCodePoints(arr) {
-  let str = '';
-  for (let i = 0, l = arr.length; i < l; i++) {
-    str += String.fromCodePoint(arr[i]);
+  const CHUNKSIZE = 1 << 15;
+  let len = arr.length;
+  if (len <= CHUNKSIZE) {
+    return String.fromCodePoints.apply(String, arr);
   }
-  return str;
+  let index = 0;
+  let parts = '';
+  do {
+    const last = arr[index + CHUNKSIZE - 1];
+    const size = last >= 0xD800 && last < 0xDC00 ? CHUNKSIZE - 1 : CHUNKSIZE;
+    parts += String.fromCharCode.apply(String, arr.slice(index, index += size));
+    len -= size;
+  } while (len > CHUNKSIZE);
+  return parts + String.fromCharCode.apply(String, arr.slice(index, index + len));
 };
 
 if (!String.prototype.replaceAll) {
