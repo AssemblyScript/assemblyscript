@@ -198,7 +198,7 @@ globalScope["changetype"] = function changetype(value) {
 };
 
 String["fromCharCodes"] = function fromCharCodes(arr) {
-  const CHUNKSIZE = 1 << 13;
+  const CHUNKSIZE = 1 << 15;
   const len = arr.length;
   if (len <= CHUNKSIZE) {
     return String.fromCharCode.apply(String, arr);
@@ -216,7 +216,7 @@ String["fromCharCodes"] = function fromCharCodes(arr) {
 };
 
 String["fromCodePoints"] = function fromCodePoints(arr) {
-  const CHUNKSIZE = 1 << 13;
+  const CHUNKSIZE = 1 << 15;
   let len = arr.length;
   if (len <= CHUNKSIZE) {
     return String.fromCodePoints.apply(String, arr);
