@@ -2397,18 +2397,18 @@ function readBuffer(ptr: usize, len: i32): Uint8Array {
 
 export function readString(ptr: usize): string | null {
   if (!ptr) return null;
-  var str = "";
+  var arr = new Array<i32>();
   // the following is based on Emscripten's UTF8ArrayToString
   var cp: u32;
   var u1: u32, u2: u32, u3: u32, u4: u32, u5: u32;
   while (cp = binaryen.__i32_load8_u(ptr++)) {
     if (!(cp & 0x80)) {
-      str += String.fromCharCode(cp);
+      arr.push(cp);
       continue;
     }
     u1 = binaryen.__i32_load8_u(ptr++) & 63;
     if ((cp & 0xE0) == 0xC0) {
-      str += String.fromCharCode(((cp & 31) << 6) | u1);
+      arr.push(((cp & 31) << 6) | u1);
       continue;
     }
     u2 = binaryen.__i32_load8_u(ptr++) & 63;
@@ -2428,16 +2428,16 @@ export function readString(ptr: usize): string | null {
         }
       }
     }
-    str += String.fromCharCode(cp);
+    arr.push(cp);
     if (cp < 0x10000) {
-      str += String.fromCharCode(cp);
+      arr.push(cp);
     } else {
       let ch = cp - 0x10000;
-      str += String.fromCharCode(0xD800 | (ch >>> 10)) +
-             String.fromCharCode(0xDC00 | (ch & 0x3FF));
+      arr.push(0xD800 | (ch >>> 10));
+      arr.push(0xDC00 | (ch & 0x3FF));
     }
   }
-  return str;
+  return String.fromCharCodes(arr);
 }
 
 /** Result structure of {@link Module#toBinary}. */
