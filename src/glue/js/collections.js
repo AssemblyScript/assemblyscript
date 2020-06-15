@@ -4,28 +4,13 @@
  */
 
 global.Map_keys = function Map_keys(map) {
-  const arr = new Array(map.size);
-  let i = 0;
-  for (let key of map.keys()) {
-    arr[i++] = key;
-  }
-  return arr;
+  return Array.from(map.keys());
 };
 
 global.Map_values = function Map_values(map) {
-  const arr = new Array(map.size);
-  let i = 0;
-  for (let value of map.values()) {
-    arr[i++] = value;
-  }
-  return arr;
+  return Array.from(map.values());
 };
 
 global.Set_values = function Set_values(set) {
-  const arr = new Array(set.size);
-  let i = 0;
-  for (let value of set.values()) {
-    arr[i++] = value;
-  }
-  return arr;
+  return Array.from(set.values());
 };
