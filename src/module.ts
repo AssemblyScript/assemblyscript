@@ -2413,7 +2413,7 @@ function readBuffer(ptr: usize, len: i32): Uint8Array {
 
 export function readString(ptr: usize): string | null {
   if (!ptr) return null;
-  var arr = new Array<u32>();
+  var arr = new Array<i32>();
   // the following is based on Emscripten's UTF8ArrayToString
   var cp: u32;
   var u1: u32, u2: u32, u3: u32, u4: u32, u5: u32;

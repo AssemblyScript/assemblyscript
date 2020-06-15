@@ -225,8 +225,6 @@ function i64_to_f64(value: i64): f64 {
   return <f64>value;
 }
 
-import { CharCode } from "../../util";
-
 // @ts-ignore: decorator
 @global
 function i64_to_string(value: i64, unsigned: bool = false): string {
