@@ -1277,7 +1277,9 @@ export class Module {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    binaryen._BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, params, results);
+    binaryen._BinaryenAddEventImport(
+      this.ref, cStr1, cStr2, cStr3, attribute, params, results
+    );
   }
 
   // memory
@@ -1762,10 +1764,14 @@ export class Module {
       case ExpressionId.GlobalGet: {
         let globalName = binaryen._BinaryenGlobalGetGetName(expr);
         if (!globalName) break;
-        return binaryen._BinaryenGlobalGet(this.ref, globalName, binaryen._BinaryenExpressionGetType(expr));
+        return binaryen._BinaryenGlobalGet(
+          this.ref, globalName, binaryen._BinaryenExpressionGetType(expr)
+        );
       }
       case ExpressionId.Load: {
-        if (!(nested1 = this.cloneExpression(binaryen._BinaryenLoadGetPtr(expr), noSideEffects, maxDepth))) {
+        if (!(nested1 = this.cloneExpression(
+          binaryen._BinaryenLoadGetPtr(expr), noSideEffects, maxDepth)
+        )) {
           break;
         }
         return (
@@ -1787,19 +1793,29 @@ export class Module {
         );
       }
       case ExpressionId.Unary: {
-        if (!(nested1 = this.cloneExpression(binaryen._BinaryenUnaryGetValue(expr), noSideEffects, maxDepth))) {
+        if (!(nested1 = this.cloneExpression(
+          binaryen._BinaryenUnaryGetValue(expr), noSideEffects, maxDepth)
+        )) {
           break;
         }
-        return binaryen._BinaryenUnary(this.ref, binaryen._BinaryenUnaryGetOp(expr), nested1);
+        return binaryen._BinaryenUnary(
+          this.ref, binaryen._BinaryenUnaryGetOp(expr), nested1
+        );
       }
       case ExpressionId.Binary: {
-        if (!(nested1 = this.cloneExpression(binaryen._BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth))) {
+        if (!(nested1 = this.cloneExpression(
+          binaryen._BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth)
+        )) {
           break;
         }
-        if (!(nested2 = this.cloneExpression(binaryen._BinaryenBinaryGetRight(expr), noSideEffects, maxDepth))) {
+        if (!(nested2 = this.cloneExpression(
+          binaryen._BinaryenBinaryGetRight(expr), noSideEffects, maxDepth)
+        )) {
           break;
         }
-        return binaryen._BinaryenBinary(this.ref, binaryen._BinaryenBinaryGetOp(expr), nested1, nested2);
+        return binaryen._BinaryenBinary(
+          this.ref, binaryen._BinaryenBinaryGetOp(expr), nested1, nested2
+        );
       }
     }
     return 0;
@@ -1809,7 +1825,12 @@ export class Module {
     return binaryen._BinaryenExpressionCopy(expr, this.ref);
   }
 
-  runExpression(expr: ExpressionRef, flags: ExpressionRunnerFlags, maxDepth: i32 = 50, maxLoopIterations: i32 = 1): ExpressionRef {
+  runExpression(
+    expr: ExpressionRef,
+    flags: ExpressionRunnerFlags,
+    maxDepth: i32 = 50,
+    maxLoopIterations: i32 = 1
+  ): ExpressionRef {
     var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
     var precomp =  binaryen._ExpressionRunnerRunAndDispose(runner, expr);
     if (precomp) {
@@ -2453,16 +2474,23 @@ export class BinaryModule {
 /** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
 export function needsExplicitUnreachable(expr: ExpressionRef): bool {
   // not applicable if pushing a value to the stack
-  if (binaryen._BinaryenExpressionGetType(expr) != NativeType.Unreachable) return false;
+  if (binaryen._BinaryenExpressionGetType(expr) != NativeType.Unreachable) {
+    return false;
+  }
 
   switch (binaryen._BinaryenExpressionGetId(expr)) {
     case ExpressionId.Unreachable:
     case ExpressionId.Return: return false;
-    case ExpressionId.Break: return binaryen._BinaryenBreakGetCondition(expr) != 0;
+    case ExpressionId.Break: {
+      return binaryen._BinaryenBreakGetCondition(expr) != 0;
+    }
     case ExpressionId.Block: {
       if (!binaryen._BinaryenBlockGetName(expr)) { // can't break out of it
         let numChildren = binaryen._BinaryenBlockGetNumChildren(expr); // last child needs unreachable
-        return numChildren > 0 && needsExplicitUnreachable(binaryen._BinaryenBlockGetChild(expr, numChildren - 1));
+        return (
+          numChildren > 0 &&
+          needsExplicitUnreachable(binaryen._BinaryenBlockGetChild(expr, numChildren - 1))
+        );
       }
     }
   }
@@ -2470,7 +2498,11 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
 }
 
 /** Traverses all expression members of an expression, calling the given visitor. */
-export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: ExpressionRef, data: T) => void): bool {
+export function traverse<T>(
+  expr:  ExpressionRef,
+  data:  T,
+  visit: (expr: ExpressionRef, data: T) => void
+): bool {
   switch (getExpressionId(expr)) {
     case ExpressionId.Block: {
       for (let i: Index = 0, n = binaryen._BinaryenBlockGetNumChildren(expr); i < n; ++i) {
