@@ -552,7 +552,9 @@ export class Module {
   v128(bytes: Uint8Array): ExpressionRef {
     assert(bytes.length == 16);
     var out = this.lit;
-    for (let i = 0; i < 16; ++i) binaryen.__i32_store8(out + i, bytes[i]);
+    for (let i = 0; i < 16; ++i) {
+      binaryen.__i32_store8(out + i, bytes[i]);
+    }
     binaryen._BinaryenLiteralVec128(out, out);
     return binaryen._BinaryenConst(this.ref, out);
   }
@@ -585,7 +587,9 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
     var cArr = allocPtrArray(operands);
-    var ret = binaryen._BinaryenHost(this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0);
+    var ret = binaryen._BinaryenHost(
+      this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0
+    );
     binaryen._free(cArr);
     return ret;
   }
@@ -1095,7 +1099,15 @@ export class Module {
   ): FunctionRef {
     var cStr = this.allocStringCached(name);
     var cArr = allocPtrArray(varTypes);
-    var ret = binaryen._BinaryenAddFunction(this.ref, cStr, params, results, cArr, varTypes ? varTypes.length : 0, body);
+    var ret = binaryen._BinaryenAddFunction(
+      this.ref,
+      cStr,
+      params,
+      results,
+      cArr,
+      varTypes ? varTypes.length : 0,
+      body
+    );
     binaryen._free(cArr);
     return ret;
   }
@@ -1114,7 +1126,11 @@ export class Module {
 
   private hasTemporaryFunction: bool = false;
 
-  addTemporaryFunction(result: NativeType, paramTypes: NativeType[] | null, body: ExpressionRef): FunctionRef {
+  addTemporaryFunction(
+    result: NativeType,
+    paramTypes: NativeType[] | null,
+    body: ExpressionRef
+  ): FunctionRef {
     this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
     var tempName = this.allocStringCached("");
     var cArr = allocPtrArray(paramTypes);
@@ -1276,8 +1292,9 @@ export class Module {
     var offs = new Array<ExpressionRef>(k);
     var sizs = new Array<Index>(k);
     for (let i = 0; i < k; ++i) {
-      let buffer = segments[i].buffer;
-      let offset = segments[i].offset;
+      let segment = segments[i];
+      let buffer = segment.buffer;
+      let offset = segment.offset;
       segs[i] = allocU8Array(buffer);
       psvs[i] = 0; // no passive segments currently
       offs[i] = target == Target.WASM64
@@ -1289,12 +1306,16 @@ export class Module {
     var cArr2 = allocU8Array(psvs);
     var cArr3 = allocPtrArray(offs);
     var cArr4 = allocU32Array(sizs);
-    binaryen._BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, cArr4, k, shared);
+    binaryen._BinaryenSetMemory(
+      this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, cArr4, k, shared
+    );
     binaryen._free(cArr4);
     binaryen._free(cArr3);
     binaryen._free(cArr2);
     binaryen._free(cArr1);
-    for (let i = k - 1; i >= 0; --i) binaryen._free(segs[i]);
+    for (let i = k - 1; i >= 0; --i) {
+      binaryen._free(segs[i]);
+    }
   }
 
   // table
@@ -1314,7 +1335,9 @@ export class Module {
       names[i] = this.allocStringCached(funcs[i]);
     }
     var cArr = allocPtrArray(names);
-    binaryen._BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames, offset);
+    binaryen._BinaryenSetFunctionTable(
+      this.ref, initial, maximum, cArr, numNames, offset
+    );
     binaryen._free(cArr);
   }
 
@@ -2256,20 +2279,20 @@ export function hasSideEffects(expr: ExpressionRef, features: FeatureFlags = Fea
 
 function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
-  var numValues = u8s.length;
-  var ptr = binaryen._malloc(numValues);
-  var idx = ptr;
-  for (let i = 0; i < numValues; ++i) {
-    binaryen.__i32_store8(idx++, u8s[i]);
+  var len = u8s.length;
+  var ptr = binaryen._malloc(len);
+  for (let i = 0; i < len; ++i) {
+    binaryen.__i32_store8(ptr + i, u8s[i]);
   }
   return ptr;
 }
 
 function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
-  var ptr = binaryen._malloc(i32s.length << 2);
+  var len = i32s.length;
+  var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
-  for (let i = 0, k = i32s.length; i < k; ++i) {
+  for (let i = 0; i < len; ++i) {
     let val = i32s[i];
     binaryen.__i32_store(idx, val);
     idx += 4;
@@ -2279,9 +2302,10 @@ function allocI32Array(i32s: i32[] | null): usize {
 
 function allocU32Array(u32s: u32[] | null): usize {
   if (!u32s) return 0;
-  var ptr = binaryen._malloc(u32s.length << 2);
+  var len = u32s.length;
+  var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
-  for (let i = 0, k = u32s.length; i < k; ++i) {
+  for (let i = 0; i < len; ++i) {
     let val = u32s[i];
     binaryen.__i32_store(idx, val);
     idx += 4;
@@ -2293,9 +2317,10 @@ function allocPtrArray(ptrs: usize[] | null): usize {
   if (!ptrs) return 0;
   // TODO: WASM64
   assert(ASC_TARGET != Target.WASM64);
-  var ptr = binaryen._malloc(ptrs.length << 2);
+  var len = ptrs.length;
+  var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
-  for (let i = 0, k = ptrs.length; i < k; ++i) {
+  for (let i = 0, k = len; i < k; ++i) {
     let val = ptrs[i];
     binaryen.__i32_store(idx, <i32>val);
     idx += 4;
@@ -2329,7 +2354,7 @@ function stringLengthUTF8(str: string): usize {
 
 function allocString(str: string | null): usize {
   if (str === null) return 0;
-  var ptr = binaryen._malloc(stringLengthUTF8(str) + 1);
+  var ptr = binaryen._malloc(stringLengthUTF8(str) + 1) >>> 0;
   // the following is based on Emscripten's stringToUTF8Array
   var idx = ptr;
   for (let i = 0, k = str.length; i < k; ++i) {
@@ -2370,9 +2395,9 @@ function allocString(str: string | null): usize {
   return ptr;
 }
 
-function readBuffer(ptr: usize, length: i32): Uint8Array {
-  var ret = new Uint8Array(length);
-  for (let i = 0; i < length; ++i) {
+function readBuffer(ptr: usize, len: i32): Uint8Array {
+  var ret = new Uint8Array(len);
+  for (let i = 0; i < len; ++i) {
     ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
   }
   return ret;
@@ -2380,7 +2405,7 @@ function readBuffer(ptr: usize, length: i32): Uint8Array {
 
 export function readString(ptr: usize): string | null {
   if (!ptr) return null;
-  var arr = new Array<i32>();
+  var arr = new Array<u32>();
   // the following is based on Emscripten's UTF8ArrayToString
   var cp: u32;
   var u1: u32, u2: u32, u3: u32, u4: u32, u5: u32;
@@ -2416,12 +2441,11 @@ export function readString(ptr: usize): string | null {
       arr.push(cp);
     } else {
       let ch = cp - 0x10000;
-      arr.push(0xD800 | (ch >> 10));
+      arr.push(0xD800 | (ch >>> 10));
       arr.push(0xDC00 | (ch & 0x3FF));
     }
   }
   return String.fromCharCodes(arr);
-  // return String.fromCodePoints(arr);
 }
 
 /** Result structure of {@link Module#toBinary}. */
