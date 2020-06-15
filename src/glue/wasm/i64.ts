@@ -226,7 +226,7 @@ function i64_to_f64(value: i64): f64 {
 }
 
 // @ts-ignore: decorator
-@global
+@global @inline
 function i64_to_string(value: i64, unsigned: bool = false): string {
   return (unsigned ? <u64>value : value).toString();
 }
