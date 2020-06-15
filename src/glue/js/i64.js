@@ -138,11 +138,11 @@ global.i64_is_i32 = function i64_is_i32(value) {
 };
 
 global.i64_is_u8 = function i64_is_u8(value) {
-  return value.high === 0 && value.low >= 0 && value.low <= u8.MAX_VALUE;
+  return value.high === 0 && (value.low >>> 0) <= u8.MAX_VALUE;
 };
 
 global.i64_is_u16 = function i64_is_u16(value) {
-  return value.high === 0 && value.low >= 0 && value.low <= u16.MAX_VALUE;
+  return value.high === 0 && (value.low >>> 0) <= u16.MAX_VALUE;
 };
 
 global.i64_is_u32 = function i64_is_u32(value) {
@@ -150,7 +150,7 @@ global.i64_is_u32 = function i64_is_u32(value) {
 };
 
 global.i64_is_bool = function i64_is_bool(value) {
-  return value.high === 0 && (value.low === 0 || value.low === 1);
+  return (value.high | (value.low & ~1)) === 0;
 };
 
 const minSafeF32 = Long.fromNumber(f32.MIN_SAFE_INTEGER);
@@ -176,5 +176,5 @@ global.i64_to_f64 = function i64_to_f64(value) {
 };
 
 global.i64_to_string = function i64_to_string(value, unsigned) {
-  return (unsigned ? value.toUnsigned() : value).toString();
+  return unsigned ? value.toUnsigned().toString() : value.toString();
 };

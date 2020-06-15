@@ -180,25 +180,25 @@ function i64_is_i32(value: i64): bool {
 // @ts-ignore: decorator
 @global @inline
 function i64_is_u8(value: i64): bool {
-  return value >= 0 && value <= <i64>u8.MAX_VALUE;
+  return <u64>value <= <u64>u8.MAX_VALUE;
 }
 
 // @ts-ignore: decorator
 @global @inline
 function i64_is_u16(value: i64): bool {
-  return value >= 0 && value <= <i64>u16.MAX_VALUE;
+  return <u64>value <= <u64>u16.MAX_VALUE;
 }
 
 // @ts-ignore: decorator
 @global @inline
 function i64_is_u32(value: i64): bool {
-  return value >= 0 && value <= <i64>u32.MAX_VALUE;
+  return <u64>value <= <u64>u32.MAX_VALUE;
 }
 
 // @ts-ignore: decorator
 @global @inline
 function i64_is_bool(value: i64): bool {
-  return value === 0 || value === 1;
+  return (value & ~1) == 0;
 }
 
 // @ts-ignore: decorator
