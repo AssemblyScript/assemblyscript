@@ -849,8 +849,12 @@ export class Module {
     var cStr = this.allocStringCached(target);
     var cArr = allocPtrArray(operands);
     var ret = isReturn
-      ? binaryen._BinaryenReturnCall(this.ref, cStr, cArr, operands ? operands.length : 0, returnType)
-      : binaryen._BinaryenCall(this.ref, cStr, cArr, operands ? operands.length : 0, returnType);
+      ? binaryen._BinaryenReturnCall(
+          this.ref, cStr, cArr, operands ? operands.length : 0, returnType
+        )
+      : binaryen._BinaryenCall(
+          this.ref, cStr, cArr, operands ? operands.length : 0, returnType
+        );
     binaryen._free(cArr);
     return ret;
   }
@@ -872,8 +876,12 @@ export class Module {
   ): ExpressionRef {
     var cArr = allocPtrArray(operands);
     var ret = isReturn
-      ? binaryen._BinaryenReturnCallIndirect(this.ref, index, cArr, operands ? operands.length : 0, params, results)
-      : binaryen._BinaryenCallIndirect(this.ref, index, cArr, operands ? operands.length : 0, params, results);
+      ? binaryen._BinaryenReturnCallIndirect(
+          this.ref, index, cArr, operands ? operands.length : 0, params, results
+        )
+      : binaryen._BinaryenCallIndirect(
+          this.ref, index, cArr, operands ? operands.length : 0, params, results
+        );
     binaryen._free(cArr);
     return ret;
   }
