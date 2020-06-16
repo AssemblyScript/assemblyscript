@@ -2311,17 +2311,13 @@ function stringLengthUTF8(str: string): usize {
       u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
     }
     if (u <= 0x7F) {
-      ++len;
+      len += 1;
     } else if (u <= 0x7FF) {
       len += 2;
     } else if (u <= 0xFFFF) {
       len += 3;
     } else if (u <= 0x1FFFFF) {
       len += 4;
-    } else if (u <= 0x3FFFFFF) {
-      len += 5;
-    } else {
-      len += 6;
     }
   }
   return len;
@@ -2329,7 +2325,7 @@ function stringLengthUTF8(str: string): usize {
 
 function allocString(str: string | null): usize {
   if (str === null) return 0;
-  var ptr = binaryen._malloc(stringLengthUTF8(str) + 1);
+  var ptr = binaryen._malloc(stringLengthUTF8(str) + 1) >>> 0;
   // the following is based on Emscripten's stringToUTF8Array
   var idx = ptr;
   for (let i = 0, k = str.length; i < k; ++i) {
@@ -2346,21 +2342,9 @@ function allocString(str: string | null): usize {
       binaryen.__i32_store8(idx++, (0xE0 |  (u >>> 12)      ) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-    } else if (u <= 0x1FFFFF) {
-      binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-    } else if (u <= 0x3FFFFFF) {
-      binaryen.__i32_store8(idx++, (0xF8 |  (u >>> 24)      ) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 18) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
     } else {
-      binaryen.__i32_store8(idx++, (0xFC |  (u >>> 30)      ) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 24) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 18) & 63)) as u8);
+      assert(u < 0x200000, "Invalid Unicode code point during allocString");
+      binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
@@ -2370,9 +2354,9 @@ function allocString(str: string | null): usize {
   return ptr;
 }
 
-function readBuffer(ptr: usize, length: i32): Uint8Array {
-  var ret = new Uint8Array(length);
-  for (let i = 0; i < length; ++i) {
+function readBuffer(ptr: usize, len: i32): Uint8Array {
+  var ret = new Uint8Array(len);
+  for (let i = 0; i < len; ++i) {
     ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
   }
   return ret;
@@ -2383,7 +2367,7 @@ export function readString(ptr: usize): string | null {
   var arr = new Array<i32>();
   // the following is based on Emscripten's UTF8ArrayToString
   var cp: u32;
-  var u1: u32, u2: u32, u3: u32, u4: u32, u5: u32;
+  var u1: u32, u2: u32, u3: u32;
   while (cp = binaryen.__i32_load8_u(ptr++)) {
     if (!(cp & 0x80)) {
       arr.push(cp);
@@ -2402,26 +2386,18 @@ export function readString(ptr: usize): string | null {
       if ((cp & 0xF8) == 0xF0) {
         cp = ((cp & 7) << 18) | (u1 << 12) | (u2 << 6) | u3;
       } else {
-        u4 = binaryen.__i32_load8_u(ptr++) & 63;
-        if ((cp & 0xFC) == 0xF8) {
-          cp = ((cp & 3) << 24) | (u1 << 18) | (u2 << 12) | (u3 << 6) | u4;
-        } else {
-          u5 = binaryen.__i32_load8_u(ptr++) & 63;
-          cp = ((cp & 1) << 30) | (u1 << 24) | (u2 << 18) | (u3 << 12) | (u4 << 6) | u5;
-        }
+        assert("Invalid UTF8 sequence during readString");
       }
     }
-    arr.push(cp);
     if (cp < 0x10000) {
       arr.push(cp);
     } else {
       let ch = cp - 0x10000;
-      arr.push(0xD800 | (ch >> 10));
+      arr.push(0xD800 | (ch >>> 10));
       arr.push(0xDC00 | (ch & 0x3FF));
     }
   }
   return String.fromCharCodes(arr);
-  // return String.fromCodePoints(arr);
 }
 
 /** Result structure of {@link Module#toBinary}. */
