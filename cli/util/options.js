@@ -147,16 +147,16 @@ function sanitizeValue(value, type) {
     switch (type) {
       case undefined:
       case "b": return Boolean(value);
-      case "i": return +(+value).toFixed(0) || 0;
-      case "f": return +value || 0;
+      case "i": return Number(Number(value).toFixed(0)) || 0;
+      case "f": return Number(value) || 0;
       case "s": return String(value);
       case "I": {
         if (!Array.isArray(value)) value = [ value ];
-        return value.map(v => +(+v).toFixed(0) || 0);
+        return value.map(v => Number(Number(v).toFixed(0)) || 0);
       }
       case "F": {
         if (!Array.isArray(value)) value = [ value ];
-        return value.map(v => +v || 0);
+        return value.map(v => Number(v) || 0);
       }
       case "S": {
         if (!Array.isArray(value)) value = [ value ];
