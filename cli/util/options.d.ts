@@ -56,4 +56,4 @@ export function help(config: Config, options?: HelpOptions): string;
 export function addDefaults(config: Config, options: { [key: string]: number | string });
 
 /** Merges two sets of options into one, preferring the newer set. */
-export function merge(config: Config, newerOptions: { [key: string]: number | string }, olderOptions: { [key: string]: number | string });
+export function merge(config: Config, currentOptions: { [key: string]: number | string }, parentOptions: { [key: string]: number | string });
