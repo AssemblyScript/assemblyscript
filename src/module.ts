@@ -2386,7 +2386,7 @@ export function readString(ptr: usize): string | null {
       if ((cp & 0xF8) == 0xF0) {
         cp = ((cp & 7) << 18) | (u1 << 12) | (u2 << 6) | u3;
       } else {
-        assert("Invalid UTF8 sequence during readString");
+        assert(false, "Invalid UTF8 sequence during readString");
       }
     }
     if (cp < 0x10000) {
