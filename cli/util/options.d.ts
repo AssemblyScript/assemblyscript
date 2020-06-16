@@ -3,6 +3,11 @@
  * @license Apache-2.0
  */
 
+/** A set of options. */
+export interface OptionSet {
+  [key: string]: number | string
+}
+
 /** Command line option description. */
 export interface OptionDescription {
   /** Textual description. */
@@ -10,7 +15,7 @@ export interface OptionDescription {
   /** Data type. One of (b)oolean [default], (i)nteger, (f)loat or (s)tring. Uppercase means multiple values. */
   type?: "b" | "i" | "f" | "s" | "I" | "F" | "S",
   /** Substituted options, if any. */
-  value?: { [key: string]: number | string },
+  value?: OptionSet,
   /** Short alias, if any. */
   alias?: string
   /** The default value, if any. */
@@ -27,7 +32,7 @@ interface Config {
 /** Parsing result. */
 interface Result {
   /** Parsed options. */
-  options: { [key: string]: number | string },
+  options: OptionSet,
   /** Unknown options. */
   unknown: string[],
   /** Normal arguments. */
@@ -53,7 +58,7 @@ interface HelpOptions {
 export function help(config: Config, options?: HelpOptions): string;
 
 /** Populates default values on a parsed options result. */
-export function addDefaults(config: Config, options: { [key: string]: number | string });
+export function addDefaults(config: Config, options: OptionSet): OptionSet;
 
 /** Merges two sets of options into one, preferring the newer set. */
-export function merge(config: Config, currentOptions: { [key: string]: number | string }, parentOptions: { [key: string]: number | string });
+export function merge(config: Config, currentOptions: OptionSet, parentOptions: OptionSet): OptionSet;
