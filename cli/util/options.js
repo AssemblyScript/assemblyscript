@@ -160,7 +160,7 @@ function sanitizeValue(value, type) {
       }
       case "S": {
         if (!Array.isArray(value)) value = [ value ];
-        return value.map(v => String(v));
+        return value.map(String);
       }
     }
   }
