@@ -16,7 +16,7 @@ const colorsUtil = require("./colors");
 // S    | string array
 
 /** Parses the specified command line arguments according to the given configuration. */
-function parse(argv, config, populateDefaults = true) {
+function parse(argv, config, propagateDefaults = true) {
   var options = {};
   var unknown = [];
   var args = [];
@@ -87,7 +87,7 @@ function parse(argv, config, populateDefaults = true) {
     } else unknown.push(arg);
   }
   while (i < k) trailing.push(argv[i++]); // trailing
-  if (populateDefaults) addDefaults(config, options);
+  if (propagateDefaults) addDefaults(config, options);
 
   return { options, unknown, arguments: args, trailing };
 }
@@ -149,13 +149,9 @@ function merge(config, currentOptions, parentOptions) {
       if (parentOptions[key] != null) {
         // only parent value present
         if (Array.isArray(parentOptions[key])) {
-          if (mutuallyExclusive) {
-            const exclude = currentOptions[mutuallyExclusive];
-            if (exclude) {
-              mergedOptions[key] = parentOptions[key].filter(value => !exclude.includes(value));
-            } else {
-              mergedOptions[key] = parentOptions[key].slice();
-            }
+          let exclude;
+          if (mutuallyExclusive != null && (exclude = currentOptions[mutuallyExclusive])) {
+            mergedOptions[key] = parentOptions[key].filter(value => !exclude.includes(value));
           } else {
             mergedOptions[key] = parentOptions[key].slice();
           }
@@ -173,19 +169,12 @@ function merge(config, currentOptions, parentOptions) {
     } else {
       // both current and parent values present
       if (Array.isArray(currentOptions[key])) {
-        if (mutuallyExclusive) {
-          const exclude = currentOptions[mutuallyExclusive];
-          if (exclude) {
-            mergedOptions[key] = [
-              ...currentOptions[key],
-              ...parentOptions[key].filter(value => !currentOptions[key].includes(value) && !exclude.includes(value))
-            ];
-          } else {
-            mergedOptions[key] = [
-              ...currentOptions[key],
-              ...parentOptions[key].filter(value => !currentOptions[key].includes(value)) // dedup
-            ];
-          }
+        let exclude;
+        if (mutuallyExclusive != null && (exclude = currentOptions[mutuallyExclusive])) {
+          mergedOptions[key] = [
+            ...currentOptions[key],
+            ...parentOptions[key].filter(value => !currentOptions[key].includes(value) && !exclude.includes(value))
+          ];
         } else {
           mergedOptions[key] = [
             ...currentOptions[key],

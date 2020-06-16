@@ -42,7 +42,7 @@ interface Result {
 }
 
 /** Parses the specified command line arguments according to the given configuration. */
-export function parse(argv: string[], config: Config, populateDefaults?: boolean): Result;
+export function parse(argv: string[], config: Config, propagateDefaults?: boolean): Result;
 
 /** Help formatting options. */
 interface HelpOptions {
@@ -57,8 +57,8 @@ interface HelpOptions {
 /** Generates the help text for the specified configuration. */
 export function help(config: Config, options?: HelpOptions): string;
 
+/** Merges two sets of options into one, preferring the current over the parent set. */
+export function merge(config: Config, currentOptions: OptionSet, parentOptions: OptionSet): OptionSet;
+
 /** Populates default values on a parsed options result. */
 export function addDefaults(config: Config, options: OptionSet): OptionSet;
-
-/** Merges two sets of options into one, preferring the newer set. */
-export function merge(config: Config, currentOptions: OptionSet, parentOptions: OptionSet): OptionSet;
