@@ -141,48 +141,76 @@ function help(config, options) {
 
 exports.help = help;
 
+/** Sanitizes an option value to be a valid value of the option's type. */
+function sanitizeValue(value, type) {
+  if (value != null) {
+    switch (type) {
+      case undefined:
+      case "b": return Boolean(value);
+      case "i": return +(+value).toFixed(0) || 0;
+      case "f": return +value || 0;
+      case "s": return String(value);
+      case "I": {
+        if (!Array.isArray(value)) value = [ value ];
+        return value.map(v => +(+v).toFixed(0) || 0);
+      }
+      case "F": {
+        if (!Array.isArray(value)) value = [ value ];
+        return value.map(v => +v || 0);
+      }
+      case "S": {
+        if (!Array.isArray(value)) value = [ value ];
+        return value.map(v => String(v));
+      }
+    }
+  }
+  return undefined;
+}
+
 /** Merges two sets of options into one, preferring the current over the parent set. */
 function merge(config, currentOptions, parentOptions) {
   const mergedOptions = {};
-  for (const [key, { mutuallyExclusive }] of Object.entries(config)) {
-    if (currentOptions[key] == null) {
-      if (parentOptions[key] != null) {
+  for (const [key, { type, mutuallyExclusive }] of Object.entries(config)) {
+    let currentValue = sanitizeValue(currentOptions[key], type);
+    let parentValue = sanitizeValue(parentOptions[key], type);
+    if (currentValue == null) {
+      if (parentValue != null) {
         // only parent value present
-        if (Array.isArray(parentOptions[key])) {
+        if (Array.isArray(parentValue)) {
           let exclude;
           if (mutuallyExclusive != null && (exclude = currentOptions[mutuallyExclusive])) {
-            mergedOptions[key] = parentOptions[key].filter(value => !exclude.includes(value));
+            mergedOptions[key] = parentValue.filter(value => !exclude.includes(value));
           } else {
-            mergedOptions[key] = parentOptions[key].slice();
+            mergedOptions[key] = parentValue.slice();
           }
         } else {
-          mergedOptions[key] = parentOptions[key];
+          mergedOptions[key] = parentValue;
         }
       }
-    } else if (parentOptions[key] == null) {
+    } else if (parentValue == null) {
       // only current value present
-      if (Array.isArray(currentOptions[key])) {
-        mergedOptions[key] = currentOptions[key].slice();
+      if (Array.isArray(currentValue)) {
+        mergedOptions[key] = currentValue.slice();
       } else {
-        mergedOptions[key] = currentOptions[key];
+        mergedOptions[key] = currentValue;
       }
     } else {
       // both current and parent values present
-      if (Array.isArray(currentOptions[key])) {
+      if (Array.isArray(currentValue)) {
         let exclude;
         if (mutuallyExclusive != null && (exclude = currentOptions[mutuallyExclusive])) {
           mergedOptions[key] = [
-            ...currentOptions[key],
-            ...parentOptions[key].filter(value => !currentOptions[key].includes(value) && !exclude.includes(value))
+            ...currentValue,
+            ...parentValue.filter(value => !currentValue.includes(value) && !exclude.includes(value))
           ];
         } else {
           mergedOptions[key] = [
-            ...currentOptions[key],
-            ...parentOptions[key].filter(value => !currentOptions[key].includes(value)) // dedup
+            ...currentValue,
+            ...parentValue.filter(value => !currentValue.includes(value)) // dedup
           ];
         }
       } else {
-        mergedOptions[key] = currentOptions[key];
+        mergedOptions[key] = currentValue;
       }
     }
   }
