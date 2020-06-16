@@ -2449,7 +2449,6 @@ export function readString(ptr: usize): string | null {
         }
       }
     }
-    arr.push(cp);
     if (cp < 0x10000) {
       arr.push(cp);
     } else {
