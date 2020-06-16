@@ -2421,7 +2421,7 @@ export function readString(ptr: usize): string | null {
   var arr = new Array<i32>();
   // the following is based on Emscripten's UTF8ArrayToString
   var cp: u32;
-  var u1: u32, u2: u32, u3: u32, u4: u32, u5: u32;
+  var u1: u32, u2: u32, u3: u32;
   while (cp = binaryen.__i32_load8_u(ptr++)) {
     if (!(cp & 0x80)) {
       arr.push(cp);
@@ -2440,13 +2440,7 @@ export function readString(ptr: usize): string | null {
       if ((cp & 0xF8) == 0xF0) {
         cp = ((cp & 7) << 18) | (u1 << 12) | (u2 << 6) | u3;
       } else {
-        u4 = binaryen.__i32_load8_u(ptr++) & 63;
-        if ((cp & 0xFC) == 0xF8) {
-          cp = ((cp & 3) << 24) | (u1 << 18) | (u2 << 12) | (u3 << 6) | u4;
-        } else {
-          u5 = binaryen.__i32_load8_u(ptr++) & 63;
-          cp = ((cp & 1) << 30) | (u1 << 24) | (u2 << 18) | (u3 << 12) | (u4 << 6) | u5;
-        }
+        assert("Invalid UTF8 sequence during readString");
       }
     }
     if (cp < 0x10000) {
