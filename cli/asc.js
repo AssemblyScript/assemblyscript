@@ -944,14 +944,45 @@ exports.main = function main(argv, options, callback) {
   }
 };
 
+const toString = Object.prototype.toString;
+const typeOf = val => toString.call(val).slice(7, -1);
+
 function getAsconfig(file, baseDir, readFile) {
   const contents = readFile(file, baseDir);
+  const location = path.join(baseDir, file);
   if (!contents) return null;
-  const config = JSON.parse(contents);
-  // TODO: validate configuration shape
-  // TODO: wrap JSON.parse() in try catch to obtain a more descriptive error
+
+  // obtain the configuration
+  let config;
+  try {
+    config = JSON.parse(contents);
+  } catch(ex) {
+    throw new Error("Asconfig is not valid json: " + location);
+  }
+
+  // validate asconfig shape
+  if (config.options && typeOf(config.options) !== "Object") {
+    throw new Error("Asconfig.options is not an object: " + location);
+  }
+  if (config.include && typeOf(config.include) !== "Array") {
+    throw new Error("Asconfig.include is not an object: " + location);
+  }
+  if (config.targets) {
+    if (typeOf(config.targets) !== "Object") {
+      throw new Error("Asconfig.targets is not an object: " + location);
+    }
+    const targets = Object.keys(config.targets);
+    for (let i = 0; i < targets.length; i++) {
+      const target = targets[i];
+      if (typeOf(config.targets[target]) !== "Object") {
+        throw new Error("Asconfig.targets." + target + " is not an object: " + location);
+      }
+    }
+  }
+
   return config;
 }
+
 exports.getAsconfig = getAsconfig;
 
 /** Checks diagnostics emitted so far for errors. */
