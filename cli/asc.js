@@ -194,7 +194,8 @@ exports.main = function main(argv, options, callback) {
   if (!stderr) throw Error("'options.stderr' must be specified");
 
   const opts = optionsUtil.parse(argv, exports.options);
-  const args = opts.options;
+  let args = opts.options;
+
   argv = opts.arguments;
   if (args.noColors) {
     colorsUtil.stdout.supported =
@@ -270,6 +271,24 @@ exports.main = function main(argv, options, callback) {
 
   // Set up base directory
   const baseDir = args.baseDir ? path.resolve(args.baseDir) : ".";
+  const target = args.target;
+
+  // Once the basedir is calculated, we can resolve the config, and it's extensions
+  let asconfig = getAsconfig(opts.config, baseDir, readFile);
+  while (asconfig) {
+    if (asconfig.targets && asconfig.targets[target]) {
+      optionsUtil.merge(exports.options, args, asconfig.targets[target])
+    }
+    if (asconfig.options) {
+      optionsUtil.merge(exports.options, args, asconfig.options);
+    }
+    if (asconfig.extends) {
+      const dirname = path.dirname(path.join(baseDir, options.config));
+      asconfig = getAsconfig(asconfig.extends, dirname, readFile);
+    } else {
+      asconfig = null; // finished resolving the configuration
+    }
+  }
 
   // Set up options
   const compilerOptions = assemblyscript.newOptions();
@@ -923,6 +942,16 @@ exports.main = function main(argv, options, callback) {
     });
   }
 };
+
+function getAsconfig(file, baseDir, readFile) {
+  const contents = readFile(file, baseDir);
+  if (!contents) return null;
+  const config = JSON.parse(contents);
+  // TODO: validate configuration shape
+  // TODO: wrap JSON.parse() in try catch to obtain a more descriptive error
+  return config;
+}
+exports.getAsconfig = getAsconfig;
 
 /** Checks diagnostics emitted so far for errors. */
 function checkDiagnostics(program, stderr) {
