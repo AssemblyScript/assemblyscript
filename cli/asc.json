@@ -21,7 +21,7 @@
     "category": "General",
     "description": "Provides a configuration for assemblyscript to compile your project.",
     "type": "s",
-    "default": "asconfig.js"
+    "default": "asconfig.json"
   },
   "target": {
     "category": "General",

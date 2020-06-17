@@ -274,8 +274,9 @@ exports.main = function main(argv, options, callback) {
   const target = args.target;
 
   // Once the basedir is calculated, we can resolve the config, and it's extensions
-  let asconfig = getAsconfig(opts.config, baseDir, readFile);
+  let asconfig = getAsconfig(args.config, baseDir, readFile);
   while (asconfig) {
+    // merge target first, then base options, then extended asconfigs
     if (asconfig.targets && asconfig.targets[target]) {
       optionsUtil.merge(exports.options, args, asconfig.targets[target])
     }
