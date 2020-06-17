@@ -6927,7 +6927,7 @@ export class Compiler extends DiagnosticEmitter {
     if (instance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
 
     // Inline if explicitly requested
-    if (instance.hasDecorator(DecoratorFlags.INLINE) && !instance.is(CommonFlags.VIRTUAL)) {
+    if (instance.hasDecorator(DecoratorFlags.INLINE) && (!instance.is(CommonFlags.VIRTUAL) || reportNode.isCallOnSuper)) {
       assert(!instance.is(CommonFlags.STUB)); // doesn't make sense
       let inlineStack = this.inlineStack;
       if (inlineStack.includes(instance)) {
@@ -6999,8 +6999,6 @@ export class Compiler extends DiagnosticEmitter {
     thisArg: ExpressionRef = 0,
     immediatelyDropped: bool = false
   ): ExpressionRef {
-    assert(!instance.is(CommonFlags.VIRTUAL));
-
     var module = this.module;
     var numArguments = operands ? operands.length : 0;
     var signature = instance.signature;
