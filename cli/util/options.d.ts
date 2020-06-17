@@ -3,6 +3,11 @@
  * @license Apache-2.0
  */
 
+/** A set of options. */
+export interface OptionSet {
+  [key: string]: number | string
+}
+
 /** Command line option description. */
 export interface OptionDescription {
   /** Textual description. */
@@ -10,7 +15,7 @@ export interface OptionDescription {
   /** Data type. One of (b)oolean [default], (i)nteger, (f)loat or (s)tring. Uppercase means multiple values. */
   type?: "b" | "i" | "f" | "s" | "I" | "F" | "S",
   /** Substituted options, if any. */
-  value?: { [key: string]: number | string },
+  value?: OptionSet,
   /** Short alias, if any. */
   alias?: string
   /** The default value, if any. */
@@ -27,19 +32,17 @@ interface Config {
 /** Parsing result. */
 interface Result {
   /** Parsed options. */
-  options: { [key: string]: number | string },
+  options: OptionSet,
   /** Unknown options. */
   unknown: string[],
   /** Normal arguments. */
   arguments: string[],
   /** Trailing arguments. */
-  trailing: string[],
-  /** Provided arguments from the cli. */
-  provided: Set<string>
+  trailing: string[]
 }
 
 /** Parses the specified command line arguments according to the given configuration. */
-export function parse(argv: string[], config: Config): Result;
+export function parse(argv: string[], config: Config, propagateDefaults?: boolean): Result;
 
 /** Help formatting options. */
 interface HelpOptions {
@@ -53,3 +56,9 @@ interface HelpOptions {
 
 /** Generates the help text for the specified configuration. */
 export function help(config: Config, options?: HelpOptions): string;
+
+/** Merges two sets of options into one, preferring the current over the parent set. */
+export function merge(config: Config, currentOptions: OptionSet, parentOptions: OptionSet): OptionSet;
+
+/** Populates default values on a parsed options result. */
+export function addDefaults(config: Config, options: OptionSet): OptionSet;

@@ -16,12 +16,11 @@ const colorsUtil = require("./colors");
 // S    | string array
 
 /** Parses the specified command line arguments according to the given configuration. */
-function parse(argv, config) {
+function parse(argv, config, propagateDefaults = true) {
   var options = {};
   var unknown = [];
   var args = [];
   var trailing = [];
-  var provided = new Set();
 
   // make an alias map and initialize defaults
   var aliases = {};
@@ -54,13 +53,15 @@ function parse(argv, config) {
       else { args.push(arg); continue; } // argument
     }
     if (option) {
-      if (option.type == null || option.type === "b") {
-        options[key] = true; // flag
-        provided.add(key);
+      if (option.value) {
+        // alias setting fixed values
+        Object.keys(option.value).forEach(k => options[k] = option.value[k]);
+      } else if (option.type == null || option.type === "b") {
+        // boolean flag not taking a value
+        options[key] = true;
       } else {
-        // the argument was provided
-        if (i + 1 < argv.length && argv[i + 1].charCodeAt(0) != 45) { // present
-          provided.add(key);
+        if (i + 1 < argv.length && argv[i + 1].charCodeAt(0) != 45) {
+          // non-boolean with given value
           switch (option.type) {
             case "i": options[key] = parseInt(argv[++i], 10); break;
             case "I": options[key] = (options[key] || []).concat(parseInt(argv[++i], 10)); break;
@@ -70,7 +71,8 @@ function parse(argv, config) {
             case "S": options[key] = (options[key] || []).concat(argv[++i].split(",")); break;
             default: unknown.push(arg); --i;
           }
-        } else { // omitted
+        } else {
+          // non-boolean with omitted value
           switch (option.type) {
             case "i":
             case "f": options[key] = option.default || 0; break;
@@ -82,12 +84,12 @@ function parse(argv, config) {
           }
         }
       }
-      if (option.value) Object.keys(option.value).forEach(k => options[k] = option.value[k]);
     } else unknown.push(arg);
   }
   while (i < k) trailing.push(argv[i++]); // trailing
+  if (propagateDefaults) addDefaults(config, options);
 
-  return { options, unknown, arguments: args, trailing, provided };
+  return { options, unknown, arguments: args, trailing };
 }
 
 exports.parse = parse;
@@ -138,3 +140,93 @@ function help(config, options) {
 }
 
 exports.help = help;
+
+/** Sanitizes an option value to be a valid value of the option's type. */
+function sanitizeValue(value, type) {
+  if (value != null) {
+    switch (type) {
+      case undefined:
+      case "b": return Boolean(value);
+      case "i": return Math.trunc(value) || 0;
+      case "f": return Number(value) || 0;
+      case "s": return String(value);
+      case "I": {
+        if (!Array.isArray(value)) value = [ value ];
+        return value.map(v => Math.trunc(v) || 0);
+      }
+      case "F": {
+        if (!Array.isArray(value)) value = [ value ];
+        return value.map(v => Number(v) || 0);
+      }
+      case "S": {
+        if (!Array.isArray(value)) value = [ value ];
+        return value.map(String);
+      }
+    }
+  }
+  return undefined;
+}
+
+/** Merges two sets of options into one, preferring the current over the parent set. */
+function merge(config, currentOptions, parentOptions) {
+  const mergedOptions = {};
+  for (const [key, { type, mutuallyExclusive }] of Object.entries(config)) {
+    let currentValue = sanitizeValue(currentOptions[key], type);
+    let parentValue = sanitizeValue(parentOptions[key], type);
+    if (currentValue == null) {
+      if (parentValue != null) {
+        // only parent value present
+        if (Array.isArray(parentValue)) {
+          let exclude;
+          if (mutuallyExclusive != null && (exclude = currentOptions[mutuallyExclusive])) {
+            mergedOptions[key] = parentValue.filter(value => !exclude.includes(value));
+          } else {
+            mergedOptions[key] = parentValue.slice();
+          }
+        } else {
+          mergedOptions[key] = parentValue;
+        }
+      }
+    } else if (parentValue == null) {
+      // only current value present
+      if (Array.isArray(currentValue)) {
+        mergedOptions[key] = currentValue.slice();
+      } else {
+        mergedOptions[key] = currentValue;
+      }
+    } else {
+      // both current and parent values present
+      if (Array.isArray(currentValue)) {
+        let exclude;
+        if (mutuallyExclusive != null && (exclude = currentOptions[mutuallyExclusive])) {
+          mergedOptions[key] = [
+            ...currentValue,
+            ...parentValue.filter(value => !currentValue.includes(value) && !exclude.includes(value))
+          ];
+        } else {
+          mergedOptions[key] = [
+            ...currentValue,
+            ...parentValue.filter(value => !currentValue.includes(value)) // dedup
+          ];
+        }
+      } else {
+        mergedOptions[key] = currentValue;
+      }
+    }
+  }
+  return mergedOptions;
+}
+
+exports.merge = merge;
+
+/** Populates default values on a parsed options result. */
+function addDefaults(config, options) {
+  for (const [key, { default: defaultValue }] of Object.entries(config)) {
+    if (options[key] == null && defaultValue != null) {
+      options[key] = defaultValue;
+    }
+  }
+  return options;
+}
+
+exports.addDefaults = addDefaults;
