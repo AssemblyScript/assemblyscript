@@ -945,7 +945,7 @@ exports.main = function main(argv, options, callback) {
 };
 
 const toString = Object.prototype.toString;
-const typeOf = val => toString.call(val).slice(7, -1);
+const typeOf = val => toString.call(val).slice(8, -1);
 
 function getAsconfig(file, baseDir, readFile) {
   const contents = readFile(file, baseDir);
