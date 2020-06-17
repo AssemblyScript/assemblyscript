@@ -278,10 +278,10 @@ exports.main = function main(argv, options, callback) {
   while (asconfig) {
     // merge target first, then base options, then extended asconfigs
     if (asconfig.targets && asconfig.targets[target]) {
-      optionsUtil.merge(exports.options, args, asconfig.targets[target]);
+      args = optionsUtil.merge(exports.options, args, asconfig.targets[target]);
     }
     if (asconfig.options) {
-      optionsUtil.merge(exports.options, args, asconfig.options);
+      args = optionsUtil.merge(exports.options, args, asconfig.options);
     }
     if (asconfig.extends) {
       const dirname = path.dirname(path.join(baseDir, options.config));
