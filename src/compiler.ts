@@ -6927,7 +6927,7 @@ export class Compiler extends DiagnosticEmitter {
     if (instance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
 
     // Inline if explicitly requested
-    if (instance.hasDecorator(DecoratorFlags.INLINE)) {
+    if (instance.hasDecorator(DecoratorFlags.INLINE) && !instance.is(CommonFlags.VIRTUAL)) {
       assert(!instance.is(CommonFlags.STUB)); // doesn't make sense
       let inlineStack = this.inlineStack;
       if (inlineStack.includes(instance)) {
