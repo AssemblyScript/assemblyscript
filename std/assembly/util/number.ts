@@ -124,7 +124,7 @@ f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff";
 
 // @ts-ignore: decorator
 @inline
-export function isPowOfTwo<T extends number>(value: T): bool {
+export function isPowerOf2<T extends number>(value: T): bool {
   return popcnt<T>(value) == 1;
 }
 
@@ -165,7 +165,7 @@ export function decimalCount64High(value: u64): u32 {
 }
 
 function ulog_base(num: u64, base: i32): u32 {
-  if (isPowOfTwo(base)) {
+  if (isPowerOf2(base)) {
     return (63 - <u32>clz(num)) / (31 - <u32>clz(base)) + 1;
   }
   var b64 = u64(base), b = b64, e: u32 = 1;
