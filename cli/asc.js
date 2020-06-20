@@ -275,21 +275,57 @@ exports.main = function main(argv, options, callback) {
 
   // Once the basedir is calculated, we can resolve the config, and it's extensions
   let asconfig = getAsconfig(args.config, baseDir, readFile);
+  let asconfigDir = baseDir;
+
   while (asconfig) {
-    // merge target first, then base options, then extended asconfigs
+    // merge target first, then merge options, then merge extended asconfigs
     if (asconfig.targets && asconfig.targets[target]) {
       args = optionsUtil.merge(exports.options, args, asconfig.targets[target]);
     }
     if (asconfig.options) {
       args = optionsUtil.merge(exports.options, args, asconfig.options);
     }
+
+    // entries are added to the compilation
+    if (asconfig.entries) {
+      for (const entry of entries) {
+        argv.push(
+          path.isAbsolute(entry)
+            ? entry
+            // the entry is relative to the asconfig directory
+            : path.join(asconfigDir, entry)
+        );
+      }
+    }
+
+    // asconfig "extends" another config, merging options of it's parent
     if (asconfig.extends) {
-      const dirname = path.dirname(path.join(baseDir, options.config));
-      asconfig = getAsconfig(asconfig.extends, dirname, readFile);
+      asconfigDir = path.isAbsolute(asconfig.extends)
+        // absolute extension path means we know the exact directory and location
+        ? path.dirname(asconfig.extends)
+        // relative means we need to calculate a relative asconfigDir
+        : path.join(asconfigDir, path.dirname(asconfig.extends));
+      asconfig = getAsconfig(asconfigDir, path.basename(asconfig.extends), readFile);
     } else {
-      asconfig = null; // finished resolving the configuration
+      asconfig = null; // finished resolving the configuration chain
     }
   }
+
+  // Just some helper functions
+  const resolve = arg => path.isAbsolute(arg) ? arg : path.resolve(arg);
+  const unique = () => {
+    const set = new Set();
+    return arg => {
+      if (set.has(arg)) return false;
+      set.add(arg);
+      return true;
+    };
+  };
+
+  // postprocess we need to get absolute file locations for lib, argv, and transform
+  argv = argv.map(resolve).filter(unique());
+  args.transform = args.transform.map(resolve).filter(unique());
+  args.lib = args.lib.map(resolve).filter(unique());
 
   // Set up options
   const compilerOptions = assemblyscript.newOptions();
@@ -594,7 +630,7 @@ exports.main = function main(argv, options, callback) {
     const filename = argv[i];
 
     let sourcePath = String(filename).replace(/\\/g, "/").replace(extension.re, "").replace(/[\\/]$/, "");
-    
+
     // Setting the path to relative path
     sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath) : sourcePath;
 
