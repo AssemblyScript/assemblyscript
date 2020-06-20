@@ -312,7 +312,10 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Just some helper functions
-  const resolve = arg => path.isAbsolute(arg) ? arg : path.resolve(arg);
+  const resolve = arg => path.isAbsolute(arg)
+    ? arg
+    // this transform is relative to process.cwd()
+    : path.resolve(path.join(baseDir, arg));
   const unique = () => {
     const set = new Set();
     return arg => {
@@ -322,10 +325,10 @@ exports.main = function main(argv, options, callback) {
     };
   };
 
-  // postprocess we need to get absolute file locations for lib, argv, and transform
-  argv = argv.map(resolve).filter(unique());
-  args.transform = args.transform.map(resolve).filter(unique());
-  args.lib = args.lib.map(resolve).filter(unique());
+  const makeRelative = arg => path.relative(baseDir, arg);
+
+  // postprocess we need to get absolute file locations argv
+  argv = argv.map(resolve).filter(unique()).map(makeRelative);
 
   // Set up options
   const compilerOptions = assemblyscript.newOptions();
@@ -403,7 +406,7 @@ exports.main = function main(argv, options, callback) {
   const transforms = [];
   if (args.transform) {
     let tsNodeRegistered = false;
-    let transformArgs = args.transform;
+    let transformArgs = args.transform.map(resolve).filter(unique());
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
       if (!tsNodeRegistered && filename.endsWith(".ts")) { // ts-node requires .ts specifically
@@ -460,6 +463,7 @@ exports.main = function main(argv, options, callback) {
   if (args.lib) {
     let lib = args.lib;
     if (typeof lib === "string") lib = lib.split(",");
+    lib = lib.map(resolve).filter(unique());
     Array.prototype.push.apply(customLibDirs, lib.map(lib => lib.trim()));
     for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
       let libDir = customLibDirs[i];
