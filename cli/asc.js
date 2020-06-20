@@ -288,7 +288,7 @@ exports.main = function main(argv, options, callback) {
 
     // entries are added to the compilation
     if (asconfig.entries) {
-      for (const entry of entries) {
+      for (const entry of asconfig.entries) {
         argv.push(
           path.isAbsolute(entry)
             ? entry
