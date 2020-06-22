@@ -153,7 +153,42 @@ class Inherit_Ctor extends Inherit_Base {
   assert(o.a != null);
 }
 
-// flow sanity
+// related object literal cases
+
+class SomeObject {
+  a: i32;
+  b: string | null;
+}
+{
+  let a: SomeObject = {}; // OK
+  assert(a.a == 0);
+  assert(a.b == null);
+  let b: SomeObject = { a: 1 }; // OK
+  assert(b.a == 1);
+  assert(b.b == null);
+  let c: SomeObject = { b: "b" }; // OK
+  assert(c.a == 0);
+  assert(c.b == "b");
+  let d: SomeObject = { a: 2, b: "bb" }; // OK
+  assert(d.a == 2);
+  assert(d.b == "bb");
+}
+
+class SomeOtherObject extends SomeObject {
+  c: string;
+}
+{
+  let a: SomeOtherObject = { c: "c" }; // OK
+  assert(a.a == 0);
+  assert(a.b == null);
+  assert(a.c == "c");
+  let b: SomeOtherObject = { a: 3, b: "bbb", c: "cc" };
+  assert(b.a == 3);
+  assert(b.b == "bbb");
+  assert(b.c == "cc");
+}
+
+// related flow cases
 
 class Flow_Balanced {
   a: ArrayBuffer; // OK (any branch)
