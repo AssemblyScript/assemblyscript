@@ -1666,6 +1666,8 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.ensureConstructor(instance, instance.identifierNode);
+    this.checkFieldInitialization(instance);
+
     var instanceMembers = instance.members;
     if (instanceMembers) {
       // TODO: for (let element of instanceMembers.values()) {
@@ -6618,8 +6620,10 @@ export class Compiler extends DiagnosticEmitter {
       let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
       let nativeSizeType = this.options.nativeSizeType;
 
+      let baseCtorInstance = this.ensureConstructor(baseClassInstance, expression);
+      this.checkFieldInitialization(baseClassInstance, expression);
       let superCall = this.compileCallDirect(
-        this.ensureConstructor(baseClassInstance, expression),
+        baseCtorInstance,
         expression.args,
         expression,
         module.local_get(thisLocal.index, nativeSizeType),
@@ -7941,19 +7945,6 @@ export class Compiler extends DiagnosticEmitter {
       return this.module.unreachable();
     }
 
-    // handle call with `this` in constructors
-    let actualFunction = this.currentFlow.actualFunction;
-    if (actualFunction.is(CommonFlags.CONSTRUCTOR)) {
-      let parent = actualFunction.parent;
-      assert(parent.kind == ElementKind.CLASS);
-      for (let i = 0, k = argumentExpressions.length; i < k; ++i) {
-        if (argumentExpressions[i].kind == NodeKind.THIS) {
-          this.checkFieldInitialization(<Class>parent, argumentExpressions[i]);
-          break;
-        }
-      }
-    }
-
     var numArgumentsInclThis = thisArg ? numArguments + 1 : numArguments;
     var operands = new Array<ExpressionRef>(numArgumentsInclThis);
     var index = 0;
@@ -9211,11 +9202,10 @@ export class Compiler extends DiagnosticEmitter {
       let fieldType = fieldInstance.type;
 
       if (fieldInstance.initializerNode) {
-        continue; // set by default ctor
+        continue; // set by generated ctor
       }
 
       if (fieldType.is(TypeFlags.REFERENCE) && fieldType.classReference !== null) {
-        // TODO: Check if it is a class, with a default value (constructor with no params).
         if (!fieldType.is(TypeFlags.NULLABLE)) {
           this.error(
             DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
@@ -9263,10 +9253,15 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (hasErrors) return module.unreachable();
 
+    // generate the default constructor
+    var ctor = this.ensureConstructor(classReference, expression);
+    // note that this is not checking field initialization within the ctor, but
+    // instead checks conditions above with provided fields taken into account.
+
     // allocate a new instance first and assign 'this' to the temp. local
     exprs.unshift(
       module.local_set(tempLocal.index,
-        this.compileInstantiate(classReference, [], Constraints.WILL_RETAIN, expression)
+        this.compileInstantiate(ctor, [], Constraints.WILL_RETAIN, expression)
       )
     );
 
@@ -9330,11 +9325,18 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (!classInstance) return module.unreachable();
     if (contextualType == Type.void) constraints |= Constraints.WILL_DROP;
-    return this.compileInstantiate(classInstance, expression.args, constraints, expression);
+    var ctor = this.ensureConstructor(classInstance, expression);
+    this.checkFieldInitialization(classInstance, expression);
+    return this.compileInstantiate(ctor, expression.args, constraints, expression);
   }
 
   /** Gets the compiled constructor of the specified class or generates one if none is present. */
-  ensureConstructor(classInstance: Class, reportNode: Node): Function {
+  ensureConstructor(
+    /** Class wanting a constructor. */
+    classInstance: Class,
+    /** Report node. */
+    reportNode: Node
+  ): Function {
     var instance = classInstance.constructorInstance;
     if (instance) {
       // shortcut if already compiled
@@ -9347,6 +9349,7 @@ export class Compiler extends DiagnosticEmitter {
       let contextualTypeArguments = uniqueMap(classInstance.contextualTypeArguments);
       if (baseClass) {
         let baseCtor = this.ensureConstructor(baseClass, reportNode);
+        this.checkFieldInitialization(baseClass, reportNode);
         instance = new Function(
           CommonNames.constructor,
           new FunctionPrototype(
@@ -9443,14 +9446,11 @@ export class Compiler extends DiagnosticEmitter {
       instance.finalize(module, funcRef);
     }
 
-    // check that fields are initialized when returning
-    this.checkFieldInitialization(classInstance);
-
     return instance;
   }
 
   /** Checks that all class fields have been initialized. */
-  private checkFieldInitialization(classInstance: Class, relatedNode: Node | null = null): void {
+  checkFieldInitialization(classInstance: Class, relatedNode: Node | null = null): void {
     var members = classInstance.members;
     if (members) {
       let ctor = assert(classInstance.constructorInstance);
@@ -9484,8 +9484,8 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileInstantiate(
-    /** Class to instantiate. */
-    classInstance: Class,
+    /** Constructor to call. */
+    ctorInstance: Function,
     /** Constructor arguments. */
     argumentExpressions: Expression[],
     /** Contextual flags. */
@@ -9493,10 +9493,13 @@ export class Compiler extends DiagnosticEmitter {
     /** Node to report on. */
     reportNode: Node
   ): ExpressionRef {
-    var ctor = this.ensureConstructor(classInstance, reportNode);
-    if (classInstance.type.isUnmanaged || ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
+    assert(ctorInstance.is(CommonFlags.CONSTRUCTOR));
+    var parent = ctorInstance.parent;
+    assert(parent.kind == ElementKind.CLASS);
+    var classInstance = <Class>parent;
+    if (classInstance.type.isUnmanaged || ctorInstance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     var expr = this.compileCallDirect( // no need for another autoreleased local
-      ctor,
+      ctorInstance,
       argumentExpressions,
       reportNode,
       this.makeZero(this.options.usizeType),
