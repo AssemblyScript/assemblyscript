@@ -425,17 +425,17 @@ export class Program extends DiagnosticEmitter {
     super(diagnostics);
     var nativeSource = new Source(SourceKind.LIBRARY_ENTRY, LIBRARY_SUBST + ".wasm", "[native code]");
     this.nativeSource = nativeSource;
-    var nativeFile = new File(this, nativeSource);
-    this.nativeFile = nativeFile;
-    this.filesByName.set(nativeFile.internalName, nativeFile);
     this.parser = new Parser(this.diagnostics, this.sources);
-    this.resolver = new Resolver(this);
+    this._resolver = new Resolver(this);
+    var nativeFile = new File(this, nativeSource);
+    this._nativeFile = nativeFile;
+    this.filesByName.set(nativeFile.internalName, nativeFile);
   }
 
   /** Parser instance. */
   parser: Parser;
   /** Resolver instance. */
-  resolver: Resolver;
+  private _resolver: Resolver | null = null;
   /** Array of sources. */
   sources: Source[] = [];
   /** Diagnostic offset used where successively obtaining the next diagnostic. */
@@ -443,13 +443,23 @@ export class Program extends DiagnosticEmitter {
   /** Special native code source. */
   nativeSource: Source;
   /** Special native code file. */
-  nativeFile: File;
+  private _nativeFile: File | null = null;
   /** Next class id. */
   nextClassId: u32 = 0;
   /** Next signature id. */
   nextSignatureId: i32 = 0;
   /** An indicator if the program has been initialized. */
   initialized: bool = false;
+
+  /** Gets the singleton native file. */
+  get nativeFile(): File {
+    return assert(this._nativeFile);
+  }
+
+  /** Gets the corresponding resolver. */
+  get resolver(): Resolver {
+    return assert(this._resolver);
+  }
 
   // Lookup maps
 
@@ -2600,7 +2610,7 @@ export namespace DecoratorFlags {
 export abstract class Element {
 
   /** Parent element. */
-  parent: Element;
+  private _parent: Element | null;
   /** Common flags indicating specific traits. */
   flags: CommonFlags = CommonFlags.NONE;
   /** Decorator flags indicating annotated traits. */
@@ -2627,11 +2637,16 @@ export abstract class Element {
     this.name = name;
     this.internalName = internalName;
     if (parent) {
-      this.parent = parent;
+      this._parent = parent;
     } else {
       assert(this.kind == ElementKind.FILE);
-      this.parent = this; // special case to keep this.parent non-nullable
+      this._parent = this; // special case to keep this.parent non-nullable
     }
+  }
+
+  /** Gets the parent element. */
+  get parent(): Element {
+    return assert(this._parent);
   }
 
   /** Gets the enclosing file. */
@@ -2881,7 +2896,7 @@ export class File extends Element {
   /** File re-exports. */
   exportsStar: File[] | null = null;
   /** Top-level start function of this file. */
-  startFunction: Function;
+  private _startFunction: Function | null;
 
   /** Constructs a new file. */
   constructor(
@@ -2906,7 +2921,12 @@ export class File extends Element {
       this
     );
     startFunction.internalName = startFunction.name;
-    this.startFunction = startFunction;
+    this._startFunction = startFunction;
+  }
+
+  /** Gets this file's start function. */
+  get startFunction(): Function {
+    return assert(this._startFunction);
   }
 
   /* @override */
@@ -3436,7 +3456,7 @@ export class Function extends TypedElement {
   /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> | null;
   /** Default control flow. */
-  flow: Flow;
+  private _flow: Flow | null;
   /** Remembered debug locations. */
   debugLocations: Range[] = [];
   /** Function reference, if compiled. */
@@ -3510,8 +3530,13 @@ export class Function extends TypedElement {
         this.localsByIndex[local.index] = local;
       }
     }
-    this.flow = Flow.createParent(this);
+    this._flow = Flow.createParent(this);
     registerConcreteElement(program, this);
+  }
+
+  /** Gets the default control flow. */
+  get flow(): Flow {
+    return assert(this._flow);
   }
 
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */

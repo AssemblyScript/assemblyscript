@@ -399,15 +399,26 @@ export function operatorTokenToString(token: Token): string {
 
 export class Range {
 
-  source: Source;
+  private _source: Source | null;
   start: i32;
   end: i32;
   debugInfoRef: usize = 0;
 
-  constructor(source: Source, start: i32, end: i32) {
-    this.source = source;
+  constructor(source: Source | null, start: i32, end: i32) {
     this.start = start;
     this.end = end;
+    this._source = source;
+  }
+
+  /** Gets the corresponding source. */
+  get source(): Source {
+    return assert(this._source);
+  }
+
+  /** Sets the corresponding source. */
+  set source(source: Source) {
+    assert(!this._source);
+    this._source = source;
   }
 
   static join(a: Range, b: Range): Range {

@@ -1,7 +1,7 @@
 class A1 {
   private padding0: f64;
   private padding1: f64;
-  private c1: C1;
+  private c1: C1 | null;
 }
 
 class A2 extends A1 { }

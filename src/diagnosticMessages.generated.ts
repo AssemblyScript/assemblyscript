@@ -163,6 +163,8 @@ export enum DiagnosticCode {
   Expected_0_arguments_but_got_1 = 2554,
   Expected_at_least_0_arguments_but_got_1 = 2555,
   Expected_0_type_arguments_but_got_1 = 2558,
+  Property_0_has_no_initializer_and_is_not_assigned_in_the_constructor_before_this_is_used_or_returned = 2564,
+  Property_0_is_used_before_being_assigned = 2565,
   A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums = 2651,
   Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration = 2673,
   Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration = 2674,
@@ -338,6 +340,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2554: return "Expected {0} arguments, but got {1}.";
     case 2555: return "Expected at least {0} arguments, but got {1}.";
     case 2558: return "Expected {0} type arguments, but got {1}.";
+    case 2564: return "Property '{0}' has no initializer and is not assigned in the constructor before 'this' is used or returned.";
+    case 2565: return "Property '{0}' is used before being assigned.";
     case 2651: return "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.";
     case 2673: return "Constructor of class '{0}' is private and only accessible within the class declaration.";
     case 2674: return "Constructor of class '{0}' is protected and only accessible within the class declaration.";
