@@ -5895,11 +5895,9 @@
   (local $2 i64)
   (local $3 i64)
   local.get $1
-  local.get $1
+  i32.popcnt
   i32.const 1
-  i32.sub
-  i32.and
-  i32.eqz
+  i32.eq
   if
    i32.const 63
    local.get $0
@@ -6057,7 +6055,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 367
+   i32.const 373
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -6162,7 +6160,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 344
+   i32.const 350
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -6355,7 +6353,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 395
+   i32.const 401
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -6457,7 +6455,7 @@
   if
    i32.const 13552
    i32.const 13680
-   i32.const 425
+   i32.const 431
    i32.const 5
    call $~lib/builtins/abort
    unreachable

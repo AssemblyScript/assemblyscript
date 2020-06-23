@@ -122,6 +122,12 @@ f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff";
   0x9E19DB92B4E31BA9, 0xEB96BF6EBADF77D9, 0xAF87023B9BF0EE6B
 ]);
 
+// @ts-ignore: decorator
+@inline
+export function isPowerOf2<T extends number>(value: T): bool {
+  return popcnt<T>(value) == 1;
+}
+
 // Count number of decimals for u32 values
 // In our case input value always non-zero so we can simplify some parts
 export function decimalCount32(value: u32): u32 {
@@ -159,7 +165,7 @@ export function decimalCount64High(value: u64): u32 {
 }
 
 function ulog_base(num: u64, base: i32): u32 {
-  if ((base & (base - 1)) == 0) { // if base is pow of two
+  if (isPowerOf2(base)) {
     return (63 - <u32>clz(num)) / (31 - <u32>clz(base)) + 1;
   }
   var b64 = u64(base), b = b64, e: u32 = 1;
