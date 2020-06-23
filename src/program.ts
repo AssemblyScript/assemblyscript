@@ -426,16 +426,16 @@ export class Program extends DiagnosticEmitter {
     var nativeSource = new Source(SourceKind.LIBRARY_ENTRY, LIBRARY_SUBST + ".wasm", "[native code]");
     this.nativeSource = nativeSource;
     this.parser = new Parser(this.diagnostics, this.sources);
-    this._resolver = new Resolver(this);
+    this.resolver = new Resolver(this);
     var nativeFile = new File(this, nativeSource);
-    this._nativeFile = nativeFile;
+    this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
   }
 
   /** Parser instance. */
   parser: Parser;
   /** Resolver instance. */
-  private _resolver: Resolver | null = null;
+  resolver!: Resolver;
   /** Array of sources. */
   sources: Source[] = [];
   /** Diagnostic offset used where successively obtaining the next diagnostic. */
@@ -443,23 +443,13 @@ export class Program extends DiagnosticEmitter {
   /** Special native code source. */
   nativeSource: Source;
   /** Special native code file. */
-  private _nativeFile: File | null = null;
+  nativeFile!: File;
   /** Next class id. */
   nextClassId: u32 = 0;
   /** Next signature id. */
   nextSignatureId: i32 = 0;
   /** An indicator if the program has been initialized. */
   initialized: bool = false;
-
-  /** Gets the singleton native file. */
-  get nativeFile(): File {
-    return assert(this._nativeFile);
-  }
-
-  /** Gets the corresponding resolver. */
-  get resolver(): Resolver {
-    return assert(this._resolver);
-  }
 
   // Lookup maps
 
@@ -2610,7 +2600,7 @@ export namespace DecoratorFlags {
 export abstract class Element {
 
   /** Parent element. */
-  private _parent: Element | null;
+  parent!: Element;
   /** Common flags indicating specific traits. */
   flags: CommonFlags = CommonFlags.NONE;
   /** Decorator flags indicating annotated traits. */
@@ -2637,16 +2627,11 @@ export abstract class Element {
     this.name = name;
     this.internalName = internalName;
     if (parent) {
-      this._parent = parent;
+      this.parent = parent;
     } else {
       assert(this.kind == ElementKind.FILE);
-      this._parent = this; // special case to keep this.parent non-nullable
+      this.parent = this; // special case to keep this.parent non-nullable
     }
-  }
-
-  /** Gets the parent element. */
-  get parent(): Element {
-    return assert(this._parent);
   }
 
   /** Gets the enclosing file. */
@@ -2896,7 +2881,7 @@ export class File extends Element {
   /** File re-exports. */
   exportsStar: File[] | null = null;
   /** Top-level start function of this file. */
-  private _startFunction: Function | null;
+  startFunction!: Function;
 
   /** Constructs a new file. */
   constructor(
@@ -2921,12 +2906,7 @@ export class File extends Element {
       this
     );
     startFunction.internalName = startFunction.name;
-    this._startFunction = startFunction;
-  }
-
-  /** Gets this file's start function. */
-  get startFunction(): Function {
-    return assert(this._startFunction);
+    this.startFunction = startFunction;
   }
 
   /* @override */
@@ -3456,7 +3436,7 @@ export class Function extends TypedElement {
   /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> | null;
   /** Default control flow. */
-  private _flow: Flow | null;
+  flow!: Flow;
   /** Remembered debug locations. */
   debugLocations: Range[] = [];
   /** Function reference, if compiled. */
@@ -3530,13 +3510,8 @@ export class Function extends TypedElement {
         this.localsByIndex[local.index] = local;
       }
     }
-    this._flow = Flow.createParent(this);
+    this.flow = Flow.createParent(this);
     registerConcreteElement(program, this);
-  }
-
-  /** Gets the default control flow. */
-  get flow(): Flow {
-    return assert(this._flow);
   }
 
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
@@ -4073,6 +4048,8 @@ export class Class extends TypedElement {
   extendees: Set<Class> | null = null;
   /** Classes implementing this interface. */
   implementers: Set<Class> | null = null;
+  /** Whether the field initialization check has already been performed. */
+  didCheckFieldInitialization: bool = false;
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {

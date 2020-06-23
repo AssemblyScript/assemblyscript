@@ -49,12 +49,14 @@ export enum DiagnosticCode {
   _0_keyword_cannot_be_used_here = 230,
   A_class_with_a_constructor_explicitly_returning_something_else_than_this_must_be_final = 231,
   Exported_generic_function_or_class_has_no_concrete_instances = 232,
+  Property_0_is_always_assigned_before_being_used = 233,
   Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
   Expression_compiles_to_a_dynamic_check_at_runtime = 903,
   Indexed_access_may_involve_bounds_checking = 904,
   Explicitly_returning_constructor_drops_this_allocation = 905,
+  Unnecessary_definite_assignment = 906,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -226,12 +228,14 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 230: return "'{0}' keyword cannot be used here.";
     case 231: return "A class with a constructor explicitly returning something else than 'this' must be '@final'.";
     case 232: return "Exported generic function or class has no concrete instances.";
+    case 233: return "Property '{0}' is always assigned before being used.";
     case 900: return "Type '{0}' is cyclic. Module will include deferred garbage collection.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";
     case 903: return "Expression compiles to a dynamic check at runtime.";
     case 904: return "Indexed access may involve bounds checking.";
     case 905: return "Explicitly returning constructor drops 'this' allocation.";
+    case 906: return "Unnecessary definite assignment.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

@@ -82,6 +82,10 @@ import {
   Node
 } from "./ast";
 
+import {
+  uniqueMap
+} from "./util";
+
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
   /** No specific conditions. */
@@ -287,13 +291,8 @@ export class Flow {
     }
     branch.localFlags = this.localFlags.slice();
     if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
-      let fieldFlags = assert(this.thisFieldFlags);
-      let clonedFieldFlags = new Map<Field,FieldFlags>();
-      for (let _keys = Map_keys(fieldFlags), i = 0, k = _keys.length; i < k; ++i) {
-        let key = _keys[i];
-        clonedFieldFlags.set(key, changetype<FieldFlags>(fieldFlags.get(key)));
-      }
-      branch.thisFieldFlags = clonedFieldFlags;
+      let thisFieldFlags = assert(this.thisFieldFlags);
+      branch.thisFieldFlags = uniqueMap<Field,FieldFlags>(thisFieldFlags);
     } else {
       assert(!this.thisFieldFlags);
     }

@@ -399,34 +399,24 @@ export function operatorTokenToString(token: Token): string {
 
 export class Range {
 
-  private _source: Source | null;
   start: i32;
   end: i32;
+  source!: Source;
   debugInfoRef: usize = 0;
 
-  constructor(source: Source | null, start: i32, end: i32) {
+  constructor(start: i32, end: i32) {
     this.start = start;
     this.end = end;
-    this._source = source;
-  }
-
-  /** Gets the corresponding source. */
-  get source(): Source {
-    return assert(this._source);
-  }
-
-  /** Sets the corresponding source. */
-  set source(source: Source) {
-    assert(!this._source);
-    this._source = source;
   }
 
   static join(a: Range, b: Range): Range {
     if (a.source != b.source) throw new Error("source mismatch");
-    return new Range(a.source,
+    let range = new Range(
       a.start < b.start ? a.start : b.start,
       a.end > b.end ? a.end : b.end
     );
+    range.source = a.source;
+    return range;
   }
 
   equals(other: Range): bool {
@@ -434,11 +424,15 @@ export class Range {
   }
 
   get atStart(): Range {
-    return new Range(this.source, this.start, this.start);
+    let range = new Range(this.start, this.start);
+    range.source = this.source;
+    return range;
   }
 
   get atEnd(): Range {
-    return new Range(this.source, this.end, this.end);
+    let range = new Range(this.end, this.end);
+    range.source = this.source;
+    return range;
   }
 
   toString(): string {
@@ -1028,7 +1022,9 @@ export class Tokenizer extends DiagnosticEmitter {
     } else if (end < 0) {
       end = start;
     }
-    return new Range(this.source, start, end);
+    let range = new Range(start, end);
+    range.source = this.source;
+    return range;
   }
 
   readIdentifier(): string {

@@ -1530,8 +1530,7 @@ export class Source extends Node {
     /** Full source text. */
     public text: string
   ) {
-    super(NodeKind.SOURCE, changetype<Range>(0)); // ¯\(ツ)/¯
-    this.range = new Range(null, 0, text.length);
+    super(NodeKind.SOURCE, new Range(0, text.length));
     var internalPath = mangleInternalPath(normalizedPath);
     this.internalPath = internalPath;
     var pos = internalPath.lastIndexOf(PATH_DELIMITER);

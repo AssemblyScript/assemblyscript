@@ -9451,6 +9451,8 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Checks that all class fields have been initialized. */
   checkFieldInitialization(classInstance: Class, relatedNode: Node | null = null): void {
+    if (classInstance.didCheckFieldInitialization) return;
+    classInstance.didCheckFieldInitialization = true;
     var members = classInstance.members;
     if (members) {
       let ctor = assert(classInstance.constructorInstance);
@@ -9460,8 +9462,7 @@ export class Compiler extends DiagnosticEmitter {
         if (element.kind == ElementKind.FIELD && element.parent == classInstance) {
           let field = <Field>element;
           if (!field.initializerNode && !flow.isThisFieldFlag(field, FieldFlags.INITIALIZED)) {
-            if (!field.is(CommonFlags.ERRORED)) {
-              field.set(CommonFlags.ERRORED);
+            if (!field.is(CommonFlags.DEFINITELY_ASSIGNED)) {
               if (relatedNode) {
                 this.errorRelated(
                   DiagnosticCode.Property_0_has_no_initializer_and_is_not_assigned_in_the_constructor_before_this_is_used_or_returned,
@@ -9476,6 +9477,19 @@ export class Compiler extends DiagnosticEmitter {
                   field.internalName
                 );
               }
+            }
+          } else if (field.is(CommonFlags.DEFINITELY_ASSIGNED)) {
+            if (field.type.is(TypeFlags.REFERENCE)) {
+              this.warning( // involves a runtime check
+                DiagnosticCode.Property_0_is_always_assigned_before_being_used,
+                field.identifierNode.range,
+                field.internalName
+              );
+            } else {
+              this.pedantic( // is a nop anyway
+                DiagnosticCode.Unnecessary_definite_assignment,
+                field.identifierNode.range
+              );
             }
           }
         }
@@ -9577,25 +9591,26 @@ export class Compiler extends DiagnosticEmitter {
           (<Class>fieldParent).type,
           Constraints.CONV_IMPLICIT | Constraints.IS_THIS
         );
+        let thisType = this.currentType;
         if (
           flow.actualFunction.is(CommonFlags.CONSTRUCTOR) &&
           thisExpression.kind == NodeKind.THIS &&
-          !flow.isThisFieldFlag(fieldInstance, FieldFlags.INITIALIZED)
+          !flow.isThisFieldFlag(fieldInstance, FieldFlags.INITIALIZED) &&
+          !fieldInstance.is(CommonFlags.DEFINITELY_ASSIGNED)
         ) {
-          this.error(
+          this.errorRelated(
             DiagnosticCode.Property_0_is_used_before_being_assigned,
             expression.range,
+            fieldInstance.identifierNode.range,
             fieldInstance.internalName
           );
-        } else {
-          let thisType = this.currentType;
-          if (thisType.is(TypeFlags.NULLABLE)) {
-            if (!flow.isNonnull(thisExpr, thisType)) {
-              this.error(
-                DiagnosticCode.Object_is_possibly_null,
-                thisExpression.range
-              );
-            }
+        }
+        if (thisType.is(TypeFlags.NULLABLE)) {
+          if (!flow.isNonnull(thisExpr, thisType)) {
+            this.error(
+              DiagnosticCode.Object_is_possibly_null,
+              thisExpression.range
+            );
           }
         }
         if (!fieldInstance.is(CommonFlags.COMPILED)) {
@@ -9604,13 +9619,17 @@ export class Compiler extends DiagnosticEmitter {
           if (typeNode) this.checkTypeSupported(fieldInstance.type, typeNode);
         }
         this.currentType = fieldType;
-        return module.load(
+        let ret = module.load(
           fieldType.byteSize,
           fieldType.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
           thisExpr,
           fieldType.toNativeType(),
           fieldInstance.memoryOffset
         );
+        if (fieldInstance.is(CommonFlags.DEFINITELY_ASSIGNED) && fieldType.is(TypeFlags.REFERENCE) && !fieldType.is(TypeFlags.NULLABLE)) {
+          ret = this.makeRuntimeNonNullCheck(ret, fieldType, expression);
+        }
+        return ret;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
         let propertyPrototype = <PropertyPrototype>target;
@@ -10835,11 +10854,10 @@ export class Compiler extends DiagnosticEmitter {
     codeLocation: Node
   ): ExpressionRef {
     var program = this.program;
-    var module = this.module;
-    var stringInstance = program.stringInstance;
     var abortInstance = program.abortInstance;
-    if (!abortInstance || !this.compileFunction(abortInstance)) return module.unreachable();
+    if (!abortInstance || !this.compileFunction(abortInstance)) return this.module.unreachable();
 
+    var stringInstance = program.stringInstance;
     var messageArg: ExpressionRef;
     if (message !== null) {
       // The message argument works much like an arm of an IF that does not become executed if the
@@ -10851,14 +10869,29 @@ export class Compiler extends DiagnosticEmitter {
       messageArg = this.makeZero(stringInstance.type);
     }
 
-    var filenameArg = this.ensureStaticString(codeLocation.range.source.normalizedPath);
+    return this.makeStaticAbort(messageArg, codeLocation);
+  }
+
+  /** Makes a call to `abort`, if present, otherwise creates a trap. */
+  makeStaticAbort(
+    /** Message argument of type string. May be zero. */
+    messageExpr: ExpressionRef,
+    /** Code location to report when aborting. */
+    codeLocation: Node
+  ): ExpressionRef {
+    var program = this.program;
+    var module = this.module;
+    var abortInstance = program.abortInstance;
+    if (!abortInstance || !this.compileFunction(abortInstance)) return module.unreachable();
+
+    var filenameExpr = this.ensureStaticString(codeLocation.range.source.normalizedPath);
     var range = codeLocation.range;
     var source = range.source;
     return module.block(null, [
       module.call(
         abortInstance.internalName, [
-          messageArg,
-          filenameArg,
+          messageExpr,
+          filenameExpr,
           module.i32(source.lineAt(range.start)),
           module.i32(source.columnAt())
         ],
@@ -10877,7 +10910,6 @@ export class Compiler extends DiagnosticEmitter {
     /** Report node. */
     reportNode: Node
   ): ExpressionRef {
-    assert(type.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE));
     var module = this.module;
     var flow = this.currentFlow;
     var temp = flow.getTempLocal(type);
@@ -10886,9 +10918,10 @@ export class Compiler extends DiagnosticEmitter {
     expr = module.if(
       module.local_tee(temp.index, expr),
       module.local_get(temp.index, type.toNativeType()),
-      this.makeAbort(null, reportNode) // TODO: throw
+      this.makeStaticAbort(this.ensureStaticString("unexpected null"), reportNode) // TODO: throw
     );
     flow.freeTempLocal(temp);
+    this.currentType = type.nonNullableType;
     return expr;
   }
 
@@ -10915,9 +10948,10 @@ export class Compiler extends DiagnosticEmitter {
         module.i32(toType.classReference!.id)
       ], NativeType.I32),
       module.local_get(temp.index, type.toNativeType()),
-      this.makeAbort(null, reportNode) // TODO: throw
+      this.makeStaticAbort(this.ensureStaticString("unexpected upcast"), reportNode) // TODO: throw
     );
     flow.freeTempLocal(temp);
+    this.currentType = toType;
     return expr;
   }
 }
