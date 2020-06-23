@@ -17,16 +17,18 @@
  (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 64) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
  (data (i32.const 128) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s\00")
- (data (i32.const 176) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s\00")
- (data (i32.const 224) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\04\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 176) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00")
+ (data (i32.const 224) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s\00")
+ (data (i32.const 272) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00u\00p\00c\00a\00s\00t\00")
+ (data (i32.const 336) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\04\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 224))
- (global $~lib/heap/__heap_base i32 (i32.const 268))
+ (global $~lib/rt/__rtti_base i32 (i32.const 336))
+ (global $~lib/heap/__heap_base i32 (i32.const 380))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -1582,8 +1584,8 @@
   if (result i32)
    local.get $1
   else
-   i32.const 0
    i32.const 192
+   i32.const 240
    i32.const 14
    i32.const 12
    call $~lib/builtins/abort
@@ -1684,8 +1686,8 @@
   if (result i32)
    local.get $1
   else
-   i32.const 0
-   i32.const 192
+   i32.const 288
+   i32.const 240
    i32.const 31
    i32.const 9
    call $~lib/builtins/abort
@@ -1705,8 +1707,8 @@
   if (result i32)
    local.get $1
   else
-   i32.const 0
    i32.const 192
+   i32.const 240
    i32.const 36
    i32.const 9
    call $~lib/builtins/abort
@@ -1718,8 +1720,8 @@
   if (result i32)
    local.get $1
   else
-   i32.const 0
-   i32.const 192
+   i32.const 288
+   i32.const 240
    i32.const 36
    i32.const 9
    call $~lib/builtins/abort
@@ -1742,8 +1744,8 @@
   if (result i32)
    local.get $1
   else
-   i32.const 0
-   i32.const 192
+   i32.const 288
+   i32.const 240
    i32.const 41
    i32.const 30
    call $~lib/builtins/abort
@@ -1774,8 +1776,8 @@
   if (result i32)
    local.get $1
   else
-   i32.const 0
-   i32.const 192
+   i32.const 288
+   i32.const 240
    i32.const 47
    i32.const 30
    call $~lib/builtins/abort
