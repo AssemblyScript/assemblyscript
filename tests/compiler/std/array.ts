@@ -1060,3 +1060,7 @@ __release(changetype<usize>(arr));
   let testArray: i32[][] = [[], []];
   assert(testArray.flat().length == 0);
 }
+
+// export extended Array
+
+export class ExtendedArray extends Array<u8> {}

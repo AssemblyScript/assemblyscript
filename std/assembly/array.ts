@@ -496,7 +496,7 @@ export class Array<T> {
 
   flat(): T {
     if (!isArray<T>()) {
-      ERROR("Cannot call flat() on Array<T> where T is not an Array.");
+      throw new TypeError("Cannot call flat() on Array<T> where T is not an Array.");
     }
     // Get the length and data start values
     var length = this.length_;
