@@ -367,8 +367,12 @@ export class Array<T> {
       base + sizeof<T>(),
       <usize>lastIndex << alignof<T>()
     );
-    // @ts-ignore
-    store<T>(base + (<usize>lastIndex << alignof<T>()), <T>0);
+    if (isReference<T>()) {
+      store<usize>(base + (<usize>lastIndex << alignof<T>()), 0);
+    } else {
+      // @ts-ignore
+      store<T>(base + (<usize>lastIndex << alignof<T>()), <T>0);
+    }
     this.length_ = lastIndex;
     return element; // no need to retain -> is moved
   }
