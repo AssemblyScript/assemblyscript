@@ -42,7 +42,9 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
-const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
+// const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
+
+const binaryen = global.binaryen || (global.binaryen = require("./binaryen_js"));
 
 // Sets up an extension with its definition counterpart and relevant regexes.
 function setupExtension(extension) {
@@ -574,7 +576,7 @@ exports.main = function main(argv, options, callback) {
     const filename = argv[i];
 
     let sourcePath = String(filename).replace(/\\/g, "/").replace(extension.re, "").replace(/[\\/]$/, "");
-    
+
     // Setting the path to relative path
     sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath) : sourcePath;
 
