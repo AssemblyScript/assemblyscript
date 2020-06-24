@@ -1061,6 +1061,8 @@ __release(changetype<usize>(arr));
   assert(testArray.flat().length == 0);
 }
 
-// export extended Array
+// export extended arrays
 
-export class ExtendedArray extends Array<u8> {}
+export class ArrayU32 extends Array<u32> {}
+export class ArrayU8 extends Array<u8> {}
+export class ArrayArrayI32 extends Array<Array<i32>> {}
