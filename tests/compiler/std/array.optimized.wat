@@ -234,7 +234,7 @@
  (data (i32.const 9952) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00\90%\00\00\d0%\00\00\00\00\00\00\f0%\00\000&\00\00P&\00\00p&\00\00\b0&")
  (data (i32.const 10004) "\01")
  (data (i32.const 10020) "\01")
- (data (i32.const 10032) "n\00\00\00\01\00\00\00\01\00\00\00n\00\00\00C\00a\00n\00n\00o\00t\00 \00c\00a\00l\00l\00 \00f\00l\00a\00t\00(\00)\00 \00o\00n\00 \00A\00r\00r\00a\00y\00<\00T\00>\00 \00w\00h\00e\00r\00e\00 \00T\00 \00i\00s\00 \00n\00o\00t\00 \00a\00n\00 \00A\00r\00r\00a\00y\00.")
+ (data (i32.const 10032) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00I\00l\00l\00e\00g\00a\00l\00 \00g\00e\00n\00e\00r\00i\00c\00 \00t\00y\00p\00e")
  (table $0 57 funcref)
  (elem (i32.const 1) $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|2 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|16 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -340,7 +340,7 @@
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
-  i32.const 10160
+  i32.const 10088
   i32.gt_u
   if
    local.get $0
@@ -929,11 +929,11 @@
    if
     unreachable
    end
-   i32.const 10160
+   i32.const 10096
    local.tee $0
    i32.const 0
    i32.store
-   i32.const 11728
+   i32.const 11664
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -944,7 +944,7 @@
      local.get $1
      i32.const 2
      i32.shl
-     i32.const 10160
+     i32.const 10096
      i32.add
      i32.const 0
      i32.store offset=4
@@ -962,7 +962,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 10160
+       i32.const 10096
        i32.add
        i32.const 0
        i32.store offset=96
@@ -980,13 +980,13 @@
      br $for-loop|0
     end
    end
-   i32.const 10160
-   i32.const 11744
+   i32.const 10096
+   i32.const 11680
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 10160
+   i32.const 10096
    global.set $~lib/rt/tlsf/ROOT
   end
   local.get $0
@@ -1544,7 +1544,7 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 10160
+  i32.const 10088
   i32.gt_u
   if
    local.get $0
@@ -2361,7 +2361,7 @@
   local.get $2
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 10160
+  i32.const 10088
   i32.ge_u
   if
    local.get $1
@@ -19709,7 +19709,7 @@
  )
  (func $~lib/rt/pure/__visit (param $0 i32)
   local.get $0
-  i32.const 10160
+  i32.const 10088
   i32.lt_u
   if
    return

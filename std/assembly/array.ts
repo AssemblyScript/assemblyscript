@@ -4,7 +4,7 @@ import { BLOCK_MAXSIZE } from "./rt/common";
 import { COMPARATOR, SORT } from "./util/sort";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 import { idof, isArray as builtin_isArray } from "./builtins";
-import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
 /** Ensures that the given array has _at least_ the specified backing size. */
 function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
@@ -501,7 +501,7 @@ export class Array<T> {
 
   flat(): T {
     if (!isArray<T>()) {
-      throw new TypeError("Cannot call flat() on Array<T> where T is not an Array.");
+      throw new TypeError(E_ILLEGALGENTYPE);
     }
     // Get the length and data start values
     var length = this.length_;
