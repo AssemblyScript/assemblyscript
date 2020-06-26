@@ -29,5 +29,6 @@ jobs:
       run: |
         node node_modules/semantic-release/bin/semantic-release.js --unstable
         cd lib/loader
+        npm config set "//registry.npmjs.org/:_authToken=${NPM_TOKEN}"
         npm publish --access public
         cd ../..
