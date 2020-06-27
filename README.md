@@ -3,10 +3,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AssemblyScript/assemblyscript/actions"><img src="https://github.com/AssemblyScript/assemblyscript/workflows/Test/badge.svg?branch=master&event=push" alt="Test status" /></a>
-  <a href="https://github.com/AssemblyScript/assemblyscript/actions"><img src="https://github.com/AssemblyScript/assemblyscript/workflows/Publish/badge.svg?branch=master&event=schedule" alt="Publish status" /></a>
+  <a href="https://github.com/AssemblyScript/assemblyscript/actions?query=workflow%3ATest"><img src="https://github.com/AssemblyScript/assemblyscript/workflows/Test/badge.svg?branch=master&event=push" alt="Test status" /></a>
+  <a href="https://github.com/AssemblyScript/assemblyscript/actions?query=workflow%3APublish"><img src="https://github.com/AssemblyScript/assemblyscript/workflows/Publish/badge.svg?branch=master&event=schedule" alt="Publish status" /></a>
   <a href="https://www.npmjs.com/package/assemblyscript"><img src="https://img.shields.io/npm/v/assemblyscript.svg?&label=&logo=npm&logoColor=ffffff&labelColor=eeeeee&color=cb3837" alt="npm package" /></a>
-  <a href="https://discord.gg/U63XU2J"><img src="https://img.shields.io/discord/721472913886281818.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2" alt="Discord online" /></a>
+  <a href="https://discord.gg/assemblyscript"><img src="https://img.shields.io/discord/721472913886281818.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2" alt="Discord online" /></a>
 </p>
 
 <p align="justify"><strong>AssemblyScript</strong> compiles a strict variant of <a href="http://www.typescriptlang.org">TypeScript</a> (basically JavaScript with types) to <a href="http://webassembly.org">WebAssembly</a> using <a href="https://github.com/WebAssembly/binaryen">Binaryen</a>. It generates lean and mean WebAssembly modules while being just an <code>npm install</code> away.</p>
