@@ -17,6 +17,18 @@
     "type": "b",
     "default": false
   },
+  "config": {
+    "category": "General",
+    "description": "Provides a configuration for assemblyscript to compile your project.",
+    "type": "s",
+    "default": "asconfig.json"
+  },
+  "target": {
+    "category": "General",
+    "description": "Provides a compile target for use with an assemblyscript configuration.",
+    "type": "s",
+    "default": "release"
+  },
 
   "optimize": {
     "category": "Optimization",

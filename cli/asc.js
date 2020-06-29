@@ -194,7 +194,8 @@ exports.main = function main(argv, options, callback) {
   if (!stderr) throw Error("'options.stderr' must be specified");
 
   const opts = optionsUtil.parse(argv, exports.options);
-  const args = opts.options;
+  let args = opts.options;
+
   argv = opts.arguments;
   if (args.noColors) {
     colorsUtil.stdout.supported =
@@ -270,6 +271,64 @@ exports.main = function main(argv, options, callback) {
 
   // Set up base directory
   const baseDir = args.baseDir ? path.resolve(args.baseDir) : ".";
+  const target = args.target;
+
+  // Once the basedir is calculated, we can resolve the config, and it's extensions
+  let asconfig = getAsconfig(args.config, baseDir, readFile);
+  let asconfigDir = baseDir;
+
+  while (asconfig) {
+    // merge target first, then merge options, then merge extended asconfigs
+    if (asconfig.targets && asconfig.targets[target]) {
+      args = optionsUtil.merge(exports.options, args, asconfig.targets[target]);
+    }
+    if (asconfig.options) {
+      args = optionsUtil.merge(exports.options, args, asconfig.options);
+    }
+
+    // entries are added to the compilation
+    if (asconfig.entries) {
+      for (const entry of asconfig.entries) {
+        argv.push(
+          path.isAbsolute(entry)
+            ? entry
+            // the entry is relative to the asconfig directory
+            : path.join(asconfigDir, entry)
+        );
+      }
+    }
+
+    // asconfig "extends" another config, merging options of it's parent
+    if (asconfig.extends) {
+      asconfigDir = path.isAbsolute(asconfig.extends)
+        // absolute extension path means we know the exact directory and location
+        ? path.dirname(asconfig.extends)
+        // relative means we need to calculate a relative asconfigDir
+        : path.join(asconfigDir, path.dirname(asconfig.extends));
+      asconfig = getAsconfig(asconfigDir, path.basename(asconfig.extends), readFile);
+    } else {
+      asconfig = null; // finished resolving the configuration chain
+    }
+  }
+
+  // Just some helper functions
+  const resolve = arg => path.isAbsolute(arg)
+    ? arg
+    // this transform is relative to process.cwd()
+    : path.resolve(path.join(baseDir, arg));
+  const unique = () => {
+    const set = new Set();
+    return arg => {
+      if (set.has(arg)) return false;
+      set.add(arg);
+      return true;
+    };
+  };
+
+  const makeRelative = arg => path.relative(baseDir, arg);
+
+  // postprocess we need to get absolute file locations argv
+  argv = argv.map(resolve).filter(unique()).map(makeRelative);
 
   // Set up options
   const compilerOptions = assemblyscript.newOptions();
@@ -347,7 +406,7 @@ exports.main = function main(argv, options, callback) {
   const transforms = [];
   if (args.transform) {
     let tsNodeRegistered = false;
-    let transformArgs = args.transform;
+    let transformArgs = args.transform.map(resolve).filter(unique());
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
       if (!tsNodeRegistered && filename.endsWith(".ts")) { // ts-node requires .ts specifically
@@ -404,6 +463,7 @@ exports.main = function main(argv, options, callback) {
   if (args.lib) {
     let lib = args.lib;
     if (typeof lib === "string") lib = lib.split(",");
+    lib = lib.map(resolve).filter(unique());
     Array.prototype.push.apply(customLibDirs, lib.map(lib => lib.trim()));
     for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
       let libDir = customLibDirs[i];
@@ -574,7 +634,7 @@ exports.main = function main(argv, options, callback) {
     const filename = argv[i];
 
     let sourcePath = String(filename).replace(/\\/g, "/").replace(extension.re, "").replace(/[\\/]$/, "");
-    
+
     // Setting the path to relative path
     sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath) : sourcePath;
 
@@ -923,6 +983,47 @@ exports.main = function main(argv, options, callback) {
     });
   }
 };
+
+const toString = Object.prototype.toString;
+const typeOf = val => toString.call(val).slice(8, -1);
+
+function getAsconfig(file, baseDir, readFile) {
+  const contents = readFile(file, baseDir);
+  const location = path.join(baseDir, file);
+  if (!contents) return null;
+
+  // obtain the configuration
+  let config;
+  try {
+    config = JSON.parse(contents);
+  } catch(ex) {
+    throw new Error("Asconfig is not valid json: " + location);
+  }
+
+  // validate asconfig shape
+  if (config.options && typeOf(config.options) !== "Object") {
+    throw new Error("Asconfig.options is not an object: " + location);
+  }
+  if (config.include && typeOf(config.include) !== "Array") {
+    throw new Error("Asconfig.include is not an object: " + location);
+  }
+  if (config.targets) {
+    if (typeOf(config.targets) !== "Object") {
+      throw new Error("Asconfig.targets is not an object: " + location);
+    }
+    const targets = Object.keys(config.targets);
+    for (let i = 0; i < targets.length; i++) {
+      const target = targets[i];
+      if (typeOf(config.targets[target]) !== "Object") {
+        throw new Error("Asconfig.targets." + target + " is not an object: " + location);
+      }
+    }
+  }
+
+  return config;
+}
+
+exports.getAsconfig = getAsconfig;
 
 /** Checks diagnostics emitted so far for errors. */
 function checkDiagnostics(program, stderr) {
