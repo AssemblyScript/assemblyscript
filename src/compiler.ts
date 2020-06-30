@@ -7376,8 +7376,8 @@ export class Compiler extends DiagnosticEmitter {
           let overloadNumParameters = overloadParameterTypes.length;
           let paramExprs = new Array<ExpressionRef>(1 + overloadNumParameters);
           paramExprs[0] = module.local_get(0, nativeSizeType); // this
-          for (let n = 0; n < numParameters; ++n) {
-            paramExprs[1 + n] = module.local_get(1 + n, parameterTypes[n].toNativeType());
+          for (let n = 1; n <= numParameters; ++n) {
+            paramExprs[n] = module.local_get(n, parameterTypes[n - 1].toNativeType());
           }
           let needsVarargsStub = false;
           for (let n = numParameters; n < overloadNumParameters; ++n) {
@@ -9420,7 +9420,7 @@ export class Compiler extends DiagnosticEmitter {
         let numParameters = parameterTypes.length;
         let operands = new Array<ExpressionRef>(1 + numParameters);
         operands[0] = module.local_get(0, nativeSizeType);
-        for (let i = 1; i < numParameters; ++i) {
+        for (let i = 1; i <= numParameters; ++i) {
           operands[i] = module.local_get(i, parameterTypes[i - 1].toNativeType());
         }
         stmts.push(
