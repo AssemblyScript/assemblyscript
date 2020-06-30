@@ -114,9 +114,9 @@ export class Type {
   /** Underlying signature reference, if a function type. */
   signatureReference: Signature | null;
   /** Respective non-nullable type, if nullable. */
-  nonNullableType: Type;
-  /** Cached nullable type, if non-nullable. */
-  private cachedNullableType: Type | null = null;
+  private _nonNullableType: Type | null = null;
+  /** Respective nullable type, if non-nullable. */
+  private _nullableType: Type | null = null;
 
   /** Constructs a new resolved type. */
   constructor(kind: TypeKind, flags: TypeFlags, size: u32) {
@@ -126,7 +126,11 @@ export class Type {
     this.byteSize = <i32>ceil<f64>(<f64>size / 8);
     this.classReference = null;
     this.signatureReference = null;
-    this.nonNullableType = this;
+    if (!(flags & TypeFlags.NULLABLE)) {
+      this._nonNullableType = this;
+    } else {
+      this._nullableType = this;
+    }
   }
 
   /** Returns the closest int type representing this type. */
@@ -177,6 +181,16 @@ export class Type {
     return classReference !== null && classReference.hasDecorator(DecoratorFlags.UNMANAGED);
   }
 
+  /** Gets the corresponding non-nullable type. */
+  get nonNullableType(): Type {
+    return assert(this._nonNullableType); // set either in ctor or asNullable
+  }
+
+  /** Gets the corresponding nullable type, if applicable. */
+  get nullableType(): Type | null {
+    return this._nullableType; // set either in ctor or asNullable
+  }
+
   /** Computes the sign-extending shift in the target type. */
   computeSmallIntegerShift(targetType: Type): i32 {
     return targetType.size - this.size;
@@ -212,15 +226,15 @@ export class Type {
   /** Composes the respective nullable type of this type. */
   asNullable(): Type {
     assert(this.is(TypeFlags.REFERENCE));
-    var cachedNullableType = this.cachedNullableType;
-    if (!cachedNullableType) {
+    var nullableType = this._nullableType;
+    if (!nullableType) {
       assert(!this.is(TypeFlags.NULLABLE));
-      this.cachedNullableType = cachedNullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
-      cachedNullableType.nonNullableType = this;
-      cachedNullableType.classReference = this.classReference;       // either a class reference
-      cachedNullableType.signatureReference = this.signatureReference; // or a function reference
+      this._nullableType = nullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
+      nullableType.classReference = this.classReference;         // either a class reference
+      nullableType.signatureReference = this.signatureReference; // or a function reference
+      nullableType._nonNullableType = this;
     }
-    return cachedNullableType;
+    return nullableType;
   }
 
   /** Tests if this type equals the specified. */
@@ -555,7 +569,7 @@ export class Signature {
   /** Cached {@link FunctionTarget}. */
   cachedFunctionTarget: FunctionTarget | null = null;
   /** Respective function type. */
-  type: Type;
+  private _type: Type | null;
   /** The program that created this signature. */
   program: Program;
 
@@ -573,7 +587,7 @@ export class Signature {
     this.thisType = thisType;
     this.program = program;
     this.hasRest = false;
-    this.type = program.options.usizeType.asFunction(this);
+    this._type = program.options.usizeType.asFunction(this);
 
     var signatureTypes = program.uniqueSignatures;
     var length = signatureTypes.length;
@@ -586,6 +600,11 @@ export class Signature {
     }
     this.id = program.nextSignatureId++;
     program.uniqueSignatures.push(this);
+  }
+
+  /** Gets the respective function type matching this signature. */
+  get type(): Type {
+    return assert(this._type);
   }
 
   get nativeParams(): NativeType {

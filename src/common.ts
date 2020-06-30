@@ -37,7 +37,7 @@ export enum CommonFlags {
   /** Has a `set` modifier. */
   SET = 1 << 12,
   /** Has a definite assignment assertion `!` as in `x!: i32;`. */
-  DEFINITE_ASSIGNMENT = 1 << 13,
+  DEFINITELY_ASSIGNED = 1 << 13,
 
   // Extended modifiers usually derived from basic modifiers
 

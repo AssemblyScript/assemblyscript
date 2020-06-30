@@ -31,10 +31,10 @@ assert(expectedReadIndex == expectedWriteIndex);
 // Cyclic test with locals becoming deferred until collected
 
 class Foo {
-  bar: Bar;
+  bar: Bar | null;
 }
 class Bar {
-  foo: Foo;
+  foo: Foo | null;
 }
 
 function testCyclic(): void {
