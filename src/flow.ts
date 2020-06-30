@@ -927,7 +927,10 @@ export class Flow {
       for (let _keys = Map_keys(leftFieldFlags), i = 0, k = _keys.length; i < k; ++i) {
         let key = _keys[i];
         let leftFlags = changetype<FieldFlags>(leftFieldFlags.get(key));
-        if ((leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) && (changetype<FieldFlags>(rightFieldFlags.get(key)) & FieldFlags.INITIALIZED)) {
+        if (
+          (leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) && 
+          (changetype<FieldFlags>(rightFieldFlags.get(key)) & FieldFlags.INITIALIZED)
+        ) {
           newFieldFlags.set(key, FieldFlags.INITIALIZED);
         }
       }
