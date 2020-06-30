@@ -9420,8 +9420,8 @@ export class Compiler extends DiagnosticEmitter {
         let numParameters = parameterTypes.length;
         let operands = new Array<ExpressionRef>(1 + numParameters);
         operands[0] = module.local_get(0, nativeSizeType);
-        for (let i = 0; i < numParameters; ++i) {
-          operands[i + 1] = module.local_get(i + 1, parameterTypes[i].toNativeType());
+        for (let i = 1; i < numParameters; ++i) {
+          operands[i] = module.local_get(i, parameterTypes[i - 1].toNativeType());
         }
         stmts.push(
           module.local_set(0,
