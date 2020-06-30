@@ -26,4 +26,14 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      run: node node_modules/semantic-release/bin/semantic-release.js --unstable
+      # On success, semantic-release will update the version and publish,
+      # triggering the postversion script that'll update the loader's version
+      # as well. If nothing was published, the version will still be '0.0.0'.
+      run: |
+        node node_modules/semantic-release/bin/semantic-release.js --unstable
+        cd lib/loader
+        if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
+          npm config set "//registry.npmjs.org/:_authToken=${NPM_TOKEN}"
+          npm publish --access public
+        fi
+        cd ../..

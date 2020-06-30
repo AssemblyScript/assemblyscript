@@ -5,6 +5,7 @@ daysUntilClose: 7
 exemptLabels:
   - bug
   - enhancement
+  - compatibility
 exemptProjects: true
 exemptMilestones: true
 exemptAssignees: true
