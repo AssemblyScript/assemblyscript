@@ -2000,14 +2000,12 @@
        i32.sub
        i32.store16
       else
-       i32.const -1
-       local.set $1
        local.get $2
        i32.const 223
        i32.sub
        i32.const 64056
        i32.le_u
-       if
+       if (result i32)
         block $~lib/util/casemap/bsearch|inlined.0 (result i32)
          local.get $3
          local.set $1
@@ -2058,9 +2056,10 @@
          end
          i32.const -1
         end
-        local.set $1
+       else
+        i32.const -1
        end
-       local.get $1
+       local.tee $1
        i32.const -1
        i32.xor
        if

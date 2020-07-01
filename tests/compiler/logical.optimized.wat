@@ -963,8 +963,8 @@
   end
  )
  (func $start:logical
-  (local $0 i32)
-  (local $1 f64)
+  (local $0 f64)
+  (local $1 i32)
   (local $2 i32)
   (local $3 f32)
   (local $4 i32)
@@ -973,13 +973,13 @@
   local.tee $4
   call $~lib/rt/pure/__retain
   local.tee $2
-  if
+  if (result i32)
    i32.const 1
-   local.set $0
+  else
+   i32.const 0
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $0
   i32.eqz
   if
    i32.const 0

@@ -1631,11 +1631,9 @@ export class Module {
           passes.push("vacuum");
           passes.push("merge-locals");
           passes.push("coalesce-locals");
-          passes.push("simplify-locals-nostructure");
-          passes.push("vacuum");
+          passes.push("simplify-locals");
           passes.push("inlining-optimizing");
           passes.push("precompute-propagate");
-          passes.push("simplify-locals");
           passes.push("vacuum");
           passes.push("coalesce-locals");
         }
