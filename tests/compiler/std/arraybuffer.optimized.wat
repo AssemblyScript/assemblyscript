@@ -1785,9 +1785,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/rt/pure/__release
-  i32.const 0
+  block $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null> (result i32)
+   i32.const 0
+   call $~lib/rt/pure/__release
+   i32.const 0
+   br $__inlined_func$~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null>
+  end
   if
    i32.const 0
    i32.const 1312
