@@ -1,9 +1,9 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -962,22 +962,24 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~start
+ (func $start:logical
   (local $0 i32)
-  (local $1 i32)
+  (local $1 f64)
   (local $2 i32)
-  (local $3 i32)
+  (local $3 f32)
+  (local $4 i32)
+  (local $5 i32)
   call $logical/Obj#constructor
-  local.tee $2
+  local.tee $4
   call $~lib/rt/pure/__retain
-  local.tee $0
-  if (result i32)
+  local.tee $2
+  if
    i32.const 1
-  else
-   i32.const 0
+   local.set $0
   end
-  local.get $0
+  local.get $2
   call $~lib/rt/pure/__release
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -988,15 +990,15 @@
    unreachable
   end
   call $logical/Obj#constructor
-  local.tee $0
+  local.tee $2
   call $~lib/rt/pure/__retain
-  local.tee $3
+  local.tee $5
   if (result i32)
    i32.const 1
   else
    i32.const 0
   end
-  local.get $3
+  local.get $5
   call $~lib/rt/pure/__release
   i32.eqz
   if
@@ -1007,10 +1009,13 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $4
+  call $~lib/rt/pure/__release
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $0
-  call $~lib/rt/pure/__release
+ )
+ (func $~start
+  call $start:logical
  )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)

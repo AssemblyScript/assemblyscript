@@ -1648,61 +1648,61 @@
  (func $~lib/number/F32#toString (param $0 f32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 f64)
+  (local $3 f64)
+  (local $4 i32)
   block $__inlined_func$~lib/util/number/dtoa
    local.get $0
    f64.promote_f32
-   local.tee $4
+   local.tee $3
    f64.const 0
    f64.eq
    if
     i32.const 1280
-    local.set $2
+    local.set $1
     br $__inlined_func$~lib/util/number/dtoa
    end
-   local.get $4
-   local.get $4
+   local.get $3
+   local.get $3
    f64.sub
    f64.const 0
    f64.ne
    if
-    local.get $4
-    local.get $4
+    local.get $3
+    local.get $3
     f64.ne
     if
      i32.const 1312
-     local.set $2
+     local.set $1
      br $__inlined_func$~lib/util/number/dtoa
     end
     i32.const 1344
     i32.const 1392
-    local.get $4
+    local.get $3
     f64.const 0
     f64.lt
     select
-    local.set $2
+    local.set $1
     br $__inlined_func$~lib/util/number/dtoa
    end
    i32.const 56
    i32.const 1
    call $~lib/rt/stub/__alloc
-   local.tee $2
-   local.get $4
-   call $~lib/util/number/dtoa_core
    local.tee $1
+   local.get $3
+   call $~lib/util/number/dtoa_core
+   local.tee $2
    i32.const 28
    i32.eq
    br_if $__inlined_func$~lib/util/number/dtoa
-   local.get $2
    local.get $1
-   call $~lib/string/String#substring
    local.get $2
+   call $~lib/string/String#substring
+   local.get $1
    i32.const 15
    i32.and
    i32.eqz
    i32.const 0
-   local.get $2
+   local.get $1
    select
    i32.eqz
    if
@@ -1713,10 +1713,10 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $2
+   local.get $1
    i32.const 16
    i32.sub
-   local.tee $3
+   local.tee $4
    i32.load offset=4
    i32.const 1
    i32.ne
@@ -1729,18 +1729,18 @@
     unreachable
    end
    global.get $~lib/rt/stub/offset
-   local.get $2
-   local.get $3
+   local.get $1
+   local.get $4
    i32.load
    i32.add
    i32.eq
    if
-    local.get $3
+    local.get $4
     global.set $~lib/rt/stub/offset
    end
-   local.set $2
+   local.set $1
   end
-  local.get $2
+  local.get $1
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)

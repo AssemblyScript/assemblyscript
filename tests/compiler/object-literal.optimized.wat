@@ -1812,22 +1812,22 @@
   i32.const 3
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.tee $1
+  local.tee $0
   i32.const 0
   i32.store
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store offset=4
-  local.get $1
-  local.tee $0
+  local.get $0
+  local.tee $1
   i32.const 123
   i32.store
-  local.get $1
+  local.get $0
   i32.const 1040
   i32.store offset=4
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__retain
-  local.tee $1
+  local.tee $0
   i32.load
   i32.const 123
   i32.ne
@@ -1839,7 +1839,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   i32.load offset=4
   i32.const 1040
   call $~lib/string/String.__eq
@@ -1852,201 +1852,201 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
   i32.const 8
   i32.const 0
   call $~lib/rt/tlsf/__alloc
-  local.tee $1
+  local.tee $0
   i32.const 0
   i32.store
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store offset=4
-  local.get $1
+  local.get $0
   i32.const 123
   i32.store
-  local.get $1
+  local.get $0
   block $__inlined_func$~lib/string/String#substring (result i32)
    i32.const 1312
    i32.const 0
    i32.const 1040
    call $~lib/string/String#get:length
-   local.tee $2
-   i32.const 0
-   local.get $2
-   i32.lt_s
-   select
-   local.tee $3
-   i32.const 5
-   local.get $2
-   i32.const 5
-   local.get $2
-   i32.lt_s
-   select
    local.tee $5
-   local.get $3
+   i32.const 0
    local.get $5
+   i32.lt_s
+   select
+   local.tee $4
+   i32.const 5
+   local.get $5
+   i32.const 5
+   local.get $5
+   i32.lt_s
+   select
+   local.tee $2
+   local.get $4
+   local.get $2
    i32.gt_s
    select
    i32.const 1
    i32.shl
-   local.tee $4
-   local.get $3
-   local.get $5
-   local.get $3
-   local.get $5
+   local.tee $3
+   local.get $4
+   local.get $2
+   local.get $4
+   local.get $2
    i32.lt_s
    select
    i32.const 1
    i32.shl
-   local.tee $3
+   local.tee $4
    i32.sub
-   local.tee $5
+   local.tee $2
    i32.eqz
    br_if $__inlined_func$~lib/string/String#substring
    drop
    i32.const 1040
    i32.const 0
-   local.get $4
-   local.get $2
+   local.get $3
+   local.get $5
    i32.const 1
    i32.shl
    i32.eq
-   local.get $3
+   local.get $4
    select
    br_if $__inlined_func$~lib/string/String#substring
    drop
-   local.get $5
+   local.get $2
    i32.const 1
    call $~lib/rt/tlsf/__alloc
-   local.tee $4
-   local.get $3
+   local.tee $3
+   local.get $4
    i32.const 1040
    i32.add
-   local.get $5
+   local.get $2
    call $~lib/memory/memory.copy
-   local.get $4
+   local.get $3
    call $~lib/rt/pure/__retain
   end
   i32.store offset=4
-  local.get $1
+  local.get $0
   call $object-literal/testUnmanaged
   i32.const 65
   i32.const 4
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.tee $1
+  local.tee $0
   i32.const 0
   i32.store
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store offset=4
-  local.get $1
+  local.get $0
   i64.const 0
   i64.store offset=8
-  local.get $1
+  local.get $0
   i64.const 0
   i64.store offset=16
-  local.get $1
+  local.get $0
   f32.const 0
   f32.store offset=24
-  local.get $1
+  local.get $0
   f64.const 0
   f64.store offset=32
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store8 offset=40
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store8 offset=41
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store16 offset=42
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store16 offset=44
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store offset=48
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store offset=52
-  local.get $1
+  local.get $0
   f64.const 0
   f64.store offset=56
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store8 offset=64
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store offset=4
-  local.get $1
+  local.get $0
   i64.const 0
   i64.store offset=8
-  local.get $1
+  local.get $0
   i64.const 0
   i64.store offset=16
-  local.get $1
+  local.get $0
   f32.const 0
   f32.store offset=24
-  local.get $1
+  local.get $0
   f64.const 0
   f64.store offset=32
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store8 offset=40
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store8 offset=41
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store16 offset=42
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store16 offset=44
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store offset=48
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store offset=52
-  local.get $1
+  local.get $0
   f64.const 0
   f64.store offset=56
-  local.get $1
+  local.get $0
   i32.const 0
   i32.store8 offset=64
-  local.get $1
+  local.get $0
   call $object-literal/testOmittedTypes
   i32.const 16
   i32.const 5
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $3
   i32.const 0
   i32.store
-  local.get $4
+  local.get $3
   i32.const 0
   i32.store offset=4
-  local.get $4
+  local.get $3
   f64.const 0
   f64.store offset=8
-  local.get $4
+  local.get $3
   i32.const 0
   i32.store
-  local.get $4
+  local.get $3
   i32.const 1360
   i32.store offset=4
-  local.get $4
+  local.get $3
   f64.const 0
   f64.store offset=8
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__retain
-  local.tee $5
+  local.tee $2
   i32.load
   if
    i32.const 0
@@ -2056,7 +2056,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $2
   i32.load offset=4
   i32.const 1360
   call $~lib/string/String.__eq
@@ -2069,7 +2069,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $2
   f64.load offset=8
   f64.const 0
   f64.ne
@@ -2081,72 +2081,72 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $2
   call $~lib/rt/pure/__release
   i32.const 40
   i32.const 6
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.tee $5
+  local.tee $2
   i32.const 1392
   i32.store
-  local.get $5
+  local.get $2
   i32.const 1424
   i32.store offset=4
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=8
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=12
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=16
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=20
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=24
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=28
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=32
-  local.get $5
+  local.get $2
   i32.const -1
   i32.store offset=36
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=8
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=12
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=16
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=20
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=24
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=28
-  local.get $5
+  local.get $2
   i32.const 0
   i32.store offset=32
-  local.get $5
+  local.get $2
   call $object-literal/testOmittedFoo
-  local.get $0
-  call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $0
   call $~lib/rt/pure/__release
-  local.get $5
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~start

@@ -997,14 +997,6 @@
   end
   call $~lib/rt/pure/__release
   global.get $rc/logical-or-mismatch/gloRef
-  local.tee $0
-  if (result i32)
-   local.get $0
-  else
-   global.get $rc/logical-or-mismatch/gloRef
-  end
-  drop
-  global.get $rc/logical-or-mismatch/gloRef
   call $~lib/rt/pure/__release
  )
  (func $~lib/rt/pure/decrement (param $0 i32)
