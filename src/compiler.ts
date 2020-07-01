@@ -389,8 +389,6 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasCustomMemoryLayout()) {
       this.memoryOffset = i64_new(options.memoryBase);
       module.setLowMemoryUnused(false);
-      let data = options.memoryData;
-      if (data) this.addMemorySegment(data, 1);
     } else {
       if (!options.lowMemoryLimit && options.optimizeLevelHint >= 2) {
         this.memoryOffset = i64_new(1024);
@@ -418,6 +416,10 @@ export class Compiler extends DiagnosticEmitter {
     startFunctionInstance.internalName = BuiltinNames.start;
     this.currentFlow = startFunctionInstance.flow;
     this.currentBody = new Array<ExpressionRef>();
+
+    // inject custom memory data if provided
+    var memoryData = options.memoryData;
+    if (memoryData) this.addMemorySegment(memoryData, 1);
   }
 
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
