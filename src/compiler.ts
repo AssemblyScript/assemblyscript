@@ -7110,6 +7110,13 @@ export class Compiler extends DiagnosticEmitter {
     // Compile the called function's body in the scope of the inlined flow
     this.compileFunctionBody(instance, body);
 
+    // If a constructor, perform field init checks on its flow directly
+    if (instance.is(CommonFlags.CONSTRUCTOR)) {
+      let parent = instance.parent;
+      assert(parent.kind == ElementKind.CLASS);
+      this.checkFieldInitializationInFlow(<Class>parent, flow);
+    }
+
     // Free any new scoped locals and reset to the original flow
     if (!flow.is(FlowFlags.TERMINATES)) {
       this.performAutoreleases(flow, body);
@@ -9326,7 +9333,11 @@ export class Compiler extends DiagnosticEmitter {
     if (!classInstance) return module.unreachable();
     if (contextualType == Type.void) constraints |= Constraints.WILL_DROP;
     var ctor = this.ensureConstructor(classInstance, expression);
-    this.checkFieldInitialization(classInstance, expression);
+    if (!ctor.hasDecorator(DecoratorFlags.INLINE)) {
+      // Inlined ctors haven't been compiled yet and are checked upon inline
+      // compilation of their body instead.
+      this.checkFieldInitialization(classInstance, expression);
+    }
     return this.compileInstantiate(ctor, expression.args, constraints, expression);
   }
 
@@ -9453,10 +9464,14 @@ export class Compiler extends DiagnosticEmitter {
   checkFieldInitialization(classInstance: Class, relatedNode: Node | null = null): void {
     if (classInstance.didCheckFieldInitialization) return;
     classInstance.didCheckFieldInitialization = true;
+    var ctor = assert(classInstance.constructorInstance);
+    this.checkFieldInitializationInFlow(classInstance, ctor.flow, relatedNode);
+  }
+
+  /** Checks that all class fields have been initialized in the specified flow. */
+  checkFieldInitializationInFlow(classInstance: Class, flow: Flow, relatedNode: Node | null = null): void {
     var members = classInstance.members;
     if (members) {
-      let ctor = assert(classInstance.constructorInstance);
-      let flow = ctor.flow;
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let element = _values[i];
         if (element.kind == ElementKind.FIELD && element.parent == classInstance) {
