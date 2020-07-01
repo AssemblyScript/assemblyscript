@@ -16,8 +16,10 @@
  (data (i32.const 1024) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1072) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 1136) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
- (data (i32.const 1184) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s")
- (data (i32.const 1232) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\04\00\00\00 ")
+ (data (i32.const 1184) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
+ (data (i32.const 1232) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s")
+ (data (i32.const 1280) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00u\00p\00c\00a\00s\00t")
+ (data (i32.const 1344) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\04\00\00\00 ")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
@@ -603,11 +605,11 @@
    if
     unreachable
    end
-   i32.const 1280
+   i32.const 1392
    local.tee $0
    i32.const 0
    i32.store
-   i32.const 2848
+   i32.const 2960
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -618,7 +620,7 @@
      local.get $1
      i32.const 2
      i32.shl
-     i32.const 1280
+     i32.const 1392
      i32.add
      i32.const 0
      i32.store offset=4
@@ -636,7 +638,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 1280
+       i32.const 1392
        i32.add
        i32.const 0
        i32.store offset=96
@@ -654,13 +656,13 @@
      br $for-loop|0
     end
    end
-   i32.const 1280
-   i32.const 2864
+   i32.const 1392
+   i32.const 2976
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 1280
+   i32.const 1392
    global.set $~lib/rt/tlsf/ROOT
   end
   local.get $0
@@ -904,7 +906,7 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 1276
+  i32.const 1388
   i32.gt_u
   if
    local.get $0
@@ -968,7 +970,7 @@
  )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
-  i32.const 1276
+  i32.const 1388
   i32.gt_u
   if
    local.get $0
@@ -993,7 +995,7 @@
   i32.sub
   i32.load offset=8
   local.tee $0
-  i32.const 1232
+  i32.const 1344
   i32.load
   i32.le_u
   if
@@ -1008,7 +1010,7 @@
     local.get $0
     i32.const 3
     i32.shl
-    i32.const 1236
+    i32.const 1348
     i32.add
     i32.load offset=4
     local.tee $0
@@ -1030,13 +1032,13 @@
   (local $9 i32)
   call $managed-cast/Cat#constructor
   call $managed-cast/Cat#constructor
-  local.tee $3
+  local.tee $5
   call $~lib/rt/pure/__retain
   local.tee $0
   i32.eqz
   if
-   i32.const 0
    i32.const 1200
+   i32.const 1248
    i32.const 14
    i32.const 12
    call $~lib/builtins/abort
@@ -1045,20 +1047,20 @@
   local.get $0
   call $~lib/rt/pure/__release
   call $managed-cast/Cat#constructor
-  local.tee $4
-  call $managed-cast/testDowncastToNullable
-  call $managed-cast/Cat#constructor
-  local.tee $5
-  call $managed-cast/testDowncastToNullable
-  call $managed-cast/Cat#constructor
   local.tee $6
+  call $managed-cast/testDowncastToNullable
+  call $managed-cast/Cat#constructor
+  local.tee $7
+  call $managed-cast/testDowncastToNullable
+  call $managed-cast/Cat#constructor
+  local.tee $8
   call $~lib/rt/pure/__retain
   local.tee $0
   call $~lib/rt/__instanceof
   i32.eqz
   if
-   i32.const 0
-   i32.const 1200
+   i32.const 1296
+   i32.const 1248
    i32.const 31
    i32.const 9
    call $~lib/builtins/abort
@@ -1067,72 +1069,69 @@
   local.get $0
   call $~lib/rt/pure/__release
   call $managed-cast/Cat#constructor
-  local.tee $7
+  local.tee $9
   call $~lib/rt/pure/__retain
   local.tee $0
-  local.set $1
-  block $__inlined_func$managed-cast/testUpcastFromNullable
-   block $folding-inner0
-    local.get $0
-    i32.eqz
-    br_if $folding-inner0
-    local.get $1
-    call $~lib/rt/__instanceof
-    i32.eqz
-    br_if $folding-inner0
-    local.get $0
-    call $~lib/rt/pure/__release
-    br $__inlined_func$managed-cast/testUpcastFromNullable
-   end
-   i32.const 0
+  local.get $0
+  i32.eqz
+  if
    i32.const 1200
+   i32.const 1248
    i32.const 36
    i32.const 9
    call $~lib/builtins/abort
    unreachable
   end
-  call $managed-cast/Cat#constructor
-  local.tee $8
-  call $~lib/rt/pure/__retain
-  local.tee $1
-  local.get $1
   call $~lib/rt/__instanceof
   i32.eqz
   if
-   i32.const 0
-   i32.const 1200
+   i32.const 1296
+   i32.const 1248
+   i32.const 36
+   i32.const 9
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/pure/__release
+  call $managed-cast/Cat#constructor
+  local.tee $2
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  local.get $0
+  call $~lib/rt/__instanceof
+  i32.eqz
+  if
+   i32.const 1296
+   i32.const 1248
    i32.const 41
    i32.const 30
    call $~lib/builtins/abort
    unreachable
   end
   call $~lib/rt/pure/__retain
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release
   call $managed-cast/Cat#constructor
-  local.tee $9
-  call $~lib/rt/pure/__retain
   local.tee $1
-  local.get $1
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  local.get $0
   call $~lib/rt/__instanceof
   i32.eqz
   if
-   i32.const 0
-   i32.const 1200
+   i32.const 1296
+   i32.const 1248
    i32.const 47
    i32.const 30
    call $~lib/builtins/abort
    unreachable
   end
   call $~lib/rt/pure/__retain
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
   local.get $5
   call $~lib/rt/pure/__release
@@ -1143,6 +1142,10 @@
   local.get $8
   call $~lib/rt/pure/__release
   local.get $9
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $1
   call $~lib/rt/pure/__release
  )
  (func $~start
@@ -1196,7 +1199,7 @@
      local.tee $1
      if
       local.get $1
-      i32.const 1276
+      i32.const 1388
       i32.ge_u
       if
        local.get $1

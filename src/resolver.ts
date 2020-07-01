@@ -97,7 +97,7 @@ import {
 } from "./common";
 
 import {
-  makeMap,
+  uniqueMap,
   isPowerOf2
 } from "./util";
 
@@ -255,7 +255,7 @@ export class Resolver extends DiagnosticEmitter {
           <ClassPrototype>element,
           typeArgumentNodes,
           ctxElement,
-          makeMap<string,Type>(ctxTypes), // don't inherit
+          uniqueMap<string,Type>(ctxTypes), // don't inherit
           node,
           reportMode
         );
@@ -311,7 +311,7 @@ export class Resolver extends DiagnosticEmitter {
           typeParameterNodes,
           typeArgumentNodes,
           ctxElement,
-          ctxTypes = makeMap(ctxTypes), // inherit
+          ctxTypes = uniqueMap(ctxTypes), // inherit
           node,
           reportMode
         );
@@ -666,7 +666,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Contextual element. */
     ctxElement: Element,
     /** Contextual types, i.e. `T`. */
-    ctxTypes: Map<string,Type> = makeMap<string,Type>(),
+    ctxTypes: Map<string,Type> = uniqueMap<string,Type>(),
     /** Alternative report node in case of empty type arguments. */
     alternativeReportNode: Node | null = null,
     /** How to proceed with eventual diagnostics. */
@@ -742,7 +742,7 @@ export class Resolver extends DiagnosticEmitter {
         prototype,
         typeArguments,
         ctxFlow.actualFunction,
-        makeMap(ctxFlow.contextualTypeArguments), // don't inherit
+        uniqueMap(ctxFlow.contextualTypeArguments), // don't inherit
         node,
         reportMode
       );
@@ -750,7 +750,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // infer generic call if type arguments have been omitted
     if (prototype.is(CommonFlags.GENERIC)) {
-      let contextualTypeArguments = makeMap<string,Type>(ctxFlow.contextualTypeArguments);
+      let contextualTypeArguments = uniqueMap<string,Type>(ctxFlow.contextualTypeArguments);
 
       // fill up contextual types with auto for each generic component
       let typeParameterNodes = assert(prototype.typeParameterNodes);
@@ -810,13 +810,13 @@ export class Resolver extends DiagnosticEmitter {
       return this.resolveFunction(
         prototype,
         resolvedTypeArguments,
-        makeMap<string,Type>(ctxFlow.contextualTypeArguments),
+        uniqueMap<string,Type>(ctxFlow.contextualTypeArguments),
         reportMode
       );
     }
 
     // otherwise resolve the non-generic call as usual
-    return this.resolveFunction(prototype, null, makeMap<string,Type>(), reportMode);
+    return this.resolveFunction(prototype, null, uniqueMap<string,Type>(), reportMode);
   }
 
   /** Updates contextual types with a possibly encapsulated inferred type. */
@@ -1228,7 +1228,7 @@ export class Resolver extends DiagnosticEmitter {
     var element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
     if (!element) return null;
     if (element.kind == ElementKind.FUNCTION_PROTOTYPE) {
-      let instance = this.resolveFunction(<FunctionPrototype>element, null, makeMap<string,Type>(), reportMode);
+      let instance = this.resolveFunction(<FunctionPrototype>element, null, uniqueMap<string,Type>(), reportMode);
       if (!instance) return null;
       element = instance;
     }
@@ -2549,7 +2549,7 @@ export class Resolver extends DiagnosticEmitter {
         <ClassPrototype>element,
         node.typeArguments,
         ctxFlow.actualFunction,
-        makeMap<string,Type>(ctxFlow.contextualTypeArguments),
+        uniqueMap<string,Type>(ctxFlow.contextualTypeArguments),
         node,
         reportMode
       );
@@ -2636,7 +2636,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Type arguments provided. */
     typeArguments: Type[] | null,
     /** Contextual types, i.e. `T`. */
-    ctxTypes: Map<string,Type> = makeMap<string,Type>(),
+    ctxTypes: Map<string,Type> = uniqueMap<string,Type>(),
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Function | null {
@@ -2878,7 +2878,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Type arguments provided. */
     typeArguments: Type[] | null,
     /** Contextual types, i.e. `T`. */
-    ctxTypes: Map<string,Type> = makeMap<string,Type>(),
+    ctxTypes: Map<string,Type> = uniqueMap<string,Type>(),
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Class | null {
@@ -2939,7 +2939,7 @@ export class Resolver extends DiagnosticEmitter {
         basePrototype,
         extendsNode.typeArguments,
         prototype.parent, // relative to derived class
-        makeMap(ctxTypes), // don't inherit
+        uniqueMap(ctxTypes), // don't inherit
         extendsNode,
         reportMode
       );
@@ -2975,7 +2975,7 @@ export class Resolver extends DiagnosticEmitter {
           interfacePrototype,
           implementsNode.typeArguments,
           prototype.parent,
-          makeMap(ctxTypes),
+          uniqueMap(ctxTypes),
           implementsNode,
           reportMode
         );
@@ -3214,14 +3214,14 @@ export class Resolver extends DiagnosticEmitter {
         operatorInstance = this.resolveFunction(
           boundPrototype,
           null,
-          makeMap<string,Type>(),
+          uniqueMap<string,Type>(),
           reportMode
         );
       } else {
         operatorInstance = this.resolveFunction(
           overloadPrototype,
           null,
-          makeMap<string,Type>(),
+          uniqueMap<string,Type>(),
           reportMode
         );
       }
@@ -3359,7 +3359,7 @@ export class Resolver extends DiagnosticEmitter {
       let getterInstance = this.resolveFunction(
         getterPrototype,
         null,
-        makeMap<string,Type>(),
+        uniqueMap<string,Type>(),
         reportMode
       );
       if (getterInstance) {
@@ -3372,7 +3372,7 @@ export class Resolver extends DiagnosticEmitter {
       let setterInstance = this.resolveFunction(
         setterPrototype,
         null,
-        makeMap<string,Type>(),
+        uniqueMap<string,Type>(),
         reportMode
       );
       if (setterInstance) {

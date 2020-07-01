@@ -947,7 +947,7 @@ export class Parser extends DiagnosticEmitter {
     }
     var flags = parentFlags;
     if (tn.skip(Token.EXCLAMATION)) {
-      flags |= CommonFlags.DEFINITE_ASSIGNMENT;
+      flags |= CommonFlags.DEFINITELY_ASSIGNED;
     }
 
     var type: TypeNode | null = null;
@@ -981,7 +981,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     var range = Range.join(identifier.range, tn.range());
-    if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) != 0 && initializer !== null) {
+    if ((flags & CommonFlags.DEFINITELY_ASSIGNED) != 0 && initializer !== null) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
         range
@@ -2271,7 +2271,7 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       if (tn.skip(Token.EXCLAMATION)) {
-        flags |= CommonFlags.DEFINITE_ASSIGNMENT;
+        flags |= CommonFlags.DEFINITELY_ASSIGNED;
       }
       if (tn.skip(Token.COLON)) {
         type = this.parseType(tn);
@@ -2288,7 +2288,7 @@ export class Parser extends DiagnosticEmitter {
         if (!initializer) return null;
       }
       let range = tn.range(startPos, tn.pos);
-      if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) != 0 && ((flags & CommonFlags.STATIC) != 0 || isInterface || initializer !== null)) {
+      if ((flags & CommonFlags.DEFINITELY_ASSIGNED) != 0 && ((flags & CommonFlags.STATIC) != 0 || isInterface || initializer !== null)) {
         this.error(
           DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
           range

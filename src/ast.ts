@@ -748,14 +748,26 @@ export abstract class Node {
     return false;
   }
 
-  /** Checks if this is a call calling a method on super. */
-  get isCallOnSuper(): bool {
-    if (this.kind != NodeKind.CALL) return false;
-    var expression = changetype<CallExpression>(this).expression;
-    if (expression.kind != NodeKind.PROPERTYACCESS) return false;
-    var target = (<PropertyAccessExpression>expression).expression;
-    if (target.kind == NodeKind.SUPER) return true;
+  private isAccessOn(kind: NodeKind): bool {
+    let node = changetype<Node>(this);
+    if (node.kind == NodeKind.CALL) {
+      node = (<CallExpression>node).expression;
+    }
+    if (node.kind == NodeKind.PROPERTYACCESS) {
+      let target = (<PropertyAccessExpression>node).expression;
+      if (target.kind == kind) return true;
+    }
     return false;
+  }
+
+  /** Checks if this node accesses a method or property on `this`. */
+  get isAccessOnThis(): bool {
+    return this.isAccessOn(NodeKind.THIS);
+  }
+
+  /** Checks if this node accesses a method or property on `super`. */
+  get isAccessOnSuper(): bool {
+    return this.isAccessOn(NodeKind.SUPER);
   }
 }
 
@@ -1518,12 +1530,12 @@ export class Source extends Node {
     /** Full source text. */
     public text: string
   ) {
-    super(NodeKind.SOURCE, changetype<Range>(0)); // ¯\(ツ)/¯
-    this.range = new Range(this, 0, text.length);
+    super(NodeKind.SOURCE, new Range(0, text.length));
     var internalPath = mangleInternalPath(normalizedPath);
     this.internalPath = internalPath;
     var pos = internalPath.lastIndexOf(PATH_DELIMITER);
     this.simplePath = pos >= 0 ? internalPath.substring(pos + 1) : internalPath;
+    this.range.source = this;
   }
 
   /** Path used internally. */
