@@ -1512,6 +1512,7 @@ export class Module {
         passes.push("flatten");
         passes.push("simplify-locals-notee-nostructure");
         passes.push("vacuum");
+
         passes.push("code-folding");
         passes.push("flatten");
         passes.push("local-cse");
@@ -1549,11 +1550,13 @@ export class Module {
       }
       passes.push("simplify-locals-nostructure");
       passes.push("vacuum");
+
       passes.push("reorder-locals");
       passes.push("remove-unused-brs");
       passes.push("coalesce-locals");
       passes.push("simplify-locals");
       passes.push("vacuum");
+
       passes.push("reorder-locals");
       passes.push("coalesce-locals");
       passes.push("reorder-locals");
@@ -1576,8 +1579,8 @@ export class Module {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("rse");
+        passes.push("vacuum");
       }
-      passes.push("vacuum");
 
       // --- PassRunner::addDefaultGlobalOptimizationPostPasses ---
 
@@ -1623,24 +1626,29 @@ export class Module {
           // very expensive, so O3 only
           passes.push("simplify-globals");
           passes.push("vacuum");
+
           // replace indirect with direct calls again and inline
           passes.push("inlining-optimizing");
           passes.push("directize");
           passes.push("dae-optimizing");
           passes.push("precompute-propagate");
           passes.push("vacuum");
+
           passes.push("merge-locals");
           passes.push("coalesce-locals");
           passes.push("simplify-locals");
           passes.push("vacuum");
+
           passes.push("inlining-optimizing");
           passes.push("precompute-propagate");
           passes.push("vacuum");
+
           passes.push("coalesce-locals");
         }
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
         passes.push("vacuum");
+
         passes.push("optimize-instructions");
         passes.push("simplify-globals-optimizing");
       }
