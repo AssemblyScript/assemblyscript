@@ -1629,12 +1629,13 @@ export class Module {
           passes.push("simplify-globals");
           passes.push("vacuum");
 
+          passes.push("precompute-propagate");
+          passes.push("vacuum");
+
           // replace indirect with direct calls again and inline
           passes.push("inlining-optimizing");
           passes.push("directize");
           passes.push("dae-optimizing");
-          passes.push("precompute-propagate");
-          passes.push("vacuum");
 
           passes.push("merge-locals");
           passes.push("coalesce-locals");

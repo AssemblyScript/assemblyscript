@@ -1,8 +1,8 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -17840,15 +17840,16 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/string/joinIntegerArray<i8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<i8> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  local.get $2
+  i32.const 3264
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   local.get $1
   i32.const 1
   i32.sub
@@ -17856,7 +17857,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    i32.const 2928
    return
@@ -17867,12 +17868,12 @@
    local.get $0
    i32.load8_s
    call $~lib/util/number/itoa32
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    return
   end
   local.get $4
-  local.get $2
+  local.get $3
   call $~lib/string/String#get:length
   local.tee $5
   i32.const 11
@@ -17893,7 +17894,7 @@
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -17902,25 +17903,25 @@
     i32.add
     i32.load8_s
     call $~lib/util/number/itoa_buffered<i8>
-    local.get $3
+    local.get $2
     i32.add
-    local.set $3
+    local.set $2
     local.get $5
     if
      local.get $1
-     local.get $3
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $3
      local.get $5
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     local.get $3
+     local.get $2
      local.get $5
      i32.add
-     local.set $3
+     local.set $2
     end
     local.get $6
     i32.const 1
@@ -17931,7 +17932,7 @@
   end
   local.get $7
   local.get $1
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
@@ -17940,7 +17941,7 @@
   i32.add
   i32.load8_s
   call $~lib/util/number/itoa_buffered<i8>
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   i32.gt_s
@@ -17948,13 +17949,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -17963,7 +17964,6 @@
   i32.load offset=4
   local.get $0
   i32.load offset=8
-  i32.const 3264
   call $~lib/util/string/joinIntegerArray<i8>
   i32.const 3264
   call $~lib/rt/pure/__release
@@ -18161,15 +18161,16 @@
   call $~lib/util/number/utoa_dec_simple<u32>
   local.get $1
  )
- (func $~lib/util/string/joinIntegerArray<u8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<u8> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  local.get $2
+  i32.const 3264
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   local.get $1
   i32.const 1
   i32.sub
@@ -18177,7 +18178,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    i32.const 2928
    return
@@ -18188,12 +18189,12 @@
    local.get $0
    i32.load8_u
    call $~lib/util/number/utoa32
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    return
   end
   local.get $4
-  local.get $2
+  local.get $3
   call $~lib/string/String#get:length
   local.tee $5
   i32.const 10
@@ -18214,7 +18215,7 @@
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -18223,25 +18224,25 @@
     i32.add
     i32.load8_u
     call $~lib/util/number/itoa_buffered<u8>
-    local.get $3
+    local.get $2
     i32.add
-    local.set $3
+    local.set $2
     local.get $5
     if
      local.get $1
-     local.get $3
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $3
      local.get $5
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     local.get $3
+     local.get $2
      local.get $5
      i32.add
-     local.set $3
+     local.set $2
     end
     local.get $6
     i32.const 1
@@ -18252,7 +18253,7 @@
   end
   local.get $7
   local.get $1
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
@@ -18261,7 +18262,7 @@
   i32.add
   i32.load8_u
   call $~lib/util/number/itoa_buffered<u8>
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   i32.gt_s
@@ -18269,13 +18270,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -18284,7 +18285,6 @@
   i32.load offset=4
   local.get $0
   i32.load offset=8
-  i32.const 3264
   call $~lib/util/string/joinIntegerArray<u8>
   i32.const 3264
   call $~lib/rt/pure/__release
@@ -18350,15 +18350,16 @@
   call $~lib/util/number/utoa_dec_simple<u32>
   local.get $1
  )
- (func $~lib/util/string/joinIntegerArray<i16> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<i16> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  local.get $2
+  i32.const 3264
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   local.get $1
   i32.const 1
   i32.sub
@@ -18366,7 +18367,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    i32.const 2928
    return
@@ -18377,12 +18378,12 @@
    local.get $0
    i32.load16_s
    call $~lib/util/number/itoa32
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    return
   end
   local.get $4
-  local.get $2
+  local.get $3
   call $~lib/string/String#get:length
   local.tee $5
   i32.const 11
@@ -18403,7 +18404,7 @@
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -18414,25 +18415,25 @@
     i32.add
     i32.load16_s
     call $~lib/util/number/itoa_buffered<i16>
-    local.get $3
+    local.get $2
     i32.add
-    local.set $3
+    local.set $2
     local.get $5
     if
      local.get $1
-     local.get $3
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $3
      local.get $5
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     local.get $3
+     local.get $2
      local.get $5
      i32.add
-     local.set $3
+     local.set $2
     end
     local.get $6
     i32.const 1
@@ -18443,7 +18444,7 @@
   end
   local.get $7
   local.get $1
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
@@ -18454,7 +18455,7 @@
   i32.add
   i32.load16_s
   call $~lib/util/number/itoa_buffered<i16>
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   i32.gt_s
@@ -18462,13 +18463,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -18479,7 +18480,6 @@
   i32.load offset=8
   i32.const 1
   i32.shr_u
-  i32.const 3264
   call $~lib/util/string/joinIntegerArray<i16>
   i32.const 3264
   call $~lib/rt/pure/__release
@@ -18514,15 +18514,16 @@
   call $~lib/util/number/utoa_dec_simple<u32>
   local.get $1
  )
- (func $~lib/util/string/joinIntegerArray<u16> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<u16> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  local.get $2
+  i32.const 3264
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   local.get $1
   i32.const 1
   i32.sub
@@ -18530,7 +18531,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    i32.const 2928
    return
@@ -18541,12 +18542,12 @@
    local.get $0
    i32.load16_u
    call $~lib/util/number/utoa32
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    return
   end
   local.get $4
-  local.get $2
+  local.get $3
   call $~lib/string/String#get:length
   local.tee $5
   i32.const 10
@@ -18567,7 +18568,7 @@
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -18578,25 +18579,25 @@
     i32.add
     i32.load16_u
     call $~lib/util/number/itoa_buffered<u16>
-    local.get $3
+    local.get $2
     i32.add
-    local.set $3
+    local.set $2
     local.get $5
     if
      local.get $1
-     local.get $3
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $3
      local.get $5
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     local.get $3
+     local.get $2
      local.get $5
      i32.add
-     local.set $3
+     local.set $2
     end
     local.get $6
     i32.const 1
@@ -18607,7 +18608,7 @@
   end
   local.get $7
   local.get $1
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
@@ -18618,7 +18619,7 @@
   i32.add
   i32.load16_u
   call $~lib/util/number/itoa_buffered<u16>
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   i32.gt_s
@@ -18626,13 +18627,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -18643,7 +18644,6 @@
   i32.load offset=8
   i32.const 1
   i32.shr_u
-  i32.const 3264
   call $~lib/util/string/joinIntegerArray<u16>
   i32.const 3264
   call $~lib/rt/pure/__release
@@ -18691,15 +18691,16 @@
   call $~lib/util/number/utoa_dec_simple<u32>
   local.get $0
  )
- (func $~lib/util/string/joinIntegerArray<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<i32> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  local.get $2
+  i32.const 3264
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   local.get $1
   i32.const 1
   i32.sub
@@ -18707,7 +18708,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    i32.const 2928
    return
@@ -18718,12 +18719,12 @@
    local.get $0
    i32.load
    call $~lib/util/number/itoa32
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    return
   end
   local.get $4
-  local.get $2
+  local.get $3
   call $~lib/string/String#get:length
   local.tee $5
   i32.const 11
@@ -18744,7 +18745,7 @@
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -18755,25 +18756,25 @@
     i32.add
     i32.load
     call $~lib/util/number/itoa_buffered<i32>
-    local.get $3
+    local.get $2
     i32.add
-    local.set $3
+    local.set $2
     local.get $5
     if
      local.get $1
-     local.get $3
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $3
      local.get $5
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     local.get $3
+     local.get $2
      local.get $5
      i32.add
-     local.set $3
+     local.set $2
     end
     local.get $6
     i32.const 1
@@ -18784,7 +18785,7 @@
   end
   local.get $7
   local.get $1
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
@@ -18795,7 +18796,7 @@
   i32.add
   i32.load
   call $~lib/util/number/itoa_buffered<i32>
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   i32.gt_s
@@ -18803,13 +18804,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -18820,7 +18821,6 @@
   i32.load offset=8
   i32.const 2
   i32.shr_u
-  i32.const 3264
   call $~lib/util/string/joinIntegerArray<i32>
   i32.const 3264
   call $~lib/rt/pure/__release
@@ -18846,15 +18846,16 @@
   call $~lib/util/number/utoa_dec_simple<u32>
   local.get $0
  )
- (func $~lib/util/string/joinIntegerArray<u32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<u32> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  local.get $2
+  i32.const 3264
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   local.get $1
   i32.const 1
   i32.sub
@@ -18862,7 +18863,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    i32.const 2928
    return
@@ -18873,12 +18874,12 @@
    local.get $0
    i32.load
    call $~lib/util/number/utoa32
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    return
   end
   local.get $4
-  local.get $2
+  local.get $3
   call $~lib/string/String#get:length
   local.tee $5
   i32.const 10
@@ -18899,7 +18900,7 @@
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -18910,25 +18911,25 @@
     i32.add
     i32.load
     call $~lib/util/number/itoa_buffered<u32>
-    local.get $3
+    local.get $2
     i32.add
-    local.set $3
+    local.set $2
     local.get $5
     if
      local.get $1
-     local.get $3
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $3
      local.get $5
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     local.get $3
+     local.get $2
      local.get $5
      i32.add
-     local.set $3
+     local.set $2
     end
     local.get $6
     i32.const 1
@@ -18939,7 +18940,7 @@
   end
   local.get $7
   local.get $1
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
@@ -18950,7 +18951,7 @@
   i32.add
   i32.load
   call $~lib/util/number/itoa_buffered<u32>
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   i32.gt_s
@@ -18958,13 +18959,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -18975,7 +18976,6 @@
   i32.load offset=8
   i32.const 2
   i32.shr_u
-  i32.const 3264
   call $~lib/util/string/joinIntegerArray<u32>
   i32.const 3264
   call $~lib/rt/pure/__release
@@ -19117,16 +19117,17 @@
   end
   local.get $3
  )
- (func $~lib/util/string/joinIntegerArray<i64> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+ (func $~lib/util/string/joinIntegerArray<i64> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  local.get $2
+  i32.const 3264
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $4
   local.get $1
   i32.const 1
   i32.sub
@@ -19134,7 +19135,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $2
+   local.get $4
    call $~lib/rt/pure/__release
    i32.const 2928
    return
@@ -19148,28 +19149,28 @@
     i64.load
     i32.wrap_i64
     i64.extend_i32_s
-    local.tee $4
+    local.tee $3
     i64.eqz
     br_if $__inlined_func$~lib/util/number/itoa64
     drop
-    local.get $4
+    local.get $3
     i64.const 63
     i64.shr_u
     i32.wrap_i64
     local.tee $0
     if
      i64.const 0
-     local.get $4
+     local.get $3
      i64.sub
-     local.set $4
+     local.set $3
     end
-    local.get $4
+    local.get $3
     i64.const 4294967295
     i64.le_u
     if
-     local.get $4
+     local.get $3
      i32.wrap_i64
-     local.tee $3
+     local.tee $2
      call $~lib/util/number/decimalCount32
      local.get $0
      i32.add
@@ -19179,22 +19180,22 @@
      i32.const 1
      call $~lib/rt/tlsf/__alloc
      local.tee $1
-     local.get $3
+     local.get $2
      local.get $5
      call $~lib/util/number/utoa_dec_simple<u32>
     else
-     local.get $4
+     local.get $3
      call $~lib/util/number/decimalCount64High
      local.get $0
      i32.add
-     local.tee $3
+     local.tee $2
      i32.const 1
      i32.shl
      i32.const 1
      call $~lib/rt/tlsf/__alloc
      local.tee $1
-     local.get $4
      local.get $3
+     local.get $2
      call $~lib/util/number/utoa_dec_simple<u64>
     end
     local.get $0
@@ -19206,12 +19207,12 @@
     local.get $1
     call $~lib/rt/pure/__retain
    end
-   local.get $2
+   local.get $4
    call $~lib/rt/pure/__release
    return
   end
   local.get $5
-  local.get $2
+  local.get $4
   call $~lib/string/String#get:length
   local.tee $6
   i32.const 21
@@ -19232,7 +19233,7 @@
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -19243,25 +19244,25 @@
     i32.add
     i64.load
     call $~lib/util/number/itoa_buffered<i64>
-    local.get $3
+    local.get $2
     i32.add
-    local.set $3
+    local.set $2
     local.get $6
     if
      local.get $1
-     local.get $3
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $4
      local.get $6
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     local.get $3
+     local.get $2
      local.get $6
      i32.add
-     local.set $3
+     local.set $2
     end
     local.get $7
     i32.const 1
@@ -19272,7 +19273,7 @@
   end
   local.get $8
   local.get $1
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
@@ -19283,7 +19284,7 @@
   i32.add
   i64.load
   call $~lib/util/number/itoa_buffered<i64>
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   i32.gt_s
@@ -19291,13 +19292,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $2
+   local.get $4
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $2
+  local.get $4
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -19308,7 +19309,6 @@
   i32.load offset=8
   i32.const 3
   i32.shr_u
-  i32.const 3264
   call $~lib/util/string/joinIntegerArray<i64>
   i32.const 3264
   call $~lib/rt/pure/__release
@@ -19351,16 +19351,17 @@
   end
   local.get $2
  )
- (func $~lib/util/string/joinIntegerArray<u64> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<u64> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i64)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  local.get $2
+  i32.const 3264
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   local.get $1
   i32.const 1
   i32.sub
@@ -19368,7 +19369,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    i32.const 2928
    return
@@ -19392,14 +19393,14 @@
      i32.wrap_i64
      local.tee $1
      call $~lib/util/number/decimalCount32
-     local.tee $3
+     local.tee $2
      i32.const 1
      i32.shl
      i32.const 1
      call $~lib/rt/tlsf/__alloc
      local.tee $0
      local.get $1
-     local.get $3
+     local.get $2
      call $~lib/util/number/utoa_dec_simple<u32>
     else
      local.get $5
@@ -19417,12 +19418,12 @@
     local.get $0
     call $~lib/rt/pure/__retain
    end
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    return
   end
   local.get $4
-  local.get $2
+  local.get $3
   call $~lib/string/String#get:length
   local.tee $6
   i32.const 20
@@ -19443,7 +19444,7 @@
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -19454,25 +19455,25 @@
     i32.add
     i64.load
     call $~lib/util/number/itoa_buffered<u64>
-    local.get $3
+    local.get $2
     i32.add
-    local.set $3
+    local.set $2
     local.get $6
     if
      local.get $1
-     local.get $3
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $3
      local.get $6
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     local.get $3
+     local.get $2
      local.get $6
      i32.add
-     local.set $3
+     local.set $2
     end
     local.get $7
     i32.const 1
@@ -19483,7 +19484,7 @@
   end
   local.get $8
   local.get $1
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
@@ -19494,7 +19495,7 @@
   i32.add
   i64.load
   call $~lib/util/number/itoa_buffered<u64>
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   i32.gt_s
@@ -19502,13 +19503,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -19519,7 +19520,6 @@
   i32.load offset=8
   i32.const 3
   i32.shr_u
-  i32.const 3264
   call $~lib/util/string/joinIntegerArray<u64>
   i32.const 3264
   call $~lib/rt/pure/__release
@@ -20575,15 +20575,16 @@
   local.get $1
   call $~lib/util/number/dtoa_core
  )
- (func $~lib/util/string/joinFloatArray<f32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinFloatArray<f32> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  local.get $2
+  i32.const 3264
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   local.get $1
   i32.const 1
   i32.sub
@@ -20591,7 +20592,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    i32.const 2928
    return
@@ -20603,12 +20604,12 @@
    f32.load
    f64.promote_f32
    call $~lib/util/number/dtoa
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    return
   end
   local.get $4
-  local.get $2
+  local.get $3
   call $~lib/string/String#get:length
   local.tee $5
   i32.const 28
@@ -20629,7 +20630,7 @@
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -20641,25 +20642,25 @@
     f32.load
     f64.promote_f32
     call $~lib/util/number/dtoa_buffered
-    local.get $3
+    local.get $2
     i32.add
-    local.set $3
+    local.set $2
     local.get $5
     if
      local.get $1
-     local.get $3
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $3
      local.get $5
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     local.get $3
+     local.get $2
      local.get $5
      i32.add
-     local.set $3
+     local.set $2
     end
     local.get $6
     i32.const 1
@@ -20670,7 +20671,7 @@
   end
   local.get $7
   local.get $1
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
@@ -20682,7 +20683,7 @@
   f32.load
   f64.promote_f32
   call $~lib/util/number/dtoa_buffered
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   i32.gt_s
@@ -20690,13 +20691,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -20707,20 +20708,20 @@
   i32.load offset=8
   i32.const 2
   i32.shr_u
-  i32.const 3264
   call $~lib/util/string/joinFloatArray<f32>
   i32.const 3264
   call $~lib/rt/pure/__release
  )
- (func $~lib/util/string/joinFloatArray<f64> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinFloatArray<f64> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  local.get $2
+  i32.const 3264
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   local.get $1
   i32.const 1
   i32.sub
@@ -20728,7 +20729,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    i32.const 2928
    return
@@ -20739,12 +20740,12 @@
    local.get $0
    f64.load
    call $~lib/util/number/dtoa
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    return
   end
   local.get $4
-  local.get $2
+  local.get $3
   call $~lib/string/String#get:length
   local.tee $5
   i32.const 28
@@ -20765,7 +20766,7 @@
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -20776,25 +20777,25 @@
     i32.add
     f64.load
     call $~lib/util/number/dtoa_buffered
-    local.get $3
+    local.get $2
     i32.add
-    local.set $3
+    local.set $2
     local.get $5
     if
      local.get $1
-     local.get $3
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $3
      local.get $5
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     local.get $3
+     local.get $2
      local.get $5
      i32.add
-     local.set $3
+     local.set $2
     end
     local.get $6
     i32.const 1
@@ -20805,7 +20806,7 @@
   end
   local.get $7
   local.get $1
-  local.get $3
+  local.get $2
   i32.const 1
   i32.shl
   i32.add
@@ -20816,7 +20817,7 @@
   i32.add
   f64.load
   call $~lib/util/number/dtoa_buffered
-  local.get $3
+  local.get $2
   i32.add
   local.tee $0
   i32.gt_s
@@ -20824,13 +20825,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -20841,7 +20842,6 @@
   i32.load offset=8
   i32.const 3
   i32.shr_u
-  i32.const 3264
   call $~lib/util/string/joinFloatArray<f64>
   i32.const 3264
   call $~lib/rt/pure/__release
