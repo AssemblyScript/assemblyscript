@@ -225,6 +225,11 @@
     "type": "i",
     "default": 0
   },
+  "memoryData": {
+    "category": "Linking",
+    "description": "Path to a file to inject as raw memory after memoryBase.",
+    "type": "s"
+  },
   "tableBase": {
     "category": "Linking",
     "description": "Sets the start offset of emitted table elements.",

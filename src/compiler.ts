@@ -223,6 +223,8 @@ export class Options {
   explicitStart: bool = false;
   /** Static memory start offset. */
   memoryBase: u32 = 0;
+  /** Static memory data to include. */
+  memoryData: Uint8Array | null = null;
   /** Static table start offset. */
   tableBase: u32 = 0;
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
@@ -269,6 +271,11 @@ export class Options {
   /** Tests if a specific feature is activated. */
   hasFeature(feature: Feature): bool {
     return (this.features & feature) != 0;
+  }
+
+  /** Tests if options indicate a custom memory layout. */
+  hasCustomMemoryLayout(): bool {
+    return this.memoryBase > 0 || this.memoryData != null;
   }
 }
 
@@ -379,9 +386,11 @@ export class Compiler extends DiagnosticEmitter {
     var options = program.options;
     var module = Module.create();
     this.module = module;
-    if (options.memoryBase) {
+    if (options.hasCustomMemoryLayout()) {
       this.memoryOffset = i64_new(options.memoryBase);
       module.setLowMemoryUnused(false);
+      let data = options.memoryData;
+      if (data) this.addMemorySegment(data, 1);
     } else {
       if (!options.lowMemoryLimit && options.optimizeLevelHint >= 2) {
         this.memoryOffset = i64_new(1024);

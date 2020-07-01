@@ -102,6 +102,11 @@ export function setMemoryBase(options: Options, memoryBase: u32): void {
   options.memoryBase = memoryBase;
 }
 
+/** Sets the `memoryData` option. */
+export function setMemoryData(options: Options, memoryData: Uint8Array): void {
+  options.memoryData = memoryData;
+}
+
 /** Sets the `tableBase` option. */
 export function setTableBase(options: Options, tableBase: u32): void {
   options.tableBase = tableBase;

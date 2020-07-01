@@ -290,6 +290,12 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setPedantic(compilerOptions, args.pedantic);
   assemblyscript.setLowMemoryLimit(compilerOptions, args.lowMemoryLimit >>> 0);
 
+  if (args.memoryData != null) {
+    const data = readFileInternal(args.memoryData, baseDir);
+    if (!data) throw Error("File '" + args.memoryData + "' not found.");
+    assemblyscript.setMemoryData(compilerOptions, new Uint8Array(data));
+  }
+
   // Add or override aliases if specified
   if (args.use) {
     let aliases = args.use;
@@ -861,6 +867,20 @@ exports.main = function main(argv, options, callback) {
   }
 
   return callback(null);
+
+  function readFileInternal(filename, baseDir, options) {
+    let name = path.resolve(baseDir, filename);
+    try {
+      let text;
+      stats.readCount++;
+      stats.readTime += measure(() => {
+        text = fs.readFileSync(name, options);
+      });
+      return text;
+    } catch (e) {
+      return null;
+    }
+  }
 
   function readFileNode(filename, baseDir) {
     let name = path.resolve(baseDir, filename);
