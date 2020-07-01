@@ -1530,8 +1530,8 @@ export class Module {
       //   passes.push("post-assemblyscript");
       // }
       passes.push("optimize-instructions");
-      passes.push("inlining");
       passes.push("dce");
+      passes.push("inlining");
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
       passes.push("inlining-optimizing");

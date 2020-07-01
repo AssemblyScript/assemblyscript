@@ -1189,14 +1189,14 @@
   global.set $do/ran
   i32.const 0
   local.set $0
-  loop $do-continue|08
+  loop $do-continue|06
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $do-continue|08
+   br_if $do-continue|06
   end
   local.get $0
   i32.const 10
