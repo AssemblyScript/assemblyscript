@@ -2000,8 +2000,6 @@
        i32.sub
        i32.store16
       else
-       i32.const -1
-       local.set $1
        local.get $2
        i32.const 223
        i32.sub

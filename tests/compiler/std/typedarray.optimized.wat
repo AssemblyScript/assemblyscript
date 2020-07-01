@@ -5976,12 +5976,12 @@
   i32.load offset=4
   local.set $7
   loop $for-loop|0
-   local.get $2
+   local.get $1
    local.get $4
    i32.lt_s
    if
     local.get $7
-    local.get $2
+    local.get $1
     i32.const 2
     i32.shl
     i32.add
@@ -5994,27 +5994,27 @@
     i32.gt_s
     if
      local.get $5
-     local.get $1
+     local.get $2
      i32.const 2
      i32.shl
      i32.add
      local.get $6
      i32.store
-     local.get $1
+     local.get $2
      i32.const 1
      i32.add
-     local.set $1
+     local.set $2
     end
-    local.get $2
+    local.get $1
     i32.const 1
     i32.add
-    local.set $2
+    local.set $1
     br $for-loop|0
    end
   end
   local.get $0
   local.get $5
-  local.get $1
+  local.get $2
   i32.const 2
   i32.shl
   local.tee $2
@@ -6167,12 +6167,12 @@
   i32.load offset=4
   local.set $7
   loop $for-loop|0
-   local.get $2
+   local.get $1
    local.get $4
    i32.lt_s
    if
     local.get $7
-    local.get $2
+    local.get $1
     i32.const 2
     i32.shl
     i32.add
@@ -6185,27 +6185,27 @@
     i32.gt_u
     if
      local.get $5
-     local.get $1
+     local.get $2
      i32.const 2
      i32.shl
      i32.add
      local.get $6
      i32.store
-     local.get $1
+     local.get $2
      i32.const 1
      i32.add
-     local.set $1
+     local.set $2
     end
-    local.get $2
+    local.get $1
     i32.const 1
     i32.add
-    local.set $2
+    local.set $1
     br $for-loop|0
    end
   end
   local.get $0
   local.get $5
-  local.get $1
+  local.get $2
   i32.const 2
   i32.shl
   local.tee $2
@@ -6358,12 +6358,12 @@
   i32.load offset=4
   local.set $7
   loop $for-loop|0
-   local.get $2
+   local.get $1
    local.get $4
    i32.lt_s
    if
     local.get $7
-    local.get $2
+    local.get $1
     i32.const 3
     i32.shl
     i32.add
@@ -6376,27 +6376,27 @@
     i64.gt_s
     if
      local.get $5
-     local.get $1
+     local.get $2
      i32.const 3
      i32.shl
      i32.add
      local.get $6
      i64.store
-     local.get $1
+     local.get $2
      i32.const 1
      i32.add
-     local.set $1
+     local.set $2
     end
-    local.get $2
+    local.get $1
     i32.const 1
     i32.add
-    local.set $2
+    local.set $1
     br $for-loop|0
    end
   end
   local.get $0
   local.get $5
-  local.get $1
+  local.get $2
   i32.const 3
   i32.shl
   local.tee $2
@@ -6549,12 +6549,12 @@
   i32.load offset=4
   local.set $7
   loop $for-loop|0
-   local.get $2
+   local.get $1
    local.get $4
    i32.lt_s
    if
     local.get $7
-    local.get $2
+    local.get $1
     i32.const 3
     i32.shl
     i32.add
@@ -6567,27 +6567,27 @@
     i64.gt_u
     if
      local.get $5
-     local.get $1
+     local.get $2
      i32.const 3
      i32.shl
      i32.add
      local.get $6
      i64.store
-     local.get $1
+     local.get $2
      i32.const 1
      i32.add
-     local.set $1
+     local.set $2
     end
-    local.get $2
+    local.get $1
     i32.const 1
     i32.add
-    local.set $2
+    local.set $1
     br $for-loop|0
    end
   end
   local.get $0
   local.get $5
-  local.get $1
+  local.get $2
   i32.const 3
   i32.shl
   local.tee $2
@@ -6740,12 +6740,12 @@
   i32.load offset=4
   local.set $7
   loop $for-loop|0
-   local.get $2
+   local.get $1
    local.get $4
    i32.lt_s
    if
     local.get $7
-    local.get $2
+    local.get $1
     i32.const 2
     i32.shl
     i32.add
@@ -6758,27 +6758,27 @@
     f32.gt
     if
      local.get $5
-     local.get $1
+     local.get $2
      i32.const 2
      i32.shl
      i32.add
      local.get $6
      f32.store
-     local.get $1
+     local.get $2
      i32.const 1
      i32.add
-     local.set $1
+     local.set $2
     end
-    local.get $2
+    local.get $1
     i32.const 1
     i32.add
-    local.set $2
+    local.set $1
     br $for-loop|0
    end
   end
   local.get $0
   local.get $5
-  local.get $1
+  local.get $2
   i32.const 2
   i32.shl
   local.tee $2
@@ -6931,12 +6931,12 @@
   i32.load offset=4
   local.set $7
   loop $for-loop|0
-   local.get $2
+   local.get $1
    local.get $4
    i32.lt_s
    if
     local.get $7
-    local.get $2
+    local.get $1
     i32.const 3
     i32.shl
     i32.add
@@ -6949,27 +6949,27 @@
     f64.gt
     if
      local.get $5
-     local.get $1
+     local.get $2
      i32.const 3
      i32.shl
      i32.add
      local.get $6
      f64.store
-     local.get $1
+     local.get $2
      i32.const 1
      i32.add
-     local.set $1
+     local.set $2
     end
-    local.get $2
+    local.get $1
     i32.const 1
     i32.add
-    local.set $2
+    local.set $1
     br $for-loop|0
    end
   end
   local.get $0
   local.get $5
-  local.get $1
+  local.get $2
   i32.const 3
   i32.shl
   local.tee $2

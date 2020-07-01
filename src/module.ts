@@ -1622,13 +1622,13 @@ export class Module {
         if (optimizeLevel >= 3) {
           // very expensive, so O3 only
           passes.push("simplify-globals");
+          passes.push("simplify-locals");
           passes.push("vacuum");
           // replace indirect with direct calls again and inline
           passes.push("inlining-optimizing");
           passes.push("directize");
           passes.push("dae-optimizing");
           passes.push("precompute-propagate");
-          passes.push("simplify-locals");
           passes.push("vacuum");
           passes.push("merge-locals");
           passes.push("coalesce-locals");
