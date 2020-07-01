@@ -1,0 +1,10 @@
+{
+  "targets": {
+    "release": {
+      "optimizeLevel": 3,
+      "shrinkLevel": 1,
+      "enable": ["simd"]
+    }
+  },
+  "options": {}
+}

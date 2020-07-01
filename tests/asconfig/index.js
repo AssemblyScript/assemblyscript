@@ -1,8 +1,10 @@
 const asc = require("../../cli/asc");
 const loader = require("../../lib/loader");
+const args = process.argv.slice(2);
+
 /** @type {Uint8Array} */
 let binary;
-asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--explicitStart"], {
+asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--explicitStart", ...args], {
   writeFile(name, contents) {
     if (name === "output.wasm") {
       binary = contents;
