@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "npm run test:use-consts && npm run test:entry-points && npm run test:flags && npm run test:complicated",
+    "test:use-consts": "cd use-consts && npm run test",
+    "test:entry-points": "cd entry-points && npm run test",
+    "test:flags": "cd flags && npm run test",
+    "test:complicated": "cd complicated && npm run test"
+  }
+}
