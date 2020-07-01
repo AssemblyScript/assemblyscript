@@ -1583,6 +1583,81 @@
   end
   local.get $4
   call $~lib/rt/stub/__release
+  i32.const 0
+  local.set $1
+  local.get $1
+  i32.eqz
+  if
+   i32.const 4
+   i32.const 23
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $1
+  end
+  local.get $1
+  i32.const 0
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  i32.store
+  local.get $1
+  local.set $1
+  local.get $1
+  i32.load
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 218
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  call $~lib/rt/stub/__release
+  i32.const 0
+  local.set $0
+  local.get $0
+  i32.eqz
+  if
+   i32.const 4
+   i32.const 24
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  local.tee $2
+  i32.const 0
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.load
+  call $~lib/rt/stub/__release
+  local.get $3
+  i32.store
+  local.get $0
+  local.set $0
+  local.get $0
+  i32.load
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 230
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/stub/__release
  )
  (func $~start
   call $start:field-initialization
