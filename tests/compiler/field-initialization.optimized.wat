@@ -817,6 +817,52 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 4
+  i32.const 23
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 0
+  i32.const 0
+  call $~lib/rt/stub/__alloc
+  i32.store
+  local.get $0
+  i32.load
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1040
+   i32.const 218
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 4
+  i32.const 24
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 0
+  i32.store
+  i32.const 0
+  i32.const 0
+  call $~lib/rt/stub/__alloc
+  local.set $1
+  local.get $0
+  i32.load
+  drop
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+  i32.load
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1040
+   i32.const 230
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~start
   call $start:field-initialization

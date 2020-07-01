@@ -204,3 +204,28 @@ class Flow_Balanced {
   let o = new Flow_Balanced(true);
   assert(o.a != null);
 }
+
+// inlined ctors
+
+class Ref_Init_InlineCtor {
+  a: ArrayBuffer = new ArrayBuffer(0); // OK
+  @inline
+  constructor() {
+  }
+}
+{
+  let o = new Ref_Init_InlineCtor();
+  assert(o.a != null);
+}
+
+class Ref_InlineCtor_Init {
+  a: ArrayBuffer; // OK (in ctor)
+  @inline
+  constructor() {
+    this.a = new ArrayBuffer(0);
+  }
+}
+{
+  let o = new Ref_InlineCtor_Init();
+  assert(o.a != null);
+}

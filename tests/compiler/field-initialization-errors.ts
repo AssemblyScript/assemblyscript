@@ -16,6 +16,16 @@ class Ref_Ctor {
   new Ref_Ctor();
 }
 
+// Uninitialized with inline ctor
+class Ref_InlineCtor {
+  a: ArrayBuffer; // TS2564
+  @inline constructor() {
+  }
+}
+{
+  new Ref_InlineCtor();
+}
+
 // Uninitialized in any branch
 class Ref_Ctor_Branch {
   a: ArrayBuffer; // TS2564
