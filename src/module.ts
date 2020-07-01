@@ -1628,6 +1628,7 @@ export class Module {
           passes.push("directize");
           passes.push("dae-optimizing");
           passes.push("precompute-propagate");
+          passes.push("simplify-locals");
           passes.push("vacuum");
           passes.push("merge-locals");
           passes.push("coalesce-locals");
