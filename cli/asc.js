@@ -305,7 +305,7 @@ exports.main = function main(argv, options, callback) {
         ? path.dirname(asconfig.extends)
         // relative means we need to calculate a relative asconfigDir
         : path.join(asconfigDir, path.dirname(asconfig.extends));
-      asconfig = getAsconfig(asconfigDir, path.basename(asconfig.extends), readFile);
+      asconfig = getAsconfig(path.basename(asconfig.extends), asconfigDir, readFile);
     } else {
       asconfig = null; // finished resolving the configuration chain
     }
