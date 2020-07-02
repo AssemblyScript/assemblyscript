@@ -2239,7 +2239,7 @@ export class Program extends DiagnosticEmitter {
       validDecorators |= DecoratorFlags.EXTERNAL;
     } else {
       validDecorators |= DecoratorFlags.INLINE;
-      if (declaration.range.source.isLibrary) {
+      if (declaration.range.source.isLibrary || declaration.is(CommonFlags.EXPORT)) {
         validDecorators |= DecoratorFlags.LAZY;
       }
     }
