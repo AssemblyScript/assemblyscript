@@ -358,8 +358,8 @@ export class Compiler extends DiagnosticEmitter {
   skippedAutoreleases: Set<ExpressionRef> = new Set();
   /** Current inline functions stack. */
   inlineStack: Function[] = [];
-  /** Lazily compiled library functions. */
-  lazyLibraryFunctions: Set<Function> = new Set();
+  /** Lazily compiled functions. */
+  lazyFunctions: Set<Function> = new Set();
   /** Pending class-specific instanceof helpers. */
   pendingClassInstanceOf: Set<ClassPrototype> = new Set();
   /** Functions potentially involving a virtual call. */
@@ -490,20 +490,20 @@ export class Compiler extends DiagnosticEmitter {
       program.registerConstantInteger("__GC_ALL_ACYCLIC", Type.bool, i64_new(1, 0));
     }
 
-    // compile lazy library functions
-    var lazyLibraryFunctions = this.lazyLibraryFunctions;
+    // compile lazy functions
+    var lazyFunctions = this.lazyFunctions;
     do {
       let functionsToCompile = new Array<Function>();
       // TODO: for (let instance of lazyLibraryFunctions) {
-      for (let _values = Set_values(lazyLibraryFunctions), i = 0, k = _values.length; i < k; ++i) {
+      for (let _values = Set_values(lazyFunctions), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
         functionsToCompile.push(instance);
       }
-      lazyLibraryFunctions.clear();
+      lazyFunctions.clear();
       for (let i = 0, k = functionsToCompile.length; i < k; ++i) {
         this.compileFunction(unchecked(functionsToCompile[i]), true);
       }
-    } while (lazyLibraryFunctions.size);
+    } while (lazyFunctions.size);
 
     // compile pending class-specific instanceof helpers
     // TODO: for (let prototype of this.pendingClassInstanceOf.values()) {
@@ -759,7 +759,7 @@ export class Compiler extends DiagnosticEmitter {
             global.identifierNode.range
           );
         } else {
-          this.module.addGlobalExport(element.internalName, prefix + name);
+          if (element.is(CommonFlags.COMPILED)) this.module.addGlobalExport(element.internalName, prefix + name);
         }
         break;
       }
@@ -916,7 +916,7 @@ export class Compiler extends DiagnosticEmitter {
       // TODO: for (let element of exports.values()) {
       for (let _values = Map_values(exports), i = 0, k = _values.length; i < k; ++i) {
         let element = unchecked(_values[i]);
-        this.compileElement(element);
+        if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileElement(element);
       }
     }
     var exportsStar = file.exportsStar;
@@ -1349,7 +1349,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!forceStdAlternative) {
       if (instance.hasDecorator(DecoratorFlags.BUILTIN)) return true;
       if (instance.hasDecorator(DecoratorFlags.LAZY)) {
-        this.lazyLibraryFunctions.add(instance);
+        this.lazyFunctions.add(instance);
         return true;
       }
     }
