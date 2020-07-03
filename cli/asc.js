@@ -1031,7 +1031,7 @@ function getAsconfig(file, baseDir, readFile) {
   }
 
   if (config.extends && typeof config.extends !== "string") {
-    throw new Error("Asconfig.extends is not a string: " + location)
+    throw new Error("Asconfig.extends is not a string: " + location);
   }
 
   return config;
