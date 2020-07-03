@@ -132,7 +132,6 @@
    i32.sub
    local.set $0
   end
-  local.get $2
   local.get $0
   i32.const 10
   i32.ge_u
@@ -173,6 +172,7 @@
   i32.const 100000
   i32.lt_u
   select
+  local.get $2
   i32.add
   local.tee $3
   i32.const 1

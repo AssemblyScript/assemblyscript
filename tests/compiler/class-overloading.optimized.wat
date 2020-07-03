@@ -98,12 +98,11 @@
    local.set $0
   end
   local.get $0
-  i32.eqz
   if (result i32)
+   local.get $0
+  else
    i32.const 3
    call $~lib/rt/stub/__alloc
-  else
-   local.get $0
   end
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)

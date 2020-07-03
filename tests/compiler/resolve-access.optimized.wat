@@ -112,7 +112,7 @@
   (local $3 i32)
   (local $4 i32)
   i32.const 1040
-  local.set $1
+  local.set $3
   i32.const 8
   local.set $4
   block $~lib/util/memory/memmove|inlined.0
@@ -146,13 +146,13 @@
        i32.const 1
        i32.add
        local.set $0
-       local.get $1
-       local.tee $3
+       local.get $3
+       local.tee $1
        i32.const 1
        i32.add
-       local.set $1
+       local.set $3
        local.get $2
-       local.get $3
+       local.get $1
        i32.load8_u
        i32.store8
        br $while-continue|0
@@ -164,7 +164,7 @@
       i32.ge_u
       if
        local.get $0
-       local.get $1
+       local.get $3
        i64.load
        i64.store
        local.get $4
@@ -175,10 +175,10 @@
        i32.const 8
        i32.add
        local.set $0
-       local.get $1
+       local.get $3
        i32.const 8
        i32.add
-       local.set $1
+       local.set $3
        br $while-continue|1
       end
      end
@@ -191,13 +191,13 @@
       i32.const 1
       i32.add
       local.set $0
-      local.get $1
-      local.tee $3
+      local.get $3
+      local.tee $1
       i32.const 1
       i32.add
-      local.set $1
+      local.set $3
       local.get $2
-      local.get $3
+      local.get $1
       i32.load8_u
       i32.store8
       local.get $4
