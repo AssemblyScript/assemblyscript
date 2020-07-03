@@ -986,7 +986,7 @@ exports.main = function main(argv, options, callback) {
 const toString = Object.prototype.toString;
 
 function isObject(arg) {
-  return toString.call(arg).slice(8, -1) === "Object";
+  return toString.call(arg) === "[object Object]";
 }
 
 function getAsconfig(file, baseDir, readFile) {
