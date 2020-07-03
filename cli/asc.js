@@ -990,7 +990,10 @@ exports.main = function main(argv, options, callback) {
 };
 
 const toString = Object.prototype.toString;
-const typeOf = val => toString.call(val).slice(8, -1);
+
+function isObject(arg) {
+  return toString.call(arg).slice(8, -1) === "Object";
+}
 
 function getAsconfig(file, baseDir, readFile) {
   const contents = readFile(file, baseDir);
@@ -1006,23 +1009,29 @@ function getAsconfig(file, baseDir, readFile) {
   }
 
   // validate asconfig shape
-  if (config.options && typeOf(config.options) !== "Object") {
+  if (config.options && !isObject(config.options)) {
     throw new Error("Asconfig.options is not an object: " + location);
   }
-  if (config.include && typeOf(config.include) !== "Array") {
-    throw new Error("Asconfig.include is not an object: " + location);
+
+  if (config.include && !Array.isArray(config.include)) {
+    throw new Error("Asconfig.include is not an array: " + location);
   }
+
   if (config.targets) {
-    if (typeOf(config.targets) !== "Object") {
+    if (!isObject(config.targets)) {
       throw new Error("Asconfig.targets is not an object: " + location);
     }
     const targets = Object.keys(config.targets);
     for (let i = 0; i < targets.length; i++) {
       const target = targets[i];
-      if (typeOf(config.targets[target]) !== "Object") {
+      if (!isObject(config.targets[target])) {
         throw new Error("Asconfig.targets." + target + " is not an object: " + location);
       }
     }
+  }
+
+  if (config.extends && typeof config.extends !== "string") {
+    throw new Error("Asconfig.extends is not a string: " + location)
   }
 
   return config;
