@@ -42,6 +42,7 @@ const compilerDir = path.join(__dirname, "..");
 const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
 const tsconfigFile = path.join(assemblyDir, "tsconfig.json");
+const asconfigFile = path.join(projectDir, "asconfig.json");
 let tsconfigBase = path.relative(assemblyDir, path.join(compilerDir, "std", "assembly.json"));
 if (/^(\.\.[/\\])*node_modules[/\\]assemblyscript[/\\]/.test(tsconfigBase)) {
   // Use node resolution if the compiler is a normal dependency
@@ -84,6 +85,9 @@ console.log([
   colors.cyan("  ./tests/index.js"),
   "  Example test to check that your module is indeed working.",
   "",
+  colors.cyan("  ./asconfig.json"),
+  "  Main configuration file that defines a debug and release target for your project.",
+  "",
   colors.cyan("  ./package.json"),
   "  Package info containing the necessary commands to compile to WebAssembly.",
   "",
@@ -108,6 +112,7 @@ function createProject(answer) {
   ensureIndexJs();
   ensureTestsDirectory();
   ensureTestsIndexJs();
+  ensureAsconfigJson();
   console.log([
     colors.green("Done!"),
     "",
@@ -207,6 +212,37 @@ function ensureTsconfigJson() {
   console.log();
 }
 
+function ensureAsconfigJson() {
+  console.log("- Making sure that 'asconfig.json' is set up...");
+  if (!fs.existsSync(asconfigFile)) {
+    fs.writeFileSync(asconfigFile, JSON.stringify({
+      targets: {
+        debug: {
+          // -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+          binaryFile: "build/untouched.wasm",
+          textFile: "build/untouched.wat",
+          sourceMap: true,
+          debug: true
+        },
+        release: {
+          // -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+          binaryFile: "build/optimized.wasm",
+          textFile: "build/optimized.wat",
+          sourceMap: true,
+          optimizeLevel: 3
+        }
+      },
+      options: {}
+    }, null, 2));
+    console.log(colors.green("  Created: ") + tsconfigFile);
+  } else {
+    // TODO: What to do here?
+    // const asconfig = JSON.parse(fs.readFileSync(asconfigFile, "utf-8"));
+    console.log(colors.green("  Ignored: ") + asconfigFile);
+  }
+  console.log();
+}
+
 function ensureEntryFile() {
   console.log("- Making sure that 'assembly/index.ts' exists...");
   if (!fs.existsSync(entryFile)) {
@@ -253,8 +289,8 @@ function ensureGitignore() {
 function ensurePackageJson() {
   console.log("- Making sure that 'package.json' contains the build commands...");
   const entryPath = path.relative(projectDir, entryFile).replace(/\\/g, "/");
-  const buildUntouched = "asc " + entryPath + " -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug";
-  const buildOptimized = "asc " + entryPath + " -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize";
+  const buildUntouched = "asc " + entryPath + " --target debug";
+  const buildOptimized = "asc " + entryPath + " --target release";
   const buildAll = "npm run asbuild:untouched && npm run asbuild:optimized";
   if (!fs.existsSync(packageFile)) {
     fs.writeFileSync(packageFile, JSON.stringify({
