@@ -318,13 +318,8 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Use this with array.filter(unique()) to obtain a unique array of values
-  function unique() {
-    const set = new Set();
-    return function (arg) {
-      if (set.has(arg)) return false;
-      set.add(arg);
-      return true;
-    };
+  function unique(values) {
+    return [...new Set(value)];
   }
 
   // returns a relative path from baseDir
@@ -332,7 +327,7 @@ exports.main = function main(argv, options, callback) {
     return path.relative(baseDir, arg);
   }
   // postprocess we need to get absolute file locations argv
-  argv = argv.map(resolve).filter(unique()).map(makeRelative);
+  argv = unique(argv.map(resolve)).map(makeRelative);
 
   // Set up options
   const compilerOptions = assemblyscript.newOptions();
