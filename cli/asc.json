@@ -19,13 +19,13 @@
   },
   "config": {
     "category": "General",
-    "description": "Provides a configuration for assemblyscript to compile your project.",
+    "description":  "Configuration file to apply. CLI arguments take precedence.",
     "type": "s",
     "default": "asconfig.json"
   },
   "target": {
     "category": "General",
-    "description": "Provides a compile target for use with an assemblyscript configuration.",
+    "description": "Configuration compile target profile to apply.",
     "type": "s",
     "default": "release"
   },
