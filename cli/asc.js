@@ -273,7 +273,7 @@ exports.main = function main(argv, options, callback) {
   const baseDir = args.baseDir ? path.resolve(args.baseDir) : ".";
   const target = args.target;
 
-  // Once the basedir is calculated, we can resolve the config, and it's extensions
+  // Once the baseDir is calculated, we can resolve the config, and its extensions
   let asconfig = getAsconfig(args.config, baseDir, readFile);
   let asconfigDir = baseDir;
 
