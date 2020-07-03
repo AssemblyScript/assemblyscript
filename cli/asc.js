@@ -317,9 +317,9 @@ exports.main = function main(argv, options, callback) {
     else return path.resolve(path.join(baseDir, arg));
   }
 
-  // Use this with array.filter(unique()) to obtain a unique array of values
+  // create a unique set of values
   function unique(values) {
-    return [...new Set(value)];
+    return [...new Set(values)];
   }
 
   // returns a relative path from baseDir
@@ -405,7 +405,7 @@ exports.main = function main(argv, options, callback) {
   const transforms = [];
   if (args.transform) {
     let tsNodeRegistered = false;
-    let transformArgs = args.transform.map(resolve).filter(unique());
+    let transformArgs = unique(args.transform.map(resolve));
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
       if (!tsNodeRegistered && filename.endsWith(".ts")) { // ts-node requires .ts specifically
@@ -463,7 +463,7 @@ exports.main = function main(argv, options, callback) {
   if (args.lib) {
     let lib = args.lib;
     if (typeof lib === "string") lib = lib.split(",");
-    lib = lib.map(resolve).filter(unique());
+    lib = unique(lib.map(resolve));
     Array.prototype.push.apply(customLibDirs, lib.map(lib => lib.trim()));
     for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
       let libDir = customLibDirs[i];
