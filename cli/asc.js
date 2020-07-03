@@ -311,22 +311,26 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  // Just some helper functions
-  const resolve = arg => path.isAbsolute(arg)
-    ? arg
-    // this transform is relative to process.cwd()
-    : path.resolve(path.join(baseDir, arg));
-  const unique = () => {
+  // This method resolves a path relative to the baseDir instead of process.cwd()
+  function resolve(arg) {
+    if (path.isAbsolute(arg)) return arg;
+    else return path.resolve(path.join(baseDir, arg));
+  }
+
+  // Use this with array.filter(unique()) to obtain a unique array of values
+  function unique() {
     const set = new Set();
-    return arg => {
+    return function (arg) {
       if (set.has(arg)) return false;
       set.add(arg);
       return true;
     };
-  };
+  }
 
-  const makeRelative = arg => path.relative(baseDir, arg);
-
+  // returns a relative path from baseDir
+  function makeRelative(arg) {
+    return path.relative(baseDir, arg);
+  }
   // postprocess we need to get absolute file locations argv
   argv = argv.map(resolve).filter(unique()).map(makeRelative);
 
@@ -435,6 +439,7 @@ exports.main = function main(argv, options, callback) {
       }
     }
   }
+
   function applyTransform(name, ...args) {
     for (let i = 0, k = transforms.length; i < k; ++i) {
       let transform = transforms[i];
