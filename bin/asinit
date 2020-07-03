@@ -229,7 +229,8 @@ function ensureAsconfigJson() {
           binaryFile: "build/optimized.wasm",
           textFile: "build/optimized.wat",
           sourceMap: true,
-          optimizeLevel: 3
+          optimizeLevel: 3,
+          shrinkLevel: 1,
         }
       },
       options: {}
