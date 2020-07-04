@@ -2023,11 +2023,12 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
+    var isGetterOrSetter = isGetter || isSetter;
     var name: IdentifierExpression;
     if (isConstructor) {
       name = Node.createConstructorExpression(tn.range());
     } else {
-      if (!(isGetter || isSetter) && tn.skip(Token.OPENBRACKET)) {
+      if (!isGetterOrSetter && tn.skip(Token.OPENBRACKET)) {
         if (!startPos) startPos = tn.tokenPos;
         // TODO: also handle symbols, which might have some of these modifiers
         if (flags & CommonFlags.PUBLIC) {
@@ -2091,7 +2092,7 @@ export class Parser extends DiagnosticEmitter {
           DiagnosticCode.Type_parameters_cannot_appear_on_a_constructor_declaration,
           tn.range(typeParametersStart, tn.pos)
         ); // recoverable
-      } else if (isGetter || isSetter) {
+      } else if (isGetterOrSetter) {
         this.error(
           DiagnosticCode.An_accessor_cannot_have_type_parameters,
           tn.range(typeParametersStart, tn.pos)
@@ -2236,7 +2237,7 @@ export class Parser extends DiagnosticEmitter {
         name.range
       );
 
-    } else if (isGetter || isSetter) {
+    } else if (isGetterOrSetter) {
       this.error(
         DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
         name.range
