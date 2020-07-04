@@ -2225,7 +2225,11 @@ export class Parser extends DiagnosticEmitter {
         body,
         tn.range(startPos, tn.pos)
       );
-      tn.skip(Token.SEMICOLON);
+      if (isInterface && tn.peek(false) == Token.COMMA) {
+        tn.skip(Token.COMMA);
+      } else {
+        tn.skip(Token.SEMICOLON);
+      }
       return retMethod;
 
     } else if (isConstructor) {
@@ -2288,7 +2292,10 @@ export class Parser extends DiagnosticEmitter {
         if (!initializer) return null;
       }
       let range = tn.range(startPos, tn.pos);
-      if ((flags & CommonFlags.DEFINITELY_ASSIGNED) != 0 && ((flags & CommonFlags.STATIC) != 0 || isInterface || initializer !== null)) {
+      if (
+        (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0 &&
+        (isInterface || initializer !== null || (flags & CommonFlags.STATIC) != 0)
+      ) {
         this.error(
           DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
           range
@@ -2302,7 +2309,11 @@ export class Parser extends DiagnosticEmitter {
         initializer,
         range
       );
-      tn.skip(Token.SEMICOLON);
+      if (isInterface && tn.peek(false) == Token.COMMA) {
+        tn.skip(Token.COMMA);
+      } else {
+        tn.skip(Token.SEMICOLON);
+      }
       return retField;
     }
     return null;
