@@ -2169,7 +2169,7 @@ export class Parser extends DiagnosticEmitter {
             tn.range()
           );
         }
-        returnType = this.parseType(tn, name.kind == NodeKind.CONSTRUCTOR || isSetter);
+        returnType = this.parseType(tn, isSetter || name.kind == NodeKind.CONSTRUCTOR);
         if (!returnType) return null;
       } else {
         returnType = Node.createOmittedType(tn.range(tn.pos));
@@ -2209,7 +2209,7 @@ export class Parser extends DiagnosticEmitter {
         }
         body = this.parseBlockStatement(tn, false);
         if (!body) return null;
-      } else if (!(flags & (CommonFlags.AMBIENT | CommonFlags.ABSTRACT)) && !isInterface) {
+      } else if (!isInterface && !(flags & (CommonFlags.AMBIENT | CommonFlags.ABSTRACT))) {
         this.error(
           DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
           tn.range()
