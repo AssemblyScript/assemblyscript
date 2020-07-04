@@ -981,7 +981,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     var range = Range.join(identifier.range, tn.range());
-    if ((flags & CommonFlags.DEFINITELY_ASSIGNED) != 0 && initializer !== null) {
+    if (initializer !== null && (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
         range
@@ -1852,7 +1852,7 @@ export class Parser extends DiagnosticEmitter {
         if (!decorators) decorators = new Array();
         decorators.push(decorator);
       } while (tn.skip(Token.AT));
-      if (decorators !== null && isInterface) {
+      if (isInterface && decorators !== null) {
         this.error(
           DiagnosticCode.Decorators_are_not_valid_here,
           Range.join(decorators[0].range, decorators[decorators.length - 1].range)
@@ -3246,7 +3246,11 @@ export class Parser extends DiagnosticEmitter {
       if (!label) return null;
       if (tn.skip(Token.COLON)) {
         statements = new Array<Statement>();
-        while (tn.peek() != Token.CASE && tn.nextToken != Token.DEFAULT && tn.nextToken != Token.CLOSEBRACE) {
+        while (
+          tn.peek() != Token.CASE &&
+          tn.nextToken != Token.DEFAULT &&
+          tn.nextToken != Token.CLOSEBRACE
+        ) {
           statement = this.parseStatement(tn);
           if (!statement) return null;
           statements.push(statement);
@@ -3264,7 +3268,11 @@ export class Parser extends DiagnosticEmitter {
     } else if (tn.skip(Token.DEFAULT)) {
       if (tn.skip(Token.COLON)) {
         statements = new Array<Statement>();
-        while (tn.peek() != Token.CASE && tn.nextToken != Token.DEFAULT && tn.nextToken != Token.CLOSEBRACE) {
+        while (
+          tn.peek() != Token.CASE &&
+          tn.nextToken != Token.DEFAULT &&
+          tn.nextToken != Token.CLOSEBRACE
+        ) {
           statement = this.parseStatement(tn);
           if (!statement) return null;
           statements.push(statement);
@@ -3544,8 +3552,7 @@ export class Parser extends DiagnosticEmitter {
         let typeArguments: TypeNode[] | null = null;
         let arguments_: Expression[] | null = null;
         if (
-          tn.skip(Token.OPENPAREN)
-          ||
+          tn.skip(Token.OPENPAREN) ||
           (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) !== null
         ) {
           arguments_ = this.parseArguments(tn);
@@ -4153,9 +4160,9 @@ export class Parser extends DiagnosticEmitter {
   ): Expression {
     var typeArguments: TypeNode[] | null = null;
     while (
-      tn.skip(Token.OPENPAREN)
-      ||
-      potentiallyGeneric && (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) !== null
+      tn.skip(Token.OPENPAREN) ||
+      potentiallyGeneric &&
+      (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) !== null
     ) {
       let args = this.parseArguments(tn);
       if (!args) break;
