@@ -1674,16 +1674,16 @@ export class Parser extends DiagnosticEmitter {
 
     var extendsType: NamedTypeNode | null = null;
     if (tn.skip(Token.EXTENDS)) {
-      let t = this.parseType(tn);
-      if (!t) return null;
-      if (t.kind != NodeKind.NAMEDTYPE) {
+      let ty = this.parseType(tn);
+      if (!ty) return null;
+      if (ty.kind != NodeKind.NAMEDTYPE) {
         this.error(
           DiagnosticCode.Identifier_expected,
-          t.range
+          ty.range
         );
         return null;
       }
-      extendsType = <NamedTypeNode>t;
+      extendsType = <NamedTypeNode>ty;
     }
 
     var implementsTypes: NamedTypeNode[] | null = null;
