@@ -2225,9 +2225,7 @@ export class Parser extends DiagnosticEmitter {
         body,
         tn.range(startPos, tn.pos)
       );
-      if (isInterface && tn.peek(false) == Token.COMMA) {
-        tn.skip(Token.COMMA);
-      } else {
+      if (!(isInterface && tn.skip(Token.COMMA))) {
         tn.skip(Token.SEMICOLON);
       }
       return retMethod;
@@ -2309,9 +2307,7 @@ export class Parser extends DiagnosticEmitter {
         initializer,
         range
       );
-      if (isInterface && tn.peek(false) == Token.COMMA) {
-        tn.skip(Token.COMMA);
-      } else {
+      if (!(isInterface && tn.skip(Token.COMMA))) {
         tn.skip(Token.SEMICOLON);
       }
       return retField;
