@@ -463,38 +463,38 @@ export class Tokenizer extends DiagnosticEmitter {
   constructor(source: Source, diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
 
-    this.source = source;
-    this.pos = 0;
-    this.end = source.text.length;
     if (!diagnostics) diagnostics = [];
     this.diagnostics = diagnostics;
+    this.source = source;
 
-    var end = this.end;
     var text = source.text;
-
+    var end = text.length;
+    var pos = 0;
     // skip bom
     if (
-      this.pos < end &&
-      text.charCodeAt(this.pos) == CharCode.BYTEORDERMARK
+      pos < end &&
+      text.charCodeAt(pos) == CharCode.BYTEORDERMARK
     ) {
-      ++this.pos;
+      ++pos;
     }
 
     // skip shebang
     if (
-      this.pos + 1 < end &&
-      text.charCodeAt(this.pos) == CharCode.HASH &&
-      text.charCodeAt(this.pos + 1) == CharCode.EXCLAMATION
+      pos + 1 < end &&
+      text.charCodeAt(pos) == CharCode.HASH &&
+      text.charCodeAt(pos + 1) == CharCode.EXCLAMATION
     ) {
-      this.pos += 2;
+      pos += 2;
       while (
-        this.pos < end &&
-        text.charCodeAt(this.pos) != CharCode.LINEFEED
+        pos < end &&
+        text.charCodeAt(pos) != CharCode.LINEFEED
       ) {
-        ++this.pos;
+        ++pos;
       }
       // 'next' now starts at lf or eof
     }
+    this.pos = pos;
+    this.end = end;
   }
 
   next(identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): Token {
