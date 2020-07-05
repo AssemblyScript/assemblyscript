@@ -3869,7 +3869,7 @@ export class Parser extends DiagnosticEmitter {
     if (tn.skip(Token.GREATERTHAN)) {
       let end = tn.pos;
       if (tn.skip(Token.OPENPAREN)) {
-        if (!typeArguments || !typeArguments.length) {
+        if (!typeArguments) {
           this.error(
             DiagnosticCode.Type_argument_list_cannot_be_empty,
             tn.range(start, end)
