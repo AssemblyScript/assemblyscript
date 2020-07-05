@@ -1282,13 +1282,13 @@ export class Tokenizer extends DiagnosticEmitter {
 
   readHexInteger(): i64 {
     var text = this.source.text;
-    var start = this.pos;
+    let pos = this.pos;
+    var end = this.end;
+    var start = pos;
+    var sepEnd = start;
     var value = i64_new(0);
     var i64_4 = i64_new(4);
-    var sepEnd = start;
-    var end = this.end;
-    while (this.pos < end) {
-      let pos = this.pos;
+    while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = (value << 4) + c - CharCode._0;
@@ -1321,31 +1321,32 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      this.pos = pos + 1;
+      ++pos;
     }
-    if (this.pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Hexadecimal_digit_expected,
         this.range(start)
       );
-    } else if (sepEnd == this.pos) {
+    } else if (sepEnd == pos) {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
     }
+    this.pos = pos;
     return value;
   }
 
   readDecimalInteger(): i64 {
     var text = this.source.text;
-    var start = this.pos;
+    var pos = this.pos;
     var end = this.end;
+    var start = pos;
+    var sepEnd = start;
     var value = i64_new(0);
     var i64_10 = i64_new(10);
-    var sepEnd = start;
-    while (this.pos < end) {
-      let pos = this.pos;
+    while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 10 + c - CharCode._0;
@@ -1366,31 +1367,32 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      this.pos = pos + 1;
+      ++pos;
     }
-    if (this.pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Digit_expected,
         this.range(start)
       );
-    } else if (sepEnd == this.pos) {
+    } else if (sepEnd == pos) {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
     }
+    this.pos = pos;
     return value;
   }
 
   readOctalInteger(): i64 {
     var text = this.source.text;
-    var start = this.pos;
+    var pos = this.pos;
+    var end = this.end;
+    var start = pos;
+    var sepEnd = start;
     var value = i64_new(0);
     var i64_3 = i64_new(3);
-    var sepEnd = start;
-    var end = this.end;
-    while (this.pos < end) {
-      let pos = this.pos;
+    while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._7) {
         // value = (value << 3) + c - CharCode._0;
@@ -1411,31 +1413,32 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      this.pos = pos + 1;
+      ++pos;
     }
-    if (this.pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Octal_digit_expected,
         this.range(start)
       );
-    } else if (sepEnd == this.pos) {
+    } else if (sepEnd == pos) {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
     }
+    this.pos = pos;
     return value;
   }
 
   readBinaryInteger(): i64 {
     var text = this.source.text;
-    var start = this.pos;
+    var pos = this.pos;
+    var end = this.end;
+    var start = pos;
+    var sepEnd = start;
     var value = i64_new(0);
     var i64_1 = i64_new(1);
-    var sepEnd = start;
-    var end = this.end;
-    while (this.pos < end) {
-      let pos = this.pos;
+    while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c == CharCode._0) {
         // value = (value << 1);
@@ -1459,19 +1462,20 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      this.pos = pos + 1;
+      ++pos;
     }
-    if (this.pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Binary_digit_expected,
         this.range(start)
       );
-    } else if (sepEnd == this.pos) {
+    } else if (sepEnd == pos) {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
     }
+    this.pos = pos;
     return value;
   }
 
@@ -1491,34 +1495,36 @@ export class Tokenizer extends DiagnosticEmitter {
 
   readDecimalFloat(): f64 {
     // TODO: numeric separators (parseFloat can't handle these)
-    var start = this.pos;
-    var end = this.end;
     var text = this.source.text;
-    while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
-      ++this.pos;
+    var pos = this.pos;
+    var end = this.end;
+    var start = pos;
+    while (pos < end && isDecimalDigit(text.charCodeAt(pos))) {
+      ++pos;
     }
-    if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
-      ++this.pos;
-      while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
-        ++this.pos;
+    if (pos < end && text.charCodeAt(pos) == CharCode.DOT) {
+      ++pos;
+      while (pos < end && isDecimalDigit(text.charCodeAt(pos))) {
+        ++pos;
       }
     }
-    if (this.pos < end) {
-      let c = text.charCodeAt(this.pos);
+    if (pos < end) {
+      let c = text.charCodeAt(pos);
       if ((c | 32) == CharCode.e) {
         if (
-          ++this.pos < end &&
-          (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
-          isDecimalDigit(text.charCodeAt(this.pos + 1))
+          ++pos < end &&
+          (c = text.charCodeAt(pos)) == CharCode.MINUS || c == CharCode.PLUS &&
+          isDecimalDigit(text.charCodeAt(pos + 1))
         ) {
-          ++this.pos;
+          ++pos;
         }
-        while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
-          ++this.pos;
+        while (pos < end && isDecimalDigit(text.charCodeAt(pos))) {
+          ++pos;
         }
       }
     }
-    return parseFloat(text.substring(start, this.pos));
+    this.pos = pos;
+    return parseFloat(text.substring(start, pos));
   }
 
   readHexFloat(): f64 {
@@ -1527,10 +1533,11 @@ export class Tokenizer extends DiagnosticEmitter {
 
   readHexadecimalEscape(remain: i32 = 2): string {
     var value = 0;
-    var end = this.end;
     var text = this.source.text;
-    while (this.pos < end) {
-      let c = text.charCodeAt(this.pos++);
+    var pos = this.pos;
+    var end = this.end;
+    while (pos < end) {
+      let c = text.charCodeAt(pos++);
       if (c >= CharCode._0 && c <= CharCode._9) {
         value = (value << 4) + c - CharCode._0;
       } else if (c >= CharCode.A && c <= CharCode.F) {
@@ -1540,8 +1547,9 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         this.error(
           DiagnosticCode.Hexadecimal_digit_expected,
-          this.range(this.pos - 1, this.pos)
+          this.range(pos - 1, pos)
         );
+        this.pos = pos;
         return "";
       }
       if (--remain == 0) break;
@@ -1549,10 +1557,12 @@ export class Tokenizer extends DiagnosticEmitter {
     if (remain) {
       this.error(
         DiagnosticCode.Unexpected_end_of_text,
-        this.range(this.pos)
+        this.range(pos)
       );
+      this.pos = pos;
       return "";
     }
+    this.pos = pos;
     return String.fromCharCode(value);
   }
 
