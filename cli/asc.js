@@ -469,12 +469,12 @@ exports.main = function main(argv, options, callback) {
       assemblyscript.parse(program, exports.libraryFiles[libPath], exports.libraryPrefix + libPath + extension.ext, false);
     });
   });
-  const customLibDirs = [];
+  let customLibDirs = [];
   if (args.lib) {
     let lib = args.lib;
-    if (typeof lib === "string") lib = lib.split(",");
-    lib = unique(lib.map(resolve));
-    Array.prototype.push.apply(customLibDirs, lib.map(lib => lib.trim()));
+    if (typeof lib === "string") lib = lib.trim().split(/\s*,\s*/);
+    customLibDirs.push(...lib.map(resolve));
+    customLibDirs = unique(customLibDirs); // because `lib` and `customLibDirs` could potentially has duplicates
     for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
       let libDir = customLibDirs[i];
       let libFiles;
