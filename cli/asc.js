@@ -277,6 +277,9 @@ exports.main = function main(argv, options, callback) {
   let asconfig = getAsconfig(args.config, baseDir, readFile);
   let asconfigDir = baseDir;
 
+  const seenAsconfig = new Set();
+  seenAsconfig.add(path.join(baseDir, args.config));
+
   while (asconfig) {
     // merge target first, then merge options, then merge extended asconfigs
     if (asconfig.targets && asconfig.targets[target]) {
@@ -305,7 +308,14 @@ exports.main = function main(argv, options, callback) {
         ? path.dirname(asconfig.extends)
         // relative means we need to calculate a relative asconfigDir
         : path.join(asconfigDir, path.dirname(asconfig.extends));
-      asconfig = getAsconfig(path.basename(asconfig.extends), asconfigDir, readFile);
+      const fileName = path.basename(asconfig.extends);
+      const filePath = path.join(asconfigDir, fileName);
+      if (seenAsconfig.has(filePath)) {
+        asconfig = null;
+      } else {
+        seenAsconfig.add(filePath);
+        asconfig = getAsconfig(fileName, asconfigDir, readFile);
+      }
     } else {
       asconfig = null; // finished resolving the configuration chain
     }
