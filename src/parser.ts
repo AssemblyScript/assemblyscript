@@ -3853,7 +3853,7 @@ export class Parser extends DiagnosticEmitter {
     var state = tn.mark();
     if (!tn.skip(Token.LESSTHAN)) return null;
     var start = tn.tokenPos;
-    var typeArguments = new Array<TypeNode>();
+    var typeArguments: TypeNode[] | null = null;
     do {
       if (tn.peek() === Token.GREATERTHAN) {
         break;
@@ -3863,12 +3863,13 @@ export class Parser extends DiagnosticEmitter {
         tn.reset(state);
         return null;
       }
-      typeArguments.push(type);
+      if (!typeArguments) typeArguments = [ type ];
+      else typeArguments.push(type);
     } while (tn.skip(Token.COMMA));
     if (tn.skip(Token.GREATERTHAN)) {
       let end = tn.pos;
       if (tn.skip(Token.OPENPAREN)) {
-        if (!typeArguments.length) {
+        if (!typeArguments || !typeArguments.length) {
           this.error(
             DiagnosticCode.Type_argument_list_cannot_be_empty,
             tn.range(start, end)
