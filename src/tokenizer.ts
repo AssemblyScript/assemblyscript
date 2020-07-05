@@ -1063,40 +1063,44 @@ export class Tokenizer extends DiagnosticEmitter {
 
   readString(): string {
     var text = this.source.text;
-    var quote = text.charCodeAt(this.pos++);
-    var start = this.pos;
     var end = this.end;
+    var pos = this.pos;
+    var quote = text.charCodeAt(pos++);
+    var start = pos;
     var result = "";
     while (true) {
-      if (this.pos >= end) {
-        result += text.substring(start, this.pos);
+      if (pos >= end) {
+        result += text.substring(start, pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
           this.range(start - 1, end)
         );
         break;
       }
-      let c = text.charCodeAt(this.pos);
+      let c = text.charCodeAt(pos);
       if (c == quote) {
-        result += text.substring(start, this.pos++);
+        result += text.substring(start, pos++);
         break;
       }
       if (c == CharCode.BACKSLASH) {
-        result += text.substring(start, this.pos);
+        result += text.substring(start, pos);
+        this.pos = pos; // save
         result += this.readEscapeSequence();
-        start = this.pos;
+        pos = this.pos; // restore
+        start = pos;
         continue;
       }
       if (isLineBreak(c) && quote != CharCode.BACKTICK) {
-        result += text.substring(start, this.pos);
+        result += text.substring(start, pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
-          this.range(start - 1, this.pos)
+          this.range(start - 1, pos)
         );
         break;
       }
-      ++this.pos;
+      ++pos;
     }
+    this.pos = pos;
     return result;
   }
 
@@ -1224,9 +1228,9 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   testInteger(): bool {
-    var end = this.end;
     var text = this.source.text;
     var pos = this.pos;
+    var end = this.end;
     if (pos + 1 < end && text.charCodeAt(pos) == CharCode._0) {
       switch (text.charCodeAt(pos + 2) | 32) {
         case CharCode.x:
