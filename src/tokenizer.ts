@@ -1220,24 +1220,25 @@ export class Tokenizer extends DiagnosticEmitter {
 
   readInteger(): i64 {
     var text = this.source.text;
-    if (this.pos + 2 < this.end && text.charCodeAt(this.pos) == CharCode._0) {
-      switch (text.charCodeAt(this.pos + 1) | 32) {
+    var pos = this.pos;
+    if (pos + 2 < this.end && text.charCodeAt(pos) == CharCode._0) {
+      switch (text.charCodeAt(pos + 1) | 32) {
         case CharCode.x: {
-          this.pos += 2;
+          this.pos = pos + 2;
           return this.readHexInteger();
         }
         case CharCode.b: {
-          this.pos += 2;
+          this.pos = pos + 2;
           return this.readBinaryInteger();
         }
         case CharCode.o: {
-          this.pos += 2;
+          this.pos = pos + 2;
           return this.readOctalInteger();
         }
       }
-      if (isOctalDigit(text.charCodeAt(this.pos + 1))) {
-        let start = this.pos;
-        ++this.pos;
+      if (isOctalDigit(text.charCodeAt(pos + 1))) {
+        let start = pos;
+        this.pos = pos + 1;
         let value = this.readOctalInteger();
         this.error(
           DiagnosticCode.Octal_literals_are_not_allowed_in_strict_mode,
@@ -1380,7 +1381,7 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      ++this.pos;
+      this.pos = pos + 1;
     }
     if (this.pos == start) {
       this.error(
