@@ -4562,13 +4562,11 @@
   local.get $4
   i32.load16_u
   local.set $5
-  i32.const 0
-  local.set $6
   loop $while-continue|0
    local.get $5
    call $~lib/util/string/isSpace
-   local.set $7
-   local.get $7
+   local.set $6
+   local.get $6
    if
     local.get $4
     i32.const 2
@@ -4583,6 +4581,8 @@
     br $while-continue|0
    end
   end
+  i32.const 0
+  local.set $7
   local.get $5
   i32.const 45
   i32.eq
@@ -4609,7 +4609,7 @@
    i32.load16_u
    local.set $5
    i32.const 1
-   local.set $6
+   local.set $7
   else
    local.get $5
    i32.const 43
@@ -4663,16 +4663,16 @@
          i32.load16_u
          i32.const 32
          i32.or
-         local.set $7
-         local.get $7
+         local.set $6
+         local.get $6
          i32.const 98
          i32.eq
          br_if $case0|1
-         local.get $7
+         local.get $6
          i32.const 111
          i32.eq
          br_if $case1|1
-         local.get $7
+         local.get $6
          i32.const 120
          i32.eq
          br_if $case2|1
@@ -4748,13 +4748,13 @@
   block $while-break|2
    loop $while-continue|2
     local.get $2
-    local.tee $7
+    local.tee $6
     i32.const 1
     i32.sub
     local.set $2
-    local.get $7
-    local.set $7
-    local.get $7
+    local.get $6
+    local.set $6
+    local.get $6
     if
      local.get $4
      i32.load16_u
@@ -4841,7 +4841,7 @@
   local.get $8
   f64.convert_i64_s
   local.set $9
-  local.get $6
+  local.get $7
   if (result f64)
    local.get $9
    f64.neg
@@ -4925,8 +4925,6 @@
   local.get $4
   i32.load16_u
   local.set $5
-  i32.const 0
-  local.set $6
   loop $while-continue|0
    local.get $5
    call $~lib/util/string/isSpace
@@ -4946,6 +4944,8 @@
     br $while-continue|0
    end
   end
+  i32.const 0
+  local.set $6
   local.get $5
   i32.const 45
   i32.eq
@@ -5262,13 +5262,11 @@
   local.get $4
   i32.load16_u
   local.set $5
-  i32.const 0
-  local.set $6
   loop $while-continue|0
    local.get $5
    call $~lib/util/string/isSpace
-   local.set $7
-   local.get $7
+   local.set $6
+   local.get $6
    if
     local.get $4
     i32.const 2
@@ -5283,6 +5281,8 @@
     br $while-continue|0
    end
   end
+  i32.const 0
+  local.set $7
   local.get $5
   i32.const 45
   i32.eq
@@ -5309,7 +5309,7 @@
    i32.load16_u
    local.set $5
    i32.const 1
-   local.set $6
+   local.set $7
   else
    local.get $5
    i32.const 43
@@ -5363,16 +5363,16 @@
          i32.load16_u
          i32.const 32
          i32.or
-         local.set $7
-         local.get $7
+         local.set $6
+         local.get $6
          i32.const 98
          i32.eq
          br_if $case0|1
-         local.get $7
+         local.get $6
          i32.const 111
          i32.eq
          br_if $case1|1
-         local.get $7
+         local.get $6
          i32.const 120
          i32.eq
          br_if $case2|1
@@ -5448,13 +5448,13 @@
   block $while-break|2
    loop $while-continue|2
     local.get $2
-    local.tee $7
+    local.tee $6
     i32.const 1
     i32.sub
     local.set $2
-    local.get $7
-    local.set $7
-    local.get $7
+    local.get $6
+    local.set $6
+    local.get $6
     if
      local.get $4
      i32.load16_u
@@ -5540,7 +5540,7 @@
   end
   local.get $8
   local.set $9
-  local.get $6
+  local.get $7
   if (result i64)
    i64.const 0
    local.get $9
@@ -6021,7 +6021,7 @@
    if
     f64.const inf
     local.get $5
-    f64.copysign
+    f64.mul
     local.set $2
     local.get $0
     call $~lib/rt/pure/__release

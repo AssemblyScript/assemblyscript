@@ -770,7 +770,7 @@ export function strtod(str: string): f64 {
   var ptr  = changetype<usize>(str);
   var code = <u32>load<u16>(ptr);
 
-  var sign = 1.;
+  var sign = 1.0;
   // skip white spaces
   while (len && isSpace(code)) {
     code = <u32>load<u16>(ptr += 2);
@@ -794,7 +794,7 @@ export function strtod(str: string): f64 {
       load<u64>(ptr, 0) == 0x690066006E0049 && // ifnI
       load<u64>(ptr, 8) == 0x7900740069006E    // ytin
     ) {
-      return copysign<f64>(Infinity, sign);
+      return Infinity * sign;
     }
     return NaN;
   }

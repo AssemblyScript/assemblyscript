@@ -3548,7 +3548,7 @@
      call $~lib/rt/pure/__release
      f64.const inf
      local.get $9
-     f64.copysign
+     f64.mul
      return
     end
     br $folding-inner0
