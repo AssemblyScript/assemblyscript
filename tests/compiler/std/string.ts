@@ -118,6 +118,7 @@ assert(isNaN(parseInt("-")));
 assert(isNaN(parseInt("+")));
 assert(isNaN(parseInt("123", 37)));
 assert(isNaN(parseInt("🔥")));
+assert(isNaN(parseInt("abc")));
 assert(isNaN(parseInt("badnum")));
 assert(isNaN(F32.parseInt("badnum")));
 assert(isNaN(F64.parseInt("badnum")));
