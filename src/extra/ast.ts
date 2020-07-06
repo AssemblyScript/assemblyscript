@@ -1613,7 +1613,7 @@ export class ASTBuilder {
     var type = node.type;
     var initializer = node.initializer;
     if (type) {
-      if (kind == ParameterKind.OPTIONAL) sb.push("?");
+      if (kind == ParameterKind.OPTIONAL && !initializer) sb.push("?");
       if (!isTypeOmitted(type)) {
         sb.push(": ");
         this.visitTypeNode(type);
