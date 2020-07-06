@@ -664,14 +664,13 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
   var code = <u32>load<u16>(ptr);
 
-  // determine sign
-  // @ts-ignore: cast
-  var sign = false;
   // trim white spaces
   while (isSpace(code)) {
     code = <u32>load<u16>(ptr += 2);
     --len;
   }
+  // determine sign
+  var sign = false;
   if (code == CharCode.MINUS) {
     if (!--len) {
       if (isFloat<T>()) {
