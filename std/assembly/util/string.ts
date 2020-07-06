@@ -652,10 +652,13 @@ export function toUpper8(c: u32): u32 {
 export function strtol<T>(str: string, radix: i32 = 0): T {
   var len = str.length;
   if (!len) {
-    // @ts-ignore: cast
-    if (isFloat<T>()) return <T>NaN;
-    // @ts-ignore: cast
-    return <T>0;
+    if (isFloat<T>()) {
+      // @ts-ignore: cast
+      return <T>NaN;
+    } else {
+      // @ts-ignore: cast
+      return <T>0;
+    }
   }
 
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
@@ -663,7 +666,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
 
   // determine sign
   // @ts-ignore: cast
-  var sign: T = 1;
+  var sign = false;
   // trim white spaces
   while (isSpace(code)) {
     code = <u32>load<u16>(ptr += 2);
@@ -671,20 +674,26 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   }
   if (code == CharCode.MINUS) {
     if (!--len) {
-      // @ts-ignore: cast
-      if (isFloat<T>()) return <T>NaN;
-      // @ts-ignore: cast
-      return <T>0;
+      if (isFloat<T>()) {
+        // @ts-ignore: cast
+        return <T>NaN;
+      } else {
+        // @ts-ignore: cast
+        return <T>0;
+      }
     }
     code = <u32>load<u16>(ptr += 2);
     // @ts-ignore: type
-    sign = -1;
+    sign = true;
   } else if (code == CharCode.PLUS) {
     if (!--len) {
-      // @ts-ignore: cast
-      if (isFloat<T>()) return <T>NaN;
-      // @ts-ignore: cast
-      return <T>0;
+      if (isFloat<T>()) {
+        // @ts-ignore: cast
+        return <T>NaN;
+      } else {
+        // @ts-ignore: cast
+        return <T>0;
+      }
     }
     code = <u32>load<u16>(ptr += 2);
   }
@@ -712,15 +721,18 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
       }
     } else radix = 10;
   } else if (radix < 2 || radix > 36) {
-    // @ts-ignore: cast
-    if (isFloat<T>()) return <T>NaN;
-    // @ts-ignore: cast
-    return <T>0;
+    if (isFloat<T>()) {
+      // @ts-ignore: cast
+      return <T>NaN;
+    } else {
+      // @ts-ignore: cast
+      return <T>0;
+    }
   }
 
   // calculate value
   // @ts-ignore: type
-  var num: T = 0;
+  var num: i64 = 0;
   while (len--) {
     code = <u32>load<u16>(ptr);
     if (code - CharCode._0 < 10) {
@@ -729,14 +741,27 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
       code -= CharCode.A - 10;
     } else if (code - CharCode.a <= <u32>(CharCode.z - CharCode.a)) {
       code -= CharCode.a - 10;
-    } else break;
-    if (code >= <u32>radix) break;
+    }
+    if (code >= <u32>radix) {
+      if (!num) {
+        if (isFloat<T>()) {
+          // @ts-ignore: cast
+          return <T>NaN;
+        } else {
+          // @ts-ignore: cast
+          return <T>0;
+        }
+      }
+      break;
+    }
     // @ts-ignore: type
     num = num * radix + code;
     ptr += 2;
   }
+  // @ts-ignore: cast
+  var res = <T>num;
   // @ts-ignore: type
-  return sign * num;
+  return sign ? -res : res;
 }
 
 export function strtod(str: string): f64 {

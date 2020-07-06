@@ -108,9 +108,19 @@ assert(parseInt("0x1g") == 1); // not valid
 assert(parseInt("-123") == -123);
 assert(parseInt("+123") == 123);
 assert(parseInt("-12.3") == -12);
+assert(parseInt("1🔥") == 1);
+assert(parseInt("2badnum") == 2);
 
 assert(parseInt(" \t\n1") == 1);
 assert(parseInt(" \t\n0x02") == 2);
+assert(isNaN(parseInt("")));
+assert(isNaN(parseInt("-")));
+assert(isNaN(parseInt("+")));
+assert(isNaN(parseInt("123", 37)));
+assert(isNaN(parseInt("🔥")));
+assert(isNaN(parseInt("badnum")));
+assert(isNaN(F32.parseInt("badnum")));
+assert(isNaN(F64.parseInt("badnum")));
 
 assert(I32.parseInt("0x7FFFFFFF") == I32.MAX_VALUE);
 assert(I64.parseInt("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);
