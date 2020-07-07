@@ -2815,12 +2815,12 @@
       local.set $1
      end
     end
+    local.get $1
+    i32.const 10
+    local.get $1
+    select
+    local.set $1
    end
-   local.get $1
-   i32.const 10
-   local.get $1
-   select
-   local.set $1
    loop $while-continue|2
     block $while-break|2
      local.get $0

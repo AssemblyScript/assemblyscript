@@ -740,8 +740,8 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
         }
       }
     }
+    if (!radix) radix = 10;
   }
-  if (!radix) radix = 10;
 
   // calculate value
   // @ts-ignore: type

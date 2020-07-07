@@ -4779,12 +4779,12 @@
      br $break|1
     end
    end
-  end
-  local.get $1
-  i32.eqz
-  if
-   i32.const 10
-   local.set $1
+   local.get $1
+   i32.eqz
+   if
+    i32.const 10
+    local.set $1
+   end
   end
   f64.const 0
   local.set $8
@@ -5174,12 +5174,12 @@
      br $break|1
     end
    end
-  end
-  local.get $1
-  i32.eqz
-  if
-   i32.const 10
-   local.set $1
+   local.get $1
+   i32.eqz
+   if
+    i32.const 10
+    local.set $1
+   end
   end
   i32.const 0
   local.set $7
@@ -5533,12 +5533,12 @@
      br $break|1
     end
    end
-  end
-  local.get $1
-  i32.eqz
-  if
-   i32.const 10
-   local.set $1
+   local.get $1
+   i32.eqz
+   if
+    i32.const 10
+    local.set $1
+   end
   end
   i64.const 0
   local.set $8
