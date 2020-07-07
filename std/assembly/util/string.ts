@@ -672,7 +672,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   // determine sign
   // @ts-ignore
   var sign: T = 1;
-  if (code == CharCode.MINUS) {
+  if (code == CharCode.MINUS || code == CharCode.PLUS) {
     if (!--len) {
       if (isFloat<T>()) {
         // @ts-ignore: cast
@@ -682,18 +682,9 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
         return <T>0;
       }
     }
-    code = <u32>load<u16>(ptr += 2);
-    // @ts-ignore: type
-    sign = -1;
-  } else if (code == CharCode.PLUS) {
-    if (!--len) {
-      if (isFloat<T>()) {
-        // @ts-ignore: cast
-        return <T>NaN;
-      } else {
-        // @ts-ignore: cast
-        return <T>0;
-      }
+    if (code == CharCode.MINUS) {
+      // @ts-ignore: type
+      sign = -1;
     }
     code = <u32>load<u16>(ptr += 2);
   }

@@ -2638,23 +2638,23 @@
   block $folding-inner0
    local.get $0
    call $~lib/rt/pure/__retain
-   local.tee $4
+   local.tee $3
    call $~lib/string/String#get:length
    local.tee $0
    i32.eqz
    br_if $folding-inner0
-   local.get $4
-   local.tee $3
+   local.get $3
+   local.tee $4
    i32.load16_u
    local.set $2
    loop $while-continue|0
     local.get $2
     call $~lib/util/string/isSpace
     if
-     local.get $3
+     local.get $4
      i32.const 2
      i32.add
-     local.tee $3
+     local.tee $4
      i32.load16_u
      local.set $2
      local.get $0
@@ -2665,11 +2665,16 @@
     end
    end
    f64.const 1
-   local.set $6
+   local.set $5
+   i32.const 1
+   local.get $2
+   i32.const 43
+   i32.eq
    local.get $2
    i32.const 45
    i32.eq
-   if (result i32)
+   select
+   if
     local.get $0
     i32.const 1
     i32.sub
@@ -2677,33 +2682,19 @@
     i32.eqz
     br_if $folding-inner0
     f64.const -1
-    local.set $6
-    local.get $3
+    f64.const 1
+    local.get $2
+    i32.const 45
+    i32.eq
+    select
+    local.set $5
+    local.get $4
     i32.const 2
     i32.add
-    local.tee $3
+    local.tee $4
     i32.load16_u
-   else
-    local.get $2
-    i32.const 43
-    i32.eq
-    if (result i32)
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.tee $0
-     i32.eqz
-     br_if $folding-inner0
-     local.get $3
-     i32.const 2
-     i32.add
-     local.tee $3
-     i32.load16_u
-    else
-     local.get $2
-    end
+    local.set $2
    end
-   local.set $2
    local.get $1
    if
     i32.const 1
@@ -2728,7 +2719,7 @@
      i32.gt_s
      select
      if (result i32)
-      local.get $3
+      local.get $4
       i32.load16_u offset=2
       i32.const 32
       i32.or
@@ -2738,10 +2729,10 @@
       i32.const 0
      end
      if
-      local.get $3
+      local.get $4
       i32.const 4
       i32.add
-      local.set $3
+      local.set $4
       local.get $0
       i32.const 2
       i32.sub
@@ -2761,7 +2752,7 @@
      block $break|1
       block $case2|1
        block $case1|1
-        local.get $3
+        local.get $4
         i32.load16_u offset=2
         i32.const 32
         i32.or
@@ -2779,10 +2770,10 @@
          br_if $case2|1
          br $break|1
         end
-        local.get $3
+        local.get $4
         i32.const 4
         i32.add
-        local.set $3
+        local.set $4
         local.get $0
         i32.const 2
         i32.sub
@@ -2791,10 +2782,10 @@
         local.set $1
         br $break|1
        end
-       local.get $3
+       local.get $4
        i32.const 4
        i32.add
-       local.set $3
+       local.set $4
        local.get $0
        i32.const 2
        i32.sub
@@ -2803,10 +2794,10 @@
        local.set $1
        br $break|1
       end
-      local.get $3
+      local.get $4
       i32.const 4
       i32.add
-      local.set $3
+      local.set $4
       local.get $0
       i32.const 2
       i32.sub
@@ -2830,7 +2821,7 @@
      local.set $0
      local.get $2
      if
-      local.get $3
+      local.get $4
       i32.load16_u
       local.tee $2
       i32.const 48
@@ -2866,10 +2857,10 @@
       local.get $1
       i32.ge_u
       if
-       local.get $5
-       local.get $5
+       local.get $6
+       local.get $6
        f64.eq
-       local.get $5
+       local.get $6
        f64.const 0
        f64.ne
        i32.and
@@ -2877,30 +2868,30 @@
        br_if $folding-inner0
        br $while-break|2
       end
-      local.get $5
+      local.get $6
       local.get $1
       f64.convert_i32_s
       f64.mul
       local.get $2
       f64.convert_i32_u
       f64.add
-      local.set $5
-      local.get $3
+      local.set $6
+      local.get $4
       i32.const 2
       i32.add
-      local.set $3
+      local.set $4
       br $while-continue|2
      end
     end
    end
-   local.get $4
+   local.get $3
    call $~lib/rt/pure/__release
-   local.get $6
    local.get $5
+   local.get $6
    f64.mul
    return
   end
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   f64.const nan:0x8000000000000
  )
@@ -2924,23 +2915,23 @@
   block $folding-inner0
    local.get $0
    call $~lib/rt/pure/__retain
-   local.tee $3
+   local.tee $2
    call $~lib/string/String#get:length
    local.tee $0
    i32.eqz
    br_if $folding-inner0
-   local.get $3
-   local.tee $2
+   local.get $2
+   local.tee $3
    i32.load16_u
    local.set $1
    loop $while-continue|0
     local.get $1
     call $~lib/util/string/isSpace
     if
-     local.get $2
+     local.get $3
      i32.const 2
      i32.add
-     local.tee $2
+     local.tee $3
      i32.load16_u
      local.set $1
      local.get $0
@@ -2951,11 +2942,16 @@
     end
    end
    i32.const 1
-   local.set $6
+   local.set $4
+   i32.const 1
+   local.get $1
+   i32.const 43
+   i32.eq
    local.get $1
    i32.const 45
    i32.eq
-   if (result i32)
+   select
+   if
     local.get $0
     i32.const 1
     i32.sub
@@ -2963,33 +2959,19 @@
     i32.eqz
     br_if $folding-inner0
     i32.const -1
-    local.set $6
-    local.get $2
+    i32.const 1
+    local.get $1
+    i32.const 45
+    i32.eq
+    select
+    local.set $4
+    local.get $3
     i32.const 2
     i32.add
-    local.tee $2
+    local.tee $3
     i32.load16_u
-   else
-    local.get $1
-    i32.const 43
-    i32.eq
-    if (result i32)
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.tee $0
-     i32.eqz
-     br_if $folding-inner0
-     local.get $2
-     i32.const 2
-     i32.add
-     local.tee $2
-     i32.load16_u
-    else
-     local.get $1
-    end
+    local.set $1
    end
-   local.set $1
    local.get $0
    i32.const 2
    i32.gt_s
@@ -3002,7 +2984,7 @@
     block $break|1
      block $case2|1
       block $case1|1
-       local.get $2
+       local.get $3
        i32.load16_u offset=2
        i32.const 32
        i32.or
@@ -3020,47 +3002,47 @@
         br_if $case2|1
         br $break|1
        end
-       local.get $2
+       local.get $3
        i32.const 4
        i32.add
-       local.set $2
+       local.set $3
        local.get $0
        i32.const 2
        i32.sub
        local.set $0
        i32.const 2
-       local.set $4
+       local.set $6
        br $break|1
       end
-      local.get $2
+      local.get $3
       i32.const 4
       i32.add
-      local.set $2
+      local.set $3
       local.get $0
       i32.const 2
       i32.sub
       local.set $0
       i32.const 8
-      local.set $4
+      local.set $6
       br $break|1
      end
-     local.get $2
+     local.get $3
      i32.const 4
      i32.add
-     local.set $2
+     local.set $3
      local.get $0
      i32.const 2
      i32.sub
      local.set $0
      i32.const 16
-     local.set $4
+     local.set $6
     end
    end
-   local.get $4
+   local.get $6
    i32.const 10
-   local.get $4
+   local.get $6
    select
-   local.set $4
+   local.set $6
    loop $while-continue|2
     block $while-break|2
      local.get $0
@@ -3070,7 +3052,7 @@
      local.set $0
      local.get $1
      if
-      local.get $2
+      local.get $3
       i32.load16_u
       local.tee $1
       i32.const 48
@@ -3103,7 +3085,7 @@
        select
       end
       local.tee $1
-      local.get $4
+      local.get $6
       i32.ge_u
       if
        local.get $5
@@ -3112,27 +3094,27 @@
        br $while-break|2
       end
       local.get $1
-      local.get $4
       local.get $5
+      local.get $6
       i32.mul
       i32.add
       local.set $5
-      local.get $2
+      local.get $3
       i32.const 2
       i32.add
-      local.set $2
+      local.set $3
       br $while-continue|2
      end
     end
    end
-   local.get $3
+   local.get $2
    call $~lib/rt/pure/__release
+   local.get $4
    local.get $5
-   local.get $6
    i32.mul
    return
   end
-  local.get $3
+  local.get $2
   call $~lib/rt/pure/__release
   i32.const 0
  )
@@ -3140,29 +3122,29 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 i64)
   (local $5 i64)
-  (local $6 i64)
+  (local $6 i32)
   block $folding-inner0
    local.get $0
    call $~lib/rt/pure/__retain
-   local.tee $3
+   local.tee $2
    call $~lib/string/String#get:length
    local.tee $0
    i32.eqz
    br_if $folding-inner0
-   local.get $3
-   local.tee $2
+   local.get $2
+   local.tee $3
    i32.load16_u
    local.set $1
    loop $while-continue|0
     local.get $1
     call $~lib/util/string/isSpace
     if
-     local.get $2
+     local.get $3
      i32.const 2
      i32.add
-     local.tee $2
+     local.tee $3
      i32.load16_u
      local.set $1
      local.get $0
@@ -3173,11 +3155,16 @@
     end
    end
    i64.const 1
-   local.set $6
+   local.set $4
+   i32.const 1
+   local.get $1
+   i32.const 43
+   i32.eq
    local.get $1
    i32.const 45
    i32.eq
-   if (result i32)
+   select
+   if
     local.get $0
     i32.const 1
     i32.sub
@@ -3185,33 +3172,19 @@
     i32.eqz
     br_if $folding-inner0
     i64.const -1
-    local.set $6
-    local.get $2
+    i64.const 1
+    local.get $1
+    i32.const 45
+    i32.eq
+    select
+    local.set $4
+    local.get $3
     i32.const 2
     i32.add
-    local.tee $2
+    local.tee $3
     i32.load16_u
-   else
-    local.get $1
-    i32.const 43
-    i32.eq
-    if (result i32)
-     local.get $0
-     i32.const 1
-     i32.sub
-     local.tee $0
-     i32.eqz
-     br_if $folding-inner0
-     local.get $2
-     i32.const 2
-     i32.add
-     local.tee $2
-     i32.load16_u
-    else
-     local.get $1
-    end
+    local.set $1
    end
-   local.set $1
    local.get $0
    i32.const 2
    i32.gt_s
@@ -3224,7 +3197,7 @@
     block $break|1
      block $case2|1
       block $case1|1
-       local.get $2
+       local.get $3
        i32.load16_u offset=2
        i32.const 32
        i32.or
@@ -3242,47 +3215,47 @@
         br_if $case2|1
         br $break|1
        end
-       local.get $2
+       local.get $3
        i32.const 4
        i32.add
-       local.set $2
+       local.set $3
        local.get $0
        i32.const 2
        i32.sub
        local.set $0
        i32.const 2
-       local.set $4
+       local.set $6
        br $break|1
       end
-      local.get $2
+      local.get $3
       i32.const 4
       i32.add
-      local.set $2
+      local.set $3
       local.get $0
       i32.const 2
       i32.sub
       local.set $0
       i32.const 8
-      local.set $4
+      local.set $6
       br $break|1
      end
-     local.get $2
+     local.get $3
      i32.const 4
      i32.add
-     local.set $2
+     local.set $3
      local.get $0
      i32.const 2
      i32.sub
      local.set $0
      i32.const 16
-     local.set $4
+     local.set $6
     end
    end
-   local.get $4
+   local.get $6
    i32.const 10
-   local.get $4
+   local.get $6
    select
-   local.set $4
+   local.set $6
    loop $while-continue|2
     block $while-break|2
      local.get $0
@@ -3292,7 +3265,7 @@
      local.set $0
      local.get $1
      if
-      local.get $2
+      local.get $3
       i32.load16_u
       local.tee $1
       i32.const 48
@@ -3325,7 +3298,7 @@
        select
       end
       local.tee $1
-      local.get $4
+      local.get $6
       i32.ge_u
       if
        local.get $5
@@ -3336,27 +3309,27 @@
       local.get $1
       i64.extend_i32_u
       local.get $5
-      local.get $4
+      local.get $6
       i64.extend_i32_s
       i64.mul
       i64.add
       local.set $5
-      local.get $2
+      local.get $3
       i32.const 2
       i32.add
-      local.set $2
+      local.set $3
       br $while-continue|2
      end
     end
    end
-   local.get $3
+   local.get $2
    call $~lib/rt/pure/__release
+   local.get $4
    local.get $5
-   local.get $6
    i64.mul
    return
   end
-  local.get $3
+  local.get $2
   call $~lib/rt/pure/__release
   i64.const 0
  )

@@ -4594,6 +4594,13 @@
   local.get $5
   i32.const 45
   i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $5
+   i32.const 43
+   i32.eq
+  end
   if
    local.get $2
    i32.const 1
@@ -4610,41 +4617,19 @@
     local.get $3
     return
    end
+   local.get $5
+   i32.const 45
+   i32.eq
+   if
+    f64.const -1
+    local.set $7
+   end
    local.get $4
    i32.const 2
    i32.add
    local.tee $4
    i32.load16_u
    local.set $5
-   f64.const -1
-   local.set $7
-  else
-   local.get $5
-   i32.const 43
-   i32.eq
-   if
-    local.get $2
-    i32.const 1
-    i32.sub
-    local.tee $2
-    i32.eqz
-    if
-     i32.const 1
-     drop
-     f64.const nan:0x8000000000000
-     local.set $3
-     local.get $0
-     call $~lib/rt/pure/__release
-     local.get $3
-     return
-    end
-    local.get $4
-    i32.const 2
-    i32.add
-    local.tee $4
-    i32.load16_u
-    local.set $5
-   end
   end
   local.get $1
   if
@@ -4989,6 +4974,13 @@
   local.get $5
   i32.const 45
   i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $5
+   i32.const 43
+   i32.eq
+  end
   if
    local.get $2
    i32.const 1
@@ -5005,41 +4997,19 @@
     local.get $3
     return
    end
+   local.get $5
+   i32.const 45
+   i32.eq
+   if
+    i32.const -1
+    local.set $6
+   end
    local.get $4
    i32.const 2
    i32.add
    local.tee $4
    i32.load16_u
    local.set $5
-   i32.const -1
-   local.set $6
-  else
-   local.get $5
-   i32.const 43
-   i32.eq
-   if
-    local.get $2
-    i32.const 1
-    i32.sub
-    local.tee $2
-    i32.eqz
-    if
-     i32.const 0
-     drop
-     i32.const 0
-     local.set $3
-     local.get $0
-     call $~lib/rt/pure/__release
-     local.get $3
-     return
-    end
-    local.get $4
-    i32.const 2
-    i32.add
-    local.tee $4
-    i32.load16_u
-    local.set $5
-   end
   end
   local.get $1
   if
@@ -5348,6 +5318,13 @@
   local.get $5
   i32.const 45
   i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $5
+   i32.const 43
+   i32.eq
+  end
   if
    local.get $2
    i32.const 1
@@ -5364,41 +5341,19 @@
     local.get $3
     return
    end
+   local.get $5
+   i32.const 45
+   i32.eq
+   if
+    i64.const -1
+    local.set $7
+   end
    local.get $4
    i32.const 2
    i32.add
    local.tee $4
    i32.load16_u
    local.set $5
-   i64.const -1
-   local.set $7
-  else
-   local.get $5
-   i32.const 43
-   i32.eq
-   if
-    local.get $2
-    i32.const 1
-    i32.sub
-    local.tee $2
-    i32.eqz
-    if
-     i32.const 0
-     drop
-     i64.const 0
-     local.set $3
-     local.get $0
-     call $~lib/rt/pure/__release
-     local.get $3
-     return
-    end
-    local.get $4
-    i32.const 2
-    i32.add
-    local.tee $4
-    i32.load16_u
-    local.set $5
-   end
   end
   local.get $1
   if
