@@ -2704,6 +2704,58 @@
    end
    local.set $2
    local.get $1
+   if (result i32)
+    i32.const 1
+    local.get $1
+    i32.const 36
+    i32.gt_s
+    local.get $1
+    i32.const 2
+    i32.lt_s
+    select
+    br_if $folding-inner0
+    i32.const 0
+    i32.const 1
+    local.get $1
+    i32.const 16
+    i32.ne
+    select
+   else
+    i32.const 1
+   end
+   if
+    local.get $2
+    i32.const 48
+    i32.eq
+    i32.const 0
+    local.get $0
+    i32.const 2
+    i32.gt_s
+    select
+    if (result i32)
+     local.get $3
+     i32.load16_u offset=2
+     i32.const 32
+     i32.or
+     i32.const 120
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     i32.const 4
+     i32.add
+     local.set $3
+     i32.const 16
+     local.set $1
+     local.get $0
+     i32.const 2
+     i32.sub
+     local.set $0
+    end
+   end
+   local.get $1
    i32.eqz
    if
     local.get $0
@@ -2777,17 +2829,7 @@
    i32.const 10
    local.get $1
    select
-   local.tee $1
-   i32.const 2
-   i32.lt_s
-   if (result i32)
-    i32.const 1
-   else
-    local.get $1
-    i32.const 36
-    i32.gt_s
-   end
-   br_if $folding-inner0
+   local.set $1
    loop $while-continue|2
     block $while-break|2
      local.get $0
@@ -2956,35 +2998,79 @@
      local.get $1
     end
    end
-   local.set $1
+   local.tee $1
+   i32.const 48
+   i32.eq
+   i32.const 0
    local.get $0
    i32.const 2
    i32.gt_s
-   i32.const 0
-   local.get $1
-   i32.const 48
-   i32.eq
    select
+   if (result i32)
+    local.get $2
+    i32.load16_u offset=2
+    i32.const 32
+    i32.or
+    i32.const 120
+    i32.eq
+   else
+    i32.const 0
+   end
    if
-    block $break|1
-     block $case2|1
-      block $case1|1
-       local.get $2
-       i32.load16_u offset=2
-       i32.const 32
-       i32.or
-       local.tee $1
-       i32.const 98
-       i32.ne
-       if
-        local.get $1
-        i32.const 111
-        i32.eq
-        br_if $case1|1
-        local.get $1
-        i32.const 120
-        i32.eq
-        br_if $case2|1
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    i32.const 16
+    local.set $4
+    local.get $0
+    i32.const 2
+    i32.sub
+    local.set $0
+   end
+   local.get $4
+   i32.eqz
+   if
+    local.get $0
+    i32.const 2
+    i32.gt_s
+    i32.const 0
+    local.get $1
+    i32.const 48
+    i32.eq
+    select
+    if
+     block $break|1
+      block $case2|1
+       block $case1|1
+        local.get $2
+        i32.load16_u offset=2
+        i32.const 32
+        i32.or
+        local.tee $1
+        i32.const 98
+        i32.ne
+        if
+         local.get $1
+         i32.const 111
+         i32.eq
+         br_if $case1|1
+         local.get $1
+         i32.const 120
+         i32.eq
+         br_if $case2|1
+         br $break|1
+        end
+        local.get $2
+        i32.const 4
+        i32.add
+        local.set $2
+        local.get $0
+        i32.const 2
+        i32.sub
+        local.set $0
+        i32.const 2
+        local.set $4
         br $break|1
        end
        local.get $2
@@ -2995,7 +3081,7 @@
        i32.const 2
        i32.sub
        local.set $0
-       i32.const 2
+       i32.const 8
        local.set $4
        br $break|1
       end
@@ -3007,37 +3093,16 @@
       i32.const 2
       i32.sub
       local.set $0
-      i32.const 8
+      i32.const 16
       local.set $4
-      br $break|1
      end
-     local.get $2
-     i32.const 4
-     i32.add
-     local.set $2
-     local.get $0
-     i32.const 2
-     i32.sub
-     local.set $0
-     i32.const 16
-     local.set $4
     end
    end
    local.get $4
    i32.const 10
    local.get $4
    select
-   local.tee $4
-   i32.const 2
-   i32.lt_s
-   if (result i32)
-    i32.const 1
-   else
-    local.get $4
-    i32.const 36
-    i32.gt_s
-   end
-   br_if $folding-inner0
+   local.set $4
    loop $while-continue|2
     block $while-break|2
      local.get $0
@@ -3188,35 +3253,79 @@
      local.get $1
     end
    end
-   local.set $1
+   local.tee $1
+   i32.const 48
+   i32.eq
+   i32.const 0
    local.get $0
    i32.const 2
    i32.gt_s
-   i32.const 0
-   local.get $1
-   i32.const 48
-   i32.eq
    select
+   if (result i32)
+    local.get $2
+    i32.load16_u offset=2
+    i32.const 32
+    i32.or
+    i32.const 120
+    i32.eq
+   else
+    i32.const 0
+   end
    if
-    block $break|1
-     block $case2|1
-      block $case1|1
-       local.get $2
-       i32.load16_u offset=2
-       i32.const 32
-       i32.or
-       local.tee $1
-       i32.const 98
-       i32.ne
-       if
-        local.get $1
-        i32.const 111
-        i32.eq
-        br_if $case1|1
-        local.get $1
-        i32.const 120
-        i32.eq
-        br_if $case2|1
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    i32.const 16
+    local.set $4
+    local.get $0
+    i32.const 2
+    i32.sub
+    local.set $0
+   end
+   local.get $4
+   i32.eqz
+   if
+    local.get $0
+    i32.const 2
+    i32.gt_s
+    i32.const 0
+    local.get $1
+    i32.const 48
+    i32.eq
+    select
+    if
+     block $break|1
+      block $case2|1
+       block $case1|1
+        local.get $2
+        i32.load16_u offset=2
+        i32.const 32
+        i32.or
+        local.tee $1
+        i32.const 98
+        i32.ne
+        if
+         local.get $1
+         i32.const 111
+         i32.eq
+         br_if $case1|1
+         local.get $1
+         i32.const 120
+         i32.eq
+         br_if $case2|1
+         br $break|1
+        end
+        local.get $2
+        i32.const 4
+        i32.add
+        local.set $2
+        local.get $0
+        i32.const 2
+        i32.sub
+        local.set $0
+        i32.const 2
+        local.set $4
         br $break|1
        end
        local.get $2
@@ -3227,7 +3336,7 @@
        i32.const 2
        i32.sub
        local.set $0
-       i32.const 2
+       i32.const 8
        local.set $4
        br $break|1
       end
@@ -3239,37 +3348,16 @@
       i32.const 2
       i32.sub
       local.set $0
-      i32.const 8
+      i32.const 16
       local.set $4
-      br $break|1
      end
-     local.get $2
-     i32.const 4
-     i32.add
-     local.set $2
-     local.get $0
-     i32.const 2
-     i32.sub
-     local.set $0
-     i32.const 16
-     local.set $4
     end
    end
    local.get $4
    i32.const 10
    local.get $4
    select
-   local.tee $4
-   i32.const 2
-   i32.lt_s
-   if (result i32)
-    i32.const 1
-   else
-    local.get $4
-    i32.const 36
-    i32.gt_s
-   end
-   br_if $folding-inner0
+   local.set $4
    loop $while-continue|2
     block $while-break|2
      local.get $0

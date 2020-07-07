@@ -4545,7 +4545,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 f64)
-  (local $8 f64)
+  (local $8 i32)
+  (local $9 f64)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -4645,6 +4646,77 @@
     local.set $5
    end
   end
+  i32.const 1
+  local.set $8
+  local.get $1
+  i32.const 0
+  i32.ne
+  if
+   local.get $1
+   i32.const 2
+   i32.lt_s
+   if (result i32)
+    i32.const 1
+   else
+    local.get $1
+    i32.const 36
+    i32.gt_s
+   end
+   if
+    i32.const 1
+    drop
+    f64.const nan:0x8000000000000
+    local.set $3
+    local.get $0
+    call $~lib/rt/pure/__release
+    local.get $3
+    return
+   end
+   local.get $1
+   i32.const 16
+   i32.ne
+   if
+    i32.const 0
+    local.set $8
+   end
+  end
+  local.get $8
+  if
+   local.get $2
+   i32.const 2
+   i32.gt_s
+   if (result i32)
+    local.get $5
+    i32.const 48
+    i32.eq
+   else
+    i32.const 0
+   end
+   if (result i32)
+    local.get $4
+    i32.const 2
+    i32.add
+    i32.load16_u
+    i32.const 32
+    i32.or
+    i32.const 120
+    i32.eq
+   else
+    i32.const 0
+   end
+   if
+    local.get $4
+    i32.const 4
+    i32.add
+    local.set $4
+    local.get $2
+    i32.const 2
+    i32.sub
+    local.set $2
+    i32.const 16
+    local.set $1
+   end
+  end
   local.get $1
   i32.eqz
   if
@@ -4728,28 +4800,8 @@
    i32.const 10
    local.set $1
   end
-  local.get $1
-  i32.const 2
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.const 36
-   i32.gt_s
-  end
-  if
-   i32.const 1
-   drop
-   f64.const nan:0x8000000000000
-   local.set $3
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $3
-   return
-  end
   f64.const 0
-  local.set $8
+  local.set $9
   block $while-break|2
    loop $while-continue|2
     local.get $2
@@ -4811,7 +4863,7 @@
      local.get $1
      i32.ge_u
      if
-      local.get $8
+      local.get $9
       local.tee $3
       f64.const 0
       f64.ne
@@ -4832,14 +4884,14 @@
       end
       br $while-break|2
      end
-     local.get $8
+     local.get $9
      local.get $1
      f64.convert_i32_s
      f64.mul
      local.get $5
      f64.convert_i32_u
      f64.add
-     local.set $8
+     local.set $9
      local.get $4
      i32.const 2
      i32.add
@@ -4849,7 +4901,7 @@
    end
   end
   local.get $7
-  local.get $8
+  local.get $9
   f64.mul
   local.set $3
   local.get $0
@@ -4904,6 +4956,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -5003,6 +5056,77 @@
     local.set $5
    end
   end
+  i32.const 1
+  local.set $7
+  local.get $1
+  i32.const 0
+  i32.ne
+  if
+   local.get $1
+   i32.const 2
+   i32.lt_s
+   if (result i32)
+    i32.const 1
+   else
+    local.get $1
+    i32.const 36
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    drop
+    i32.const 0
+    local.set $3
+    local.get $0
+    call $~lib/rt/pure/__release
+    local.get $3
+    return
+   end
+   local.get $1
+   i32.const 16
+   i32.ne
+   if
+    i32.const 0
+    local.set $7
+   end
+  end
+  local.get $7
+  if
+   local.get $2
+   i32.const 2
+   i32.gt_s
+   if (result i32)
+    local.get $5
+    i32.const 48
+    i32.eq
+   else
+    i32.const 0
+   end
+   if (result i32)
+    local.get $4
+    i32.const 2
+    i32.add
+    i32.load16_u
+    i32.const 32
+    i32.or
+    i32.const 120
+    i32.eq
+   else
+    i32.const 0
+   end
+   if
+    local.get $4
+    i32.const 4
+    i32.add
+    local.set $4
+    local.get $2
+    i32.const 2
+    i32.sub
+    local.set $2
+    i32.const 16
+    local.set $1
+   end
+  end
   local.get $1
   i32.eqz
   if
@@ -5086,28 +5210,8 @@
    i32.const 10
    local.set $1
   end
-  local.get $1
-  i32.const 2
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.const 36
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   drop
-   i32.const 0
-   local.set $3
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $3
-   return
-  end
   i32.const 0
-  local.set $7
+  local.set $8
   block $while-break|2
    loop $while-continue|2
     local.get $2
@@ -5169,26 +5273,26 @@
      local.get $1
      i32.ge_u
      if
-      local.get $7
+      local.get $8
       i32.eqz
       if
        i32.const 0
        drop
        i32.const 0
-       local.set $8
+       local.set $9
        local.get $0
        call $~lib/rt/pure/__release
-       local.get $8
+       local.get $9
        return
       end
       br $while-break|2
      end
-     local.get $7
+     local.get $8
      local.get $1
      i32.mul
      local.get $5
      i32.add
-     local.set $7
+     local.set $8
      local.get $4
      i32.const 2
      i32.add
@@ -5198,7 +5302,7 @@
    end
   end
   local.get $6
-  local.get $7
+  local.get $8
   i32.mul
   local.set $3
   local.get $0
@@ -5225,7 +5329,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i64)
-  (local $8 i64)
+  (local $8 i32)
+  (local $9 i64)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -5325,6 +5430,77 @@
     local.set $5
    end
   end
+  i32.const 1
+  local.set $8
+  local.get $1
+  i32.const 0
+  i32.ne
+  if
+   local.get $1
+   i32.const 2
+   i32.lt_s
+   if (result i32)
+    i32.const 1
+   else
+    local.get $1
+    i32.const 36
+    i32.gt_s
+   end
+   if
+    i32.const 0
+    drop
+    i64.const 0
+    local.set $3
+    local.get $0
+    call $~lib/rt/pure/__release
+    local.get $3
+    return
+   end
+   local.get $1
+   i32.const 16
+   i32.ne
+   if
+    i32.const 0
+    local.set $8
+   end
+  end
+  local.get $8
+  if
+   local.get $2
+   i32.const 2
+   i32.gt_s
+   if (result i32)
+    local.get $5
+    i32.const 48
+    i32.eq
+   else
+    i32.const 0
+   end
+   if (result i32)
+    local.get $4
+    i32.const 2
+    i32.add
+    i32.load16_u
+    i32.const 32
+    i32.or
+    i32.const 120
+    i32.eq
+   else
+    i32.const 0
+   end
+   if
+    local.get $4
+    i32.const 4
+    i32.add
+    local.set $4
+    local.get $2
+    i32.const 2
+    i32.sub
+    local.set $2
+    i32.const 16
+    local.set $1
+   end
+  end
   local.get $1
   i32.eqz
   if
@@ -5408,28 +5584,8 @@
    i32.const 10
    local.set $1
   end
-  local.get $1
-  i32.const 2
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.const 36
-   i32.gt_s
-  end
-  if
-   i32.const 0
-   drop
-   i64.const 0
-   local.set $3
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $3
-   return
-  end
   i64.const 0
-  local.set $8
+  local.set $9
   block $while-break|2
    loop $while-continue|2
     local.get $2
@@ -5491,7 +5647,7 @@
      local.get $1
      i32.ge_u
      if
-      local.get $8
+      local.get $9
       i64.const 0
       i64.ne
       i32.eqz
@@ -5507,14 +5663,14 @@
       end
       br $while-break|2
      end
-     local.get $8
+     local.get $9
      local.get $1
      i64.extend_i32_s
      i64.mul
      local.get $5
      i64.extend_i32_u
      i64.add
-     local.set $8
+     local.set $9
      local.get $4
      i32.const 2
      i32.add
@@ -5524,7 +5680,7 @@
    end
   end
   local.get $7
-  local.get $8
+  local.get $9
   i64.mul
   local.set $3
   local.get $0

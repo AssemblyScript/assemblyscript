@@ -698,8 +698,36 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     code = <u32>load<u16>(ptr += 2);
   }
 
-  // determine radix by literal prefix
+  // See https://tc39.es/ecma262/#sec-parseint-string-radix
+  var stripPrefix = true;
+  if (radix != 0) {
+    if (radix < 2 || radix > 36) {
+      if (isFloat<T>()) {
+        // @ts-ignore: cast
+        return <T>NaN;
+      } else {
+        // @ts-ignore: cast
+        return <T>0;
+      }
+    }
+    if (radix != 16) {
+      stripPrefix = false;
+    }
+  }
+
+  if (stripPrefix) {
+    if (
+      len > 2 &&
+      code == CharCode._0 &&
+      (<u32>load<u16>(ptr + 2) | 32) == CharCode.x
+    ) {
+      ptr += 4; len -= 2;
+      radix = 16;
+    }
+  }
+
   if (!radix) {
+    // determine radix by literal prefix
     if (code == CharCode._0 && len > 2) {
       switch (<u32>load<u16>(ptr + 2) | 32) {
         case CharCode.b: {
@@ -721,15 +749,6 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     }
   }
   if (!radix) radix = 10;
-  if (radix < 2 || radix > 36) {
-    if (isFloat<T>()) {
-      // @ts-ignore: cast
-      return <T>NaN;
-    } else {
-      // @ts-ignore: cast
-      return <T>0;
-    }
-  }
 
   // calculate value
   // @ts-ignore: type
