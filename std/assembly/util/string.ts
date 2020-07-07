@@ -699,7 +699,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   }
 
   // See https://tc39.es/ecma262/#sec-parseint-string-radix
-  if (radix != 0) {
+  if (radix) {
     if (radix < 2 || radix > 36) {
       if (isFloat<T>()) {
         // @ts-ignore: cast
@@ -719,9 +719,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
         ptr += 4; len -= 2;
       }
     }
-  }
-
-  if (!radix) {
+  } else {
     // determine radix by literal prefix
     if (code == CharCode._0 && len > 2) {
       switch (<u32>load<u16>(ptr + 2) | 32) {

@@ -2718,7 +2718,7 @@
     local.get $1
     i32.const 16
     i32.eq
-    if (result i32)
+    if
      local.get $2
      i32.const 48
      i32.eq
@@ -2737,7 +2737,7 @@
      else
       i32.const 0
      end
-     if (result i32)
+     if
       local.get $3
       i32.const 4
       i32.add
@@ -2745,17 +2745,10 @@
       local.get $0
       i32.const 2
       i32.sub
-     else
-      local.get $0
+      local.set $0
      end
-    else
-     local.get $0
     end
-    local.set $0
-   end
-   local.get $1
-   i32.eqz
-   if
+   else
     local.get $0
     i32.const 2
     i32.gt_s

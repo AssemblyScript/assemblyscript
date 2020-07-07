@@ -4647,8 +4647,6 @@
    end
   end
   local.get $1
-  i32.const 0
-  i32.ne
   if
    local.get $1
    i32.const 2
@@ -4707,10 +4705,7 @@
      local.set $2
     end
    end
-  end
-  local.get $1
-  i32.eqz
-  if
+  else
    local.get $5
    i32.const 48
    i32.eq
@@ -5047,8 +5042,6 @@
    end
   end
   local.get $1
-  i32.const 0
-  i32.ne
   if
    local.get $1
    i32.const 2
@@ -5107,10 +5100,7 @@
      local.set $2
     end
    end
-  end
-  local.get $1
-  i32.eqz
-  if
+  else
    local.get $5
    i32.const 48
    i32.eq
@@ -5411,8 +5401,6 @@
    end
   end
   local.get $1
-  i32.const 0
-  i32.ne
   if
    local.get $1
    i32.const 2
@@ -5471,10 +5459,7 @@
      local.set $2
     end
    end
-  end
-  local.get $1
-  i32.eqz
-  if
+  else
    local.get $5
    i32.const 48
    i32.eq
