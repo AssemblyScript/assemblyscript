@@ -699,7 +699,6 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
   }
 
   // See https://tc39.es/ecma262/#sec-parseint-string-radix
-  var stripPrefix = true;
   if (radix != 0) {
     if (radix < 2 || radix > 36) {
       if (isFloat<T>()) {
@@ -710,19 +709,15 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
         return <T>0;
       }
     }
-    if (radix != 16) {
-      stripPrefix = false;
-    }
-  }
-
-  if (stripPrefix) {
-    if (
-      len > 2 &&
-      code == CharCode._0 &&
-      (<u32>load<u16>(ptr + 2) | 32) == CharCode.x
-    ) {
-      ptr += 4; len -= 2;
-      radix = 16;
+    // handle case as parseInt("0xFF", 16) by spec
+    if (radix == 16) {
+      if (
+        len > 2 &&
+        code == CharCode._0 &&
+        (<u32>load<u16>(ptr + 2) | 32) == CharCode.x
+      ) {
+        ptr += 4; len -= 2;
+      }
     }
   }
 
