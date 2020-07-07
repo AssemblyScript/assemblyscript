@@ -709,7 +709,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     }
   }
 
-  // determine radix
+  // determine radix by literal prefix
   if (code == CharCode._0 && len > 2) {
     switch (<u32>load<u16>(ptr + 2) | 32) {
       case CharCode.b: {
