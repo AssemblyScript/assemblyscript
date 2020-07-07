@@ -698,35 +698,35 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     code = <u32>load<u16>(ptr += 2);
   }
 
-  // determine radix
-  if (!radix) {
-    if (code == CharCode._0 && len > 2) {
-      switch (<u32>load<u16>(ptr + 2) | 32) {
-        case CharCode.b: {
-          ptr += 4; len -= 2;
-          radix = 2;
-          break;
-        }
-        case CharCode.o: {
-          ptr += 4; len -= 2;
-          radix = 8;
-          break;
-        }
-        case CharCode.x: {
-          ptr += 4; len -= 2;
-          radix = 16;
-          break;
-        }
-        default: radix = 10;
-      }
-    } else radix = 10;
-  } else if (radix < 2 || radix > 36) {
+  if (!radix) radix = 10;
+  if (radix < 2 || radix > 36) {
     if (isFloat<T>()) {
       // @ts-ignore: cast
       return <T>NaN;
     } else {
       // @ts-ignore: cast
       return <T>0;
+    }
+  }
+
+  // determine radix
+  if (code == CharCode._0 && len > 2) {
+    switch (<u32>load<u16>(ptr + 2) | 32) {
+      case CharCode.b: {
+        ptr += 4; len -= 2;
+        radix = 2;
+        break;
+      }
+      case CharCode.o: {
+        ptr += 4; len -= 2;
+        radix = 8;
+        break;
+      }
+      case CharCode.x: {
+        ptr += 4; len -= 2;
+        radix = 16;
+        break;
+      }
     }
   }
 

@@ -110,11 +110,15 @@ assert(parseInt("+123") == 123);
 assert(parseInt("-12.3") == -12);
 assert(parseInt("0", 0) == 0);
 assert(parseInt("0x0", 0) == 0);
+assert(parseInt("\u000A1") == 1); // from test262
+assert(parseInt("\u20281") == 1); // from test262
+assert(parseInt("\u20291") == 1); // from test262
 assert(Math.signbit(parseInt("-0")));
 assert(parseInt("0XABCDEF") == parseInt("ABCDEF", 16));
 assert(parseInt("36893488147419103232") == 36893488147419103000.0); // bigger than 2 ** 64 - 1
 assert(parseInt("36893488147419103232", 13) == 5.135857308667095e+21);
 assert(parseInt("-1000000000000000000000000", 10) == -1000000000000000000000000.0);
+assert(parseInt("0x10000000000000000000", 16) == 75557863725914323419136.0); // from test262
 assert(parseInt("1🔥") == 1);
 assert(parseInt("2badnum") == 2);
 
