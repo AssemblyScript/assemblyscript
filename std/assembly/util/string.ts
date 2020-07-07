@@ -670,7 +670,8 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     --len;
   }
   // determine sign
-  var sign = false;
+  // @ts-ignore
+  var sign: T = 1;
   if (code == CharCode.MINUS) {
     if (!--len) {
       if (isFloat<T>()) {
@@ -683,7 +684,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     }
     code = <u32>load<u16>(ptr += 2);
     // @ts-ignore: type
-    sign = true;
+    sign = -1;
   } else if (code == CharCode.PLUS) {
     if (!--len) {
       if (isFloat<T>()) {
@@ -731,7 +732,7 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
 
   // calculate value
   // @ts-ignore: type
-  var num: i64 = 0;
+  var num: T = 0;
   while (len--) {
     code = <u32>load<u16>(ptr);
     if (code - CharCode._0 < 10) {
@@ -757,10 +758,8 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
     num = num * radix + code;
     ptr += 2;
   }
-  // @ts-ignore: cast
-  var res = <T>num;
   // @ts-ignore: type
-  return sign ? -res : res;
+  return sign * num;
 }
 
 export function strtod(str: string): f64 {
