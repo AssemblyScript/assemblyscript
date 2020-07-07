@@ -102,7 +102,7 @@ assert(parseInt("0001") == 1);
 assert(parseInt("0b101") == 0b101);
 assert(parseInt("0o707") == 0o707);
 assert(parseInt("0xf0f") == 0xf0f);
-assert(parseInt("0xF0F") == 0xf0f);
+assert(parseInt("0XF0F") == 0xf0f); // uppercase
 assert(parseInt("011") == 11); // not octal
 assert(parseInt("0x1g") == 1); // not valid
 assert(parseInt("-123") == -123);
@@ -110,7 +110,7 @@ assert(parseInt("+123") == 123);
 assert(parseInt("-12.3") == -12);
 assert(parseInt("0", 0) == 0);
 assert(parseInt("0x0", 0) == 0);
-assert(parseInt("-0") == -0 && Math.signbit(parseInt("-0")));
+assert(Math.signbit(parseInt("-0")));
 assert(parseInt("0XABCDEF") == parseInt("ABCDEF", 16));
 assert(parseInt("36893488147419103232") == 36893488147419103000.0); // bigger than 2 ** 64 - 1
 assert(parseInt("36893488147419103232", 13) == 5.135857308667095e+21);
@@ -125,7 +125,6 @@ assert(isNaN(parseInt("-")));
 assert(isNaN(parseInt("+")));
 assert(isNaN(parseInt("123", 37)));
 assert(isNaN(parseInt("🔥")));
-assert(isNaN(parseInt("abc")));
 assert(isNaN(parseInt("badnum")));
 assert(isNaN(F32.parseInt("badnum")));
 assert(isNaN(F64.parseInt("badnum")));
