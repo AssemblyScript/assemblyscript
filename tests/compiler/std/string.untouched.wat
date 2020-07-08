@@ -4669,9 +4669,7 @@
     end
     if (result i32)
      local.get $4
-     i32.const 2
-     i32.add
-     i32.load16_u
+     i32.load16_u offset=2
      i32.const 32
      i32.or
      i32.const 120
@@ -4707,9 +4705,7 @@
       block $case1|1
        block $case0|1
         local.get $4
-        i32.const 2
-        i32.add
-        i32.load16_u
+        i32.load16_u offset=2
         i32.const 32
         i32.or
         local.set $6
@@ -5049,9 +5045,7 @@
     end
     if (result i32)
      local.get $4
-     i32.const 2
-     i32.add
-     i32.load16_u
+     i32.load16_u offset=2
      i32.const 32
      i32.or
      i32.const 120
@@ -5087,9 +5081,7 @@
       block $case1|1
        block $case0|1
         local.get $4
-        i32.const 2
-        i32.add
-        i32.load16_u
+        i32.load16_u offset=2
         i32.const 32
         i32.or
         local.set $3
@@ -5393,9 +5385,7 @@
     end
     if (result i32)
      local.get $4
-     i32.const 2
-     i32.add
-     i32.load16_u
+     i32.load16_u offset=2
      i32.const 32
      i32.or
      i32.const 120
@@ -5431,9 +5421,7 @@
       block $case1|1
        block $case0|1
         local.get $4
-        i32.const 2
-        i32.add
-        i32.load16_u
+        i32.load16_u offset=2
         i32.const 32
         i32.or
         local.set $6
