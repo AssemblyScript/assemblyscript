@@ -7,14 +7,6 @@ assert(offsetof<ArrayBufferView>("buffer") == offsetof<i32[]>("buffer"));
 assert(offsetof<ArrayBufferView>("dataStart") == offsetof<i32[]>("dataStart"));
 assert(offsetof<ArrayBufferView>("byteLength") == offsetof<i32[]>("byteLength"));
 
-// export function test(x: u64): bool {
-//   return x <= 4294967295;
-// }
-
-// export function test2(x: u64): u64 {
-//   return x & 4294967295;
-// }
-
 // Obtains the internal capacity of an array from its backing buffer.
 function internalCapacity<T>(array: Array<T>): i32 {
   // the memory region used by the backing buffer might still be larger in that the ArrayBuffer
