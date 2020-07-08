@@ -26,7 +26,9 @@ import {
   Function,
   Element,
   ElementKind,
-  Global
+  Global,
+  Field,
+  Class
 } from "./program";
 
 import {
@@ -79,6 +81,10 @@ import {
 import {
   Node
 } from "./ast";
+
+import {
+  uniqueMap
+} from "./util";
 
 /** Control flow flags indicating specific conditions. */
 export const enum FlowFlags {
@@ -171,6 +177,12 @@ export enum LocalFlags {
                | CONDITIONALLY_RETAINED
 }
 
+/** Flags indicating the current state of a field. */
+export enum FieldFlags {
+  NONE = 0,
+  INITIALIZED = 1 << 0
+}
+
 /** Condition kinds. */
 export const enum ConditionKind {
   /** Outcome of the condition is unknown */
@@ -186,7 +198,11 @@ export class Flow {
 
   /** Creates the parent flow of the specified function. */
   static createParent(parentFunction: Function): Flow {
-    return new Flow(parentFunction);
+    var flow = new Flow(parentFunction);
+    if (parentFunction.is(CommonFlags.CONSTRUCTOR)) {
+      flow.initThisFieldFlags();
+    }
+    return flow;
   }
 
   /** Creates an inline flow within `parentFunction`. */
@@ -194,6 +210,9 @@ export class Flow {
     var flow = new Flow(parentFunction);
     flow.inlineFunction = inlineFunction;
     flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString();
+    if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
+      flow.initThisFieldFlags();
+    }
     return flow;
   }
 
@@ -216,6 +235,8 @@ export class Flow {
   scopedLocals: Map<string,Local> | null = null;
   /** Local flags. */
   localFlags: LocalFlags[] = [];
+  /** Field flags on `this`. Constructors only. */
+  thisFieldFlags: Map<Field,FieldFlags> | null = null;
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null = null;
   /** The label we break to when encountering a return statement, when inlining. */
@@ -269,6 +290,12 @@ export class Flow {
       branch.breakLabel = this.breakLabel;
     }
     branch.localFlags = this.localFlags.slice();
+    if (this.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+      let thisFieldFlags = assert(this.thisFieldFlags);
+      branch.thisFieldFlags = uniqueMap<Field,FieldFlags>(thisFieldFlags);
+    } else {
+      assert(!this.thisFieldFlags);
+    }
     branch.inlineFunction = this.inlineFunction;
     branch.inlineReturnLabel = this.inlineReturnLabel;
     return branch;
@@ -537,6 +564,62 @@ export class Flow {
     localFlags[index] = flags & ~flag;
   }
 
+  /** Initializes `this` field flags. */
+  initThisFieldFlags(): void {
+    var actualFunction = this.actualFunction;
+    assert(actualFunction.is(CommonFlags.CONSTRUCTOR));
+    var actualParent = actualFunction.parent;
+    assert(actualParent.kind == ElementKind.CLASS);
+    var actualClass = <Class>actualParent;
+    this.thisFieldFlags = new Map();
+    var members = actualClass.members;
+    if (members) {
+      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+        let member = _values[i];
+        if (member.kind == ElementKind.FIELD) {
+          let field = <Field>member;
+          if (
+            // guaranteed by super
+            field.parent != actualClass ||
+            // has field initializer
+            field.initializerNode !== null ||
+            // is initialized as a ctor parameter
+            field.prototype.parameterIndex != -1 ||
+            // is safe to initialize with zero
+            field.type.isAny(TypeFlags.VALUE | TypeFlags.NULLABLE)
+          ) {
+            this.setThisFieldFlag(field, FieldFlags.INITIALIZED);
+          }
+        }
+      }
+    }
+  }
+
+  /** Tests if the specified `this` field has the specified flag or flags. */
+  isThisFieldFlag(field: Field, flag: FieldFlags): bool {
+    var fieldFlags = this.thisFieldFlags;
+    if (fieldFlags) {
+      return (changetype<FieldFlags>(fieldFlags.get(field)) & flag) == flag;
+    }
+    return false;
+  }
+
+  /** Sets the specified flag or flags on the given `this` field. */
+  setThisFieldFlag(field: Field, flag: FieldFlags): void {
+    var fieldFlags = this.thisFieldFlags;
+    if (fieldFlags) {
+      assert(this.actualFunction.is(CommonFlags.CONSTRUCTOR));
+      if (fieldFlags.has(field)) {
+        let flags = changetype<FieldFlags>(fieldFlags.get(field));
+        fieldFlags.set(field, flags | flag);
+      } else {
+        fieldFlags.set(field, flag);
+      }
+    } else {
+      assert(!this.actualFunction.is(CommonFlags.CONSTRUCTOR));
+    }
+  }
+
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
   pushBreakLabel(): string {
     var parentFunction = this.parentFunction;
@@ -582,6 +665,7 @@ export class Flow {
 
     this.flags = this.flags | otherFlags; // what happens before is still true
     this.localFlags = other.localFlags;
+    this.thisFieldFlags = other.thisFieldFlags;
   }
 
   /** Inherits flags of a conditional branch joining again with this one, i.e. then without else. */
@@ -667,6 +751,7 @@ export class Flow {
 
     this.flags = newFlags | (thisFlags & FlowFlags.UNCHECKED_CONTEXT);
 
+    // local flags
     var thisLocalFlags = this.localFlags;
     var numThisLocalFlags = thisLocalFlags.length;
     var otherLocalFlags = other.localFlags;
@@ -694,6 +779,9 @@ export class Flow {
       }
       thisLocalFlags[i] = newFlags;
     }
+
+    // field flags do not matter here since there's only INITIALIZED, which can
+    // only be set if it has been observed prior to entering the branch.
   }
 
   /** Inherits mutual flags of two alternate branches becoming this one, i.e. then with else. */
@@ -787,6 +875,7 @@ export class Flow {
 
     this.flags = newFlags | (this.flags & FlowFlags.UNCHECKED_CONTEXT);
 
+    // local flags
     var thisLocalFlags = this.localFlags;
     if (leftFlags & FlowFlags.TERMINATES) {
       if (!(rightFlags & FlowFlags.TERMINATES)) {
@@ -828,6 +917,26 @@ export class Flow {
         }
         thisLocalFlags[i] = newFlags;
       }
+    }
+
+    // field flags (currently only INITIALIZED, so can simplify)
+    var leftFieldFlags = left.thisFieldFlags;
+    if (leftFieldFlags) {
+      let newFieldFlags = new Map<Field,FieldFlags>();
+      let rightFieldFlags = assert(right.thisFieldFlags);
+      for (let _keys = Map_keys(leftFieldFlags), i = 0, k = _keys.length; i < k; ++i) {
+        let key = _keys[i];
+        let leftFlags = changetype<FieldFlags>(leftFieldFlags.get(key));
+        if (
+          (leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) && 
+          (changetype<FieldFlags>(rightFieldFlags.get(key)) & FieldFlags.INITIALIZED)
+        ) {
+          newFieldFlags.set(key, FieldFlags.INITIALIZED);
+        }
+      }
+      this.thisFieldFlags = newFieldFlags;
+    } else {
+      assert(!right.thisFieldFlags);
     }
   }
 

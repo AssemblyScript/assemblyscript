@@ -2894,7 +2894,9 @@ function builtin_instantiate(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   compiler.currentType = classInstance.type;
-  return compiler.compileInstantiate(classInstance, operands, Constraints.NONE, ctx.reportNode);
+  var ctor = compiler.ensureConstructor(classInstance, ctx.reportNode);
+  compiler.checkFieldInitialization(classInstance, ctx.reportNode);
+  return compiler.compileInstantiate(ctor, operands, Constraints.NONE, ctx.reportNode);
 }
 builtins.set(BuiltinNames.instantiate, builtin_instantiate);
 

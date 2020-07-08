@@ -947,7 +947,7 @@ export class Parser extends DiagnosticEmitter {
     }
     var flags = parentFlags;
     if (tn.skip(Token.EXCLAMATION)) {
-      flags |= CommonFlags.DEFINITE_ASSIGNMENT;
+      flags |= CommonFlags.DEFINITELY_ASSIGNED;
     }
 
     var type: TypeNode | null = null;
@@ -981,7 +981,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     var range = Range.join(identifier.range, tn.range());
-    if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) != 0 && initializer !== null) {
+    if ((flags & CommonFlags.DEFINITELY_ASSIGNED) != 0 && initializer !== null) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
         range
@@ -2169,7 +2169,7 @@ export class Parser extends DiagnosticEmitter {
             tn.range()
           );
         }
-        returnType = this.parseType(tn, name.kind == NodeKind.CONSTRUCTOR || isSetter);
+        returnType = this.parseType(tn, isSetter || name.kind == NodeKind.CONSTRUCTOR);
         if (!returnType) return null;
       } else {
         returnType = Node.createOmittedType(tn.range(tn.pos));
@@ -2209,7 +2209,7 @@ export class Parser extends DiagnosticEmitter {
         }
         body = this.parseBlockStatement(tn, false);
         if (!body) return null;
-      } else if (!(flags & (CommonFlags.AMBIENT | CommonFlags.ABSTRACT)) && !isInterface) {
+      } else if (!isInterface && !(flags & (CommonFlags.AMBIENT | CommonFlags.ABSTRACT))) {
         this.error(
           DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
           tn.range()
@@ -2225,7 +2225,9 @@ export class Parser extends DiagnosticEmitter {
         body,
         tn.range(startPos, tn.pos)
       );
-      tn.skip(Token.SEMICOLON);
+      if (!(isInterface && tn.skip(Token.COMMA))) {
+        tn.skip(Token.SEMICOLON);
+      }
       return retMethod;
 
     } else if (isConstructor) {
@@ -2271,7 +2273,7 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       if (tn.skip(Token.EXCLAMATION)) {
-        flags |= CommonFlags.DEFINITE_ASSIGNMENT;
+        flags |= CommonFlags.DEFINITELY_ASSIGNED;
       }
       if (tn.skip(Token.COLON)) {
         type = this.parseType(tn);
@@ -2288,7 +2290,10 @@ export class Parser extends DiagnosticEmitter {
         if (!initializer) return null;
       }
       let range = tn.range(startPos, tn.pos);
-      if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) != 0 && ((flags & CommonFlags.STATIC) != 0 || isInterface || initializer !== null)) {
+      if (
+        (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0 &&
+        (isInterface || initializer !== null || (flags & CommonFlags.STATIC) != 0)
+      ) {
         this.error(
           DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
           range
@@ -2302,7 +2307,9 @@ export class Parser extends DiagnosticEmitter {
         initializer,
         range
       );
-      tn.skip(Token.SEMICOLON);
+      if (!(isInterface && tn.skip(Token.COMMA))) {
+        tn.skip(Token.SEMICOLON);
+      }
       return retField;
     }
     return null;

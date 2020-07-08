@@ -425,17 +425,17 @@ export class Program extends DiagnosticEmitter {
     super(diagnostics);
     var nativeSource = new Source(SourceKind.LIBRARY_ENTRY, LIBRARY_SUBST + ".wasm", "[native code]");
     this.nativeSource = nativeSource;
+    this.parser = new Parser(this.diagnostics, this.sources);
+    this.resolver = new Resolver(this);
     var nativeFile = new File(this, nativeSource);
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
-    this.parser = new Parser(this.diagnostics, this.sources);
-    this.resolver = new Resolver(this);
   }
 
   /** Parser instance. */
   parser: Parser;
   /** Resolver instance. */
-  resolver: Resolver;
+  resolver!: Resolver;
   /** Array of sources. */
   sources: Source[] = [];
   /** Diagnostic offset used where successively obtaining the next diagnostic. */
@@ -443,7 +443,7 @@ export class Program extends DiagnosticEmitter {
   /** Special native code source. */
   nativeSource: Source;
   /** Special native code file. */
-  nativeFile: File;
+  nativeFile!: File;
   /** Next class id. */
   nextClassId: u32 = 0;
   /** Next signature id. */
@@ -2239,7 +2239,7 @@ export class Program extends DiagnosticEmitter {
       validDecorators |= DecoratorFlags.EXTERNAL;
     } else {
       validDecorators |= DecoratorFlags.INLINE;
-      if (declaration.range.source.isLibrary) {
+      if (declaration.range.source.isLibrary || declaration.is(CommonFlags.EXPORT)) {
         validDecorators |= DecoratorFlags.LAZY;
       }
     }
@@ -2600,7 +2600,7 @@ export namespace DecoratorFlags {
 export abstract class Element {
 
   /** Parent element. */
-  parent: Element;
+  parent!: Element;
   /** Common flags indicating specific traits. */
   flags: CommonFlags = CommonFlags.NONE;
   /** Decorator flags indicating annotated traits. */
@@ -2881,7 +2881,7 @@ export class File extends Element {
   /** File re-exports. */
   exportsStar: File[] | null = null;
   /** Top-level start function of this file. */
-  startFunction: Function;
+  startFunction!: Function;
 
   /** Constructs a new file. */
   constructor(
@@ -3436,7 +3436,7 @@ export class Function extends TypedElement {
   /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> | null;
   /** Default control flow. */
-  flow: Flow;
+  flow!: Flow;
   /** Remembered debug locations. */
   debugLocations: Range[] = [];
   /** Function reference, if compiled. */
@@ -4048,6 +4048,8 @@ export class Class extends TypedElement {
   extendees: Set<Class> | null = null;
   /** Classes implementing this interface. */
   implementers: Set<Class> | null = null;
+  /** Whether the field initialization check has already been performed. */
+  didCheckFieldInitialization: bool = false;
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {

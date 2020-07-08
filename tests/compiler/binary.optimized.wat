@@ -114,7 +114,7 @@
      local.get $1
      i32.const 8388608
      i32.ge_u
-     if
+     if (result i32)
       local.get $1
       i32.const 8388608
       i32.eq
@@ -122,9 +122,9 @@
       local.get $1
       i32.const 8388608
       i32.sub
-      local.set $1
+     else
+      local.get $1
      end
-     local.get $1
      i32.const 1
      i32.shl
      local.set $1
@@ -261,7 +261,7 @@
      local.get $1
      i64.const 4503599627370496
      i64.ge_u
-     if
+     if (result i64)
       local.get $1
       i64.const 4503599627370496
       i64.eq
@@ -269,9 +269,9 @@
       local.get $1
       i64.const 4503599627370496
       i64.sub
-      local.set $1
+     else
+      local.get $1
      end
-     local.get $1
      i64.const 1
      i64.shl
      local.set $1

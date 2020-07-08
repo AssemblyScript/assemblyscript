@@ -1,0 +1,20 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "TS2564: Property 'field-initialization-errors/Ref.a' has no initializer",
+    "TS2564: Property 'field-initialization-errors/Ref_Ctor.a' has no initializer",
+    "TS2564: Property 'field-initialization-errors/Ref_InlineCtor.a' has no initializer",
+    "TS2564: Property 'field-initialization-errors/Ref_Ctor_Branch.a' has no initializer",
+    "TS2565: Property 'field-initialization-errors/Ref_Ctor_Use_Init.a' is used before being assigned.",
+    "TS2564: Property 'field-initialization-errors/Ref_Ctor_Call_Init.a' has no initializer",
+    "TS2564: Property 'field-initialization-errors/Ref_Ctor_Prop_Init.a' has no initializer",
+    "TS2564: Property 'field-initialization-errors/Ref_Ctor_Callwith_Init.a' has no initializer",
+    "TS2564: Property 'field-initialization-errors/Ref_Ctor_Alias_Init.a' has no initializer",
+    "TS2564: Property 'field-initialization-errors/Ref_Ctor_Assign_Init.a' has no initializer",
+    "TS2564: Property 'field-initialization-errors/Ref_Ctor_Icallwith_Init.a' has no initializer",
+    "TS2564: Property 'field-initialization-errors/Inherit_Base.a' has no initializer",
+    "EOF"
+  ]
+}
