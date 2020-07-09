@@ -713,17 +713,17 @@ export class Parser extends DiagnosticEmitter {
           if (tn.skip(Token.COLON)) {
             isSignature = true;
             tn.discard(state);
-            let ty = this.parseType(tn, false);
-            if (!ty) return null;
-            if (ty.kind != NodeKind.NAMEDTYPE) {
+            let type = this.parseType(tn, false);
+            if (!type) return null;
+            if (type.kind != NodeKind.NAMEDTYPE) {
               this.error(
                 DiagnosticCode.Identifier_expected,
-                ty.range
+                type.range
               );
               this.tryParseSignatureIsSignature = true;
               return null;
             }
-            thisType = <NamedTypeNode>ty;
+            thisType = <NamedTypeNode>type;
           } else {
             tn.reset(state);
             this.tryParseSignatureIsSignature = false;
@@ -1154,29 +1154,29 @@ export class Parser extends DiagnosticEmitter {
       );
       let extendsType: NamedTypeNode | null = null;
       if (tn.skip(Token.EXTENDS)) {
-        let ty = this.parseType(tn);
-        if (!ty) return null;
-        if (ty.kind != NodeKind.NAMEDTYPE) {
+        let type = this.parseType(tn);
+        if (!type) return null;
+        if (type.kind != NodeKind.NAMEDTYPE) {
           this.error(
             DiagnosticCode.Identifier_expected,
-            ty.range
+            type.range
           );
           return null;
         }
-        extendsType = <NamedTypeNode>ty;
+        extendsType = <NamedTypeNode>type;
       }
       let defaultType: NamedTypeNode | null = null;
       if (tn.skip(Token.EQUALS)) {
-        let ty = this.parseType(tn);
-        if (!ty) return null;
-        if (ty.kind != NodeKind.NAMEDTYPE) {
+        let type = this.parseType(tn);
+        if (!type) return null;
+        if (type.kind != NodeKind.NAMEDTYPE) {
           this.error(
             DiagnosticCode.Identifier_expected,
-            ty.range
+            type.range
           );
           return null;
         }
-        defaultType = <NamedTypeNode>ty;
+        defaultType = <NamedTypeNode>type;
       }
       return Node.createTypeParameter(
         identifier,
@@ -1674,16 +1674,16 @@ export class Parser extends DiagnosticEmitter {
 
     var extendsType: NamedTypeNode | null = null;
     if (tn.skip(Token.EXTENDS)) {
-      let ty = this.parseType(tn);
-      if (!ty) return null;
-      if (ty.kind != NodeKind.NAMEDTYPE) {
+      let type = this.parseType(tn);
+      if (!type) return null;
+      if (type.kind != NodeKind.NAMEDTYPE) {
         this.error(
           DiagnosticCode.Identifier_expected,
-          ty.range
+          type.range
         );
         return null;
       }
-      extendsType = <NamedTypeNode>ty;
+      extendsType = <NamedTypeNode>type;
     }
 
     var implementsTypes: NamedTypeNode[] | null = null;
