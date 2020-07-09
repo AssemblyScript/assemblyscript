@@ -290,20 +290,17 @@ exports.main = function main(argv, options, callback) {
         // ensure that a transform's path is relative to the current config
         asconfig.options.transform = asconfig.options.transform.map(p => {
           if (!path.isAbsolute(p)) {
-            if (p.startsWith(".")) {
-              return path.join(asconfigDir, p);
-            }
-            return require.resolve(p)
+            return require.resolve(p);
           }
           return p;
-        })
+        });
       }
       args = optionsUtil.merge(exports.options, asconfig.options, args);
     }
 
     // entries are added to the compilation
-    if (asconfig.include) {
-      for (const entry of asconfig.include) {
+    if (asconfig.entries) {
+      for (const entry of asconfig.entries) {
         argv.push(
           path.isAbsolute(entry)
             ? entry
