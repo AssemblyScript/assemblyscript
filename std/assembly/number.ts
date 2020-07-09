@@ -295,7 +295,7 @@ export abstract class F32 {
   }
 
   static parseInt(value: string, radix: i32 = 0): f32 {
-    return <f32>strtol<i64>(value, radix);
+    return <f32>strtol<f64>(value, radix);
   }
 
   static parseFloat(value: string): f32 {
@@ -359,7 +359,7 @@ export abstract class F64 {
   }
 
   static parseInt(value: string, radix: i32 = 0): f64 {
-    return <f64>strtol<i64>(value, radix);
+    return strtol<f64>(value, radix);
   }
 
   static parseFloat(value: string): f64 {
