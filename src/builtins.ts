@@ -3968,7 +3968,7 @@ function builtin_v128_sub_saturate(ctx: BuiltinContext): ExpressionRef {
   }
   compiler.error(
     DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-    ctx.reportNode.typeArgumentsRange, "v128.sub_saturate", type.toString(true)
+    ctx.reportNode.typeArgumentsRange, "v128.sub_saturate", type.toString()
   );
   return module.unreachable();
 }
