@@ -1465,7 +1465,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var start = this.pos;
     var end = this.end;
     var text = this.source.text;
-    this.readDecimalFloatPartial();
+    this.readDecimalFloatPartial(false);
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
       this.readDecimalFloatPartial();
@@ -1487,7 +1487,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return parseFloat(floatString);
   }
 
-  private readDecimalFloatPartial(): void {
+  private readDecimalFloatPartial(allowLeadingZeroSep: boolean = true): void {
     let start = this.pos;
     let end = this.end;
     let text = this.source.text;
@@ -1502,6 +1502,11 @@ export class Tokenizer extends DiagnosticEmitter {
             sepEnd == start
               ? DiagnosticCode.Numeric_separators_are_not_allowed_here
               : DiagnosticCode.Multiple_consecutive_numeric_separators_are_not_permitted,
+            this.range(this.pos)
+          );
+        } else if (!allowLeadingZeroSep && this.pos - 1 == start && text.charCodeAt(this.pos - 1) == CharCode._0) {
+          this.error(
+            DiagnosticCode.Numeric_separators_are_not_allowed_here,
             this.range(this.pos)
           );
         }
