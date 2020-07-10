@@ -1483,11 +1483,11 @@ export class Tokenizer extends DiagnosticEmitter {
         this.readDecimalFloatPartial();
       }
     }
-    let floatString = text.substring(start, this.pos).replace(/_/g, '');
+    let floatString = text.substring(start, this.pos).replaceAll("_", "");
     return parseFloat(floatString);
   }
 
-  private readDecimalFloatPartial() {
+  private readDecimalFloatPartial(): void {
     let start = this.pos;
     let end = this.end;
     let text = this.source.text;
