@@ -86,8 +86,7 @@ import {
   Type,
   Signature,
   typesToString,
-  TypeKind,
-  TypeFlags
+  TypeKind
 } from "./types";
 
 import {
