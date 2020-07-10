@@ -653,15 +653,13 @@ exports.main = function main(argv, options, callback) {
   // Validate the module if requested
   if (!args.noValidate) {
     stats.validateCount++;
-    let callbackErrorResponse;
+    let isValid;
     stats.validateTime += measure(() => {
-      if (!module.validate()) {
-        module.dispose();
-        callbackErrorResponse = callback(Error("Validate error"));
-      }
+      isValid = module.validate();
     });
-    if (callbackErrorResponse) {
-      return callbackErrorResponse;
+    if (!isValid) {
+      module.dispose();
+      return callback(Error("validate error"));
     }
   }
 
