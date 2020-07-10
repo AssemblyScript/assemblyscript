@@ -283,19 +283,22 @@ exports.main = function main(argv, options, callback) {
   while (asconfig) {
     // merge target first, then merge options, then merge extended asconfigs
     if (asconfig.targets && asconfig.targets[target]) {
-      args = optionsUtil.merge(exports.options, asconfig.targets[target], args);
+      args = optionsUtil.merge(exports.options, args, asconfig.targets[target]);
     }
     if (asconfig.options) {
       if (asconfig.options.transform) {
         // ensure that a transform's path is relative to the current config
         asconfig.options.transform = asconfig.options.transform.map(p => {
           if (!path.isAbsolute(p)) {
+            if (p.startsWith(".")) {
+              return path.join(asconfigDir, p);
+            }
             return require.resolve(p);
           }
           return p;
         });
       }
-      args = optionsUtil.merge(exports.options, asconfig.options, args);
+      args = optionsUtil.merge(exports.options, args, asconfig.options);
     }
 
     // entries are added to the compilation
