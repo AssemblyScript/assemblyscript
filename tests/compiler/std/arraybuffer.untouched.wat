@@ -3124,7 +3124,7 @@
   local.get $7
   call $~lib/rt/pure/__retain
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32> | null> (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>|null> (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3201,7 +3201,7 @@
   drop
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null> (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array|null> (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3230,7 +3230,7 @@
   local.get $1
   return
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array | null> (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array|null> (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3267,7 +3267,7 @@
   local.get $1
   return
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView | null> (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView|null> (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3909,7 +3909,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32> | null>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>|null>
   i32.eqz
   i32.eqz
   if
@@ -3945,7 +3945,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array|null>
   i32.eqz
   i32.eqz
   if
@@ -3957,7 +3957,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array | null>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array|null>
   i32.eqz
   i32.eqz
   if
@@ -3969,7 +3969,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView | null>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView|null>
   i32.eqz
   i32.eqz
   if

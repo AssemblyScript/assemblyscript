@@ -5383,7 +5383,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func "$~lib/function/Function<(x: i32) => i32>#__visit_impl" (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -5415,7 +5415,7 @@
    end
    local.get $0
    local.get $1
-   call "$~lib/function/Function<(x: i32) => i32>#__visit_impl"
+   call $~lib/function/Function<%28i32%29=>i32>#__visit_impl
    return
   end
   unreachable

@@ -1852,13 +1852,13 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func "$~lib/function/Function<() => retain-return/Ref>#__visit_impl" (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28%29=>retain-return/Ref>#__visit_impl (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func "$~lib/function/Function<(ref: retain-return/Ref) => retain-return/Ref>#__visit_impl" (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28retain-return/Ref%29=>retain-return/Ref>#__visit_impl (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1891,12 +1891,12 @@
     end
     local.get $0
     local.get $1
-    call "$~lib/function/Function<() => retain-return/Ref>#__visit_impl"
+    call $~lib/function/Function<%28%29=>retain-return/Ref>#__visit_impl
     return
    end
    local.get $0
    local.get $1
-   call "$~lib/function/Function<(ref: retain-return/Ref) => retain-return/Ref>#__visit_impl"
+   call $~lib/function/Function<%28retain-return/Ref%29=>retain-return/Ref>#__visit_impl
    return
   end
   unreachable

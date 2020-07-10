@@ -1589,7 +1589,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<infer-array/Ref | null>#__uget (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<infer-array/Ref|null>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1599,7 +1599,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<infer-array/Ref | null>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<infer-array/Ref|null>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1615,7 +1615,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<infer-array/Ref | null>#__uget
+  call $~lib/array/Array<infer-array/Ref|null>#__uget
   local.set $2
   i32.const 1
   drop
@@ -1624,7 +1624,7 @@
   drop
   local.get $2
  )
- (func $~lib/array/Array<~lib/string/String | null>#__uget (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String|null>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1634,7 +1634,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<~lib/string/String | null>#__get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String|null>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1650,7 +1650,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<~lib/string/String | null>#__uget
+  call $~lib/array/Array<~lib/string/String|null>#__uget
   local.set $2
   i32.const 1
   drop

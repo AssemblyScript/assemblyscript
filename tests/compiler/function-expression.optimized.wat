@@ -12,18 +12,18 @@
  (data (i32.const 1152) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\03")
  (data (i32.const 1184) "\08\00\00\00\01\00\00\00\05\00\00\00\08\00\00\00\04")
  (data (i32.const 1216) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\05")
- (data (i32.const 1248) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\06")
- (data (i32.const 1280) "\08\00\00\00\01\00\00\00\08\00\00\00\08\00\00\00\07")
+ (data (i32.const 1248) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\06")
+ (data (i32.const 1280) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\07")
  (data (i32.const 1312) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\08")
- (data (i32.const 1344) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\t")
- (data (i32.const 1376) "\08\00\00\00\01\00\00\00\08\00\00\00\08\00\00\00\n")
+ (data (i32.const 1344) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\t")
+ (data (i32.const 1376) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\n")
  (data (i32.const 1408) "\08\00\00\00\01\00\00\00\05\00\00\00\08\00\00\00\0b")
- (data (i32.const 1440) "\08\00\00\00\01\00\00\00\t\00\00\00\08\00\00\00\0c")
- (data (i32.const 1472) "\08\00\00\00\01\00\00\00\n\00\00\00\08\00\00\00\0d")
- (data (i32.const 1504) "\08\00\00\00\01\00\00\00\t\00\00\00\08\00\00\00\0e")
- (data (i32.const 1536) "\08\00\00\00\01\00\00\00\n\00\00\00\08\00\00\00\0f")
- (data (i32.const 1568) "\08\00\00\00\01\00\00\00\t\00\00\00\08\00\00\00\10")
- (data (i32.const 1600) "\08\00\00\00\01\00\00\00\n\00\00\00\08\00\00\00\11")
+ (data (i32.const 1440) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\0c")
+ (data (i32.const 1472) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\0d")
+ (data (i32.const 1504) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\0e")
+ (data (i32.const 1536) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\0f")
+ (data (i32.const 1568) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\10")
+ (data (i32.const 1600) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\11")
  (table $0 18 funcref)
  (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|2 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0)
  (export "memory" (memory $0))
@@ -270,7 +270,7 @@
   i32.const 1
   i32.store
   i32.const 1640
-  i32.const 11
+  i32.const 8
   i32.store
   i32.const 1644
   i32.const 4

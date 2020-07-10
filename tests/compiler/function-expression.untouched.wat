@@ -13,18 +13,18 @@
  (data (i32.const 144) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00")
  (data (i32.const 176) "\08\00\00\00\01\00\00\00\05\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00")
  (data (i32.const 208) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00")
- (data (i32.const 240) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00")
- (data (i32.const 272) "\08\00\00\00\01\00\00\00\08\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00")
+ (data (i32.const 240) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00")
+ (data (i32.const 272) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00")
  (data (i32.const 304) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00")
- (data (i32.const 336) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\t\00\00\00\00\00\00\00")
- (data (i32.const 368) "\08\00\00\00\01\00\00\00\08\00\00\00\08\00\00\00\n\00\00\00\00\00\00\00")
+ (data (i32.const 336) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\t\00\00\00\00\00\00\00")
+ (data (i32.const 368) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\n\00\00\00\00\00\00\00")
  (data (i32.const 400) "\08\00\00\00\01\00\00\00\05\00\00\00\08\00\00\00\0b\00\00\00\00\00\00\00")
- (data (i32.const 432) "\08\00\00\00\01\00\00\00\t\00\00\00\08\00\00\00\0c\00\00\00\00\00\00\00")
- (data (i32.const 464) "\08\00\00\00\01\00\00\00\n\00\00\00\08\00\00\00\0d\00\00\00\00\00\00\00")
- (data (i32.const 496) "\08\00\00\00\01\00\00\00\t\00\00\00\08\00\00\00\0e\00\00\00\00\00\00\00")
- (data (i32.const 528) "\08\00\00\00\01\00\00\00\n\00\00\00\08\00\00\00\0f\00\00\00\00\00\00\00")
- (data (i32.const 560) "\08\00\00\00\01\00\00\00\t\00\00\00\08\00\00\00\10\00\00\00\00\00\00\00")
- (data (i32.const 592) "\08\00\00\00\01\00\00\00\n\00\00\00\08\00\00\00\11\00\00\00\00\00\00\00")
+ (data (i32.const 432) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\0c\00\00\00\00\00\00\00")
+ (data (i32.const 464) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\0d\00\00\00\00\00\00\00")
+ (data (i32.const 496) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\0e\00\00\00\00\00\00\00")
+ (data (i32.const 528) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\0f\00\00\00\00\00\00\00")
+ (data (i32.const 560) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\10\00\00\00\00\00\00\00")
+ (data (i32.const 592) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\11\00\00\00\00\00\00\00")
  (table $0 18 funcref)
  (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0 $function-expression/testNullable~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testLocal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testField~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0)
  (global $function-expression/f1 (mut i32) (i32.const 32))
@@ -341,7 +341,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 11
+   i32.const 8
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0

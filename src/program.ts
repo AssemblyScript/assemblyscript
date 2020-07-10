@@ -3494,7 +3494,7 @@ export class Function extends TypedElement {
       let parameterTypes = signature.parameterTypes;
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         let parameterType = parameterTypes[i];
-        let parameterName = signature.getParameterName(i);
+        let parameterName = this.getParameterName(i);
         let local = new Local(
           parameterName,
           localIndex++,
@@ -3507,6 +3507,14 @@ export class Function extends TypedElement {
     }
     this.flow = Flow.createParent(this);
     registerConcreteElement(program, this);
+  }
+
+  /** Gets the name of the parameter at the specified index. */
+  getParameterName(index: i32): string {
+    var parameters = (<FunctionDeclaration>this.declaration).signature.parameters;
+    return parameters.length > index
+      ? parameters[index].name.text
+      : getDefaultParameterName(index);
   }
 
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
@@ -4624,4 +4632,15 @@ export function mangleInternalName(name: string, parent: Element, isInstance: bo
            + (isInstance ? INSTANCE_DELIMITER : STATIC_DELIMITER) + name;
     }
   }
+}
+
+// Cached default parameter names used where names are unknown.
+var cachedDefaultParameterNames: string[] = [];
+
+/** Gets the cached default parameter name for the specified index. */
+export function getDefaultParameterName(index: i32): string {
+  for (let i = cachedDefaultParameterNames.length; i <= index; ++i) {
+    cachedDefaultParameterNames.push("$" + i.toString());
+  }
+  return cachedDefaultParameterNames[index];
 }

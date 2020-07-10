@@ -369,7 +369,6 @@ export class Resolver extends DiagnosticEmitter {
     var parameterNodes = node.parameters;
     var numParameters = parameterNodes.length;
     var parameterTypes = new Array<Type>(numParameters);
-    var parameterNames = new Array<string>(numParameters);
     var requiredParameters = 0;
     var hasRest = false;
     for (let i = 0; i < numParameters; ++i) {
@@ -403,7 +402,6 @@ export class Resolver extends DiagnosticEmitter {
       );
       if (!parameterType) return null;
       parameterTypes[i] = parameterType;
-      parameterNames[i] = parameterNode.name.text;
     }
     var returnTypeNode = node.returnType;
     var returnType: Type | null;
@@ -425,7 +423,6 @@ export class Resolver extends DiagnosticEmitter {
       if (!returnType) return null;
     }
     var signature = new Signature(this.program, parameterTypes, returnType, thisType);
-    signature.parameterNames = parameterNames;
     signature.requiredParameters = requiredParameters;
     signature.hasRest = hasRest;
     return node.isNullable ? signature.type.asNullable() : signature.type;
@@ -2667,7 +2664,6 @@ export class Resolver extends DiagnosticEmitter {
     var signatureParameters = signatureNode.parameters;
     var numSignatureParameters = signatureParameters.length;
     var parameterTypes = new Array<Type>(numSignatureParameters);
-    var parameterNames = new Array<string>(numSignatureParameters);
     var requiredParameters = 0;
     for (let i = 0; i < numSignatureParameters; ++i) {
       let parameterDeclaration = signatureParameters[i];
@@ -2701,7 +2697,6 @@ export class Resolver extends DiagnosticEmitter {
         return null;
       }
       parameterTypes[i] = parameterType;
-      parameterNames[i] = parameterDeclaration.name.text;
     }
 
     // resolve return type
@@ -2732,7 +2727,6 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     var signature = new Signature(this.program, parameterTypes, returnType, thisType);
-    signature.parameterNames = parameterNames;
     signature.requiredParameters = requiredParameters;
 
     var nameInclTypeParameters = prototype.name;

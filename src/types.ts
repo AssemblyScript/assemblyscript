@@ -452,19 +452,22 @@ export class Type {
   }
 
   /** Converts this type to a string. */
-  toString(): string {
+  toString(validWat: bool = false): string {
+    const nullablePostfix = validWat
+      ? "|null"
+      : " | null";
     if (this.isReference) {
       let classReference = this.getClass();
       if (classReference) {
         return this.isNullableReference
-          ? classReference.internalName + " | null"
+          ? classReference.internalName + nullablePostfix
           : classReference.internalName;
       }
       let signatureReference = this.getSignature();
       if (signatureReference) {
         return this.isNullableReference
-          ? "(" + signatureReference.toString() + ") | null"
-          : signatureReference.toString();
+          ? "(" + signatureReference.toString(validWat) + ")" + nullablePostfix
+          : signatureReference.toString(validWat);
       }
       // TODO: Reflect.apply(value, "toString", []) ?
       assert(this.kind == TypeKind.ANYREF);
@@ -669,7 +672,7 @@ export function typesToString(types: Type[]): string {
   var numTypes = types.length;
   if (!numTypes) return "";
   var sb = new Array<string>(numTypes);
-  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString();
+  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString(true);
   return sb.join(",");
 }
 
@@ -679,8 +682,6 @@ export class Signature {
   id: u32 = 0;
   /** Parameter types, if any, excluding `this`. */
   parameterTypes: Type[];
-  /** Parameter names, if known, excluding `this`. */
-  parameterNames: string[] | null;
   /** Number of required parameters excluding `this`. Other parameters are considered optional. */
   requiredParameters: i32;
   /** Return type. */
@@ -702,7 +703,6 @@ export class Signature {
     thisType: Type | null = null
   ) {
     this.parameterTypes = parameterTypes ? parameterTypes : [];
-    this.parameterNames = null;
     this.requiredParameters = 0;
     this.returnType = returnType ? returnType : Type.void;
     this.thisType = thisType;
@@ -747,14 +747,6 @@ export class Signature {
 
   get nativeResults(): NativeType {
     return this.returnType.toNativeType();
-  }
-
-  /** Gets the known or, alternatively, generic parameter name at the specified index. */
-  getParameterName(index: i32): string {
-    var parameterNames = this.parameterNames;
-    return parameterNames !== null && parameterNames.length > index
-      ? parameterNames[index]
-      : getDefaultParameterName(index);
   }
 
   /** Tests if this signature equals the specified. */
@@ -818,36 +810,31 @@ export class Signature {
   }
 
   /** Converts this signature to a string. */
-  toString(): string {
+  toString(validWat: bool = false): string {
     var sb = new Array<string>();
-    sb.push("(");
+    sb.push(validWat ? "%28" : "(");
     var index = 0;
     var thisType = this.thisType;
     if (thisType) {
-      sb.push("this: ");
+      sb.push(validWat ? "this:" : "this: ");
       assert(!thisType.signatureReference);
-      sb.push(thisType.toString());
+      sb.push(thisType.toString(validWat));
       index = 1;
     }
     var parameters = this.parameterTypes;
     var numParameters = parameters.length;
     if (numParameters) {
-      let names = this.parameterNames;
-      let numNames = names ? names.length : 0;
       let optionalStart = this.requiredParameters;
       let restIndex = this.hasRest ? numParameters - 1 : -1;
       for (let i = 0; i < numParameters; ++i, ++index) {
-        if (index) sb.push(", ");
+        if (index) sb.push(validWat ? "%2C" : ", ");
         if (i == restIndex) sb.push("...");
-        if (i < numNames) sb.push((<string[]>names)[i]);
-        else sb.push(getDefaultParameterName(i));
-        if (i >= optionalStart && i != restIndex) sb.push("?: ");
-        else sb.push(": ");
-        sb.push(parameters[i].toString());
+        sb.push(parameters[i].toString(validWat));
+        if (i >= optionalStart && i != restIndex) sb.push("?");
       }
     }
-    sb.push(") => ");
-    sb.push(this.returnType.toString());
+    sb.push(validWat ? "%29=>" : ") => ");
+    sb.push(this.returnType.toString(validWat));
     return sb.join("");
   }
 
@@ -859,29 +846,6 @@ export class Signature {
     for (let i = 0; i < numParameterTypes; ++i) {
       cloneParameterTypes[i] = parameterTypes[i];
     }
-    var clone = new Signature(this.program, cloneParameterTypes, this.returnType, this.thisType);
-    var parameterNames = this.parameterNames;
-    if (parameterNames) {
-      let numParameterNames = parameterNames.length;
-      let cloneParameterNames = new Array<string>(numParameterNames);
-      for (let i = 0; i < numParameterNames; ++i) {
-        cloneParameterNames[i] = parameterNames[i];
-      }
-      clone.parameterNames = cloneParameterNames;
-    }
-    return clone;
+    return new Signature(this.program, cloneParameterTypes, this.returnType, this.thisType);
   }
-}
-
-// helpers
-
-// Cached default parameter names used where names are unknown.
-var cachedDefaultParameterNames: string[] = [];
-
-/** Gets the cached default parameter name for the specified index. */
-export function getDefaultParameterName(index: i32): string {
-  for (let i = cachedDefaultParameterNames.length; i <= index; ++i) {
-    cachedDefaultParameterNames.push("arg$" + i.toString());
-  }
-  return cachedDefaultParameterNames[index - 1];
 }

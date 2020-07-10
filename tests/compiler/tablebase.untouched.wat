@@ -15,7 +15,7 @@
  (func $tablebase/foo
   nop
  )
- (func "$~lib/function/Function<() => void>#get:index" (param $0 i32) (result i32)
+ (func $~lib/function/Function<%28%29=>void>#get:index (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
@@ -25,7 +25,7 @@
   i32.eq
   drop
   global.get $tablebase/staticFunction
-  call "$~lib/function/Function<() => void>#get:index"
+  call $~lib/function/Function<%28%29=>void>#get:index
   i32.const 32
   i32.eq
   i32.eqz

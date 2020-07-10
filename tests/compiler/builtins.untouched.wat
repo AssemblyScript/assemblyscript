@@ -88,11 +88,11 @@
   local.get $1
   i32.add
  )
- (func "$~lib/function/Function<(a: i32, b: i32) => i32>#get:index" (param $0 i32) (result i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func "$~lib/function/Function<(a: i32, b: i32) => i32>#get:name" (param $0 i32) (result i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name (param $0 i32) (result i32)
   i32.const 32
  )
  (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
@@ -308,10 +308,10 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func "$~lib/function/Function<(a: i32, b: i32) => i32>#get:length" (param $0 i32) (result i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length (param $0 i32) (result i32)
   i32.const 2
  )
- (func "$~lib/function/Function<(a: i32, b: i32) => i32>#toString" (param $0 i32) (result i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString (param $0 i32) (result i32)
   i32.const 160
  )
  (func $~lib/atomics/Atomics.isLockFree (param $0 i32) (result i32)
@@ -1217,7 +1217,7 @@
   i32.const 2
   i32.const 3
   global.get $builtins/fn
-  call "$~lib/function/Function<(a: i32, b: i32) => i32>#get:index"
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index
   call_indirect (type $i32_i32_=>_i32)
   i32.eq
   i32.eqz
@@ -1230,7 +1230,7 @@
    unreachable
   end
   global.get $builtins/fn
-  call "$~lib/function/Function<(a: i32, b: i32) => i32>#get:name"
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name
   local.tee $0
   i32.const 32
   call $~lib/string/String.__eq
@@ -1244,7 +1244,7 @@
    unreachable
   end
   global.get $builtins/fn
-  call "$~lib/function/Function<(a: i32, b: i32) => i32>#get:length"
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length
   i32.const 2
   i32.eq
   i32.eqz
@@ -1257,7 +1257,7 @@
    unreachable
   end
   global.get $builtins/fn
-  call "$~lib/function/Function<(a: i32, b: i32) => i32>#get:length"
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length
   i32.const 2
   i32.eq
   i32.eqz
@@ -1270,7 +1270,7 @@
    unreachable
   end
   global.get $builtins/fn
-  call "$~lib/function/Function<(a: i32, b: i32) => i32>#toString"
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString
   local.tee $1
   i32.const 160
   call $~lib/string/String.__eq

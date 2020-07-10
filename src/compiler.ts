@@ -7073,7 +7073,7 @@ export class Compiler extends DiagnosticEmitter {
       // the example above essentially `t2=1, t1=(t1 = 2)`.
       let paramExpr = operands![i];
       let paramType = parameterTypes[i];
-      let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), paramType, usedLocals);
+      let argumentLocal = flow.addScopedLocal(instance.getParameterName(i), paramType, usedLocals);
       findUsedLocals(paramExpr, usedLocals);
       // inlining is aware of wrap/nonnull states:
       if (!previousFlow.canOverflow(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
@@ -7119,7 +7119,7 @@ export class Compiler extends DiagnosticEmitter {
         initType,
         Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
       );
-      let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), initType);
+      let argumentLocal = flow.addScopedLocal(instance.getParameterName(i), initType);
       if (!flow.canOverflow(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
       if (flow.isNonnull(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
       if (initType.isManaged) {
@@ -8167,10 +8167,8 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // check non-omitted parameter types
-      let parameterNames = new Array<string>(numPresentParameters);
       for (let i = 0; i < numPresentParameters; ++i) {
         let parameterNode = parameterNodes[i];
-        parameterNames[i] = parameterNode.name.text; // use actual name
         if (!isTypeOmitted(parameterNode.type)) {
           let resolvedType = this.resolver.resolveType(
             parameterNode.type,
@@ -8239,7 +8237,6 @@ export class Compiler extends DiagnosticEmitter {
 
       let signature = new Signature(this.program, parameterTypes, returnType, thisType);
       signature.requiredParameters = numParameters; // !
-      signature.parameterNames = parameterNames;
       instance = new Function(
         prototype.name,
         prototype,
