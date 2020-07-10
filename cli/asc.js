@@ -283,7 +283,7 @@ exports.main = function main(argv, options, callback) {
   while (asconfig) {
     // merge target first, then merge options, then merge extended asconfigs
     if (asconfig.targets && asconfig.targets[target]) {
-      args = optionsUtil.merge(exports.options, args, asconfig.targets[target]);
+      args = optionsUtil.merge(exports.options, asconfig.targets[target], args);
     }
     if (asconfig.options) {
       if (asconfig.options.transform) {
@@ -298,7 +298,7 @@ exports.main = function main(argv, options, callback) {
           return p;
         });
       }
-      args = optionsUtil.merge(exports.options, args, asconfig.options);
+      args = optionsUtil.merge(exports.options, asconfig.options, args);
     }
 
     // entries are added to the compilation
@@ -332,6 +332,9 @@ exports.main = function main(argv, options, callback) {
       asconfig = null; // finished resolving the configuration chain
     }
   }
+
+  exports.args = args;
+  exports.argv = argv;
 
   // This method resolves a path relative to the baseDir instead of process.cwd()
   function resolve(arg) {

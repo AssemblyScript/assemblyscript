@@ -1,0 +1,8 @@
+{
+  "target": {
+    "release": {},
+    "debug": {
+      "debug": true
+    }
+  }  
+}
