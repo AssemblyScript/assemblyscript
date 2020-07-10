@@ -34,7 +34,6 @@ import {
   Global,
   TypeDefinition,
   TypedElement,
-  FunctionTarget,
   IndexSignature,
   isTypedElement,
   InterfacePrototype,
@@ -202,7 +201,7 @@ export class Resolver extends DiagnosticEmitter {
           }
         }
         if (node.isNullable) {
-          if (type.is(TypeFlags.REFERENCE)) return type.asNullable();
+          if (type.isInternalReference) return type.asNullable();
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Type_0_cannot_be_nullable,
@@ -280,15 +279,12 @@ export class Resolver extends DiagnosticEmitter {
         }
         let type = typeDefinition.type;
         if (node.isNullable) {
-          if (!type.is(TypeFlags.REFERENCE)) {
-            if (reportMode == ReportMode.REPORT) {
-              this.error(
-                DiagnosticCode.Type_0_cannot_be_nullable,
-                nameNode.range, nameNode.identifier.text
-              );
-            }
-          } else {
-            return type.asNullable();
+          if (type.isInternalReference) return type.asNullable();
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Type_0_cannot_be_nullable,
+              nameNode.range, nameNode.identifier.text
+            );
           }
         }
         return type;
@@ -330,15 +326,12 @@ export class Resolver extends DiagnosticEmitter {
       );
       if (!type) return null;
       if (node.isNullable) {
-        if (!type.is(TypeFlags.REFERENCE)) {
-          if (reportMode == ReportMode.REPORT) {
-            this.error(
-              DiagnosticCode.Type_0_cannot_be_nullable,
-              nameNode.range, nameNode.identifier.text
-            );
-          }
-        } else {
-          return type.asNullable();
+        if (type.isInternalReference) return type.asNullable();
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_0_cannot_be_nullable,
+            nameNode.range, nameNode.identifier.text
+          );
         }
       }
       return type;
@@ -561,19 +554,11 @@ export class Resolver extends DiagnosticEmitter {
     }
     var typeArgument = this.resolveType(typeArgumentNodes[0], ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
-    var classReference = typeArgument.classReference;
-    if (!classReference) {
-      if (reportMode == ReportMode.REPORT) {
-        this.error(
-          DiagnosticCode.Index_signature_is_missing_in_type_0,
-          typeArgumentNodes[0].range, typeArgument.toString()
-        );
-      }
-      return null;
+    var classReference = typeArgument.getClassOrWrapper(this.program);
+    if (classReference) {
+      let overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
+      if (overload) return overload.signature.returnType;
     }
-
-    var overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
-    if (overload) return overload.signature.returnType;
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -607,17 +592,15 @@ export class Resolver extends DiagnosticEmitter {
     }
     var typeArgument = this.resolveType(typeArgumentNodes[0], ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
-    var signatureReference = typeArgument.signatureReference;
-    if (!signatureReference) {
-      if (reportMode == ReportMode.REPORT) {
-        this.error(
-          DiagnosticCode.Type_0_has_no_call_signatures,
-          typeArgumentNodes[0].range, typeArgument.toString()
-        );
-      }
-      return null;
+    var signatureReference = typeArgument.getSignature();
+    if (signatureReference) return signatureReference.returnType;
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Type_0_has_no_call_signatures,
+        typeArgumentNodes[0].range, typeArgument.toString()
+      );
     }
-    return signatureReference.returnType;
+    return null;
   }
 
   /** Resolves a type name to the program element it refers to. */
@@ -889,31 +872,20 @@ export class Resolver extends DiagnosticEmitter {
     if (isTypedElement(kind)) {
       let type = (<TypedElement>element).type;
       assert(type != Type.void);
-      let classReference = type.classReference;
+      let classReference = type.getClassOrWrapper(this.program);
       if (classReference) {
         let wrappedType = classReference.wrappedType;
         if (wrappedType) type = wrappedType;
       }
       return type;
     }
-    if (kind == ElementKind.FUNCTION_TARGET) {
-      return (<FunctionTarget>element).type;
-    }
     return null;
   }
 
   /** Gets the element of a concrete type. */
   getElementOfType(type: Type): Element | null {
-    if (type.is(TypeFlags.REFERENCE)) {
-      let classReference = type.classReference;
-      if (classReference) return classReference;
-      let signatureReference = assert(type.signatureReference);
-      return signatureReference.asFunctionTarget(this.program);
-    } else if (type != Type.void) {
-      let wrapperClasses = this.program.wrapperClasses;
-      assert(wrapperClasses.has(type));
-      return assert(wrapperClasses.get(type));
-    }
+    let classReference = type.getClassOrWrapper(this.program);
+    if (classReference) return classReference;
     return null;
   }
 
@@ -1219,10 +1191,18 @@ export class Resolver extends DiagnosticEmitter {
       case NodeKind.TRUE:
       case NodeKind.FALSE: return Type.bool;
       case NodeKind.NULL: {
-        let classReference = ctxType.classReference;
-        return ctxType.is(TypeFlags.REFERENCE) && classReference !== null
-          ? classReference.type.asNullable()
-          : this.program.options.usizeType; // TODO: anyref context?
+        let classReference = ctxType.getClass();
+        if (classReference) {
+          return classReference.type.asNullable();
+        } else {
+          let signatureReference = ctxType.getSignature();
+          if (signatureReference) {
+            return signatureReference.type.asNullable();
+          } else if (ctxType.isExternalReference) {
+            return Type.anyref.asNullable();
+          }
+        }
+        return this.program.options.usizeType;
       }
     }
     var element = this.lookupIdentifierExpression(node, ctxFlow, ctxElement, reportMode);
@@ -1284,20 +1264,15 @@ export class Resolver extends DiagnosticEmitter {
         let variableLikeElement = <VariableLikeElement>target;
         let type = variableLikeElement.type;
         assert(type != Type.void);
-        let classReference = type.classReference;
+        let classReference = type.getClassOrWrapper(this.program);
         if (!classReference) {
-          let wrapperClasses = this.program.wrapperClasses;
-          if (wrapperClasses.has(type)) {
-            classReference = assert(wrapperClasses.get(type));
-          } else {
-            if (reportMode == ReportMode.REPORT) {
-              this.error(
-                DiagnosticCode.Property_0_does_not_exist_on_type_1,
-                node.property.range, propertyName, variableLikeElement.type.toString()
-              );
-            }
-            return null;
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Property_0_does_not_exist_on_type_1,
+              node.property.range, propertyName, variableLikeElement.type.toString()
+            );
           }
+          return null;
         }
         target = classReference;
         break;
@@ -1312,20 +1287,15 @@ export class Resolver extends DiagnosticEmitter {
         let propertyInstance = <Property>target;
         let getterInstance = assert(propertyInstance.getterInstance); // must have a getter
         let type = getterInstance.signature.returnType;
-        let classReference = type.classReference;
+        let classReference = type.getClassOrWrapper(this.program);
         if (!classReference) {
-          let wrapperClasses = this.program.wrapperClasses;
-          if (wrapperClasses.has(type)) {
-            classReference = assert(wrapperClasses.get(type));
-          } else {
-            if (reportMode == ReportMode.REPORT) {
-              this.error(
-                DiagnosticCode.Property_0_does_not_exist_on_type_1,
-                node.property.range, propertyName, type.toString()
-              );
-            }
-            return null;
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Property_0_does_not_exist_on_type_1,
+              node.property.range, propertyName, type.toString()
+            );
           }
+          return null;
         }
         target = classReference;
         break;
@@ -1347,25 +1317,21 @@ export class Resolver extends DiagnosticEmitter {
           return null;
         }
         let returnType = indexedGet.signature.returnType;
-        let classReference = returnType.classReference;
+        let classReference = returnType.getClassOrWrapper(this.program);
         if (!classReference) {
-          let wrapperClasses = this.program.wrapperClasses;
-          if (wrapperClasses.has(returnType)) {
-            classReference = assert(wrapperClasses.get(returnType));
-          } else {
-            if (reportMode == ReportMode.REPORT) {
-              this.error(
-                DiagnosticCode.Property_0_does_not_exist_on_type_1,
-                node.property.range, propertyName, returnType.toString()
-              );
-            }
-            return null;
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Property_0_does_not_exist_on_type_1,
+              node.property.range, propertyName, returnType.toString()
+            );
           }
+          return null;
         }
         target = classReference;
         break;
       }
-      case ElementKind.FUNCTION_PROTOTYPE: { // function Symbol() + type Symbol = _Symbol
+      case ElementKind.FUNCTION_PROTOTYPE: {
+        // Function with shadow type, i.e. function Symbol() + type Symbol = _Symbol
         let shadowType = target.shadowType;
         if (shadowType) {
           if (!shadowType.is(CommonFlags.RESOLVED)) {
@@ -1375,7 +1341,18 @@ export class Resolver extends DiagnosticEmitter {
           let classReference = shadowType.type.classReference;
           if (classReference) target = classReference.prototype;
           break;
+        } else if (!target.is(CommonFlags.GENERIC)) {
+          // Inherit from 'Function' if not overridden, i.e. fn.call
+          let members = target.members;
+          if (!members || !members.has(propertyName)) {
+            let functionInstance = this.resolveFunction(<FunctionPrototype>target, null, uniqueMap<string,Type>(), ReportMode.SWALLOW);
+            if (functionInstance) {
+              let wrapper = functionInstance.type.getClassOrWrapper(this.program);
+              if (wrapper) target = wrapper;
+            }
+          }
         }
+        break;
       }
     }
 
@@ -1493,9 +1470,9 @@ export class Resolver extends DiagnosticEmitter {
     var targetExpression = node.expression;
     var targetType = this.resolveExpression(targetExpression, ctxFlow, ctxType, reportMode);
     if (!targetType) return null;
-    if (targetType.is(TypeFlags.REFERENCE)) {
-      let classReference = targetType.classReference;
-      while (classReference) {
+    let classReference = targetType.getClassOrWrapper(this.program);
+    if (classReference) {
+      do {
         let indexSignature = classReference.indexSignature;
         if (indexSignature) {
           this.currentThisExpression = targetExpression;
@@ -1503,7 +1480,7 @@ export class Resolver extends DiagnosticEmitter {
           return indexSignature;
         }
         classReference = classReference.base;
-      }
+      } while(classReference);
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
@@ -1546,7 +1523,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Contextual type. */
     ctxType: Type
   ): Type {
-    if (!ctxType.is(TypeFlags.REFERENCE)) {
+    if (ctxType.isValue) {
       // compile to contextual type if matching
       switch (ctxType.kind) {
         case TypeKind.I8: {
@@ -1754,16 +1731,12 @@ export class Resolver extends DiagnosticEmitter {
       case Token.MINUS_MINUS: {
         let type = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
         if (!type) return null;
-        if (type.is(TypeFlags.REFERENCE)) {
-          let classReference = type.classReference;
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.fromUnaryPrefixToken(operator));
-            if (overload) return overload.signature.returnType;
-            let wrappedType = classReference.wrappedType;
-            if (wrappedType) type = wrappedType;
-          }
+        let classReference = type.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.fromUnaryPrefixToken(operator));
+          if (overload) return overload.signature.returnType;
         }
-        if (!type.isAny(TypeFlags.FLOAT | TypeFlags.INTEGER) || type.is(TypeFlags.REFERENCE)) {
+        if (!type.isNumericValue) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
@@ -1777,26 +1750,22 @@ export class Resolver extends DiagnosticEmitter {
       case Token.EXCLAMATION: {
         let type = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
         if (!type) return null;
-        if (type.is(TypeFlags.REFERENCE)) {
-          let classReference = type.classReference;
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.NOT);
-            if (overload) return overload.signature.returnType;
-          }
+        let classReference = type.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.NOT);
+          if (overload) return overload.signature.returnType;
         }
         return Type.bool; // incl. references
       }
       case Token.TILDE: {
         let type = this.resolveExpression(operand, ctxFlow, ctxType, reportMode);
         if (!type) return null;
-        if (type.is(TypeFlags.REFERENCE)) {
-          let classReference = type.classReference;
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.BITWISE_NOT);
-            if (overload) return overload.signature.returnType;
-          }
+        let classReference = type.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.BITWISE_NOT);
+          if (overload) return overload.signature.returnType;
         }
-        if (!type.isAny(TypeFlags.FLOAT | TypeFlags.INTEGER) || !type.is(TypeFlags.VALUE)) {
+        if (!type.isNumericValue) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
@@ -1854,14 +1823,12 @@ export class Resolver extends DiagnosticEmitter {
       case Token.MINUS_MINUS: {
         let type = this.resolveExpression(node.operand, ctxFlow, ctxType, reportMode);
         if (!type) return null;
-        if (type.is(TypeFlags.REFERENCE)) {
-          let classReference = type.classReference;
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.fromUnaryPostfixToken(operator));
-            if (overload) return overload.signature.returnType;
-          }
+        let classReference = type.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.fromUnaryPostfixToken(operator));
+          if (overload) return overload.signature.returnType;
         }
-        if (!type.isAny(TypeFlags.INTEGER | TypeFlags.FLOAT) || !type.is(TypeFlags.VALUE)) {
+        if (!type.isNumericValue) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
@@ -1944,14 +1911,12 @@ export class Resolver extends DiagnosticEmitter {
       case Token.GREATERTHAN_EQUALS: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
-        if (leftType.is(TypeFlags.REFERENCE)) {
-          let classReference = leftType.classReference;
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
-            if (overload) return overload.signature.returnType;
-          }
+        let classReference = leftType.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) return overload.signature.returnType;
         }
-        if (!leftType.isAny(TypeFlags.INTEGER | TypeFlags.FLOAT) || leftType.is(TypeFlags.REFERENCE)) {
+        if (!leftType.isNumericValue) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
@@ -1969,12 +1934,10 @@ export class Resolver extends DiagnosticEmitter {
       case Token.EXCLAMATION_EQUALS: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
-        if (leftType.is(TypeFlags.REFERENCE)) {
-          let classReference = leftType.classReference;
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
-            if (overload) return overload.signature.returnType;
-          }
+        let classReference = leftType.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) return overload.signature.returnType;
         }
         return Type.bool;
       }
@@ -1995,12 +1958,10 @@ export class Resolver extends DiagnosticEmitter {
       case Token.PERCENT: { // mod has special logic, but also behaves like this
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
-        if (leftType.is(TypeFlags.REFERENCE)) {
-          let classReference = leftType.classReference;
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
-            if (overload) return overload.signature.returnType;
-          }
+        let classReference = leftType.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) return overload.signature.returnType;
         }
         let rightType = this.resolveExpression(right, ctxFlow, leftType, reportMode);
         if (!rightType) return null;
@@ -2021,12 +1982,10 @@ export class Resolver extends DiagnosticEmitter {
       case Token.ASTERISK_ASTERISK: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
-        if (leftType.is(TypeFlags.REFERENCE)) {
-          let classReference = leftType.classReference;
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
-            if (overload) return overload.signature.returnType;
-          }
+        let classReference = leftType.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) return overload.signature.returnType;
         }
         let rightType = this.resolveExpression(right, ctxFlow, leftType, reportMode);
         if (!rightType) return null;
@@ -2049,14 +2008,12 @@ export class Resolver extends DiagnosticEmitter {
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
-        if (leftType.is(TypeFlags.REFERENCE)) {
-          let classReference = leftType.classReference;
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
-            if (overload) return overload.signature.returnType;
-          }
+        let classReference = leftType.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) return overload.signature.returnType;
         }
-        if (!leftType.is(TypeFlags.INTEGER) || leftType.is(TypeFlags.REFERENCE)) {
+        if (!leftType.isIntegerValue) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
@@ -2075,17 +2032,15 @@ export class Resolver extends DiagnosticEmitter {
       case Token.CARET: {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
-        if (leftType.is(TypeFlags.REFERENCE)) {
-          let classReference = leftType.classReference;
-          if (classReference) {
-            let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
-            if (overload) return overload.signature.returnType;
-          }
+        let classReference = leftType.getClassOrWrapper(this.program);
+        if (classReference) {
+          let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
+          if (overload) return overload.signature.returnType;
         }
         let rightType = this.resolveExpression(right, ctxFlow, ctxType, reportMode);
         if (!rightType) return null;
         let commonType = Type.commonDenominator(leftType, rightType, false);
-        if (!commonType || !commonType.is(TypeFlags.INTEGER) || commonType.is(TypeFlags.REFERENCE)) {
+        if (!commonType || !commonType.isIntegerValue) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -2247,22 +2202,18 @@ export class Resolver extends DiagnosticEmitter {
           (<IntegerLiteralExpression>node).value,
           ctxType
         );
-        let wrapperClasses = this.program.wrapperClasses;
-        assert(wrapperClasses.has(intType));
-        return assert(wrapperClasses.get(intType));
+        return assert(intType.getClassOrWrapper(this.program));
       }
       case LiteralKind.FLOAT: {
         let fltType = ctxType == Type.f32 ? Type.f32 : Type.f64;
-        let wrapperClasses = this.program.wrapperClasses;
-        assert(wrapperClasses.has(fltType));
-        return assert(wrapperClasses.get(fltType));
+        return assert(fltType.getClassOrWrapper(this.program));
       }
       case LiteralKind.STRING: {
         return this.program.stringInstance;
       }
       case LiteralKind.ARRAY: {
-        let classReference = ctxType.classReference;
-        if (ctxType.is(TypeFlags.REFERENCE) && classReference !== null && classReference.prototype == this.program.arrayPrototype) {
+        let classReference = ctxType.getClass();
+        if (classReference !== null && classReference.prototype == this.program.arrayPrototype) {
           return this.getElementOfType(ctxType);
         }
         // otherwise infer, ignoring ctxType
@@ -2300,8 +2251,7 @@ export class Resolver extends DiagnosticEmitter {
         }
         if (
           numNullLiterals > 0 &&
-          elementType.is(TypeFlags.REFERENCE) &&
-          !elementType.is(TypeFlags.HOST) // TODO: anyref isn't nullable as-is
+          elementType.isInternalReference
         ) {
           elementType = elementType.asNullable();
         }
@@ -2400,14 +2350,20 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.FIELD: {
         let varType = (<VariableLikeElement>target).type;
         let varElement = this.getElementOfType(varType);
-        if (!varElement || varElement.kind != ElementKind.FUNCTION_TARGET) {
+        if (!varElement || varElement.kind != ElementKind.CLASS) {
           break;
         }
         target = varElement;
         // fall-through
       }
-      case ElementKind.FUNCTION_TARGET: {
-        return (<FunctionTarget>target).signature.returnType;
+      case ElementKind.CLASS: {
+        let typeArguments = (<Class>target).getTypeArgumentsTo(this.program.functionPrototype);
+        if (typeArguments !== null && typeArguments.length > 0) {
+          let ftype = typeArguments[0];
+          let signatureReference = assert(ftype.signatureReference);
+          return signatureReference.returnType;
+        }
+        break;
       }
     }
     if (reportMode == ReportMode.REPORT) {
@@ -2460,9 +2416,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    var wrapperClasses = this.program.wrapperClasses;
-    assert(wrapperClasses.has(Type.bool));
-    return assert(wrapperClasses.get(Type.bool));
+    return assert(Type.bool.getClassOrWrapper(this.program));
   }
 
   /** Resolves an instanceof expression to its static type. */

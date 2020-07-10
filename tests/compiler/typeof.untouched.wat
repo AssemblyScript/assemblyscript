@@ -14,7 +14,8 @@
  (data (i32.const 160) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00b\00o\00o\00l\00e\00a\00n\00")
  (data (i32.const 192) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001\00")
  (data (i32.const 224) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00s\00t\00r\00i\00n\00g\00")
- (data (i32.const 256) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00u\00n\00d\00e\00f\00i\00n\00e\00d\00")
+ (data (i32.const 256) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 288) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00u\00n\00d\00e\00f\00i\00n\00e\00d\00")
  (table $0 2 funcref)
  (elem (i32.const 1) $start:typeof~anonymous|0)
  (global $typeof/SomeNamespace.a i32 (i32.const 1))
@@ -25,12 +26,12 @@
  (global $typeof/I (mut i64) (i64.const 1))
  (global $typeof/F (mut f64) (f64.const 1))
  (global $typeof/s (mut i32) (i32.const 208))
- (global $typeof/fn (mut i32) (i32.const 1))
+ (global $typeof/fn (mut i32) (i32.const 272))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $typeof/c (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 292))
+ (global $~lib/heap/__heap_base i32 (i32.const 324))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
@@ -363,7 +364,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3
+   i32.const 4
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -656,8 +657,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 272
-  i32.const 272
+  i32.const 304
+  i32.const 304
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -670,8 +671,8 @@
   end
   global.get $typeof/c
   drop
-  i32.const 272
-  i32.const 272
+  i32.const 304
+  i32.const 304
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -684,8 +685,8 @@
   end
   global.get $typeof/c
   drop
-  i32.const 272
-  i32.const 272
+  i32.const 304
+  i32.const 304
   call $~lib/string/String.__eq
   i32.eqz
   if

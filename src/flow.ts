@@ -951,12 +951,12 @@ export class Flow {
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
       let local = localsByIndex[i];
       let type = local.type;
-      if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+      if (type.isShortIntegerValue) {
         if (before.isLocalFlag(i, LocalFlags.WRAPPED) && !after.isLocalFlag(i, LocalFlags.WRAPPED)) {
           return true;
         }
       }
-      if (type.is(TypeFlags.REFERENCE)) {
+      if (type.isNullableReference) {
         if (before.isLocalFlag(i, LocalFlags.NONNULL) && !after.isLocalFlag(i, LocalFlags.NONNULL)) {
           return true;
         }
@@ -986,7 +986,7 @@ export class Flow {
 
   /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
   isNonnull(expr: ExpressionRef, type: Type): bool {
-    if (!type.is(TypeFlags.NULLABLE)) return true;
+    if (!type.isNullableReference) return true;
     // below, only teeLocal/getLocal are relevant because these are the only expressions that
     // depend on a dynamic nullable state (flag = LocalFlags.NONNULL), while everything else
     // has already been handled by the nullable type check above.
@@ -994,11 +994,11 @@ export class Flow {
       case ExpressionId.LocalSet: {
         if (!isLocalTee(expr)) break;
         let local = this.parentFunction.localsByIndex[getLocalSetIndex(expr)];
-        return !local.type.is(TypeFlags.NULLABLE) || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
+        return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
       }
       case ExpressionId.LocalGet: {
         let local = this.parentFunction.localsByIndex[getLocalGetIndex(expr)];
-        return !local.type.is(TypeFlags.NULLABLE) || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
+        return !local.type.isNullableReference || this.isLocalFlag(local.index, LocalFlags.NONNULL, false);
       }
     }
     return false;
@@ -1219,7 +1219,7 @@ export class Flow {
     assert(type != Type.void);
 
     // types other than i8, u8, i16, u16 and bool do not overflow
-    if (!type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) return false;
+    if (!type.isShortIntegerValue) return false;
 
     var operand: ExpressionRef;
     switch (getExpressionId(expr)) {
@@ -1347,7 +1347,7 @@ export class Flow {
           // wrapped, it can't overflow.
           case BinaryOp.ShrU32: {
             let shift = 32 - type.size;
-            return type.is(TypeFlags.SIGNED)
+            return type.isSignedIntegerValue
               ? !(
                   getExpressionId(operand = getBinaryRight(expr)) == ExpressionId.Const &&
                   getConstValueI32(operand) > shift // must clear MSB
@@ -1492,9 +1492,11 @@ export class Flow {
 
 /** Tests if a conversion from one type to another can technically overflow. */
 function canConversionOverflow(fromType: Type, toType: Type): bool {
-  return !fromType.is(TypeFlags.INTEGER) // non-i32 locals or returns
-      || fromType.size > toType.size
-      || fromType.is(TypeFlags.SIGNED) != toType.is(TypeFlags.SIGNED);
+  return toType.isShortIntegerValue && (
+    !fromType.isIntegerValue ||                                    // i.e. float to small int
+    fromType.size > toType.size ||                                 // larger int to small int
+    fromType.isSignedIntegerValue != toType.isSignedIntegerValue   // signedness mismatch
+  );
 }
 
 /** Finds all indexes of locals used in the specified expression. */

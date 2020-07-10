@@ -189,6 +189,7 @@
  )
  (func $assert-nonnull/testFn (param $0 i32) (result i32)
   local.get $0
+  i32.load
   call_indirect (type $none_=>_i32)
  )
  (func $assert-nonnull/testFn2 (param $0 i32) (result i32)
@@ -203,11 +204,13 @@
    unreachable
   end
   local.get $0
+  i32.load
   call_indirect (type $none_=>_i32)
  )
  (func $assert-nonnull/testRet (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
+  i32.load
   call_indirect (type $none_=>_i32)
   local.tee $1
   local.get $1
@@ -224,12 +227,14 @@
  (func $assert-nonnull/testObjFn (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
+  i32.load
   call_indirect (type $none_=>_i32)
  )
  (func $assert-nonnull/testObjRet (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
+  i32.load
   call_indirect (type $none_=>_i32)
   local.tee $1
   local.get $1

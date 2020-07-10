@@ -216,10 +216,12 @@
  (func $retain-release/provideRefIndirect (param $0 i32)
   global.get $retain-release/REF
   local.get $0
+  i32.load
   call_indirect (type $i32_=>_none)
  )
  (func $retain-release/receiveRefIndirect (param $0 i32)
   local.get $0
+  i32.load
   call_indirect (type $none_=>_i32)
   drop
  )

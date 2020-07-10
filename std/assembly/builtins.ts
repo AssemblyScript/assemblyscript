@@ -168,6 +168,10 @@ export declare function assert<T>(isTrueish: T, message?: string): T;
 @unsafe @builtin
 export declare function unchecked<T>(expr: T): T;
 
+// @ts-ignore: decorator	
+@unsafe @builtin
+export declare function call_indirect<T>(index: u32, ...args: auto[]): T;
+
 // @ts-ignore: decorator
 @builtin
 export declare function instantiate<T>(...args: auto[]): T;

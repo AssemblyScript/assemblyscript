@@ -41,6 +41,12 @@ export function writeI32(value: i32, buffer: Uint8Array, offset: i32): void {
   buffer[offset + 3] = value >>> 24;
 }
 
+/** Writes a 32-bit integer as a 64-bit integer to the specified buffer. */
+export function writeI32AsI64(value: i32, buffer: Uint8Array, offset: i32, unsigned: bool = false): void {
+  writeI32(value, buffer, offset);
+  writeI32(unsigned || value >= 0 ? 0 : -1, buffer, offset + 4);
+}
+
 /** Reads a 64-bit integer from the specified buffer. */
 export function readI64(buffer: Uint8Array, offset: i32): i64 {
   var lo = readI32(buffer, offset);
@@ -52,6 +58,12 @@ export function readI64(buffer: Uint8Array, offset: i32): i64 {
 export function writeI64(value: i64, buffer: Uint8Array, offset: i32): void {
   writeI32(i64_low(value), buffer, offset);
   writeI32(i64_high(value), buffer, offset + 4);
+}
+
+/** Writes a 64-bit integer as a 32-bit integer to the specified buffer. */
+export function writeI64AsI32(value: i64, buffer: Uint8Array, offset: i32, unsigned: bool = false): void {
+  assert(unsigned ? i64_is_u32(value) : i64_is_i32(value));
+  writeI32(i64_low(value), buffer, offset);
 }
 
 /** Reads a 32-bit float from the specified buffer. */

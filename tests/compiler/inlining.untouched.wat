@@ -8,13 +8,14 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 64) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
  (table $0 2 funcref)
  (elem (i32.const 1) $inlining/func_fe~anonymous|0)
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 56))
+ (global $~lib/heap/__heap_base i32 (i32.const 88))
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
  (start $~start)
@@ -164,7 +165,10 @@
   i32.const 2
   i32.const 1
   global.set $~argumentsLength
-  i32.const 1
+  i32.const 80
+  call $~lib/rt/stub/__retain
+  local.tee $2
+  i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 2
   i32.eq
@@ -180,9 +184,9 @@
   i32.const 42
   local.set $6
   i32.const 2
-  local.set $2
+  local.set $3
   local.get $6
-  local.get $2
+  local.get $3
   i32.add
   i32.const 44
   i32.eq
@@ -195,10 +199,10 @@
   i32.const 43
   local.set $5
   i32.const 3
-  local.set $2
+  local.set $3
   local.get $4
   call $~lib/rt/stub/__retain
-  local.tee $2
+  local.tee $3
   i32.const 123
   i32.eq
   i32.eqz
@@ -211,6 +215,8 @@
    unreachable
   end
   local.get $2
+  call $~lib/rt/stub/__release
+  local.get $3
   call $~lib/rt/stub/__release
   local.get $7
   call $~lib/rt/stub/__release
@@ -336,7 +342,7 @@
   i32.eqz
   if
    i32.const 16
-   i32.const 4
+   i32.const 5
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $1
@@ -355,7 +361,7 @@
   i32.eqz
   if
    i32.const 8
-   i32.const 5
+   i32.const 6
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $3

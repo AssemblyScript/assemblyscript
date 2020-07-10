@@ -13,6 +13,12 @@
  (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 64) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
  (data (i32.const 128) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s\00")
+ (data (i32.const 176) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 208) "\08\00\00\00\01\00\00\00\05\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00")
+ (data (i32.const 240) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00")
+ (data (i32.const 272) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00")
+ (data (i32.const 304) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00")
+ (data (i32.const 336) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00")
  (table $0 7 funcref)
  (elem (i32.const 1) $start:retain-return~anonymous|0 $start:retain-return~anonymous|1 $start:retain-return~anonymous|2 $start:retain-return~anonymous|3 $start:retain-return~anonymous|4 $start:retain-return~anonymous|5)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -20,15 +26,15 @@
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $retain-return/ref (mut i32) (i32.const 0))
- (global $retain-return/returnNewFnExpr (mut i32) (i32.const 1))
+ (global $retain-return/returnNewFnExpr (mut i32) (i32.const 192))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $retain-return/returnLocalFnExpr (mut i32) (i32.const 2))
- (global $retain-return/returnGlobalFnExpr (mut i32) (i32.const 3))
- (global $retain-return/returnNewFnBlock (mut i32) (i32.const 4))
- (global $retain-return/returnLocalFnBlock (mut i32) (i32.const 5))
- (global $retain-return/returnGlobalFnBlock (mut i32) (i32.const 6))
+ (global $retain-return/returnLocalFnExpr (mut i32) (i32.const 224))
+ (global $retain-return/returnGlobalFnExpr (mut i32) (i32.const 256))
+ (global $retain-return/returnNewFnBlock (mut i32) (i32.const 288))
+ (global $retain-return/returnLocalFnBlock (mut i32) (i32.const 320))
+ (global $retain-return/returnGlobalFnBlock (mut i32) (i32.const 352))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 176))
+ (global $~lib/heap/__heap_base i32 (i32.const 360))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -1608,63 +1614,75 @@
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnNewFnExpr
+  i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnNewFnExpr
+  i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   global.get $retain-return/ref
   i32.const 1
   global.set $~argumentsLength
   global.get $retain-return/returnLocalFnExpr
+  i32.load
   call_indirect (type $i32_=>_i32)
   call $~lib/rt/pure/__release
   global.get $retain-return/ref
   i32.const 1
   global.set $~argumentsLength
   global.get $retain-return/returnLocalFnExpr
+  i32.load
   call_indirect (type $i32_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnGlobalFnExpr
+  i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnGlobalFnExpr
+  i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnNewFnBlock
+  i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnNewFnBlock
+  i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnLocalFnBlock
+  i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnLocalFnBlock
+  i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnGlobalFnBlock
+  i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnGlobalFnBlock
+  i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
@@ -1834,27 +1852,51 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
+ (func "$~lib/function/Function<() => retain-return/Ref>#__visit_impl" (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
+ (func "$~lib/function/Function<(ref: retain-return/Ref) => retain-return/Ref>#__visit_impl" (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
-   block $switch$1$case$4
-    block $switch$1$case$2
+   block $switch$1$case$7
+    block $switch$1$case$6
+     block $switch$1$case$4
+      block $switch$1$case$2
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$2 $switch$1$case$6 $switch$1$case$7 $switch$1$default
+      end
+      return
+     end
      local.get $0
-     i32.const 8
-     i32.sub
      i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$2 $switch$1$default
+     local.tee $2
+     if
+      local.get $2
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     return
     end
+    local.get $0
+    local.get $1
+    call "$~lib/function/Function<() => retain-return/Ref>#__visit_impl"
     return
    end
    local.get $0
-   i32.load
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
+   local.get $1
+   call "$~lib/function/Function<(ref: retain-return/Ref) => retain-return/Ref>#__visit_impl"
    return
   end
   unreachable

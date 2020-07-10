@@ -38,7 +38,11 @@
  (data (i32.const 3048) "\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
  (data (i32.const 3088) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
  (data (i32.const 3104) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\001\00.\000\00")
- (data (i32.const 3136) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 3136) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 3168) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00")
+ (data (i32.const 3200) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00")
+ (data (i32.const 3232) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00")
+ (data (i32.const 3264) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
  (table $0 5 funcref)
  (elem (i32.const 1) $start:resolve-ternary~anonymous|0 $start:resolve-ternary~anonymous|1 $resolve-ternary/g1 $resolve-ternary/g2)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -53,11 +57,11 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $resolve-ternary/f1 i32 (i32.const 1))
- (global $resolve-ternary/f2 i32 (i32.const 2))
+ (global $resolve-ternary/f1 i32 (i32.const 3152))
+ (global $resolve-ternary/f2 i32 (i32.const 3184))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 3136))
- (global $~lib/heap/__heap_base i32 (i32.const 3164))
+ (global $~lib/rt/__rtti_base i32 (i32.const 3264))
+ (global $~lib/heap/__heap_base i32 (i32.const 3300))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
@@ -5109,6 +5113,12 @@
  (func $start:resolve-ternary
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   global.get $resolve-ternary/b
   if (result i32)
    i32.const 1
@@ -5155,9 +5165,14 @@
   global.get $resolve-ternary/b
   if (result i32)
    global.get $resolve-ternary/f1
+   call $~lib/rt/pure/__retain
+   local.tee $2
   else
    global.get $resolve-ternary/f2
+   call $~lib/rt/pure/__retain
+   local.tee $3
   end
+  i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 2
   i32.eq
@@ -5175,10 +5190,15 @@
   global.set $~argumentsLength
   global.get $resolve-ternary/b
   if (result i32)
-   i32.const 3
+   i32.const 3216
+   call $~lib/rt/pure/__retain
+   local.tee $4
   else
-   i32.const 4
+   i32.const 3248
+   call $~lib/rt/pure/__retain
+   local.tee $5
   end
+  i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 4
   i32.eq
@@ -5197,9 +5217,14 @@
   global.get $resolve-ternary/b
   if (result i32)
    global.get $resolve-ternary/f2
+   call $~lib/rt/pure/__retain
+   local.tee $6
   else
-   i32.const 4
+   i32.const 3248
+   call $~lib/rt/pure/__retain
+   local.tee $7
   end
+  i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 3
   i32.eq
@@ -5215,6 +5240,18 @@
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
   call $~lib/rt/pure/__release
  )
  (func $~start
@@ -5346,27 +5383,39 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
+ (func "$~lib/function/Function<(x: i32) => i32>#__visit_impl" (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
-   block $switch$1$case$4
-    block $switch$1$case$2
-     local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$default
+   block $switch$1$case$5
+    block $switch$1$case$4
+     block $switch$1$case$2
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$default
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.tee $2
+    if
+     local.get $2
+     local.get $1
+     call $~lib/rt/pure/__visit
     end
     return
    end
    local.get $0
-   i32.load
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
+   local.get $1
+   call "$~lib/function/Function<(x: i32) => i32>#__visit_impl"
    return
   end
   unreachable

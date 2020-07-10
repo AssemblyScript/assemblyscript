@@ -5,6 +5,7 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+// @ts-ignore: decorator
 @global const i64_zero: i64 = 0;
 
 // @ts-ignore: decorator
@@ -12,6 +13,12 @@
 
 // @ts-ignore: decorator
 @global const i64_neg_one: i64 = -1;
+
+// @ts-ignore: decorator
+@global @inline
+function i64_is<T>(value: T): bool {
+  return isInteger<T>() && sizeof<T>() == 8;
+}
 
 // @ts-ignore: decorator
 @global @inline
