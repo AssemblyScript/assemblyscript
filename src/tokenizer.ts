@@ -1462,18 +1462,13 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readDecimalFloat(): f64 {
-    // TODO: numeric separators (parseFloat can't handle these)
     var start = this.pos;
     var end = this.end;
     var text = this.source.text;
-    while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
-      ++this.pos;
-    }
+    this.readDecimalFloatPartial();
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
-      while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
-        ++this.pos;
-      }
+      this.readDecimalFloatPartial();
     }
     if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
@@ -1485,12 +1480,45 @@ export class Tokenizer extends DiagnosticEmitter {
         ) {
           ++this.pos;
         }
-        while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
-          ++this.pos;
-        }
+        this.readDecimalFloatPartial();
       }
     }
-    return parseFloat(text.substring(start, this.pos));
+    let floatString = text.substring(start, this.pos).replace(/_/g, '');
+    return parseFloat(floatString);
+  }
+
+  private readDecimalFloatPartial() {
+    let start = this.pos;
+    let end = this.end;
+    let text = this.source.text;
+    var sepEnd = start;
+
+    while (this.pos < end) {
+      let c = text.charCodeAt(this.pos);
+
+      if (c == CharCode._) {
+        if (sepEnd == this.pos) {
+          this.error(
+            sepEnd == start
+              ? DiagnosticCode.Numeric_separators_are_not_allowed_here
+              : DiagnosticCode.Multiple_consecutive_numeric_separators_are_not_permitted,
+            this.range(this.pos)
+          );
+        }
+        sepEnd = this.pos + 1;
+      } else if (!isDecimalDigit(c)) {
+        break;
+      }
+
+      ++this.pos;
+    }
+
+    if (this.pos != start && sepEnd == this.pos) {
+      this.error(
+        DiagnosticCode.Numeric_separators_are_not_allowed_here,
+        this.range(sepEnd - 1)
+      );
+    }
   }
 
   readHexFloat(): f64 {
