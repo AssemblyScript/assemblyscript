@@ -5,8 +5,7 @@
     "allowJs": false,
     "sourceMap": true,
     "target": "esnext",
-    "strict": true,
-    "lib": ["esnext", "esnext.string"]
+    "strict": true
   },
   "include": [
     "./**/*.ts"
