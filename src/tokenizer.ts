@@ -1465,10 +1465,11 @@ export class Tokenizer extends DiagnosticEmitter {
     var start = this.pos;
     var end = this.end;
     var text = this.source.text;
-    this.readDecimalFloatPartial(false);
+
+    let hasSep = this.readDecimalFloatPartial(false);
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
-      this.readDecimalFloatPartial();
+      hasSep = this.readDecimalFloatPartial() || hasSep;
     }
     if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
@@ -1480,18 +1481,21 @@ export class Tokenizer extends DiagnosticEmitter {
         ) {
           ++this.pos;
         }
-        this.readDecimalFloatPartial();
+        hasSep = this.readDecimalFloatPartial() || hasSep;
       }
     }
-    let floatString = text.substring(start, this.pos).replaceAll("_", "");
-    return parseFloat(floatString);
+    let result = text.substring(start, this.pos);
+    if (hasSep) result = result.replaceAll("_", "");
+    return parseFloat(result);
   }
 
-  private readDecimalFloatPartial(allowLeadingZeroSep: boolean = true): void {
+  /** Reads one decimal section of a float literal, returning true iff the literal had any separators. */
+  private readDecimalFloatPartial(allowLeadingZeroSep: bool = true): bool {
     let start = this.pos;
     let end = this.end;
     let text = this.source.text;
-    var sepEnd = start;
+    let sepEnd = start;
+    let hasSep = false;
 
     while (this.pos < end) {
       let c = text.charCodeAt(this.pos);
@@ -1511,6 +1515,7 @@ export class Tokenizer extends DiagnosticEmitter {
           );
         }
         sepEnd = this.pos + 1;
+        hasSep = true;
       } else if (!isDecimalDigit(c)) {
         break;
       }
@@ -1524,6 +1529,8 @@ export class Tokenizer extends DiagnosticEmitter {
         this.range(sepEnd - 1)
       );
     }
+
+    return hasSep;
   }
 
   readHexFloat(): f64 {
