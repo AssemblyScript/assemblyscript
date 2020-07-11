@@ -653,12 +653,14 @@ exports.main = function main(argv, options, callback) {
   // Validate the module if requested
   if (!args.noValidate) {
     stats.validateCount++;
+    let isValid;
     stats.validateTime += measure(() => {
-      if (!module.validate()) {
-        module.dispose();
-        return callback(Error("Validate error"));
-      }
+      isValid = module.validate();
     });
+    if (!isValid) {
+      module.dispose();
+      return callback(Error("validate error"));
+    }
   }
 
   // Set Binaryen-specific options
