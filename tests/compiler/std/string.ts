@@ -102,15 +102,37 @@ assert(parseInt("0001") == 1);
 assert(parseInt("0b101") == 0b101);
 assert(parseInt("0o707") == 0o707);
 assert(parseInt("0xf0f") == 0xf0f);
-assert(parseInt("0xF0F") == 0xf0f);
+assert(parseInt("0XF0F") == 0xf0f); // uppercase
 assert(parseInt("011") == 11); // not octal
 assert(parseInt("0x1g") == 1); // not valid
 assert(parseInt("-123") == -123);
 assert(parseInt("+123") == 123);
 assert(parseInt("-12.3") == -12);
+assert(parseInt("0", 0) == 0);
+assert(parseInt("0x0", 0) == 0);
+assert(parseInt("0b11", 16) == 0xb11);
+assert(parseInt("\u000A1") == 1); // from test262
+assert(parseInt("\u20281") == 1); // from test262
+assert(parseInt("\u20291") == 1); // from test262
+assert(Math.signbit(parseInt("-0")));
+assert(parseInt("0XABCDEF") == parseInt("ABCDEF", 16));
+assert(parseInt("36893488147419103232") == 36893488147419103000.0); // bigger than 2 ** 64 - 1
+assert(parseInt("36893488147419103232", 13) == 5.135857308667095e+21);
+assert(parseInt("-1000000000000000000000000", 10) == -1000000000000000000000000.0);
+assert(parseInt("0x10000000000000000000", 16) == 75557863725914323419136.0); // from test262
+assert(parseInt("1🔥") == 1);
+assert(parseInt("2badnum") == 2);
 
 assert(parseInt(" \t\n1") == 1);
 assert(parseInt(" \t\n0x02") == 2);
+assert(isNaN(parseInt("")));
+assert(isNaN(parseInt("-")));
+assert(isNaN(parseInt("+")));
+assert(isNaN(parseInt("123", 37)));
+assert(isNaN(parseInt("🔥")));
+assert(isNaN(parseInt("badnum")));
+assert(isNaN(F32.parseInt("badnum")));
+assert(isNaN(F64.parseInt("badnum")));
 
 assert(I32.parseInt("0x7FFFFFFF") == I32.MAX_VALUE);
 assert(I64.parseInt("0x7FFFFFFFFFFFFFFF") == I64.MAX_VALUE);

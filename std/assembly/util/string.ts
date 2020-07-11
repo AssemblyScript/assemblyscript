@@ -652,47 +652,68 @@ export function toUpper8(c: u32): u32 {
 export function strtol<T>(str: string, radix: i32 = 0): T {
   var len = str.length;
   if (!len) {
-    // @ts-ignore: cast
-    if (isFloat<T>()) return <T>NaN;
-    // @ts-ignore: cast
-    return <T>0;
+    if (isFloat<T>()) {
+      // @ts-ignore: cast
+      return <T>NaN;
+    } else {
+      // @ts-ignore: cast
+      return <T>0;
+    }
   }
 
   var ptr = changetype<usize>(str) /* + HEAD -> offset */;
   var code = <u32>load<u16>(ptr);
 
-  // determine sign
-  // @ts-ignore: cast
-  var sign: T = 1;
   // trim white spaces
   while (isSpace(code)) {
     code = <u32>load<u16>(ptr += 2);
     --len;
   }
-  if (code == CharCode.MINUS) {
+  // determine sign
+  // @ts-ignore
+  var sign: T = 1;
+  if (code == CharCode.MINUS || code == CharCode.PLUS) {
     if (!--len) {
-      // @ts-ignore: cast
-      if (isFloat<T>()) return <T>NaN;
-      // @ts-ignore: cast
-      return <T>0;
+      if (isFloat<T>()) {
+        // @ts-ignore: cast
+        return <T>NaN;
+      } else {
+        // @ts-ignore: cast
+        return <T>0;
+      }
     }
-    code = <u32>load<u16>(ptr += 2);
-    // @ts-ignore: type
-    sign = -1;
-  } else if (code == CharCode.PLUS) {
-    if (!--len) {
-      // @ts-ignore: cast
-      if (isFloat<T>()) return <T>NaN;
-      // @ts-ignore: cast
-      return <T>0;
+    if (code == CharCode.MINUS) {
+      // @ts-ignore: type
+      sign = -1;
     }
     code = <u32>load<u16>(ptr += 2);
   }
 
-  // determine radix
-  if (!radix) {
+  // See https://tc39.es/ecma262/#sec-parseint-string-radix
+  if (radix) {
+    if (radix < 2 || radix > 36) {
+      if (isFloat<T>()) {
+        // @ts-ignore: cast
+        return <T>NaN;
+      } else {
+        // @ts-ignore: cast
+        return <T>0;
+      }
+    }
+    // handle case as parseInt("0xFF", 16) by spec
+    if (radix == 16) {
+      if (
+        len > 2 &&
+        code == CharCode._0 &&
+        (<u32>load<u16>(ptr, 2) | 32) == CharCode.x
+      ) {
+        ptr += 4; len -= 2;
+      }
+    }
+  } else {
+    // determine radix by literal prefix
     if (code == CharCode._0 && len > 2) {
-      switch (<u32>load<u16>(ptr + 2) | 32) {
+      switch (<u32>load<u16>(ptr, 2) | 32) {
         case CharCode.b: {
           ptr += 4; len -= 2;
           radix = 2;
@@ -708,14 +729,9 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
           radix = 16;
           break;
         }
-        default: radix = 10;
       }
-    } else radix = 10;
-  } else if (radix < 2 || radix > 36) {
-    // @ts-ignore: cast
-    if (isFloat<T>()) return <T>NaN;
-    // @ts-ignore: cast
-    return <T>0;
+    }
+    if (!radix) radix = 10;
   }
 
   // calculate value
@@ -729,8 +745,19 @@ export function strtol<T>(str: string, radix: i32 = 0): T {
       code -= CharCode.A - 10;
     } else if (code - CharCode.a <= <u32>(CharCode.z - CharCode.a)) {
       code -= CharCode.a - 10;
-    } else break;
-    if (code >= <u32>radix) break;
+    }
+    if (code >= <u32>radix) {
+      if (!num) {
+        if (isFloat<T>()) {
+          // @ts-ignore: cast
+          return <T>NaN;
+        } else {
+          // @ts-ignore: cast
+          return <T>0;
+        }
+      }
+      break;
+    }
     // @ts-ignore: type
     num = num * radix + code;
     ptr += 2;
@@ -746,7 +773,7 @@ export function strtod(str: string): f64 {
   var ptr  = changetype<usize>(str);
   var code = <u32>load<u16>(ptr);
 
-  var sign = 1.;
+  var sign = 1.0;
   // skip white spaces
   while (len && isSpace(code)) {
     code = <u32>load<u16>(ptr += 2);
@@ -770,7 +797,7 @@ export function strtod(str: string): f64 {
       load<u64>(ptr, 0) == 0x690066006E0049 && // ifnI
       load<u64>(ptr, 8) == 0x7900740069006E    // ytin
     ) {
-      return copysign<f64>(Infinity, sign);
+      return Infinity * sign;
     }
     return NaN;
   }
