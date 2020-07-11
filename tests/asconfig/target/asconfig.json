@@ -4,6 +4,9 @@
       "optimizeLevel": 3,
       "shrinkLevel": 1,
       "enable": ["simd"]
+    },
+    "dev": {
+      "debug": true
     }
   },
   "options": {}
