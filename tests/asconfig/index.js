@@ -6,10 +6,15 @@ const path = require("path");
 
 /** @type {Uint8Array} */
 let binary;
-asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--explicitStart", ...args], {
+/** @type {Uint8Array} */
+let wat;
+asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--textFile", "output.wat", "--explicitStart", ...args], {
   writeFile(name, contents) {
     if (name === "output.wasm") {
       binary = contents;
+    }
+    if (name === "output.wat") {
+      wat = contents;
     }
   }
 }, (err) => {
@@ -22,6 +27,12 @@ asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--explicitStart", ..
     console.error("No binary was generated for the asconfig test in " + process.cwd());
     process.exit(1);
   }
+
+  if (!wat) {
+    console.error("No watFile was generated for the asconfig test in " + process.cwd());
+    process.exit(1);
+  }
+
   const optionsPath = path.join(process.cwd(), "options.json");
   if (fs.existsSync(optionsPath)) {
     const options = require(optionsPath);
@@ -32,6 +43,12 @@ asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--explicitStart", ..
     }
   }
 
+  const watPath = path.join(process.cwd(), "output.wat");
+  if (fs.existsSync(watPath)) {
+
+  } else {
+    fs.writeFileSync(watPath, wat);
+  }
   const theResult = loader.instantiateSync(binary);
 
   theResult.exports._start();

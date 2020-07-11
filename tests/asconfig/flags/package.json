@@ -1,6 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "test": "node ../index.js && cd nested && npm run test"
+    "test": "node ../index.js --target debug && cd nested && npm run test"
   }
 }
