@@ -37,7 +37,7 @@ export enum CommonFlags {
   /** Has a `set` modifier. */
   SET = 1 << 12,
   /** Has a definite assignment assertion `!` as in `x!: i32;`. */
-  DEFINITE_ASSIGNMENT = 1 << 13,
+  DEFINITELY_ASSIGNED = 1 << 13,
 
   // Extended modifiers usually derived from basic modifiers
 
@@ -62,21 +62,23 @@ export enum CommonFlags {
   RESOLVED = 1 << 21,
   /** Is compiled. */
   COMPILED = 1 << 22,
+  /** Did error. */
+  ERRORED = 1 << 23,
   /** Has a constant value and is therefore inlined. */
-  INLINED = 1 << 23,
+  INLINED = 1 << 24,
   /** Is scoped. */
-  SCOPED = 1 << 24,
+  SCOPED = 1 << 25,
   /** Is a stub. */
-  STUB = 1 << 25,
+  STUB = 1 << 26,
   /** Is a virtual method. */
-  VIRTUAL = 1 << 26,
+  VIRTUAL = 1 << 27,
   /** Is (part of) a closure. */
-  CLOSURE = 1 << 27,
+  CLOSURE = 1 << 28,
 
   // Other
 
   /** Is quoted. */
-  QUOTED = 1 << 28
+  QUOTED = 1 << 29
 }
 
 /** Path delimiter inserted between file system levels. */
@@ -212,6 +214,8 @@ export namespace CommonNames {
   export const trace = "trace";
   export const seed = "seed";
   export const pow = "pow";
+  export const ipow32 = "ipow32";
+  export const ipow64 = "ipow64";
   export const mod = "mod";
   export const alloc = "__alloc";
   export const realloc = "__realloc";

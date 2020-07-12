@@ -653,12 +653,14 @@ exports.main = function main(argv, options, callback) {
   // Validate the module if requested
   if (!args.noValidate) {
     stats.validateCount++;
+    let isValid;
     stats.validateTime += measure(() => {
-      if (!module.validate()) {
-        module.dispose();
-        return callback(Error("Validate error"));
-      }
+      isValid = module.validate();
     });
+    if (!isValid) {
+      module.dispose();
+      return callback(Error("validate error"));
+    }
   }
 
   // Set Binaryen-specific options
@@ -719,7 +721,11 @@ exports.main = function main(argv, options, callback) {
   // Prepare output
   if (!args.noEmit) {
     let hasStdout = false;
-    let hasOutput = false;
+    let hasOutput = args.textFile != null
+                 || args.binaryFile != null
+                 || args.jsFile != null
+                 || args.tsdFile != null
+                 || args.idlFile != null;
 
     if (args.outFile != null) {
       if (/\.was?t$/.test(args.outFile) && args.textFile == null) {
@@ -752,7 +758,6 @@ exports.main = function main(argv, options, callback) {
         writeStdout(wasm.output);
         hasStdout = true;
       }
-      hasOutput = true;
 
       // Post-process source map
       if (wasm.sourceMap != null) {
@@ -776,24 +781,22 @@ exports.main = function main(argv, options, callback) {
       }
     }
 
-    // Write JS
-    if (args.jsFile != null) {
-      let js;
-      if (args.jsFile.length) {
+    // Write text (also fallback)
+    if (args.textFile != null || !hasOutput) {
+      let wat;
+      if (args.textFile != null && args.textFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          js = module.toAsmjs();
+          wat = module.toText();
         });
-        writeFile(args.jsFile, js, baseDir);
+        writeFile(args.textFile, wat, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          js = module.toAsmjs();
+          wat = module.toText();
         });
-        writeStdout(js);
-        hasStdout = true;
+        writeStdout(wat);
       }
-      hasOutput = true;
     }
 
     // Write WebIDL
@@ -813,7 +816,6 @@ exports.main = function main(argv, options, callback) {
         writeStdout(idl);
         hasStdout = true;
       }
-      hasOutput = true;
     }
 
     // Write TypeScript definition
@@ -833,24 +835,23 @@ exports.main = function main(argv, options, callback) {
         writeStdout(tsd);
         hasStdout = true;
       }
-      hasOutput = true;
     }
 
-    // Write text (must be last)
-    if (args.textFile != null || !hasOutput) {
-      let wat;
-      if (args.textFile && args.textFile.length) {
+    // Write JS (modifies the binary, so must be last)
+    if (args.jsFile != null) {
+      let js;
+      if (args.jsFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          wat = module.toText();
+          js = module.toAsmjs();
         });
-        writeFile(args.textFile, wat, baseDir);
+        writeFile(args.jsFile, js, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          wat = module.toText();
+          js = module.toAsmjs();
         });
-        writeStdout(wat);
+        writeStdout(js);
       }
     }
   }

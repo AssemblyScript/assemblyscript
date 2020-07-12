@@ -98,17 +98,16 @@ export enum ExpressionId {
   DataDrop = 35 /* _BinaryenDataDropId */,
   MemoryCopy = 36 /* _BinaryenMemoryCopyId */,
   MemoryFill = 37 /* _BinaryenMemoryFillId */,
-  Push = 38 /* _BinaryenPushId */,
-  Pop = 39 /* _BinaryenPopId */,
-  RefNull = 40 /* _BinaryenRefNullId */,
-  RefIsNull = 41 /* _BinaryenRefIsNullId */,
-  RefFunc = 42 /* _BinaryenRefFuncId */,
-  Try = 43 /* _BinaryenTryId */,
-  Throw = 44 /* _BinaryenThrowId */,
-  Rethrow = 45 /* _BinaryenRethrowId */,
-  BrOnExn = 46 /* _BinaryenBrOnExnId */,
-  TupleMake = 47 /* _BinaryenTupleMakeId */,
-  TupleExtract = 48 /* _BinaryenTupleExtractId */
+  Pop = 38 /* _BinaryenPopId */,
+  RefNull = 39 /* _BinaryenRefNullId */,
+  RefIsNull = 40 /* _BinaryenRefIsNullId */,
+  RefFunc = 41 /* _BinaryenRefFuncId */,
+  Try = 42 /* _BinaryenTryId */,
+  Throw = 43 /* _BinaryenThrowId */,
+  Rethrow = 44 /* _BinaryenRethrowId */,
+  BrOnExn = 45 /* _BinaryenBrOnExnId */,
+  TupleMake = 46 /* _BinaryenTupleMakeId */,
+  TupleExtract = 47 /* _BinaryenTupleExtractId */
 }
 
 export enum UnaryOp {
@@ -206,25 +205,33 @@ export enum UnaryOp {
   AbsF32x4 = 85 /* _BinaryenAbsVecF32x4 */,
   NegF32x4 = 86 /* _BinaryenNegVecF32x4 */,
   SqrtF32x4 = 87 /* _BinaryenSqrtVecF32x4 */,
-  AbsF64x2 = 88 /* _BinaryenAbsVecF64x2 */,
-  NegF64x2 = 89 /* _BinaryenNegVecF64x2 */,
-  SqrtF64x2 = 90 /* _BinaryenSqrtVecF64x2 */,
-  TruncSatF32x4ToI32x4 = 91 /* _BinaryenTruncSatSVecF32x4ToVecI32x4 */,
-  TruncSatF32x4ToU32x4 = 92 /* _BinaryenTruncSatUVecF32x4ToVecI32x4 */,
-  TruncSatF64x2ToI64x2 = 93 /* _BinaryenTruncSatSVecF64x2ToVecI64x2 */,
-  TruncSatF64x2ToU64x2 = 94 /* _BinaryenTruncSatUVecF64x2ToVecI64x2 */,
-  ConvertI32x4ToF32x4 = 95 /* _BinaryenConvertSVecI32x4ToVecF32x4 */,
-  ConvertU32x4ToF32x4 = 96 /* _BinaryenConvertUVecI32x4ToVecF32x4 */,
-  ConvertI64x2ToF64x2 = 97 /* _BinaryenConvertSVecI64x2ToVecF64x2 */,
-  ConvertU64x2ToF64x2 = 98 /* _BinaryenConvertUVecI64x2ToVecF64x2 */,
-  WidenLowI8x16ToI16x8 = 99 /* _BinaryenWidenLowSVecI8x16ToVecI16x8 */,
-  WidenHighI8x16ToI16x8 = 100 /* _BinaryenWidenHighSVecI8x16ToVecI16x8 */,
-  WidenLowU8x16ToU16x8 = 101 /* _BinaryenWidenLowUVecI8x16ToVecI16x8 */,
-  WidenHighU8x16ToU16x8 = 102 /* _BinaryenWidenHighUVecI8x16ToVecI16x8 */,
-  WidenLowI16x8ToI32x4 = 103 /* _BinaryenWidenLowSVecI16x8ToVecI32x4 */,
-  WidenHighI16x8ToI32x4 = 104 /* _BinaryenWidenHighSVecI16x8ToVecI32x4 */,
-  WidenLowU16x8ToU32x4 = 105 /* _BinaryenWidenLowUVecI16x8ToVecI32x4 */,
-  WidenHighU16x8ToU32x4 = 106 /* _BinaryenWidenHighUVecI16x8ToVecI32x4 */
+  CeilF32x4 = 88 /* _BinaryenCeilVecF32x4 */,
+  FloorF32x4 = 89 /* _BinaryenFloorVecF32x4 */,
+  TruncF32x4 = 90 /* BinaryenTruncVecF32x4 */,
+  NearestF32x4 = 91 /* BinaryenNearestVecF32x4 */,
+  AbsF64x2 = 92 /* _BinaryenAbsVecF64x2 */,
+  NegF64x2 = 93 /* _BinaryenNegVecF64x2 */,
+  SqrtF64x2 = 94 /* _BinaryenSqrtVecF64x2 */,
+  CeilF64x2 = 95 /* _BinaryenCeilVecF64x2 */,
+  FloorF64x2 = 96 /* _BinaryenFloorVecF64x2 */,
+  TruncF64x2 = 97 /* BinaryenTruncVecF64x2 */,
+  NearestF64x2 = 98 /* BinaryenNearestVecF64x2 */,
+  TruncSatF32x4ToI32x4 = 99 /* _BinaryenTruncSatSVecF32x4ToVecI32x4 */,
+  TruncSatF32x4ToU32x4 = 100 /* _BinaryenTruncSatUVecF32x4ToVecI32x4 */,
+  TruncSatF64x2ToI64x2 = 101 /* _BinaryenTruncSatSVecF64x2ToVecI64x2 */,
+  TruncSatF64x2ToU64x2 = 102 /* _BinaryenTruncSatUVecF64x2ToVecI64x2 */,
+  ConvertI32x4ToF32x4 = 103 /* _BinaryenConvertSVecI32x4ToVecF32x4 */,
+  ConvertU32x4ToF32x4 = 104 /* _BinaryenConvertUVecI32x4ToVecF32x4 */,
+  ConvertI64x2ToF64x2 = 105 /* _BinaryenConvertSVecI64x2ToVecF64x2 */,
+  ConvertU64x2ToF64x2 = 106 /* _BinaryenConvertUVecI64x2ToVecF64x2 */,
+  WidenLowI8x16ToI16x8 = 107 /* _BinaryenWidenLowSVecI8x16ToVecI16x8 */,
+  WidenHighI8x16ToI16x8 = 108 /* _BinaryenWidenHighSVecI8x16ToVecI16x8 */,
+  WidenLowU8x16ToU16x8 = 109 /* _BinaryenWidenLowUVecI8x16ToVecI16x8 */,
+  WidenHighU8x16ToU16x8 = 110 /* _BinaryenWidenHighUVecI8x16ToVecI16x8 */,
+  WidenLowI16x8ToI32x4 = 111 /* _BinaryenWidenLowSVecI16x8ToVecI32x4 */,
+  WidenHighI16x8ToI32x4 = 112 /* _BinaryenWidenHighSVecI16x8ToVecI32x4 */,
+  WidenLowU16x8ToU32x4 = 113 /* _BinaryenWidenLowUVecI16x8ToVecI32x4 */,
+  WidenHighU16x8ToU32x4 = 114 /* _BinaryenWidenHighUVecI16x8ToVecI32x4 */
 }
 
 export enum BinaryOp {
@@ -386,27 +393,28 @@ export enum BinaryOp {
   DotI16x8 = 153 /* _BinaryenDotSVecI16x8ToVecI32x4 */,
   AddI64x2 = 154 /* _BinaryenAddVecI64x2 */,
   SubI64x2 = 155 /* _BinaryenSubVecI64x2 */,
-  AddF32x4 = 156 /* _BinaryenAddVecF32x4 */,
-  SubF32x4 = 157 /* _BinaryenSubVecF32x4 */,
-  MulF32x4 = 158 /* _BinaryenMulVecF32x4 */,
-  DivF32x4 = 159 /* _BinaryenDivVecF32x4 */,
-  MinF32x4 = 160 /* _BinaryenMinVecF32x4 */,
-  MaxF32x4 = 161 /* _BinaryenMaxVecF32x4 */,
-  PminF32x4 = 162 /* _BinaryenPMinVecF32x4 */,
-  PmaxF32x4 = 163 /* _BinaryenPMaxVecF32x4 */,
-  AddF64x2 = 164 /* _BinaryenAddVecF64x2 */,
-  SubF64x2 = 165 /* _BinaryenSubVecF64x2 */,
-  MulF64x2 = 166 /* _BinaryenMulVecF64x2 */,
-  DivF64x2 = 167 /* _BinaryenDivVecF64x2 */,
-  MinF64x2 = 168 /* _BinaryenMinVecF64x2 */,
-  MaxF64x2 = 169 /* _BinaryenMaxVecF64x2 */,
-  PminF64x2 = 170 /* _BinaryenPMinVecF64x2 */,
-  PmaxF64x2 = 171 /* _BinaryenPMaxVecF64x2 */,
-  NarrowI16x8ToI8x16 = 172 /* _BinaryenNarrowSVecI16x8ToVecI8x16 */,
-  NarrowU16x8ToU8x16 = 173 /* _BinaryenNarrowUVecI16x8ToVecI8x16 */,
-  NarrowI32x4ToI16x8 = 174 /* _BinaryenNarrowSVecI32x4ToVecI16x8 */,
-  NarrowU32x4ToU16x8 = 175 /* _BinaryenNarrowUVecI32x4ToVecI16x8 */,
-  SwizzleV8x16 = 176 /* _BinaryenSwizzleVec8x16 */
+
+  AddF32x4 = 157 /* _BinaryenAddVecF32x4 */,
+  SubF32x4 = 158 /* _BinaryenSubVecF32x4 */,
+  MulF32x4 = 159 /* _BinaryenMulVecF32x4 */,
+  DivF32x4 = 160 /* _BinaryenDivVecF32x4 */,
+  MinF32x4 = 161 /* _BinaryenMinVecF32x4 */,
+  MaxF32x4 = 162 /* _BinaryenMaxVecF32x4 */,
+  PminF32x4 = 163 /* _BinaryenPMinVecF32x4 */,
+  PmaxF32x4 = 164 /* _BinaryenPMaxVecF32x4 */,
+  AddF64x2 = 165 /* _BinaryenAddVecF64x2 */,
+  SubF64x2 = 166 /* _BinaryenSubVecF64x2 */,
+  MulF64x2 = 167 /* _BinaryenMulVecF64x2 */,
+  DivF64x2 = 168 /* _BinaryenDivVecF64x2 */,
+  MinF64x2 = 169 /* _BinaryenMinVecF64x2 */,
+  MaxF64x2 = 170 /* _BinaryenMaxVecF64x2 */,
+  PminF64x2 = 171 /* _BinaryenPMinVecF64x2 */,
+  PmaxF64x2 = 172 /* _BinaryenPMaxVecF64x2 */,
+  NarrowI16x8ToI8x16 = 173 /* _BinaryenNarrowSVecI16x8ToVecI8x16 */,
+  NarrowU16x8ToU8x16 = 174 /* _BinaryenNarrowUVecI16x8ToVecI8x16 */,
+  NarrowI32x4ToI16x8 = 175 /* _BinaryenNarrowSVecI32x4ToVecI16x8 */,
+  NarrowU32x4ToU16x8 = 176 /* _BinaryenNarrowUVecI32x4ToVecI16x8 */,
+  SwizzleV8x16 = 177 /* _BinaryenSwizzleVec8x16 */
 }
 
 export enum HostOp {
@@ -544,7 +552,9 @@ export class Module {
   v128(bytes: Uint8Array): ExpressionRef {
     assert(bytes.length == 16);
     var out = this.lit;
-    for (let i = 0; i < 16; ++i) binaryen.__i32_store8(out + i, bytes[i]);
+    for (let i = 0; i < 16; ++i) {
+      binaryen.__i32_store8(out + i, bytes[i]);
+    }
     binaryen._BinaryenLiteralVec128(out, out);
     return binaryen._BinaryenConst(this.ref, out);
   }
@@ -577,7 +587,9 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
     var cArr = allocPtrArray(operands);
-    var ret = binaryen._BinaryenHost(this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0);
+    var ret = binaryen._BinaryenHost(
+      this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0
+    );
     binaryen._free(cArr);
     return ret;
   }
@@ -837,8 +849,12 @@ export class Module {
     var cStr = this.allocStringCached(target);
     var cArr = allocPtrArray(operands);
     var ret = isReturn
-      ? binaryen._BinaryenReturnCall(this.ref, cStr, cArr, operands ? operands.length : 0, returnType)
-      : binaryen._BinaryenCall(this.ref, cStr, cArr, operands ? operands.length : 0, returnType);
+      ? binaryen._BinaryenReturnCall(
+          this.ref, cStr, cArr, operands ? operands.length : 0, returnType
+        )
+      : binaryen._BinaryenCall(
+          this.ref, cStr, cArr, operands ? operands.length : 0, returnType
+        );
     binaryen._free(cArr);
     return ret;
   }
@@ -860,8 +876,12 @@ export class Module {
   ): ExpressionRef {
     var cArr = allocPtrArray(operands);
     var ret = isReturn
-      ? binaryen._BinaryenReturnCallIndirect(this.ref, index, cArr, operands ? operands.length : 0, params, results)
-      : binaryen._BinaryenCallIndirect(this.ref, index, cArr, operands ? operands.length : 0, params, results);
+      ? binaryen._BinaryenReturnCallIndirect(
+          this.ref, index, cArr, operands ? operands.length : 0, params, results
+        )
+      : binaryen._BinaryenCallIndirect(
+          this.ref, index, cArr, operands ? operands.length : 0, params, results
+        );
     binaryen._free(cArr);
     return ret;
   }
@@ -933,18 +953,23 @@ export class Module {
     return binaryen._BinaryenBrOnExn(this.ref, cStr1, cStr2, exnref);
   }
 
-  // push / pop (multi value?)
-
-  push(
-    value: ExpressionRef
-  ): ExpressionRef {
-    return binaryen._BinaryenPush(this.ref, value);
-  }
+  // multi value (pseudo instructions)
 
   pop(
     type: NativeType
   ): ExpressionRef {
     return binaryen._BinaryenPop(this.ref, type);
+  }
+
+  tuple_make(operands: ExpressionRef[]): ExpressionRef {
+    var cArr = allocPtrArray(operands);
+    var ret = binaryen._BinaryenTupleMake(this.ref, cArr, operands.length);
+    binaryen._free(cArr);
+    return ret;
+  }
+
+  tuple_extract(tuple: ExpressionRef, index: Index): ExpressionRef {
+    return binaryen._BinaryenTupleExtract(this.ref, tuple, index);
   }
 
   // simd
@@ -1019,19 +1044,6 @@ export class Module {
     return binaryen._BinaryenRefFunc(this.ref, cStr);
   }
 
-  // tuples (pseudo instructions)
-
-  tuple_make(operands: ExpressionRef[]): ExpressionRef {
-    var cArr = allocPtrArray(operands);
-    var ret = binaryen._BinaryenTupleMake(this.ref, cArr, operands.length);
-    binaryen._free(cArr);
-    return ret;
-  }
-
-  tuple_extract(tuple: ExpressionRef, index: Index): ExpressionRef {
-    return binaryen._BinaryenTupleExtract(this.ref, tuple, index);
-  }
-
   // globals
 
   addGlobal(
@@ -1095,7 +1107,15 @@ export class Module {
   ): FunctionRef {
     var cStr = this.allocStringCached(name);
     var cArr = allocPtrArray(varTypes);
-    var ret = binaryen._BinaryenAddFunction(this.ref, cStr, params, results, cArr, varTypes ? varTypes.length : 0, body);
+    var ret = binaryen._BinaryenAddFunction(
+      this.ref,
+      cStr,
+      params,
+      results,
+      cArr,
+      varTypes ? varTypes.length : 0,
+      body
+    );
     binaryen._free(cArr);
     return ret;
   }
@@ -1114,7 +1134,11 @@ export class Module {
 
   private hasTemporaryFunction: bool = false;
 
-  addTemporaryFunction(result: NativeType, paramTypes: NativeType[] | null, body: ExpressionRef): FunctionRef {
+  addTemporaryFunction(
+    result: NativeType,
+    paramTypes: NativeType[] | null,
+    body: ExpressionRef
+  ): FunctionRef {
     this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
     var tempName = this.allocStringCached("");
     var cArr = allocPtrArray(paramTypes);
@@ -1253,7 +1277,9 @@ export class Module {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    binaryen._BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, params, results);
+    binaryen._BinaryenAddEventImport(
+      this.ref, cStr1, cStr2, cStr3, attribute, params, results
+    );
   }
 
   // memory
@@ -1276,8 +1302,9 @@ export class Module {
     var offs = new Array<ExpressionRef>(k);
     var sizs = new Array<Index>(k);
     for (let i = 0; i < k; ++i) {
-      let buffer = segments[i].buffer;
-      let offset = segments[i].offset;
+      let segment = segments[i];
+      let buffer = segment.buffer;
+      let offset = segment.offset;
       segs[i] = allocU8Array(buffer);
       psvs[i] = 0; // no passive segments currently
       offs[i] = target == Target.WASM64
@@ -1289,12 +1316,16 @@ export class Module {
     var cArr2 = allocU8Array(psvs);
     var cArr3 = allocPtrArray(offs);
     var cArr4 = allocU32Array(sizs);
-    binaryen._BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, cArr4, k, shared);
+    binaryen._BinaryenSetMemory(
+      this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, cArr4, k, shared
+    );
     binaryen._free(cArr4);
     binaryen._free(cArr3);
     binaryen._free(cArr2);
     binaryen._free(cArr1);
-    for (let i = k - 1; i >= 0; --i) binaryen._free(segs[i]);
+    for (let i = k - 1; i >= 0; --i) {
+      binaryen._free(segs[i]);
+    }
   }
 
   // table
@@ -1314,7 +1345,9 @@ export class Module {
       names[i] = this.allocStringCached(funcs[i]);
     }
     var cArr = allocPtrArray(names);
-    binaryen._BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames, offset);
+    binaryen._BinaryenSetFunctionTable(
+      this.ref, initial, maximum, cArr, numNames, offset
+    );
     binaryen._free(cArr);
   }
 
@@ -1479,6 +1512,7 @@ export class Module {
         passes.push("flatten");
         passes.push("simplify-locals-notee-nostructure");
         passes.push("vacuum");
+
         passes.push("code-folding");
         passes.push("flatten");
         passes.push("local-cse");
@@ -1488,15 +1522,18 @@ export class Module {
         passes.push("rse");
         passes.push("vacuum");
       }
-      if (usesARC) {
-        if (optimizeLevel < 3) {
-          passes.push("flatten");
-        }
-        passes.push("post-assemblyscript");
-      }
+      // FIXME: see issue #1288
+      // if (usesARC) {
+      //   if (optimizeLevel < 3) {
+      //     passes.push("flatten");
+      //   }
+      //   passes.push("post-assemblyscript");
+      // }
       passes.push("optimize-instructions");
-      passes.push("inlining");
-      passes.push("dce");
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        passes.push("dce");
+        passes.push("inlining");
+      }
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
       passes.push("inlining-optimizing");
@@ -1515,11 +1552,13 @@ export class Module {
       }
       passes.push("simplify-locals-nostructure");
       passes.push("vacuum");
+
       passes.push("reorder-locals");
       passes.push("remove-unused-brs");
       passes.push("coalesce-locals");
       passes.push("simplify-locals");
       passes.push("vacuum");
+
       passes.push("reorder-locals");
       passes.push("coalesce-locals");
       passes.push("reorder-locals");
@@ -1542,8 +1581,8 @@ export class Module {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("rse");
+        passes.push("vacuum");
       }
-      passes.push("vacuum");
 
       // --- PassRunner::addDefaultGlobalOptimizationPostPasses ---
 
@@ -1589,22 +1628,30 @@ export class Module {
           // very expensive, so O3 only
           passes.push("simplify-globals");
           passes.push("vacuum");
+
+          passes.push("precompute-propagate");
+          passes.push("vacuum");
+
           // replace indirect with direct calls again and inline
           passes.push("inlining-optimizing");
           passes.push("directize");
           passes.push("dae-optimizing");
-          passes.push("precompute-propagate");
-          passes.push("vacuum");
+
           passes.push("merge-locals");
           passes.push("coalesce-locals");
-          passes.push("simplify-locals-nostructure");
+          passes.push("simplify-locals");
           passes.push("vacuum");
+
           passes.push("inlining-optimizing");
           passes.push("precompute-propagate");
+          passes.push("vacuum");
+
+          passes.push("coalesce-locals");
         }
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
         passes.push("vacuum");
+
         passes.push("optimize-instructions");
         passes.push("simplify-globals-optimizing");
       }
@@ -1730,10 +1777,14 @@ export class Module {
       case ExpressionId.GlobalGet: {
         let globalName = binaryen._BinaryenGlobalGetGetName(expr);
         if (!globalName) break;
-        return binaryen._BinaryenGlobalGet(this.ref, globalName, binaryen._BinaryenExpressionGetType(expr));
+        return binaryen._BinaryenGlobalGet(
+          this.ref, globalName, binaryen._BinaryenExpressionGetType(expr)
+        );
       }
       case ExpressionId.Load: {
-        if (!(nested1 = this.cloneExpression(binaryen._BinaryenLoadGetPtr(expr), noSideEffects, maxDepth))) {
+        if (!(nested1 = this.cloneExpression(
+          binaryen._BinaryenLoadGetPtr(expr), noSideEffects, maxDepth)
+        )) {
           break;
         }
         return (
@@ -1755,19 +1806,29 @@ export class Module {
         );
       }
       case ExpressionId.Unary: {
-        if (!(nested1 = this.cloneExpression(binaryen._BinaryenUnaryGetValue(expr), noSideEffects, maxDepth))) {
+        if (!(nested1 = this.cloneExpression(
+          binaryen._BinaryenUnaryGetValue(expr), noSideEffects, maxDepth)
+        )) {
           break;
         }
-        return binaryen._BinaryenUnary(this.ref, binaryen._BinaryenUnaryGetOp(expr), nested1);
+        return binaryen._BinaryenUnary(
+          this.ref, binaryen._BinaryenUnaryGetOp(expr), nested1
+        );
       }
       case ExpressionId.Binary: {
-        if (!(nested1 = this.cloneExpression(binaryen._BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth))) {
+        if (!(nested1 = this.cloneExpression(
+          binaryen._BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth)
+        )) {
           break;
         }
-        if (!(nested2 = this.cloneExpression(binaryen._BinaryenBinaryGetRight(expr), noSideEffects, maxDepth))) {
+        if (!(nested2 = this.cloneExpression(
+          binaryen._BinaryenBinaryGetRight(expr), noSideEffects, maxDepth)
+        )) {
           break;
         }
-        return binaryen._BinaryenBinary(this.ref, binaryen._BinaryenBinaryGetOp(expr), nested1, nested2);
+        return binaryen._BinaryenBinary(
+          this.ref, binaryen._BinaryenBinaryGetOp(expr), nested1, nested2
+        );
       }
     }
     return 0;
@@ -1777,7 +1838,12 @@ export class Module {
     return binaryen._BinaryenExpressionCopy(expr, this.ref);
   }
 
-  runExpression(expr: ExpressionRef, flags: ExpressionRunnerFlags, maxDepth: i32 = 50, maxLoopIterations: i32 = 1): ExpressionRef {
+  runExpression(
+    expr: ExpressionRef,
+    flags: ExpressionRunnerFlags,
+    maxDepth: i32 = 50,
+    maxLoopIterations: i32 = 1
+  ): ExpressionRef {
     var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
     var precomp =  binaryen._ExpressionRunnerRunAndDispose(runner, expr);
     if (precomp) {
@@ -2238,7 +2304,8 @@ export enum SideEffects {
   ImplicitTrap = 256 /* _BinaryenSideEffectImplicitTrap */,
   IsAtomic = 512 /* _BinaryenSideEffectIsAtomic */,
   Throws = 1024 /* _BinaryenSideEffectThrows */,
-  Any = 2047 /* _BinaryenSideEffectAny */
+  DanglingPop = 2048 /* _BinaryenSideEffectDanglingPop */,
+  Any = 4095 /* _BinaryenSideEffectAny */
 }
 
 export function getSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): SideEffects {
@@ -2254,20 +2321,20 @@ export function hasSideEffects(expr: ExpressionRef, features: FeatureFlags = Fea
 
 function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
-  var numValues = u8s.length;
-  var ptr = binaryen._malloc(numValues);
-  var idx = ptr;
-  for (let i = 0; i < numValues; ++i) {
-    binaryen.__i32_store8(idx++, u8s[i]);
+  var len = u8s.length;
+  var ptr = binaryen._malloc(len);
+  for (let i = 0; i < len; ++i) {
+    binaryen.__i32_store8(ptr + i, u8s[i]);
   }
   return ptr;
 }
 
 function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
-  var ptr = binaryen._malloc(i32s.length << 2);
+  var len = i32s.length;
+  var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
-  for (let i = 0, k = i32s.length; i < k; ++i) {
+  for (let i = 0; i < len; ++i) {
     let val = i32s[i];
     binaryen.__i32_store(idx, val);
     idx += 4;
@@ -2277,9 +2344,10 @@ function allocI32Array(i32s: i32[] | null): usize {
 
 function allocU32Array(u32s: u32[] | null): usize {
   if (!u32s) return 0;
-  var ptr = binaryen._malloc(u32s.length << 2);
+  var len = u32s.length;
+  var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
-  for (let i = 0, k = u32s.length; i < k; ++i) {
+  for (let i = 0; i < len; ++i) {
     let val = u32s[i];
     binaryen.__i32_store(idx, val);
     idx += 4;
@@ -2291,9 +2359,10 @@ function allocPtrArray(ptrs: usize[] | null): usize {
   if (!ptrs) return 0;
   // TODO: WASM64
   assert(ASC_TARGET != Target.WASM64);
-  var ptr = binaryen._malloc(ptrs.length << 2);
+  var len = ptrs.length;
+  var ptr = binaryen._malloc(len << 2);
   var idx = ptr;
-  for (let i = 0, k = ptrs.length; i < k; ++i) {
+  for (let i = 0, k = len; i < k; ++i) {
     let val = ptrs[i];
     binaryen.__i32_store(idx, <i32>val);
     idx += 4;
@@ -2309,17 +2378,13 @@ function stringLengthUTF8(str: string): usize {
       u = 0x10000 + ((u & 0x3FF) << 10) | (str.charCodeAt(++i) & 0x3FF);
     }
     if (u <= 0x7F) {
-      ++len;
+      len += 1;
     } else if (u <= 0x7FF) {
       len += 2;
     } else if (u <= 0xFFFF) {
       len += 3;
-    } else if (u <= 0x1FFFFF) {
-      len += 4;
-    } else if (u <= 0x3FFFFFF) {
-      len += 5;
     } else {
-      len += 6;
+      len += 4;
     }
   }
   return len;
@@ -2327,7 +2392,7 @@ function stringLengthUTF8(str: string): usize {
 
 function allocString(str: string | null): usize {
   if (str === null) return 0;
-  var ptr = binaryen._malloc(stringLengthUTF8(str) + 1);
+  var ptr = binaryen._malloc(stringLengthUTF8(str) + 1) >>> 0;
   // the following is based on Emscripten's stringToUTF8Array
   var idx = ptr;
   for (let i = 0, k = str.length; i < k; ++i) {
@@ -2344,21 +2409,9 @@ function allocString(str: string | null): usize {
       binaryen.__i32_store8(idx++, (0xE0 |  (u >>> 12)      ) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-    } else if (u <= 0x1FFFFF) {
-      binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
-    } else if (u <= 0x3FFFFFF) {
-      binaryen.__i32_store8(idx++, (0xF8 |  (u >>> 24)      ) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 18) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
     } else {
-      binaryen.__i32_store8(idx++, (0xFC |  (u >>> 30)      ) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 24) & 63)) as u8);
-      binaryen.__i32_store8(idx++, (0x80 | ((u >>> 18) & 63)) as u8);
+      assert(u < 0x200000, "Invalid Unicode code point during allocString");
+      binaryen.__i32_store8(idx++, (0xF0 |  (u >>> 18)      ) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ((u >>> 12) & 63)) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ((u >>>  6) & 63)) as u8);
       binaryen.__i32_store8(idx++, (0x80 | ( u         & 63)) as u8);
@@ -2368,9 +2421,9 @@ function allocString(str: string | null): usize {
   return ptr;
 }
 
-function readBuffer(ptr: usize, length: i32): Uint8Array {
-  var ret = new Uint8Array(length);
-  for (let i = 0; i < length; ++i) {
+function readBuffer(ptr: usize, len: i32): Uint8Array {
+  var ret = new Uint8Array(len);
+  for (let i = 0; i < len; ++i) {
     ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
   }
   return ret;
@@ -2381,7 +2434,7 @@ export function readString(ptr: usize): string | null {
   var arr = new Array<i32>();
   // the following is based on Emscripten's UTF8ArrayToString
   var cp: u32;
-  var u1: u32, u2: u32, u3: u32, u4: u32, u5: u32;
+  var u1: u32, u2: u32, u3: u32;
   while (cp = binaryen.__i32_load8_u(ptr++)) {
     if (!(cp & 0x80)) {
       arr.push(cp);
@@ -2400,26 +2453,18 @@ export function readString(ptr: usize): string | null {
       if ((cp & 0xF8) == 0xF0) {
         cp = ((cp & 7) << 18) | (u1 << 12) | (u2 << 6) | u3;
       } else {
-        u4 = binaryen.__i32_load8_u(ptr++) & 63;
-        if ((cp & 0xFC) == 0xF8) {
-          cp = ((cp & 3) << 24) | (u1 << 18) | (u2 << 12) | (u3 << 6) | u4;
-        } else {
-          u5 = binaryen.__i32_load8_u(ptr++) & 63;
-          cp = ((cp & 1) << 30) | (u1 << 24) | (u2 << 18) | (u3 << 12) | (u4 << 6) | u5;
-        }
+        assert(false, "Invalid UTF8 sequence during readString");
       }
     }
-    arr.push(cp);
     if (cp < 0x10000) {
       arr.push(cp);
     } else {
       let ch = cp - 0x10000;
-      arr.push(0xD800 | (ch >> 10));
+      arr.push(0xD800 | (ch >>> 10));
       arr.push(0xDC00 | (ch & 0x3FF));
     }
   }
   return String.fromCharCodes(arr);
-  // return String.fromCodePoints(arr);
 }
 
 /** Result structure of {@link Module#toBinary}. */
@@ -2435,16 +2480,23 @@ export class BinaryModule {
 /** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
 export function needsExplicitUnreachable(expr: ExpressionRef): bool {
   // not applicable if pushing a value to the stack
-  if (binaryen._BinaryenExpressionGetType(expr) != NativeType.Unreachable) return false;
+  if (binaryen._BinaryenExpressionGetType(expr) != NativeType.Unreachable) {
+    return false;
+  }
 
   switch (binaryen._BinaryenExpressionGetId(expr)) {
     case ExpressionId.Unreachable:
     case ExpressionId.Return: return false;
-    case ExpressionId.Break: return binaryen._BinaryenBreakGetCondition(expr) != 0;
+    case ExpressionId.Break: {
+      return binaryen._BinaryenBreakGetCondition(expr) != 0;
+    }
     case ExpressionId.Block: {
       if (!binaryen._BinaryenBlockGetName(expr)) { // can't break out of it
         let numChildren = binaryen._BinaryenBlockGetNumChildren(expr); // last child needs unreachable
-        return numChildren > 0 && needsExplicitUnreachable(binaryen._BinaryenBlockGetChild(expr, numChildren - 1));
+        return (
+          numChildren > 0 &&
+          needsExplicitUnreachable(binaryen._BinaryenBlockGetChild(expr, numChildren - 1))
+        );
       }
     }
   }
@@ -2452,7 +2504,11 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
 }
 
 /** Traverses all expression members of an expression, calling the given visitor. */
-export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: ExpressionRef, data: T) => void): bool {
+export function traverse<T>(
+  expr:  ExpressionRef,
+  data:  T,
+  visit: (expr: ExpressionRef, data: T) => void
+): bool {
   switch (getExpressionId(expr)) {
     case ExpressionId.Block: {
       for (let i: Index = 0, n = binaryen._BinaryenBlockGetNumChildren(expr); i < n; ++i) {
@@ -2625,10 +2681,6 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(binaryen._BinaryenMemoryFillGetDest(expr), data);
       visit(binaryen._BinaryenMemoryFillGetValue(expr), data);
       visit(binaryen._BinaryenMemoryFillGetSize(expr), data);
-      break;
-    }
-    case ExpressionId.Push: {
-      visit(binaryen._BinaryenPushGetValue(expr), data);
       break;
     }
     case ExpressionId.Pop: {

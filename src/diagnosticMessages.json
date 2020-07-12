@@ -42,6 +42,7 @@
   "'{0}' keyword cannot be used here.": 230,
   "A class with a constructor explicitly returning something else than 'this' must be '@final'.": 231,
   "Exported generic function or class has no concrete instances.": 232,
+  "Property '{0}' is always assigned before being used.": 233,
 
   "Type '{0}' is cyclic. Module will include deferred garbage collection.": 900,
   "Importing the table disables some indirect call optimizations.": 901,
@@ -49,6 +50,7 @@
   "Expression compiles to a dynamic check at runtime.": 903,
   "Indexed access may involve bounds checking.": 904,
   "Explicitly returning constructor drops 'this' allocation.": 905,
+  "Unnecessary definite assignment.": 906,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,
@@ -143,6 +145,7 @@
   "A class can only implement an interface.": 2422,
   "A namespace declaration cannot be located prior to a class or function with which it is merged.": 2434,
   "Property '{0}' is protected and only accessible within class '{1}' and its subclasses.": 2445,
+  "Variable '{0}' used before its declaration.": 2448,
   "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": 2453,
   "Type '{0}' has no property '{1}'.": 2460,
   "The '{0}' operator cannot be applied to type '{1}'.": 2469,
@@ -158,6 +161,8 @@
   "Expected {0} arguments, but got {1}.": 2554,
   "Expected at least {0} arguments, but got {1}.": 2555,
   "Expected {0} type arguments, but got {1}.": 2558,
+  "Property '{0}' has no initializer and is not assigned in the constructor before 'this' is used or returned.": 2564,
+  "Property '{0}' is used before being assigned.": 2565,
   "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": 2651,
   "Constructor of class '{0}' is private and only accessible within the class declaration.": 2673,
   "Constructor of class '{0}' is protected and only accessible within the class declaration.": 2674,

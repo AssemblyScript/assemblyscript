@@ -188,7 +188,8 @@
       " tail-calls          Tail call operations.",
       " multi-value         Multi value types."
     ],
-    "type": "S"
+    "type": "S",
+    "mutuallyExclusive": "disable"
   },
   "disable": {
     "category": "Features",
@@ -198,7 +199,8 @@
       " mutable-globals     Mutable global imports and exports.",
       ""
     ],
-    "type": "S"
+    "type": "S",
+    "mutuallyExclusive": "enable"
   },
   "use": {
     "category": "Features",

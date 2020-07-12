@@ -2,7 +2,7 @@
 
 var globalScope = typeof window !== "undefined" && window || typeof global !== "undefined" && global || self;
 
-globalScope.ASC_TARGET = 2; // Target.JS
+globalScope.ASC_TARGET = 0; // Target.JS
 globalScope.ASC_NO_ASSERT = false;
 globalScope.ASC_MEMORY_BASE = 0;
 globalScope.ASC_OPTIMIZE_LEVEL = 3;
@@ -198,11 +198,39 @@ globalScope["changetype"] = function changetype(value) {
 };
 
 String["fromCharCodes"] = function fromCharCodes(arr) {
-  return String.fromCharCode.apply(String, arr);
+  const CHUNKSIZE = 1 << 13;
+  const len = arr.length;
+  if (len <= CHUNKSIZE) {
+    return String.fromCharCode.apply(String, arr);
+  }
+  let index = 0;
+  let parts = '';
+  while (index < len) {
+    parts += String.fromCharCode.apply(
+      String,
+      arr.slice(index, Math.min(index + CHUNKSIZE, len))
+    );
+    index += CHUNKSIZE;
+  }
+  return parts;
 };
 
 String["fromCodePoints"] = function fromCodePoints(arr) {
-  return String.fromCodePoint.apply(String, arr);
+  const CHUNKSIZE = 1 << 13;
+  const len = arr.length;
+  if (len <= CHUNKSIZE) {
+    return String.fromCodePoint.apply(String, arr);
+  }
+  let index = 0;
+  let parts = '';
+  while (index < len) {
+    parts += String.fromCodePoint.apply(
+      String,
+      arr.slice(index, Math.min(index + CHUNKSIZE, len))
+    );
+    index += CHUNKSIZE;
+  }
+  return parts;
 };
 
 if (!String.prototype.replaceAll) {

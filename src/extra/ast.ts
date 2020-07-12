@@ -1099,7 +1099,7 @@ export class ASTBuilder {
     this.serializeAccessModifiers(node);
     this.visitIdentifierExpression(node.name);
     var sb = this.sb;
-    if (node.flags & CommonFlags.DEFINITE_ASSIGNMENT) {
+    if (node.flags & CommonFlags.DEFINITELY_ASSIGNED) {
       sb.push("!");
     }
     var type = node.type;
@@ -1528,7 +1528,7 @@ export class ASTBuilder {
     this.visitIdentifierExpression(node.name);
     var type = node.type;
     var sb = this.sb;
-    if (node.flags & CommonFlags.DEFINITE_ASSIGNMENT) {
+    if (node.flags & CommonFlags.DEFINITELY_ASSIGNED) {
       sb.push("!");
     }
     if (type) {
@@ -1613,7 +1613,7 @@ export class ASTBuilder {
     var type = node.type;
     var initializer = node.initializer;
     if (type) {
-      if (kind == ParameterKind.OPTIONAL) sb.push("?");
+      if (kind == ParameterKind.OPTIONAL && !initializer) sb.push("?");
       if (!isTypeOmitted(type)) {
         sb.push(": ");
         this.visitTypeNode(type);

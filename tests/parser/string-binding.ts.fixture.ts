@@ -1,7 +1,7 @@
 @binding(BindingCall.NEW, [BindingType.STRING], BindingType.OBJECT_HANDLE)
 export class ExternalString {
   @binding(BindingCall.FUNCTION, [BindingType.U32, BindingType.U32], BindingType.OBJECT_HANDLE)
-  static fromCharCode(char: u16, schar?: u16 = <u16>-1): String {
+  static fromCharCode(char: u16, schar: u16 = <u16>-1): String {
     return unreachable();
   }
   @binding(BindingCall.FUNCTION, [BindingType.U32], BindingType.OBJECT_HANDLE)

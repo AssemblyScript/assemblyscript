@@ -122,6 +122,12 @@ f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff";
   0x9E19DB92B4E31BA9, 0xEB96BF6EBADF77D9, 0xAF87023B9BF0EE6B
 ]);
 
+// @ts-ignore: decorator
+@inline
+export function isPowerOf2<T extends number>(value: T): bool {
+  return popcnt<T>(value) == 1;
+}
+
 // Count number of decimals for u32 values
 // In our case input value always non-zero so we can simplify some parts
 export function decimalCount32(value: u32): u32 {
@@ -159,7 +165,7 @@ export function decimalCount64High(value: u64): u32 {
 }
 
 function ulog_base(num: u64, base: i32): u32 {
-  if ((base & (base - 1)) == 0) { // if base is pow of two
+  if (isPowerOf2(base)) {
     return (63 - <u32>clz(num)) / (31 - <u32>clz(base)) + 1;
   }
   var b64 = u64(base), b = b64, e: u32 = 1;
@@ -290,7 +296,7 @@ export function utoa32_dec_core(buffer: usize, num: u32, offset: usize): void {
 
 // @ts-ignore: decorator
 @inline
-export function utoa32_hex_core(buffer: usize, num: u32, offset: usize): void {
+function utoa32_hex_core(buffer: usize, num: u32, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
     utoa_hex_simple<u32>(buffer, num, offset);
   } else {
@@ -300,7 +306,7 @@ export function utoa32_hex_core(buffer: usize, num: u32, offset: usize): void {
 
 // @ts-ignore: decorator
 @inline
-export function utoa64_dec_core(buffer: usize, num: u64, offset: usize): void {
+function utoa64_dec_core(buffer: usize, num: u64, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
     utoa_dec_simple<u64>(buffer, num, offset);
   } else {
@@ -310,7 +316,7 @@ export function utoa64_dec_core(buffer: usize, num: u64, offset: usize): void {
 
 // @ts-ignore: decorator
 @inline
-export function utoa64_hex_core(buffer: usize, num: u64, offset: usize): void {
+function utoa64_hex_core(buffer: usize, num: u64, offset: usize): void {
   if (ASC_SHRINK_LEVEL >= 1) {
     utoa_hex_simple<u64>(buffer, num, offset);
   } else {
@@ -318,7 +324,7 @@ export function utoa64_hex_core(buffer: usize, num: u64, offset: usize): void {
   }
 }
 
-export function utoa64_any_core(buffer: usize, num: u64, offset: usize, radix: i32): void {
+function utoa64_any_core(buffer: usize, num: u64, offset: usize, radix: i32): void {
   const lut = changetype<usize>(ANY_DIGITS);
   var base = u64(radix);
   if ((radix & (radix - 1)) == 0) { // for radix which pow of two
@@ -710,7 +716,7 @@ function prettify(buffer: usize, length: i32, k: i32): i32 {
   }
 }
 
-export function dtoa_core(buffer: usize, value: f64): i32 {
+function dtoa_core(buffer: usize, value: f64): i32 {
   var sign = i32(value < 0);
   if (sign) {
     value = -value;
@@ -736,8 +742,7 @@ export function dtoa(value: f64): String {
   return result;
 }
 
-export function itoa_stream<T extends number>(buffer: usize, offset: usize, value: T): u32 {
-  buffer += offset << 1;
+export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
   var sign: u32 = 0;
   if (isSigned<T>()) {
     sign = u32(value < 0);
@@ -783,8 +788,7 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
   return decimals;
 }
 
-export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
-  buffer += offset << 1;
+export function dtoa_buffered(buffer: usize, value: f64): u32 {
   if (value == 0) {
     store<u16>(buffer, CharCode._0);
     store<u16>(buffer, CharCode.DOT, 2);
