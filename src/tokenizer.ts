@@ -1362,6 +1362,11 @@ export class Tokenizer extends DiagnosticEmitter {
               : DiagnosticCode.Multiple_consecutive_numeric_separators_are_not_permitted,
             this.range(pos)
           );
+        } else if (pos - 1 == start && text.charCodeAt(pos - 1) == CharCode._0) {
+          this.error(
+            DiagnosticCode.Numeric_separators_are_not_allowed_here,
+            this.range(pos)
+          );
         }
         sepEnd = pos + 1;
       } else {
@@ -1497,9 +1502,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var end = this.end;
     var start = this.pos;
-    var sepCount = 0;
-
-    sepCount += this.readDecimalFloatPartial(false);
+    var sepCount = this.readDecimalFloatPartial(false);
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
       sepCount += this.readDecimalFloatPartial();
@@ -1518,7 +1521,7 @@ export class Tokenizer extends DiagnosticEmitter {
       }
     }
     let result = text.substring(start, this.pos);
-    if (sepCount > 0) result = result.replaceAll("_", "");
+    if (sepCount) result = result.replaceAll("_", "");
     return parseFloat(result);
   }
 
@@ -1553,7 +1556,6 @@ export class Tokenizer extends DiagnosticEmitter {
       } else if (!isDecimalDigit(c)) {
         break;
       }
-
       ++pos;
     }
 
