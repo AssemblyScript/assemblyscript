@@ -1,8 +1,6 @@
 const asc = require("../../cli/asc");
 const loader = require("../../lib/loader");
 const args = process.argv.slice(2);
-const fs = require("fs");
-const path = require("path");
 
 /** @type {Uint8Array} */
 let binary;
