@@ -333,6 +333,13 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
+  // If showConfig print args and exit
+  if (args.showConfig) {
+    // FIXME: not a proper C-like API
+    stderr.write(JSON.stringify(args, null, 2));
+    return callback(null);
+  }
+
   // This method resolves a path relative to the baseDir instead of process.cwd()
   function resolve(arg) {
     if (path.isAbsolute(arg)) return arg;
