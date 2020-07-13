@@ -8,7 +8,7 @@ const path = require("path");
 let binary;
 /** @type {Uint8Array} */
 let wat;
-asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--textFile", "output.wat", "--explicitStart", ...args], {
+asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--explicitStart", ...args], {
   writeFile(name, contents) {
     if (name === "output.wasm") {
       binary = contents;
@@ -28,29 +28,13 @@ asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--textFile", "output
     process.exit(1);
   }
 
-  if (!wat) {
-    console.error("No watFile was generated for the asconfig test in " + process.cwd());
+  const theModule = loader.instantiateSync(binary);
+
+  try {
+    theModule.exports._start();
+  } catch (err) {
+    console.error("The wasm module _start() function failed in " + process.cwd());
     process.exit(1);
   }
-
-  const optionsPath = path.join(process.cwd(), "options.json");
-  if (fs.existsSync(optionsPath)) {
-    const options = require(optionsPath);
-    for (const option of Object.getOwnPropertyNames(options) ){
-      if (options[option] != asc.args[option]) {
-        throw new Error(`Test ${path.basename(process.cwd())}: ${options[option]} != ${asc.args[option]}`);
-      }
-    }
-  }
-
-  const watPath = path.join(process.cwd(), "output.wat");
-  if (fs.existsSync(watPath)) {
-
-  } else {
-    fs.writeFileSync(watPath, wat);
-  }
-  const theResult = loader.instantiateSync(binary);
-
-  theResult.exports._start();
   return 0;
 });

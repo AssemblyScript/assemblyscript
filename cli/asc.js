@@ -333,9 +333,6 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  exports.args = args;
-  exports.argv = argv;
-
   // This method resolves a path relative to the baseDir instead of process.cwd()
   function resolve(arg) {
     if (path.isAbsolute(arg)) return arg;
