@@ -1497,12 +1497,12 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var end = this.end;
     var start = this.pos;
-    var hasSep = false;
+    var sepCount = 0;
 
-    hasSep = this.readDecimalFloatPartial(false) || hasSep;
+    sepCount += this.readDecimalFloatPartial(false);
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
-      hasSep = this.readDecimalFloatPartial() || hasSep;
+      sepCount += this.readDecimalFloatPartial();
     }
     if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
@@ -1514,22 +1514,22 @@ export class Tokenizer extends DiagnosticEmitter {
         ) {
           ++this.pos;
         }
-        hasSep = this.readDecimalFloatPartial() || hasSep;
+        sepCount += this.readDecimalFloatPartial();
       }
     }
     let result = text.substring(start, this.pos);
-    if (hasSep) result = result.replaceAll("_", "");
+    if (sepCount > 0) result = result.replaceAll("_", "");
     return parseFloat(result);
   }
 
-  /** Reads past one section of a decimal float literal. Returns true iff there were any separators. */
-  private readDecimalFloatPartial(allowLeadingZeroSep: bool = true): bool {
+  /** Reads past one section of a decimal float literal. Returns the number of separators encountered. */
+  private readDecimalFloatPartial(allowLeadingZeroSep: bool = true): u32 {
     var text = this.source.text;
     var pos = this.pos;
     var start = pos;
     var end = this.end;
     var sepEnd = start;
-    var hasSep = false;
+    var sepCount = 0;
 
     while (pos < end) {
       let c = text.charCodeAt(pos);
@@ -1549,7 +1549,7 @@ export class Tokenizer extends DiagnosticEmitter {
           );
         }
         sepEnd = pos + 1;
-        hasSep = true;
+        ++sepCount;
       } else if (!isDecimalDigit(c)) {
         break;
       }
@@ -1565,7 +1565,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
 
     this.pos = pos;
-    return hasSep;
+    return sepCount;
   }
 
   readHexFloat(): f64 {
