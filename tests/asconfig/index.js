@@ -10,9 +10,6 @@ asc.main(["assembly/index.ts", "--textFile", "output.wat", "--outFile", "output.
     if (name === "output.wasm") {
       binary = contents;
     }
-    if (name === "output.wat") {
-      wat = contents;
-    }
   }
 }, (err) => {
   if (err) {
