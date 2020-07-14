@@ -1,0 +1,16 @@
+{
+  "targets": {
+    "release": {
+      "shrinkLevel": 1,
+      "optimizeLevel": 3,
+      "runtime": "stub",
+      "initialMemory": 30,
+      "explicitStart": true,
+      "measure": true,
+      "pedantic": true
+    }
+  },
+  "options": {
+    "enable": ["simd"]
+  }
+}
