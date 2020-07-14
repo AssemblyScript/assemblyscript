@@ -298,7 +298,7 @@ exports.main = function main(argv, options, callback) {
           return p;
         });
       }
-      args = optionsUtil.merge(exports.options, asconfig.options, args);
+      args = optionsUtil.merge(exports.options, args, asconfig.options);
     }
 
     // entries are added to the compilation
