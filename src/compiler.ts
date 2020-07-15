@@ -10763,7 +10763,8 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.EXTERNREF: {
         // TODO: non-null object might still be considered falseish
         // i.e. a ref to Boolean(false), Number(0), String("") etc.
-        return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));
+        // TODO: return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));
+        assert(false, 'Truthy checks for externref are not yet supported');
       }
       default: {
         assert(false);
