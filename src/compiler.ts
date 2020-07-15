@@ -7970,16 +7970,16 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallIndirect(signature, indexArg, operands, immediatelyDropped, reportNode);
+    return this.makeCallIndirect(signature, indexArg, reportNode, operands, immediatelyDropped);
   }
 
   /** Creates an indirect call to the function at `indexArg` in the function table. */
   makeCallIndirect(
     signature: Signature,
     indexArg: ExpressionRef,
+    reportNode: Node,
     operands: ExpressionRef[] | null = null,
     immediatelyDropped: bool = false,
-    reportNode: Node
   ): ExpressionRef {
     var module = this.module;
     var numOperands = operands ? operands.length : 0;
