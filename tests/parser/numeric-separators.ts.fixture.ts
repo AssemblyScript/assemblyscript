@@ -32,6 +32,7 @@
 4369;
 585;
 15;
+1;
 // ERROR 6188: "Numeric separators are not allowed here." in numeric-separators.ts(14,9+0)
 // ERROR 6189: "Multiple consecutive numeric separators are not permitted." in numeric-separators.ts(15,4+0)
 // ERROR 6188: "Numeric separators are not allowed here." in numeric-separators.ts(17,11+0)
@@ -56,3 +57,4 @@
 // ERROR 6188: "Numeric separators are not allowed here." in numeric-separators.ts(43,3+0)
 // ERROR 6188: "Numeric separators are not allowed here." in numeric-separators.ts(44,3+0)
 // ERROR 6188: "Numeric separators are not allowed here." in numeric-separators.ts(45,3+0)
+// ERROR 1121: "Octal literals are not allowed in strict mode." in numeric-separators.ts(47,1+4)
