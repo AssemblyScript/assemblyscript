@@ -4,8 +4,7 @@ const args = process.argv.slice(2);
 
 /** @type {Uint8Array} */
 let binary;
-// Output watfile to reduce stdout output
-asc.main(["assembly/index.ts", "--textFile", "output.wat", "--outFile", "output.wasm", "--explicitStart", ...args], {
+asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--explicitStart", ...args], {
   writeFile(name, contents) {
     if (name === "output.wasm") {
       binary = contents;

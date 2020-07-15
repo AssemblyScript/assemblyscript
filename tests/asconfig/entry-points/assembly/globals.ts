@@ -1,4 +1,3 @@
-
-
 @global
-const answerToLife = 42;
+  const answerToLife = 42;
+assert(answerToLife);
