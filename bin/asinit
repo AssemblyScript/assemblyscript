@@ -235,7 +235,7 @@ function ensureAsconfigJson() {
       },
       options: {}
     }, null, 2));
-    console.log(colors.green("  Created: ") + tsconfigFile);
+    console.log(colors.green("  Created: ") + asconfigFile);
   } else {
     console.log(colors.yellow("  Exists: ") + asconfigFile);
   }
