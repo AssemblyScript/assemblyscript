@@ -57,4 +57,4 @@
 // ERROR 6188: "Numeric separators are not allowed here." in numeric-separators.ts(43,3+0)
 // ERROR 6188: "Numeric separators are not allowed here." in numeric-separators.ts(44,3+0)
 // ERROR 6188: "Numeric separators are not allowed here." in numeric-separators.ts(45,3+0)
-// ERROR 1121: "Octal literals are not allowed in strict mode." in numeric-separators.ts(47,1+4)
+// ERROR 1121: "Octal literals are not allowed in strict mode." in numeric-separators.ts(47,1+5)
