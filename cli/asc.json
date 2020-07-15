@@ -301,7 +301,7 @@
     "default": false
   },
   "showConfig": {
-    "description": "Print out compiler configuration and not emit code.",
+    "description": "Print computed compiler options and exit.",
     "type": "b",
     "default": false
   },
