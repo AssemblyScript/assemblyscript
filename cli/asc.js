@@ -492,7 +492,7 @@ exports.main = function main(argv, options, callback) {
     let lib = args.lib;
     if (typeof lib === "string") lib = lib.trim().split(/\s*,\s*/);
     customLibDirs.push(...lib.map(resolve));
-    customLibDirs = unique(customLibDirs); // because `lib` and `customLibDirs` could potentially has duplicates
+    customLibDirs = unique(customLibDirs); // `lib` and `customLibDirs` may include duplicates
     for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
       let libDir = customLibDirs[i];
       let libFiles;
