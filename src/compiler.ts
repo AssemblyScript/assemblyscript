@@ -10780,6 +10780,7 @@ export class Compiler extends DiagnosticEmitter {
           reportNode.range,
           "ref.is_null"
         );
+        return module.unreachable();
       }
       default: {
         assert(false);
