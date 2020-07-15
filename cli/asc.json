@@ -19,7 +19,7 @@
   },
   "config": {
     "category": "General",
-    "description":  "Configuration file to apply. CLI arguments take precedence.",
+    "description": "Configuration file to apply. CLI arguments take precedence.",
     "type": "s",
     "default": "asconfig.json"
   },
