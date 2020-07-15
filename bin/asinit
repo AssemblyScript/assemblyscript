@@ -86,7 +86,7 @@ console.log([
   "  Example test to check that your module is indeed working.",
   "",
   colors.cyan("  ./asconfig.json"),
-  "  Main configuration file that defines a debug and release target for your project.",
+  "  Configuration file defining both a 'debug' and a 'release' target.",
   "",
   colors.cyan("  ./package.json"),
   "  Package info containing the necessary commands to compile to WebAssembly.",
