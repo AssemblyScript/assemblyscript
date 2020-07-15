@@ -25,7 +25,7 @@
   },
   "target": {
     "category": "General",
-    "description": "Configuration compile target profile to apply.",
+    "description": "Target configuration to use. Defaults to 'release'.",
     "type": "s",
     "default": "release"
   },
