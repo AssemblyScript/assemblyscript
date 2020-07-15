@@ -2440,7 +2440,8 @@ function builtin_select(ctx: BuiltinContext): ExpressionRef {
   var arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
   var arg2 = compiler.makeIsTrueish(
     compiler.compileExpression(operands[2], Type.bool),
-    compiler.currentType // ^
+    compiler.currentType, // ^
+    operands[2]
   );
   compiler.currentType = type;
   return module.select(arg0, arg1, arg2);
@@ -2577,9 +2578,9 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     let exprs = new Array<ExpressionRef>(numElements);
     let isStatic = true;
     for (let i = 0; i < numElements; ++i) {
-      let expression = expressions[i];
-      if (expression) {
-        let expr = compiler.compileExpression(expression, elementType,
+      let elementExpression = expressions[i];
+      if (elementExpression) {
+        let expr = compiler.compileExpression(elementExpression, elementType,
           Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
         let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
@@ -2590,7 +2591,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
         }
         exprs[i] = expr;
       } else {
-        exprs[i] = compiler.makeZero(elementType);
+        exprs[i] = compiler.makeZero(elementType, valuesOperand);
       }
     }
     if (!isStatic) {
