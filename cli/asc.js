@@ -720,13 +720,6 @@ exports.main = function main(argv, options, callback) {
 
   // Prepare output
   if (!args.noEmit) {
-    let hasStdout = false;
-    let hasOutput = args.textFile != null
-                 || args.binaryFile != null
-                 || args.jsFile != null
-                 || args.tsdFile != null
-                 || args.idlFile != null;
-
     if (args.outFile != null) {
       if (/\.was?t$/.test(args.outFile) && args.textFile == null) {
         args.textFile = args.outFile;
@@ -736,6 +729,13 @@ exports.main = function main(argv, options, callback) {
         args.binaryFile = args.outFile;
       }
     }
+
+    let hasStdout = false;
+    let hasOutput = args.textFile != null
+                 || args.binaryFile != null
+                 || args.jsFile != null
+                 || args.tsdFile != null
+                 || args.idlFile != null;
 
     // Write binary
     if (args.binaryFile != null) {
