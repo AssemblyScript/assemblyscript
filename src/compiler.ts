@@ -8280,8 +8280,9 @@ export class Compiler extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Not_implemented_0,
             expression.range,
-            "null references"
+            "ref.null"
           );
+          return module.unreachable();
         }
         this.currentType = options.usizeType;
         this.warning(
