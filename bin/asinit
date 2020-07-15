@@ -237,9 +237,7 @@ function ensureAsconfigJson() {
     }, null, 2));
     console.log(colors.green("  Created: ") + tsconfigFile);
   } else {
-    // TODO: What to do here?
-    // const asconfig = JSON.parse(fs.readFileSync(asconfigFile, "utf-8"));
-    console.log(colors.green("  Ignored: ") + asconfigFile);
+    console.log(colors.yellow("  Exists: ") + asconfigFile);
   }
   console.log();
 }
