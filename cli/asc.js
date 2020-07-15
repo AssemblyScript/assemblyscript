@@ -342,7 +342,7 @@ exports.main = function main(argv, options, callback) {
   // This method resolves a path relative to the baseDir instead of process.cwd()
   function resolve(arg) {
     if (path.isAbsolute(arg)) return arg;
-    return path.resolve(path.join(baseDir, arg));
+    return path.resolve(baseDir, arg);
   }
 
   // create a unique set of values
