@@ -335,7 +335,6 @@ exports.main = function main(argv, options, callback) {
 
   // If showConfig print args and exit
   if (args.showConfig) {
-    // FIXME: not a proper C-like API
     stderr.write(JSON.stringify(args, null, 2));
     return callback(null);
   }
