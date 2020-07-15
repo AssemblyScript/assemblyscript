@@ -1052,13 +1052,15 @@ export class Tokenizer extends DiagnosticEmitter {
 
   readIdentifier(): string {
     var text = this.source.text;
-    var start = this.pos;
     var end = this.end;
+    var pos = this.pos;
+    var start = pos;
     while (
-      ++this.pos < end &&
-      isIdentifierPart(text.charCodeAt(this.pos))
+      ++pos < end &&
+      isIdentifierPart(text.charCodeAt(pos))
     );
-    return text.substring(start, this.pos);
+    this.pos = pos;
+    return text.substring(start, pos);
   }
 
   readString(): string {
