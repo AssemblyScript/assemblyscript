@@ -8271,7 +8271,12 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = signatureReference.type.asNullable();
             return module.i32(0);
           }
-          return module.ref_null();
+          // TODO: return null ref for externref or funcref
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            expression.range,
+            "null references"
+          );
         }
         this.currentType = options.usizeType;
         this.warning(
@@ -10653,7 +10658,10 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(0);
       case TypeKind.F64: return module.f64(0);
       case TypeKind.V128: return module.v128(v128_zero);
-      case TypeKind.EXTERNREF: return module.ref_null();
+      case TypeKind.EXTERNREF:
+        // TODO: return null ref for both externref as well as funcref
+        assert(false, 'null for externref is not yet supported');
+        return module.unreachable();
     }
   }
 

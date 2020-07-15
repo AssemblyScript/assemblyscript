@@ -26,9 +26,8 @@ console.log(someObject);
 console.log(someKey);
 console.log(Reflect.get(someObject, someKey));
 
-// can represent and recognize 'null'
-
-var nullGlobal: externref;
+// TODO: can represent and recognize 'null' for both externref and funcref
+/* var nullGlobal: externref;
 assert(!nullGlobal);
 nullGlobal = null;
 assert(!nullGlobal);
@@ -43,10 +42,11 @@ assert(!nullGlobalInit);
   assert(!nullLocalInit);
 }
 
-// can represent function references
+// funcref can represent function references
 
 function someFunc(): void {}
 var funcGlobal: externref = someFunc;
 {
   let funcLocal: externref = someFunc;
 }
+*/
