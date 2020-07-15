@@ -340,8 +340,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // This method resolves a path relative to the baseDir instead of process.cwd()
-  function resolve(arg) {
-    if (path.isAbsolute(arg)) return arg;
+  function resolveBasedir(arg) {
     return path.resolve(baseDir, arg);
   }
 
@@ -355,7 +354,7 @@ exports.main = function main(argv, options, callback) {
     return path.relative(baseDir, arg);
   }
   // postprocess we need to get absolute file locations argv
-  argv = unique(argv.map(resolve)).map(makeRelative);
+  argv = unique(argv.map(resolveBasedir)).map(makeRelative);
 
   // Set up options
   const compilerOptions = assemblyscript.newOptions();
@@ -433,7 +432,7 @@ exports.main = function main(argv, options, callback) {
   const transforms = [];
   if (args.transform) {
     let tsNodeRegistered = false;
-    let transformArgs = unique(args.transform.map(resolve));
+    let transformArgs = unique(args.transform.map(resolveBasedir));
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
       if (!tsNodeRegistered && filename.endsWith(".ts")) { // ts-node requires .ts specifically
@@ -491,7 +490,7 @@ exports.main = function main(argv, options, callback) {
   if (args.lib) {
     let lib = args.lib;
     if (typeof lib === "string") lib = lib.trim().split(/\s*,\s*/);
-    customLibDirs.push(...lib.map(resolve));
+    customLibDirs.push(...lib.map(resolveBasedir));
     customLibDirs = unique(customLibDirs); // `lib` and `customLibDirs` may include duplicates
     for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
       let libDir = customLibDirs[i];
