@@ -1,8 +1,7 @@
 {
   "targets": {
     "release": {
-      "shrinkLevel": 1,
-      "optimizeLevel": 3,
+      "optimize": true,
       "runtime": "stub",
       "initialMemory": 30,
       "explicitStart": true,
