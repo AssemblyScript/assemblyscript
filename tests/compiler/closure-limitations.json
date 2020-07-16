@@ -3,8 +3,9 @@
     "--runtime none"
   ],
   "stderr": [
-    "AS100: Not implemented: Updating closed locals",
-    "AS100: Not implemented: Calling a Closure from an anonymous function that shares the same parent.",
+    "AS100: Not implemented: Closures",
+    "AS100: Not implemented: Closures",
+    "AS100: Not implemented: Closures",
     "EOF"
   ]
 }
