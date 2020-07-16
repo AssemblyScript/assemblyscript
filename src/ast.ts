@@ -59,6 +59,7 @@ export enum NodeKind {
   LITERAL,
   NEW,
   NULL,
+  OMITTED,
   PARENTHESIZED,
   PROPERTYACCESS,
   TERNARY,
@@ -209,7 +210,7 @@ export abstract class Node {
   }
 
   static createArrayLiteralExpression(
-    elementExpressions: (Expression | null)[],
+    elementExpressions: Expression[],
     range: Range
   ): ArrayLiteralExpression {
     return new ArrayLiteralExpression(elementExpressions, range);
@@ -324,6 +325,12 @@ export abstract class Node {
     range: Range
   ): ObjectLiteralExpression {
     return new ObjectLiteralExpression(names, values, range);
+  }
+
+  static createOmittedExpression(
+    range: Range
+  ): OmittedExpression {
+    return new OmittedExpression(range);
   }
 
   static createParenthesizedExpression(
@@ -1101,7 +1108,7 @@ export abstract class LiteralExpression extends Expression {
 export class ArrayLiteralExpression extends LiteralExpression {
   constructor(
     /** Nested element expressions. */
-    public elementExpressions: (Expression | null)[],
+    public elementExpressions: Expression[],
     /** Source range. */
     range: Range
   ) {
@@ -1344,6 +1351,16 @@ export class ObjectLiteralExpression extends LiteralExpression {
     range: Range
   ) {
     super(LiteralKind.OBJECT, range);
+  }
+}
+
+/** Represents an omitted expression, e.g. within an array literal. */
+export class OmittedExpression extends Expression {
+  constructor(
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.OMITTED, range);
   }
 }
 

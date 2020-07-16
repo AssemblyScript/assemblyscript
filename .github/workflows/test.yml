@@ -115,8 +115,7 @@ jobs:
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
-        # FIXME: newer node-v8 builds are currently broken
-        node-version: "14.0.0-v8-canary201911242015a12d82"
+        node-version: "15.0.0-v8-canary202007077c53168ead"
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files

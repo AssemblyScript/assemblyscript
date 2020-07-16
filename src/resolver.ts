@@ -107,6 +107,7 @@ import {
 import {
   BuiltinNames
 } from "./builtins";
+import { Module } from "./module";
 
 /** Indicates whether errors are reported or not. */
 export enum ReportMode {
@@ -1195,7 +1196,7 @@ export class Resolver extends DiagnosticEmitter {
           if (signatureReference) {
             return signatureReference.type.asNullable();
           } else if (ctxType.isExternalReference) {
-            return Type.anyref.asNullable();
+            return Type.externref.asNullable();
           }
         }
         return this.program.options.usizeType;

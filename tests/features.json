@@ -22,7 +22,7 @@
       "--enable reference-types"
     ],
     "v8_flags": [
-      "--experimental-wasm-anyref"
+      "--experimental-wasm-reftypes"
     ]
   },
   "bigint-integration": {

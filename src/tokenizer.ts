@@ -1052,13 +1052,15 @@ export class Tokenizer extends DiagnosticEmitter {
 
   readIdentifier(): string {
     var text = this.source.text;
-    var start = this.pos;
     var end = this.end;
+    var pos = this.pos;
+    var start = pos;
     while (
-      ++this.pos < end &&
-      isIdentifierPart(text.charCodeAt(this.pos))
+      ++pos < end &&
+      isIdentifierPart(text.charCodeAt(pos))
     );
-    return text.substring(start, this.pos);
+    this.pos = pos;
+    return text.substring(start, pos);
   }
 
   readString(): string {
@@ -1362,6 +1364,11 @@ export class Tokenizer extends DiagnosticEmitter {
               : DiagnosticCode.Multiple_consecutive_numeric_separators_are_not_permitted,
             this.range(pos)
           );
+        } else if (pos - 1 == start && text.charCodeAt(pos - 1) == CharCode._0) {
+          this.error(
+            DiagnosticCode.Numeric_separators_are_not_allowed_here,
+            this.range(pos)
+          );
         }
         sepEnd = pos + 1;
       } else {
@@ -1494,37 +1501,75 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readDecimalFloat(): f64 {
-    // TODO: numeric separators (parseFloat can't handle these)
     var text = this.source.text;
-    var pos = this.pos;
     var end = this.end;
-    var start = pos;
-    while (pos < end && isDecimalDigit(text.charCodeAt(pos))) {
-      ++pos;
+    var start = this.pos;
+    var sepCount = this.readDecimalFloatPartial(false);
+    if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
+      ++this.pos;
+      sepCount += this.readDecimalFloatPartial();
     }
-    if (pos < end && text.charCodeAt(pos) == CharCode.DOT) {
-      ++pos;
-      while (pos < end && isDecimalDigit(text.charCodeAt(pos))) {
-        ++pos;
-      }
-    }
-    if (pos < end) {
-      let c = text.charCodeAt(pos);
+    if (this.pos < end) {
+      let c = text.charCodeAt(this.pos);
       if ((c | 32) == CharCode.e) {
         if (
-          ++pos < end &&
-          (c = text.charCodeAt(pos)) == CharCode.MINUS || c == CharCode.PLUS &&
-          isDecimalDigit(text.charCodeAt(pos + 1))
+          ++this.pos < end &&
+          (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
+          isDecimalDigit(text.charCodeAt(this.pos + 1))
         ) {
-          ++pos;
+          ++this.pos;
         }
-        while (pos < end && isDecimalDigit(text.charCodeAt(pos))) {
-          ++pos;
-        }
+        sepCount += this.readDecimalFloatPartial();
       }
     }
+    let result = text.substring(start, this.pos);
+    if (sepCount) result = result.replaceAll("_", "");
+    return parseFloat(result);
+  }
+
+  /** Reads past one section of a decimal float literal. Returns the number of separators encountered. */
+  private readDecimalFloatPartial(allowLeadingZeroSep: bool = true): u32 {
+    var text = this.source.text;
+    var pos = this.pos;
+    var start = pos;
+    var end = this.end;
+    var sepEnd = start;
+    var sepCount = 0;
+
+    while (pos < end) {
+      let c = text.charCodeAt(pos);
+
+      if (c == CharCode._) {
+        if (sepEnd == pos) {
+          this.error(
+            sepEnd == start
+              ? DiagnosticCode.Numeric_separators_are_not_allowed_here
+              : DiagnosticCode.Multiple_consecutive_numeric_separators_are_not_permitted,
+            this.range(pos)
+          );
+        } else if (!allowLeadingZeroSep && pos - 1 == start && text.charCodeAt(pos - 1) == CharCode._0) {
+          this.error(
+            DiagnosticCode.Numeric_separators_are_not_allowed_here,
+            this.range(pos)
+          );
+        }
+        sepEnd = pos + 1;
+        ++sepCount;
+      } else if (!isDecimalDigit(c)) {
+        break;
+      }
+      ++pos;
+    }
+
+    if (pos != start && sepEnd == pos) {
+      this.error(
+        DiagnosticCode.Numeric_separators_are_not_allowed_here,
+        this.range(sepEnd - 1)
+      );
+    }
+
     this.pos = pos;
-    return parseFloat(text.substring(start, pos));
+    return sepCount;
   }
 
   readHexFloat(): f64 {

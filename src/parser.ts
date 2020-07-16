@@ -3670,11 +3670,11 @@ export class Parser extends DiagnosticEmitter {
       }
       // ArrayLiteralExpression
       case Token.OPENBRACKET: {
-        let elementExpressions = new Array<Expression | null>();
+        let elementExpressions = new Array<Expression>();
         while (!tn.skip(Token.CLOSEBRACKET)) {
           let expr: Expression | null;
           if (tn.peek() == Token.COMMA) {
-            expr = null; // omitted
+            expr = Node.createOmittedExpression(tn.range(tn.pos));
           } else {
             expr = this.parseExpression(tn, Precedence.COMMA + 1);
             if (!expr) return null;

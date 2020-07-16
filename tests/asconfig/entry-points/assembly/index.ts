@@ -1,0 +1,2 @@
+
+assert(answerToLife == 42);

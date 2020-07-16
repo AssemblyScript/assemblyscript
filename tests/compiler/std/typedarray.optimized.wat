@@ -9465,15 +9465,10 @@
   local.get $7
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
-  local.get $2
-  call $~lib/rt/pure/__retain
   local.get $0
-  i64.const 2
-  i64.rem_u
+  i64.const 1
+  i64.and
   i64.eqz
-  local.set $2
-  call $~lib/rt/pure/__release
-  local.get $2
  )
  (func $~lib/math/NativeMathf.mod (param $0 f32) (result f32)
   (local $1 i32)

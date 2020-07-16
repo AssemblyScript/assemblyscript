@@ -978,7 +978,7 @@ function builtin_nameof(ctx: BuiltinContext): ExpressionRef {
         value = "Function";
       } else {
         assert(resultType.isExternalReference);
-        value = "Anyref"; // TODO
+        value = "Externref";
       }
     }
   } else {
@@ -997,7 +997,7 @@ function builtin_nameof(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.ISIZE: { value = "isize"; break; }
       case TypeKind.USIZE: { value = "usize"; break; }
       case TypeKind.V128: { value = "v128"; break; }
-      case TypeKind.ANYREF: { value = "anyref"; break; }
+      case TypeKind.EXTERNREF: { value = "externref"; break; }
       default: assert(false);
       case TypeKind.VOID: { value = "void"; break; }
     }
@@ -2445,7 +2445,8 @@ function builtin_select(ctx: BuiltinContext): ExpressionRef {
   var arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
   var arg2 = compiler.makeIsTrueish(
     compiler.compileExpression(operands[2], Type.bool),
-    compiler.currentType // ^
+    compiler.currentType, // ^
+    operands[2]
   );
   compiler.currentType = type;
   return module.select(arg0, arg1, arg2);
@@ -2582,9 +2583,9 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     let exprs = new Array<ExpressionRef>(numElements);
     let isStatic = true;
     for (let i = 0; i < numElements; ++i) {
-      let expression = expressions[i];
-      if (expression) {
-        let expr = compiler.compileExpression(expression, elementType,
+      let elementExpression = expressions[i];
+      if (elementExpression.kind != NodeKind.OMITTED) {
+        let expr = compiler.compileExpression(elementExpression, elementType,
           Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
         let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
@@ -2595,7 +2596,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
         }
         exprs[i] = expr;
       } else {
-        exprs[i] = compiler.makeZero(elementType);
+        exprs[i] = compiler.makeZero(elementType, elementExpression);
       }
     }
     if (!isStatic) {
