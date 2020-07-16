@@ -74,7 +74,7 @@ function subscribe(funcToCallOnPub: SubFunc): UnSubFunc {
   return (): void => {
     let funcIndex = subscriptions.indexOf(funcToCallOnPub);
     subscriptions.splice(funcIndex, 1);
-  }
+  };
 }
 
 function publish(): void {
@@ -92,11 +92,11 @@ function publish(): void {
 
 let plusOne = (): void => {
   globalSubVar += 1;
-}
+};
 
 let plusTwo = (): void => {
   globalSubVar += 1;
-}
+};
 
 
 let unsubPlusOne: () => void = subscribe(plusOne);
