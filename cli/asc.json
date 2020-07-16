@@ -17,6 +17,18 @@
     "type": "b",
     "default": false
   },
+  "config": {
+    "category": "General",
+    "description": "Configuration file to apply. CLI arguments take precedence.",
+    "type": "s",
+    "default": "asconfig.json"
+  },
+  "target": {
+    "category": "General",
+    "description": "Target configuration to use. Defaults to 'release'.",
+    "type": "s",
+    "default": "release"
+  },
 
   "optimize": {
     "category": "Optimization",
@@ -285,6 +297,11 @@
   },
   "noEmit": {
     "description": "Performs compilation as usual but does not emit code.",
+    "type": "b",
+    "default": false
+  },
+  "showConfig": {
+    "description": "Print computed compiler options and exit.",
     "type": "b",
     "default": false
   },
