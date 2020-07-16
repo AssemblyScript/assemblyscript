@@ -61,7 +61,7 @@ export const enum TypeKind {
   // references
 
   /** Any host reference. */
-  ANYREF,
+  EXTERNREF,
 
   // other
 
@@ -267,7 +267,7 @@ export class Type {
             if (targetFunction = target.signatureReference) {
               return currentFunction.isAssignableTo(targetFunction);
             }
-          } else if (this.kind == TypeKind.ANYREF && target.kind == TypeKind.ANYREF) {
+          } else if (this.kind == TypeKind.EXTERNREF && target.kind == TypeKind.EXTERNREF) {
             return true;
           }
         }
@@ -344,8 +344,8 @@ export class Type {
           : signatureReference.toString();
       }
       // TODO: Reflect.apply(value, "toString", []) ?
-      assert(this.kind == TypeKind.ANYREF);
-      return "anyref";
+      assert(this.kind == TypeKind.EXTERNREF);
+      return "externref";
     }
     switch (this.kind) {
       case TypeKind.I8: return "i8";
@@ -362,7 +362,7 @@ export class Type {
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
       case TypeKind.V128: return "v128";
-      case TypeKind.ANYREF: return "anyref";
+      case TypeKind.EXTERNREF: return "externref";
       default: assert(false);
       case TypeKind.VOID: return "void";
     }
@@ -388,7 +388,7 @@ export class Type {
       case TypeKind.F32: return NativeType.F32;
       case TypeKind.F64: return NativeType.F64;
       case TypeKind.V128: return NativeType.V128;
-      case TypeKind.ANYREF: return NativeType.Anyref;
+      case TypeKind.EXTERNREF: return NativeType.Externref;
       case TypeKind.VOID: return NativeType.None;
     }
   }
@@ -521,7 +521,7 @@ export class Type {
   );
 
   /** Any host reference. */
-  static readonly anyref: Type = new Type(TypeKind.ANYREF,
+  static readonly externref: Type = new Type(TypeKind.EXTERNREF,
     TypeFlags.HOST       |
     TypeFlags.REFERENCE, 0
   );
