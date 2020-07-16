@@ -107,7 +107,6 @@ import {
 import {
   BuiltinNames
 } from "./builtins";
-import { Module } from "./module";
 
 /** Indicates whether errors are reported or not. */
 export enum ReportMode {
