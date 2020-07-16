@@ -2,5 +2,14 @@
   "asc_flags": [
     "--runtime full",
     "--use ASC_RTRACE=1"
+  ],
+  "stderr": [
+    "AS100: Not implemented: Closures",
+    "AS100: Not implemented: Closures",
+    "TS2304: Cannot find name '$local0'.",
+    "AS100: Not implemented: Closures",
+    "AS100: Not implemented: Closures",
+    "AS100: Not implemented: Closures",
+    "AS100: Not implemented: Closures"
   ]
 }

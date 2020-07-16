@@ -1,3 +1,5 @@
+// NOTE torch2424 6/15/20: This test has a lot of errors skipped. Closures is currently a WIP
+
 function testParam($local0: i32, $local1: i32): (value: i32) => i32 {
   return function inner(value: i32) {
     return $local1; // closure
@@ -63,21 +65,21 @@ export function returnOverBoundary(): () => i32 {
 }
 returnOverBoundary();
 
-// KNOWN BUGS
+// KNOWN BUGS (torch2424: 6/15/20 - As of the original Closures PR)
 
-// causes a memory leak, copyFunction is properly released
-// const func = (i: i32): i32 => i;
-// let copyFunction: (i: i32) => i32 = func;
+// Causes a memory leak, copyFunction is properly released
+const func = (i: i32): i32 => i;
+let copyFunction: (i: i32) => i32 = func;
 
-// also causes a memory leak
-// function nestedExecutionTest(arg: i32): i32 {
-// var x = 7;
-// var f = complexCreateClosure(arg);
-// var g = (fn: (x3: i32) => i32): i32 => {
-// var first = fn(arg);
-// return x;
-// };
-// return g(f);
-// }
-// nestedExecutionTest(1);
+// Also causes a memory leak
+function nestedExecutionTest(arg: i32): i32 {
+  var x = 7;
+  var f = complexCreateClosure(arg);
+  var g = (fn: (x3: i32) => i32): i32 => {
+    var first = fn(arg);
+    return x;
+  };
+  return g(f);
+}
+nestedExecutionTest(1);
 

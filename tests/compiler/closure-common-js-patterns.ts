@@ -1,3 +1,5 @@
+// NOTE torch2424 6/15/20: This test has a lot of errors skipped. Closures is currently a WIP
+
 // Common use cases / concepts for closures, as covered in articles like:
 // https://medium.com/@dis_is_patrick/practical-uses-for-closures-c65640ae7304
 // https://stackoverflow.com/questions/2728278/what-is-a-practical-use-for-a-closure-in-javascript
@@ -62,7 +64,6 @@ assert(generatedPlusTwo() == 26);
 
 // I often will use this for like Pub/Sub stuff
 
-/*
 type SubFunc = () => void;
 type UnSubFunc = () => void;
 let subscriptions = new Array<SubFunc>();
@@ -129,6 +130,10 @@ publish();
 assert(globalSubVar == 5);
 assert(subscriptions.length == 0);
 
+
+// TODO (torch2424 6/15/20): Uncomment this test once closures is fully implemented
+/*
+
 // Namespacing private functions
 // Again, kind of weird, they should probably just make a class, but it's another interesting test
 
@@ -175,5 +180,4 @@ myChunk.write(1025);
 
 assert(myChunk.totalSize == 2048);
 assert(myChunk.usedSize == 1025);
-
 */
