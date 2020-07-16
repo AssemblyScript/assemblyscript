@@ -191,6 +191,7 @@ export namespace CommonNames {
   export const StaticArray = "StaticArray";
   export const Set = "Set";
   export const Map = "Map";
+  export const Function = "Function";
   export const ArrayBufferView = "ArrayBufferView";
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";

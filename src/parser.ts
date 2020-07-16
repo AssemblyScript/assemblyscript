@@ -1563,13 +1563,14 @@ export class Parser extends DiagnosticEmitter {
     var parameters = this.parseParameters(tn);
     if (!parameters) return null;
 
-    return this.parseFunctionExpressionCommon(tn, name, parameters, arrowKind, startPos, signatureStart);
+    return this.parseFunctionExpressionCommon(tn, name, parameters, this.parseParametersThis, arrowKind, startPos, signatureStart);
   }
 
   private parseFunctionExpressionCommon(
     tn: Tokenizer,
     name: IdentifierExpression,
     parameters: ParameterNode[],
+    explicitThis: NamedTypeNode | null,
     arrowKind: ArrowKind,
     startPos: i32 = -1,
     signatureStart: i32 = -1
@@ -1598,7 +1599,7 @@ export class Parser extends DiagnosticEmitter {
     var signature = Node.createFunctionType(
       parameters,
       returnType,
-      null, // TODO?
+      explicitThis,
       false,
       tn.range(signatureStart, tn.pos)
     );
@@ -3585,6 +3586,7 @@ export class Parser extends DiagnosticEmitter {
             tn,
             Node.createEmptyIdentifierExpression(tn.range(startPos)),
             [],
+            null,
             ArrowKind.ARROW_PARENTHESIZED
           );
         }
@@ -3777,6 +3779,7 @@ export class Parser extends DiagnosticEmitter {
                 identifier.range
               )
             ],
+            null,
             ArrowKind.ARROW_SINGLE,
             startPos
           );

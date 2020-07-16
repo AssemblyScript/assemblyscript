@@ -214,7 +214,7 @@
   (local $1 i32)
   (local $2 f32)
   (local $3 f64)
-  block $~lib/util/hash/HASH<~lib/string/String | null>|inlined.0 (result i32)
+  block $~lib/util/hash/HASH<~lib/string/String|null>|inlined.0 (result i32)
    i32.const 0
    call $~lib/rt/stub/__retain
    local.set $0
@@ -226,7 +226,7 @@
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
-   br $~lib/util/hash/HASH<~lib/string/String | null>|inlined.0
+   br $~lib/util/hash/HASH<~lib/string/String|null>|inlined.0
   end
   call $std/hash/check
   drop

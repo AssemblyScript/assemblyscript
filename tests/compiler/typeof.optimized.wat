@@ -13,7 +13,8 @@
  (data (i32.const 1168) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00b\00o\00o\00l\00e\00a\00n")
  (data (i32.const 1200) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
  (data (i32.const 1232) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00s\00t\00r\00i\00n\00g")
- (data (i32.const 1264) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00u\00n\00d\00e\00f\00i\00n\00e\00d")
+ (data (i32.const 1264) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\01")
+ (data (i32.const 1296) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00u\00n\00d\00e\00f\00i\00n\00e\00d")
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
@@ -352,7 +353,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1344
+  i32.const 1376
   memory.size
   local.tee $1
   i32.const 16
@@ -361,7 +362,7 @@
   i32.gt_u
   if
    local.get $1
-   i32.const 66879
+   i32.const 66911
    local.get $0
    i32.sub
    i32.const -65536
@@ -386,16 +387,16 @@
     end
    end
   end
-  i32.const 1312
+  i32.const 1344
   i32.const 16
   i32.store
-  i32.const 1316
+  i32.const 1348
   i32.const 1
   i32.store
-  i32.const 1320
-  i32.const 3
+  i32.const 1352
+  i32.const 4
   i32.store
-  i32.const 1324
+  i32.const 1356
   i32.const 0
   i32.store
   i32.const 1072
@@ -422,8 +423,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1280
-  i32.const 1280
+  i32.const 1312
+  i32.const 1312
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -434,8 +435,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1280
-  i32.const 1280
+  i32.const 1312
+  i32.const 1312
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -446,8 +447,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1280
-  i32.const 1280
+  i32.const 1312
+  i32.const 1312
   call $~lib/string/String.__eq
   i32.eqz
   if

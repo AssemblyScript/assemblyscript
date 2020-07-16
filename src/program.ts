@@ -34,8 +34,7 @@
 // │ ├─FieldPrototype         Prototype of concrete field instances
 // │ ├─PropertyPrototype      Prototype of concrete property instances
 // │ └─ClassPrototype         Prototype of concrete classe instances
-// ├─File                     File, analogous to Source in the AST
-// └─FunctionTarget           Indirectly called function helper (typed)
+// └─File                     File, analogous to Source in the AST
 
 import {
   CommonFlags,
@@ -66,8 +65,8 @@ import {
 import {
   Type,
   TypeKind,
-  TypeFlags,
-  Signature
+  Signature,
+  TypeFlags
 } from "./types";
 
 import {
@@ -117,7 +116,8 @@ import {
 
 import {
   Module,
-  FunctionRef
+  FunctionRef,
+  MemorySegment
 } from "./module";
 
 import {
@@ -126,7 +126,10 @@ import {
   writeI16,
   writeI32,
   writeF32,
-  writeF64
+  writeF64,
+  writeI64,
+  writeI32AsI64,
+  writeI64AsI32
 } from "./util";
 
 import {
@@ -518,6 +521,14 @@ export class Program extends DiagnosticEmitter {
   }
   private _mapPrototype: ClassPrototype | null = null;
 
+  /** Gets the standard `Function` prototype. */
+  get functionPrototype(): ClassPrototype {
+    var cached = this._functionPrototype;
+    if (!cached) this._functionPrototype = cached = <ClassPrototype>this.require(CommonNames.Function, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _functionPrototype: ClassPrototype | null = null;
+
   /** Gets the standard `Int8Array` prototype. */
   get int8ArrayPrototype(): ClassPrototype {
     var cached = this._int8ArrayPrototype;
@@ -724,21 +735,6 @@ export class Program extends DiagnosticEmitter {
       if (source.internalPath == internalPath) return source.text;
     }
     return null;
-  }
-
-  /** Writes a common runtime header to the specified buffer. */
-  writeRuntimeHeader(buffer: Uint8Array, offset: i32, id: u32, payloadSize: u32): void {
-    // BLOCK {
-    //   mmInfo: usize // WASM64 TODO
-    //   gcInfo: u32
-    //   rtId: u32
-    //   rtSize: u32
-    // }
-    assert(payloadSize < (1 << 28)); // 1 bit BUFFERED + 3 bits color
-    writeI32(payloadSize, buffer, offset);
-    writeI32(1, buffer, offset + 4); // RC=1
-    writeI32(id, buffer, offset + 8);
-    writeI32(payloadSize, buffer, offset + 12);
   }
 
   /** Gets the size of a runtime header. */
@@ -1494,22 +1490,20 @@ export class Program extends DiagnosticEmitter {
     this.nativeFile.add(name, element);
   }
 
-  /** Registers the backing class of a native type. */
+  /** Registers the wrapper class of a non-class type. */
   private registerWrapperClass(type: Type, className: string): void {
     var wrapperClasses = this.wrapperClasses;
-    assert(!type.classReference && !wrapperClasses.has(type));
-    var element = this.lookupGlobal(className);
-    if (!element) return;
+    assert(!type.isInternalReference && !wrapperClasses.has(type));
+    var element = assert(this.lookupGlobal(className));
     assert(element.kind == ElementKind.CLASS_PROTOTYPE);
-    var classElement = this.resolver.resolveClass(<ClassPrototype>element, null);
-    if (!classElement) return;
+    var classElement = assert(this.resolver.resolveClass(<ClassPrototype>element, null));
     classElement.wrappedType = type;
     wrapperClasses.set(type, classElement);
   }
 
   /** Registers a constant integer value within the global scope. */
   registerConstantInteger(name: string, type: Type, value: i64): void {
-    assert(type.is(TypeFlags.INTEGER)); // must be an integer type
+    assert(type.isIntegerInclReference);
     var global = new Global(
       name,
       this.nativeFile,
@@ -1522,7 +1516,7 @@ export class Program extends DiagnosticEmitter {
 
   /** Registers a constant float value within the global scope. */
   private registerConstantFloat(name: string, type: Type, value: f64): void {
-    assert(type.is(TypeFlags.FLOAT)); // must be a float type
+    assert(type.isFloatValue);
     var global = new Global(
       name,
       this.nativeFile,
@@ -3167,7 +3161,7 @@ export abstract class VariableLikeElement extends TypedElement {
 
   /** Applies a constant integer value to this element. */
   setConstantIntegerValue(value: i64, type: Type): void {
-    assert(type.is(TypeFlags.INTEGER));
+    assert(type.isIntegerInclReference);
     this.type = type;
     this.constantValueKind = ConstantValueKind.INTEGER;
     this.constantIntegerValue = value;
@@ -3176,7 +3170,7 @@ export abstract class VariableLikeElement extends TypedElement {
 
   /** Applies a constant float value to this element. */
   setConstantFloatValue(value: f64, type: Type): void {
-    assert(type.is(TypeFlags.FLOAT));
+    assert(type.isFloatValue);
     this.type = type;
     this.constantValueKind = ConstantValueKind.FLOAT;
     this.constantFloatValue = value;
@@ -3441,12 +3435,12 @@ export class Function extends TypedElement {
   debugLocations: Range[] = [];
   /** Function reference, if compiled. */
   ref: FunctionRef = 0;
-  /** Function table index, if any. */
-  functionTableIndex: i32 = -1;
   /** Varargs stub for calling with omitted arguments. */
   varargsStub: Function | null = null;
   /** Virtual stub for calling overloads. */
   virtualStub: Function | null = null;
+  /** Runtime memory segment, if created. */
+  memorySegment: MemorySegment | null = null;
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
@@ -3483,14 +3477,15 @@ export class Function extends TypedElement {
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
     var program = prototype.program;
-    this.type = program.options.usizeType.asFunction(signature);
+    this.type = signature.type;
     if (!prototype.is(CommonFlags.AMBIENT)) {
       let localIndex = 0;
-      if (this.is(CommonFlags.INSTANCE)) {
+      let thisType = signature.thisType;
+      if (thisType) {
         let local = new Local(
           CommonNames.this_,
           localIndex++,
-          assert(signature.thisType),
+          thisType,
           this
         );
         this.localsByName.set(CommonNames.this_, local);
@@ -3499,7 +3494,7 @@ export class Function extends TypedElement {
       let parameterTypes = signature.parameterTypes;
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         let parameterType = parameterTypes[i];
-        let parameterName = signature.getParameterName(i);
+        let parameterName = this.getParameterName(i);
         let local = new Local(
           parameterName,
           localIndex++,
@@ -3512,6 +3507,14 @@ export class Function extends TypedElement {
     }
     this.flow = Flow.createParent(this);
     registerConcreteElement(program, this);
+  }
+
+  /** Gets the name of the parameter at the specified index. */
+  getParameterName(index: i32): string {
+    var parameters = (<FunctionDeclaration>this.declaration).signature.parameters;
+    return parameters.length > index
+      ? parameters[index].name.text
+      : getDefaultParameterName(index);
   }
 
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
@@ -3595,42 +3598,6 @@ export class Function extends TypedElement {
         );
       }
     }
-  }
-}
-
-var nextFunctionTarget = 0;
-
-/** A resolved function target, that is a function called indirectly by an index and signature. */
-export class FunctionTarget extends Element {
-
-  /** Underlying signature. */
-  signature: Signature;
-  /** Function type. */
-  type: Type;
-
-  /** Constructs a new function target. */
-  constructor(
-    /** Concrete signature. */
-    signature: Signature,
-    /** Program reference. */
-    program: Program
-  ) {
-    super(
-      ElementKind.FUNCTION_TARGET,
-      "~sig" + nextFunctionTarget.toString(),
-      "~sig" + nextFunctionTarget.toString(),
-      program,
-      program.nativeFile
-    );
-    ++nextFunctionTarget;
-    this.signature = signature;
-    this.flags = CommonFlags.RESOLVED;
-    this.type = program.options.usizeType.asFunction(signature);
-  }
-
-  /* @override */
-  lookup(name: string): Element | null {
-    return null;
   }
 }
 
@@ -4100,7 +4067,10 @@ export class Class extends TypedElement {
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
     this.typeArguments = typeArguments;
-    this.setType(program.options.usizeType.asClass(this));
+    var usizeType = program.options.usizeType;
+    var type = new Type(usizeType.kind, usizeType.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, usizeType.size);
+    type.classReference = this;
+    this.setType(type);
 
     if (!this.hasDecorator(DecoratorFlags.UNMANAGED)) {
       let id = program.nextClassId++;
@@ -4226,39 +4196,80 @@ export class Class extends TypedElement {
     return (<Field>field).memoryOffset;
   }
 
+  /** Creates a buffer suitable to hold a runtime instance of this class. */
+  createBuffer(overhead: i32 = 0): Uint8Array {
+    var size = this.nextMemoryOffset + overhead;
+    var buffer = new Uint8Array(this.program.runtimeHeaderSize + size);
+    assert(!this.program.options.isWasm64); // TODO: WASM64, mmInfo is usize
+    // see: std/assembly/rt/common.ts
+    assert(size < (1 << 28));     // 1 bit BUFFERED + 3 bits color
+    writeI32(size, buffer, 0);    // mmInfo = 0
+    writeI32(1, buffer, 4);       // gcInfo (RC) = 1
+    writeI32(this.id, buffer, 8); // rtId
+    writeI32(size, buffer, 12);   // rtSize
+    return buffer;
+  }
+
   /** Writes a field value to a buffer and returns the number of bytes written. */
-  writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32): i32 {
+  writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.runtimeHeaderSize): i32 {
     var element = this.lookupInSelf(name);
     if (element !== null && element.kind == ElementKind.FIELD) {
       let fieldInstance = <Field>element;
       let offset = baseOffset + fieldInstance.memoryOffset;
-      switch (fieldInstance.type.kind) {
+      let typeKind = fieldInstance.type.kind;
+      switch (typeKind) {
         case TypeKind.I8:
         case TypeKind.U8: {
+          assert(!i64_is(value));
           writeI8(i32(value), buffer, offset);
           return 1;
         }
         case TypeKind.I16:
         case TypeKind.U16: {
+          assert(!i64_is(value));
           writeI16(i32(value), buffer, offset);
           return 2;
         }
         case TypeKind.I32:
         case TypeKind.U32: {
+          assert(!i64_is(value));
           writeI32(i32(value), buffer, offset);
           return 4;
         }
         case TypeKind.ISIZE:
         case TypeKind.USIZE: {
-          assert(!this.program.options.isWasm64); // TODO
-          writeI32(i32(value), buffer, offset);
-          return 4;
+          if (this.program.options.isWasm64) {
+            if (i64_is(value)) {
+              writeI64(value, buffer, offset);
+            } else {
+              writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.USIZE);
+            }
+            return 8;
+          } else {
+            if (i64_is(value)) {
+              writeI64AsI32(value, buffer, offset, typeKind == TypeKind.USIZE);
+            } else {
+              writeI32(i32(value), buffer, offset);
+            }
+            return 4;
+          }
+        }
+        case TypeKind.I64:
+        case TypeKind.U64: {
+          if (i64_is(value)) {
+            writeI64(value, buffer, offset);
+          } else {
+            writeI32AsI64(i32(value), buffer, offset, typeKind == TypeKind.U64);
+          }
+          return 8;
         }
         case TypeKind.F32: {
+          assert(!i64_is(value));
           writeF32(f32(value), buffer, offset);
           return 4;
         }
         case TypeKind.F64: {
+          assert(!i64_is(value));
           writeF64(f64(value), buffer, offset);
           return 8;
         }
@@ -4361,8 +4372,8 @@ export class Class extends TypedElement {
         let member = unchecked(_values[i]);
         if (member.kind == ElementKind.FIELD) {
           let fieldType = (<Field>member).type;
-          if (fieldType.is(TypeFlags.REFERENCE)) {
-            if ((current = fieldType.classReference) !== null && (
+          if (fieldType.isReference) {
+            if ((current = fieldType.getClass()) !== null && (
               current === other ||
               current.cyclesTo(other, except)
             )) return true;
@@ -4621,4 +4632,15 @@ export function mangleInternalName(name: string, parent: Element, isInstance: bo
            + (isInstance ? INSTANCE_DELIMITER : STATIC_DELIMITER) + name;
     }
   }
+}
+
+// Cached default parameter names used where names are unknown.
+var cachedDefaultParameterNames: string[] = [];
+
+/** Gets the cached default parameter name for the specified index. */
+export function getDefaultParameterName(index: i32): string {
+  for (let i = cachedDefaultParameterNames.length; i <= index; ++i) {
+    cachedDefaultParameterNames.push("$" + i.toString());
+  }
+  return cachedDefaultParameterNames[index];
 }

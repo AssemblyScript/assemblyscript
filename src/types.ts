@@ -5,7 +5,6 @@
 
 import {
   Class,
-  FunctionTarget,
   Program,
   DecoratorFlags
 } from "./program";
@@ -80,8 +79,8 @@ export const enum TypeFlags {
   INTEGER = 1 << 2,
   /** Is a floating point type. */
   FLOAT = 1 << 3,
-  /** Is a pointer type. */
-  POINTER = 1 << 4,
+  /** Is a varying (in size) type. */
+  VARYING = 1 << 4,
   /** Is smaller than 32-bits. */
   SHORT = 1 << 5,
   /** Is larger than 32-bits. */
@@ -94,8 +93,12 @@ export const enum TypeFlags {
   NULLABLE = 1 << 9,
   /** Is a vector type. */
   VECTOR = 1 << 10,
-  /** Is a host type. */
-  HOST = 1 << 11
+  /** Is an external type. */
+  EXTERNAL = 1 << 11,
+  /** Is a class. */
+  CLASS = 1 << 12,
+  /** Is a function. */
+  FUNCTION = 1 << 13
 }
 
 /** Represents a resolved type. */
@@ -165,12 +168,145 @@ export class Type {
     return 31 - clz<i32>(this.byteSize);
   }
 
+  /** Tests if this type represents a basic value. */
+  get isValue(): bool {
+    return this.is(TypeFlags.VALUE);
+  }
+
+  /** Tests if this type represents an integer value. */
+  get isIntegerValue(): bool {
+    return this.is(TypeFlags.INTEGER | TypeFlags.VALUE);
+  }
+
+  /** Tests if this type represents a small (< 32 bits) integer value. */
+  get isShortIntegerValue(): bool {
+    return this.is(TypeFlags.SHORT | TypeFlags.INTEGER | TypeFlags.VALUE);
+  }
+
+  /** Tests if this type represents a long (> 32 bits) integer value. */
+  get isLongIntegerValue(): bool {
+    return this.is(TypeFlags.LONG | TypeFlags.INTEGER | TypeFlags.VALUE);
+  }
+
+  /** Tests if this type represents a signed integer value. */
+  get isSignedIntegerValue(): bool {
+    return this.is(TypeFlags.SIGNED | TypeFlags.INTEGER | TypeFlags.VALUE);
+  }
+
+  /** Tests if this type represents an unsigned integer value. */
+  get isUnsignedIntegerValue(): bool {
+    return this.is(TypeFlags.UNSIGNED | TypeFlags.INTEGER | TypeFlags.VALUE);
+  }
+
+  /** Tests if this type represents a varying (in size) integer value. */
+  get isVaryingIntegerValue(): bool {
+    return this.is(TypeFlags.VARYING | TypeFlags.INTEGER | TypeFlags.VALUE);
+  }
+
+  /** Tests if this type represents an integer, including references.  */
+  get isIntegerInclReference(): bool {
+    return this.is(TypeFlags.INTEGER);
+  }
+
+  /** Tests if this type represents a floating point value. */
+  get isFloatValue(): bool {
+    return this.is(TypeFlags.FLOAT | TypeFlags.VALUE);
+  }
+  
+  /** Tests if this type represents a numeric (integer or floating point) value. */
+  get isNumericValue(): bool {
+    return this.isIntegerValue || this.isFloatValue;
+  }
+
+  /** Tests if this type represents a boolean value. */
+  get isBooleanValue(): bool {
+    return this == Type.bool;
+  }
+
+  /** Tests if this type represents a vector value. */
+  get isVectorValue(): bool {
+    return this.is(TypeFlags.VECTOR | TypeFlags.VALUE);
+  }
+  
+  /** Tests if this type represents an internal or external reference. */
+  get isReference(): bool {
+    return this.is(TypeFlags.REFERENCE);
+  }
+
+  /** Tests if this type represents a nullable internal or external reference. */
+  get isNullableReference(): bool {
+    return this.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE);
+  }
+
+  /** Tests if this type represents an internal object. */
+  get isInternalReference(): bool {
+    return this.is(TypeFlags.INTEGER | TypeFlags.REFERENCE);
+  }
+
+  /** Tests if this type represents an external object. */
+  get isExternalReference(): bool {
+    return this.is(TypeFlags.EXTERNAL | TypeFlags.REFERENCE);
+  }
+
+  /** Tests if this type represents a class. */
+  get isClass(): bool {
+    return this.isInternalReference
+      ? this.classReference !== null
+      : false;
+  }
+
+  /** Gets the underlying class of this type, if any. */
+  getClass(): Class | null {
+    return this.isInternalReference
+      ? this.classReference
+      : null;
+  }
+
+  /** Gets the underlying class or wrapper class of this type, if any. */
+  getClassOrWrapper(program: Program): Class | null {
+    let classReference = this.getClass();
+    if (classReference) {
+      // typical class
+      return classReference;
+    } else {
+      let signatureReference = this.getSignature();
+      if (signatureReference) {
+        // function wrapper
+        let type = signatureReference.type;
+        let wrapper = assert(program.resolver.resolveClass(program.functionPrototype, [ type ]));
+        wrapper.wrappedType = type;
+        return wrapper;
+      } else {
+        let wrapperClasses = program.wrapperClasses;
+        if (wrapperClasses.has(this)) {
+          // value wrapper
+          return assert(wrapperClasses.get(this));
+        }
+      }
+    }
+    return null;
+  }
+
+  /** Tests if this type represents a function. */
+  get isFunction(): bool {
+    return this.isInternalReference
+      ? this.signatureReference !== null
+      : false;
+  }
+
+  /** Gets the underlying function signature of this type, if any. */
+  getSignature(): Signature | null {
+    return this.isInternalReference
+      ? this.signatureReference
+      : null;
+  }
+
   /** Tests if this is a managed type that needs GC hooks. */
   get isManaged(): bool {
-    if (this.is(TypeFlags.INTEGER | TypeFlags.REFERENCE)) {
+    if (this.isInternalReference) {
       let classReference = this.classReference;
       if (classReference) return !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
-      // return this.signatureReference !== null; // TODO: closures
+      return this.signatureReference !== null; // function references are managed
     }
     return false;
   }
@@ -207,28 +343,12 @@ export class Type {
   /** Tests if this type has any of the specified flags. */
   isAny(flags: TypeFlags): bool { return (this.flags & flags) != 0; }
 
-  /** Composes a class type from this type and a class. */
-  asClass(classType: Class): Type {
-    assert(this.kind == TypeKind.USIZE && !this.classReference);
-    var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
-    ret.classReference = classType;
-    return ret;
-  }
-
-  /** Composes a function type from this type and a function. */
-  asFunction(signature: Signature): Type {
-    assert(this.kind == TypeKind.USIZE && !this.signatureReference);
-    var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
-    ret.signatureReference = signature;
-    return ret;
-  }
-
   /** Composes the respective nullable type of this type. */
   asNullable(): Type {
-    assert(this.is(TypeFlags.REFERENCE));
+    assert(this.isInternalReference);
     var nullableType = this._nullableType;
     if (!nullableType) {
-      assert(!this.is(TypeFlags.NULLABLE));
+      assert(!this.isNullableReference);
       this._nullableType = nullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
       nullableType.classReference = this.classReference;         // either a class reference
       nullableType.signatureReference = this.signatureReference; // or a function reference
@@ -240,11 +360,11 @@ export class Type {
   /** Tests if this type equals the specified. */
   equals(other: Type): bool {
     if (this.kind != other.kind) return false;
-    if (this.is(TypeFlags.REFERENCE)) {
+    if (this.isReference) {
       return (
         this.classReference == other.classReference &&
         this.signatureReference == other.signatureReference &&
-        this.is(TypeFlags.NULLABLE) == other.is(TypeFlags.NULLABLE)
+        this.isNullableReference == other.isNullableReference
       );
     }
     return true;
@@ -256,15 +376,15 @@ export class Type {
     var targetClass: Class | null;
     var currentFunction: Signature | null;
     var targetFunction: Signature | null;
-    if (this.is(TypeFlags.REFERENCE)) {
-      if (target.is(TypeFlags.REFERENCE)) {
-        if (!this.is(TypeFlags.NULLABLE) || target.is(TypeFlags.NULLABLE)) {
-          if (currentClass = this.classReference) {
-            if (targetClass = target.classReference) {
+    if (this.isReference) {
+      if (target.isReference) {
+        if (!this.isNullableReference || target.isNullableReference) {
+          if (currentClass = this.getClass()) {
+            if (targetClass = target.getClass()) {
               return currentClass.isAssignableTo(targetClass);
             }
-          } else if (currentFunction = this.signatureReference) {
-            if (targetFunction = target.signatureReference) {
+          } else if (currentFunction = this.getSignature()) {
+            if (targetFunction = target.getSignature()) {
               return currentFunction.isAssignableTo(targetFunction);
             }
           } else if (this.kind == TypeKind.EXTERNREF && target.kind == TypeKind.EXTERNREF) {
@@ -272,13 +392,13 @@ export class Type {
           }
         }
       }
-    } else if (!target.is(TypeFlags.REFERENCE)) {
-      if (this.is(TypeFlags.INTEGER)) {
-        if (target.is(TypeFlags.INTEGER)) {
+    } else if (!target.isReference) {
+      if (this.isIntegerValue) {
+        if (target.isIntegerValue) {
           if (
             !signednessIsRelevant ||
-            this == Type.bool || // a bool (0 or 1) can be safely assigned to all sorts of integers
-            this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)
+            this.isBooleanValue || // a bool (0 or 1) can be safely assigned to all sorts of integers
+            this.isSignedIntegerValue == target.isSignedIntegerValue
           ) {
             return this.size <= target.size;
           }
@@ -287,12 +407,12 @@ export class Type {
         } else if (target.kind == TypeKind.F64) {
           return this.size <= 52; // ^
         }
-      } else if (this.is(TypeFlags.FLOAT)) {
-        if (target.is(TypeFlags.FLOAT)) {
+      } else if (this.isFloatValue) {
+        if (target.isFloatValue) {
           return this.size <= target.size;
         }
-      } else if (this.is(TypeFlags.VECTOR)) {
-        if (target.is(TypeFlags.VECTOR)) {
+      } else if (this.isVectorValue) {
+        if (target.isVectorValue) {
           return this.size == target.size;
         }
       }
@@ -302,11 +422,13 @@ export class Type {
 
   /** Tests if a value of this type is assignable to the target type excl. implicit conversion. */
   isStrictlyAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
-    if (this.is(TypeFlags.REFERENCE)) return this.isAssignableTo(target);
-    else if (target.is(TypeFlags.REFERENCE)) return false;
-    if (this.is(TypeFlags.INTEGER)) {
-      return target.is(TypeFlags.INTEGER) && target.size == this.size && (
-        !signednessIsRelevant || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED)
+    if (this.isReference) return this.isAssignableTo(target);
+    else if (target.isReference) return false;
+    // not dealing with references from here on
+    if (this.isIntegerValue) {
+      return target.isIntegerValue && target.size == this.size && (
+        !signednessIsRelevant ||
+        this.isSignedIntegerValue == target.isSignedIntegerValue
       );
     }
     return this.kind == target.kind;
@@ -314,6 +436,7 @@ export class Type {
 
   /** Tests if a value of this type can be changed to the target type using `changetype`. */
   isChangeableTo(target: Type): bool {
+    // special in that it allows integer references as well
     if (this.is(TypeFlags.INTEGER) && target.is(TypeFlags.INTEGER)) {
       let size = this.size;
       return size == target.size && (size >= 32 || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED));
@@ -329,19 +452,22 @@ export class Type {
   }
 
   /** Converts this type to a string. */
-  toString(): string {
-    if (this.is(TypeFlags.REFERENCE)) {
-      let classReference = this.classReference;
+  toString(validWat: bool = false): string {
+    const nullablePostfix = validWat
+      ? "|null"
+      : " | null";
+    if (this.isReference) {
+      let classReference = this.getClass();
       if (classReference) {
-        return this.is(TypeFlags.NULLABLE)
-          ? classReference.internalName + " | null"
+        return this.isNullableReference
+          ? classReference.internalName + nullablePostfix
           : classReference.internalName;
       }
-      let signatureReference = this.signatureReference;
+      let signatureReference = this.getSignature();
       if (signatureReference) {
-        return this.is(TypeFlags.NULLABLE)
-          ? "(" + signatureReference.toString() + ") | null"
-          : signatureReference.toString();
+        return this.isNullableReference
+          ? "(" + signatureReference.toString(validWat) + ")" + nullablePostfix
+          : signatureReference.toString(validWat);
       }
       // TODO: Reflect.apply(value, "toString", []) ?
       assert(this.kind == TypeKind.EXTERNREF);
@@ -430,7 +556,7 @@ export class Type {
   static readonly isize32: Type = new Type(TypeKind.ISIZE,
     TypeFlags.SIGNED   |
     TypeFlags.INTEGER  |
-    TypeFlags.POINTER  |
+    TypeFlags.VARYING  |
     TypeFlags.VALUE,  32
   );
 
@@ -439,7 +565,7 @@ export class Type {
     TypeFlags.SIGNED   |
     TypeFlags.LONG     |
     TypeFlags.INTEGER  |
-    TypeFlags.POINTER  |
+    TypeFlags.VARYING  |
     TypeFlags.VALUE,  64
   );
 
@@ -478,7 +604,7 @@ export class Type {
   static readonly usize32: Type = new Type(TypeKind.USIZE,
     TypeFlags.UNSIGNED |
     TypeFlags.INTEGER  |
-    TypeFlags.POINTER  |
+    TypeFlags.VARYING  |
     TypeFlags.VALUE,  32
   );
 
@@ -487,7 +613,7 @@ export class Type {
     TypeFlags.UNSIGNED |
     TypeFlags.LONG     |
     TypeFlags.INTEGER  |
-    TypeFlags.POINTER  |
+    TypeFlags.VARYING  |
     TypeFlags.VALUE,  64
   );
 
@@ -522,7 +648,7 @@ export class Type {
 
   /** Any host reference. */
   static readonly externref: Type = new Type(TypeKind.EXTERNREF,
-    TypeFlags.HOST       |
+    TypeFlags.EXTERNAL   |
     TypeFlags.REFERENCE, 0
   );
 
@@ -546,18 +672,16 @@ export function typesToString(types: Type[]): string {
   var numTypes = types.length;
   if (!numTypes) return "";
   var sb = new Array<string>(numTypes);
-  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString();
+  for (let i = 0; i < numTypes; ++i) sb[i] = types[i].toString(true);
   return sb.join(",");
 }
 
 /** Represents a fully resolved function signature. */
 export class Signature {
-  /** The unique program id that represents this signature. */
+  /** Unique id representing this signature. */
   id: u32 = 0;
   /** Parameter types, if any, excluding `this`. */
   parameterTypes: Type[];
-  /** Parameter names, if known, excluding `this`. */
-  parameterNames: string[] | null;
   /** Number of required parameters excluding `this`. Other parameters are considered optional. */
   requiredParameters: i32;
   /** Return type. */
@@ -566,10 +690,8 @@ export class Signature {
   thisType: Type | null;
   /** Whether the last parameter is a rest parameter. */
   hasRest: bool;
-  /** Cached {@link FunctionTarget}. */
-  cachedFunctionTarget: FunctionTarget | null = null;
   /** Respective function type. */
-  private _type: Type | null;
+  type: Type;
   /** The program that created this signature. */
   program: Program;
 
@@ -581,13 +703,15 @@ export class Signature {
     thisType: Type | null = null
   ) {
     this.parameterTypes = parameterTypes ? parameterTypes : [];
-    this.parameterNames = null;
     this.requiredParameters = 0;
     this.returnType = returnType ? returnType : Type.void;
     this.thisType = thisType;
     this.program = program;
     this.hasRest = false;
-    this._type = program.options.usizeType.asFunction(this);
+    var usizeType = program.options.usizeType;
+    var type = new Type(usizeType.kind, usizeType.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, usizeType.size);
+    this.type = type;
+    type.signatureReference = this;
 
     var signatureTypes = program.uniqueSignatures;
     var length = signatureTypes.length;
@@ -600,11 +724,6 @@ export class Signature {
     }
     this.id = program.nextSignatureId++;
     program.uniqueSignatures.push(this);
-  }
-
-  /** Gets the respective function type matching this signature. */
-  get type(): Type {
-    return assert(this._type);
   }
 
   get nativeParams(): NativeType {
@@ -628,21 +747,6 @@ export class Signature {
 
   get nativeResults(): NativeType {
     return this.returnType.toNativeType();
-  }
-
-  asFunctionTarget(program: Program): FunctionTarget {
-    var target = this.cachedFunctionTarget;
-    if (!target) this.cachedFunctionTarget = target = new FunctionTarget(this, program);
-    else assert(target.program == program);
-    return target;
-  }
-
-  /** Gets the known or, alternatively, generic parameter name at the specified index. */
-  getParameterName(index: i32): string {
-    var parameterNames = this.parameterNames;
-    return parameterNames !== null && parameterNames.length > index
-      ? parameterNames[index]
-      : getDefaultParameterName(index);
   }
 
   /** Tests if this signature equals the specified. */
@@ -706,36 +810,31 @@ export class Signature {
   }
 
   /** Converts this signature to a string. */
-  toString(): string {
+  toString(validWat: bool = false): string {
     var sb = new Array<string>();
-    sb.push("(");
+    sb.push(validWat ? "%28" : "(");
     var index = 0;
     var thisType = this.thisType;
     if (thisType) {
-      sb.push("this: ");
+      sb.push(validWat ? "this:" : "this: ");
       assert(!thisType.signatureReference);
-      sb.push(thisType.toString());
+      sb.push(thisType.toString(validWat));
       index = 1;
     }
     var parameters = this.parameterTypes;
     var numParameters = parameters.length;
     if (numParameters) {
-      let names = this.parameterNames;
-      let numNames = names ? names.length : 0;
       let optionalStart = this.requiredParameters;
       let restIndex = this.hasRest ? numParameters - 1 : -1;
       for (let i = 0; i < numParameters; ++i, ++index) {
-        if (index) sb.push(", ");
+        if (index) sb.push(validWat ? "%2C" : ", ");
         if (i == restIndex) sb.push("...");
-        if (i < numNames) sb.push((<string[]>names)[i]);
-        else sb.push(getDefaultParameterName(i));
-        if (i >= optionalStart && i != restIndex) sb.push("?: ");
-        else sb.push(": ");
-        sb.push(parameters[i].toString());
+        sb.push(parameters[i].toString(validWat));
+        if (i >= optionalStart && i != restIndex) sb.push("?");
       }
     }
-    sb.push(") => ");
-    sb.push(this.returnType.toString());
+    sb.push(validWat ? "%29=>" : ") => ");
+    sb.push(this.returnType.toString(validWat));
     return sb.join("");
   }
 
@@ -747,29 +846,6 @@ export class Signature {
     for (let i = 0; i < numParameterTypes; ++i) {
       cloneParameterTypes[i] = parameterTypes[i];
     }
-    var clone = new Signature(this.program, cloneParameterTypes, this.returnType, this.thisType);
-    var parameterNames = this.parameterNames;
-    if (parameterNames) {
-      let numParameterNames = parameterNames.length;
-      let cloneParameterNames = new Array<string>(numParameterNames);
-      for (let i = 0; i < numParameterNames; ++i) {
-        cloneParameterNames[i] = parameterNames[i];
-      }
-      clone.parameterNames = cloneParameterNames;
-    }
-    return clone;
+    return new Signature(this.program, cloneParameterTypes, this.returnType, this.thisType);
   }
-}
-
-// helpers
-
-// Cached default parameter names used where names are unknown.
-var cachedDefaultParameterNames: string[] = [];
-
-/** Gets the cached default parameter name for the specified index. */
-export function getDefaultParameterName(index: i32): string {
-  for (let i = cachedDefaultParameterNames.length; i <= index; ++i) {
-    cachedDefaultParameterNames.push("arg$" + i.toString());
-  }
-  return cachedDefaultParameterNames[index - 1];
 }

@@ -1,11 +1,17 @@
 (module
- (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
- (memory $0 0)
+ (type $none_=>_none (func))
+ (memory $0 1)
+ (data (i32.const 1024) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\01")
+ (table $0 2 funcref)
+ (elem (i32.const 1) $getter-call/C#get:x~anonymous|0)
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $~start)
+ (func $getter-call/C#get:x~anonymous|0 (result i32)
+  i32.const 42
+ )
  (func $getter-call/test (result i32)
   (local $0 i32)
   (local $1 i32)
@@ -70,10 +76,12 @@
   local.get $0
   i32.const 0
   i32.store offset=12
-  i32.const 42
+  i32.const 1040
+  i32.load
+  call_indirect (type $none_=>_i32)
  )
  (func $~start
-  i32.const 1024
+  i32.const 1056
   global.set $~lib/rt/stub/offset
  )
 )

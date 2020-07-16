@@ -273,7 +273,7 @@ export class IDLBuilder extends ExportsWalker {
       // if (i >= requiredParameters) sb.push("optional ");
       sb.push(this.typeToString(parameters[i]));
       sb.push(" ");
-      sb.push(signature.getParameterName(i));
+      sb.push(element.getParameterName(i));
     }
     sb.push(");\n");
     var members = element.members;
@@ -463,7 +463,7 @@ export class TSDBuilder extends ExportsWalker {
     for (let i = 0; i < numParameters; ++i) {
       if (i) sb.push(", ");
       // if (i >= requiredParameters) sb.push("optional ");
-      sb.push(signature.getParameterName(i));
+      sb.push(element.getParameterName(i));
       sb.push(": ");
       sb.push(this.typeToString(parameters[i]));
     }

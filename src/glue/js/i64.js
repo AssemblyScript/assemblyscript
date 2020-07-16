@@ -11,6 +11,10 @@ global.i64_zero    = Long.ZERO;
 global.i64_one     = Long.ONE;
 global.i64_neg_one = Long.fromInt(-1);
 
+global.i64_is = function i64_is(value) {
+  return Long.isLong(value);
+};
+
 global.i64_new = function i64_new(lo, hi) {
   return Long.fromBits(lo, hi);
 };

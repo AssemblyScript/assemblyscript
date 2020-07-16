@@ -4,13 +4,14 @@
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (memory $0 0)
+ (memory $0 1)
+ (data (i32.const 16) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
  (table $0 2 funcref)
  (elem (i32.const 1) $getter-call/C#get:x~anonymous|0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 8))
+ (global $~lib/heap/__heap_base i32 (i32.const 40))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $~start)
@@ -142,7 +143,8 @@
   i32.const 42
  )
  (func $getter-call/C#get:x (param $0 i32) (result i32)
-  i32.const 1
+  i32.const 32
+  call $~lib/rt/stub/__retain
  )
  (func $~lib/rt/stub/__release (param $0 i32)
   nop
@@ -150,6 +152,7 @@
  (func $getter-call/test (result i32)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
   i32.const 0
   call $getter-call/C#constructor
   local.set $0
@@ -157,11 +160,15 @@
   global.set $~argumentsLength
   local.get $0
   call $getter-call/C#get:x
+  local.tee $1
+  i32.load
   call_indirect (type $none_=>_i32)
-  local.set $1
+  local.set $2
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
  )
  (func $~start
   global.get $~lib/heap/__heap_base

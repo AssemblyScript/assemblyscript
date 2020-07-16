@@ -323,7 +323,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/object/Object.is<~lib/string/String | null> (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String|null> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -876,7 +876,7 @@
   end
   i32.const 0
   i32.const 0
-  call $~lib/object/Object.is<~lib/string/String | null>
+  call $~lib/object/Object.is<~lib/string/String|null>
   i32.const 1
   i32.eq
   i32.eqz
@@ -890,7 +890,7 @@
   end
   i32.const 176
   i32.const 0
-  call $~lib/object/Object.is<~lib/string/String | null>
+  call $~lib/object/Object.is<~lib/string/String|null>
   i32.const 0
   i32.eq
   i32.eqz
@@ -904,7 +904,7 @@
   end
   i32.const 0
   i32.const 176
-  call $~lib/object/Object.is<~lib/string/String | null>
+  call $~lib/object/Object.is<~lib/string/String|null>
   i32.const 0
   i32.eq
   i32.eqz

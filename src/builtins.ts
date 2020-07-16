@@ -84,7 +84,8 @@ import {
   Global,
   DecoratorFlags,
   Element,
-  ClassPrototype
+  ClassPrototype,
+  Class
 } from "./program";
 
 import {
@@ -180,6 +181,7 @@ export namespace BuiltinNames {
   export const unreachable = "~lib/builtins/unreachable";
   export const changetype = "~lib/builtins/changetype";
   export const assert = "~lib/builtins/assert";
+  export const call_indirect = "~lib/builtins/call_indirect";
   export const unchecked = "~lib/builtins/unchecked";
   export const instantiate = "~lib/builtins/instantiate";
   export const idof = "~lib/builtins/idof";
@@ -597,6 +599,9 @@ export namespace BuiltinNames {
   export const WARNING = "~lib/diagnostics/WARNING";
   export const INFO = "~lib/diagnostics/INFO";
 
+  // std/function.ts
+  export const Function = "~lib/function/Function";
+
   // std/memory.ts
   export const memory_size = "~lib/memory/memory.size";
   export const memory_grow = "~lib/memory/memory.grow";
@@ -634,6 +639,8 @@ export class BuiltinContext {
     public typeArguments: Type[] | null,
     /** Provided operands. */
     public operands: Expression[],
+    /** Provided this operand, if any. */
+    public thisOperand: Expression | null,
     /** Contextual type. */
     public contextualType: Type,
     /** Respective call expression. */
@@ -646,6 +653,9 @@ export class BuiltinContext {
 /** Global builtins map. */
 export const builtins = new Map<string,(ctx: BuiltinContext) => ExpressionRef>();
 
+/** Function builtins map. */
+export const function_builtins = new Map<string,(ctx: BuiltinContext) => ExpressionRef>();
+
 // === Static type evaluation =================================================================
 
 // isInteger<T!>() / isInteger<T?>(value: T) -> bool
@@ -655,7 +665,7 @@ function builtin_isInteger(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.is(TypeFlags.INTEGER) && !type.is(TypeFlags.REFERENCE) ? 1 : 0);
+  return module.i32(type.isIntegerValue ? 1 : 0);
 }
 builtins.set(BuiltinNames.isInteger, builtin_isInteger);
 
@@ -666,7 +676,7 @@ function builtin_isFloat(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.is(TypeFlags.FLOAT) ? 1 : 0);
+  return module.i32(type.isFloatValue ? 1 : 0);
 }
 builtins.set(BuiltinNames.isFloat, builtin_isFloat);
 
@@ -677,7 +687,7 @@ function builtin_isBoolean(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type == Type.bool ? 1 : 0);
+  return module.i32(type.isBooleanValue ? 1 : 0);
 }
 builtins.set(BuiltinNames.isBoolean, builtin_isBoolean);
 
@@ -688,7 +698,7 @@ function builtin_isSigned(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.is(TypeFlags.SIGNED) ? 1 : 0);
+  return module.i32(type.isSignedIntegerValue ? 1 : 0);
 }
 builtins.set(BuiltinNames.isSigned, builtin_isSigned);
 
@@ -699,7 +709,7 @@ function builtin_isReference(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.is(TypeFlags.REFERENCE) ? 1 : 0);
+  return module.i32(type.isReference ? 1 : 0);
 }
 builtins.set(BuiltinNames.isReference, builtin_isReference);
 
@@ -710,14 +720,12 @@ function builtin_isString(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  if (type.is(TypeFlags.REFERENCE)) {
-    let classReference = type.classReference;
-    if (classReference) {
-      let stringInstance = compiler.program.stringInstance;
-      if (stringInstance !== null && classReference.isAssignableTo(stringInstance)) return module.i32(1);
-    }
-  }
-  return module.i32(0);
+  var classReference = type.getClass();
+  return module.i32(
+    classReference !== null && classReference.isAssignableTo(compiler.program.stringInstance)
+      ? 1
+      : 0
+  );
 }
 builtins.set(BuiltinNames.isString, builtin_isString);
 
@@ -728,13 +736,12 @@ function builtin_isArray(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  if (type.is(TypeFlags.REFERENCE)) {
-    let classReference = type.classReference;
-    if (classReference) {
-      return module.i32(classReference.prototype.extends(compiler.program.arrayPrototype) ? 1 : 0);
-    }
-  }
-  return module.i32(0);
+  var classReference = type.getClass();
+  return module.i32(
+    classReference !== null && classReference.extends(compiler.program.arrayPrototype)
+      ? 1
+      : 0
+  );
 }
 builtins.set(BuiltinNames.isArray, builtin_isArray);
 
@@ -745,13 +752,12 @@ function builtin_isArrayLike(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  if (type.is(TypeFlags.REFERENCE)) {
-    let classReference = type.classReference;
-    if (classReference) {
-      return module.i32(classReference.isArrayLike ? 1 : 0);
-    }
-  }
-  return module.i32(0);
+  var classReference = type.getClass();
+  return module.i32(
+    classReference !== null && classReference.isArrayLike
+      ? 1
+      : 0
+  );
 }
 builtins.set(BuiltinNames.isArrayLike, builtin_isArrayLike);
 
@@ -762,7 +768,7 @@ function builtin_isFunction(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.signatureReference ? 1 : 0);
+  return module.i32(type.isFunction ? 1 : 0);
 }
 builtins.set(BuiltinNames.isFunction, builtin_isFunction);
 
@@ -773,7 +779,7 @@ function builtin_isNullable(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(type.is(TypeFlags.NULLABLE) ? 1 : 0);
+  return module.i32(type.isNullableReference ? 1 : 0);
 }
 builtins.set(BuiltinNames.isNullable, builtin_isNullable);
 
@@ -792,7 +798,7 @@ function builtin_isDefined(ctx: BuiltinContext): ExpressionRef {
     Type.auto,
     ReportMode.SWALLOW
   );
-  return module.i32(element ? 1 : 0);
+  return module.i32(element !== null ? 1 : 0);
 }
 builtins.set(BuiltinNames.isDefined, builtin_isDefined);
 
@@ -908,18 +914,18 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var contextualType = ctx.contextualType;
   var type = ctx.typeArguments![0];
-  var classType = type.classReference;
-  if (!(type.is(TypeFlags.REFERENCE) && classType !== null)) {
+  var classReference = type.getClassOrWrapper(compiler.program);
+  if (!classReference) {
     compiler.error(
       DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
       ctx.reportNode.typeArgumentsRange, "offsetof", type.toString()
     );
     if (compiler.options.isWasm64) {
-      if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
+      if (contextualType.isIntegerValue && contextualType.size <= 32) {
         compiler.currentType = Type.u32;
       }
     } else {
-      if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
+      if (contextualType.isIntegerValue && contextualType.size == 64) {
         compiler.currentType = Type.u64;
       }
     }
@@ -935,7 +941,7 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
       return module.unreachable();
     }
     let fieldName = (<StringLiteralExpression>firstOperand).value;
-    let classMembers = classType.members;
+    let classMembers = classReference.members;
     if (classMembers !== null && classMembers.has(fieldName)) {
       let member = assert(classMembers.get(fieldName));
       if (member.kind == ElementKind.FIELD) {
@@ -944,11 +950,11 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     }
     compiler.error(
       DiagnosticCode.Type_0_has_no_property_1,
-      firstOperand.range, classType.internalName, fieldName
+      firstOperand.range, classReference.internalName, fieldName
     );
     return module.unreachable();
   }
-  return contextualUsize(compiler, i64_new(classType.nextMemoryOffset), contextualType);
+  return contextualUsize(compiler, i64_new(classReference.nextMemoryOffset), contextualType);
 }
 builtins.set(BuiltinNames.offsetof, builtin_offsetof);
 
@@ -962,15 +968,16 @@ function builtin_nameof(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   var value: string;
-  if (resultType.is(TypeFlags.REFERENCE)) {
-    let classReference = resultType.classReference;
+  if (resultType.isReference) {
+    let classReference = resultType.getClass();
     if (classReference) {
       value = classReference.name;
     } else {
-      let signatureReference = resultType.signatureReference;
+      let signatureReference = resultType.getSignature();
       if (signatureReference) {
         value = "Function";
       } else {
+        assert(resultType.isExternalReference);
         value = "Externref";
       }
     }
@@ -1006,15 +1013,13 @@ function builtin_idof(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.u32;
   if (!type) return module.unreachable();
-  if (type.is(TypeFlags.REFERENCE)) {
-    let signatureReference = type.signatureReference;
-    if (signatureReference) {
-      return module.i32(signatureReference.id);
-    }
-    let classReference = type.classReference;
-    if (classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
-      return module.i32(classReference.id);
-    }
+  let signatureReference = type.getSignature();
+  if (signatureReference) {
+    return module.i32(signatureReference.id);
+  }
+  let classReference = type.getClassOrWrapper(compiler.program);
+  if (classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED)) {
+    return module.i32(classReference.id);
   }
   compiler.error(
     DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
@@ -1039,7 +1044,7 @@ function builtin_clz(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(ctx.operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
     : compiler.compileExpression(ctx.operands[0], Type.i32, Constraints.MUST_WRAP);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.BOOL: // not wrapped
       case TypeKind.I8:
@@ -1083,7 +1088,7 @@ function builtin_ctz(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
     : compiler.compileExpression(operands[0], Type.i32, Constraints.MUST_WRAP);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.BOOL: // not wrapped
       case TypeKind.I8:
@@ -1127,7 +1132,7 @@ function builtin_popcnt(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
     : compiler.compileExpression(operands[0], Type.i32, Constraints.MUST_WRAP);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (compiler.currentType.kind) {
       case TypeKind.BOOL: // not wrapped
       case TypeKind.I8:
@@ -1171,7 +1176,7 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
     : compiler.compileExpression(operands[0], Type.i32, Constraints.MUST_WRAP);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
     switch (type.kind) {
       case TypeKind.I8:
@@ -1221,7 +1226,7 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
     : compiler.compileExpression(operands[0], Type.i32, Constraints.MUST_WRAP);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
     switch (type.kind) {
       case TypeKind.I8:
@@ -1271,7 +1276,7 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
     : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
@@ -1379,7 +1384,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(left, typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
     : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     let arg1: ExpressionRef;
     if (!typeArguments && left.isNumericLiteral) { // prefer right type
       arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
@@ -1458,7 +1463,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(left, typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
     : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     let arg1: ExpressionRef;
     if (!typeArguments && left.isNumericLiteral) { // prefer right type
       arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
@@ -1536,7 +1541,7 @@ function builtin_ceil(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
     : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
@@ -1575,7 +1580,7 @@ function builtin_floor(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
     : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
@@ -1614,7 +1619,7 @@ function builtin_copysign(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
     : compiler.compileExpression(operands[0], Type.f64, Constraints.NONE);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
     switch (type.kind) {
       // TODO: does an integer version make sense?
@@ -1644,7 +1649,7 @@ function builtin_nearest(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
     : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
@@ -1680,7 +1685,7 @@ function builtin_reinterpret(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments;
   var type = typeArguments![0];
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I32:
       case TypeKind.U32: {
@@ -1744,7 +1749,7 @@ function builtin_sqrt(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
     : compiler.compileExpression(operands[0], Type.f64, Constraints.NONE);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       // TODO: integer versions (that return f64 or convert)?
       case TypeKind.F32: return module.unary(UnaryOp.SqrtF32, arg0);
@@ -1773,7 +1778,7 @@ function builtin_trunc(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
     : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
   var type = compiler.currentType;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
@@ -1816,7 +1821,7 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
     : compiler.compileExpression(operands[0], Type.auto);
   var type = compiler.currentType;
   compiler.currentType = Type.bool;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       // never NaN
       case TypeKind.I8:
@@ -1892,7 +1897,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
     : compiler.compileExpression(operands[0], Type.auto);
   var type = compiler.currentType;
   compiler.currentType = Type.bool;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       // always finite
       case TypeKind.I8:
@@ -1978,8 +1983,8 @@ function builtin_load(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments![0];
   var outType = (
     contextualType != Type.auto &&
-    type.is(TypeFlags.INTEGER) &&
-    contextualType.is(TypeFlags.INTEGER) &&
+    type.isIntegerValue &&
+    contextualType.isIntegerValue &&
     contextualType.size > type.size
   ) ? contextualType : type;
   var arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
@@ -2003,7 +2008,7 @@ function builtin_load(ctx: BuiltinContext): ExpressionRef {
   compiler.currentType = outType;
   return module.load(
     type.byteSize,
-    type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
+    type.isSignedIntegerValue,
     arg0,
     outType.toNativeType(),
     immOffset,
@@ -2035,16 +2040,16 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
     : compiler.compileExpression(
         operands[1],
         type,
-        type.is(TypeFlags.INTEGER)
+        type.isIntegerValue
           ? Constraints.NONE // no need to convert to small int (but now might result in a float)
           : Constraints.CONV_IMPLICIT
       );
   var inType = compiler.currentType;
   if (
-    type.is(TypeFlags.INTEGER) &&
+    type.isIntegerValue &&
     (
-      !inType.is(TypeFlags.INTEGER) || // float to int
-      inType.size < type.size          // int to larger int (clear garbage bits)
+      !inType.isIntegerValue || // float to int
+      inType.size < type.size   // int to larger int (clear garbage bits)
     )
   ) {
     arg1 = compiler.convertExpression(arg1,
@@ -2091,11 +2096,11 @@ function builtin_atomic_load(ctx: BuiltinContext): ExpressionRef {
   var contextualType = ctx.contextualType;
   var type = typeArguments![0];
   var outType = (
-    type.is(TypeFlags.INTEGER) &&
-    contextualType.is(TypeFlags.INTEGER) &&
+    type.isIntegerValue &&
+    contextualType.isIntegerValue &&
     contextualType.size > type.size
   ) ? contextualType : type;
-  if (!type.is(TypeFlags.INTEGER)) {
+  if (!type.isIntegerValue) {
     compiler.error(
       DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
       ctx.reportNode.typeArgumentsRange, "atomic.load", type.toString()
@@ -2132,7 +2137,7 @@ function builtin_atomic_store(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments;
   var contextualType = ctx.contextualType;
   var type = typeArguments![0];
-  if (!type.is(TypeFlags.INTEGER)) {
+  if (!type.isIntegerValue) {
     compiler.error(
       DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
       ctx.reportNode.typeArgumentsRange, "atomic.store", type.toString()
@@ -2150,16 +2155,16 @@ function builtin_atomic_store(ctx: BuiltinContext): ExpressionRef {
     : compiler.compileExpression(
         operands[1],
         type,
-        type.is(TypeFlags.INTEGER)
+        type.isIntegerValue
           ? Constraints.NONE // no need to convert to small int (but now might result in a float)
           : Constraints.CONV_IMPLICIT
       );
   var inType = compiler.currentType;
   if (
-    type.is(TypeFlags.INTEGER) &&
+    type.isIntegerValue &&
     (
-      !inType.is(TypeFlags.INTEGER) || // float to int
-      inType.size < type.size          // int to larger int (clear garbage bits)
+      !inType.isIntegerValue|| // float to int
+      inType.size < type.size  // int to larger int (clear garbage bits)
     )
   ) {
     arg1 = compiler.convertExpression(arg1,
@@ -2192,7 +2197,7 @@ function builtin_atomic_binary(ctx: BuiltinContext, op: AtomicRMWOp, opName: str
   var typeArguments = ctx.typeArguments;
   var contextualType = ctx.contextualType;
   var type = typeArguments![0];
-  if (!type.is(TypeFlags.INTEGER) || type.size < 8) {
+  if (!type.isIntegerValue || type.size < 8) {
     compiler.error(
       DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
       ctx.reportNode.typeArgumentsRange, opName, type.toString()
@@ -2211,16 +2216,16 @@ function builtin_atomic_binary(ctx: BuiltinContext, op: AtomicRMWOp, opName: str
     : compiler.compileExpression(
         operands[1],
         type,
-        type.is(TypeFlags.INTEGER)
+        type.isIntegerValue
           ? Constraints.NONE // no need to convert to small int (but now might result in a float)
           : Constraints.CONV_IMPLICIT
       );
   var inType = compiler.currentType;
   if (
-    type.is(TypeFlags.INTEGER) &&
+    type.isIntegerValue &&
     (
-      !inType.is(TypeFlags.INTEGER) || // float to int
-      inType.size < type.size          // int to larger int (clear garbage bits)
+      !inType.isIntegerValue || // float to int
+      inType.size < type.size   // int to larger int (clear garbage bits)
     )
   ) {
     arg1 = compiler.convertExpression(arg1,
@@ -2288,7 +2293,7 @@ function builtin_atomic_cmpxchg(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments;
   var contextualType = ctx.contextualType;
   var type = typeArguments![0];
-  if (!type.is(TypeFlags.INTEGER) || type.size < 8) {
+  if (!type.isIntegerValue || type.size < 8) {
     compiler.error(
       DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
       ctx.reportNode.typeArgumentsRange, "atomic.cmpxchg", type.toString()
@@ -2307,7 +2312,7 @@ function builtin_atomic_cmpxchg(ctx: BuiltinContext): ExpressionRef {
     : compiler.compileExpression(
         operands[1],
         type,
-        type.is(TypeFlags.INTEGER)
+        type.isIntegerValue
           ? Constraints.NONE // no need to convert to small int (but now might result in a float)
           : Constraints.CONV_IMPLICIT
       );
@@ -2317,10 +2322,10 @@ function builtin_atomic_cmpxchg(ctx: BuiltinContext): ExpressionRef {
     Constraints.CONV_IMPLICIT
   );
   if (
-    type.is(TypeFlags.INTEGER) &&
+    type.isIntegerValue &&
     (
-      !inType.is(TypeFlags.INTEGER) || // float to int
-      inType.size < type.size          // int to larger int (clear garbage bits)
+      !inType.isIntegerValue || // float to int
+      inType.size < type.size   // int to larger int (clear garbage bits)
     )
   ) {
     arg1 = compiler.convertExpression(arg1,
@@ -2556,7 +2561,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
   var offset: i64;
   if (typeArguments !== null && typeArguments.length > 0) { // data<T>(values[, align])
     let elementType = typeArguments[0];
-    if (!elementType.is(TypeFlags.VALUE)) {
+    if (!elementType.isValue) {
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
         ctx.reportNode.typeArgumentsRange, "memory.data", elementType.toString()
@@ -2579,7 +2584,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     let isStatic = true;
     for (let i = 0; i < numElements; ++i) {
       let elementExpression = expressions[i];
-      if (elementExpression) {
+      if (elementExpression.kind != NodeKind.OMITTED) {
         let expr = compiler.compileExpression(elementExpression, elementType,
           Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
@@ -2591,7 +2596,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
         }
         exprs[i] = expr;
       } else {
-        exprs[i] = compiler.makeZero(elementType, valuesOperand);
+        exprs[i] = compiler.makeZero(elementType, elementExpression);
       }
     }
     if (!isStatic) {
@@ -2876,6 +2881,36 @@ function builtin_unchecked(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.unchecked, builtin_unchecked);
 
+// call_indirect<T?>(index: u32, ...args: *[]) -> T
+function builtin_call_indirect(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkTypeOptional(ctx, true) |
+    checkArgsOptional(ctx, 1, i32.MAX_VALUE)
+  ) return module.unreachable();
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var returnType: Type;
+  if (typeArguments) {
+    assert(typeArguments.length);
+    returnType = typeArguments[0];
+  } else {
+    returnType = ctx.contextualType;
+  }
+  var indexArg = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
+  var numOperands = operands.length - 1;
+  var operandExprs = new Array<ExpressionRef>(numOperands);
+  var nativeParamTypes = new Array<NativeType>(numOperands);
+  for (let i = 0; i < numOperands; ++i) {
+    operandExprs[i] = compiler.compileExpression(operands[1 + i], Type.auto);
+    nativeParamTypes[i] = compiler.currentType.toNativeType();
+  }
+  compiler.currentType = returnType;
+  return module.call_indirect(indexArg, operandExprs, createType(nativeParamTypes), returnType.toNativeType());
+}
+builtins.set(BuiltinNames.call_indirect, builtin_call_indirect);
+
 // instantiate<T!>(...args: *[]) -> T
 function builtin_instantiate(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
@@ -2886,8 +2921,8 @@ function builtin_instantiate(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments!;
   var typeArgument = typeArguments[0];
-  var classInstance = typeArgument.classReference;
-  if (!(typeArgument.is(TypeFlags.REFERENCE) && classInstance !== null)) {
+  var classInstance = typeArgument.getClass();
+  if (!classInstance) {
     compiler.error(
       DiagnosticCode.This_expression_is_not_constructable,
       ctx.reportNode.expression.range
@@ -2940,6 +2975,44 @@ function builtin_info(ctx: BuiltinContext): ExpressionRef {
   return builtin_diagnostic(ctx, DiagnosticCategory.INFO);
 }
 builtins.set(BuiltinNames.INFO, builtin_info);
+
+// === Function builtins ======================================================================
+
+// Function<T>#call(thisArg: thisof<T> | null, ...args: *[]) -> returnof<T>
+function builtin_function_call(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var parent = ctx.prototype.parent;
+  assert(parent.kind == ElementKind.CLASS);
+  var classInstance = <Class>parent;
+  assert(classInstance.prototype == compiler.program.functionPrototype);
+  var typeArguments = assert(classInstance.typeArguments);
+  assert(typeArguments.length == 1);
+  var ftype = typeArguments[0];
+  var signature = assert(ftype.getSignature());
+  var returnType = signature.returnType;
+  if (
+    checkTypeAbsent(ctx) |
+    checkArgsOptional(ctx, 1 + signature.requiredParameters, 1 + signature.parameterTypes.length)
+  ) {
+    compiler.currentType = returnType;
+    return compiler.module.unreachable();
+  }
+  var indexArg = compiler.compileExpression(assert(ctx.thisOperand), ftype, Constraints.CONV_IMPLICIT);
+  var thisOperand = assert(ctx.operands.shift());
+  var thisType = signature.thisType;
+  var thisArg: usize = 0;
+  if (thisType) {
+    thisArg = compiler.compileExpression(thisOperand, thisType, Constraints.CONV_IMPLICIT);
+  } else if (thisOperand.kind != NodeKind.NULL) {
+    compiler.error(
+      DiagnosticCode._this_cannot_be_referenced_in_current_location,
+      thisOperand.range
+    );
+    return compiler.module.unreachable();
+  }
+  return compiler.compileCallIndirect(signature, indexArg, ctx.operands, ctx.reportNode, thisArg, ctx.contextualType == Type.void);
+}
+function_builtins.set("call", builtin_function_call);
 
 // === Portable type conversions ==============================================================
 
@@ -3246,7 +3319,7 @@ function builtin_v128_splat(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], type, Constraints.CONV_IMPLICIT);
   compiler.currentType = Type.v128;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.unary(UnaryOp.SplatI8x16, arg0);
@@ -3302,7 +3375,7 @@ function builtin_v128_extract_lane(ctx: BuiltinContext): ExpressionRef {
       operands[1].range
     );
   }
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     let maxIdx = (16 / assert(type.byteSize)) - 1;
     if (idx < 0 || idx > maxIdx) {
       compiler.error(
@@ -3370,7 +3443,7 @@ function builtin_v128_replace_lane(ctx: BuiltinContext): ExpressionRef {
       operands[1].range
     );
   }
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     let maxIdx = (16 / assert(type.byteSize)) - 1;
     if (idx < 0 || idx > maxIdx) {
       compiler.error(
@@ -3423,7 +3496,7 @@ function builtin_v128_shuffle(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     let laneWidth = type.byteSize;
     let laneCount = 16 / laneWidth;
     assert(isInteger(laneCount) && isPowerOf2(laneCount));
@@ -3571,7 +3644,7 @@ function builtin_v128_load_splat(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.currentType = Type.v128;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: {
@@ -3639,7 +3712,7 @@ function builtin_v128_load_ext(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.currentType = Type.v128;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.simd_load(SIMDLoadOp.LoadI8ToI16x8, arg0, immOffset, immAlign);
       case TypeKind.U8: return module.simd_load(SIMDLoadOp.LoadU8ToU16x8, arg0, immOffset, immAlign);
@@ -3682,7 +3755,7 @@ function builtin_v128_add(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.binary(BinaryOp.AddI8x16, arg0, arg1);
@@ -3730,7 +3803,7 @@ function builtin_v128_sub(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.binary(BinaryOp.SubI8x16, arg0, arg1);
@@ -3778,7 +3851,7 @@ function builtin_v128_mul(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.binary(BinaryOp.MulI8x16, arg0, arg1);
@@ -3822,7 +3895,7 @@ function builtin_v128_div(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.binary(BinaryOp.DivF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.DivF64x2, arg0, arg1);
@@ -3853,7 +3926,7 @@ function builtin_v128_add_saturate(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.AddSatI8x16, arg0, arg1);
       case TypeKind.U8: return module.binary(BinaryOp.AddSatU8x16, arg0, arg1);
@@ -3886,7 +3959,7 @@ function builtin_v128_sub_saturate(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.SubSatI8x16, arg0, arg1);
       case TypeKind.U8: return module.binary(BinaryOp.SubSatU8x16, arg0, arg1);
@@ -3919,7 +3992,7 @@ function builtin_v128_min(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.MinI8x16, arg0, arg1);
       case TypeKind.U8: return module.binary(BinaryOp.MinU8x16, arg0, arg1);
@@ -3964,7 +4037,7 @@ function builtin_v128_max(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.MaxI8x16, arg0, arg1);
       case TypeKind.U8: return module.binary(BinaryOp.MaxU8x16, arg0, arg1);
@@ -4009,7 +4082,7 @@ function builtin_v128_pmin(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.binary(BinaryOp.PminF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.PminF64x2, arg0, arg1);
@@ -4040,7 +4113,7 @@ function builtin_v128_pmax(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.binary(BinaryOp.PmaxF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.PmaxF64x2, arg0, arg1);
@@ -4071,7 +4144,7 @@ function builtin_v128_dot(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I16: return module.binary(BinaryOp.DotI16x8, arg0, arg1);
     }
@@ -4101,7 +4174,7 @@ function builtin_v128_avgr(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.U8:  return module.binary(BinaryOp.AvgrU8x16, arg0, arg1);
       case TypeKind.U16: return module.binary(BinaryOp.AvgrU16x8, arg0, arg1);
@@ -4132,7 +4205,7 @@ function builtin_v128_eq(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.binary(BinaryOp.EqI8x16, arg0, arg1);
@@ -4176,7 +4249,7 @@ function builtin_v128_ne(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.binary(BinaryOp.NeI8x16, arg0, arg1);
@@ -4220,7 +4293,7 @@ function builtin_v128_lt(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.LtI8x16, arg0, arg1);
       case TypeKind.U8: return module.binary(BinaryOp.LtU8x16, arg0, arg1);
@@ -4269,7 +4342,7 @@ function builtin_v128_le(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.LeI8x16, arg0, arg1);
       case TypeKind.U8: return module.binary(BinaryOp.LeU8x16, arg0, arg1);
@@ -4318,7 +4391,7 @@ function builtin_v128_gt(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.GtI8x16, arg0, arg1);
       case TypeKind.U8: return module.binary(BinaryOp.GtU8x16, arg0, arg1);
@@ -4367,7 +4440,7 @@ function builtin_v128_ge(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.binary(BinaryOp.GeI8x16, arg0, arg1);
       case TypeKind.U8: return module.binary(BinaryOp.GeU8x16, arg0, arg1);
@@ -4416,7 +4489,7 @@ function builtin_v128_narrow(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I16: return module.binary(BinaryOp.NarrowI16x8ToI8x16, arg0, arg1);
       case TypeKind.U16: return module.binary(BinaryOp.NarrowU16x8ToU8x16, arg0, arg1);
@@ -4448,7 +4521,7 @@ function builtin_v128_neg(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.unary(UnaryOp.NegI8x16, arg0);
@@ -4495,7 +4568,7 @@ function builtin_v128_abs(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.unary(UnaryOp.AbsI8x16, arg0);
       case TypeKind.I16: return module.unary(UnaryOp.AbsI16x8, arg0);
@@ -4539,7 +4612,7 @@ function builtin_v128_sqrt(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.unary(UnaryOp.SqrtF32x4, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.SqrtF64x2, arg0);
@@ -4569,7 +4642,7 @@ function builtin_v128_ceil(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.unary(UnaryOp.CeilF32x4, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.CeilF64x2, arg0);
@@ -4599,7 +4672,7 @@ function builtin_v128_floor(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.unary(UnaryOp.FloorF32x4, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.FloorF64x2, arg0);
@@ -4629,7 +4702,7 @@ function builtin_v128_trunc(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.unary(UnaryOp.TruncF32x4, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.TruncF64x2, arg0);
@@ -4659,7 +4732,7 @@ function builtin_v128_nearest(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.unary(UnaryOp.NearestF32x4, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.NearestF64x2, arg0);
@@ -4689,7 +4762,7 @@ function builtin_v128_convert(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I32: return module.unary(UnaryOp.ConvertI32x4ToF32x4, arg0);
       case TypeKind.U32: return module.unary(UnaryOp.ConvertU32x4ToF32x4, arg0);
@@ -4721,7 +4794,7 @@ function builtin_v128_trunc_sat(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I32: return module.unary(UnaryOp.TruncSatF32x4ToI32x4, arg0);
       case TypeKind.U32: return module.unary(UnaryOp.TruncSatF32x4ToU32x4, arg0);
@@ -4753,7 +4826,7 @@ function builtin_v128_widen_low(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.unary(UnaryOp.WidenLowI8x16ToI16x8, arg0);
       case TypeKind.U8: return module.unary(UnaryOp.WidenLowU8x16ToU16x8, arg0);
@@ -4785,7 +4858,7 @@ function builtin_v128_widen_high(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.unary(UnaryOp.WidenHighI8x16ToI16x8, arg0);
       case TypeKind.U8: return module.unary(UnaryOp.WidenHighU8x16ToU16x8, arg0);
@@ -4818,7 +4891,7 @@ function builtin_v128_shl(ctx: BuiltinContext): ExpressionRef {
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.CONV_IMPLICIT);
   compiler.currentType = Type.v128;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.simd_shift(SIMDShiftOp.ShlI8x16, arg0, arg1);
@@ -4864,7 +4937,7 @@ function builtin_v128_shr(ctx: BuiltinContext): ExpressionRef {
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.CONV_IMPLICIT);
   compiler.currentType = Type.v128;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8: return module.simd_shift(SIMDShiftOp.ShrI8x16, arg0, arg1);
       case TypeKind.U8: return module.simd_shift(SIMDShiftOp.ShrU8x16, arg0, arg1);
@@ -5003,7 +5076,7 @@ function builtin_v128_any_true(ctx: BuiltinContext): ExpressionRef {
   var type = ctx.typeArguments![0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   compiler.currentType = Type.bool;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.unary(UnaryOp.AnyTrueI8x16, arg0);
@@ -5048,7 +5121,7 @@ function builtin_v128_all_true(ctx: BuiltinContext): ExpressionRef {
   var type = ctx.typeArguments![0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   compiler.currentType = Type.bool;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.unary(UnaryOp.AllTrueI8x16, arg0);
@@ -5093,7 +5166,7 @@ function builtin_v128_bitmask(ctx: BuiltinContext): ExpressionRef {
   var type = ctx.typeArguments![0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   compiler.currentType = Type.i32;
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: return module.unary(UnaryOp.BitmaskI8x16, arg0);
@@ -5133,7 +5206,7 @@ function builtin_v128_qfma(ctx: BuiltinContext): ExpressionRef {
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
   var arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.simd_ternary(SIMDTernaryOp.QFMAF32x4, arg0, arg1, arg2);
       case TypeKind.F64: return module.simd_ternary(SIMDTernaryOp.QFMAF64x2, arg0, arg1, arg2);
@@ -5164,7 +5237,7 @@ function builtin_v128_qfms(ctx: BuiltinContext): ExpressionRef {
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
   var arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
-  if (!type.is(TypeFlags.REFERENCE)) {
+  if (type.isValue) {
     switch (type.kind) {
       case TypeKind.F32: return module.simd_ternary(SIMDTernaryOp.QFMSF32x4, arg0, arg1, arg2);
       case TypeKind.F64: return module.simd_ternary(SIMDTernaryOp.QFMSF64x2, arg0, arg1, arg2);
@@ -8135,11 +8208,10 @@ export function compileVisitGlobals(compiler: Compiler): void {
     if (element.kind != ElementKind.GLOBAL) continue;
     let global = <Global>element;
     let globalType = global.type;
-    let classType = globalType.classReference;
+    let classReference = globalType.getClass();
     if (
-      globalType.is(TypeFlags.REFERENCE) &&
-      classType !== null &&
-      !classType.hasDecorator(DecoratorFlags.UNMANAGED) &&
+      classReference !== null &&
+      !classReference.hasDecorator(DecoratorFlags.UNMANAGED) &&
       global.is(CommonFlags.COMPILED)
     ) {
       if (global.is(CommonFlags.INLINED)) {
@@ -8639,7 +8711,7 @@ function checkArgsOptional(ctx: BuiltinContext, expectedMinimum: i32, expectedMa
 function contextualUsize(compiler: Compiler, value: i64, contextualType: Type): ExpressionRef {
   var module = compiler.module;
   // Check if contextual type fits
-  if (contextualType != Type.auto && contextualType.is(TypeFlags.INTEGER | TypeFlags.VALUE)) {
+  if (contextualType != Type.auto && contextualType.isIntegerValue) {
     switch (contextualType.kind) {
       case TypeKind.I32: {
         if (i64_is_i32(value)) {

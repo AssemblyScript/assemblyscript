@@ -773,29 +773,47 @@
   call $~lib/rt/stub/__release
  )
  (func $retain-release/provideRefIndirect (param $0 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
   global.get $retain-release/REF
   i32.const 1
   global.set $~argumentsLength
   local.get $0
+  i32.load
   call_indirect (type $i32_=>_none)
+  local.get $0
+  call $~lib/rt/stub/__release
  )
  (func $retain-release/receiveRefIndirect (param $0 i32)
   (local $1 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
   i32.const 0
   global.set $~argumentsLength
   local.get $0
+  i32.load
   call_indirect (type $none_=>_i32)
   local.tee $1
   i32.eqz
   drop
   local.get $1
   call $~lib/rt/stub/__release
+  local.get $0
+  call $~lib/rt/stub/__release
  )
  (func $retain-release/receiveRefIndirectDrop (param $0 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
   i32.const 0
   global.set $~argumentsLength
   local.get $0
+  i32.load
   call_indirect (type $none_=>_i32)
+  call $~lib/rt/stub/__release
+  local.get $0
   call $~lib/rt/stub/__release
  )
  (func $~start
