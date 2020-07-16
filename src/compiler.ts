@@ -8795,11 +8795,11 @@ export class Compiler extends DiagnosticEmitter {
     var expressions = expression.elementExpressions;
     var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
-    var isStatic = true;
+    var isStatic = !elementType.is(TypeFlags.HOST);
     var nativeElementType = elementType.toNativeType();
     for (let i = 0; i < length; ++i) {
       let elementExpression = expressions[i];
-      if (elementExpression) {
+      if (elementExpression.kind != NodeKind.OMITTED) {
         let expr = this.compileExpression(<Expression>elementExpression, elementType,
           Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
@@ -8811,7 +8811,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         values[i] = expr;
       } else {
-        values[i] = this.makeZero(elementType, expression);
+        values[i] = this.makeZero(elementType, elementExpression);
       }
     }
 
@@ -8966,10 +8966,10 @@ export class Compiler extends DiagnosticEmitter {
     var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
     var nativeElementType = elementType.toNativeType();
-    var isStatic = true;
+    var isStatic = !elementType.is(TypeFlags.HOST);
     for (let i = 0; i < length; ++i) {
       let elementExpression = expressions[i];
-      if (elementExpression) {
+      if (elementExpression.kind != NodeKind.OMITTED) {
         let expr = this.compileExpression(elementExpression, elementType,
           Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
@@ -8981,7 +8981,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         values[i] = expr;
       } else {
-        values[i] = this.makeZero(elementType, expression);
+        values[i] = this.makeZero(elementType, elementExpression);
       }
     }
 
@@ -10670,7 +10670,7 @@ export class Compiler extends DiagnosticEmitter {
         this.error(
           DiagnosticCode.Not_implemented_0,
           reportNode.range,
-          "ref.null<externref>"
+          "ref.null"
         );
         return module.unreachable();
     }
