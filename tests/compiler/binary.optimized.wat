@@ -339,10 +339,6 @@
  )
  (func $start:binary
   global.get $binary/i
-  i32.const 1
-  i32.rem_s
-  drop
-  global.get $binary/i
   call $~lib/math/ipow32
   drop
   global.get $binary/i
@@ -353,11 +349,9 @@
   i32.const 1
   i32.sub
   global.set $binary/i
-  global.get $binary/i
-  i32.const 1
-  i32.rem_s
+  i32.const 0
   global.set $binary/i
-  global.get $binary/i
+  i32.const 0
   call $~lib/math/ipow32
   global.set $binary/i
   global.get $binary/i
@@ -392,38 +386,20 @@
   i32.const 1
   i32.sub
   global.set $binary/i
-  global.get $binary/i
-  i32.const 1
-  i32.rem_s
+  i32.const 0
   global.set $binary/i
-  global.get $binary/i
-  i32.const 1
-  i32.shl
+  i32.const 0
   global.set $binary/i
-  global.get $binary/i
-  i32.const 1
-  i32.shr_s
+  i32.const 0
   global.set $binary/i
-  global.get $binary/i
-  i32.const 1
-  i32.shr_u
+  i32.const 0
   global.set $binary/i
-  global.get $binary/i
-  i32.const 1
-  i32.and
+  i32.const 0
   global.set $binary/i
-  global.get $binary/i
   i32.const 1
-  i32.or
   global.set $binary/i
-  global.get $binary/i
-  i32.const 1
-  i32.xor
+  i32.const 0
   global.set $binary/i
-  global.get $binary/I
-  i64.const 1
-  i64.rem_s
-  drop
   global.get $binary/I
   i64.const 1
   i64.add
@@ -432,25 +408,15 @@
   i64.const 1
   i64.sub
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.rem_s
+  i64.const 0
   global.set $binary/I
-  global.get $binary/I
-  f64.convert_i64_s
-  i64.trunc_f64_s
+  i64.const 0
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.shl
+  i64.const 0
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.shr_s
+  i64.const 0
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.shr_u
+  i64.const 0
   global.set $binary/I
   global.get $binary/I
   i64.const 1
@@ -472,33 +438,19 @@
   i64.const 1
   i64.sub
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.rem_s
+  i64.const 0
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.shl
+  i64.const 0
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.shr_s
+  i64.const 0
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.shr_u
+  i64.const 0
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.and
+  i64.const 0
   global.set $binary/I
-  global.get $binary/I
   i64.const 1
-  i64.or
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.xor
+  i64.const 0
   global.set $binary/I
   global.get $binary/f
   call $~lib/math/NativeMathf.mod
