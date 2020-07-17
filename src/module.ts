@@ -2013,8 +2013,8 @@ export function getBlockChildCount(expr: ExpressionRef): Index {
   return binaryen._BinaryenBlockGetNumChildren(expr);
 }
 
-export function getBlockChild(expr: ExpressionRef, index: Index): ExpressionRef {
-  return binaryen._BinaryenBlockGetChild(expr, index);
+export function getBlockChildAt(expr: ExpressionRef, index: Index): ExpressionRef {
+  return binaryen._BinaryenBlockGetChildAt(expr, index);
 }
 
 export function getIfCondition(expr: ExpressionRef): ExpressionRef {
@@ -2073,8 +2073,8 @@ export function getCallOperandCount(expr: ExpressionRef): i32 {
   return binaryen._BinaryenCallGetNumOperands(expr);
 }
 
-export function getCallOperand(expr: ExpressionRef, index: Index): ExpressionRef {
-  return binaryen._BinaryenCallGetOperand(expr, index);
+export function getCallOperandAt(expr: ExpressionRef, index: Index): ExpressionRef {
+  return binaryen._BinaryenCallGetOperandAt(expr, index);
 }
 
 export function getHostOp(expr: ExpressionRef): ExpressionRef {
@@ -2085,8 +2085,8 @@ export function getHostOperandCount(expr: ExpressionRef): Index {
   return binaryen._BinaryenHostGetNumOperands(expr);
 }
 
-export function getHostOperand(expr: ExpressionRef, index: Index): ExpressionRef {
-  return binaryen._BinaryenHostGetOperand(expr, index);
+export function getHostOperandAt(expr: ExpressionRef, index: Index): ExpressionRef {
+  return binaryen._BinaryenHostGetOperandAt(expr, index);
 }
 
 export function getHostName(expr: ExpressionRef): string | null {
@@ -2390,7 +2390,7 @@ function stringLengthUTF8(str: string): usize {
   return len;
 }
 
-function allocString(str: string | null): usize {
+export function allocString(str: string | null): usize {
   if (str === null) return 0;
   var ptr = binaryen._malloc(stringLengthUTF8(str) + 1) >>> 0;
   // the following is based on Emscripten's stringToUTF8Array
@@ -2495,7 +2495,7 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
         let numChildren = binaryen._BinaryenBlockGetNumChildren(expr); // last child needs unreachable
         return (
           numChildren > 0 &&
-          needsExplicitUnreachable(binaryen._BinaryenBlockGetChild(expr, numChildren - 1))
+          needsExplicitUnreachable(binaryen._BinaryenBlockGetChildAt(expr, numChildren - 1))
         );
       }
     }
@@ -2512,7 +2512,7 @@ export function traverse<T>(
   switch (getExpressionId(expr)) {
     case ExpressionId.Block: {
       for (let i: Index = 0, n = binaryen._BinaryenBlockGetNumChildren(expr); i < n; ++i) {
-        visit(binaryen._BinaryenBlockGetChild(expr, i), data);
+        visit(binaryen._BinaryenBlockGetChildAt(expr, i), data);
       }
       break;
     }
@@ -2538,13 +2538,13 @@ export function traverse<T>(
     }
     case ExpressionId.Call: {
       for (let i: Index = 0, n = binaryen._BinaryenCallGetNumOperands(expr); i < n; ++i) {
-        visit(binaryen._BinaryenCallGetOperand(expr, i), data);
+        visit(binaryen._BinaryenCallGetOperandAt(expr, i), data);
       }
       break;
     }
     case ExpressionId.CallIndirect: {
       for (let i: Index = 0, n = binaryen._BinaryenCallIndirectGetNumOperands(expr); i < n; ++i) {
-        visit(binaryen._BinaryenCallIndirectGetOperand(expr, i), data);
+        visit(binaryen._BinaryenCallIndirectGetOperandAt(expr, i), data);
       }
       break;
     }
@@ -2599,7 +2599,7 @@ export function traverse<T>(
     }
     case ExpressionId.Host: {
       for (let i: Index = 0, n = binaryen._BinaryenHostGetNumOperands(expr); i < n; ++i) {
-        visit(binaryen._BinaryenHostGetOperand(expr, i), data);
+        visit(binaryen._BinaryenHostGetOperandAt(expr, i), data);
       }
       break;
     }
@@ -2703,7 +2703,7 @@ export function traverse<T>(
     }
     case ExpressionId.Throw: {
       for (let i: Index = 0, n = binaryen._BinaryenThrowGetNumOperands(expr); i < n; ++i) {
-        visit(binaryen._BinaryenThrowGetOperand(expr, i), data);
+        visit(binaryen._BinaryenThrowGetOperandAt(expr, i), data);
       }
       break;
     }
@@ -2717,7 +2717,7 @@ export function traverse<T>(
     }
     case ExpressionId.TupleMake: {
       for (let i: Index = 0, n = binaryen._BinaryenTupleMakeGetNumOperands(expr); i < n; ++i) {
-        visit(binaryen._BinaryenTupleMakeGetOperand(expr, i), data);
+        visit(binaryen._BinaryenTupleMakeGetOperandAt(expr, i), data);
       }
       break;
     }

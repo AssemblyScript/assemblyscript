@@ -520,7 +520,7 @@ export declare function _BinaryenBrOnExn(module: BinaryenModuleRef, name: usize,
 
 export declare function _BinaryenTupleMake(module: BinaryenModuleRef, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
 export declare function _BinaryenTupleMakeGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
-export declare function _BinaryenTupleMakeGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenTupleMakeGetOperandAt(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
 export declare function _BinaryenTupleExtract(module: BinaryenModuleRef, tuple: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
 export declare function _BinaryenTupleExtractGetTuple(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenTupleExtractGetIndex(expr: BinaryenExpressionRef): BinaryenIndex;
@@ -531,14 +531,23 @@ export declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): B
 export declare function _BinaryenExpressionGetType(expr: BinaryenExpressionRef): BinaryenType;
 export declare function _BinaryenExpressionPrint(expr: BinaryenExpressionRef): void;
 export declare function _BinaryenExpressionCopy(expr: BinaryenExpressionRef, module: BinaryenModuleRef): BinaryenExpressionRef;
+export declare function _BinaryenExpressionFinalize(expr: BinaryenExpressionRef): void;
 
 export declare function _BinaryenBlockGetName(expr: BinaryenExpressionRef): usize;
+export declare function _BinaryenBlockSetName(expr: BinaryenExpressionRef, name: usize): void;
 export declare function _BinaryenBlockGetNumChildren(expr: BinaryenExpressionRef): BinaryenIndex;
-export declare function _BinaryenBlockGetChild(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenBlockGetChildAt(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenBlockSetChildAt(expr: BinaryenExpressionRef, index: BinaryenIndex, childExpr: BinaryenExpressionRef): void;
+export declare function _BinaryenBlockAppendChild(expr: BinaryenExpressionRef, childExpr: BinaryenExpressionRef): BinaryenIndex;
+export declare function _BinaryenBlockInsertChildAt(expr: BinaryenExpressionRef, index: BinaryenIndex, childExpr: BinaryenExpressionRef): void;
+export declare function _BinaryenBlockRemoveChildAt(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
 
 export declare function _BinaryenIfGetCondition(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenIfSetCondition(expr: BinaryenExpressionRef, conditionExpr: BinaryenExpressionRef): void;
 export declare function _BinaryenIfGetIfTrue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenIfSetIfTrue(expr: BinaryenExpressionRef, ifTrueExpr: BinaryenExpressionRef): void;
 export declare function _BinaryenIfGetIfFalse(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenIfSetIfFalse(expr: BinaryenExpressionRef, ifFalseExpr: BinaryenExpressionRef): void;
 
 export declare function _BinaryenLoopGetName(expr: BinaryenExpressionRef): usize;
 export declare function _BinaryenLoopGetBody(expr: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -548,18 +557,18 @@ export declare function _BinaryenBreakGetCondition(expr: BinaryenExpressionRef):
 export declare function _BinaryenBreakGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 export declare function _BinaryenSwitchGetNumNames(expr: BinaryenExpressionRef): BinaryenIndex;
-export declare function _BinaryenSwitchGetName(expr: BinaryenExpressionRef, index: BinaryenIndex): usize;
+export declare function _BinaryenSwitchGetNameAt(expr: BinaryenExpressionRef, index: BinaryenIndex): usize;
 export declare function _BinaryenSwitchGetDefaultName(expr: BinaryenExpressionRef): usize;
 export declare function _BinaryenSwitchGetCondition(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenSwitchGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
 export declare function _BinaryenCallGetTarget(expr: BinaryenExpressionRef): usize;
 export declare function _BinaryenCallGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
-export declare function _BinaryenCallGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenCallGetOperandAt(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
 
 export declare function _BinaryenCallIndirectGetTarget(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenCallIndirectGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
-export declare function _BinaryenCallIndirectGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenCallIndirectGetOperandAt(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
 
 export declare function _BinaryenLocalGetGetIndex(expr: BinaryenExpressionRef): BinaryenIndex;
 
@@ -575,7 +584,7 @@ export declare function _BinaryenGlobalSetGetValue(expr: BinaryenExpressionRef):
 export declare function _BinaryenHostGetOp(expr: BinaryenExpressionRef): BinaryenOp;
 export declare function _BinaryenHostGetNameOperand(expr: BinaryenExpressionRef): usize;
 export declare function _BinaryenHostGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
-export declare function _BinaryenHostGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenHostGetOperandAt(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
 
 export declare function _BinaryenLoadIsAtomic(expr: BinaryenExpressionRef): bool;
 export declare function _BinaryenLoadIsSigned(expr: BinaryenExpressionRef): bool;
@@ -685,7 +694,7 @@ export declare function _BinaryenTryGetCatchBody(expr: BinaryenExpressionRef): B
 
 export declare function _BinaryenThrowGetEvent(expr: BinaryenExpressionRef): usize;
 export declare function _BinaryenThrowGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
-export declare function _BinaryenThrowGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenThrowGetOperandAt(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
 
 export declare function _BinaryenRethrowGetExnref(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 
