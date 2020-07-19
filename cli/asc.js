@@ -351,8 +351,11 @@ exports.main = function main(argv, options, callback) {
 
   // returns a relative path from baseDir
   function makeRelative(arg) {
+    // FIXME: see https://github.com/AssemblyScript/assemblyscript/issues/1398
+    if (baseDir === ".") return arg;
     return path.relative(baseDir, arg);
   }
+
   // postprocess we need to get absolute file locations argv
   argv = unique(argv.map(resolveBasedir)).map(makeRelative);
 
