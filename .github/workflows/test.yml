@@ -68,6 +68,8 @@ jobs:
           exit 1
         fi
         npm test
+    - name: Test browser build
+      run: node tests/browser-asc
   test-windows:
     name: "Compiler (Windows, node current)"
     runs-on: windows-latest
@@ -87,6 +89,8 @@ jobs:
       run: npm run build
     - name: Test distribution
       run: npm test
+    - name: Test browser build
+      run: node tests/browser-asc
   test-macos:
     name: "Compiler (MacOS, node current)"
     runs-on: macos-latest
@@ -106,6 +110,8 @@ jobs:
       run: npm run build
     - name: Test distribution
       run: npm test
+    - name: Test browser build
+      run: node tests/browser-asc
   test-features:
     name: "Features"
     runs-on: ubuntu-latest
