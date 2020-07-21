@@ -39,7 +39,7 @@ import {
   getConstValueF32,
   getConstValueF64,
   getBlockChildCount,
-  getBlockChild,
+  getBlockChildAt,
   getBlockName,
   getLocalGetIndex,
   isLocalTee,
@@ -2194,7 +2194,7 @@ export class Compiler extends DiagnosticEmitter {
       switch (getExpressionId(stmt)) {
         case ExpressionId.Block: {
           if (!getBlockName(stmt)) {
-            for (let j: Index = 0, k = getBlockChildCount(stmt); j < k; ++j) stmts.push(getBlockChild(stmt, j));
+            for (let j: Index = 0, k = getBlockChildCount(stmt); j < k; ++j) stmts.push(getBlockChildAt(stmt, j));
             break;
           }
           // fall-through
@@ -7635,7 +7635,7 @@ export class Compiler extends DiagnosticEmitter {
         if (getBlockName(expr) === null) { // must not be a break target
           let count = getBlockChildCount(expr);
           if (count) {
-            return this.tryUndoAutorelease(getBlockChild(expr, count - 1), flow);
+            return this.tryUndoAutorelease(getBlockChildAt(expr, count - 1), flow);
           }
         }
         break;
