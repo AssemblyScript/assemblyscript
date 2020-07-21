@@ -1213,11 +1213,9 @@ export class Program extends DiagnosticEmitter {
       let basePrototype = thisPrototype.basePrototype;
       let interfacePrototypes = thisPrototype.interfacePrototypes;
       if (basePrototype) {
-        assert(!interfacePrototypes);
         this.markVirtuals(thisPrototype, basePrototype);
       }
       if (interfacePrototypes) {
-        assert(!basePrototype);
         for (let j = 0, l = interfacePrototypes.length; j < l; ++j) {
           this.markVirtuals(thisPrototype, interfacePrototypes[j]);
         }
