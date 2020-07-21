@@ -284,7 +284,7 @@ exports.main = function main(argv, options, callback) {
   const configs = [asconfig];
 
   // First find all parent configs and add them each to the front
-  while (asconfig.extends) {
+  while (asconfig && asconfig.extends) {
     asconfigDir = path.isAbsolute(asconfig.extends)
       // absolute extension path means we know the exact directory and location
       ? path.dirname(asconfig.extends)
