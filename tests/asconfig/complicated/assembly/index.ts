@@ -3,4 +3,4 @@ assert(ASC_SHRINK_LEVEL == 1);
 assert(ASC_FEATURE_SIMD);
 let size = memory.size();
 trace("size", 1, size);
-assert(size == 30);
+assert(size == 30, "expected 30 got " + size.toString());

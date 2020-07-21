@@ -280,11 +280,30 @@ exports.main = function main(argv, options, callback) {
   const seenAsconfig = new Set();
   seenAsconfig.add(path.join(baseDir, args.config));
 
-  while (asconfig) {
-    // merge target first, then merge options, then merge extended asconfigs
-    if (asconfig.targets && asconfig.targets[target]) {
-      args = optionsUtil.merge(exports.options, asconfig.targets[target], args);
+  // Keep array of configs
+  const configs = [asconfig];
+
+  // First find all parent configs and add them each to the front
+  while (asconfig.extends) {
+    asconfigDir = path.isAbsolute(asconfig.extends)
+      // absolute extension path means we know the exact directory and location
+      ? path.dirname(asconfig.extends)
+      // relative means we need to calculate a relative asconfigDir
+      : path.join(asconfigDir, path.dirname(asconfig.extends));
+    const fileName = path.basename(asconfig.extends);
+    const filePath = path.join(asconfigDir, fileName);
+    if (seenAsconfig.has(filePath)) {
+      asconfig = null;
+    } else {
+      seenAsconfig.add(filePath);
+      asconfig = getAsconfig(fileName, asconfigDir, readFile);
+      configs.unshift(asconfig);
     }
+  }
+  let entries = new Set();
+  asconfig = configs.shift();
+  while (asconfig) {
+    // First merge options as the targets can overwrite them later
     if (asconfig.options) {
       if (asconfig.options.transform) {
         // ensure that a transform's path is relative to the current config
@@ -298,43 +317,33 @@ exports.main = function main(argv, options, callback) {
           return p;
         });
       }
-      args = optionsUtil.merge(exports.options, args, asconfig.options);
+      args = optionsUtil.merge(exports.options, asconfig.options, args);
     }
-
+    
+    // merge targets
+    if (asconfig.targets && asconfig.targets[target]) {
+      args = optionsUtil.merge(exports.options, asconfig.targets[target], args);
+    }
     // entries are added to the compilation
     if (asconfig.entries) {
       for (const entry of asconfig.entries) {
-        argv.push(
-          path.isAbsolute(entry)
+        entries.add(
+          path.relative(baseDir, path.isAbsolute(entry)
             ? entry
             // the entry is relative to the asconfig directory
             : path.join(asconfigDir, entry)
-        );
+          ));
       }
     }
-
-    // asconfig "extends" another config, merging options of it's parent
-    if (asconfig.extends) {
-      asconfigDir = path.isAbsolute(asconfig.extends)
-        // absolute extension path means we know the exact directory and location
-        ? path.dirname(asconfig.extends)
-        // relative means we need to calculate a relative asconfigDir
-        : path.join(asconfigDir, path.dirname(asconfig.extends));
-      const fileName = path.basename(asconfig.extends);
-      const filePath = path.join(asconfigDir, fileName);
-      if (seenAsconfig.has(filePath)) {
-        asconfig = null;
-      } else {
-        seenAsconfig.add(filePath);
-        asconfig = getAsconfig(fileName, asconfigDir, readFile);
-      }
-    } else {
-      asconfig = null; // finished resolving the configuration chain
-    }
+    asconfig = configs.shift();
   }
+
+  // Add entries
+  argv = argv.concat(Array.from(entries));
 
   // If showConfig print args and exit
   if (args.showConfig) {
+    args.argv = argv;
     stderr.write(JSON.stringify(args, null, 2));
     return callback(null);
   }
