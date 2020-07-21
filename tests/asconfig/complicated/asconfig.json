@@ -6,7 +6,8 @@
       "initialMemory": 30,
       "explicitStart": true,
       "measure": true,
-      "pedantic": true
+      "pedantic": true,
+      "sourceMap": true
     }
   },
   "options": {

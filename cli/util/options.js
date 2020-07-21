@@ -149,7 +149,10 @@ function sanitizeValue(value, type) {
       case "b": return Boolean(value);
       case "i": return Math.trunc(value) || 0;
       case "f": return Number(value) || 0;
-      case "s": return String(value);
+      case "s": {
+        if (value === true) return "";
+        return String(value);
+      }
       case "I": {
         if (!Array.isArray(value)) value = [ value ];
         return value.map(v => Math.trunc(v) || 0);

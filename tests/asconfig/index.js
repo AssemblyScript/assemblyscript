@@ -8,6 +8,8 @@ asc.main(["assembly/index.ts", "--outFile", "output.wasm", "--explicitStart", ..
   writeFile(name, contents) {
     if (name === "output.wasm") {
       binary = contents;
+    } else if (name !== "output.wasm.map") {
+      throw Error("Unexpected output file: " + name);
     }
   }
 }, (err) => {
