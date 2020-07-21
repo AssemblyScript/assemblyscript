@@ -193,8 +193,9 @@ exports.main = function main(argv, options, callback) {
   if (!stdout) throw Error("'options.stdout' must be specified");
   if (!stderr) throw Error("'options.stderr' must be specified");
 
-  const opts = optionsUtil.parse(argv, exports.options);
-  let args = opts.options;
+  const opts = optionsUtil.parse(argv, exports.options, false);
+  let args = optionsUtil.addDefaults(exports.options, opts.options);
+  let cliArgs = opts.options;
 
   argv = opts.arguments;
   if (args.noColors) {
@@ -302,6 +303,7 @@ exports.main = function main(argv, options, callback) {
   }
   let entries = new Set();
   asconfig = configs.shift();
+  let configArgs = {};
   while (asconfig) {
     // First merge options as the targets can overwrite them later
     if (asconfig.options) {
@@ -317,12 +319,12 @@ exports.main = function main(argv, options, callback) {
           return p;
         });
       }
-      args = optionsUtil.merge(exports.options, asconfig.options, args);
+      configArgs = optionsUtil.merge(exports.options, asconfig.options, configArgs);
     }
     
     // merge targets
     if (asconfig.targets && asconfig.targets[target]) {
-      args = optionsUtil.merge(exports.options, asconfig.targets[target], args);
+      configArgs = optionsUtil.merge(exports.options, asconfig.targets[target], configArgs);
     }
     // entries are added to the compilation
     if (asconfig.entries) {
@@ -337,7 +339,10 @@ exports.main = function main(argv, options, callback) {
     }
     asconfig = configs.shift();
   }
-
+  // Merge with defaults
+  args = optionsUtil.merge(exports.options, configArgs, args);
+  // Merge in cli args
+  args = optionsUtil.merge(exports.options, cliArgs, args);
   // Add entries
   argv = argv.concat(Array.from(entries));
 

@@ -31,7 +31,7 @@ function parse(argv, config, propagateDefaults = true) {
       if (typeof option.alias === "string") aliases[option.alias] = key;
       else if (Array.isArray(option.alias)) option.alias.forEach(alias => aliases[alias] = key);
     }
-    if (option.default != null) options[key] = option.default;
+    if (option.default != null && propagateDefaults) options[key] = option.default;
   });
 
   // iterate over argv
@@ -87,7 +87,9 @@ function parse(argv, config, propagateDefaults = true) {
     } else unknown.push(arg);
   }
   while (i < k) trailing.push(argv[i++]); // trailing
-  if (propagateDefaults) addDefaults(config, options);
+  if (propagateDefaults) {
+    options = addDefaults(config, options);
+  }
 
   return { options, unknown, arguments: args, trailing };
 }
@@ -224,12 +226,17 @@ exports.merge = merge;
 
 /** Populates default values on a parsed options result. */
 function addDefaults(config, options) {
+  const newOptions = {};
   for (const [key, { default: defaultValue }] of Object.entries(config)) {
-    if (options[key] == null && defaultValue != null) {
-      options[key] = defaultValue;
+    if (options[key] == null) {
+      if (defaultValue != null) {
+        newOptions[key] = defaultValue;
+      }
+    } else {
+      newOptions[key] = options[key];
     }
   }
-  return options;
+  return newOptions;
 }
 
 exports.addDefaults = addDefaults;

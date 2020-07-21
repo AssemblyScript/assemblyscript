@@ -1,6 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "test": "node ../index.js"
+    "test": "node ../index.js --target && node ../index.js --showConfig --runtime none"
   }
 }
