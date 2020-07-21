@@ -466,6 +466,7 @@ type BinaryenExpressionRef = usize;
 
 export declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): BinaryenExpressionId;
 export declare function _BinaryenExpressionGetType(expr: BinaryenExpressionRef): BinaryenType;
+export declare function _BinaryenExpressionSetType(expr: BinaryenExpressionRef, type: BinaryenType): void;
 export declare function _BinaryenExpressionPrint(expr: BinaryenExpressionRef): void;
 export declare function _BinaryenExpressionCopy(expr: BinaryenExpressionRef, module: BinaryenModuleRef): BinaryenExpressionRef;
 export declare function _BinaryenExpressionFinalize(expr: BinaryenExpressionRef): void;
