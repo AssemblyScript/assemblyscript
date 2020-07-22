@@ -61,4 +61,4 @@ export function help(config: Config, options?: HelpOptions): string;
 export function merge(config: Config, currentOptions: OptionSet, parentOptions: OptionSet): OptionSet;
 
 /** Populates default values on a parsed options result. */
-export function addDefaults(config: Config, options: OptionSet): OptionSet;
+export function addDefaults(config: Config, options: OptionSet): void;

@@ -31,7 +31,7 @@ function parse(argv, config, propagateDefaults = true) {
       if (typeof option.alias === "string") aliases[option.alias] = key;
       else if (Array.isArray(option.alias)) option.alias.forEach(alias => aliases[alias] = key);
     }
-    if (option.default != null) options[key] = option.default;
+    if (propagateDefaults && option.default != null) options[key] = option.default;
   });
 
   // iterate over argv
@@ -229,7 +229,6 @@ function addDefaults(config, options) {
       options[key] = defaultValue;
     }
   }
-  return options;
 }
 
 exports.addDefaults = addDefaults;

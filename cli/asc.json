@@ -20,14 +20,12 @@
   "config": {
     "category": "General",
     "description": "Configuration file to apply. CLI arguments take precedence.",
-    "type": "s",
-    "default": "asconfig.json"
+    "type": "s"
   },
   "target": {
     "category": "General",
     "description": "Target configuration to use. Defaults to 'release'.",
-    "type": "s",
-    "default": "release"
+    "type": "s"
   },
 
   "optimize": {
