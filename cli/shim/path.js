@@ -207,6 +207,8 @@ var posix = {
 
     if (from === to) return '';
 
+    if (from === ".") return to; // FIX for 'odule.ts' (see issue #1398)
+
     // Trim any leading backslashes
     var fromStart = 1;
     for (; fromStart < from.length; ++fromStart) {
