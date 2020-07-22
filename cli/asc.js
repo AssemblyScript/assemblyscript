@@ -195,11 +195,11 @@ exports.main = function main(argv, options, callback) {
   if (!stderr) throw Error("'options.stderr' must be specified");
 
   // Parse command line options but do not populate option defaults yet
-  const optionsResult = optionsUtil.parse(argv, exports.options, false);
-  let opts = optionsResult.options;
-  argv = optionsResult.arguments;
+  const opts = optionsUtil.parse(argv, exports.options, false);
+  let args = opts.options;
+  argv = opts.arguments;
 
-  if (opts.noColors) {
+  if (args.noColors) {
     colorsUtil.stdout.supported =
     colorsUtil.stderr.supported = false;
   } else {
@@ -208,7 +208,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Check for unknown options
-  const unknownOpts = optionsResult.unknown;
+  const unknownOpts = opts.unknown;
   if (unknownOpts.length) {
     unknownOpts.forEach(arg => {
       stderr.write(colorsUtil.stderr.yellow("WARNING ") + "Unknown option '" + arg + "'" + EOL);
@@ -216,7 +216,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Check for trailing arguments
-  const trailingArgv = optionsResult.trailing;
+  const trailingArgv = opts.trailing;
   if (trailingArgv.length) {
     stderr.write(colorsUtil.stderr.yellow("WARNING ") + "Unsupported trailing arguments: " + trailingArgv.join(" ") + EOL);
   }
@@ -232,24 +232,24 @@ exports.main = function main(argv, options, callback) {
   };
 
   // Just print the version if requested
-  if (opts.version) {
+  if (args.version) {
     stdout.write("Version " + exports.version + (isDev ? "-dev" : "") + EOL);
     return callback(null);
   }
 
   // Use another extension if requested
-  if (typeof opts.extension === "string") {
-    if (/^\.?[0-9a-zA-Z]{1,14}$/.test(opts.extension)) {
-      extension = setupExtension(opts.extension);
+  if (typeof args.extension === "string") {
+    if (/^\.?[0-9a-zA-Z]{1,14}$/.test(args.extension)) {
+      extension = setupExtension(args.extension);
     } else {
-      return callback(Error("Invalid extension: " + opts.extension));
+      return callback(Error("Invalid extension: " + args.extension));
     }
   }
 
   // Print the help message if requested or no source files are provided
-  if (opts.help || !argv.length) {
-    var out = opts.help ? stdout : stderr;
-    var color = opts.help ? colorsUtil.stdout : colorsUtil.stderr;
+  if (args.help || !argv.length) {
+    var out = args.help ? stdout : stderr;
+    var color = args.help ? colorsUtil.stdout : colorsUtil.stderr;
     out.write([
       color.white("SYNTAX"),
       "  " + color.cyan("asc") + " [entryFile ...] [options]",
@@ -285,7 +285,7 @@ exports.main = function main(argv, options, callback) {
   const seenAsconfig = new Set();
   seenAsconfig.add(asconfigPath);
 
-  const target = opts.target || "release";
+  const target = args.target || "release";
   while (asconfig) {
     // Merge target first
     if (asconfig.targets) {
@@ -321,7 +321,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Populate option defaults once user-defined options are set
-  optionsUtil.addDefaults(exports.options, opts);
+  optionsUtil.addDefaults(exports.options, args);
 
   // If showConfig print options and exit
   if (opts.showConfig) {
@@ -340,25 +340,25 @@ exports.main = function main(argv, options, callback) {
   // Set up options
   const compilerOptions = assemblyscript.newOptions();
   assemblyscript.setTarget(compilerOptions, 0);
-  assemblyscript.setNoAssert(compilerOptions, opts.noAssert);
-  assemblyscript.setExportMemory(compilerOptions, !opts.noExportMemory);
-  assemblyscript.setImportMemory(compilerOptions, opts.importMemory);
-  assemblyscript.setInitialMemory(compilerOptions, opts.initialMemory >>> 0);
-  assemblyscript.setMaximumMemory(compilerOptions, opts.maximumMemory >>> 0);
-  assemblyscript.setSharedMemory(compilerOptions, opts.sharedMemory);
-  assemblyscript.setImportTable(compilerOptions, opts.importTable);
-  assemblyscript.setExportTable(compilerOptions, opts.exportTable);
-  assemblyscript.setExplicitStart(compilerOptions, opts.explicitStart);
-  assemblyscript.setMemoryBase(compilerOptions, opts.memoryBase >>> 0);
-  assemblyscript.setTableBase(compilerOptions, opts.tableBase >>> 0);
-  assemblyscript.setSourceMap(compilerOptions, opts.sourceMap != null);
-  assemblyscript.setNoUnsafe(compilerOptions, opts.noUnsafe);
-  assemblyscript.setPedantic(compilerOptions, opts.pedantic);
-  assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
+  assemblyscript.setNoAssert(compilerOptions, args.noAssert);
+  assemblyscript.setExportMemory(compilerOptions, !args.noExportMemory);
+  assemblyscript.setImportMemory(compilerOptions, args.importMemory);
+  assemblyscript.setInitialMemory(compilerOptions, args.initialMemory >>> 0);
+  assemblyscript.setMaximumMemory(compilerOptions, args.maximumMemory >>> 0);
+  assemblyscript.setSharedMemory(compilerOptions, args.sharedMemory);
+  assemblyscript.setImportTable(compilerOptions, args.importTable);
+  assemblyscript.setExportTable(compilerOptions, args.exportTable);
+  assemblyscript.setExplicitStart(compilerOptions, args.explicitStart);
+  assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
+  assemblyscript.setTableBase(compilerOptions, args.tableBase >>> 0);
+  assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
+  assemblyscript.setNoUnsafe(compilerOptions, args.noUnsafe);
+  assemblyscript.setPedantic(compilerOptions, args.pedantic);
+  assemblyscript.setLowMemoryLimit(compilerOptions, args.lowMemoryLimit >>> 0);
 
   // Add or override aliases if specified
-  if (opts.use) {
-    let aliases = opts.use;
+  if (args.use) {
+    let aliases = args.use;
     for (let i = 0, k = aliases.length; i < k; ++i) {
       let part = aliases[i];
       let p = part.indexOf("=");
@@ -372,7 +372,7 @@ exports.main = function main(argv, options, callback) {
 
   // Disable default features if specified
   var features;
-  if ((features = opts.disable) != null) {
+  if ((features = args.disable) != null) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
@@ -383,7 +383,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Enable experimental features if specified
-  if ((features = opts.enable) != null) {
+  if ((features = args.enable) != null) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
@@ -396,12 +396,12 @@ exports.main = function main(argv, options, callback) {
   // Set up optimization levels
   var optimizeLevel = 0;
   var shrinkLevel = 0;
-  if (opts.optimize) {
+  if (args.optimize) {
     optimizeLevel = exports.defaultOptimizeLevel;
     shrinkLevel = exports.defaultShrinkLevel;
   }
-  if (typeof opts.optimizeLevel === "number") optimizeLevel = opts.optimizeLevel;
-  if (typeof opts.shrinkLevel === "number") shrinkLevel = opts.shrinkLevel;
+  if (typeof args.optimizeLevel === "number") optimizeLevel = args.optimizeLevel;
+  if (typeof args.shrinkLevel === "number") shrinkLevel = args.shrinkLevel;
   optimizeLevel = Math.min(Math.max(optimizeLevel, 0), 3);
   shrinkLevel = Math.min(Math.max(shrinkLevel, 0), 2);
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
@@ -411,7 +411,7 @@ exports.main = function main(argv, options, callback) {
 
   // Set up transforms
   const transforms = [];
-  if (opts.transform) {
+  if (args.transform) {
     let tsNodeRegistered = false;
     let transformArgs = unique(opts.transform);
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
@@ -494,7 +494,7 @@ exports.main = function main(argv, options, callback) {
       }
     }
   }
-  opts.path = opts.path || [];
+  args.path = args.path || [];
 
   // Maps package names to parent directory
   var packageMains = new Map();
@@ -553,8 +553,8 @@ exports.main = function main(argv, options, callback) {
             for (let i = parts.length, k = WIN ? 1 : 0; i >= k; --i) {
               if (parts[i - 1] !== "node_modules") paths.push(parts.slice(0, i).join(SEP) + SEP + "node_modules");
             }
-            for (const currentPath of paths.concat(...opts.path).map(p => path.relative(baseDir, p))) {
-              if (opts.traceResolution) stderr.write("  in " + path.join(currentPath, packageName) + EOL);
+            for (const currentPath of paths.concat(...args.path).map(p => path.relative(baseDir, p))) {
+              if (args.traceResolution) stderr.write("  in " + path.join(currentPath, packageName) + EOL);
               let mainPath = "assembly";
               if (packageMains.has(packageName)) { // use cached
                 mainPath = packageMains.get(packageName);
@@ -576,14 +576,14 @@ exports.main = function main(argv, options, callback) {
               if ((sourceText = readFile(path.join(mainDir, plainName + extension.ext), baseDir)) != null) {
                 sourcePath = libraryPrefix + packageName + "/" + plainName + extension.ext;
                 packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
-                if (opts.traceResolution) stderr.write("  -> " + path.join(mainDir, plainName + extension.ext) + EOL);
+                if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, plainName + extension.ext) + EOL);
                 break;
               } else if (!isPackageRoot) {
                 const indexName = filePath + "/index";
                 if ((sourceText = readFile(path.join(mainDir, indexName + extension.ext), baseDir)) !== null) {
                   sourcePath = libraryPrefix + packageName + "/" + indexName + extension.ext;
                   packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
-                  if (opts.traceResolution) stderr.write("  -> " + path.join(mainDir, indexName + extension.ext) + EOL);
+                  if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, indexName + extension.ext) + EOL);
                   break;
                 }
               }
@@ -621,7 +621,7 @@ exports.main = function main(argv, options, callback) {
 
   // Include runtime template before entry files so its setup runs first
   {
-    let runtimeName = String(opts.runtime);
+    let runtimeName = String(args.runtime);
     let runtimePath = "rt/index-" + runtimeName;
     let runtimeText = exports.libraryFiles[runtimePath];
     if (runtimeText == null) {
@@ -681,7 +681,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Print files and exit if listFiles
-  if (opts.listFiles) {
+  if (args.listFiles) {
     // FIXME: not a proper C-like API
     stderr.write(program.sources.map(s => s.normalizedPath).sort().join(EOL) + EOL);
     return callback(null);
@@ -719,7 +719,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Validate the module if requested
-  if (!opts.noValidate) {
+  if (!args.noValidate) {
     stats.validateCount++;
     let isValid;
     stats.validateTime += measure(() => {
@@ -732,32 +732,32 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Set Binaryen-specific options
-  if (opts.trapMode === "clamp") {
+  if (args.trapMode === "clamp") {
     stats.optimizeCount++;
     stats.optimizeTime += measure(() => {
       module.runPass("trap-mode-clamp");
     });
-  } else if (opts.trapMode === "js") {
+  } else if (args.trapMode === "js") {
     stats.optimizeCount++;
     stats.optimizeTime += measure(() => {
       module.runPass("trap-mode-js");
     });
-  } else if (opts.trapMode !== "allow") {
+  } else if (args.trapMode !== "allow") {
     module.dispose();
     return callback(Error("Unsupported trap mode"));
   }
 
   // Optimize the module
-  const debugInfo = opts.debug;
-  const usesARC = opts.runtime == "half" || opts.runtime == "full";
-  const converge = opts.converge;
+  const debugInfo = args.debug;
+  const usesARC = args.runtime == "half" || args.runtime == "full";
+  const converge = args.converge;
   const runPasses = [];
-  if (opts.runPasses) {
-    if (typeof opts.runPasses === "string") {
-      opts.runPasses = opts.runPasses.split(",");
+  if (args.runPasses) {
+    if (typeof args.runPasses === "string") {
+      args.runPasses = args.runPasses.split(",");
     }
-    if (opts.runPasses.length) {
-      opts.runPasses.forEach(pass => {
+    if (args.runPasses.length) {
+      args.runPasses.forEach(pass => {
         if (runPasses.indexOf(pass = pass.trim()) < 0)
           runPasses.push(pass);
       });
@@ -787,30 +787,30 @@ exports.main = function main(argv, options, callback) {
   });
 
   // Prepare output
-  if (!opts.noEmit) {
-    if (opts.outFile != null) {
-      if (/\.was?t$/.test(opts.outFile) && opts.textFile == null) {
-        opts.textFile = opts.outFile;
-      } else if (/\.js$/.test(opts.outFile) && opts.jsFile == null) {
-        opts.jsFile = opts.outFile;
-      } else if (opts.binaryFile == null) {
-        opts.binaryFile = opts.outFile;
+  if (!args.noEmit) {
+    if (args.outFile != null) {
+      if (/\.was?t$/.test(args.outFile) && args.textFile == null) {
+        args.textFile = args.outFile;
+      } else if (/\.js$/.test(args.outFile) && args.jsFile == null) {
+        args.jsFile = args.outFile;
+      } else if (args.binaryFile == null) {
+        args.binaryFile = args.outFile;
       }
     }
 
     let hasStdout = false;
-    let hasOutput = opts.textFile != null
-                 || opts.binaryFile != null
-                 || opts.jsFile != null
-                 || opts.tsdFile != null
-                 || opts.idlFile != null;
+    let hasOutput = args.textFile != null
+                 || args.binaryFile != null
+                 || args.jsFile != null
+                 || args.tsdFile != null
+                 || args.idlFile != null;
 
     // Write binary
-    if (opts.binaryFile != null) {
-      let basename = path.basename(opts.binaryFile);
-      let sourceMapURL = opts.sourceMap != null
-        ? opts.sourceMap.length
-          ? opts.sourceMap
+    if (args.binaryFile != null) {
+      let basename = path.basename(args.binaryFile);
+      let sourceMapURL = args.sourceMap != null
+        ? args.sourceMap.length
+          ? args.sourceMap
           : "./" + basename + ".map"
         : null;
 
@@ -820,8 +820,8 @@ exports.main = function main(argv, options, callback) {
         wasm = module.toBinary(sourceMapURL);
       });
 
-      if (opts.binaryFile.length) {
-        writeFile(opts.binaryFile, wasm.output, baseDir);
+      if (args.binaryFile.length) {
+        writeFile(args.binaryFile, wasm.output, baseDir);
       } else {
         writeStdout(wasm.output);
         hasStdout = true;
@@ -829,7 +829,7 @@ exports.main = function main(argv, options, callback) {
 
       // Post-process source map
       if (wasm.sourceMap != null) {
-        if (opts.binaryFile.length) {
+        if (args.binaryFile.length) {
           let map = JSON.parse(wasm.sourceMap);
           map.sourceRoot = "./" + basename;
           let contents = [];
@@ -840,7 +840,7 @@ exports.main = function main(argv, options, callback) {
           });
           map.sourcesContent = contents;
           writeFile(path.join(
-            path.dirname(opts.binaryFile),
+            path.dirname(args.binaryFile),
             path.basename(sourceMapURL)
           ).replace(/^\.\//, ""), JSON.stringify(map), baseDir);
         } else {
@@ -850,14 +850,14 @@ exports.main = function main(argv, options, callback) {
     }
 
     // Write text (also fallback)
-    if (opts.textFile != null || !hasOutput) {
+    if (args.textFile != null || !hasOutput) {
       let wat;
-      if (opts.textFile != null && opts.textFile.length) {
+      if (args.textFile != null && args.textFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
           wat = module.toText();
         });
-        writeFile(opts.textFile, wat, baseDir);
+        writeFile(args.textFile, wat, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -868,14 +868,14 @@ exports.main = function main(argv, options, callback) {
     }
 
     // Write WebIDL
-    if (opts.idlFile != null) {
+    if (args.idlFile != null) {
       let idl;
-      if (opts.idlFile.length) {
+      if (args.idlFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
           idl = assemblyscript.buildIDL(program);
         });
-        writeFile(opts.idlFile, idl, baseDir);
+        writeFile(args.idlFile, idl, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -887,14 +887,14 @@ exports.main = function main(argv, options, callback) {
     }
 
     // Write TypeScript definition
-    if (opts.tsdFile != null) {
+    if (args.tsdFile != null) {
       let tsd;
-      if (opts.tsdFile.length) {
+      if (args.tsdFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
           tsd = assemblyscript.buildTSD(program);
         });
-        writeFile(opts.tsdFile, tsd, baseDir);
+        writeFile(args.tsdFile, tsd, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -906,14 +906,14 @@ exports.main = function main(argv, options, callback) {
     }
 
     // Write JS (modifies the binary, so must be last)
-    if (opts.jsFile != null) {
+    if (args.jsFile != null) {
       let js;
-      if (opts.jsFile.length) {
+      if (args.jsFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
           js = module.toAsmjs();
         });
-        writeFile(opts.jsFile, js, baseDir);
+        writeFile(args.jsFile, js, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
@@ -925,7 +925,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   module.dispose();
-  if (opts.measure) {
+  if (args.measure) {
     printStats(stats, stderr);
   }
 
