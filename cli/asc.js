@@ -30,19 +30,19 @@
 
 /* global BUNDLE_VERSION, BUNDLE_LIBRARY, BUNDLE_DEFINITIONS */
 
-// Use "." instead of "/" as cwd in browsers
-if (process.browser) process.cwd = function() { return "."; };
-
 const fs = require("fs");
 const path = require("path");
+const process = require("process"); // ensure shim
+
 const utf8 = require("./util/utf8");
 const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
 const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
+const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
+
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
-const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
 
 // Sets up an extension with its definition counterpart and relevant regexes.
 function setupExtension(extension) {
@@ -351,8 +351,6 @@ exports.main = function main(argv, options, callback) {
 
   // returns a relative path from baseDir
   function makeRelative(arg) {
-    // FIXME: see https://github.com/AssemblyScript/assemblyscript/issues/1398
-    if (baseDir === ".") return arg;
     return path.relative(baseDir, arg);
   }
 
@@ -1108,8 +1106,6 @@ function createStats() {
 }
 
 exports.createStats = createStats;
-
-if (!process.hrtime) process.hrtime = require("browser-process-hrtime");
 
 /** Measures the execution time of the specified function.  */
 function measure(fn) {
