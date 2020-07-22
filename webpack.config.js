@@ -60,6 +60,7 @@ const lib = {
 };
 
 // Build asc for browser usage
+const shimDir = path.join(__dirname, "cli", "shim");
 const bin = {
   context: path.join(__dirname, "cli"),
   entry: [ "./asc.js" ],
@@ -70,10 +71,11 @@ const bin = {
   ],
   node: {
     "buffer": false,
-    "fs": "empty",
+    "fs": false,
     "global": true,
     "os": false,
-    "process": "mock",
+    "path": false,
+    "process": false,
     "crypto": false
   },
   output: {
@@ -103,7 +105,14 @@ const bin = {
       },
       __dirname: JSON.stringify(".")
     }),
-    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts-node|glob)$/)
+
+    // Ignored node-only dependencies
+    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts-node|glob)$/),
+
+    // Browser shims
+    new webpack.NormalModuleReplacementPlugin(/^path$/, path.join(shimDir, "path")),
+    new webpack.NormalModuleReplacementPlugin(/^process$/, path.join(shimDir, "process")),
+    new webpack.NormalModuleReplacementPlugin(/^fs$/, path.join(shimDir, "fs"))
   ],
   optimization: {
     minimize: true,
