@@ -5,7 +5,9 @@
     }
   },
   "options": {
-    "enable": ["simd"]
+    "enable": ["simd"],
+    "runtime": "half",
+    "noEmit": false
   },
   "extends": "./extends.json"
 }
