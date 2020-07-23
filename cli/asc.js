@@ -325,8 +325,10 @@ exports.main = function main(argv, options, callback) {
 
   // If showConfig print options and exit
   if (opts.showConfig) {
-    opts.entries = argv;
-    stderr.write(JSON.stringify(opts, null, 2));
+    stderr.write(JSON.stringify({
+      options: opts,
+      entries: argv
+    }, null, 2));
     return callback(null);
   }
 
