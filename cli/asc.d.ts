@@ -56,7 +56,7 @@ export interface MemoryStream extends OutputStream {
 }
 
 /** Compiler options. */
-interface CompilerOptions {
+export interface CompilerOptions {
   /** Prints just the compiler's version and exits. */
   version?: boolean;
   /** Prints the help message and exits. */
@@ -146,7 +146,7 @@ interface CompilerOptions {
 }
 
 /** Compiler API options. */
-interface APIOptions {
+export interface APIOptions {
   /** Standard output stream to use. */
   stdout?: OutputStream;
   /** Standard error stream to use. */

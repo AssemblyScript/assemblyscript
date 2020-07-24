@@ -309,7 +309,7 @@ exports.main = function main(argv, options, callback) {
 
     // Look up extended asconfig and repeat
     if (asconfig.extends) {
-      asconfigPath = optionsUtil.resolvePath(asconfig.extends, asconfigDir);
+      asconfigPath = optionsUtil.resolvePath(asconfig.extends, asconfigDir, true);
       asconfigFile = path.basename(asconfigPath);
       asconfigDir = path.dirname(asconfigPath);
       if (seenAsconfig.has(asconfigPath)) break;
