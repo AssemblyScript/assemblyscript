@@ -241,7 +241,7 @@ exports.merge = merge;
 function resolvePath(p, baseDir, useNodeResolution = false) {
   if (path.isAbsolute(p)) return p;
   if (useNodeResolution && !p.startsWith(".")) {
-    return require.resolve(p, { paths: [ baseDir ] });
+    return path.relative(baseDir, require.resolve(p, { paths: [ baseDir ] }));
   }
   return path.join(baseDir, p);
 }
