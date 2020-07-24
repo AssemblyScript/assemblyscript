@@ -274,7 +274,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Set up base directory
-  const baseDir = opts.baseDir || ".";
+  const baseDir = path.normalize(opts.baseDir || ".");
 
   // Load additional options from asconfig.json
   let asconfigPath = optionsUtil.resolvePath(opts.config || "asconfig.json", baseDir);
