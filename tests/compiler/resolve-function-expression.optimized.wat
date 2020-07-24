@@ -348,10 +348,8 @@
    br_if $__inlined_func$~lib/string/String.__eq
    drop
    block $folding-inner0
-    i32.const 0
-    i32.const 1
     local.get $1
-    select
+    i32.eqz
     br_if $folding-inner0
     local.get $1
     call $~lib/string/String#get:length
