@@ -58,7 +58,10 @@ interface HelpOptions {
 export function help(config: Config, options?: HelpOptions): string;
 
 /** Merges two sets of options into one, preferring the current over the parent set. */
-export function merge(config: Config, currentOptions: OptionSet, parentOptions: OptionSet): OptionSet;
+export function merge(config: Config, currentOptions: OptionSet, parentOptions: OptionSet, parentBaseDir: string): OptionSet;
+
+/** Resolves a single relative path. Keeps absolute paths, otherwise prepends baseDir. */
+export function resolvePath(path: string, baseDir: string, useNodeResolution?: boolean): string;
 
 /** Populates default values on a parsed options result. */
-export function addDefaults(config: Config, options: OptionSet): OptionSet;
+export function addDefaults(config: Config, options: OptionSet): void;
