@@ -193,7 +193,8 @@ import {
   writeF32,
   writeF64,
   uniqueMap,
-  isPowerOf2
+  isPowerOf2,
+  v128_zero
 } from "./util";
 
 /** Compiler options. */
@@ -3058,10 +3059,11 @@ export class Compiler extends DiagnosticEmitter {
         if (initExpr) {
           let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
           if (precomp) {
-            initExpr = precomp;
-            let local = new Local(name, -1, type, flow.parentFunction);
+            initExpr = precomp; // always use precomputed initExpr
+            let local: Local | null = null;
             switch (<u32>getExpressionType(initExpr)) {
               case <u32>NativeType.I32: {
+                local = new Local(name, -1, type, flow.parentFunction);
                 local.setConstantIntegerValue(
                   i64_new(
                     getConstValueI32(initExpr),
@@ -3072,6 +3074,7 @@ export class Compiler extends DiagnosticEmitter {
                 break;
               }
               case <u32>NativeType.I64: {
+                local = new Local(name, -1, type, flow.parentFunction);
                 local.setConstantIntegerValue(
                   i64_new(
                     getConstValueI64Low(initExpr),
@@ -3082,33 +3085,33 @@ export class Compiler extends DiagnosticEmitter {
                 break;
               }
               case <u32>NativeType.F32: {
+                local = new Local(name, -1, type, flow.parentFunction);
                 local.setConstantFloatValue(<f64>getConstValueF32(initExpr), type);
                 break;
               }
               case <u32>NativeType.F64: {
+                local = new Local(name, -1, type, flow.parentFunction);
                 local.setConstantFloatValue(getConstValueF64(initExpr), type);
                 break;
               }
-              default: {
-                assert(false);
-                return module.unreachable();
+            }
+            if (local) {
+              // Add as a virtual local that doesn't actually exist in WebAssembly
+              let scopedLocals = flow.scopedLocals;
+              if (!scopedLocals) flow.scopedLocals = scopedLocals = new Map();
+              else if (scopedLocals.has(name)) {
+                let existing = assert(scopedLocals.get(name));
+                this.errorRelated(
+                  DiagnosticCode.Duplicate_identifier_0,
+                  declaration.name.range,
+                  existing.declaration.name.range,
+                  name
+                );
+                return this.module.unreachable();
               }
+              scopedLocals.set(name, local);
+              isStatic = true;
             }
-            // Create a virtual local that doesn't actually exist in WebAssembly
-            let scopedLocals = flow.scopedLocals;
-            if (!scopedLocals) flow.scopedLocals = scopedLocals = new Map();
-            else if (scopedLocals.has(name)) {
-              let existing = assert(scopedLocals.get(name));
-              this.errorRelated(
-                DiagnosticCode.Duplicate_identifier_0,
-                declaration.name.range,
-                existing.declaration.name.range,
-                name
-              );
-              return this.module.unreachable();
-            }
-            scopedLocals.set(name, local);
-            isStatic = true;
           }
         } else {
           this.error(
@@ -11034,8 +11037,6 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
-
-const v128_zero = new Uint8Array(16);
 
 function mangleImportName(
   element: Element,
