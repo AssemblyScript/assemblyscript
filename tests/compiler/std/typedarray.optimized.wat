@@ -9475,8 +9475,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 1
-  i32.const 0
   local.get $0
   i32.reinterpret_f32
   local.tee $1
@@ -9487,7 +9485,6 @@
   local.tee $2
   i32.const 255
   i32.eq
-  select
   if
    local.get $0
    f32.const 2
@@ -9702,8 +9699,6 @@
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
-  i32.const 1
-  i32.const 0
   local.get $0
   i64.reinterpret_f64
   local.tee $1
@@ -9714,7 +9709,6 @@
   local.tee $2
   i64.const 2047
   i64.eq
-  select
   if
    local.get $0
    f64.const 2

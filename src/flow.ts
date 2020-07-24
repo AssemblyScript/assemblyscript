@@ -56,7 +56,7 @@ import {
   isLoadSigned,
   getBlockName,
   getBlockChildCount,
-  getBlockChild,
+  getBlockChildAt,
   getIfTrue,
   getIfFalse,
   getSelectThen,
@@ -66,7 +66,7 @@ import {
   getIfCondition,
   getConstValueI64High,
   getUnaryValue,
-  getCallOperand,
+  getCallOperandAt,
   traverse
 } from "./module";
 
@@ -1114,7 +1114,7 @@ export class Flow {
         let program = this.parentFunction.program;
         if (name == program.retainInstance.internalName) {
           // __retain just passes through the argument
-          this.inheritNonnullIfTrue(getCallOperand(expr, 0), iff);
+          this.inheritNonnullIfTrue(getCallOperandAt(expr, 0), iff);
         }
         break;
       }
@@ -1423,7 +1423,7 @@ export class Flow {
       case ExpressionId.Block: {
         if (!getBlockName(expr)) {
           let size = assert(getBlockChildCount(expr));
-          let last = getBlockChild(expr, size - 1);
+          let last = getBlockChildAt(expr, size - 1);
           return this.canOverflow(last, type);
         }
         break;
