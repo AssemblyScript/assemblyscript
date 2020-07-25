@@ -49,7 +49,7 @@
     "asinit": "bin/asinit"
   },
   "scripts": {
-    "build": "npm run build:bundle && npm run build:dts",
+    "build": "npm run build:bundle && npm run build:dts && node scripts/build-sdk",
     "build:bundle": "webpack --mode production --display-modules",
     "build:dts": "node scripts/build-dts && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index-release",
     "build:sdk": "node scripts/build-sdk",
@@ -67,7 +67,7 @@
     "make": "npm run clean && npm test && npm run build && npm test",
     "all": "npm run check && npm run make",
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
-    "postversion": "node scripts/postversion && npm run build:sdk",
+    "postversion": "node scripts/postversion && npm run build",
     "prepublishOnly": "node scripts/prepublish",
     "postpublish": "node scripts/postpublish",
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
