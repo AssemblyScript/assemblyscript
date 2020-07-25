@@ -1023,7 +1023,7 @@ export class Program extends DiagnosticEmitter {
     // queued imports should be resolvable now through traversing exports and queued exports.
     // note that imports may depend upon imports, so repeat until there's no more progress.
     do {
-      let i = 0, k = queuedImports.length;
+      let i = 0, madeProgress = false;
       while (i < queuedImports.length) {
         let queuedImport = queuedImports[i];
         let localIdentifier = queuedImport.localIdentifier;
@@ -1042,6 +1042,7 @@ export class Program extends DiagnosticEmitter {
               localIdentifier // isImport
             );
             queuedImports.splice(i, 1);
+            madeProgress = true;
           } else {
             ++i;
           }
@@ -1060,26 +1061,28 @@ export class Program extends DiagnosticEmitter {
               localIdentifier // isImport
             );
             queuedImports.splice(i, 1);
+            madeProgress = true;
           } else {
             ++i;
             assert(false); // already reported by the parser not finding the file
           }
         }
       }
-      if (queuedImports.length == k) break; // no more progress
-    } while (true);
-
-    // report queued imports we were unable to resolve
-    for (let i = 0, k = queuedImports.length; i < k; ++i) {
-      let queuedImport = queuedImports[i];
-      let foreignIdentifier = queuedImport.foreignIdentifier;
-      if (foreignIdentifier) {
-        this.error(
-          DiagnosticCode.Module_0_has_no_exported_member_1,
-          foreignIdentifier.range, queuedImport.foreignPath, foreignIdentifier.text
-        );
+      if (!madeProgress) {
+        // report queued imports we were unable to resolve
+        for (let j = 0, l = queuedImports.length; j < l; ++j) {
+          let queuedImport = queuedImports[j];
+          let foreignIdentifier = queuedImport.foreignIdentifier;
+          if (foreignIdentifier) {
+            this.error(
+              DiagnosticCode.Module_0_has_no_exported_member_1,
+              foreignIdentifier.range, queuedImport.foreignPath, foreignIdentifier.text
+            );
+          }
+        }
+        break;
       }
-    }
+    } while (true);
 
     // queued exports should be resolvable now that imports are finalized
     // TODO: for (let [file, exports] of queuedExports) {
