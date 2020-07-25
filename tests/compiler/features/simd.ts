@@ -683,6 +683,11 @@ function test_v64x2(): void {
   // }
 }
 
+function test_const(): v128 {
+  const one = i32x4.splat(1); // should precompute
+  return one;                 // should not inline
+}
+
 if (ASC_FEATURE_SIMD) {
   test_v128();
   test_i8x16();
@@ -695,4 +700,5 @@ if (ASC_FEATURE_SIMD) {
   test_v16x8();
   test_v32x4();
   test_v64x2();
+  test_const();
 }
