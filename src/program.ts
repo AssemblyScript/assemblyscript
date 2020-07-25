@@ -1020,48 +1020,64 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // queued imports should be resolvable now through traversing exports and queued exports
+    // queued imports should be resolvable now through traversing exports and queued exports.
+    // note that imports may depend upon imports, so repeat until there's no more progress.
+    do {
+      let i = 0, k = queuedImports.length;
+      while (i < queuedImports.length) {
+        let queuedImport = queuedImports[i];
+        let localIdentifier = queuedImport.localIdentifier;
+        let foreignIdentifier = queuedImport.foreignIdentifier;
+        if (foreignIdentifier) { // i.e. import { foo [as bar] } from "./baz"
+          let element = this.lookupForeign(
+            foreignIdentifier.text,
+            queuedImport.foreignPath,
+            queuedImport.foreignPathAlt,
+            queuedExports
+          );
+          if (element) {
+            queuedImport.localFile.add(
+              localIdentifier.text,
+              element,
+              localIdentifier // isImport
+            );
+            queuedImports.splice(i, 1);
+          } else {
+            ++i;
+          }
+        } else { // i.e. import * as bar from "./bar"
+          let foreignFile = this.lookupForeignFile(queuedImport.foreignPath, queuedImport.foreignPathAlt);
+          if (foreignFile) {
+            let localFile = queuedImport.localFile;
+            let localName = localIdentifier.text;
+            localFile.add(
+              localName,
+              foreignFile.asImportedNamespace(
+                localName,
+                localFile,
+                localIdentifier
+              ),
+              localIdentifier // isImport
+            );
+            queuedImports.splice(i, 1);
+          } else {
+            ++i;
+            assert(false); // already reported by the parser not finding the file
+          }
+        }
+      }
+      if (queuedImports.length == k) break; // no more progress
+    } while (true);
+
+    // report queued imports we were unable to resolve
     for (let i = 0, k = queuedImports.length; i < k; ++i) {
       let queuedImport = queuedImports[i];
-      let localIdentifier = queuedImport.localIdentifier;
       let foreignIdentifier = queuedImport.foreignIdentifier;
-      if (foreignIdentifier) { // i.e. import { foo [as bar] } from "./baz"
-        let element = this.lookupForeign(
-          foreignIdentifier.text,
-          queuedImport.foreignPath,
-          queuedImport.foreignPathAlt,
-          queuedExports
+      if (foreignIdentifier) {
+        this.error(
+          DiagnosticCode.Module_0_has_no_exported_member_1,
+          foreignIdentifier.range, queuedImport.foreignPath, foreignIdentifier.text
         );
-        if (element) {
-          queuedImport.localFile.add(
-            localIdentifier.text,
-            element,
-            localIdentifier // isImport
-          );
-        } else {
-          // FIXME: file not found is not reported if this happens?
-          this.error(
-            DiagnosticCode.Module_0_has_no_exported_member_1,
-            foreignIdentifier.range, queuedImport.foreignPath, foreignIdentifier.text
-          );
-        }
-      } else { // i.e. import * as bar from "./bar"
-        let foreignFile = this.lookupForeignFile(queuedImport.foreignPath, queuedImport.foreignPathAlt);
-        if (foreignFile) {
-          let localFile = queuedImport.localFile;
-          let localName = localIdentifier.text;
-          localFile.add(
-            localName,
-            foreignFile.asImportedNamespace(
-              localName,
-              localFile,
-              localIdentifier
-            ),
-            localIdentifier // isImport
-          );
-        } else {
-          assert(false); // already reported by the parser not finding the file
-        }
       }
     }
 
