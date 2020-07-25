@@ -3,6 +3,7 @@
  * @license Apache-2.0
  */
 
+const path = require("path");
 const colorsUtil = require("./colors");
 
 // type | meaning
@@ -31,7 +32,7 @@ function parse(argv, config, propagateDefaults = true) {
       if (typeof option.alias === "string") aliases[option.alias] = key;
       else if (Array.isArray(option.alias)) option.alias.forEach(alias => aliases[alias] = key);
     }
-    if (option.default != null) options[key] = option.default;
+    if (propagateDefaults && option.default != null) options[key] = option.default;
   });
 
   // iterate over argv
@@ -171,22 +172,29 @@ function sanitizeValue(value, type) {
 }
 
 /** Merges two sets of options into one, preferring the current over the parent set. */
-function merge(config, currentOptions, parentOptions) {
+function merge(config, currentOptions, parentOptions, parentBaseDir) {
   const mergedOptions = {};
-  for (const [key, { type, mutuallyExclusive }] of Object.entries(config)) {
+  for (const [key, { type, mutuallyExclusive, isPath, useNodeResolution, cliOnly }] of Object.entries(config)) {
     let currentValue = sanitizeValue(currentOptions[key], type);
     let parentValue = sanitizeValue(parentOptions[key], type);
     if (currentValue == null) {
       if (parentValue != null) {
         // only parent value present
+        if (cliOnly) continue;
         if (Array.isArray(parentValue)) {
           let exclude;
+          if (isPath) {
+            parentValue = parentValue.map(value => resolvePath(value, parentBaseDir, useNodeResolution));
+          }
           if (mutuallyExclusive != null && (exclude = currentOptions[mutuallyExclusive])) {
             mergedOptions[key] = parentValue.filter(value => !exclude.includes(value));
           } else {
             mergedOptions[key] = parentValue.slice();
           }
         } else {
+          if (isPath) {
+            parentValue = resolvePath(parentValue, parentBaseDir, useNodeResolution);
+          }
           mergedOptions[key] = parentValue;
         }
       }
@@ -200,7 +208,14 @@ function merge(config, currentOptions, parentOptions) {
     } else {
       // both current and parent values present
       if (Array.isArray(currentValue)) {
+        if (cliOnly) {
+          mergedOptions[key] = currentValue.slice();
+          continue;
+        }
         let exclude;
+        if (isPath) {
+          parentValue = parentValue.map(value => resolvePath(value, parentBaseDir, useNodeResolution));
+        }
         if (mutuallyExclusive != null && (exclude = currentOptions[mutuallyExclusive])) {
           mergedOptions[key] = [
             ...currentValue,
@@ -222,6 +237,17 @@ function merge(config, currentOptions, parentOptions) {
 
 exports.merge = merge;
 
+/** Resolves a single possibly relative path. Keeps absolute paths, otherwise prepends baseDir. */
+function resolvePath(p, baseDir, useNodeResolution = false) {
+  if (path.isAbsolute(p)) return p;
+  if (useNodeResolution && !p.startsWith(".")) {
+    return require.resolve(p, { paths: [ baseDir ] });
+  }
+  return path.join(baseDir, p);
+}
+
+exports.resolvePath = resolvePath;
+
 /** Populates default values on a parsed options result. */
 function addDefaults(config, options) {
   for (const [key, { default: defaultValue }] of Object.entries(config)) {
@@ -229,7 +255,6 @@ function addDefaults(config, options) {
       options[key] = defaultValue;
     }
   }
-  return options;
 }
 
 exports.addDefaults = addDefaults;

@@ -6,6 +6,8 @@
     }
   },
   "options": {
-    "disable": ["simd"]
+    "disable": ["simd"],
+    "noEmit": true,
+    "noAssert": true
   }
 }

@@ -21,13 +21,13 @@
     "category": "General",
     "description": "Configuration file to apply. CLI arguments take precedence.",
     "type": "s",
-    "default": "asconfig.json"
+    "cliOnly": true
   },
   "target": {
     "category": "General",
     "description": "Target configuration to use. Defaults to 'release'.",
     "type": "s",
-    "default": "release"
+    "cliOnly": true
   },
 
   "optimize": {
@@ -247,7 +247,9 @@
   "transform": {
     "category": "API",
     "description": "Specifies the path to a custom transform to 'require'.",
-    "type": "S"
+    "type": "S",
+    "isPath": true,
+    "useNodeResolution": true
   },
 
   "trapMode": {
@@ -285,7 +287,8 @@
   },
   "extension": {
     "description": "Specifies an alternative file extension to use.",
-    "type": "s"
+    "type": "s",
+    "cliOnly": true
   },
   "noUnsafe": {
     "description": [
@@ -320,7 +323,8 @@
       "Adds one or multiple paths to custom library components and",
       "uses exports of all top-level files at this path as globals."
     ],
-    "type": "s"
+    "type": "S",
+    "isPath": true
   },
   "path": {
     "description": [
@@ -328,7 +332,8 @@
       "to node_modules. Prefers an 'ascMain' entry in a package's",
       "package.json and falls back to an inner 'assembly/' folder."
     ],
-    "type": "S"
+    "type": "S",
+    "isPath": true
   },
   "traceResolution": {
     "description": "Enables tracing of package resolution.",

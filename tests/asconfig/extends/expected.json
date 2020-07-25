@@ -1,0 +1,8 @@
+{
+  "options": {
+    "runtime": "half",
+    "noEmit": false,
+    "noAssert": true,
+    "enable": ["simd"]
+  }
+}
