@@ -3,6 +3,7 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_v128 (func (result v128)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00")
@@ -2989,6 +2990,12 @@
  (func $features/simd/test_v64x2
   nop
  )
+ (func $features/simd/test_const (result v128)
+  (local $0 v128)
+  v128.const i32x4 0x00000001 0x00000001 0x00000001 0x00000001
+  local.set $0
+  local.get $0
+ )
  (func $start:features/simd
   global.get $~lib/heap/__heap_base
   i32.const 15
@@ -3013,6 +3020,8 @@
   call $features/simd/test_v16x8
   call $features/simd/test_v32x4
   call $features/simd/test_v64x2
+  call $features/simd/test_const
+  drop
  )
  (func $~start
   call $start:features/simd
