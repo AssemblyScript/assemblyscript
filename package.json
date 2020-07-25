@@ -49,7 +49,7 @@
     "asinit": "bin/asinit"
   },
   "scripts": {
-    "build": "npm run build:bundle && npm run build:dts && node scripts/build-sdk",
+    "build": "npm run build:bundle && npm run build:dts && npm run build:sdk",
     "build:bundle": "webpack --mode production --display-modules",
     "build:dts": "node scripts/build-dts && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index-release",
     "build:sdk": "node scripts/build-sdk",
