@@ -6,3 +6,6 @@ export {
   default,
   default as renamed_default
 } from "./reexport";
+
+import { exportstar } from "./reexport";
+export { exportstar };

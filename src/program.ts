@@ -1020,50 +1020,69 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // queued imports should be resolvable now through traversing exports and queued exports
-    for (let i = 0, k = queuedImports.length; i < k; ++i) {
-      let queuedImport = queuedImports[i];
-      let localIdentifier = queuedImport.localIdentifier;
-      let foreignIdentifier = queuedImport.foreignIdentifier;
-      if (foreignIdentifier) { // i.e. import { foo [as bar] } from "./baz"
-        let element = this.lookupForeign(
-          foreignIdentifier.text,
-          queuedImport.foreignPath,
-          queuedImport.foreignPathAlt,
-          queuedExports
-        );
-        if (element) {
-          queuedImport.localFile.add(
-            localIdentifier.text,
-            element,
-            localIdentifier // isImport
+    // queued imports should be resolvable now through traversing exports and queued exports.
+    // note that imports may depend upon imports, so repeat until there's no more progress.
+    do {
+      let i = 0, madeProgress = false;
+      while (i < queuedImports.length) {
+        let queuedImport = queuedImports[i];
+        let localIdentifier = queuedImport.localIdentifier;
+        let foreignIdentifier = queuedImport.foreignIdentifier;
+        if (foreignIdentifier) { // i.e. import { foo [as bar] } from "./baz"
+          let element = this.lookupForeign(
+            foreignIdentifier.text,
+            queuedImport.foreignPath,
+            queuedImport.foreignPathAlt,
+            queuedExports
           );
-        } else {
-          // FIXME: file not found is not reported if this happens?
-          this.error(
-            DiagnosticCode.Module_0_has_no_exported_member_1,
-            foreignIdentifier.range, queuedImport.foreignPath, foreignIdentifier.text
-          );
-        }
-      } else { // i.e. import * as bar from "./bar"
-        let foreignFile = this.lookupForeignFile(queuedImport.foreignPath, queuedImport.foreignPathAlt);
-        if (foreignFile) {
-          let localFile = queuedImport.localFile;
-          let localName = localIdentifier.text;
-          localFile.add(
-            localName,
-            foreignFile.asImportedNamespace(
+          if (element) {
+            queuedImport.localFile.add(
+              localIdentifier.text,
+              element,
+              localIdentifier // isImport
+            );
+            queuedImports.splice(i, 1);
+            madeProgress = true;
+          } else {
+            ++i;
+          }
+        } else { // i.e. import * as bar from "./bar"
+          let foreignFile = this.lookupForeignFile(queuedImport.foreignPath, queuedImport.foreignPathAlt);
+          if (foreignFile) {
+            let localFile = queuedImport.localFile;
+            let localName = localIdentifier.text;
+            localFile.add(
               localName,
-              localFile,
-              localIdentifier
-            ),
-            localIdentifier // isImport
-          );
-        } else {
-          assert(false); // already reported by the parser not finding the file
+              foreignFile.asImportedNamespace(
+                localName,
+                localFile,
+                localIdentifier
+              ),
+              localIdentifier // isImport
+            );
+            queuedImports.splice(i, 1);
+            madeProgress = true;
+          } else {
+            ++i;
+            assert(false); // already reported by the parser not finding the file
+          }
         }
       }
-    }
+      if (!madeProgress) {
+        // report queued imports we were unable to resolve
+        for (let j = 0, l = queuedImports.length; j < l; ++j) {
+          let queuedImport = queuedImports[j];
+          let foreignIdentifier = queuedImport.foreignIdentifier;
+          if (foreignIdentifier) {
+            this.error(
+              DiagnosticCode.Module_0_has_no_exported_member_1,
+              foreignIdentifier.range, queuedImport.foreignPath, foreignIdentifier.text
+            );
+          }
+        }
+        break;
+      }
+    } while (true);
 
     // queued exports should be resolvable now that imports are finalized
     // TODO: for (let [file, exports] of queuedExports) {
