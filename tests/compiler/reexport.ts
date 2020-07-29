@@ -28,5 +28,9 @@ export { ns as renamed_ns } from "./export";
 import * as exportstar from "./exportstar";
 export { exportstar };
 
+import * as BasicExports from "./exports";
+assert(BasicExports.add(2, 2) == 4);
+assert(BasicExports.mul(2, 2) == 4);
+
 export { default } from "./export-default";
 export { default as renamed_default } from "./export-default";
