@@ -1,6 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "test": "node ../../index.js"
+    "test": "../../../bin/asc --showConfig && node ../../index.js"
   }
 }
