@@ -6435,6 +6435,7 @@
   (local $3 f64)
   (local $4 f64)
   (local $5 f64)
+  (local $6 f64)
   local.get $0
   i64.reinterpret_f64
   local.set $1
@@ -6498,6 +6499,8 @@
    return
   end
   local.get $0
+  local.set $5
+  f64.const 1
   local.set $4
   i32.const 1023
   i32.const 2043
@@ -6510,14 +6513,16 @@
   i64.const 32
   i64.shl
   f64.reinterpret_i64
-  local.set $5
-  local.get $4
+  local.set $6
+  local.get $5
   f64.const 1416.0996898839683
   f64.sub
   call $~lib/math/NativeMath.exp
-  local.get $5
+  local.get $4
+  local.get $6
   f64.mul
-  local.get $5
+  f64.mul
+  local.get $6
   f64.mul
   local.set $3
   local.get $3
@@ -6980,6 +6985,7 @@
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
+  (local $4 f32)
   local.get $0
   i32.reinterpret_f32
   local.set $1
@@ -7038,6 +7044,8 @@
    return
   end
   local.get $0
+  local.set $3
+  f32.const 1
   local.set $2
   i32.const 127
   i32.const 235
@@ -7047,14 +7055,16 @@
   i32.const 23
   i32.shl
   f32.reinterpret_i32
-  local.set $3
-  local.get $2
+  local.set $4
+  local.get $3
   f32.const 162.88958740234375
   f32.sub
   call $~lib/math/NativeMathf.exp
-  local.get $3
+  local.get $2
+  local.get $4
   f32.mul
-  local.get $3
+  f32.mul
+  local.get $4
   f32.mul
  )
  (func $std/math/test_coshf (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
@@ -11422,7 +11432,7 @@
   if
    i32.const 0
    i32.const 13360
-   i32.const 1398
+   i32.const 1399
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -13489,14 +13499,14 @@
   f64.const 0.5
   local.get $0
   f64.copysign
-  local.set $5
+  local.set $4
   local.get $3
   i32.const 1082535490
   i32.lt_u
   if
    local.get $2
    call $~lib/math/NativeMath.expm1
-   local.set $4
+   local.set $5
    local.get $3
    i32.const 1072693248
    i32.lt_u
@@ -13512,14 +13522,14 @@
      local.get $0
      return
     end
-    local.get $5
+    local.get $4
     f64.const 2
-    local.get $4
+    local.get $5
     f64.mul
-    local.get $4
-    local.get $4
+    local.get $5
+    local.get $5
     f64.mul
-    local.get $4
+    local.get $5
     f64.const 1
     f64.add
     f64.div
@@ -13527,10 +13537,10 @@
     f64.mul
     return
    end
+   local.get $4
    local.get $5
-   local.get $4
-   local.get $4
-   local.get $4
+   local.get $5
+   local.get $5
    f64.const 1
    f64.add
    f64.div
@@ -13538,11 +13548,12 @@
    f64.mul
    return
   end
-  f64.const 2
-  local.get $5
-  f64.mul
   local.get $2
   local.set $6
+  f64.const 2
+  local.get $4
+  f64.mul
+  local.set $5
   i32.const 1023
   i32.const 2043
   i32.const 2
@@ -13559,13 +13570,12 @@
   f64.const 1416.0996898839683
   f64.sub
   call $~lib/math/NativeMath.exp
+  local.get $5
   local.get $7
   f64.mul
+  f64.mul
   local.get $7
   f64.mul
-  f64.mul
-  local.set $4
-  local.get $4
  )
  (func $std/math/test_sinh (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
@@ -13609,14 +13619,14 @@
   f32.const 0.5
   local.get $0
   f32.copysign
-  local.set $4
+  local.set $3
   local.get $1
   i32.const 1118925335
   i32.lt_u
   if
    local.get $2
    call $~lib/math/NativeMathf.expm1
-   local.set $3
+   local.set $4
    local.get $1
    i32.const 1065353216
    i32.lt_u
@@ -13632,14 +13642,14 @@
      local.get $0
      return
     end
-    local.get $4
+    local.get $3
     f32.const 2
-    local.get $3
+    local.get $4
     f32.mul
-    local.get $3
-    local.get $3
+    local.get $4
+    local.get $4
     f32.mul
-    local.get $3
+    local.get $4
     f32.const 1
     f32.add
     f32.div
@@ -13647,10 +13657,10 @@
     f32.mul
     return
    end
+   local.get $3
    local.get $4
-   local.get $3
-   local.get $3
-   local.get $3
+   local.get $4
+   local.get $4
    f32.const 1
    f32.add
    f32.div
@@ -13658,11 +13668,12 @@
    f32.mul
    return
   end
-  f32.const 2
-  local.get $4
-  f32.mul
   local.get $2
   local.set $5
+  f32.const 2
+  local.get $3
+  f32.mul
+  local.set $4
   i32.const 127
   i32.const 235
   i32.const 1
@@ -13676,13 +13687,12 @@
   f32.const 162.88958740234375
   f32.sub
   call $~lib/math/NativeMathf.exp
+  local.get $4
   local.get $6
   f32.mul
+  f32.mul
   local.get $6
   f32.mul
-  f32.mul
-  local.set $3
-  local.get $3
  )
  (func $std/math/test_sinhf (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0

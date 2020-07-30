@@ -8432,7 +8432,7 @@
   if
    i32.const 0
    i32.const 3616
-   i32.const 1398
+   i32.const 1399
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -9672,17 +9672,17 @@
    f64.mul
    return
   end
-  f64.const 2
-  local.get $2
-  f64.mul
   local.get $1
   f64.const 1416.0996898839683
   f64.sub
   call $~lib/math/NativeMath.exp
-  f64.const 2247116418577894884661631e283
+  f64.const 2
+  local.get $2
   f64.mul
   f64.const 2247116418577894884661631e283
   f64.mul
+  f64.mul
+  f64.const 2247116418577894884661631e283
   f64.mul
  )
  (func $std/math/test_sinh (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
@@ -9760,17 +9760,17 @@
    f32.mul
    return
   end
-  f32.const 2
-  local.get $3
-  f32.mul
   local.get $1
   f32.const 162.88958740234375
   f32.sub
   call $~lib/math/NativeMathf.exp
-  f32.const 1661534994731144841129758e11
+  f32.const 2
+  local.get $3
   f32.mul
   f32.const 1661534994731144841129758e11
   f32.mul
+  f32.mul
+  f32.const 1661534994731144841129758e11
   f32.mul
  )
  (func $std/math/test_sinhf (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
