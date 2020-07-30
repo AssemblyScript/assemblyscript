@@ -303,7 +303,7 @@ exports.main = function main(argv, options, callback) {
     // Append entries
     if (asconfig.entries) {
       for (let entry of asconfig.entries) {
-        argv.push(path.relative(baseDir, optionsUtil.resolvePath(entry, asconfigDir)));
+        argv.push(optionsUtil.resolvePath(entry, asconfigDir));
       }
     }
 
