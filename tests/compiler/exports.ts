@@ -57,4 +57,4 @@ export namespace outer {
   }
 }
 
-export {mul} from "./export"; 
+export {renamed_mul} from "./export"; 

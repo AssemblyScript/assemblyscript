@@ -30,7 +30,7 @@ export { exportstar };
 
 import * as BasicExports from "./exports";
 assert(BasicExports.add(2, 2) == 4);
-assert(BasicExports.mul(2, 2) == 4);
+assert(BasicExports.renamed_mul(2, 2) == 4);
 
 export { default } from "./export-default";
 export { default as renamed_default } from "./export-default";
