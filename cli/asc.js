@@ -644,7 +644,7 @@ exports.main = function main(argv, options, callback) {
     let sourcePath = String(filename).replace(/\\/g, "/").replace(extension.re, "").replace(/[\\/]$/, "");
 
     // Setting the path to relative path
-    sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath) : sourcePath;
+    sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath).replace(/\\/g, "/") : sourcePath;
 
     // Try entryPath.ext, then entryPath/index.ext
     let sourceText = readFile(sourcePath + extension.ext, baseDir);

@@ -1,3 +1,7 @@
+import { forty_one } from "./data";
+import "./globalTwo";
+
 // @ts-ignore: decorator
-@global const answerToLife = 42;
-assert(answerToLife);
+@global function answerToLife(): i32 { return forty_one + ONE; }
+
+assert(answerToLife());
