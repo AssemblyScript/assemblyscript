@@ -303,7 +303,7 @@ exports.main = function main(argv, options, callback) {
     // Append entries
     if (asconfig.entries) {
       for (let entry of asconfig.entries) {
-        argv.push(path.relative(baseDir, optionsUtil.resolvePath(entry, asconfigDir)));
+        argv.push(optionsUtil.resolvePath(entry, asconfigDir));
       }
     }
 
@@ -644,7 +644,7 @@ exports.main = function main(argv, options, callback) {
     let sourcePath = String(filename).replace(/\\/g, "/").replace(extension.re, "").replace(/[\\/]$/, "");
 
     // Setting the path to relative path
-    sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath) : sourcePath;
+    sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath).replace(/\\/g, "/") : sourcePath;
 
     // Try entryPath.ext, then entryPath/index.ext
     let sourceText = readFile(sourcePath + extension.ext, baseDir);
