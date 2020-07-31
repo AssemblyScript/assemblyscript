@@ -9194,6 +9194,7 @@ export class Compiler extends DiagnosticEmitter {
       let memberName = names[i].text;
       let member: DeclaredElement;
       if (!members || !members.has(memberName) || (member = assert(members.get(memberName))).kind != ElementKind.FIELD) {
+        console.log('Yoooooo this the error');
         this.error(
           DiagnosticCode.Property_0_does_not_exist_on_type_1,
           names[i].range, memberName, classType.toString()

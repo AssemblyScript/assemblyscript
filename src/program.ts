@@ -1056,7 +1056,9 @@ export class Program extends DiagnosticEmitter {
               foreignFile.asImportedNamespace(
                 localName,
                 localFile,
-                localIdentifier
+                localIdentifier,
+                this,
+                queuedExports
               ),
               localIdentifier // isImport
             );
@@ -1609,7 +1611,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Tries to locate a foreign element by traversing exports and queued exports. */
-  private lookupForeign(
+  lookupForeign(
     /** Identifier within the other file. */
     foreignName: string,
     /** Normalized path to the other file. */
@@ -2987,12 +2989,49 @@ export class File extends Element {
   }
 
   /** Creates an imported namespace from this file. */
-  asImportedNamespace(name: string, parent: Element, localIdentifier: IdentifierExpression): Namespace {
+  asImportedNamespace(
+    name: string, 
+    parent: Element, 
+    localIdentifier: IdentifierExpression,
+    program: Program,
+    queuedExports: Map<File,Map<string,QueuedExport>>
+  ): Namespace {
     var declaration = this.program.makeNativeNamespaceDeclaration(name);
     declaration.name = localIdentifier;
     var ns = new Namespace(name, parent, declaration);
     ns.set(CommonFlags.SCOPED);
     this.copyExportsToNamespace(ns);
+
+    // Add any queued exports to the namespace as well
+    if (queuedExports.has(this)) {
+      let fileQueuedExports = assert(queuedExports.get(this));
+      for (let _keys = Map_keys(fileQueuedExports), i = 0, k = _keys.length; i < k; ++i) {
+        let exportName = unchecked(_keys[i]);
+        let queuedExport = assert(fileQueuedExports.get(exportName));
+        let localName = queuedExport.localIdentifier.text;
+        let foreignPath = queuedExport.foreignPath; 
+        if (foreignPath) {
+          let element = program.lookupForeign(
+            localName,
+            foreignPath,
+            assert(queuedExport.foreignPathAlt), // must be set if foreignPath is
+            queuedExports
+          );
+          if (element) {
+            ns.add(exportName, element);
+          } else {
+            program.error(
+              DiagnosticCode.Module_0_has_no_exported_member_1,
+              queuedExport.localIdentifier.range,
+              foreignPath, localName
+            );
+          }
+        } else {
+          // Should have already been added
+        }
+      }
+    }
+
     return ns;
   }
 
