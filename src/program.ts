@@ -1022,6 +1022,11 @@ export class Program extends DiagnosticEmitter {
 
     // queued imports should be resolvable now through traversing exports and queued exports.
     // note that imports may depend upon imports, so repeat until there's no more progress.
+    //
+    // Also, we are creating a map for imported namespaces to have their exports resolved
+    // while we are resolving exports
+    // Our importNameSpaces traverses like foreignFile -> localFile -> namespaceNames
+    let importNamespacesMap = new Map<File, Map<File, Array<string>>>();
     do {
       let i = 0, madeProgress = false;
       while (i < queuedImports.length) {
@@ -1056,14 +1061,25 @@ export class Program extends DiagnosticEmitter {
               foreignFile.asImportedNamespace(
                 localName,
                 localFile,
-                localIdentifier,
-                this,
-                queuedExports
+                localIdentifier
               ),
               localIdentifier // isImport
             );
             queuedImports.splice(i, 1);
             madeProgress = true;
+
+            // Also, make sure to record the namespace in our importNamespaces for later
+            if (importNamespacesMap.has(foreignFile)) {
+              let importNamespaceLocalFileMap = importNamespacesMap.get(foreignFile) as Map<File, Array<string>>;
+              let importNamespaceNames = importNamespaceLocalFileMap.get(localFile) as Array<string>;
+              importNamespaceNames.push(localName);
+            } else {
+              let importNamespaceLocalFileMap = new Map<File, Array<string>>();
+              let importNamespaceNames = new Array<string>();
+              importNamespaceNames.push(localName);
+              importNamespaceLocalFileMap.set(localFile, importNamespaceNames);
+              importNamespacesMap.set(foreignFile, importNamespaceLocalFileMap);
+            }
           } else {
             ++i;
             assert(false); // already reported by the parser not finding the file
@@ -1106,6 +1122,27 @@ export class Program extends DiagnosticEmitter {
           );
           if (element) {
             file.ensureExport(exportName, element);
+
+            // Check if there is a namespace that also needs this
+            if (importNamespacesMap.has(file)) {
+
+              let importNamespaceLocalFileMap = importNamespacesMap.get(file) as Map<File, Array<string>>;
+              let importNameSpaceLocalFileKeys = Map_keys(importNamespaceLocalFileMap);
+              let importNameSpaceLocalFileKeysLength = importNameSpaceLocalFileKeys.length;
+              for (let ii = 0; ii < importNameSpaceLocalFileKeysLength; ++ii) {
+                let localFile = importNameSpaceLocalFileKeys[ii];
+
+                // Get our namespaces
+                let importNamespacesNames = importNamespaceLocalFileMap.get(localFile) as Array<string>;
+                for (let jj = 0; jj < importNamespacesNames.length; jj++) {
+                  let namespace = localFile.lookup(importNamespacesNames[jj]);
+                  if (namespace && exportName !== importNamespacesNames[jj]) {
+                    namespace.add(exportName, element);
+                  }
+                }
+              }
+            }
+
           } else {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
@@ -1117,6 +1154,27 @@ export class Program extends DiagnosticEmitter {
           let element = file.lookupInSelf(localName);
           if (element) {
             file.ensureExport(exportName, element);
+
+            // Check if there is a namespace that also needs this
+            if (importNamespacesMap.has(file)) {
+
+              let importNamespaceLocalFileMap = importNamespacesMap.get(file) as Map<File, Array<string>>;
+              let importNameSpaceLocalFileKeys = Map_keys(importNamespaceLocalFileMap);
+              let importNameSpaceLocalFileKeysLength = importNameSpaceLocalFileKeys.length;
+              for (let ii = 0; ii < importNameSpaceLocalFileKeysLength; ++ii) {
+                let localFile = importNameSpaceLocalFileKeys[ii];
+
+                // Get our namespaces
+                let importNamespacesNames = importNamespaceLocalFileMap.get(localFile) as Array<string>;
+                for (let jj = 0; jj < importNamespacesNames.length; jj++) {
+                  let namespace = localFile.lookup(importNamespacesNames[jj]);
+                  if (namespace && exportName !== importNamespacesNames[jj]) {
+                    namespace.add(exportName, element);
+                  }
+                }
+              }
+            }
+
           } else {
             let globalElement = this.lookupGlobal(localName);
             if (globalElement !== null && isDeclaredElement(globalElement.kind)) { // export { memory }
@@ -2992,46 +3050,15 @@ export class File extends Element {
   asImportedNamespace(
     name: string, 
     parent: Element, 
-    localIdentifier: IdentifierExpression,
-    program: Program,
-    queuedExports: Map<File,Map<string,QueuedExport>>
+    localIdentifier: IdentifierExpression
   ): Namespace {
     var declaration = this.program.makeNativeNamespaceDeclaration(name);
     declaration.name = localIdentifier;
     var ns = new Namespace(name, parent, declaration);
     ns.set(CommonFlags.SCOPED);
     this.copyExportsToNamespace(ns);
-
-    // Add any queued exports to the namespace as well
-    if (queuedExports.has(this)) {
-      let fileQueuedExports = assert(queuedExports.get(this));
-      for (let _keys = Map_keys(fileQueuedExports), i = 0, k = _keys.length; i < k; ++i) {
-        let exportName = unchecked(_keys[i]);
-        let queuedExport = assert(fileQueuedExports.get(exportName));
-        let localName = queuedExport.localIdentifier.text;
-        let foreignPath = queuedExport.foreignPath; 
-        if (foreignPath) {
-          let element = program.lookupForeign(
-            localName,
-            foreignPath,
-            assert(queuedExport.foreignPathAlt), // must be set if foreignPath is
-            queuedExports
-          );
-          if (element) {
-            ns.add(exportName, element);
-          } else {
-            program.error(
-              DiagnosticCode.Module_0_has_no_exported_member_1,
-              queuedExport.localIdentifier.range,
-              foreignPath, localName
-            );
-          }
-        } else {
-          // Should have already been added
-        }
-      }
-    }
-
+    // NOTE: Some exports are still queued, and are not added here.
+    // But will be added to the namespace when the exports are being resolved.
     return ns;
   }
 

@@ -815,6 +815,13 @@ export class Compiler extends DiagnosticEmitter {
         if (!classInstance.type.isUnmanaged) {
           let module = this.module;
           let internalName = classInstance.internalName;
+
+          // We remove the global before adding it, as this ensures
+          // we are not adding the same global twice. This is needed,
+          // As we can export a class from a file, and in that sample file,
+          // Export a namspace (import * as), that exports the same class.
+          // And there is no module.hasGlobal(), and this works fine :)
+          module.removeGlobal(internalName);
           module.addGlobal(internalName, NativeType.I32, false, module.i32(classInstance.id));
           module.addGlobalExport(internalName, prefix + name);
         }
@@ -9194,7 +9201,6 @@ export class Compiler extends DiagnosticEmitter {
       let memberName = names[i].text;
       let member: DeclaredElement;
       if (!members || !members.has(memberName) || (member = assert(members.get(memberName))).kind != ElementKind.FIELD) {
-        console.log('Yoooooo this the error');
         this.error(
           DiagnosticCode.Property_0_does_not_exist_on_type_1,
           names[i].range, memberName, classType.toString()

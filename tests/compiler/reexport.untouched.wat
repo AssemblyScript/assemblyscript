@@ -1,11 +1,11 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00r\00e\00e\00x\00p\00o\00r\00t\00.\00t\00s\00")
@@ -13,14 +13,20 @@
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
+ (global $exports/Animal.CAT i32 (i32.const 0))
+ (global $exports/Animal.DOG i32 (i32.const 1))
+ (global $exports/animals.Animal.CAT i32 (i32.const 0))
+ (global $exports/animals.Animal.DOG i32 (i32.const 1))
  (global $exports/Car.TIRES i32 (i32.const 4))
  (global $exports/vehicles.Car.TIRES i32 (i32.const 4))
  (global $exports/outer.inner.a i32 (i32.const 42))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $reexport/car (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 56))
- (global $exports/Car i32 (i32.const 3))
  (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $exports/Car i32 (i32.const 3))
+ (global $exports/vehicles.Car i32 (i32.const 4))
  (export "memory" (memory $0))
  (export "add" (func $export/add))
  (export "renamed_sub" (func $export/sub))
@@ -50,6 +56,33 @@
  (export "exportstar.renamed_c" (global $export/c))
  (export "exportstar.ns.two" (func $export/ns.two))
  (export "exportstar.default.two" (func $export/ns.two))
+ (export "ExportsNamespace.add" (func $exports/add))
+ (export "ExportsNamespace.subOpt" (func $exports/subOpt@varargs))
+ (export "ExportsNamespace.math.sub" (func $exports/math.sub))
+ (export "ExportsNamespace.Animal.CAT" (global $exports/Animal.CAT))
+ (export "ExportsNamespace.Animal.DOG" (global $exports/Animal.DOG))
+ (export "ExportsNamespace.animals.Animal.CAT" (global $exports/animals.Animal.CAT))
+ (export "ExportsNamespace.animals.Animal.DOG" (global $exports/animals.Animal.DOG))
+ (export "ExportsNamespace.Car" (global $exports/Car))
+ (export "ExportsNamespace.Car#get:doors" (func $exports/Car#get:doors))
+ (export "ExportsNamespace.Car#set:doors" (func $exports/Car#set:doors))
+ (export "ExportsNamespace.Car#constructor" (func $exports/Car#constructor@varargs))
+ (export "ExportsNamespace.Car#get:numDoors" (func $exports/Car#get:numDoors))
+ (export "ExportsNamespace.Car#set:numDoors" (func $exports/Car#set:numDoors))
+ (export "ExportsNamespace.Car#openDoors" (func $exports/Car#openDoors))
+ (export "ExportsNamespace.Car.TIRES" (global $exports/Car.TIRES))
+ (export "ExportsNamespace.Car.getNumTires" (func $exports/Car.getNumTires))
+ (export "ExportsNamespace.vehicles.Car" (global $exports/vehicles.Car))
+ (export "ExportsNamespace.vehicles.Car#get:doors" (func $exports/vehicles.Car#get:doors))
+ (export "ExportsNamespace.vehicles.Car#set:doors" (func $exports/vehicles.Car#set:doors))
+ (export "ExportsNamespace.vehicles.Car#constructor" (func $exports/vehicles.Car#constructor@varargs))
+ (export "ExportsNamespace.vehicles.Car#get:numDoors" (func $exports/vehicles.Car#get:numDoors))
+ (export "ExportsNamespace.vehicles.Car#set:numDoors" (func $exports/vehicles.Car#set:numDoors))
+ (export "ExportsNamespace.vehicles.Car#openDoors" (func $exports/vehicles.Car#openDoors))
+ (export "ExportsNamespace.vehicles.Car.TIRES" (global $exports/vehicles.Car.TIRES))
+ (export "ExportsNamespace.vehicles.Car.getNumTires" (func $exports/vehicles.Car.getNumTires))
+ (export "ExportsNamespace.outer.inner.a" (global $exports/outer.inner.a))
+ (export "ExportsNamespace.renamed_mul" (func $export/mul))
  (export "default" (func $export-default/theDefault))
  (export "renamed_default" (func $export-default/theDefault))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
@@ -68,52 +101,6 @@
   local.get $0
   local.get $1
   i32.add
- )
- (func $start:reexport
-  i32.const 1
-  i32.const 2
-  call $export/add
-  i32.const 3
-  i32.const 4
-  call $export/mul
-  i32.add
-  drop
-  i32.const 2
-  i32.const 2
-  call $exports/add
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 36
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 2
-  i32.const 2
-  call $export/mul
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 37
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $export/sub (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.sub
- )
- (func $exports/Car.getNumTires (result i32)
-  global.get $exports/Car.TIRES
  )
  (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
@@ -245,6 +232,83 @@
   i32.store
   local.get $0
  )
+ (func $exports/Car#get:numDoors (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+ )
+ (func $start:reexport
+  i32.const 1
+  i32.const 2
+  call $export/add
+  i32.const 3
+  i32.const 4
+  call $export/mul
+  i32.add
+  drop
+  i32.const 2
+  i32.const 2
+  call $exports/add
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 37
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  i32.const 2
+  call $export/mul
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 38
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/heap/__heap_base
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
+  i32.const 0
+  i32.const 2
+  call $exports/Car#constructor
+  global.set $reexport/car
+  global.get $reexport/car
+  call $exports/Car#get:numDoors
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 40
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $export/sub (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.sub
+ )
+ (func $exports/Car.getNumTires (result i32)
+  global.get $exports/Car.TIRES
+ )
  (func $exports/Car#get:doors (param $0 i32) (result i32)
   local.get $0
   i32.load
@@ -253,10 +317,6 @@
   local.get $0
   local.get $1
   i32.store
- )
- (func $exports/Car#get:numDoors (param $0 i32) (result i32)
-  local.get $0
-  i32.load
  )
  (func $exports/Car#set:numDoors (param $0 i32) (param $1 i32)
   local.get $0
@@ -272,21 +332,63 @@
  (func $export/ns.two
   nop
  )
+ (func $exports/subOpt (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.sub
+ )
+ (func $exports/math.sub (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.sub
+ )
+ (func $exports/vehicles.Car.getNumTires (result i32)
+  global.get $exports/vehicles.Car.TIRES
+ )
+ (func $exports/vehicles.Car#constructor (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 4
+   i32.const 4
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+ )
+ (func $exports/vehicles.Car#get:doors (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+ )
+ (func $exports/vehicles.Car#set:doors (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+ )
+ (func $exports/vehicles.Car#get:numDoors (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+ )
+ (func $exports/vehicles.Car#set:numDoors (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+ )
+ (func $exports/vehicles.Car#openDoors (param $0 i32)
+  nop
+ )
  (func $export-default/theDefault
   nop
  )
  (func $~start
   call $start:reexport
-  global.get $~lib/heap/__heap_base
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
-  global.set $~lib/rt/stub/offset
  )
  (func $exports/Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
@@ -303,6 +405,40 @@
   local.get $0
   local.get $1
   call $exports/Car#constructor
+ )
+ (func $exports/subOpt@varargs (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $exports/subOpt
+ )
+ (func $exports/vehicles.Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 2
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $exports/vehicles.Car#constructor
  )
  (func $~setArgumentsLength (param $0 i32)
   local.get $0

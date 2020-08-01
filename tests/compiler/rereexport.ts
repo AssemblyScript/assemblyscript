@@ -17,9 +17,10 @@ assert(ReexportsNamespace.rerenamed_mul(2, 2) == 4);
 let car: ReexportsNamespace.Car = new ReexportsNamespace.Car();
 assert(car.numDoors == 2);
 
-//Test our imported namespace with the exported import * as namespace
+// Test our imported namespace with the exported import * as namespace
 assert(ReexportsNamespace.ExportsNamespace.add(2, 2) == 4);
 assert(ReexportsNamespace.ExportsNamespace.renamed_mul(2, 2) == 4);
 let exportsNamespaceCar: ReexportsNamespace.Car = new ReexportsNamespace.ExportsNamespace.Car();
 assert(exportsNamespaceCar.numDoors == 2);
+
 
