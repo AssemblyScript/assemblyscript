@@ -1125,24 +1125,13 @@ export class Program extends DiagnosticEmitter {
 
             // Check if there is a namespace that also needs this
             if (importNamespacesMap.has(file)) {
-
-              let importNamespaceLocalFileMap = importNamespacesMap.get(file) as Map<File, Array<string>>;
-              let importNameSpaceLocalFileKeys = Map_keys(importNamespaceLocalFileMap);
-              let importNameSpaceLocalFileKeysLength = importNameSpaceLocalFileKeys.length;
-              for (let ii = 0; ii < importNameSpaceLocalFileKeysLength; ++ii) {
-                let localFile = importNameSpaceLocalFileKeys[ii];
-
-                // Get our namespaces
-                let importNamespacesNames = importNamespaceLocalFileMap.get(localFile) as Array<string>;
-                for (let jj = 0; jj < importNamespacesNames.length; jj++) {
-                  let namespace = localFile.lookup(importNamespacesNames[jj]);
-                  if (namespace && exportName !== importNamespacesNames[jj]) {
-                    namespace.add(exportName, element);
-                  }
-                }
-              }
+              this.addExportToImportNameSpace(
+                importNamespacesMap,
+                file,
+                exportName,
+                element
+              );
             }
-
           } else {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
@@ -1157,24 +1146,13 @@ export class Program extends DiagnosticEmitter {
 
             // Check if there is a namespace that also needs this
             if (importNamespacesMap.has(file)) {
-
-              let importNamespaceLocalFileMap = importNamespacesMap.get(file) as Map<File, Array<string>>;
-              let importNameSpaceLocalFileKeys = Map_keys(importNamespaceLocalFileMap);
-              let importNameSpaceLocalFileKeysLength = importNameSpaceLocalFileKeys.length;
-              for (let ii = 0; ii < importNameSpaceLocalFileKeysLength; ++ii) {
-                let localFile = importNameSpaceLocalFileKeys[ii];
-
-                // Get our namespaces
-                let importNamespacesNames = importNamespaceLocalFileMap.get(localFile) as Array<string>;
-                for (let jj = 0; jj < importNamespacesNames.length; jj++) {
-                  let namespace = localFile.lookup(importNamespacesNames[jj]);
-                  if (namespace && exportName !== importNamespacesNames[jj]) {
-                    namespace.add(exportName, element);
-                  }
-                }
-              }
+              this.addExportToImportNameSpace(
+                importNamespacesMap,
+                file,
+                exportName,
+                element
+              );
             }
-
           } else {
             let globalElement = this.lookupGlobal(localName);
             if (globalElement !== null && isDeclaredElement(globalElement.kind)) { // export { memory }
@@ -1362,6 +1340,29 @@ export class Program extends DiagnosticEmitter {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.markModuleExports(file);
+      }
+    }
+  }
+
+  private addExportToImportNameSpace(
+    importNamespacesMap: Map<File, Map<File, Array<string>>>,
+    file: File,
+    exportName: string,
+    element: DeclaredElement
+  ): void {
+    let importNamespaceLocalFileMap = importNamespacesMap.get(file) as Map<File, Array<string>>;
+    let importNameSpaceLocalFileKeys = Map_keys(importNamespaceLocalFileMap);
+    let importNameSpaceLocalFileKeysLength = importNameSpaceLocalFileKeys.length;
+    for (let i = 0; i < importNameSpaceLocalFileKeysLength; ++i) {
+      let localFile = importNameSpaceLocalFileKeys[i];
+
+      // Get our namespaces
+      let importNamespacesNames = importNamespaceLocalFileMap.get(localFile) as Array<string>;
+      for (let j = 0; j < importNamespacesNames.length; j++) {
+        let namespace = localFile.lookup(importNamespacesNames[j]);
+        if (namespace && exportName !== importNamespacesNames[j]) {
+          namespace.add(exportName, element);
+        }
       }
     }
   }
