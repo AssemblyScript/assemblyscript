@@ -2492,9 +2492,9 @@
          block $~lib/util/string/isFinalSigma|inlined.0 (result i32)
           local.get $0
           local.set $6
-          local.get $4
           i32.const 0
           local.set $3
+          local.get $4
           i32.const 0
           local.get $4
           local.tee $1

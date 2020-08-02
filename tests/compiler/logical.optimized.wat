@@ -965,21 +965,15 @@
  (func $start:logical
   (local $0 f64)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 f32)
+  (local $2 f32)
+  (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   call $logical/Obj#constructor
-  local.tee $4
+  local.tee $3
   call $~lib/rt/pure/__retain
-  local.tee $2
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 0
-  end
-  local.get $2
+  local.tee $1
   call $~lib/rt/pure/__release
+  local.get $1
   i32.eqz
   if
    i32.const 0
@@ -990,16 +984,11 @@
    unreachable
   end
   call $logical/Obj#constructor
-  local.tee $2
+  local.tee $1
   call $~lib/rt/pure/__retain
-  local.tee $5
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 0
-  end
-  local.get $5
+  local.tee $4
   call $~lib/rt/pure/__release
+  local.get $4
   i32.eqz
   if
    i32.const 0
@@ -1009,9 +998,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   call $~lib/rt/pure/__release
  )
  (func $~start

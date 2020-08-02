@@ -1506,6 +1506,7 @@ export class Module {
       // --- PassRunner::addDefaultFunctionOptimizationPasses ---
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        passes.push("simplify-locals-nostructure");
         passes.push("ssa-nomerge");
       }
       if (optimizeLevel >= 3) {
