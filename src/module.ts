@@ -1507,6 +1507,7 @@ export class Module {
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("simplify-locals-notee-nostructure");
+        passes.push("vacuum");
         passes.push("ssa-nomerge");
       }
       if (optimizeLevel >= 3) {
