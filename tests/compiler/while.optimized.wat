@@ -693,7 +693,8 @@
     unreachable
    end
    i32.const 1216
-   local.tee $1
+   local.set $1
+   i32.const 1216
    i32.const 0
    i32.store
    i32.const 2784
@@ -718,10 +719,10 @@
       i32.const 16
       i32.lt_u
       if
+       local.get $2
        local.get $0
        i32.const 4
        i32.shl
-       local.get $2
        i32.add
        i32.const 2
        i32.shl

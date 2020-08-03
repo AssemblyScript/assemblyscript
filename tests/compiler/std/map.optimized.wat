@@ -627,7 +627,8 @@
     unreachable
    end
    i32.const 1568
-   local.tee $1
+   local.set $1
+   i32.const 1568
    i32.const 0
    i32.store
    i32.const 3136
@@ -652,10 +653,10 @@
       i32.const 16
       i32.lt_u
       if
+       local.get $2
        local.get $0
        i32.const 4
        i32.shl
-       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -1867,10 +1868,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
+    local.get $4
     local.get $5
     i32.const 3
     i32.and
-    local.get $4
     i32.or
     i32.store
     local.get $1

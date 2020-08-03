@@ -2616,20 +2616,20 @@
   i64.const 32
   i64.shr_u
   i32.wrap_i64
-  local.set $5
-  local.get $6
-  i32.wrap_i64
-  local.get $1
-  i64.reinterpret_f64
-  local.tee $6
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
   local.set $4
   local.get $6
   i32.wrap_i64
+  local.set $3
+  local.get $1
+  i64.reinterpret_f64
+  local.tee $6
+  i32.wrap_i64
   local.tee $7
-  local.get $4
+  local.get $6
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.tee $5
   i32.const 1072693248
   i32.sub
   i32.or
@@ -2639,24 +2639,25 @@
    call $~lib/math/NativeMath.atan
    return
   end
-  local.get $4
+  local.get $5
   i32.const 30
   i32.shr_u
   i32.const 2
   i32.and
-  local.get $5
+  local.get $4
   i32.const 31
   i32.shr_u
   i32.or
   local.set $2
-  local.get $4
-  i32.const 2147483647
-  i32.and
-  local.set $4
   local.get $5
   i32.const 2147483647
   i32.and
-  local.tee $5
+  local.set $5
+  local.get $4
+  i32.const 2147483647
+  i32.and
+  local.tee $4
+  local.get $3
   i32.or
   i32.eqz
   if
@@ -2686,12 +2687,12 @@
    end
   end
   block $folding-inner0
-   local.get $4
+   local.get $5
    local.get $7
    i32.or
    i32.eqz
    br_if $folding-inner0
-   local.get $4
+   local.get $5
    i32.const 2146435072
    i32.eq
    if
@@ -2707,7 +2708,7 @@
     i32.const 2
     i32.and
     select
-    local.get $5
+    local.get $4
     i32.const 2146435072
     i32.eq
     select
@@ -2721,20 +2722,20 @@
     return
    end
    i32.const 1
-   local.get $5
+   local.get $4
    i32.const 2146435072
    i32.eq
-   local.get $4
+   local.get $5
    i32.const 67108864
    i32.add
-   local.get $5
+   local.get $4
    i32.lt_u
    select
    br_if $folding-inner0
-   local.get $5
+   local.get $4
    i32.const 67108864
    i32.add
-   local.get $4
+   local.get $5
    i32.lt_u
    i32.const 0
    local.get $2

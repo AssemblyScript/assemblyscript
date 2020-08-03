@@ -1510,6 +1510,7 @@ export class Module {
         passes.push("rse");
         passes.push("vacuum");
         passes.push("ssa-nomerge");
+        passes.push("simplify-globals-optimizing");
       }
       if (optimizeLevel >= 3) {
         passes.push("flatten");
