@@ -7232,33 +7232,35 @@
      i32.shr_s
      i32.const 1023
      i32.sub
-     local.tee $11
+     local.tee $12
      i32.const 20
      i32.gt_s
      local.tee $5
      select
-     local.get $11
+     local.get $12
      i32.sub
-     local.set $12
-     i32.const 2
+     local.set $11
      local.get $6
      local.get $9
      local.get $5
      select
-     local.tee $5
-     local.get $12
-     i32.shr_u
-     local.tee $11
-     i32.const 1
-     i32.and
-     i32.sub
-     i32.const 0
-     local.get $5
+     local.tee $12
      local.get $11
-     local.get $12
+     i32.shr_u
+     local.tee $5
+     local.get $11
      i32.shl
+     local.get $12
      i32.eq
-     select
+     if (result i32)
+      i32.const 2
+      local.get $5
+      i32.const 1
+      i32.and
+      i32.sub
+     else
+      i32.const 0
+     end
     else
      i32.const 0
     end
@@ -7274,10 +7276,10 @@
    i32.const 2146435072
    i32.eq
    if
-    local.get $18
     local.get $4
     i32.const 1072693248
     i32.sub
+    local.get $18
     i32.or
     if
      local.get $4
@@ -7378,10 +7380,10 @@
     i32.const 0
     i32.lt_s
     if (result f64)
-     local.get $5
      local.get $4
      i32.const 1072693248
      i32.sub
+     local.get $5
      i32.or
      if (result f64)
       local.get $3
@@ -7805,14 +7807,14 @@
     i64.const 32
     i64.shr_u
     i32.wrap_i64
-    local.tee $12
+    local.tee $11
     i32.const 1083179008
     i32.ge_s
     if
-     local.get $5
-     local.get $12
+     local.get $11
      i32.const 1083179008
      i32.sub
+     local.get $5
      i32.or
      local.get $1
      f64.const 8.008566259537294e-17
@@ -7824,16 +7826,16 @@
      i32.or
      br_if $folding-inner0
     else
-     local.get $12
+     local.get $11
      i32.const 2147483647
      i32.and
      i32.const 1083231232
      i32.ge_s
      i32.const 0
-     local.get $5
-     local.get $12
+     local.get $11
      i32.const -1064252416
      i32.sub
+     local.get $5
      i32.or
      local.get $1
      local.get $0
@@ -7844,10 +7846,10 @@
      select
      br_if $folding-inner1
     end
-    local.get $12
+    local.get $11
     i32.const 2147483647
     i32.and
-    local.tee $11
+    local.tee $12
     i32.const 20
     i32.shr_s
     i32.const 1023
@@ -7856,19 +7858,19 @@
     i32.const 0
     local.set $6
     local.get $1
-    local.get $11
+    local.get $12
     i32.const 1071644672
     i32.gt_s
     if
      i32.const 1048575
-     local.get $12
+     local.get $11
      i32.const 1048576
      local.get $5
      i32.const 1
      i32.add
      i32.shr_s
      i32.add
-     local.tee $11
+     local.tee $12
      i32.const 2147483647
      i32.and
      i32.const 20
@@ -7879,7 +7881,7 @@
      i32.shr_s
      i32.const -1
      i32.xor
-     local.get $11
+     local.get $12
      i32.and
      i64.extend_i32_s
      i64.const 32
@@ -7887,7 +7889,7 @@
      f64.reinterpret_i64
      local.set $0
      i32.const 0
-     local.get $11
+     local.get $12
      i32.const 1048575
      i32.and
      i32.const 1048576
@@ -7899,7 +7901,7 @@
      local.tee $6
      i32.sub
      local.get $6
-     local.get $12
+     local.get $11
      i32.const 0
      i32.lt_s
      select
@@ -8600,10 +8602,10 @@
    local.get $5
    i64.lt_s
    if
-    local.get $5
     local.get $3
     i64.const 1
     i64.add
+    local.get $5
     i64.eq
     br_if $do-break|0
     local.get $0
@@ -8719,10 +8721,10 @@
   f64.gt
   select
   i32.const 0
-  local.get $5
   local.get $3
   i64.const 1
   i64.add
+  local.get $5
   i64.eq
   select
   local.get $3
@@ -8853,10 +8855,10 @@
    local.get $8
    i32.lt_s
    if
-    local.get $8
     local.get $9
     i32.const 1
     i32.add
+    local.get $8
     i32.eq
     br_if $do-break|0
     local.get $0
@@ -8969,10 +8971,10 @@
   f32.gt
   select
   i32.const 0
-  local.get $8
   local.get $9
   i32.const 1
   i32.add
+  local.get $8
   i32.eq
   select
   local.get $8

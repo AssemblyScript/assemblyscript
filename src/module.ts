@@ -1529,7 +1529,6 @@ export class Module {
       //   }
       //   passes.push("post-assemblyscript");
       // }
-      passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("dce");
         passes.push("inlining");
