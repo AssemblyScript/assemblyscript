@@ -1507,6 +1507,7 @@ export class Module {
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("simplify-locals-notee-nostructure");
+        passes.push("rse");
         passes.push("vacuum");
         passes.push("ssa-nomerge");
       }
@@ -1519,10 +1520,6 @@ export class Module {
         passes.push("flatten");
         passes.push("local-cse");
         passes.push("reorder-locals");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        passes.push("rse");
-        passes.push("vacuum");
       }
       // FIXME: see issue #1288
       // if (usesARC) {

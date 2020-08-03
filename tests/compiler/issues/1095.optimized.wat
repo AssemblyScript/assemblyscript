@@ -77,23 +77,23 @@
    local.get $2
    i32.clz
    i32.sub
-   local.tee $4
+   local.tee $3
    i32.const 4
    i32.sub
    i32.shr_u
    i32.const 16
    i32.xor
    local.set $2
-   local.get $4
+   local.get $3
    i32.const 7
    i32.sub
-   local.set $4
+   local.set $3
   end
   local.get $2
   i32.const 16
   i32.lt_u
   i32.const 0
-  local.get $4
+  local.get $3
   i32.const 23
   i32.lt_u
   select
@@ -108,25 +108,25 @@
   end
   local.get $1
   i32.load offset=20
-  local.set $3
+  local.set $4
   local.get $1
   i32.load offset=16
   local.tee $5
   if
    local.get $5
-   local.get $3
+   local.get $4
    i32.store offset=20
   end
-  local.get $3
+  local.get $4
   if
-   local.get $3
+   local.get $4
    local.get $5
    i32.store offset=16
   end
   local.get $1
   local.get $0
   local.get $2
-  local.get $4
+  local.get $3
   i32.const 4
   i32.shl
   i32.add
@@ -138,24 +138,24 @@
   if
    local.get $0
    local.get $2
-   local.get $4
+   local.get $3
    i32.const 4
    i32.shl
    i32.add
    i32.const 2
    i32.shl
    i32.add
-   local.get $3
+   local.get $4
    i32.store offset=96
-   local.get $3
+   local.get $4
    i32.eqz
    if
     local.get $0
-    local.get $4
+    local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.tee $3
+    local.tee $4
     i32.load offset=4
     i32.const 1
     local.get $2
@@ -164,7 +164,7 @@
     i32.xor
     i32.and
     local.set $1
-    local.get $3
+    local.get $4
     local.get $1
     i32.store offset=4
     local.get $1
@@ -174,7 +174,7 @@
      local.get $0
      i32.load
      i32.const 1
-     local.get $4
+     local.get $3
      i32.shl
      i32.const -1
      i32.xor
@@ -584,16 +584,16 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $0
+  local.tee $1
   i32.eqz
   if
    i32.const 1
    memory.size
-   local.tee $0
+   local.tee $1
    i32.gt_s
    if (result i32)
     i32.const 1
-    local.get $0
+    local.get $1
     i32.sub
     memory.grow
     i32.const 0
@@ -605,18 +605,18 @@
     unreachable
    end
    i32.const 1312
-   local.tee $0
+   local.tee $1
    i32.const 0
    i32.store
    i32.const 2880
    i32.const 0
    i32.store
    loop $for-loop|0
-    local.get $1
+    local.get $0
     i32.const 23
     i32.lt_u
     if
-     local.get $1
+     local.get $0
      i32.const 2
      i32.shl
      i32.const 1312
@@ -630,7 +630,7 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $1
+       local.get $0
        i32.const 4
        i32.shl
        local.get $2
@@ -648,10 +648,10 @@
        br $for-loop|1
       end
      end
-     local.get $1
+     local.get $0
      i32.const 1
      i32.add
-     local.set $1
+     local.set $0
      br $for-loop|0
     end
    end
@@ -664,7 +664,7 @@
    i32.const 1312
    global.set $~lib/rt/tlsf/ROOT
   end
-  local.get $0
+  local.get $1
  )
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)

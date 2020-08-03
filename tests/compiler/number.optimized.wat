@@ -1359,7 +1359,6 @@
   select
  )
  (func $~lib/number/F32.isInteger (param $0 f32) (result i32)
-  (local $1 i32)
   local.get $0
   f32.trunc
   local.get $0
@@ -1385,7 +1384,6 @@
   select
  )
  (func $~lib/number/F64.isInteger (param $0 f64) (result i32)
-  (local $1 i32)
   local.get $0
   f64.trunc
   local.get $0
