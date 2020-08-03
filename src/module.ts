@@ -1549,7 +1549,7 @@ export class Module {
       if (optimizeLevel >= 3 && shrinkLevel <= 1) {
         passes.push("licm");
       }
-      passes.push("simplify-locals-notee-nostructure");
+      passes.push("simplify-locals-nostructure");
       passes.push("vacuum");
 
       passes.push("reorder-locals");
