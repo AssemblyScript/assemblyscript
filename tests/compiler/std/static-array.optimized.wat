@@ -210,11 +210,11 @@
        local.get $4
        i32.eqz
        br_if $~lib/util/memory/memmove|inlined.0
-       local.get $0
        local.get $4
        i32.const 1
        i32.sub
        local.tee $4
+       local.get $0
        i32.add
        local.get $1
        local.get $4
@@ -229,11 +229,11 @@
       i32.const 8
       i32.ge_u
       if
-       local.get $0
        local.get $4
        i32.const 8
        i32.sub
        local.tee $4
+       local.get $0
        i32.add
        local.get $1
        local.get $4
@@ -247,11 +247,11 @@
     loop $while-continue|5
      local.get $4
      if
-      local.get $0
       local.get $4
       i32.const 1
       i32.sub
       local.tee $4
+      local.get $0
       i32.add
       local.get $1
       local.get $4
