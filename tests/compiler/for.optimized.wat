@@ -125,15 +125,13 @@
   i32.const -4
   i32.and
   local.tee $2
+  i32.const 1073741808
+  i32.lt_u
+  i32.const 0
+  local.get $2
   i32.const 16
   i32.ge_u
-  if (result i32)
-   local.get $2
-   i32.const 1073741808
-   i32.lt_u
-  else
-   i32.const 0
-  end
+  select
   i32.eqz
   if
    i32.const 0
@@ -408,15 +406,13 @@
   i32.const -4
   i32.and
   local.tee $3
+  i32.const 1073741808
+  i32.lt_u
+  i32.const 0
+  local.get $3
   i32.const 16
   i32.ge_u
-  if (result i32)
-   local.get $3
-   i32.const 1073741808
-   i32.lt_u
-  else
-   i32.const 0
-  end
+  select
   i32.eqz
   if
    i32.const 0
@@ -1163,12 +1159,12 @@
   global.set $for/ran
   i32.const 10
   local.set $0
-  loop $for-loop|04
+  loop $for-loop|03
    local.get $0
    i32.const 1
    i32.sub
    local.tee $0
-   br_if $for-loop|04
+   br_if $for-loop|03
   end
   local.get $0
   if
@@ -1185,14 +1181,14 @@
   global.set $for/ran
   i32.const 0
   local.set $0
-  loop $for-loop|06
+  loop $for-loop|04
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $for-loop|06
+   br_if $for-loop|04
   end
   local.get $0
   i32.const 10
@@ -1215,7 +1211,7 @@
   global.set $for/ran
   i32.const 0
   local.set $0
-  loop $for-loop|07
+  loop $for-loop|05
    local.get $0
    i32.const 10
    i32.lt_s
@@ -1224,7 +1220,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|07
+    br $for-loop|05
    end
   end
   local.get $0
@@ -1265,7 +1261,7 @@
   global.set $for/ran
   call $for/Ref#constructor
   local.set $0
-  loop $for-loop|03
+  loop $for-loop|06
    local.get $0
    if
     local.get $2
@@ -1290,7 +1286,7 @@
     end
     local.get $1
     local.set $0
-    br $for-loop|03
+    br $for-loop|06
    end
   end
   local.get $2
@@ -1335,7 +1331,7 @@
   call $for/Ref#constructor
   local.set $0
   call $~lib/rt/pure/__release
-  loop $for-loop|05
+  loop $for-loop|07
    block $for-break0
     call $for/Ref#constructor
     local.tee $1
@@ -1362,7 +1358,7 @@
      local.get $0
      call $~lib/rt/pure/__release
      local.set $0
-     br $for-loop|05
+     br $for-loop|07
     end
    end
   end

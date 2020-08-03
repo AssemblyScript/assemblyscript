@@ -53,15 +53,13 @@
   i32.const -4
   i32.and
   local.tee $2
+  i32.const 1073741808
+  i32.lt_u
+  i32.const 0
+  local.get $2
   i32.const 16
   i32.ge_u
-  if (result i32)
-   local.get $2
-   i32.const 1073741808
-   i32.lt_u
-  else
-   i32.const 0
-  end
+  select
   i32.eqz
   if
    i32.const 0
@@ -336,15 +334,13 @@
   i32.const -4
   i32.and
   local.tee $3
+  i32.const 1073741808
+  i32.lt_u
+  i32.const 0
+  local.get $3
   i32.const 16
   i32.ge_u
-  if (result i32)
-   local.get $3
-   i32.const 1073741808
-   i32.lt_u
-  else
-   i32.const 0
-  end
+  select
   i32.eqz
   if
    i32.const 0
@@ -710,6 +706,7 @@
    i32.shr_u
    local.set $1
   else
+   i32.const 31
    local.get $1
    i32.const 1
    i32.const 27
@@ -726,11 +723,11 @@
    i32.lt_u
    select
    local.tee $1
-   i32.const 31
-   local.get $1
    i32.clz
    i32.sub
-   local.tee $2
+   local.set $2
+   local.get $1
+   local.get $2
    i32.const 4
    i32.sub
    i32.shr_u
@@ -1784,18 +1781,16 @@
   local.get $0
   i32.load offset=4
   local.tee $1
+  i32.const -2147483648
+  i32.and
+  i32.eqz
+  i32.const 0
+  local.get $1
   i32.const 1879048192
   i32.and
   i32.const 536870912
   i32.eq
-  if (result i32)
-   local.get $1
-   i32.const -2147483648
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
+  select
   if
    local.get $0
    local.get $1
@@ -1835,19 +1830,17 @@
     local.tee $5
     i32.load offset=4
     local.tee $2
+    i32.const 268435455
+    i32.and
+    i32.const 0
+    i32.gt_u
+    i32.const 0
+    local.get $2
     i32.const 1879048192
     i32.and
     i32.const 805306368
     i32.eq
-    if (result i32)
-     local.get $2
-     i32.const 268435455
-     i32.and
-     i32.const 0
-     i32.gt_u
-    else
-     i32.const 0
-    end
+    select
     if
      local.get $5
      call $~lib/rt/pure/markGray

@@ -29,11 +29,10 @@
   i32.const 1
   i32.eq
   local.set $1
-  loop $while-continue|0 (result i32)
+  loop $while-continue|0
    local.get $1
-   if (result i32)
-    i32.const 1
-   else
+   i32.eqz
+   if
     local.get $0
     i32.const 2
     i32.ne
@@ -46,6 +45,7 @@
     unreachable
    end
   end
+  i32.const 1
  )
  (func $loop-flow/forAny (param $0 i32) (result i32)
   (local $1 i32)
@@ -53,11 +53,10 @@
   i32.const 1
   i32.eq
   local.set $1
-  loop $for-loop|0 (result i32)
+  loop $for-loop|0
    local.get $1
-   if (result i32)
-    i32.const 1
-   else
+   i32.eqz
+   if
     local.get $0
     i32.const 2
     i32.eq
@@ -72,6 +71,7 @@
     br $for-loop|0
    end
   end
+  i32.const 1
  )
  (func $loop-flow/doAny (param $0 i32) (result i32)
   (local $1 i32)
@@ -79,11 +79,10 @@
   i32.const 1
   i32.eq
   local.set $1
-  loop $do-continue|0 (result i32)
+  loop $do-continue|0
    local.get $1
-   if (result i32)
-    i32.const 1
-   else
+   i32.eqz
+   if
     local.get $0
     i32.const 2
     i32.ne
@@ -96,6 +95,7 @@
     unreachable
    end
   end
+  i32.const 1
  )
  (func $loop-flow/whileThrow (result i32)
   i32.const 1088

@@ -45,15 +45,13 @@
   i32.const -4
   i32.and
   local.tee $2
+  i32.const 1073741808
+  i32.lt_u
+  i32.const 0
+  local.get $2
   i32.const 16
   i32.ge_u
-  if (result i32)
-   local.get $2
-   i32.const 1073741808
-   i32.lt_u
-  else
-   i32.const 0
-  end
+  select
   i32.eqz
   if
    i32.const 0
@@ -328,15 +326,13 @@
   i32.const -4
   i32.and
   local.tee $3
+  i32.const 1073741808
+  i32.lt_u
+  i32.const 0
+  local.get $3
   i32.const 16
   i32.ge_u
-  if (result i32)
-   local.get $3
-   i32.const 1073741808
-   i32.lt_u
-  else
-   i32.const 0
-  end
+  select
   i32.eqz
   if
    i32.const 0

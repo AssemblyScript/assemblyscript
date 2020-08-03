@@ -133,15 +133,13 @@
   i32.const -4
   i32.and
   local.tee $2
+  i32.const 1073741808
+  i32.lt_u
+  i32.const 0
+  local.get $2
   i32.const 16
   i32.ge_u
-  if (result i32)
-   local.get $2
-   i32.const 1073741808
-   i32.lt_u
-  else
-   i32.const 0
-  end
+  select
   i32.eqz
   if
    i32.const 0
@@ -416,15 +414,13 @@
   i32.const -4
   i32.and
   local.tee $3
+  i32.const 1073741808
+  i32.lt_u
+  i32.const 0
+  local.get $3
   i32.const 16
   i32.ge_u
-  if (result i32)
-   local.get $3
-   i32.const 1073741808
-   i32.lt_u
-  else
-   i32.const 0
-  end
+  select
   i32.eqz
   if
    i32.const 0
@@ -1216,14 +1212,14 @@
   global.set $while/ran
   i32.const 10
   local.set $2
-  loop $while-continue|04
+  loop $while-continue|013
    local.get $2
    if
     local.get $2
     i32.const 1
     i32.sub
     local.set $2
-    br $while-continue|04
+    br $while-continue|013
    end
   end
   local.get $2
@@ -1243,7 +1239,7 @@
   local.set $0
   i32.const 10
   local.set $1
-  loop $while-continue|03
+  loop $while-continue|04
    local.get $0
    if
     loop $while-continue|1
@@ -1260,7 +1256,7 @@
     i32.const 1
     i32.sub
     local.set $0
-    br $while-continue|03
+    br $while-continue|04
    end
   end
   local.get $0
@@ -1422,14 +1418,14 @@
   global.set $while/ran
   i32.const 0
   local.set $2
-  loop $while-continue|067
+  loop $while-continue|02
    local.get $2
    i32.const 1
    i32.add
    local.tee $2
    i32.const 1
    i32.lt_s
-   br_if $while-continue|067
+   br_if $while-continue|02
   end
   i32.const 1
   global.set $while/ran
@@ -1437,14 +1433,14 @@
   global.set $while/ran
   i32.const 0
   local.set $2
-  loop $while-continue|08
+  loop $while-continue|03
    local.get $2
    i32.const 1
    i32.add
    local.tee $2
    i32.const 1
    i32.lt_s
-   br_if $while-continue|08
+   br_if $while-continue|03
   end
   i32.const 1
   global.set $while/ran

@@ -50,6 +50,10 @@
   local.get $0
   i32.reinterpret_f32
   local.tee $1
+  i32.const -2147483648
+  i32.and
+  local.set $4
+  local.get $1
   i32.const 23
   i32.shr_u
   i32.const 255
@@ -63,10 +67,6 @@
    f32.div
    return
   end
-  local.get $1
-  i32.const -2147483648
-  i32.and
-  local.set $4
   block $folding-inner0
    local.get $1
    i32.const 1
@@ -191,6 +191,10 @@
   local.get $0
   i64.reinterpret_f64
   local.tee $1
+  i64.const 63
+  i64.shr_u
+  local.set $4
+  local.get $1
   i64.const 52
   i64.shr_u
   i64.const 2047
@@ -204,10 +208,6 @@
    f64.div
    return
   end
-  local.get $1
-  i64.const 63
-  i64.shr_u
-  local.set $4
   block $folding-inner0
    local.get $1
    i64.const 1

@@ -1511,6 +1511,9 @@ export class Module {
         passes.push("vacuum");
         passes.push("ssa-nomerge");
         passes.push("simplify-globals-optimizing");
+        passes.push("remove-unused-brs");
+        passes.push("remove-unused-names");
+        passes.push("merge-blocks");
       }
       if (optimizeLevel >= 3) {
         passes.push("flatten");
