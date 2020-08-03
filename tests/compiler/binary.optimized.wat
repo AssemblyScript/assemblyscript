@@ -132,6 +132,7 @@
      br $while-continue|0
     end
    end
+   local.get $4
    local.get $1
    i32.const 8388608
    i32.ge_u
@@ -150,31 +151,27 @@
    i32.const 8
    i32.shl
    i32.clz
-   local.tee $3
+   local.tee $1
    i32.shl
-   local.set $1
-   local.get $2
-   local.get $3
+   local.tee $3
+   i32.const 8388608
    i32.sub
-   local.tee $2
+   local.get $2
+   local.get $1
+   i32.sub
+   local.tee $1
+   i32.const 23
+   i32.shl
+   i32.or
+   local.get $3
+   i32.const 1
+   local.get $1
+   i32.sub
+   i32.shr_u
+   local.get $1
    i32.const 0
    i32.gt_s
-   if (result i32)
-    local.get $1
-    i32.const 8388608
-    i32.sub
-    local.get $2
-    i32.const 23
-    i32.shl
-    i32.or
-   else
-    local.get $1
-    i32.const 1
-    local.get $2
-    i32.sub
-    i32.shr_u
-   end
-   local.get $4
+   select
    i32.or
    f32.reinterpret_i32
    return
@@ -195,7 +192,12 @@
   i64.shr_u
   i64.const 2047
   i64.and
-  local.tee $2
+  local.set $2
+  local.get $1
+  i64.const 63
+  i64.shr_u
+  local.set $3
+  local.get $2
   i64.const 2047
   i64.eq
   if
@@ -204,19 +206,15 @@
    f64.div
    return
   end
-  local.get $1
-  i64.const 63
-  i64.shr_u
-  local.set $4
   block $folding-inner0
    local.get $1
    i64.const 1
    i64.shl
-   local.tee $3
+   local.tee $4
    i64.const 9214364837600034816
    i64.le_u
    if
-    local.get $3
+    local.get $4
     i64.const 9214364837600034816
     i64.eq
     br_if $folding-inner0
@@ -276,6 +274,9 @@
      br $while-continue|0
     end
    end
+   local.get $3
+   i64.const 63
+   i64.shl
    local.get $1
    i64.const 4503599627370496
    i64.ge_u
@@ -294,35 +295,29 @@
    i64.const 11
    i64.shl
    i64.clz
-   local.tee $3
+   local.tee $1
    i64.shl
-   local.set $1
-   local.get $2
-   local.get $3
+   local.tee $3
+   i64.const 4503599627370496
    i64.sub
-   local.tee $2
+   local.get $2
+   local.get $1
+   i64.sub
+   local.tee $1
+   i64.const 52
+   i64.shl
+   i64.or
+   local.get $3
+   i64.const 0
+   local.get $1
+   i64.sub
+   i64.const 1
+   i64.add
+   i64.shr_u
+   local.get $1
    i64.const 0
    i64.gt_s
-   if (result i64)
-    local.get $1
-    i64.const 4503599627370496
-    i64.sub
-    local.get $2
-    i64.const 52
-    i64.shl
-    i64.or
-   else
-    local.get $1
-    i64.const 0
-    local.get $2
-    i64.sub
-    i64.const 1
-    i64.add
-    i64.shr_u
-   end
-   local.get $4
-   i64.const 63
-   i64.shl
+   select
    i64.or
    f64.reinterpret_i64
    return

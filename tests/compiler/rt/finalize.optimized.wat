@@ -178,7 +178,7 @@
     i32.const 2
     i32.shl
     i32.add
-    local.tee $4
+    local.tee $1
     i32.load offset=4
     i32.const 1
     local.get $2
@@ -186,11 +186,11 @@
     i32.const -1
     i32.xor
     i32.and
-    local.set $1
-    local.get $4
+    local.set $2
     local.get $1
+    local.get $2
     i32.store offset=4
-    local.get $1
+    local.get $2
     i32.eqz
     if
      local.get $0
@@ -653,10 +653,10 @@
       i32.const 16
       i32.lt_u
       if
+       local.get $2
        local.get $0
        i32.const 4
        i32.shl
-       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -1909,8 +1909,17 @@
    i32.load
    i32.const 32
    i32.and
-   i32.eqz
    if
+    local.get $0
+    local.get $1
+    i32.const 1
+    i32.sub
+    local.get $2
+    i32.const -268435456
+    i32.and
+    i32.or
+    i32.store offset=4
+   else
     local.get $0
     local.get $1
     i32.const 1
@@ -1940,16 +1949,6 @@
      i32.add
      global.set $~lib/rt/pure/CUR
     end
-   else
-    local.get $0
-    local.get $1
-    i32.const 1
-    i32.sub
-    local.get $2
-    i32.const -268435456
-    i32.and
-    i32.or
-    i32.store offset=4
    end
   end
  )
@@ -2066,25 +2065,25 @@
   global.get $~lib/rt/pure/ROOTS
   local.tee $1
   local.tee $3
-  local.set $4
-  global.get $~lib/rt/pure/CUR
   local.set $0
+  global.get $~lib/rt/pure/CUR
+  local.set $5
   loop $for-loop|0
-   local.get $4
    local.get $0
+   local.get $5
    i32.lt_u
    if
-    local.get $4
+    local.get $0
     i32.load
-    local.tee $5
-    i32.load offset=4
     local.tee $2
+    i32.load offset=4
+    local.tee $4
     i32.const 1879048192
     i32.and
     i32.const 805306368
     i32.eq
     if (result i32)
-     local.get $2
+     local.get $4
      i32.const 268435455
      i32.and
      i32.const 0
@@ -2093,10 +2092,10 @@
      i32.const 0
     end
     if
-     local.get $5
+     local.get $2
      call $~lib/rt/pure/markGray
      local.get $3
-     local.get $5
+     local.get $2
      i32.store
      local.get $3
      i32.const 4
@@ -2104,29 +2103,29 @@
      local.set $3
     else
      i32.const 0
-     local.get $2
+     local.get $4
      i32.const 268435455
      i32.and
      i32.eqz
-     local.get $2
+     local.get $4
      i32.const 1879048192
      i32.and
      select
      if
-      local.get $5
+      local.get $2
       call $~lib/rt/pure/finalize
      else
-      local.get $5
       local.get $2
+      local.get $4
       i32.const 2147483647
       i32.and
       i32.store offset=4
      end
     end
-    local.get $4
+    local.get $0
     i32.const 4
     i32.add
-    local.set $4
+    local.set $0
     br $for-loop|0
    end
   end
@@ -2193,14 +2192,11 @@
      block $case3|0
       block $case2|0
        block $case1|0
-        local.get $1
-        i32.const 1
-        i32.ne
-        if
+        block $case0|0
          local.get $1
-         i32.const 2
+         i32.const 1
          i32.sub
-         br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0
+         br_table $case0|0 $case1|0 $case2|0 $case3|0 $case4|0 $case5|0
         end
         local.get $0
         call $~lib/rt/pure/decrement

@@ -1536,6 +1536,13 @@ export class Module {
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
       passes.push("inlining-optimizing");
+
+      if (optimizeLevel >= 3 && shrinkLevel <= 1) {
+        passes.push("licm");
+      }
+      passes.push("simplify-locals-notee-nostructure");
+      passes.push("vacuum");
+
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("pick-load-signs");
         passes.push("simplify-globals-optimizing");
@@ -1545,11 +1552,6 @@ export class Module {
       } else {
         passes.push("precompute");
       }
-      passes.push("vacuum");
-      if (optimizeLevel >= 3 && shrinkLevel <= 1) {
-        passes.push("licm");
-      }
-      passes.push("simplify-locals-nostructure");
       passes.push("vacuum");
 
       passes.push("reorder-locals");

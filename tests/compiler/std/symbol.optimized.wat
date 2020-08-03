@@ -1364,14 +1364,11 @@
            block $case3|0
             block $case2|0
              block $case1|0
-              local.get $0
-              i32.const 1
-              i32.ne
-              if
+              block $case0|0
                local.get $0
-               i32.const 2
+               i32.const 1
                i32.sub
-               br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $case11|0
+               br_table $case0|0 $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $case11|0
               end
               i32.const 1408
               br $break|0
