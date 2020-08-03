@@ -1537,16 +1537,16 @@ export class Module {
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
       passes.push("inlining-optimizing");
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        passes.push("pick-load-signs");
-        passes.push("simplify-globals-optimizing");
-      }
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("precompute-propagate");
       } else {
         passes.push("precompute");
       }
       passes.push("vacuum");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("pick-load-signs");
+        passes.push("simplify-globals-optimizing");
+      }
       if (optimizeLevel >= 3 && shrinkLevel <= 1) {
         passes.push("licm");
       }
