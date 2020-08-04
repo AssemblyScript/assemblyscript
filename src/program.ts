@@ -1022,11 +1022,6 @@ export class Program extends DiagnosticEmitter {
 
     // queued imports should be resolvable now through traversing exports and queued exports.
     // note that imports may depend upon imports, so repeat until there's no more progress.
-    //
-    // Also, we are creating a map for imported namespaces to have their exports resolved
-    // while we are resolving exports
-    // Our importNameSpaces traverses like foreignFile -> localFile -> namespaceNames
-    let importNamespacesMap = new Map<File, Map<File, Array<string>>>();
     do {
       let i = 0, madeProgress = false;
       while (i < queuedImports.length) {
@@ -1067,19 +1062,6 @@ export class Program extends DiagnosticEmitter {
             );
             queuedImports.splice(i, 1);
             madeProgress = true;
-
-            // Also, make sure to record the namespace in our importNamespaces for later
-            if (importNamespacesMap.has(foreignFile)) {
-              let importNamespaceLocalFileMap = importNamespacesMap.get(foreignFile) as Map<File, Array<string>>;
-              let importNamespaceNames = importNamespaceLocalFileMap.get(localFile) as Array<string>;
-              importNamespaceNames.push(localName);
-            } else {
-              let importNamespaceLocalFileMap = new Map<File, Array<string>>();
-              let importNamespaceNames = new Array<string>();
-              importNamespaceNames.push(localName);
-              importNamespaceLocalFileMap.set(localFile, importNamespaceNames);
-              importNamespacesMap.set(foreignFile, importNamespaceLocalFileMap);
-            }
           } else {
             ++i;
             assert(false); // already reported by the parser not finding the file
@@ -1122,16 +1104,6 @@ export class Program extends DiagnosticEmitter {
           );
           if (element) {
             file.ensureExport(exportName, element);
-
-            // Check if there is a namespace that also needs this
-            if (importNamespacesMap.has(file)) {
-              this.addExportToImportNameSpace(
-                importNamespacesMap,
-                file,
-                exportName,
-                element
-              );
-            }
           } else {
             this.error(
               DiagnosticCode.Module_0_has_no_exported_member_1,
@@ -1143,16 +1115,6 @@ export class Program extends DiagnosticEmitter {
           let element = file.lookupInSelf(localName);
           if (element) {
             file.ensureExport(exportName, element);
-
-            // Check if there is a namespace that also needs this
-            if (importNamespacesMap.has(file)) {
-              this.addExportToImportNameSpace(
-                importNamespacesMap,
-                file,
-                exportName,
-                element
-              );
-            }
           } else {
             let globalElement = this.lookupGlobal(localName);
             if (globalElement !== null && isDeclaredElement(globalElement.kind)) { // export { memory }
@@ -1340,29 +1302,6 @@ export class Program extends DiagnosticEmitter {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.markModuleExports(file);
-      }
-    }
-  }
-
-  private addExportToImportNameSpace(
-    importNamespacesMap: Map<File, Map<File, Array<string>>>,
-    file: File,
-    exportName: string,
-    element: DeclaredElement
-  ): void {
-    let importNamespaceLocalFileMap = importNamespacesMap.get(file) as Map<File, Array<string>>;
-    let importNameSpaceLocalFileKeys = Map_keys(importNamespaceLocalFileMap);
-    let importNameSpaceLocalFileKeysLength = importNameSpaceLocalFileKeys.length;
-    for (let i = 0; i < importNameSpaceLocalFileKeysLength; ++i) {
-      let localFile = importNameSpaceLocalFileKeys[i];
-
-      // Get our namespaces
-      let importNamespacesNames = importNamespaceLocalFileMap.get(localFile) as Array<string>;
-      for (let j = 0; j < importNamespacesNames.length; j++) {
-        let namespace = localFile.lookup(importNamespacesNames[j]);
-        if (namespace && exportName !== importNamespacesNames[j]) {
-          namespace.add(exportName, element);
-        }
       }
     }
   }
@@ -1670,7 +1609,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Tries to locate a foreign element by traversing exports and queued exports. */
-  lookupForeign(
+  private lookupForeign(
     /** Identifier within the other file. */
     foreignName: string,
     /** Normalized path to the other file. */
@@ -2954,6 +2893,11 @@ export class File extends Element {
   exportsStar: File[] | null = null;
   /** Top-level start function of this file. */
   startFunction!: Function;
+  /** 
+   * Array of all the names space made from this file 
+   * E.g import * as MyNamespace from "./this-file"
+   */
+  importedNamespacesFromThisFile: Array<Namespace> = new Array<Namespace>();
 
   /** Constructs a new file. */
   constructor(
@@ -3023,6 +2967,14 @@ export class File extends Element {
     if (!exports) this.exports = exports = new Map();
     exports.set(name, element);
     if (this.source.sourceKind == SourceKind.LIBRARY_ENTRY) this.program.ensureGlobal(name, element);
+
+    // Also, add to the namespaces that caputure our exports
+    for(let i = 0; i < this.importedNamespacesFromThisFile.length; i++) {
+      let ns = this.importedNamespacesFromThisFile[i];
+      if (!ns.lookup(name)) {
+        ns.add(name, element);
+      }
+    }
   }
 
   /** Ensures that another file is a re-export of this file. */
@@ -3060,6 +3012,9 @@ export class File extends Element {
     this.copyExportsToNamespace(ns);
     // NOTE: Some exports are still queued, and are not added here.
     // But will be added to the namespace when the exports are being resolved.
+    // We are adding this namespaces to our this files imported namespaces so
+    // we can resolve when we add our exports
+    this.importedNamespacesFromThisFile.push(ns);
     return ns;
   }
 

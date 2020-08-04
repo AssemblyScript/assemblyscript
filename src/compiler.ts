@@ -367,6 +367,8 @@ export class Compiler extends DiagnosticEmitter {
   virtualCalls: Set<Function> = new Set();
   /** Elements currently undergoing compilation. */
   pendingElements: Set<Element> = new Set();
+  /** Classes that are already added as globals */
+  globalClasses: Set<Class> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -812,7 +814,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS: {
         let classInstance = <Class>element;
         // make the class name itself represent its runtime id
-        if (!classInstance.type.isUnmanaged) {
+        if (!classInstance.type.isUnmanaged && !this.globalClasses.has(classInstance)) {
           let module = this.module;
           let internalName = classInstance.internalName;
 
@@ -821,9 +823,9 @@ export class Compiler extends DiagnosticEmitter {
           // As we can export a class from a file, and in that sample file,
           // Export a namspace (import * as), that exports the same class.
           // And there is no module.hasGlobal(), and this works fine :)
-          module.removeGlobal(internalName);
           module.addGlobal(internalName, NativeType.I32, false, module.i32(classInstance.id));
           module.addGlobalExport(internalName, prefix + name);
+          this.globalClasses.add(classInstance);
         }
         break;
       }
