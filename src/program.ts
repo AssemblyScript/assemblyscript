@@ -2965,7 +2965,7 @@ export class File extends Element {
     exports.set(name, element);
     if (this.source.sourceKind == SourceKind.LIBRARY_ENTRY) this.program.ensureGlobal(name, element);
 
-    // Also, add to the namespaces that caputure our exports
+    // Also, add to the namespaces that capture our exports
     for(let i = 0; i < this.aliasNamespaces.length; i++) {
       let ns = this.aliasNamespaces[i];
       if (!ns.lookup(name)) {
