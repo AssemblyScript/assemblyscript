@@ -1364,14 +1364,11 @@
            block $case3|0
             block $case2|0
              block $case1|0
-              local.get $0
-              i32.const 1
-              i32.ne
-              if
+              block $case0|0
                local.get $0
-               i32.const 2
+               i32.const 1
                i32.sub
-               br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $case11|0
+               br_table $case0|0 $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $case11|0
               end
               i32.const 1408
               br $break|0
@@ -1428,6 +1425,7 @@
  )
  (func $start:std/symbol
   (local $0 i32)
+  (local $1 i32)
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
   call $~lib/symbol/Symbol
@@ -1487,6 +1485,7 @@
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol.keyFor
   local.tee $0
+  local.get $0
   i32.eqz
   if
    i32.const 1344
@@ -1496,11 +1495,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
   global.set $std/symbol/key3
   global.get $std/symbol/sym4
   call $~lib/symbol/_Symbol.keyFor
   local.tee $0
+  local.get $0
   i32.eqz
   if
    i32.const 1344
@@ -1510,7 +1509,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
   global.set $std/symbol/key4
   global.get $std/symbol/key3
   i32.const 1040

@@ -21,14 +21,6 @@
   (local $6 i64)
   (local $7 i64)
   (local $8 i64)
-  local.get $0
-  i64.reinterpret_f64
-  local.tee $2
-  i64.const 52
-  i64.shr_u
-  i64.const 2047
-  i64.and
-  local.set $4
   local.get $1
   i64.reinterpret_f64
   local.tee $3
@@ -37,25 +29,32 @@
   i64.const 2047
   i64.and
   local.set $5
+  local.get $0
+  i64.reinterpret_f64
+  local.tee $2
+  i64.const 63
+  i64.shr_u
+  local.set $7
+  i32.const 1
+  local.get $1
+  local.get $1
+  f64.ne
+  i32.const 1
+  local.get $2
+  i64.const 52
+  i64.shr_u
+  i64.const 2047
+  i64.and
+  local.tee $4
+  i64.const 2047
+  i64.eq
   local.get $3
   i64.const 1
   i64.shl
   local.tee $6
   i64.eqz
-  if (result i32)
-   i32.const 1
-  else
-   local.get $4
-   i64.const 2047
-   i64.eq
-  end
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   local.get $1
-   f64.ne
-  end
+  select
+  select
   if
    local.get $0
    local.get $1
@@ -65,10 +64,6 @@
    f64.div
    return
   end
-  local.get $2
-  i64.const 63
-  i64.shr_u
-  local.set $7
   block $folding-inner0
    local.get $2
    i64.const 1
@@ -267,14 +262,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  local.get $0
-  i32.reinterpret_f32
-  local.tee $2
-  i32.const 23
-  i32.shr_u
-  i32.const 255
-  i32.and
-  local.set $4
   local.get $1
   i32.reinterpret_f32
   local.tee $3
@@ -283,24 +270,31 @@
   i32.const 255
   i32.and
   local.set $5
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $2
+  i32.const -2147483648
+  i32.and
+  local.set $7
+  i32.const 1
+  local.get $1
+  local.get $1
+  f32.ne
+  local.get $2
+  i32.const 23
+  i32.shr_u
+  i32.const 255
+  i32.and
+  local.tee $4
+  i32.const 255
+  i32.eq
+  i32.const 1
   local.get $3
   i32.const 1
   i32.shl
   local.tee $6
-  if (result i32)
-   local.get $4
-   i32.const 255
-   i32.eq
-  else
-   i32.const 1
-  end
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   local.get $1
-   f32.ne
-  end
+  select
+  select
   if
    local.get $0
    local.get $1
@@ -310,10 +304,6 @@
    f32.div
    return
   end
-  local.get $2
-  i32.const -2147483648
-  i32.and
-  local.set $7
   block $folding-inner0
    local.get $2
    i32.const 1

@@ -1506,7 +1506,14 @@ export class Module {
       // --- PassRunner::addDefaultFunctionOptimizationPasses ---
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        passes.push("simplify-locals-notee-nostructure");
+        passes.push("rse");
+        passes.push("vacuum");
         passes.push("ssa-nomerge");
+        passes.push("simplify-globals-optimizing");
+        passes.push("remove-unused-brs");
+        passes.push("remove-unused-names");
+        passes.push("merge-blocks");
       }
       if (optimizeLevel >= 3) {
         passes.push("flatten");
@@ -1517,10 +1524,6 @@ export class Module {
         passes.push("flatten");
         passes.push("local-cse");
         passes.push("reorder-locals");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        passes.push("rse");
-        passes.push("vacuum");
       }
       // FIXME: see issue #1288
       // if (usesARC) {
@@ -1537,16 +1540,16 @@ export class Module {
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
       passes.push("inlining-optimizing");
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        passes.push("pick-load-signs");
-        passes.push("simplify-globals-optimizing");
-      }
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("precompute-propagate");
       } else {
         passes.push("precompute");
       }
       passes.push("vacuum");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("pick-load-signs");
+        passes.push("simplify-globals-optimizing");
+      }
       if (optimizeLevel >= 3 && shrinkLevel <= 1) {
         passes.push("licm");
       }
