@@ -376,10 +376,7 @@ export abstract class Node {
     value: string,
     range: Range
   ): StringLiteralExpression {
-    var expr = new StringLiteralExpression();
-    expr.range = range;
-    expr.value = value;
-    return expr;
+    return new TemplateLiteralExpression(value, range);
   }
 
   static createSuperExpression(
@@ -1445,10 +1442,13 @@ export class StringLiteralExpression extends LiteralExpression {
 
 /** Represents a string template literal expression. */
 export class TemplateLiteralExpression extends LiteralExpression {
-  literalKind = LiteralKind.TEMPLATE;
-
-  /** String value without quotes. */
-  value: string;
+  constructor(
+    /** String value without quotes. */
+    public expresssionParts: Expression[],
+    /** Source range. */
+    range: Range
+) {
+    super(LiteralKind.TEMPLATE, range);
 }
 
 /** Represents a `super` expression. */

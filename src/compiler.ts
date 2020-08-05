@@ -8780,8 +8780,8 @@ export class Compiler extends DiagnosticEmitter {
     return module.unreachable();
   }
 
-  compileTemplateLiteral(arg0: TemplateLiteralExpression, constraints: Constraints): ExpressionRef {
-    const innerExpressions: ExpressionRef[] = [];
+  compileTemplateLiteral(expr: TemplateLiteralExpression, constraints: Constraints): ExpressionRef {
+    const innerExpressions: ExpressionRef[] = expr.expresssionParts;
 
     return 0;
   }
