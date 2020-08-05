@@ -1053,7 +1053,7 @@ export class Program extends DiagnosticEmitter {
             let localName = localIdentifier.text;
             localFile.add(
               localName,
-              foreignFile.asImportedNamespace(
+              foreignFile.asAliasNamespace(
                 localName,
                 localFile,
                 localIdentifier
@@ -2893,11 +2893,8 @@ export class File extends Element {
   exportsStar: File[] | null = null;
   /** Top-level start function of this file. */
   startFunction!: Function;
-  /** 
-   * Array of all the names space made from this file 
-   * E.g import * as MyNamespace from "./this-file"
-   */
-  importedNamespacesFromThisFile: Array<Namespace> = new Array<Namespace>();
+  /** Array of `import * as X` alias namespaces of this file. */
+  aliasNamespaces: Array<Namespace> = new Array<Namespace>();
 
   /** Constructs a new file. */
   constructor(
@@ -2969,8 +2966,8 @@ export class File extends Element {
     if (this.source.sourceKind == SourceKind.LIBRARY_ENTRY) this.program.ensureGlobal(name, element);
 
     // Also, add to the namespaces that caputure our exports
-    for(let i = 0; i < this.importedNamespacesFromThisFile.length; i++) {
-      let ns = this.importedNamespacesFromThisFile[i];
+    for(let i = 0; i < this.aliasNamespaces.length; i++) {
+      let ns = this.aliasNamespaces[i];
       if (!ns.lookup(name)) {
         ns.add(name, element);
       }
@@ -3000,7 +2997,7 @@ export class File extends Element {
   }
 
   /** Creates an imported namespace from this file. */
-  asImportedNamespace(
+  asAliasNamespace(
     name: string, 
     parent: Element, 
     localIdentifier: IdentifierExpression
@@ -3010,11 +3007,10 @@ export class File extends Element {
     var ns = new Namespace(name, parent, declaration);
     ns.set(CommonFlags.SCOPED);
     this.copyExportsToNamespace(ns);
-    // NOTE: Some exports are still queued, and are not added here.
-    // But will be added to the namespace when the exports are being resolved.
-    // We are adding this namespaces to our this files imported namespaces so
-    // we can resolve when we add our exports
-    this.importedNamespacesFromThisFile.push(ns);
+    // NOTE: Some exports are still queued, and can't yet be added here,
+    // so we remember all the alias namespaces and add to them as well
+    // when adding an element to the file.
+    this.aliasNamespaces.push(ns);
     return ns;
   }
 

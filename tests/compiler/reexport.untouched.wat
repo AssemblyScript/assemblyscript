@@ -63,6 +63,7 @@
  (export "ExportsNamespace.Animal.DOG" (global $exports/Animal.DOG))
  (export "ExportsNamespace.animals.Animal.CAT" (global $exports/animals.Animal.CAT))
  (export "ExportsNamespace.animals.Animal.DOG" (global $exports/animals.Animal.DOG))
+ (export "ExportsNamespace.Car" (global $exports/Car))
  (export "ExportsNamespace.Car#get:doors" (func $exports/Car#get:doors))
  (export "ExportsNamespace.Car#set:doors" (func $exports/Car#set:doors))
  (export "ExportsNamespace.Car#constructor" (func $exports/Car#constructor@varargs))
