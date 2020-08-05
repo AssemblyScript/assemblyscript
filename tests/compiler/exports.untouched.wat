@@ -14,6 +14,9 @@
  (global $exports/Car.TIRES i32 (i32.const 4))
  (global $exports/vehicles.Car.TIRES i32 (i32.const 4))
  (global $exports/outer.inner.a i32 (i32.const 42))
+ (global $export/a i32 (i32.const 1))
+ (global $export/b i32 (i32.const 2))
+ (global $export/c i32 (i32.const 3))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8))
@@ -47,6 +50,7 @@
  (export "vehicles.Car.TIRES" (global $exports/vehicles.Car.TIRES))
  (export "vehicles.Car.getNumTires" (func $exports/vehicles.Car.getNumTires))
  (export "outer.inner.a" (global $exports/outer.inner.a))
+ (export "renamed_mul" (func $export/mul))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (start $~start)
  (func $exports/add (param $0 i32) (param $1 i32) (result i32)
@@ -259,6 +263,11 @@
  )
  (func $exports/vehicles.Car#openDoors (param $0 i32)
   nop
+ )
+ (func $export/mul (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.mul
  )
  (func $~start
   global.get $~lib/heap/__heap_base
