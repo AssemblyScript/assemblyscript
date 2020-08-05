@@ -56,3 +56,5 @@ export namespace outer {
     export const a = 42;
   }
 }
+
+export {renamed_mul} from "./export"; 
