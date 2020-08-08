@@ -68,8 +68,6 @@ jobs:
           exit 1
         fi
         npm test
-    - name: Test browser build
-      run: node tests/browser-asc
   test-windows:
     name: "Compiler (Windows, node current)"
     runs-on: windows-latest
@@ -89,8 +87,6 @@ jobs:
       run: npm run build
     - name: Test distribution
       run: npm test
-    - name: Test browser build
-      run: node tests/browser-asc
   test-macos:
     name: "Compiler (MacOS, node current)"
     runs-on: macos-latest
@@ -110,8 +106,6 @@ jobs:
       run: npm run build
     - name: Test distribution
       run: npm test
-    - name: Test browser build
-      run: node tests/browser-asc
   test-features:
     name: "Features"
     runs-on: ubuntu-latest
@@ -121,7 +115,8 @@ jobs:
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
-        node-version: "15.0.0-v8-canary202007077c53168ead"
+        # FIXME: newer node-v8 builds are currently broken
+        node-version: "14.0.0-v8-canary201911242015a12d82"
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
