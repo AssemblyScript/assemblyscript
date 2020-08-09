@@ -1,6 +1,5 @@
 import { itoa32, utoa32, itoa64, utoa64, dtoa, itoa_buffered, dtoa_buffered, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
-import { string } from "string";
 
 // All tables are stored as two staged lookup tables (static tries)
 // because the full range of Unicode symbols can't be efficiently
@@ -1022,8 +1021,7 @@ export function joinThreeStrings(a: string, b: string, c: string): string {
   var bytesLenA = <usize>a.length << 1;
   var bytesLenB = <usize>b.length << 1;
   var bytesLenC = <usize>c.length << 1;
-  var length = bytesLenA + bytesLenB + bytesLenC;
-  var result = __alloc(length, idof<string>());
+  var result = __alloc(bytesLenA + bytesLenB + bytesLenC, idof<string>());
   var offset: usize = 0;
   if (bytesLenA) {
     memory.copy(
