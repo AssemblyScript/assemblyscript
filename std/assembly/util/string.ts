@@ -983,25 +983,25 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
     // @ts-ignore: type
     if (value !== null) estLen += value.length;
   }
-  var offset = 0;
-  var sepLen = separator.length;
-  var result = __alloc((estLen + sepLen * lastIndex) << 1, idof<string>());
+  var offset: usize = 0;
+  var sepLen = <usize>separator.length << 1;
+  var result = __alloc((estLen << 1) + sepLen * lastIndex, idof<string>());
   for (let i = 0; i < lastIndex; ++i) {
     value = load<string>(dataStart + (<usize>i << alignof<string>()));
     if (value !== null) {
-      let valueLen = value.length;
+      let valueLen = <usize>value.length << 1;
       memory.copy(
-        result + (<usize>offset << 1),
+        result + offset,
         changetype<usize>(value),
-        <usize>valueLen << 1
+        valueLen
       );
       offset += valueLen;
     }
     if (sepLen) {
       memory.copy(
-        result + (<usize>offset << 1),
+        result + offset,
         changetype<usize>(separator),
-        <usize>sepLen << 1
+        sepLen
       );
       offset += sepLen;
     }
@@ -1009,7 +1009,7 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
   value = load<string>(dataStart + (<usize>lastIndex << alignof<string>()));
   if (value !== null) {
     memory.copy(
-      result + (<usize>offset << 1),
+      result + offset,
       changetype<usize>(value),
       <usize>value.length << 1
     );
