@@ -1,16 +1,17 @@
 import { itoa32, utoa32, itoa64, utoa64, dtoa, itoa_buffered, dtoa_buffered, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
+import { string } from "string";
 
 // All tables are stored as two staged lookup tables (static tries)
 // because the full range of Unicode symbols can't be efficiently
 // represented as-is in memory (see Unicode spec ch 5, p.196):
-// https://www.unicode.org/versions/Unicode12.0.0/ch05.pdf
+// https://www.unicode.org/versions/Unicode13.0.0/ch05.pdf
 // Tables have been generated using these forked musl tools:
 // https://github.com/MaxGraey/musl-chartable-tools/tree/case-ignorable
 
 // Lookup table to check if a character is alphanumeric or not
 // See: https://git.musl-libc.org/cgit/musl/tree/src/ctype/alpha.h
-// size: 3904 bytes
+// size: 4032 bytes (compressed to ~3500 after binaryen)
 // @ts-ignore
 @inline @lazy const ALPHA_TABLE = memory.data<u8>([
   18,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,17,34,35,36,17,37,38,39,40,
@@ -191,7 +192,7 @@ import { ipow32 } from "../math";
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,3
 ]);
 
-// size: 1568 bytes (compressed to ~1380 bytes after binaryen)
+// size: 1568 bytes (compressed to ~1300 bytes after binaryen)
 // @ts-ignore: decorator
 @lazy @inline const CASED = memory.data<u8>([
   18,19,20,21,22,23,16,16,16,16,16,16,16,16,16,16,
@@ -274,7 +275,7 @@ import { ipow32 } from "../math";
   0,0,0,0,0,0,0,0
 ]);
 
-// size: 2976 bytes (compressed to ~2050 bytes after binaryen)
+// size: 2976 bytes (compressed to ~2000 bytes after binaryen)
 // @ts-ignore: decorator
 @lazy @inline const CASE_IGNORABLES = memory.data<u8>([
   18,16,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
@@ -1012,6 +1013,39 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
       result + (<usize>offset << 1),
       changetype<usize>(value),
       <usize>value.length << 1
+    );
+  }
+  return changetype<string>(result); // retains
+}
+
+export function joinThreeStrings(a: string, b: string, c: string): string {
+  var bytesLenA = <usize>a.length << 1;
+  var bytesLenB = <usize>b.length << 1;
+  var bytesLenC = <usize>c.length << 1;
+  var length = bytesLenA + bytesLenB + bytesLenC;
+  var result = __alloc(length, idof<string>());
+  var offset: usize = 0;
+  if (bytesLenA) {
+    memory.copy(
+      result,
+      changetype<usize>(a),
+      bytesLenA
+    );
+    offset += bytesLenA;
+  }
+  if (bytesLenB) {
+    memory.copy(
+      result + offset,
+      changetype<usize>(b),
+      bytesLenB
+    );
+    offset += bytesLenB;
+  }
+  if (bytesLenC) {
+    memory.copy(
+      result + offset,
+      changetype<usize>(c),
+      bytesLenC
     );
   }
   return changetype<string>(result); // retains
