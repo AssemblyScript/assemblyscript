@@ -1017,7 +1017,7 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
   return changetype<string>(result); // retains
 }
 
-export function joinThreeStrings(a: string, b: string, c: string): string {
+export function concat3(a: string, b: string, c: string): string {
   var bytesLenA = <usize>a.length << 1;
   var bytesLenB = <usize>b.length << 1;
   var bytesLenC = <usize>c.length << 1;
