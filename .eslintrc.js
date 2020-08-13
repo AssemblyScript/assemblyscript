@@ -122,7 +122,9 @@ module.exports = {
             "args": "none",
             "ignoreRestSiblings": false
           }
-        ]
+        ],
+        // Broken rule, demands return type annotations on setters.
+        "@typescript-eslint/explicit-module-boundary-types": "off"
       }
     },
 
