@@ -1710,7 +1710,8 @@ export class Program extends DiagnosticEmitter {
       this.checkDecorators(declaration.decorators,
         DecoratorFlags.GLOBAL |
         DecoratorFlags.FINAL |
-        DecoratorFlags.UNMANAGED
+        DecoratorFlags.UNMANAGED |
+        DecoratorFlags.EXTERN
       )
     );
     if (!parent.add(name, element)) return null;
@@ -2582,7 +2583,9 @@ export enum DecoratorFlags {
   /** Is compiled lazily. */
   LAZY = 1 << 9,
   /** Is considered unsafe code. */
-  UNSAFE = 1 << 10
+  UNSAFE = 1 << 10,
+  /** Is an extern class. */
+  EXTERN = 1 << 11,
 }
 
 export namespace DecoratorFlags {
@@ -2602,6 +2605,7 @@ export namespace DecoratorFlags {
       case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
       case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
       case DecoratorKind.UNSAFE: return DecoratorFlags.UNSAFE;
+      case DecoratorKind.EXTERN: return DecoratorFlags.EXTERN;
       default: return DecoratorFlags.NONE;
     }
   }
@@ -4101,7 +4105,9 @@ export class Class extends TypedElement {
     this.decoratorFlags = prototype.decoratorFlags;
     this.typeArguments = typeArguments;
     var usizeType = program.options.usizeType;
-    var type = new Type(usizeType.kind, usizeType.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, usizeType.size);
+    var type = this.hasDecorator(DecoratorFlags.EXTERN)
+      ? new Type(Type.externref.kind, Type.externref.flags, 0)
+      : new Type(usizeType.kind, usizeType.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, usizeType.size);
     type.classReference = this;
     this.setType(type);
 

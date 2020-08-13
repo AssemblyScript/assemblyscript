@@ -1855,5 +1855,5 @@ declare function external(...args: any[]): any;
 /** Annotates a global for lazy compilation. */
 declare function lazy(...args: any[]): any;
 
-/** Annotates a function as the explicit start function. */
-declare function start(...args: any[]): any;
+/** Annotates a class as being backed by `externref`. */
+declare function extern(constructor: Function): void;

@@ -1,0 +1,8 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "features": [
+    "reference-types"
+  ]
+}

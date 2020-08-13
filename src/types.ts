@@ -250,14 +250,14 @@ export class Type {
 
   /** Tests if this type represents a class. */
   get isClass(): bool {
-    return this.isInternalReference
+    return this.isReference
       ? this.classReference !== null
       : false;
   }
 
   /** Gets the underlying class of this type, if any. */
   getClass(): Class | null {
-    return this.isInternalReference
+    return this.isReference
       ? this.classReference
       : null;
   }

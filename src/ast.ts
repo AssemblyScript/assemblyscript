@@ -951,7 +951,8 @@ export enum DecoratorKind {
   EXTERNAL,
   BUILTIN,
   LAZY,
-  UNSAFE
+  UNSAFE,
+  EXTERN
 }
 
 export namespace DecoratorKind {
@@ -968,6 +969,7 @@ export namespace DecoratorKind {
         }
         case CharCode.e: {
           if (nameStr == "external") return DecoratorKind.EXTERNAL;
+          if (nameStr == "extern") return DecoratorKind.EXTERN;
           break;
         }
         case CharCode.f: {

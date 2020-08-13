@@ -122,3 +122,6 @@ export declare function demangle<T extends Record<string,unknown>>(
   exports: Record<string,unknown>,
   extendedExports?: Record<string,unknown>
 ): T;
+
+/** Binds a JavaScript object to its corresponding WebAssembly imports. */
+export declare function bind(name: string, obj: Record<string,unknown>, base?: Record<string,unknown>);
