@@ -1,6 +1,7 @@
 {
   "asc_flags": [
-    "--runtime none"
+    "--runtime none",
+    "--explicitStart"
   ],
   "features": [
     "reference-types"

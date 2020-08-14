@@ -7859,7 +7859,7 @@ export class Compiler extends DiagnosticEmitter {
     var parameterTypes = instance.signature.parameterTypes;
     var maxArguments = parameterTypes.length;
     var maxOperands = maxArguments;
-    if (instance.is(CommonFlags.INSTANCE)) {
+    if (instance.signature.thisType) {
       ++minOperands;
       ++maxOperands;
       --numArguments;
@@ -9375,13 +9375,25 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (!classInstance) return module.unreachable();
     if (contextualType == Type.void) constraints |= Constraints.WILL_DROP;
-    var ctor = this.ensureConstructor(classInstance, expression);
-    if (!ctor.hasDecorator(DecoratorFlags.INLINE)) {
-      // Inlined ctors haven't been compiled yet and are checked upon inline
-      // compilation of their body instead.
-      this.checkFieldInitialization(classInstance, expression);
+    if (classInstance.hasDecorator(DecoratorFlags.EXTERN)) {
+      let ctor = classInstance.constructorInstance;
+      if (!ctor) {
+        this.error(
+          DiagnosticCode.Cannot_create_an_instance_of_an_abstract_class,
+          expression.range
+        );
+        return module.unreachable();
+      }
+      return this.compileCallDirect(ctor, expression.args, expression);
+    } else {
+      let ctor = this.ensureConstructor(classInstance, expression);
+      if (!ctor.hasDecorator(DecoratorFlags.INLINE)) {
+        // Inlined ctors haven't been compiled yet and are checked upon inline
+        // compilation of their body instead.
+        this.checkFieldInitialization(classInstance, expression);
+      }
+      return this.compileInstantiate(ctor, expression.args, constraints, expression);
     }
-    return this.compileInstantiate(ctor, expression.args, constraints, expression);
   }
 
   /** Gets the compiled constructor of the specified class or generates one if none is present. */
@@ -9391,6 +9403,7 @@ export class Compiler extends DiagnosticEmitter {
     /** Report node. */
     reportNode: Node
   ): Function {
+    assert(!classInstance.hasDecorator(DecoratorFlags.EXTERN));
     var instance = classInstance.constructorInstance;
     if (instance) {
       // shortcut if already compiled
@@ -9574,7 +9587,9 @@ export class Compiler extends DiagnosticEmitter {
       ctorInstance,
       argumentExpressions,
       reportNode,
-      this.makeZero(this.options.usizeType, reportNode),
+      classInstance.hasDecorator(DecoratorFlags.EXTERN)
+        ? 0
+        : this.makeZero(classInstance.type, reportNode),
       constraints
     );
     if (getExpressionType(expr) != NativeType.None) { // possibly WILL_DROP

@@ -37,7 +37,8 @@ import {
   IndexSignature,
   isTypedElement,
   InterfacePrototype,
-  DeclaredElement
+  DeclaredElement,
+  DecoratorFlags
 } from "./program";
 
 import {
@@ -2656,8 +2657,10 @@ export class Resolver extends DiagnosticEmitter {
       if (!thisType) return null;
       ctxTypes.set(CommonNames.this_, thisType);
     } else if (classInstance) {
-      thisType = classInstance.type;
-      ctxTypes.set(CommonNames.this_, thisType);
+      if (!(classInstance.hasDecorator(DecoratorFlags.EXTERN) && prototype.is(CommonFlags.CONSTRUCTOR))) {
+        thisType = classInstance.type;
+        ctxTypes.set(CommonNames.this_, thisType);
+      }
     }
 
     // resolve parameter types
