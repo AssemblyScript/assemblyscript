@@ -3813,11 +3813,11 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   private convertFloat32ToBoolExpression(expr: ExpressionRef): ExpressionRef {
-    let module = this.module;
+    var module = this.module;
 
     // (x != 0.0) & (x == x)
-    let flow = this.currentFlow;
-    let temp = flow.getTempLocal(Type.f32);
+    var flow = this.currentFlow;
+    var temp = flow.getTempLocal(Type.f32);
     expr = module.binary(BinaryOp.AndI32,
       module.binary(BinaryOp.NeF32, module.local_tee(temp.index, expr), module.f32(0)),
       module.binary(BinaryOp.EqF32,
@@ -3830,11 +3830,11 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   private convertFloat64ToBoolExpression(expr: ExpressionRef): ExpressionRef {
-    let module = this.module;
+    var module = this.module;
 
     // (x != 0.0) & (x == x)
-    let flow = this.currentFlow;
-    let temp = flow.getTempLocal(Type.f64);
+    var flow = this.currentFlow;
+    var temp = flow.getTempLocal(Type.f64);
     expr = module.binary(BinaryOp.AndI32,
       module.binary(BinaryOp.NeF64, module.local_tee(temp.index, expr), module.f64(0)),
       module.binary(BinaryOp.EqF64,
