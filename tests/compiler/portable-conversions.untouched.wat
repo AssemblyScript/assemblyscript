@@ -516,11 +516,11 @@
   end
   global.get $portable-conversions/f
   i32.reinterpret_f32
-  i32.const 2147483647
-  i32.and
   i32.const 1
+  i32.shl
+  i32.const 2
   i32.sub
-  i32.const 2139095039
+  i32.const -16777218
   i32.le_u
   i32.eqz
   if
@@ -533,11 +533,11 @@
   end
   global.get $portable-conversions/F
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   i32.eqz
   if

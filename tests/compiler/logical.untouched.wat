@@ -1613,11 +1613,11 @@
   drop
   f64.const 0
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   if (result i32)
    unreachable
@@ -1634,11 +1634,11 @@
   drop
   f64.const 1
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   if (result i32)
    i32.const 1
@@ -1660,11 +1660,11 @@
   drop
   f64.const 1
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   if (result f64)
    f64.const 2
@@ -1672,11 +1672,11 @@
    f64.const 1
   end
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   if (result i32)
    i32.const 1
@@ -1766,11 +1766,11 @@
   end
   f32.const 1
   i32.reinterpret_f32
-  i32.const 2147483647
-  i32.and
   i32.const 1
+  i32.shl
+  i32.const 2
   i32.sub
-  i32.const 2139095039
+  i32.const -16777218
   i32.le_u
   if (result f32)
    f32.const 2
@@ -1792,11 +1792,11 @@
   end
   f32.const 0
   i32.reinterpret_f32
-  i32.const 2147483647
-  i32.and
   i32.const 1
+  i32.shl
+  i32.const 2
   i32.sub
-  i32.const 2139095039
+  i32.const -16777218
   i32.le_u
   if (result f32)
    f32.const 0
@@ -1818,11 +1818,11 @@
   end
   f64.const 1
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   if (result f64)
    f64.const 2
@@ -1844,11 +1844,11 @@
   end
   f64.const 0
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   if (result f64)
    f64.const 0
@@ -1870,11 +1870,11 @@
   end
   f32.const nan:0x400000
   i32.reinterpret_f32
-  i32.const 2147483647
-  i32.and
   i32.const 1
+  i32.shl
+  i32.const 2
   i32.sub
-  i32.const 2139095039
+  i32.const -16777218
   i32.le_u
   if (result f32)
    f32.const nan:0x400000
@@ -1896,11 +1896,11 @@
   end
   f32.const 1
   i32.reinterpret_f32
-  i32.const 2147483647
-  i32.and
   i32.const 1
+  i32.shl
+  i32.const 2
   i32.sub
-  i32.const 2139095039
+  i32.const -16777218
   i32.le_u
   if (result f32)
    f32.const 1
@@ -1922,11 +1922,11 @@
   end
   f64.const nan:0x8000000000000
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   if (result f64)
    f64.const nan:0x8000000000000
@@ -1948,11 +1948,11 @@
   end
   f64.const 1
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   if (result f64)
    f64.const 1
@@ -1974,11 +1974,11 @@
   end
   f32.const 1
   i32.reinterpret_f32
-  i32.const 2147483647
-  i32.and
   i32.const 1
+  i32.shl
+  i32.const 2
   i32.sub
-  i32.const 2139095039
+  i32.const -16777218
   i32.le_u
   if (result f32)
    f32.const nan:0x400000
@@ -2001,11 +2001,11 @@
   end
   f32.const nan:0x400000
   i32.reinterpret_f32
-  i32.const 2147483647
-  i32.and
   i32.const 1
+  i32.shl
+  i32.const 2
   i32.sub
-  i32.const 2139095039
+  i32.const -16777218
   i32.le_u
   if (result f32)
    f32.const 1
@@ -2028,11 +2028,11 @@
   end
   f64.const 1
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   if (result f64)
    f64.const nan:0x8000000000000
@@ -2055,11 +2055,11 @@
   end
   f64.const nan:0x8000000000000
   i64.reinterpret_f64
-  i64.const 9223372036854775807
-  i64.and
   i64.const 1
+  i64.shl
+  i64.const 2
   i64.sub
-  i64.const 9218868437227405311
+  i64.const -9007199254740994
   i64.le_u
   if (result f64)
    f64.const 1
