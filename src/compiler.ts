@@ -3814,8 +3814,11 @@ export class Compiler extends DiagnosticEmitter {
 
   private convertFloat32ToBoolExpression(expr: ExpressionRef): ExpressionRef {
     var module = this.module;
+    var options = this.options;
 
-    if (this.options.shrinkLevelHint == 0) {
+    if (!options.willOptimize || (
+      options.optimizeLevelHint >= 2 && options.shrinkLevelHint <= 1
+    )) {
       // bitCast(1) <= abs(bitCast(x)) <= bitCast(Infinity) or
       // (reinterpret<u32>(x) & 0x7FFFFFFF) - 1 <= 0x7F800000 - 1
       expr = module.binary(BinaryOp.LeU32,
@@ -3846,8 +3849,11 @@ export class Compiler extends DiagnosticEmitter {
 
   private convertFloat64ToBoolExpression(expr: ExpressionRef): ExpressionRef {
     var module = this.module;
+    var options = this.options;
 
-    if (this.options.shrinkLevelHint == 0) {
+    if (!options.willOptimize || (
+      options.optimizeLevelHint >= 2 && options.shrinkLevelHint <= 1
+    )) {
       // bitCast(1) <= abs(bitCast(x)) <= bitCast(Infinity) or
       // (reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF) - 1 <= 0x7FF0000000000000 - 1
       expr = module.binary(BinaryOp.LeU64,
