@@ -3682,17 +3682,7 @@ export class Compiler extends DiagnosticEmitter {
         // f32 to int
         if (fromType.kind == TypeKind.F32) {
           if (toType.isBooleanValue) {
-            // (x != 0.0) & (x == x)
-            let flow = this.currentFlow;
-            let temp = flow.getTempLocal(Type.f32);
-            expr = module.binary(BinaryOp.AndI32,
-              module.binary(BinaryOp.NeF32, module.local_tee(temp.index, expr), module.f32(0)),
-              module.binary(BinaryOp.EqF32,
-                module.local_get(temp.index, NativeType.F32),
-                module.local_get(temp.index, NativeType.F32)
-              )
-            );
-            flow.freeTempLocal(temp);
+            expr = this.convertFloat32ToBoolExpression(expr);
             wrap = false;
           } else if (toType.isSignedIntegerValue) {
             if (toType.isLongIntegerValue) {
@@ -3711,17 +3701,7 @@ export class Compiler extends DiagnosticEmitter {
         // f64 to int
         } else {
           if (toType.isBooleanValue) {
-            // (x != 0.0) & (x == x)
-            let flow = this.currentFlow;
-            let temp = flow.getTempLocal(Type.f64);
-            expr = module.binary(BinaryOp.AndI32,
-              module.binary(BinaryOp.NeF64, module.local_tee(temp.index, expr), module.f64(0)),
-              module.binary(BinaryOp.EqF64,
-                module.local_get(temp.index, NativeType.F64),
-                module.local_get(temp.index, NativeType.F64)
-              )
-            );
-            flow.freeTempLocal(temp);
+            expr = this.convertFloat64ToBoolExpression(expr);
             wrap = false;
           } else if (toType.isSignedIntegerValue) {
             if (toType.isLongIntegerValue) {
@@ -3830,6 +3810,40 @@ export class Compiler extends DiagnosticEmitter {
     return wrap
       ? this.ensureSmallIntegerWrap(expr, toType)
       : expr;
+  }
+
+  private convertFloat32ToBoolExpression(expr: ExpressionRef): ExpressionRef {
+    let module = this.module;
+
+    // (x != 0.0) & (x == x)
+    let flow = this.currentFlow;
+    let temp = flow.getTempLocal(Type.f32);
+    expr = module.binary(BinaryOp.AndI32,
+      module.binary(BinaryOp.NeF32, module.local_tee(temp.index, expr), module.f32(0)),
+      module.binary(BinaryOp.EqF32,
+        module.local_get(temp.index, NativeType.F32),
+        module.local_get(temp.index, NativeType.F32)
+      )
+    );
+    flow.freeTempLocal(temp);
+    return expr;
+  }
+
+  private convertFloat64ToBoolExpression(expr: ExpressionRef): ExpressionRef {
+    let module = this.module;
+
+    // (x != 0.0) & (x == x)
+    let flow = this.currentFlow;
+    let temp = flow.getTempLocal(Type.f64);
+    expr = module.binary(BinaryOp.AndI32,
+      module.binary(BinaryOp.NeF64, module.local_tee(temp.index, expr), module.f64(0)),
+      module.binary(BinaryOp.EqF64,
+        module.local_get(temp.index, NativeType.F64),
+        module.local_get(temp.index, NativeType.F64)
+      )
+    );
+    flow.freeTempLocal(temp);
+    return expr;
   }
 
   private compileAssertionExpression(
@@ -10810,32 +10824,10 @@ export class Compiler extends DiagnosticEmitter {
           : expr;
       }
       case TypeKind.F32: {
-        // (x != 0.0) & (x == x)
-        let flow = this.currentFlow;
-        let temp = flow.getTempLocal(Type.f32);
-        let ret = module.binary(BinaryOp.AndI32,
-          module.binary(BinaryOp.NeF32, module.local_tee(temp.index, expr), module.f32(0)),
-          module.binary(BinaryOp.EqF32,
-            module.local_get(temp.index, NativeType.F32),
-            module.local_get(temp.index, NativeType.F32)
-          )
-        );
-        flow.freeTempLocal(temp);
-        return ret;
+        return this.convertFloat32ToBoolExpression(expr);
       }
       case TypeKind.F64: {
-        // (x != 0.0) & (x == x)
-        let flow = this.currentFlow;
-        let temp = flow.getTempLocal(Type.f64);
-        let ret = module.binary(BinaryOp.AndI32,
-          module.binary(BinaryOp.NeF64, module.local_tee(temp.index, expr), module.f64(0)),
-          module.binary(BinaryOp.EqF64,
-            module.local_get(temp.index, NativeType.F64),
-            module.local_get(temp.index, NativeType.F64)
-          )
-        );
-        flow.freeTempLocal(temp);
-        return ret;
+        return this.convertFloat64ToBoolExpression(expr);
       }
       case TypeKind.EXTERNREF: {
         // TODO: non-null object might still be considered falseish
