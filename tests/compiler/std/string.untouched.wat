@@ -4828,13 +4828,13 @@
      i32.ge_u
      if
       local.get $8
-      local.tee $3
-      f64.const 0
-      f64.ne
-      local.get $3
-      local.get $3
-      f64.eq
-      i32.and
+      i64.reinterpret_f64
+      i64.const 9223372036854775807
+      i64.and
+      i64.const 1
+      i64.sub
+      i64.const 9218868437227405311
+      i64.le_u
       i32.eqz
       if
        i32.const 1

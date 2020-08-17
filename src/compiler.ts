@@ -3815,34 +3815,64 @@ export class Compiler extends DiagnosticEmitter {
   private convertFloat32ToBoolExpression(expr: ExpressionRef): ExpressionRef {
     var module = this.module;
 
-    // (x != 0.0) & (x == x)
-    var flow = this.currentFlow;
-    var temp = flow.getTempLocal(Type.f32);
-    expr = module.binary(BinaryOp.AndI32,
-      module.binary(BinaryOp.NeF32, module.local_tee(temp.index, expr), module.f32(0)),
-      module.binary(BinaryOp.EqF32,
-        module.local_get(temp.index, NativeType.F32),
-        module.local_get(temp.index, NativeType.F32)
-      )
-    );
-    flow.freeTempLocal(temp);
+    if (this.options.shrinkLevelHint == 0) {
+      // bitCast(1) <= abs(bitCast(x)) <= bitCast(Infinity) or
+      // (reinterpret<u32>(x) & 0x7FFFFFFF) - 1 <= 0x7F800000 - 1
+      expr = module.binary(BinaryOp.LeU32,
+        module.binary(BinaryOp.SubI32,
+          module.binary(BinaryOp.AndI32,
+            module.unary(UnaryOp.ReinterpretF32, expr),
+            module.i32(0x7FFFFFFF)
+          ),
+          module.i32(1)
+        ),
+        module.i32(0x7F7FFFFF)
+      );
+    } else {
+      // (x != 0.0) & (x == x)
+      let flow = this.currentFlow;
+      let temp = flow.getTempLocal(Type.f32);
+      expr = module.binary(BinaryOp.AndI32,
+        module.binary(BinaryOp.NeF32, module.local_tee(temp.index, expr), module.f32(0)),
+        module.binary(BinaryOp.EqF32,
+          module.local_get(temp.index, NativeType.F32),
+          module.local_get(temp.index, NativeType.F32)
+        )
+      );
+      flow.freeTempLocal(temp);
+    }
     return expr;
   }
 
   private convertFloat64ToBoolExpression(expr: ExpressionRef): ExpressionRef {
     var module = this.module;
 
-    // (x != 0.0) & (x == x)
-    var flow = this.currentFlow;
-    var temp = flow.getTempLocal(Type.f64);
-    expr = module.binary(BinaryOp.AndI32,
-      module.binary(BinaryOp.NeF64, module.local_tee(temp.index, expr), module.f64(0)),
-      module.binary(BinaryOp.EqF64,
-        module.local_get(temp.index, NativeType.F64),
-        module.local_get(temp.index, NativeType.F64)
-      )
-    );
-    flow.freeTempLocal(temp);
+    if (this.options.shrinkLevelHint == 0) {
+      // bitCast(1) <= abs(bitCast(x)) <= bitCast(Infinity) or
+      // (reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF) - 1 <= 0x7FF0000000000000 - 1
+      expr = module.binary(BinaryOp.LeU64,
+        module.binary(BinaryOp.SubI64,
+          module.binary(BinaryOp.AndI64,
+            module.unary(UnaryOp.ReinterpretF64, expr),
+            module.i64(0xFFFFFFFF, 0x7FFFFFFF) // 0x7FFFFFFFFFFFFFFF
+          ),
+          module.i64(1)
+        ),
+        module.i64(0xFFFFFFFF, 0x7FEFFFFF) // 0x7FEFFFFFFFFFFFFF
+      );
+    } else {
+      // (x != 0.0) & (x == x)
+      let flow = this.currentFlow;
+      let temp = flow.getTempLocal(Type.f64);
+      expr = module.binary(BinaryOp.AndI32,
+        module.binary(BinaryOp.NeF64, module.local_tee(temp.index, expr), module.f64(0)),
+        module.binary(BinaryOp.EqF64,
+          module.local_get(temp.index, NativeType.F64),
+          module.local_get(temp.index, NativeType.F64)
+        )
+      );
+      flow.freeTempLocal(temp);
+    }
     return expr;
   }
 
