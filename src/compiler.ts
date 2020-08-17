@@ -3682,7 +3682,17 @@ export class Compiler extends DiagnosticEmitter {
         // f32 to int
         if (fromType.kind == TypeKind.F32) {
           if (toType.isBooleanValue) {
-            expr = module.binary(BinaryOp.NeF32, expr, module.f32(0));
+            // (x != 0.0) & (x == x)
+            let flow = this.currentFlow;
+            let temp = flow.getTempLocal(Type.f32);
+            expr = module.binary(BinaryOp.AndI32,
+              module.binary(BinaryOp.NeF32, module.local_tee(temp.index, expr), module.f32(0)),
+              module.binary(BinaryOp.EqF32,
+                module.local_get(temp.index, NativeType.F32),
+                module.local_get(temp.index, NativeType.F32)
+              )
+            );
+            flow.freeTempLocal(temp);
             wrap = false;
           } else if (toType.isSignedIntegerValue) {
             if (toType.isLongIntegerValue) {
@@ -3701,7 +3711,17 @@ export class Compiler extends DiagnosticEmitter {
         // f64 to int
         } else {
           if (toType.isBooleanValue) {
-            expr = module.binary(BinaryOp.NeF64, expr, module.f64(0));
+            // (x != 0.0) & (x == x)
+            let flow = this.currentFlow;
+            let temp = flow.getTempLocal(Type.f64);
+            expr = module.binary(BinaryOp.AndI32,
+              module.binary(BinaryOp.NeF64, module.local_tee(temp.index, expr), module.f64(0)),
+              module.binary(BinaryOp.EqF64,
+                module.local_get(temp.index, NativeType.F64),
+                module.local_get(temp.index, NativeType.F64)
+              )
+            );
+            flow.freeTempLocal(temp);
             wrap = false;
           } else if (toType.isSignedIntegerValue) {
             if (toType.isLongIntegerValue) {

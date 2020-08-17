@@ -15,6 +15,8 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $start:bool
+  (local $0 f32)
+  (local $1 f64)
   global.get $bool/i
   i32.const 0
   i32.ne
@@ -72,8 +74,13 @@
    unreachable
   end
   global.get $bool/f
+  local.tee $0
   f32.const 0
   f32.ne
+  local.get $0
+  local.get $0
+  f32.eq
+  i32.and
   i32.const 1
   i32.eq
   i32.eqz
@@ -86,8 +93,13 @@
    unreachable
   end
   global.get $bool/F
+  local.tee $1
   f64.const 0
   f64.ne
+  local.get $1
+  local.get $1
+  f64.eq
+  i32.and
   i32.const 1
   i32.eq
   i32.eqz

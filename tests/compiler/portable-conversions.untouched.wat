@@ -12,6 +12,8 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $start:portable-conversions
+  (local $0 f32)
+  (local $1 f64)
   global.get $portable-conversions/i
   i32.const 24
   i32.shl
@@ -515,8 +517,13 @@
    unreachable
   end
   global.get $portable-conversions/f
+  local.tee $0
   f32.const 0
   f32.ne
+  local.get $0
+  local.get $0
+  f32.eq
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -527,8 +534,13 @@
    unreachable
   end
   global.get $portable-conversions/F
+  local.tee $1
   f64.const 0
   f64.ne
+  local.get $1
+  local.get $1
+  f64.eq
+  i32.and
   i32.eqz
   if
    i32.const 0
