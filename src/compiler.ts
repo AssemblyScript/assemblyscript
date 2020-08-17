@@ -3819,7 +3819,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!options.willOptimize || (
       options.optimizeLevelHint >= 2 && options.shrinkLevelHint <= 1
     )) {
-      // bitCast(1) <= abs(bitCast(x)) <= bitCast(Infinity) or
+      // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
       // (reinterpret<u32>(x) & 0x7FFFFFFF) - 1 <= 0x7F800000 - 1
       expr = module.binary(BinaryOp.LeU32,
         module.binary(BinaryOp.SubI32,
@@ -3854,7 +3854,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!options.willOptimize || (
       options.optimizeLevelHint >= 2 && options.shrinkLevelHint <= 1
     )) {
-      // bitCast(1) <= abs(bitCast(x)) <= bitCast(Infinity) or
+      // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
       // (reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF) - 1 <= 0x7FF0000000000000 - 1
       expr = module.binary(BinaryOp.LeU64,
         module.binary(BinaryOp.SubI64,
