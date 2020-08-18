@@ -1,0 +1,6 @@
+{
+  "asc_flags": [
+    "-O3",
+    "--runtime none"
+  ]
+}
