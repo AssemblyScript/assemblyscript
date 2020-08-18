@@ -34,6 +34,8 @@
   global.set $unary/i
   i32.const -2
   global.set $unary/i
+  i32.const -2
+  global.set $unary/i
   i32.const 2
   global.set $unary/i
   i32.const 0
@@ -44,14 +46,11 @@
   global.set $unary/i
   i32.const -1
   global.set $unary/i
+  i32.const 0
+  global.set $unary/i
   i32.const -1
-  local.tee $0
-  i32.const 1
-  i32.add
   global.set $unary/i
-  local.get $0
-  global.set $unary/i
-  global.get $unary/i
+  i32.const -1
   local.tee $0
   i32.const 1
   i32.sub
@@ -82,6 +81,8 @@
   global.set $unary/I
   i64.const -2
   global.set $unary/I
+  i64.const -2
+  global.set $unary/I
   i64.const 2
   global.set $unary/I
   i64.const 0
@@ -92,14 +93,11 @@
   global.set $unary/I
   i64.const -1
   global.set $unary/I
+  i64.const 0
+  global.set $unary/I
   i64.const -1
-  local.tee $1
-  i64.const 1
-  i64.add
   global.set $unary/I
-  local.get $1
-  global.set $unary/I
-  global.get $unary/I
+  i64.const -1
   local.tee $1
   i64.const 1
   i64.sub
