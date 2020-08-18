@@ -1546,7 +1546,6 @@ export class Module {
       } else {
         passes.push("precompute");
       }
-      passes.push("vacuum");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("pick-load-signs");
         passes.push("simplify-globals-optimizing");
@@ -1634,7 +1633,6 @@ export class Module {
           passes.push("vacuum");
 
           passes.push("precompute-propagate");
-          passes.push("vacuum");
 
           // replace indirect with direct calls again and inline
           passes.push("inlining-optimizing");
