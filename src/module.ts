@@ -1507,7 +1507,6 @@ export class Module {
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("simplify-locals-notee-nostructure");
-        passes.push("precompute");
         passes.push("rse");
         passes.push("vacuum");
         passes.push("ssa-nomerge");
@@ -1517,6 +1516,7 @@ export class Module {
         passes.push("merge-blocks");
       }
       if (optimizeLevel >= 3) {
+        passes.push("precompute");
         passes.push("flatten");
         passes.push("simplify-locals-notee-nostructure");
         passes.push("vacuum");

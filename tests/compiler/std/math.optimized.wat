@@ -2602,21 +2602,20 @@
   i64.const 32
   i64.shr_u
   i32.wrap_i64
-  local.set $5
+  local.set $4
   local.get $6
   i32.wrap_i64
   local.set $3
   local.get $1
   i64.reinterpret_f64
   local.tee $6
+  i32.wrap_i64
+  local.tee $7
+  local.get $6
   i64.const 32
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $6
-  i32.wrap_i64
-  local.tee $7
-  local.get $4
+  local.tee $5
   i32.const 1072693248
   i32.sub
   i32.or
@@ -2626,24 +2625,24 @@
    call $~lib/math/NativeMath.atan
    return
   end
-  local.get $4
+  local.get $5
   i32.const 30
   i32.shr_u
   i32.const 2
   i32.and
-  local.get $5
+  local.get $4
   i32.const 31
   i32.shr_u
   i32.or
   local.set $2
-  local.get $4
-  i32.const 2147483647
-  i32.and
-  local.set $4
   local.get $5
   i32.const 2147483647
   i32.and
-  local.tee $5
+  local.set $5
+  local.get $4
+  i32.const 2147483647
+  i32.and
+  local.tee $4
   local.get $3
   i32.or
   i32.eqz
@@ -2651,22 +2650,16 @@
    block $break|0
     block $case3|0
      block $case2|0
-      local.get $2
-      i32.eqz
-      local.get $2
-      i32.const 1
-      i32.eq
-      i32.or
-      i32.eqz
-      if
+      block $case1|0
        local.get $2
-       i32.const 2
-       i32.eq
-       br_if $case2|0
-       local.get $2
-       i32.const 3
-       i32.eq
-       br_if $case3|0
+       i32.eqz
+       br_if $case1|0
+       block $tablify|0
+        local.get $2
+        i32.const 1
+        i32.sub
+        br_table $case1|0 $case2|0 $case3|0 $tablify|0
+       end
        br $break|0
       end
       local.get $0
@@ -2680,66 +2673,55 @@
    end
   end
   block $folding-inner0
-   local.get $4
+   local.get $5
    local.get $7
    i32.or
    i32.eqz
    br_if $folding-inner0
-   local.get $4
+   local.get $5
    i32.const 2146435072
    i32.eq
    if
-    local.get $5
+    f64.const 2.356194490192345
+    f64.const 0.7853981633974483
+    local.get $2
+    i32.const 2
+    i32.and
+    select
+    f64.const 3.141592653589793
+    f64.const 0
+    local.get $2
+    i32.const 2
+    i32.and
+    select
+    local.get $4
     i32.const 2146435072
     i32.eq
-    if
-     f64.const 2.356194490192345
-     f64.const 0.7853981633974483
-     local.get $2
-     i32.const 2
-     i32.and
-     select
-     local.tee $0
-     f64.neg
-     local.get $0
-     local.get $2
-     i32.const 1
-     i32.and
-     select
-     return
-    else
-     f64.const 3.141592653589793
-     f64.const 0
-     local.get $2
-     i32.const 2
-     i32.and
-     select
-     local.tee $0
-     f64.neg
-     local.get $0
-     local.get $2
-     i32.const 1
-     i32.and
-     select
-     return
-    end
-    unreachable
+    select
+    local.tee $0
+    f64.neg
+    local.get $0
+    local.get $2
+    i32.const 1
+    i32.and
+    select
+    return
    end
    i32.const 1
-   local.get $5
+   local.get $4
    i32.const 2146435072
    i32.eq
-   local.get $4
+   local.get $5
    i32.const 67108864
    i32.add
-   local.get $5
+   local.get $4
    i32.lt_u
    select
    br_if $folding-inner0
-   local.get $5
+   local.get $4
    i32.const 67108864
    i32.add
-   local.get $4
+   local.get $5
    i32.lt_u
    i32.const 0
    local.get $2
@@ -10682,7 +10664,7 @@
    local.get $2
    local.get $2
    f64.mul
-   local.tee $1
+   local.tee $4
    f64.mul
    f64.const -2.5050760253406863e-08
    local.get $2
@@ -10700,13 +10682,13 @@
    f64.const 0.5
    local.get $2
    f64.mul
-   local.tee $4
+   local.tee $1
    f64.sub
    local.tee $7
    f64.const 1
    local.get $7
    f64.sub
-   local.get $4
+   local.get $1
    f64.sub
    local.get $2
    local.get $2
@@ -10720,8 +10702,8 @@
    f64.mul
    f64.add
    f64.mul
-   local.get $1
-   local.get $1
+   local.get $4
+   local.get $4
    f64.mul
    f64.const -2.7557314351390663e-07
    local.get $2
