@@ -1514,9 +1514,9 @@ export class Module {
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
         passes.push("merge-blocks");
+        passes.push("precompute");
       }
       if (optimizeLevel >= 3) {
-        passes.push("precompute");
         passes.push("flatten");
         passes.push("simplify-locals-notee-nostructure");
         passes.push("vacuum");
