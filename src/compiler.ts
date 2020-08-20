@@ -3682,7 +3682,7 @@ export class Compiler extends DiagnosticEmitter {
         // f32 to int
         if (fromType.kind == TypeKind.F32) {
           if (toType.isBooleanValue) {
-            expr = module.binary(BinaryOp.NeF32, expr, module.f32(0));
+            expr = this.makeIsTrueish(expr, Type.f32, reportNode);
             wrap = false;
           } else if (toType.isSignedIntegerValue) {
             if (toType.isLongIntegerValue) {
@@ -3701,7 +3701,7 @@ export class Compiler extends DiagnosticEmitter {
         // f64 to int
         } else {
           if (toType.isBooleanValue) {
-            expr = module.binary(BinaryOp.NeF64, expr, module.f64(0));
+            expr = this.makeIsTrueish(expr, Type.f64, reportNode);
             wrap = false;
           } else if (toType.isSignedIntegerValue) {
             if (toType.isLongIntegerValue) {
@@ -10790,32 +10790,38 @@ export class Compiler extends DiagnosticEmitter {
           : expr;
       }
       case TypeKind.F32: {
-        // (x != 0.0) & (x == x)
-        let flow = this.currentFlow;
-        let temp = flow.getTempLocal(Type.f32);
-        let ret = module.binary(BinaryOp.AndI32,
-          module.binary(BinaryOp.NeF32, module.local_tee(temp.index, expr), module.f32(0)),
-          module.binary(BinaryOp.EqF32,
-            module.local_get(temp.index, NativeType.F32),
-            module.local_get(temp.index, NativeType.F32)
-          )
+        // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
+        // (reinterpret<u32>(x) & 0x7FFFFFFF) - 1 <= 0x7F800000 - 1
+        //
+        // and finally:
+        // (reinterpret<u32>(x) << 1) - (1 << 1) <= ((0x7F800000 - 1) << 1)
+        return module.binary(BinaryOp.LeU32,
+          module.binary(BinaryOp.SubI32,
+            module.binary(BinaryOp.ShlI32,
+              module.unary(UnaryOp.ReinterpretF32, expr),
+              module.i32(1)
+            ),
+            module.i32(2) // 1 << 1
+          ),
+          module.i32(0xFEFFFFFE) // (0x7F800000 - 1) << 1
         );
-        flow.freeTempLocal(temp);
-        return ret;
       }
       case TypeKind.F64: {
-        // (x != 0.0) & (x == x)
-        let flow = this.currentFlow;
-        let temp = flow.getTempLocal(Type.f64);
-        let ret = module.binary(BinaryOp.AndI32,
-          module.binary(BinaryOp.NeF64, module.local_tee(temp.index, expr), module.f64(0)),
-          module.binary(BinaryOp.EqF64,
-            module.local_get(temp.index, NativeType.F64),
-            module.local_get(temp.index, NativeType.F64)
-          )
+        // 0 < abs(bitCast(x)) <= bitCast(Infinity) or
+        // (reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF) - 1 <= 0x7FF0000000000000 - 1
+        //
+        // and finally:
+        // (reinterpret<u64>(x) << 1) - (1 << 1) <= ((0x7FF0000000000000 - 1) << 1)
+        return module.binary(BinaryOp.LeU64,
+          module.binary(BinaryOp.SubI64,
+            module.binary(BinaryOp.ShlI64,
+              module.unary(UnaryOp.ReinterpretF64, expr),
+              module.i64(1)
+            ),
+            module.i64(2) // 1 << 1
+          ),
+          module.i64(0xFFFFFFFE, 0xFFDFFFFF) // (0x7FF0000000000000 - 1) << 1
         );
-        flow.freeTempLocal(temp);
-        return ret;
       }
       case TypeKind.EXTERNREF: {
         // TODO: non-null object might still be considered falseish
