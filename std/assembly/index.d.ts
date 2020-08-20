@@ -506,11 +506,17 @@ declare namespace f32 {
   /** Largest representable value. */
   export const MAX_VALUE: f32;
   /** Smallest normalized positive value. */
-  export const MIN_POSITIVE_VALUE: f32;
+  export const MIN_NORMAL_VALUE: f32;
   /** Smallest safely representable integer value. */
   export const MIN_SAFE_INTEGER: f32;
   /** Largest safely representable integer value. */
   export const MAX_SAFE_INTEGER: f32;
+  /** Positive infinity value. */
+  export const POSITIVE_INFINITY: f32;
+  /** Negative infinity value. */
+  export const NEGATIVE_INFINITY: f32;
+  /** Not a number value. */
+  export const NaN: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
   /** Loads a 32-bit float from memory. */
@@ -526,11 +532,17 @@ declare namespace f64 {
   /** Largest representable value. */
   export const MAX_VALUE: f64;
   /** Smallest normalized positive value. */
-  export const MIN_POSITIVE_VALUE: f64;
+  export const MIN_NORMAL_VALUE: f64;
   /** Smallest safely representable integer value. */
   export const MIN_SAFE_INTEGER: f64;
   /** Largest safely representable integer value. */
   export const MAX_SAFE_INTEGER: f64;
+  /** Positive infinity value. */
+  export const POSITIVE_INFINITY: f64;
+  /** Negative infinity value. */
+  export const NEGATIVE_INFINITY: f64;
+  /** Not a number value. */
+  export const NaN: f64;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
   /** Loads a 64-bit float from memory. */

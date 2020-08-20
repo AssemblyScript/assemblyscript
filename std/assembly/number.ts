@@ -268,15 +268,15 @@ export abstract class F32 {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly POSITIVE_INFINITY: f32 = Infinity;
+  static readonly POSITIVE_INFINITY: f32 = f32.POSITIVE_INFINITY;
 
   // @ts-ignore: decorator
   @lazy
-  static readonly NEGATIVE_INFINITY: f32 = -Infinity;
+  static readonly NEGATIVE_INFINITY: f32 = f32.NEGATIVE_INFINITY;
 
   // @ts-ignore: decorator
   @lazy
-  static readonly NaN: f32 = NaN;
+  static readonly NaN: f32 = f32.NaN;
 
   static isNaN(value: f32): bool {
     return isNaN<f32>(value);
@@ -332,15 +332,15 @@ export abstract class F64 {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly POSITIVE_INFINITY: f64 = Infinity;
+  static readonly POSITIVE_INFINITY: f64 = f64.POSITIVE_INFINITY;
 
   // @ts-ignore: decorator
   @lazy
-  static readonly NEGATIVE_INFINITY: f64 = -Infinity;
+  static readonly NEGATIVE_INFINITY: f64 = f64.NEGATIVE_INFINITY;
 
   // @ts-ignore: decorator
   @lazy
-  static readonly NaN: f64 = NaN;
+  static readonly NaN: f64 = f64.NaN;
 
   static isNaN(value: f64): bool {
     return isNaN<f64>(value);
