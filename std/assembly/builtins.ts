@@ -946,7 +946,7 @@ export namespace f64 {
   export const NEGATIVE_INFINITY: f64 = -Infinity;
 
   // @ts-ignore: decorator
-  @inline @lazy
+  @lazy
   export const NaN: f64 = 0.0 / 0.0;
 
   // @ts-ignore: decorator
