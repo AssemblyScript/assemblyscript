@@ -168,7 +168,7 @@ export declare function assert<T>(isTrueish: T, message?: string): T;
 @unsafe @builtin
 export declare function unchecked<T>(expr: T): T;
 
-// @ts-ignore: decorator	
+// @ts-ignore: decorator
 @unsafe @builtin
 export declare function call_indirect<T>(index: u32, ...args: auto[]): T;
 
@@ -847,6 +847,14 @@ export namespace f32 {
   export const MAX_SAFE_INTEGER: f32 =  16777215;
 
   // @ts-ignore: decorator
+  @lazy
+  export const POSITIVE_INFINITY: f32 =  Infinity;
+
+  // @ts-ignore: decorator
+  @lazy
+  export const NEGATIVE_INFINITY: f32 = -Infinity;
+
+  // @ts-ignore: decorator
   @builtin
   export declare function abs(value: f32): f32;
 
@@ -924,6 +932,14 @@ export namespace f64 {
   // @ts-ignore: decorator
   @lazy
   export const MAX_SAFE_INTEGER: f64 =  9007199254740991;
+
+  // @ts-ignore: decorator
+  @lazy
+  export const POSITIVE_INFINITY: f64 =  Infinity;
+
+  // @ts-ignore: decorator
+  @lazy
+  export const NEGATIVE_INFINITY: f64 = -Infinity;
 
   // @ts-ignore: decorator
   @builtin

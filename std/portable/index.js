@@ -80,7 +80,9 @@ Object.defineProperties(
     "MAX_VALUE": { value: Math.fround(3.4028235e+38), writable: false },
     "MIN_NORMAL_VALUE":  { value:  Math.fround(1.17549435e-38), writable: false },
     "MIN_SAFE_INTEGER":  { value: -16777215, writable: false },
-    "MAX_SAFE_INTEGER":  { value:  16777215, writable: false }
+    "MAX_SAFE_INTEGER":  { value:  16777215, writable: false },
+    "POSITIVE_INFINITY": { value:  Math.fround(Infinity), writable: false },
+    "NEGATIVE_INFINITY": { value: Math.fround(-Infinity), writable: false }
   }
 );
 
@@ -92,7 +94,9 @@ Object.defineProperties(
     "MAX_VALUE": { value: 1.7976931348623157e+308, writable: false },
     "MIN_NORMAL_VALUE":  { value: 2.2250738585072014e-308 , writable: false },
     "MIN_SAFE_INTEGER":  { value: -9007199254740991, writable: false },
-    "MAX_SAFE_INTEGER":  { value:  9007199254740991, writable: false }
+    "MAX_SAFE_INTEGER":  { value:  9007199254740991, writable: false },
+    "POSITIVE_INFINITY": { value:  Infinity, writable: false },
+    "NEGATIVE_INFINITY": { value: -Infinity, writable: false }
   }
 );
 

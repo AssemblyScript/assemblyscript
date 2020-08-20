@@ -235,6 +235,10 @@ declare namespace f32 {
   export const MIN_SAFE_INTEGER: f32;
   /** Largest safely representable integer value. */
   export const MAX_SAFE_INTEGER: f32;
+  /** Positive infinity value. */
+  export const POSITIVE_INFINITY: f32;
+  /** Negative infinity value. */
+  export const NEGATIVE_INFINITY: f32;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
   /** Returns a boolean value that indicates whether a value is the reserved value NaN (not a number). */
@@ -263,6 +267,10 @@ declare namespace f64 {
   export const MIN_SAFE_INTEGER: f64;
   /** Largest safely representable integer value. */
   export const MAX_SAFE_INTEGER: f64;
+  /** Positive infinity value. */
+  export const POSITIVE_INFINITY: f64;
+  /** Negative infinity value. */
+  export const NEGATIVE_INFINITY: f64;
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
   /** Returns a boolean value that indicates whether a value is the reserved value NaN (not a number). */
