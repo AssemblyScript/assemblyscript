@@ -2653,7 +2653,7 @@
     end
    end
    f64.const 1
-   local.set $5
+   local.set $6
    i32.const 1
    local.get $2
    i32.const 43
@@ -2675,7 +2675,7 @@
     i32.const 45
     i32.eq
     select
-    local.set $5
+    local.set $6
     local.get $4
     i32.const 2
     i32.add
@@ -2845,25 +2845,25 @@
       local.get $1
       i32.ge_u
       if
-       local.get $6
-       local.get $6
-       f64.eq
-       local.get $6
-       f64.const 0
-       f64.ne
-       i32.and
-       i32.eqz
+       local.get $5
+       i64.reinterpret_f64
+       i64.const 1
+       i64.shl
+       i64.const 2
+       i64.sub
+       i64.const -9007199254740994
+       i64.gt_u
        br_if $folding-inner0
        br $while-break|2
       end
-      local.get $6
+      local.get $5
       local.get $1
       f64.convert_i32_s
       f64.mul
       local.get $2
       f64.convert_i32_u
       f64.add
-      local.set $6
+      local.set $5
       local.get $4
       i32.const 2
       i32.add
@@ -2874,8 +2874,8 @@
    end
    local.get $3
    call $~lib/rt/pure/__release
-   local.get $5
    local.get $6
+   local.get $5
    f64.mul
    return
   end
