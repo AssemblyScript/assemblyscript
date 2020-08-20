@@ -27,10 +27,13 @@ const commands = {
 };
 
 let pm = "npm";
-if (process.env.npm_config_user_agent.test(/\byarn\//))
-  pm = "yarn";
-else if (process.env.npm_config_user_agent.test(/\bpnpm\//))
-  pm = "pnpm";
+if (typeof process.env.npm_config_user_agent === "string") {
+  if (process.env.npm_config_user_agent.test(/\byarn\//)) {
+    pm = "yarn";
+  } else if (process.env.npm_config_user_agent.test(/\bpnpm\//)) {
+    pm = "pnpm";
+  }
+}
 
 const asinitOptions = {
   "help": {
