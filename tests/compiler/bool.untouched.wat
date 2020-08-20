@@ -19,7 +19,7 @@
  (global $bool/f5 (mut f32) (f32.const 0))
  (global $bool/f6 (mut f32) (f32.const inf))
  (global $bool/f7 (mut f32) (f32.const 0))
- (global $~lib/builtins/f32.MIN_NORMAL_VALUE f32 (f32.const 1.1754943508222875e-38))
+ (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const 1.401298464324817e-45))
  (global $bool/f8 (mut f32) (f32.const 0))
  (global $bool/f9 (mut f32) (f32.const 0))
  (global $bool/F (mut f64) (f64.const 2))
@@ -32,7 +32,7 @@
  (global $bool/F5 (mut f64) (f64.const 0))
  (global $bool/F6 (mut f64) (f64.const inf))
  (global $bool/F7 (mut f64) (f64.const 0))
- (global $~lib/builtins/f64.MIN_NORMAL_VALUE f64 (f64.const 2.2250738585072014e-308))
+ (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
  (global $bool/F8 (mut f64) (f64.const 0))
  (global $bool/F9 (mut f64) (f64.const 0))
  (global $bool/uu (mut i32) (i32.const 2))
@@ -277,7 +277,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MIN_NORMAL_VALUE
+  global.get $~lib/builtins/f32.MIN_VALUE
   global.set $bool/f8
   global.get $bool/f8
   i32.reinterpret_f32
@@ -293,12 +293,12 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 30
+   i32.const 29
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MIN_NORMAL_VALUE
+  global.get $~lib/builtins/f32.MIN_VALUE
   f32.neg
   global.set $bool/f9
   global.get $bool/f9
@@ -315,7 +315,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 33
+   i32.const 31
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -334,7 +334,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 36
+   i32.const 34
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -353,7 +353,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 38
+   i32.const 36
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -372,7 +372,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 40
+   i32.const 38
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -391,7 +391,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 42
+   i32.const 40
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -413,7 +413,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 44
+   i32.const 42
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -434,7 +434,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 46
+   i32.const 44
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -456,7 +456,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 48
+   i32.const 46
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -475,7 +475,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 50
+   i32.const 48
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -497,12 +497,12 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 52
+   i32.const 50
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_NORMAL_VALUE
+  global.get $~lib/builtins/f64.MIN_VALUE
   global.set $bool/F8
   global.get $bool/F8
   i64.reinterpret_f64
@@ -518,12 +518,12 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 55
+   i32.const 52
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_NORMAL_VALUE
+  global.get $~lib/builtins/f64.MIN_VALUE
   f64.neg
   global.set $bool/F9
   global.get $bool/F9
@@ -540,7 +540,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 58
+   i32.const 54
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -554,7 +554,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 61
+   i32.const 57
    i32.const 1
    call $~lib/builtins/abort
    unreachable

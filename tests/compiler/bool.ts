@@ -25,11 +25,9 @@ var f6 = <f32>+Infinity;
 assert(<bool>f6 == true);
 var f7 = <f32>-Infinity;
 assert(<bool>f7 == true);
-// @ts-ignore
-var f8 = +f32.MIN_NORMAL_VALUE;
+var f8 = +f32.MIN_VALUE;
 assert(<bool>f8 == true);
-// @ts-ignore
-var f9 = -f32.MIN_NORMAL_VALUE;
+var f9 = -f32.MIN_VALUE;
 assert(<bool>f9 == true);
 
 var F = <f64>2;
@@ -50,11 +48,9 @@ var F6 = +Infinity;
 assert(<bool>F6 == true);
 var F7 = -Infinity;
 assert(<bool>F7 == true);
-// @ts-ignore
-var F8 = +f64.MIN_NORMAL_VALUE;
+var F8 = +f64.MIN_VALUE;
 assert(<bool>F8 == true);
-// @ts-ignore
-var F9 = -f64.MIN_NORMAL_VALUE;
+var F9 = -f64.MIN_VALUE;
 assert(<bool>F9 == true);
 
 var uu = <u8>2;
