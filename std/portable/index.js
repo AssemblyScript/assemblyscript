@@ -81,8 +81,8 @@ Object.defineProperties(
     "MIN_NORMAL_VALUE":  { value:  Math.fround(1.17549435e-38), writable: false },
     "MIN_SAFE_INTEGER":  { value: -16777215, writable: false },
     "MAX_SAFE_INTEGER":  { value:  16777215, writable: false },
-    "POSITIVE_INFINITY": { value:  Math.fround(Infinity), writable: false },
-    "NEGATIVE_INFINITY": { value: Math.fround(-Infinity), writable: false }
+    "POSITIVE_INFINITY": { value:  Infinity, writable: false },
+    "NEGATIVE_INFINITY": { value: -Infinity, writable: false }
   }
 );
 
