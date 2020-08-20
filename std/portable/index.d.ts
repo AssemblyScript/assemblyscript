@@ -230,7 +230,7 @@ declare namespace f32 {
   /** Largest representable value. */
   export const MAX_VALUE: f32;
   /** Smallest normalized positive value. */
-  export const MIN_POSITIVE_VALUE: f32;
+  export const MIN_NORMAL_VALUE: f32;
   /** Smallest safely representable integer value. */
   export const MIN_SAFE_INTEGER: f32;
   /** Largest safely representable integer value. */
@@ -258,7 +258,7 @@ declare namespace f64 {
   /** Largest representable value. */
   export const MAX_VALUE: f64;
   /** Smallest normalized positive value. */
-  export const MIN_POSITIVE_VALUE: f64;
+  export const MIN_NORMAL_VALUE: f64;
   /** Smallest safely representable integer value. */
   export const MIN_SAFE_INTEGER: f64;
   /** Largest safely representable integer value. */
