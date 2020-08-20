@@ -82,7 +82,8 @@ Object.defineProperties(
     "MIN_SAFE_INTEGER":  { value: -16777215, writable: false },
     "MAX_SAFE_INTEGER":  { value:  16777215, writable: false },
     "POSITIVE_INFINITY": { value:  Infinity, writable: false },
-    "NEGATIVE_INFINITY": { value: -Infinity, writable: false }
+    "NEGATIVE_INFINITY": { value: -Infinity, writable: false },
+    "NaN": { value: NaN, writable: false }
   }
 );
 
@@ -96,7 +97,8 @@ Object.defineProperties(
     "MIN_SAFE_INTEGER":  { value: -9007199254740991, writable: false },
     "MAX_SAFE_INTEGER":  { value:  9007199254740991, writable: false },
     "POSITIVE_INFINITY": { value:  Infinity, writable: false },
-    "NEGATIVE_INFINITY": { value: -Infinity, writable: false }
+    "NEGATIVE_INFINITY": { value: -Infinity, writable: false },
+    "NaN": { value: NaN, writable: false }
   }
 );
 

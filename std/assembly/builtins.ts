@@ -855,6 +855,10 @@ export namespace f32 {
   export const NEGATIVE_INFINITY: f32 = -Infinity;
 
   // @ts-ignore: decorator
+  @inline @lazy
+  export const NaN: f32 = 0.0 / 0.0;
+
+  // @ts-ignore: decorator
   @builtin
   export declare function abs(value: f32): f32;
 
@@ -940,6 +944,10 @@ export namespace f64 {
   // @ts-ignore: decorator
   @lazy
   export const NEGATIVE_INFINITY: f64 = -Infinity;
+
+  // @ts-ignore: decorator
+  @inline @lazy
+  export const NaN: f64 = 0.0 / 0.0;
 
   // @ts-ignore: decorator
   @builtin
