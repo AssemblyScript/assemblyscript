@@ -855,7 +855,7 @@ export namespace f32 {
   export const NEGATIVE_INFINITY: f32 = -Infinity;
 
   // @ts-ignore: decorator
-  @inline @lazy
+  @lazy
   export const NaN: f32 = 0.0 / 0.0;
 
   // @ts-ignore: decorator
