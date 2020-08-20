@@ -6,9 +6,56 @@ var u = <u32>2;
 assert(<bool>u == true);
 var U = <u64>2;
 assert(<bool>U == true);
+
 var f = <f32>2;
 assert(<bool>f == true);
+var f0 = <f32>+0.0;
+assert(<bool>f0 == false);
+var f1 = <f32>-0.0;
+assert(<bool>f1 == false);
+var f2 = <f32>+NaN;
+assert(<bool>f2 == false);
+var f3 = <f32>-NaN;
+assert(<bool>f3 == false);
+var f4 = +f32.MAX_VALUE;
+assert(<bool>f4 == true);
+var f5 = -f32.MAX_VALUE;
+assert(<bool>f5 == true);
+var f6 = <f32>+Infinity;
+assert(<bool>f6 == true);
+var f7 = <f32>-Infinity;
+assert(<bool>f7 == true);
+// @ts-ignore
+var f8 = +f32.MIN_NORMAL_VALUE;
+assert(<bool>f8 == true);
+// @ts-ignore
+var f9 = -f32.MIN_NORMAL_VALUE;
+assert(<bool>f9 == true);
+
 var F = <f64>2;
 assert(<bool>F == true);
+var F0 = <f64>+0.0;
+assert(<bool>F0 == false);
+var F1 = <f64>-0.0;
+assert(<bool>F1 == false);
+var F2 = <f64>+NaN;
+assert(<bool>F2 == false);
+var F3 = <f64>-NaN;
+assert(<bool>F3 == false);
+var F4 = +f64.MAX_VALUE;
+assert(<bool>F4 == true);
+var F5 = -f64.MAX_VALUE;
+assert(<bool>F5 == true);
+var F6 = +Infinity;
+assert(<bool>F6 == true);
+var F7 = -Infinity;
+assert(<bool>F7 == true);
+// @ts-ignore
+var F8 = +f64.MIN_NORMAL_VALUE;
+assert(<bool>F8 == true);
+// @ts-ignore
+var F9 = -f64.MIN_NORMAL_VALUE;
+assert(<bool>F9 == true);
+
 var uu = <u8>2;
 assert(<bool>uu == true);
