@@ -10664,7 +10664,7 @@
    local.get $2
    local.get $2
    f64.mul
-   local.tee $1
+   local.tee $4
    f64.mul
    f64.const -2.5050760253406863e-08
    local.get $2
@@ -10682,13 +10682,13 @@
    f64.const 0.5
    local.get $2
    f64.mul
-   local.tee $4
+   local.tee $1
    f64.sub
    local.tee $7
    f64.const 1
    local.get $7
    f64.sub
-   local.get $4
+   local.get $1
    f64.sub
    local.get $2
    local.get $2
@@ -10702,8 +10702,8 @@
    f64.mul
    f64.add
    f64.mul
-   local.get $1
-   local.get $1
+   local.get $4
+   local.get $4
    f64.mul
    f64.const -2.7557314351390663e-07
    local.get $2
