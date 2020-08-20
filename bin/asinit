@@ -28,9 +28,9 @@ const commands = {
 
 let pm = "npm";
 if (typeof process.env.npm_config_user_agent === "string") {
-  if (process.env.npm_config_user_agent.test(/\byarn\//)) {
+  if (/\byarn\//.test(process.env.npm_config_user_agent)) {
     pm = "yarn";
-  } else if (process.env.npm_config_user_agent.test(/\bpnpm\//)) {
+  } else if (/\bpnpm\//.test(process.env.npm_config_user_agent)) {
     pm = "pnpm";
   }
 }
