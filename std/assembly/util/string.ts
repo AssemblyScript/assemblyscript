@@ -458,6 +458,7 @@ import { ipow32 } from "../math";
 // @ts-ignore: decorator
 @inline
 export const enum CharCode {
+  PERCENT = 0x25,
   PLUS = 0x2B,
   MINUS = 0x2D,
   DOT = 0x2E,
