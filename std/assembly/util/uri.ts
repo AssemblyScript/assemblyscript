@@ -9,7 +9,7 @@
 import { CharCode } from "./string";
 
 // @ts-ignore: decorator
-@lazy const URI_SAFE = memory.data<u8>([
+@lazy export const URI_SAFE = memory.data<u8>([
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -21,7 +21,7 @@ import { CharCode } from "./string";
 ]);
 
 // @ts-ignore: decorator
-@lazy const URL_SAFE = memory.data<u8>([
+@lazy export const URL_SAFE = memory.data<u8>([
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
@@ -45,7 +45,7 @@ export function escapeUnsafe(dst: usize, src: usize, len: isize, table: usize): 
 
     while (
       i < len && ch <= 127 &&
-      load<u8>(table + <usize>load<u16>(src + (i << 1))) != 0
+      load<u8>(table + (ch = <u32>load<u16>(src + (i << 1)))) != 0
     ) ++i;
 
     if (i > org) {
