@@ -43,10 +43,16 @@ export function escapeUnsafe(dst: usize, src: usize, len: isize, table: usize): 
     org = i;
     let ch = <u32>load<u16>(src + (i << 1));
 
-    while (
-      i < len && ch <= 127 &&
-      load<u8>(table + (ch = <u32>load<u16>(src + (i << 1)))) != 0
-    ) ++i;
+    while (i < len) {
+      if (ch <= 127) {
+        if (!load<u8>(table + ch)) break;
+        ++i;
+        ch = <u32>load<u16>(src + (i << 1));
+        continue;
+      }
+      if (ch > 0xD800 || ch == h0) break;
+      ++i;
+    }
 
     if (i > org) {
       if (!org) {
