@@ -1,50 +1,39 @@
 (module
- (type $i (func (result i32)))
- (type $ii (func (param i32) (result i32)))
- (type $v (func))
- (memory $0 0)
- (table $0 2 anyfunc)
- (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
+ (type $none_=>_i32 (func (result i32)))
+ (type $none_=>_none (func))
+ (memory $0 1)
+ (data (i32.const 1024) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\01")
+ (table $0 2 funcref)
+ (elem (i32.const 1) $getter-call/C#get:x~anonymous|0)
+ (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "test" (func $getter-call/test))
- (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (start $~start)
+ (func $getter-call/C#get:x~anonymous|0 (result i32)
+  i32.const 42
+ )
+ (func $getter-call/test (result i32)
+  (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  get_local $0
-  i32.const 1073741824
-  i32.gt_u
-  if
-   unreachable
-  end
-  get_global $~lib/allocator/arena/offset
-  tee_local $1
-  get_local $0
-  i32.const 1
-  get_local $0
-  i32.const 1
-  i32.gt_u
-  select
+  global.get $~lib/rt/stub/offset
+  i32.const 16
   i32.add
-  i32.const 7
+  local.tee $3
+  i32.const 16
   i32.add
-  i32.const -8
-  i32.and
-  tee_local $2
-  current_memory
-  tee_local $3
+  local.tee $0
+  memory.size
+  local.tee $2
   i32.const 16
   i32.shl
+  local.tee $1
   i32.gt_u
   if
-   get_local $3
-   get_local $2
-   get_local $1
+   local.get $2
+   local.get $0
+   local.get $1
    i32.sub
    i32.const 65535
    i32.add
@@ -52,17 +41,17 @@
    i32.and
    i32.const 16
    i32.shr_u
-   tee_local $0
-   get_local $3
-   get_local $0
+   local.tee $1
+   local.get $2
+   local.get $1
    i32.gt_s
    select
-   grow_memory
+   memory.grow
    i32.const 0
    i32.lt_s
    if
-    get_local $0
-    grow_memory
+    local.get $1
+    memory.grow
     i32.const 0
     i32.lt_s
     if
@@ -70,29 +59,29 @@
     end
    end
   end
-  get_local $2
-  set_global $~lib/allocator/arena/offset
-  get_local $1
- )
- (func $getter-call/C#get:x~anonymous|1 (; 1 ;) (type $i) (result i32)
-  i32.const 42
- )
- (func $getter-call/test (; 2 ;) (type $i) (result i32)
-  i32.const 0
-  call $~lib/allocator/arena/__memory_allocate
-  drop
-  i32.const 0
-  set_global $~argc
+  local.get $0
+  global.set $~lib/rt/stub/offset
+  local.get $3
+  i32.const 16
+  i32.sub
+  local.tee $0
+  i32.const 16
+  i32.store
+  local.get $0
   i32.const 1
-  call_indirect (type $i)
+  i32.store offset=4
+  local.get $0
+  i32.const 3
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  i32.const 1040
+  i32.load
+  call_indirect (type $none_=>_i32)
  )
- (func $start (; 3 ;) (type $v)
-  i32.const 8
-  set_global $~lib/allocator/arena/startOffset
-  get_global $~lib/allocator/arena/startOffset
-  set_global $~lib/allocator/arena/offset
- )
- (func $null (; 4 ;) (type $v)
-  nop
+ (func $~start
+  i32.const 1056
+  global.set $~lib/rt/stub/offset
  )
 )

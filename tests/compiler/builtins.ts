@@ -1,4 +1,5 @@
 var b: bool;
+class C {}
 
 // type checks
 
@@ -10,17 +11,33 @@ assert(isReference<string>());
 assert(!isReference<usize>());
 assert(isArray<i32[]>());
 assert(!isArray<usize>());
+assert(isArrayLike<i32[]>());
+assert(isArrayLike<string>());
+assert(isArrayLike<Uint8Array>());
+assert(!isArrayLike<i32>());
+assert(isFunction<() => void>());
+assert(!isFunction<u32>());
+assert(isNullable<C | null>());
+assert(!isNullable<C>());
 
 assert(isInteger(<i32>1));
 assert(!isInteger(<f32>1));
 assert(isFloat(<f32>1));
 assert(!isFloat(<i32>1));
-assert(isReference(changetype<string>(null)));
-assert(!isReference(changetype<usize>(null)));
-assert(isString("1"));
+assert(isReference(changetype<string>(0)));
+assert(!isReference(changetype<usize>(0)));
+assert(isString(""));
+assert(isString("abc"));
 assert(!isString(1));
-assert(isArray(changetype<i32[]>(null)));
-assert(!isArray(changetype<usize>(null)));
+assert(isArray(changetype<i32[]>(0)));
+assert(isArrayLike(changetype<i32[]>(0)));
+assert(isArrayLike(changetype<string>(0)));
+assert(isArrayLike(changetype<Uint8Array>(0)));
+assert(!isArray(changetype<usize>(0)));
+assert(isFunction(changetype<() => void>(0)));
+assert(!isFunction(changetype<u32>(0)));
+assert(isNullable(changetype<C | null>(0)));
+assert(!isNullable(changetype<C>(0)));
 
 // evaluation
 
@@ -141,6 +158,11 @@ F = trunc<f64>(1.25);
 b = isNaN<f64>(1.25);
 b = isFinite<f64>(1.25);
 
+// prefer right type if left is a numeric literal
+
+F = min(0, 1.0);
+f = max(0, f);
+
 // load and store
 
 i = load<i32>(8); store<i32>(8, i);
@@ -239,8 +261,13 @@ F = select<f64>(12.5, 25.0, false);
 
 if (!i) unreachable();
 
-var fn = function(a: i32, b: i32): void {};
-call_indirect(fn, 1, 2);
+var fn = function(a: i32, b: i32): i32 { return a + b; };
+assert(fn(1,2) == 3);
+assert(5 == call_indirect(fn.index, 2, 3)); // ctxType i32
+assert(fn.name == "");
+assert(fn.length == 2);
+assert(changetype<(a: i32, b: i32) => i32>(fn).length == 2);
+assert(fn.toString() == "function() { [native code] }");
 
 // AS specific
 
@@ -257,6 +284,12 @@ assert(sizeof<i64>() == 8);
 sizeof<isize>();
 assert(sizeof<f32>() == 4);
 assert(sizeof<f64>() == 8);
+
+assert(alignof<u8>() == 0);
+assert(alignof<u16>() == 1);
+assert(alignof<u32>() == 2);
+assert(alignof<u64>() == 3);
+assert(alignof<bool>() == 0);
 
 class Foo<T> { a: T; b: T; }
 assert(offsetof<Foo<i32>>("a") == 0);
@@ -314,27 +347,6 @@ assert(f32.MAX_VALUE == 3.40282347e+38);
 assert(f32.MIN_SAFE_INTEGER == -16777215);
 assert(f32.MAX_SAFE_INTEGER == 16777215);
 assert(f32.EPSILON == 1.19209290e-07);
-assert(isNaN<f32>(f32.NaN));
-assert(f32.isSafeInteger(f32.MIN_SAFE_INTEGER - 1) == false);
-assert(f32.isSafeInteger(f32.MIN_SAFE_INTEGER) == true);
-assert(f32.isSafeInteger(+0.0) == true);
-assert(f32.isSafeInteger(-0.0) == true);
-assert(f32.isSafeInteger(NaN) == false);
-assert(f32.isSafeInteger(Infinity) == false);
-assert(f32.isSafeInteger(f32.MAX_SAFE_INTEGER) == true);
-assert(f32.isSafeInteger(f32.MAX_SAFE_INTEGER + 1) == false);
-assert(f32.isSafeInteger(0.5) == false);
-assert(f32.isInteger(+0.0) == true);
-assert(f32.isInteger(-0.0) == true);
-assert(f32.isInteger(NaN) == false);
-assert(f32.isInteger(Infinity) == false);
-assert(f32.isInteger(f32.EPSILON) == false);
-assert(f32.isInteger(+1.0) == true);
-assert(f32.isInteger(-1.0) == true);
-assert(f32.isInteger(f32.MIN_SAFE_INTEGER) == true);
-assert(f32.isInteger(f32.MAX_SAFE_INTEGER) == true);
-assert(f32.isInteger(+0.5) == false);
-assert(f32.isInteger(-1.5) == false);
 
 assert(f64.MIN_NORMAL_VALUE == 2.2250738585072014e-308);
 assert(f64.MIN_VALUE == 5e-324);
@@ -342,27 +354,6 @@ assert(f64.MAX_VALUE == 1.7976931348623157e+308);
 assert(f64.MIN_SAFE_INTEGER == -9007199254740991);
 assert(f64.MAX_SAFE_INTEGER == 9007199254740991);
 assert(f64.EPSILON == 2.2204460492503131e-16);
-assert(isNaN<f64>(f64.NaN));
-assert(f64.isSafeInteger(f64.MIN_SAFE_INTEGER - 1) == false);
-assert(f64.isSafeInteger(f64.MIN_SAFE_INTEGER) == true);
-assert(f64.isSafeInteger(+0.0) == true);
-assert(f64.isSafeInteger(-0.0) == true);
-assert(f64.isSafeInteger(NaN) == false);
-assert(f64.isSafeInteger(Infinity) == false);
-assert(f64.isSafeInteger(f64.MAX_SAFE_INTEGER) == true);
-assert(f64.isSafeInteger(f64.MAX_SAFE_INTEGER + 1) == false);
-assert(f64.isSafeInteger(0.5) == false);
-assert(f64.isInteger(+0.0) == true);
-assert(f64.isInteger(-0.0) == true);
-assert(f64.isInteger(NaN) == false);
-assert(f64.isInteger(Infinity) == false);
-assert(f64.isInteger(f64.EPSILON) == false);
-assert(f64.isInteger(+1.0) == true);
-assert(f64.isInteger(-1.0) == true);
-assert(f64.isInteger(f64.MIN_SAFE_INTEGER) == true);
-assert(f64.isInteger(f64.MAX_SAFE_INTEGER) == true);
-assert(f64.isInteger(+0.5) == false);
-assert(f64.isInteger(-1.5) == false);
 
 // inline-assembler
 
@@ -438,6 +429,73 @@ f64.store(8, 1.0);
 f32.trunc(1.0);
 f64.trunc(1.0);
 
-// should be importable
-import { isNaN as isItNaN } from "builtins";
-isItNaN<f64>(1);
+assert(Atomics.isLockFree(0) == false);
+assert(Atomics.isLockFree(1) == true);
+assert(Atomics.isLockFree(2) == true);
+assert(Atomics.isLockFree(3) == false);
+assert(Atomics.isLockFree(4) == true);
+assert(Atomics.isLockFree(5) == false);
+assert(Atomics.isLockFree(8) == false);
+
+{
+  let a = idof<() => void>();
+  let b = idof<() => void>();
+  let c = idof<(a: u32) => void>();
+  let d = idof<(val: C) => C>();
+  let e = idof<(val2: C) => C>();
+  trace("signatures", 5, a, b, c, d, e);
+
+  assert(a == b, "testing");
+  assert(a != c);
+  assert(c == idof<(b: u32) => void>());
+  assert(d == e);
+}
+
+{
+  assert(nameof<() => void>() == "Function");
+  assert(nameof<(a: C) => i32>() == "Function");
+  assert(nameof<C>() == "C");
+  assert(nameof<string>() == "String");
+  assert(nameof<bool>() == "bool");
+  assert(nameof<i8>() == "i8");
+  assert(nameof<u8>() == "u8");
+  assert(nameof<i16>() == "i16");
+  assert(nameof<u16>() == "u16");
+  assert(nameof<i32>() == "i32");
+  assert(nameof<u32>() == "u32");
+  assert(nameof<f32>() == "f32");
+  assert(nameof<i64>() == "i64");
+  assert(nameof<u64>() == "u64");
+  assert(nameof<f64>() == "f64");
+  assert(nameof<isize>() == "isize");
+  assert(nameof<usize>() == "usize");
+  assert(nameof<void>() == "void");
+  assert(nameof("some value") == "String");
+  assert(nameof((): void => {}) == "Function");
+}
+
+assert(isVoid<void>());
+assert(!isVoid<i8>());
+assert(!isVoid<u8>());
+assert(!isVoid<i16>());
+assert(!isVoid<u16>());
+assert(!isVoid<i32>());
+assert(!isVoid<u32>());
+assert(!isVoid<f32>());
+assert(!isVoid<i64>());
+assert(!isVoid<u64>());
+assert(!isVoid<f64>());
+assert(!isVoid<C>());
+assert(!isVoid<string>());
+// assert(!isVoid<v128>());
+
+assert(lengthof<() => void>() == 0);
+assert(lengthof<(a: i32) => void>() == 1);
+assert(lengthof<(a: i32, b: C) => void>() == 2);
+assert(lengthof<(a: i32, b: C, c: string) => void>() == 3);
+assert(lengthof((a: i32, b: i32, c: i32, d: i32): void => {}) == 4);
+
+assert(isInteger<ReturnType<() => i32>>());
+assert(isInteger<returnof<() => i32>>());
+assert(isManaged<returnof<() => C>>());
+assert(isManaged<ReturnType<() => C>>());

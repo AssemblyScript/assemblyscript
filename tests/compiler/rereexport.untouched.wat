@@ -1,31 +1,192 @@
 (module
- (type $iii (func (param i32 i32) (result i32)))
- (type $v (func))
- (memory $0 0)
- (table $0 1 anyfunc)
- (elem (i32.const 0) $null)
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (memory $0 1)
+ (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00r\00e\00e\00x\00p\00o\00r\00t\00.\00t\00s\00")
+ (data (i32.const 64) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00r\00e\00r\00e\00e\00x\00p\00o\00r\00t\00.\00t\00s\00")
+ (table $0 1 funcref)
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
- (global $HEAP_BASE i32 (i32.const 8))
+ (global $exports/Car.TIRES i32 (i32.const 4))
+ (global $exports/vehicles.Car.TIRES i32 (i32.const 4))
+ (global $exports/outer.inner.a i32 (i32.const 42))
+ (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
+ (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $reexport/car (mut i32) (i32.const 0))
+ (global $rereexport/car (mut i32) (i32.const 0))
+ (global $rereexport/exportsNamespaceCar (mut i32) (i32.const 0))
+ (global $~lib/heap/__heap_base i32 (i32.const 108))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "a" (global $export/a))
  (export "renamed_a" (global $export/a))
  (export "renamed_b" (global $export/b))
  (export "renamed_renamed_b" (global $export/b))
- (start $start)
- (func $export/add (; 0 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+ (export "default" (func $export-default/theDefault))
+ (export "renamed_default" (func $export-default/theDefault))
+ (export "exportstar.add" (func $export/add))
+ (export "exportstar.sub" (func $export/sub))
+ (export "exportstar.renamed_mul" (func $export/mul))
+ (export "exportstar.a" (global $export/a))
+ (export "exportstar.b" (global $export/b))
+ (export "exportstar.renamed_c" (global $export/c))
+ (export "exportstar.ns.two" (func $export/ns.two))
+ (export "exportstar.default.two" (func $export/ns.two))
+ (start $~start)
+ (func $export/add (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
   i32.add
  )
- (func $export/mul (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+ (func $export/mul (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
   i32.mul
  )
- (func $start (; 2 ;) (type $v)
+ (func $exports/add (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.add
+ )
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  memory.size
+  local.set $1
+  local.get $1
+  i32.const 16
+  i32.shl
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.gt_u
+  if
+   local.get $0
+   local.get $2
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const 65535
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.set $3
+   local.get $1
+   local.tee $4
+   local.get $3
+   local.tee $5
+   local.get $4
+   local.get $5
+   i32.gt_s
+   select
+   local.set $4
+   local.get $4
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $3
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $0
+  global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.const 1073741808
+  i32.gt_u
+  if
+   unreachable
+  end
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.set $2
+  local.get $0
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  local.tee $3
+  i32.const 16
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_u
+  select
+  local.set $5
+  local.get $2
+  local.get $5
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
+  local.get $2
+  i32.const 16
+  i32.sub
+  local.set $6
+  local.get $6
+  local.get $5
+  i32.store
+  i32.const 1
+  drop
+  local.get $6
+  i32.const 1
+  i32.store offset=4
+  local.get $6
+  local.get $1
+  i32.store offset=8
+  local.get $6
+  local.get $0
+  i32.store offset=12
+  local.get $2
+ )
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $exports/Car#constructor (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 4
+   i32.const 3
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+ )
+ (func $exports/Car#get:numDoors (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+ )
+ (func $start:reexport
   i32.const 1
   i32.const 2
   call $export/add
@@ -34,7 +195,170 @@
   call $export/mul
   i32.add
   drop
+  i32.const 2
+  i32.const 2
+  call $exports/add
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 37
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  i32.const 2
+  call $export/mul
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 38
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/heap/__heap_base
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
+  i32.const 0
+  i32.const 2
+  call $exports/Car#constructor
+  global.set $reexport/car
+  global.get $reexport/car
+  call $exports/Car#get:numDoors
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 40
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
- (func $null (; 3 ;) (type $v)
+ (func $start:rereexport
+  call $start:reexport
+  i32.const 2
+  i32.const 2
+  call $export/add
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 15
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  i32.const 2
+  call $export/mul
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 16
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  i32.const 2
+  call $exports/Car#constructor
+  global.set $rereexport/car
+  global.get $rereexport/car
+  call $exports/Car#get:numDoors
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 18
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  i32.const 2
+  call $exports/add
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 21
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  i32.const 2
+  call $export/mul
+  i32.const 4
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 22
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  i32.const 2
+  call $exports/Car#constructor
+  global.set $rereexport/exportsNamespaceCar
+  global.get $rereexport/exportsNamespaceCar
+  call $exports/Car#get:numDoors
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 24
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $export-default/theDefault
+  nop
+ )
+ (func $export/sub (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.sub
+ )
+ (func $export/ns.one
+  nop
+ )
+ (func $export/ns.two
+  nop
+ )
+ (func $~start
+  call $start:rereexport
  )
 )

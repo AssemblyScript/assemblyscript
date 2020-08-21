@@ -6,5 +6,3 @@ trace("three_int", 3, 1, 2, 3);
 trace("four_int", 4, 1, 2, 3, 4);
 trace("five_int", 5, 1, 2, 3, 4, 5);
 trace("five_dbl", 5, 1.1, 2.2, 3.3, 4.4, 5.5);
-
-export function main(): void {}

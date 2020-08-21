@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "test": "npm run a && npm run b && npm run c && npm run d && npm run e && npm run f && npm run g && npm run as && npm run h",
+    "a": "cd ./packages/a && node ../../../../bin/asc assembly/index.ts --noEmit --runtime stub",
+    "as": "cd ./packages/as && node ../../../../bin/asc as/index.ts --noEmit --runtime stub",
+    "b": "cd ./packages/b && node ../../../../bin/asc assembly/index.ts --noEmit --runtime stub && node ../../../../bin/asc assembly/index.ts --noEmit --runtime stub --listFiles",
+    "c": "cd ./packages/c && node ../../../../bin/asc assembly/index.ts --noEmit --runtime stub",
+    "d": "cd ./packages/d && node ../../../../bin/asc assembly/index.ts --path packages --noEmit --runtime stub --traceResolution",
+    "e": "cd ./packages/d/packages/e && node ../../../../../../bin/asc assembly/index.ts --noEmit --runtime stub",
+    "f": "cd ./packages/d/packages/e/packages/f && node ../../../../../../../../bin/asc assembly/index.ts --noEmit --runtime stub",
+    "g": "cd ./packages/g && node test.js",
+    "h": "cd ./packages/h && node ../../../../bin/asc assembly/index.ts --noEmit --runtime none --traceResolution"
+  },
+  "author": "Willem Wyndham",
+  "license": "Apache-2.0"
+}

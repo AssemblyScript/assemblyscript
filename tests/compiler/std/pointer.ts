@@ -1,8 +1,7 @@
 // A pointer arithmetic experiment
 
-class Pointer<T> {
+@final @unmanaged class Pointer<T> {
 
-  // FIXME: does not inline, always yields a trampoline
   @inline constructor(offset: usize = 0) {
     return changetype<Pointer<T>>(offset);
   }

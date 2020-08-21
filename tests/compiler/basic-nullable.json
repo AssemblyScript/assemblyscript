@@ -1,0 +1,9 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "AS204: Type 'i32' cannot be nullable.",
+    "EOF"
+  ]
+}

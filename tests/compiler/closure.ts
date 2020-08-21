@@ -1,16 +1,24 @@
-// TODO
+function testParam($local0: i32, $local1: i32): (value: i32) => i32 {
+  return function inner(value: i32) {
+    return $local1; // closure
+  };
+}
+testParam(1, 2);
 
-// export function outer(): () => () => i32 {
-//   var inner: i32 = 42; // should become a global right away
-//   return function a(): () => i32 {
-//     return function b(): i32 {
-//       return inner++;
-//     };
-//   };
-// }
+function testVar(): (value: i32) => i32 {
+  var $local0 = 0;
+  return function inner(value: i32) {
+    return $local0; // closure
+  };
+}
+testVar();
 
-// var fnA = outer();
-// var fnB = fnA();
+function testLet(): (value: i32) => i32 {
+  let $local0 = 0;
+  return function inner(value: i32) {
+    return $local0; // closure
+  };
+}
+testLet();
 
-// assert(fnB() == 42);
-// assert(fnB() == 43);
+ERROR("EOF");

@@ -15,11 +15,11 @@ export class Invalid<T> {
   get instanceGetter<T>(a: i32) {}
   set instanceSetter<T>() {}
 }
-// ERROR 1092: "Type parameters cannot appear on a constructor declaration." in class.ts:15:13
-// ERROR 1110: "Type expected." in class.ts:18:20
-// ERROR 1094: "An accessor cannot have type parameters." in class.ts:23:20
-// ERROR 1054: "A 'get' accessor cannot have parameters." in class.ts:23:6
-// ERROR 1110: "Type expected." in class.ts:23:31
-// ERROR 1094: "An accessor cannot have type parameters." in class.ts:28:20
-// ERROR 1049: "A 'set' accessor must have exactly one parameter." in class.ts:28:6
-// ERROR 1095: "A 'set' accessor cannot have a return type annotation." in class.ts:28:25
+// ERROR 1092: "Type parameters cannot appear on a constructor declaration." in class.ts(15,14+3)
+// ERROR 1110: "Type expected." in class.ts(18,21+0)
+// ERROR 1094: "An accessor cannot have type parameters." in class.ts(23,21+3)
+// ERROR 1054: "A 'get' accessor cannot have parameters." in class.ts(23,7+14)
+// ERROR 1110: "Type expected." in class.ts(23,32+0)
+// ERROR 1094: "An accessor cannot have type parameters." in class.ts(28,21+3)
+// ERROR 1049: "A 'set' accessor must have exactly one parameter." in class.ts(28,7+14)
+// ERROR 1095: "A 'set' accessor cannot have a return type annotation." in class.ts(28,26+1)

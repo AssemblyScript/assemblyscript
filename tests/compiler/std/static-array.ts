@@ -1,5 +1,3 @@
-import "allocator/arena"; // needed just because std/Array#[]= calls __grow conditionally
-
 const i: i32[] = [1, 2];
 const I: i64[] = [3, 4];
 const f: f32[] = [1.5, 2.5];

@@ -1,13 +1,10 @@
 (module
- (type $v (func))
+ (type $none_=>_none (func))
  (memory $0 0)
- (table $0 1 anyfunc)
- (elem (i32.const 0) $null)
- (global $HEAP_BASE i32 (i32.const 8))
+ (table $0 1 funcref)
  (export "memory" (memory $0))
- (export "table" (table $0))
- (start $start)
- (func $start (; 0 ;) (type $v)
+ (start $~start)
+ (func $start:literals
   i32.const 0
   drop
   i32.const 1
@@ -97,6 +94,7 @@
   i32.const 0
   drop
  )
- (func $null (; 1 ;) (type $v)
+ (func $~start
+  call $start:literals
  )
 )

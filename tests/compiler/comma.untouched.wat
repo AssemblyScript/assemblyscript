@@ -1,209 +1,187 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\08\00\00\00c\00o\00m\00m\00a\00.\00t\00s\00")
- (table $0 1 anyfunc)
- (elem (i32.const 0) $null)
+ (data (i32.const 16) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00c\00o\00m\00m\00a\00.\00t\00s\00")
+ (table $0 1 funcref)
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 28))
  (export "memory" (memory $0))
- (export "table" (table $0))
- (start $start)
- (func $start (; 1 ;) (type $v)
+ (start $~start)
+ (func $start:comma
   (local $0 i32)
   (local $1 i32)
-  block
-   block (result i32)
-    get_global $comma/a
-    tee_local $0
-    i32.const 1
-    i32.add
-    set_global $comma/a
-    get_local $0
-   end
-   set_global $comma/b
-   get_global $comma/a
-   drop
-  end
-  get_global $comma/a
+  global.get $comma/a
+  local.tee $0
+  i32.const 1
+  i32.add
+  global.set $comma/a
+  local.get $0
+  global.set $comma/b
+  global.get $comma/a
+  drop
+  global.get $comma/a
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 4
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   i32.const 0
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 5
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block
-   get_global $comma/a
    i32.const 1
-   i32.add
-   set_global $comma/a
-   get_global $comma/a
-   set_global $comma/b
-  end
-  get_global $comma/a
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 8
-   i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/a
+  i32.const 1
+  i32.add
+  global.set $comma/a
+  global.get $comma/a
+  global.set $comma/b
+  global.get $comma/a
   i32.const 2
   i32.eq
   i32.eqz
   if
    i32.const 0
+   i32.const 32
    i32.const 8
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $comma/b
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
    i32.const 9
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  block (result i32)
-   i32.const 0
-   set_global $comma/b
-   get_global $comma/b
-  end
-  set_global $comma/a
-  block (result i32)
-   get_global $comma/a
-   i32.const 1
-   i32.add
-   set_global $comma/a
-   get_global $comma/a
-  end
-  set_global $comma/b
-  get_global $comma/a
+  i32.const 0
+  global.set $comma/b
+  global.get $comma/b
+  global.set $comma/a
+  global.get $comma/a
+  i32.const 1
+  i32.add
+  global.set $comma/a
+  global.get $comma/a
+  global.set $comma/b
+  global.get $comma/a
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 14
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 15
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block (result i32)
-   get_global $comma/a
    i32.const 1
-   i32.add
-   set_global $comma/a
-   block (result i32)
-    get_global $comma/a
-    set_global $comma/b
-    get_global $comma/b
-   end
+   call $~lib/builtins/abort
+   unreachable
   end
-  set_global $comma/a
-  get_global $comma/a
+  global.get $comma/a
+  i32.const 1
+  i32.add
+  global.set $comma/a
+  global.get $comma/a
+  global.set $comma/b
+  global.get $comma/b
+  global.set $comma/a
+  global.get $comma/a
   i32.const 2
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 18
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  get_global $comma/b
+  global.get $comma/b
   i32.const 2
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 19
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  block $break|0
-   i32.const 0
-   set_local $1
-   loop $repeat|0
-    get_local $1
-    get_global $comma/a
-    i32.lt_s
-    i32.eqz
-    br_if $break|0
+  i32.const 0
+  local.set $1
+  loop $for-loop|0
+   local.get $1
+   global.get $comma/a
+   i32.lt_s
+   local.set $0
+   local.get $0
+   if
     nop
-    block
-     get_global $comma/a
-     i32.const 1
-     i32.sub
-     set_global $comma/a
-     get_local $1
-     i32.const 1
-     i32.add
-     set_local $1
-    end
-    br $repeat|0
-    unreachable
+    global.get $comma/a
+    i32.const 1
+    i32.sub
+    global.set $comma/a
+    local.get $1
+    i32.const 1
+    i32.add
+    local.set $1
+    br $for-loop|0
    end
-   unreachable
   end
-  get_local $1
+  local.get $1
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 22
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  block
-   i32.const 1
-   drop
-   i32.const 2
-   drop
-   i32.const 3
-   drop
-  end
+  i32.const 1
+  drop
+  i32.const 2
+  drop
+  i32.const 3
+  drop
  )
- (func $null (; 2 ;) (type $v)
+ (func $~start
+  call $start:comma
  )
 )

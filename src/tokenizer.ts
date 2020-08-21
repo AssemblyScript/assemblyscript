@@ -1,11 +1,15 @@
 /**
- * A TypeScript tokenizer modified for AssemblyScript.
+ * @fileoverview A TypeScript tokenizer modified for AssemblyScript.
  *
- * Skips over trivia and provides a general mark/reset mechanism for the parser to utilize on
- * ambiguous tokens.
+ * The `Tokenizer` scans over a source file and returns one syntactic token
+ * at a time that the parser will combine to an abstract syntax tree.
  *
- * @module tokenizer
- *//***/
+ * It skips over trivia like comments and whitespace and provides a general
+ * mark/reset mechanism for the parser to utilize on ambiguous tokens, with
+ * one token of lookahead otherwise.
+ *
+ * @license Apache-2.0
+ */
 
 import {
   DiagnosticCode,
@@ -176,164 +180,124 @@ export function tokenFromKeyword(text: string): Token {
   assert(text.length);
   switch (text.charCodeAt(0)) {
     case CharCode.a: {
-      switch (text) {
-        case "abstract": return Token.ABSTRACT;
-        case "as": return Token.AS;
-        case "async": return Token.ASYNC;
-        case "await": return Token.AWAIT;
-      }
+      if (text == "abstract") return Token.ABSTRACT;
+      if (text == "as") return Token.AS;
+      if (text == "async") return Token.ASYNC;
+      if (text == "await") return Token.AWAIT;
       break;
     }
     case CharCode.b: {
-      switch (text) {
-        case "break": return Token.BREAK;
-      }
+      if (text == "break") return Token.BREAK;
       break;
     }
     case CharCode.c: {
-      switch (text) {
-        case "case": return Token.CASE;
-        case "catch": return Token.CATCH;
-        case "class": return Token.CLASS;
-        case "continue": return Token.CONTINUE;
-        case "const": return Token.CONST;
-        case "constructor": return Token.CONSTRUCTOR;
-      }
+      if (text == "case") return Token.CASE;
+      if (text == "catch") return Token.CATCH;
+      if (text == "class") return Token.CLASS;
+      if (text == "continue") return Token.CONTINUE;
+      if (text == "const") return Token.CONST;
+      if (text == "constructor") return Token.CONSTRUCTOR;
       break;
     }
     case CharCode.d: {
-      switch (text) {
-        case "debugger": return Token.DEBUGGER;
-        case "declare": return Token.DECLARE;
-        case "default": return Token.DEFAULT;
-        case "delete": return Token.DELETE;
-        case "do": return Token.DO;
-      }
+      if (text == "debugger") return Token.DEBUGGER;
+      if (text == "declare") return Token.DECLARE;
+      if (text == "default") return Token.DEFAULT;
+      if (text == "delete") return Token.DELETE;
+      if (text == "do") return Token.DO;
       break;
     }
     case CharCode.e: {
-      switch (text) {
-        case "else": return Token.ELSE;
-        case "enum": return Token.ENUM;
-        case "export": return Token.EXPORT;
-        case "extends": return Token.EXTENDS;
-      }
+      if (text == "else") return Token.ELSE;
+      if (text == "enum") return Token.ENUM;
+      if (text == "export") return Token.EXPORT;
+      if (text == "extends") return Token.EXTENDS;
       break;
     }
     case CharCode.f: {
-      switch (text) {
-        case "false": return Token.FALSE;
-        case "finally": return Token.FINALLY;
-        case "for": return Token.FOR;
-        case "from": return Token.FROM;
-        case "function": return Token.FUNCTION;
-      }
+      if (text == "false") return Token.FALSE;
+      if (text == "finally") return Token.FINALLY;
+      if (text == "for") return Token.FOR;
+      if (text == "from") return Token.FROM;
+      if (text == "function") return Token.FUNCTION;
       break;
     }
     case CharCode.g: {
-      switch (text) {
-        case "get": return Token.GET;
-      }
+      if (text == "get") return Token.GET;
       break;
     }
     case CharCode.i: {
-      switch (text) {
-        case "if": return Token.IF;
-        case "implements": return Token.IMPLEMENTS;
-        case "import": return Token.IMPORT;
-        case "in": return Token.IN;
-        case "instanceof": return Token.INSTANCEOF;
-        case "interface": return Token.INTERFACE;
-        case "is": return Token.IS;
-      }
+      if (text == "if") return Token.IF;
+      if (text == "implements") return Token.IMPLEMENTS;
+      if (text == "import") return Token.IMPORT;
+      if (text == "in") return Token.IN;
+      if (text == "instanceof") return Token.INSTANCEOF;
+      if (text == "interface") return Token.INTERFACE;
+      if (text == "is") return Token.IS;
       break;
     }
     case CharCode.k: {
-      switch (text) {
-        case "keyof": return Token.KEYOF;
-      }
+      if (text == "keyof") return Token.KEYOF;
       break;
     }
     case CharCode.l: {
-      switch (text) {
-        case "let": return Token.LET;
-      }
+      if (text == "let") return Token.LET;
       break;
     }
     case CharCode.m: {
-      switch (text) {
-        case "module": return Token.MODULE;
-      }
+      if (text == "module") return Token.MODULE;
       break;
     }
     case CharCode.n: {
-      switch (text) {
-        case "namespace": return Token.NAMESPACE;
-        case "new": return Token.NEW;
-        case "null": return Token.NULL;
-      }
+      if (text == "namespace") return Token.NAMESPACE;
+      if (text == "new") return Token.NEW;
+      if (text == "null") return Token.NULL;
       break;
     }
     case CharCode.o: {
-      switch (text) {
-        case "of": return Token.OF;
-      }
+      if (text == "of") return Token.OF;
       break;
     }
     case CharCode.p: {
-      switch (text) {
-        case "package": return Token.PACKAGE;
-        case "private": return Token.PRIVATE;
-        case "protected": return Token.PROTECTED;
-        case "public": return Token.PUBLIC;
-      }
+      if (text == "package") return Token.PACKAGE;
+      if (text == "private") return Token.PRIVATE;
+      if (text == "protected") return Token.PROTECTED;
+      if (text == "public") return Token.PUBLIC;
       break;
     }
     case CharCode.r: {
-      switch (text) {
-        case "readonly": return Token.READONLY;
-        case "return": return Token.RETURN;
-      }
+      if (text == "readonly") return Token.READONLY;
+      if (text == "return") return Token.RETURN;
       break;
     }
     case CharCode.s: {
-      switch (text) {
-        case "set": return Token.SET;
-        case "static": return Token.STATIC;
-        case "super": return Token.SUPER;
-        case "switch": return Token.SWITCH;
-      }
+      if (text == "set") return Token.SET;
+      if (text == "static") return Token.STATIC;
+      if (text == "super") return Token.SUPER;
+      if (text == "switch") return Token.SWITCH;
       break;
     }
     case CharCode.t: {
-      switch (text) {
-        case "this": return Token.THIS;
-        case "throw": return Token.THROW;
-        case "true": return Token.TRUE;
-        case "try": return Token.TRY;
-        case "type": return Token.TYPE;
-        case "typeof": return Token.TYPEOF;
-      }
+      if (text == "this") return Token.THIS;
+      if (text == "throw") return Token.THROW;
+      if (text == "true") return Token.TRUE;
+      if (text == "try") return Token.TRY;
+      if (text == "type") return Token.TYPE;
+      if (text == "typeof") return Token.TYPEOF;
       break;
     }
     case CharCode.v: {
-      switch (text) {
-        case "var": return Token.VAR;
-        case "void": return Token.VOID;
-      }
+      if (text == "var") return Token.VAR;
+      if (text == "void") return Token.VOID;
       break;
     }
     case CharCode.w: {
-      switch (text) {
-        case "while": return Token.WHILE;
-        case "with": return Token.WITH;
-      }
+      if (text == "while") return Token.WHILE;
+      if (text == "with") return Token.WITH;
       break;
     }
     case CharCode.y: {
-      switch (text) {
-        case "yield": return Token.YIELD;
-      }
+      if (text == "yield") return Token.YIELD;
       break;
     }
   }
@@ -350,16 +314,30 @@ export function tokenIsAlsoIdentifier(token: Token): bool {
     case Token.FROM:
     case Token.FOR:
     case Token.GET:
+    case Token.INSTANCEOF:
     case Token.IS:
     case Token.KEYOF:
     case Token.MODULE:
     case Token.NAMESPACE:
+    case Token.NULL:
     case Token.READONLY:
     case Token.SET:
     case Token.TYPE:
     case Token.VOID: return true;
     default: return false;
   }
+}
+
+export function isIllegalVariableIdentifier(name: string): bool {
+  assert(name.length);
+  switch (name.charCodeAt(0)) {
+    case CharCode.d: return name == "delete";
+    case CharCode.f: return name == "for";
+    case CharCode.i: return name == "instanceof";
+    case CharCode.n: return name == "null";
+    case CharCode.v: return name == "void";
+  }
+  return false;
 }
 
 export function operatorTokenToString(token: Token): string {
@@ -421,62 +399,46 @@ export function operatorTokenToString(token: Token): string {
 
 export class Range {
 
-  source: Source;
   start: i32;
   end: i32;
+  source!: Source;
+  debugInfoRef: usize = 0;
 
-  // TODO: set these while tokenizing
-  // line: i32;
-  // column: i32;
-
-  constructor(source: Source, start: i32, end: i32) {
-    this.source = source;
+  constructor(start: i32, end: i32) {
     this.start = start;
     this.end = end;
   }
 
   static join(a: Range, b: Range): Range {
     if (a.source != b.source) throw new Error("source mismatch");
-    return new Range(a.source,
+    let range = new Range(
       a.start < b.start ? a.start : b.start,
       a.end > b.end ? a.end : b.end
     );
+    range.source = a.source;
+    return range;
+  }
+
+  equals(other: Range): bool {
+    return this.source == other.source && this.start == other.start && this.end == other.end;
   }
 
   get atStart(): Range {
-    return new Range(this.source, this.start, this.start);
+    let range = new Range(this.start, this.start);
+    range.source = this.source;
+    return range;
   }
+
   get atEnd(): Range {
-    return new Range(this.source, this.end, this.end);
-  }
-
-  get line(): i32 {
-    var text = this.source.text;
-    var line = 1;
-    for (let pos = this.start; pos >= 0; --pos) {
-      if (text.charCodeAt(pos) == CharCode.LINEFEED) line++;
-    }
-    return line;
-  }
-
-  get column(): i32 {
-    var text = this.source.text;
-    var column = 0;
-    for (let pos = this.start - 1; pos >= 0; --pos) {
-      if (text.charCodeAt(pos) == CharCode.LINEFEED) break;
-      ++column;
-    }
-    return column;
+    let range = new Range(this.end, this.end);
+    range.source = this.source;
+    return range;
   }
 
   toString(): string {
     return this.source.text.substring(this.start, this.end);
   }
-
-  debugInfoRef: usize = 0;
 }
-
-declare function parseFloat(str: string): f64;
 
 /** Handler for intercepting comments while tokenizing. */
 export type CommentHandler = (kind: CommentKind, text: string, range: Range) => void;
@@ -500,41 +462,48 @@ export class Tokenizer extends DiagnosticEmitter {
   /** Constructs a new tokenizer. */
   constructor(source: Source, diagnostics: DiagnosticMessage[] | null = null) {
     super(diagnostics);
+
+    if (!diagnostics) diagnostics = [];
+    this.diagnostics = diagnostics;
     this.source = source;
-    this.pos = 0;
-    this.end = source.text.length;
-    this.diagnostics = diagnostics ? diagnostics : new Array();
 
     var text = source.text;
-
+    var end = text.length;
+    var pos = 0;
     // skip bom
     if (
-      this.pos < this.end &&
-      text.charCodeAt(this.pos) == CharCode.BYTEORDERMARK
+      pos < end &&
+      text.charCodeAt(pos) == CharCode.BYTEORDERMARK
     ) {
-      ++this.pos;
+      ++pos;
     }
 
     // skip shebang
     if (
-      this.pos + 1 < this.end &&
-      text.charCodeAt(this.pos) == CharCode.HASH &&
-      text.charCodeAt(this.pos + 1) == CharCode.EXCLAMATION
+      pos + 1 < end &&
+      text.charCodeAt(pos) == CharCode.HASH &&
+      text.charCodeAt(pos + 1) == CharCode.EXCLAMATION
     ) {
-      this.pos += 2;
+      pos += 2;
       while (
-        this.pos < this.end &&
-        text.charCodeAt(this.pos) != CharCode.LINEFEED
+        pos < end &&
+        text.charCodeAt(pos) != CharCode.LINEFEED
       ) {
-        ++this.pos;
+        ++pos;
       }
       // 'next' now starts at lf or eof
     }
+    this.pos = pos;
+    this.end = end;
   }
 
   next(identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): Token {
     this.nextToken = -1;
-    return this.token = this.unsafeNext(identifierHandling);
+    var token: Token;
+    do token = this.unsafeNext(identifierHandling);
+    while (token == Token.INVALID);
+    this.token = token;
+    return token;
   }
 
   private unsafeNext(
@@ -542,14 +511,16 @@ export class Tokenizer extends DiagnosticEmitter {
     maxTokenLength: i32 = i32.MAX_VALUE
   ): Token {
     var text = this.source.text;
-    while (this.pos < this.end) {
-      this.tokenPos = this.pos;
-      let c = text.charCodeAt(this.pos);
+    var end = this.end;
+    var pos = this.pos;
+    while (pos < end) {
+      this.tokenPos = pos;
+      let c = text.charCodeAt(pos);
       switch (c) {
         case CharCode.CARRIAGERETURN: {
           if (!(
-            ++this.pos < this.end &&
-            text.charCodeAt(this.pos) == CharCode.LINEFEED
+            ++pos < end &&
+            text.charCodeAt(pos) == CharCode.LINEFEED
           )) break;
           // otherwise fall-through
         }
@@ -558,174 +529,190 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode.VERTICALTAB:
         case CharCode.FORMFEED:
         case CharCode.SPACE: {
-          ++this.pos;
+          ++pos;
           break;
         }
         case CharCode.EXCLAMATION: {
-          ++this.pos;
+          ++pos;
           if (
-            maxTokenLength > 1 && this.pos < this.end &&
-            text.charCodeAt(this.pos) == CharCode.EQUALS
+            maxTokenLength > 1 && pos < end &&
+            text.charCodeAt(pos) == CharCode.EQUALS
           ) {
-            ++this.pos;
+            ++pos;
             if (
-              maxTokenLength > 2 && this.pos < this.end &&
-              text.charCodeAt(this.pos) == CharCode.EQUALS
+              maxTokenLength > 2 && pos < end &&
+              text.charCodeAt(pos) == CharCode.EQUALS
             ) {
-              ++this.pos;
+              this.pos = pos + 1;
               return Token.EXCLAMATION_EQUALS_EQUALS;
             }
+            this.pos = pos;
             return Token.EXCLAMATION_EQUALS;
           }
+          this.pos = pos;
           return Token.EXCLAMATION;
         }
         case CharCode.DOUBLEQUOTE:
         case CharCode.SINGLEQUOTE:
         case CharCode.BACKTICK: { // TODO
+          this.pos = pos;
           return Token.STRINGLITERAL; // expects a call to readString
         }
         case CharCode.PERCENT: {
-          ++this.pos;
+          ++pos;
           if (
-            maxTokenLength > 1 && this.pos < this.end &&
-            text.charCodeAt(this.pos) == CharCode.EQUALS
+            maxTokenLength > 1 && pos < end &&
+            text.charCodeAt(pos) == CharCode.EQUALS
           ) {
-            ++this.pos;
+            this.pos = pos + 1;
             return Token.PERCENT_EQUALS;
           }
+          this.pos = pos;
           return Token.PERCENT;
         }
         case CharCode.AMPERSAND: {
-          ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.AMPERSAND) {
-              ++this.pos;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            let chr = text.charCodeAt(pos);
+            if (chr == CharCode.AMPERSAND) {
+              this.pos = pos + 1;
               return Token.AMPERSAND_AMPERSAND;
             }
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
-              ++this.pos;
+            if (chr == CharCode.EQUALS) {
+              this.pos = pos + 1;
               return Token.AMPERSAND_EQUALS;
             }
           }
+          this.pos = pos;
           return Token.AMPERSAND;
         }
         case CharCode.OPENPAREN: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.OPENPAREN;
         }
         case CharCode.CLOSEPAREN: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.CLOSEPAREN;
         }
         case CharCode.ASTERISK: {
-          ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
-              ++this.pos;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            let chr = text.charCodeAt(pos);
+            if (chr == CharCode.EQUALS) {
+              this.pos = pos + 1;
               return Token.ASTERISK_EQUALS;
             }
-            if (text.charCodeAt(this.pos) == CharCode.ASTERISK) {
-              ++this.pos;
+            if (chr == CharCode.ASTERISK) {
+              ++pos;
               if (
-                maxTokenLength > 2 && this.pos < this.end &&
-                text.charCodeAt(this.pos) == CharCode.EQUALS
+                maxTokenLength > 2 && pos < end &&
+                text.charCodeAt(pos) == CharCode.EQUALS
               ) {
-                ++this.pos;
+                this.pos = pos + 1;
                 return Token.ASTERISK_ASTERISK_EQUALS;
               }
+              this.pos = pos;
               return Token.ASTERISK_ASTERISK;
             }
           }
+          this.pos = pos;
           return Token.ASTERISK;
         }
         case CharCode.PLUS: {
-          ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.PLUS) {
-              ++this.pos;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            let chr = text.charCodeAt(pos);
+            if (chr == CharCode.PLUS) {
+              this.pos = pos + 1;
               return Token.PLUS_PLUS;
             }
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
-              ++this.pos;
+            if (chr == CharCode.EQUALS) {
+              this.pos = pos + 1;
               return Token.PLUS_EQUALS;
             }
           }
+          this.pos = pos;
           return Token.PLUS;
         }
         case CharCode.COMMA: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.COMMA;
         }
         case CharCode.MINUS: {
-          ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.MINUS) {
-              ++this.pos;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            let chr = text.charCodeAt(pos);
+            if (chr == CharCode.MINUS) {
+              this.pos = pos + 1;
               return Token.MINUS_MINUS;
             }
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
-              ++this.pos;
+            if (chr == CharCode.EQUALS) {
+              this.pos = pos + 1;
               return Token.MINUS_EQUALS;
             }
           }
+          this.pos = pos;
           return Token.MINUS;
         }
         case CharCode.DOT: {
-          ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
-            if (isDecimalDigit(text.charCodeAt(this.pos))) {
-              --this.pos;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            let chr = text.charCodeAt(pos);
+            if (isDecimalDigit(chr)) {
+              this.pos = pos - 1;
               return Token.FLOATLITERAL; // expects a call to readFloat
             }
             if (
-              maxTokenLength > 2 && this.pos + 1 < this.end &&
-              text.charCodeAt(this.pos) == CharCode.DOT &&
-              text.charCodeAt(this.pos + 1) == CharCode.DOT
+              maxTokenLength > 2 && pos + 1 < end &&
+              chr == CharCode.DOT &&
+              text.charCodeAt(pos + 1) == CharCode.DOT
             ) {
-              this.pos += 2;
+              this.pos = pos + 2;
               return Token.DOT_DOT_DOT;
             }
           }
+          this.pos = pos;
           return Token.DOT;
         }
         case CharCode.SLASH: {
-          let commentStartPos = this.pos;
-          ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.SLASH) { // single-line
+          let commentStartPos = pos;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            let chr = text.charCodeAt(pos);
+            if (chr == CharCode.SLASH) { // single-line
               let commentKind = CommentKind.LINE;
               if (
-                this.pos + 1 < this.end &&
-                text.charCodeAt(this.pos + 1) == CharCode.SLASH
+                pos + 1 < end &&
+                text.charCodeAt(pos + 1) == CharCode.SLASH
               ) {
-                ++this.pos;
+                ++pos;
                 commentKind = CommentKind.TRIPLE;
               }
-              while (++this.pos < this.end) {
-                if (text.charCodeAt(this.pos) == CharCode.LINEFEED) {
-                  ++this.pos;
+              while (++pos < end) {
+                if (text.charCodeAt(pos) == CharCode.LINEFEED) {
+                  ++pos;
                   break;
                 }
               }
               if (this.onComment) {
                 this.onComment(
                   commentKind,
-                  text.substring(commentStartPos, this.pos),
-                  this.range(commentStartPos, this.pos)
+                  text.substring(commentStartPos, pos),
+                  this.range(commentStartPos, pos)
                 );
               }
               break;
             }
-            if (text.charCodeAt(this.pos) == CharCode.ASTERISK) { // multi-line
+            if (chr == CharCode.ASTERISK) { // multi-line
               let closed = false;
-              while (++this.pos < this.end) {
-                c = text.charCodeAt(this.pos);
+              while (++pos < end) {
+                c = text.charCodeAt(pos);
                 if (
                   c == CharCode.ASTERISK &&
-                  this.pos + 1 < this.end &&
-                  text.charCodeAt(this.pos + 1) == CharCode.SLASH
+                  pos + 1 < end &&
+                  text.charCodeAt(pos + 1) == CharCode.SLASH
                 ) {
-                  this.pos += 2;
+                  pos += 2;
                   closed = true;
                   break;
                 }
@@ -733,22 +720,23 @@ export class Tokenizer extends DiagnosticEmitter {
               if (!closed) {
                 this.error(
                   DiagnosticCode._0_expected,
-                  this.range(this.pos), "*/"
+                  this.range(pos), "*/"
                 );
               } else if (this.onComment) {
                 this.onComment(
                   CommentKind.BLOCK,
-                  text.substring(commentStartPos, this.pos),
-                  this.range(commentStartPos, this.pos)
+                  text.substring(commentStartPos, pos),
+                  this.range(commentStartPos, pos)
                 );
               }
               break;
             }
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
-              ++this.pos;
+            if (chr == CharCode.EQUALS) {
+              this.pos = pos + 1;
               return Token.SLASH_EQUALS;
             }
           }
+          this.pos = pos;
           return Token.SLASH;
         }
         case CharCode._0:
@@ -761,187 +749,210 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode._7:
         case CharCode._8:
         case CharCode._9: {
+          this.pos = pos;
           return this.testInteger()
             ? Token.INTEGERLITERAL // expects a call to readInteger
             : Token.FLOATLITERAL;  // expects a call to readFloat
         }
         case CharCode.COLON: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.COLON;
         }
         case CharCode.SEMICOLON: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.SEMICOLON;
         }
         case CharCode.LESSTHAN: {
-          ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.LESSTHAN) {
-              ++this.pos;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            let chr = text.charCodeAt(pos);
+            if (chr == CharCode.LESSTHAN) {
+              ++pos;
               if (
                 maxTokenLength > 2 &&
-                this.pos < this.end &&
-                text.charCodeAt(this.pos) == CharCode.EQUALS
+                pos < end &&
+                text.charCodeAt(pos) == CharCode.EQUALS
               ) {
-                ++this.pos;
+                this.pos = pos + 1;
                 return Token.LESSTHAN_LESSTHAN_EQUALS;
               }
+              this.pos = pos;
               return Token.LESSTHAN_LESSTHAN;
             }
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
-              ++this.pos;
+            if (chr == CharCode.EQUALS) {
+              this.pos = pos + 1;
               return Token.LESSTHAN_EQUALS;
             }
           }
+          this.pos = pos;
           return Token.LESSTHAN;
         }
         case CharCode.EQUALS: {
-          ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
-              ++this.pos;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            let chr = text.charCodeAt(pos);
+            if (chr == CharCode.EQUALS) {
+              ++pos;
               if (
                 maxTokenLength > 2 &&
-                this.pos < this.end &&
-                text.charCodeAt(this.pos) == CharCode.EQUALS
+                pos < end &&
+                text.charCodeAt(pos) == CharCode.EQUALS
               ) {
-                ++this.pos;
+                this.pos = pos + 1;
                 return Token.EQUALS_EQUALS_EQUALS;
               }
+              this.pos = pos;
               return Token.EQUALS_EQUALS;
             }
-            if (text.charCodeAt(this.pos) == CharCode.GREATERTHAN) {
-              ++this.pos;
+            if (chr == CharCode.GREATERTHAN) {
+              this.pos = pos + 1;
               return Token.EQUALS_GREATERTHAN;
             }
           }
+          this.pos = pos;
           return Token.EQUALS;
         }
         case CharCode.GREATERTHAN: {
-          ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.GREATERTHAN) {
-              ++this.pos;
-              if (maxTokenLength > 2 && this.pos < this.end) {
-                if (text.charCodeAt(this.pos) == CharCode.GREATERTHAN) {
-                  ++this.pos;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            let chr = text.charCodeAt(pos);
+            if (chr == CharCode.GREATERTHAN) {
+              ++pos;
+              if (maxTokenLength > 2 && pos < end) {
+                chr = text.charCodeAt(pos);
+                if (chr == CharCode.GREATERTHAN) {
+                  ++pos;
                   if (
-                    maxTokenLength > 3 && this.pos < this.end &&
-                    text.charCodeAt(this.pos) == CharCode.EQUALS
+                    maxTokenLength > 3 && pos < end &&
+                    text.charCodeAt(pos) == CharCode.EQUALS
                   ) {
-                    ++this.pos;
+                    this.pos = pos + 1;
                     return Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS;
                   }
+                  this.pos = pos;
                   return Token.GREATERTHAN_GREATERTHAN_GREATERTHAN;
                 }
-                if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
-                  ++this.pos;
+                if (chr == CharCode.EQUALS) {
+                  this.pos = pos + 1;
                   return Token.GREATERTHAN_GREATERTHAN_EQUALS;
                 }
               }
+              this.pos = pos;
               return Token.GREATERTHAN_GREATERTHAN;
             }
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
-              ++this.pos;
+            if (chr == CharCode.EQUALS) {
+              this.pos = pos + 1;
               return Token.GREATERTHAN_EQUALS;
             }
           }
+          this.pos = pos;
           return Token.GREATERTHAN;
         }
         case CharCode.QUESTION: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.QUESTION;
         }
         case CharCode.OPENBRACKET: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.OPENBRACKET;
         }
         case CharCode.CLOSEBRACKET: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.CLOSEBRACKET;
         }
         case CharCode.CARET: {
-          ++this.pos;
+          ++pos;
           if (
-            maxTokenLength > 1 && this.pos < this.end &&
-            text.charCodeAt(this.pos) == CharCode.EQUALS
+            maxTokenLength > 1 && pos < end &&
+            text.charCodeAt(pos) == CharCode.EQUALS
           ) {
-            ++this.pos;
+            this.pos = pos + 1;
             return Token.CARET_EQUALS;
           }
+          this.pos = pos;
           return Token.CARET;
         }
         case CharCode.OPENBRACE: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.OPENBRACE;
         }
         case CharCode.BAR: {
-          ++this.pos;
-          if (maxTokenLength > 1 && this.pos < this.end) {
-            if (text.charCodeAt(this.pos) == CharCode.BAR) {
-              ++this.pos;
+          ++pos;
+          if (maxTokenLength > 1 && pos < end) {
+            let chr = text.charCodeAt(pos);
+            if (chr == CharCode.BAR) {
+              this.pos = pos + 1;
               return Token.BAR_BAR;
             }
-            if (text.charCodeAt(this.pos) == CharCode.EQUALS) {
-              ++this.pos;
+            if (chr == CharCode.EQUALS) {
+              this.pos = pos + 1;
               return Token.BAR_EQUALS;
             }
           }
+          this.pos = pos;
           return Token.BAR;
         }
         case CharCode.CLOSEBRACE: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.CLOSEBRACE;
         }
         case CharCode.TILDE: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.TILDE;
         }
         case CharCode.AT: {
-          ++this.pos;
+          this.pos = pos + 1;
           return Token.AT;
         }
         default: {
           if (isIdentifierStart(c)) {
             if (isKeywordCharacter(c)) {
-              let posBefore = this.pos;
+              let posBefore = pos;
               while (
-                ++this.pos < this.end &&
-                isIdentifierPart(c = text.charCodeAt(this.pos))
+                ++pos < end &&
+                isIdentifierPart(c = text.charCodeAt(pos))
               ) {
                 if (!isKeywordCharacter(c)) {
                   this.pos = posBefore;
                   return Token.IDENTIFIER;
                 }
               }
-              let keywordText = text.substring(posBefore, this.pos);
+              let keywordText = text.substring(posBefore, pos);
               let keywordToken = tokenFromKeyword(keywordText);
               if (
-                keywordToken != Token.INVALID &&
+                keywordToken !== Token.INVALID &&
                 identifierHandling !== IdentifierHandling.ALWAYS &&
                 !(
                   identifierHandling === IdentifierHandling.PREFER &&
                   tokenIsAlsoIdentifier(keywordToken)
                 )
               ) {
+                this.pos = pos;
                 return keywordToken;
               }
-              this.pos = posBefore;
+              this.pos = pos = posBefore;
             }
+            this.pos = pos;
             return Token.IDENTIFIER; // expects a call to readIdentifier
           } else if (isWhiteSpace(c)) {
-            ++this.pos;
+            ++pos;
             break;
           }
+          let start = pos++;
+          if ( // surrogate pair?
+            (c & 0xFC00) == 0xD800 && pos < end &&
+            ((text.charCodeAt(pos)) & 0xFC00) == 0xDC00
+          ) ++pos;
           this.error(
             DiagnosticCode.Invalid_character,
-            this.range(this.pos, this.pos + 1)
+            this.range(start, pos)
           );
-          ++this.pos;
+          this.pos = pos;
           return Token.INVALID;
         }
       }
     }
+    this.pos = pos;
     return Token.ENDOFFILE;
   }
 
@@ -955,7 +966,10 @@ export class Tokenizer extends DiagnosticEmitter {
       let posBefore = this.pos;
       let tokenBefore = this.token;
       let tokenPosBefore = this.tokenPos;
-      this.nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
+      let nextToken: Token;
+      do nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
+      while (nextToken == Token.INVALID);
+      this.nextToken = nextToken;
       this.nextTokenPos = this.tokenPos;
       if (checkOnNewLine) {
         this.nextTokenOnNewLine = false;
@@ -982,14 +996,14 @@ export class Tokenizer extends DiagnosticEmitter {
     var tokenBefore = this.token;
     var tokenPosBefore = this.tokenPos;
     var maxCompoundLength = i32.MAX_VALUE;
-    switch (token) {
-      case Token.GREATERTHAN: { // where parsing type arguments
-        maxCompoundLength = 1;
-        break;
-      }
+    if (token == Token.GREATERTHAN) {  // where parsing type arguments
+      maxCompoundLength = 1;
     }
-    this.token = this.unsafeNext(identifierHandling, maxCompoundLength);
-    if (this.token == token) {
+    var nextToken: Token;
+    do nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
+    while (nextToken == Token.INVALID);
+    if (nextToken == token) {
+      this.token = token;
       this.nextToken = -1;
       return true;
     } else {
@@ -1001,16 +1015,15 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   mark(): State {
-    var state: State;
-    if (reusableState) {
-      state = reusableState;
+    var state = reusableState;
+    if (state) {
       reusableState = null;
+      state.pos = this.pos;
+      state.token = this.token;
+      state.tokenPos = this.tokenPos;
     } else {
-      state = new State();
+      state = new State(this.pos, this.token, this.tokenPos);
     }
-    state.pos = this.pos;
-    state.token = this.token;
-    state.tokenPos = this.tokenPos;
     return state;
   }
 
@@ -1032,62 +1045,73 @@ export class Tokenizer extends DiagnosticEmitter {
     } else if (end < 0) {
       end = start;
     }
-    return new Range(this.source, start, end);
+    let range = new Range(start, end);
+    range.source = this.source;
+    return range;
   }
 
   readIdentifier(): string {
     var text = this.source.text;
-    var start = this.pos;
+    var end = this.end;
+    var pos = this.pos;
+    var start = pos;
     while (
-      ++this.pos < this.end &&
-      isIdentifierPart(text.charCodeAt(this.pos))
+      ++pos < end &&
+      isIdentifierPart(text.charCodeAt(pos))
     );
-    return text.substring(start, this.pos);
+    this.pos = pos;
+    return text.substring(start, pos);
   }
 
   readString(): string {
     var text = this.source.text;
-    var quote = text.charCodeAt(this.pos++);
-    var start = this.pos;
+    var end = this.end;
+    var pos = this.pos;
+    var quote = text.charCodeAt(pos++);
+    var start = pos;
     var result = "";
     while (true) {
-      if (this.pos >= this.end) {
-        result += text.substring(start, this.pos);
+      if (pos >= end) {
+        result += text.substring(start, pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
-          this.range(start - 1, this.end)
+          this.range(start - 1, end)
         );
         break;
       }
-      let c = text.charCodeAt(this.pos);
+      let c = text.charCodeAt(pos);
       if (c == quote) {
-        result += text.substring(start, this.pos++);
+        result += text.substring(start, pos++);
         break;
       }
       if (c == CharCode.BACKSLASH) {
-        result += text.substring(start, this.pos);
+        result += text.substring(start, pos);
+        this.pos = pos; // save
         result += this.readEscapeSequence();
-        start = this.pos;
+        pos = this.pos; // restore
+        start = pos;
         continue;
       }
-      if (isLineBreak(c)) {
-        result += text.substring(start, this.pos);
+      if (isLineBreak(c) && quote != CharCode.BACKTICK) {
+        result += text.substring(start, pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
-          this.range(start - 1, this.pos)
+          this.range(start - 1, pos)
         );
         break;
       }
-      ++this.pos;
+      ++pos;
     }
+    this.pos = pos;
     return result;
   }
 
   readEscapeSequence(): string {
-    if (++this.pos >= this.end) {
+    var end = this.end;
+    if (++this.pos >= end) {
       this.error(
         DiagnosticCode.Unexpected_end_of_text,
-        this.range(this.end)
+        this.range(end)
       );
       return "";
     }
@@ -1106,7 +1130,7 @@ export class Tokenizer extends DiagnosticEmitter {
       case CharCode.DOUBLEQUOTE: return "\"";
       case CharCode.u: {
         if (
-          this.pos < this.end &&
+          this.pos < end &&
           text.charCodeAt(this.pos) == CharCode.OPENBRACE
         ) {
           ++this.pos;
@@ -1114,9 +1138,12 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         return this.readUnicodeEscape(); // \uDDDD
       }
+      case CharCode.x: {
+        return this.readHexadecimalEscape(); // \xDD
+      }
       case CharCode.CARRIAGERETURN: {
         if (
-          this.pos < this.end &&
+          this.pos < end &&
           text.charCodeAt(this.pos) == CharCode.LINEFEED
         ) {
           ++this.pos;
@@ -1133,12 +1160,13 @@ export class Tokenizer extends DiagnosticEmitter {
   readRegexpPattern(): string {
     var text = this.source.text;
     var start = this.pos;
+    var end = this.end;
     var escaped = false;
     while (true) {
-      if (this.pos >= this.end) {
+      if (this.pos >= end) {
         this.error(
           DiagnosticCode.Unterminated_regular_expression_literal,
-          this.range(start, this.end)
+          this.range(start, end)
         );
         break;
       }
@@ -1148,7 +1176,7 @@ export class Tokenizer extends DiagnosticEmitter {
         continue;
       }
       let c = text.charCodeAt(this.pos);
-      if (c == CharCode.SLASH && !escaped) break;
+      if (!escaped && c == CharCode.SLASH) break;
       if (isLineBreak(c)) {
         this.error(
           DiagnosticCode.Unterminated_regular_expression_literal,
@@ -1165,8 +1193,9 @@ export class Tokenizer extends DiagnosticEmitter {
   readRegexpFlags(): string {
     var text = this.source.text;
     var start = this.pos;
+    var end = this.end;
     var flags = 0;
-    while (this.pos < this.end) {
+    while (this.pos < end) {
       let c: i32 = text.charCodeAt(this.pos);
       if (!isIdentifierPart(c)) break;
       ++this.pos;
@@ -1202,52 +1231,46 @@ export class Tokenizer extends DiagnosticEmitter {
 
   testInteger(): bool {
     var text = this.source.text;
-    if (text.charCodeAt(this.pos) == CharCode._0 && this.pos + 1 < this.end) {
-      switch (text.charCodeAt(this.pos + 2)) {
-        case CharCode.X:
+    var pos = this.pos;
+    var end = this.end;
+    if (pos + 1 < end && text.charCodeAt(pos) == CharCode._0) {
+      switch (text.charCodeAt(pos + 2) | 32) {
         case CharCode.x:
-        case CharCode.B:
         case CharCode.b:
-        case CharCode.O:
         case CharCode.o: return true;
       }
     }
-    var pos = this.pos;
-    while (pos < this.end) {
+    while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c == CharCode.DOT || c == CharCode.E || c == CharCode.e) {
-        return false;
-      }
-      if ((c < CharCode._0 || c > CharCode._9) && c != CharCode._) break;
+      if (c == CharCode.DOT || (c | 32) == CharCode.e) return false;
+      if (c != CharCode._ && (c < CharCode._0 || c > CharCode._9)) break;
       // does not validate separator placement (this is done in readXYInteger)
       pos++;
     }
     return true;
   }
 
-  readInteger(): I64 {
+  readInteger(): i64 {
     var text = this.source.text;
-    if (text.charCodeAt(this.pos) == CharCode._0 && this.pos + 2 < this.end) {
-      switch (text.charCodeAt(this.pos + 1)) {
-        case CharCode.X:
+    var pos = this.pos;
+    if (pos + 2 < this.end && text.charCodeAt(pos) == CharCode._0) {
+      switch (text.charCodeAt(pos + 1) | 32) {
         case CharCode.x: {
-          this.pos += 2;
+          this.pos = pos + 2;
           return this.readHexInteger();
         }
-        case CharCode.B:
         case CharCode.b: {
-          this.pos += 2;
+          this.pos = pos + 2;
           return this.readBinaryInteger();
         }
-        case CharCode.O:
         case CharCode.o: {
-          this.pos += 2;
+          this.pos = pos + 2;
           return this.readOctalInteger();
         }
       }
-      if (isOctalDigit(text.charCodeAt(this.pos + 1))) {
-        let start = this.pos;
-        ++this.pos;
+      if (isOctalDigit(text.charCodeAt(pos + 1))) {
+        let start = pos;
+        this.pos = pos + 1;
         let value = this.readOctalInteger();
         this.error(
           DiagnosticCode.Octal_literals_are_not_allowed_in_strict_mode,
@@ -1259,32 +1282,33 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.readDecimalInteger();
   }
 
-  readHexInteger(): I64 {
+  readHexInteger(): i64 {
     var text = this.source.text;
-    var start = this.pos;
-    var value = i64_new(0, 0);
-    var i64_16 = i64_new(16, 0);
+    let pos = this.pos;
+    var end = this.end;
+    var start = pos;
     var sepEnd = start;
-    while (this.pos < this.end) {
-      let pos = this.pos;
+    var value = i64_new(0);
+    var i64_4 = i64_new(4);
+    while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
-        // value = value * 16 + c - CharCode._0;
+        // value = (value << 4) + c - CharCode._0;
         value = i64_add(
-          i64_mul(value, i64_16),
-          i64_new(c - CharCode._0, 0)
+          i64_shl(value, i64_4),
+          i64_new(c - CharCode._0)
         );
-       } else if (c >= CharCode.A && c <= CharCode.F) {
-        // value = value * 16 + 10 + c - CharCode.A;
+      } else if (c >= CharCode.A && c <= CharCode.F) {
+        // value = (value << 4) + 10 + c - CharCode.A;
         value = i64_add(
-          i64_mul(value, i64_16),
-          i64_new(10 + c - CharCode.A, 0)
+          i64_shl(value, i64_4),
+          i64_new(10 + c - CharCode.A)
         );
       } else if (c >= CharCode.a && c <= CharCode.f) {
-        // value = value * 16 + 10 + c - CharCode.a;
+        // value = (value << 4) + 10 + c - CharCode.a;
         value = i64_add(
-          i64_mul(value, i64_16),
-          i64_new(10 + c - CharCode.a, 0)
+          i64_shl(value, i64_4),
+          i64_new(10 + c - CharCode.a)
         );
       } else if (c == CharCode._) {
         if (sepEnd == pos) {
@@ -1299,36 +1323,38 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      this.pos = pos + 1;
+      ++pos;
     }
-    if (this.pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Hexadecimal_digit_expected,
         this.range(start)
       );
-    } else if (sepEnd == this.pos) {
+    } else if (sepEnd == pos) {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
     }
+    this.pos = pos;
     return value;
   }
 
-  readDecimalInteger(): I64 {
+  readDecimalInteger(): i64 {
     var text = this.source.text;
-    var start = this.pos;
-    var value = i64_new(0, 0);
-    var i64_10 = i64_new(10, 0);
+    var pos = this.pos;
+    var end = this.end;
+    var start = pos;
     var sepEnd = start;
-    while (this.pos < this.end) {
-      let pos = this.pos;
+    var value = i64_new(0);
+    var i64_10 = i64_new(10);
+    while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._9) {
         // value = value * 10 + c - CharCode._0;
         value = i64_add(
           i64_mul(value, i64_10),
-          i64_new(c - CharCode._0, 0)
+          i64_new(c - CharCode._0)
         );
       } else if (c == CharCode._) {
         if (sepEnd == pos) {
@@ -1338,41 +1364,48 @@ export class Tokenizer extends DiagnosticEmitter {
               : DiagnosticCode.Multiple_consecutive_numeric_separators_are_not_permitted,
             this.range(pos)
           );
+        } else if (pos - 1 == start && text.charCodeAt(pos - 1) == CharCode._0) {
+          this.error(
+            DiagnosticCode.Numeric_separators_are_not_allowed_here,
+            this.range(pos)
+          );
         }
         sepEnd = pos + 1;
       } else {
         break;
       }
-      this.pos = pos + 1;
+      ++pos;
     }
-    if (this.pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Digit_expected,
         this.range(start)
       );
-    } else if (sepEnd == this.pos) {
+    } else if (sepEnd == pos) {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
     }
+    this.pos = pos;
     return value;
   }
 
-  readOctalInteger(): I64 {
+  readOctalInteger(): i64 {
     var text = this.source.text;
-    var start = this.pos;
-    var value = i64_new(0, 0);
-    var i64_8 = i64_new(8, 0);
+    var pos = this.pos;
+    var end = this.end;
+    var start = pos;
     var sepEnd = start;
-    while (this.pos < this.end) {
-      let pos = this.pos;
+    var value = i64_new(0);
+    var i64_3 = i64_new(3);
+    while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c >= CharCode._0 && c <= CharCode._7) {
-        // value = value * 8 + c - CharCode._0;
+        // value = (value << 3) + c - CharCode._0;
         value = i64_add(
-          i64_mul(value, i64_8),
-          i64_new(c - CharCode._0, 0)
+          i64_shl(value, i64_3),
+          i64_new(c - CharCode._0)
         );
       } else if (c == CharCode._) {
         if (sepEnd == pos) {
@@ -1387,42 +1420,40 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      ++this.pos;
+      ++pos;
     }
-    if (this.pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Octal_digit_expected,
         this.range(start)
       );
-    } else if (sepEnd == this.pos) {
+    } else if (sepEnd == pos) {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
     }
+    this.pos = pos;
     return value;
   }
 
-  readBinaryInteger(): I64 {
+  readBinaryInteger(): i64 {
     var text = this.source.text;
-    var start = this.pos;
-    var value = i64_new(0, 0);
-    var i64_2 = i64_new(2, 0);
-    var i64_1 = i64_new(1, 0);
+    var pos = this.pos;
+    var end = this.end;
+    var start = pos;
     var sepEnd = start;
-    while (this.pos < this.end) {
-      let pos = this.pos;
+    var value = i64_new(0);
+    var i64_1 = i64_new(1);
+    while (pos < end) {
       let c = text.charCodeAt(pos);
       if (c == CharCode._0) {
-        // value = value * 2;
-        value = i64_mul(
-          value,
-          i64_2
-        );
+        // value = (value << 1);
+        value = i64_shl(value, i64_1);
       } else if (c == CharCode._1) {
-        // value = value * 2 + 1;
+        // value = (value << 1) + 1;
         value = i64_add(
-          i64_mul(value, i64_2),
+          i64_shl(value, i64_1),
           i64_1
         );
       } else if (c == CharCode._) {
@@ -1438,19 +1469,20 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         break;
       }
-      this.pos = pos + 1;
+      ++pos;
     }
-    if (this.pos == start) {
+    if (pos == start) {
       this.error(
         DiagnosticCode.Binary_digit_expected,
         this.range(start)
       );
-    } else if (sepEnd == this.pos) {
+    } else if (sepEnd == pos) {
       this.error(
         DiagnosticCode.Numeric_separators_are_not_allowed_here,
         this.range(sepEnd - 1)
       );
     }
+    this.pos = pos;
     return value;
   }
 
@@ -1469,59 +1501,100 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readDecimalFloat(): f64 {
-    // TODO: numeric separators (parseFloat can't handle these)
-    var start = this.pos;
     var text = this.source.text;
-    while (this.pos < this.end && isDecimalDigit(text.charCodeAt(this.pos))) {
+    var end = this.end;
+    var start = this.pos;
+    var sepCount = this.readDecimalFloatPartial(false);
+    if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
+      sepCount += this.readDecimalFloatPartial();
     }
-    if (this.pos < this.end && text.charCodeAt(this.pos) == CharCode.DOT) {
-      ++this.pos;
-      while (this.pos < this.end && isDecimalDigit(text.charCodeAt(this.pos))) {
-        ++this.pos;
-      }
-    }
-    if (this.pos < this.end) {
+    if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
-      if (c == CharCode.E || c == CharCode.e) {
+      if ((c | 32) == CharCode.e) {
         if (
-          ++this.pos < this.end && (
-            text.charCodeAt(this.pos) == CharCode.MINUS ||
-            text.charCodeAt(this.pos) == CharCode.PLUS
-          ) &&
+          ++this.pos < end &&
+          (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
           isDecimalDigit(text.charCodeAt(this.pos + 1))
         ) {
           ++this.pos;
         }
-        while (this.pos < this.end && isDecimalDigit(text.charCodeAt(this.pos))) {
-          ++this.pos;
-        }
+        sepCount += this.readDecimalFloatPartial();
       }
     }
-    return parseFloat(text.substring(start, this.pos));
+    let result = text.substring(start, this.pos);
+    if (sepCount) result = result.replaceAll("_", "");
+    return parseFloat(result);
+  }
+
+  /** Reads past one section of a decimal float literal. Returns the number of separators encountered. */
+  private readDecimalFloatPartial(allowLeadingZeroSep: bool = true): u32 {
+    var text = this.source.text;
+    var pos = this.pos;
+    var start = pos;
+    var end = this.end;
+    var sepEnd = start;
+    var sepCount = 0;
+
+    while (pos < end) {
+      let c = text.charCodeAt(pos);
+
+      if (c == CharCode._) {
+        if (sepEnd == pos) {
+          this.error(
+            sepEnd == start
+              ? DiagnosticCode.Numeric_separators_are_not_allowed_here
+              : DiagnosticCode.Multiple_consecutive_numeric_separators_are_not_permitted,
+            this.range(pos)
+          );
+        } else if (!allowLeadingZeroSep && pos - 1 == start && text.charCodeAt(pos - 1) == CharCode._0) {
+          this.error(
+            DiagnosticCode.Numeric_separators_are_not_allowed_here,
+            this.range(pos)
+          );
+        }
+        sepEnd = pos + 1;
+        ++sepCount;
+      } else if (!isDecimalDigit(c)) {
+        break;
+      }
+      ++pos;
+    }
+
+    if (pos != start && sepEnd == pos) {
+      this.error(
+        DiagnosticCode.Numeric_separators_are_not_allowed_here,
+        this.range(sepEnd - 1)
+      );
+    }
+
+    this.pos = pos;
+    return sepCount;
   }
 
   readHexFloat(): f64 {
     throw new Error("not implemented"); // TBD
   }
 
-  readUnicodeEscape(): string {
-    var remain = 4;
+  readHexadecimalEscape(remain: i32 = 2): string {
     var value = 0;
     var text = this.source.text;
-    while (this.pos < this.end) {
-      let c = text.charCodeAt(this.pos++);
+    var pos = this.pos;
+    var end = this.end;
+    while (pos < end) {
+      let c = text.charCodeAt(pos++);
       if (c >= CharCode._0 && c <= CharCode._9) {
-        value = value * 16 + c - CharCode._0;
+        value = (value << 4) + c - CharCode._0;
       } else if (c >= CharCode.A && c <= CharCode.F) {
-        value = value * 16 + 10 + c - CharCode.A;
+        value = (value << 4) + c + (10 - CharCode.A);
       } else if (c >= CharCode.a && c <= CharCode.f) {
-        value = value * 16 + 10 + c - CharCode.a;
+        value = (value << 4) + c + (10 - CharCode.a);
       } else {
         this.error(
           DiagnosticCode.Hexadecimal_digit_expected,
-          this.range(this.pos - 1, this.pos)
+          this.range(pos - 1, pos)
         );
+        this.pos = pos;
         return "";
       }
       if (--remain == 0) break;
@@ -1529,11 +1602,17 @@ export class Tokenizer extends DiagnosticEmitter {
     if (remain) {
       this.error(
         DiagnosticCode.Unexpected_end_of_text,
-        this.range(this.pos)
+        this.range(pos)
       );
+      this.pos = pos;
       return "";
     }
+    this.pos = pos;
     return String.fromCharCode(value);
+  }
+
+  readUnicodeEscape(): string {
+    return this.readHexadecimalEscape(4);
   }
 
   private readExtendedUnicodeEscape(): string {
@@ -1551,11 +1630,12 @@ export class Tokenizer extends DiagnosticEmitter {
       invalid = true;
     }
 
+    var end = this.end;
     var text = this.source.text;
-    if (this.pos >= this.end) {
+    if (this.pos >= end) {
       this.error(
         DiagnosticCode.Unexpected_end_of_text,
-        this.range(start, this.end)
+        this.range(start, end)
       );
       invalid = true;
     } else if (text.charCodeAt(this.pos) == CharCode.CLOSEBRACE) {
@@ -1569,26 +1649,25 @@ export class Tokenizer extends DiagnosticEmitter {
     }
 
     if (invalid) return "";
-    return value32 < 65536
+    return value32 < 0x10000
       ? String.fromCharCode(value32)
       : String.fromCharCode(
-        (((value32 - 65536) / 1024 | 0) + 0xD800) as i32,
-        ( (value32 - 65536) % 1024      + 0xDC00) as i32
+        ((value32 - 0x10000) >>> 10) | 0xD800,
+        ((value32 - 0x10000) & 1023) | 0xDC00
       );
-  }
-
-  finish(): void {
   }
 }
 
 /** Tokenizer state as returned by {@link Tokenizer#mark} and consumed by {@link Tokenizer#reset}. */
 export class State {
-  /** Current position. */
-  pos: i32;
-  /** Current token. */
-  token: Token;
-  /** Current token's position. */
-  tokenPos: i32;
+  constructor(
+    /** Current position. */
+    public pos: i32,
+    /** Current token. */
+    public token: Token,
+    /** Current token's position. */
+    public tokenPos: i32
+  ) {}
 }
 
 // Reusable state object to reduce allocations

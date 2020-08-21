@@ -1,0 +1,14 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "TS2300: Duplicate identifier 'a'", "var a: f32", "var a: i32",
+    "TS2300: Duplicate identifier 'b'", "b: f32", "b: i32",
+    "TS2300: Duplicate identifier 'c'", "static c: f32", " static c: i32",
+    "TS2300: Duplicate identifier 'd'", "const d: f32", "const d: i32",
+    "TS2300: Duplicate identifier 'e'", "var e: f32", "var e: i32",
+    "TS2300: Duplicate identifier 'f'", "let f: f32",
+    "EOF"
+  ]
+}

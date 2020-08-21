@@ -1,0 +1,13 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "TS2540: Cannot assign to", "b = 3;",
+    "TS2540: Cannot assign to", "a = 2;",
+    "TS2540: Cannot assign to", "b = [ 2 ];",
+    "TS2540: Cannot assign to", "a = [ 2 ];",
+    "TS2540: Cannot assign to", "a = 2;",
+    "EOF"
+  ]
+}

@@ -1,10 +1,32 @@
 {
   "name": "@assemblyscript/loader",
-  "version": "1.0.0",
+  "description": "A convenient loader for AssemblyScript modules.",
+  "keywords": [
+    "assemblyscript",
+    "loader",
+    "glue",
+    "interop",
+    "webassembly",
+    "wasm"
+  ],
+  "version": "0.0.0",
+  "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
+  "license": "Apache-2.0",
+  "homepage": "https://assemblyscript.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AssemblyScript/assemblyscript.git",
+    "directory": "lib/loader"
+  },
+  "bugs": {
+    "url": "https://github.com/AssemblyScript/assemblyscript/issues"
+  },
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test:build": "asc tests/assembly/index.ts -b tests/build/untouched.wasm",
+    "asbuild": "npm run asbuild:default && npm run asbuild:legacy",
+    "asbuild:default": "node ../../bin/asc tests/assembly/index.ts -b tests/build/default.wasm",
+    "asbuild:legacy": "node ../../bin/asc tests/assembly/index.ts --disable mutable-globals -b tests/build/legacy.wasm",
     "test": "node tests"
   },
   "files": [
@@ -12,8 +34,5 @@
     "index.js",
     "package.json",
     "README.md"
-  ],
-  "dependencies": {
-    "@types/webassembly-js-api": "0.0.1"
-  }
+  ]
 }

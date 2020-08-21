@@ -32,3 +32,11 @@ export function test(animal: Animal<f64>): Animal<f64> {
   var cls = changetype<Animal<f64>>(ptr);
   return cls;
 }
+
+class GenericInitializer<T> {
+  foo: Array<T> = new Array<T>(); // issue 1119
+}
+
+export function testGenericInitializer(): void {
+  new GenericInitializer<i32>();
+}

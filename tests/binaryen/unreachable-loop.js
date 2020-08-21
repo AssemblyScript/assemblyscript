@@ -2,7 +2,7 @@ var binaryen = require("binaryen");
 
 var mod = new binaryen.Module();
 var funcType = mod.addFunctionType("v", binaryen.none, []);
-var func = mod.addFunction("0", funcType, [],
+mod.addFunction("0", funcType, [],
   mod.drop(
     mod.block("label$1", [
       mod.loop("label$2",

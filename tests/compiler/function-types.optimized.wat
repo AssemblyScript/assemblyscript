@@ -1,186 +1,165 @@
 (module
- (type $iii (func (param i32 i32) (result i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $III (func (param i64 i64) (result i64)))
- (type $FFF (func (param f64 f64) (result f64)))
- (type $v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
+ (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\11\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00t\00y\00p\00e\00s\00.\00t\00s")
- (table $0 5 anyfunc)
- (elem (i32.const 0) $null $function-types/makeAdder<i32>~anonymous|1 $function-types/makeAdder<i64>~anonymous|2 $function-types/makeAdder<f64>~anonymous|3 $function-types/makeAdder<i32>~anonymous|1)
+ (data (i32.const 1024) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\01")
+ (data (i32.const 1056) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00t\00y\00p\00e\00s\00.\00t\00s")
+ (data (i32.const 1120) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\02")
+ (data (i32.const 1152) "\08\00\00\00\01\00\00\00\05\00\00\00\08\00\00\00\03")
+ (data (i32.const 1184) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\04")
+ (table $0 5 funcref)
+ (elem (i32.const 1) $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|0 $function-types/makeAdder<f64>~anonymous|0 $function-types/makeAdder<i32>~anonymous|0)
  (global $function-types/i32Adder (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
- (global $function-types/i64Adder (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
- (start $start)
- (func $function-types/makeAdder<i32>~anonymous|1 (; 1 ;) (type $iii) (param $0 i32) (param $1 i32) (result i32)
-  get_local $0
-  get_local $1
+ (start $~start)
+ (func $function-types/makeAdder<i32>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
   i32.add
  )
- (func $function-types/makeAdder<i64>~anonymous|2 (; 2 ;) (type $III) (param $0 i64) (param $1 i64) (result i64)
-  get_local $0
-  get_local $1
+ (func $function-types/makeAdder<i64>~anonymous|0 (param $0 i64) (param $1 i64) (result i64)
+  local.get $0
+  local.get $1
   i64.add
  )
- (func $function-types/makeAdder<f64>~anonymous|3 (; 3 ;) (type $FFF) (param $0 f64) (param $1 f64) (result f64)
-  get_local $0
-  get_local $1
+ (func $function-types/makeAdder<f64>~anonymous|0 (param $0 f64) (param $1 f64) (result f64)
+  local.get $0
+  local.get $1
   f64.add
  )
- (func $start (; 4 ;) (type $v)
-  (local $0 i32)
+ (func $function-types/doAddWithFn<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  local.get $1
+  local.get $2
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
+ )
+ (func $start:function-types
+  i32.const 1040
+  global.set $function-types/i32Adder
   i32.const 1
-  set_global $function-types/i32Adder
   i32.const 2
-  set_global $~argc
-  i32.const 1
-  i32.const 2
-  get_global $function-types/i32Adder
-  call_indirect (type $iii)
+  i32.const 1040
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 1072
    i32.const 11
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  set_global $function-types/i64Adder
-  i32.const 2
-  set_global $~argc
   i64.const 10
   i64.const 20
-  get_global $function-types/i64Adder
-  call_indirect (type $III)
+  i32.const 1136
+  i32.load
+  call_indirect (type $i64_i64_=>_i64)
   i64.const 30
   i64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 1072
    i32.const 15
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  set_global $~argc
   f64.const 1.5
   f64.const 2.5
-  i32.const 3
-  call_indirect (type $FFF)
+  i32.const 1168
+  i32.load
+  call_indirect (type $f64_f64_=>_f64)
   f64.const 4
   f64.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 1072
    i32.const 17
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 2
-  set_global $~argc
-  i32.const 2
   i32.const 3
-  get_global $function-types/i32Adder
-  call_indirect (type $iii)
+  global.get $function-types/i32Adder
+  call $function-types/doAddWithFn<i32>
   i32.const 5
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 1072
    i32.const 23
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  set_global $~argc
   i32.const 3
   i32.const 4
-  i32.const 1
-  call_indirect (type $iii)
+  i32.const 1040
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
   i32.const 7
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 1072
    i32.const 29
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  set_global $~argc
   i32.const 4
   i32.const 5
-  i32.const 4
-  call_indirect (type $iii)
+  i32.const 1200
+  call $function-types/doAddWithFn<i32>
   i32.const 9
   i32.ne
   if
    i32.const 0
-   i32.const 8
+   i32.const 1072
    i32.const 35
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 2
-  set_global $~argc
-  block $1of1
-   block $0of1
-    block $outOfRange
-     get_global $~argc
-     i32.const 2
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
    i32.const 1
-   set_local $0
-  end
-  i32.const 2
-  set_global $~argc
-  i32.const 1
-  i32.const 2
-  get_local $0
-  call_indirect (type $iii)
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 41
-   i32.const 0
-   call $~lib/env/abort
+   call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  set_global $~argc
   i32.const 1
   i32.const 2
-  i32.const 1
-  call_indirect (type $iii)
+  i32.const 1040
+  call $function-types/doAddWithFn<i32>
   i32.const 3
   i32.ne
   if
    i32.const 0
-   i32.const 8
-   i32.const 42
+   i32.const 1072
+   i32.const 41
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32.const 2
+  i32.const 1040
+  call $function-types/doAddWithFn<i32>
+  i32.const 3
+  i32.ne
+  if
    i32.const 0
-   call $~lib/env/abort
+   i32.const 1072
+   i32.const 42
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
  )
- (func $null (; 5 ;) (type $v)
-  nop
+ (func $~start
+  call $start:function-types
  )
 )

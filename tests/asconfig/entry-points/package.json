@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "node ../index.js && npm run test:nested && npm run test:node",
+    "test:nested": "cd nested && npm run test",
+    "test:node": "cd node-resolution && npm run test"
+  }
+}

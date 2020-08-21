@@ -5,7 +5,7 @@ if (typeof asc.definitionFiles.portable !== "string") throw Error("missing bundl
 
 const stdout = asc.createMemoryStream();
 const stderr = asc.createMemoryStream();
-const files = { "module.ts": `import "allocator/arena";` };
+const files = { "module.ts": `export function test(): void {}` };
 
 console.log("# asc --version");
 
@@ -47,16 +47,16 @@ asc.main([
 ], {
   stdout: stdout,
   stderr: stderr,
-  readFile: (name) => {
-    console.log("readFile: " + name);
-    if (files.hasOwnProperty(name)) return files[name];
+  readFile: (name, baseDir) => {
+    console.log("readFile: " + name + ", baseDir=" + baseDir);
+    if (Object.prototype.hasOwnProperty.call(files, name)) return files[name];
     return null;
   },
-  writeFile: (name, data) => {
-    console.log("writeFile: " + name);
+  writeFile: (name, data, baseDir) => {
+    console.log("writeFile: " + name + ", baseDir=" + baseDir);
   },
-  listFiles: (dirname) => {
-    console.log("listFiles: " + dirname);
+  listFiles: (dirname, baseDir) => {
+    console.log("listFiles: " + dirname + ", baseDir=" + baseDir);
     return [];
   }
 }, err => {
@@ -73,7 +73,7 @@ process.stdout.write(stderr.toString());
 
 console.log("\n# asc.compileString");
 
-const output = asc.compileString(`import "allocator/arena";`, { optimizeLevel: 2 });
+const output = asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, runtime: "none", exportTable: true, measure: true });
 console.log(">>> .stdout >>>");
 process.stdout.write(output.stdout.toString());
 console.log(">>> .stderr >>>");

@@ -1,56 +1,68 @@
-import { memcmp, memmove, memset } from "./internal/memory";
+import { memcmp, memmove, memset } from "./util/memory";
+import { E_NOTIMPLEMENTED } from "./util/error";
 
-@builtin export declare const HEAP_BASE: usize; // tslint:disable-line
-
-/* tslint:disable */
-
+/** Memory manager interface. */
 export namespace memory {
 
-  @builtin export declare function size(): i32;
+  /** Gets the size of the memory in pages. */
+  // @ts-ignore: decorator
+  @builtin
+  export declare function size(): i32;
 
-  @builtin export declare function grow(pages: i32): i32;
+  /** Grows the memory by the given size in pages and returns the previous size in pages. */
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function grow(pages: i32): i32;
 
-  @inline export function fill(dest: usize, c: u8, n: usize): void { // see: musl/src/string/memset
-    if (isDefined(__memory_fill)) { __memory_fill(dest, c, n); return; }
-    memset(dest, c, n);
+  /** Fills a section in memory with the specified byte value. */
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export function fill(dst: usize, c: u8, n: usize): void {
+    memset(dst, c, n); // fallback if "bulk-memory" isn't enabled
   }
 
-  @inline export function copy(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
-    if (isDefined(__memory_copy)) { __memory_copy(dest, src, n); return; }
-    memmove(dest, src, n);
+  /** Copies a section of memory to another. Has move semantics. */
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export function copy(dst: usize, src: usize, n: usize): void {
+    memmove(dst, src, n); // fallback if "bulk-memory" isn't enabled
   }
 
-  @inline export function compare(vl: usize, vr: usize, n: usize): i32 { // see: musl/src/string/memcmp.c
-    if (isDefined(__memory_compare)) return __memory_compare(vl, vr, n);
+  /** Initializes a memory segment. */
+  // @ts-ignore: decorator
+  @unsafe
+  export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
+
+  /** Drops a memory segment. */
+  // @ts-ignore: decorator
+  @unsafe
+  export function drop(segmentIndex: u32): void {
+    throw new Error(E_NOTIMPLEMENTED);
+  }
+
+  /** Repeats a section of memory at a specific address. */
+  // @ts-ignore: decorator
+  @unsafe
+  export function repeat(dst: usize, src: usize, srcLength: usize, count: usize): void {
+    var index: usize = 0;
+    var total = srcLength * count;
+    while (index < total) {
+      memory.copy(dst + index, src, srcLength);
+      index += srcLength;
+    }
+  }
+
+  /** Compares a section of memory to another. */
+  // @ts-ignore: decorator
+  @inline
+  export function compare(vl: usize, vr: usize, n: usize): i32 {
     return memcmp(vl, vr, n);
   }
 
-  // Passive segments
-
-  // export function init(segmentIndex: u32, srcOffset: usize, dstOffset: usize, n: usize): void {
-  //   __memory_init(segmentIndex, srcOffset, dstOffset);
-  // }
-
-  // export function drop(segmentIndex: u32): void {
-  //   __memory_drop(segmentIndex);
-  // }
-
-  // Allocator
-
-  @inline export function allocate(size: usize): usize {
-    if (isDefined(__memory_allocate)) return __memory_allocate(size);
-    WARNING("Calling 'memory.allocate' requires a memory manager to be present.");
-    return <usize>unreachable();
-  }
-
-  @inline export function free(ptr: usize): void {
-    if (isDefined(__memory_free)) { __memory_free(ptr); return; }
-    WARNING("Calling 'memory.free' requires a memory manager to be present.");
-    unreachable();
-  }
-
-  @inline export function reset(): void {
-    if (isDefined(__memory_reset)) { __memory_reset(); return; }
-    unreachable();
-  }
+  /** Gets a pointer to a static chunk of memory of the given size. */
+  // @ts-ignore: decorator
+  @builtin
+  export declare function data<T>(size: T, align?: i32): usize;
 }

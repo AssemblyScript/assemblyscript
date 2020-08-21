@@ -1,6 +1,5 @@
 const js = true;
 
-@external("math", "mod")
 export declare function mod(x: f64, y: f64): f64;
 
 function check<T>(actual: T, expected: T): bool {

@@ -1,25 +1,55 @@
 (module
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $iiv (func (param i32 i32)))
- (type $v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 8) "\0b\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s\00")
- (data (i32.const 40) "\01\00\00\001\00")
- (table $0 2 anyfunc)
- (elem (i32.const 0) $null $start~anonymous|1)
+ (data (i32.const 16) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 32) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
+ (data (i32.const 64) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s\00")
+ (data (i32.const 112) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 144) "8\00\00\00\01\00\00\00\01\00\00\008\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00(\00)\00 \00{\00 \00[\00n\00a\00t\00i\00v\00e\00 \00c\00o\00d\00e\00]\00 \00}\00")
+ (data (i32.const 224) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00i\00g\00n\00a\00t\00u\00r\00e\00s\00")
+ (data (i32.const 272) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00t\00e\00s\00t\00i\00n\00g\00")
+ (data (i32.const 304) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00F\00u\00n\00c\00t\00i\00o\00n\00")
+ (data (i32.const 336) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00C\00")
+ (data (i32.const 368) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00S\00t\00r\00i\00n\00g\00")
+ (data (i32.const 400) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00b\00o\00o\00l\00")
+ (data (i32.const 432) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00i\008\00")
+ (data (i32.const 464) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00u\008\00")
+ (data (i32.const 496) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\001\006\00")
+ (data (i32.const 528) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00u\001\006\00")
+ (data (i32.const 560) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\003\002\00")
+ (data (i32.const 592) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00u\003\002\00")
+ (data (i32.const 624) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00f\003\002\00")
+ (data (i32.const 656) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\006\004\00")
+ (data (i32.const 688) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00u\006\004\00")
+ (data (i32.const 720) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00f\006\004\00")
+ (data (i32.const 752) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00i\00s\00i\00z\00e\00")
+ (data (i32.const 784) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00u\00s\00i\00z\00e\00")
+ (data (i32.const 816) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00v\00o\00i\00d\00")
+ (data (i32.const 848) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00o\00m\00e\00 \00v\00a\00l\00u\00e\00")
+ (data (i32.const 896) "\08\00\00\00\01\00\00\00\0b\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00")
+ (data (i32.const 928) "\08\00\00\00\01\00\00\00\0c\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00")
+ (table $0 4 funcref)
+ (elem (i32.const 1) $start:builtins~anonymous|0 $start:builtins~anonymous|1 $start:builtins~anonymous|2)
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
- (global $NaN f64 (f64.const nan:0x8000000000000))
- (global $Infinity f64 (f64.const inf))
  (global $builtins/F (mut f64) (f64.const 0))
  (global $builtins/constantOffset i32 (i32.const 8))
  (global $builtins/u (mut i32) (i32.const 0))
  (global $builtins/U (mut i64) (i64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
- (global $builtins/fn (mut i32) (i32.const 1))
+ (global $builtins/fn (mut i32) (i32.const 128))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i16.MIN_VALUE i32 (i32.const -32768))
@@ -44,263 +74,375 @@
  (global $~lib/builtins/f32.MIN_SAFE_INTEGER f32 (f32.const -16777215))
  (global $~lib/builtins/f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
  (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
- (global $~lib/builtins/f32.NaN f32 (f32.const nan:0x400000))
  (global $~lib/builtins/f64.MIN_NORMAL_VALUE f64 (f64.const 2.2250738585072014e-308))
  (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
- (global $~lib/builtins/f64.NaN f64 (f64.const nan:0x8000000000000))
- (global $HEAP_BASE i32 (i32.const 48))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "test" (func $builtins/test))
- (start $start)
- (func $start~anonymous|1 (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (start $~start)
+ (func $start:builtins~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.add
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name (param $0 i32) (result i32)
+  i32.const 32
+ )
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $builtins/test (; 2 ;) (type $v)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+ )
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $2
+  call $~lib/rt/stub/__retain
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $5
+  local.get $2
+  local.get $3
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $6
+  i32.const 0
+  i32.const 2
+  i32.lt_s
+  drop
+  local.get $4
+  i32.const 4
+  i32.ge_u
+  if (result i32)
+   local.get $5
+   i32.const 7
+   i32.and
+   local.get $6
+   i32.const 7
+   i32.and
+   i32.or
+   i32.eqz
+  else
+   i32.const 0
+  end
+  if
+   block $do-break|0
+    loop $do-continue|0
+     local.get $5
+     i64.load
+     local.get $6
+     i64.load
+     i64.ne
+     if
+      br $do-break|0
+     end
+     local.get $5
+     i32.const 8
+     i32.add
+     local.set $5
+     local.get $6
+     i32.const 8
+     i32.add
+     local.set $6
+     local.get $4
+     i32.const 4
+     i32.sub
+     local.set $4
+     local.get $4
+     i32.const 4
+     i32.ge_u
+     local.set $7
+     local.get $7
+     br_if $do-continue|0
+    end
+   end
+  end
+  loop $while-continue|1
+   local.get $4
+   local.tee $7
+   i32.const 1
+   i32.sub
+   local.set $4
+   local.get $7
+   local.set $7
+   local.get $7
+   if
+    local.get $5
+    i32.load16_u
+    local.set $8
+    local.get $6
+    i32.load16_u
+    local.set $9
+    local.get $8
+    local.get $9
+    i32.ne
+    if
+     local.get $8
+     local.get $9
+     i32.sub
+     local.set $10
+     local.get $0
+     call $~lib/rt/stub/__release
+     local.get $2
+     call $~lib/rt/stub/__release
+     local.get $10
+     return
+    end
+    local.get $5
+    i32.const 2
+    i32.add
+    local.set $5
+    local.get $6
+    i32.const 2
+    i32.add
+    local.set $6
+    br $while-continue|1
+   end
+  end
+  i32.const 0
+  local.set $7
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $2
+  call $~lib/rt/stub/__release
+  local.get $7
+ )
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $1
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.eq
+  if
+   i32.const 1
+   local.set $2
+   local.get $0
+   call $~lib/rt/stub/__release
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $2
+   return
+  end
+  local.get $0
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $1
+   i32.const 0
+   i32.eq
+  end
+  if
+   i32.const 0
+   local.set $2
+   local.get $0
+   call $~lib/rt/stub/__release
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $2
+   return
+  end
+  local.get $0
+  call $~lib/string/String#get:length
+  local.set $3
+  local.get $3
+  local.get $1
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   local.set $2
+   local.get $0
+   call $~lib/rt/stub/__release
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $2
+   return
+  end
+  local.get $0
+  i32.const 0
+  local.get $1
+  i32.const 0
+  local.get $3
+  call $~lib/util/string/compareImpl
+  i32.eqz
+  local.set $2
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length (param $0 i32) (result i32)
+  i32.const 2
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString (param $0 i32) (result i32)
+  i32.const 160
+ )
+ (func $~lib/atomics/Atomics.isLockFree (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $0
+   i32.const 2
+   i32.eq
+  end
+  if (result i32)
+   i32.const 1
+  else
+   local.get $0
+   i32.const 4
+   i32.eq
+  end
+ )
+ (func $start:builtins~anonymous|1
   nop
  )
- (func $start (; 3 ;) (type $v)
+ (func $start:builtins~anonymous|2 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  nop
+ )
+ (func $start:builtins
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
   (local $4 f32)
   (local $5 f64)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 5
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 6
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 7
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 8
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 9
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 10
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 11
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 12
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 14
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
+  i32.const 1
+  drop
+  i32.const 1
+  drop
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 15
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 16
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 17
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 18
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 19
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 20
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 21
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 22
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 23
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 27
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 28
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 29
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
+  i32.const 1
+  drop
   i32.const 0
   i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 0
   i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 30
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   i32.const 1
   i32.clz
   drop
@@ -319,112 +461,112 @@
   i32.rotr
   drop
   i32.const -42
-  tee_local $0
-  i32.const 0
-  get_local $0
-  i32.sub
-  get_local $0
-  i32.const 0
+  local.tee $0
+  i32.const 31
+  i32.shr_s
+  local.tee $1
+  local.get $0
+  i32.add
+  local.get $1
+  i32.xor
+  drop
+  i32.const 1
+  local.tee $0
+  i32.const 2
+  local.tee $1
+  local.get $0
+  local.get $1
   i32.gt_s
   select
   drop
   i32.const 1
-  tee_local $0
+  local.tee $0
   i32.const 2
-  tee_local $1
-  get_local $0
-  get_local $1
-  i32.gt_s
-  select
-  drop
-  i32.const 1
-  tee_local $0
-  i32.const 2
-  tee_local $1
-  get_local $0
-  get_local $1
+  local.tee $1
+  local.get $0
+  local.get $1
   i32.lt_s
   select
   drop
   i32.const 1
   i32.clz
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 1
   i32.ctz
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 1
   i32.popcnt
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 1
   i32.const 1
   i32.rotl
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 1
   i32.const 1
   i32.rotr
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const -42
-  tee_local $0
-  i32.const 0
-  get_local $0
-  i32.sub
-  get_local $0
-  i32.const 0
-  i32.gt_s
-  select
-  set_global $builtins/i
-  get_global $builtins/i
+  local.tee $0
+  i32.const 31
+  i32.shr_s
+  local.tee $1
+  local.get $0
+  i32.add
+  local.get $1
+  i32.xor
+  global.set $builtins/i
+  global.get $builtins/i
   i32.const 42
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
-   i32.const 50
-   i32.const 19
-   call $~lib/env/abort
+   i32.const 80
+   i32.const 67
+   i32.const 20
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 1
-  tee_local $0
+  local.tee $0
   i32.const 2
-  tee_local $1
-  get_local $0
-  get_local $1
+  local.tee $1
+  local.get $0
+  local.get $1
   i32.gt_s
   select
-  set_global $builtins/i
-  get_global $builtins/i
+  global.set $builtins/i
+  global.get $builtins/i
   i32.const 2
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
-   i32.const 51
-   i32.const 20
-   call $~lib/env/abort
+   i32.const 80
+   i32.const 68
+   i32.const 21
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 1
-  tee_local $0
+  local.tee $0
   i32.const 2
-  tee_local $1
-  get_local $0
-  get_local $1
+  local.tee $1
+  local.get $0
+  local.get $1
   i32.lt_s
   select
-  set_global $builtins/i
-  get_global $builtins/i
+  global.set $builtins/i
+  global.get $builtins/i
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
-   i32.const 52
-   i32.const 20
-   call $~lib/env/abort
+   i32.const 80
+   i32.const 69
+   i32.const 21
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 1
@@ -445,315 +587,227 @@
   i64.rotr
   drop
   i64.const -42
-  tee_local $2
-  i64.const 0
-  get_local $2
-  i64.sub
-  get_local $2
-  i64.const 0
-  i64.gt_s
-  select
+  local.tee $2
+  i64.const 63
+  i64.shr_s
+  local.tee $3
+  local.get $2
+  i64.add
+  local.get $3
+  i64.xor
   drop
   i64.const 1
   i64.clz
-  set_global $builtins/I
+  global.set $builtins/I
   i64.const 1
   i64.ctz
-  set_global $builtins/I
+  global.set $builtins/I
   i64.const 1
   i64.popcnt
-  set_global $builtins/I
+  global.set $builtins/I
   i64.const 1
   i64.const 1
   i64.rotl
-  set_global $builtins/I
+  global.set $builtins/I
   i64.const 1
   i64.const 1
   i64.rotr
-  set_global $builtins/I
+  global.set $builtins/I
   i64.const -42
-  tee_local $2
-  i64.const 0
-  get_local $2
-  i64.sub
-  get_local $2
-  i64.const 0
-  i64.gt_s
-  select
-  set_global $builtins/I
-  get_global $builtins/I
+  local.tee $2
+  i64.const 63
+  i64.shr_s
+  local.tee $3
+  local.get $2
+  i64.add
+  local.get $3
+  i64.xor
+  global.set $builtins/I
+  global.get $builtins/I
   i64.const 42
   i64.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
-   i32.const 68
-   i32.const 19
-   call $~lib/env/abort
+   i32.const 80
+   i32.const 85
+   i32.const 20
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 1
-  tee_local $2
+  local.tee $2
   i64.const 2
-  tee_local $3
-  get_local $2
-  get_local $3
+  local.tee $3
+  local.get $2
+  local.get $3
   i64.gt_s
   select
-  set_global $builtins/I
-  get_global $builtins/I
+  global.set $builtins/I
+  global.get $builtins/I
   i64.const 2
   i64.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
-   i32.const 69
-   i32.const 20
-   call $~lib/env/abort
+   i32.const 80
+   i32.const 86
+   i32.const 21
+   call $~lib/builtins/abort
    unreachable
   end
   i64.const 1
-  tee_local $2
+  local.tee $2
   i64.const 2
-  tee_local $3
-  get_local $2
-  get_local $3
+  local.tee $3
+  local.get $2
+  local.get $3
   i64.lt_s
   select
-  set_global $builtins/I
-  get_global $builtins/i
+  global.set $builtins/I
+  global.get $builtins/i
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
-   i32.const 70
-   i32.const 20
-   call $~lib/env/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  drop
-  f32.const inf
-  drop
-  f32.const 1.25
-  f32.abs
-  drop
-  f32.const 1.25
-  f32.ceil
-  drop
-  f32.const 1.25
-  f32.const 2.5
-  f32.copysign
-  drop
-  f32.const 1.25
-  f32.floor
-  drop
-  f32.const 1.25
-  f32.const 2.5
-  f32.max
-  drop
-  f32.const 1.25
-  f32.const 2.5
-  f32.min
-  drop
-  f32.const 1.25
-  f32.nearest
-  drop
-  f32.const 1.25
-  f32.sqrt
-  drop
-  f32.const 1.25
-  f32.trunc
-  drop
-  block $~lib/builtins/isNaN<f32>|inlined.0 (result i32)
-   f32.const 1.25
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.ne
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
+   i32.const 80
    i32.const 87
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isNaN<f32>|inlined.1 (result i32)
-   f32.const nan:0x400000
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.ne
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 88
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f32>|inlined.0 (result i32)
-   f32.const 1.25
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.sub
-   f32.const 0
-   f32.eq
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 89
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f32>|inlined.1 (result i32)
-   f32.const inf
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.sub
-   f32.const 0
-   f32.eq
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 90
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f32>|inlined.2 (result i32)
-   f32.const inf
-   f32.neg
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.sub
-   f32.const 0
-   f32.eq
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 91
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f32>|inlined.3 (result i32)
-   f32.const nan:0x400000
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.sub
-   f32.const 0
-   f32.eq
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 92
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 21
+   call $~lib/builtins/abort
    unreachable
   end
   f32.const nan:0x400000
-  set_global $builtins/f
+  drop
   f32.const inf
-  set_global $builtins/f
+  drop
   f32.const 1.25
   f32.abs
-  set_global $builtins/f
+  drop
   f32.const 1.25
   f32.ceil
-  set_global $builtins/f
+  drop
   f32.const 1.25
   f32.const 2.5
   f32.copysign
-  set_global $builtins/f
+  drop
   f32.const 1.25
   f32.floor
-  set_global $builtins/f
+  drop
   f32.const 1.25
   f32.const 2.5
   f32.max
-  set_global $builtins/f
+  drop
   f32.const 1.25
   f32.const 2.5
   f32.min
-  set_global $builtins/f
+  drop
   f32.const 1.25
   f32.nearest
-  set_global $builtins/f
+  drop
   f32.const 1.25
   f32.sqrt
-  set_global $builtins/f
+  drop
   f32.const 1.25
   f32.trunc
-  set_global $builtins/f
-  block $~lib/builtins/isNaN<f32>|inlined.2 (result i32)
-   f32.const 1.25
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.ne
-  end
+  drop
+  f32.const 1.25
+  local.tee $4
+  local.get $4
+  f32.ne
+  i32.const 0
+  i32.eq
+  drop
+  f32.const nan:0x400000
+  local.tee $4
+  local.get $4
+  f32.ne
   i32.const 1
-  i32.and
-  set_global $builtins/b
-  block $~lib/builtins/isFinite<f32>|inlined.4 (result i32)
-   f32.const 1.25
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.sub
-   f32.const 0
-   f32.eq
-  end
+  i32.eq
+  drop
+  f32.const 1.25
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   i32.const 1
-  i32.and
-  set_global $builtins/b
+  i32.eq
+  drop
+  f32.const inf
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
+  i32.const 0
+  i32.eq
+  drop
+  f32.const inf
+  f32.neg
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
+  i32.const 0
+  i32.eq
+  drop
+  f32.const nan:0x400000
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
+  i32.const 0
+  i32.eq
+  drop
+  f32.const nan:0x400000
+  global.set $builtins/f
+  f32.const inf
+  global.set $builtins/f
+  f32.const 1.25
+  f32.abs
+  global.set $builtins/f
+  f32.const 1.25
+  f32.ceil
+  global.set $builtins/f
+  f32.const 1.25
+  f32.const 2.5
+  f32.copysign
+  global.set $builtins/f
+  f32.const 1.25
+  f32.floor
+  global.set $builtins/f
+  f32.const 1.25
+  f32.const 2.5
+  f32.max
+  global.set $builtins/f
+  f32.const 1.25
+  f32.const 2.5
+  f32.min
+  global.set $builtins/f
+  f32.const 1.25
+  f32.nearest
+  global.set $builtins/f
+  f32.const 1.25
+  f32.sqrt
+  global.set $builtins/f
+  f32.const 1.25
+  f32.trunc
+  global.set $builtins/f
+  f32.const 1.25
+  local.tee $4
+  local.get $4
+  f32.ne
+  global.set $builtins/b
+  f32.const 1.25
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
+  global.set $builtins/b
   f64.const nan:0x8000000000000
   drop
   f64.const inf
@@ -792,196 +846,116 @@
   f64.const 1.25
   f64.trunc
   drop
-  block $~lib/builtins/isNaN<f64>|inlined.0 (result i32)
-   f64.const 1.25
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.ne
-  end
-  i32.const 1
-  i32.and
+  f64.const 1.25
+  local.tee $5
+  local.get $5
+  f64.ne
   i32.const 0
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 123
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isNaN<f64>|inlined.1 (result i32)
-   f64.const nan:0x8000000000000
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.ne
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 124
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f64>|inlined.0 (result i32)
-   f64.const 1.25
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.sub
-   f64.const 0
-   f64.eq
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 125
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f64>|inlined.1 (result i32)
-   f64.const inf
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.sub
-   f64.const 0
-   f64.eq
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 126
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f64>|inlined.2 (result i32)
-   f64.const inf
-   f64.neg
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.sub
-   f64.const 0
-   f64.eq
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 127
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f64>|inlined.3 (result i32)
-   f64.const nan:0x8000000000000
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.sub
-   f64.const 0
-   f64.eq
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 128
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   f64.const nan:0x8000000000000
-  set_global $builtins/F
+  local.tee $5
+  local.get $5
+  f64.ne
+  i32.const 1
+  i32.eq
+  drop
+  f64.const 1.25
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
+  i32.const 1
+  i32.eq
+  drop
   f64.const inf
-  set_global $builtins/F
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
+  i32.const 0
+  i32.eq
+  drop
+  f64.const inf
+  f64.neg
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
+  i32.const 0
+  i32.eq
+  drop
+  f64.const nan:0x8000000000000
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
+  i32.const 0
+  i32.eq
+  drop
+  f64.const nan:0x8000000000000
+  global.set $builtins/F
+  f64.const inf
+  global.set $builtins/F
   f64.const 1.25
   f64.abs
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
   f64.ceil
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
   f64.const 2.5
   f64.copysign
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
   f64.floor
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
   f64.const 2.5
   f64.max
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
   f64.const 2.5
   f64.min
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
   f64.nearest
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
   f64.sqrt
-  set_global $builtins/F
+  global.set $builtins/F
   f64.const 1.25
   f64.trunc
-  set_global $builtins/F
-  block $~lib/builtins/isNaN<f64>|inlined.2 (result i32)
-   f64.const 1.25
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.ne
-  end
-  i32.const 1
-  i32.and
-  set_global $builtins/b
-  block $~lib/builtins/isFinite<f64>|inlined.4 (result i32)
-   f64.const 1.25
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.sub
-   f64.const 0
-   f64.eq
-  end
-  i32.const 1
-  i32.and
-  set_global $builtins/b
+  global.set $builtins/F
+  f64.const 1.25
+  local.tee $5
+  local.get $5
+  f64.ne
+  global.set $builtins/b
+  f64.const 1.25
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
+  global.set $builtins/b
+  f64.const 0
+  f64.const 1
+  f64.min
+  global.set $builtins/F
+  f32.const 0
+  global.get $builtins/f
+  f32.max
+  global.set $builtins/f
   i32.const 8
   i32.load
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
-  get_global $builtins/i
+  global.get $builtins/i
   i32.store
   i32.const 8
   i32.const 8
@@ -989,9 +963,9 @@
   i32.store
   i32.const 8
   i64.load
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
-  get_global $builtins/I
+  global.get $builtins/I
   i64.store
   i32.const 8
   i32.const 8
@@ -999,9 +973,9 @@
   i64.store
   i32.const 8
   f32.load
-  set_global $builtins/f
+  global.set $builtins/f
   i32.const 8
-  get_global $builtins/f
+  global.get $builtins/f
   f32.store
   i32.const 8
   i32.const 8
@@ -1009,9 +983,9 @@
   f32.store
   i32.const 8
   f64.load
-  set_global $builtins/F
+  global.set $builtins/F
   i32.const 8
-  get_global $builtins/F
+  global.get $builtins/F
   f64.store
   i32.const 8
   i32.const 8
@@ -1019,9 +993,9 @@
   f64.store
   i32.const 0
   i32.load offset=8
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 0
-  get_global $builtins/i
+  global.get $builtins/i
   i32.store offset=8
   i32.const 0
   i32.const 0
@@ -1029,9 +1003,9 @@
   i32.store offset=8
   i32.const 0
   i64.load offset=8
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 0
-  get_global $builtins/I
+  global.get $builtins/I
   i64.store offset=8
   i32.const 0
   i32.const 0
@@ -1039,9 +1013,9 @@
   i64.store offset=8
   i32.const 0
   f32.load offset=8
-  set_global $builtins/f
+  global.set $builtins/f
   i32.const 0
-  get_global $builtins/f
+  global.get $builtins/f
   f32.store offset=8
   i32.const 0
   i32.const 0
@@ -1049,9 +1023,9 @@
   f32.store offset=8
   i32.const 0
   f64.load offset=8
-  set_global $builtins/F
+  global.set $builtins/F
   i32.const 0
-  get_global $builtins/F
+  global.get $builtins/F
   f64.store offset=8
   i32.const 0
   i32.const 0
@@ -1059,64 +1033,64 @@
   f64.store offset=8
   i32.const 8
   i32.load8_s
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load16_s
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load8_u
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load16_u
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load
-  set_global $builtins/i
+  global.set $builtins/i
   i32.const 8
   i32.load8_u
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i32.load16_u
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i32.load
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i32.load8_s
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i32.load16_s
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i32.load
-  set_global $builtins/u
+  global.set $builtins/u
   i32.const 8
   i64.load8_s
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
   i64.load16_s
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
   i64.load32_s
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
   i64.load
-  set_global $builtins/I
+  global.set $builtins/I
   i32.const 8
   i64.load8_u
-  set_global $builtins/U
+  global.set $builtins/U
   i32.const 8
   i64.load16_u
-  set_global $builtins/U
+  global.set $builtins/U
   i32.const 8
   i64.load32_u
-  set_global $builtins/U
+  global.set $builtins/U
   i32.const 8
   i64.load
-  set_global $builtins/U
+  global.set $builtins/U
   i32.const 8
   i32.const 1
   i32.store8
@@ -1140,42 +1114,42 @@
   i64.store
   i32.const 8
   i32.const 1
-  i64.extend_s/i32
+  i64.extend_i32_s
   i64.store
   f32.const 1.25
-  i32.reinterpret/f32
+  i32.reinterpret_f32
   drop
   i32.const 25
-  f32.reinterpret/i32
+  f32.reinterpret_i32
   drop
   f64.const 1.25
-  i64.reinterpret/f64
+  i64.reinterpret_f64
   drop
   i64.const 25
-  f64.reinterpret/i64
+  f64.reinterpret_i64
   drop
   f32.const 1.25
-  i32.reinterpret/f32
-  set_global $builtins/i
+  i32.reinterpret_f32
+  global.set $builtins/i
   i32.const 25
-  f32.reinterpret/i32
-  set_global $builtins/f
+  f32.reinterpret_i32
+  global.set $builtins/f
   f64.const 1.25
-  i64.reinterpret/f64
-  set_global $builtins/I
+  i64.reinterpret_f64
+  global.set $builtins/I
   i64.const 25
-  f64.reinterpret/i64
-  set_global $builtins/F
-  current_memory
+  f64.reinterpret_i64
+  global.set $builtins/F
+  memory.size
   drop
   i32.const 1
-  grow_memory
+  memory.grow
   drop
-  current_memory
-  set_global $builtins/s
+  memory.size
+  global.set $builtins/s
   i32.const 1
-  grow_memory
-  set_global $builtins/s
+  memory.grow
+  global.set $builtins/s
   i32.const 10
   i32.const 20
   i32.const 1
@@ -1200,2157 +1174,403 @@
   i32.const 20
   i32.const 1
   select
-  set_global $builtins/i
+  global.set $builtins/i
   i64.const 100
   i64.const 200
   i32.const 0
   select
-  set_global $builtins/I
+  global.set $builtins/I
   f32.const 1.25
   f32.const 2.5
   i32.const 1
   select
-  set_global $builtins/f
+  global.set $builtins/f
   f64.const 12.5
   f64.const 25
   i32.const 0
   select
-  set_global $builtins/F
-  get_global $builtins/i
+  global.set $builtins/F
+  global.get $builtins/i
   i32.eqz
   if
    unreachable
   end
   i32.const 1
   i32.const 2
-  get_global $builtins/fn
-  call_indirect (type $iiv)
-  i32.const 1
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 247
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
   i32.const 2
-  i32.const 2
+  global.set $~argumentsLength
+  global.get $builtins/fn
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
+  i32.const 3
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
-   i32.const 248
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 4
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 249
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 8
-  i32.const 8
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 250
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 4
-  drop
-  i32.const 1
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 252
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 253
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 2
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 254
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 4
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 255
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 8
-  i32.const 8
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 256
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 4
-  drop
-  i32.const 4
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 258
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 8
-  i32.const 8
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 259
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 0
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 262
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 4
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 263
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 0
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 264
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  i32.const 2
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
+   i32.const 80
    i32.const 265
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  i32.const 0
+  i32.const 5
+  i32.const 2
+  i32.const 3
+  global.get $builtins/fn
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index
+  call_indirect (type $i32_i32_=>_i32)
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 80
+   i32.const 266
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $builtins/fn
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name
+  local.tee $0
+  i32.const 32
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
    i32.const 267
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  i32.const 8
+  global.get $builtins/fn
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length
+  i32.const 2
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 80
    i32.const 268
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
+  global.get $builtins/fn
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 269
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $builtins/fn
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString
+  local.tee $1
+  i32.const 160
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 270
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 2
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  i32.const 4
+  drop
+  i32.const 1
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 1
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 2
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  i32.const 4
+  drop
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 1
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 2
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 3
+  i32.const 3
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 2
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   f64.ne
+  drop
+  f32.const nan:0x400000
+  local.tee $4
+  local.get $4
+  f32.ne
+  drop
+  f64.const nan:0x8000000000000
+  local.tee $5
+  local.get $5
+  f64.ne
+  drop
+  f32.const nan:0x400000
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 270
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isNaN<f32>|inlined.3 (result i32)
-   f32.const nan:0x400000
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.ne
-  end
-  i32.const 1
-  i32.and
+  drop
+  f32.const inf
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 271
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isNaN<f64>|inlined.3 (result i32)
-   f64.const nan:0x8000000000000
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.ne
-  end
-  i32.const 1
-  i32.and
+  drop
+  f64.const nan:0x8000000000000
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
   i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 272
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f32>|inlined.5 (result i32)
-   f32.const nan:0x400000
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.sub
-   f32.const 0
-   f32.eq
-  end
-  i32.const 1
-  i32.and
+  drop
+  f64.const inf
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 273
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f32>|inlined.6 (result i32)
-   f32.const inf
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.sub
-   f32.const 0
-   f32.eq
-  end
-  i32.const 1
-  i32.and
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 274
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f64>|inlined.5 (result i32)
-   f64.const nan:0x8000000000000
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.sub
-   f64.const 0
-   f64.eq
-  end
-  i32.const 1
-  i32.and
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 275
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f64>|inlined.6 (result i32)
-   f64.const inf
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.sub
-   f64.const 0
-   f64.eq
-  end
-  i32.const 1
-  i32.and
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 276
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f32>|inlined.7 (result i32)
-   f32.const 0
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.sub
-   f32.const 0
-   f32.eq
-  end
-  i32.const 1
-  i32.and
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 277
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isFinite<f64>|inlined.7 (result i32)
-   f64.const 0
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.sub
-   f64.const 0
-   f64.eq
-  end
-  i32.const 1
-  i32.and
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 278
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/i8.MIN_VALUE
+  drop
+  f32.const 0
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
+  drop
+  f64.const 0
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
+  drop
+  global.get $~lib/builtins/i8.MIN_VALUE
   i32.const 128
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 291
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/i8.MAX_VALUE
+  drop
+  global.get $~lib/builtins/i8.MAX_VALUE
   i32.const 127
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 292
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/i16.MIN_VALUE
+  drop
+  global.get $~lib/builtins/i16.MIN_VALUE
   i32.const 32768
   i32.const 16
   i32.shl
   i32.const 16
   i32.shr_s
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 293
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/i16.MAX_VALUE
+  drop
+  global.get $~lib/builtins/i16.MAX_VALUE
   i32.const 32767
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 294
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/i32.MIN_VALUE
+  drop
+  global.get $~lib/builtins/i32.MIN_VALUE
   i32.const -2147483648
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 295
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/i32.MAX_VALUE
+  drop
+  global.get $~lib/builtins/i32.MAX_VALUE
   i32.const 2147483647
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 296
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/i64.MIN_VALUE
+  drop
+  global.get $~lib/builtins/i64.MIN_VALUE
   i64.const -9223372036854775808
   i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 297
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/i64.MAX_VALUE
+  drop
+  global.get $~lib/builtins/i64.MAX_VALUE
   i64.const 9223372036854775807
   i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 298
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/u8.MIN_VALUE
+  drop
+  global.get $~lib/builtins/u8.MIN_VALUE
   i32.const 0
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 300
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/u8.MAX_VALUE
+  drop
+  global.get $~lib/builtins/u8.MAX_VALUE
   i32.const 255
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 301
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/u16.MIN_VALUE
+  drop
+  global.get $~lib/builtins/u16.MIN_VALUE
   i32.const 0
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 302
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/u16.MAX_VALUE
+  drop
+  global.get $~lib/builtins/u16.MAX_VALUE
   i32.const 65535
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 303
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/u32.MIN_VALUE
+  drop
+  global.get $~lib/builtins/u32.MIN_VALUE
   i32.const 0
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 304
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/u32.MAX_VALUE
+  drop
+  global.get $~lib/builtins/u32.MAX_VALUE
   i32.const -1
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 305
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/u64.MIN_VALUE
+  drop
+  global.get $~lib/builtins/u64.MIN_VALUE
   i64.const 0
   i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 306
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/u64.MAX_VALUE
+  drop
+  global.get $~lib/builtins/u64.MAX_VALUE
   i64.const -1
   i64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 307
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/bool.MIN_VALUE
+  drop
+  global.get $~lib/builtins/bool.MIN_VALUE
   i32.const 0
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 308
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/bool.MIN_VALUE
+  drop
+  global.get $~lib/builtins/bool.MIN_VALUE
   i32.const 0
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 308
-   i32.const 29
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/bool.MAX_VALUE
+  drop
+  global.get $~lib/builtins/bool.MAX_VALUE
   i32.const 1
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 309
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/bool.MAX_VALUE
+  drop
+  global.get $~lib/builtins/bool.MAX_VALUE
   i32.const 1
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 309
-   i32.const 29
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f32.MIN_NORMAL_VALUE
+  drop
+  global.get $~lib/builtins/f32.MIN_NORMAL_VALUE
   f32.const 1.1754943508222875e-38
   f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 311
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f32.MIN_VALUE
+  drop
+  global.get $~lib/builtins/f32.MIN_VALUE
   f32.const 1.401298464324817e-45
   f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 312
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f32.MAX_VALUE
+  drop
+  global.get $~lib/builtins/f32.MAX_VALUE
   f32.const 3402823466385288598117041e14
   f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 313
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f32.MIN_SAFE_INTEGER
+  drop
+  global.get $~lib/builtins/f32.MIN_SAFE_INTEGER
   f32.const -16777215
   f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 314
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
+  drop
+  global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
   f32.const 16777215
   f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 315
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f32.EPSILON
+  drop
+  global.get $~lib/builtins/f32.EPSILON
   f32.const 1.1920928955078125e-07
   f32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 316
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isNaN<f32>|inlined.4 (result i32)
-   get_global $~lib/builtins/f32.NaN
-   set_local $4
-   get_local $4
-   get_local $4
-   f32.ne
-  end
-  i32.const 1
-  i32.and
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 317
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isSafeInteger|inlined.0 (result i32)
-   get_global $~lib/builtins/f32.MIN_SAFE_INTEGER
-   f32.const 1
-   f32.sub
-   set_local $4
-   get_local $4
-   f32.abs
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   f32.le
-   tee_local $0
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 318
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isSafeInteger|inlined.1 (result i32)
-   get_global $~lib/builtins/f32.MIN_SAFE_INTEGER
-   set_local $4
-   get_local $4
-   f32.abs
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   f32.le
-   tee_local $0
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 319
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isSafeInteger|inlined.2 (result i32)
-   f32.const 0
-   set_local $4
-   get_local $4
-   f32.abs
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   f32.le
-   tee_local $0
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 320
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isSafeInteger|inlined.3 (result i32)
-   f32.const -0
-   set_local $4
-   get_local $4
-   f32.abs
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   f32.le
-   tee_local $0
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 321
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isSafeInteger|inlined.4 (result i32)
-   f32.const nan:0x400000
-   set_local $4
-   get_local $4
-   f32.abs
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   f32.le
-   tee_local $0
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 322
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isSafeInteger|inlined.5 (result i32)
-   f32.const inf
-   set_local $4
-   get_local $4
-   f32.abs
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   f32.le
-   tee_local $0
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 323
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isSafeInteger|inlined.6 (result i32)
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   set_local $4
-   get_local $4
-   f32.abs
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   f32.le
-   tee_local $0
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 324
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isSafeInteger|inlined.7 (result i32)
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   f32.const 1
-   f32.add
-   set_local $4
-   get_local $4
-   f32.abs
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   f32.le
-   tee_local $0
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 325
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isSafeInteger|inlined.8 (result i32)
-   f32.const 0.5
-   set_local $4
-   get_local $4
-   f32.abs
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   f32.le
-   tee_local $0
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 326
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.0 (result i32)
-   f32.const 0
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.8 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 327
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.1 (result i32)
-   f32.const -0
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.9 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 328
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.2 (result i32)
-   f32.const nan:0x400000
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.10 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 329
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.3 (result i32)
-   f32.const inf
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.11 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 330
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.4 (result i32)
-   get_global $~lib/builtins/f32.EPSILON
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.12 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 331
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.5 (result i32)
-   f32.const 1
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.13 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 332
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.6 (result i32)
-   f32.const -1
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.14 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 333
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.7 (result i32)
-   get_global $~lib/builtins/f32.MIN_SAFE_INTEGER
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.15 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 334
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.8 (result i32)
-   get_global $~lib/builtins/f32.MAX_SAFE_INTEGER
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.16 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 335
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.9 (result i32)
-   f32.const 0.5
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.17 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 336
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f32.isInteger|inlined.10 (result i32)
-   f32.const -1.5
-   set_local $4
-   block $~lib/builtins/isFinite<f32>|inlined.18 (result i32)
-    get_local $4
-    get_local $4
-    f32.sub
-    f32.const 0
-    f32.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $4
-    f32.trunc
-    get_local $4
-    f32.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 337
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f64.MIN_NORMAL_VALUE
+  drop
+  global.get $~lib/builtins/f64.MIN_NORMAL_VALUE
   f64.const 2.2250738585072014e-308
   f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 339
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f64.MIN_VALUE
+  drop
+  global.get $~lib/builtins/f64.MIN_VALUE
   f64.const 5e-324
   f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 340
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f64.MAX_VALUE
+  drop
+  global.get $~lib/builtins/f64.MAX_VALUE
   f64.const 1797693134862315708145274e284
   f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 341
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f64.MIN_SAFE_INTEGER
+  drop
+  global.get $~lib/builtins/f64.MIN_SAFE_INTEGER
   f64.const -9007199254740991
   f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 342
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
+  drop
+  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   f64.const 9007199254740991
   f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 343
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  get_global $~lib/builtins/f64.EPSILON
+  drop
+  global.get $~lib/builtins/f64.EPSILON
   f64.const 2.220446049250313e-16
   f64.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 344
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/isNaN<f64>|inlined.4 (result i32)
-   get_global $~lib/builtins/f64.NaN
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.ne
-  end
-  i32.const 1
-  i32.and
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 345
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isSafeInteger|inlined.0 (result i32)
-   get_global $~lib/builtins/f64.MIN_SAFE_INTEGER
-   f64.const 1
-   f64.sub
-   set_local $5
-   get_local $5
-   f64.abs
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.le
-   tee_local $0
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 346
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isSafeInteger|inlined.1 (result i32)
-   get_global $~lib/builtins/f64.MIN_SAFE_INTEGER
-   set_local $5
-   get_local $5
-   f64.abs
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.le
-   tee_local $0
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 347
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isSafeInteger|inlined.2 (result i32)
-   f64.const 0
-   set_local $5
-   get_local $5
-   f64.abs
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.le
-   tee_local $0
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 348
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isSafeInteger|inlined.3 (result i32)
-   f64.const -0
-   set_local $5
-   get_local $5
-   f64.abs
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.le
-   tee_local $0
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 349
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isSafeInteger|inlined.4 (result i32)
-   f64.const nan:0x8000000000000
-   set_local $5
-   get_local $5
-   f64.abs
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.le
-   tee_local $0
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 350
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isSafeInteger|inlined.5 (result i32)
-   f64.const inf
-   set_local $5
-   get_local $5
-   f64.abs
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.le
-   tee_local $0
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 351
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isSafeInteger|inlined.6 (result i32)
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   set_local $5
-   get_local $5
-   f64.abs
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.le
-   tee_local $0
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 352
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isSafeInteger|inlined.7 (result i32)
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.const 1
-   f64.add
-   set_local $5
-   get_local $5
-   f64.abs
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.le
-   tee_local $0
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 353
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isSafeInteger|inlined.8 (result i32)
-   f64.const 0.5
-   set_local $5
-   get_local $5
-   f64.abs
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   f64.le
-   tee_local $0
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 354
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.0 (result i32)
-   f64.const 0
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.8 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 355
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.1 (result i32)
-   f64.const -0
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.9 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 356
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.2 (result i32)
-   f64.const nan:0x8000000000000
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.10 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 357
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.3 (result i32)
-   f64.const inf
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.11 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 358
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.4 (result i32)
-   get_global $~lib/builtins/f64.EPSILON
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.12 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 359
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.5 (result i32)
-   f64.const 1
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.13 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 360
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.6 (result i32)
-   f64.const -1
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.14 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 361
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.7 (result i32)
-   get_global $~lib/builtins/f64.MIN_SAFE_INTEGER
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.15 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 362
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.8 (result i32)
-   get_global $~lib/builtins/f64.MAX_SAFE_INTEGER
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.16 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 363
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.9 (result i32)
-   f64.const 0.5
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.17 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 364
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
-  block $~lib/builtins/f64.isInteger|inlined.10 (result i32)
-   f64.const -1.5
-   set_local $5
-   block $~lib/builtins/isFinite<f64>|inlined.18 (result i32)
-    get_local $5
-    get_local $5
-    f64.sub
-    f64.const 0
-    f64.eq
-   end
-   tee_local $0
-   i32.const 1
-   i32.and
-   if (result i32)
-    get_local $5
-    f64.trunc
-    get_local $5
-    f64.eq
-   else    
-    get_local $0
-   end
-  end
-  i32.const 1
-  i32.and
-  i32.const 0
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 365
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   f32.const 1
   f32.abs
   drop
@@ -3460,16 +1680,16 @@
   f64.min
   drop
   f32.const 1
-  i32.reinterpret/f32
+  i32.reinterpret_f32
   drop
   f64.const 1
-  i64.reinterpret/f64
+  i64.reinterpret_f64
   drop
   i32.const 1
-  f32.reinterpret/i32
+  f32.reinterpret_i32
   drop
   i64.const 1
-  f64.reinterpret/i64
+  f64.reinterpret_i64
   drop
   i32.const 1
   i32.const 2
@@ -3503,14 +1723,14 @@
   i32.const 1
   i32.store
   i32.const 8
-  i32.const 1
-  i32.store8
+  i64.const 1
+  i64.store8
   i32.const 8
-  i32.const 1
-  i32.store16
+  i64.const 1
+  i64.store16
   i32.const 8
-  i32.const 1
-  i32.store
+  i64.const 1
+  i64.store32
   i32.const 8
   i64.const 1
   i64.store
@@ -3526,15 +1746,483 @@
   f64.const 1
   f64.trunc
   drop
-  block $~lib/builtins/isNaN<f64>|inlined.5 (result i32)
-   f64.const 1
-   set_local $5
-   get_local $5
-   get_local $5
-   f64.ne
+  i32.const 0
+  call $~lib/atomics/Atomics.isLockFree
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 432
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
   end
+  i32.const 1
+  call $~lib/atomics/Atomics.isLockFree
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 433
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  call $~lib/atomics/Atomics.isLockFree
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 434
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 3
+  call $~lib/atomics/Atomics.isLockFree
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 435
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 4
+  call $~lib/atomics/Atomics.isLockFree
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 436
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 5
+  call $~lib/atomics/Atomics.isLockFree
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 437
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8
+  call $~lib/atomics/Atomics.isLockFree
+  i32.const 0
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 438
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  local.set $6
+  i32.const 0
+  local.set $7
+  i32.const 25
+  local.set $8
+  i32.const 26
+  local.set $9
+  i32.const 26
+  local.set $10
+  i32.const 240
+  i32.const 5
+  local.get $6
+  f64.convert_i32_u
+  local.get $7
+  f64.convert_i32_u
+  local.get $8
+  f64.convert_i32_u
+  local.get $9
+  f64.convert_i32_u
+  local.get $10
+  f64.convert_i32_u
+  call $~lib/builtins/trace
+  local.get $6
+  local.get $7
+  i32.eq
+  i32.eqz
+  if
+   i32.const 288
+   i32.const 80
+   i32.const 448
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $6
+  local.get $8
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 449
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $8
+  i32.const 25
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 450
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $9
+  local.get $10
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 451
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 320
+  i32.const 320
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 455
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 320
+  i32.const 320
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 456
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 352
+  i32.const 352
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 457
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 384
+  i32.const 384
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 458
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 416
+  i32.const 416
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 459
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 448
+  i32.const 448
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 460
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 480
+  i32.const 480
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 461
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 512
+  i32.const 512
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 462
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 544
+  i32.const 544
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 463
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 576
+  i32.const 576
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 464
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 608
+  i32.const 608
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 465
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 640
+  i32.const 640
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 466
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 672
+  i32.const 672
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 467
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 704
+  i32.const 704
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 468
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 736
+  i32.const 736
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 469
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 768
+  i32.const 768
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 470
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 800
+  i32.const 800
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 471
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 832
+  i32.const 832
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 472
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 384
+  i32.const 384
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 473
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 320
+  i32.const 320
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 474
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
   drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 1
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 2
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 3
+  i32.const 3
+  i32.eq
+  drop
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
  )
- (func $null (; 4 ;) (type $v)
+ (func $builtins/test
+  nop
+ )
+ (func $~start
+  call $start:builtins
  )
 )

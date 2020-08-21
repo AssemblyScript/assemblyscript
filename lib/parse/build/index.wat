@@ -1,14 +1,13 @@
 (module
- (type $iiv (func (param i32 i32)))
- (type $ii (func (param i32) (result i32)))
- (type $iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $iiiv (func (param i32 i32 i32)))
- (type $iiiiiiv (func (param i32 i32 i32 i32 i32 i32)))
- (type $iiiiiv (func (param i32 i32 i32 i32 i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
- (type $I (func (result i64)))
- (type $iv (func (param i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $FUNCSIG$viii (func (param i32 i32 i32)))
+ (type $FUNCSIG$viiiiii (func (param i32 i32 i32 i32 i32 i32)))
+ (type $FUNCSIG$viiiii (func (param i32 i32 i32 i32 i32)))
+ (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$v (func))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "memory" (memory $0 0))
  (import "options" "onSection" (func $assembly/options/onSection (param i32 i32 i32 i32 i32) (result i32)))
@@ -30,233 +29,172 @@
  (import "options" "onFunctionName" (func $assembly/options/onFunctionName (param i32 i32 i32)))
  (import "options" "onLocalName" (func $assembly/options/onLocalName (param i32 i32 i32 i32)))
  (import "options" "onSourceMappingURL" (func $assembly/options/onSourceMappingURL (param i32 i32)))
- (table $0 1 anyfunc)
- (elem (i32.const 0) $null)
  (global $assembly/index/off (mut i32) (i32.const 0))
- (global $src/common/SectionId.Custom (mut i32) (i32.const 0))
- (global $src/common/SectionId.Type (mut i32) (i32.const 1))
- (global $src/common/SectionId.Import (mut i32) (i32.const 2))
- (global $src/common/SectionId.Function (mut i32) (i32.const 3))
- (global $src/common/SectionId.Table (mut i32) (i32.const 4))
- (global $src/common/SectionId.Memory (mut i32) (i32.const 5))
- (global $src/common/SectionId.Global (mut i32) (i32.const 6))
- (global $src/common/SectionId.Export (mut i32) (i32.const 7))
- (global $src/common/SectionId.Start (mut i32) (i32.const 8))
- (global $src/common/SectionId.Element (mut i32) (i32.const 9))
- (global $src/common/SectionId.Code (mut i32) (i32.const 10))
- (global $src/common/SectionId.Data (mut i32) (i32.const 11))
- (global $src/common/ExternalKind.Function (mut i32) (i32.const 0))
- (global $src/common/ExternalKind.Table (mut i32) (i32.const 1))
- (global $src/common/ExternalKind.Memory (mut i32) (i32.const 2))
- (global $src/common/ExternalKind.Global (mut i32) (i32.const 3))
- (global $src/common/Opcode.end (mut i32) (i32.const 11))
- (global $src/common/Opcode.get_global (mut i32) (i32.const 35))
- (global $src/common/Opcode.i32_const (mut i32) (i32.const 65))
- (global $src/common/Opcode.i64_const (mut i32) (i32.const 66))
- (global $src/common/Opcode.f32_const (mut i32) (i32.const 67))
- (global $src/common/Opcode.f64_const (mut i32) (i32.const 68))
- (global $src/common/NameType.Module (mut i32) (i32.const 0))
- (global $src/common/NameType.Function (mut i32) (i32.const 1))
- (global $src/common/NameType.Local (mut i32) (i32.const 2))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "parse" (func $assembly/index/parse))
  (func $assembly/index/readVaruint (; 19 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  get_global $assembly/index/off
-  set_local $0
-  block $break|0
-   loop $continue|0
-    get_local $0
-    tee_local $1
-    i32.const 1
-    i32.add
-    set_local $0
-    get_local $2
-    get_local $1
-    i32.load8_u
-    tee_local $1
-    i32.const 127
-    i32.and
-    get_local $3
-    i32.shl
-    i32.or
-    set_local $2
-    get_local $1
-    i32.const 128
-    i32.and
-    i32.eqz
-    br_if $break|0
-    get_local $3
+  global.get $assembly/index/off
+  local.set $0
+  loop $continue|0
+   local.get $0
+   local.tee $1
+   i32.const 1
+   i32.add
+   local.set $0
+   local.get $1
+   i32.load8_u
+   local.tee $1
+   i32.const 127
+   i32.and
+   local.get $3
+   i32.shl
+   local.get $2
+   i32.or
+   local.set $2
+   local.get $1
+   i32.const 128
+   i32.and
+   if
+    local.get $3
     i32.const 7
     i32.add
-    set_local $3
+    local.set $3
     br $continue|0
-    unreachable
    end
-   unreachable
   end
-  get_local $0
-  set_global $assembly/index/off
-  get_local $2
+  local.get $0
+  global.set $assembly/index/off
+  local.get $2
  )
- (func $assembly/index/readVarint (; 20 ;) (type $ii) (param $0 i32) (result i32)
+ (func $assembly/index/readVarint (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  get_global $assembly/index/off
-  set_local $2
+  global.get $assembly/index/off
+  local.set $4
   loop $continue|0
-   get_local $2
-   tee_local $4
+   local.get $4
+   local.tee $3
    i32.const 1
    i32.add
-   set_local $2
-   get_local $3
-   get_local $4
+   local.set $4
+   local.get $3
    i32.load8_u
-   tee_local $5
+   local.tee $3
    i32.const 127
    i32.and
-   get_local $1
+   local.get $1
    i32.shl
+   local.get $2
    i32.or
-   set_local $3
-   get_local $1
+   local.set $2
+   local.get $1
    i32.const 7
    i32.add
-   set_local $1
-   get_local $5
+   local.set $1
+   local.get $3
    i32.const 128
    i32.and
    br_if $continue|0
   end
-  get_local $2
-  set_global $assembly/index/off
-  get_local $3
+  local.get $4
+  global.set $assembly/index/off
   i32.const -1
-  get_local $1
+  local.get $1
   i32.shl
+  local.get $2
   i32.or
-  set_local $2
-  get_local $1
-  get_local $0
+  local.get $2
+  local.get $3
+  i32.const 64
+  i32.and
+  i32.const 0
+  i32.ne
+  i32.const 0
+  local.get $1
+  local.get $0
   i32.lt_u
-  tee_local $4
-  if
-   get_local $5
-   i32.const 64
-   i32.and
-   i32.const 0
-   i32.ne
-   set_local $4
-  end
-  get_local $2
-  get_local $3
-  get_local $4
+  select
   select
  )
- (func $assembly/index/readVarint64 (; 21 ;) (type $I) (result i64)
-  (local $0 i64)
+ (func $assembly/index/readVarint64 (; 21 ;) (type $FUNCSIG$v)
+  (local $0 i32)
   (local $1 i64)
   (local $2 i32)
-  (local $3 i32)
+  (local $3 i64)
   (local $4 i64)
-  (local $5 i64)
-  get_global $assembly/index/off
-  set_local $3
+  global.get $assembly/index/off
+  local.set $0
   loop $continue|0
-   get_local $3
-   tee_local $2
+   local.get $0
+   local.tee $2
    i32.const 1
    i32.add
-   set_local $3
-   get_local $1
-   get_local $2
+   local.set $0
+   local.get $2
    i64.load8_u
-   tee_local $4
+   local.tee $4
    i64.const 127
    i64.and
-   get_local $0
+   local.get $1
    i64.shl
+   local.get $3
    i64.or
-   set_local $1
-   get_local $0
+   local.set $3
+   local.get $1
    i64.const 7
    i64.add
-   set_local $0
-   get_local $4
+   local.set $1
+   local.get $4
    i64.const 128
    i64.and
    i64.const 0
    i64.ne
    br_if $continue|0
   end
-  get_local $3
-  set_global $assembly/index/off
-  get_local $1
-  i64.const -1
-  get_local $0
-  i64.shl
-  i64.or
-  set_local $5
-  get_local $0
-  i64.const 64
-  i64.lt_u
-  tee_local $2
-  if
-   get_local $4
-   i64.const 64
-   i64.and
-   i64.const 0
-   i64.ne
-   set_local $2
-  end
-  get_local $5
-  get_local $1
-  get_local $2
-  select
+  local.get $0
+  global.set $assembly/index/off
  )
- (func $assembly/index/skipInitExpr (; 22 ;) (type $v)
+ (func $assembly/index/skipInitExpr (; 22 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
+  global.get $assembly/index/off
+  local.tee $1
+  i32.load8_u
+  local.set $0
+  local.get $1
+  i32.const 1
+  i32.add
+  global.set $assembly/index/off
   block $break|0
    block $case5|0
     block $case4|0
      block $case3|0
       block $case2|0
        block $case1|0
-        get_global $assembly/index/off
-        tee_local $1
-        i32.load8_u
-        set_local $0
-        get_local $1
-        i32.const 1
-        i32.add
-        set_global $assembly/index/off
-        get_local $0
-        get_global $src/common/Opcode.i32_const
+        local.get $0
+        i32.const 65
         i32.ne
         if
-         get_local $0
-         get_global $src/common/Opcode.i64_const
+         local.get $0
+         i32.const 66
          i32.eq
          br_if $case1|0
-         get_local $0
-         get_global $src/common/Opcode.f32_const
+         local.get $0
+         i32.const 67
          i32.eq
          br_if $case2|0
-         get_local $0
-         get_global $src/common/Opcode.f64_const
+         local.get $0
+         i32.const 68
          i32.eq
          br_if $case3|0
-         get_local $0
-         get_global $src/common/Opcode.get_global
+         local.get $0
+         i32.const 35
          i32.eq
          br_if $case4|0
          br $case5|0
@@ -267,27 +205,26 @@
         br $break|0
        end
        call $assembly/index/readVarint64
-       drop
        br $break|0
       end
-      get_global $assembly/index/off
-      tee_local $0
+      global.get $assembly/index/off
+      local.tee $0
       i32.load
       drop
-      get_local $0
+      local.get $0
       i32.const 4
       i32.add
-      set_global $assembly/index/off
+      global.set $assembly/index/off
       br $break|0
      end
-     get_global $assembly/index/off
-     tee_local $0
+     global.get $assembly/index/off
+     local.tee $0
      i64.load
      drop
-     get_local $0
+     local.get $0
      i32.const 8
      i32.add
-     set_global $assembly/index/off
+     global.set $assembly/index/off
      br $break|0
     end
     call $assembly/index/readVaruint
@@ -296,22 +233,20 @@
    end
    unreachable
   end
-  get_global $assembly/index/off
-  tee_local $1
+  global.get $assembly/index/off
+  local.tee $1
   i32.load8_u
-  set_local $0
-  get_local $1
+  local.get $1
   i32.const 1
   i32.add
-  set_global $assembly/index/off
-  get_local $0
-  get_global $src/common/Opcode.end
+  global.set $assembly/index/off
+  i32.const 11
   i32.ne
   if
    unreachable
   end
  )
- (func $assembly/index/parse (; 23 ;) (type $iiv) (param $0 i32) (param $1 i32)
+ (func $assembly/index/parse (; 23 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -325,84 +260,78 @@
   (local $12 i32)
   (local $13 i32)
   (local $14 i32)
-  get_local $0
-  set_global $assembly/index/off
-  get_global $assembly/index/off
-  tee_local $6
+  local.get $0
+  global.set $assembly/index/off
+  global.get $assembly/index/off
+  local.tee $0
   i32.load
-  set_local $0
-  get_local $6
+  local.get $0
   i32.const 4
   i32.add
-  set_global $assembly/index/off
-  get_local $0
+  global.set $assembly/index/off
   i32.const 1836278016
   i32.ne
   if
    unreachable
   end
-  get_global $assembly/index/off
-  tee_local $6
+  global.get $assembly/index/off
+  local.tee $0
   i32.load
-  set_local $0
-  get_local $6
+  local.get $0
   i32.const 4
   i32.add
-  set_global $assembly/index/off
-  get_local $0
+  global.set $assembly/index/off
   i32.const 1
   i32.ne
   if
    unreachable
   end
+  i32.const 0
+  local.set $0
   loop $continue|0
-   get_global $assembly/index/off
-   get_local $1
+   global.get $assembly/index/off
+   local.get $1
    i32.lt_u
    if
     call $assembly/index/readVaruint
-    set_local $2
+    local.set $4
     call $assembly/index/readVaruint
-    set_local $8
+    local.set $3
     i32.const 0
-    set_local $5
+    local.set $5
     i32.const 0
-    set_local $0
-    get_local $2
+    local.set $2
+    local.get $4
     if
-     get_local $2
-     get_global $src/common/SectionId.Data
+     local.get $4
+     i32.const 11
      i32.gt_u
      if
       unreachable
      end
     else     
-     get_global $assembly/index/off
-     set_local $4
+     global.get $assembly/index/off
+     local.set $6
      call $assembly/index/readVaruint
-     set_local $0
-     get_global $assembly/index/off
-     set_local $5
-     get_global $assembly/index/off
-     get_local $0
+     local.tee $2
+     global.get $assembly/index/off
+     local.tee $5
      i32.add
-     set_global $assembly/index/off
-     get_local $8
-     get_global $assembly/index/off
-     get_local $4
+     global.set $assembly/index/off
+     local.get $3
+     global.get $assembly/index/off
+     local.get $6
      i32.sub
      i32.sub
-     set_local $8
+     local.set $3
     end
-    get_local $2
-    get_global $assembly/index/off
-    tee_local $4
-    get_local $8
-    get_local $5
-    get_local $0
+    local.get $4
+    global.get $assembly/index/off
+    local.tee $6
+    local.get $3
+    local.get $5
+    local.get $2
     call $assembly/options/onSection
-    i32.const 1
-    i32.and
     if
      block $break|1
       block $case12|1
@@ -415,206 +344,144 @@
              block $case3|1
               block $case2|1
                block $case1|1
-                get_local $2
-                get_global $src/common/SectionId.Type
+                local.get $4
+                i32.const 1
                 i32.ne
                 if
-                 get_local $2
-                 get_global $src/common/SectionId.Import
+                 local.get $4
+                 i32.const 2
                  i32.eq
                  br_if $case1|1
-                 get_local $2
-                 get_global $src/common/SectionId.Function
-                 i32.eq
-                 br_if $case2|1
-                 get_local $2
-                 get_global $src/common/SectionId.Table
-                 i32.eq
-                 br_if $case3|1
-                 get_local $2
-                 get_global $src/common/SectionId.Memory
-                 i32.eq
-                 br_if $case4|1
-                 get_local $2
-                 get_global $src/common/SectionId.Global
-                 i32.eq
-                 br_if $case5|1
-                 get_local $2
-                 get_global $src/common/SectionId.Export
-                 i32.eq
-                 br_if $case6|1
-                 get_local $2
-                 get_global $src/common/SectionId.Start
-                 i32.eq
-                 br_if $case7|1
-                 get_local $2
-                 get_global $src/common/SectionId.Custom
-                 i32.eq
-                 br_if $case8|1
-                 get_local $2
-                 get_global $src/common/SectionId.Element
-                 i32.eq
-                 br_if $case11|1
-                 get_local $2
-                 get_global $src/common/SectionId.Code
-                 i32.eq
-                 br_if $case11|1
-                 get_local $2
-                 get_global $src/common/SectionId.Data
-                 i32.eq
-                 br_if $case11|1
+                 block $tablify|0
+                  local.get $4
+                  br_table $case8|1 $tablify|0 $tablify|0 $case2|1 $case3|1 $case4|1 $case5|1 $case6|1 $case7|1 $case11|1 $case11|1 $case11|1 $tablify|0
+                 end
                  br $case12|1
                 end
                 call $assembly/index/readVaruint
-                set_local $2
-                block $break|2
-                 i32.const 0
-                 set_local $3
-                 loop $repeat|2
-                  get_local $3
-                  get_local $2
-                  i32.ge_u
-                  br_if $break|2
-                  get_local $3
+                local.set $4
+                i32.const 0
+                local.set $2
+                loop $loop|2
+                 local.get $2
+                 local.get $4
+                 i32.lt_u
+                 if
+                  local.get $2
                   i32.const 7
                   call $assembly/index/readVarint
                   i32.const 127
                   i32.and
                   call $assembly/options/onType
                   call $assembly/index/readVaruint
-                  set_local $4
-                  block $break|3
-                   i32.const 0
-                   set_local $7
-                   loop $repeat|3
-                    get_local $7
-                    get_local $4
-                    i32.ge_u
-                    br_if $break|3
-                    get_local $3
-                    get_local $7
+                  local.set $5
+                  i32.const 0
+                  local.set $3
+                  loop $loop|3
+                   local.get $3
+                   local.get $5
+                   i32.lt_u
+                   if
+                    local.get $2
+                    local.get $3
                     i32.const 7
                     call $assembly/index/readVarint
                     i32.const 127
                     i32.and
                     call $assembly/options/onTypeParam
-                    get_local $7
+                    local.get $3
                     i32.const 1
                     i32.add
-                    set_local $7
-                    br $repeat|3
-                    unreachable
+                    local.set $3
+                    br $loop|3
                    end
-                   unreachable
                   end
                   call $assembly/index/readVaruint
-                  set_local $7
-                  block $break|4
-                   i32.const 0
-                   set_local $5
-                   loop $repeat|4
-                    get_local $5
-                    get_local $7
-                    i32.ge_u
-                    br_if $break|4
-                    get_local $3
-                    get_local $5
+                  local.set $5
+                  i32.const 0
+                  local.set $3
+                  loop $loop|4
+                   local.get $3
+                   local.get $5
+                   i32.lt_u
+                   if
+                    local.get $2
+                    local.get $3
                     i32.const 7
                     call $assembly/index/readVarint
                     i32.const 127
                     i32.and
                     call $assembly/options/onTypeReturn
-                    get_local $5
+                    local.get $3
                     i32.const 1
                     i32.add
-                    set_local $5
-                    br $repeat|4
-                    unreachable
+                    local.set $3
+                    br $loop|4
                    end
-                   unreachable
                   end
-                  get_local $3
+                  local.get $2
                   i32.const 1
                   i32.add
-                  set_local $3
-                  br $repeat|2
-                  unreachable
+                  local.set $2
+                  br $loop|2
                  end
-                 unreachable
                 end
                 br $break|1
                end
                call $assembly/index/readVaruint
-               set_local $2
-               block $break|5
-                i32.const 0
-                set_local $3
-                loop $repeat|5
-                 get_local $3
-                 get_local $2
-                 i32.ge_u
-                 br_if $break|5
+               local.set $7
+               i32.const 0
+               local.set $4
+               loop $loop|5
+                local.get $4
+                local.get $7
+                i32.lt_u
+                if
                  call $assembly/index/readVaruint
-                 set_local $7
-                 get_global $assembly/index/off
-                 set_local $4
-                 get_global $assembly/index/off
-                 get_local $7
+                 local.tee $3
+                 global.get $assembly/index/off
+                 local.tee $5
                  i32.add
-                 set_global $assembly/index/off
+                 global.set $assembly/index/off
                  call $assembly/index/readVaruint
-                 set_local $9
-                 get_global $assembly/index/off
-                 set_local $5
-                 get_global $assembly/index/off
-                 get_local $9
+                 local.tee $6
+                 global.get $assembly/index/off
+                 local.tee $8
                  i32.add
-                 set_global $assembly/index/off
-                 get_global $assembly/index/off
-                 tee_local $6
+                 global.set $assembly/index/off
+                 global.get $assembly/index/off
+                 local.tee $9
                  i32.load8_u
-                 set_local $0
-                 get_local $6
+                 local.set $2
+                 local.get $9
                  i32.const 1
                  i32.add
-                 set_global $assembly/index/off
-                 get_local $3
-                 get_local $0
-                 get_local $4
-                 get_local $7
-                 get_local $5
-                 get_local $9
+                 global.set $assembly/index/off
+                 local.get $4
+                 local.get $2
+                 local.get $5
+                 local.get $3
+                 local.get $8
+                 local.get $6
                  call $assembly/options/onImport
                  block $break|6
                   block $case4|6
                    block $case3|6
                     block $case2|6
                      block $case1|6
-                      get_local $0
-                      tee_local $6
-                      get_global $src/common/ExternalKind.Function
-                      i32.ne
+                      local.get $2
                       if
-                       get_local $6
-                       get_global $src/common/ExternalKind.Table
-                       i32.eq
-                       br_if $case1|6
-                       get_local $6
-                       get_global $src/common/ExternalKind.Memory
-                       i32.eq
-                       br_if $case2|6
-                       get_local $6
-                       get_global $src/common/ExternalKind.Global
-                       i32.eq
-                       br_if $case3|6
-                       br $case4|6
+                       local.get $2
+                       i32.const 1
+                       i32.sub
+                       br_table $case1|6 $case2|6 $case3|6 $case4|6
                       end
-                      get_local $11
-                      tee_local $10
+                      local.get $10
+                      local.tee $2
                       i32.const 1
                       i32.add
-                      set_local $11
-                      get_local $10
+                      local.set $10
+                      local.get $2
                       call $assembly/index/readVaruint
                       call $assembly/options/onFunctionImport
                       br $break|6
@@ -623,19 +490,18 @@
                      call $assembly/index/readVarint
                      i32.const 127
                      i32.and
-                     set_local $6
+                     local.set $3
                      call $assembly/index/readVaruint
-                     set_local $10
-                     get_local $12
-                     tee_local $0
+                     local.set $5
+                     local.get $0
+                     local.tee $2
                      i32.const 1
                      i32.add
-                     set_local $12
-                     get_local $0
-                     get_local $6
+                     local.set $0
+                     local.get $2
+                     local.get $3
                      call $assembly/index/readVaruint
-                     tee_local $4
-                     get_local $10
+                     local.get $5
                      i32.const 1
                      i32.and
                      if (result i32)
@@ -643,22 +509,20 @@
                      else                      
                       i32.const -1
                      end
-                     tee_local $8
-                     get_local $10
+                     local.get $5
                      call $assembly/options/onTableImport
                      br $break|6
                     end
                     call $assembly/index/readVaruint
-                    set_local $8
-                    get_local $13
-                    tee_local $6
+                    local.set $3
+                    local.get $11
+                    local.tee $2
                     i32.const 1
                     i32.add
-                    set_local $13
-                    get_local $6
+                    local.set $11
+                    local.get $2
                     call $assembly/index/readVaruint
-                    tee_local $0
-                    get_local $8
+                    local.get $3
                     i32.const 1
                     i32.and
                     if (result i32)
@@ -666,17 +530,16 @@
                     else                     
                      i32.const 65535
                     end
-                    tee_local $10
-                    get_local $8
+                    local.get $3
                     call $assembly/options/onMemoryImport
                     br $break|6
                    end
-                   get_local $14
-                   tee_local $8
+                   local.get $12
+                   local.tee $2
                    i32.const 1
                    i32.add
-                   set_local $14
-                   get_local $8
+                   local.set $12
+                   local.get $2
                    i32.const 7
                    call $assembly/index/readVarint
                    i32.const 127
@@ -687,72 +550,65 @@
                   end
                   unreachable
                  end
-                 get_local $3
+                 local.get $4
                  i32.const 1
                  i32.add
-                 set_local $3
-                 br $repeat|5
-                 unreachable
+                 local.set $4
+                 br $loop|5
                 end
-                unreachable
                end
                br $break|1
               end
               call $assembly/index/readVaruint
-              set_local $2
-              block $break|7
-               i32.const 0
-               set_local $3
-               loop $repeat|7
-                get_local $3
-                get_local $2
-                i32.ge_u
-                br_if $break|7
-                get_local $11
-                tee_local $5
+              local.set $4
+              i32.const 0
+              local.set $3
+              loop $loop|7
+               local.get $3
+               local.get $4
+               i32.lt_u
+               if
+                local.get $10
+                local.tee $2
                 i32.const 1
                 i32.add
-                set_local $11
-                get_local $5
+                local.set $10
+                local.get $2
                 call $assembly/index/readVaruint
                 call $assembly/options/onFunction
-                get_local $3
+                local.get $3
                 i32.const 1
                 i32.add
-                set_local $3
-                br $repeat|7
-                unreachable
+                local.set $3
+                br $loop|7
                end
-               unreachable
               end
               br $break|1
              end
              call $assembly/index/readVaruint
-             set_local $2
-             block $break|8
-              i32.const 0
-              set_local $3
-              loop $repeat|8
-               get_local $3
-               get_local $2
-               i32.ge_u
-               br_if $break|8
+             local.set $7
+             i32.const 0
+             local.set $4
+             loop $loop|8
+              local.get $4
+              local.get $7
+              i32.lt_u
+              if
                call $assembly/index/readVaruint
                i32.const 127
                i32.and
-               set_local $0
+               local.set $3
                call $assembly/index/readVaruint
-               set_local $5
-               get_local $12
-               tee_local $7
+               local.set $5
+               local.get $0
+               local.tee $2
                i32.const 1
                i32.add
-               set_local $12
-               get_local $7
-               get_local $0
+               local.set $0
+               local.get $2
+               local.get $3
                call $assembly/index/readVaruint
-               tee_local $6
-               get_local $5
+               local.get $5
                i32.const 1
                i32.and
                if (result i32)
@@ -760,41 +616,36 @@
                else                
                 i32.const -1
                end
-               tee_local $4
-               get_local $5
+               local.get $5
                call $assembly/options/onTable
-               get_local $3
+               local.get $4
                i32.const 1
                i32.add
-               set_local $3
-               br $repeat|8
-               unreachable
+               local.set $4
+               br $loop|8
               end
-              unreachable
              end
              br $break|1
             end
             call $assembly/index/readVaruint
-            set_local $2
-            block $break|9
-             i32.const 0
-             set_local $3
-             loop $repeat|9
-              get_local $3
-              get_local $2
-              i32.ge_u
-              br_if $break|9
+            local.set $6
+            i32.const 0
+            local.set $3
+            loop $loop|9
+             local.get $3
+             local.get $6
+             i32.lt_u
+             if
               call $assembly/index/readVaruint
-              set_local $4
-              get_local $13
-              tee_local $0
+              local.set $4
+              local.get $11
+              local.tee $2
               i32.const 1
               i32.add
-              set_local $13
-              get_local $0
+              local.set $11
+              local.get $2
               call $assembly/index/readVaruint
-              tee_local $6
-              get_local $4
+              local.get $4
               i32.const 1
               i32.and
               if (result i32)
@@ -802,98 +653,87 @@
               else               
                i32.const 65535
               end
-              tee_local $5
-              get_local $4
+              local.get $4
               call $assembly/options/onMemory
-              get_local $3
+              local.get $3
               i32.const 1
               i32.add
-              set_local $3
-              br $repeat|9
-              unreachable
+              local.set $3
+              br $loop|9
              end
-             unreachable
             end
             br $break|1
            end
            call $assembly/index/readVaruint
-           set_local $2
-           block $break|10
-            i32.const 0
-            set_local $3
-            loop $repeat|10
-             get_local $3
-             get_local $2
-             i32.ge_u
-             br_if $break|10
+           local.set $4
+           i32.const 0
+           local.set $3
+           loop $loop|10
+            local.get $3
+            local.get $4
+            i32.lt_u
+            if
              i32.const 7
              call $assembly/index/readVarint
              i32.const 127
              i32.and
-             set_local $5
+             local.set $5
              call $assembly/index/readVaruint
-             set_local $9
+             local.set $6
              call $assembly/index/skipInitExpr
-             get_local $14
-             tee_local $4
+             local.get $12
+             local.tee $2
              i32.const 1
              i32.add
-             set_local $14
-             get_local $4
-             get_local $5
-             get_local $9
+             local.set $12
+             local.get $2
+             local.get $5
+             local.get $6
              call $assembly/options/onGlobal
-             get_local $3
+             local.get $3
              i32.const 1
              i32.add
-             set_local $3
-             br $repeat|10
-             unreachable
+             local.set $3
+             br $loop|10
             end
-            unreachable
            end
            br $break|1
           end
           call $assembly/index/readVaruint
-          set_local $2
-          block $break|11
-           i32.const 0
-           set_local $3
-           loop $repeat|11
-            get_local $3
-            get_local $2
-            i32.ge_u
-            br_if $break|11
+          local.set $3
+          i32.const 0
+          local.set $2
+          loop $loop|11
+           local.get $2
+           local.get $3
+           i32.lt_u
+           if
             call $assembly/index/readVaruint
-            set_local $9
-            get_global $assembly/index/off
-            set_local $5
-            get_global $assembly/index/off
-            get_local $9
+            local.tee $4
+            global.get $assembly/index/off
+            local.tee $5
             i32.add
-            set_global $assembly/index/off
-            get_global $assembly/index/off
-            tee_local $6
+            global.set $assembly/index/off
+            global.get $assembly/index/off
+            local.tee $6
             i32.load8_u
-            set_local $0
-            get_local $6
+            local.set $7
+            local.get $6
             i32.const 1
             i32.add
-            set_global $assembly/index/off
-            get_local $3
-            get_local $0
+            global.set $assembly/index/off
+            local.get $2
+            local.get $7
             call $assembly/index/readVaruint
-            get_local $5
-            get_local $9
+            local.get $5
+            local.get $4
             call $assembly/options/onExport
-            get_local $3
+            local.get $2
             i32.const 1
             i32.add
-            set_local $3
-            br $repeat|11
-            unreachable
+            local.set $2
+            br $loop|11
            end
-           unreachable
           end
           br $break|1
          end
@@ -901,218 +741,192 @@
          call $assembly/options/onStart
          br $break|1
         end
-        get_local $0
+        local.get $2
         i32.const 4
         i32.eq
-        tee_local $2
-        if
-         get_local $5
+        if (result i32)
+         local.get $5
          i32.load
          i32.const 1701667182
          i32.eq
-         set_local $2
+        else         
+         i32.const 0
         end
-        get_local $2
         if
          call $assembly/index/readVaruint
-         set_local $2
+         local.set $2
          call $assembly/index/readVaruint
-         set_local $3
-         get_global $assembly/index/off
-         set_local $0
+         global.get $assembly/index/off
          block $break|12
           block $case3|12
            block $case2|12
             block $case1|12
-             get_local $2
-             tee_local $4
-             get_global $src/common/NameType.Module
-             i32.ne
+             local.get $2
              if
-              get_local $4
-              get_global $src/common/NameType.Function
+              local.get $2
+              i32.const 1
               i32.eq
               br_if $case1|12
-              get_local $4
-              get_global $src/common/NameType.Local
+              local.get $2
+              i32.const 2
               i32.eq
               br_if $case2|12
               br $case3|12
              end
              call $assembly/index/readVaruint
-             set_local $4
-             get_global $assembly/index/off
-             get_local $4
+             local.set $2
+             global.get $assembly/index/off
+             local.get $2
              call $assembly/options/onModuleName
              br $break|12
             end
             call $assembly/index/readVaruint
-            set_local $5
-            block $break|13
-             i32.const 0
-             set_local $4
-             loop $repeat|13
-              get_local $4
-              get_local $5
-              i32.ge_u
-              br_if $break|13
+            local.set $2
+            i32.const 0
+            local.set $3
+            loop $loop|13
+             local.get $3
+             local.get $2
+             i32.lt_u
+             if
               call $assembly/index/readVaruint
-              set_local $9
               call $assembly/index/readVaruint
-              set_local $7
-              get_global $assembly/index/off
-              set_local $2
-              get_global $assembly/index/off
-              get_local $7
+              local.tee $7
+              global.get $assembly/index/off
+              local.tee $8
               i32.add
-              set_global $assembly/index/off
-              get_local $9
-              get_local $2
-              get_local $7
+              global.set $assembly/index/off
+              local.get $8
+              local.get $7
               call $assembly/options/onFunctionName
-              get_local $4
+              local.get $3
               i32.const 1
               i32.add
-              set_local $4
-              br $repeat|13
-              unreachable
+              local.set $3
+              br $loop|13
              end
-             unreachable
             end
             br $break|12
            end
            call $assembly/index/readVaruint
-           set_local $5
-           block $break|14
-            i32.const 0
-            set_local $4
-            loop $repeat|14
-             get_local $4
-             get_local $5
-             i32.ge_u
-             br_if $break|14
+           local.set $6
+           i32.const 0
+           local.set $2
+           loop $loop|14
+            local.get $2
+            local.get $6
+            i32.lt_u
+            if
              call $assembly/index/readVaruint
-             set_local $2
+             local.set $7
              call $assembly/index/readVaruint
-             set_local $7
-             block $break|15
-              i32.const 0
-              set_local $9
-              loop $repeat|15
-               get_local $9
-               get_local $7
-               i32.ge_u
-               br_if $break|15
+             local.set $8
+             i32.const 0
+             local.set $3
+             loop $loop|15
+              local.get $3
+              local.get $8
+              i32.lt_u
+              if
                call $assembly/index/readVaruint
-               set_local $10
+               local.set $9
                call $assembly/index/readVaruint
-               set_local $8
-               get_global $assembly/index/off
-               set_local $6
-               get_global $assembly/index/off
-               get_local $8
+               local.tee $13
+               global.get $assembly/index/off
+               local.tee $14
                i32.add
-               set_global $assembly/index/off
-               get_local $2
-               get_local $10
-               get_local $6
-               get_local $8
+               global.set $assembly/index/off
+               local.get $7
+               local.get $9
+               local.get $14
+               local.get $13
                call $assembly/options/onLocalName
-               get_local $9
+               local.get $3
                i32.const 1
                i32.add
-               set_local $9
-               br $repeat|15
-               unreachable
+               local.set $3
+               br $loop|15
               end
-              unreachable
              end
-             get_local $4
+             local.get $2
              i32.const 1
              i32.add
-             set_local $4
-             br $repeat|14
-             unreachable
+             local.set $2
+             br $loop|14
             end
-            unreachable
            end
            br $break|12
           end
           unreachable
          end
-         get_local $0
-         get_local $3
          i32.add
-         set_global $assembly/index/off
+         global.set $assembly/index/off
          br $break|1
         else         
-         get_local $0
+         local.get $2
          i32.const 16
          i32.eq
-         tee_local $0
-         if
-          get_local $5
+         if (result i32)
+          local.get $5
           i64.load
           i64.const 7011371672682196851
           i64.eq
-          set_local $0
+         else          
+          i32.const 0
          end
-         get_local $0
-         if
-          get_local $5
+         if (result i32)
+          local.get $5
           i32.const 8
           i32.add
           i64.load
           i64.const 5499551997695193200
           i64.eq
-          set_local $0
+         else          
+          i32.const 0
          end
-         get_local $0
          if
           call $assembly/index/readVaruint
-          set_local $0
-          get_global $assembly/index/off
-          set_local $3
-          get_global $assembly/index/off
-          get_local $0
+          local.tee $2
+          global.get $assembly/index/off
+          local.tee $4
           i32.add
-          set_global $assembly/index/off
-          get_local $3
-          get_local $0
+          global.set $assembly/index/off
+          local.get $4
+          local.get $2
           call $assembly/options/onSourceMappingURL
          end
         end
-        get_local $4
-        get_local $8
+        local.get $3
+        local.get $6
         i32.add
-        set_global $assembly/index/off
+        global.set $assembly/index/off
         br $break|1
        end
-       get_global $assembly/index/off
-       get_local $8
+       global.get $assembly/index/off
+       local.get $3
        i32.add
-       set_global $assembly/index/off
+       global.set $assembly/index/off
        br $break|1
       end
       unreachable
      end
     else     
-     get_global $assembly/index/off
-     get_local $8
+     global.get $assembly/index/off
+     local.get $3
      i32.add
-     set_global $assembly/index/off
+     global.set $assembly/index/off
     end
     br $continue|0
    end
   end
-  get_global $assembly/index/off
-  get_local $1
+  global.get $assembly/index/off
+  local.get $1
   i32.ne
   if
    unreachable
   end
  )
- (func $null (; 24 ;) (type $v)
+ (func $null (; 24 ;) (type $FUNCSIG$v)
   nop
  )
 )

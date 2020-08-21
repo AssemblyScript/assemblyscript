@@ -1,185 +1,181 @@
-import {
-  HEADER_SIZE,
-  MAX_BLENGTH
-} from "./internal/arraybuffer";
+import { BLOCK_MAXSIZE } from "./rt/common";
+import { ArrayBuffer } from "./arraybuffer";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
+
+// TODO: there is probably a smarter way to check byteOffset for accesses larger than 1 byte
 
 export class DataView {
 
+  readonly buffer: ArrayBuffer;
+  @unsafe readonly dataStart: usize;
+  readonly byteLength: i32;
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.buffer));
+  }
+
   constructor(
-    readonly buffer: ArrayBuffer,
-    readonly byteOffset: i32 = 0,
-    readonly byteLength: i32 = i32.MIN_VALUE // FIXME
+    buffer: ArrayBuffer,
+    byteOffset: i32 = 0,
+    byteLength: i32 = buffer.byteLength
   ) {
-    if (byteLength === i32.MIN_VALUE) byteLength = buffer.byteLength - byteOffset; // FIXME
-    if (<u32>byteOffset > <u32>MAX_BLENGTH) throw new RangeError("Invalid byteOffset");
-    if (<u32>byteLength > <u32>MAX_BLENGTH) throw new RangeError("Invalid byteLength");
-    if (byteOffset + byteLength > buffer.byteLength) throw new RangeError("Invalid length");
+    if (
+      i32(<u32>byteLength > <u32>BLOCK_MAXSIZE) |
+      i32(<u32>byteOffset + byteLength > <u32>buffer.byteLength)
+    ) throw new RangeError(E_INVALIDLENGTH);
+    this.buffer = buffer; // retains
+    var dataStart = changetype<usize>(buffer) + <usize>byteOffset;
+    this.dataStart = dataStart;
+    this.byteLength = byteLength;
   }
 
   getFloat32(byteOffset: i32, littleEndian: boolean = false): f32 {
-    checkOffset(byteOffset, 4, this.byteLength);
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     return littleEndian
-      ? load<f32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE)
-      : reinterpret<f32>(
-          bswap<u32>(
-            load<u32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE)
-          )
-        );
+      ? load<f32>(this.dataStart + <usize>byteOffset)
+      : reinterpret<f32>(bswap<u32>(load<u32>(this.dataStart + <usize>byteOffset)));
   }
 
   getFloat64(byteOffset: i32, littleEndian: boolean = false): f64 {
-    checkOffset(byteOffset, 8, this.byteLength);
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     return littleEndian
-      ? load<f64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE)
-      : reinterpret<f64>(
-          bswap(
-            load<u64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE)
-          )
-        );
+      ? load<f64>(this.dataStart + <usize>byteOffset)
+      : reinterpret<f64>(bswap<u64>(load<u64>(this.dataStart + <usize>byteOffset)));
   }
 
   getInt8(byteOffset: i32): i8 {
-    checkOffset(byteOffset, 1, this.byteLength);
-    return load<i8>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    if (<u32>byteOffset >= <u32>this.byteLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<i8>(this.dataStart + <usize>byteOffset);
   }
 
   getInt16(byteOffset: i32, littleEndian: boolean = false): i16 {
-    checkOffset(byteOffset, 2, this.byteLength);
-    var result: i16 = load<i16>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    var result: i16 = load<i16>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<i16>(result);
   }
 
   getInt32(byteOffset: i32, littleEndian: boolean = false): i32 {
-    checkOffset(byteOffset, 4, this.byteLength);
-    var result = load<i32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    var result: i32 = load<i32>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<i32>(result);
   }
 
   getUint8(byteOffset: i32): u8 {
-    checkOffset(byteOffset, 1, this.byteLength);
-    return load<u8>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    if (<u32>byteOffset >= <u32>this.byteLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<u8>(this.dataStart + <usize>byteOffset);
   }
 
   getUint16(byteOffset: i32, littleEndian: boolean = false): u16 {
-    checkOffset(byteOffset, 2, this.byteLength);
-    var result: u16 = load<u16>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    var result: u16 = load<u16>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u16>(result);
   }
 
   getUint32(byteOffset: i32, littleEndian: boolean = false): u32 {
-    checkOffset(byteOffset, 4, this.byteLength);
-    var result = load<u32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    var result: u32 = load<u32>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u32>(result);
   }
 
   setFloat32(byteOffset: i32, value: f32, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 4, this.byteLength);
-    if (littleEndian) {
-      store<f32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, value, HEADER_SIZE);
-    } else {
-      store<u32>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-        bswap(
-          reinterpret<u32>(value)
-        ),
-        HEADER_SIZE
-      );
-    }
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (littleEndian) store<f32>(this.dataStart + <usize>byteOffset, value);
+    else store<u32>(this.dataStart + <usize>byteOffset, bswap<u32>(reinterpret<u32>(value)));
   }
 
   setFloat64(byteOffset: i32, value: f64, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 8, this.byteLength);
-    if (littleEndian) {
-      store<f64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, value, HEADER_SIZE);
-    } else {
-      store<u64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-        bswap(
-          reinterpret<u64>(value)
-        ),
-        HEADER_SIZE
-      );
-    }
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (littleEndian) store<f64>(this.dataStart + <usize>byteOffset, value);
+    else store<u64>(this.dataStart + <usize>byteOffset, bswap<u64>(reinterpret<u64>(value)));
   }
 
   setInt8(byteOffset: i32, value: i8): void {
-    checkOffset(byteOffset, 1, this.byteLength);
-    store<i8>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, value, HEADER_SIZE);
+    if (<u32>byteOffset >= <u32>this.byteLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<i8>(this.dataStart + <usize>byteOffset, value);
   }
 
   setInt16(byteOffset: i32, value: i16, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 2, this.byteLength);
-    store<i16>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<i16>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i16>(value));
   }
 
   setInt32(byteOffset: i32, value: i32, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 4, this.byteLength);
-    store<i32>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<i32>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i32>(value));
   }
 
   setUint8(byteOffset: i32, value: u8): void {
-    checkOffset(byteOffset, 1, this.byteLength);
-    store<u8>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, value, HEADER_SIZE);
+    if (<u32>byteOffset >= <u32>this.byteLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<u8>(this.dataStart + <usize>byteOffset, value);
   }
 
   setUint16(byteOffset: i32, value: u16, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 2, this.byteLength);
-    store<u16>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<u16>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u16>(value));
   }
 
   setUint32(byteOffset: i32, value: u32, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 4, this.byteLength);
-    store<u32>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<u32>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u32>(value));
   }
 
   // Non-standard additions that make sense in WebAssembly, but won't work in JS:
 
   getInt64(byteOffset: i32, littleEndian: boolean = false): i64 {
-    checkOffset(byteOffset, 8, this.byteLength);
-    var result = load<i64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
-    return littleEndian ? result : bswap(result);
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    var result: i64 = load<i64>(this.dataStart + <usize>byteOffset);
+    return littleEndian ? result : bswap<i64>(result);
   }
 
   getUint64(byteOffset: i32, littleEndian: boolean = false): u64 {
-    checkOffset(byteOffset, 8, this.byteLength);
-    var result = load<u64>(changetype<usize>(this.buffer) + this.byteOffset + byteOffset, HEADER_SIZE);
-    return littleEndian ? result : bswap(result);
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    var result = load<u64>(this.dataStart + <usize>byteOffset);
+    return littleEndian ? result : bswap<u64>(result);
   }
 
   setInt64(byteOffset: i32, value: i64, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 8, this.byteLength);
-    store<i64>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<i64>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i64>(value));
   }
 
   setUint64(byteOffset: i32, value: u64, littleEndian: boolean = false): void {
-    checkOffset(byteOffset, 8, this.byteLength);
-    store<u64>(
-      changetype<usize>(this.buffer) + this.byteOffset + byteOffset,
-      littleEndian ? value : bswap(value),
-      HEADER_SIZE
-    );
+    if (
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
+    store<u64>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u64>(value));
   }
-}
 
-@inline function checkOffset(byteOffset: i32, n: i32, byteLength: i32): void {
-  // n and byteLength must be known to be in bounds
-  if (<u32>byteOffset > <u32>MAX_BLENGTH || byteOffset + n > byteLength) throw new Error("Offset out of bounds");
+  toString(): string {
+    return "[object DataView]";
+  }
 }

@@ -1,0 +1,13 @@
+{
+  "targets": {
+    "release": {
+      "shrinkLevel": 2
+    }
+  },
+  "options": {
+    "enable": ["simd"],
+    "runtime": "half",
+    "noEmit": false
+  },
+  "extends": "./extends.json"
+}

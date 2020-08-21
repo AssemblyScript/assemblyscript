@@ -1,0 +1,17 @@
+{
+  "targets": {
+    "release": {
+      "noAssert": true,
+      "runtime": "none"
+    },
+    "debug": {
+      "optimizeLevel": 3,
+      "shrinkLevel": 1,
+      "enable": ["simd"],      
+      "debug": true
+    }
+  },
+  "options": {
+    "runtime": "stub"
+  }
+}

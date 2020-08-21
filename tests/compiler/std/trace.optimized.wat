@@ -1,98 +1,90 @@
 (module
- (type $iiFFFFFv (func (param i32 i32 f64 f64 f64 f64 f64)))
- (type $v (func))
- (import "env" "trace" (func $~lib/env/trace (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $none_=>_none (func))
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 8) "\0d\00\00\00z\00e\00r\00o\00_\00i\00m\00p\00l\00i\00c\00i\00t")
- (data (i32.const 40) "\0d\00\00\00z\00e\00r\00o\00_\00e\00x\00p\00l\00i\00c\00i\00t")
- (data (i32.const 72) "\07\00\00\00o\00n\00e\00_\00i\00n\00t")
- (data (i32.const 96) "\07\00\00\00t\00w\00o\00_\00i\00n\00t")
- (data (i32.const 120) "\t\00\00\00t\00h\00r\00e\00e\00_\00i\00n\00t")
- (data (i32.const 144) "\08\00\00\00f\00o\00u\00r\00_\00i\00n\00t")
- (data (i32.const 168) "\08\00\00\00f\00i\00v\00e\00_\00i\00n\00t")
- (data (i32.const 192) "\08\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
- (table $0 1 anyfunc)
- (elem (i32.const 0) $null)
+ (data (i32.const 1024) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00z\00e\00r\00o\00_\00i\00m\00p\00l\00i\00c\00i\00t")
+ (data (i32.const 1072) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00z\00e\00r\00o\00_\00e\00x\00p\00l\00i\00c\00i\00t")
+ (data (i32.const 1120) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00o\00n\00e\00_\00i\00n\00t")
+ (data (i32.const 1152) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00t\00w\00o\00_\00i\00n\00t")
+ (data (i32.const 1184) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00t\00h\00r\00e\00e\00_\00i\00n\00t")
+ (data (i32.const 1232) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00o\00u\00r\00_\00i\00n\00t")
+ (data (i32.const 1264) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00i\00n\00t")
+ (data (i32.const 1296) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
  (global $~started (mut i32) (i32.const 0))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
- (export "table" (table $0))
- (export "main" (func $std/trace/main))
- (func $std/trace/main (; 1 ;) (type $v)
-  get_global $~started
-  i32.eqz
+ (func $~start
+  global.get $~started
   if
-   call $start
+   return
+  else
    i32.const 1
-   set_global $~started
+   global.set $~started
   end
- )
- (func $start (; 2 ;) (type $v)
-  i32.const 8
+  i32.const 1040
   i32.const 0
   f64.const 0
   f64.const 0
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/env/trace
-  i32.const 40
+  call $~lib/builtins/trace
+  i32.const 1088
   i32.const 0
   f64.const 0
   f64.const 0
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/env/trace
-  i32.const 72
+  call $~lib/builtins/trace
+  i32.const 1136
   i32.const 1
   f64.const 1
   f64.const 0
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/env/trace
-  i32.const 96
+  call $~lib/builtins/trace
+  i32.const 1168
   i32.const 2
   f64.const 1
   f64.const 2
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/env/trace
-  i32.const 120
+  call $~lib/builtins/trace
+  i32.const 1200
   i32.const 3
   f64.const 1
   f64.const 2
   f64.const 3
   f64.const 0
   f64.const 0
-  call $~lib/env/trace
-  i32.const 144
+  call $~lib/builtins/trace
+  i32.const 1248
   i32.const 4
   f64.const 1
   f64.const 2
   f64.const 3
   f64.const 4
   f64.const 0
-  call $~lib/env/trace
-  i32.const 168
+  call $~lib/builtins/trace
+  i32.const 1280
   i32.const 5
   f64.const 1
   f64.const 2
   f64.const 3
   f64.const 4
   f64.const 5
-  call $~lib/env/trace
-  i32.const 192
+  call $~lib/builtins/trace
+  i32.const 1312
   i32.const 5
   f64.const 1.1
   f64.const 2.2
   f64.const 3.3
   f64.const 4.4
   f64.const 5.5
-  call $~lib/env/trace
- )
- (func $null (; 3 ;) (type $v)
-  nop
+  call $~lib/builtins/trace
  )
 )

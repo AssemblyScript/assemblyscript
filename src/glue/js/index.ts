@@ -1,22 +1,10 @@
 /**
- * JavaScript glue code.
- * @module glue/js
- * @preferred
- *//***/
+ * @fileoverview JavaScript glue code.
+ * @license Apache-2.0
+ */
 
-/// <reference path="./node.d.ts" />
-
-import "./binaryen"; // must be first so portable can pick up the memory implementation
 import "../../../std/portable/index";
+import "../binaryen";
 import "./float";
 import "./i64";
-
-import { Module } from "../../module";
-
-Module.prototype.toText = function(this: Module) {
-  return new binaryen.Module(this.ref).emitStackIR();
-};
-
-Module.prototype.toAsmjs = function(this: Module) {
-  return new binaryen.Module(this.ref).emitAsmjs();
-};
+import "./collections";

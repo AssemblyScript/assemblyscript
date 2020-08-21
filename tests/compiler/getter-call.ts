@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 class C {
   get x(): () => i32 {
     return (): i32 => 42;

@@ -1,5 +1,3 @@
-import "allocator/arena";
-
 class AClass {
   static aStaticField: i32 = 0;
   aField: i32 = 1;

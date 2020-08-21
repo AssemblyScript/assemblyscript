@@ -1,15 +1,11 @@
 (module
- (type $v (func))
- (type $i (func (result i32)))
- (type $I (func (result i64)))
- (type $f (func (result f32)))
- (type $F (func (result f64)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
- (memory $0 1)
- (data (i32.const 8) "\0d\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s\00")
- (table $0 1 anyfunc)
- (elem (i32.const 0) $null)
+ (type $none_=>_none (func))
+ (type $none_=>_i32 (func (result i32)))
+ (type $none_=>_i64 (func (result i64)))
+ (type $none_=>_f32 (func (result f32)))
+ (type $none_=>_f64 (func (result f64)))
+ (memory $0 0)
+ (table $0 1 funcref)
  (global $infer-type/i i32 (i32.const 10))
  (global $infer-type/I i64 (i64.const 4294967296))
  (global $infer-type/F f64 (f64.const 1.5))
@@ -19,11 +15,9 @@
  (global $infer-type/rF (mut f64) (f64.const 0))
  (global $infer-type/inferi (mut i32) (i32.const -2147483648))
  (global $infer-type/inferu (mut i32) (i32.const 2147483647))
- (global $HEAP_BASE i32 (i32.const 40))
  (export "memory" (memory $0))
- (export "table" (table $0))
- (start $start)
- (func $infer-type/locals (; 1 ;) (type $v)
+ (start $~start)
+ (func $infer-type/locals
   (local $0 i32)
   (local $1 i64)
   (local $2 f64)
@@ -31,101 +25,82 @@
   (local $4 i64)
   (local $5 f64)
   i32.const 10
-  set_local $0
+  local.set $0
   i64.const 4294967296
-  set_local $1
+  local.set $1
   f64.const 1.5
-  set_local $2
-  get_global $infer-type/i
-  set_local $3
-  get_global $infer-type/I
-  set_local $4
-  get_global $infer-type/F
-  set_local $5
+  local.set $2
+  global.get $infer-type/i
+  local.set $3
+  global.get $infer-type/I
+  local.set $4
+  global.get $infer-type/F
+  local.set $5
  )
- (func $infer-type/reti (; 2 ;) (type $i) (result i32)
+ (func $infer-type/reti (result i32)
   i32.const 0
  )
- (func $infer-type/retI (; 3 ;) (type $I) (result i64)
+ (func $infer-type/retI (result i64)
   i64.const 0
  )
- (func $infer-type/retf (; 4 ;) (type $f) (result f32)
+ (func $infer-type/retf (result f32)
   f32.const 0
  )
- (func $infer-type/refF (; 5 ;) (type $F) (result f64)
+ (func $infer-type/refF (result f64)
   f64.const 0
  )
- (func $start (; 6 ;) (type $v)
+ (func $start:infer-type
   (local $0 i32)
   (local $1 i32)
-  get_global $infer-type/i
+  (local $2 i32)
+  global.get $infer-type/i
   drop
-  get_global $infer-type/I
+  global.get $infer-type/I
   drop
-  get_global $infer-type/F
+  global.get $infer-type/F
   drop
   call $infer-type/locals
   call $infer-type/reti
-  set_global $infer-type/ri
-  get_global $infer-type/ri
+  global.set $infer-type/ri
+  global.get $infer-type/ri
   drop
   call $infer-type/retI
-  set_global $infer-type/rI
-  get_global $infer-type/rI
+  global.set $infer-type/rI
+  global.get $infer-type/rI
   drop
   call $infer-type/retf
-  set_global $infer-type/rf
-  get_global $infer-type/rf
+  global.set $infer-type/rf
+  global.get $infer-type/rf
   drop
   call $infer-type/refF
-  set_global $infer-type/rF
-  get_global $infer-type/rF
+  global.set $infer-type/rF
+  global.get $infer-type/rF
   drop
-  block $break|0
-   block
-    i32.const 0
-    set_local $0
-    i32.const 10
-    set_local $1
-   end
-   loop $repeat|0
-    get_local $0
-    get_local $1
-    i32.lt_s
-    i32.eqz
-    br_if $break|0
-    nop
-    get_local $0
+  i32.const 0
+  local.set $0
+  i32.const 10
+  local.set $1
+  loop $for-loop|0
+   local.get $0
+   local.get $1
+   i32.lt_s
+   local.set $2
+   local.get $2
+   if
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
-    br $repeat|0
-    unreachable
+    local.set $0
+    br $for-loop|0
    end
-   unreachable
   end
   i32.const 0
   i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 49
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
   i32.const 1
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 8
-   i32.const 52
-   i32.const 0
-   call $~lib/env/abort
-   unreachable
-  end
+  drop
  )
- (func $null (; 7 ;) (type $v)
+ (func $~start
+  call $start:infer-type
  )
 )

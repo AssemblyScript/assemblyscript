@@ -1,10 +1,11 @@
 /**
- * Various compiler utilities.
- * @module util
- * @preferred
- *//***/
+ * @fileoverview Various utility.
+ * @license Apache-2.0
+ */
 
-export * from "./charcode";
+export * from "./binary";
+export * from "./collections";
+export * from "./math";
 export * from "./path";
 export * from "./text";
-export * from "./binary";
+export * from "./vector";

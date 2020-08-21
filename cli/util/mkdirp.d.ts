@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Recursive mkdir definitions.
+ * @license Apache-2.0
+ */
+
 interface Options {
   mode?: number;
 }

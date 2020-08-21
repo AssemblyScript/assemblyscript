@@ -1,86 +1,124 @@
-import "@types/webassembly-js-api";
+/// <reference lib="esnext.bigint" />
 
-/** WebAssembly imports with two levels of nesting. */
-interface ImportsObject {
-  [key: string]: {},
-  env: {
-    memory?: WebAssembly.Memory,
-    table?: WebAssembly.Table,
-    abort?: (msg: number, file: number, line: number, column: number) => void
-  }
+export interface ResultObject {
+  module: WebAssembly.Module;
+  instance: WebAssembly.Instance;
 }
 
-type TypedArray
-  = Int8Array
-  | Uint8Array
-  | Int16Array
-  | Uint16Array
-  | Int32Array
-  | Uint32Array
-  | Float32Array
-  | Float64Array;
 
-type TypedArrayConstructor
-  = Int8ArrayConstructor
-  | Uint8ArrayConstructor
-  | Int16ArrayConstructor
-  | Uint16ArrayConstructor
-  | Int32ArrayConstructor
-  | Uint32ArrayConstructor
-  | Float32ArrayConstructor
-  | Float32ArrayConstructor;
+/** WebAssembly imports with an optional env object and two levels of nesting. */
+export type Imports = {
+  [key: string]: Record<string,unknown>;
+  env?: {
+    memory?: WebAssembly.Memory;
+    table?: WebAssembly.Table;
+    seed?(): number;
+    abort?(msg: number, file: number, line: number, column: number): void;
+    trace?(msg: number, numArgs?: number, ...args: number[]): void;
+  };
+};
 
 /** Utility mixed in by the loader. */
-interface ASUtil {
-  /** An 8-bit signed integer view on the memory. */
-  readonly I8: Uint8Array;
-  /** An 8-bit unsigned integer view on the memory. */
-  readonly U8: Uint8Array;
-  /** A 16-bit signed integer view on the memory. */
-  readonly I16: Uint16Array;
-  /** A 16-bit unsigned integer view on the memory. */
-  readonly U16: Uint16Array;
-  /** A 32-bit signed integer view on the memory. */
-  readonly I32: Uint32Array;
-  /** A 32-bit unsigned integer view on the memory. */
-  readonly U32: Uint32Array;
-  /** A 64-bit signed integer view on the memory. */
-  readonly I64: any; // BigInt64Array
-  /** A 64-bit unsigned integer vieww on the memory. */
-  readonly U64: any; // BigUint64Array
-  /** A 32-bit float view on the memory. */
-  readonly F32: Float32Array;
-  /** A 64-bit float view on the memory. */
-  readonly F64: Float64Array;
-  /** Allocates a new string in the module's memory and returns its pointer. */
-  newString(str: string): number;
-  /** Gets a string from the module's memory by its pointer. */
-  getString(ptr: number): string;
-  /** Copies a typed array into the module's memory and returns its pointer. */
-  newArray(view: TypedArray, length?: number): number;
-  /** Creates a typed array in the module's memory and returns its pointer. */
-  newArray(ctor: TypedArrayConstructor, length: number, unsafe?: boolean): number;
-  /** Gets a view on a typed array in the module's memory by its pointer. */
-  getArray<T extends TypedArray = TypedArray>(ctor: TypedArrayConstructor, ptr: number): T;
-  /** Frees a typed array in the module's memory. Must not be accessed anymore afterwards. */
-  freeArray(ptr: number): void;
-  /** Gets a function by its pointer. */
-  getFunction<R = any>(ptr: number): (...args: any[]) => R;
-  /**
-   * Creates a new function in the module's table and returns its pointer. Note that only actual
-   * WebAssembly functions, i.e. as exported by the module, are supported.
-   */
-  newFunction(fn: (...args: any[]) => any): number;
+export interface ASUtil {
+  memory?: WebAssembly.Memory;
+  table?: WebAssembly.Table;
+
+  /** Explicit start function, if requested. */
+  _start(): void;
+  /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
+  __allocString(str: string): number;
+  /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
+  __allocArray(id: number, values: ArrayLike<number>): number;
+
+  /** Copies a string's value from the module's memory. */
+  __getString(ptr: number): string;
+  /** Copies an ArrayBuffer's value from the module's memory. */
+  __getArrayBuffer(ptr: number): ArrayBuffer;
+
+  /** Copies an array's values from the module's memory. Infers the array type from RTTI. */
+  __getArray(ptr: number): number[];
+  /** Copies an Int8Array's values from the module's memory. */
+  __getInt8Array(ptr: number): Int8Array;
+  /** Copies an Uint8Array's values from the module's memory. */
+  __getUint8Array(ptr: number): Uint8Array;
+  /** Copies an Uint8ClampedArray's values from the module's memory. */
+  __getUint8ClampedArray(ptr: number): Uint8ClampedArray;
+  /** Copies an Int16Array's values from the module's memory. */
+  __getInt16Array(ptr: number): Int16Array;
+  /** Copies an Uint16Array's values from the module's memory. */
+  __getUint16Array(ptr: number): Uint16Array;
+  /** Copies an Int32Array's values from the module's memory. */
+  __getInt32Array(ptr: number): Int32Array;
+  /** Copies an Uint32Array's values from the module's memory. */
+  __getUint32Array(ptr: number): Uint32Array;
+  /** Copies an Int32Array's values from the module's memory. */
+  __getInt64Array?(ptr: number): BigInt64Array;
+  /** Copies an Uint32Array's values from the module's memory. */
+  __getUint64Array?(ptr: number): BigUint64Array;
+  /** Copies a Float32Array's values from the module's memory. */
+  __getFloat32Array(ptr: number): Float32Array;
+  /** Copies a Float64Array's values from the module's memory. */
+  __getFloat64Array(ptr: number): Float64Array;
+
+  /** Gets a live view on an array's values in the module's memory. Infers the array type from RTTI. */
+  __getArrayView(ptr: number): ArrayBufferView;
+  /** Gets a live view on an Int8Array's values in the module's memory. */
+  __getInt8ArrayView(ptr: number): Int8Array;
+  /** Gets a live view on an Uint8Array's values in the module's memory. */
+  __getUint8ArrayView(ptr: number): Uint8Array;
+  /** Gets a live view on an Uint8ClampedArray's values in the module's memory. */
+  __getUint8ClampedArrayView(ptr: number): Uint8ClampedArray;
+  /** Gets a live view on an Int16Array's values in the module's memory. */
+  __getInt16ArrayView(ptr: number): Int16Array;
+  /** Gets a live view on an Uint16Array's values in the module's memory. */
+  __getUint16ArrayView(ptr: number): Uint16Array;
+  /** Gets a live view on an Int32Array's values in the module's memory. */
+  __getInt32ArrayView(ptr: number): Int32Array;
+  /** Gets a live view on an Uint32Array's values in the module's memory. */
+  __getUint32ArrayView(ptr: number): Uint32Array;
+  /** Gets a live view on an Int32Array's values in the module's memory. */
+  __getInt64ArrayView?(ptr: number): BigInt64Array;
+  /** Gets a live view on an Uint32Array's values in the module's memory. */
+  __getUint64ArrayView?(ptr: number): BigUint64Array;
+  /** Gets a live view on a Float32Array's values in the module's memory. */
+  __getFloat32ArrayView(ptr: number): Float32Array;
+  /** Gets a live view on a Float64Array's values in the module's memory. */
+  __getFloat64ArrayView(ptr: number): Float64Array;
+
+  /** Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer. */
+  __retain(ptr: number): number;
+  /** Releases a previously retained reference to a managed object, allowing the runtime to collect it once its reference count reaches zero. */
+  __release(ptr: number): void;
+  /** Forcefully resets the heap to its initial offset, effectively clearing dynamic memory. Stub runtime only. */
+  __reset?(): void;
+  /** Allocates an instance of the class represented by the specified id. */
+  __alloc(size: number, id: number): number;
+  /** Tests whether a managed object is an instance of the class represented by the specified base id. */
+  __instanceof(ptr: number, baseId: number): boolean;
+  /** Forces a cycle collection. Only relevant if objects potentially forming reference cycles are used. */
+  __collect(): void;
 }
 
-/** Instantiates an AssemblyScript module using the specified imports. */
-export declare function instantiate<T extends {}>(module: WebAssembly.Module, imports?: ImportsObject): ASUtil & T;
+/** Asynchronously instantiates an AssemblyScript module from anything that can be instantiated. */
+export declare function instantiate<T extends Record<string,unknown>>(
+  source: WebAssembly.Module | BufferSource | Response | PromiseLike<WebAssembly.Module | BufferSource | Response>,
+  imports?: Imports
+): Promise<ResultObject & { exports: ASUtil & T }>;
 
-/** Instantiates an AssemblyScript module from a buffer using the specified imports. */
-export declare function instantiateBuffer<T extends {}>(buffer: Uint8Array, imports?: ImportsObject): ASUtil & T;
+/** Synchronously instantiates an AssemblyScript module from a WebAssembly.Module or binary buffer. */
+export declare function instantiateSync<T extends Record<string,unknown>>(
+  source: WebAssembly.Module | BufferSource,
+  imports?: Imports
+): ResultObject & { exports: ASUtil & T };
 
-/** Instantiates an AssemblyScript module from a response using the specified imports. */
-export declare function instantiateStreaming<T extends {}>(result: Promise<Response>, imports?: ImportsObject): Promise<ASUtil & T>;
+/** Asynchronously instantiates an AssemblyScript module from a response, i.e. as obtained by `fetch`. */
+export declare function instantiateStreaming<T extends Record<string,unknown>>(
+  source: Response | PromiseLike<Response>,
+  imports?: Imports
+): Promise<ResultObject & { exports: ASUtil & T }>;
 
 /** Demangles an AssemblyScript module's exports to a friendly object structure. */
-export declare function demangle<T extends {}>(exports: {}): T;
+export declare function demangle<T extends Record<string,unknown>>(
+  exports: Record<string,unknown>,
+  extendedExports?: Record<string,unknown>
+): T;

@@ -1,0 +1,6 @@
+{
+  "options": {
+    "runtime": "none",
+    "noAssert": true
+  }
+}

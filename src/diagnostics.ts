@@ -1,11 +1,14 @@
 /**
- * Shared diagnostic handling inherited by the parser and the compiler.
- * @module diagnostics
- * @preferred
- *//***/
+ * @fileoverview Shared diagnostic handling.
+ * @license Apache-2.0
+ */
 
 import {
   Range
+} from "./tokenizer";
+
+import {
+  Source
 } from "./ast";
 
 import {
@@ -24,6 +27,8 @@ export {
 
 /** Indicates the category of a {@link DiagnosticMessage}. */
 export enum DiagnosticCategory {
+  /** Overly pedantic message. */
+  PEDANTIC,
   /** Informatory message. */
   INFO,
   /** Warning message. */
@@ -35,6 +40,7 @@ export enum DiagnosticCategory {
 /** Returns the string representation of the specified diagnostic category. */
 export function diagnosticCategoryToString(category: DiagnosticCategory): string {
   switch (category) {
+    case DiagnosticCategory.PEDANTIC: return "PEDANTIC";
     case DiagnosticCategory.INFO: return "INFO";
     case DiagnosticCategory.WARNING: return "WARNING";
     case DiagnosticCategory.ERROR: return "ERROR";
@@ -51,12 +57,15 @@ export const COLOR_BLUE: string = "\u001b[96m";
 export const COLOR_YELLOW: string = "\u001b[93m";
 /** ANSI escape sequence for red foreground. */
 export const COLOR_RED: string = "\u001b[91m";
+/** ANSI escape sequence for magenta foreground. */
+export const COLOR_MAGENTA: string = "\u001b[95m";
 /** ANSI escape sequence to reset the foreground color. */
 export const COLOR_RESET: string = "\u001b[0m";
 
 /** Returns the ANSI escape sequence for the specified category. */
 export function diagnosticCategoryToColor(category: DiagnosticCategory): string {
   switch (category) {
+    case DiagnosticCategory.PEDANTIC: return COLOR_MAGENTA;
     case DiagnosticCategory.INFO: return COLOR_BLUE;
     case DiagnosticCategory.WARNING: return COLOR_YELLOW;
     case DiagnosticCategory.ERROR: return COLOR_RED;
@@ -78,6 +87,8 @@ export class DiagnosticMessage {
   message: string;
   /** Respective source range, if any. */
   range: Range | null = null;
+  /** Related range, if any. */
+  relatedRange: Range | null = null; // TODO: Make this a related message for chains?
 
   /** Constructs a new diagnostic message. */
   private constructor(code: i32, category: DiagnosticCategory, message: string) {
@@ -95,37 +106,30 @@ export class DiagnosticMessage {
     arg2: string | null = null
   ): DiagnosticMessage {
     var message = diagnosticCodeToString(code);
-    if (arg0 != null) message = message.replace("{0}", arg0);
-    if (arg1 != null) message = message.replace("{1}", arg1);
-    if (arg2 != null) message = message.replace("{2}", arg2);
+    if (arg0 !== null) message = message.replace("{0}", arg0);
+    if (arg1 !== null) message = message.replace("{1}", arg1);
+    if (arg2 !== null) message = message.replace("{2}", arg2);
     return new DiagnosticMessage(code, category, message);
   }
 
-  /** Creates a new informatory diagnostic message. */
-  static createInfo(
-    code: DiagnosticCode,
-    arg0: string | null = null,
-    arg1: string | null = null
-  ): DiagnosticMessage {
-    return DiagnosticMessage.create(code, DiagnosticCategory.INFO, arg0, arg1);
-  }
-
-  /** Creates a new warning diagnostic message. */
-  static createWarning(
-    code: DiagnosticCode,
-    arg0: string | null = null,
-    arg1: string | null = null
-  ): DiagnosticMessage {
-    return DiagnosticMessage.create(code, DiagnosticCategory.WARNING, arg0, arg1);
-  }
-
-  /** Creates a new error diagnostic message. */
-  static createError(
-    code: DiagnosticCode,
-    arg0: string | null = null,
-    arg1: string | null = null
-  ): DiagnosticMessage {
-    return DiagnosticMessage.create(code, DiagnosticCategory.ERROR, arg0, arg1);
+  /** Tests if this message equals the specified. */
+  equals(other: DiagnosticMessage): bool {
+    if (this.code != other.code) return false;
+    var thisRange = this.range;
+    var otherRange = other.range;
+    if (thisRange) {
+      if (!otherRange || !thisRange.equals(otherRange)) return false;
+    } else if (otherRange) {
+      return false;
+    }
+    var thisRelatedRange = this.relatedRange;
+    var otherRelatedRange = other.relatedRange;
+    if (thisRelatedRange) {
+      if (!otherRelatedRange || !thisRelatedRange.equals(otherRelatedRange)) return false;
+    } else if (otherRange) {
+      return false;
+    }
+    return this.message == other.message;
   }
 
   /** Adds a source range to this message. */
@@ -134,27 +138,38 @@ export class DiagnosticMessage {
     return this;
   }
 
+  /** Adds a related source range to this message. */
+  withRelatedRange(range: Range): this {
+    this.relatedRange = range;
+    return this;
+  }
+
   /** Converts this message to a string. */
   toString(): string {
-    if (this.range) {
+    var range = this.range;
+    if (range) {
+      let source = range.source;
       return (
         diagnosticCategoryToString(this.category) +
         " " +
-        this.code.toString(10) +
+        this.code.toString() +
         ": \"" +
         this.message +
         "\" in " +
-        this.range.source.normalizedPath +
-        ":" +
-        this.range.line.toString(10) +
-        ":" +
-        this.range.column.toString(10)
+        source.normalizedPath +
+        "(" +
+        source.lineAt(range.start).toString() +
+        "," +
+        source.columnAt().toString() +
+        "+" +
+        (range.end - range.start).toString() +
+        ")"
       );
     }
     return (
       diagnosticCategoryToString(this.category) +
       " " +
-      this.code.toString(10) +
+      this.code.toString() +
       ": " +
       this.message
     );
@@ -174,28 +189,45 @@ export function formatDiagnosticMessage(
   sb.push(diagnosticCategoryToString(message.category));
   if (useColors) sb.push(COLOR_RESET);
   sb.push(message.code < 1000 ? " AS" : " TS");
-  sb.push(message.code.toString(10));
+  sb.push(message.code.toString());
   sb.push(": ");
   sb.push(message.message);
 
   // include range information if available
-  if (message.range) {
+  var range = message.range;
+  if (range) {
+    let source = range.source;
 
     // include context information if requested
-    let range = message.range;
     if (showContext) {
       sb.push("\n");
-      sb.push(formatDiagnosticContext(message.range, useColors));
+      sb.push(formatDiagnosticContext(range, useColors));
     }
-
     sb.push("\n");
     sb.push(" in ");
-    sb.push(range.source.normalizedPath);
+    sb.push(source.normalizedPath);
     sb.push("(");
-    sb.push(range.line.toString(10));
+    sb.push(source.lineAt(range.start).toString());
     sb.push(",");
-    sb.push(range.column.toString(10));
+    sb.push(source.columnAt().toString());
     sb.push(")");
+
+    let relatedRange = message.relatedRange;
+    if (relatedRange) {
+      let relatedSource = relatedRange.source;
+      if (showContext) {
+        sb.push("\n");
+        sb.push(formatDiagnosticContext(relatedRange, useColors));
+      }
+      sb.push("\n");
+      sb.push(" in ");
+      sb.push(relatedSource.normalizedPath);
+      sb.push("(");
+      sb.push(relatedSource.lineAt(relatedRange.start).toString());
+      sb.push(",");
+      sb.push(relatedSource.columnAt().toString());
+      sb.push(")");
+    }
   }
   return sb.join("");
 }
@@ -221,7 +253,13 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
   if (range.start == range.end) {
     sb.push("^");
   } else {
-    while (start++ < range.end) sb.push("~");
+    while (start++ < range.end) {
+      if (isLineBreak(text.charCodeAt(start))) {
+        sb.push(start == range.start + 1 ? "^" : "~");
+        break;
+      }
+      sb.push("~");
+    }
   }
   if (useColors) sb.push(COLOR_RESET);
   return sb.join("");
@@ -232,57 +270,145 @@ export abstract class DiagnosticEmitter {
 
   /** Diagnostic messages emitted so far. */
   diagnostics: DiagnosticMessage[];
+  /** Diagnostic messages already seen, by range. */
+  private seen: Map<Source,Map<i32,DiagnosticMessage[]>> = new Map();
 
   /** Initializes this diagnostic emitter. */
   protected constructor(diagnostics: DiagnosticMessage[] | null = null) {
-    this.diagnostics = diagnostics ? <DiagnosticMessage[]>diagnostics : new Array();
+    if (!diagnostics) diagnostics = [];
+    this.diagnostics = diagnostics;
   }
 
   /** Emits a diagnostic message of the specified category. */
   emitDiagnostic(
     code: DiagnosticCode,
     category: DiagnosticCategory,
-    range: Range,
+    range: Range | null,
+    relatedRange: Range | null,
     arg0: string | null = null,
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2).withRange(range);
+    var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2);
+    if (range) message = message.withRange(range);
+    if (relatedRange) message.relatedRange = relatedRange;
+    // It is possible that the same diagnostic is emitted twice, for example
+    // when compiling generics with different types or when recompiling a loop
+    // because our initial assumptions didn't hold. It is even possible to get
+    // multiple instances of the same range during parsing. Deduplicate these.
+    if (range) {
+      let seen = this.seen;
+      if (seen.has(range.source)) {
+        let seenInSource = assert(seen.get(range.source));
+        if (seenInSource.has(range.start)) {
+          let seenMessagesAtPos = assert(seenInSource.get(range.start));
+          for (let i = 0, k = seenMessagesAtPos.length; i < k; ++i) {
+            if (seenMessagesAtPos[i].equals(message)) return;
+          }
+          seenMessagesAtPos.push(message);
+        } else {
+          seenInSource.set(range.start, [ message ]);
+        }
+      } else {
+        let seenInSource = new Map<i32,DiagnosticMessage[]>();
+        seenInSource.set(range.start, [ message ]);
+        seen.set(range.source, seenInSource);
+      }
+    }
     this.diagnostics.push(message);
     // console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
     // console.log(<string>new Error("stack").stack);
   }
 
-  /** Emits an informatory diagnostic message. */
-  info(
+  /** Emits an overly pedantic diagnostic message. */
+  pedantic(
     code: DiagnosticCode,
-    range: Range,
+    range: Range | null,
     arg0: string | null = null,
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.PEDANTIC, range, null, arg0, arg1, arg2);
+  }
+
+  /** Emits an overly pedantic diagnostic message with a related range. */
+  pedanticRelated(
+    code: DiagnosticCode,
+    range: Range,
+    relatedRange: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.PEDANTIC, range, relatedRange, arg0, arg1, arg2);
+  }
+
+  /** Emits an informatory diagnostic message. */
+  info(
+    code: DiagnosticCode,
+    range: Range | null,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, null, arg0, arg1, arg2);
+  }
+
+  /** Emits an informatory diagnostic message with a related range. */
+  infoRelated(
+    code: DiagnosticCode,
+    range: Range,
+    relatedRange: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.INFO, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits a warning diagnostic message. */
   warning(
     code: DiagnosticCode,
-    range: Range,
+    range: Range | null,
     arg0: string | null = null,
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, null, arg0, arg1, arg2);
+  }
+
+  /** Emits a warning diagnostic message with a related range. */
+  warningRelated(
+    code: DiagnosticCode,
+    range: Range,
+    relatedRange: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.WARNING, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits an error diagnostic message. */
   error(
     code: DiagnosticCode,
-    range: Range,
+    range: Range | null,
     arg0: string | null = null,
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
-    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, arg0, arg1, arg2);
+    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, null, arg0, arg1, arg2);
+  }
+
+  /** Emits an error diagnostic message with a related range. */
+  errorRelated(
+    code: DiagnosticCode,
+    range: Range,
+    relatedRange: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.ERROR, range, relatedRange, arg0, arg1, arg2);
   }
 }

@@ -1,12 +1,11 @@
 (module
- (type $iiv (func (param i32 i32)))
- (type $iiiiv (func (param i32 i32 i32 i32)))
- (type $v (func))
- (import "env" "abort" (func $~lib/env/abort (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\0d\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
- (table $0 1 anyfunc)
- (elem (i32.const 0) $null)
+ (data (i32.const 16) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
+ (table $0 1 funcref)
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
@@ -18,20 +17,19 @@
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $retain-i32/si (mut i32) (i32.const 0))
  (global $retain-i32/ui (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 40))
+ (global $retain-i32/ri (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
- (start $start)
- (func $retain-i32/test (; 1 ;) (type $iiv) (param $0 i32) (param $1 i32)
-  get_local $0
-  get_local $1
+ (start $~start)
+ (func $retain-i32/test (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
   i32.add
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.add
   i32.const 24
   i32.shl
@@ -41,21 +39,21 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 4
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.sub
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.sub
   i32.const 24
   i32.shl
@@ -65,21 +63,21 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 5
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.mul
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.mul
   i32.const 24
   i32.shl
@@ -89,21 +87,21 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 6
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.and
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.and
   i32.const 24
   i32.shl
@@ -113,21 +111,21 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 7
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.or
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.or
   i32.const 24
   i32.shl
@@ -137,21 +135,21 @@
   i32.eqz
   if
    i32.const 0
+   i32.const 32
    i32.const 8
-   i32.const 8
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.xor
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.xor
   i32.const 24
   i32.shl
@@ -161,21 +159,21 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 9
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.shl
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.shl
   i32.const 24
   i32.shl
@@ -185,19 +183,19 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 10
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.add
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.add
   i32.const 255
   i32.and
@@ -205,19 +203,19 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 13
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.sub
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.sub
   i32.const 255
   i32.and
@@ -225,19 +223,19 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 14
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.mul
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.mul
   i32.const 255
   i32.and
@@ -245,19 +243,19 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 15
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.and
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.and
   i32.const 255
   i32.and
@@ -265,19 +263,19 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 16
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.or
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.or
   i32.const 255
   i32.and
@@ -285,19 +283,19 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 17
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.xor
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.xor
   i32.const 255
   i32.and
@@ -305,19 +303,19 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 18
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.shl
   i32.const 255
   i32.and
-  get_local $0
-  get_local $1
+  local.get $0
+  local.get $1
   i32.shl
   i32.const 255
   i32.and
@@ -325,139 +323,144 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 19
-   i32.const 2
-   call $~lib/env/abort
+   i32.const 3
+   call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 2 ;) (type $v)
+ (func $retain-i32/testLocalRetain
   (local $0 i32)
   i32.const 0
-  get_global $~lib/builtins/i8.MAX_VALUE
+  i32.load8_s
+  local.set $0
+  i32.const 1
+  drop
+ )
+ (func $start:retain-i32
+  (local $0 i32)
+  (local $1 i32)
+  i32.const 0
+  global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   i32.const 0
   call $retain-i32/test
   i32.const 1
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   i32.const 1
   call $retain-i32/test
   i32.const -1
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   i32.const -1
   call $retain-i32/test
   i32.const 0
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   i32.const 0
   call $retain-i32/test
   i32.const 1
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   i32.const 1
   call $retain-i32/test
   i32.const -1
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   i32.const -1
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MAX_VALUE
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MIN_VALUE
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MAX_VALUE
-  get_global $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/i8.MIN_VALUE
-  get_global $~lib/builtins/i8.MAX_VALUE
+  global.get $~lib/builtins/i8.MIN_VALUE
+  global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
   i32.const 0
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   i32.const 0
   call $retain-i32/test
   i32.const 1
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   i32.const 1
   call $retain-i32/test
   i32.const -1
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   call $retain-i32/test
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   i32.const -1
   call $retain-i32/test
-  get_global $~lib/builtins/u8.MAX_VALUE
-  get_global $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
+  global.get $~lib/builtins/u8.MAX_VALUE
   call $retain-i32/test
-  block $break|0
-   get_global $~lib/builtins/i8.MIN_VALUE
-   set_local $0
-   loop $repeat|0
-    get_local $0
-    get_global $~lib/builtins/u8.MAX_VALUE
-    i32.le_s
-    i32.eqz
-    br_if $break|0
-    block
-     i32.const 0
-     get_local $0
-     call $retain-i32/test
-     i32.const 1
-     get_local $0
-     call $retain-i32/test
-     i32.const -1
-     get_local $0
-     call $retain-i32/test
-     get_global $~lib/builtins/i8.MIN_VALUE
-     get_local $0
-     call $retain-i32/test
-     get_global $~lib/builtins/i8.MAX_VALUE
-     get_local $0
-     call $retain-i32/test
-     get_global $~lib/builtins/u8.MAX_VALUE
-     get_local $0
-     call $retain-i32/test
-     get_global $~lib/builtins/i16.MIN_VALUE
-     get_local $0
-     call $retain-i32/test
-     get_global $~lib/builtins/i16.MAX_VALUE
-     get_local $0
-     call $retain-i32/test
-     get_global $~lib/builtins/u16.MAX_VALUE
-     get_local $0
-     call $retain-i32/test
-     get_global $~lib/builtins/i32.MAX_VALUE
-     get_local $0
-     call $retain-i32/test
-     get_global $~lib/builtins/i32.MIN_VALUE
-     get_local $0
-     call $retain-i32/test
-     get_global $~lib/builtins/u32.MAX_VALUE
-     get_local $0
-     call $retain-i32/test
-    end
-    get_local $0
+  global.get $~lib/builtins/i8.MIN_VALUE
+  local.set $0
+  loop $for-loop|0
+   local.get $0
+   global.get $~lib/builtins/u8.MAX_VALUE
+   i32.le_s
+   local.set $1
+   local.get $1
+   if
+    i32.const 0
+    local.get $0
+    call $retain-i32/test
+    i32.const 1
+    local.get $0
+    call $retain-i32/test
+    i32.const -1
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i8.MIN_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i8.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/u8.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i16.MIN_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i16.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/u16.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i32.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/i32.MIN_VALUE
+    local.get $0
+    call $retain-i32/test
+    global.get $~lib/builtins/u32.MAX_VALUE
+    local.get $0
+    call $retain-i32/test
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
-    br $repeat|0
-    unreachable
+    local.set $0
+    br $for-loop|0
    end
-   unreachable
   end
   i32.const 127
   i32.const 127
@@ -468,17 +471,17 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 78
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 127
@@ -490,17 +493,17 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 81
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 127
@@ -510,17 +513,17 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -2
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 84
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
@@ -530,17 +533,17 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -128
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 87
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const -128
@@ -550,17 +553,17 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -128
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 90
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 127
@@ -570,17 +573,17 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -127
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 93
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const -128
@@ -590,81 +593,81 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const -128
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 96
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 127
   i32.const 2
   i32.rem_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 99
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 1
   i32.const 127
   i32.rem_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 102
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const -128
   i32.const 2
   i32.rem_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const 0
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 105
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 1
   i32.const -128
   i32.rem_s
-  set_global $retain-i32/si
-  get_global $retain-i32/si
+  global.set $retain-i32/si
+  global.get $retain-i32/si
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 108
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 255
@@ -674,17 +677,17 @@
   i32.add
   i32.const 255
   i32.and
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 255
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 113
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 255
@@ -694,17 +697,17 @@
   i32.sub
   i32.const 255
   i32.and
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 255
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 116
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 255
@@ -712,17 +715,17 @@
   i32.mul
   i32.const 255
   i32.and
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 254
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 119
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 255
@@ -730,68 +733,75 @@
   i32.mul
   i32.const 255
   i32.and
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 122
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 255
   i32.const 255
   i32.div_u
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 125
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 255
   i32.const 2
   i32.rem_u
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 1
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 128
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
   i32.const 255
   i32.const 255
   i32.rem_u
-  set_global $retain-i32/ui
-  get_global $retain-i32/ui
+  global.set $retain-i32/ui
+  global.get $retain-i32/ui
   i32.const 0
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 8
+   i32.const 32
    i32.const 131
-   i32.const 0
-   call $~lib/env/abort
+   i32.const 1
+   call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  i32.load8_s
+  global.set $retain-i32/ri
+  i32.const 1
+  drop
+  call $retain-i32/testLocalRetain
  )
- (func $null (; 3 ;) (type $v)
+ (func $~start
+  call $start:retain-i32
  )
 )

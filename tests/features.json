@@ -1,0 +1,41 @@
+{
+  "mutable-globals": {
+  },
+  "simd": {
+    "asc_flags": [
+      "--enable simd"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-simd"
+    ]
+  },
+  "threads": {
+    "asc_flags": [
+      "--enable threads"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-threads"
+    ]
+  },
+  "reference-types": {
+    "asc_flags": [
+      "--enable reference-types"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-reftypes"
+    ]
+  },
+  "bigint-integration": {
+    "v8_flags": [
+      "--experimental-wasm-bigint"
+    ]
+  },
+  "exception-handling": {
+    "asc_flags": [
+      "--enable exception-handling"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-eh"
+    ]
+  }
+}

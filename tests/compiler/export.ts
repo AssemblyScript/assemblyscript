@@ -28,3 +28,5 @@ export namespace ns {
   function one(): void {}
   export function two(): void {}
 }
+
+export default ns;

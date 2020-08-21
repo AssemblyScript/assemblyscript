@@ -1,43 +1,21 @@
 (module
- (type $v (func))
- (memory $0 1)
- (data (i32.const 8) "\0d\00\00\00i\00n\00f\00e\00r\00-\00t\00y\00p\00e\00.\00t\00s")
- (table $0 1 anyfunc)
- (elem (i32.const 0) $null)
- (global $infer-type/ri (mut i32) (i32.const 0))
- (global $infer-type/rI (mut i64) (i64.const 0))
- (global $infer-type/rf (mut f32) (f32.const 0))
- (global $infer-type/rF (mut f64) (f64.const 0))
+ (type $none_=>_none (func))
+ (memory $0 0)
  (export "memory" (memory $0))
- (export "table" (table $0))
- (start $start)
- (func $start (; 0 ;) (type $v)
+ (start $~start)
+ (func $~start
   (local $0 i32)
-  i32.const 0
-  set_global $infer-type/ri
-  i64.const 0
-  set_global $infer-type/rI
-  f32.const 0
-  set_global $infer-type/rf
-  f64.const 0
-  set_global $infer-type/rF
-  block $break|0
-   loop $repeat|0
-    get_local $0
-    i32.const 10
-    i32.ge_s
-    br_if $break|0
-    get_local $0
+  loop $for-loop|0
+   local.get $0
+   i32.const 10
+   i32.lt_s
+   if
+    local.get $0
     i32.const 1
     i32.add
-    set_local $0
-    br $repeat|0
-    unreachable
+    local.set $0
+    br $for-loop|0
    end
-   unreachable
   end
- )
- (func $null (; 1 ;) (type $v)
-  nop
  )
 )

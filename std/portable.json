@@ -1,13 +1,13 @@
 {
   "extends": "../tsconfig-base.json",
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "module": "commonjs",
-    "noLib": true,
     "allowJs": true,
     "downlevelIteration": true,
     "preserveConstEnums": true,
     "typeRoots": [ "types" ],
-    "types": [ "portable" ]
+    "types": [ "portable" ],
+    "lib": ["esnext", "esnext.string"]
   }
 }

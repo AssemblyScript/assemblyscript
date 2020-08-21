@@ -1,0 +1,17 @@
+{
+  "targets": {
+    "release": {
+      "optimize": true,
+      "runtime": "stub",
+      "initialMemory": 30,
+      "explicitStart": true,
+      "measure": true,
+      "pedantic": true,
+      "sourceMap": true
+    }
+  },
+  "options": {
+    "initialMemory": 100,
+    "enable": ["simd"]
+  }
+}

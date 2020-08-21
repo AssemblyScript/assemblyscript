@@ -1,4 +1,4 @@
-var binaryen = global.Binaryen = require("../lib/binaryen");
+var binaryen = global.binaryen = require("../lib/binaryen");
 
 require("ts-node").register({ project: require("path").join(__dirname, "..", "src", "tsconfig.json") });
 require("../src/glue/js");

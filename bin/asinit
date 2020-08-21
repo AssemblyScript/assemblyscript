@@ -1,10 +1,58 @@
 #!/usr/bin/env node
+
+/* tslint:disable */
+
 const fs = require("fs");
 const path = require("path");
 const colors = require("../cli/util/colors");
 const version = require("../package.json").version;
+const options = require("../cli/util/options");
 
-if (process.argv.length < 3) printHelp();
+const commands = {
+  "npm": {
+    install: "npm install",
+    run: "npm run",
+    test: "npm test"
+  },
+  "yarn": {
+    install: "yarn install",
+    run: "yarn",
+    test: "yarn test"
+  },
+  "pnpm": {
+    install: "pnpm install",
+    run: "pnpm run",
+    test: "pnpm test"
+  }
+};
+
+let pm = "npm";
+if (typeof process.env.npm_config_user_agent === "string") {
+  if (/\byarn\//.test(process.env.npm_config_user_agent)) {
+    pm = "yarn";
+  } else if (/\bpnpm\//.test(process.env.npm_config_user_agent)) {
+    pm = "pnpm";
+  }
+}
+
+const asinitOptions = {
+  "help": {
+    "category": "General",
+    "description": "Prints a help message.",
+    "type": "b",
+    "alias": "h"
+  },
+  "yes": {
+    "category": "General",
+    "description": "Answers all questions with their default option for non-interactive usage.",
+    "type": "b",
+    "alias": "y"
+  }
+};
+
+const cliOptions = options.parse(process.argv.slice(2), asinitOptions);
+
+if (cliOptions.options.help || cliOptions.arguments.length === 0) printHelp();
 
 function printHelp() {
   console.log([
@@ -16,22 +64,24 @@ function printHelp() {
   process.exit(0);
 }
 
-const rl = require("readline").createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-const projectDir = path.resolve(process.argv[2]);
+const projectDir = path.resolve(cliOptions.arguments[0]);
 const compilerDir = path.join(__dirname, "..");
 const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
 const tsconfigFile = path.join(assemblyDir, "tsconfig.json");
-const tsconfigBase = path.relative(assemblyDir, path.join(compilerDir, "std", "assembly.json"));
+const asconfigFile = path.join(projectDir, "asconfig.json");
+let tsconfigBase = path.relative(assemblyDir, path.join(compilerDir, "std", "assembly.json"));
+if (/^(\.\.[/\\])*node_modules[/\\]assemblyscript[/\\]/.test(tsconfigBase)) {
+  // Use node resolution if the compiler is a normal dependency
+  tsconfigBase = "assemblyscript/std/assembly.json";
+}
 const entryFile = path.join(assemblyDir, "index.ts");
 const buildDir = path.join(projectDir, "build");
+const testsDir = path.join(projectDir, "tests");
 const gitignoreFile = path.join(buildDir, ".gitignore");
 const packageFile = path.join(projectDir, "package.json");
 const indexFile = path.join(projectDir, "index.js");
+const testsIndexFile = path.join(testsDir, "index.js");
 
 console.log([
   "Version: " + version,
@@ -48,7 +98,7 @@ console.log([
   "  TypeScript configuration inheriting recommended AssemblyScript settings.",
   "",
   colors.cyan("  ./assembly/index.ts"),
-  "  Exemplary entry file being compiled to WebAssembly to get you started.",
+  "  Example entry file being compiled to WebAssembly to get you started.",
   "",
   colors.cyan("  ./build"),
   "  Build artifact directory where compiled WebAssembly files are stored.",
@@ -59,6 +109,12 @@ console.log([
   colors.cyan("  ./index.js"),
   "  Main file loading the WebAssembly module and exporting its exports.",
   "",
+  colors.cyan("  ./tests/index.js"),
+  "  Example test to check that your module is indeed working.",
+  "",
+  colors.cyan("  ./asconfig.json"),
+  "  Configuration file defining both a 'debug' and a 'release' target.",
+  "",
   colors.cyan("  ./package.json"),
   "  Package info containing the necessary commands to compile to WebAssembly.",
   "",
@@ -67,7 +123,7 @@ console.log([
   ""
 ].join("\n"));
 
-rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", answer => {
+function createProject(answer) {
   if (!/^y?$/i.test(answer)) {
     process.exit(1);
     return;
@@ -81,15 +137,22 @@ rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", answer => {
   ensureGitignore();
   ensurePackageJson();
   ensureIndexJs();
+  ensureTestsDirectory();
+  ensureTestsIndexJs();
+  ensureAsconfigJson();
   console.log([
     colors.green("Done!"),
+    "",
+    "Don't forget to install dependencies before you start:",
+    "",
+    colors.white("  " + commands[pm].install),
     "",
     "To edit the entry file, open '" + colors.cyan("assembly/index.ts") + "' in your editor of choice.",
     "Create as many additional files as necessary and use them as imports.",
     "",
     "To build the entry file to WebAssembly when you are ready, run:",
     "",
-    colors.white("  npm run asbuild"),
+    colors.white("  " + commands[pm].run + " asbuild"),
     "",
     "Running the command above creates the following binaries incl. their respective",
     "text format representations and source maps:",
@@ -105,17 +168,33 @@ rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", answer => {
     colors.cyan("  ./build/optimized.wasm.map"),
     colors.cyan("  ./build/optimized.wat"),
     "",
-    "  ^ The optimized WebAssembly module using default optimization settings (-O2s).",
+    "  ^ The optimized WebAssembly module using default optimization settings.",
     "    You can change the optimization settings in '" + colors.cyan("package.json")+ "'.",
     "",
-    colors.white("Additional documentation is available at the AssemblyScript wiki:"),
+    "To run the tests, do:",
     "",
-    "  https://github.com/AssemblyScript/assemblyscript/wiki",
+    colors.white("  " + commands[pm].test),
+    "",
+    "The AssemblyScript documentation covers all the details:",
+    "",
+    "  https://docs.assemblyscript.org",
     "",
     "Have a nice day!"
   ].join("\n"));
-  rl.close();
-});
+}
+
+if (cliOptions.options.yes) {
+  createProject("y");
+} else {
+  const rl = require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", result => {
+    rl.close();
+    createProject(result);
+  });
+}
 
 function ensureProjectDirectory() {
   console.log("- Making sure that the project directory exists...");
@@ -156,6 +235,35 @@ function ensureTsconfigJson() {
     tsconfig["extends"] = base;
     fs.writeFileSync(tsconfigFile, JSON.stringify(tsconfig, null, 2));
     console.log(colors.green("  Updated: ") + tsconfigFile);
+  }
+  console.log();
+}
+
+function ensureAsconfigJson() {
+  console.log("- Making sure that 'asconfig.json' is set up...");
+  if (!fs.existsSync(asconfigFile)) {
+    fs.writeFileSync(asconfigFile, JSON.stringify({
+      targets: {
+        debug: {
+          // -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug
+          binaryFile: "build/untouched.wasm",
+          textFile: "build/untouched.wat",
+          sourceMap: true,
+          debug: true
+        },
+        release: {
+          // -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize
+          binaryFile: "build/optimized.wasm",
+          textFile: "build/optimized.wat",
+          sourceMap: true,
+          optimize: true
+        }
+      },
+      options: {}
+    }, null, 2));
+    console.log(colors.green("  Created: ") + asconfigFile);
+  } else {
+    console.log(colors.yellow("  Exists: ") + asconfigFile);
   }
   console.log();
 }
@@ -204,29 +312,56 @@ function ensureGitignore() {
 }
 
 function ensurePackageJson() {
-  console.log("- Making sure that 'package.json' contains the build commands...")
+  console.log("- Making sure that 'package.json' contains the build commands...");
   const entryPath = path.relative(projectDir, entryFile).replace(/\\/g, "/");
-  const buildUntouched = "asc " + entryPath + " -b build/untouched.wasm -t build/untouched.wat --sourceMap --validate --debug";
-  const buildOptimized = "asc " + entryPath + " -b build/optimized.wasm -t build/optimized.wat --sourceMap --validate --optimize";
-  const buildAll = "npm run asbuild:untouched && npm run asbuild:optimized";
+  const buildUntouched = "asc " + entryPath + " --target debug";
+  const buildOptimized = "asc " + entryPath + " --target release";
+  const buildAll = commands[pm].run + " asbuild:untouched && " + commands[pm].run + " asbuild:optimized";
   if (!fs.existsSync(packageFile)) {
     fs.writeFileSync(packageFile, JSON.stringify({
       "scripts": {
         "asbuild:untouched": buildUntouched,
         "asbuild:optimized": buildOptimized,
-        "asbuild": buildAll
+        "asbuild": buildAll,
+        "test": "node tests"
+      },
+      "dependencies": {
+        "@assemblyscript/loader": "^" + compilerVersion
+      },
+      "devDependencies": {
+        "assemblyscript": "^" + compilerVersion
       }
     }, null, 2));
     console.log(colors.green("  Created: ") + packageFile);
   } else {
     let pkg = JSON.parse(fs.readFileSync(packageFile));
-    let scripts = pkg["scripts"];
-    if (!scripts) scripts = {};
+    let scripts = pkg.scripts || {};
+    let updated = false;
     if (!scripts["asbuild"]) {
       scripts["asbuild:untouched"] = buildUntouched;
       scripts["asbuild:optimized"] = buildOptimized;
       scripts["asbuild"] = buildAll;
       pkg["scripts"] = scripts;
+      updated = true;
+    }
+    if (!scripts["test"]) {
+      scripts["test"] = "node tests";
+      pkg["scripts"] = scripts;
+      updated = true;
+    }
+    let dependencies = pkg["dependencies"] || {};
+    if (!dependencies["@assemblyscript/loader"]) {
+      dependencies["@assemblyscript/loader"] = "^" + compilerVersion;
+      pkg["dependencies"] = dependencies;
+      updated = true;
+    }
+    let devDependencies = pkg["devDependencies"] || {};
+    if (!devDependencies["assemblyscript"]) {
+      devDependencies["assemblyscript"] = "^" + compilerVersion;
+      pkg["devDependencies"] = devDependencies;
+      updated = true;
+    }
+    if (updated) {
       fs.writeFileSync(packageFile, JSON.stringify(pkg, null, 2));
       console.log(colors.green("  Updated: ") + packageFile);
     } else {
@@ -241,15 +376,41 @@ function ensureIndexJs() {
   if (!fs.existsSync(indexFile)) {
     fs.writeFileSync(indexFile, [
       "const fs = require(\"fs\");",
-      "const compiled = new WebAssembly.Module(fs.readFileSync(__dirname + \"/build/optimized.wasm\"));",
-      "const imports = {};",
-      "Object.defineProperty(module, \"exports\", {",
-      "  get: () => new WebAssembly.Instance(compiled, imports).exports",
-      "});",
+      "const loader = require(\"@assemblyscript/loader\");",
+      "const imports = { /* imports go here */ };",
+      "const wasmModule = loader.instantiateSync(fs.readFileSync(__dirname + \"/build/optimized.wasm\"), imports);",
+      "module.exports = wasmModule.exports;"
     ].join("\n") + "\n");
     console.log(colors.green("  Created: ") + indexFile);
   } else {
     console.log(colors.yellow("  Exists: ") + indexFile);
+  }
+  console.log();
+}
+
+function ensureTestsDirectory() {
+  console.log("- Making sure that the 'tests' directory exists...");
+  if (!fs.existsSync(testsDir)) {
+    fs.mkdirSync(testsDir);
+    console.log(colors.green("  Created: ") + testsDir);
+  } else {
+    console.log(colors.yellow("  Exists: ") + testsDir);
+  }
+  console.log();
+}
+
+function ensureTestsIndexJs() {
+  console.log("- Making sure that 'tests/index.js' exists...");
+  if (!fs.existsSync(testsIndexFile)) {
+    fs.writeFileSync(testsIndexFile, [
+      "const assert = require(\"assert\");",
+      "const myModule = require(\"..\");",
+      "assert.equal(myModule.add(1, 2), 3);",
+      "console.log(\"ok\");"
+    ].join("\n") + "\n");
+    console.log(colors.green("  Created: ") + testsIndexFile);
+  } else {
+    console.log(colors.yellow("  Exists: ") + testsIndexFile);
   }
   console.log();
 }

@@ -6,18 +6,21 @@ function test(file) {
 
   const exports = new WebAssembly.Instance(new WebAssembly.Module(fs.readFileSync(__dirname + "/" + file)), {
     env: {
-      abort: function(msg, file, line, column) {
+      abort(msg, file, line, column) {
         throw Error("Assertion failed: " + (msg ? "'" + getString(msg) + "' " : "") + "at " + getString(file) + ":" + line + ":" + column);
       },
-      log: function(ptr) { console.log(getString(ptr)); },
-      logi: function(i) { console.log(i); }
+      log(ptr) { console.log(getString(ptr)); },
+      logi(i) { console.log(i); }
     }
   }).exports;
 
   function getString(ptr) {
-    var len = new Uint32Array(exports.memory.buffer, ptr)[0];
-    var str = new Uint16Array(exports.memory.buffer, ptr + 4).subarray(0, len);
-    return String.fromCharCode.apply(String, str);
+    if (!ptr) return "null";
+    var U32 = new Uint32Array(exports.memory.buffer);
+    var U16 = new Uint16Array(exports.memory.buffer);
+    var length = U32[(ptr - 4) >>> 2] >>> 1;
+    var offset = ptr >>> 1;
+    return String.fromCharCode.apply(String, U16.subarray(offset, offset + length));
   }
 
   require("./runner")(exports, 20, 20000);
@@ -25,17 +28,17 @@ function test(file) {
   console.log("mem final: " + exports.memory.buffer.byteLength);
   console.log();
 
-  const alloc = exports["memory.allocate"];
+  const alloc = exports["__alloc"];
   var overflow = false;
   try {
-    alloc(COMMON_MAX + 1); // unreachable
+    alloc(COMMON_MAX + 1, 0); // unreachable
     overflow = true;
-  } catch (e) {}
+  } catch (e) { /* nop */ }
   if (overflow) throw Error("allocation can overflow COMMON_MAX + 1");
   try {
-    alloc(0xffffffff); // unreachable
+    alloc(0xffffffff, 0); // unreachable
     overflow = true;
-  } catch (e) {}
+  } catch (e) { /* nop */ }
   if (overflow) throw Error("allocation can overflow 0xffffffff");
 }
 

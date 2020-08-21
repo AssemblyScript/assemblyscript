@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Terminal colors utility definitions.
+ * @license Apache-2.0
+ */
+
 interface Colors {
   /** Whether terminal colors are supported. */
   supported: boolean;
@@ -25,7 +30,7 @@ interface Exports extends Colors {
   /** Standard error wrapper. */
   stderr: Colors;
   /** Creates an instance for the specified stream. */
-  from(stream: any, base?: {}): Colors;
+  from(stream: Record<string,unknown>, base?: Record<string,unknown>): Colors;
   /** Gray color escape sequence. */
   GRAY: string;
   /** Red color escape sequence. */

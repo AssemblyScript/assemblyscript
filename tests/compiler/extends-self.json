@@ -1,0 +1,9 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "TS2506",
+    "EOF"
+  ]
+}

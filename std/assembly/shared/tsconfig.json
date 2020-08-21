@@ -1,0 +1,11 @@
+{
+  "extends": "../../portable.json",
+  "compilerOptions": {
+    "outDir": "../../../out",
+    "allowJs": false,
+    "sourceMap": true
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}

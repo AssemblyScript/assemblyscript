@@ -1,29 +1,37 @@
 /**
- * Abstract syntax tree representing a source file once parsed.
- * @module ast
- *//***/
+ * @fileoverview Abstract syntax tree representing a source file once parsed.
+ *
+ * Each node in the AST is represented by an instance of a subclass of `Node`,
+ * with its `Node#kind` represented by one of the `NodeKind` constants, which
+ * dependent code typically switches over. The intended way to create a node
+ * is to use the respective `Node.createX` method instead of its constructor.
+ *
+ * Note that the AST does not contain any type information except type names.
+ *
+ * @license Apache-2.0
+ */
+
+// TODO: Make the AST more easily serializable by refactoring `Node#range` so
+// it doesn't reference the non-serializable `Source` object.
 
 import {
   CommonFlags,
   PATH_DELIMITER,
-  STATIC_DELIMITER,
-  INSTANCE_DELIMITER,
-  LIBRARY_PREFIX
+  LIBRARY_PREFIX,
+  LIBRARY_SUBST
 } from "./common";
 
 import {
   Token,
-  Tokenizer,
   Range
 } from "./tokenizer";
 
 import {
   normalizePath,
   resolvePath,
-  CharCode
+  CharCode,
+  isTrivialAlphanum
 } from "./util";
-
-export { Token, Range };
 
 /** Indicates the kind of a node. */
 export enum NodeKind {
@@ -31,10 +39,11 @@ export enum NodeKind {
   SOURCE,
 
   // types
-  TYPE,
+  NAMEDTYPE,
+  FUNCTIONTYPE,
+  TYPENAME,
   TYPEPARAMETER,
   PARAMETER,
-  SIGNATURE,
 
   // expressions
   IDENTIFIER,
@@ -50,6 +59,7 @@ export enum NodeKind {
   LITERAL,
   NEW,
   NULL,
+  OMITTED,
   PARENTHESIZED,
   PROPERTYACCESS,
   TERNARY,
@@ -67,9 +77,11 @@ export enum NodeKind {
   DO,
   EMPTY,
   EXPORT,
+  EXPORTDEFAULT,
   EXPORTIMPORT,
   EXPRESSION,
   FOR,
+  FOROF,
   IF,
   IMPORT,
   RETURN,
@@ -97,129 +109,70 @@ export enum NodeKind {
   DECORATOR,
   EXPORTMEMBER,
   SWITCHCASE,
+  INDEXSIGNATURE,
   COMMENT
-}
-
-/** Checks if a node represents a constant value. */
-export function nodeIsConstantValue(kind: NodeKind): bool {
-  switch (kind) {
-    case NodeKind.LITERAL:
-    case NodeKind.NULL:
-    case NodeKind.TRUE:
-    case NodeKind.FALSE: return true;
-  }
-  return false;
-}
-
-/** Checks if a node might be callable. */
-export function nodeIsCallable(kind: NodeKind): bool {
-  switch (kind) {
-    case NodeKind.IDENTIFIER:
-    case NodeKind.CALL:
-    case NodeKind.ELEMENTACCESS:
-    case NodeKind.PROPERTYACCESS:
-    case NodeKind.PARENTHESIZED: return true;
-  }
-  return false;
-}
-
-/** Checks if a node might be callable with generic arguments. */
-export function nodeIsGenericCallable(kind: NodeKind): bool {
-  switch (kind) {
-    case NodeKind.IDENTIFIER:
-    case NodeKind.PROPERTYACCESS: return true;
-  }
-  return false;
 }
 
 /** Base class of all nodes. */
 export abstract class Node {
-
-  /** Node kind indicator. */
-  kind: NodeKind;
-  /** Source range. */
-  range: Range;
-  /** Parent node. */
-  parent: Node | null = null;
-  /** Common flags indicating specific traits. */
-  flags: CommonFlags = CommonFlags.NONE;
-
-  /** Tests if this node has the specified flag or flags. */
-  is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
-  /** Tests if this node has one of the specified flags. */
-  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
-  /** Sets a specific flag or flags. */
-  set(flag: CommonFlags): void { this.flags |= flag; }
+  constructor(
+    /** Kind of this node. */
+    public kind: NodeKind,
+    /** Source range. */
+    public range: Range
+  ) {}
 
   // types
 
-  static createType(
-    name: IdentifierExpression,
-    typeArguments: CommonTypeNode[] | null,
+  static createSimpleTypeName(
+    name: string,
+    range: Range
+  ): TypeName {
+    return new TypeName(Node.createIdentifierExpression(name, range), null, range);
+  }
+
+  static createNamedType(
+    name: TypeName,
+    typeArguments: TypeNode[] | null,
     isNullable: bool,
     range: Range
-  ): TypeNode {
-    var type = new TypeNode();
-    type.range = range;
-    type.name = name; name.parent = type;
-    type.typeArguments = typeArguments; if (typeArguments) setParent(typeArguments, type);
-    type.isNullable = isNullable;
-    return type;
+  ): NamedTypeNode {
+    return new NamedTypeNode(name, typeArguments, isNullable, range);
+  }
+
+  static createFunctionType(
+    parameters: ParameterNode[],
+    returnType: TypeNode,
+    explicitThisType: NamedTypeNode | null,
+    isNullable: bool,
+    range: Range
+  ): FunctionTypeNode {
+    return new FunctionTypeNode(parameters, returnType, explicitThisType, isNullable, range);
   }
 
   static createOmittedType(
     range: Range
-  ): TypeNode {
-    return Node.createType(
-      Node.createIdentifierExpression("", range),
-      null,
-      false,
-      range
-    );
+  ): NamedTypeNode {
+    return new NamedTypeNode(Node.createSimpleTypeName("", range), null, false, range);
   }
 
   static createTypeParameter(
     name: IdentifierExpression,
-    extendsType: TypeNode | null,
+    extendsType: NamedTypeNode | null,
+    defaultType: NamedTypeNode | null,
     range: Range
   ): TypeParameterNode {
-    var elem = new TypeParameterNode();
-    elem.range = range;
-    elem.name = name; name.parent = elem;
-    elem.extendsType = extendsType; if (extendsType) extendsType.parent = elem;
-    return elem;
+    return new TypeParameterNode(name, extendsType, defaultType, range);
   }
 
   static createParameter(
+    parameterKind: ParameterKind,
     name: IdentifierExpression,
-    type: CommonTypeNode,
+    type: TypeNode,
     initializer: Expression | null,
-    kind: ParameterKind,
     range: Range
   ): ParameterNode {
-    var elem = new ParameterNode();
-    elem.range = range;
-    elem.name = name; name.parent = elem;
-    elem.type = type; if (type) type.parent = elem;
-    elem.initializer = initializer; if (initializer) initializer.parent = elem;
-    elem.parameterKind = kind;
-    return elem;
-  }
-
-  static createSignature(
-    parameters: ParameterNode[],
-    returnType: CommonTypeNode,
-    explicitThisType: TypeNode | null,
-    isNullable: bool,
-    range: Range
-  ): SignatureNode {
-    var sig = new SignatureNode();
-    sig.range = range;
-    sig.parameters = parameters; setParent(parameters, sig);
-    sig.returnType = returnType; returnType.parent = sig;
-    sig.explicitThisType = explicitThisType; if (explicitThisType) explicitThisType.parent = sig;
-    sig.isNullable = isNullable;
-    return sig;
+    return new ParameterNode(parameterKind, name, type, initializer, range);
   }
 
   // special
@@ -229,69 +182,47 @@ export abstract class Node {
     args: Expression[] | null,
     range: Range
   ): DecoratorNode {
-    var stmt = new DecoratorNode();
-    stmt.range = range;
-    stmt.name = name; name.parent = stmt;
-    stmt.arguments = args; if (args) setParent(args, stmt);
-    stmt.decoratorKind = decoratorNameToKind(name);
-    return stmt;
+    return new DecoratorNode(DecoratorKind.fromNode(name), name, args, range);
   }
 
   static createComment(
+    commentKind: CommentKind,
     text: string,
-    kind: CommentKind,
     range: Range
   ): CommentNode {
-    var node = new CommentNode();
-    node.range = range;
-    node.commentKind = kind;
-    node.text = text;
-    return node;
+    return new CommentNode(commentKind, text, range);
   }
 
   // expressions
 
   static createIdentifierExpression(
-    name: string,
-    range: Range
+    text: string,
+    range: Range,
+    isQuoted: bool = false
   ): IdentifierExpression {
-    var expr = new IdentifierExpression();
-    expr.range = range;
-    expr.text = name;
-    return expr;
+    return new IdentifierExpression(text, isQuoted, range);
   }
 
   static createEmptyIdentifierExpression(
     range: Range
   ): IdentifierExpression {
-    var expr = new IdentifierExpression();
-    expr.range = range;
-    expr.text = "";
-    return expr;
+    return new IdentifierExpression("", false, range);
   }
 
   static createArrayLiteralExpression(
-    elements: (Expression | null)[],
+    elementExpressions: Expression[],
     range: Range
   ): ArrayLiteralExpression {
-    var expr = new ArrayLiteralExpression();
-    expr.range = range;
-    expr.elementExpressions = elements; setParentIfNotNull(elements, expr);
-    return expr;
+    return new ArrayLiteralExpression(elementExpressions, range);
   }
 
   static createAssertionExpression(
     assertionKind: AssertionKind,
     expression: Expression,
-    toType: CommonTypeNode,
+    toType: TypeNode | null,
     range: Range
   ): AssertionExpression {
-    var expr = new AssertionExpression();
-    expr.range = range;
-    expr.assertionKind = assertionKind;
-    expr.expression = expression; expression.parent = expr;
-    expr.toType = toType; toType.parent = expr;
-    return expr;
+    return new AssertionExpression(assertionKind, expression, toType, range);
   }
 
   static createBinaryExpression(
@@ -300,137 +231,92 @@ export abstract class Node {
     right: Expression,
     range: Range
   ): BinaryExpression {
-    var expr = new BinaryExpression();
-    expr.range = range;
-    expr.operator = operator;
-    expr.left = left; left.parent = expr;
-    expr.right = right; right.parent = expr;
-    return expr;
+    return new BinaryExpression(operator, left, right, range);
   }
 
   static createCallExpression(
     expression: Expression,
-    typeArgs: CommonTypeNode[] | null,
+    typeArguments: TypeNode[] | null,
     args: Expression[],
     range: Range
   ): CallExpression {
-    var expr = new CallExpression();
-    expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    expr.typeArguments = typeArgs; if (typeArgs) setParent(typeArgs, expr);
-    expr.arguments = args; setParent(args, expr);
-    return expr;
+    return new CallExpression(expression, typeArguments, args, range);
   }
 
   static createClassExpression(
     declaration: ClassDeclaration
   ): ClassExpression {
-    var expr = new ClassExpression();
-    expr.range = declaration.range;
-    expr.declaration = declaration;
-    return expr;
+    return new ClassExpression(declaration);
   }
 
   static createCommaExpression(
     expressions: Expression[],
     range: Range
   ): CommaExpression {
-    var expr = new CommaExpression();
-    expr.range = range;
-    expr.expressions = expressions; setParent(expressions, expr);
-    return expr;
+    return new CommaExpression(expressions, range);
   }
 
   static createConstructorExpression(
     range: Range
   ): ConstructorExpression {
-    var expr = new ConstructorExpression();
-    expr.range = range;
-    return expr;
+    return new ConstructorExpression(range);
   }
 
   static createElementAccessExpression(
     expression: Expression,
-    element: Expression,
+    elementExpression: Expression,
     range: Range
   ): ElementAccessExpression {
-    var expr = new ElementAccessExpression();
-    expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    expr.elementExpression = element; element.parent = expr;
-    return expr;
+    return new ElementAccessExpression(expression, elementExpression, range);
   }
 
   static createFalseExpression(
     range: Range
   ): FalseExpression {
-    var expr = new FalseExpression();
-    expr.range = range;
-    return expr;
+    return new FalseExpression(range);
   }
 
   static createFloatLiteralExpression(
     value: f64,
     range: Range
   ): FloatLiteralExpression {
-    var expr = new FloatLiteralExpression();
-    expr.range = range;
-    expr.value = value;
-    return expr;
+    return new FloatLiteralExpression(value, range);
   }
 
   static createFunctionExpression(
     declaration: FunctionDeclaration
   ): FunctionExpression {
-    var expr = new FunctionExpression();
-    expr.flags = declaration.flags & CommonFlags.ARROW;
-    expr.range = declaration.range;
-    expr.declaration = declaration;
-    return expr;
+    return new FunctionExpression(declaration);
   }
 
   static createInstanceOfExpression(
     expression: Expression,
-    isType: CommonTypeNode,
+    isType: TypeNode,
     range: Range
   ): InstanceOfExpression {
-    var expr = new InstanceOfExpression();
-    expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    expr.isType = isType; isType.parent = expr;
-    return expr;
+    return new InstanceOfExpression(expression, isType, range);
   }
 
   static createIntegerLiteralExpression(
-    value: I64,
+    value: i64,
     range: Range
   ): IntegerLiteralExpression {
-    var expr = new IntegerLiteralExpression();
-    expr.range = range;
-    expr.value = value;
-    return expr;
+    return new IntegerLiteralExpression(value, range);
   }
 
   static createNewExpression(
-    expression: Expression,
-    typeArgs: CommonTypeNode[] | null,
+    typeName: TypeName,
+    typeArguments: TypeNode[] | null,
     args: Expression[],
     range: Range
   ): NewExpression {
-    var expr = new NewExpression();
-    expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    expr.typeArguments = typeArgs; if (typeArgs) setParent(typeArgs, expr);
-    expr.arguments = args; setParent(args, expr);
-    return expr;
+    return new NewExpression(typeName, typeArguments, args, range);
   }
 
   static createNullExpression(
     range: Range
   ): NullExpression {
-    var expr = new NullExpression();
-    expr.range = range;
-    return expr;
+    return new NullExpression(range);
   }
 
   static createObjectLiteralExpression(
@@ -438,21 +324,20 @@ export abstract class Node {
     values: Expression[],
     range: Range
   ): ObjectLiteralExpression {
-    var expr = new ObjectLiteralExpression();
-    expr.range = range;
-    expr.names = names;
-    expr.values = values;
-    return expr;
+    return new ObjectLiteralExpression(names, values, range);
+  }
+
+  static createOmittedExpression(
+    range: Range
+  ): OmittedExpression {
+    return new OmittedExpression(range);
   }
 
   static createParenthesizedExpression(
     expression: Expression,
     range: Range
   ): ParenthesizedExpression {
-    var expr = new ParenthesizedExpression();
-    expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    return expr;
+    return new ParenthesizedExpression(expression, range);
   }
 
   static createPropertyAccessExpression(
@@ -460,23 +345,15 @@ export abstract class Node {
     property: IdentifierExpression,
     range: Range
   ): PropertyAccessExpression {
-    var expr = new PropertyAccessExpression();
-    expr.range = range;
-    expr.expression = expression; expression.parent = expr;
-    expr.property = property; property.parent = expr;
-    return expr;
+    return new PropertyAccessExpression(expression, property, range);
   }
 
   static createRegexpLiteralExpression(
     pattern: string,
-    flags: string,
+    patternFlags: string,
     range: Range
   ): RegexpLiteralExpression {
-    var expr = new RegexpLiteralExpression();
-    expr.range = range;
-    expr.pattern = pattern;
-    expr.patternFlags = flags;
-    return expr;
+    return new RegexpLiteralExpression(pattern, patternFlags, range);
   }
 
   static createTernaryExpression(
@@ -485,46 +362,32 @@ export abstract class Node {
     ifElse: Expression,
     range: Range
   ): TernaryExpression {
-    var expr = new TernaryExpression();
-    expr.range = range;
-    expr.condition = condition; condition.parent = expr;
-    expr.ifThen = ifThen; ifThen.parent = expr;
-    expr.ifElse = ifElse; ifElse.parent = expr;
-    return expr;
+    return new TernaryExpression(condition, ifThen, ifElse, range);
   }
 
   static createStringLiteralExpression(
     value: string,
     range: Range
   ): StringLiteralExpression {
-    var expr = new StringLiteralExpression();
-    expr.range = range;
-    expr.value = value;
-    return expr;
+    return new StringLiteralExpression(value, range);
   }
 
   static createSuperExpression(
     range: Range
   ): SuperExpression {
-    var expr = new SuperExpression();
-    expr.range = range;
-    return expr;
+    return new SuperExpression(range);
   }
 
   static createThisExpression(
     range: Range
   ): ThisExpression {
-    var expr = new ThisExpression();
-    expr.range = range;
-    return expr;
+    return new ThisExpression(range);
   }
 
   static createTrueExpression(
     range: Range
   ): TrueExpression {
-    var expr = new TrueExpression();
-    expr.range = range;
-    return expr;
+    return new TrueExpression(range);
   }
 
   static createUnaryPostfixExpression(
@@ -532,11 +395,7 @@ export abstract class Node {
     operand: Expression,
     range: Range
   ): UnaryPostfixExpression {
-    var expr = new UnaryPostfixExpression();
-    expr.range = range;
-    expr.operator = operator;
-    expr.operand = operand; operand.parent = expr;
-    return expr;
+    return new UnaryPostfixExpression(operator, operand, range);
   }
 
   static createUnaryPrefixExpression(
@@ -544,11 +403,7 @@ export abstract class Node {
     operand: Expression,
     range: Range
   ): UnaryPrefixExpression {
-    var expr = new UnaryPrefixExpression();
-    expr.range = range;
-    expr.operator = operator;
-    expr.operand = operand; operand.parent = expr;
-    return expr;
+    return new UnaryPrefixExpression(operator, operand, range);
   }
 
   // statements
@@ -557,52 +412,34 @@ export abstract class Node {
     statements: Statement[],
     range: Range
   ): BlockStatement {
-    var stmt = new BlockStatement();
-    stmt.range = range;
-    stmt.statements = statements; setParent(statements, stmt);
-    return stmt;
+    return new BlockStatement(statements, range);
   }
 
   static createBreakStatement(
     label: IdentifierExpression | null,
     range: Range
   ): BreakStatement {
-    var stmt = new BreakStatement();
-    stmt.range = range;
-    stmt.label = label; if (label) label.parent = stmt;
-    return stmt;
+    return new BreakStatement(label, range);
   }
 
   static createClassDeclaration(
-    identifier: IdentifierExpression,
-    typeParameters: TypeParameterNode[],
-    extendsType: TypeNode | null, // can't be a function
-    implementsTypes: TypeNode[] | null, // can't be functions
-    members: DeclarationStatement[],
+    name: IdentifierExpression,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
+    typeParameters: TypeParameterNode[] | null,
+    extendsType: NamedTypeNode | null,
+    implementsTypes: NamedTypeNode[] | null,
+    members: DeclarationStatement[],
     range: Range
   ): ClassDeclaration {
-    var stmt = new ClassDeclaration();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.name = identifier; identifier.parent = stmt;
-    stmt.typeParameters = typeParameters; setParent(typeParameters, stmt);
-    stmt.extendsType = extendsType; if (extendsType) extendsType.parent = stmt;
-    stmt.implementsTypes = implementsTypes; if (implementsTypes) setParent(implementsTypes, stmt);
-    stmt.members = members; setParent(members, stmt);
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
-    return stmt;
+    return new ClassDeclaration(name, decorators, flags, typeParameters, extendsType, implementsTypes, members, range);
   }
 
   static createContinueStatement(
     label: IdentifierExpression | null,
     range: Range
   ): ContinueStatement {
-    var stmt = new ContinueStatement();
-    stmt.range = range;
-    stmt.label = label; if (label) label.parent = stmt;
-    return stmt;
+    return new ContinueStatement(label, range);
   }
 
   static createDoStatement(
@@ -610,78 +447,48 @@ export abstract class Node {
     condition: Expression,
     range: Range
   ): DoStatement {
-    var stmt = new DoStatement();
-    stmt.range = range;
-    stmt.statement = statement; statement.parent = stmt;
-    stmt.condition = condition; condition.parent = stmt;
-    return stmt;
+    return new DoStatement(statement, condition, range);
   }
 
   static createEmptyStatement(
     range: Range
   ): EmptyStatement {
-    var stmt = new EmptyStatement();
-    stmt.range = range;
-    return stmt;
+    return new EmptyStatement(range);
   }
 
   static createEnumDeclaration(
     name: IdentifierExpression,
-    members: EnumValueDeclaration[],
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
+    values: EnumValueDeclaration[],
     range: Range
   ): EnumDeclaration {
-    var stmt = new EnumDeclaration();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.values = members; setParent(members, stmt);
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
-    return stmt;
+    return new EnumDeclaration(name, decorators, flags, values, range);
   }
 
   static createEnumValueDeclaration(
     name: IdentifierExpression,
-    value: Expression | null,
     flags: CommonFlags,
+    initializer: Expression | null,
     range: Range
   ): EnumValueDeclaration {
-    var stmt = new EnumValueDeclaration();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.value = value; if (value) value.parent = stmt;
-    return stmt;
+    return new EnumValueDeclaration(name, flags, initializer, range);
   }
 
   static createExportStatement(
     members: ExportMember[] | null,
     path: StringLiteralExpression | null,
-    flags: CommonFlags,
+    isDeclare: bool,
     range: Range
   ): ExportStatement {
-    var stmt = new ExportStatement();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.members = members; if (members) setParent(members, stmt);
-    stmt.path = path;
-    if (path) {
-      let normalizedPath = normalizePath(path.value);
-      if (path.value.startsWith(".")) { // relative
-        stmt.normalizedPath = resolvePath(
-          normalizedPath,
-          range.source.normalizedPath
-        );
-      } else { // absolute
-        stmt.normalizedPath = normalizedPath;
-      }
-      stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
-    } else {
-      stmt.normalizedPath = null;
-      stmt.internalPath = null;
-    }
-    return stmt;
+    return new ExportStatement(members, path, isDeclare, range);
+  }
+
+  static createExportDefaultStatement(
+    declaration: DeclarationStatement,
+    range: Range
+  ): ExportDefaultStatement {
+    return new ExportDefaultStatement(declaration, range);
   }
 
   static createExportImportStatement(
@@ -689,37 +496,22 @@ export abstract class Node {
     externalName: IdentifierExpression,
     range: Range
   ): ExportImportStatement {
-    var stmt = new ExportImportStatement();
-    stmt.range = range;
-    stmt.name = name; name.parent = stmt;
-    stmt.externalName = externalName; externalName.parent = stmt;
-    return stmt;
+    return new ExportImportStatement(name, externalName, range);
   }
 
   static createExportMember(
-    name: IdentifierExpression,
-    externalName: IdentifierExpression | null,
+    localName: IdentifierExpression,
+    exportedName: IdentifierExpression | null,
     range: Range
   ): ExportMember {
-    var elem = new ExportMember();
-    elem.range = range;
-    elem.name = name; name.parent = elem;
-    if (!externalName) {
-      externalName = name;
-    } else {
-      externalName.parent = elem;
-    }
-    elem.externalName = externalName;
-    return elem;
+    if (!exportedName) exportedName = localName;
+    return new ExportMember(localName, exportedName, range);
   }
 
   static createExpressionStatement(
     expression: Expression
   ): ExpressionStatement {
-    var stmt = new ExpressionStatement();
-    stmt.range = expression.range;
-    stmt.expression = expression; expression.parent = stmt;
-    return stmt;
+    return new ExpressionStatement(expression);
   }
 
   static createIfStatement(
@@ -728,111 +520,56 @@ export abstract class Node {
     ifFalse: Statement | null,
     range: Range
   ): IfStatement {
-    var stmt = new IfStatement();
-    stmt.range = range;
-    stmt.condition = condition; condition.parent = stmt;
-    stmt.ifTrue = ifTrue; ifTrue.parent = stmt;
-    stmt.ifFalse = ifFalse; if (ifFalse) ifFalse.parent = stmt;
-    return stmt;
+    return new IfStatement(condition, ifTrue, ifFalse, range);
   }
 
   static createImportStatement(
-    decls: ImportDeclaration[] | null,
+    declarations: ImportDeclaration[] | null,
     path: StringLiteralExpression,
     range: Range
   ): ImportStatement {
-    var stmt = new ImportStatement();
-    stmt.range = range;
-    stmt.declarations = decls; if (decls) setParent(decls, stmt);
-    stmt.namespaceName = null;
-    stmt.path = path;
-    var normalizedPath = normalizePath(path.value);
-    if (path.value.startsWith(".")) { // relative in project
-      stmt.normalizedPath = resolvePath(
-        normalizedPath,
-        range.source.normalizedPath
-      );
-    } else { // absolute in library
-      if (!normalizedPath.startsWith(LIBRARY_PREFIX)) {
-        normalizedPath = LIBRARY_PREFIX + normalizedPath;
-      }
-      stmt.normalizedPath = normalizedPath;
-    }
-    stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
-    return stmt;
+    return new ImportStatement(declarations, null, path, range);
   }
 
-  static createImportStatementWithWildcard(
-    identifier: IdentifierExpression,
+  static createWildcardImportStatement(
+    namespaceName: IdentifierExpression,
     path: StringLiteralExpression,
     range: Range
   ): ImportStatement {
-    var stmt = new ImportStatement();
-    stmt.range = range;
-    stmt.declarations = null;
-    stmt.namespaceName = identifier;
-    stmt.path = path;
-    stmt.normalizedPath = resolvePath(
-      normalizePath(path.value),
-      range.source.normalizedPath
-    );
-    stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
-    return stmt;
+    return new ImportStatement(null, namespaceName, path, range);
   }
 
   static createImportDeclaration(
-    externalName: IdentifierExpression,
+    foreignName: IdentifierExpression,
     name: IdentifierExpression | null,
     range: Range
   ): ImportDeclaration {
-    var elem = new ImportDeclaration();
-    elem.range = range;
-    elem.externalName = externalName; externalName.parent = elem;
-    if (!name) {
-      name = externalName;
-    } else {
-      name.parent = elem;
-    }
-    elem.name = name;
-    return elem;
+    if (!name) name = foreignName;
+    return new ImportDeclaration(name, foreignName, range);
   }
 
   static createInterfaceDeclaration(
     name: IdentifierExpression,
-    typeParameters: TypeParameterNode[],
-    extendsType: TypeNode | null, // can't be a function
-    members: DeclarationStatement[],
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
+    typeParameters: TypeParameterNode[] | null,
+    extendsType: NamedTypeNode | null,
+    implementsTypes: NamedTypeNode[] | null,
+    members: DeclarationStatement[],
     range: Range
   ): InterfaceDeclaration {
-    var stmt = new InterfaceDeclaration();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.extendsType = extendsType; if (extendsType) extendsType.parent = stmt;
-    stmt.members = members; setParent(members, stmt);
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
-    return stmt;
+    return new InterfaceDeclaration(name, decorators, flags, typeParameters, extendsType, implementsTypes, members, range);
   }
 
   static createFieldDeclaration(
     name: IdentifierExpression,
-    type: CommonTypeNode | null,
-    initializer: Expression | null,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
+    type: TypeNode | null,
+    initializer: Expression | null,
     range: Range
   ): FieldDeclaration {
-    var stmt = new FieldDeclaration();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.type = type; if (type) type.parent = stmt;
-    stmt.initializer = initializer; if (initializer) initializer.parent = stmt;
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
-    return stmt;
+    return new FieldDeclaration(name, decorators, flags, type, initializer, -1, range);
   }
 
   static createForStatement(
@@ -842,79 +579,67 @@ export abstract class Node {
     statement: Statement,
     range: Range
   ): ForStatement {
-    var stmt = new ForStatement();
-    stmt.range = range;
-    stmt.initializer = initializer; if (initializer) initializer.parent = stmt;
-    stmt.condition = condition; if (condition) condition.parent = stmt;
-    stmt.incrementor = incrementor; if (incrementor) incrementor.parent = stmt;
-    stmt.statement = statement; statement.parent = stmt;
-    return stmt;
+    return new ForStatement(initializer, condition, incrementor, statement, range);
+  }
+
+  static createForOfStatement(
+    variable: Statement,
+    iterable: Expression,
+    statement: Statement,
+    range: Range
+  ): ForOfStatement {
+    return new ForOfStatement(variable, iterable, statement, range);
   }
 
   static createFunctionDeclaration(
     name: IdentifierExpression,
-    typeParameters: TypeParameterNode[] | null,
-    signature: SignatureNode,
-    body: Statement | null,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
+    typeParameters: TypeParameterNode[] | null,
+    signature: FunctionTypeNode,
+    body: Statement | null,
+    arrowKind: ArrowKind,
     range: Range
   ): FunctionDeclaration {
-    var stmt = new FunctionDeclaration();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.signature = signature; signature.parent = stmt;
-    stmt.body = body; if (body) body.parent = stmt;
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
-    return stmt;
+    return new FunctionDeclaration(name, decorators, flags, typeParameters, signature, body, arrowKind, range);
+  }
+
+  static createIndexSignature(
+    keyType: NamedTypeNode,
+    valueType: TypeNode,
+    flags: CommonFlags,
+    range: Range
+  ): IndexSignatureNode {
+    return new IndexSignatureNode(keyType, valueType, flags, range);
   }
 
   static createMethodDeclaration(
     name: IdentifierExpression,
-    typeParameters: TypeParameterNode[] | null,
-    signature: SignatureNode,
-    body: Statement | null,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
+    typeParameters: TypeParameterNode[] | null,
+    signature: FunctionTypeNode,
+    body: Statement | null,
     range: Range
   ): MethodDeclaration {
-    var stmt = new MethodDeclaration();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.signature = signature; signature.parent = stmt;
-    stmt.body = body; if (body) body.parent = stmt;
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
-    return stmt;
+    return new MethodDeclaration(name, decorators, flags, typeParameters, signature, body, range);
   }
 
   static createNamespaceDeclaration(
     name: IdentifierExpression,
-    members: Statement[],
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
+    members: Statement[],
     range: Range
   ): NamespaceDeclaration {
-    var stmt = new NamespaceDeclaration();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.members = members; setParent(members, stmt);
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
-    return stmt;
+    return new NamespaceDeclaration(name, decorators, flags, members, range);
   }
 
   static createReturnStatement(
     value: Expression | null,
     range: Range
   ): ReturnStatement {
-    var stmt = new ReturnStatement();
-    stmt.range = range;
-    stmt.value = value; if (value) value.parent = stmt;
-    return stmt;
+    return new ReturnStatement(value, range);
   }
 
   static createSwitchStatement(
@@ -922,11 +647,7 @@ export abstract class Node {
     cases: SwitchCase[],
     range: Range
   ): SwitchStatement {
-    var stmt = new SwitchStatement();
-    stmt.range = range;
-    stmt.condition = condition; condition.parent = stmt;
-    stmt.cases = cases; setParent(cases, stmt);
-    return stmt;
+    return new SwitchStatement(condition, cases, range);
   }
 
   static createSwitchCase(
@@ -934,21 +655,14 @@ export abstract class Node {
     statements: Statement[],
     range: Range
   ): SwitchCase {
-    var elem = new SwitchCase();
-    elem.range = range;
-    elem.label = label; if (label) label.parent = elem;
-    elem.statements = statements; setParent(statements, elem);
-    return elem;
+    return new SwitchCase(label, statements, range);
   }
 
   static createThrowStatement(
     value: Expression,
     range: Range
   ): ThrowStatement {
-    var stmt = new ThrowStatement();
-    stmt.range = range;
-    stmt.value = value; value.parent = stmt;
-    return stmt;
+    return new ThrowStatement(value, range);
   }
 
   static createTryStatement(
@@ -958,76 +672,44 @@ export abstract class Node {
     finallyStatements: Statement[] | null,
     range: Range
   ): TryStatement {
-    var stmt = new TryStatement();
-    stmt.range = range;
-    stmt.statements = statements; setParent(statements, stmt);
-    stmt.catchVariable = catchVariable;
-    if (catchVariable) catchVariable.parent = stmt;
-    stmt.catchStatements = catchStatements;
-    if (catchStatements) setParent(catchStatements, stmt);
-    stmt.finallyStatements = finallyStatements;
-    if (finallyStatements) setParent(finallyStatements, stmt);
-    return stmt;
+    return new TryStatement(statements, catchVariable, catchStatements, finallyStatements, range);
   }
 
   static createTypeDeclaration(
     name: IdentifierExpression,
-    typeParameters: TypeParameterNode[] | null,
-    alias: CommonTypeNode,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
+    typeParameters: TypeParameterNode[] | null,
+    type: TypeNode,
     range: Range
   ): TypeDeclaration {
-    var stmt = new TypeDeclaration();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.name = name; name.parent = stmt;
-    stmt.typeParameters = typeParameters; if (typeParameters) setParent(typeParameters, stmt);
-    stmt.type = alias; alias.parent = stmt;
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
-    return stmt;
+    return new TypeDeclaration(name, decorators, flags, typeParameters, type, range);
   }
 
   static createVariableStatement(
-    declarations: VariableDeclaration[],
     decorators: DecoratorNode[] | null,
-    flags: CommonFlags,
+    declarations: VariableDeclaration[],
     range: Range
   ): VariableStatement {
-    var stmt = new VariableStatement();
-    stmt.range = range;
-    stmt.flags = flags;
-    stmt.declarations = declarations; setParent(declarations, stmt);
-    stmt.decorators = decorators; if (decorators) setParent(decorators, stmt);
-    return stmt;
+    return new VariableStatement(decorators, declarations, range);
   }
 
   static createVariableDeclaration(
     name: IdentifierExpression,
-    type: CommonTypeNode | null,
-    initializer: Expression | null,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
+    type: TypeNode | null,
+    initializer: Expression | null,
     range: Range
   ): VariableDeclaration {
-    var elem = new VariableDeclaration();
-    elem.range = range;
-    elem.flags = flags;
-    elem.name = name; name.parent = elem;
-    elem.type = type; if (type) type.parent = elem;
-    elem.initializer = initializer; if (initializer) initializer.parent = elem;
-    elem.decorators = decorators; // inherited
-    return elem;
+    return new VariableDeclaration(name, decorators, flags, type, initializer, range);
   }
 
   static createVoidStatement(
     expression: Expression,
     range: Range
   ): VoidStatement {
-    var stmt = new VoidStatement();
-    stmt.range = range;
-    stmt.expression = expression;
-    return stmt;
+    return new VoidStatement(expression, range);
   }
 
   static createWhileStatement(
@@ -1035,41 +717,182 @@ export abstract class Node {
     statement: Statement,
     range: Range
   ): WhileStatement {
-    var stmt = new WhileStatement();
-    stmt.range = range;
-    stmt.condition = condition; condition.parent = stmt;
-    stmt.statement = statement; statement.parent = stmt;
-    return stmt;
+    return new WhileStatement(condition, statement, range);
+  }
+
+  /** Tests if this node is a literal of the specified kind. */
+  isLiteralKind(literalKind: LiteralKind): bool {
+    return this.kind == NodeKind.LITERAL
+        && (<LiteralExpression>changetype<Node>(this)).literalKind == literalKind; // TS
+  }
+
+  /** Tests if this node is a literal of a numeric kind (float or integer). */
+  get isNumericLiteral(): bool {
+    if (this.kind == NodeKind.LITERAL) {
+      switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
+        case LiteralKind.FLOAT:
+        case LiteralKind.INTEGER: return true;
+      }
+    }
+    return false;
+  }
+
+  /** Tests whether this node is guaranteed to compile to a constant value. */
+  get compilesToConst(): bool {
+    switch (this.kind) {
+      case NodeKind.LITERAL: {
+        switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
+          case LiteralKind.FLOAT:
+          case LiteralKind.INTEGER:
+          case LiteralKind.STRING: return true;
+        }
+        break;
+      }
+      case NodeKind.NULL:
+      case NodeKind.TRUE:
+      case NodeKind.FALSE: return true;
+    }
+    return false;
+  }
+
+  private isAccessOn(kind: NodeKind): bool {
+    let node = changetype<Node>(this);
+    if (node.kind == NodeKind.CALL) {
+      node = (<CallExpression>node).expression;
+    }
+    if (node.kind == NodeKind.PROPERTYACCESS) {
+      let target = (<PropertyAccessExpression>node).expression;
+      if (target.kind == kind) return true;
+    }
+    return false;
+  }
+
+  /** Checks if this node accesses a method or property on `this`. */
+  get isAccessOnThis(): bool {
+    return this.isAccessOn(NodeKind.THIS);
+  }
+
+  /** Checks if this node accesses a method or property on `super`. */
+  get isAccessOnSuper(): bool {
+    return this.isAccessOn(NodeKind.SUPER);
   }
 }
 
 // types
 
-export abstract class CommonTypeNode extends Node {
-  // kind varies
+export abstract class TypeNode extends Node {
+  constructor(
+    /** Kind of the type node. */
+    kind: NodeKind,
+    /** Whether nullable or not. */
+    public isNullable: bool,
+    /** Source range. */
+    range: Range
+  ) {
+    super(kind, range);
+  }
 
-  /** Whether nullable or not. */
-  isNullable: bool;
+  /** Tests if this type has a generic component matching one of the given type parameters. */
+  hasGenericComponent(typeParameterNodes: TypeParameterNode[]): bool {
+    if (this.kind == NodeKind.NAMEDTYPE) {
+      let namedTypeNode = <NamedTypeNode>changetype<TypeNode>(this); // TS
+      if (!namedTypeNode.name.next) {
+        let typeArgumentNodes = namedTypeNode.typeArguments;
+        if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+          for (let i = 0, k = typeArgumentNodes.length; i < k; ++i) {
+            if (typeArgumentNodes[i].hasGenericComponent(typeParameterNodes)) return true;
+          }
+        } else {
+          let name = namedTypeNode.name.identifier.text;
+          for (let i = 0, k = typeParameterNodes.length; i < k; ++i) {
+            if (typeParameterNodes[i].name.text == name) return true;
+          }
+        }
+      }
+    } else if (this.kind == NodeKind.FUNCTIONTYPE) {
+      let functionTypeNode = <FunctionTypeNode>changetype<TypeNode>(this); // TS
+      let parameterNodes = functionTypeNode.parameters;
+      for (let i = 0, k = parameterNodes.length; i < k; ++i) {
+        if (parameterNodes[i].type.hasGenericComponent(typeParameterNodes)) return true;
+      }
+      if (functionTypeNode.returnType.hasGenericComponent(typeParameterNodes)) return true;
+      let explicitThisType = functionTypeNode.explicitThisType;
+      if (explicitThisType !== null && explicitThisType.hasGenericComponent(typeParameterNodes)) return true;
+    } else {
+      assert(false);
+    }
+    return false;
+  }
 }
 
-/** Represents a type annotation. */
-export class TypeNode extends CommonTypeNode {
-  kind = NodeKind.TYPE;
+/** Represents a type name. */
+export class TypeName extends Node {
+  constructor(
+    /** Identifier of this part. */
+    public identifier: IdentifierExpression,
+    /** Next part of the type name or `null` if this is the last part. */
+    public next: TypeName | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.TYPENAME, range);
+  }
+}
 
-  /** Identifier reference. */
-  name: IdentifierExpression;
-  /** Type argument references. */
-  typeArguments: CommonTypeNode[] | null;
+/** Represents a named type. */
+export class NamedTypeNode extends TypeNode {
+  constructor(
+    /** Type name. */
+    public name: TypeName,
+    /** Type argument references. */
+    public typeArguments: TypeNode[] | null,
+    /** Whether nullable or not. */
+    isNullable: bool,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.NAMEDTYPE, isNullable, range);
+  }
+
+  /** Checks if this type node has type arguments. */
+  get hasTypeArguments(): bool {
+    var typeArguments = this.typeArguments;
+    return typeArguments !== null && typeArguments.length > 0;
+  }
+}
+
+/** Represents a function type. */
+export class FunctionTypeNode extends TypeNode {
+  constructor(
+    /** Function parameters. */
+    public parameters: ParameterNode[],
+    /** Return type. */
+    public returnType: TypeNode,
+    /** Explicitly provided this type, if any. */
+    public explicitThisType: NamedTypeNode | null, // can't be a function
+    /** Whether nullable or not. */
+    isNullable: bool,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.FUNCTIONTYPE, isNullable, range);
+  }
 }
 
 /** Represents a type parameter. */
 export class TypeParameterNode extends Node {
-  kind = NodeKind.TYPEPARAMETER;
-
-  /** Identifier reference. */
-  name: IdentifierExpression;
-  /** Extended type reference, if any. */
-  extendsType: TypeNode | null; // can't be a function
+  constructor(
+    /** Identifier reference. */
+    public name: IdentifierExpression,
+    /** Extended type reference, if any. */
+    public extendsType: NamedTypeNode | null, // can't be a function
+    /** Default type if omitted, if any. */
+    public defaultType: NamedTypeNode | null, // can't be a function
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.TYPEPARAMETER, range);
+  }
 }
 
 /** Represents the kind of a parameter. */
@@ -1084,30 +907,32 @@ export enum ParameterKind {
 
 /** Represents a function parameter. */
 export class ParameterNode extends Node {
-  kind = NodeKind.PARAMETER;
+  constructor(
+    /** Parameter kind. */
+    public parameterKind: ParameterKind,
+    /** Parameter name. */
+    public name: IdentifierExpression,
+    /** Parameter type. */
+    public type: TypeNode,
+    /** Initializer expression, if any. */
+    public initializer: Expression | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.PARAMETER, range);
+  }
 
-  /** Parameter kind. */
-  parameterKind: ParameterKind;
-  /** Parameter name. */
-  name: IdentifierExpression;
-  /** Parameter type. */
-  type: CommonTypeNode;
-  /** Initializer expression, if present. */
-  initializer: Expression | null;
   /** Implicit field declaration, if applicable. */
   implicitFieldDeclaration: FieldDeclaration | null = null;
-}
+  /** Common flags indicating specific traits. */
+  flags: CommonFlags = CommonFlags.NONE;
 
-/** Represents a function signature. */
-export class SignatureNode extends CommonTypeNode {
-  kind = NodeKind.SIGNATURE;
-
-  /** Accepted parameters. */
-  parameters: ParameterNode[];
-  /** Return type. */
-  returnType: CommonTypeNode;
-  /** Explicitly provided this type, if any. */
-  explicitThisType: TypeNode | null; // can't be a function
+  /** Tests if this node has the specified flag or flags. */
+  is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
+  /** Tests if this node has one of the specified flags. */
+  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
+  /** Sets a specific flag or flags. */
+  set(flag: CommonFlags): void { this.flags |= flag; }
 }
 
 // special
@@ -1121,93 +946,104 @@ export enum DecoratorKind {
   OPERATOR_PREFIX,
   OPERATOR_POSTFIX,
   UNMANAGED,
-  SEALED,
+  FINAL,
   INLINE,
   EXTERNAL,
-  BUILTIN
+  BUILTIN,
+  LAZY,
+  UNSAFE
 }
 
-/** Returns the kind of the specified decorator. Defaults to {@link DecoratorKind.CUSTOM}. */
-export function decoratorNameToKind(name: Expression): DecoratorKind {
-  // @global, @inline, @operator, @sealed, @unmanaged
-  if (name.kind == NodeKind.IDENTIFIER) {
-    let nameStr = (<IdentifierExpression>name).text;
-    assert(nameStr.length);
-    switch (nameStr.charCodeAt(0)) {
-      case CharCode.b: {
-        if (nameStr == "builtin") return DecoratorKind.BUILTIN;
-        break;
-      }
-      case CharCode.e: {
-        if (nameStr == "external") return DecoratorKind.EXTERNAL;
-        break;
-      }
-      case CharCode.g: {
-        if (nameStr == "global") return DecoratorKind.GLOBAL;
-        break;
-      }
-      case CharCode.i: {
-        if (nameStr == "inline") return DecoratorKind.INLINE;
-        break;
-      }
-      case CharCode.o: {
-        if (nameStr == "operator") return DecoratorKind.OPERATOR;
-        break;
-      }
-      case CharCode.s: {
-        if (nameStr == "sealed") return DecoratorKind.SEALED;
-        break;
-      }
-      case CharCode.u: {
-        if (nameStr == "unmanaged") return DecoratorKind.UNMANAGED;
-        break;
-      }
-    }
-  } else if (
-    name.kind == NodeKind.PROPERTYACCESS &&
-    (<PropertyAccessExpression>name).expression.kind == NodeKind.IDENTIFIER
-  ) {
-    let nameStr = (<IdentifierExpression>(<PropertyAccessExpression>name).expression).text;
-    assert(nameStr.length);
-    let propStr = (<PropertyAccessExpression>name).property.text;
-    assert(propStr.length);
-    // @operator.binary, @operator.prefix, @operator.postfix
-    if (nameStr == "operator") {
-      switch (propStr.charCodeAt(0)) {
+export namespace DecoratorKind {
+
+  /** Returns the kind of the specified decorator name node. Defaults to {@link DecoratorKind.CUSTOM}. */
+  export function fromNode(nameNode: Expression): DecoratorKind {
+    if (nameNode.kind == NodeKind.IDENTIFIER) {
+      let nameStr = (<IdentifierExpression>nameNode).text;
+      assert(nameStr.length);
+      switch (nameStr.charCodeAt(0)) {
         case CharCode.b: {
-          if (propStr == "binary") return DecoratorKind.OPERATOR_BINARY;
+          if (nameStr == "builtin") return DecoratorKind.BUILTIN;
           break;
         }
-        case CharCode.p: {
-          switch (propStr) {
-            case "prefix": return DecoratorKind.OPERATOR_PREFIX;
-            case "postfix": return DecoratorKind.OPERATOR_POSTFIX;
-          }
+        case CharCode.e: {
+          if (nameStr == "external") return DecoratorKind.EXTERNAL;
+          break;
+        }
+        case CharCode.f: {
+          if (nameStr == "final") return DecoratorKind.FINAL;
+          break;
+        }
+        case CharCode.g: {
+          if (nameStr == "global") return DecoratorKind.GLOBAL;
+          break;
+        }
+        case CharCode.i: {
+          if (nameStr == "inline") return DecoratorKind.INLINE;
+          break;
+        }
+        case CharCode.l: {
+          if (nameStr == "lazy") return DecoratorKind.LAZY;
+          break;
+        }
+        case CharCode.o: {
+          if (nameStr == "operator") return DecoratorKind.OPERATOR;
+          break;
+        }
+        case CharCode.u: {
+          if (nameStr == "unmanaged") return DecoratorKind.UNMANAGED;
+          if (nameStr == "unsafe") return DecoratorKind.UNSAFE;
           break;
         }
       }
+    } else if (nameNode.kind == NodeKind.PROPERTYACCESS) {
+      let propertyAccessNode = <PropertyAccessExpression>nameNode;
+      let expression = propertyAccessNode.expression;
+      if (expression.kind == NodeKind.IDENTIFIER) {
+        let nameStr = (<IdentifierExpression>expression).text;
+        assert(nameStr.length);
+        let propStr = propertyAccessNode.property.text;
+        assert(propStr.length);
+        if (nameStr == "operator") {
+          switch (propStr.charCodeAt(0)) {
+            case CharCode.b: {
+              if (propStr == "binary") return DecoratorKind.OPERATOR_BINARY;
+              break;
+            }
+            case CharCode.p: {
+              if (propStr == "prefix") return DecoratorKind.OPERATOR_PREFIX;
+              if (propStr == "postfix") return DecoratorKind.OPERATOR_POSTFIX;
+              break;
+            }
+          }
+        }
+      }
     }
+    return DecoratorKind.CUSTOM;
   }
-  return DecoratorKind.CUSTOM;
 }
 
 /** Represents a decorator. */
 export class DecoratorNode extends Node {
-  kind = NodeKind.DECORATOR;
-
-  /** Built-in kind, if applicable. */
-  decoratorKind: DecoratorKind;
-  /** Name expression. */
-  name: Expression;
-  /** Argument expressions. */
-  arguments: Expression[] | null;
+  constructor(
+    /** Built-in decorator kind, or custom. */
+    public decoratorKind: DecoratorKind,
+    /** Name expression. */
+    public name: Expression,
+    /** Argument expressions. */
+    public args: Expression[] | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.DECORATOR, range);
+  }
 }
 
 /** Comment kinds. */
 export enum CommentKind {
   /** Line comment. */
   LINE,
-  /** Triple-slash comment. */
+  /** Triple-slash line comment. */
   TRIPLE,
   /** Block comment. */
   BLOCK
@@ -1215,12 +1051,16 @@ export enum CommentKind {
 
 /** Represents a comment. */
 export class CommentNode extends Node {
-  kind = NodeKind.COMMENT;
-
-  /** Comment kind. */
-  commentKind: CommentKind;
-  /** Comment text. */
-  text: string;
+  constructor(
+    /** Comment kind. */
+    public commentKind: CommentKind,
+    /** Comment text. */
+    public text: string,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.COMMENT, range);
+  }
 }
 
 // expressions
@@ -1230,10 +1070,16 @@ export abstract class Expression extends Node { }
 
 /** Represents an identifier expression. */
 export class IdentifierExpression extends Expression {
-  kind = NodeKind.IDENTIFIER;
-
-  /** Textual name. */
-  text: string;
+  constructor(
+    /** Textual name. */
+    public text: string,
+    /** Whether quoted or not. */
+    public isQuoted: bool,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.IDENTIFIER, range);
+  }
 }
 
 /** Indicates the kind of a literal. */
@@ -1248,417 +1094,642 @@ export enum LiteralKind {
 
 /** Base class of all literal expressions. */
 export abstract class LiteralExpression extends Expression {
-  kind = NodeKind.LITERAL;
-
-  /** Specific literal kind. */
-  literalKind: LiteralKind;
+  constructor(
+    /** Specific literal kind. */
+    public literalKind: LiteralKind,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.LITERAL, range);
+  }
 }
 
 /** Represents an `[]` literal expression. */
 export class ArrayLiteralExpression extends LiteralExpression {
-  literalKind = LiteralKind.ARRAY;
-
-  /** Nested element expressions. */
-  elementExpressions: (Expression | null)[];
+  constructor(
+    /** Nested element expressions. */
+    public elementExpressions: Expression[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(LiteralKind.ARRAY, range);
+  }
 }
 
 /** Indicates the kind of an assertion. */
 export enum AssertionKind {
+  /** A prefix assertion, i.e. `<T>expr`. */
   PREFIX,
-  AS
+  /** An as assertion, i.e. `expr as T`. */
+  AS,
+  /** A non-null assertion, i.e. `!expr`. */
+  NONNULL,
+  /** A const assertion, i.e. `expr as const`. */
+  CONST
 }
 
 /** Represents an assertion expression. */
 export class AssertionExpression extends Expression {
-  kind = NodeKind.ASSERTION;
-
-  /** Specific kind of this assertion. */
-  assertionKind: AssertionKind;
-  /** Expression being asserted. */
-  expression: Expression;
-  /** Target type. */
-  toType: CommonTypeNode;
+  constructor(
+    /** Specific kind of this assertion. */
+    public assertionKind: AssertionKind,
+    /** Expression being asserted. */
+    public expression: Expression,
+    /** Target type, if applicable. */
+    public toType: TypeNode | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.ASSERTION, range);
+  }
 }
 
 /** Represents a binary expression. */
 export class BinaryExpression extends Expression {
-  kind = NodeKind.BINARY;
-
-  /** Operator token. */
-  operator: Token;
-  /** Left-hand side expression */
-  left: Expression;
-  /** Right-hand side expression. */
-  right: Expression;
+  constructor(
+    /** Operator token. */
+    public operator: Token,
+    /** Left-hand side expression */
+    public left: Expression,
+    /** Right-hand side expression. */
+    public right: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.BINARY, range);
+  }
 }
 
 /** Represents a call expression. */
 export class CallExpression extends Expression {
-  kind = NodeKind.CALL;
+  constructor(
+    /** Called expression. Usually an identifier or property access expression. */
+    public expression: Expression,
+    /** Provided type arguments. */
+    public typeArguments: TypeNode[] | null,
+    /** Provided arguments. */
+    public args: Expression[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.CALL, range);
+  }
 
-  /** Called expression. Usually an identifier or property access expression. */
-  expression: Expression;
-  /** Provided type arguments. */
-  typeArguments: CommonTypeNode[] | null;
-  /** Provided arguments. */
-  arguments: Expression[];
+  /** Gets the type arguments range for reporting. */
+  get typeArgumentsRange(): Range {
+    var typeArguments = this.typeArguments;
+    var numTypeArguments: i32;
+    if (typeArguments) {
+      if (numTypeArguments = typeArguments.length) {
+        return Range.join(typeArguments[0].range, typeArguments[numTypeArguments - 1].range);
+      }
+    }
+    return this.expression.range;
+  }
+
+  /** Gets the arguments range for reporting. */
+  get argumentsRange(): Range {
+    var args = this.args;
+    var numArguments = args.length;
+    if (numArguments) {
+      return Range.join(args[0].range, args[numArguments - 1].range);
+    }
+    return this.expression.range;
+  }
 }
 
 /** Represents a class expression using the 'class' keyword. */
 export class ClassExpression extends Expression {
-  kind = NodeKind.CLASS;
-
-  /** Inline class declaration. */
-  declaration: ClassDeclaration;
+  constructor(
+    /** Inline class declaration. */
+    public declaration: ClassDeclaration
+  ) {
+    super(NodeKind.CLASS, declaration.range);
+  }
 }
 
 /** Represents a comma expression composed of multiple expressions. */
 export class CommaExpression extends Expression {
-  kind = NodeKind.COMMA;
-
-  /** Sequential expressions. */
-  expressions: Expression[];
+  constructor(
+    /** Sequential expressions. */
+    public expressions: Expression[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.COMMA, range);
+  }
 }
 
 /** Represents a `constructor` expression. */
 export class ConstructorExpression extends IdentifierExpression {
-  kind = NodeKind.CONSTRUCTOR;
-  text = "constructor";
+  constructor(
+    /** Source range. */
+    range: Range
+  ) {
+    super("constructor", false, range);
+    this.kind = NodeKind.CONSTRUCTOR;
+  }
 }
 
 /** Represents an element access expression, e.g., array access. */
 export class ElementAccessExpression extends Expression {
-  kind = NodeKind.ELEMENTACCESS;
-
-  /** Expression being accessed. */
-  expression: Expression;
-  /** Element of the expression being accessed. */
-  elementExpression: Expression;
+  constructor(
+    /** Expression being accessed. */
+    public expression: Expression,
+    /** Element of the expression being accessed. */
+    public elementExpression: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.ELEMENTACCESS, range);
+  }
 }
 
 /** Represents a float literal expression. */
 export class FloatLiteralExpression extends LiteralExpression {
-  literalKind = LiteralKind.FLOAT;
-
-  /** Float value. */
-  value: f64;
+  constructor(
+    /** Float value. */
+    public value: f64,
+    /** Source range. */
+    range: Range
+  ) {
+    super(LiteralKind.FLOAT, range);
+  }
 }
 
 /** Represents a function expression using the 'function' keyword. */
 export class FunctionExpression extends Expression {
-  kind = NodeKind.FUNCTION;
-
-  /** Inline function declaration. */
-  declaration: FunctionDeclaration;
+  constructor(
+    /** Inline function declaration. */
+    public declaration: FunctionDeclaration
+  ) {
+    super(NodeKind.FUNCTION, declaration.range);
+  }
 }
 
 /** Represents an `instanceof` expression. */
 export class InstanceOfExpression extends Expression {
-  kind = NodeKind.INSTANCEOF;
-
-  /** Expression being asserted. */
-  expression: Expression;
-  /** Type to test for. */
-  isType: CommonTypeNode;
+  constructor(
+    /** Expression being asserted. */
+    public expression: Expression,
+    /** Type to test for. */
+    public isType: TypeNode,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.INSTANCEOF, range);
+  }
 }
 
 /** Represents an integer literal expression. */
 export class IntegerLiteralExpression extends LiteralExpression {
-  literalKind = LiteralKind.INTEGER;
-
-  /** Integer value. */
-  value: I64;
+  constructor(
+    /** Integer value. */
+    public value: i64,
+    /** Source range. */
+    range: Range
+  ) {
+    super(LiteralKind.INTEGER, range);
+  }
 }
 
 /** Represents a `new` expression. Like a call but with its own kind. */
-export class NewExpression extends CallExpression {
-  kind = NodeKind.NEW;
+export class NewExpression extends Expression {
+  constructor(
+    /** Type being constructed. */
+    public typeName: TypeName,
+    /** Provided type arguments. */
+    public typeArguments: TypeNode[] | null,
+    /** Provided arguments. */
+    public args: Expression[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.NEW, range);
+  }
+
+  /** Gets the type arguments range for reporting. */
+  get typeArgumentsRange(): Range {
+    var typeArguments = this.typeArguments;
+    var numTypeArguments: i32;
+    if (typeArguments !== null && (numTypeArguments = typeArguments.length) > 0) {
+      return Range.join(typeArguments[0].range, typeArguments[numTypeArguments - 1].range);
+    }
+    return this.typeName.range;
+  }
+
+  /** Gets the arguments range for reporting. */
+  get argumentsRange(): Range {
+    var args = this.args;
+    var numArguments = args.length;
+    if (numArguments) {
+      return Range.join(args[0].range, args[numArguments - 1].range);
+    }
+    return this.typeName.range;
+  }
 }
 
 /** Represents a `null` expression. */
 export class NullExpression extends IdentifierExpression {
-  kind = NodeKind.NULL;
-  text = "null";
+  constructor(
+    /** Source range. */
+    range: Range
+  ) {
+    super("null", false, range);
+    this.kind = NodeKind.NULL;
+  }
 }
 
 /** Represents an object literal expression. */
 export class ObjectLiteralExpression extends LiteralExpression {
-  literalKind = LiteralKind.OBJECT;
+  constructor(
+    /** Field names. */
+    public names: IdentifierExpression[],
+    /** Field values. */
+    public values: Expression[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(LiteralKind.OBJECT, range);
+  }
+}
 
-  /** Field names. */
-  names: IdentifierExpression[];
-  /** Field values. */
-  values: Expression[];
+/** Represents an omitted expression, e.g. within an array literal. */
+export class OmittedExpression extends Expression {
+  constructor(
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.OMITTED, range);
+  }
 }
 
 /** Represents a parenthesized expression. */
 export class ParenthesizedExpression extends Expression {
-  kind = NodeKind.PARENTHESIZED;
-
-  /** Expression in parenthesis. */
-  expression: Expression;
+  constructor(
+    /** Expression in parenthesis. */
+    public expression: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.PARENTHESIZED, range);
+  }
 }
 
 /** Represents a property access expression. */
 export class PropertyAccessExpression extends Expression {
-  kind = NodeKind.PROPERTYACCESS;
-
-  /** Expression being accessed. */
-  expression: Expression;
-  /** Property of the expression being accessed. */
-  property: IdentifierExpression;
+  constructor(
+    /** Expression being accessed. */
+    public expression: Expression,
+    /** Property of the expression being accessed. */
+    public property: IdentifierExpression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.PROPERTYACCESS, range);
+  }
 }
 
 /** Represents a regular expression literal expression. */
 export class RegexpLiteralExpression extends LiteralExpression {
-  literalKind = LiteralKind.REGEXP;
-
-  /** Regular expression pattern. */
-  pattern: string;
-  /** Regular expression flags. */
-  patternFlags: string;
+  constructor(
+    /** Regular expression pattern. */
+    public pattern: string,
+    /** Regular expression flags. */
+    public patternFlags: string,
+    /** Source range. */
+    range: Range
+  ) {
+    super(LiteralKind.REGEXP, range);
+  }
 }
 
 /** Represents a ternary expression, i.e., short if notation. */
 export class TernaryExpression extends Expression {
-  kind = NodeKind.TERNARY;
-
-  /** Condition expression. */
-  condition: Expression;
-  /** Expression executed when condition is `true`. */
-  ifThen: Expression;
-  /** Expression executed when condition is `false`. */
-  ifElse: Expression;
+  constructor(
+    /** Condition expression. */
+    public condition: Expression,
+    /** Expression executed when condition is `true`. */
+    public ifThen: Expression,
+    /** Expression executed when condition is `false`. */
+    public ifElse: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.TERNARY, range);
+  }
 }
 
 /** Represents a string literal expression. */
 export class StringLiteralExpression extends LiteralExpression {
-  literalKind = LiteralKind.STRING;
-
-  /** String value without quotes. */
-  value: string;
+  constructor(
+    /** String value without quotes. */
+    public value: string,
+    /** Source range. */
+    range: Range
+  ) {
+    super(LiteralKind.STRING, range);
+  }
 }
 
 /** Represents a `super` expression. */
 export class SuperExpression extends IdentifierExpression {
-  kind = NodeKind.SUPER;
-  text = "super";
+  constructor(
+    /** Source range. */
+    range: Range
+  ) {
+    super("super", false, range);
+    this.kind = NodeKind.SUPER;
+  }
 }
 
 /** Represents a `this` expression. */
 export class ThisExpression extends IdentifierExpression {
-  kind = NodeKind.THIS;
-  text = "this";
+  constructor(
+    /** Source range. */
+    range: Range
+  ) {
+    super("this", false, range);
+    this.kind = NodeKind.THIS;
+  }
 }
 
 /** Represents a `true` expression. */
 export class TrueExpression extends IdentifierExpression {
-  kind = NodeKind.TRUE;
-  text = "true";
+  constructor(
+    /** Source range. */
+    range: Range
+  ) {
+    super("true", false, range);
+    this.kind = NodeKind.TRUE;
+  }
 }
 
 /** Represents a `false` expression. */
 export class FalseExpression extends IdentifierExpression {
-  kind = NodeKind.FALSE;
-  text = "false";
+  constructor(
+    /** Source range. */
+    range: Range
+  ) {
+    super("false", false, range);
+    this.kind = NodeKind.FALSE;
+  }
 }
 
 /** Base class of all unary expressions. */
 export abstract class UnaryExpression extends Expression {
-
-  /** Operator token. */
-  operator: Token;
-  /** Operand expression. */
-  operand: Expression;
+  constructor(
+    /** Unary expression kind. */
+    kind: NodeKind,
+    /** Operator token. */
+    public operator: Token,
+    /** Operand expression. */
+    public operand: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(kind, range);
+  }
 }
 
 /** Represents a unary postfix expression, e.g. a postfix increment. */
 export class UnaryPostfixExpression extends UnaryExpression {
-  kind = NodeKind.UNARYPOSTFIX;
+  constructor(
+    /** Operator token. */
+    operator: Token,
+    /** Operand expression. */
+    operand: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.UNARYPOSTFIX, operator, operand, range);
+  }
 }
 
 /** Represents a unary prefix expression, e.g. a negation. */
 export class UnaryPrefixExpression extends UnaryExpression {
-  kind = NodeKind.UNARYPREFIX;
+  constructor(
+    /** Operator token. */
+    operator: Token,
+    /** Operand expression. */
+    operand: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.UNARYPREFIX, operator, operand, range);
+  }
 }
 
 // statements
-
-export function isLastStatement(statement: Statement): bool {
-  var parent = assert(statement.parent);
-  if (parent.kind == NodeKind.BLOCK) {
-    let statements = (<BlockStatement>parent).statements;
-    if (statements[statements.length - 1] === statement) {
-      switch (assert(parent.parent).kind) {
-        case NodeKind.FUNCTIONDECLARATION:
-        case NodeKind.METHODDECLARATION: return true;
-      }
-    }
-  }
-  return false;
-}
 
 /** Base class of all statement nodes. */
 export abstract class Statement extends Node { }
 
 /** Indicates the specific kind of a source. */
 export enum SourceKind {
-  /** Default source. Usually imported from an entry file. */
-  DEFAULT,
-  /** Entry file. */
-  ENTRY,
-  /** Library file. */
-  LIBRARY
+  /** User-provided file. */
+  USER = 0,
+  /** User-provided entry file. */
+  USER_ENTRY = 1,
+  /** Library-provided file. */
+  LIBRARY = 2,
+  /** Library-provided entry file. */
+  LIBRARY_ENTRY = 3
 }
 
 /** A top-level source node. */
 export class Source extends Node {
-  kind = NodeKind.SOURCE;
-  parent = null;
+  constructor(
+    /** Source kind. */
+    public sourceKind: SourceKind,
+    /** Normalized path with file extension. */
+    public normalizedPath: string,
+    /** Full source text. */
+    public text: string
+  ) {
+    super(NodeKind.SOURCE, new Range(0, text.length));
+    var internalPath = mangleInternalPath(normalizedPath);
+    this.internalPath = internalPath;
+    var pos = internalPath.lastIndexOf(PATH_DELIMITER);
+    this.simplePath = pos >= 0 ? internalPath.substring(pos + 1) : internalPath;
+    this.range.source = this;
+  }
 
-  /** Source kind. */
-  sourceKind: SourceKind;
-  /** Normalized path. */
-  normalizedPath: string;
   /** Path used internally. */
   internalPath: string;
   /** Simple path (last part without extension). */
   simplePath: string;
   /** Contained statements. */
-  statements: Statement[];
-  /** Full source text. */
-  text: string;
-  /** Tokenizer reference. */
-  tokenizer: Tokenizer | null = null;
+  statements: Statement[] = new Array();
   /** Source map index. */
   debugInfoIndex: i32 = -1;
   /** Re-exported sources. */
-  exportPaths: Set<string> | null = null;
+  exportPaths: string[] | null = null;
 
-  /** Constructs a new source node. */
-  constructor(normalizedPath: string, text: string, kind: SourceKind) {
-    super();
-    this.sourceKind = kind;
-    this.normalizedPath = normalizedPath;
-    var internalPath = mangleInternalPath(this.normalizedPath);
-    this.internalPath = internalPath;
-    var pos = internalPath.lastIndexOf(PATH_DELIMITER);
-    this.simplePath = pos >= 0 ? internalPath.substring(pos + 1) : internalPath;
-    this.statements = new Array();
-    this.range = new Range(this, 0, text.length);
-    this.text = text;
+  /** Checks if this source represents native code. */
+  get isNative(): bool {
+    return this.internalPath == LIBRARY_SUBST;
   }
 
-  /** Tests if this source is an entry file. */
-  get isEntry(): bool { return this.sourceKind == SourceKind.ENTRY; }
-  /** Tests if this source is a stdlib file. */
-  get isLibrary(): bool { return this.sourceKind == SourceKind.LIBRARY; }
+  /** Checks if this source is part of the (standard) library. */
+  get isLibrary(): bool {
+    var kind = this.sourceKind;
+    return kind == SourceKind.LIBRARY || kind == SourceKind.LIBRARY_ENTRY;
+  }
+
+  /** Cached line starts. */
+  private lineCache: i32[] | null = null;
+
+  /** Rememberd column number. */
+  private lineColumn: i32 = 0;
+
+  /** Determines the line number at the specified position. */
+  lineAt(pos: i32): i32 {
+    assert(pos >= 0 && pos < 0x7fffffff);
+    var lineCache = this.lineCache;
+    if (!lineCache) {
+      this.lineCache = lineCache = [0];
+      let text = this.text;
+      let off = 0;
+      let end = text.length;
+      while (off < end) {
+        if (text.charCodeAt(off++) == CharCode.LINEFEED) lineCache.push(off);
+      }
+      lineCache.push(0x7fffffff);
+    }
+    var l = 0;
+    var r = lineCache.length - 1;
+    while (l < r) {
+      let m = l + ((r - l) >> 1);
+      let s = unchecked(lineCache[m]);
+      if (pos < s) r = m;
+      else if (pos < unchecked(lineCache[m + 1])) {
+        this.lineColumn = pos - s + 1;
+        return m + 1;
+      }
+      else l = m + 1;
+    }
+    return assert(0);
+  }
+
+  /** Gets the column number at the last position queried with `lineAt`. */
+  columnAt(): i32 {
+    return this.lineColumn;
+  }
 }
 
 /** Base class of all declaration statements. */
 export abstract class DeclarationStatement extends Statement {
-
-  /** Simple name being declared. */
-  name: IdentifierExpression;
-  /** Array of decorators. */
-  decorators: DecoratorNode[] | null = null;
-
-  protected cachedProgramLevelInternalName: string | null = null;
-  protected cachedFileLevelInternalName: string | null = null;
-
-  /** Gets the mangled program-level internal name of this declaration. */
-  get programLevelInternalName(): string {
-    if (!this.cachedProgramLevelInternalName) {
-      this.cachedProgramLevelInternalName = mangleInternalName(this, true);
-    }
-    return this.cachedProgramLevelInternalName;
+  constructor(
+    /** Declaration node kind. */
+    kind: NodeKind,
+    /** Simple name being declared. */
+    public name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    public decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    public flags: CommonFlags,
+    /** Source range. */
+    range: Range
+  ) {
+    super(kind, range);
   }
 
-  /** Gets the mangled file-level internal name of this declaration. */
-  get fileLevelInternalName(): string {
-    if (!this.cachedFileLevelInternalName) {
-      this.cachedFileLevelInternalName = mangleInternalName(this, false);
-    }
-    return this.cachedFileLevelInternalName;
-  }
+  /** Tests if this node has the specified flag or flags. */
+  is(flag: CommonFlags): bool { return (this.flags & flag) == flag; }
+  /** Tests if this node has one of the specified flags. */
+  isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
+  /** Sets a specific flag or flags. */
+  set(flag: CommonFlags): void { this.flags |= flag; }
+}
 
-  /** Tests if this is a top-level declaration within its source file. */
-  get isTopLevel(): bool {
-    var parent = this.parent;
-    if (!parent) {
-      return false;
-    }
-    if (parent.kind == NodeKind.VARIABLE && !(parent = parent.parent)) {
-      return false;
-    }
-    return parent.kind == NodeKind.SOURCE;
-  }
-
-  /** Tests if this declaration is a top-level export within its source file. */
-  get isTopLevelExport(): bool {
-    var parent = this.parent;
-    if (!parent || (parent.kind == NodeKind.VARIABLE && !(parent = parent.parent))) {
-      return false;
-    }
-    if (parent.kind == NodeKind.NAMESPACEDECLARATION) {
-      return this.is(CommonFlags.EXPORT) && (<NamespaceDeclaration>parent).isTopLevelExport;
-    }
-    if (parent.kind == NodeKind.CLASSDECLARATION) {
-      return this.is(CommonFlags.STATIC) && (<ClassDeclaration>parent).isTopLevelExport;
-    }
-    return parent.kind == NodeKind.SOURCE && this.is(CommonFlags.EXPORT);
-  }
-
-  /** Tests if this declaration needs an explicit export. */
-  needsExplicitExport(member: ExportMember): bool {
-    // This is necessary because module-level exports are automatically created
-    // for top level declarations of all sorts. This function essentially tests
-    // that there isn't a otherwise duplicate top-level export already.
-    return (
-      member.name.text != member.externalName.text || // if aliased
-      this.range.source != member.range.source ||     // if a re-export
-      !this.isTopLevelExport                          // if not top-level
-    );
+/** Represents an index signature. */
+export class IndexSignatureNode extends Node {
+  constructor(
+    /** Key type. */
+    public keyType: NamedTypeNode,
+    /** Value type. */
+    public valueType: TypeNode,
+    /** Common flags indicating specific traits. */
+    public flags: CommonFlags,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.INDEXSIGNATURE, range);
   }
 }
 
 /** Base class of all variable-like declaration statements. */
 export abstract class VariableLikeDeclarationStatement extends DeclarationStatement {
-
-  /** Variable type. */
-  type: CommonTypeNode | null;
-  /** Variable initializer. */
-  initializer: Expression | null;
+  constructor(
+    /** Variable-like declaration node kind. */
+    kind: NodeKind,
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Annotated type node, if any. */
+    public type: TypeNode | null,
+    /** Initializer expression, if any. */
+    public initializer: Expression | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(kind, name, decorators, flags, range);
+  }
 }
 
 /** Represents a block statement. */
 export class BlockStatement extends Statement {
-  kind = NodeKind.BLOCK;
-
-  /** Contained statements. */
-  statements: Statement[];
+  constructor(
+    /** Contained statements. */
+    public statements: Statement[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.BLOCK, range);
+  }
 }
 
 /** Represents a `break` statement. */
 export class BreakStatement extends Statement {
-  kind = NodeKind.BREAK;
-
-  /** Target label, if applicable. */
-  label: IdentifierExpression | null;
+  constructor(
+    /** Target label, if any. */
+    public label: IdentifierExpression | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.BREAK, range);
+  }
 }
 
 /** Represents a `class` declaration. */
 export class ClassDeclaration extends DeclarationStatement {
-  kind = NodeKind.CLASSDECLARATION;
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Accepted type parameters. */
+    public typeParameters: TypeParameterNode[] | null,
+    /** Base class type being extended, if any. */
+    public extendsType: NamedTypeNode | null, // can't be a function
+    /** Interface types being implemented, if any. */
+    public implementsTypes: NamedTypeNode[] | null, // can't be functions
+    /** Class member declarations. */
+    public members: DeclarationStatement[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.CLASSDECLARATION, name, decorators, flags, range);
+  }
 
-  /** Accepted type parameters. */
-  typeParameters: TypeParameterNode[];
-  /** Base class type being extended, if any. */
-  extendsType: TypeNode | null; // can't be a function
-  /** Interface types being implemented, if any. */
-  implementsTypes: TypeNode[] | null; // can't be functions
-  /** Class member declarations. */
-  members: DeclarationStatement[];
+  /** Index signature, if present. */
+  indexSignature: IndexSignatureNode | null = null;
 
   get isGeneric(): bool {
     var typeParameters = this.typeParameters;
@@ -1668,273 +1739,534 @@ export class ClassDeclaration extends DeclarationStatement {
 
 /** Represents a `continue` statement. */
 export class ContinueStatement extends Statement {
-  kind = NodeKind.CONTINUE;
-
-  /** Target label, if applicable. */
-  label: IdentifierExpression | null;
+  constructor(
+    /** Target label, if applicable. */
+    public label: IdentifierExpression | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.CONTINUE, range);
+  }
 }
 
 /** Represents a `do` statement. */
 export class DoStatement extends Statement {
-  kind = NodeKind.DO;
-
-  /** Statement being looped over. */
-  statement: Statement;
-  /** Condition when to repeat. */
-  condition: Expression;
+  constructor(
+    /** Statement being looped over. */
+    public statement: Statement,
+    /** Condition when to repeat. */
+    public condition: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.DO, range);
+  }
 }
 
 /** Represents an empty statement, i.e., a semicolon terminating nothing. */
 export class EmptyStatement extends Statement {
-  kind = NodeKind.EMPTY;
+  constructor(
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.EMPTY, range);
+  }
 }
 
 /** Represents an `enum` declaration. */
 export class EnumDeclaration extends DeclarationStatement {
-  kind = NodeKind.ENUMDECLARATION;
-
-  /** Enum value declarations. */
-  values: EnumValueDeclaration[];
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Enum value declarations. */
+    public values: EnumValueDeclaration[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.ENUMDECLARATION, name, decorators, flags, range);
+  }
 }
 
 /** Represents a value of an `enum` declaration. */
-export class EnumValueDeclaration extends DeclarationStatement {
-  kind = NodeKind.ENUMVALUEDECLARATION;
-  // name is inherited
-
-  /** Value expression. */
-  value: Expression | null;
+export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Initializer expression, if any. */
+    initializer: Expression | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.ENUMVALUEDECLARATION, name, null, flags, null, initializer, range);
+  }
 }
 
 /** Represents an `export import` statement of an interface. */
-export class ExportImportStatement extends Node {
-  kind = NodeKind.EXPORTIMPORT;
-
-  /** Identifier being imported. */
-  name: IdentifierExpression;
-  /** Identifier being exported. */
-  externalName: IdentifierExpression;
+export class ExportImportStatement extends Statement {
+  constructor(
+    /** Identifier being imported. */
+    public name: IdentifierExpression,
+    /** Identifier being exported. */
+    public externalName: IdentifierExpression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.EXPORTIMPORT, range);
+  }
 }
 
 /** Represents a member of an `export` statement. */
 export class ExportMember extends Node {
-  kind = NodeKind.EXPORTMEMBER;
-
-  /** Identifier being exported. */
-  name: IdentifierExpression;
-  /** Identifier seen when imported again. */
-  externalName: IdentifierExpression;
+  constructor(
+    /** Local identifier. */
+    public localName: IdentifierExpression,
+    /** Exported identifier. */
+    public exportedName: IdentifierExpression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.EXPORTMEMBER, range);
+  }
 }
 
 /** Represents an `export` statement. */
 export class ExportStatement extends Statement {
-  kind = NodeKind.EXPORT;
+  constructor(
+    /** Array of members if a set of named exports, or `null` if a file export. */
+    public members: ExportMember[] | null,
+    /** Path being exported from, if applicable. */
+    public path: StringLiteralExpression | null,
+    /** Whether this is a declared export. */
+    public isDeclare: bool,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.EXPORT, range);
+    if (path) {
+      let normalizedPath = normalizePath(path.value);
+      if (path.value.startsWith(".")) { // relative
+        normalizedPath = resolvePath(normalizedPath, range.source.internalPath);
+      } else { // absolute
+        if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
+      }
+      this.internalPath = normalizedPath;
+    } else {
+      this.internalPath = null;
+    }
+  }
 
-  /** Array of members if a set of named exports, or `null` if a filespace export. */
-  members: ExportMember[] | null;
-  /** Path being exported from, if applicable. */
-  path: StringLiteralExpression | null;
-  /** Normalized path, if `path` is set. */
-  normalizedPath: string | null;
-  /** Mangled internal path being referenced, if `path` is set. */
+  /** Internal path being referenced, if `path` is set. */
   internalPath: string | null;
+}
+
+/** Represents an `export default` statement. */
+export class ExportDefaultStatement extends Statement {
+  constructor(
+    /** Declaration being exported as default. */
+    public declaration: DeclarationStatement,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.EXPORTDEFAULT, range);
+  }
 }
 
 /** Represents an expression that is used as a statement. */
 export class ExpressionStatement extends Statement {
-  kind = NodeKind.EXPRESSION;
-
-  /** Expression being used as a statement.*/
-  expression: Expression;
+  constructor(
+    /** Expression being used as a statement.*/
+    public expression: Expression
+  ) {
+    super(NodeKind.EXPRESSION, expression.range);
+  }
 }
 
 /** Represents a field declaration within a `class`. */
 export class FieldDeclaration extends VariableLikeDeclarationStatement {
-  kind = NodeKind.FIELDDECLARATION;
-
-  /** Parameter index within the constructor, if applicable. */
-  parameterIndex: i32 = -1;
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Annotated type node, if any. */
+    type: TypeNode | null,
+    /** Initializer expression, if any. */
+    initializer: Expression | null,
+    /** Parameter index if declared as a constructor parameter, otherwise `-1`. */
+    public parameterIndex: i32,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.FIELDDECLARATION, name, decorators, flags, type, initializer, range);
+  }
 }
 
 /** Represents a `for` statement. */
 export class ForStatement extends Statement {
-  kind = NodeKind.FOR;
+  constructor(
+    /** Initializer statement, if present. Either a `VariableStatement` or `ExpressionStatement`. */
+    public initializer: Statement | null,
+    /** Condition expression, if present. */
+    public condition: Expression | null,
+    /** Incrementor expression, if present. */
+    public incrementor: Expression | null,
+    /** Statement being looped over. */
+    public statement: Statement,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.FOR, range);
+  }
+}
 
-  /**
-   * Initializer statement, if present.
-   * Either a {@link VariableStatement} or {@link ExpressionStatement}.
-   */
-  initializer: Statement | null;
-  /** Condition expression, if present. */
-  condition: Expression | null;
-  /** Incrementor expression, if present. */
-  incrementor: Expression | null;
-  /** Statement being looped over. */
-  statement: Statement;
+/** Represents a `for..of` statement. */
+export class ForOfStatement extends Statement {
+  constructor(
+    /** Variable statement. Either a `VariableStatement` or `ExpressionStatement` of `IdentifierExpression`. */
+    public variable: Statement,
+    /** Iterable expression being iterated. */
+    public iterable: Expression,
+    /** Statement being looped over. */
+    public statement: Statement,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.FOROF, range);
+  }
+}
+
+/** Indicates the kind of an array function. */
+export const enum ArrowKind {
+  /** Not an arrow function. */
+  NONE,
+  /** Parenthesized parameter list. */
+  ARROW_PARENTHESIZED,
+  /** Single parameter without parenthesis. */
+  ARROW_SINGLE
 }
 
 /** Represents a `function` declaration. */
 export class FunctionDeclaration extends DeclarationStatement {
-  kind = NodeKind.FUNCTIONDECLARATION;
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Type parameters, if any. */
+    public typeParameters: TypeParameterNode[] | null,
+    /** Function signature. */
+    public signature: FunctionTypeNode,
+    /** Body statement. Usually a block. */
+    public body: Statement | null,
+    /** Arrow function kind, if applicable. */
+    public arrowKind: ArrowKind,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.FUNCTIONDECLARATION, name, decorators, flags, range);
+  }
 
-  /** Type parameters, if any. */
-  typeParameters: TypeParameterNode[] | null;
-  /** Function signature. */
-  signature: SignatureNode;
-  /** Body statement. Usually a block. */
-  body: Statement | null;
-
+  /** Gets if this function is generic. */
   get isGeneric(): bool {
     var typeParameters = this.typeParameters;
     return typeParameters != null && typeParameters.length > 0;
+  }
+
+  /** Clones this function declaration. */
+  clone(): FunctionDeclaration {
+    return new FunctionDeclaration(
+      this.name,
+      this.decorators,
+      this.flags,
+      this.typeParameters,
+      this.signature,
+      this.body,
+      this.arrowKind,
+      this.range
+    );
   }
 }
 
 /** Represents an `if` statement. */
 export class IfStatement extends Statement {
-  kind = NodeKind.IF;
-
-  /** Condition. */
-  condition: Expression;
-  /** Statement executed when condition is `true`. */
-  ifTrue: Statement;
-  /** Statement executed when condition is `false`. */
-  ifFalse: Statement | null;
+  constructor(
+    /** Condition. */
+    public condition: Expression,
+    /** Statement executed when condition is `true`. */
+    public ifTrue: Statement,
+    /** Statement executed when condition is `false`. */
+    public ifFalse: Statement | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.IF, range);
+  }
 }
 
 /** Represents an `import` declaration part of an {@link ImportStatement}. */
 export class ImportDeclaration extends DeclarationStatement {
-  kind = NodeKind.IMPORTDECLARATION;
-
-  /** Identifier being imported. */
-  externalName: IdentifierExpression;
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Identifier being imported. */
+    public foreignName: IdentifierExpression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.IMPORTDECLARATION, name, null, CommonFlags.NONE, range);
+  }
 }
 
 /** Represents an `import` statement. */
 export class ImportStatement extends Statement {
-  kind = NodeKind.IMPORT;
+  constructor(
+    /** Array of member declarations or `null` if an asterisk import. */
+    public declarations: ImportDeclaration[] | null,
+    /** Name of the local namespace, if an asterisk import. */
+    public namespaceName: IdentifierExpression | null,
+    /** Path being imported from. */
+    public path: StringLiteralExpression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.IMPORT, range);
+    var normalizedPath = normalizePath(path.value);
+    if (path.value.startsWith(".")) { // relative in project
+      normalizedPath = resolvePath(normalizedPath, range.source.internalPath);
+    } else { // absolute in library
+      if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
+    }
+    this.internalPath = normalizedPath;
+  }
 
-  /** Array of member declarations or `null` if an asterisk import. */
-  declarations: ImportDeclaration[] | null;
-  /** Name of the local namespace, if an asterisk import. */
-  namespaceName: IdentifierExpression | null;
-  /** Path being imported from. */
-  path: StringLiteralExpression;
-  /** Normalized path. */
-  normalizedPath: string;
-  /** Mangled internal path being referenced. */
+  /** Internal path being referenced. */
   internalPath: string;
 }
 
 /** Represents an `interfarce` declaration. */
 export class InterfaceDeclaration extends ClassDeclaration {
-  kind = NodeKind.INTERFACEDECLARATION;
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Accepted type parameters. */
+    typeParameters: TypeParameterNode[] | null,
+    /** Base class type being extended, if any. */
+    extendsType: NamedTypeNode | null, // can't be a function
+    /** Interface types being implemented, if any. */
+    implementsTypes: NamedTypeNode[] | null, // can't be functions
+    /** Class member declarations. */
+    members: DeclarationStatement[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(name, decorators, flags, typeParameters, extendsType, implementsTypes, members, range);
+    this.kind = NodeKind.INTERFACEDECLARATION;
+  }
 }
 
 /** Represents a method declaration within a `class`. */
 export class MethodDeclaration extends FunctionDeclaration {
-  kind = NodeKind.METHODDECLARATION;
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Type parameters, if any. */
+    typeParameters: TypeParameterNode[] | null,
+    /** Function signature. */
+    signature: FunctionTypeNode,
+    /** Body statement. Usually a block. */
+    body: Statement | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(name, decorators, flags, typeParameters, signature, body, ArrowKind.NONE, range);
+    this.kind = NodeKind.METHODDECLARATION;
+  }
 }
 
 /** Represents a `namespace` declaration. */
 export class NamespaceDeclaration extends DeclarationStatement {
-  kind = NodeKind.NAMESPACEDECLARATION;
-
-  /** Array of namespace members. */
-  members: Statement[];
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Array of namespace members. */
+    public members: Statement[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.NAMESPACEDECLARATION, name, decorators, flags, range);
+  }
 }
 
 /** Represents a `return` statement. */
 export class ReturnStatement extends Statement {
-  kind = NodeKind.RETURN;
-
-  /** Value expression being returned, if present. */
-  value: Expression | null;
+  constructor(
+    /** Value expression being returned, if present. */
+    public value: Expression | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.RETURN, range);
+  }
 }
 
 /** Represents a single `case` within a `switch` statement. */
 export class SwitchCase extends Node {
-  kind = NodeKind.SWITCHCASE;
-
-  /** Label expression. `null` indicates the default case. */
-  label: Expression | null;
-  /** Contained statements. */
-  statements: Statement[];
+  constructor(
+    /** Label expression. `null` indicates the default case. */
+    public label: Expression | null,
+    /** Contained statements. */
+    public statements: Statement[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.SWITCHCASE, range);
+  }
 }
 
 /** Represents a `switch` statement. */
 export class SwitchStatement extends Statement {
-  kind = NodeKind.SWITCH;
-
-  /** Condition expression. */
-  condition: Expression;
-  /** Contained cases. */
-  cases: SwitchCase[];
+  constructor(
+    /** Condition expression. */
+    public condition: Expression,
+    /** Contained cases. */
+    public cases: SwitchCase[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.SWITCH, range);
+  }
 }
 
 /** Represents a `throw` statement. */
 export class ThrowStatement extends Statement {
-  kind = NodeKind.THROW;
-
-  /** Value expression being thrown. */
-  value: Expression;
+  constructor(
+    /** Value expression being thrown. */
+    public value: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.THROW, range);
+  }
 }
 
 /** Represents a `try` statement. */
 export class TryStatement extends Statement {
-  kind = NodeKind.TRY;
-
-  /** Contained statements. */
-  statements: Statement[];
-  /** Exception variable name, if a `catch` clause is present. */
-  catchVariable: IdentifierExpression | null;
-  /** Statements being executed on catch, if a `catch` clause is present. */
-  catchStatements: Statement[] | null;
-  /** Statements being executed afterwards, if a `finally` clause is present. */
-  finallyStatements: Statement[] | null;
+  constructor(
+    /** Contained statements. */
+    public statements: Statement[],
+    /** Exception variable name, if a `catch` clause is present. */
+    public catchVariable: IdentifierExpression | null,
+    /** Statements being executed on catch, if a `catch` clause is present. */
+    public catchStatements: Statement[] | null,
+    /** Statements being executed afterwards, if a `finally` clause is present. */
+    public finallyStatements: Statement[] | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.TRY, range);
+  }
 }
 
 /** Represents a `type` declaration. */
 export class TypeDeclaration extends DeclarationStatement {
-  kind = NodeKind.TYPEDECLARATION;
-
-  /** Type parameters, if any. */
-  typeParameters: TypeParameterNode[] | null;
-  /** Type being aliased. */
-  type: CommonTypeNode;
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Type parameters, if any. */
+    public typeParameters: TypeParameterNode[] | null,
+    /** Type being aliased. */
+    public type: TypeNode,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.TYPEDECLARATION, name, decorators, flags, range);
+  }
 }
 
 /** Represents a variable declaration part of a {@link VariableStatement}. */
 export class VariableDeclaration extends VariableLikeDeclarationStatement {
-  kind = NodeKind.VARIABLEDECLARATION;
+  constructor(
+    /** Simple name being declared. */
+    name: IdentifierExpression,
+    /** Array of decorators, if any. */
+    decorators: DecoratorNode[] | null,
+    /** Common flags indicating specific traits. */
+    flags: CommonFlags,
+    /** Annotated type node, if any. */
+    type: TypeNode | null,
+    /** Initializer expression, if any. */
+    initializer: Expression | null,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.VARIABLEDECLARATION, name, decorators, flags, type, initializer, range);
+  }
 }
 
 /** Represents a variable statement wrapping {@link VariableDeclaration}s. */
 export class VariableStatement extends Statement {
-  kind = NodeKind.VARIABLE;
-
-  /** Array of decorators. */
-  decorators: DecoratorNode[] | null;
-  /** Array of member declarations. */
-  declarations: VariableDeclaration[];
+  constructor(
+    /** Array of decorators. */
+    public decorators: DecoratorNode[] | null,
+    /** Array of member declarations. */
+    public declarations: VariableDeclaration[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.VARIABLE, range);
+  }
 }
 
 /** Represents a void statement dropping an expression's value. */
 export class VoidStatement extends Statement {
-  kind = NodeKind.VOID;
-
-  /** Expression being dropped. */
-  expression: Expression;
+  constructor(
+    /** Expression being dropped. */
+    public expression: Expression,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.VOID, range);
+  }
 }
 
 /** Represents a `while` statement. */
 export class WhileStatement extends Statement {
-  kind = NodeKind.WHILE;
-
-  /** Condition expression. */
-  condition: Expression;
-  /** Statement being looped over. */
-  statement: Statement;
+  constructor(
+    /** Condition expression. */
+    public condition: Expression,
+    /** Statement being looped over. */
+    public statement: Statement,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.WHILE, range);
+  }
 }
 
 /** Finds the first decorator matching the specified kind. */
@@ -1948,55 +2280,29 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
   return null;
 }
 
-/** Mangles a declaration's name to an internal name. */
-export function mangleInternalName(declaration: DeclarationStatement, asGlobal: bool = false): string {
-  var name = declaration.name.text;
-  var parent = declaration.parent;
-  if (!parent) return name;
-  if (
-    declaration.kind == NodeKind.VARIABLEDECLARATION &&
-    parent.kind == NodeKind.VARIABLE
-  ) { // skip over
-    if (!(parent = parent.parent)) return name;
-  }
-  if (parent.kind == NodeKind.CLASSDECLARATION) {
-    return mangleInternalName(<ClassDeclaration>parent, asGlobal) + (
-      declaration.is(CommonFlags.STATIC)
-        ? STATIC_DELIMITER
-        : INSTANCE_DELIMITER
-    ) + name;
-  }
-  if (
-    parent.kind == NodeKind.NAMESPACEDECLARATION ||
-    parent.kind == NodeKind.ENUMDECLARATION
-  ) {
-    return mangleInternalName(<DeclarationStatement>parent, asGlobal) +
-           STATIC_DELIMITER + name;
-  }
-  return asGlobal
-    ? name
-    : declaration.range.source.internalPath + PATH_DELIMITER + name;
-}
-
 /** Mangles an external to an internal path. */
 export function mangleInternalPath(path: string): string {
-  if (path.endsWith(".ts")) path = path.substring(0, path.length - 3);
+  var pos = path.lastIndexOf(".");
+  var len = path.length;
+  if (pos >= 0 && len - pos >= 2) { // at least one char plus dot
+    let cur = pos;
+    while (++cur < len) {
+      if (!isTrivialAlphanum(path.charCodeAt(cur))) {
+        assert(false); // not a valid external path
+        return path;
+      }
+    }
+    return path.substring(0, pos);
+  }
+  assert(false); // not an external path
   return path;
 }
 
-// Helpers
-
-/** Sets the parent node on an array of nodes. */
-function setParent(nodes: Node[], parent: Node): void {
-  for (let i = 0, k = nodes.length; i < k; ++i) {
-    nodes[i].parent = parent;
+/** Tests if the specified type node represents an omitted type. */
+export function isTypeOmitted(type: TypeNode): bool {
+  if (type.kind == NodeKind.NAMEDTYPE) {
+    let name = (<NamedTypeNode>type).name;
+    return !(name.next !== null || name.identifier.text.length > 0);
   }
-}
-
-/** Sets the parent node on an array of nullable nodes. */
-function setParentIfNotNull(nodes: (Node | null)[], parent: Node): void {
-  for (let i = 0, k = nodes.length; i < k; ++i) {
-    let node = nodes[i];
-    if (node) node.parent = parent;
-  }
+  return false;
 }

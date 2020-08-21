@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "scripts": {
+    "server": "http-server . -o -c-1",
+    "build": "npm run build:untouched && npm run build:optimized",
+    "build:untouched": "node ../../bin/asc assembly/index.ts -t untouched.wat -b untouched.wasm --runtime full --sourceMap --measure",
+    "build:optimized": "node ../../bin/asc assembly/index.ts -t optimized.wat -b optimized.wasm --runtime full --sourceMap --measure --noAssert --optimize"
+  },
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}

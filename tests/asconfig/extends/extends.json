@@ -1,0 +1,13 @@
+{
+  "targets": {
+    "release": {
+      "shrinkLevel": 1,
+      "optimizeLevel": 1
+    }
+  },
+  "options": {
+    "disable": ["simd"],
+    "noEmit": true,
+    "noAssert": true
+  }
+}

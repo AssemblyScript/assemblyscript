@@ -1,5 +1,9 @@
 npm-debug.*
+dist/
 docs/
 node_modules/
 out/
 raw/
+.history
+*.backup
+.vscode

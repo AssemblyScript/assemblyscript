@@ -1,12 +1,13 @@
-/* tslint:disable */
+/// <reference path="./rt/index.d.ts" />
 
-@builtin export declare function iterateRoots(fn: (ref: usize) => void): void;
-
+/** Garbage collector interface. */
 export namespace gc {
 
+  /** Can be set to `false` to disable automatic collection. Defaults to `true`. */
+  export var auto: bool = true;
+
+  /** Performs a full garbage collection cycle. */
   export function collect(): void {
-    if (isDefined(__gc_collect)) { __gc_collect(); return; }
-    WARNING("Calling 'gc.collect' requires a garbage collector to be present.");
-    unreachable();
+    __collect();
   }
 }

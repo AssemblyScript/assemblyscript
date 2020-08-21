@@ -1,10 +1,8 @@
-const useFill = false;
-
 function runner(exports, runs, allocs) {
-  const alloc = exports["memory.allocate"];
-  const free  = exports["memory.free"];
+  const alloc = exports["__alloc"];
+  const free  = exports["__free"];
+  const reset = exports["__reset"];
   const fill  = exports["memory.fill"];
-  const reset = exports["memory.reset"];
 
   const ptrs = [];
 
@@ -12,19 +10,19 @@ function runner(exports, runs, allocs) {
     if (!maxSize) maxSize = 8192;
     var size = ((Math.random() * maxSize) >>> 0) + 1;
     size = (size + 3) & ~3;
-    var ptr = alloc(size);
+    var ptr = alloc(size, 0);
     if (!ptr) throw Error();
-    if ((ptr & 7) != 0) throw Error("invalid alignment: " + (ptr & 7) + " on " + ptr);
+    if ((ptr & 15) != 0) throw Error("invalid alignment: " + (ptr & 15) + " on " + ptr);
     if (ptrs.indexOf(ptr) >= 0) throw Error("duplicate pointer");
-    if (useFill) fill(ptr, 0xdc, size);
+    if (fill) fill(ptr, ptr % 16, size);
     ptrs.push(ptr);
     return ptr;
   }
 
   function preciseFree(ptr) {
     var idx = ptrs.indexOf(ptr);
-    if (idx < 0) throw Error();
-    var ptr = ptrs[idx];
+    if (idx < 0) throw Error("unknown pointer");
+    ptr = ptrs[idx];
     ptrs.splice(idx, 1);
     if (typeof ptr !== "number") throw Error();
     free(ptr);
@@ -39,7 +37,7 @@ function runner(exports, runs, allocs) {
   }
 
   // remember the smallest possible memory address
-  var base = alloc(64);
+  var base = alloc(64, 0);
   console.log("base: " + base);
   try {
     reset();
@@ -77,31 +75,31 @@ function runner(exports, runs, allocs) {
 
       try {
         reset();
-        var ptr = alloc(64);
+        let ptr = alloc(64, 0);
         if (ptr !== base) throw Error("expected " + base + " but got " + ptr);
         reset();
       } catch (e) {
         // should now be possible to reuse the entire memory
         // just try a large portion of the memory here, for example because of
         // SL+1 for allocations in TLSF
-        var size = ((exports.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
-        var ptr = alloc(size);
-        if (useFill) fill(ptr, 0xac, size);
+        let size = ((exports.memory.buffer.byteLength - base) * 9 / 10) >>> 0;
+        let ptr = alloc(size, 0);
+        // if (fill) fill(ptr, 0xac, size);
         if (ptr !== base) throw Error("expected " + base + " but got " + ptr);
         free(ptr);
       }
       testMemChanged();
     }
   } finally {
-    // mem(allocator.memory, 0, 0x10000);
+    // mem(exports.memory, 0, 0x800);
   }
 }
 
-function mem(memory, offset, count) {
+/* function mem(memory, offset, count) {
   if (!offset) offset = 0;
   if (!count) count = 1024;
   var mem = new Uint8Array(memory.buffer, offset);
-  var stackTop = new Uint32Array(memory.buffer, 4, 1)[0];
+  // var stackTop = new Uint32Array(memory.buffer, 4, 1)[0];
   var hex = [];
   for (var i = 0; i < count; ++i) {
     var o = (offset + i).toString(16);
@@ -114,6 +112,6 @@ function mem(memory, offset, count) {
     hex.push(h);
   }
   console.log(hex.join(" ") + " ...");
-}
+} */
 
 if (typeof module === "object" && typeof exports === "object") module.exports = runner;

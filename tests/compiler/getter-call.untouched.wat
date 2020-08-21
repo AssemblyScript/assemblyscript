@@ -1,64 +1,38 @@
 (module
- (type $i (func (result i32)))
- (type $ii (func (param i32) (result i32)))
- (type $v (func))
- (memory $0 0)
- (table $0 2 anyfunc)
- (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|1)
- (global $~lib/internal/allocator/AL_BITS i32 (i32.const 3))
- (global $~lib/internal/allocator/AL_SIZE i32 (i32.const 8))
- (global $~lib/internal/allocator/AL_MASK i32 (i32.const 7))
- (global $~lib/internal/allocator/MAX_SIZE_32 i32 (i32.const 1073741824))
- (global $~lib/allocator/arena/startOffset (mut i32) (i32.const 0))
- (global $~lib/allocator/arena/offset (mut i32) (i32.const 0))
- (global $~argc (mut i32) (i32.const 0))
- (global $HEAP_BASE i32 (i32.const 8))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (memory $0 1)
+ (data (i32.const 16) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
+ (table $0 2 funcref)
+ (elem (i32.const 1) $getter-call/C#get:x~anonymous|0)
+ (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
+ (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~lib/heap/__heap_base i32 (i32.const 40))
  (export "memory" (memory $0))
- (export "table" (table $0))
  (export "test" (func $getter-call/test))
- (start $start)
- (func $~lib/allocator/arena/__memory_allocate (; 0 ;) (type $ii) (param $0 i32) (result i32)
+ (start $~start)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  get_local $0
-  get_global $~lib/internal/allocator/MAX_SIZE_32
-  i32.gt_u
-  if
-   unreachable
-  end
-  get_global $~lib/allocator/arena/offset
-  set_local $1
-  get_local $1
-  get_local $0
-  tee_local $2
-  i32.const 1
-  tee_local $3
-  get_local $2
-  get_local $3
-  i32.gt_u
-  select
-  i32.add
-  get_global $~lib/internal/allocator/AL_MASK
-  i32.add
-  get_global $~lib/internal/allocator/AL_MASK
-  i32.const -1
-  i32.xor
-  i32.and
-  set_local $4
-  current_memory
-  set_local $5
-  get_local $4
-  get_local $5
+  memory.size
+  local.set $1
+  local.get $1
   i32.const 16
   i32.shl
+  local.set $2
+  local.get $0
+  local.get $2
   i32.gt_u
   if
-   get_local $4
-   get_local $1
+   local.get $0
+   local.get $2
    i32.sub
    i32.const 65535
    i32.add
@@ -68,23 +42,23 @@
    i32.and
    i32.const 16
    i32.shr_u
-   set_local $2
-   get_local $5
-   tee_local $3
-   get_local $2
-   tee_local $6
-   get_local $3
-   get_local $6
+   local.set $3
+   local.get $1
+   local.tee $4
+   local.get $3
+   local.tee $5
+   local.get $4
+   local.get $5
    i32.gt_s
    select
-   set_local $3
-   get_local $3
-   grow_memory
+   local.set $4
+   local.get $4
+   memory.grow
    i32.const 0
    i32.lt_s
    if
-    get_local $2
-    grow_memory
+    local.get $3
+    memory.grow
     i32.const 0
     i32.lt_s
     if
@@ -92,48 +66,120 @@
     end
    end
   end
-  get_local $4
-  set_global $~lib/allocator/arena/offset
-  get_local $1
+  local.get $0
+  global.set $~lib/rt/stub/offset
  )
- (func $~lib/memory/memory.allocate (; 1 ;) (type $ii) (param $0 i32) (result i32)
-  get_local $0
-  call $~lib/allocator/arena/__memory_allocate
-  return
- )
- (func $getter-call/C#get:x~anonymous|1 (; 2 ;) (type $i) (result i32)
-  i32.const 42
- )
- (func $getter-call/C#get:x (; 3 ;) (type $ii) (param $0 i32) (result i32)
-  i32.const 1
- )
- (func $getter-call/test (; 4 ;) (type $i) (result i32)
-  (local $0 i32)
-  block (result i32)
-   i32.const 0
-   call $~lib/memory/memory.allocate
-   set_local $0
-   get_local $0
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.const 1073741808
+  i32.gt_u
+  if
+   unreachable
   end
-  set_local $0
-  i32.const 0
-  set_global $~argc
-  get_local $0
-  call $getter-call/C#get:x
-  call_indirect (type $i)
- )
- (func $start (; 5 ;) (type $v)
-  get_global $HEAP_BASE
-  get_global $~lib/internal/allocator/AL_MASK
+  global.get $~lib/rt/stub/offset
+  i32.const 16
   i32.add
-  get_global $~lib/internal/allocator/AL_MASK
+  local.set $2
+  local.get $0
+  i32.const 15
+  i32.add
+  i32.const 15
   i32.const -1
   i32.xor
   i32.and
-  set_global $~lib/allocator/arena/startOffset
-  get_global $~lib/allocator/arena/startOffset
-  set_global $~lib/allocator/arena/offset
+  local.tee $3
+  i32.const 16
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_u
+  select
+  local.set $5
+  local.get $2
+  local.get $5
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
+  local.get $2
+  i32.const 16
+  i32.sub
+  local.set $6
+  local.get $6
+  local.get $5
+  i32.store
+  i32.const 1
+  drop
+  local.get $6
+  i32.const 1
+  i32.store offset=4
+  local.get $6
+  local.get $1
+  i32.store offset=8
+  local.get $6
+  local.get $0
+  i32.store offset=12
+  local.get $2
  )
- (func $null (; 6 ;) (type $v)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $getter-call/C#constructor (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 3
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+ )
+ (func $getter-call/C#get:x~anonymous|0 (result i32)
+  i32.const 42
+ )
+ (func $getter-call/C#get:x (param $0 i32) (result i32)
+  i32.const 32
+  call $~lib/rt/stub/__retain
+ )
+ (func $~lib/rt/stub/__release (param $0 i32)
+  nop
+ )
+ (func $getter-call/test (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 0
+  call $getter-call/C#constructor
+  local.set $0
+  i32.const 0
+  global.set $~argumentsLength
+  local.get $0
+  call $getter-call/C#get:x
+  local.tee $1
+  i32.load
+  call_indirect (type $none_=>_i32)
+  local.set $2
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
+ )
+ (func $~start
+  global.get $~lib/heap/__heap_base
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
  )
 )

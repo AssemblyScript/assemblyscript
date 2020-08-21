@@ -1,140 +1,138 @@
-import "allocator/arena";
-
 class Tester {
   constructor(public x: i32, public y: i32) {
   }
 
-  @operator('+')
+  @operator("+")
   static add(a: Tester, b: Tester): Tester {
     return new Tester(a.x + b.x, a.y + b.y);
   }
 
-  @operator('-')
+  @operator("-")
   static sub(a: Tester, b: Tester): Tester {
     return new Tester(a.x - b.x, a.y - b.y);
   }
 
-  @operator('*')
+  @operator("*")
   static mul(a: Tester, b: Tester): Tester {
     return new Tester(a.x * b.x, a.y * b.y);
   }
 
-  @operator('/')
+  @operator("/")
   static div(a: Tester, b: Tester): Tester {
     return new Tester(a.x / b.x, a.y / b.y);
   }
 
-  @operator('%')
+  @operator("%")
   static mod(a: Tester, b: Tester): Tester {
     return new Tester(a.x % b.x, a.y % b.y);
   }
 
-  @operator('**')
+  @operator("**")
   static pow(a: Tester, b: Tester): Tester {
     return new Tester(<i32>(a.x ** b.x), <i32>(a.y ** b.y));
   }
 
-  @operator('|')
+  @operator("|")
   static or(a: Tester, b: Tester): Tester {
     return new Tester(a.x | b.x, a.y | b.y);
   }
 
-  @operator('&')
+  @operator("&")
   static and(a: Tester, b: Tester): Tester {
     return new Tester(a.x & b.x, a.y & b.y);
   }
 
-  @operator('^')
+  @operator("^")
   static xor(a: Tester, b: Tester): Tester {
     return new Tester(a.x ^ b.x, a.y ^ b.y);
   }
 
-  @operator('==')
+  @operator("==")
   static equals(a: Tester, b: Tester): bool {
     return a.x == b.x && a.y == b.y;
   }
 
-  @operator('!=')
+  @operator("!=")
   static notEquals(a: Tester, b: Tester): bool {
     return a.x != b.x && a.y != b.y;
   }
 
-  @operator('>')
+  @operator(">")
   static greater(a: Tester, b: Tester): bool {
     return a.x > b.x && a.y > b.y;
   }
 
-  @operator('>=')
+  @operator(">=")
   static greaterEquals(a: Tester, b: Tester): bool {
     return a.x >= b.x && a.y >= b.y;
   }
 
-  @operator('<')
+  @operator("<")
   static less(a: Tester, b: Tester): bool {
     return a.x < b.x && a.y < b.y;
   }
 
-  @operator('<=')
+  @operator("<=")
   static lessEquals(a: Tester, b: Tester): bool {
     return a.x <= b.x && a.y <= b.y;
   }
 
-  @operator('>>')
+  @operator(">>")
   static shr(value: Tester, shift: i32): Tester {
     return new Tester(value.x >> shift, value.y >> shift);
   }
 
-  @operator('>>>')
+  @operator(">>>")
   static shu(value: Tester, shift: i32): Tester {
     return new Tester(value.x >>> shift, value.y >>> shift);
   }
 
-  @operator('<<')
+  @operator("<<")
   static shl(value: Tester, shift: i32): Tester {
     return new Tester(value.x << shift, value.y << shift);
   }
 
   // unary opterators
-  @operator.prefix('~')
+  @operator.prefix("~")
   static not(value: Tester): Tester {
     return new Tester(~value.x, ~value.y);
   }
 
-  @operator.prefix('!')
+  @operator.prefix("!")
   static excl(value: Tester): bool {
     return !value.x && !value.y;
   }
 
-  @operator.prefix('+')
+  @operator.prefix("+")
   static pos(value: Tester): Tester {
     return new Tester(+value.x, +value.y);
   }
 
-  @operator.prefix('-')
+  @operator.prefix("-")
   static neg(value: Tester): Tester {
     return new Tester(-value.x, -value.y);
   }
 
-  @operator.prefix('++')
+  @operator.prefix("++")
   inc(): this {
     ++this.x;
     ++this.y;
     return this;
   }
 
-  @operator.prefix('--')
+  @operator.prefix("--")
   dec(): this {
     --this.x;
     --this.y;
     return this;
   }
 
-  @operator.postfix('++')
+  @operator.postfix("++")
   postInc(): Tester {
     return new Tester(this.x + 1, this.y + 1);
   }
 
-  @operator.postfix('--')
+  @operator.postfix("--")
   postDec(): Tester {
     return new Tester(this.x - 1, this.y - 1);
   }
@@ -297,18 +295,18 @@ assert(incdec.x == 0 && incdec.y == 1);
 class TesterInlineStatic {
   constructor(public x: i32, public y: i32) {
   }
-  @inline @operator('+')
+  @inline @operator("+")
   static add(a: TesterInlineStatic, b: TesterInlineStatic): TesterInlineStatic {
     return new TesterInlineStatic(a.x + b.x, a.y + b.y);
   }
 
-  @inline @operator.postfix('++')
+  @inline @operator.postfix("++")
   static postInc(a: TesterInlineStatic): TesterInlineStatic {
     return new TesterInlineStatic(a.x + 1, a.y + 1);
   }
 }
 var ais1 = new TesterInlineStatic(1, 2);
-ais1++; // 2, 3
+ais1 = ais1++; // 2, 3 (static skips re-assign)
 var ais2 = new TesterInlineStatic(2, 3);
 var ais  = ais1 + ais2;
 assert(ais.x == 4 && ais.y == 6);
@@ -317,12 +315,12 @@ assert(ais.x == 4 && ais.y == 6);
 class TesterInlineInstance {
   constructor(public x: i32, public y: i32) {
   }
-  @inline @operator('+')
+  @inline @operator("+")
   add(b: TesterInlineInstance): TesterInlineInstance {
     return new TesterInlineInstance(this.x + b.x, this.y + b.y);
   }
 
-  @inline @operator.postfix('++')
+  @inline @operator.postfix("++")
   postInc(): TesterInlineInstance {
     return new TesterInlineInstance(this.x + 1, this.y + 1);
   }

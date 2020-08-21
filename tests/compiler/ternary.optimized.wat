@@ -1,21 +1,12 @@
 (module
- (type $v (func))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (memory $0 0)
- (table $0 1 anyfunc)
- (elem (i32.const 0) $null)
- (global $ternary/a (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "table" (table $0))
- (start $start)
- (func $start (; 0 ;) (type $v)
-  i32.const 1
-  set_global $ternary/a
-  i32.const 1
-  set_global $ternary/a
-  i32.const 1
-  set_global $ternary/a
- )
- (func $null (; 1 ;) (type $v)
-  nop
+ (export "test" (func $ternary/test))
+ (func $ternary/test (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $1
+  local.get $2
+  local.get $0
+  select
  )
 )

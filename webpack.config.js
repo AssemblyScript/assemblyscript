@@ -1,6 +1,18 @@
 const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
+const TerserPlugin = require('terser-webpack-plugin');
+
+function preamble(name) {
+  return [
+    "/**",
+    " * @license",
+    " * " + name,
+    " * Copyright Daniel Wirtz / The AssemblyScript Authors.",
+    " * SPDX-License-Identifier: Apache-2.0",
+    " */"
+  ].join("\n");
+}
 
 // Build the C-like library
 const lib = {
@@ -14,7 +26,9 @@ const lib = {
       }
     ]
   },
-  externals: [ "binaryen" ],
+  externals: [
+    "binaryen"
+  ],
   resolve: {
     extensions: [ ".ts", ".js" ]
   },
@@ -28,22 +42,40 @@ const lib = {
   devtool: "source-map",
   performance: {
     hints : false
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          output: {
+            comments: false,
+            preamble: preamble("The AssemblyScript Compiler.")
+          }
+        },
+        sourceMap: true
+      })
+    ],
   }
 };
 
 // Build asc for browser usage
+const shimDir = path.join(__dirname, "cli", "shim");
 const bin = {
   context: path.join(__dirname, "cli"),
   entry: [ "./asc.js" ],
-  externals: [{
-    "../dist/assemblyscript.js": "assemblyscript"
-  }],
+  externals: [
+    "binaryen",
+    "assemblyscript",
+    "ts-node"
+  ],
   node: {
     "buffer": false,
-    "fs": "empty",
+    "fs": false,
     "global": true,
     "os": false,
-    "process": "mock",
+    "path": false,
+    "process": false,
     "crypto": false
   },
   output: {
@@ -73,8 +105,29 @@ const bin = {
       },
       __dirname: JSON.stringify(".")
     }),
-    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts\-node|glob)$/)
-  ]
+
+    // Ignored node-only dependencies
+    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts-node|glob)$/),
+
+    // Browser shims
+    new webpack.NormalModuleReplacementPlugin(/^path$/, path.join(shimDir, "path")),
+    new webpack.NormalModuleReplacementPlugin(/^process$/, path.join(shimDir, "process")),
+    new webpack.NormalModuleReplacementPlugin(/^fs$/, path.join(shimDir, "fs"))
+  ],
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          output: {
+            comments: false,
+            preamble: preamble("The AssemblyScript Compiler Frontend.")
+          }
+        },
+        sourceMap: true
+      })
+    ],
+  }
 };
 
 function bundleFile(filename) {

@@ -2,7 +2,10 @@
   "extends": "../std/portable.json",
   "compilerOptions": {
     "outDir": "../out",
-    "sourceMap": true
+    "allowJs": false,
+    "sourceMap": true,
+    "target": "esnext",
+    "strict": true
   },
   "include": [
     "./**/*.ts"

@@ -1,0 +1,33 @@
+{
+  "asc_flags": [
+    "--runtime none",
+    "--noUnsafe"
+  ],
+  "stderr": [
+    "AS212: Decorator '@unsafe' is not valid here.",
+    "AS101: Operation is unsafe.", "f1();",
+    "AS101: Operation is unsafe.", "f2();",
+    "AS101: Operation is unsafe.", "= new Foo();",
+    "AS101: Operation is unsafe.", "super();",
+    "AS101: Operation is unsafe.", "= instantiate<Foo>()",
+    "AS101: Operation is unsafe.", "Foo.bar();",
+    "AS101: Operation is unsafe.", "foo.bar();",
+    "AS101: Operation is unsafe.", " = Foo.foo;",
+    "AS101: Operation is unsafe.", "Foo.foo = 1;",
+    "AS101: Operation is unsafe.", "Foo.foo++;",
+    "AS101: Operation is unsafe.", "Foo.foo += 1;",
+    "AS101: Operation is unsafe.", " = foo.foo;",
+    "AS101: Operation is unsafe.", "foo.foo = 1;",
+    "AS101: Operation is unsafe.", "foo.foo++;",
+    "AS101: Operation is unsafe.", "foo.foo += 1;",
+    "AS101: Operation is unsafe.", "= Foo.baz;",
+    "AS101: Operation is unsafe.", "Foo.baz = 1;",
+    "AS101: Operation is unsafe.", "Foo.baz++;",
+    "AS101: Operation is unsafe.", "Foo.baz += 1;",
+    "AS101: Operation is unsafe.", "= foo.baz;",
+    "AS101: Operation is unsafe.", "foo.baz = 1;",
+    "AS101: Operation is unsafe.", "foo.baz++;",
+    "AS101: Operation is unsafe.", "foo.baz += 1;",
+    "EOF"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "npm run test:use-consts && npm run test:target && npm run test:entry-points && npm run test:complicated && npm run test:extends",
+    "test:use-consts": "cd use-consts && npm run test",
+    "test:entry-points": "cd entry-points && npm run test",
+    "test:respect-inheritence": "cd respect-inheritence && npm run test",
+    "test:target": "cd target && npm run test",
+    "test:cyclical": "cd cyclical && npm run test",
+    "test:complicated": "cd complicated && npm run test",
+    "test:extends": "cd extends && npm run test"
+  }
+}

@@ -71,6 +71,22 @@ and it might be necessary to export entry points.
 Additional fixtures for the optimized module etc. are generated as well but are used for visual
 confirmation only.
 
+If present, error checks are performed by expecting the exact sequence of substrings provided within
+the respective `.json` file. Using the `stderr` config option will skip instantiating and running
+the module.
+
+Optionally, a `.js` file of the same name as the test file can be added containing code to run pre
+and post instantiation of the module, with the following export signatures:
+
+* **preInstantiate**(imports: `object`, exports: `object`): `void`<br />
+  Can be used to populate imports with functionality required by the test. Note that `exports` is an
+  empty object that will be populated with the actual exports after instantiation. Useful if an import
+  needs to call an export (usually in combination with the `--explicitStart` flag).
+
+* **postInstantiate**(instance: `WebAssembly.Instance`): `void`<br />
+  Can be used to execute custom test logic once the module is ready. Throwing an error will fail the
+  instantiation test.
+
 Running all tests:
 
 ```

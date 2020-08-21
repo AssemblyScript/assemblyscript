@@ -1,6 +1,4 @@
-import "allocator/arena";
-
-function test<K>(): void {
+function testNumeric<K extends number>(): void {
   var set = new Set<K>();
 
   // insert new
@@ -18,6 +16,15 @@ function test<K>(): void {
     assert(set.has(k));
   }
   assert(set.size == 100);
+
+  // values 
+  let vals = set.values();
+  let valSet = new Set<K>(); 
+  for (let index = 0; index < vals.length; ++index) {
+    assert(set.has(vals[index]));
+    valSet.add(vals[index]);
+  }
+  assert(valSet.size == set.size);
 
   // delete
   for (let k: K = 0; k < 50; ++k) {
@@ -42,13 +49,13 @@ function test<K>(): void {
   assert(set.size == 0);
 }
 
-test<i8>();
-test<u8>();
-test<i16>();
-test<u16>();
-test<i32>();
-test<u32>();
-test<i64>();
-test<u64>();
-test<f32>();
-test<f64>();
+testNumeric<i8>();
+testNumeric<u8>();
+testNumeric<i16>();
+testNumeric<u16>();
+testNumeric<i32>();
+testNumeric<u32>();
+testNumeric<i64>();
+testNumeric<u64>();
+testNumeric<f32>();
+testNumeric<f64>();

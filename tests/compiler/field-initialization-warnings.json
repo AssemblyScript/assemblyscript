@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "AS906: Unnecessary definite assignment.",
+    "AS233: Property 'field-initialization-warnings/Ref_Ctor_Init.a' is always assigned",
+    "EOF"
+  ]
+}

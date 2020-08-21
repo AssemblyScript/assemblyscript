@@ -1,0 +1,9 @@
+{
+  "features": [
+    "bigint-integration"
+  ],
+  "asc_flags": [
+    "--runtime none",
+    "--explicitStart"
+  ]
+}
