@@ -41,6 +41,10 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
 
+const dynRequire = typeof __webpack_require__ === "function"
+  ? __non_webpack_require__
+  : require;
+
 const WIN = process.platform === "win32";
 const EOL = WIN ? "\r\n" : "\n";
 const SEP = WIN ? "\\" : "/";
@@ -76,9 +80,6 @@ var isDev = false;
   try {
     assemblyscript = require("assemblyscript");
   } catch (e) {
-    function dynRequire(...args) {
-      return eval("require")(...args);
-    }
     try { // `asc` on the command line
       assemblyscript = dynRequire("../dist/assemblyscript.js");
     } catch (e) {
