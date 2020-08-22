@@ -47,7 +47,7 @@ export function escapeUnsafe(dst: usize, src: usize, len: isize, table: usize): 
       if (ch <= 127) {
         if (!load<u8>(table + ch)) break;
       } else {
-        if (ch > 0xD800 || ch == h0) break;
+        if (ch >= 0xD800 || ch == h0) break;
       }
       ++i;
     }
