@@ -76,24 +76,22 @@ var isDev = false;
   try {
     assemblyscript = require("assemblyscript");
   } catch (e) {
-    function dynRequire(...args) {
-      return eval("require")(...args);
-    }
+    const lazyRequire = name => ((() => require(name))());
     try { // `asc` on the command line
-      assemblyscript = dynRequire("../dist/assemblyscript.js");
+      assemblyscript = lazyRequire("../dist/assemblyscript.js")();
     } catch (e) {
       try { // `asc` on the command line without dist files
-        dynRequire("ts-node").register({
+        lazyRequire("ts-node").register({
           project: path.join(__dirname, "..", "src", "tsconfig.json"),
           skipIgnore: true,
           compilerOptions: { target: "ES2016" }
         });
-        dynRequire("../src/glue/js");
-        assemblyscript = dynRequire("../src");
+        lazyRequire("../src/glue/js");
+        assemblyscript = lazyRequire("../src");
         isDev = true;
       } catch (e_ts) {
         try { // `require("dist/asc.js")` in explicit browser tests
-          assemblyscript = dynRequire("./assemblyscript");
+          assemblyscript = lazyRequire("./assemblyscript");
         } catch (e) {
           throw Error(e_ts.stack + "\n---\n" + e.stack);
         }
