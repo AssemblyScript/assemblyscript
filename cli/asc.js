@@ -50,15 +50,15 @@ const EOL = WIN ? "\r\n" : "\n";
 const SEP = WIN ? "\\" : "/";
 
 // Sets up an extension with its definition counterpart and relevant regexes.
-function setupExtension(extension) {
-  if (!extension.startsWith(".")) extension = "." + extension;
+function setupExtension(ext) {
+  if (!ext.startsWith(".")) ext = "." + ext;
   return {
-    ext: extension,
-    ext_d: ".d" + extension,
-    re: new RegExp("\\" + extension + "$"),
-    re_d: new RegExp("\\.d\\" + extension + "$"),
-    re_except_d: new RegExp("^(?!.*\\.d\\" + extension + "$).*\\" + extension + "$"),
-    re_index: new RegExp("(?:^|[\\\\\\/])index\\" + extension + "$")
+    ext,
+    ext_d: ".d" + ext,
+    re: new RegExp("\\" + ext + "$"),
+    re_d: new RegExp("\\.d\\" + ext + "$"),
+    re_except_d: new RegExp("^(?!.*\\.d\\" + ext + "$).*\\" + ext + "$"),
+    re_index: new RegExp("(?:^|[\\\\\\/])index\\" + ext + "$")
   };
 }
 
@@ -66,7 +66,7 @@ const defaultExtension = setupExtension(".ts");
 
 // Proxy Binaryen's ready event
 Object.defineProperty(exports, "ready", {
-  get: function() { return binaryen.ready; }
+  get() { return binaryen.ready; }
 });
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
@@ -961,11 +961,10 @@ exports.main = function main(argv, options, callback) {
         filename = path.basename(filename);
         const outputFilePath = path.join(dirPath, filename);
         if (!fs.existsSync(dirPath)) mkdirp(dirPath);
-        if (typeof contents === "string") {
-          fs.writeFileSync(outputFilePath, contents, { encoding: "utf8" } );
-        } else {
-          fs.writeFileSync(outputFilePath, contents);
-        }
+        fs.writeFileSync(
+          outputFilePath, contents,
+          typeof contents === "string" ? { encoding: "utf8" } : void 0
+        );
       });
       return true;
     } catch (e) {
@@ -978,7 +977,8 @@ exports.main = function main(argv, options, callback) {
     try {
       stats.readCount++;
       stats.readTime += measure(() => {
-        files = fs.readdirSync(path.join(baseDir, dirname)).filter(file => extension.re_except_d.test(file));
+        files = fs.readdirSync(path.join(baseDir, dirname))
+          .filter(file => extension.re_except_d.test(file));
       });
       return files;
     } catch (e) {
@@ -1119,9 +1119,7 @@ exports.formatTime = formatTime;
 
 /** Formats and prints out the contents of a set of stats. */
 function printStats(stats, output) {
-  function format(time, count) {
-    return pad(formatTime(time), 12) + "  n=" + count;
-  }
+  const format = (time, count) => pad(formatTime(time), 12) + "  n=" + count;
   (output || process.stdout).write([
     "I/O Read   : " + format(stats.readTime, stats.readCount),
     "I/O Write  : " + format(stats.writeTime, stats.writeCount),
@@ -1138,8 +1136,8 @@ function printStats(stats, output) {
 exports.printStats = printStats;
 
 var allocBuffer = typeof global !== "undefined" && global.Buffer
-  ? global.Buffer.allocUnsafe || function(len) { return new global.Buffer(len); }
-  : function(len) { return new Uint8Array(len); };
+  ? global.Buffer.allocUnsafe || (len => new global.Buffer(len))
+  : len => new Uint8Array(len);
 
 /** Creates a memory stream that can be used in place of stdout/stderr. */
 function createMemoryStream(fn) {
