@@ -131,7 +131,7 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if
   find
     .files(libDir, defaultExtension.re_except_d)
     .forEach(file => {
-      bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8" )
+      bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8" );
     });
   return bundled;
 })();
@@ -166,7 +166,7 @@ exports.compileString = (sources, options) => {
       if (val) argv.push("--" + key);
     } else {
       if (Array.isArray(val)) {
-        val.forEach(val => { argv.push("--" + key, String(val)) });
+        val.forEach(val => { argv.push("--" + key, String(val)); });
       }
       else argv.push("--" + key, String(val));
     }
@@ -175,7 +175,7 @@ exports.compileString = (sources, options) => {
     stdout: output.stdout,
     stderr: output.stderr,
     readFile: name => Object.prototype.hasOwnProperty.call(sources, name) ? sources[name] : null,
-    writeFile: (name, contents) => { output[name] = contents },
+    writeFile: (name, contents) => { output[name] = contents; },
     listFiles: () => []
   });
   return output;
