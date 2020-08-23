@@ -130,16 +130,21 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if
   const bundled = {};
   find
     .files(libDir, defaultExtension.re_except_d)
-    .forEach(file => bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
+    .forEach(file => {
+      bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8" )
+    });
   return bundled;
 })();
 
 /** Bundled definition files. */
 exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : (() => { // set up if not a bundle
-  const stdDir = path.join(__dirname, "..", "std");
+  const readDefinition = name => fs.readFileSync(
+    path.join(__dirname, "..", "std", name, "index" + defaultExtension.ext_d),
+    "utf8"
+  );
   return {
-    "assembly": fs.readFileSync(path.join(stdDir, "assembly", "index" + defaultExtension.ext_d), "utf8"),
-    "portable": fs.readFileSync(path.join(stdDir, "portable", "index" + defaultExtension.ext_d), "utf8")
+    assembly: readDefinition("assembly"),
+    portable: readDefinition("portable")
   };
 })();
 
@@ -160,7 +165,9 @@ exports.compileString = (sources, options) => {
     if (opt && opt.type === "b") {
       if (val) argv.push("--" + key);
     } else {
-      if (Array.isArray(val)) val.forEach(val => argv.push("--" + key, String(val)));
+      if (Array.isArray(val)) {
+        val.forEach(val => { argv.push("--" + key, String(val)) });
+      }
       else argv.push("--" + key, String(val));
     }
   });
@@ -168,7 +175,7 @@ exports.compileString = (sources, options) => {
     stdout: output.stdout,
     stderr: output.stderr,
     readFile: name => Object.prototype.hasOwnProperty.call(sources, name) ? sources[name] : null,
-    writeFile: (name, contents) => output[name] = contents,
+    writeFile: (name, contents) => { output[name] = contents },
     listFiles: () => []
   });
   return output;
