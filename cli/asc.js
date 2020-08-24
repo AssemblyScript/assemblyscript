@@ -41,6 +41,10 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
 
+const dynRequire = typeof __webpack_require__ === "function"
+  ? __non_webpack_require__
+  : require;
+
 const WIN = process.platform === "win32";
 const EOL = WIN ? "\r\n" : "\n";
 const SEP = WIN ? "\\" : "/";
@@ -77,20 +81,20 @@ var isDev = false;
     assemblyscript = require("assemblyscript");
   } catch (e) {
     try { // `asc` on the command line
-      assemblyscript = require(/* webpackIgnore: true */ "../dist/assemblyscript.js");
+      assemblyscript = dynRequire("../dist/assemblyscript.js");
     } catch (e) {
       try { // `asc` on the command line without dist files
-        require(/* webpackIgnore: true */ "ts-node").register({
+        dynRequire("ts-node").register({
           project: path.join(__dirname, "..", "src", "tsconfig.json"),
           skipIgnore: true,
           compilerOptions: { target: "ES2016" }
         });
-        require(/* webpackIgnore: true */ "../src/glue/js");
-        assemblyscript = require(/* webpackIgnore: true */ "../src");
+        dynRequire("../src/glue/js");
+        assemblyscript = dynRequire("../src");
         isDev = true;
       } catch (e_ts) {
         try { // `require("dist/asc.js")` in explicit browser tests
-          assemblyscript = require(/* webpackIgnore: true */ "./assemblyscript");
+          assemblyscript = dynRequire("./assemblyscript");
         } catch (e) {
           throw Error(e_ts.stack + "\n---\n" + e.stack);
         }
