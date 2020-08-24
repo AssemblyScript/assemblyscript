@@ -66,8 +66,7 @@ const bin = {
   entry: [ "./asc.js" ],
   externals: [
     "binaryen",
-    "assemblyscript",
-    "ts-node"
+    "assemblyscript"
   ],
   node: {
     "buffer": false,
@@ -105,9 +104,6 @@ const bin = {
       },
       __dirname: JSON.stringify(".")
     }),
-
-    // Ignored node-only dependencies
-    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts-node|glob)$/),
 
     // Browser shims
     new webpack.NormalModuleReplacementPlugin(/^path$/, path.join(shimDir, "path")),
