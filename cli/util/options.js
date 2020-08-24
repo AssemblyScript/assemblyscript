@@ -5,7 +5,6 @@
 
 const path = require("path");
 const colorsUtil = require("./colors");
-const dynrequire = require("./dynrequire");
 
 // type | meaning
 // -----|---------------
@@ -237,6 +236,10 @@ function merge(config, currentOptions, parentOptions, parentBaseDir) {
 }
 
 exports.merge = merge;
+
+const dynrequire = typeof __webpack_require__ === "function"
+  ? __non_webpack_require__
+  : require;
 
 /** Resolves a single possibly relative path. Keeps absolute paths, otherwise prepends baseDir. */
 function resolvePath(p, baseDir, useNodeResolution = false) {
