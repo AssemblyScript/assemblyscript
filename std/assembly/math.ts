@@ -1567,6 +1567,11 @@ export namespace NativeMath {
   }
 
   export function mod(x: f64, y: f64): f64 { // see: musl/src/math/fmod.c
+    // TODO: move this rule to compiler's optimization pass
+    if (builtin_abs<f64>(y) == 1.0) {
+      // x % 1, x % -1  ==>  sign(x) * abs(x - trunc(x))
+      return builtin_copysign<f64>(x - builtin_trunc<f64>(x), x);
+    }
     var ux = reinterpret<u64>(x);
     var uy = reinterpret<u64>(y);
     var ex = <i64>(ux >> 52 & 0x7FF);
@@ -2871,6 +2876,11 @@ export namespace NativeMathf {
   }
 
   export function mod(x: f32, y: f32): f32 { // see: musl/src/math/fmodf.c
+    // TODO: move this rule to compiler's optimization pass
+    if (builtin_abs<f32>(y) == 1.0) {
+      // x % 1, x % -1  ==>  sign(x) * abs(x - trunc(x))
+      return builtin_copysign<f32>(x - builtin_trunc<f32>(x), x);
+    }
     var ux = reinterpret<u32>(x);
     var uy = reinterpret<u32>(y);
     var ex = <i32>(ux >> 23 & 0xFF);
