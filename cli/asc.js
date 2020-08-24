@@ -131,7 +131,7 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if
   find
     .files(libDir, defaultExtension.re_except_d)
     .forEach(file => {
-      bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8" );
+      bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8");
     });
   return bundled;
 })();
