@@ -39,11 +39,8 @@ const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
 const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
+const dynrequire = require("./util/dynrequire");
 const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
-
-const dynRequire = typeof __webpack_require__ === "function"
-  ? __non_webpack_require__
-  : require;
 
 const WIN = process.platform === "win32";
 const EOL = WIN ? "\r\n" : "\n";
@@ -81,20 +78,20 @@ var isDev = false;
     assemblyscript = require("assemblyscript");
   } catch (e) {
     try { // `asc` on the command line
-      assemblyscript = dynRequire("../dist/assemblyscript.js");
+      assemblyscript = dynrequire("../dist/assemblyscript.js");
     } catch (e) {
       try { // `asc` on the command line without dist files
-        dynRequire("ts-node").register({
+        dynrequire("ts-node").register({
           project: path.join(__dirname, "..", "src", "tsconfig.json"),
           skipIgnore: true,
           compilerOptions: { target: "ES2016" }
         });
-        dynRequire("../src/glue/js");
-        assemblyscript = dynRequire("../src");
+        dynrequire("../src/glue/js");
+        assemblyscript = dynrequire("../src");
         isDev = true;
       } catch (e_ts) {
         try { // `require("dist/asc.js")` in explicit browser tests
-          assemblyscript = dynRequire("./assemblyscript");
+          assemblyscript = dynrequire("./assemblyscript");
         } catch (e) {
           throw Error(e_ts.stack + "\n---\n" + e.stack);
         }
@@ -110,7 +107,7 @@ exports.isBundle = typeof BUNDLE_VERSION === "string";
 exports.isDev = isDev;
 
 /** AssemblyScript version. */
-exports.version = exports.isBundle ? BUNDLE_VERSION : require("../package.json").version;
+exports.version = exports.isBundle ? BUNDLE_VERSION : dynrequire("../package.json").version;
 
 /** Available CLI options. */
 exports.options = require("./asc.json");
@@ -425,11 +422,11 @@ exports.main = function main(argv, options, callback) {
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
       if (!tsNodeRegistered && filename.endsWith(".ts")) { // ts-node requires .ts specifically
-        require("ts-node").register({ transpileOnly: true, skipProject: true, compilerOptions: { target: "ES2016" } });
+        dynrequire("ts-node").register({ transpileOnly: true, skipProject: true, compilerOptions: { target: "ES2016" } });
         tsNodeRegistered = true;
       }
       try {
-        const classOrModule = require(require.resolve(filename, { paths: [baseDir, process.cwd()] }));
+        const classOrModule = dynrequire(dynrequire.resolve(filename, { paths: [baseDir, process.cwd()] }));
         if (typeof classOrModule === "function") {
           Object.assign(classOrModule.prototype, {
             program,
