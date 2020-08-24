@@ -53,6 +53,7 @@ const lib = {
             preamble: preamble("The AssemblyScript Compiler.")
           }
         },
+        parallel: true,
         sourceMap: true
       })
     ],
@@ -115,6 +116,7 @@ const bin = {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
+          toplevel: true,
           output: {
             comments: false,
             preamble: preamble("The AssemblyScript Compiler Frontend.")
