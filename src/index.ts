@@ -253,7 +253,7 @@ export function buildIDL(program: Program): string {
 }
 
 /** Builds TypeScript definitions for the specified program. */
-export function buildTSD(program: Program, moduleName?: string): string {
+export function buildTSD(program: Program, moduleName: string = "ASModule"): string {
   return TSDBuilder.build(program, moduleName);
 }
 
