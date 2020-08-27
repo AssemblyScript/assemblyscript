@@ -896,17 +896,21 @@ exports.main = function main(argv, options, callback) {
 
     // Write TypeScript definition
     if (opts.tsdFile != null) {
+      let moduleName;
       let tsd;
+      if (opts.tsdModuleName != null) {
+        moduleName = opts.tsdModuleName;
+      }
       if (opts.tsdFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          tsd = assemblyscript.buildTSD(program);
+          tsd = assemblyscript.buildTSD(program, moduleName);
         });
         writeFile(opts.tsdFile, tsd, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          tsd = assemblyscript.buildTSD(program);
+          tsd = assemblyscript.buildTSD(program, moduleName);
         });
         writeStdout(tsd);
         hasStdout = true;

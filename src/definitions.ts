@@ -373,16 +373,23 @@ export class IDLBuilder extends ExportsWalker {
 export class TSDBuilder extends ExportsWalker {
 
   /** Builds TypeScript definitions for the specified program. */
-  static build(program: Program): string {
-    return new TSDBuilder(program).build();
+  static build(program: Program, moduleName?: string): string {
+    return new TSDBuilder(program, false, moduleName).build();
   }
 
+  private moduleName: string = "ASModule";
   private sb: string[] = [];
   private indentLevel: i32 = 0;
 
   /** Constructs a new WebIDL builder. */
-  constructor(program: Program, includePrivate: bool = false) {
+  constructor(program: Program, includePrivate: bool = false, moduleName?: string) {
     super(program, includePrivate);
+
+    if (moduleName) {
+      if (moduleName.trim().match(/^[a-z0-9_]+$/i)) {
+        this.moduleName = moduleName.trim();
+      }
+    }
   }
 
   visitGlobal(name: string, element: Global): void {
@@ -592,7 +599,7 @@ export class TSDBuilder extends ExportsWalker {
   build(): string {
     var sb = this.sb;
     var isWasm64 = this.program.options.isWasm64;
-    sb.push("declare module ASModule {\n");
+    sb.push("declare module " + this.moduleName + " {\n");
     sb.push("  type i8 = number;\n");
     sb.push("  type i16 = number;\n");
     sb.push("  type i32 = number;\n");
@@ -618,7 +625,7 @@ export class TSDBuilder extends ExportsWalker {
     this.walk();
     --this.indentLevel;
     sb.push("}\n");
-    sb.push("export default ASModule;\n");
+    sb.push("export default " + this.moduleName + ";\n");
     return this.sb.join("");
   }
 }

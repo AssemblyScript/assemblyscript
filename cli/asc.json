@@ -118,6 +118,12 @@
     "type": "s",
     "alias": "d"
   },
+  "tsdModuleName": {
+    "category": "Output",
+    "description": "Specifies the TypeScript definition output file module name.",
+    "type": "s",
+    "default": "ASModule"
+  },
 
   "sourceMap": {
     "category": "Debugging",
