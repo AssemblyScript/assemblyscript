@@ -1485,14 +1485,14 @@ export class Module {
     this.setOptimizeLevel(optimizeLevel);
     this.setShrinkLevel(shrinkLevel);
     this.setDebugInfo(debugInfo);
-    this.setAllowHeavyweight(true);
     this.clearPassArguments();
 
     // Tweak inlining limits based on optimization levels
-    if (optimizeLevel >= 2 && shrinkLevel === 0) {
+    if (optimizeLevel >= 2 && shrinkLevel == 0) {
       this.setAlwaysInlineMaxSize(12);
       this.setFlexibleInlineMaxSize(70);
       this.setOneCallerInlineMaxSize(200);
+      this.setAllowHeavyweight(optimizeLevel >= 3);
     } else {
       this.setAlwaysInlineMaxSize(
         optimizeLevel == 0 && shrinkLevel >= 0
@@ -1501,6 +1501,7 @@ export class Module {
       );
       this.setFlexibleInlineMaxSize(65);
       this.setOneCallerInlineMaxSize(80);
+      this.setAllowHeavyweight(false);
     }
 
     // Pass order here differs substantially from Binaryen's defaults
