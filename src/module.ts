@@ -1485,7 +1485,7 @@ export class Module {
     this.setOptimizeLevel(optimizeLevel);
     this.setShrinkLevel(shrinkLevel);
     this.setDebugInfo(debugInfo);
-    this.setAllowHeavyweight(false); // TODO
+    this.setAllowHeavyweight(true);
     this.clearPassArguments();
 
     // Tweak inlining limits based on optimization levels
