@@ -16072,14 +16072,16 @@
   local.set $10
   local.get $2
   call $~lib/string/String#get:length
+  i32.const 1
+  i32.shl
   local.set $11
   local.get $5
+  i32.const 1
+  i32.shl
   local.get $11
   local.get $3
   i32.mul
   i32.add
-  i32.const 1
-  i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc
   local.set $12
@@ -16117,16 +16119,14 @@
     if
      local.get $6
      call $~lib/string/String#get:length
+     i32.const 1
+     i32.shl
      local.set $9
      local.get $12
      local.get $10
-     i32.const 1
-     i32.shl
      i32.add
      local.get $6
      local.get $9
-     i32.const 1
-     i32.shl
      call $~lib/memory/memory.copy
      local.get $10
      local.get $9
@@ -16137,13 +16137,9 @@
     if
      local.get $12
      local.get $10
-     i32.const 1
-     i32.shl
      i32.add
      local.get $2
      local.get $11
-     i32.const 1
-     i32.shl
      call $~lib/memory/memory.copy
      local.get $10
      local.get $11
@@ -16182,8 +16178,6 @@
   if
    local.get $12
    local.get $10
-   i32.const 1
-   i32.shl
    i32.add
    local.get $6
    local.get $6

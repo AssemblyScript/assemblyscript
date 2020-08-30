@@ -368,6 +368,8 @@ export class Compiler extends DiagnosticEmitter {
   virtualCalls: Set<Function> = new Set();
   /** Elements currently undergoing compilation. */
   pendingElements: Set<Element> = new Set();
+  /** Elements, that are module exports, already processed */
+  doneModuleExports: Set<Element> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -816,7 +818,11 @@ export class Compiler extends DiagnosticEmitter {
         if (!classInstance.type.isUnmanaged) {
           let module = this.module;
           let internalName = classInstance.internalName;
-          module.addGlobal(internalName, NativeType.I32, false, module.i32(classInstance.id));
+
+          if (!this.doneModuleExports.has(element)) {
+            module.addGlobal(internalName, NativeType.I32, false, module.i32(classInstance.id));
+            this.doneModuleExports.add(element);
+          }
           module.addGlobalExport(internalName, prefix + name);
         }
         break;

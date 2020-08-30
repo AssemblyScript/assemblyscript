@@ -44,6 +44,7 @@
  (export "vehicles.Car.TIRES" (global $exports/vehicles.Car.TIRES))
  (export "vehicles.Car.getNumTires" (func $exports/Car.getNumTires))
  (export "outer.inner.a" (global $exports/outer.inner.a))
+ (export "renamed_mul" (func $export/mul))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (start $~start)
  (func $exports/add (param $0 i32) (param $1 i32) (result i32)
@@ -136,6 +137,11 @@
  )
  (func $exports/Car#openDoors (param $0 i32)
   nop
+ )
+ (func $export/mul (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.mul
  )
  (func $~start
   i32.const 1024
