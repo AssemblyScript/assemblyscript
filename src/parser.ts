@@ -29,7 +29,7 @@ import {
 } from "./diagnostics";
 
 import {
-  normalizePath, CharCode
+  normalizePath, CharCode, concat3
 } from "./util";
 
 import {
@@ -3889,7 +3889,15 @@ export class Parser extends DiagnosticEmitter {
     }
     return parts.reduce((acc: Expression | null, expr: Expression) => {
       if (acc == null) return expr;
-      return Node.createBinaryExpression(Token.PLUS, acc, expr, tn.range(startPos, tn.pos));
+      if (parts.length  == 1) {
+        return isDefined(parts[0]) ? parts[0] : parts[0].toString();
+      } else if  (parts.length  == 2) {
+        return Node.createBinaryExpression(Token.PLUS, parts[0], parts[1], tn.range(startPos, tn.pos));
+      } else if (parts.length  == 3) {
+        return concat3(parts[0], parts[1],  parts[2]);
+      } else {
+        return Node.createArrayLiteralExpression(parts, tn.range(startPos, tn.pos));
+      }
     }, null);
   }
 

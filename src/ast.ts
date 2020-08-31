@@ -1449,6 +1449,7 @@ export class TemplateLiteralExpression extends LiteralExpression {
     range: Range
 ) {
     super(LiteralKind.TEMPLATE, range);
+  }
 }
 
 /** Represents a `super` expression. */
