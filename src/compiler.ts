@@ -8787,9 +8787,13 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileTemplateLiteral(expr: TemplateLiteralExpression, constraints: Constraints): ExpressionRef {
-    const innerExpressions: ExpressionRef[] = expr.expresssionParts;
+    const innerExpressions: ExpressionRef[] | Expression[] = expr.expresssionParts;
 
-    return 0;
+    var innerConcat = innerExpressions.reduce(function(preV, elem) {
+      return Number(preV + elem.toString()); 
+    }, 0);
+
+    return innerConcat;
   }
 
   compileStringLiteral(

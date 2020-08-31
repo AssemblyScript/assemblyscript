@@ -29,9 +29,10 @@ import {
 } from "./diagnostics";
 
 import {
-  normalizePath, CharCode, concat3
+  normalizePath, CharCode
 } from "./util";
 
+import { concat3 } from "../std/assembly/util/string";
 import {
   Node,
   NodeKind,
