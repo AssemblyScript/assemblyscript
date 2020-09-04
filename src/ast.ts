@@ -1580,8 +1580,8 @@ export class Source extends Node {
   /** Cached line starts. */
   private lineCache: i32[] | null = null;
 
-  /** Rememberd column number. */
-  private lineColumn: i32 = 0;
+  /** Remembered column number. */
+  private lineColumn: i32 = 1;
 
   /** Determines the line number at the specified position. Starts at `1`. */
   lineAt(pos: i32): i32 {
