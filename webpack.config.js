@@ -53,6 +53,7 @@ const lib = {
             preamble: preamble("The AssemblyScript Compiler.")
           }
         },
+        parallel: true,
         sourceMap: true
       })
     ],
@@ -120,6 +121,7 @@ const bin = {
             preamble: preamble("The AssemblyScript Compiler Frontend.")
           }
         },
+        parallel: true,
         sourceMap: true
       })
     ],
