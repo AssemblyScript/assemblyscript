@@ -22,6 +22,19 @@
   (local $7 i64)
   (local $8 i64)
   local.get $1
+  f64.abs
+  f64.const 1
+  f64.eq
+  if
+   local.get $0
+   local.get $0
+   f64.trunc
+   f64.sub
+   local.get $0
+   f64.copysign
+   return
+  end
+  local.get $1
   i64.reinterpret_f64
   local.tee $3
   i64.const 52
@@ -262,6 +275,19 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  local.get $1
+  f32.abs
+  f32.const 1
+  f32.eq
+  if
+   local.get $0
+   local.get $0
+   f32.trunc
+   f32.sub
+   local.get $0
+   f32.copysign
+   return
+  end
   local.get $1
   i32.reinterpret_f32
   local.tee $3
