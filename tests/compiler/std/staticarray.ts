@@ -1,9 +1,12 @@
+import { BLOCK_OVERHEAD, BLOCK } from "rt/common";
+
 // from contextual type
 const arr1: StaticArray<i32> = [1,2,3];
 assert(arr1[1] == 2);
 assert(arr1.length == 3);
 arr1[1] = 4;
 assert(arr1[1] == 4);
+assert(changetype<BLOCK>(changetype<usize>(arr1) - BLOCK_OVERHEAD).rtId == idof<StaticArray<i32>>());
 
 // from assertion
 const arr2 = [1,2,3] as StaticArray<i32>;
