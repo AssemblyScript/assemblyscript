@@ -344,7 +344,7 @@ function ensurePackageJson() {
       pkg["scripts"] = scripts;
       updated = true;
     }
-    if (!scripts["test"]) {
+    if (!scripts["test"] || scripts["test"] == "echo \"Error: no test specified\" && exit 1") {
       scripts["test"] = "node tests";
       pkg["scripts"] = scripts;
       updated = true;
