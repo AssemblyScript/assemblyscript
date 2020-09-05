@@ -158,17 +158,6 @@
   global.set $memory/ptr
   i32.const 1167
   global.set $memory/ptr
-  global.get $memory/ptr
-  i32.const 1167
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 39
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 1169
   global.set $memory/ptr
   i32.const 1169

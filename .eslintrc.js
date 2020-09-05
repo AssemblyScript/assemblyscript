@@ -16,7 +16,8 @@ module.exports = {
   },
   globals: {
     "BigInt64Array": "readonly",
-    "BigUint64Array": "readonly"
+    "BigUint64Array": "readonly",
+    "__non_webpack_require__": "readonly"
   },
 
   // === General rules =========================================================

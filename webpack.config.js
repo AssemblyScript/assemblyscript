@@ -53,6 +53,7 @@ const lib = {
             preamble: preamble("The AssemblyScript Compiler.")
           }
         },
+        parallel: true,
         sourceMap: true
       })
     ],
@@ -66,8 +67,7 @@ const bin = {
   entry: [ "./asc.js" ],
   externals: [
     "binaryen",
-    "assemblyscript",
-    "ts-node"
+    "assemblyscript"
   ],
   node: {
     "buffer": false,
@@ -106,9 +106,6 @@ const bin = {
       __dirname: JSON.stringify(".")
     }),
 
-    // Ignored node-only dependencies
-    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts-node|glob)$/),
-
     // Browser shims
     new webpack.NormalModuleReplacementPlugin(/^path$/, path.join(shimDir, "path")),
     new webpack.NormalModuleReplacementPlugin(/^process$/, path.join(shimDir, "process")),
@@ -124,6 +121,7 @@ const bin = {
             preamble: preamble("The AssemblyScript Compiler Frontend.")
           }
         },
+        parallel: true,
         sourceMap: true
       })
     ],

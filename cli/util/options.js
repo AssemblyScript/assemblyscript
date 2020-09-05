@@ -237,11 +237,15 @@ function merge(config, currentOptions, parentOptions, parentBaseDir) {
 
 exports.merge = merge;
 
+const dynrequire = typeof __webpack_require__ === "function"
+  ? __non_webpack_require__
+  : require;
+
 /** Resolves a single possibly relative path. Keeps absolute paths, otherwise prepends baseDir. */
 function resolvePath(p, baseDir, useNodeResolution = false) {
   if (path.isAbsolute(p)) return p;
   if (useNodeResolution && !p.startsWith(".")) {
-    return require.resolve(p, { paths: [ baseDir ] });
+    return dynrequire.resolve(p, { paths: [ baseDir ] });
   }
   return path.join(baseDir, p);
 }

@@ -8,6 +8,35 @@ const colors = require("../cli/util/colors");
 const version = require("../package.json").version;
 const options = require("../cli/util/options");
 
+const npmDefaultTest = "echo \"Error: no test specified\" && exit 1";
+
+const commands = {
+  "npm": {
+    install: "npm install",
+    run: "npm run",
+    test: "npm test"
+  },
+  "yarn": {
+    install: "yarn install",
+    run: "yarn",
+    test: "yarn test"
+  },
+  "pnpm": {
+    install: "pnpm install",
+    run: "pnpm run",
+    test: "pnpm test"
+  }
+};
+
+let pm = "npm";
+if (typeof process.env.npm_config_user_agent === "string") {
+  if (/\byarn\//.test(process.env.npm_config_user_agent)) {
+    pm = "yarn";
+  } else if (/\bpnpm\//.test(process.env.npm_config_user_agent)) {
+    pm = "pnpm";
+  }
+}
+
 const asinitOptions = {
   "help": {
     "category": "General",
@@ -118,14 +147,14 @@ function createProject(answer) {
     "",
     "Don't forget to install dependencies before you start:",
     "",
-    colors.white("  npm install"),
+    colors.white("  " + commands[pm].install),
     "",
     "To edit the entry file, open '" + colors.cyan("assembly/index.ts") + "' in your editor of choice.",
     "Create as many additional files as necessary and use them as imports.",
     "",
     "To build the entry file to WebAssembly when you are ready, run:",
     "",
-    colors.white("  npm run asbuild"),
+    colors.white("  " + commands[pm].run + " asbuild"),
     "",
     "Running the command above creates the following binaries incl. their respective",
     "text format representations and source maps:",
@@ -146,7 +175,7 @@ function createProject(answer) {
     "",
     "To run the tests, do:",
     "",
-    colors.white("  npm test"),
+    colors.white("  " + commands[pm].test),
     "",
     "The AssemblyScript documentation covers all the details:",
     "",
@@ -289,7 +318,7 @@ function ensurePackageJson() {
   const entryPath = path.relative(projectDir, entryFile).replace(/\\/g, "/");
   const buildUntouched = "asc " + entryPath + " --target debug";
   const buildOptimized = "asc " + entryPath + " --target release";
-  const buildAll = "npm run asbuild:untouched && npm run asbuild:optimized";
+  const buildAll = commands[pm].run + " asbuild:untouched && " + commands[pm].run + " asbuild:optimized";
   if (!fs.existsSync(packageFile)) {
     fs.writeFileSync(packageFile, JSON.stringify({
       "scripts": {
@@ -317,7 +346,7 @@ function ensurePackageJson() {
       pkg["scripts"] = scripts;
       updated = true;
     }
-    if (!scripts["test"]) {
+    if (!scripts["test"] || scripts["test"] == npmDefaultTest) {
       scripts["test"] = "node tests";
       pkg["scripts"] = scripts;
       updated = true;

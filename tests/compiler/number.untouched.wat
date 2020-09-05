@@ -52,10 +52,12 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
+ (global $~lib/builtins/f32.NaN f32 (f32.const nan:0x400000))
  (global $~lib/number/F32.NaN f32 (f32.const nan:0x400000))
  (global $~lib/builtins/f32.MIN_SAFE_INTEGER f32 (f32.const -16777215))
  (global $~lib/builtins/f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
  (global $~lib/builtins/f32.EPSILON f32 (f32.const 1.1920928955078125e-07))
+ (global $~lib/builtins/f64.NaN f64 (f64.const nan:0x8000000000000))
  (global $~lib/number/F64.NaN f64 (f64.const nan:0x8000000000000))
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
@@ -2498,19 +2500,16 @@
    i32.lt_s
    drop
    local.get $4
-   local.get $3
-   i32.add
    local.get $5
+   i32.sub
+   local.get $3
+   i32.sub
+   i32.const 0
+   local.get $3
+   i32.const 1
+   i32.shl
+   i32.sub
    i32.le_u
-   if (result i32)
-    i32.const 1
-   else
-    local.get $5
-    local.get $3
-    i32.add
-    local.get $4
-    i32.le_u
-   end
    if
     local.get $5
     local.get $4

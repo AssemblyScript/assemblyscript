@@ -41,20 +41,24 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
 
+const dynrequire = typeof __webpack_require__ === "function"
+  ? __non_webpack_require__
+  : require;
+
 const WIN = process.platform === "win32";
 const EOL = WIN ? "\r\n" : "\n";
 const SEP = WIN ? "\\" : "/";
 
 // Sets up an extension with its definition counterpart and relevant regexes.
-function setupExtension(extension) {
-  if (!extension.startsWith(".")) extension = "." + extension;
+function setupExtension(ext) {
+  if (!ext.startsWith(".")) ext = "." + ext;
   return {
-    ext: extension,
-    ext_d: ".d" + extension,
-    re: new RegExp("\\" + extension + "$"),
-    re_d: new RegExp("\\.d\\" + extension + "$"),
-    re_except_d: new RegExp("^(?!.*\\.d\\" + extension + "$).*\\" + extension + "$"),
-    re_index: new RegExp("(?:^|[\\\\\\/])index\\" + extension + "$")
+    ext,
+    ext_d: ".d" + ext,
+    re: new RegExp("\\" + ext + "$"),
+    re_d: new RegExp("\\.d\\" + ext + "$"),
+    re_except_d: new RegExp("^(?!.*\\.d\\" + ext + "$).*\\" + ext + "$"),
+    re_index: new RegExp("(?:^|[\\\\\\/])index\\" + ext + "$")
   };
 }
 
@@ -62,7 +66,7 @@ const defaultExtension = setupExtension(".ts");
 
 // Proxy Binaryen's ready event
 Object.defineProperty(exports, "ready", {
-  get: function() { return binaryen.ready; }
+  get() { return binaryen.ready; }
 });
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
@@ -76,24 +80,21 @@ var isDev = false;
   try {
     assemblyscript = require("assemblyscript");
   } catch (e) {
-    function dynRequire(...args) {
-      return eval("require")(...args);
-    }
     try { // `asc` on the command line
-      assemblyscript = dynRequire("../dist/assemblyscript.js");
+      assemblyscript = dynrequire("../dist/assemblyscript.js");
     } catch (e) {
       try { // `asc` on the command line without dist files
-        dynRequire("ts-node").register({
+        dynrequire("ts-node").register({
           project: path.join(__dirname, "..", "src", "tsconfig.json"),
           skipIgnore: true,
           compilerOptions: { target: "ES2016" }
         });
-        dynRequire("../src/glue/js");
-        assemblyscript = dynRequire("../src");
+        dynrequire("../src/glue/js");
+        assemblyscript = dynrequire("../src");
         isDev = true;
       } catch (e_ts) {
         try { // `require("dist/asc.js")` in explicit browser tests
-          assemblyscript = dynRequire("./assemblyscript");
+          assemblyscript = dynrequire("./assemblyscript");
         } catch (e) {
           throw Error(e_ts.stack + "\n---\n" + e.stack);
         }
@@ -109,7 +110,7 @@ exports.isBundle = typeof BUNDLE_VERSION === "string";
 exports.isDev = isDev;
 
 /** AssemblyScript version. */
-exports.version = exports.isBundle ? BUNDLE_VERSION : require("../package.json").version;
+exports.version = exports.isBundle ? BUNDLE_VERSION : dynrequire("../package.json").version;
 
 /** Available CLI options. */
 exports.options = require("./asc.json");
@@ -129,16 +130,21 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if
   const bundled = {};
   find
     .files(libDir, defaultExtension.re_except_d)
-    .forEach(file => bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
+    .forEach(file => {
+      bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8");
+    });
   return bundled;
 })();
 
 /** Bundled definition files. */
 exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : (() => { // set up if not a bundle
-  const stdDir = path.join(__dirname, "..", "std");
+  const readDefinition = name => fs.readFileSync(
+    path.join(__dirname, "..", "std", name, "index" + defaultExtension.ext_d),
+    "utf8"
+  );
   return {
-    "assembly": fs.readFileSync(path.join(stdDir, "assembly", "index" + defaultExtension.ext_d), "utf8"),
-    "portable": fs.readFileSync(path.join(stdDir, "portable", "index" + defaultExtension.ext_d), "utf8")
+    assembly: readDefinition("assembly"),
+    portable: readDefinition("portable")
   };
 })();
 
@@ -159,7 +165,9 @@ exports.compileString = (sources, options) => {
     if (opt && opt.type === "b") {
       if (val) argv.push("--" + key);
     } else {
-      if (Array.isArray(val)) val.forEach(val => argv.push("--" + key, String(val)));
+      if (Array.isArray(val)) {
+        val.forEach(val => { argv.push("--" + key, String(val)); });
+      }
       else argv.push("--" + key, String(val));
     }
   });
@@ -167,7 +175,7 @@ exports.compileString = (sources, options) => {
     stdout: output.stdout,
     stderr: output.stderr,
     readFile: name => Object.prototype.hasOwnProperty.call(sources, name) ? sources[name] : null,
-    writeFile: (name, contents) => output[name] = contents,
+    writeFile: (name, contents) => { output[name] = contents; },
     listFiles: () => []
   });
   return output;
@@ -417,11 +425,11 @@ exports.main = function main(argv, options, callback) {
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
       if (!tsNodeRegistered && filename.endsWith(".ts")) { // ts-node requires .ts specifically
-        require("ts-node").register({ transpileOnly: true, skipProject: true, compilerOptions: { target: "ES2016" } });
+        dynrequire("ts-node").register({ transpileOnly: true, skipProject: true, compilerOptions: { target: "ES2016" } });
         tsNodeRegistered = true;
       }
       try {
-        const classOrModule = require(require.resolve(filename, { paths: [baseDir, process.cwd()] }));
+        const classOrModule = dynrequire(dynrequire.resolve(filename, { paths: [baseDir, process.cwd()] }));
         if (typeof classOrModule === "function") {
           Object.assign(classOrModule.prototype, {
             program,
@@ -644,7 +652,7 @@ exports.main = function main(argv, options, callback) {
     let sourcePath = String(filename).replace(/\\/g, "/").replace(extension.re, "").replace(/[\\/]$/, "");
 
     // Setting the path to relative path
-    sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath) : sourcePath;
+    sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath).replace(/\\/g, "/") : sourcePath;
 
     // Try entryPath.ext, then entryPath/index.ext
     let sourceText = readFile(sourcePath + extension.ext, baseDir);
@@ -953,11 +961,10 @@ exports.main = function main(argv, options, callback) {
         filename = path.basename(filename);
         const outputFilePath = path.join(dirPath, filename);
         if (!fs.existsSync(dirPath)) mkdirp(dirPath);
-        if (typeof contents === "string") {
-          fs.writeFileSync(outputFilePath, contents, { encoding: "utf8" } );
-        } else {
-          fs.writeFileSync(outputFilePath, contents);
-        }
+        fs.writeFileSync(
+          outputFilePath, contents,
+          typeof contents === "string" ? { encoding: "utf8" } : void 0
+        );
       });
       return true;
     } catch (e) {
@@ -970,7 +977,8 @@ exports.main = function main(argv, options, callback) {
     try {
       stats.readCount++;
       stats.readTime += measure(() => {
-        files = fs.readdirSync(path.join(baseDir, dirname)).filter(file => extension.re_except_d.test(file));
+        files = fs.readdirSync(path.join(baseDir, dirname))
+          .filter(file => extension.re_except_d.test(file));
       });
       return files;
     } catch (e) {
@@ -1111,9 +1119,7 @@ exports.formatTime = formatTime;
 
 /** Formats and prints out the contents of a set of stats. */
 function printStats(stats, output) {
-  function format(time, count) {
-    return pad(formatTime(time), 12) + "  n=" + count;
-  }
+  const format = (time, count) => pad(formatTime(time), 12) + "  n=" + count;
   (output || process.stdout).write([
     "I/O Read   : " + format(stats.readTime, stats.readCount),
     "I/O Write  : " + format(stats.writeTime, stats.writeCount),
@@ -1130,8 +1136,8 @@ function printStats(stats, output) {
 exports.printStats = printStats;
 
 var allocBuffer = typeof global !== "undefined" && global.Buffer
-  ? global.Buffer.allocUnsafe || function(len) { return new global.Buffer(len); }
-  : function(len) { return new Uint8Array(len); };
+  ? global.Buffer.allocUnsafe || (len => new global.Buffer(len))
+  : len => new Uint8Array(len);
 
 /** Creates a memory stream that can be used in place of stdout/stderr. */
 function createMemoryStream(fn) {

@@ -5083,19 +5083,16 @@
    i32.lt_s
    drop
    local.get $4
-   local.get $3
-   i32.add
    local.get $5
+   i32.sub
+   local.get $3
+   i32.sub
+   i32.const 0
+   local.get $3
+   i32.const 1
+   i32.shl
+   i32.sub
    i32.le_u
-   if (result i32)
-    i32.const 1
-   else
-    local.get $5
-    local.get $3
-    i32.add
-    local.get $4
-    i32.le_u
-   end
    if
     local.get $5
     local.get $4
@@ -19024,6 +19021,19 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  local.get $1
+  f32.abs
+  f32.const 1
+  f32.eq
+  if
+   local.get $0
+   local.get $0
+   f32.trunc
+   f32.sub
+   local.get $0
+   f32.copysign
+   return
+  end
   local.get $0
   i32.reinterpret_f32
   local.set $2
@@ -19438,6 +19448,19 @@
   (local $9 i64)
   (local $10 i32)
   (local $11 i64)
+  local.get $1
+  f64.abs
+  f64.const 1
+  f64.eq
+  if
+   local.get $0
+   local.get $0
+   f64.trunc
+   f64.sub
+   local.get $0
+   f64.copysign
+   return
+  end
   local.get $0
   i64.reinterpret_f64
   local.set $2

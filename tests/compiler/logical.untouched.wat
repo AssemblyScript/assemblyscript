@@ -1600,8 +1600,8 @@
   local.get $2
  )
  (func $start:logical
-  (local $0 f64)
-  (local $1 f32)
+  (local $0 f32)
+  (local $1 f64)
   (local $2 i32)
   (local $3 i32)
   i32.const 0
@@ -1612,13 +1612,13 @@
   end
   drop
   f64.const 0
-  local.tee $0
-  f64.const 0
-  f64.ne
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.reinterpret_f64
+  i64.const 1
+  i64.shl
+  i64.const 2
+  i64.sub
+  i64.const -9007199254740994
+  i64.le_u
   if (result i32)
    unreachable
   else
@@ -1633,13 +1633,13 @@
   end
   drop
   f64.const 1
-  local.tee $0
-  f64.const 0
-  f64.ne
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.reinterpret_f64
+  i64.const 1
+  i64.shl
+  i64.const 2
+  i64.sub
+  i64.const -9007199254740994
+  i64.le_u
   if (result i32)
    i32.const 1
   else
@@ -1659,25 +1659,25 @@
   end
   drop
   f64.const 1
-  local.tee $0
-  f64.const 0
-  f64.ne
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.reinterpret_f64
+  i64.const 1
+  i64.shl
+  i64.const 2
+  i64.sub
+  i64.const -9007199254740994
+  i64.le_u
   if (result f64)
    f64.const 2
   else
    f64.const 1
   end
-  local.tee $0
-  f64.const 0
-  f64.ne
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.reinterpret_f64
+  i64.const 1
+  i64.shl
+  i64.const 2
+  i64.sub
+  i64.const -9007199254740994
+  i64.le_u
   if (result i32)
    i32.const 1
   else
@@ -1765,13 +1765,13 @@
    unreachable
   end
   f32.const 1
-  local.tee $1
-  f32.const 0
-  f32.ne
-  local.get $1
-  local.get $1
-  f32.eq
-  i32.and
+  i32.reinterpret_f32
+  i32.const 1
+  i32.shl
+  i32.const 2
+  i32.sub
+  i32.const -16777218
+  i32.le_u
   if (result f32)
    f32.const 2
   else
@@ -1791,13 +1791,13 @@
    unreachable
   end
   f32.const 0
-  local.tee $1
-  f32.const 0
-  f32.ne
-  local.get $1
-  local.get $1
-  f32.eq
-  i32.and
+  i32.reinterpret_f32
+  i32.const 1
+  i32.shl
+  i32.const 2
+  i32.sub
+  i32.const -16777218
+  i32.le_u
   if (result f32)
    f32.const 0
   else
@@ -1817,13 +1817,13 @@
    unreachable
   end
   f64.const 1
-  local.tee $0
-  f64.const 0
-  f64.ne
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.reinterpret_f64
+  i64.const 1
+  i64.shl
+  i64.const 2
+  i64.sub
+  i64.const -9007199254740994
+  i64.le_u
   if (result f64)
    f64.const 2
   else
@@ -1843,13 +1843,13 @@
    unreachable
   end
   f64.const 0
-  local.tee $0
-  f64.const 0
-  f64.ne
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.reinterpret_f64
+  i64.const 1
+  i64.shl
+  i64.const 2
+  i64.sub
+  i64.const -9007199254740994
+  i64.le_u
   if (result f64)
    f64.const 0
   else
@@ -1869,13 +1869,13 @@
    unreachable
   end
   f32.const nan:0x400000
-  local.tee $1
-  f32.const 0
-  f32.ne
-  local.get $1
-  local.get $1
-  f32.eq
-  i32.and
+  i32.reinterpret_f32
+  i32.const 1
+  i32.shl
+  i32.const 2
+  i32.sub
+  i32.const -16777218
+  i32.le_u
   if (result f32)
    f32.const nan:0x400000
   else
@@ -1895,13 +1895,13 @@
    unreachable
   end
   f32.const 1
-  local.tee $1
-  f32.const 0
-  f32.ne
-  local.get $1
-  local.get $1
-  f32.eq
-  i32.and
+  i32.reinterpret_f32
+  i32.const 1
+  i32.shl
+  i32.const 2
+  i32.sub
+  i32.const -16777218
+  i32.le_u
   if (result f32)
    f32.const 1
   else
@@ -1921,13 +1921,13 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  local.tee $0
-  f64.const 0
-  f64.ne
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.reinterpret_f64
+  i64.const 1
+  i64.shl
+  i64.const 2
+  i64.sub
+  i64.const -9007199254740994
+  i64.le_u
   if (result f64)
    f64.const nan:0x8000000000000
   else
@@ -1947,13 +1947,13 @@
    unreachable
   end
   f64.const 1
-  local.tee $0
-  f64.const 0
-  f64.ne
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.reinterpret_f64
+  i64.const 1
+  i64.shl
+  i64.const 2
+  i64.sub
+  i64.const -9007199254740994
+  i64.le_u
   if (result f64)
    f64.const 1
   else
@@ -1973,13 +1973,13 @@
    unreachable
   end
   f32.const 1
-  local.tee $1
-  f32.const 0
-  f32.ne
-  local.get $1
-  local.get $1
-  f32.eq
-  i32.and
+  i32.reinterpret_f32
+  i32.const 1
+  i32.shl
+  i32.const 2
+  i32.sub
+  i32.const -16777218
+  i32.le_u
   if (result f32)
    f32.const nan:0x400000
   else
@@ -1987,8 +1987,8 @@
   end
   global.set $logical/f
   global.get $logical/f
-  local.tee $1
-  local.get $1
+  local.tee $0
+  local.get $0
   f32.ne
   i32.eqz
   if
@@ -2000,13 +2000,13 @@
    unreachable
   end
   f32.const nan:0x400000
-  local.tee $1
-  f32.const 0
-  f32.ne
-  local.get $1
-  local.get $1
-  f32.eq
-  i32.and
+  i32.reinterpret_f32
+  i32.const 1
+  i32.shl
+  i32.const 2
+  i32.sub
+  i32.const -16777218
+  i32.le_u
   if (result f32)
    f32.const 1
   else
@@ -2014,8 +2014,8 @@
   end
   global.set $logical/f
   global.get $logical/f
-  local.tee $1
-  local.get $1
+  local.tee $0
+  local.get $0
   f32.ne
   i32.eqz
   if
@@ -2027,13 +2027,13 @@
    unreachable
   end
   f64.const 1
-  local.tee $0
-  f64.const 0
-  f64.ne
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.reinterpret_f64
+  i64.const 1
+  i64.shl
+  i64.const 2
+  i64.sub
+  i64.const -9007199254740994
+  i64.le_u
   if (result f64)
    f64.const nan:0x8000000000000
   else
@@ -2041,8 +2041,8 @@
   end
   global.set $logical/F
   global.get $logical/F
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   f64.ne
   i32.eqz
   if
@@ -2054,13 +2054,13 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  local.tee $0
-  f64.const 0
-  f64.ne
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.reinterpret_f64
+  i64.const 1
+  i64.shl
+  i64.const 2
+  i64.sub
+  i64.const -9007199254740994
+  i64.le_u
   if (result f64)
    f64.const 1
   else
@@ -2068,8 +2068,8 @@
   end
   global.set $logical/F
   global.get $logical/F
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   f64.ne
   i32.eqz
   if

@@ -75,24 +75,30 @@ Object.defineProperties(
 Object.defineProperties(
   globalScope["f32"] = function f32(value) { return Math.fround(value); },
   {
-    "EPSILON":   { value: Math.fround(1.1920929e-07), writable: false },
-    "MIN_VALUE": { value: Math.fround(1.4012985e-45), writable: false },
-    "MAX_VALUE": { value: Math.fround(3.4028235e+38), writable: false },
-    "MIN_NORMAL_VALUE":  { value:  Math.fround(1.17549435e-38), writable: false },
+    "EPSILON":   { value: 1.1920928955078125e-07, writable: false },
+    "MIN_VALUE": { value: 1.4012984643248170e-45, writable: false },
+    "MAX_VALUE": { value: 3.4028234663852886e+38, writable: false },
+    "MIN_NORMAL_VALUE":  { value:  1.1754943508222875e-38, writable: false },
     "MIN_SAFE_INTEGER":  { value: -16777215, writable: false },
-    "MAX_SAFE_INTEGER":  { value:  16777215, writable: false }
+    "MAX_SAFE_INTEGER":  { value:  16777215, writable: false },
+    "POSITIVE_INFINITY": { value:  Infinity, writable: false },
+    "NEGATIVE_INFINITY": { value: -Infinity, writable: false },
+    "NaN": { value: NaN, writable: false }
   }
 );
 
 Object.defineProperties(
   globalScope["f64"] = function f64(value) { return +value; },
   {
-    "EPSILON":   { value: 2.2204460492503131e-16,  writable: false },
+    "EPSILON":   { value: 2.2204460492503131e-016, writable: false },
     "MIN_VALUE": { value:                  5e-324, writable: false },
     "MAX_VALUE": { value: 1.7976931348623157e+308, writable: false },
-    "MIN_NORMAL_VALUE":  { value: 2.2250738585072014e-308 , writable: false },
+    "MIN_NORMAL_VALUE":  { value:  2.2250738585072014e-308, writable: false },
     "MIN_SAFE_INTEGER":  { value: -9007199254740991, writable: false },
-    "MAX_SAFE_INTEGER":  { value:  9007199254740991, writable: false }
+    "MAX_SAFE_INTEGER":  { value:  9007199254740991, writable: false },
+    "POSITIVE_INFINITY": { value:  Infinity, writable: false },
+    "NEGATIVE_INFINITY": { value: -Infinity, writable: false },
+    "NaN": { value: NaN, writable: false }
   }
 );
 

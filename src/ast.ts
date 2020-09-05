@@ -1580,10 +1580,10 @@ export class Source extends Node {
   /** Cached line starts. */
   private lineCache: i32[] | null = null;
 
-  /** Rememberd column number. */
-  private lineColumn: i32 = 0;
+  /** Remembered column number. */
+  private lineColumn: i32 = 1;
 
-  /** Determines the line number at the specified position. */
+  /** Determines the line number at the specified position. Starts at `1`. */
   lineAt(pos: i32): i32 {
     assert(pos >= 0 && pos < 0x7fffffff);
     var lineCache = this.lineCache;
@@ -1612,7 +1612,7 @@ export class Source extends Node {
     return assert(0);
   }
 
-  /** Gets the column number at the last position queried with `lineAt`. */
+  /** Gets the column number at the last position queried with `lineAt`. Starts at `1`. */
   columnAt(): i32 {
     return this.lineColumn;
   }

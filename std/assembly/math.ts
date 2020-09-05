@@ -63,12 +63,13 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
 /** @internal */
 // @ts-ignore: decorator
 @inline
-function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
+function expo2(x: f64, sign: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
   const                       // see: musl/src/math/__expo2.c
     k    = <u32>2043,
     kln2 = reinterpret<f64>(0x40962066151ADD8B); // 0x1.62066151add8bp+10
   var scale = reinterpret<f64>(<u64>((<u32>0x3FF + k / 2) << 20) << 32);
-  return NativeMath.exp(x - kln2) * scale * scale;
+  // in directed rounding correct sign before rounding or overflow is important
+  return NativeMath.exp(x - kln2) * (sign * scale) * scale;
 }
 
 /** @internal */
@@ -759,7 +760,7 @@ export namespace NativeMath {
       t = exp(x);
       return 0.5 * (t + 1 / t);
     }
-    t = expo2(x);
+    t = expo2(x, 1);
     return t;
   }
 
@@ -1470,18 +1471,16 @@ export namespace NativeMath {
     var u = reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF;
     var absx = reinterpret<f64>(u);
     var w = <u32>(u >> 32);
-    var t: f64;
     var h = builtin_copysign(0.5, x);
     if (w < 0x40862E42) {
-      t = expm1(absx);
+      let t = expm1(absx);
       if (w < 0x3FF00000) {
         if (w < 0x3FF00000 - (26 << 20)) return x;
         return h * (2 * t - t * t / (t + 1));
       }
       return h * (t + t / (t + 1));
     }
-    t = 2 * h * expo2(absx);
-    return t;
+    return expo2(absx, 2 * h);
   }
 
   // @ts-ignore: decorator
@@ -1568,6 +1567,12 @@ export namespace NativeMath {
   }
 
   export function mod(x: f64, y: f64): f64 { // see: musl/src/math/fmod.c
+    if (builtin_abs<f64>(y) == 1.0) {
+      // x % 1, x % -1  ==>  sign(x) * abs(x - 1.0 * trunc(x / 1.0))
+      // TODO: move this rule to compiler's optimization pass.
+      // It could be apply for any x % C_pot, where "C_pot" is pow of two const.
+      return builtin_copysign<f64>(x - builtin_trunc<f64>(x), x);
+    }
     var ux = reinterpret<u64>(x);
     var uy = reinterpret<u64>(y);
     var ex = <i64>(ux >> 52 & 0x7FF);
@@ -1760,12 +1765,13 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
 
 // @ts-ignore: decorator
 @inline
-function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
+function expo2f(x: f32, sign: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   const                                // see: musl/src/math/__expo2f.c
     k    = <u32>235,
     kln2 = reinterpret<f32>(0x4322E3BC); // 0x1.45c778p+7f
   var scale = reinterpret<f32>(<u32>(0x7F + (k >> 1)) << 23);
-  return NativeMathf.exp(x - kln2) * scale * scale;
+  // in directed rounding correct sign before rounding or overflow is important
+  return NativeMathf.exp(x - kln2) * (sign * scale) * scale;
 }
 
 // @ts-ignore: decorator
@@ -2253,7 +2259,7 @@ export namespace NativeMathf {
       // return 0.5 * (t + 1 / t);
       return 0.5 * t + 0.5 / t;
     }
-    return expo2f(x);
+    return expo2f(x, 1);
   }
 
   // @ts-ignore: decorator
@@ -2758,18 +2764,16 @@ export namespace NativeMathf {
   export function sinh(x: f32): f32 { // see: musl/src/math/sinhf.c
     var u = reinterpret<u32>(x) & 0x7FFFFFFF;
     var absx = reinterpret<f32>(u);
-    var t: f32;
     var h = builtin_copysign<f32>(0.5, x);
     if (u < 0x42B17217) {
-      t = expm1(absx);
+      let t = expm1(absx);
       if (u < 0x3F800000) {
         if (u < 0x3F800000 - (12 << 23)) return x;
         return h * (2 * t - t * t / (t + 1));
       }
       return h * (t + t / (t + 1));
     }
-    t = 2 * h * expo2f(absx);
-    return t;
+    return expo2f(absx, 2 * h);
   }
 
   // @ts-ignore: decorator
@@ -2873,6 +2877,12 @@ export namespace NativeMathf {
   }
 
   export function mod(x: f32, y: f32): f32 { // see: musl/src/math/fmodf.c
+    if (builtin_abs<f32>(y) == 1.0) {
+      // x % 1, x % -1  ==>  sign(x) * abs(x - 1.0 * trunc(x / 1.0))
+      // TODO: move this rule to compiler's optimization pass.
+      // It could be apply for any x % C_pot, where "C_pot" is pow of two const.
+      return builtin_copysign<f32>(x - builtin_trunc<f32>(x), x);
+    }
     var ux = reinterpret<u32>(x);
     var uy = reinterpret<u32>(y);
     var ex = <i32>(ux >> 23 & 0xFF);

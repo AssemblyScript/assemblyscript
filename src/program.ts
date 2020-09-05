@@ -1053,7 +1053,7 @@ export class Program extends DiagnosticEmitter {
             let localName = localIdentifier.text;
             localFile.add(
               localName,
-              foreignFile.asImportedNamespace(
+              foreignFile.asAliasNamespace(
                 localName,
                 localFile,
                 localIdentifier
@@ -2893,6 +2893,8 @@ export class File extends Element {
   exportsStar: File[] | null = null;
   /** Top-level start function of this file. */
   startFunction!: Function;
+  /** Array of `import * as X` alias namespaces of this file. */
+  aliasNamespaces: Array<Namespace> = new Array<Namespace>();
 
   /** Constructs a new file. */
   constructor(
@@ -2962,6 +2964,12 @@ export class File extends Element {
     if (!exports) this.exports = exports = new Map();
     exports.set(name, element);
     if (this.source.sourceKind == SourceKind.LIBRARY_ENTRY) this.program.ensureGlobal(name, element);
+
+    // Also, add to the namespaces that capture our exports
+    for(let i = 0; i < this.aliasNamespaces.length; i++) {
+      let ns = this.aliasNamespaces[i];
+      ns.add(name, element);
+    }
   }
 
   /** Ensures that another file is a re-export of this file. */
@@ -2987,12 +2995,20 @@ export class File extends Element {
   }
 
   /** Creates an imported namespace from this file. */
-  asImportedNamespace(name: string, parent: Element, localIdentifier: IdentifierExpression): Namespace {
+  asAliasNamespace(
+    name: string, 
+    parent: Element, 
+    localIdentifier: IdentifierExpression
+  ): Namespace {
     var declaration = this.program.makeNativeNamespaceDeclaration(name);
     declaration.name = localIdentifier;
     var ns = new Namespace(name, parent, declaration);
     ns.set(CommonFlags.SCOPED);
     this.copyExportsToNamespace(ns);
+    // NOTE: Some exports are still queued, and can't yet be added here,
+    // so we remember all the alias namespaces and add to them as well
+    // when adding an element to the file.
+    this.aliasNamespaces.push(ns);
     return ns;
   }
 
@@ -3611,7 +3627,7 @@ export class Function extends TypedElement {
           range.debugInfoRef,
           source.debugInfoIndex,
           source.lineAt(range.start),
-          source.columnAt()
+          source.columnAt() - 1 // source maps are 0-based
         );
       }
     }
