@@ -2898,7 +2898,7 @@ function builtin_call_indirect(ctx: BuiltinContext): ExpressionRef {
   } else {
     returnType = ctx.contextualType;
   }
-  var indexArg = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
+  var functionInstance = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
   var numOperands = operands.length - 1;
   var operandExprs = new Array<ExpressionRef>(numOperands);
   var nativeParamTypes = new Array<NativeType>(numOperands);
@@ -2907,7 +2907,7 @@ function builtin_call_indirect(ctx: BuiltinContext): ExpressionRef {
     nativeParamTypes[i] = compiler.currentType.toNativeType();
   }
   compiler.currentType = returnType;
-  return module.call_indirect(indexArg, operandExprs, createType(nativeParamTypes), returnType.toNativeType());
+  return module.call_indirect(functionInstance, operandExprs, createType(nativeParamTypes), returnType.toNativeType());
 }
 builtins.set(BuiltinNames.call_indirect, builtin_call_indirect);
 
@@ -2997,7 +2997,7 @@ function builtin_function_call(ctx: BuiltinContext): ExpressionRef {
     compiler.currentType = returnType;
     return compiler.module.unreachable();
   }
-  var indexArg = compiler.compileExpression(assert(ctx.thisOperand), ftype, Constraints.CONV_IMPLICIT);
+  var functionInstance = compiler.compileExpression(assert(ctx.thisOperand), ftype, Constraints.CONV_IMPLICIT);
   var thisOperand = assert(ctx.operands.shift());
   var thisType = signature.thisType;
   var thisArg: usize = 0;
@@ -3010,7 +3010,7 @@ function builtin_function_call(ctx: BuiltinContext): ExpressionRef {
     );
     return compiler.module.unreachable();
   }
-  return compiler.compileCallIndirect(signature, indexArg, ctx.operands, ctx.reportNode, thisArg, ctx.contextualType == Type.void);
+  return compiler.compileCallIndirect(signature, functionInstance, ctx.operands, ctx.reportNode, thisArg, ctx.contextualType == Type.void);
 }
 function_builtins.set("call", builtin_function_call);
 

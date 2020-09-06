@@ -6668,7 +6668,7 @@ export class Compiler extends DiagnosticEmitter {
     var thisExpression = this.resolver.currentThisExpression;
 
     var signature: Signature | null;
-    var indexArg: ExpressionRef;
+    var functionInstance: ExpressionRef;
     switch (target.kind) {
 
       // direct call: concrete function
@@ -6708,9 +6708,9 @@ export class Compiler extends DiagnosticEmitter {
         signature = local.type.signatureReference;
         if (signature) {
           if (local.is(CommonFlags.INLINED)) {
-            indexArg = module.i32(i64_low(local.constantIntegerValue));
+            functionInstance = module.i32(i64_low(local.constantIntegerValue));
           } else {
-            indexArg = module.local_get(local.index, NativeType.I32);
+            functionInstance = module.local_get(local.index, NativeType.I32);
           }
           break;
         }
@@ -6724,7 +6724,7 @@ export class Compiler extends DiagnosticEmitter {
         let global = <Global>target;
         signature = global.type.signatureReference;
         if (signature) {
-          indexArg = module.global_get(global.internalName, global.type.toNativeType());
+          functionInstance = module.global_get(global.internalName, global.type.toNativeType());
           break;
         }
         this.error(
@@ -6740,7 +6740,7 @@ export class Compiler extends DiagnosticEmitter {
         if (signature) {
           let fieldParent = fieldInstance.parent;
           assert(fieldParent.kind == ElementKind.CLASS);
-          indexArg = module.load(4, false,
+          functionInstance = module.load(4, false,
             this.compileExpression(
               assert(thisExpression),
               (<Class>fieldParent).type,
@@ -6775,7 +6775,7 @@ export class Compiler extends DiagnosticEmitter {
             Constraints.CONV_IMPLICIT | Constraints.IS_THIS
           );
         }
-        indexArg = this.compileCallDirect(getterInstance, [], expression.expression, thisArg);
+        functionInstance = this.compileCallDirect(getterInstance, [], expression.expression, thisArg);
         signature = this.currentType.signatureReference;
         if (!signature) {
           this.error(
@@ -6792,7 +6792,7 @@ export class Compiler extends DiagnosticEmitter {
         if (typeArguments !== null && typeArguments.length > 0) {
           let ftype = typeArguments[0];
           signature = ftype.getSignature();
-          indexArg = this.compileExpression(expression.expression, ftype, Constraints.CONV_IMPLICIT);
+          functionInstance = this.compileExpression(expression.expression, ftype, Constraints.CONV_IMPLICIT);
           break;
         }
         // fall-through
@@ -6817,7 +6817,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     return this.compileCallIndirect(
       assert(signature), // FIXME: bootstrap can't see this yet
-      indexArg,
+      functionInstance,
       expression.args,
       expression,
       0,
@@ -7973,7 +7973,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Compiles an indirect call using an index argument and a signature. */
   compileCallIndirect(
     signature: Signature,
-    indexArg: ExpressionRef,
+    functionInstance: ExpressionRef,
     argumentExpressions: Expression[],
     reportNode: Node,
     thisArg: ExpressionRef = 0,
@@ -8004,13 +8004,13 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallIndirect(signature, indexArg, reportNode, operands, immediatelyDropped);
+    return this.makeCallIndirect(signature, functionInstance, reportNode, operands, immediatelyDropped);
   }
 
-  /** Creates an indirect call to the function at `indexArg` in the function table. */
+  /** Creates an indirect call to the function at `functionInstance` in the function table. */
   makeCallIndirect(
     signature: Signature,
-    indexArg: ExpressionRef,
+    functionInstance: ExpressionRef,
     reportNode: Node,
     operands: ExpressionRef[] | null = null,
     immediatelyDropped: bool = false,
@@ -8044,7 +8044,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (this.options.isWasm64) {
-      indexArg = module.unary(UnaryOp.WrapI64, indexArg);
+      functionInstance = module.unary(UnaryOp.WrapI64, functionInstance);
     }
 
     // We might be calling a varargs stub here, even if all operands have been
@@ -8052,27 +8052,27 @@ export class Compiler extends DiagnosticEmitter {
     // into the index argument, which becomes executed last after any operands.
     this.ensureArgumentsLength();
     var nativeSizeType = this.options.nativeSizeType;
-    if (getSideEffects(indexArg) & SideEffects.WritesGlobal) {
+    if (getSideEffects(functionInstance) & SideEffects.WritesGlobal) {
       let flow = this.currentFlow;
-      let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(indexArg));
-      indexArg = module.block(null, [
-        module.local_set(temp.index, indexArg),
+      let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(functionInstance));
+      functionInstance = module.block(null, [
+        module.local_set(temp.index, functionInstance),
         module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
         module.local_get(temp.index, nativeSizeType)
       ], nativeSizeType);
       flow.freeTempLocal(temp);
     } else { // simplify
-      indexArg = module.block(null, [
+      functionInstance = module.block(null, [
         module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
-        indexArg
+        functionInstance
       ], nativeSizeType);
     }
     var expr = module.call_indirect(
       nativeSizeType == NativeType.I64
         ? module.unary(UnaryOp.WrapI64,
-            module.load(8, false, indexArg, NativeType.I64)
+            module.load(8, false, functionInstance, NativeType.I64)
           )
-        : module.load(4, false, indexArg, NativeType.I32),
+        : module.load(4, false, functionInstance, NativeType.I32),
       operands,
       signature.nativeParams,
       signature.nativeResults
@@ -8148,6 +8148,7 @@ export class Compiler extends DiagnosticEmitter {
     contextualSignature: Signature | null,
     constraints: Constraints
   ): ExpressionRef {
+    console.log("compiling function expression");
     var declaration = expression.declaration.clone(); // generic contexts can have multiple
     assert(!declaration.typeParameters); // function expression cannot be generic
     var flow = this.currentFlow;
