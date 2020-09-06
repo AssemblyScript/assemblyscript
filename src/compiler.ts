@@ -2015,7 +2015,7 @@ export class Compiler extends DiagnosticEmitter {
     // Create a new instance of the function object in memory
     var rtInstance = assert(this.resolver.resolveClass(program.functionPrototype, [ instance.type ]));
     var currentType = this.currentType;
-    var functionInstanceExpr = this.makeAllocation(rtInstance)
+    var functionInstanceExpr = this.makeAllocation(rtInstance);
     this.currentType = currentType;
 
     // Put the address of that instance into a local
@@ -2023,10 +2023,13 @@ export class Compiler extends DiagnosticEmitter {
     var functionInstanceSetExpr = module.local_set(functionInstanceLocal.index, functionInstanceExpr);
 
     // Copy the function index from the static runtime instance
+    var rtInstanceAddrExpr = options.isWasm64 ?
+      module.i64(i64_low(rtInstanceOffset), i64_high(rtInstanceOffset)) :
+      module.i32(i64_low(rtInstanceOffset));
     var storeIndexExpr = module.store(
       4,
       module.local_get(functionInstanceLocal.index, options.nativeSizeType),
-      module.load(4, false, module.i32(i64_low(rtInstanceOffset)), NativeType.I32),
+      module.load(4, false, rtInstanceAddrExpr, NativeType.I32),
       NativeType.I32,
     );
 
@@ -2041,12 +2044,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // Return the pointer to the function instance
     return module.block(null, [
-        functionInstanceSetExpr,
-        storeIndexExpr,
-        writeEnvExpr,
-        module.local_get(functionInstanceLocal.index, options.nativeSizeType)
-      ], options.nativeSizeType
-    )
+      functionInstanceSetExpr,
+      storeIndexExpr,
+      writeEnvExpr,
+      module.local_get(functionInstanceLocal.index, options.nativeSizeType)
+    ], options.nativeSizeType
+    );
   }
 
   // === Statements ===============================================================================
