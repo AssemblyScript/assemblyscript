@@ -8148,7 +8148,6 @@ export class Compiler extends DiagnosticEmitter {
     contextualSignature: Signature | null,
     constraints: Constraints
   ): ExpressionRef {
-    console.log("compiling function expression");
     var declaration = expression.declaration.clone(); // generic contexts can have multiple
     assert(!declaration.typeParameters); // function expression cannot be generic
     var flow = this.currentFlow;
