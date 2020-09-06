@@ -1,29 +1,19 @@
 name: Publish
 on:
-  push:
-    branches:
-    - master
+  schedule:
+  - cron: '0 0 * * *'
 jobs:
-  publish:
-    name: "Packages"
-    if: github.repository == 'DuncanUszkay1/assemblyscript'
+  release:
+    name: Packages
+    if: github.repository == 'AssemblyScript/assemblyscript'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
       with:
-        ref: release
+        ref: master
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: current
-    - name: Merge master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        git remote set-url origin "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-        git fetch origin
-        git merge origin/master
     - name: Install dependencies
       run: npm ci
     - name: Build distribution files
@@ -32,41 +22,18 @@ jobs:
         npm run build
     - name: Test distribution files
       run: npm test
-    - name: Set up version
-      run: |
-        VERSION=$(node -e "console.log(require('./package.json').version)")
-        git add --force dist/*
-        if git rev-parse v$VERSION >/dev/null 2>&1; then
-          VERSION=$VERSION-nightly.$(date "+%Y%m%d")
-          if git rev-parse v$VERSION >/dev/null 2>&1; then
-            echo "Nightly $VERSION does already exist."
-            exit 1
-          fi
-          echo ::set-env name=CHANNEL::nightly
-          echo "Committing nightly ($VERSION) ..."
-          git commit -m "Nightly v$VERSION"
-          npm version $VERSION --no-git-tag-version --force
-        else
-          echo ::set-env name=CHANNEL::latest
-          echo "Committing release ($VERSION) ..."
-          git commit --allow-empty -m "Release v$VERSION"
-        fi
-        echo ::set-env name=VERSION::$VERSION
-        cd lib/loader
-        npm version $VERSION --no-git-tag-version --force
-        cd ../..
-    - name: Create tag and push distribution files
-      run: |
-        git tag v$VERSION
-        git push origin release
-        git push origin v$VERSION
-    - name: Publish to npm
+    - name: Make semantic release
       env:
-        NPM_REGISTRY: "registry.npmjs.org"
-        NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # On success, semantic-release will update the version and publish,
+      # triggering the postversion script that'll update the loader's version
+      # as well. If nothing was published, the version will still be '0.0.0'.
       run: |
-        npm config set "//${NPM_REGISTRY}/:_authToken=${NPM_AUTH_TOKEN}"
-        npm publish --tag $CHANNEL
+        node node_modules/semantic-release/bin/semantic-release.js --unstable
         cd lib/loader
-        npm publish --tag $CHANNEL --access public
+        if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
+          npm config set "//registry.npmjs.org/:_authToken=${NPM_TOKEN}"
+          npm publish --access public
+        fi
         cd ../..
