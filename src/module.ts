@@ -1492,7 +1492,7 @@ export class Module {
       this.setAlwaysInlineMaxSize(12);
       this.setFlexibleInlineMaxSize(70);
       this.setOneCallerInlineMaxSize(200);
-      this.setAllowHeavyweight(optimizeLevel >= 3);
+      this.setAllowInliningFunctionsWithLoops(optimizeLevel >= 3);
     } else {
       this.setAlwaysInlineMaxSize(
         optimizeLevel == 0 && shrinkLevel >= 0
