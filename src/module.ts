@@ -1501,7 +1501,7 @@ export class Module {
       );
       this.setFlexibleInlineMaxSize(65);
       this.setOneCallerInlineMaxSize(80);
-      this.setAllowHeavyweight(false);
+      this.setAllowInliningFunctionsWithLoops(false);
     }
 
     // Pass order here differs substantially from Binaryen's defaults
