@@ -6668,7 +6668,7 @@ export class Compiler extends DiagnosticEmitter {
     var thisExpression = this.resolver.currentThisExpression;
 
     var signature: Signature | null;
-    var functionInstance: ExpressionRef;
+    var functionPointer: ExpressionRef;
     switch (target.kind) {
 
       // direct call: concrete function
@@ -6678,23 +6678,23 @@ export class Compiler extends DiagnosticEmitter {
           // builtins handle present respectively omitted type arguments on their own
           return this.compileCallExpressionBuiltin(functionPrototype, expression, contextualType);
         }
-        let functionInstance = this.resolver.maybeInferCall(expression, functionPrototype, flow);
-        if (!functionInstance) return this.module.unreachable();
-        target = functionInstance;
+        let functionPointer = this.resolver.maybeInferCall(expression, functionPrototype, flow);
+        if (!functionPointer) return this.module.unreachable();
+        target = functionPointer;
         // fall-through
       }
       case ElementKind.FUNCTION: {
-        let functionInstance = <Function>target;
+        let functionPointer = <Function>target;
         let thisArg: ExpressionRef = 0;
-        if (functionInstance.is(CommonFlags.INSTANCE)) {
+        if (functionPointer.is(CommonFlags.INSTANCE)) {
           thisArg = this.compileExpression(
             assert(thisExpression),
-            assert(functionInstance.signature.thisType),
+            assert(functionPointer.signature.thisType),
             Constraints.CONV_IMPLICIT | Constraints.IS_THIS
           );
         }
         return this.compileCallDirect(
-          functionInstance,
+          functionPointer,
           expression.args,
           expression,
           thisArg,
@@ -6708,9 +6708,9 @@ export class Compiler extends DiagnosticEmitter {
         signature = local.type.signatureReference;
         if (signature) {
           if (local.is(CommonFlags.INLINED)) {
-            functionInstance = module.i32(i64_low(local.constantIntegerValue));
+            functionPointer = module.i32(i64_low(local.constantIntegerValue));
           } else {
-            functionInstance = module.local_get(local.index, NativeType.I32);
+            functionPointer = module.local_get(local.index, NativeType.I32);
           }
           break;
         }
@@ -6724,7 +6724,7 @@ export class Compiler extends DiagnosticEmitter {
         let global = <Global>target;
         signature = global.type.signatureReference;
         if (signature) {
-          functionInstance = module.global_get(global.internalName, global.type.toNativeType());
+          functionPointer = module.global_get(global.internalName, global.type.toNativeType());
           break;
         }
         this.error(
@@ -6740,7 +6740,7 @@ export class Compiler extends DiagnosticEmitter {
         if (signature) {
           let fieldParent = fieldInstance.parent;
           assert(fieldParent.kind == ElementKind.CLASS);
-          functionInstance = module.load(4, false,
+          functionPointer = module.load(4, false,
             this.compileExpression(
               assert(thisExpression),
               (<Class>fieldParent).type,
@@ -6775,7 +6775,7 @@ export class Compiler extends DiagnosticEmitter {
             Constraints.CONV_IMPLICIT | Constraints.IS_THIS
           );
         }
-        functionInstance = this.compileCallDirect(getterInstance, [], expression.expression, thisArg);
+        functionPointer = this.compileCallDirect(getterInstance, [], expression.expression, thisArg);
         signature = this.currentType.signatureReference;
         if (!signature) {
           this.error(
@@ -6792,7 +6792,7 @@ export class Compiler extends DiagnosticEmitter {
         if (typeArguments !== null && typeArguments.length > 0) {
           let ftype = typeArguments[0];
           signature = ftype.getSignature();
-          functionInstance = this.compileExpression(expression.expression, ftype, Constraints.CONV_IMPLICIT);
+          functionPointer = this.compileExpression(expression.expression, ftype, Constraints.CONV_IMPLICIT);
           break;
         }
         // fall-through
@@ -6817,7 +6817,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     return this.compileCallIndirect(
       assert(signature), // FIXME: bootstrap can't see this yet
-      functionInstance,
+      functionPointer,
       expression.args,
       expression,
       0,
@@ -7973,7 +7973,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Compiles an indirect call using an index argument and a signature. */
   compileCallIndirect(
     signature: Signature,
-    functionInstance: ExpressionRef,
+    functionPointer: ExpressionRef,
     argumentExpressions: Expression[],
     reportNode: Node,
     thisArg: ExpressionRef = 0,
@@ -8004,13 +8004,13 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallIndirect(signature, functionInstance, reportNode, operands, immediatelyDropped);
+    return this.makeCallIndirect(signature, functionPointer, reportNode, operands, immediatelyDropped);
   }
 
   /** Creates an indirect call to the function at `functionInstance` in the function table. */
   makeCallIndirect(
     signature: Signature,
-    functionInstance: ExpressionRef,
+    functionPointer: ExpressionRef,
     reportNode: Node,
     operands: ExpressionRef[] | null = null,
     immediatelyDropped: bool = false,
@@ -8044,7 +8044,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (this.options.isWasm64) {
-      functionInstance = module.unary(UnaryOp.WrapI64, functionInstance);
+      functionPointer = module.unary(UnaryOp.WrapI64, functionPointer);
     }
 
     // We might be calling a varargs stub here, even if all operands have been
@@ -8052,27 +8052,27 @@ export class Compiler extends DiagnosticEmitter {
     // into the index argument, which becomes executed last after any operands.
     this.ensureArgumentsLength();
     var nativeSizeType = this.options.nativeSizeType;
-    if (getSideEffects(functionInstance) & SideEffects.WritesGlobal) {
+    if (getSideEffects(functionPointer) & SideEffects.WritesGlobal) {
       let flow = this.currentFlow;
-      let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(functionInstance));
-      functionInstance = module.block(null, [
-        module.local_set(temp.index, functionInstance),
+      let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(functionPointer));
+      functionPointer = module.block(null, [
+        module.local_set(temp.index, functionPointer),
         module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
         module.local_get(temp.index, nativeSizeType)
       ], nativeSizeType);
       flow.freeTempLocal(temp);
     } else { // simplify
-      functionInstance = module.block(null, [
+      functionPointer = module.block(null, [
         module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
-        functionInstance
+        functionPointer
       ], nativeSizeType);
     }
     var expr = module.call_indirect(
       nativeSizeType == NativeType.I64
         ? module.unary(UnaryOp.WrapI64,
-            module.load(8, false, functionInstance, NativeType.I64)
+            module.load(8, false, functionPointer, NativeType.I64)
           )
-        : module.load(4, false, functionInstance, NativeType.I32),
+        : module.load(4, false, functionPointer, NativeType.I32),
       operands,
       signature.nativeParams,
       signature.nativeResults

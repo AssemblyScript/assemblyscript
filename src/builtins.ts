@@ -2898,7 +2898,7 @@ function builtin_call_indirect(ctx: BuiltinContext): ExpressionRef {
   } else {
     returnType = ctx.contextualType;
   }
-  var functionInstance = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
+  var indexArg = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
   var numOperands = operands.length - 1;
   var operandExprs = new Array<ExpressionRef>(numOperands);
   var nativeParamTypes = new Array<NativeType>(numOperands);
@@ -2907,7 +2907,7 @@ function builtin_call_indirect(ctx: BuiltinContext): ExpressionRef {
     nativeParamTypes[i] = compiler.currentType.toNativeType();
   }
   compiler.currentType = returnType;
-  return module.call_indirect(functionInstance, operandExprs, createType(nativeParamTypes), returnType.toNativeType());
+  return module.call_indirect(indexArg, operandExprs, createType(nativeParamTypes), returnType.toNativeType());
 }
 builtins.set(BuiltinNames.call_indirect, builtin_call_indirect);
 
