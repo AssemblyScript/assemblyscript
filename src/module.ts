@@ -1434,12 +1434,12 @@ export class Module {
     binaryen._BinaryenSetOneCallerInlineMaxSize(size);
   }
 
-  getAllowHeavyweight(): bool {
-    return binaryen._BinaryenGetAllowHeavyweight();
+  getAllowInliningFunctionsWithLoops(): bool {
+    return binaryen._BinaryenGetAllowInliningFunctionsWithLoops();
   }
 
-  setAllowHeavyweight(allowHeavyweight: bool): void {
-    binaryen._BinaryenSetAllowHeavyweight(allowHeavyweight);
+  setAllowInliningFunctionsWithLoops(enabled: bool): void {
+    binaryen._BinaryenSetAllowInliningFunctionsWithLoops(enabled);
   }
 
   // meta (module)
