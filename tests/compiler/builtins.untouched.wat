@@ -1,9 +1,9 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -47,7 +47,9 @@
  (global $builtins/u (mut i32) (i32.const 0))
  (global $builtins/U (mut i64) (i64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
- (global $builtins/fn (mut i32) (i32.const 128))
+ (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
+ (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $builtins/fn (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
@@ -80,6 +82,7 @@
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
+ (global $~lib/heap/__heap_base i32 (i32.const 952))
  (export "memory" (memory $0))
  (export "test" (func $builtins/test))
  (start $~start)
@@ -88,15 +91,124 @@
   local.get $1
   i32.add
  )
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  memory.size
+  local.set $1
+  local.get $1
+  i32.const 16
+  i32.shl
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.gt_u
+  if
+   local.get $0
+   local.get $2
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const 65535
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.set $3
+   local.get $1
+   local.tee $4
+   local.get $3
+   local.tee $5
+   local.get $4
+   local.get $5
+   i32.gt_s
+   select
+   local.set $4
+   local.get $4
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $3
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $0
+  global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.const 1073741808
+  i32.gt_u
+  if
+   unreachable
+  end
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.set $2
+  local.get $0
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  local.tee $3
+  i32.const 16
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_u
+  select
+  local.set $5
+  local.get $2
+  local.get $5
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
+  local.get $2
+  i32.const 16
+  i32.sub
+  local.set $6
+  local.get $6
+  local.get $5
+  i32.store
+  i32.const 1
+  drop
+  local.get $6
+  i32.const 1
+  i32.store offset=4
+  local.get $6
+  local.get $1
+  i32.store offset=8
+  local.get $6
+  local.get $0
+  i32.store offset=12
+  local.get $2
+ )
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
+  local.get $0
+ )
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name (param $0 i32) (result i32)
   i32.const 32
- )
- (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
-  local.get $0
  )
  (func $~lib/rt/stub/__release (param $0 i32)
   nop
@@ -351,6 +463,7 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
   i32.const 1
   drop
   i32.const 0
@@ -1195,6 +1308,30 @@
   if
    unreachable
   end
+  global.get $~lib/heap/__heap_base
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
+  i32.const 8
+  i32.const 6
+  call $~lib/rt/stub/__alloc
+  local.set $0
+  local.get $0
+  i32.const 128
+  i32.load
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  call $~lib/rt/stub/__retain
+  global.set $builtins/fn
   i32.const 1
   i32.const 2
   i32.const 2
@@ -1231,7 +1368,7 @@
   end
   global.get $builtins/fn
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name
-  local.tee $0
+  local.tee $1
   i32.const 32
   call $~lib/string/String.__eq
   i32.eqz
@@ -1271,7 +1408,7 @@
   end
   global.get $builtins/fn
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString
-  local.tee $1
+  local.tee $6
   i32.const 160
   call $~lib/string/String.__eq
   i32.eqz
@@ -1838,19 +1975,17 @@
    unreachable
   end
   i32.const 0
-  local.set $6
-  i32.const 0
   local.set $7
-  i32.const 25
+  i32.const 0
   local.set $8
   i32.const 26
   local.set $9
-  i32.const 26
+  i32.const 27
   local.set $10
+  i32.const 27
+  local.set $11
   i32.const 240
   i32.const 5
-  local.get $6
-  f64.convert_i32_u
   local.get $7
   f64.convert_i32_u
   local.get $8
@@ -1859,9 +1994,11 @@
   f64.convert_i32_u
   local.get $10
   f64.convert_i32_u
+  local.get $11
+  f64.convert_i32_u
   call $~lib/builtins/trace
-  local.get $6
   local.get $7
+  local.get $8
   i32.eq
   i32.eqz
   if
@@ -1872,8 +2009,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $6
-  local.get $8
+  local.get $7
+  local.get $9
   i32.ne
   i32.eqz
   if
@@ -1884,8 +2021,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $8
-  i32.const 25
+  local.get $9
+  i32.const 26
   i32.eq
   i32.eqz
   if
@@ -1896,8 +2033,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $9
   local.get $10
+  local.get $11
   i32.eq
   i32.eqz
   if
@@ -2214,9 +2351,9 @@
   drop
   i32.const 1
   drop
-  local.get $0
-  call $~lib/rt/stub/__release
   local.get $1
+  call $~lib/rt/stub/__release
+  local.get $6
   call $~lib/rt/stub/__release
  )
  (func $builtins/test

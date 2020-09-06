@@ -2001,6 +2001,54 @@ export class Compiler extends DiagnosticEmitter {
     return i64_add(memorySegment.offset, i64_new(program.runtimeHeaderSize));
   }
 
+  // Required for Closures: Allocate a function object at Runtime which is a copy of the runtime function
+  // created statically in ensureRuntimeFunction but with a possibly non-null env that holds closed
+  // over context
+  // DuncanUszkay1 TODO: Populate the env with the closed over context
+  allocFunction(instance: Function): ExpressionRef {
+    var program = this.program;
+    var module = this.module;
+    var options = this.options;
+
+    var rtInstanceOffset = this.ensureRuntimeFunction(instance);
+
+    // Create a new instance of the function object in memory
+    var rtInstance = assert(this.resolver.resolveClass(program.functionPrototype, [ instance.type ]));
+    var currentType = this.currentType;
+    var functionInstanceExpr = this.makeAllocation(rtInstance)
+    this.currentType = currentType;
+
+    // Put the address of that instance into a local
+    var functionInstanceLocal = this.currentFlow.getTempLocal(options.usizeType);
+    var functionInstanceSetExpr = module.local_set(functionInstanceLocal.index, functionInstanceExpr);
+
+    // Copy the function index from the static runtime instance
+    var storeIndexExpr = module.store(
+      4,
+      module.local_get(functionInstanceLocal.index, options.nativeSizeType),
+      module.load(4, false, module.i32(i64_low(rtInstanceOffset)), NativeType.I32),
+      NativeType.I32,
+    );
+
+    // DuncanUszkay1 TODO: Add an environment for this particular function instance
+    var writeEnvExpr = module.store(
+      options.isWasm64 ? 8 : 4,
+      module.local_get(functionInstanceLocal.index, options.nativeSizeType),
+      options.isWasm64 ? module.i64(0) : module.i32(0),
+      options.nativeSizeType,
+      4
+    );
+
+    // Return the pointer to the function instance
+    return module.block(null, [
+        functionInstanceSetExpr,
+        storeIndexExpr,
+        writeEnvExpr,
+        module.local_get(functionInstanceLocal.index, options.nativeSizeType)
+      ], options.nativeSizeType
+    )
+  }
+
   // === Statements ===============================================================================
 
   /** Compiles a top level statement (incl. function declarations etc.) to the specified body. */
@@ -8270,10 +8318,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = instance.signature.type;
     }
 
-    var offset = this.ensureRuntimeFunction(instance); // reports
-    return this.options.isWasm64
-      ? this.module.i64(i64_low(offset), i64_high(offset))
-      : this.module.i32(i64_low(offset));
+    return this.allocFunction(instance);
   }
 
   /** Makes sure the enclosing source file of the specified expression has been compiled. */

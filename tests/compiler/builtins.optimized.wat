@@ -41,6 +41,7 @@
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
  (global $builtins/F (mut f64) (f64.const 0))
+ (global $builtins/fn (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "test" (func $start:builtins~anonymous|1))
  (start $~start)
@@ -187,6 +188,8 @@
   nop
  )
  (func $start:builtins
+  (local $0 i32)
+  (local $1 i32)
   i32.const 31
   global.set $builtins/i
   i32.const 0
@@ -457,9 +460,64 @@
   global.set $builtins/f
   f64.const 25
   global.set $builtins/F
+  i32.const 2000
+  memory.size
+  local.tee $1
+  i32.const 16
+  i32.shl
+  local.tee $0
+  i32.gt_u
+  if
+   local.get $1
+   i32.const 67535
+   local.get $0
+   i32.sub
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.tee $0
+   local.get $1
+   local.get $0
+   i32.gt_s
+   select
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $0
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  i32.const 1968
+  i32.const 16
+  i32.store
+  i32.const 1972
+  i32.const 1
+  i32.store
+  i32.const 1976
+  i32.const 6
+  i32.store
+  i32.const 1980
+  i32.const 8
+  i32.store
+  i32.const 1984
+  i32.const 1136
+  i32.load
+  i32.store
+  i32.const 1988
+  i32.const 0
+  i32.store
+  i32.const 1984
+  global.set $builtins/fn
   i32.const 1
   i32.const 2
-  i32.const 1136
+  i32.const 1984
   i32.load
   call_indirect (type $i32_i32_=>_i32)
   i32.const 3
@@ -474,7 +532,7 @@
   end
   i32.const 2
   i32.const 3
-  i32.const 1136
+  global.get $builtins/fn
   i32.load
   call_indirect (type $i32_i32_=>_i32)
   i32.const 5
@@ -660,9 +718,9 @@
   i32.const 5
   f64.const 0
   f64.const 0
-  f64.const 25
   f64.const 26
-  f64.const 26
+  f64.const 27
+  f64.const 27
   call $~lib/builtins/trace
   i32.const 1328
   i32.const 1328

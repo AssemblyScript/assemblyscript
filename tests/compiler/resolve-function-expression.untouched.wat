@@ -24,9 +24,9 @@
  (data (i32.const 1952) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002\00")
  (table $0 4 funcref)
  (elem (i32.const 1) $start:resolve-function-expression~anonymous|0 $start:resolve-function-expression~anonymous|1 $start:resolve-function-expression~anonymous|2)
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 1972))
  (export "memory" (memory $0))
@@ -35,71 +35,6 @@
   local.get $0
   i32.const 40
   i32.add
- )
- (func $start:resolve-function-expression~anonymous|1 (param $0 i32) (result i32)
-  local.get $0
-  i32.const 41
-  i32.add
- )
- (func $start:resolve-function-expression~anonymous|2 (param $0 i32) (result i32)
-  local.get $0
-  i32.const 42
-  i32.add
- )
- (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
-  local.get $0
-  i32.const 100000
-  i32.lt_u
-  if
-   local.get $0
-   i32.const 100
-   i32.lt_u
-   if
-    i32.const 1
-    local.get $0
-    i32.const 10
-    i32.ge_u
-    i32.add
-    return
-   else
-    i32.const 3
-    local.get $0
-    i32.const 10000
-    i32.ge_u
-    i32.add
-    local.get $0
-    i32.const 1000
-    i32.ge_u
-    i32.add
-    return
-   end
-   unreachable
-  else
-   local.get $0
-   i32.const 10000000
-   i32.lt_u
-   if
-    i32.const 6
-    local.get $0
-    i32.const 1000000
-    i32.ge_u
-    i32.add
-    return
-   else
-    i32.const 8
-    local.get $0
-    i32.const 1000000000
-    i32.ge_u
-    i32.add
-    local.get $0
-    i32.const 100000000
-    i32.ge_u
-    i32.add
-    return
-   end
-   unreachable
-  end
-  unreachable
  )
  (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
@@ -209,6 +144,71 @@
   local.get $0
   i32.store offset=12
   local.get $2
+ )
+ (func $start:resolve-function-expression~anonymous|1 (param $0 i32) (result i32)
+  local.get $0
+  i32.const 41
+  i32.add
+ )
+ (func $start:resolve-function-expression~anonymous|2 (param $0 i32) (result i32)
+  local.get $0
+  i32.const 42
+  i32.add
+ )
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
+  local.get $0
+  i32.const 100000
+  i32.lt_u
+  if
+   local.get $0
+   i32.const 100
+   i32.lt_u
+   if
+    i32.const 1
+    local.get $0
+    i32.const 10
+    i32.ge_u
+    i32.add
+    return
+   else
+    i32.const 3
+    local.get $0
+    i32.const 10000
+    i32.ge_u
+    i32.add
+    local.get $0
+    i32.const 1000
+    i32.ge_u
+    i32.add
+    return
+   end
+   unreachable
+  else
+   local.get $0
+   i32.const 10000000
+   i32.lt_u
+   if
+    i32.const 6
+    local.get $0
+    i32.const 1000000
+    i32.ge_u
+    i32.add
+    return
+   else
+    i32.const 8
+    local.get $0
+    i32.const 1000000000
+    i32.ge_u
+    i32.add
+    local.get $0
+    i32.const 100000000
+    i32.ge_u
+    i32.add
+    return
+   end
+   unreachable
+  end
+  unreachable
  )
  (func $~lib/util/number/utoa32_dec_lut (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -935,10 +935,34 @@
  )
  (func $start:resolve-function-expression
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/heap/__heap_base
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
   i32.const 2
   i32.const 1
   global.set $~argumentsLength
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.set $0
+  local.get $0
   i32.const 32
+  i32.load
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
   i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 42
@@ -955,7 +979,18 @@
   i32.const 1
   i32.const 1
   global.set $~argumentsLength
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.set $1
+  local.get $1
   i32.const 144
+  i32.load
+  i32.store
+  local.get $1
+  i32.const 0
+  i32.store offset=4
+  local.get $1
   i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 42
@@ -969,25 +1004,26 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/heap/__heap_base
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
-  global.set $~lib/rt/stub/offset
   i32.const 0
   i32.const 1
   global.set $~argumentsLength
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.set $2
+  local.get $2
   i32.const 176
+  i32.load
+  i32.store
+  local.get $2
+  i32.const 0
+  i32.store offset=4
+  local.get $2
   i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 10
   call $~lib/number/I32#toString
-  local.tee $0
+  local.tee $3
   i32.const 1968
   call $~lib/string/String.__eq
   i32.eqz
@@ -999,7 +1035,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $3
   call $~lib/rt/stub/__release
  )
  (func $~start

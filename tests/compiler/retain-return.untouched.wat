@@ -26,13 +26,13 @@
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $retain-return/ref (mut i32) (i32.const 0))
- (global $retain-return/returnNewFnExpr (mut i32) (i32.const 192))
+ (global $retain-return/returnNewFnExpr (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $retain-return/returnLocalFnExpr (mut i32) (i32.const 224))
- (global $retain-return/returnGlobalFnExpr (mut i32) (i32.const 256))
- (global $retain-return/returnNewFnBlock (mut i32) (i32.const 288))
- (global $retain-return/returnLocalFnBlock (mut i32) (i32.const 320))
- (global $retain-return/returnGlobalFnBlock (mut i32) (i32.const 352))
+ (global $retain-return/returnLocalFnExpr (mut i32) (i32.const 0))
+ (global $retain-return/returnGlobalFnExpr (mut i32) (i32.const 0))
+ (global $retain-return/returnNewFnBlock (mut i32) (i32.const 0))
+ (global $retain-return/returnLocalFnBlock (mut i32) (i32.const 0))
+ (global $retain-return/returnGlobalFnBlock (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 360))
  (export "_start" (func $~start))
@@ -1596,6 +1596,12 @@
  (func $start:retain-return
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   call $retain-return/returnNew
   call $~lib/rt/pure/__release
   call $retain-return/returnNew
@@ -1611,6 +1617,20 @@
   call $~lib/rt/pure/__release
   call $retain-return/returnGlobal
   call $~lib/rt/pure/__release
+  i32.const 8
+  i32.const 4
+  call $~lib/rt/tlsf/__alloc
+  local.set $0
+  local.get $0
+  i32.const 192
+  i32.load
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  call $~lib/rt/pure/__retain
+  global.set $retain-return/returnNewFnExpr
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnNewFnExpr
@@ -1623,6 +1643,20 @@
   i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
+  i32.const 8
+  i32.const 5
+  call $~lib/rt/tlsf/__alloc
+  local.set $1
+  local.get $1
+  i32.const 224
+  i32.load
+  i32.store
+  local.get $1
+  i32.const 0
+  i32.store offset=4
+  local.get $1
+  call $~lib/rt/pure/__retain
+  global.set $retain-return/returnLocalFnExpr
   global.get $retain-return/ref
   i32.const 1
   global.set $~argumentsLength
@@ -1637,6 +1671,20 @@
   i32.load
   call_indirect (type $i32_=>_i32)
   call $~lib/rt/pure/__release
+  i32.const 8
+  i32.const 4
+  call $~lib/rt/tlsf/__alloc
+  local.set $2
+  local.get $2
+  i32.const 256
+  i32.load
+  i32.store
+  local.get $2
+  i32.const 0
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__retain
+  global.set $retain-return/returnGlobalFnExpr
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnGlobalFnExpr
@@ -1649,6 +1697,20 @@
   i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
+  i32.const 8
+  i32.const 4
+  call $~lib/rt/tlsf/__alloc
+  local.set $3
+  local.get $3
+  i32.const 288
+  i32.load
+  i32.store
+  local.get $3
+  i32.const 0
+  i32.store offset=4
+  local.get $3
+  call $~lib/rt/pure/__retain
+  global.set $retain-return/returnNewFnBlock
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnNewFnBlock
@@ -1661,6 +1723,20 @@
   i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
+  i32.const 8
+  i32.const 4
+  call $~lib/rt/tlsf/__alloc
+  local.set $4
+  local.get $4
+  i32.const 320
+  i32.load
+  i32.store
+  local.get $4
+  i32.const 0
+  i32.store offset=4
+  local.get $4
+  call $~lib/rt/pure/__retain
+  global.set $retain-return/returnLocalFnBlock
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnLocalFnBlock
@@ -1673,6 +1749,20 @@
   i32.load
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
+  i32.const 8
+  i32.const 4
+  call $~lib/rt/tlsf/__alloc
+  local.set $5
+  local.get $5
+  i32.const 352
+  i32.load
+  i32.store
+  local.get $5
+  i32.const 0
+  i32.store offset=4
+  local.get $5
+  call $~lib/rt/pure/__retain
+  global.set $retain-return/returnGlobalFnBlock
   i32.const 0
   global.set $~argumentsLength
   global.get $retain-return/returnGlobalFnBlock
@@ -1686,18 +1776,18 @@
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
-  local.tee $0
+  local.tee $6
   global.get $retain-return/ref
-  local.tee $1
+  local.tee $7
   i32.ne
   if
-   local.get $0
+   local.get $6
    call $~lib/rt/pure/__retain
-   local.set $0
-   local.get $1
+   local.set $6
+   local.get $7
    call $~lib/rt/pure/__release
   end
-  local.get $0
+  local.get $6
   global.set $retain-return/ref
  )
  (func $~start

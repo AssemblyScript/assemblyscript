@@ -57,8 +57,8 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $resolve-ternary/f1 i32 (i32.const 3152))
- (global $resolve-ternary/f2 i32 (i32.const 3184))
+ (global $resolve-ternary/f1 (mut i32) (i32.const 0))
+ (global $resolve-ternary/f2 (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 3264))
  (global $~lib/heap/__heap_base i32 (i32.const 3300))
@@ -5116,6 +5116,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   global.get $resolve-ternary/b
   if (result i32)
    i32.const 1
@@ -5156,6 +5158,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/tlsf/__alloc
+  local.set $2
+  local.get $2
+  i32.const 3152
+  i32.load
+  i32.store
+  local.get $2
+  i32.const 0
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/pure/__retain
+  global.set $resolve-ternary/f1
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/tlsf/__alloc
+  local.set $3
+  local.get $3
+  i32.const 3184
+  i32.load
+  i32.store
+  local.get $3
+  i32.const 0
+  i32.store offset=4
+  local.get $3
+  call $~lib/rt/pure/__retain
+  global.set $resolve-ternary/f2
   i32.const 1
   i32.const 1
   global.set $~argumentsLength
@@ -5163,11 +5193,11 @@
   if (result i32)
    global.get $resolve-ternary/f1
    call $~lib/rt/pure/__retain
-   local.tee $2
+   local.tee $4
   else
    global.get $resolve-ternary/f2
    call $~lib/rt/pure/__retain
-   local.tee $3
+   local.tee $5
   end
   i32.load
   call_indirect (type $i32_=>_i32)
@@ -5189,11 +5219,11 @@
   if (result i32)
    i32.const 3216
    call $~lib/rt/pure/__retain
-   local.tee $4
+   local.tee $6
   else
    i32.const 3248
    call $~lib/rt/pure/__retain
-   local.tee $5
+   local.tee $7
   end
   i32.load
   call_indirect (type $i32_=>_i32)
@@ -5215,11 +5245,11 @@
   if (result i32)
    global.get $resolve-ternary/f2
    call $~lib/rt/pure/__retain
-   local.tee $6
+   local.tee $8
   else
    i32.const 3248
    call $~lib/rt/pure/__retain
-   local.tee $7
+   local.tee $9
   end
   i32.load
   call_indirect (type $i32_=>_i32)
@@ -5238,10 +5268,6 @@
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
   local.get $4
   call $~lib/rt/pure/__release
   local.get $5
@@ -5249,6 +5275,10 @@
   local.get $6
   call $~lib/rt/pure/__release
   local.get $7
+  call $~lib/rt/pure/__release
+  local.get $8
+  call $~lib/rt/pure/__release
+  local.get $9
   call $~lib/rt/pure/__release
  )
  (func $~start

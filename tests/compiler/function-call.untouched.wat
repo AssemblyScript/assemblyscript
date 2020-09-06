@@ -18,36 +18,20 @@
  (data (i32.const 288) "\08\00\00\00\01\00\00\00\08\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00")
  (table $0 9 funcref)
  (elem (i32.const 1) $start:function-call~anonymous|0 $start:function-call~anonymous|1 $start:function-call~anonymous|2 $start:function-call~anonymous|3 $start:function-call~fn2 $function-call/Foo#fnVoid $function-call/Foo#fnThis $function-call/Foo#fnRet)
- (global $function-call/fnVoid (mut i32) (i32.const 32))
- (global $~argumentsLength (mut i32) (i32.const 0))
- (global $function-call/faVoid (mut i32) (i32.const 64))
- (global $function-call/fnRet (mut i32) (i32.const 96))
- (global $function-call/faRet (mut i32) (i32.const 176))
- (global $function-call/fnThis (mut i32) (i32.const 208))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $function-call/fnVoid (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $function-call/faVoid (mut i32) (i32.const 0))
+ (global $function-call/fnRet (mut i32) (i32.const 0))
+ (global $function-call/faRet (mut i32) (i32.const 0))
+ (global $function-call/fnThis (mut i32) (i32.const 0))
  (global $function-call/foo (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 312))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-call~anonymous|0
   nop
- )
- (func $start:function-call~anonymous|1
-  nop
- )
- (func $start:function-call~anonymous|2 (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.add
- )
- (func $start:function-call~anonymous|3 (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.add
- )
- (func $start:function-call~fn2 (param $0 i32) (result i32)
-  local.get $0
  )
  (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
@@ -161,6 +145,22 @@
  (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
+ (func $start:function-call~anonymous|1
+  nop
+ )
+ (func $start:function-call~anonymous|2 (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.add
+ )
+ (func $start:function-call~anonymous|3 (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.add
+ )
+ (func $start:function-call~fn2 (param $0 i32) (result i32)
+  local.get $0
+ )
  (func $function-call/Foo#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
@@ -185,16 +185,73 @@
   i32.add
  )
  (func $start:function-call
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  global.get $~lib/heap/__heap_base
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.set $0
+  local.get $0
+  i32.const 32
+  i32.load
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  call $~lib/rt/stub/__retain
+  global.set $function-call/fnVoid
   i32.const 0
   global.set $~argumentsLength
   global.get $function-call/fnVoid
   i32.load
   call_indirect (type $none_=>_none)
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.set $1
+  local.get $1
+  i32.const 64
+  i32.load
+  i32.store
+  local.get $1
+  i32.const 0
+  i32.store offset=4
+  local.get $1
+  call $~lib/rt/stub/__retain
+  global.set $function-call/faVoid
   i32.const 0
   global.set $~argumentsLength
   global.get $function-call/faVoid
   i32.load
   call_indirect (type $none_=>_none)
+  i32.const 8
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  local.set $2
+  local.get $2
+  i32.const 96
+  i32.load
+  i32.store
+  local.get $2
+  i32.const 0
+  i32.store offset=4
+  local.get $2
+  call $~lib/rt/stub/__retain
+  global.set $function-call/fnRet
   i32.const 1
   i32.const 2
   i32.const 2
@@ -213,6 +270,20 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 8
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  local.set $3
+  local.get $3
+  i32.const 176
+  i32.load
+  i32.store
+  local.get $3
+  i32.const 0
+  i32.store offset=4
+  local.get $3
+  call $~lib/rt/stub/__retain
+  global.set $function-call/faRet
   i32.const 2
   i32.const 3
   i32.const 2
@@ -231,6 +302,20 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 8
+  i32.const 5
+  call $~lib/rt/stub/__alloc
+  local.set $4
+  local.get $4
+  i32.const 208
+  i32.load
+  i32.store
+  local.get $4
+  i32.const 0
+  i32.store offset=4
+  local.get $4
+  call $~lib/rt/stub/__retain
+  global.set $function-call/fnThis
   i32.const 1
   i32.const 0
   global.set $~argumentsLength
@@ -248,16 +333,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/heap/__heap_base
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
-  global.set $~lib/rt/stub/offset
   i32.const 0
   call $function-call/Foo#constructor
   global.set $function-call/foo

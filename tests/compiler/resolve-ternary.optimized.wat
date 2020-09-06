@@ -41,6 +41,8 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
+ (global $resolve-ternary/f1 (mut i32) (i32.const 0))
+ (global $resolve-ternary/f2 (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 2832))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
@@ -2372,19 +2374,19 @@
   (local $4 i32)
   i32.const 1
   call $~lib/util/number/decimalCount32
-  local.tee $0
+  local.tee $1
   i32.const 1
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc
-  local.tee $1
-  i32.const 1
-  local.get $0
-  call $~lib/util/number/utoa_dec_simple<u32>
-  local.get $1
-  call $~lib/rt/pure/__retain
   local.tee $0
+  i32.const 1
+  local.get $1
+  call $~lib/util/number/utoa_dec_simple<u32>
   local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $1
+  local.get $1
   i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
@@ -2400,32 +2402,32 @@
    i32.const 56
    i32.const 1
    call $~lib/rt/tlsf/__alloc
-   local.tee $1
-   call $~lib/util/number/dtoa_core
    local.tee $0
+   call $~lib/util/number/dtoa_core
+   local.tee $1
    i32.const 28
    i32.eq
    if
-    local.get $1
+    local.get $0
     call $~lib/rt/pure/__retain
-    local.set $0
+    local.set $1
     br $__inlined_func$~lib/util/number/dtoa
    end
-   local.get $1
    local.get $0
-   call $~lib/string/String#substring
-   local.set $0
-   call $~lib/rt/tlsf/maybeInitialize
    local.get $1
+   call $~lib/string/String#substring
+   local.set $1
+   call $~lib/rt/tlsf/maybeInitialize
+   local.get $0
    i32.const 16
    i32.sub
    local.set $2
-   local.get $1
+   local.get $0
    i32.const 15
    i32.and
    i32.eqz
    i32.const 0
-   local.get $1
+   local.get $0
    select
    if (result i32)
     local.get $2
@@ -2457,7 +2459,7 @@
    local.get $2
    call $~lib/rt/tlsf/freeBlock
   end
-  local.get $0
+  local.get $1
   i32.const 2688
   call $~lib/string/String.__eq
   i32.eqz
@@ -2469,8 +2471,36 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
   i32.const 2720
+  i32.load
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  call $~lib/rt/pure/__retain
+  global.set $resolve-ternary/f1
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 2752
+  i32.load
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  call $~lib/rt/pure/__retain
+  global.set $resolve-ternary/f2
+  i32.const 1
+  global.get $resolve-ternary/f1
+  call $~lib/rt/pure/__retain
+  local.tee $0
   i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 2
@@ -2498,7 +2528,9 @@
    unreachable
   end
   i32.const 1
-  i32.const 2752
+  global.get $resolve-ternary/f2
+  call $~lib/rt/pure/__retain
+  local.tee $3
   i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 3
@@ -2512,13 +2544,13 @@
    unreachable
   end
   call $~lib/rt/pure/__release
-  local.get $0
+  local.get $1
   call $~lib/rt/pure/__release
-  i32.const 2720
+  local.get $0
   call $~lib/rt/pure/__release
   i32.const 2784
   call $~lib/rt/pure/__release
-  i32.const 2752
+  local.get $3
   call $~lib/rt/pure/__release
  )
  (func $~start

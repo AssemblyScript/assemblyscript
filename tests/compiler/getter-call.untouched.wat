@@ -143,7 +143,19 @@
   i32.const 42
  )
  (func $getter-call/C#get:x (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const 8
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  local.set $1
+  local.get $1
   i32.const 32
+  i32.load
+  i32.store
+  local.get $1
+  i32.const 0
+  i32.store offset=4
+  local.get $1
   call $~lib/rt/stub/__retain
  )
  (func $~lib/rt/stub/__release (param $0 i32)

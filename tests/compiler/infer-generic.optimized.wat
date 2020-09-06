@@ -36,6 +36,59 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  i32.const 1200
+  memory.size
+  local.tee $2
+  i32.const 16
+  i32.shl
+  local.tee $0
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 66735
+   local.get $0
+   i32.sub
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.tee $0
+   local.get $2
+   local.get $0
+   i32.gt_s
+   select
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $0
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  i32.const 1168
+  i32.const 16
+  i32.store
+  i32.const 1172
+  i32.const 1
+  i32.store
+  i32.const 1176
+  i32.const 4
+  i32.store
+  i32.const 1180
+  i32.const 8
+  i32.store
+  i32.const 1184
+  i32.const 1152
+  i32.load
+  i32.store
+  i32.const 1188
+  i32.const 0
+  i32.store
   i32.const 1132
   i32.load
   local.set $1
@@ -45,32 +98,32 @@
    i32.load
    local.tee $2
    i32.lt_s
-   local.set $3
-   local.get $0
+   local.set $0
+   local.get $3
    local.get $1
    local.get $2
-   local.get $3
+   local.get $0
    select
    i32.lt_s
    if
     local.get $4
     i32.const 1124
     i32.load
-    local.get $0
+    local.get $3
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.get $0
+    local.get $3
     i32.const 1120
-    i32.const 1152
+    i32.const 1184
     i32.load
     call_indirect (type $i32_f32_i32_i32_=>_i32)
     local.set $4
-    local.get $0
+    local.get $3
     i32.const 1
     i32.add
-    local.set $0
+    local.set $3
     br $for-loop|0
    end
   end

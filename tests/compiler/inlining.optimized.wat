@@ -185,8 +185,21 @@
   end
  )
  (func $~start
-  i32.const 2
+  (local $0 i32)
+  i32.const 1104
+  global.set $~lib/rt/stub/offset
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 1088
+  i32.load
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  i32.const 2
+  local.get $0
   i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 2
@@ -199,8 +212,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1104
-  global.set $~lib/rt/stub/offset
   call $inlining/test_ctor
  )
 )

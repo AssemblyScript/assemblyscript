@@ -26,9 +26,9 @@
  (global $typeof/I (mut i64) (i64.const 1))
  (global $typeof/F (mut f64) (f64.const 1))
  (global $typeof/s (mut i32) (i32.const 208))
- (global $typeof/fn (mut i32) (i32.const 272))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $typeof/fn (mut i32) (i32.const 0))
  (global $typeof/c (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 324))
@@ -372,6 +372,7 @@
   local.get $0
  )
  (func $start:typeof
+  (local $0 i32)
   i32.const 1
   drop
   i32.const 32
@@ -604,6 +605,30 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $~lib/heap/__heap_base
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.set $0
+  local.get $0
+  i32.const 272
+  i32.load
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  call $~lib/rt/stub/__retain
+  global.set $typeof/fn
   global.get $typeof/fn
   drop
   i32.const 144
@@ -618,16 +643,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/heap/__heap_base
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
-  global.set $~lib/rt/stub/offset
   i32.const 0
   call $typeof/SomeClass#constructor
   global.set $typeof/c
