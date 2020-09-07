@@ -8007,7 +8007,7 @@ export class Compiler extends DiagnosticEmitter {
     return this.makeCallIndirect(signature, functionPointerExpr, reportNode, operands, immediatelyDropped);
   }
 
-  /** Creates an indirect call to the function at `functionInstance` in the function table. */
+  /** Creates an indirect call to the first class function pointed to by `functionPointer`. */
   makeCallIndirect(
     signature: Signature,
     functionPointerExpr: ExpressionRef,
