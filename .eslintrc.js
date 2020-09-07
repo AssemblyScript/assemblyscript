@@ -120,6 +120,7 @@ module.exports = {
         "@typescript-eslint/no-unused-vars": [
           "warn", {
             "vars": "local",
+            "varsIgnorePattern": "^[A-Z](?:From|To)?$", // ignore type params
             "args": "none",
             "ignoreRestSiblings": false
           }
