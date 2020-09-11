@@ -1434,6 +1434,14 @@ export class Module {
     binaryen._BinaryenSetOneCallerInlineMaxSize(size);
   }
 
+  getAllowInliningFunctionsWithLoops(): bool {
+    return binaryen._BinaryenGetAllowInliningFunctionsWithLoops();
+  }
+
+  setAllowInliningFunctionsWithLoops(enabled: bool): void {
+    binaryen._BinaryenSetAllowInliningFunctionsWithLoops(enabled);
+  }
+
   // meta (module)
 
   getFeatures(): FeatureFlags {
@@ -1474,23 +1482,26 @@ export class Module {
     // Implicitly run costly non-LLVM optimizations on -O3 or -Oz
     if (optimizeLevel >= 3 || shrinkLevel >= 2) optimizeLevel = 4;
 
-    binaryen._BinaryenSetOptimizeLevel(optimizeLevel);
-    binaryen._BinaryenSetShrinkLevel(shrinkLevel);
-    binaryen._BinaryenSetDebugInfo(debugInfo);
+    this.setOptimizeLevel(optimizeLevel);
+    this.setShrinkLevel(shrinkLevel);
+    this.setDebugInfo(debugInfo);
+    this.clearPassArguments();
 
     // Tweak inlining limits based on optimization levels
-    if (optimizeLevel >= 2 && shrinkLevel === 0) {
-      binaryen._BinaryenSetAlwaysInlineMaxSize(12);
-      binaryen._BinaryenSetFlexibleInlineMaxSize(70);
-      binaryen._BinaryenSetOneCallerInlineMaxSize(200);
+    if (optimizeLevel >= 2 && shrinkLevel == 0) {
+      this.setAlwaysInlineMaxSize(12);
+      this.setFlexibleInlineMaxSize(70);
+      this.setOneCallerInlineMaxSize(200);
+      this.setAllowInliningFunctionsWithLoops(optimizeLevel >= 3);
     } else {
-      binaryen._BinaryenSetAlwaysInlineMaxSize(
+      this.setAlwaysInlineMaxSize(
         optimizeLevel == 0 && shrinkLevel >= 0
           ? 2
           : 4
       );
-      binaryen._BinaryenSetFlexibleInlineMaxSize(65);
-      binaryen._BinaryenSetOneCallerInlineMaxSize(80);
+      this.setFlexibleInlineMaxSize(65);
+      this.setOneCallerInlineMaxSize(80);
+      this.setAllowInliningFunctionsWithLoops(false);
     }
 
     // Pass order here differs substantially from Binaryen's defaults
@@ -1596,7 +1607,7 @@ export class Module {
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         passes.push("inlining-optimizing");
       }
-      if (binaryen._BinaryenGetLowMemoryUnused()) {
+      if (this.getLowMemoryUnused()) {
         if (optimizeLevel >= 3 || shrinkLevel >= 1) {
           passes.push("optimize-added-constants-propagate");
         } else {

@@ -986,3 +986,5 @@ export declare function _BinaryenGetFlexibleInlineMaxSize(): BinaryenIndex;
 export declare function _BinaryenSetFlexibleInlineMaxSize(size: BinaryenIndex): void;
 export declare function _BinaryenGetOneCallerInlineMaxSize(): BinaryenIndex;
 export declare function _BinaryenSetOneCallerInlineMaxSize(size: BinaryenIndex): void;
+export declare function _BinaryenGetAllowInliningFunctionsWithLoops(): bool;
+export declare function _BinaryenSetAllowInliningFunctionsWithLoops(enabled: bool): void;
