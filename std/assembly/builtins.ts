@@ -2049,6 +2049,8 @@ export namespace v64x2 {
   export declare function load_splat(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 // @ts-ignore: decorator
 @external("env", "abort")
 declare function abort(
@@ -2073,3 +2075,5 @@ declare function trace(
 // @ts-ignore: decorator
 @external("env", "seed")
 declare function seed(): f64;
+
+/* eslint-enable @typescript-eslint/no-unused-vars */

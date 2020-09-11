@@ -1952,6 +1952,7 @@ export class Compiler extends DiagnosticEmitter {
     var program = this.program;
     var arrayBufferInstance = program.arrayBufferInstance;
     var buf = arrayBufferInstance.createBuffer(values.length * elementType.byteSize);
+    writeI32(id, buf, 8); // use specified rtId
     assert(this.writeStaticBuffer(buf, program.runtimeHeaderSize, elementType, values) == buf.length);
     return this.addMemorySegment(buf);
   }

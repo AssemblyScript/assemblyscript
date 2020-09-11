@@ -8,6 +8,8 @@ const colors = require("../cli/util/colors");
 const version = require("../package.json").version;
 const options = require("../cli/util/options");
 
+const npmDefaultTest = "echo \"Error: no test specified\" && exit 1";
+
 const commands = {
   "npm": {
     install: "npm install",
@@ -344,7 +346,7 @@ function ensurePackageJson() {
       pkg["scripts"] = scripts;
       updated = true;
     }
-    if (!scripts["test"]) {
+    if (!scripts["test"] || scripts["test"] == npmDefaultTest) {
       scripts["test"] = "node tests";
       pkg["scripts"] = scripts;
       updated = true;

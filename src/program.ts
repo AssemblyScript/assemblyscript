@@ -3627,7 +3627,7 @@ export class Function extends TypedElement {
           range.debugInfoRef,
           source.debugInfoIndex,
           source.lineAt(range.start),
-          source.columnAt()
+          source.columnAt() - 1 // source maps are 0-based
         );
       }
     }

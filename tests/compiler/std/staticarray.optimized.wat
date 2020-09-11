@@ -14,12 +14,12 @@
  (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
- (data (i32.const 1024) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03")
+ (data (i32.const 1024) "\0c\00\00\00\01\00\00\00\03\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03")
  (data (i32.const 1056) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (data (i32.const 1120) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00s\00t\00a\00t\00i\00c\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 1184) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00s\00t\00d\00/\00s\00t\00a\00t\00i\00c\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 1248) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03")
- (data (i32.const 1280) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\05\00\00\00\06\00\00\00\07")
+ (data (i32.const 1248) "\0c\00\00\00\01\00\00\00\03\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03")
+ (data (i32.const 1280) "\0c\00\00\00\01\00\00\00\03\00\00\00\0c\00\00\00\05\00\00\00\06\00\00\00\07")
  (data (i32.const 1312) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1360) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 1424) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
@@ -1354,7 +1354,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 3
+   i32.const 5
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1366,7 +1366,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 4
+   i32.const 6
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1382,7 +1382,19 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 6
+   i32.const 8
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1032
+  i32.load
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1200
+   i32.const 9
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1395,7 +1407,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 10
+   i32.const 13
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1407,7 +1419,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 11
+   i32.const 14
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1423,7 +1435,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 13
+   i32.const 16
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1438,7 +1450,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 20
+   i32.const 23
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1451,7 +1463,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 21
+   i32.const 24
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1464,7 +1476,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 22
+   i32.const 25
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1476,7 +1488,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 23
+   i32.const 26
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1492,7 +1504,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 25
+   i32.const 28
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1509,7 +1521,7 @@
   if
    i32.const 0
    i32.const 1200
-   i32.const 27
+   i32.const 30
    i32.const 1
    call $~lib/builtins/abort
    unreachable
