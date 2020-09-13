@@ -3295,9 +3295,9 @@ export class Parameter {
 
 export class ClosedLocal extends VariableLikeElement {
   local: Local;
-  functionDepth: i32 = 1;
+  functionDepth: i32;
 
-  constructor(local: Local) {
+  constructor(local: Local, functionDepth: i32 = 1) {
     super(
       ElementKind.CLOSED_LOCAL,
       local.name,
@@ -3305,6 +3305,7 @@ export class ClosedLocal extends VariableLikeElement {
       <VariableLikeDeclarationStatement>local.declaration
     )
     this.local = local;
+    this.functionDepth = functionDepth;
   }
 
   lookup(name: string) {
@@ -3616,11 +3617,23 @@ export class Function extends TypedElement {
     return local;
   }
 
-  markClosedLocal(local: Local) {
+  allocateClosedLocal(local: Local) {
     console.log("marking local " + local.name + " as closed in function " + this.name);
     local.envOffset = this.nextEnvOffset;
     // TODO: the alignment logic is slightly more complicated then this iirc
     this.nextEnvOffset += local.type.byteSize;
+  }
+
+  markClosedLocal(closedLocal: ClosedLocal) {
+    /* Notify the parent that this local must be included in its env. This will also
+     * populate the Local with information about its storage within the Env */
+    if (closedLocal.functionDepth == 1) {
+      this.allocateClosedLocal(closedLocal.local);
+    } else {
+      assert(this.parent.kind == ElementKind.FUNCTION);
+      var parentFunction = <Function>this.parent;
+      parentFunction.markClosedLocal(new ClosedLocal(closedLocal.local, closedLocal.functionDepth - 1));
+    }
   }
 
   /* @override */
@@ -3636,14 +3649,12 @@ export class Function extends TypedElement {
      * depth must be 1 */
       if (parentResult.kind == ElementKind.LOCAL) {
         assert(this.parent.kind == ElementKind.FUNCTION);
-        /* Notify the parent that this local must be included in its env. This will also
-         * populate the Local with information about its storage within the Env */
-        (<Function>this.parent).markClosedLocal(<Local>parentResult);
         /* Return a ClosedLocal with the inferred depth of 1 */
         return new ClosedLocal(<Local>parentResult)
       } else if (parentResult.kind == ElementKind.CLOSED_LOCAL) {
         /* We add 1 to the depth to indicate another level of nesting */
-        (<ClosedLocal>parentResult).functionDepth += 1;
+        var parentClosedLocal = <ClosedLocal>parentResult;
+        return new ClosedLocal(parentClosedLocal.local, parentClosedLocal.functionDepth + 1);
       }
     }
     return parentResult;

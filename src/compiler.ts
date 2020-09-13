@@ -8460,6 +8460,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.CLOSED_LOCAL: {
         var closedLocal = <ClosedLocal>target;
+        actualFunction.markClosedLocal(closedLocal);
         console.log("Accessing a closed local " + closedLocal.local.name + " at depth " + closedLocal.functionDepth + " and offset " + closedLocal.local.envOffset);
 
         return module.i32(1);
