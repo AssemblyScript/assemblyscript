@@ -90,7 +90,8 @@ import {
   IndexSignature,
   File,
   mangleInternalName,
-  DeclaredElement
+  DeclaredElement,
+  ClosedLocal
 } from "./program";
 
 import {
@@ -1482,6 +1483,12 @@ export class Compiler extends DiagnosticEmitter {
       funcRef = 0; // TODO?
       instance.set(CommonFlags.ERRORED);
     }
+
+    instance.localsByIndex
+      .filter((local: Local) => local.envOffset >= 0)
+      .forEach((local: Local) => {
+      console.log("writing " + local.name + " into the env of " + instance.name + " at offset " + local.envOffset);
+    })
 
     instance.finalize(module, funcRef);
     this.currentType = previousType;
@@ -8439,16 +8446,22 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.currentType = localType;
 
-        if (target.parent != flow.parentFunction) {
-          // TODO: closures
-          this.error(
-            DiagnosticCode.Not_implemented_0,
-            expression.range,
-            "Closures"
-          );
-          return module.unreachable();
-        }
+        //if (target.parent != flow.parentFunction) {
+          //// TODO: closures
+          //this.error(
+            //DiagnosticCode.Not_implemented_0,
+            //expression.range,
+            //"Closures"
+          //);
+          //return module.unreachable();
+        //}
         return module.local_get(localIndex, localType.toNativeType());
+      }
+      case ElementKind.CLOSED_LOCAL: {
+        var closedLocal = <ClosedLocal>target;
+        console.log("Accessing a closed local " + closedLocal.local.name + " at depth " + closedLocal.functionDepth + " and offset " + closedLocal.local.envOffset);
+
+        return module.i32(1);
       }
       case ElementKind.GLOBAL: {
         let global = <Global>target;

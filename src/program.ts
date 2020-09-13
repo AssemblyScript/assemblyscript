@@ -2554,7 +2554,9 @@ export enum ElementKind {
   /** A {@link TypeDefinition}.  */
   TYPEDEFINITION,
   /** An {@link IndexSignature}. */
-  INDEXSIGNATURE
+  INDEXSIGNATURE,
+  /** A reference to a Local beloning to a parent function. */
+  CLOSED_LOCAL
 }
 
 /** Indicates built-in decorators that are present. */
@@ -2996,8 +2998,8 @@ export class File extends Element {
 
   /** Creates an imported namespace from this file. */
   asAliasNamespace(
-    name: string, 
-    parent: Element, 
+    name: string,
+    parent: Element,
     localIdentifier: IdentifierExpression
   ): Namespace {
     var declaration = this.program.makeNativeNamespaceDeclaration(name);
@@ -3291,11 +3293,34 @@ export class Parameter {
   ) {}
 }
 
+export class ClosedLocal extends VariableLikeElement {
+  local: Local;
+  functionDepth: i32 = 1;
+
+  constructor(local: Local) {
+    super(
+      ElementKind.CLOSED_LOCAL,
+      local.name,
+      local.parent,
+      <VariableLikeDeclarationStatement>local.declaration
+    )
+    this.local = local;
+  }
+
+  lookup(name: string) {
+    return this.local.lookup(name);
+  }
+}
+
 /** A local variable. */
 export class Local extends VariableLikeElement {
 
   /** Original name of the (temporary) local. */
   private originalName: string;
+
+  /** Offset at which this local is stored in the environment of its owner function.
+   * -1 indicates it is not stored in the environment of its owner function. */
+  envOffset: i32 = -1;
 
   /** Constructs a new local variable. */
   constructor(
@@ -3482,6 +3507,9 @@ export class Function extends TypedElement {
   /** Counting id of autorelease variables. */
   nextAutoreleaseId: i32 = 0;
 
+  /** The next available offset within the env */
+  nextEnvOffset: i32 = 0;
+
   /** Constructs a new concrete function. */
   constructor(
     /** Name incl. type parameters, i.e. `foo<i32>`. */
@@ -3588,11 +3616,37 @@ export class Function extends TypedElement {
     return local;
   }
 
+  markClosedLocal(local: Local) {
+    console.log("marking local " + local.name + " as closed in function " + this.name);
+    local.envOffset = this.nextEnvOffset;
+    // TODO: the alignment logic is slightly more complicated then this iirc
+    this.nextEnvOffset += local.type.byteSize;
+  }
+
   /* @override */
   lookup(name: string): Element | null {
     var locals = this.localsByName;
     if (locals.has(name)) return assert(locals.get(name));
-    return this.parent.lookup(name);
+
+
+    var parentResult = this.parent.lookup(name);
+    if (parentResult !== null) {
+     /* We found a local in a parent of a function, mark that it must be enclosed
+     * We can infer that since this is a Local and not a Closed Local that the function
+     * depth must be 1 */
+      if (parentResult.kind == ElementKind.LOCAL) {
+        //assert(this.parent.kind == ElementKind.FUNCTION)
+        /* Notify the parent that this local must be included in its env. This will also
+         * populate the Local with information about its storage within the Env */
+        (<Function>this.parent).markClosedLocal(<Local>parentResult);
+        /* Return a ClosedLocal with the inferred depth of 1 */
+        return new ClosedLocal(<Local>parentResult)
+      } else if (parentResult.kind == ElementKind.CLOSED_LOCAL) {
+        /* We add 1 to the depth to indicate another level of nesting */
+        (<ClosedLocal>parentResult).functionDepth += 1;
+      }
+    }
+    return parentResult;
   }
 
   // used by flows to keep track of temporary locals
