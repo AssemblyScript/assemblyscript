@@ -3635,7 +3635,7 @@ export class Function extends TypedElement {
      * We can infer that since this is a Local and not a Closed Local that the function
      * depth must be 1 */
       if (parentResult.kind == ElementKind.LOCAL) {
-        //assert(this.parent.kind == ElementKind.FUNCTION)
+        assert(this.parent.kind == ElementKind.FUNCTION);
         /* Notify the parent that this local must be included in its env. This will also
          * populate the Local with information about its storage within the Env */
         (<Function>this.parent).markClosedLocal(<Local>parentResult);

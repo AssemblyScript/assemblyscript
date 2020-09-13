@@ -8446,6 +8446,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.currentType = localType;
 
+        assert(target.parent == flow.parentFunction);
         //if (target.parent != flow.parentFunction) {
           //// TODO: closures
           //this.error(
