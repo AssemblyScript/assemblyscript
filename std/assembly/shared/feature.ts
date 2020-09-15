@@ -23,7 +23,9 @@ export const enum Feature {
   /** Reference types. */
   REFERENCE_TYPES = 1 << 8, // see: https://github.com/WebAssembly/reference-types
   /** Multi value types. */
-  MULTI_VALUE = 1 << 9 // see: https://github.com/WebAssembly/multi-value
+  MULTI_VALUE = 1 << 9, // see: https://github.com/WebAssembly/multi-value
+  /** Anyref. */
+  ANYREF = 1 << 10 // TODO: custom pre-GC Binaryen feature
 }
 
 /** Gets the name of the specified feature one would specify on the command line. */
@@ -39,6 +41,7 @@ export function featureToString(feature: Feature): string {
     case Feature.TAIL_CALLS: return "tail-calls";
     case Feature.REFERENCE_TYPES: return "reference-types";
     case Feature.MULTI_VALUE: return "multi-value";
+    case Feature.ANYREF: return "anyref";
   }
   assert(false);
   return "";

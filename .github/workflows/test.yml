@@ -121,14 +121,14 @@ jobs:
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
-        node-version: "15.0.0-v8-canary202007077c53168ead"
+        node-version: "node"
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
       run: npm run clean
     - name: Test experimental features
       env:
-        ASC_FEATURES: mutable-globals,threads,reference-types,bigint-integration
+        ASC_FEATURES: mutable-globals,threads,reference-types,bigint-integration,anyref
       run: |
         npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/threads
   test-runtimes:

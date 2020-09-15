@@ -1401,9 +1401,8 @@
  )
  (func $~lib/polyfills/bswap<i16> (param $0 i32) (result i32)
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 24
+  i32.extend16_s
+  i32.const 8
   i32.shr_s
   i32.const 255
   i32.and
@@ -2149,9 +2148,8 @@
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
-  i32.const 57590
+  i32.extend16_s
+  i32.const -7946
   i32.ne
   if
    i32.const 0
@@ -2165,8 +2163,7 @@
   i32.const 1
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 22752
   i32.ne
   if
@@ -2181,9 +2178,8 @@
   i32.const 2
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
-  i32.const 40792
+  i32.extend16_s
+  i32.const -24744
   i32.ne
   if
    i32.const 0
@@ -2197,9 +2193,8 @@
   i32.const 3
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
-  i32.const 33439
+  i32.extend16_s
+  i32.const -32097
   i32.ne
   if
    i32.const 0
@@ -2213,8 +2208,7 @@
   i32.const 4
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 25986
   i32.ne
   if
@@ -2229,8 +2223,7 @@
   i32.const 5
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 17253
   i32.ne
   if
@@ -2245,8 +2238,7 @@
   i32.const 6
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 24387
   i32.ne
   if
@@ -2261,9 +2253,8 @@
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
-  i32.const 63200
+  i32.extend16_s
+  i32.const -2336
   i32.ne
   if
    i32.const 0
@@ -2277,9 +2268,8 @@
   i32.const 1
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
-  i32.const 57432
+  i32.extend16_s
+  i32.const -8104
   i32.ne
   if
    i32.const 0
@@ -2293,8 +2283,7 @@
   i32.const 2
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 22687
   i32.ne
   if
@@ -2309,9 +2298,8 @@
   i32.const 3
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
-  i32.const 40834
+  i32.extend16_s
+  i32.const -24702
   i32.ne
   if
    i32.const 0
@@ -2325,9 +2313,8 @@
   i32.const 4
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
-  i32.const 33381
+  i32.extend16_s
+  i32.const -32155
   i32.ne
   if
    i32.const 0
@@ -2341,8 +2328,7 @@
   i32.const 5
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 25923
   i32.ne
   if
@@ -2357,8 +2343,7 @@
   i32.const 6
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 17247
   i32.ne
   if
@@ -3136,9 +3121,8 @@
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
-  i32.const 52176
+  i32.extend16_s
+  i32.const -13360
   i32.ne
   if
    i32.const 0
@@ -3156,8 +3140,7 @@
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 14689
   i32.ne
   if

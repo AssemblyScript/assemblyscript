@@ -149,6 +149,8 @@ export const FEATURE_TAIL_CALLS = Feature.TAIL_CALLS;
 export const FEATURE_REFERENCE_TYPES = Feature.REFERENCE_TYPES;
 /** Multi value types. */
 export const FEATURE_MULTI_VALUE = Feature.MULTI_VALUE;
+/** Anyref type. */
+export const FEATURE_ANYREF = Feature.ANYREF;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {

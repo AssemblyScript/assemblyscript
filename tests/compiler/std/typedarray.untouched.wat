@@ -6126,10 +6126,7 @@
   call $~lib/typedarray/Int8Array#reduce<i8>
   local.set $2
   local.get $2
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 6
   i32.eq
   i32.eqz
@@ -6553,10 +6550,7 @@
   call $~lib/typedarray/Int16Array#reduce<i16>
   local.set $2
   local.get $2
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 6
   i32.eq
   i32.eqz
@@ -7682,10 +7676,7 @@
   call $~lib/typedarray/Int8Array#reduceRight<i8>
   local.set $2
   local.get $2
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 6
   i32.eq
   i32.eqz
@@ -8062,10 +8053,7 @@
   call $~lib/typedarray/Int16Array#reduceRight<i16>
   local.set $2
   local.get $2
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 6
   i32.eq
   i32.eqz
@@ -11132,10 +11120,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 2
   i32.gt_s
   local.set $3
@@ -11983,10 +11968,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 2
   i32.gt_s
   local.set $3
@@ -13885,10 +13867,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 2
   i32.eq
   local.set $3
@@ -13978,10 +13957,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 0
   i32.eq
   local.set $3
@@ -14384,10 +14360,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 2
   i32.eq
   local.set $3
@@ -14477,10 +14450,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 0
   i32.eq
   local.set $3
@@ -15684,10 +15654,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 2
   i32.eq
   local.set $3
@@ -15777,10 +15744,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 4
   i32.eq
   local.set $3
@@ -16186,10 +16150,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 2
   i32.eq
   local.set $3
@@ -16279,10 +16240,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 4
   i32.eq
   local.set $3
@@ -17494,12 +17452,10 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 2
   i32.rem_s
+  i32.extend8_s
   i32.const 0
   i32.eq
   local.set $3
@@ -17592,10 +17548,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 2
   i32.eq
   local.set $3
@@ -18008,12 +17961,10 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 2
   i32.rem_s
+  i32.extend16_s
   i32.const 0
   i32.eq
   local.set $3
@@ -18106,10 +18057,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 2
   i32.eq
   local.set $3
@@ -19880,15 +19828,9 @@
   call $~lib/array/Array<i32>#__get
   local.set $3
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.get $3
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.eq
   i32.eqz
   if
@@ -20006,30 +19948,21 @@
   global.get $std/typedarray/forEachValues
   i32.const 0
   call $~lib/array/Array<i32>#__get
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/typedarray/Int8Array#__set
   local.get $1
   i32.const 1
   global.get $std/typedarray/forEachValues
   i32.const 1
   call $~lib/array/Array<i32>#__get
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/typedarray/Int8Array#__set
   local.get $1
   i32.const 2
   global.get $std/typedarray/forEachValues
   i32.const 2
   call $~lib/array/Array<i32>#__get
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/typedarray/Int8Array#__set
   local.get $1
   i32.const 5280
@@ -20403,15 +20336,9 @@
   call $~lib/array/Array<i32>#__get
   local.set $3
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   local.get $3
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.eq
   i32.eqz
   if
@@ -20529,30 +20456,21 @@
   global.get $std/typedarray/forEachValues
   i32.const 0
   call $~lib/array/Array<i32>#__get
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/typedarray/Int16Array#__set
   local.get $1
   i32.const 1
   global.get $std/typedarray/forEachValues
   i32.const 1
   call $~lib/array/Array<i32>#__get
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/typedarray/Int16Array#__set
   local.get $1
   i32.const 2
   global.get $std/typedarray/forEachValues
   i32.const 2
   call $~lib/array/Array<i32>#__get
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/typedarray/Int16Array#__set
   local.get $1
   i32.const 5376
@@ -21833,20 +21751,14 @@
     local.get $0
     local.get $6
     call $~lib/array/Array<i32>#__get
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     call $~lib/typedarray/Int8Array#__set
     local.get $5
     local.get $6
     local.get $0
     local.get $6
     call $~lib/array/Array<i32>#__get
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     call $~lib/typedarray/Int8Array#__set
     local.get $6
     i32.const 1
@@ -21877,10 +21789,7 @@
     local.get $6
     i32.sub
     call $~lib/array/Array<i32>#__get
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.eq
     i32.eqz
     if
@@ -22889,20 +22798,14 @@
     local.get $0
     local.get $6
     call $~lib/array/Array<i32>#__get
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     call $~lib/typedarray/Int16Array#__set
     local.get $5
     local.get $6
     local.get $0
     local.get $6
     call $~lib/array/Array<i32>#__get
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     call $~lib/typedarray/Int16Array#__set
     local.get $6
     i32.const 1
@@ -22933,10 +22836,7 @@
     local.get $6
     i32.sub
     call $~lib/array/Array<i32>#__get
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.eq
     i32.eqz
     if
@@ -25317,10 +25217,7 @@
      i32.add
      i32.load8_s
      local.get $4
-     i32.const 24
-     i32.shl
-     i32.const 24
-     i32.shr_s
+     i32.extend8_s
      i32.eq
      if
       local.get $6
@@ -25413,10 +25310,7 @@
      i32.add
      i32.load8_s
      local.get $4
-     i32.const 24
-     i32.shl
-     i32.const 24
-     i32.shr_s
+     i32.extend8_s
      i32.eq
      if
       local.get $6
@@ -25494,10 +25388,7 @@
     local.get $0
     local.get $4
     call $~lib/array/Array<i32>#__get
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     call $~lib/typedarray/Int8Array#__set
     local.get $4
     i32.const 1
@@ -27390,10 +27281,7 @@
      i32.add
      i32.load16_s
      local.get $4
-     i32.const 16
-     i32.shl
-     i32.const 16
-     i32.shr_s
+     i32.extend16_s
      i32.eq
      if
       local.get $6
@@ -27486,10 +27374,7 @@
      i32.add
      i32.load16_s
      local.get $4
-     i32.const 16
-     i32.shl
-     i32.const 16
-     i32.shr_s
+     i32.extend16_s
      i32.eq
      if
       local.get $6
@@ -27567,10 +27452,7 @@
     local.get $0
     local.get $4
     call $~lib/array/Array<i32>#__get
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     call $~lib/typedarray/Int16Array#__set
     local.get $4
     i32.const 1
@@ -33608,10 +33490,7 @@
   i32.const 1
   drop
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 0
   i32.lt_s
   local.set $2
@@ -33636,10 +33515,7 @@
   i32.le_u
   drop
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 10
   i32.lt_u
   if
@@ -33649,10 +33525,7 @@
    i32.shl
    i32.add
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 48
    i32.or
    i32.store16
@@ -33669,20 +33542,14 @@
   drop
   local.get $3
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/util/number/decimalCount32
   i32.add
   local.set $3
   local.get $0
   local.set $6
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.set $5
   local.get $3
   local.set $4
@@ -34787,10 +34654,7 @@
   i32.const 1
   drop
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 0
   i32.lt_s
   local.set $2
@@ -34815,10 +34679,7 @@
   i32.le_u
   drop
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 10
   i32.lt_u
   if
@@ -34828,10 +34689,7 @@
    i32.shl
    i32.add
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 48
    i32.or
    i32.store16
@@ -34848,20 +34706,14 @@
   drop
   local.get $3
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/util/number/decimalCount32
   i32.add
   local.set $3
   local.get $0
   local.set $6
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   local.set $5
   local.get $3
   local.set $4
@@ -39583,10 +39435,7 @@
     local.get $0
     local.get $4
     call $~lib/array/Array<i32>#__get
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     call $~lib/typedarray/Int8Array#__set
     local.get $4
     i32.const 1
@@ -40205,10 +40054,7 @@
     local.get $0
     local.get $4
     call $~lib/array/Array<i32>#__get
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     call $~lib/typedarray/Int16Array#__set
     local.get $4
     i32.const 1

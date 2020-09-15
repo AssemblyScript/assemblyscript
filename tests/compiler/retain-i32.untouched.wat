@@ -24,17 +24,11 @@
   local.get $0
   local.get $1
   i32.add
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.get $0
   local.get $1
   i32.add
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.eq
   i32.eqz
   if
@@ -48,17 +42,11 @@
   local.get $0
   local.get $1
   i32.sub
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.get $0
   local.get $1
   i32.sub
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.eq
   i32.eqz
   if
@@ -72,17 +60,11 @@
   local.get $0
   local.get $1
   i32.mul
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.get $0
   local.get $1
   i32.mul
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.eq
   i32.eqz
   if
@@ -96,17 +78,11 @@
   local.get $0
   local.get $1
   i32.and
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.get $0
   local.get $1
   i32.and
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.eq
   i32.eqz
   if
@@ -120,17 +96,11 @@
   local.get $0
   local.get $1
   i32.or
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.get $0
   local.get $1
   i32.or
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.eq
   i32.eqz
   if
@@ -144,17 +114,11 @@
   local.get $0
   local.get $1
   i32.xor
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.get $0
   local.get $1
   i32.xor
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.eq
   i32.eqz
   if
@@ -168,17 +132,11 @@
   local.get $0
   local.get $1
   i32.shl
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.get $0
   local.get $1
   i32.shl
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.eq
   i32.eqz
   if
@@ -467,10 +425,7 @@
   i32.add
   i32.const 1
   i32.add
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   global.set $retain-i32/si
   global.get $retain-i32/si
   i32.const -1
@@ -489,10 +444,7 @@
   i32.sub
   i32.const 127
   i32.sub
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   global.set $retain-i32/si
   global.get $retain-i32/si
   i32.const -1
@@ -509,10 +461,7 @@
   i32.const 127
   i32.const 2
   i32.mul
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   global.set $retain-i32/si
   global.get $retain-i32/si
   i32.const -2
@@ -529,10 +478,7 @@
   i32.const 0
   i32.const -128
   i32.sub
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   global.set $retain-i32/si
   global.get $retain-i32/si
   i32.const -128
@@ -549,10 +495,7 @@
   i32.const -128
   i32.const -1
   i32.mul
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   global.set $retain-i32/si
   global.get $retain-i32/si
   i32.const -128
@@ -569,10 +512,7 @@
   i32.const 127
   i32.const -1
   i32.div_s
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   global.set $retain-i32/si
   global.get $retain-i32/si
   i32.const -127
@@ -589,10 +529,7 @@
   i32.const -128
   i32.const -1
   i32.div_s
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   global.set $retain-i32/si
   global.get $retain-i32/si
   i32.const -128

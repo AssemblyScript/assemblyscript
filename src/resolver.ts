@@ -1195,7 +1195,7 @@ export class Resolver extends DiagnosticEmitter {
           if (signatureReference) {
             return signatureReference.type.asNullable();
           } else if (ctxType.isExternalReference) {
-            return Type.externref.asNullable();
+            return ctxType; // TODO: nullable?
           }
         }
         return this.program.options.usizeType;

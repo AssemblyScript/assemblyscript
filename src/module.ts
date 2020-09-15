@@ -39,8 +39,8 @@ export namespace NativeType {
   export const V128: NativeType = 6 /* _BinaryenTypeVec128 */;
   export const Funcref: NativeType = 7 /* _BinaryenTypeFuncref */;
   export const Externref: NativeType = 8 /* _BinaryenTypeExternref */;
-  export const Nullref: NativeType = 9 /* _BinaryenTypeNullref */;
-  export const Exnref: NativeType = 10 /* _BinaryenTypeExnref */;
+  export const Exnref: NativeType = 9 /* _BinaryenTypeExnref */;
+  export const Anyref: NativeType = 10 /* _BinaryenTypeAnyref */;
   export const Auto: NativeType = -1 /* _BinaryenTypeAuto */;
 }
 
@@ -56,7 +56,8 @@ export enum FeatureFlags {
   TailCall = 128 /* _BinaryenFeatureTailCall */,
   ReferenceTypes = 256 /* _BinaryenFeatureReferenceTypes */,
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
-  All = 1023 /* _BinaryenFeatureAll */
+  Anyref = 1024 /* _BinaryenFeatureAnyref */,
+  All = 2047 /* _BinaryenFeatureAll */
 }
 
 export enum ExpressionId {
@@ -559,8 +560,8 @@ export class Module {
     return binaryen._BinaryenConst(this.ref, out);
   }
 
-  ref_null(): ExpressionRef {
-    return binaryen._BinaryenRefNull(this.ref);
+  ref_null(type: NativeType): ExpressionRef {
+    return binaryen._BinaryenRefNull(this.ref, type);
   }
 
   // expressions

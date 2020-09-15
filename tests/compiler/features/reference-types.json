@@ -1,6 +1,8 @@
 {
   "features": [
-    "reference-types"
+    "reference-types",
+    "exception-handling",
+    "anyref"
   ],
   "asc_flags": [
     "--runtime none"

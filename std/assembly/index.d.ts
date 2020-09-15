@@ -35,8 +35,14 @@ declare type f32 = number;
 declare type f64 = number;
 /** A 128-bit vector. */
 declare type v128 = object;
-/** A host reference. */
-declare type externref = object;
+/** Function reference. */
+declare type funcref = object | null;
+/** External reference. */
+declare type externref = object | null;
+/** Exception reference. */
+declare type exnref = object | null;
+/** Any reference. */
+declare type anyref = object | null;
 
 // Compiler hints
 
@@ -74,6 +80,8 @@ declare const ASC_FEATURE_TAIL_CALLS: bool;
 declare const ASC_FEATURE_REFERENCE_TYPES: bool;
 /** Whether the multi value types feature is enabled. */
 declare const ASC_FEATURE_MULTI_VALUE: bool;
+/** Whether the anyref feature is enabled. */
+declare const ASC_FEATURE_ANYREF: bool;
 
 // Builtins
 

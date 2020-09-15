@@ -1866,10 +1866,7 @@
      local.get $3
      i32.load8_s
      local.get $1
-     i32.const 24
-     i32.shl
-     i32.const 24
-     i32.shr_s
+     i32.extend8_s
      i32.eq
     else
      i32.const 0
@@ -1908,10 +1905,7 @@
    i32.eq
    drop
    local.get $2
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    call $~lib/util/hash/hash8
    br $~lib/util/hash/HASH<i8>|inlined.0
   end
@@ -2100,10 +2094,7 @@
    i32.eq
    drop
    local.get $2
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    call $~lib/util/hash/hash8
    br $~lib/util/hash/HASH<i8>|inlined.1
   end
@@ -3968,10 +3959,7 @@
    i32.eq
    drop
    local.get $2
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    call $~lib/util/hash/hash8
    br $~lib/util/hash/HASH<i8>|inlined.3
   end
@@ -4096,10 +4084,7 @@
   local.set $1
   loop $for-loop|1
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 100
    i32.lt_s
    local.set $3
@@ -4158,10 +4143,7 @@
   local.set $1
   loop $for-loop|3
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 100
    i32.lt_s
    local.set $4
@@ -4276,10 +4258,7 @@
   local.set $5
   loop $for-loop|6
    local.get $5
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 50
    i32.lt_s
    local.set $7
@@ -4338,10 +4317,7 @@
   local.set $5
   loop $for-loop|8
    local.get $5
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 50
    i32.lt_s
    local.set $8
@@ -5633,10 +5609,7 @@
      local.get $3
      i32.load16_s
      local.get $1
-     i32.const 16
-     i32.shl
-     i32.const 16
-     i32.shr_s
+     i32.extend16_s
      i32.eq
     else
      i32.const 0
@@ -5679,10 +5652,7 @@
    i32.eq
    drop
    local.get $2
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    call $~lib/util/hash/hash16
    br $~lib/util/hash/HASH<i16>|inlined.0
   end
@@ -5879,10 +5849,7 @@
    i32.eq
    drop
    local.get $2
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    call $~lib/util/hash/hash16
    br $~lib/util/hash/HASH<i16>|inlined.1
   end
@@ -6238,10 +6205,7 @@
    i32.eq
    drop
    local.get $2
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    call $~lib/util/hash/hash16
    br $~lib/util/hash/HASH<i16>|inlined.3
   end
@@ -6366,10 +6330,7 @@
   local.set $1
   loop $for-loop|1
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 100
    i32.lt_s
    local.set $3
@@ -6428,10 +6389,7 @@
   local.set $1
   loop $for-loop|3
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 100
    i32.lt_s
    local.set $4
@@ -6546,10 +6504,7 @@
   local.set $5
   loop $for-loop|6
    local.get $5
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 50
    i32.lt_s
    local.set $7
@@ -6608,10 +6563,7 @@
   local.set $5
   loop $for-loop|8
    local.get $5
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 50
    i32.lt_s
    local.set $8

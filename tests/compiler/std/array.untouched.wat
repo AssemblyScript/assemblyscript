@@ -16751,10 +16751,7 @@
   i32.const 1
   drop
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 0
   i32.lt_s
   local.set $2
@@ -16779,10 +16776,7 @@
   i32.le_u
   drop
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 10
   i32.lt_u
   if
@@ -16792,10 +16786,7 @@
    i32.shl
    i32.add
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 48
    i32.or
    i32.store16
@@ -16812,20 +16803,14 @@
   drop
   local.get $3
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/util/number/decimalCount32
   i32.add
   local.set $3
   local.get $0
   local.set $6
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.set $5
   local.get $3
   local.set $4

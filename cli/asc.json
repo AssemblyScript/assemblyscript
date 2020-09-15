@@ -187,11 +187,11 @@
     "description": [
       "Enables WebAssembly features being disabled by default.",
       "",
-      " sign-extension      Sign-extension operations",
       " bulk-memory         Bulk memory operations.",
       " simd                SIMD types and operations.",
       " threads             Threading and atomic operations.",
       " reference-types     Reference types and operations.",
+      " anyref              Anyref type (without GC).",
       ""
     ],
     "TODO_doesNothingYet": [
@@ -209,6 +209,7 @@
       "Disables WebAssembly features being enabled by default.",
       "",
       " mutable-globals     Mutable global imports and exports.",
+      " sign-extension      Sign-extension operations",
       ""
     ],
     "type": "S",

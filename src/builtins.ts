@@ -968,39 +968,16 @@ function builtin_nameof(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   var value: string;
-  if (resultType.isReference) {
+  if (resultType.isInternalReference) {
     let classReference = resultType.getClass();
     if (classReference) {
       value = classReference.name;
     } else {
-      let signatureReference = resultType.getSignature();
-      if (signatureReference) {
-        value = "Function";
-      } else {
-        assert(resultType.isExternalReference);
-        value = "Externref";
-      }
+      assert(resultType.getSignature());
+      value = "Function";
     }
   } else {
-    switch (resultType.kind) {
-      case TypeKind.BOOL: { value = "bool"; break; }
-      case TypeKind.I8: { value = "i8"; break; }
-      case TypeKind.U8: { value = "u8"; break; }
-      case TypeKind.I16: { value = "i16"; break; }
-      case TypeKind.U16: { value = "u16"; break; }
-      case TypeKind.I32: { value = "i32"; break; }
-      case TypeKind.U32: { value = "u32"; break; }
-      case TypeKind.F32: { value = "f32"; break; }
-      case TypeKind.I64: { value = "i64"; break; }
-      case TypeKind.U64: { value = "u64"; break; }
-      case TypeKind.F64: { value = "f64"; break; }
-      case TypeKind.ISIZE: { value = "isize"; break; }
-      case TypeKind.USIZE: { value = "usize"; break; }
-      case TypeKind.V128: { value = "v128"; break; }
-      case TypeKind.EXTERNREF: { value = "externref"; break; }
-      default: assert(false);
-      case TypeKind.VOID: { value = "void"; break; }
-    }
+    value = resultType.toString();
   }
   return compiler.ensureStaticString(value);
 }
@@ -2775,6 +2752,11 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       // TODO: also check for NaN in float assertions, as in `Boolean(NaN) -> false`?
       case TypeKind.F32: return module.if(module.binary(BinaryOp.EqF32, arg0, module.f32(0)), abort);
       case TypeKind.F64: return module.if(module.binary(BinaryOp.EqF64, arg0, module.f64(0)), abort);
+      case TypeKind.FUNCREF:
+      case TypeKind.EXTERNREF:
+      case TypeKind.EXNREF:
+      case TypeKind.ANYREF: return module.if(module.ref_is_null(arg0), abort);
+          
     }
   } else {
     compiler.currentType = type.nonNullableType;
@@ -2845,6 +2827,21 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
           module.binary(BinaryOp.EqF64,
             module.local_tee(temp.index, arg0),
             module.f64(0)
+          ),
+          abort,
+          module.local_get(temp.index, NativeType.F64)
+        );
+        flow.freeTempLocal(temp);
+        return ret;
+      }
+      case TypeKind.FUNCREF:
+      case TypeKind.EXTERNREF:
+      case TypeKind.EXNREF:
+      case TypeKind.ANYREF: {
+        let temp = flow.getTempLocal(type);
+        let ret = module.if(
+          module.ref_is_null(
+            module.local_tee(temp.index, arg0)
           ),
           abort,
           module.local_get(temp.index, NativeType.F64)

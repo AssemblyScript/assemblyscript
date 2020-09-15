@@ -123,7 +123,10 @@ export namespace CommonNames {
   export const f32 = "f32";
   export const f64 = "f64";
   export const v128 = "v128";
+  export const funcref = "funcref";
   export const externref = "externref";
+  export const exnref = "exnref";
+  export const anyref = "anyref";
   export const i8x16 = "i8x16";
   export const u8x16 = "u8x16";
   export const i16x8 = "i16x8";
@@ -170,6 +173,7 @@ export namespace CommonNames {
   export const ASC_FEATURE_TAIL_CALLS = "ASC_FEATURE_TAIL_CALLS";
   export const ASC_FEATURE_REFERENCE_TYPES = "ASC_FEATURE_REFERENCE_TYPES";
   export const ASC_FEATURE_MULTI_VALUE = "ASC_FEATURE_MULTI_VALUE";
+  export const ASC_FEATURE_ANYREF = "ASC_FEATURE_ANYREF";
   // classes
   export const I8 = "I8";
   export const I16 = "I16";
@@ -185,7 +189,10 @@ export namespace CommonNames {
   export const F32 = "F32";
   export const F64 = "F64";
   export const V128 = "V128";
+  export const Funcref = "Funcref";
   export const Externref = "Externref";
+  export const Exnref = "Exnref";
+  export const Anyref = "Anyref";
   export const String = "String";
   export const Array = "Array";
   export const StaticArray = "StaticArray";

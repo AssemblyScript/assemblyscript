@@ -412,10 +412,7 @@
   end
   local.get $2
   i8x16.extract_lane_s 0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 2
   i32.eq
   i32.eqz
@@ -429,10 +426,7 @@
   end
   local.get $2
   i8x16.extract_lane_s 15
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const -128
   i32.eq
   i32.eqz
@@ -954,10 +948,7 @@
   end
   local.get $2
   i16x8.extract_lane_s 0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 2
   i32.eq
   i32.eqz
@@ -971,10 +962,7 @@
   end
   local.get $2
   i16x8.extract_lane_s 7
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -32768
   i32.eq
   i32.eqz

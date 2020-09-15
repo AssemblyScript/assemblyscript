@@ -59,8 +59,14 @@ export const enum TypeKind {
 
   // references
 
-  /** Any host reference. */
+  /** Function reference. */
+  FUNCREF,
+  /** External reference. */
   EXTERNREF,
+  /** Exception reference. */
+  EXNREF,
+  /** Any reference. */
+  ANYREF,
 
   // other
 
@@ -319,6 +325,9 @@ export class Type {
 
   /** Gets the corresponding non-nullable type. */
   get nonNullableType(): Type {
+    if (this.isExternalReference) {
+      return this; // TODO
+    }
     return assert(this._nonNullableType); // set either in ctor or asNullable
   }
 
@@ -387,7 +396,7 @@ export class Type {
             if (targetFunction = target.getSignature()) {
               return currentFunction.isAssignableTo(targetFunction);
             }
-          } else if (this.kind == TypeKind.EXTERNREF && target.kind == TypeKind.EXTERNREF) {
+          } else if (this.isExternalReference && (this.kind == target.kind || target.kind == TypeKind.ANYREF)) {
             return true;
           }
         }
@@ -462,16 +471,14 @@ export class Type {
         return this.isNullableReference
           ? classReference.internalName + nullablePostfix
           : classReference.internalName;
+      } else {
+        let signatureReference = this.getSignature();
+        if (signatureReference) {
+          return this.isNullableReference
+            ? "(" + signatureReference.toString(validWat) + ")" + nullablePostfix
+            : signatureReference.toString(validWat);
+        }
       }
-      let signatureReference = this.getSignature();
-      if (signatureReference) {
-        return this.isNullableReference
-          ? "(" + signatureReference.toString(validWat) + ")" + nullablePostfix
-          : signatureReference.toString(validWat);
-      }
-      // TODO: Reflect.apply(value, "toString", []) ?
-      assert(this.kind == TypeKind.EXTERNREF);
-      return "externref";
     }
     switch (this.kind) {
       case TypeKind.I8: return "i8";
@@ -488,7 +495,10 @@ export class Type {
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
       case TypeKind.V128: return "v128";
+      case TypeKind.FUNCREF: return "funcref";
       case TypeKind.EXTERNREF: return "externref";
+      case TypeKind.EXNREF: return "exnref";
+      case TypeKind.ANYREF: return "anyref";
       default: assert(false);
       case TypeKind.VOID: return "void";
     }
@@ -514,7 +524,10 @@ export class Type {
       case TypeKind.F32: return NativeType.F32;
       case TypeKind.F64: return NativeType.F64;
       case TypeKind.V128: return NativeType.V128;
+      case TypeKind.FUNCREF: return NativeType.Funcref;
       case TypeKind.EXTERNREF: return NativeType.Externref;
+      case TypeKind.EXNREF: return NativeType.Exnref;
+      case TypeKind.ANYREF: return NativeType.Anyref;
       case TypeKind.VOID: return NativeType.None;
     }
   }
@@ -646,9 +659,31 @@ export class Type {
     TypeFlags.VALUE, 128
   );
 
-  /** Any host reference. */
+  /** Function reference. */
+  static readonly funcref: Type = new Type(TypeKind.FUNCREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** External reference. */
   static readonly externref: Type = new Type(TypeKind.EXTERNREF,
     TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** Exception reference. */
+  static readonly exnref: Type = new Type(TypeKind.EXNREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** Any reference. */
+  static readonly anyref: Type = new Type(TypeKind.ANYREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
     TypeFlags.REFERENCE, 0
   );
 

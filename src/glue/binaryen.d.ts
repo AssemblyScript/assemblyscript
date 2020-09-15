@@ -58,6 +58,7 @@ export declare function _BinaryenFeatureExceptionHandling(): BinaryenFeatureFlag
 export declare function _BinaryenFeatureTailCall(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureReferenceTypes(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureMultivalue(): BinaryenFeatureFlags;
+export declare function _BinaryenFeatureAnyref(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureAll(): BinaryenFeatureFlags;
 
 type BinaryenExpressionId = i32;
@@ -790,7 +791,7 @@ export declare function _BinaryenMemoryFillSetValue(expr: BinaryenExpressionRef,
 export declare function _BinaryenMemoryFillGetSize(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenMemoryFillSetSize(expr: BinaryenExpressionRef, sizeExpr: BinaryenExpressionRef): void;
 
-export declare function _BinaryenRefNull(module: BinaryenModuleRef): BinaryenExpressionRef;
+export declare function _BinaryenRefNull(module: BinaryenModuleRef, type: BinaryenType): BinaryenExpressionRef;
 
 export declare function _BinaryenRefIsNull(module: BinaryenModuleRef, valueExpr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenRefIsNullGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;

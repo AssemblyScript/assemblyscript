@@ -1333,10 +1333,9 @@
      i32.const 0
     else
      local.get $0
-     i32.load8_u
+     i32.load8_s
      local.get $1
-     i32.const 255
-     i32.and
+     i32.extend8_s
      i32.eq
     end
     if
@@ -1357,10 +1356,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/util/hash/hash8
   call $~lib/map/Map<i8,i32>#find
   i32.const 0
@@ -1506,10 +1502,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/util/hash/hash8
   local.tee $5
   call $~lib/map/Map<i8,i32>#find
@@ -1602,10 +1595,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/util/hash/hash8
   call $~lib/map/Map<i8,i32>#find
   local.tee $0
@@ -2530,10 +2520,7 @@
   (local $5 i32)
   local.get $1
   local.tee $3
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/util/hash/hash8
   local.set $4
   local.get $0
@@ -2559,10 +2546,9 @@
       i32.const 0
      else
       local.get $1
-      i32.load8_u
+      i32.load8_s
       local.get $3
-      i32.const 255
-      i32.and
+      i32.extend8_s
       i32.eq
      end
      br_if $__inlined_func$~lib/map/Map<i8,i8>#find
@@ -2967,10 +2953,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/util/hash/hash8
   call $~lib/map/Map<i8,i32>#find
   local.tee $1
@@ -3093,10 +3076,7 @@
   i32.store offset=20
   loop $for-loop|1
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 100
    i32.lt_s
    if
@@ -3114,10 +3094,7 @@
     local.get $0
     local.get $1
     local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.const 10
     i32.add
     call $~lib/map/Map<i8,i32>#set
@@ -3138,10 +3115,7 @@
     local.get $1
     call $~lib/map/Map<i8,i32>#get
     local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.const 10
     i32.add
     i32.ne
@@ -3176,10 +3150,7 @@
   local.set $1
   loop $for-loop|3
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 100
    i32.lt_s
    if
@@ -3199,10 +3170,7 @@
     local.get $1
     call $~lib/map/Map<i8,i32>#get
     local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.const 10
     i32.add
     i32.ne
@@ -3217,10 +3185,7 @@
     local.get $0
     local.get $1
     local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.const 20
     i32.add
     call $~lib/map/Map<i8,i32>#set
@@ -3241,10 +3206,7 @@
     local.get $1
     call $~lib/map/Map<i8,i32>#get
     local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.const 20
     i32.add
     i32.ne
@@ -3409,10 +3371,7 @@
   local.set $2
   loop $for-loop|6
    local.get $2
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 50
    i32.lt_s
    if
@@ -3432,10 +3391,7 @@
     local.get $2
     call $~lib/map/Map<i8,i32>#get
     local.get $2
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.const 20
     i32.add
     i32.ne
@@ -3484,10 +3440,7 @@
   local.set $2
   loop $for-loop|8
    local.get $2
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 50
    i32.lt_s
    if
@@ -3505,10 +3458,7 @@
     local.get $0
     local.get $2
     local.get $2
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.const 10
     i32.add
     call $~lib/map/Map<i8,i32>#set
@@ -3581,6 +3531,49 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
+ (func $~lib/map/Map<u8,i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  local.set $0
+  loop $while-continue|0
+   local.get $0
+   if
+    local.get $0
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    if (result i32)
+     i32.const 0
+    else
+     local.get $0
+     i32.load8_u
+     local.get $1
+     i32.const 255
+     i32.and
+     i32.eq
+    end
+    if
+     local.get $0
+     return
+    end
+    local.get $0
+    i32.load offset=8
+    i32.const -2
+    i32.and
+    local.set $0
+    br $while-continue|0
+   end
+  end
+  i32.const 0
+ )
  (func $~lib/map/Map<u8,i32>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -3588,7 +3581,7 @@
   i32.const 255
   i32.and
   call $~lib/util/hash/hash8
-  call $~lib/map/Map<i8,i32>#find
+  call $~lib/map/Map<u8,i32>#find
   i32.const 0
   i32.ne
  )
@@ -3736,7 +3729,7 @@
   i32.and
   call $~lib/util/hash/hash8
   local.tee $5
-  call $~lib/map/Map<i8,i32>#find
+  call $~lib/map/Map<u8,i32>#find
   local.tee $3
   if
    local.get $3
@@ -3829,7 +3822,7 @@
   i32.const 255
   i32.and
   call $~lib/util/hash/hash8
-  call $~lib/map/Map<i8,i32>#find
+  call $~lib/map/Map<u8,i32>#find
   local.tee $0
   i32.eqz
   if
@@ -4233,7 +4226,7 @@
   i32.const 255
   i32.and
   call $~lib/util/hash/hash8
-  call $~lib/map/Map<i8,i32>#find
+  call $~lib/map/Map<u8,i32>#find
   local.tee $1
   i32.eqz
   if
@@ -4825,10 +4818,9 @@
      i32.const 0
     else
      local.get $0
-     i32.load16_u
+     i32.load16_s
      local.get $1
-     i32.const 65535
-     i32.and
+     i32.extend16_s
      i32.eq
     end
     if
@@ -4849,10 +4841,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/util/hash/hash16
   call $~lib/map/Map<i16,i32>#find
   i32.const 0
@@ -4998,10 +4987,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/util/hash/hash16
   local.tee $5
   call $~lib/map/Map<i16,i32>#find
@@ -5094,10 +5080,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/util/hash/hash16
   call $~lib/map/Map<i16,i32>#find
   local.tee $0
@@ -5419,10 +5402,7 @@
   (local $5 i32)
   local.get $1
   local.tee $3
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/util/hash/hash16
   local.set $4
   local.get $0
@@ -5448,10 +5428,9 @@
       i32.const 0
      else
       local.get $1
-      i32.load16_u
+      i32.load16_s
       local.get $3
-      i32.const 65535
-      i32.and
+      i32.extend16_s
       i32.eq
      end
      br_if $__inlined_func$~lib/map/Map<i16,i16>#find
@@ -5556,10 +5535,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/util/hash/hash16
   call $~lib/map/Map<i16,i32>#find
   local.tee $1
@@ -5649,10 +5625,7 @@
   i32.store offset=20
   loop $for-loop|1
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 100
    i32.lt_s
    if
@@ -5670,10 +5643,7 @@
     local.get $0
     local.get $1
     local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.const 10
     i32.add
     call $~lib/map/Map<i16,i32>#set
@@ -5694,10 +5664,7 @@
     local.get $1
     call $~lib/map/Map<i16,i32>#get
     local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.const 10
     i32.add
     i32.ne
@@ -5732,10 +5699,7 @@
   local.set $1
   loop $for-loop|3
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 100
    i32.lt_s
    if
@@ -5755,10 +5719,7 @@
     local.get $1
     call $~lib/map/Map<i16,i32>#get
     local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.const 10
     i32.add
     i32.ne
@@ -5773,10 +5734,7 @@
     local.get $0
     local.get $1
     local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.const 20
     i32.add
     call $~lib/map/Map<i16,i32>#set
@@ -5797,10 +5755,7 @@
     local.get $1
     call $~lib/map/Map<i16,i32>#get
     local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.const 20
     i32.add
     i32.ne
@@ -5967,10 +5922,7 @@
   local.set $2
   loop $for-loop|6
    local.get $2
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 50
    i32.lt_s
    if
@@ -5990,10 +5942,7 @@
     local.get $2
     call $~lib/map/Map<i16,i32>#get
     local.get $2
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.const 20
     i32.add
     i32.ne
@@ -6042,10 +5991,7 @@
   local.set $2
   loop $for-loop|8
    local.get $2
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 50
    i32.lt_s
    if
@@ -6063,10 +6009,7 @@
     local.get $0
     local.get $2
     local.get $2
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.const 10
     i32.add
     call $~lib/map/Map<i16,i32>#set
@@ -6139,6 +6082,49 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
+ (func $~lib/map/Map<u16,i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  local.set $0
+  loop $while-continue|0
+   local.get $0
+   if
+    local.get $0
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    if (result i32)
+     i32.const 0
+    else
+     local.get $0
+     i32.load16_u
+     local.get $1
+     i32.const 65535
+     i32.and
+     i32.eq
+    end
+    if
+     local.get $0
+     return
+    end
+    local.get $0
+    i32.load offset=8
+    i32.const -2
+    i32.and
+    local.set $0
+    br $while-continue|0
+   end
+  end
+  i32.const 0
+ )
  (func $~lib/map/Map<u16,i32>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -6146,7 +6132,7 @@
   i32.const 65535
   i32.and
   call $~lib/util/hash/hash16
-  call $~lib/map/Map<i16,i32>#find
+  call $~lib/map/Map<u16,i32>#find
   i32.const 0
   i32.ne
  )
@@ -6294,7 +6280,7 @@
   i32.and
   call $~lib/util/hash/hash16
   local.tee $5
-  call $~lib/map/Map<i16,i32>#find
+  call $~lib/map/Map<u16,i32>#find
   local.tee $3
   if
    local.get $3
@@ -6387,7 +6373,7 @@
   i32.const 65535
   i32.and
   call $~lib/util/hash/hash16
-  call $~lib/map/Map<i16,i32>#find
+  call $~lib/map/Map<u16,i32>#find
   local.tee $0
   i32.eqz
   if
@@ -6795,7 +6781,7 @@
   i32.const 65535
   i32.and
   call $~lib/util/hash/hash16
-  call $~lib/map/Map<i16,i32>#find
+  call $~lib/map/Map<u16,i32>#find
   local.tee $1
   i32.eqz
   if

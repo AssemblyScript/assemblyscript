@@ -1437,10 +1437,7 @@
   drop
   global.get $~lib/builtins/i8.MIN_VALUE
   i32.const 128
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.eq
   drop
   global.get $~lib/builtins/i8.MAX_VALUE
@@ -1449,10 +1446,7 @@
   drop
   global.get $~lib/builtins/i16.MIN_VALUE
   i32.const 32768
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.eq
   drop
   global.get $~lib/builtins/i16.MAX_VALUE
