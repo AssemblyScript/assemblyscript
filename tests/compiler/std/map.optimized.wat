@@ -1383,10 +1383,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 12
   i32.mul
@@ -1528,12 +1530,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -2408,10 +2410,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 3
   i32.shl
@@ -2592,12 +2596,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -2751,10 +2755,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 12
   i32.mul
@@ -2892,12 +2898,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -3009,12 +3015,12 @@
   if (result i32)
    local.get $0
    i32.load offset=20
+   i32.const 2
+   i32.shl
    local.get $0
    i32.load offset=12
    i32.const 3
    i32.mul
-   i32.const 4
-   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -3609,10 +3615,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 12
   i32.mul
@@ -3752,12 +3760,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -3973,10 +3981,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 3
   i32.shl
@@ -4155,12 +4165,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -4270,12 +4280,12 @@
   if (result i32)
    local.get $0
    i32.load offset=20
+   i32.const 2
+   i32.shl
    local.get $0
    i32.load offset=12
    i32.const 3
    i32.mul
-   i32.const 4
-   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -4875,10 +4885,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 12
   i32.mul
@@ -5020,12 +5032,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -5297,10 +5309,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 3
   i32.shl
@@ -5481,12 +5495,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -5598,12 +5612,12 @@
   if (result i32)
    local.get $0
    i32.load offset=20
+   i32.const 2
+   i32.shl
    local.get $0
    i32.load offset=12
    i32.const 3
    i32.mul
-   i32.const 4
-   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -6167,10 +6181,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 12
   i32.mul
@@ -6310,12 +6326,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -6535,10 +6551,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 3
   i32.shl
@@ -6717,12 +6735,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -6832,12 +6850,12 @@
   if (result i32)
    local.get $0
    i32.load offset=20
+   i32.const 2
+   i32.shl
    local.get $0
    i32.load offset=12
    i32.const 3
    i32.mul
-   i32.const 4
-   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -7422,12 +7440,12 @@
   if (result i32)
    local.get $0
    i32.load offset=20
+   i32.const 2
+   i32.shl
    local.get $0
    i32.load offset=12
    i32.const 3
    i32.mul
-   i32.const 4
-   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -8615,10 +8633,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 4
   i32.shl
@@ -8756,12 +8776,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -9102,10 +9122,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 24
   i32.mul
@@ -9279,12 +9301,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -9393,12 +9415,12 @@
   if (result i32)
    local.get $0
    i32.load offset=20
+   i32.const 2
+   i32.shl
    local.get $0
    i32.load offset=12
    i32.const 3
    i32.mul
-   i32.const 4
-   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -10573,10 +10595,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 12
   i32.mul
@@ -10716,12 +10740,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -10974,10 +10998,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 12
   i32.mul
@@ -11117,12 +11143,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -11232,12 +11258,12 @@
   if (result i32)
    local.get $0
    i32.load offset=20
+   i32.const 2
+   i32.shl
    local.get $0
    i32.load offset=12
    i32.const 3
    i32.mul
-   i32.const 4
-   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -11805,10 +11831,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 4
   i32.shl
@@ -11948,12 +11976,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -12206,10 +12234,12 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $4
   local.get $3
-  i32.const 3
-  i32.shl
-  i32.const 3
-  i32.div_s
+  i64.extend_i32_s
+  i64.const 3
+  i64.shl
+  i64.const 3
+  i64.div_u
+  i32.wrap_i64
   local.tee $8
   i32.const 24
   i32.mul
@@ -12385,12 +12415,12 @@
     local.get $0
     local.get $0
     i32.load offset=20
+    i32.const 2
+    i32.shl
     local.get $0
     i32.load offset=12
     i32.const 3
     i32.mul
-    i32.const 4
-    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -12500,12 +12530,12 @@
   if (result i32)
    local.get $0
    i32.load offset=20
+   i32.const 2
+   i32.shl
    local.get $0
    i32.load offset=12
    i32.const 3
    i32.mul
-   i32.const 4
-   i32.div_s
    i32.lt_s
   else
    i32.const 0

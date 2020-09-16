@@ -103,7 +103,7 @@ export class Set<T> {
       // check if rehashing is necessary
       if (this.entriesOffset == this.entriesCapacity) {
         this.rehash(
-          this.entriesCount < this.entriesCapacity * FREE_FACTOR_N / FREE_FACTOR_D
+          this.entriesCount * FREE_FACTOR_D < this.entriesCapacity * FREE_FACTOR_N
             ?  this.bucketsMask           // just rehash if 1/4+ entries are empty
             : (this.bucketsMask << 1) | 1 // grow capacity to next 2^N
         );
@@ -138,7 +138,7 @@ export class Set<T> {
     var halfBucketsMask = this.bucketsMask >> 1;
     if (
       halfBucketsMask + 1 >= max<u32>(INITIAL_CAPACITY, this.entriesCount) &&
-      this.entriesCount < this.entriesCapacity * FREE_FACTOR_N / FREE_FACTOR_D
+      this.entriesCount * FREE_FACTOR_D < this.entriesCapacity * FREE_FACTOR_N
     ) this.rehash(halfBucketsMask);
     return true;
   }
@@ -146,7 +146,7 @@ export class Set<T> {
   private rehash(newBucketsMask: u32): void {
     var newBucketsCapacity = <i32>(newBucketsMask + 1);
     var newBuckets = new ArrayBuffer(newBucketsCapacity * <i32>BUCKET_SIZE);
-    var newEntriesCapacity = newBucketsCapacity * FILL_FACTOR_N / FILL_FACTOR_D;
+    var newEntriesCapacity = <i32>(<u64>newBucketsCapacity * FILL_FACTOR_N / FILL_FACTOR_D);
     var newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<T>());
 
     // copy old entries to new entries
