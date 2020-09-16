@@ -80,3 +80,12 @@ assert(otherFuncGlobal);
   let funcLocal: funcref = someFunc;
   assert(funcLocal);
 }
+
+// can assign any reference type to anyref
+
+anyGlobal = funcGlobal;
+anyGlobal = externGlobal;
+anyGlobal = exnGlobal;
+
+// TODO: Not implemented: ref.cast
+// exnGlobal = <exnref>anyGlobal;

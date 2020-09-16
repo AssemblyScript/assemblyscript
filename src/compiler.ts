@@ -3625,12 +3625,21 @@ export class Compiler extends DiagnosticEmitter {
         fromType = fromType.nonNullableType;
       }
       if (fromType.isAssignableTo(toType)) { // downcast or same
-        assert(fromType.kind == toType.kind);
+        assert(toType.isExternalReference || fromType.kind == toType.kind);
         this.currentType = toType;
         return expr;
       }
       if (explicit && toType.nonNullableType.isAssignableTo(fromType)) { // upcast
         // <Cat | null>(<Animal>maybeCat)
+        if (toType.isExternalReference) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            reportNode.range,
+            "ref.cast"
+          );
+          this.currentType = toType;
+          return module.unreachable();
+        }
         assert(fromType.kind == toType.kind);
         if (!this.options.noAssert) {
           expr = this.makeRuntimeUpcastCheck(expr, fromType, toType, reportNode);
