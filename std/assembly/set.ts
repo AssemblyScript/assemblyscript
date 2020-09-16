@@ -103,7 +103,7 @@ export class Set<T> {
       // check if rehashing is necessary
       if (this.entriesOffset == this.entriesCapacity) {
         this.rehash(
-          this.entriesCount * FREE_FACTOR_D < this.entriesCapacity * FREE_FACTOR_N
+          <u64>this.entriesCount * FREE_FACTOR_D < <u64>this.entriesCapacity * FREE_FACTOR_N
             ?  this.bucketsMask           // just rehash if 1/4+ entries are empty
             : (this.bucketsMask << 1) | 1 // grow capacity to next 2^N
         );
@@ -138,7 +138,7 @@ export class Set<T> {
     var halfBucketsMask = this.bucketsMask >> 1;
     if (
       halfBucketsMask + 1 >= max<u32>(INITIAL_CAPACITY, this.entriesCount) &&
-      this.entriesCount * FREE_FACTOR_D < this.entriesCapacity * FREE_FACTOR_N
+      <u64>this.entriesCount * FREE_FACTOR_D < <u64>this.entriesCapacity * FREE_FACTOR_N
     ) this.rehash(halfBucketsMask);
     return true;
   }

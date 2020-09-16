@@ -1546,13 +1546,15 @@
     local.get $0
     local.get $0
     i32.load offset=20
-    i32.const 2
-    i32.shl
+    i64.extend_i32_s
+    i64.const 2
+    i64.shl
     local.get $0
     i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.lt_s
+    i64.extend_i32_s
+    i64.const 3
+    i64.mul
+    i64.lt_u
     if (result i32)
      local.get $0
      i32.load offset=4
@@ -2223,13 +2225,15 @@
   if (result i32)
    local.get $0
    i32.load offset=20
-   i32.const 2
-   i32.shl
+   i64.extend_i32_s
+   i64.const 2
+   i64.shl
    local.get $0
    i32.load offset=12
-   i32.const 3
-   i32.mul
-   i32.lt_s
+   i64.extend_i32_s
+   i64.const 3
+   i64.mul
+   i64.lt_u
   else
    i32.const 0
   end
@@ -2781,13 +2785,15 @@
     local.get $0
     local.get $0
     i32.load offset=20
-    i32.const 2
-    i32.shl
+    i64.extend_i32_s
+    i64.const 2
+    i64.shl
     local.get $0
     i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.lt_s
+    i64.extend_i32_s
+    i64.const 3
+    i64.mul
+    i64.lt_u
     if (result i32)
      local.get $0
      i32.load offset=4
@@ -3020,13 +3026,15 @@
   if (result i32)
    local.get $0
    i32.load offset=20
-   i32.const 2
-   i32.shl
+   i64.extend_i32_s
+   i64.const 2
+   i64.shl
    local.get $0
    i32.load offset=12
-   i32.const 3
-   i32.mul
-   i32.lt_s
+   i64.extend_i32_s
+   i64.const 3
+   i64.mul
+   i64.lt_u
   else
    i32.const 0
   end
@@ -3599,13 +3607,15 @@
     local.get $0
     local.get $0
     i32.load offset=20
-    i32.const 2
-    i32.shl
+    i64.extend_i32_s
+    i64.const 2
+    i64.shl
     local.get $0
     i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.lt_s
+    i64.extend_i32_s
+    i64.const 3
+    i64.mul
+    i64.lt_u
     if (result i32)
      local.get $0
      i32.load offset=4
@@ -3896,13 +3906,15 @@
   if (result i32)
    local.get $0
    i32.load offset=20
-   i32.const 2
-   i32.shl
+   i64.extend_i32_s
+   i64.const 2
+   i64.shl
    local.get $0
    i32.load offset=12
-   i32.const 3
-   i32.mul
-   i32.lt_s
+   i64.extend_i32_s
+   i64.const 3
+   i64.mul
+   i64.lt_u
   else
    i32.const 0
   end
@@ -4421,13 +4433,15 @@
     local.get $0
     local.get $0
     i32.load offset=20
-    i32.const 2
-    i32.shl
+    i64.extend_i32_s
+    i64.const 2
+    i64.shl
     local.get $0
     i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.lt_s
+    i64.extend_i32_s
+    i64.const 3
+    i64.mul
+    i64.lt_u
     if (result i32)
      local.get $0
      i32.load offset=4
@@ -4666,13 +4680,15 @@
   if (result i32)
    local.get $0
    i32.load offset=20
-   i32.const 2
-   i32.shl
+   i64.extend_i32_s
+   i64.const 2
+   i64.shl
    local.get $0
    i32.load offset=12
-   i32.const 3
-   i32.mul
-   i32.lt_s
+   i64.extend_i32_s
+   i64.const 3
+   i64.mul
+   i64.lt_u
   else
    i32.const 0
   end
@@ -5251,13 +5267,15 @@
     local.get $0
     local.get $0
     i32.load offset=20
-    i32.const 2
-    i32.shl
+    i64.extend_i32_s
+    i64.const 2
+    i64.shl
     local.get $0
     i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.lt_s
+    i64.extend_i32_s
+    i64.const 3
+    i64.mul
+    i64.lt_u
     if (result i32)
      local.get $0
      i32.load offset=4
@@ -5544,13 +5562,15 @@
   if (result i32)
    local.get $0
    i32.load offset=20
-   i32.const 2
-   i32.shl
+   i64.extend_i32_s
+   i64.const 2
+   i64.shl
    local.get $0
    i32.load offset=12
-   i32.const 3
-   i32.mul
-   i32.lt_s
+   i64.extend_i32_s
+   i64.const 3
+   i64.mul
+   i64.lt_u
   else
    i32.const 0
   end
@@ -6602,13 +6622,15 @@
     local.get $0
     local.get $0
     i32.load offset=20
-    i32.const 2
-    i32.shl
+    i64.extend_i32_s
+    i64.const 2
+    i64.shl
     local.get $0
     i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.lt_s
+    i64.extend_i32_s
+    i64.const 3
+    i64.mul
+    i64.lt_u
     if (result i32)
      local.get $0
      i32.load offset=4
@@ -6896,13 +6918,15 @@
   if (result i32)
    local.get $0
    i32.load offset=20
-   i32.const 2
-   i32.shl
+   i64.extend_i32_s
+   i64.const 2
+   i64.shl
    local.get $0
    i32.load offset=12
-   i32.const 3
-   i32.mul
-   i32.lt_s
+   i64.extend_i32_s
+   i64.const 3
+   i64.mul
+   i64.lt_u
   else
    i32.const 0
   end
@@ -7926,13 +7950,15 @@
     local.get $0
     local.get $0
     i32.load offset=20
-    i32.const 2
-    i32.shl
+    i64.extend_i32_s
+    i64.const 2
+    i64.shl
     local.get $0
     i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.lt_s
+    i64.extend_i32_s
+    i64.const 3
+    i64.mul
+    i64.lt_u
     if (result i32)
      local.get $0
      i32.load offset=4
@@ -8205,13 +8231,15 @@
   if (result i32)
    local.get $0
    i32.load offset=20
-   i32.const 2
-   i32.shl
+   i64.extend_i32_s
+   i64.const 2
+   i64.shl
    local.get $0
    i32.load offset=12
-   i32.const 3
-   i32.mul
-   i32.lt_s
+   i64.extend_i32_s
+   i64.const 3
+   i64.mul
+   i64.lt_u
   else
    i32.const 0
   end
@@ -8755,13 +8783,15 @@
     local.get $0
     local.get $0
     i32.load offset=20
-    i32.const 2
-    i32.shl
+    i64.extend_i32_s
+    i64.const 2
+    i64.shl
     local.get $0
     i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.lt_s
+    i64.extend_i32_s
+    i64.const 3
+    i64.mul
+    i64.lt_u
     if (result i32)
      local.get $0
      i32.load offset=4
@@ -9034,13 +9064,15 @@
   if (result i32)
    local.get $0
    i32.load offset=20
-   i32.const 2
-   i32.shl
+   i64.extend_i32_s
+   i64.const 2
+   i64.shl
    local.get $0
    i32.load offset=12
-   i32.const 3
-   i32.mul
-   i32.lt_s
+   i64.extend_i32_s
+   i64.const 3
+   i64.mul
+   i64.lt_u
   else
    i32.const 0
   end

@@ -1120,13 +1120,15 @@
     local.get $0
     local.get $0
     i32.load offset=20
-    i32.const 4
-    i32.mul
+    i64.extend_i32_s
+    i64.const 4
+    i64.mul
     local.get $0
     i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.lt_s
+    i64.extend_i32_s
+    i64.const 3
+    i64.mul
+    i64.lt_u
     if (result i32)
      local.get $0
      i32.load offset=4
@@ -1531,13 +1533,15 @@
     local.get $0
     local.get $0
     i32.load offset=20
-    i32.const 4
-    i32.mul
+    i64.extend_i32_s
+    i64.const 4
+    i64.mul
     local.get $0
     i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.lt_s
+    i64.extend_i32_s
+    i64.const 3
+    i64.mul
+    i64.lt_u
     if (result i32)
      local.get $0
      i32.load offset=4
