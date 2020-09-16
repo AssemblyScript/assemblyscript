@@ -3546,8 +3546,8 @@
     if
      local.get $3
      call $~lib/rt/pure/__release
-     f64.const inf
      local.get $7
+     f64.const inf
      f64.mul
      return
     end
@@ -3979,7 +3979,6 @@
        i32.const -14
        i32.le_s
        if
-        f64.const 0.00004294967296
         local.get $14
         i64.const 6103515625
         i64.rem_u
@@ -3993,6 +3992,7 @@
         i64.sub
         i64.shl
         f64.convert_i64_u
+        f64.const 0.00004294967296
         f64.mul
         f64.nearest
         i64.trunc_f64_u
@@ -7331,9 +7331,9 @@
   local.tee $1
   i32.trunc_f64_s
   local.tee $4
+  local.get $1
   local.get $4
   f64.convert_i32_s
-  local.get $1
   f64.ne
   i32.add
   i32.const 3

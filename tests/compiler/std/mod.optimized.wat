@@ -220,8 +220,8 @@
    f64.reinterpret_i64
    return
   end
-  f64.const 0
   local.get $0
+  f64.const 0
   f64.mul
  )
  (func $std/mod/check<f64> (param $0 f64) (param $1 f64) (result i32)
@@ -463,8 +463,8 @@
    f32.reinterpret_i32
    return
   end
-  f32.const 0
   local.get $0
+  f32.const 0
   f32.mul
  )
  (func $std/mod/test_fmodf (param $0 f32) (param $1 f32) (param $2 f32) (result i32)

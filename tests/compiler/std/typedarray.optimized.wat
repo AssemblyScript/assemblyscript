@@ -9604,8 +9604,8 @@
    f32.reinterpret_i32
    return
   end
-  f32.const 0
   local.get $0
+  f32.const 0
   f32.mul
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
@@ -9833,8 +9833,8 @@
    f64.reinterpret_i64
    return
   end
-  f64.const 0
   local.get $0
+  f64.const 0
   f64.mul
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
@@ -17971,13 +17971,13 @@
     local.get $3
     i32.lt_s
     if
+     local.get $1
      local.get $4
      local.get $2
      i32.const 2
      i32.shl
      i32.add
      f32.load
-     local.get $1
      f32.eq
      if
       local.get $0
@@ -18040,13 +18040,13 @@
     i32.const 0
     i32.ge_s
     if
+     local.get $1
      local.get $3
      local.get $2
      i32.const 2
      i32.shl
      i32.add
      f32.load
-     local.get $1
      f32.eq
      if
       local.get $0
@@ -18557,13 +18557,13 @@
     local.get $3
     i32.lt_s
     if
+     local.get $1
      local.get $4
      local.get $2
      i32.const 3
      i32.shl
      i32.add
      f64.load
-     local.get $1
      f64.eq
      if
       local.get $0
@@ -18626,13 +18626,13 @@
     i32.const 0
     i32.ge_s
     if
+     local.get $1
      local.get $3
      local.get $2
      i32.const 3
      i32.shl
      i32.add
      f64.load
-     local.get $1
      f64.eq
      if
       local.get $0
@@ -21736,9 +21736,9 @@
   local.tee $1
   i32.trunc_f64_s
   local.tee $4
+  local.get $1
   local.get $4
   f64.convert_i32_s
-  local.get $1
   f64.ne
   i32.add
   i32.const 3

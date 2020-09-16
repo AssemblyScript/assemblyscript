@@ -10513,9 +10513,9 @@
     if (result i32)
      i32.const 0
     else
+     local.get $1
      local.get $0
      f32.load
-     local.get $1
      f32.eq
     end
     if
@@ -11745,9 +11745,9 @@
     if (result i32)
      i32.const 0
     else
+     local.get $1
      local.get $0
      f64.load
-     local.get $1
      f64.eq
     end
     if
@@ -12339,9 +12339,9 @@
      if (result i32)
       i32.const 0
      else
+      local.get $1
       local.get $3
       f64.load
-      local.get $1
       f64.eq
      end
      br_if $__inlined_func$~lib/map/Map<f64,f64>#find
