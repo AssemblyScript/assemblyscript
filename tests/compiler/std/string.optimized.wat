@@ -9249,16 +9249,10 @@
   i32.const 3008
   i32.const 0
   call $~lib/string/parseInt
-  local.tee $3
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
-  i32.wrap_i64
-  local.get $3
-  local.get $3
-  f64.eq
-  i32.and
-  i32.eqz
+  i64.eqz
   if
    i32.const 0
    i32.const 1088
