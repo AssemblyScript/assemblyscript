@@ -325,7 +325,7 @@ Object.defineProperties(globalScope["JSMath"], {
   sincos_cos: { value: 0.0, writable: true },
   signbit: {
     value: function signbit(x) {
-      F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
+      F64[0] = x; return Boolean(U64[1] >>> 31);
     }
   },
   sincos: {
