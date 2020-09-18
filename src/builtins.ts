@@ -53,7 +53,6 @@ import {
 import {
   BinaryOp,
   UnaryOp,
-  HostOp,
   AtomicRMWOp,
   SIMDExtractOp,
   SIMDReplaceOp,
@@ -2449,7 +2448,7 @@ function builtin_memory_size(ctx: BuiltinContext): ExpressionRef {
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 0)
   ) return module.unreachable();
-  return module.host(HostOp.MemorySize);
+  return module.memory_size();
 }
 builtins.set(BuiltinNames.memory_size, builtin_memory_size);
 
@@ -2462,10 +2461,7 @@ function builtin_memory_grow(ctx: BuiltinContext): ExpressionRef {
     checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 1)
   ) return module.unreachable();
-  var operands = ctx.operands;
-  return module.host(HostOp.MemoryGrow, null, [
-    compiler.compileExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT)
-  ]);
+  return module.memory_grow(compiler.compileExpression(ctx.operands[0], Type.i32, Constraints.CONV_IMPLICIT));
 }
 builtins.set(BuiltinNames.memory_grow, builtin_memory_grow);
 

@@ -24,12 +24,13 @@
     "v8_flags": [
     ]
   },
-  "anyref": {
+  "gc": {
     "asc_flags": [
-      "--enable anyref"
+      "--enable gc"
     ],
     "v8_flags": [
-      "--experimental-wasm-anyref"
+      "--experimental-wasm-anyref",
+      "--experimental-wasm-gc"
     ]
   },
   "bigint-integration": {

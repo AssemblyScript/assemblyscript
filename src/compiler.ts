@@ -405,7 +405,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.TAIL_CALLS)) featureFlags |= FeatureFlags.TailCall;
     if (options.hasFeature(Feature.REFERENCE_TYPES)) featureFlags |= FeatureFlags.ReferenceTypes;
     if (options.hasFeature(Feature.MULTI_VALUE)) featureFlags |= FeatureFlags.MultiValue;
-    if (options.hasFeature(Feature.ANYREF)) featureFlags |= FeatureFlags.Anyref;
+    if (options.hasFeature(Feature.GC)) featureFlags |= FeatureFlags.GC;
     module.setFeatures(featureFlags);
 
     // set up the main start function
@@ -10638,7 +10638,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.ANYREF: {
         return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode)
-            && this.checkFeatureEnabled(Feature.ANYREF, reportNode);
+            && this.checkFeatureEnabled(Feature.GC, reportNode);
       }
     }
     let classReference = type.getClass();

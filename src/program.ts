@@ -943,8 +943,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.REFERENCE_TYPES) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_MULTI_VALUE, Type.bool,
       i64_new(options.hasFeature(Feature.MULTI_VALUE) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonNames.ASC_FEATURE_ANYREF, Type.bool,
-      i64_new(options.hasFeature(Feature.ANYREF) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_GC, Type.bool,
+      i64_new(options.hasFeature(Feature.GC) ? 1 : 0, 0));
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
@@ -1162,7 +1162,7 @@ export class Program extends DiagnosticEmitter {
       if (options.hasFeature(Feature.EXCEPTION_HANDLING)) {
         this.registerWrapperClass(Type.exnref, CommonNames.Exnref);
       }
-      if (options.hasFeature(Feature.ANYREF)) {
+      if (options.hasFeature(Feature.GC)) {
         this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
       }
     }

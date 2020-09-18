@@ -431,6 +431,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $features/reference-types/funcGlobal
+  global.set $features/reference-types/anyGlobal
+  global.get $features/reference-types/externGlobal
+  global.set $features/reference-types/anyGlobal
+  global.get $features/reference-types/exnGlobal
+  global.set $features/reference-types/anyGlobal
  )
  (func $features/reference-types/internal (param $0 externref) (result externref)
   (local $1 externref)

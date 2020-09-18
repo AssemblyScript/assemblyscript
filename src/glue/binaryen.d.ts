@@ -58,7 +58,7 @@ export declare function _BinaryenFeatureExceptionHandling(): BinaryenFeatureFlag
 export declare function _BinaryenFeatureTailCall(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureReferenceTypes(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureMultivalue(): BinaryenFeatureFlags;
-export declare function _BinaryenFeatureAnyref(): BinaryenFeatureFlags;
+export declare function _BinaryenFeatureGC(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureAll(): BinaryenFeatureFlags;
 
 type BinaryenExpressionId = i32;
@@ -83,7 +83,8 @@ export declare function _BinaryenBinaryId(): BinaryenExpressionId;
 export declare function _BinaryenSelectId(): BinaryenExpressionId;
 export declare function _BinaryenDropId(): BinaryenExpressionId;
 export declare function _BinaryenReturnId(): BinaryenExpressionId;
-export declare function _BinaryenHostId(): BinaryenExpressionId;
+export declare function _BinaryenMemorySizeId(): BinaryenExpressionId;
+export declare function _BinaryenMemoryGrowId(): BinaryenExpressionId;
 export declare function _BinaryenNopId(): BinaryenExpressionId;
 export declare function _BinaryenUnreachableId(): BinaryenExpressionId;
 export declare function _BinaryenAtomicCmpxchgId(): BinaryenExpressionId;
@@ -266,9 +267,6 @@ export declare function _BinaryenLtFloat64(): BinaryenOp;
 export declare function _BinaryenLeFloat64(): BinaryenOp;
 export declare function _BinaryenGtFloat64(): BinaryenOp;
 export declare function _BinaryenGeFloat64(): BinaryenOp;
-
-export declare function _BinaryenMemorySize(): BinaryenOp;
-export declare function _BinaryenMemoryGrow(): BinaryenOp;
 
 export declare function _BinaryenAtomicRMWAdd(): BinaryenOp;
 export declare function _BinaryenAtomicRMWSub(): BinaryenOp;
@@ -569,17 +567,11 @@ export declare function _BinaryenGlobalSetSetName(expr: BinaryenExpressionRef, n
 export declare function _BinaryenGlobalSetGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenGlobalSetSetValue(expr: BinaryenExpressionRef, valueExpr: BinaryenExpressionRef): void;
 
-export declare function _BinaryenHost(module: BinaryenModuleRef, op: BinaryenOp, nameOperand: BinaryenString, operandExprs: BinaryenArray<BinaryenExpressionRef>, numOperands: BinaryenIndex): BinaryenExpressionRef;
-export declare function _BinaryenHostGetOp(expr: BinaryenExpressionRef): BinaryenOp;
-export declare function _BinaryenHostSetOp(expr: BinaryenExpressionRef, op: BinaryenOp): void;
-export declare function _BinaryenHostGetNameOperand(expr: BinaryenExpressionRef): BinaryenString;
-export declare function _BinaryenHostSetNameOperand(expr: BinaryenExpressionRef, nameOperand: BinaryenString): void;
-export declare function _BinaryenHostGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
-export declare function _BinaryenHostGetOperandAt(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
-export declare function _BinaryenHostSetOperandAt(expr: BinaryenExpressionRef, index: BinaryenIndex, operandExpr: BinaryenExpressionRef): void;
-export declare function _BinaryenHostAppendOperand(expr: BinaryenExpressionRef, operandExpr: BinaryenExpressionRef): BinaryenIndex;
-export declare function _BinaryenHostInsertOperandAt(expr: BinaryenExpressionRef, index: BinaryenIndex, operandExpr: BinaryenExpressionRef): void;
-export declare function _BinaryenHostRemoveOperandAt(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenMemorySize(module: BinaryenModuleRef): BinaryenExpressionRef;
+
+export declare function _BinaryenMemoryGrow(module: BinaryenModuleRef, delta: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenMemoryGrowGetDelta(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenMemoryGrowSetDelta(expr: BinaryenExpressionRef, delta: BinaryenExpressionRef): void;
 
 export declare function _BinaryenLoad(module: BinaryenModuleRef, bytes: u32, signed: bool, offset: u32, align: u32, type: BinaryenType, ptrExpr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenLoadIsAtomic(expr: BinaryenExpressionRef): bool;

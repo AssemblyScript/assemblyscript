@@ -80,8 +80,8 @@ declare const ASC_FEATURE_TAIL_CALLS: bool;
 declare const ASC_FEATURE_REFERENCE_TYPES: bool;
 /** Whether the multi value types feature is enabled. */
 declare const ASC_FEATURE_MULTI_VALUE: bool;
-/** Whether the anyref feature is enabled. */
-declare const ASC_FEATURE_ANYREF: bool;
+/** Whether the garbage collection feature is enabled. */
+declare const ASC_FEATURE_GC: bool;
 
 // Builtins
 

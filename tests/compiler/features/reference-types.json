@@ -2,7 +2,7 @@
   "features": [
     "reference-types",
     "exception-handling",
-    "anyref"
+    "gc"
   ],
   "asc_flags": [
     "--runtime none"
