@@ -8403,9 +8403,9 @@
   local.tee $1
   i32.trunc_f64_s
   local.tee $4
+  local.get $1
   local.get $4
   f64.convert_i32_s
-  local.get $1
   f64.ne
   i32.add
   i32.const 3
@@ -15537,10 +15537,7 @@
   i32.const 6080
   i32.const 0
   call $~lib/array/Array<i32>#reduce<i32>
-  i32.const 0
-  i32.ne
-  i32.const 1
-  i32.ne
+  i32.eqz
   if
    i32.const 0
    i32.const 1296
@@ -15689,10 +15686,7 @@
   i32.const 6304
   i32.const 0
   call $~lib/array/Array<i32>#reduceRight<i32>
-  i32.const 0
-  i32.ne
-  i32.const 1
-  i32.ne
+  i32.eqz
   if
    i32.const 0
    i32.const 1296

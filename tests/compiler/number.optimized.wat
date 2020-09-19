@@ -1346,8 +1346,8 @@
  )
  (func $~lib/number/F32.isSafeInteger (param $0 f32) (result i32)
   local.get $0
-  f32.trunc
   local.get $0
+  f32.trunc
   f32.eq
   i32.const 0
   local.get $0
@@ -1358,8 +1358,8 @@
  )
  (func $~lib/number/F32.isInteger (param $0 f32) (result i32)
   local.get $0
-  f32.trunc
   local.get $0
+  f32.trunc
   f32.eq
   i32.const 0
   local.get $0
@@ -1371,8 +1371,8 @@
  )
  (func $~lib/number/F64.isSafeInteger (param $0 f64) (result i32)
   local.get $0
-  f64.trunc
   local.get $0
+  f64.trunc
   f64.eq
   i32.const 0
   local.get $0
@@ -1383,8 +1383,8 @@
  )
  (func $~lib/number/F64.isInteger (param $0 f64) (result i32)
   local.get $0
-  f64.trunc
   local.get $0
+  f64.trunc
   f64.eq
   i32.const 0
   local.get $0

@@ -39,8 +39,8 @@ export namespace NativeType {
   export const V128: NativeType = 6 /* _BinaryenTypeVec128 */;
   export const Funcref: NativeType = 7 /* _BinaryenTypeFuncref */;
   export const Externref: NativeType = 8 /* _BinaryenTypeExternref */;
-  export const Nullref: NativeType = 9 /* _BinaryenTypeNullref */;
-  export const Exnref: NativeType = 10 /* _BinaryenTypeExnref */;
+  export const Exnref: NativeType = 9 /* _BinaryenTypeExnref */;
+  export const Anyref: NativeType = 10 /* _BinaryenTypeAnyref */;
   export const Auto: NativeType = -1 /* _BinaryenTypeAuto */;
 }
 
@@ -56,7 +56,9 @@ export enum FeatureFlags {
   TailCall = 128 /* _BinaryenFeatureTailCall */,
   ReferenceTypes = 256 /* _BinaryenFeatureReferenceTypes */,
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
-  All = 1023 /* _BinaryenFeatureAll */
+  GC = 1024 /* _BinaryenFeatureGC */,
+  Memory64 = 2048, // TODO: missing in Binaryen API
+  All = 4095 /* _BinaryenFeatureAll */
 }
 
 export enum ExpressionId {
@@ -80,34 +82,35 @@ export enum ExpressionId {
   Select = 17 /* _BinaryenSelectId */,
   Drop = 18 /* _BinaryenDropId */,
   Return = 19 /* _BinaryenReturnId */,
-  Host = 20 /* _BinaryenHostId */,
-  Nop = 21 /* _BinaryenNopId */,
-  Unreachable = 22 /* _BinaryenUnreachableId */,
-  AtomicCmpxchg = 24 /* _BinaryenAtomicCmpxchgId */,
-  AtomicRMW = 23 /* _BinaryenAtomicRMWId */,
-  AtomicWait = 25 /* _BinaryenAtomicWaitId */,
-  AtomicNotify = 26 /* _BinaryenAtomicNotifyId */,
-  AtomicFence = 27 /* _BinaryenAtomicFenceId */,
-  SIMDExtract = 28 /* _BinaryenSIMDExtractId */,
-  SIMDReplace = 29 /* _BinaryenSIMDReplaceId */,
-  SIMDShuffle = 30 /* _BinaryenSIMDShuffleId */,
-  SIMDTernary = 31 /* _BinaryenSIMDTernaryId */,
-  SIMDShift = 32 /* _BinaryenSIMDShiftId */,
-  SIMDLoad = 33 /* _BinaryenSIMDLoadId */,
-  MemoryInit = 34 /* _BinaryenMemoryInitId */,
-  DataDrop = 35 /* _BinaryenDataDropId */,
-  MemoryCopy = 36 /* _BinaryenMemoryCopyId */,
-  MemoryFill = 37 /* _BinaryenMemoryFillId */,
-  Pop = 38 /* _BinaryenPopId */,
-  RefNull = 39 /* _BinaryenRefNullId */,
-  RefIsNull = 40 /* _BinaryenRefIsNullId */,
-  RefFunc = 41 /* _BinaryenRefFuncId */,
-  Try = 42 /* _BinaryenTryId */,
-  Throw = 43 /* _BinaryenThrowId */,
-  Rethrow = 44 /* _BinaryenRethrowId */,
-  BrOnExn = 45 /* _BinaryenBrOnExnId */,
-  TupleMake = 46 /* _BinaryenTupleMakeId */,
-  TupleExtract = 47 /* _BinaryenTupleExtractId */
+  MemorySize = 20 /* _BinaryenMemorySizeId */,
+  MemoryGrow = 21 /* _BinaryenMemoryGrowId */,
+  Nop = 22 /* _BinaryenNopId */,
+  Unreachable = 23 /* _BinaryenUnreachableId */,
+  AtomicCmpxchg = 25 /* _BinaryenAtomicCmpxchgId */,
+  AtomicRMW = 24 /* _BinaryenAtomicRMWId */,
+  AtomicWait = 26 /* _BinaryenAtomicWaitId */,
+  AtomicNotify = 27 /* _BinaryenAtomicNotifyId */,
+  AtomicFence = 28 /* _BinaryenAtomicFenceId */,
+  SIMDExtract = 29 /* _BinaryenSIMDExtractId */,
+  SIMDReplace = 30 /* _BinaryenSIMDReplaceId */,
+  SIMDShuffle = 31 /* _BinaryenSIMDShuffleId */,
+  SIMDTernary = 32 /* _BinaryenSIMDTernaryId */,
+  SIMDShift = 33 /* _BinaryenSIMDShiftId */,
+  SIMDLoad = 34 /* _BinaryenSIMDLoadId */,
+  MemoryInit = 35 /* _BinaryenMemoryInitId */,
+  DataDrop = 36 /* _BinaryenDataDropId */,
+  MemoryCopy = 37 /* _BinaryenMemoryCopyId */,
+  MemoryFill = 38 /* _BinaryenMemoryFillId */,
+  Pop = 39 /* _BinaryenPopId */,
+  RefNull = 40 /* _BinaryenRefNullId */,
+  RefIsNull = 41 /* _BinaryenRefIsNullId */,
+  RefFunc = 42 /* _BinaryenRefFuncId */,
+  Try = 43 /* _BinaryenTryId */,
+  Throw = 44 /* _BinaryenThrowId */,
+  Rethrow = 45 /* _BinaryenRethrowId */,
+  BrOnExn = 46 /* _BinaryenBrOnExnId */,
+  TupleMake = 47 /* _BinaryenTupleMakeId */,
+  TupleExtract = 48 /* _BinaryenTupleExtractId */
 }
 
 export enum UnaryOp {
@@ -417,11 +420,6 @@ export enum BinaryOp {
   SwizzleV8x16 = 177 /* _BinaryenSwizzleVec8x16 */
 }
 
-export enum HostOp {
-  MemorySize = 0 /* _BinaryenMemorySize */,
-  MemoryGrow = 1 /* _BinaryenMemoryGrow */,
-}
-
 export enum AtomicRMWOp {
   Add = 0 /* _BinaryenAtomicRMWAdd */,
   Sub = 1 /* _BinaryenAtomicRMWSub */,
@@ -559,8 +557,8 @@ export class Module {
     return binaryen._BinaryenConst(this.ref, out);
   }
 
-  ref_null(): ExpressionRef {
-    return binaryen._BinaryenRefNull(this.ref);
+  ref_null(type: NativeType): ExpressionRef {
+    return binaryen._BinaryenRefNull(this.ref, type);
   }
 
   // expressions
@@ -580,18 +578,12 @@ export class Module {
     return binaryen._BinaryenBinary(this.ref, op, left, right);
   }
 
-  host(
-    op: HostOp,
-    name: string | null = null,
-    operands: ExpressionRef[] | null = null
-  ): ExpressionRef {
-    var cStr = this.allocStringCached(name);
-    var cArr = allocPtrArray(operands);
-    var ret = binaryen._BinaryenHost(
-      this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0
-    );
-    binaryen._free(cArr);
-    return ret;
+  memory_size(): ExpressionRef {
+    return binaryen._BinaryenMemorySize(this.ref);
+  }
+
+  memory_grow(delta: ExpressionRef): ExpressionRef {
+    return binaryen._BinaryenMemoryGrow(this.ref, delta);
   }
 
   local_get(
@@ -2090,20 +2082,8 @@ export function getCallOperandAt(expr: ExpressionRef, index: Index): ExpressionR
   return binaryen._BinaryenCallGetOperandAt(expr, index);
 }
 
-export function getHostOp(expr: ExpressionRef): ExpressionRef {
-  return binaryen._BinaryenHostGetOp(expr);
-}
-
-export function getHostOperandCount(expr: ExpressionRef): Index {
-  return binaryen._BinaryenHostGetNumOperands(expr);
-}
-
-export function getHostOperandAt(expr: ExpressionRef, index: Index): ExpressionRef {
-  return binaryen._BinaryenHostGetOperandAt(expr, index);
-}
-
-export function getHostName(expr: ExpressionRef): string | null {
-  return readString(binaryen._BinaryenHostGetNameOperand(expr));
+export function getMemoryGrowDelta(expr: ExpressionRef): ExpressionRef {
+  return binaryen._BinaryenMemoryGrowGetDelta(expr);
 }
 
 // functions
@@ -2610,12 +2590,11 @@ export function traverse<T>(
       visit(binaryen._BinaryenReturnGetValue(expr), data);
       break;
     }
-    case ExpressionId.Host: {
-      for (let i: Index = 0, n = binaryen._BinaryenHostGetNumOperands(expr); i < n; ++i) {
-        visit(binaryen._BinaryenHostGetOperandAt(expr, i), data);
-      }
+    case ExpressionId.MemorySize:
       break;
-    }
+    case ExpressionId.MemoryGrow:
+      visit(binaryen._BinaryenMemoryGrowGetDelta(expr), data);
+      break;
     case ExpressionId.Nop: {
       break;
     }

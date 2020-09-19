@@ -405,6 +405,8 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.TAIL_CALLS)) featureFlags |= FeatureFlags.TailCall;
     if (options.hasFeature(Feature.REFERENCE_TYPES)) featureFlags |= FeatureFlags.ReferenceTypes;
     if (options.hasFeature(Feature.MULTI_VALUE)) featureFlags |= FeatureFlags.MultiValue;
+    if (options.hasFeature(Feature.GC)) featureFlags |= FeatureFlags.GC;
+    if (options.hasFeature(Feature.MEMORY64)) featureFlags |= FeatureFlags.Memory64;
     module.setFeatures(featureFlags);
 
     // set up the main start function
@@ -3624,12 +3626,21 @@ export class Compiler extends DiagnosticEmitter {
         fromType = fromType.nonNullableType;
       }
       if (fromType.isAssignableTo(toType)) { // downcast or same
-        assert(fromType.kind == toType.kind);
+        assert(toType.isExternalReference || fromType.kind == toType.kind);
         this.currentType = toType;
         return expr;
       }
       if (explicit && toType.nonNullableType.isAssignableTo(fromType)) { // upcast
         // <Cat | null>(<Animal>maybeCat)
+        if (toType.isExternalReference) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            reportNode.range,
+            "ref.cast"
+          );
+          this.currentType = toType;
+          return module.unreachable();
+        }
         assert(fromType.kind == toType.kind);
         if (!this.options.noAssert) {
           expr = this.makeRuntimeUpcastCheck(expr, fromType, toType, reportNode);
@@ -4390,12 +4401,15 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
           }
-          case TypeKind.EXTERNREF: {
-            // TODO: ref.eq
+          case TypeKind.FUNCREF: 
+          case TypeKind.EXTERNREF:
+          case TypeKind.EXNREF:
+          case TypeKind.ANYREF: {
             this.error(
-              DiagnosticCode.Not_implemented_0,
+              DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
               expression.range,
-              "ref.eq instruction"
+              "ref.eq",
+              commonType.toString()
             );
             expr = module.unreachable();
             break;
@@ -4491,12 +4505,15 @@ export class Compiler extends DiagnosticEmitter {
             );
             break;
           }
-          case TypeKind.EXTERNREF: {
-            // TODO: !ref.eq
+          case TypeKind.FUNCREF:
+          case TypeKind.EXTERNREF:
+          case TypeKind.EXNREF:
+          case TypeKind.ANYREF: {
             this.error(
-              DiagnosticCode.Not_implemented_0,
+              DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
               expression.range,
-              "ref.eq instruction"
+              "ref.eq",
+              commonType.toString()
             );
             expr = module.unreachable();
             break;
@@ -8311,13 +8328,7 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = signatureReference.type.asNullable();
             return options.isWasm64 ? module.i64(0) : module.i32(0);
           }
-          // TODO: return null ref for externref or funcref
-          this.error(
-            DiagnosticCode.Not_implemented_0,
-            expression.range,
-            "ref.null"
-          );
-          return module.unreachable();
+          return this.makeZero(contextualType, expression);
         }
         this.currentType = options.usizeType;
         this.warning(
@@ -8508,7 +8519,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
         if (contextualType.isExternalReference) {
-          this.currentType = Type.externref;
+          this.currentType = Type.funcref;
           return module.ref_func(functionInstance.internalName);
         }
         let offset = this.ensureRuntimeFunction(functionInstance);
@@ -10619,7 +10630,17 @@ export class Compiler extends DiagnosticEmitter {
   checkTypeSupported(type: Type, reportNode: Node): bool {
     switch (type.kind) {
       case TypeKind.V128: return this.checkFeatureEnabled(Feature.SIMD, reportNode);
-      case TypeKind.EXTERNREF: return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode);
+      case TypeKind.FUNCREF:
+      case TypeKind.EXTERNREF:
+        return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode);
+      case TypeKind.EXNREF: {
+        return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode)
+            && this.checkFeatureEnabled(Feature.EXCEPTION_HANDLING, reportNode);
+      }
+      case TypeKind.ANYREF: {
+        return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode)
+            && this.checkFeatureEnabled(Feature.GC, reportNode);
+      }
     }
     let classReference = type.getClass();
     if (classReference) {
@@ -10712,14 +10733,11 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(0);
       case TypeKind.F64: return module.f64(0);
       case TypeKind.V128: return module.v128(v128_zero);
+      case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
-        // TODO: return null ref for both externref as well as funcref
-        this.error(
-          DiagnosticCode.Not_implemented_0,
-          reportNode.range,
-          "ref.null"
-        );
-        return module.unreachable();
+      case TypeKind.EXNREF:
+      case TypeKind.ANYREF:
+        return module.ref_null(type.toNativeType());
     }
   }
 
@@ -10824,16 +10842,11 @@ export class Compiler extends DiagnosticEmitter {
           module.i64(0xFFFFFFFE, 0xFFDFFFFF) // (0x7FF0000000000000 - 1) << 1
         );
       }
-      case TypeKind.EXTERNREF: {
-        // TODO: non-null object might still be considered falseish
-        // i.e. a ref to Boolean(false), Number(0), String("") etc.
-        // TODO: return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));
-        this.error(
-          DiagnosticCode.Not_implemented_0,
-          reportNode.range,
-          "ref.is_null"
-        );
-        return module.unreachable();
+      case TypeKind.FUNCREF:
+      case TypeKind.EXTERNREF:
+      case TypeKind.EXNREF:
+      case TypeKind.ANYREF:{
+        return module.ref_is_null(expr);
       }
       default: {
         assert(false);

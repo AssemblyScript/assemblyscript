@@ -192,13 +192,15 @@
       " simd                SIMD types and operations.",
       " threads             Threading and atomic operations.",
       " reference-types     Reference types and operations.",
+      " gc                  Garbage collection (anyref, WIP).",
       ""
     ],
     "TODO_doesNothingYet": [
       " nontrapping-f2i     Non-trapping float to integer ops.",
       " exception-handling  Exception handling.",
       " tail-calls          Tail call operations.",
-      " multi-value         Multi value types."
+      " multi-value         Multi value types.",
+      " memory64            Memory64 operations."
     ],
     "type": "S",
     "mutuallyExclusive": "disable"

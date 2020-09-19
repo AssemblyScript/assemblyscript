@@ -17,6 +17,8 @@
  (global $~lib/ASC_FEATURE_TAIL_CALLS i32 (i32.const 0))
  (global $~lib/ASC_FEATURE_REFERENCE_TYPES i32 (i32.const 0))
  (global $~lib/ASC_FEATURE_MULTI_VALUE i32 (i32.const 0))
+ (global $~lib/ASC_FEATURE_GC i32 (i32.const 0))
+ (global $~lib/ASC_FEATURE_MEMORY64 i32 (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:asc-constants
@@ -33,6 +35,10 @@
   i32.const 0
   drop
   i32.const 1
+  drop
+  i32.const 0
+  drop
+  i32.const 0
   drop
   i32.const 0
   drop

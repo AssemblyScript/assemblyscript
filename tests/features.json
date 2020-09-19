@@ -22,7 +22,15 @@
       "--enable reference-types"
     ],
     "v8_flags": [
-      "--experimental-wasm-reftypes"
+    ]
+  },
+  "gc": {
+    "asc_flags": [
+      "--enable gc"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-anyref",
+      "--experimental-wasm-gc"
     ]
   },
   "bigint-integration": {
