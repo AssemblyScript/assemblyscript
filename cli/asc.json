@@ -187,6 +187,7 @@
     "description": [
       "Enables WebAssembly features being disabled by default.",
       "",
+      " sign-extension      Sign-extension operations",
       " bulk-memory         Bulk memory operations.",
       " simd                SIMD types and operations.",
       " threads             Threading and atomic operations.",
@@ -198,7 +199,8 @@
       " nontrapping-f2i     Non-trapping float to integer ops.",
       " exception-handling  Exception handling.",
       " tail-calls          Tail call operations.",
-      " multi-value         Multi value types."
+      " multi-value         Multi value types.",
+      " memory64            Memory64 operations."
     ],
     "type": "S",
     "mutuallyExclusive": "disable"
@@ -209,7 +211,6 @@
       "Disables WebAssembly features being enabled by default.",
       "",
       " mutable-globals     Mutable global imports and exports.",
-      " sign-extension      Sign-extension operations",
       ""
     ],
     "type": "S",

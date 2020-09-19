@@ -174,6 +174,7 @@ export namespace CommonNames {
   export const ASC_FEATURE_REFERENCE_TYPES = "ASC_FEATURE_REFERENCE_TYPES";
   export const ASC_FEATURE_MULTI_VALUE = "ASC_FEATURE_MULTI_VALUE";
   export const ASC_FEATURE_GC = "ASC_FEATURE_GC";
+  export const ASC_FEATURE_MEMORY64 = "ASC_FEATURE_MEMORY64";
   // classes
   export const I8 = "I8";
   export const I16 = "I16";

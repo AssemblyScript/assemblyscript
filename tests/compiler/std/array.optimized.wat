@@ -9198,7 +9198,10 @@
  (func $~lib/util/number/itoa_buffered<i8> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.extend8_s
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
   i32.const 0
   i32.lt_s
   local.tee $2
@@ -9212,7 +9215,10 @@
    local.set $1
   end
   local.get $1
-  i32.extend8_s
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
   i32.const 10
   i32.lt_u
   if
@@ -9222,7 +9228,10 @@
    i32.shl
    i32.add
    local.get $1
-   i32.extend8_s
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
    i32.const 48
    i32.or
    i32.store16
@@ -9231,17 +9240,21 @@
    i32.add
    return
   end
-  local.get $0
-  local.get $1
-  i32.extend8_s
-  local.get $1
-  i32.extend8_s
-  call $~lib/util/number/decimalCount32
   local.get $2
+  local.get $1
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  local.tee $2
+  call $~lib/util/number/decimalCount32
   i32.add
-  local.tee $0
-  call $~lib/util/number/utoa_dec_simple<u32>
+  local.set $1
   local.get $0
+  local.get $2
+  local.get $1
+  call $~lib/util/number/utoa_dec_simple<u32>
+  local.get $1
  )
  (func $~lib/util/string/joinIntegerArray<i8> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15524,10 +15537,7 @@
   i32.const 6080
   i32.const 0
   call $~lib/array/Array<i32>#reduce<i32>
-  i32.const 0
-  i32.ne
-  i32.const 1
-  i32.ne
+  i32.eqz
   if
    i32.const 0
    i32.const 1296
@@ -15676,10 +15686,7 @@
   i32.const 6304
   i32.const 0
   call $~lib/array/Array<i32>#reduceRight<i32>
-  i32.const 0
-  i32.ne
-  i32.const 1
-  i32.ne
+  i32.eqz
   if
    i32.const 0
    i32.const 1296

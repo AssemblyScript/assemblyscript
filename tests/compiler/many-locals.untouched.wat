@@ -783,7 +783,10 @@
   local.get $127
   local.set $128
   local.get $128
-  i32.extend8_s
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
  )
  (func $start:many-locals
   i32.const 42
@@ -801,7 +804,6 @@
   end
   i32.const 42
   call $many-locals/testI8
-  i32.extend8_s
   i32.const 42
   i32.eq
   i32.eqz

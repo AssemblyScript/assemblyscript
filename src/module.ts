@@ -57,7 +57,8 @@ export enum FeatureFlags {
   ReferenceTypes = 256 /* _BinaryenFeatureReferenceTypes */,
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
   GC = 1024 /* _BinaryenFeatureGC */,
-  All = 2047 /* _BinaryenFeatureAll */
+  Memory64 = 2048, // TODO: missing in Binaryen API
+  All = 4095 /* _BinaryenFeatureAll */
 }
 
 export enum ExpressionId {

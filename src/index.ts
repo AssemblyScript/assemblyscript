@@ -151,6 +151,8 @@ export const FEATURE_REFERENCE_TYPES = Feature.REFERENCE_TYPES;
 export const FEATURE_MULTI_VALUE = Feature.MULTI_VALUE;
 /** Garbage collection. */
 export const FEATURE_GC = Feature.GC;
+/** Memory64. */
+export const FEATURE_MEMORY64 = Feature.MEMORY64;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {

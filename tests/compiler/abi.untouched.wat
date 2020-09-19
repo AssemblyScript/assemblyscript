@@ -27,7 +27,10 @@
   i32.const 256
   local.set $0
   local.get $0
-  i32.extend8_s
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
   i32.eqz
   i32.eqz
   if
@@ -43,19 +46,28 @@
   global.get $abi/condition
   if
    local.get $0
-   i32.extend8_s
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
    i32.const 2
    i32.div_s
    local.set $0
   else
    local.get $0
-   i32.extend8_s
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
    i32.const 2
    i32.div_s
    local.set $0
   end
   local.get $0
-  i32.extend8_s
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
   i32.eqz
   i32.eqz
   if
@@ -71,7 +83,10 @@
   global.get $abi/condition
   if
    local.get $0
-   i32.extend8_s
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
    i32.const 24
    i32.shr_s
    local.set $0
@@ -93,7 +108,10 @@
    unreachable
   end
   i32.const 256
-  i32.extend8_s
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
   global.set $abi/y
   global.get $abi/y
   i32.eqz
@@ -165,16 +183,20 @@
  )
  (func $abi/exported (result i32)
   i32.const 128
-  i32.extend8_s
-  i32.extend8_s
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
  )
  (func $abi/exportedExported (result i32)
   call $abi/exported
-  i32.extend8_s
  )
  (func $abi/exportedInternal (result i32)
   call $abi/internal
-  i32.extend8_s
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
  )
  (func $~start
   call $start:abi

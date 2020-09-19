@@ -7963,9 +7963,6 @@
   end
   i32.const 1296
   call $~lib/string/String.__not
-  i32.eqz
-  i32.const 1
-  i32.ne
   if
    i32.const 0
    i32.const 1088
@@ -7976,9 +7973,6 @@
   end
   i32.const 1328
   call $~lib/string/String.__not
-  i32.eqz
-  i32.const 1
-  i32.ne
   if
    i32.const 0
    i32.const 1088

@@ -59088,7 +59088,10 @@
   i32.const 1
   i32.const 3
   call $~lib/math/ipow32
-  i32.extend8_s
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
   i32.const 1
   i32.eq
   i32.eqz
@@ -59103,7 +59106,10 @@
   i32.const -2
   i32.const 3
   call $~lib/math/ipow32
-  i32.extend8_s
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
   i32.const -8
   i32.eq
   i32.eqz

@@ -82,6 +82,8 @@ declare const ASC_FEATURE_REFERENCE_TYPES: bool;
 declare const ASC_FEATURE_MULTI_VALUE: bool;
 /** Whether the garbage collection feature is enabled. */
 declare const ASC_FEATURE_GC: bool;
+/** Whether the memory64 feature is enabled. */
+declare const ASC_FEATURE_MEMORY64: bool;
 
 // Builtins
 
