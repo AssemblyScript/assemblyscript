@@ -945,8 +945,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.MULTI_VALUE) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_GC, Type.bool,
       i64_new(options.hasFeature(Feature.GC) ? 1 : 0, 0));
-      this.registerConstantInteger(CommonNames.ASC_FEATURE_MEMORY64, Type.bool,
-        i64_new(options.hasFeature(Feature.MEMORY64) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_MEMORY64, Type.bool,
+      i64_new(options.hasFeature(Feature.MEMORY64) ? 1 : 0, 0));
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
