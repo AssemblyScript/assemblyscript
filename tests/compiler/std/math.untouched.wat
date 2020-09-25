@@ -269,11 +269,8 @@
    i64.reinterpret_f64
    i64.const 63
    i64.shr_u
-   i32.wrap_i64
-   local.get $3
-   local.get $3
-   f64.eq
-   i32.and
+   i64.const 0
+   i64.ne
    i32.const 0
    i32.ne
    local.get $1
@@ -282,11 +279,8 @@
    i64.reinterpret_f64
    i64.const 63
    i64.shr_u
-   i32.wrap_i64
-   local.get $3
-   local.get $3
-   f64.eq
-   i32.and
+   i64.const 0
+   i64.ne
    i32.const 0
    i32.ne
    i32.eq
@@ -503,10 +497,6 @@
    i32.reinterpret_f32
    i32.const 31
    i32.shr_u
-   local.get $3
-   local.get $3
-   f32.eq
-   i32.and
    i32.const 0
    i32.ne
    local.get $1
@@ -515,10 +505,6 @@
    i32.reinterpret_f32
    i32.const 31
    i32.shr_u
-   local.get $3
-   local.get $3
-   f32.eq
-   i32.and
    i32.const 0
    i32.ne
    i32.eq
@@ -48467,11 +48453,8 @@
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
-  i32.wrap_i64
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.const 0
+  i64.ne
   i32.const 0
   i32.ne
   i32.const 0
@@ -48483,11 +48466,8 @@
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
-  i32.wrap_i64
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.const 0
+  i64.ne
   i32.const 0
   i32.ne
   i32.const 1
@@ -48499,11 +48479,8 @@
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
-  i32.wrap_i64
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.const 0
+  i64.ne
   i32.const 0
   i32.ne
   i32.const 0
@@ -48515,11 +48492,8 @@
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
-  i32.wrap_i64
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.const 0
+  i64.ne
   i32.const 0
   i32.ne
   i32.const 1
@@ -48531,11 +48505,8 @@
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
-  i32.wrap_i64
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.const 0
+  i64.ne
   i32.const 0
   i32.ne
   i32.const 0
@@ -48548,14 +48519,11 @@
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
-  i32.wrap_i64
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.const 0
+  i64.ne
   i32.const 0
   i32.ne
-  i32.const 0
+  i32.const 1
   i32.eq
   drop
   f64.const inf
@@ -48564,11 +48532,8 @@
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
-  i32.wrap_i64
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.const 0
+  i64.ne
   i32.const 0
   i32.ne
   i32.const 0
@@ -48581,11 +48546,8 @@
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
-  i32.wrap_i64
-  local.get $0
-  local.get $0
-  f64.eq
-  i32.and
+  i64.const 0
+  i64.ne
   i32.const 0
   i32.ne
   i32.const 1
@@ -48597,10 +48559,6 @@
   i32.reinterpret_f32
   i32.const 31
   i32.shr_u
-  local.get $4
-  local.get $4
-  f32.eq
-  i32.and
   i32.const 0
   i32.ne
   i32.const 0
@@ -48612,10 +48570,6 @@
   i32.reinterpret_f32
   i32.const 31
   i32.shr_u
-  local.get $4
-  local.get $4
-  f32.eq
-  i32.and
   i32.const 0
   i32.ne
   i32.const 1
@@ -48627,10 +48581,6 @@
   i32.reinterpret_f32
   i32.const 31
   i32.shr_u
-  local.get $4
-  local.get $4
-  f32.eq
-  i32.and
   i32.const 0
   i32.ne
   i32.const 0
@@ -48642,10 +48592,6 @@
   i32.reinterpret_f32
   i32.const 31
   i32.shr_u
-  local.get $4
-  local.get $4
-  f32.eq
-  i32.and
   i32.const 0
   i32.ne
   i32.const 1
@@ -48657,10 +48603,6 @@
   i32.reinterpret_f32
   i32.const 31
   i32.shr_u
-  local.get $4
-  local.get $4
-  f32.eq
-  i32.and
   i32.const 0
   i32.ne
   i32.const 0
@@ -48673,13 +48615,9 @@
   i32.reinterpret_f32
   i32.const 31
   i32.shr_u
-  local.get $4
-  local.get $4
-  f32.eq
-  i32.and
   i32.const 0
   i32.ne
-  i32.const 0
+  i32.const 1
   i32.eq
   drop
   f32.const inf
@@ -48688,10 +48626,6 @@
   i32.reinterpret_f32
   i32.const 31
   i32.shr_u
-  local.get $4
-  local.get $4
-  f32.eq
-  i32.and
   i32.const 0
   i32.ne
   i32.const 0
@@ -48704,10 +48638,6 @@
   i32.reinterpret_f32
   i32.const 31
   i32.shr_u
-  local.get $4
-  local.get $4
-  f32.eq
-  i32.and
   i32.const 0
   i32.ne
   i32.const 1
