@@ -127,14 +127,14 @@ export function bitrev<T extends number>(value: T): T {
       }
       if (sizeof<T>() == 8) {
         return <T>(
-          (<u64>load<u8>(REV_LUT + (value        & 0xFF)) << 56) |
-          (<u64>load<u8>(REV_LUT + (value >>>  8 & 0xFF)) << 48) |
-          (<u64>load<u8>(REV_LUT + (value >>> 16 & 0xFF)) << 40) |
-          (<u64>load<u8>(REV_LUT + (value >>> 24 & 0xFF)) << 32) |
-          (<u64>load<u8>(REV_LUT + (value >>> 32 & 0xFF)) << 24) |
-          (<u64>load<u8>(REV_LUT + (value >>> 40 & 0xFF)) << 16) |
-          (<u64>load<u8>(REV_LUT + (value >>> 48 & 0xFF)) <<  8) |
-          (<u64>load<u8>(REV_LUT + (value >>> 56)))
+          (<u64>load<u8>(REV_LUT + <usize>(value        & 0xFF)) << 56) |
+          (<u64>load<u8>(REV_LUT + <usize>(value >>>  8 & 0xFF)) << 48) |
+          (<u64>load<u8>(REV_LUT + <usize>(value >>> 16 & 0xFF)) << 40) |
+          (<u64>load<u8>(REV_LUT + <usize>(value >>> 24 & 0xFF)) << 32) |
+          (<u64>load<u8>(REV_LUT + <usize>(value >>> 32 & 0xFF)) << 24) |
+          (<u64>load<u8>(REV_LUT + <usize>(value >>> 40 & 0xFF)) << 16) |
+          (<u64>load<u8>(REV_LUT + <usize>(value >>> 48 & 0xFF)) <<  8) |
+          (<u64>load<u8>(REV_LUT + <usize>(value >>> 56)))
         );
       }
     }
