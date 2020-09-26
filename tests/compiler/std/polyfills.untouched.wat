@@ -13,15 +13,7 @@
   i32.const 1
   drop
   i32.const 1
-  i32.const 2
-  i32.eq
-  drop
   i32.const 1
-  i32.const 4
-  i32.eq
-  drop
-  i32.const 1
-  i32.const 8
   i32.eq
   drop
   local.get $0
@@ -31,15 +23,7 @@
   i32.const 1
   drop
   i32.const 1
-  i32.const 2
-  i32.eq
-  drop
   i32.const 1
-  i32.const 4
-  i32.eq
-  drop
-  i32.const 1
-  i32.const 8
   i32.eq
   drop
   local.get $0
@@ -47,6 +31,10 @@
  )
  (func $~lib/polyfills/bswap<u16> (param $0 i32) (result i32)
   i32.const 1
+  drop
+  i32.const 2
+  i32.const 1
+  i32.eq
   drop
   i32.const 2
   i32.const 2
@@ -67,6 +55,10 @@
  )
  (func $~lib/polyfills/bswap<i16> (param $0 i32) (result i32)
   i32.const 1
+  drop
+  i32.const 2
+  i32.const 1
+  i32.eq
   drop
   i32.const 2
   i32.const 2
@@ -91,6 +83,10 @@
   i32.const 1
   drop
   i32.const 4
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 4
   i32.const 2
   i32.eq
   drop
@@ -113,6 +109,10 @@
  )
  (func $~lib/polyfills/bswap<i32> (param $0 i32) (result i32)
   i32.const 1
+  drop
+  i32.const 4
+  i32.const 1
+  i32.eq
   drop
   i32.const 4
   i32.const 2
@@ -140,6 +140,10 @@
   (local $2 i64)
   (local $3 i64)
   i32.const 1
+  drop
+  i32.const 8
+  i32.const 1
+  i32.eq
   drop
   i32.const 8
   i32.const 2
@@ -195,6 +199,10 @@
   i32.const 1
   drop
   i32.const 8
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 8
   i32.const 2
   i32.eq
   drop
@@ -245,6 +253,10 @@
   i32.const 1
   drop
   i32.const 4
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 4
   i32.const 2
   i32.eq
   drop
@@ -267,6 +279,10 @@
  )
  (func $~lib/polyfills/bswap<isize> (param $0 i32) (result i32)
   i32.const 1
+  drop
+  i32.const 4
+  i32.const 1
+  i32.eq
   drop
   i32.const 4
   i32.const 2
@@ -300,11 +316,7 @@
   end
   drop
   i32.const 1
-  i32.const 2
-  i32.eq
-  drop
   i32.const 1
-  i32.const 4
   i32.eq
   drop
   local.get $0
@@ -321,11 +333,7 @@
   end
   drop
   i32.const 1
-  i32.const 2
-  i32.eq
-  drop
   i32.const 1
-  i32.const 4
   i32.eq
   drop
   local.get $0
@@ -340,6 +348,10 @@
   else
    i32.const 0
   end
+  drop
+  i32.const 2
+  i32.const 1
+  i32.eq
   drop
   i32.const 2
   i32.const 2
@@ -369,6 +381,10 @@
   end
   drop
   i32.const 2
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 2
   i32.const 2
   i32.eq
   drop
@@ -396,6 +412,10 @@
   else
    i32.const 0
   end
+  drop
+  i32.const 4
+  i32.const 1
+  i32.eq
   drop
   i32.const 4
   i32.const 2
@@ -431,6 +451,10 @@
   else
    i32.const 0
   end
+  drop
+  i32.const 4
+  i32.const 1
+  i32.eq
   drop
   i32.const 4
   i32.const 2

@@ -20,6 +20,9 @@
 
 export function bswap<T extends number>(value: T): T {
   if (isInteger<T>()) {
+    if (sizeof<T>() == 1) {
+      return value;
+    }
     if (sizeof<T>() == 2) {
       return <T>((value << 8) | ((value >> 8) & <T>0x00FF));
     }
@@ -39,7 +42,6 @@ export function bswap<T extends number>(value: T): T {
 
       return <T>rotr<u64>(a | b, 32);
     }
-    return value;
   }
   assert(false);
   return value;
@@ -47,12 +49,19 @@ export function bswap<T extends number>(value: T): T {
 
 export function bswap16<T extends number>(value: T): T {
   if (isInteger<T>() && sizeof<T>() <= 4) {
+    if (sizeof<T>() == 1) {
+      return value;
+    }
     if (sizeof<T>() == 2) {
       return <T>((value << 8) | ((value >> 8) & <T>0x00FF));
-    } else if (sizeof<T>() == 4) {
-      return <T>(((value << 8) & <T>0xFF00) | ((value >> 8) & <T>0x00FF) | (value & <T>0xFFFF0000));
     }
-    return value;
+    if (sizeof<T>() == 4) {
+      return <T>(
+        ((value << 8) & <T>0xFF00) |
+        ((value >> 8) & <T>0x00FF) |
+        (value & <T>0xFFFF0000)
+      );
+    }
   }
   assert(false);
   return value;
@@ -67,14 +76,16 @@ export function bitrev<T extends number>(value: T): T {
           (n * 0x0802 & 0x22110) |
           (n * 0x8020 & 0x88440)
         ) * 0x10101 >> 16);
-      } else if (sizeof<T>() == 2) {
+      }
+      if (sizeof<T>() == 2) {
         let t: u32, n = <u32>value;
         t = n | ((n & 0x000000FF) << 16);
         t = n & 0x0F0F0F0F; n = (t << 8) | (t ^ n);
         t = n & 0x33333333; n = (t << 4) | (t ^ n);
         t = n & 0x55555555; n = (t << 2) | (t ^ n);
         return <T>(n >> 15);
-      } else if (sizeof<T>() == 4) {
+      }
+      if (sizeof<T>() == 4) {
         let n = <u32>value;
         n = (n & 0x55555555) << 1 | (n & 0xAAAAAAAA) >> 1;
         n = (n & 0x33333333) << 2 | (n & 0xCCCCCCCC) >> 2;
@@ -82,7 +93,8 @@ export function bitrev<T extends number>(value: T): T {
         n = (n & 0x00FF00FF) << 8 | (n & 0xFF00FF00) >> 8;
         n = rotl<u32>(n, 16);
         return <T>n;
-      } else if (sizeof<T>() == 8) {
+      }
+      if (sizeof<T>() == 8) {
         let t: u64, n = <u64>value;
         n = rotl<u64>(n, 32);
         n = (n & 0x0001FFFF0001FFFF) << 15 | (n & 0xFFFE0000FFFE0000) >> 17;
@@ -97,19 +109,22 @@ export function bitrev<T extends number>(value: T): T {
     } else {
       if (sizeof<T>() == 1) {
         return <T>load<u8>(REV_LUT + value);
-      } else if (sizeof<T>() == 2) {
+      }
+      if (sizeof<T>() == 2) {
         return <T>(
           (<u16>load<u8>(REV_LUT + (value & 0xFF)) << 8) |
            <u16>load<u8>(REV_LUT + (value >>> 8))
         );
-      } else if (sizeof<T>() == 4) {
+      }
+      if (sizeof<T>() == 4) {
         return <T>(
           (<u32>load<u8>(REV_LUT + (value        & 0xFF)) << 24) |
           (<u32>load<u8>(REV_LUT + (value >>>  8 & 0xFF)) << 16) |
           (<u32>load<u8>(REV_LUT + (value >>> 16 & 0xFF)) <<  8) |
           (<u32>load<u8>(REV_LUT + (value >>> 24)))
         );
-      } else if (sizeof<T>() == 8) {
+      }
+      if (sizeof<T>() == 8) {
         return <T>(
           (<u64>load<u8>(REV_LUT + (value        & 0xFF)) << 56) |
           (<u64>load<u8>(REV_LUT + (value >>>  8 & 0xFF)) << 48) |
