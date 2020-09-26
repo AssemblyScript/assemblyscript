@@ -24,7 +24,7 @@ export function bswap<T extends number>(value: T): T {
       return value;
     }
     if (sizeof<T>() == 2) {
-      return <T>((value << 8) | ((value >> 8) & <T>0x00FF));
+      return <T>((value << 8) | ((value >> 8) & 0x00FF));
     }
     if (sizeof<T>() == 4) {
       return <T>(
@@ -53,13 +53,13 @@ export function bswap16<T extends number>(value: T): T {
       return value;
     }
     if (sizeof<T>() == 2) {
-      return <T>((value << 8) | ((value >> 8) & <T>0x00FF));
+      return <T>((value << 8) | ((value >> 8) & 0x00FF));
     }
     if (sizeof<T>() == 4) {
       return <T>(
-        ((value << 8) & <T>0xFF00) |
-        ((value >> 8) & <T>0x00FF) |
-        (value & <T>0xFFFF0000)
+        ((value << 8) & 0xFF00) |
+        ((value >> 8) & 0x00FF) |
+        (value & 0xFFFF0000)
       );
     }
   }
@@ -97,7 +97,8 @@ export function bitrev<T extends number>(value: T): T {
       if (sizeof<T>() == 8) {
         let t: u64, n = <u64>value;
         n = rotl<u64>(n, 32);
-        n = (n & 0x0001FFFF0001FFFF) << 15 | (n & 0xFFFE0000FFFE0000) >> 17;
+        n = (n & 0x0001FFFF0001FFFF) << 15 |
+            (n & 0xFFFE0000FFFE0000) >> 17;
         t = (n ^ (n >> 10)) & 0x003F801F003F801F;
         n = (t | (t << 10)) ^ n;
         t = (n ^ (n >>  4)) & 0x0E0384210E038421;
