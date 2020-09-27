@@ -2,10 +2,10 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
  (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
@@ -941,13 +941,6 @@
   end
   local.get $0
  )
- (func $rc/logical-or-mismatch/Ref#constructor (result i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1184
@@ -961,9 +954,17 @@
  )
  (func $~start
   (local $0 i32)
-  call $rc/logical-or-mismatch/Ref#constructor
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   global.set $rc/logical-or-mismatch/gloRef
-  call $rc/logical-or-mismatch/Ref#constructor
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   local.tee $0
   if (result i32)
    local.get $0
@@ -980,17 +981,29 @@
    local.get $0
    call $~lib/rt/pure/__retain
   else
-   call $rc/logical-or-mismatch/Ref#constructor
+   call $~lib/rt/tlsf/maybeInitialize
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
+   call $~lib/rt/pure/__retain
   end
   call $~lib/rt/pure/__release
-  call $rc/logical-or-mismatch/Ref#constructor
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   local.tee $0
   if (result i32)
    local.get $0
   else
    local.get $0
    call $~lib/rt/pure/__release
-   call $rc/logical-or-mismatch/Ref#constructor
+   call $~lib/rt/tlsf/maybeInitialize
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
+   call $~lib/rt/pure/__retain
   end
   call $~lib/rt/pure/__release
   global.get $rc/logical-or-mismatch/gloRef

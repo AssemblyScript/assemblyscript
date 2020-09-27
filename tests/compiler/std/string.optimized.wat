@@ -528,14 +528,6 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
- )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
@@ -656,10 +648,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -687,7 +687,11 @@
   local.tee $0
   if (result i32)
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.eqz
   else
    i32.const 1
@@ -1704,17 +1708,10 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  local.get $0
-  local.get $1
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
- )
  (func $~lib/string/String.fromCharCode (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 2
   local.get $1
   i32.const 0
@@ -1722,7 +1719,9 @@
   local.tee $3
   i32.shl
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   i32.store16
@@ -1768,6 +1767,7 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 2
   local.get $0
   i32.const 65535
@@ -1775,7 +1775,9 @@
   local.tee $2
   i32.shl
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $1
   local.get $2
   if
@@ -1811,7 +1813,11 @@
   local.get $1
   call $~lib/rt/pure/__retain
   local.tee $1
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $4
   i32.eqz
   if
@@ -1821,7 +1827,11 @@
    return
   end
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $3
   i32.eqz
   if
@@ -2078,17 +2088,15 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  i32.const 1
   local.get $2
   call $~lib/rt/pure/__retain
-  local.set $2
-  local.get $0
-  call $~lib/string/String#get:length
+  local.tee $2
+  i32.const 16
+  i32.sub
+  i32.load offset=12
   i32.const 1
-  i32.shl
-  local.set $5
-  i32.const 1
-  local.get $2
-  call $~lib/string/String#get:length
+  i32.shr_u
   i32.const 1
   i32.shl
   local.tee $4
@@ -2097,7 +2105,15 @@
   i32.const 1
   i32.shl
   local.tee $3
-  local.get $5
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  i32.shl
+  local.tee $5
   i32.lt_u
   select
   if
@@ -2107,9 +2123,12 @@
    call $~lib/rt/pure/__release
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $3
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $1
   local.get $3
   local.get $5
@@ -2160,26 +2179,32 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  i32.const 1
   local.get $2
   call $~lib/rt/pure/__retain
-  local.set $2
-  local.get $0
-  call $~lib/string/String#get:length
+  local.tee $2
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   i32.const 1
   i32.shl
-  local.set $3
-  i32.const 1
-  local.get $2
-  call $~lib/string/String#get:length
-  i32.const 1
-  i32.shl
-  local.tee $4
+  local.tee $3
   i32.eqz
   local.get $1
   i32.const 1
   i32.shl
-  local.tee $5
-  local.get $3
+  local.tee $4
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  i32.shl
+  local.tee $1
   i32.lt_u
   select
   if
@@ -2189,53 +2214,56 @@
    call $~lib/rt/pure/__release
    return
   end
-  local.get $5
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $4
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
-  local.tee $1
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  local.tee $5
   local.get $0
-  local.get $3
+  local.get $1
   call $~lib/memory/memory.copy
-  local.get $5
-  local.get $3
+  local.get $4
+  local.get $1
   i32.sub
   local.tee $0
-  local.get $4
+  local.get $3
   i32.gt_u
   if
    local.get $1
-   local.get $3
+   local.get $5
    i32.add
-   local.tee $3
+   local.tee $1
    local.get $2
-   local.get $4
+   local.get $3
    local.get $0
    i32.const 2
    i32.sub
-   local.get $4
-   i32.div_u
-   local.tee $5
-   call $~lib/memory/memory.repeat
-   local.get $4
-   local.get $5
-   i32.mul
-   local.tee $4
    local.get $3
+   i32.div_u
+   local.tee $4
+   call $~lib/memory/memory.repeat
+   local.get $1
+   local.get $3
+   local.get $4
+   i32.mul
+   local.tee $1
    i32.add
    local.get $2
    local.get $0
-   local.get $4
+   local.get $1
    i32.sub
    call $~lib/memory/memory.copy
   else
    local.get $1
-   local.get $3
+   local.get $5
    i32.add
    local.get $2
    local.get $0
    call $~lib/memory/memory.copy
   end
-  local.get $1
+  local.get $5
   call $~lib/rt/pure/__retain
   local.get $2
   call $~lib/rt/pure/__release
@@ -2243,22 +2271,37 @@
  (func $~lib/string/String#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   local.get $1
   call $~lib/rt/pure/__retain
   local.tee $1
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $4
   i32.eqz
   if
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $3
+  local.set $5
+  local.get $3
   i32.eqz
   if
    local.get $1
@@ -2273,7 +2316,7 @@
   i32.gt_s
   select
   local.tee $2
-  local.get $3
+  local.get $5
   local.get $4
   i32.sub
   local.tee $3
@@ -2324,12 +2367,20 @@
    i32.const 0
    return
   end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.tee $3
   local.get $1
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $2
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+  local.tee $3
   i32.ne
   if
    local.get $1
@@ -2423,7 +2474,11 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   i32.const 1
   i32.shl
   local.set $2
@@ -2464,9 +2519,12 @@
    i32.const 1280
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $2
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $3
   local.get $0
   local.get $1
@@ -2480,7 +2538,11 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   i32.const 1
   i32.shl
   local.tee $2
@@ -2520,9 +2582,12 @@
    call $~lib/rt/pure/__retain
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   local.get $1
@@ -2535,8 +2600,14 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  call $~lib/string/String#get:length
-  local.tee $3
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+  local.tee $1
+  local.set $3
+  local.get $1
   i32.const 1
   i32.shl
   local.set $1
@@ -2605,9 +2676,12 @@
    call $~lib/rt/pure/__retain
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $3
   local.get $0
   local.get $2
@@ -2627,7 +2701,11 @@
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $3
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $0
    i32.eqz
    br_if $folding-inner0
@@ -2653,7 +2731,7 @@
     end
    end
    f64.const 1
-   local.set $6
+   local.set $5
    i32.const 1
    local.get $2
    i32.const 43
@@ -2675,7 +2753,7 @@
     i32.const 45
     i32.eq
     select
-    local.set $6
+    local.set $5
     local.get $4
     i32.const 2
     i32.add
@@ -2845,7 +2923,7 @@
       local.get $1
       i32.ge_u
       if
-       local.get $5
+       local.get $6
        i64.reinterpret_f64
        i64.const 1
        i64.shl
@@ -2856,14 +2934,14 @@
        br_if $folding-inner0
        br $while-break|2
       end
-      local.get $5
+      local.get $6
       local.get $1
       f64.convert_i32_s
       f64.mul
       local.get $2
       f64.convert_i32_u
       f64.add
-      local.set $5
+      local.set $6
       local.get $4
       i32.const 2
       i32.add
@@ -2874,8 +2952,8 @@
    end
    local.get $3
    call $~lib/rt/pure/__release
-   local.get $6
    local.get $5
+   local.get $6
    f64.mul
    return
   end
@@ -2904,7 +2982,11 @@
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $0
    i32.eqz
    br_if $folding-inner0
@@ -3117,7 +3199,11 @@
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $0
    i32.eqz
    br_if $folding-inner0
@@ -3436,34 +3522,38 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i64)
-  (local $7 f64)
-  (local $8 i64)
-  (local $9 i32)
-  (local $10 f64)
-  (local $11 i64)
-  (local $12 i64)
+  (local $6 i32)
+  (local $7 i64)
+  (local $8 i32)
+  (local $9 i64)
+  (local $10 i64)
+  (local $11 f64)
+  (local $12 f64)
   (local $13 i32)
   (local $14 i64)
-  (local $15 i32)
+  (local $15 i64)
   block $folding-inner0
    local.get $0
    call $~lib/rt/pure/__retain
-   local.tee $3
-   call $~lib/string/String#get:length
-   local.tee $15
+   local.tee $4
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
+   local.tee $6
    i32.eqz
    br_if $folding-inner0
-   local.get $3
+   local.get $4
    local.tee $0
    i32.load16_u
-   local.set $13
+   local.set $8
    f64.const 1
-   local.set $7
+   local.set $12
    loop $while-continue|0
-    local.get $15
+    local.get $6
     if (result i32)
-     local.get $13
+     local.get $8
      call $~lib/util/string/isSpace
     else
      i32.const 0
@@ -3474,43 +3564,43 @@
      i32.add
      local.tee $0
      i32.load16_u
-     local.set $13
-     local.get $15
+     local.set $8
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $15
+     local.set $6
      br $while-continue|0
     end
    end
-   local.get $15
+   local.get $6
    i32.eqz
    br_if $folding-inner0
-   local.get $13
+   local.get $8
    i32.const 45
    i32.eq
    if (result i32)
-    local.get $15
+    local.get $6
     i32.const 1
     i32.sub
-    local.tee $15
+    local.tee $6
     i32.eqz
     br_if $folding-inner0
     f64.const -1
-    local.set $7
+    local.set $12
     local.get $0
     i32.const 2
     i32.add
     local.tee $0
     i32.load16_u
    else
-    local.get $13
+    local.get $8
     i32.const 43
     i32.eq
     if (result i32)
-     local.get $15
+     local.get $6
      i32.const 1
      i32.sub
-     local.tee $15
+     local.tee $6
      i32.eqz
      br_if $folding-inner0
      local.get $0
@@ -3519,14 +3609,14 @@
      local.tee $0
      i32.load16_u
     else
-     local.get $13
+     local.get $8
     end
    end
-   local.tee $13
+   local.tee $8
    i32.const 73
    i32.eq
    i32.const 0
-   local.get $15
+   local.get $6
    i32.const 8
    i32.ge_s
    select
@@ -3544,30 +3634,30 @@
      i32.const 0
     end
     if
-     local.get $3
+     local.get $4
      call $~lib/rt/pure/__release
-     local.get $7
+     local.get $12
      f64.const inf
      f64.mul
      return
     end
     br $folding-inner0
    end
-   local.get $13
+   local.get $8
    i32.const 48
    i32.sub
    i32.const 10
    i32.ge_u
    i32.const 0
-   local.get $13
+   local.get $8
    i32.const 46
    i32.ne
    select
    br_if $folding-inner0
    local.get $0
-   local.set $5
+   local.set $2
    loop $while-continue|1
-    local.get $13
+    local.get $8
     i32.const 48
     i32.eq
     if
@@ -3576,61 +3666,61 @@
      i32.add
      local.tee $0
      i32.load16_u
-     local.set $13
-     local.get $15
+     local.set $8
+     local.get $6
      i32.const 1
      i32.sub
-     local.set $15
+     local.set $6
      br $while-continue|1
     end
    end
-   local.get $15
+   local.get $6
    i32.const 0
    i32.le_s
    if
-    local.get $3
+    local.get $4
     call $~lib/rt/pure/__release
     f64.const 0
     return
    end
-   local.get $13
+   local.get $8
    i32.const 46
    i32.eq
    if
-    local.get $5
+    local.get $2
     local.get $0
     i32.sub
     i32.eqz
-    local.set $5
+    local.set $2
     local.get $0
     i32.const 2
     i32.add
     local.set $0
     i32.const 0
-    local.get $5
-    local.get $15
+    local.get $2
+    local.get $6
     i32.const 1
     i32.sub
-    local.tee $15
+    local.tee $6
     select
     br_if $folding-inner0
     i32.const 1
-    local.set $9
+    local.set $13
     loop $for-loop|2
      local.get $0
      i32.load16_u
-     local.tee $13
+     local.tee $8
      i32.const 48
      i32.eq
      if
-      local.get $15
+      local.get $6
       i32.const 1
       i32.sub
-      local.set $15
-      local.get $1
+      local.set $6
+      local.get $5
       i32.const 1
       i32.sub
-      local.set $1
+      local.set $5
       local.get $0
       i32.const 2
       i32.add
@@ -3638,82 +3728,82 @@
       br $for-loop|2
      end
     end
-    local.get $15
+    local.get $6
     i32.const 0
     i32.le_s
     if
-     local.get $3
+     local.get $4
      call $~lib/rt/pure/__release
      f64.const 0
      return
     end
-    local.get $13
+    local.get $8
     i32.const 48
     i32.sub
     i32.const 10
     i32.ge_u
     i32.const 0
     i32.const 0
+    local.get $2
     local.get $5
-    local.get $1
     select
     select
     br_if $folding-inner0
    end
-   local.get $13
+   local.get $8
    i32.const 48
    i32.sub
-   local.set $5
+   local.set $2
    loop $for-loop|3
     i32.const 1
-    local.get $9
+    local.get $13
     i32.eqz
     i32.const 0
-    local.get $13
+    local.get $8
     i32.const 46
     i32.eq
     select
-    local.get $5
+    local.get $2
     i32.const 10
     i32.lt_u
     select
     if
      block $for-break3
-      local.get $5
+      local.get $2
       i32.const 10
       i32.lt_u
       if
-       local.get $5
+       local.get $2
        i64.extend_i32_u
-       local.get $14
+       local.get $7
        i64.const 10
        i64.mul
        i64.add
-       local.get $14
-       local.get $5
+       local.get $7
+       local.get $2
        i32.eqz
        i32.eqz
        i64.extend_i32_u
        i64.or
-       local.get $2
+       local.get $1
        i32.const 19
        i32.lt_s
        select
-       local.set $14
-       local.get $2
+       local.set $7
+       local.get $1
        i32.const 1
        i32.add
-       local.set $2
-      else
-       local.get $2
        local.set $1
+      else
+       local.get $1
+       local.set $5
        i32.const 1
-       local.set $9
+       local.set $13
       end
-      local.get $15
+      local.get $6
       i32.const 1
       i32.sub
-      local.tee $15
+      local.tee $6
       i32.eqz
       br_if $for-break3
       local.get $0
@@ -3721,35 +3811,33 @@
       i32.add
       local.tee $0
       i32.load16_u
-      local.tee $13
+      local.tee $8
       i32.const 48
       i32.sub
-      local.set $5
+      local.set $2
       br $for-loop|3
      end
     end
    end
    block $~lib/util/string/scientific|inlined.0 (result f64)
+    f64.const 0
+    i32.const 1
+    local.get $5
     local.get $1
-    local.get $2
-    local.get $9
+    local.get $13
     select
     i32.const 19
-    local.get $2
+    local.get $1
     i32.const 19
-    local.get $2
+    local.get $1
     i32.lt_s
     select
     i32.sub
-    local.set $9
-    f64.const 0
-    i32.const 1
     block $~lib/util/string/parseExp|inlined.0 (result i32)
      i32.const 1
-     local.set $2
+     local.set $1
      i32.const 0
      local.get $0
-     local.tee $1
      i32.load16_u
      i32.const 32
      i32.or
@@ -3757,29 +3845,29 @@
      i32.ne
      br_if $~lib/util/string/parseExp|inlined.0
      drop
-     local.get $1
+     local.get $0
      i32.const 2
      i32.add
-     local.tee $5
+     local.tee $2
      i32.load16_u
      local.tee $0
      i32.const 45
      i32.eq
      if (result i32)
       i32.const 0
-      local.get $15
+      local.get $6
       i32.const 1
       i32.sub
-      local.tee $15
+      local.tee $6
       i32.eqz
       br_if $~lib/util/string/parseExp|inlined.0
       drop
       i32.const -1
-      local.set $2
-      local.get $5
+      local.set $1
+      local.get $2
       i32.const 2
       i32.add
-      local.tee $5
+      local.tee $2
       i32.load16_u
      else
       local.get $0
@@ -3787,17 +3875,17 @@
       i32.eq
       if (result i32)
        i32.const 0
-       local.get $15
+       local.get $6
        i32.const 1
        i32.sub
-       local.tee $15
+       local.tee $6
        i32.eqz
        br_if $~lib/util/string/parseExp|inlined.0
        drop
-       local.get $5
+       local.get $2
        i32.const 2
        i32.add
-       local.tee $5
+       local.tee $2
        i32.load16_u
       else
        local.get $0
@@ -3810,17 +3898,17 @@
       i32.eq
       if
        i32.const 0
-       local.get $15
+       local.get $6
        i32.const 1
        i32.sub
-       local.tee $15
+       local.tee $6
        i32.eqz
        br_if $~lib/util/string/parseExp|inlined.0
        drop
-       local.get $5
+       local.get $2
        i32.const 2
        i32.add
-       local.tee $5
+       local.tee $2
        i32.load16_u
        local.set $0
        br $while-continue|4
@@ -3835,31 +3923,31 @@
       i32.const 10
       i32.lt_u
       i32.const 0
-      local.get $15
+      local.get $6
       select
       if
-       local.get $2
+       local.get $1
        i32.const 3200
        i32.mul
-       local.get $4
+       local.get $3
        i32.const 3200
        i32.ge_s
        br_if $~lib/util/string/parseExp|inlined.0
        drop
        local.get $0
-       local.get $4
+       local.get $3
        i32.const 10
        i32.mul
        i32.add
-       local.set $4
-       local.get $15
+       local.set $3
+       local.get $6
        i32.const 1
        i32.sub
-       local.set $15
-       local.get $5
+       local.set $6
+       local.get $2
        i32.const 2
        i32.add
-       local.tee $5
+       local.tee $2
        i32.load16_u
        i32.const 48
        i32.sub
@@ -3867,16 +3955,15 @@
        br $for-loop|5
       end
      end
-     local.get $2
-     local.get $4
+     local.get $1
+     local.get $3
      i32.mul
     end
-    local.get $9
     i32.add
     local.tee $0
     i32.const -342
     i32.lt_s
-    local.get $14
+    local.get $7
     i64.eqz
     select
     br_if $~lib/util/string/scientific|inlined.0
@@ -3887,9 +3974,9 @@
     i32.gt_s
     br_if $~lib/util/string/scientific|inlined.0
     drop
-    local.get $14
+    local.get $7
     f64.convert_i64_u
-    local.tee $10
+    local.tee $11
     local.get $0
     i32.eqz
     br_if $~lib/util/string/scientific|inlined.0
@@ -3903,7 +3990,7 @@
     i32.gt_s
     select
     if
-     local.get $10
+     local.get $11
      local.get $0
      i32.const 3
      i32.shl
@@ -3911,20 +3998,20 @@
      i32.add
      f64.load
      f64.mul
-     local.set $10
+     local.set $11
      i32.const 22
      local.set $0
     end
-    local.get $14
+    local.get $7
     i64.const 9007199254740991
     i64.le_u
     if (result i32)
      local.get $0
      i32.const 31
      i32.shr_s
-     local.tee $2
+     local.tee $8
      local.get $0
-     local.get $2
+     local.get $8
      i32.add
      i32.xor
      i32.const 22
@@ -3937,7 +4024,7 @@
      i32.const 0
      i32.gt_s
      if
-      local.get $10
+      local.get $11
       local.get $0
       i32.const 3
       i32.shl
@@ -3947,7 +4034,7 @@
       f64.mul
       br $~lib/util/string/scientific|inlined.0
      end
-     local.get $10
+     local.get $11
      i32.const 0
      local.get $0
      i32.sub
@@ -3962,32 +4049,32 @@
      i32.const 0
      i32.lt_s
      if (result f64)
-      local.get $14
-      local.get $14
+      local.get $7
+      local.get $7
       i64.clz
-      local.tee $12
+      local.tee $9
       i64.shl
-      local.set $14
+      local.set $7
       local.get $0
-      local.tee $2
+      local.tee $1
       i64.extend_i32_s
-      local.get $12
+      local.get $9
       i64.sub
-      local.set $12
+      local.set $9
       loop $for-loop|6
-       local.get $2
+       local.get $1
        i32.const -14
        i32.le_s
        if
-        local.get $14
+        local.get $7
         i64.const 6103515625
         i64.rem_u
-        local.get $14
+        local.get $7
         i64.const 6103515625
         i64.div_u
-        local.tee $8
+        local.tee $7
         i64.clz
-        local.tee $11
+        local.tee $10
         i64.const 18
         i64.sub
         i64.shl
@@ -3996,91 +4083,91 @@
         f64.mul
         f64.nearest
         i64.trunc_f64_u
-        local.get $8
-        local.get $11
+        local.get $7
+        local.get $10
         i64.shl
         i64.add
-        local.set $14
-        local.get $12
-        local.get $11
+        local.set $7
+        local.get $9
+        local.get $10
         i64.sub
-        local.set $12
-        local.get $2
+        local.set $9
+        local.get $1
         i32.const 14
         i32.add
-        local.set $2
+        local.set $1
         br $for-loop|6
        end
       end
-      local.get $14
+      local.get $7
       i32.const 0
-      local.get $2
+      local.get $1
       i32.sub
       call $~lib/math/ipow32
       i64.extend_i32_s
-      local.tee $8
+      local.tee $14
       i64.div_u
-      local.tee $6
+      local.tee $15
       i64.clz
-      local.set $11
+      local.set $10
+      local.get $7
       local.get $14
-      local.get $8
       i64.rem_u
       f64.convert_i64_u
       i64.reinterpret_f64
-      local.get $11
+      local.get $10
       i64.const 52
       i64.shl
       i64.add
       f64.reinterpret_i64
-      local.get $8
+      local.get $14
       f64.convert_i64_u
       f64.div
       i64.trunc_f64_u
-      local.get $6
-      local.get $11
+      local.get $15
+      local.get $10
       i64.shl
       i64.add
       f64.convert_i64_u
-      local.get $12
-      local.get $11
+      local.get $9
+      local.get $10
       i64.sub
       i32.wrap_i64
       call $~lib/math/NativeMath.scalbn
      else
-      local.get $14
-      local.get $14
+      local.get $7
+      local.get $7
       i64.ctz
-      local.tee $12
+      local.tee $9
       i64.shr_u
-      local.set $14
-      local.get $12
+      local.set $7
+      local.get $9
       local.get $0
-      local.tee $4
+      local.tee $3
       i64.extend_i32_s
       i64.add
       global.set $~lib/util/string/__fixmulShift
       loop $for-loop|7
-       local.get $4
+       local.get $3
        i32.const 13
        i32.ge_s
        if
         i64.const 32
-        local.get $14
+        local.get $7
         i64.const 32
         i64.shr_u
         i64.const 1220703125
         i64.mul
-        local.get $14
+        local.get $7
         i64.const 4294967295
         i64.and
         i64.const 1220703125
         i64.mul
-        local.tee $14
+        local.tee $7
         i64.const 32
         i64.shr_u
         i64.add
-        local.tee $12
+        local.tee $9
         i64.const 32
         i64.shr_u
         i32.wrap_i64
@@ -4088,11 +4175,11 @@
         local.tee $0
         i64.extend_i32_u
         i64.sub
-        local.tee $11
+        local.tee $10
         global.get $~lib/util/string/__fixmulShift
         i64.add
         global.set $~lib/util/string/__fixmulShift
-        local.get $14
+        local.get $7
         local.get $0
         i64.extend_i32_u
         i64.shl
@@ -4100,46 +4187,46 @@
         i64.shr_u
         i64.const 1
         i64.and
-        local.get $12
+        local.get $9
         local.get $0
         i64.extend_i32_u
         i64.shl
-        local.get $14
+        local.get $7
         i64.const 4294967295
         i64.and
-        local.get $11
+        local.get $10
         i64.shr_u
         i64.or
         i64.add
-        local.set $14
-        local.get $4
+        local.set $7
+        local.get $3
         i32.const 13
         i32.sub
-        local.set $4
+        local.set $3
         br $for-loop|7
        end
       end
-      local.get $4
+      local.get $3
       call $~lib/math/ipow32
       local.tee $0
       i64.extend_i32_u
-      local.get $14
+      local.get $7
       i64.const 4294967295
       i64.and
       i64.mul
-      local.set $12
+      local.set $9
       i64.const 32
       local.get $0
       i64.extend_i32_u
-      local.get $14
+      local.get $7
       i64.const 32
       i64.shr_u
       i64.mul
-      local.get $12
+      local.get $9
       i64.const 32
       i64.shr_u
       i64.add
-      local.tee $14
+      local.tee $7
       i64.const 32
       i64.shr_u
       i32.wrap_i64
@@ -4147,11 +4234,11 @@
       local.tee $0
       i64.extend_i32_u
       i64.sub
-      local.tee $11
+      local.tee $10
       global.get $~lib/util/string/__fixmulShift
       i64.add
       global.set $~lib/util/string/__fixmulShift
-      local.get $12
+      local.get $9
       local.get $0
       i64.extend_i32_u
       i64.shl
@@ -4159,14 +4246,14 @@
       i64.shr_u
       i64.const 1
       i64.and
-      local.get $14
+      local.get $7
       local.get $0
       i64.extend_i32_u
       i64.shl
-      local.get $12
+      local.get $9
       i64.const 4294967295
       i64.and
-      local.get $11
+      local.get $10
       i64.shr_u
       i64.or
       i64.add
@@ -4177,13 +4264,13 @@
      end
     end
    end
-   local.get $3
+   local.get $4
    call $~lib/rt/pure/__release
-   local.get $7
+   local.get $12
    f64.copysign
    return
   end
-  local.get $3
+  local.get $4
   call $~lib/rt/pure/__release
   f64.const nan:0x8000000000000
  )
@@ -4227,16 +4314,24 @@
     i32.const 1648
     local.set $0
    end
-   local.get $3
-   call $~lib/string/String#get:length
-   i32.const 1
-   i32.shl
-   local.tee $4
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.const 1
    i32.shl
    local.tee $6
+   local.get $3
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
+   i32.const 1
+   i32.shl
+   local.tee $4
    i32.add
    local.tee $1
    i32.eqz
@@ -4246,9 +4341,12 @@
     i32.const 1280
     br $__inlined_func$~lib/string/String#concat
    end
+   call $~lib/rt/tlsf/maybeInitialize
    local.get $1
    i32.const 1
-   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
    call $~lib/rt/pure/__retain
    local.tee $1
    local.get $3
@@ -4306,12 +4404,20 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    i32.eqz
    br_if $folding-inner0
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $3
    i32.eqz
    if
@@ -4368,12 +4474,20 @@
    select
    br_if $folding-inner0
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    i32.eqz
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $3
    i32.eqz
    if
@@ -4441,7 +4555,11 @@
   (local $3 i32)
   i32.const 1
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $2
   i64.extend_i32_s
   local.get $1
@@ -4478,13 +4596,16 @@
    call $~lib/rt/pure/__retain
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $1
   local.get $2
   i32.mul
   i32.const 1
   i32.shl
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $3
   local.get $0
   local.get $2
@@ -4510,10 +4631,18 @@
   local.set $2
   block $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $3
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $5
    i32.le_u
    if
@@ -4544,7 +4673,11 @@
    i32.xor
    if
     local.get $2
-    call $~lib/string/String#get:length
+    i32.const 16
+    i32.sub
+    i32.load offset=12
+    i32.const 1
+    i32.shr_u
     local.tee $6
     local.get $3
     local.get $5
@@ -4553,11 +4686,14 @@
     i32.add
     local.tee $3
     if
+     call $~lib/rt/tlsf/maybeInitialize
      local.get $3
      i32.const 1
      i32.shl
      i32.const 1
-     call $~lib/rt/tlsf/__alloc
+     call $~lib/rt/tlsf/allocateBlock
+     i32.const 16
+     i32.add
      local.tee $3
      local.get $0
      local.get $4
@@ -4791,16 +4927,24 @@
   (local $10 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  local.set $7
+  local.set $8
   local.get $2
   call $~lib/rt/pure/__retain
-  local.set $5
+  local.set $6
   block $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $4
-   local.get $7
-   call $~lib/string/String#get:length
+   local.get $8
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $10
    i32.le_u
    if
@@ -4811,9 +4955,9 @@
      local.get $0
      call $~lib/rt/pure/__retain
     else
-     local.get $5
+     local.get $6
      local.get $0
-     local.get $7
+     local.get $8
      local.get $0
      call $~lib/string/String.__eq
      select
@@ -4822,8 +4966,12 @@
     local.set $0
     br $folding-inner0
    end
-   local.get $5
-   call $~lib/string/String#get:length
+   local.get $6
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.set $2
    local.get $10
    i32.eqz
@@ -4836,6 +4984,7 @@
      local.set $0
      br $folding-inner0
     end
+    call $~lib/rt/tlsf/maybeInitialize
     local.get $4
     local.get $2
     local.get $4
@@ -4846,9 +4995,11 @@
     i32.const 1
     i32.shl
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
     local.tee $3
-    local.get $5
+    local.get $6
     local.get $2
     i32.const 1
     i32.shl
@@ -4880,7 +5031,7 @@
       i32.const 1
       i32.shl
       i32.add
-      local.get $5
+      local.get $6
       local.get $2
       i32.const 1
       i32.shl
@@ -4905,39 +5056,42 @@
    local.get $10
    i32.eq
    if
+    call $~lib/rt/tlsf/maybeInitialize
     local.get $4
     i32.const 1
     i32.shl
-    local.tee $4
+    local.tee $3
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
     local.tee $1
     local.get $0
-    local.get $4
+    local.get $3
     call $~lib/memory/memory.copy
     loop $while-continue|1
      local.get $0
-     local.get $7
-     local.get $6
+     local.get $8
+     local.get $5
      call $~lib/string/String#indexOf
-     local.tee $4
+     local.tee $3
      i32.const -1
      i32.xor
      if
       local.get $1
-      local.get $4
+      local.get $3
       i32.const 1
       i32.shl
       i32.add
-      local.get $5
+      local.get $6
       local.get $2
       i32.const 1
       i32.shl
       call $~lib/memory/memory.copy
-      local.get $4
+      local.get $3
       local.get $10
       i32.add
-      local.set $6
+      local.set $5
       br $while-continue|1
      end
     end
@@ -4950,8 +5104,8 @@
    local.set $1
    loop $while-continue|2
     local.get $0
-    local.get $7
-    local.get $6
+    local.get $8
+    local.get $5
     call $~lib/string/String#indexOf
     local.tee $9
     i32.const -1
@@ -4960,14 +5114,17 @@
      local.get $3
      i32.eqz
      if
+      call $~lib/rt/tlsf/maybeInitialize
       local.get $4
       i32.const 1
       i32.shl
       i32.const 1
-      call $~lib/rt/tlsf/__alloc
+      call $~lib/rt/tlsf/allocateBlock
+      i32.const 16
+      i32.add
       local.set $3
      end
-     local.get $8
+     local.get $7
      local.get $1
      i32.gt_u
      if
@@ -4982,49 +5139,49 @@
       local.set $3
      end
      local.get $3
-     local.get $8
+     local.get $7
      i32.const 1
      i32.shl
      i32.add
      local.get $0
-     local.get $6
+     local.get $5
      i32.const 1
      i32.shl
      i32.add
      local.get $9
-     local.get $6
+     local.get $5
      i32.sub
-     local.tee $6
+     local.tee $5
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
      local.get $3
-     local.get $6
-     local.get $8
+     local.get $5
+     local.get $7
      i32.add
-     local.tee $6
+     local.tee $5
      i32.const 1
      i32.shl
      i32.add
-     local.get $5
+     local.get $6
      local.get $2
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
      local.get $2
-     local.get $6
+     local.get $5
      i32.add
-     local.set $8
+     local.set $7
      local.get $9
      local.get $10
      i32.add
-     local.set $6
+     local.set $5
      br $while-continue|2
     end
    end
-   local.get $8
+   local.get $7
    if
-    local.get $8
+    local.get $7
     local.get $1
     i32.gt_u
     if
@@ -5039,17 +5196,17 @@
      local.set $3
     end
     local.get $4
-    local.get $6
+    local.get $5
     i32.sub
     local.tee $2
     if
      local.get $3
-     local.get $8
+     local.get $7
      i32.const 1
      i32.shl
      i32.add
      local.get $0
-     local.get $6
+     local.get $5
      i32.const 1
      i32.shl
      i32.add
@@ -5060,7 +5217,7 @@
     end
     local.get $1
     local.get $2
-    local.get $8
+    local.get $7
     i32.add
     local.tee $0
     i32.gt_u
@@ -5079,22 +5236,26 @@
    end
    local.get $0
    call $~lib/rt/pure/__retain
-   local.get $7
+   local.get $8
    call $~lib/rt/pure/__release
-   local.get $5
+   local.get $6
    call $~lib/rt/pure/__release
    return
   end
-  local.get $7
+  local.get $8
   call $~lib/rt/pure/__release
-  local.get $5
+  local.get $6
   call $~lib/rt/pure/__release
   local.get $0
  )
  (func $~lib/string/String#slice (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.set $3
   local.get $1
   i32.const 0
@@ -5148,12 +5309,15 @@
    i32.const 1280
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $2
   i32.const 1
   i32.shl
   local.tee $2
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $3
   local.get $0
   local.get $1
@@ -5175,7 +5339,11 @@
   select
   local.tee $2
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $3
   local.get $1
   i32.const 0
@@ -5208,9 +5376,12 @@
    i32.const 1280
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $2
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $3
   local.get $0
   local.get $1
@@ -5233,7 +5404,11 @@
   select
   local.tee $3
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $1
   local.get $3
   local.get $1
@@ -5289,9 +5464,12 @@
    call $~lib/rt/pure/__retain
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $3
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $0
   local.get $2
@@ -5305,16 +5483,22 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 16
   i32.const 3
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 2
   i32.shl
   local.tee $2
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $3
   call $~lib/rt/pure/__retain
   i32.store
@@ -5580,220 +5764,231 @@
   local.get $1
   call $~lib/rt/pure/__retain
   local.set $1
-  block $folding-inner0
-   local.get $2
-   i32.eqz
-   br_if $folding-inner0
-   local.get $1
-   i32.eqz
-   if
-    i32.const 1
-    call $~lib/rt/__allocArray
-    call $~lib/rt/pure/__retain
-    local.tee $2
-    i32.load offset=4
-    local.get $0
-    call $~lib/rt/pure/__retain
-    i32.store
-    local.get $1
-    call $~lib/rt/pure/__release
+  block $folding-inner1
+   block $folding-inner0
     local.get $2
-    return
-   end
-   local.get $0
-   call $~lib/string/String#get:length
-   local.set $4
-   i32.const 2147483647
-   local.get $2
-   local.get $2
-   i32.const 0
-   i32.lt_s
-   select
-   local.set $2
-   local.get $1
-   call $~lib/string/String#get:length
-   local.tee $6
-   if
-    local.get $4
+    i32.eqz
+    br_if $folding-inner0
+    local.get $1
     i32.eqz
     if
      i32.const 1
      call $~lib/rt/__allocArray
      call $~lib/rt/pure/__retain
-     local.tee $0
+     local.tee $2
      i32.load offset=4
-     i32.const 1280
-     i32.store
-     local.get $1
-     call $~lib/rt/pure/__release
      local.get $0
-     return
+     call $~lib/rt/pure/__retain
+     i32.store
+     br $folding-inner1
     end
-   else
-    local.get $4
-    i32.eqz
-    br_if $folding-inner0
-    local.get $4
+    local.get $0
+    i32.const 16
+    i32.sub
+    i32.load offset=12
+    i32.const 1
+    i32.shr_u
+    local.set $3
+    i32.const 2147483647
     local.get $2
-    local.get $4
     local.get $2
+    i32.const 0
     i32.lt_s
     select
-    local.tee $5
+    local.set $6
+    local.get $1
+    i32.const 16
+    i32.sub
+    i32.load offset=12
+    i32.const 1
+    i32.shr_u
+    local.tee $2
+    local.set $8
+    local.get $2
+    if
+     local.get $3
+     i32.eqz
+     if
+      i32.const 1
+      call $~lib/rt/__allocArray
+      call $~lib/rt/pure/__retain
+      local.tee $0
+      i32.load offset=4
+      i32.const 1280
+      i32.store
+      local.get $1
+      call $~lib/rt/pure/__release
+      local.get $0
+      return
+     end
+    else
+     local.get $3
+     i32.eqz
+     br_if $folding-inner0
+     local.get $3
+     local.get $6
+     local.get $3
+     local.get $6
+     i32.lt_s
+     select
+     local.tee $5
+     call $~lib/rt/__allocArray
+     call $~lib/rt/pure/__retain
+     local.tee $3
+     i32.load offset=4
+     local.set $6
+     loop $for-loop|0
+      local.get $4
+      local.get $5
+      i32.lt_s
+      if
+       call $~lib/rt/tlsf/maybeInitialize
+       i32.const 2
+       i32.const 1
+       call $~lib/rt/tlsf/allocateBlock
+       i32.const 16
+       i32.add
+       local.tee $2
+       local.get $0
+       local.get $4
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.load16_u
+       i32.store16
+       local.get $6
+       local.get $4
+       i32.const 2
+       i32.shl
+       i32.add
+       local.get $2
+       i32.store
+       local.get $2
+       call $~lib/rt/pure/__retain
+       drop
+       local.get $4
+       i32.const 1
+       i32.add
+       local.set $4
+       br $for-loop|0
+      end
+     end
+     local.get $1
+     call $~lib/rt/pure/__release
+     local.get $3
+     return
+    end
+    i32.const 0
     call $~lib/rt/__allocArray
     call $~lib/rt/pure/__retain
-    local.tee $4
-    i32.load offset=4
-    local.set $6
-    loop $for-loop|0
-     local.get $3
+    local.set $2
+    loop $while-continue|1
+     local.get $0
+     local.get $1
      local.get $5
-     i32.lt_s
+     call $~lib/string/String#indexOf
+     local.tee $4
+     i32.const -1
+     i32.xor
      if
-      i32.const 2
+      local.get $4
+      local.get $5
+      i32.sub
+      local.tee $7
+      i32.const 0
+      i32.gt_s
+      if
+       call $~lib/rt/tlsf/maybeInitialize
+       local.get $7
+       i32.const 1
+       i32.shl
+       local.tee $7
+       i32.const 1
+       call $~lib/rt/tlsf/allocateBlock
+       i32.const 16
+       i32.add
+       local.tee $9
+       local.get $0
+       local.get $5
+       i32.const 1
+       i32.shl
+       i32.add
+       local.get $7
+       call $~lib/memory/memory.copy
+       local.get $2
+       local.get $9
+       call $~lib/array/Array<~lib/string/String>#push
+      else
+       local.get $2
+       i32.const 1280
+       call $~lib/array/Array<~lib/string/String>#push
+      end
+      local.get $10
       i32.const 1
-      call $~lib/rt/tlsf/__alloc
-      local.tee $2
-      local.get $0
-      local.get $3
-      i32.const 1
-      i32.shl
       i32.add
-      i32.load16_u
-      i32.store16
+      local.tee $10
       local.get $6
-      local.get $3
-      i32.const 2
-      i32.shl
+      i32.eq
+      br_if $folding-inner1
+      local.get $4
+      local.get $8
       i32.add
-      local.get $2
-      i32.store
-      local.get $2
-      call $~lib/rt/pure/__retain
-      drop
-      local.get $3
-      i32.const 1
-      i32.add
-      local.set $3
-      br $for-loop|0
+      local.set $5
+      br $while-continue|1
      end
     end
-    local.get $1
-    call $~lib/rt/pure/__release
-    local.get $4
-    return
+    local.get $5
+    i32.eqz
+    if
+     local.get $2
+     local.get $0
+     call $~lib/array/Array<~lib/string/String>#push
+     br $folding-inner1
+    end
+    local.get $3
+    local.get $5
+    i32.sub
+    local.tee $3
+    i32.const 0
+    i32.gt_s
+    if
+     call $~lib/rt/tlsf/maybeInitialize
+     local.get $3
+     i32.const 1
+     i32.shl
+     local.tee $3
+     i32.const 1
+     call $~lib/rt/tlsf/allocateBlock
+     i32.const 16
+     i32.add
+     local.tee $4
+     local.get $0
+     local.get $5
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $3
+     call $~lib/memory/memory.copy
+     local.get $2
+     local.get $4
+     call $~lib/array/Array<~lib/string/String>#push
+    else
+     local.get $2
+     i32.const 1280
+     call $~lib/array/Array<~lib/string/String>#push
+    end
+    br $folding-inner1
    end
    i32.const 0
    call $~lib/rt/__allocArray
    call $~lib/rt/pure/__retain
-   local.set $3
-   loop $while-continue|1
-    local.get $0
-    local.get $1
-    local.get $5
-    call $~lib/string/String#indexOf
-    local.tee $8
-    i32.const -1
-    i32.xor
-    if
-     local.get $8
-     local.get $5
-     i32.sub
-     local.tee $7
-     i32.const 0
-     i32.gt_s
-     if
-      local.get $7
-      i32.const 1
-      i32.shl
-      local.tee $7
-      i32.const 1
-      call $~lib/rt/tlsf/__alloc
-      local.tee $9
-      local.get $0
-      local.get $5
-      i32.const 1
-      i32.shl
-      i32.add
-      local.get $7
-      call $~lib/memory/memory.copy
-      local.get $3
-      local.get $9
-      call $~lib/array/Array<~lib/string/String>#push
-     else
-      local.get $3
-      i32.const 1280
-      call $~lib/array/Array<~lib/string/String>#push
-     end
-     local.get $2
-     local.get $10
-     i32.const 1
-     i32.add
-     local.tee $10
-     i32.eq
-     if
-      local.get $1
-      call $~lib/rt/pure/__release
-      local.get $3
-      return
-     end
-     local.get $6
-     local.get $8
-     i32.add
-     local.set $5
-     br $while-continue|1
-    end
-   end
-   local.get $5
-   i32.eqz
-   if
-    local.get $3
-    local.get $0
-    call $~lib/array/Array<~lib/string/String>#push
-    local.get $1
-    call $~lib/rt/pure/__release
-    local.get $3
-    return
-   end
-   local.get $4
-   local.get $5
-   i32.sub
-   local.tee $2
-   i32.const 0
-   i32.gt_s
-   if
-    local.get $2
-    i32.const 1
-    i32.shl
-    local.tee $2
-    i32.const 1
-    call $~lib/rt/tlsf/__alloc
-    local.tee $4
-    local.get $0
-    local.get $5
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $2
-    call $~lib/memory/memory.copy
-    local.get $3
-    local.get $4
-    call $~lib/array/Array<~lib/string/String>#push
-   else
-    local.get $3
-    i32.const 1280
-    call $~lib/array/Array<~lib/string/String>#push
-   end
    local.get $1
    call $~lib/rt/pure/__release
-   local.get $3
    return
   end
-  i32.const 0
-  call $~lib/rt/__allocArray
-  call $~lib/rt/pure/__retain
   local.get $1
   call $~lib/rt/pure/__release
+  local.get $2
  )
  (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
@@ -6107,7 +6302,7 @@
   local.get $0
   i32.const 31
   i32.shr_u
-  local.tee $2
+  local.tee $3
   if
    i32.const 0
    local.get $0
@@ -6120,14 +6315,19 @@
   if
    local.get $0
    call $~lib/util/number/decimalCount32
-   local.get $2
+   local.get $3
    i32.add
    local.tee $1
    i32.const 1
    i32.shl
+   local.set $2
+   call $~lib/rt/tlsf/maybeInitialize
+   local.get $2
    i32.const 1
-   call $~lib/rt/tlsf/__alloc
-   local.tee $3
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
+   local.tee $2
    local.get $0
    local.get $1
    call $~lib/util/number/utoa_dec_simple<u32>
@@ -6136,7 +6336,8 @@
    i32.const 16
    i32.eq
    if
-    local.get $2
+    call $~lib/rt/tlsf/maybeInitialize
+    local.get $3
     i32.const 31
     local.get $0
     i32.clz
@@ -6150,8 +6351,10 @@
     i32.const 1
     i32.shl
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
-    local.tee $3
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
+    local.tee $2
     local.get $0
     local.get $1
     call $~lib/util/number/utoa_hex_simple<u32>
@@ -6160,14 +6363,19 @@
     i64.extend_i32_u
     local.get $1
     call $~lib/util/number/ulog_base
-    local.get $2
+    local.get $3
     i32.add
     local.tee $4
     i32.const 1
     i32.shl
+    local.set $2
+    call $~lib/rt/tlsf/maybeInitialize
+    local.get $2
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
-    local.tee $3
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
+    local.tee $2
     local.get $0
     i64.extend_i32_u
     local.get $4
@@ -6175,13 +6383,13 @@
     call $~lib/util/number/utoa64_any_core
    end
   end
-  local.get $2
+  local.get $3
   if
-   local.get $3
+   local.get $2
    i32.const 45
    i32.store16
   end
-  local.get $3
+  local.get $2
   call $~lib/rt/pure/__retain
  )
  (func $~lib/util/number/utoa32 (param $0 i32) (param $1 i32) (result i32)
@@ -6218,8 +6426,13 @@
    local.tee $1
    i32.const 1
    i32.shl
+   local.set $2
+   call $~lib/rt/tlsf/maybeInitialize
+   local.get $2
    i32.const 1
-   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
    local.tee $2
    local.get $0
    local.get $1
@@ -6229,6 +6442,7 @@
    i32.const 16
    i32.eq
    if
+    call $~lib/rt/tlsf/maybeInitialize
     i32.const 31
     local.get $0
     i32.clz
@@ -6241,7 +6455,9 @@
     i32.const 1
     i32.shl
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
     local.tee $2
     local.get $0
     local.get $1
@@ -6254,8 +6470,13 @@
     local.tee $3
     i32.const 1
     i32.shl
+    local.set $2
+    call $~lib/rt/tlsf/maybeInitialize
+    local.get $2
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
     local.tee $2
     local.get $0
     i64.extend_i32_u
@@ -6417,8 +6638,13 @@
     local.tee $3
     i32.const 1
     i32.shl
+    local.set $2
+    call $~lib/rt/tlsf/maybeInitialize
+    local.get $2
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
     local.tee $2
     local.get $1
     local.get $3
@@ -6429,8 +6655,13 @@
     local.tee $1
     i32.const 1
     i32.shl
+    local.set $2
+    call $~lib/rt/tlsf/maybeInitialize
+    local.get $2
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
     local.tee $2
     local.get $0
     local.get $1
@@ -6441,6 +6672,7 @@
    i32.const 16
    i32.eq
    if
+    call $~lib/rt/tlsf/maybeInitialize
     i32.const 63
     local.get $0
     i64.clz
@@ -6454,7 +6686,9 @@
     i32.const 1
     i32.shl
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
     local.tee $2
     local.get $0
     local.get $1
@@ -6466,8 +6700,13 @@
     local.tee $3
     i32.const 1
     i32.shl
+    local.set $2
+    call $~lib/rt/tlsf/maybeInitialize
+    local.get $2
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
     local.tee $2
     local.get $0
     local.get $3
@@ -6508,7 +6747,7 @@
   i64.const 63
   i64.shr_u
   i32.wrap_i64
-  local.tee $2
+  local.tee $3
   if
    i64.const 0
    local.get $0
@@ -6527,28 +6766,38 @@
     i32.wrap_i64
     local.tee $1
     call $~lib/util/number/decimalCount32
-    local.get $2
+    local.get $3
     i32.add
     local.tee $4
     i32.const 1
     i32.shl
+    local.set $2
+    call $~lib/rt/tlsf/maybeInitialize
+    local.get $2
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
-    local.tee $3
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
+    local.tee $2
     local.get $1
     local.get $4
     call $~lib/util/number/utoa_dec_simple<u32>
    else
     local.get $0
     call $~lib/util/number/decimalCount64High
-    local.get $2
+    local.get $3
     i32.add
     local.tee $1
     i32.const 1
     i32.shl
+    local.set $2
+    call $~lib/rt/tlsf/maybeInitialize
+    local.get $2
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
-    local.tee $3
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
+    local.tee $2
     local.get $0
     local.get $1
     call $~lib/util/number/utoa_dec_simple<u64>
@@ -6558,7 +6807,8 @@
    i32.const 16
    i32.eq
    if
-    local.get $2
+    call $~lib/rt/tlsf/maybeInitialize
+    local.get $3
     i32.const 63
     local.get $0
     i64.clz
@@ -6573,8 +6823,10 @@
     i32.const 1
     i32.shl
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
-    local.tee $3
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
+    local.tee $2
     local.get $0
     local.get $1
     call $~lib/util/number/utoa_hex_simple<u64>
@@ -6582,27 +6834,32 @@
     local.get $0
     local.get $1
     call $~lib/util/number/ulog_base
-    local.get $2
+    local.get $3
     i32.add
     local.tee $4
     i32.const 1
     i32.shl
+    local.set $2
+    call $~lib/rt/tlsf/maybeInitialize
+    local.get $2
     i32.const 1
-    call $~lib/rt/tlsf/__alloc
-    local.tee $3
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
+    local.tee $2
     local.get $0
     local.get $4
     local.get $1
     call $~lib/util/number/utoa64_any_core
    end
   end
-  local.get $2
+  local.get $3
   if
-   local.get $3
+   local.get $2
    i32.const 45
    i32.store16
   end
-  local.get $3
+  local.get $2
   call $~lib/rt/pure/__retain
  )
  (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
@@ -7545,9 +7802,12 @@
    call $~lib/rt/pure/__retain
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 56
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $0
   call $~lib/util/number/dtoa_core
@@ -7575,9 +7835,9 @@
   (local $3 f64)
   (local $4 i32)
   (local $5 i32)
-  (local $6 f32)
+  (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
+  (local $8 f32)
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
@@ -7917,7 +8177,11 @@
    unreachable
   end
   global.get $std/string/str
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   i32.const 16
   i32.ne
   if
@@ -7933,7 +8197,11 @@
    i32.const 0
    global.get $std/string/str
    local.tee $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.ge_u
    br_if $__inlined_func$~lib/string/String#charCodeAt
    drop
@@ -7985,7 +8253,7 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/string/String.fromCharCode@varargs
-  local.tee $7
+  local.tee $9
   i32.const 1296
   call $~lib/string/String.__eq
   i32.eqz
@@ -8001,7 +8269,7 @@
   global.set $~argumentsLength
   i32.const 54
   call $~lib/string/String.fromCharCode@varargs
-  local.tee $8
+  local.tee $10
   i32.const 1472
   call $~lib/string/String.__eq
   i32.eqz
@@ -8017,7 +8285,7 @@
   global.set $~argumentsLength
   i32.const 65590
   call $~lib/string/String.fromCharCode@varargs
-  local.tee $9
+  local.tee $11
   i32.const 1472
   call $~lib/string/String.__eq
   i32.eqz
@@ -8032,7 +8300,7 @@
   i32.const 55296
   i32.const 57088
   call $~lib/string/String.fromCharCode
-  local.tee $10
+  local.tee $12
   i32.const 1504
   call $~lib/string/String.__eq
   i32.eqz
@@ -8046,7 +8314,7 @@
   end
   i32.const 0
   call $~lib/string/String.fromCodePoint
-  local.tee $11
+  local.tee $13
   i32.const 1296
   call $~lib/string/String.__eq
   i32.eqz
@@ -8060,7 +8328,7 @@
   end
   i32.const 54
   call $~lib/string/String.fromCodePoint
-  local.tee $12
+  local.tee $14
   i32.const 1472
   call $~lib/string/String.__eq
   i32.eqz
@@ -8074,7 +8342,7 @@
   end
   i32.const 119558
   call $~lib/string/String.fromCodePoint
-  local.tee $13
+  local.tee $15
   i32.const 1584
   call $~lib/string/String.__eq
   i32.eqz
@@ -8086,51 +8354,56 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/string/str
-  local.set $5
-  i32.const 1616
-  if (result i32)
+  block $__inlined_func$~lib/string/String#startsWith (result i32)
+   global.get $std/string/str
+   local.set $2
    i32.const 1616
-  else
-   i32.const 1616
-   call $~lib/rt/pure/__release
-   i32.const 0
-  end
-  drop
-  block $__inlined_func$~lib/string/String#startsWith
-   i32.const 0
-   local.get $5
-   call $~lib/string/String#get:length
-   local.tee $2
+   if (result i32)
+    i32.const 1616
+   else
+    i32.const 1616
+    call $~lib/rt/pure/__release
+    i32.const 1648
+   end
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
+   local.tee $0
+   local.set $4
+   local.get $0
    i32.const 0
    local.get $2
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
+   local.tee $0
+   i32.const 0
+   local.get $0
    i32.lt_s
    select
-   local.tee $4
-   i32.const 1616
-   call $~lib/string/String#get:length
-   local.tee $0
+   local.tee $5
    i32.add
-   local.get $2
+   local.get $0
    i32.gt_s
    if
     i32.const 1616
     call $~lib/rt/pure/__release
     i32.const 0
-    local.set $0
     br $__inlined_func$~lib/string/String#startsWith
    end
+   local.get $2
    local.get $5
-   local.get $4
    i32.const 1616
-   local.get $0
+   local.get $4
    call $~lib/util/string/compareImpl
    i32.eqz
-   local.set $0
    i32.const 1616
    call $~lib/rt/pure/__release
   end
-  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -8141,41 +8414,49 @@
    unreachable
   end
   global.get $std/string/str
-  local.set $4
+  local.set $1
   block $__inlined_func$~lib/string/String#endsWith
+   i32.const 1676
+   i32.load
+   i32.const 1
+   i32.shr_u
+   local.tee $2
+   local.set $4
    i32.const 536870904
-   local.get $4
-   call $~lib/string/String#get:length
-   local.tee $0
+   local.get $1
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
+   local.tee $5
    i32.const 536870904
-   local.get $0
+   local.get $5
    i32.lt_s
    select
-   i32.const 1680
-   call $~lib/string/String#get:length
-   local.tee $1
+   local.get $2
    i32.sub
-   local.tee $0
+   local.tee $2
    i32.const 0
    i32.lt_s
    if
     i32.const 1680
     call $~lib/rt/pure/__release
     i32.const 0
-    local.set $0
+    local.set $1
     br $__inlined_func$~lib/string/String#endsWith
    end
-   local.get $4
-   local.get $0
-   i32.const 1680
    local.get $1
+   local.get $2
+   i32.const 1680
+   local.get $4
    call $~lib/util/string/compareImpl
    i32.eqz
-   local.set $0
+   local.set $1
    i32.const 1680
    call $~lib/rt/pure/__release
   end
-  local.get $0
+  local.get $1
   i32.eqz
   if
    i32.const 0
@@ -8206,7 +8487,7 @@
   i32.const 0
   i32.const 1744
   call $~lib/string/String#padStart
-  local.tee $14
+  local.tee $4
   global.get $std/string/str
   call $~lib/string/String.__eq
   i32.eqz
@@ -8222,7 +8503,7 @@
   i32.const 15
   i32.const 1744
   call $~lib/string/String#padStart
-  local.tee $15
+  local.tee $5
   global.get $std/string/str
   call $~lib/string/String.__eq
   i32.eqz
@@ -8621,7 +8902,11 @@
   i32.const 2147483647
   call $~lib/string/String#lastIndexOf
   global.get $std/string/str
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   i32.ne
   if
    i32.const 0
@@ -9462,11 +9747,11 @@
   i32.const 0
   call $~lib/util/string/strtol<f64>
   f32.demote_f64
-  local.set $6
+  local.set $8
   i32.const 3536
   call $~lib/rt/pure/__release
-  local.get $6
-  local.get $6
+  local.get $8
+  local.get $8
   f32.eq
   if
    i32.const 0
@@ -11689,17 +11974,17 @@
   end
   i32.const 65377
   call $~lib/string/String.fromCodePoint
-  local.tee $5
+  local.tee $1
   i32.const 55296
   call $~lib/string/String.fromCodePoint
-  local.tee $2
+  local.tee $0
   i32.const 56322
   call $~lib/string/String.fromCodePoint
-  local.tee $4
+  local.tee $2
   call $~lib/string/String.__concat
-  local.tee $1
+  local.tee $6
   call $~lib/rt/pure/__retain
-  local.tee $0
+  local.tee $7
   call $~lib/string/String.__gt
   i32.eqz
   if
@@ -11710,18 +11995,20 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
-  i32.const 1872
-  call $~lib/string/String#get:length
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  i32.const 1868
+  i32.load
+  i32.const 1
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -11735,7 +12022,7 @@
   i32.const 1280
   i32.const 100
   call $~lib/string/String#repeat
-  local.tee $44
+  local.tee $6
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -11750,7 +12037,7 @@
   i32.const 1328
   i32.const 0
   call $~lib/string/String#repeat
-  local.tee $45
+  local.tee $7
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -11765,7 +12052,7 @@
   i32.const 1328
   i32.const 1
   call $~lib/string/String#repeat
-  local.tee $46
+  local.tee $44
   i32.const 1328
   call $~lib/string/String.__eq
   i32.eqz
@@ -11780,7 +12067,7 @@
   i32.const 1328
   i32.const 2
   call $~lib/string/String#repeat
-  local.tee $47
+  local.tee $45
   i32.const 12368
   call $~lib/string/String.__eq
   i32.eqz
@@ -11795,7 +12082,7 @@
   i32.const 1328
   i32.const 3
   call $~lib/string/String#repeat
-  local.tee $48
+  local.tee $46
   i32.const 12448
   call $~lib/string/String.__eq
   i32.eqz
@@ -11810,7 +12097,7 @@
   i32.const 11952
   i32.const 4
   call $~lib/string/String#repeat
-  local.tee $49
+  local.tee $47
   i32.const 12480
   call $~lib/string/String.__eq
   i32.eqz
@@ -11825,7 +12112,7 @@
   i32.const 1328
   i32.const 5
   call $~lib/string/String#repeat
-  local.tee $50
+  local.tee $48
   i32.const 12512
   call $~lib/string/String.__eq
   i32.eqz
@@ -11840,7 +12127,7 @@
   i32.const 1328
   i32.const 6
   call $~lib/string/String#repeat
-  local.tee $51
+  local.tee $49
   i32.const 12544
   call $~lib/string/String.__eq
   i32.eqz
@@ -11855,7 +12142,7 @@
   i32.const 1328
   i32.const 7
   call $~lib/string/String#repeat
-  local.tee $52
+  local.tee $50
   i32.const 12576
   call $~lib/string/String.__eq
   i32.eqz
@@ -11871,7 +12158,7 @@
   i32.const 1280
   i32.const 1280
   call $~lib/string/String#replace
-  local.tee $53
+  local.tee $51
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -11887,7 +12174,7 @@
   i32.const 1280
   i32.const 3472
   call $~lib/string/String#replace
-  local.tee $54
+  local.tee $52
   i32.const 3472
   call $~lib/string/String.__eq
   i32.eqz
@@ -11903,7 +12190,7 @@
   i32.const 3472
   i32.const 1280
   call $~lib/string/String#replace
-  local.tee $55
+  local.tee $53
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -11919,7 +12206,7 @@
   i32.const 1280
   i32.const 1280
   call $~lib/string/String#replace
-  local.tee $56
+  local.tee $54
   i32.const 3472
   call $~lib/string/String.__eq
   i32.eqz
@@ -11935,7 +12222,7 @@
   i32.const 3440
   i32.const 3472
   call $~lib/string/String#replace
-  local.tee $57
+  local.tee $55
   i32.const 1808
   call $~lib/string/String.__eq
   i32.eqz
@@ -11951,7 +12238,7 @@
   i32.const 1808
   i32.const 3472
   call $~lib/string/String#replace
-  local.tee $58
+  local.tee $56
   i32.const 3472
   call $~lib/string/String.__eq
   i32.eqz
@@ -11967,7 +12254,7 @@
   i32.const 2256
   i32.const 3472
   call $~lib/string/String#replace
-  local.tee $59
+  local.tee $57
   i32.const 1808
   call $~lib/string/String.__eq
   i32.eqz
@@ -11983,7 +12270,7 @@
   i32.const 11952
   i32.const 11952
   call $~lib/string/String#replace
-  local.tee $60
+  local.tee $58
   i32.const 1808
   call $~lib/string/String.__eq
   i32.eqz
@@ -11999,7 +12286,7 @@
   i32.const 3440
   i32.const 3472
   call $~lib/string/String#replace
-  local.tee $61
+  local.tee $59
   i32.const 12640
   call $~lib/string/String.__eq
   i32.eqz
@@ -12015,7 +12302,7 @@
   i32.const 1280
   i32.const 3472
   call $~lib/string/String#replace
-  local.tee $62
+  local.tee $60
   i32.const 12672
   call $~lib/string/String.__eq
   i32.eqz
@@ -12031,7 +12318,7 @@
   i32.const 12736
   i32.const 3472
   call $~lib/string/String#replace
-  local.tee $63
+  local.tee $61
   i32.const 12672
   call $~lib/string/String.__eq
   i32.eqz
@@ -12047,7 +12334,7 @@
   i32.const 12768
   i32.const 12800
   call $~lib/string/String#replace
-  local.tee $64
+  local.tee $62
   i32.const 12832
   call $~lib/string/String.__eq
   i32.eqz
@@ -12063,7 +12350,7 @@
   i32.const 12768
   i32.const 1280
   call $~lib/string/String#replace
-  local.tee $65
+  local.tee $63
   i32.const 11952
   call $~lib/string/String.__eq
   i32.eqz
@@ -12079,7 +12366,7 @@
   i32.const 1280
   i32.const 1808
   call $~lib/string/String#replaceAll
-  local.tee $66
+  local.tee $64
   i32.const 1808
   call $~lib/string/String.__eq
   i32.eqz
@@ -12095,7 +12382,7 @@
   i32.const 3440
   i32.const 3472
   call $~lib/string/String#replaceAll
-  local.tee $67
+  local.tee $65
   i32.const 1808
   call $~lib/string/String.__eq
   i32.eqz
@@ -12111,7 +12398,7 @@
   i32.const 1808
   i32.const 3472
   call $~lib/string/String#replaceAll
-  local.tee $68
+  local.tee $66
   i32.const 12800
   call $~lib/string/String.__eq
   i32.eqz
@@ -12127,7 +12414,7 @@
   i32.const 1808
   i32.const 3472
   call $~lib/string/String#replaceAll
-  local.tee $69
+  local.tee $67
   i32.const 12912
   call $~lib/string/String.__eq
   i32.eqz
@@ -12143,7 +12430,7 @@
   i32.const 11952
   i32.const 11952
   call $~lib/string/String#replaceAll
-  local.tee $70
+  local.tee $68
   i32.const 2000
   call $~lib/string/String.__eq
   i32.eqz
@@ -12159,7 +12446,7 @@
   i32.const 1328
   i32.const 12912
   call $~lib/string/String#replaceAll
-  local.tee $71
+  local.tee $69
   i32.const 12976
   call $~lib/string/String.__eq
   i32.eqz
@@ -12175,7 +12462,7 @@
   i32.const 11952
   i32.const 12800
   call $~lib/string/String#replaceAll
-  local.tee $72
+  local.tee $70
   i32.const 13024
   call $~lib/string/String.__eq
   i32.eqz
@@ -12191,7 +12478,7 @@
   i32.const 13088
   i32.const 12800
   call $~lib/string/String#replaceAll
-  local.tee $73
+  local.tee $71
   i32.const 13120
   call $~lib/string/String.__eq
   i32.eqz
@@ -12207,7 +12494,7 @@
   i32.const 2256
   i32.const 3472
   call $~lib/string/String#replaceAll
-  local.tee $74
+  local.tee $72
   i32.const 1808
   call $~lib/string/String.__eq
   i32.eqz
@@ -12223,7 +12510,7 @@
   i32.const 13152
   i32.const 12800
   call $~lib/string/String#replaceAll
-  local.tee $75
+  local.tee $73
   i32.const 2256
   call $~lib/string/String.__eq
   i32.eqz
@@ -12239,7 +12526,7 @@
   i32.const 13184
   i32.const 3472
   call $~lib/string/String#replaceAll
-  local.tee $76
+  local.tee $74
   i32.const 13216
   call $~lib/string/String.__eq
   i32.eqz
@@ -12255,7 +12542,7 @@
   i32.const 11952
   i32.const 3472
   call $~lib/string/String#replaceAll
-  local.tee $77
+  local.tee $75
   i32.const 3472
   call $~lib/string/String.__eq
   i32.eqz
@@ -12271,7 +12558,7 @@
   i32.const 3440
   i32.const 3472
   call $~lib/string/String#replaceAll
-  local.tee $78
+  local.tee $76
   i32.const 13248
   call $~lib/string/String.__eq
   i32.eqz
@@ -12287,7 +12574,7 @@
   i32.const 1280
   i32.const 1280
   call $~lib/string/String#replaceAll
-  local.tee $79
+  local.tee $77
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -12303,7 +12590,7 @@
   i32.const 1280
   i32.const 3472
   call $~lib/string/String#replaceAll
-  local.tee $80
+  local.tee $78
   i32.const 3472
   call $~lib/string/String.__eq
   i32.eqz
@@ -12319,7 +12606,7 @@
   i32.const 3472
   i32.const 1280
   call $~lib/string/String#replaceAll
-  local.tee $81
+  local.tee $79
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -12335,7 +12622,7 @@
   i32.const 1280
   i32.const 1280
   call $~lib/string/String#replaceAll
-  local.tee $82
+  local.tee $80
   i32.const 3472
   call $~lib/string/String.__eq
   i32.eqz
@@ -12351,7 +12638,7 @@
   i32.const 1808
   i32.const 3440
   call $~lib/string/String#replaceAll
-  local.tee $83
+  local.tee $81
   i32.const 3440
   call $~lib/string/String.__eq
   i32.eqz
@@ -12367,7 +12654,7 @@
   i32.const 2224
   i32.const 3440
   call $~lib/string/String#replaceAll
-  local.tee $84
+  local.tee $82
   i32.const 1808
   call $~lib/string/String.__eq
   i32.eqz
@@ -12383,7 +12670,7 @@
   i32.const 1280
   i32.const 3472
   call $~lib/string/String#replaceAll
-  local.tee $85
+  local.tee $83
   i32.const 13280
   call $~lib/string/String.__eq
   i32.eqz
@@ -12399,7 +12686,7 @@
   i32.const 1280
   i32.const 1280
   call $~lib/string/String#replaceAll
-  local.tee $86
+  local.tee $84
   i32.const 1808
   call $~lib/string/String.__eq
   i32.eqz
@@ -12419,7 +12706,7 @@
   i32.const 0
   i32.const 2147483647
   call $~lib/string/String#slice
-  local.tee $87
+  local.tee $85
   i32.const 13312
   call $~lib/string/String.__eq
   i32.eqz
@@ -12435,7 +12722,7 @@
   i32.const -1
   i32.const 2147483647
   call $~lib/string/String#slice
-  local.tee $88
+  local.tee $86
   i32.const 13360
   call $~lib/string/String.__eq
   i32.eqz
@@ -12451,7 +12738,7 @@
   i32.const -5
   i32.const 2147483647
   call $~lib/string/String#slice
-  local.tee $89
+  local.tee $87
   i32.const 13392
   call $~lib/string/String.__eq
   i32.eqz
@@ -12467,7 +12754,7 @@
   i32.const 2
   i32.const 7
   call $~lib/string/String#slice
-  local.tee $90
+  local.tee $88
   i32.const 13424
   call $~lib/string/String.__eq
   i32.eqz
@@ -12483,7 +12770,7 @@
   i32.const -11
   i32.const -6
   call $~lib/string/String#slice
-  local.tee $91
+  local.tee $89
   i32.const 13456
   call $~lib/string/String.__eq
   i32.eqz
@@ -12499,7 +12786,7 @@
   i32.const 4
   i32.const 3
   call $~lib/string/String#slice
-  local.tee $92
+  local.tee $90
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -12515,7 +12802,7 @@
   i32.const 0
   i32.const -1
   call $~lib/string/String#slice
-  local.tee $93
+  local.tee $91
   i32.const 13488
   call $~lib/string/String.__eq
   i32.eqz
@@ -12531,7 +12818,7 @@
   i32.const 0
   i32.const 2147483647
   call $~lib/string/String#substr
-  local.tee $94
+  local.tee $92
   i32.const 13312
   call $~lib/string/String.__eq
   i32.eqz
@@ -12547,7 +12834,7 @@
   i32.const -1
   i32.const 2147483647
   call $~lib/string/String#substr
-  local.tee $95
+  local.tee $93
   i32.const 13360
   call $~lib/string/String.__eq
   i32.eqz
@@ -12563,7 +12850,7 @@
   i32.const -5
   i32.const 2147483647
   call $~lib/string/String#substr
-  local.tee $96
+  local.tee $94
   i32.const 13392
   call $~lib/string/String.__eq
   i32.eqz
@@ -12579,7 +12866,7 @@
   i32.const 2
   i32.const 7
   call $~lib/string/String#substr
-  local.tee $97
+  local.tee $95
   i32.const 13536
   call $~lib/string/String.__eq
   i32.eqz
@@ -12595,7 +12882,7 @@
   i32.const -11
   i32.const -6
   call $~lib/string/String#substr
-  local.tee $98
+  local.tee $96
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -12611,7 +12898,7 @@
   i32.const 4
   i32.const 3
   call $~lib/string/String#substr
-  local.tee $99
+  local.tee $97
   i32.const 13568
   call $~lib/string/String.__eq
   i32.eqz
@@ -12627,7 +12914,7 @@
   i32.const 0
   i32.const -1
   call $~lib/string/String#substr
-  local.tee $100
+  local.tee $98
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -12643,7 +12930,7 @@
   i32.const 0
   i32.const 100
   call $~lib/string/String#substr
-  local.tee $101
+  local.tee $99
   i32.const 13312
   call $~lib/string/String.__eq
   i32.eqz
@@ -12659,7 +12946,7 @@
   i32.const 4
   i32.const 4
   call $~lib/string/String#substr
-  local.tee $102
+  local.tee $100
   i32.const 13600
   call $~lib/string/String.__eq
   i32.eqz
@@ -12675,7 +12962,7 @@
   i32.const 4
   i32.const -3
   call $~lib/string/String#substr
-  local.tee $103
+  local.tee $101
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -12691,7 +12978,7 @@
   i32.const 0
   i32.const 2147483647
   call $~lib/string/String#substring
-  local.tee $104
+  local.tee $102
   i32.const 13312
   call $~lib/string/String.__eq
   i32.eqz
@@ -12707,7 +12994,7 @@
   i32.const -1
   i32.const 2147483647
   call $~lib/string/String#substring
-  local.tee $105
+  local.tee $103
   i32.const 13312
   call $~lib/string/String.__eq
   i32.eqz
@@ -12723,7 +13010,7 @@
   i32.const -5
   i32.const 2147483647
   call $~lib/string/String#substring
-  local.tee $106
+  local.tee $104
   i32.const 13312
   call $~lib/string/String.__eq
   i32.eqz
@@ -12739,7 +13026,7 @@
   i32.const 2
   i32.const 7
   call $~lib/string/String#substring
-  local.tee $107
+  local.tee $105
   i32.const 13424
   call $~lib/string/String.__eq
   i32.eqz
@@ -12755,7 +13042,7 @@
   i32.const -11
   i32.const -6
   call $~lib/string/String#substring
-  local.tee $108
+  local.tee $106
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -12771,7 +13058,7 @@
   i32.const 4
   i32.const 3
   call $~lib/string/String#substring
-  local.tee $109
+  local.tee $107
   i32.const 13632
   call $~lib/string/String.__eq
   i32.eqz
@@ -12787,7 +13074,7 @@
   i32.const 0
   i32.const -1
   call $~lib/string/String#substring
-  local.tee $110
+  local.tee $108
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -12803,7 +13090,7 @@
   i32.const 0
   i32.const 100
   call $~lib/string/String#substring
-  local.tee $111
+  local.tee $109
   i32.const 13312
   call $~lib/string/String.__eq
   i32.eqz
@@ -12819,7 +13106,7 @@
   i32.const 4
   i32.const 4
   call $~lib/string/String#substring
-  local.tee $112
+  local.tee $110
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -12835,7 +13122,7 @@
   i32.const 4
   i32.const -3
   call $~lib/string/String#substring
-  local.tee $113
+  local.tee $111
   i32.const 2256
   call $~lib/string/String.__eq
   i32.eqz
@@ -12851,25 +13138,25 @@
   i32.const 0
   i32.const 2147483647
   call $~lib/string/String#split
-  local.tee $4
+  local.tee $1
   i32.load offset=12
   i32.const 1
   i32.eq
   if
-   local.get $4
+   local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1280
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -12883,10 +13170,10 @@
   i32.const 1280
   i32.const 2147483647
   call $~lib/string/String#split
-  local.set $1
-  local.get $4
-  call $~lib/rt/pure/__release
+  local.set $0
   local.get $1
+  call $~lib/rt/pure/__release
+  local.get $0
   i32.load offset=12
   if
    i32.const 0
@@ -12900,9 +13187,10 @@
   i32.const 2064
   i32.const 2147483647
   call $~lib/string/String#split
-  local.get $1
+  local.set $1
+  local.get $0
   call $~lib/rt/pure/__release
-  local.tee $1
+  local.get $1
   i32.load offset=12
   i32.const 1
   i32.eq
@@ -12910,17 +13198,17 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1280
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -12944,17 +13232,17 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 13888
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -12978,47 +13266,47 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 11920
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 12768
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13042,47 +13330,47 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 11920
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 12768
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13106,62 +13394,62 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 11920
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1280
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 12768
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13185,62 +13473,62 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1280
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 11920
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 12768
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13264,62 +13552,62 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 11920
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 12768
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1280
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13333,58 +13621,58 @@
   i32.const 1280
   i32.const 2147483647
   call $~lib/string/String#split
-  local.set $0
+  local.set $2
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $0
+  local.get $2
   i32.load offset=12
   i32.const 3
   i32.eq
   if
-   local.get $0
+   local.get $2
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
+   local.set $0
    local.get $1
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
-   local.get $0
+   local.get $2
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
    i32.const 11920
    call $~lib/string/String.__eq
-   local.set $2
+   local.set $0
    local.get $1
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
-   local.get $0
+   local.get $2
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
    i32.const 12768
    call $~lib/string/String.__eq
-   local.set $2
+   local.set $0
    local.get $1
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13398,10 +13686,10 @@
   i32.const 1280
   i32.const 0
   call $~lib/string/String#split
-  local.set $1
-  local.get $0
+  local.set $0
+  local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
+  local.get $0
   i32.load offset=12
   if
    i32.const 0
@@ -13415,9 +13703,10 @@
   i32.const 1280
   i32.const 1
   call $~lib/string/String#split
-  local.get $1
+  local.set $1
+  local.get $0
   call $~lib/rt/pure/__release
-  local.tee $1
+  local.get $1
   i32.load offset=12
   i32.const 1
   i32.eq
@@ -13425,17 +13714,17 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13459,17 +13748,17 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13493,47 +13782,47 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 11920
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 12768
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13557,47 +13846,47 @@
    local.get $1
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 11920
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
    local.get $1
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
-   local.tee $0
+   local.tee $2
    i32.const 12768
    call $~lib/string/String.__eq
-   local.set $2
-   local.get $0
+   local.set $0
+   local.get $2
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13611,58 +13900,58 @@
   i32.const 2064
   i32.const -1
   call $~lib/string/String#split
-  local.set $0
+  local.set $2
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $0
+  local.get $2
   i32.load offset=12
   i32.const 3
   i32.eq
   if
-   local.get $0
+   local.get $2
    i32.const 0
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
    i32.const 1328
    call $~lib/string/String.__eq
-   local.set $2
+   local.set $0
    local.get $1
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
-   local.get $0
+   local.get $2
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
    i32.const 11920
    call $~lib/string/String.__eq
-   local.set $2
+   local.set $0
    local.get $1
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   if
-   local.get $0
+   local.get $2
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
    i32.const 12768
    call $~lib/string/String.__eq
-   local.set $2
+   local.set $0
    local.get $1
    call $~lib/rt/pure/__release
   else
    i32.const 0
-   local.set $2
+   local.set $0
   end
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13672,12 +13961,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $2
   call $~lib/rt/pure/__release
   i32.const 0
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $114
+  local.tee $1
   i32.const 2432
   call $~lib/string/String.__eq
   i32.eqz
@@ -13692,7 +13981,7 @@
   i32.const 1
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $115
+  local.tee $0
   i32.const 2496
   call $~lib/string/String.__eq
   i32.eqz
@@ -13707,7 +13996,7 @@
   i32.const 8
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $116
+  local.tee $2
   i32.const 14368
   call $~lib/string/String.__eq
   i32.eqz
@@ -13722,7 +14011,7 @@
   i32.const 12
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $117
+  local.tee $112
   i32.const 14400
   call $~lib/string/String.__eq
   i32.eqz
@@ -13737,7 +14026,7 @@
   i32.const 123
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $118
+  local.tee $113
   i32.const 1872
   call $~lib/string/String.__eq
   i32.eqz
@@ -13752,7 +14041,7 @@
   i32.const -1000
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $119
+  local.tee $114
   i32.const 14432
   call $~lib/string/String.__eq
   i32.eqz
@@ -13767,7 +14056,7 @@
   i32.const 1234
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $120
+  local.tee $115
   i32.const 14464
   call $~lib/string/String.__eq
   i32.eqz
@@ -13782,7 +14071,7 @@
   i32.const 12345
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $121
+  local.tee $116
   i32.const 14496
   call $~lib/string/String.__eq
   i32.eqz
@@ -13797,7 +14086,7 @@
   i32.const 123456
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $122
+  local.tee $117
   i32.const 14528
   call $~lib/string/String.__eq
   i32.eqz
@@ -13812,7 +14101,7 @@
   i32.const 1111111
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $123
+  local.tee $118
   i32.const 14560
   call $~lib/string/String.__eq
   i32.eqz
@@ -13827,7 +14116,7 @@
   i32.const 1234567
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $124
+  local.tee $119
   i32.const 14592
   call $~lib/string/String.__eq
   i32.eqz
@@ -13842,7 +14131,7 @@
   i32.const 12345678
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $125
+  local.tee $120
   i32.const 14624
   call $~lib/string/String.__eq
   i32.eqz
@@ -13857,7 +14146,7 @@
   i32.const 123456789
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $126
+  local.tee $121
   i32.const 14656
   call $~lib/string/String.__eq
   i32.eqz
@@ -13872,7 +14161,7 @@
   i32.const 2147483646
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $127
+  local.tee $122
   i32.const 14704
   call $~lib/string/String.__eq
   i32.eqz
@@ -13887,7 +14176,7 @@
   i32.const 2147483647
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $128
+  local.tee $123
   i32.const 14752
   call $~lib/string/String.__eq
   i32.eqz
@@ -13902,7 +14191,7 @@
   i32.const -2147483648
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $129
+  local.tee $124
   i32.const 14800
   call $~lib/string/String.__eq
   i32.eqz
@@ -13917,7 +14206,7 @@
   i32.const -1
   i32.const 10
   call $~lib/util/number/itoa32
-  local.tee $130
+  local.tee $125
   i32.const 14848
   call $~lib/string/String.__eq
   i32.eqz
@@ -13932,7 +14221,7 @@
   i32.const 0
   i32.const 10
   call $~lib/util/number/utoa32
-  local.tee $131
+  local.tee $126
   i32.const 2432
   call $~lib/string/String.__eq
   i32.eqz
@@ -13947,7 +14236,7 @@
   i32.const 1000
   i32.const 10
   call $~lib/util/number/utoa32
-  local.tee $132
+  local.tee $127
   i32.const 14880
   call $~lib/string/String.__eq
   i32.eqz
@@ -13962,7 +14251,7 @@
   i32.const 2147483647
   i32.const 10
   call $~lib/util/number/utoa32
-  local.tee $133
+  local.tee $128
   i32.const 14752
   call $~lib/string/String.__eq
   i32.eqz
@@ -13977,7 +14266,7 @@
   i32.const -2147483648
   i32.const 10
   call $~lib/util/number/utoa32
-  local.tee $134
+  local.tee $129
   i32.const 14912
   call $~lib/string/String.__eq
   i32.eqz
@@ -13992,7 +14281,7 @@
   i32.const -1
   i32.const 10
   call $~lib/util/number/utoa32
-  local.tee $135
+  local.tee $130
   i32.const 14960
   call $~lib/string/String.__eq
   i32.eqz
@@ -14007,7 +14296,7 @@
   i32.const 0
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $136
+  local.tee $131
   i32.const 2432
   call $~lib/string/String.__eq
   i32.eqz
@@ -14022,7 +14311,7 @@
   i32.const 1
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $137
+  local.tee $132
   i32.const 2496
   call $~lib/string/String.__eq
   i32.eqz
@@ -14037,7 +14326,7 @@
   i32.const 8
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $138
+  local.tee $133
   i32.const 14368
   call $~lib/string/String.__eq
   i32.eqz
@@ -14052,7 +14341,7 @@
   i32.const 12
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $139
+  local.tee $134
   i32.const 12768
   call $~lib/string/String.__eq
   i32.eqz
@@ -14067,7 +14356,7 @@
   i32.const 123
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $140
+  local.tee $135
   i32.const 15008
   call $~lib/string/String.__eq
   i32.eqz
@@ -14082,7 +14371,7 @@
   i32.const 1234
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $141
+  local.tee $136
   i32.const 15040
   call $~lib/string/String.__eq
   i32.eqz
@@ -14097,7 +14386,7 @@
   i32.const 12345
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $142
+  local.tee $137
   i32.const 15072
   call $~lib/string/String.__eq
   i32.eqz
@@ -14112,7 +14401,7 @@
   i32.const 123456
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $143
+  local.tee $138
   i32.const 15104
   call $~lib/string/String.__eq
   i32.eqz
@@ -14127,7 +14416,7 @@
   i32.const 1111111
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $144
+  local.tee $139
   i32.const 15136
   call $~lib/string/String.__eq
   i32.eqz
@@ -14142,7 +14431,7 @@
   i32.const 1234567
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $145
+  local.tee $140
   i32.const 15168
   call $~lib/string/String.__eq
   i32.eqz
@@ -14157,7 +14446,7 @@
   i32.const 12345678
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $146
+  local.tee $141
   i32.const 15200
   call $~lib/string/String.__eq
   i32.eqz
@@ -14172,7 +14461,7 @@
   i32.const 123456789
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $147
+  local.tee $142
   i32.const 15232
   call $~lib/string/String.__eq
   i32.eqz
@@ -14187,7 +14476,7 @@
   i32.const 2147483646
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $148
+  local.tee $143
   i32.const 15264
   call $~lib/string/String.__eq
   i32.eqz
@@ -14202,7 +14491,7 @@
   i32.const 2147483647
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $149
+  local.tee $144
   i32.const 15296
   call $~lib/string/String.__eq
   i32.eqz
@@ -14217,7 +14506,7 @@
   i32.const -2147483648
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $150
+  local.tee $145
   i32.const 15328
   call $~lib/string/String.__eq
   i32.eqz
@@ -14232,7 +14521,7 @@
   i32.const -1
   i32.const 16
   call $~lib/util/number/utoa32
-  local.tee $151
+  local.tee $146
   i32.const 15360
   call $~lib/string/String.__eq
   i32.eqz
@@ -14247,7 +14536,7 @@
   i32.const 0
   i32.const 16
   call $~lib/util/number/itoa32
-  local.tee $152
+  local.tee $147
   i32.const 2432
   call $~lib/string/String.__eq
   i32.eqz
@@ -14262,7 +14551,7 @@
   i32.const -4096
   i32.const 16
   call $~lib/util/number/itoa32
-  local.tee $153
+  local.tee $148
   i32.const 14432
   call $~lib/string/String.__eq
   i32.eqz
@@ -14277,7 +14566,7 @@
   i32.const 2147483647
   i32.const 16
   call $~lib/util/number/itoa32
-  local.tee $154
+  local.tee $149
   i32.const 15296
   call $~lib/string/String.__eq
   i32.eqz
@@ -14292,7 +14581,7 @@
   i32.const -2147483647
   i32.const 16
   call $~lib/util/number/itoa32
-  local.tee $155
+  local.tee $150
   i32.const 15392
   call $~lib/string/String.__eq
   i32.eqz
@@ -14307,7 +14596,7 @@
   i32.const -268435455
   i32.const 16
   call $~lib/util/number/itoa32
-  local.tee $156
+  local.tee $151
   i32.const 15440
   call $~lib/string/String.__eq
   i32.eqz
@@ -14322,7 +14611,7 @@
   i32.const -2147483648
   i32.const 16
   call $~lib/util/number/itoa32
-  local.tee $157
+  local.tee $152
   i32.const 15472
   call $~lib/string/String.__eq
   i32.eqz
@@ -14337,7 +14626,7 @@
   i32.const -2147483648
   i32.const 16
   call $~lib/util/number/itoa32
-  local.tee $158
+  local.tee $153
   i32.const 15472
   call $~lib/string/String.__eq
   i32.eqz
@@ -14352,7 +14641,7 @@
   i32.const 0
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $159
+  local.tee $154
   i32.const 2432
   call $~lib/string/String.__eq
   i32.eqz
@@ -14367,7 +14656,7 @@
   i32.const 1
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $160
+  local.tee $155
   i32.const 2496
   call $~lib/string/String.__eq
   i32.eqz
@@ -14382,7 +14671,7 @@
   i32.const 3
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $161
+  local.tee $156
   i32.const 15520
   call $~lib/string/String.__eq
   i32.eqz
@@ -14397,7 +14686,7 @@
   i32.const 7
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $162
+  local.tee $157
   i32.const 15552
   call $~lib/string/String.__eq
   i32.eqz
@@ -14412,7 +14701,7 @@
   i32.const 14
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $163
+  local.tee $158
   i32.const 15584
   call $~lib/string/String.__eq
   i32.eqz
@@ -14427,7 +14716,7 @@
   i32.const 29
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $164
+  local.tee $159
   i32.const 15616
   call $~lib/string/String.__eq
   i32.eqz
@@ -14442,7 +14731,7 @@
   i32.const 59
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $165
+  local.tee $160
   i32.const 15648
   call $~lib/string/String.__eq
   i32.eqz
@@ -14457,7 +14746,7 @@
   i32.const 4095
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $166
+  local.tee $161
   i32.const 15680
   call $~lib/string/String.__eq
   i32.eqz
@@ -14472,7 +14761,7 @@
   i32.const 33554431
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $167
+  local.tee $162
   i32.const 15728
   call $~lib/string/String.__eq
   i32.eqz
@@ -14487,7 +14776,7 @@
   i32.const -12
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $168
+  local.tee $163
   i32.const 15808
   call $~lib/string/String.__eq
   i32.eqz
@@ -14502,7 +14791,7 @@
   i32.const -4
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $169
+  local.tee $164
   i32.const 15888
   call $~lib/string/String.__eq
   i32.eqz
@@ -14517,7 +14806,7 @@
   i32.const -2
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $170
+  local.tee $165
   i32.const 15968
   call $~lib/string/String.__eq
   i32.eqz
@@ -14532,7 +14821,7 @@
   i32.const -1
   i32.const 2
   call $~lib/util/number/utoa32
-  local.tee $171
+  local.tee $166
   i32.const 16048
   call $~lib/string/String.__eq
   i32.eqz
@@ -14547,7 +14836,7 @@
   i32.const -2047
   i32.const 2
   call $~lib/util/number/itoa32
-  local.tee $172
+  local.tee $167
   i32.const 16128
   call $~lib/string/String.__eq
   i32.eqz
@@ -14562,7 +14851,7 @@
   i32.const -1
   i32.const 3
   call $~lib/util/number/utoa32
-  local.tee $173
+  local.tee $168
   i32.const 16176
   call $~lib/string/String.__eq
   i32.eqz
@@ -14577,7 +14866,7 @@
   i32.const -1
   i32.const 4
   call $~lib/util/number/utoa32
-  local.tee $174
+  local.tee $169
   i32.const 16240
   call $~lib/string/String.__eq
   i32.eqz
@@ -14592,7 +14881,7 @@
   i32.const -1
   i32.const 5
   call $~lib/util/number/utoa32
-  local.tee $175
+  local.tee $170
   i32.const 16288
   call $~lib/string/String.__eq
   i32.eqz
@@ -14607,7 +14896,7 @@
   i32.const -1
   i32.const 8
   call $~lib/util/number/utoa32
-  local.tee $176
+  local.tee $171
   i32.const 16336
   call $~lib/string/String.__eq
   i32.eqz
@@ -14622,7 +14911,7 @@
   i32.const -1
   i32.const 11
   call $~lib/util/number/utoa32
-  local.tee $177
+  local.tee $172
   i32.const 16384
   call $~lib/string/String.__eq
   i32.eqz
@@ -14637,7 +14926,7 @@
   i32.const -1
   i32.const 15
   call $~lib/util/number/utoa32
-  local.tee $178
+  local.tee $173
   i32.const 16432
   call $~lib/string/String.__eq
   i32.eqz
@@ -14652,7 +14941,7 @@
   i32.const -1
   i32.const 17
   call $~lib/util/number/utoa32
-  local.tee $179
+  local.tee $174
   i32.const 16480
   call $~lib/string/String.__eq
   i32.eqz
@@ -14667,7 +14956,7 @@
   i32.const -1
   i32.const 21
   call $~lib/util/number/utoa32
-  local.tee $180
+  local.tee $175
   i32.const 16512
   call $~lib/string/String.__eq
   i32.eqz
@@ -14682,7 +14971,7 @@
   i32.const -1
   i32.const 27
   call $~lib/util/number/utoa32
-  local.tee $181
+  local.tee $176
   i32.const 16544
   call $~lib/string/String.__eq
   i32.eqz
@@ -14697,7 +14986,7 @@
   i32.const -1
   i32.const 32
   call $~lib/util/number/utoa32
-  local.tee $182
+  local.tee $177
   i32.const 16576
   call $~lib/string/String.__eq
   i32.eqz
@@ -14712,7 +15001,7 @@
   i32.const -1
   i32.const 36
   call $~lib/util/number/utoa32
-  local.tee $183
+  local.tee $178
   i32.const 16608
   call $~lib/string/String.__eq
   i32.eqz
@@ -14727,7 +15016,7 @@
   i64.const 0
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $184
+  local.tee $179
   i32.const 2432
   call $~lib/string/String.__eq
   i32.eqz
@@ -14742,7 +15031,7 @@
   i64.const 12
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $185
+  local.tee $180
   i32.const 14400
   call $~lib/string/String.__eq
   i32.eqz
@@ -14757,7 +15046,7 @@
   i64.const 123
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $186
+  local.tee $181
   i32.const 1872
   call $~lib/string/String.__eq
   i32.eqz
@@ -14772,7 +15061,7 @@
   i64.const 1234
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $187
+  local.tee $182
   i32.const 14464
   call $~lib/string/String.__eq
   i32.eqz
@@ -14787,7 +15076,7 @@
   i64.const 12345
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $188
+  local.tee $183
   i32.const 14496
   call $~lib/string/String.__eq
   i32.eqz
@@ -14802,7 +15091,7 @@
   i64.const 123456
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $189
+  local.tee $184
   i32.const 14528
   call $~lib/string/String.__eq
   i32.eqz
@@ -14817,7 +15106,7 @@
   i64.const 1234567
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $190
+  local.tee $185
   i32.const 14592
   call $~lib/string/String.__eq
   i32.eqz
@@ -14832,7 +15121,7 @@
   i64.const 99999999
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $191
+  local.tee $186
   i32.const 16640
   call $~lib/string/String.__eq
   i32.eqz
@@ -14847,7 +15136,7 @@
   i64.const 100000000
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $192
+  local.tee $187
   i32.const 16672
   call $~lib/string/String.__eq
   i32.eqz
@@ -14862,7 +15151,7 @@
   i64.const 4294967295
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $193
+  local.tee $188
   i32.const 14960
   call $~lib/string/String.__eq
   i32.eqz
@@ -14877,7 +15166,7 @@
   i64.const 4294967297
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $194
+  local.tee $189
   i32.const 16720
   call $~lib/string/String.__eq
   i32.eqz
@@ -14892,7 +15181,7 @@
   i64.const 68719476735
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $195
+  local.tee $190
   i32.const 16768
   call $~lib/string/String.__eq
   i32.eqz
@@ -14907,7 +15196,7 @@
   i64.const 868719476735
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $196
+  local.tee $191
   i32.const 16816
   call $~lib/string/String.__eq
   i32.eqz
@@ -14922,7 +15211,7 @@
   i64.const 8687194767350
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $197
+  local.tee $192
   i32.const 16864
   call $~lib/string/String.__eq
   i32.eqz
@@ -14937,7 +15226,7 @@
   i64.const 86871947673501
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $198
+  local.tee $193
   i32.const 16912
   call $~lib/string/String.__eq
   i32.eqz
@@ -14952,7 +15241,7 @@
   i64.const 999868719476735
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $199
+  local.tee $194
   i32.const 16960
   call $~lib/string/String.__eq
   i32.eqz
@@ -14967,7 +15256,7 @@
   i64.const 9999868719476735
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $200
+  local.tee $195
   i32.const 17008
   call $~lib/string/String.__eq
   i32.eqz
@@ -14982,7 +15271,7 @@
   i64.const 19999868719476735
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $201
+  local.tee $196
   i32.const 17056
   call $~lib/string/String.__eq
   i32.eqz
@@ -14997,7 +15286,7 @@
   i64.const 129999868719476735
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $202
+  local.tee $197
   i32.const 17120
   call $~lib/string/String.__eq
   i32.eqz
@@ -15012,7 +15301,7 @@
   i64.const 1239999868719476735
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $203
+  local.tee $198
   i32.const 17184
   call $~lib/string/String.__eq
   i32.eqz
@@ -15027,7 +15316,7 @@
   i64.const -1
   i32.const 10
   call $~lib/util/number/utoa64
-  local.tee $204
+  local.tee $199
   i32.const 17248
   call $~lib/string/String.__eq
   i32.eqz
@@ -15042,7 +15331,7 @@
   i64.const 0
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $205
+  local.tee $200
   i32.const 2432
   call $~lib/string/String.__eq
   i32.eqz
@@ -15057,7 +15346,7 @@
   i64.const -1234
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $206
+  local.tee $201
   i32.const 17312
   call $~lib/string/String.__eq
   i32.eqz
@@ -15072,7 +15361,7 @@
   i64.const 4294967295
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $207
+  local.tee $202
   i32.const 14960
   call $~lib/string/String.__eq
   i32.eqz
@@ -15087,7 +15376,7 @@
   i64.const 4294967297
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $208
+  local.tee $203
   i32.const 16720
   call $~lib/string/String.__eq
   i32.eqz
@@ -15102,7 +15391,7 @@
   i64.const -4294967295
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $209
+  local.tee $204
   i32.const 17344
   call $~lib/string/String.__eq
   i32.eqz
@@ -15117,7 +15406,7 @@
   i64.const 68719476735
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $210
+  local.tee $205
   i32.const 16768
   call $~lib/string/String.__eq
   i32.eqz
@@ -15132,7 +15421,7 @@
   i64.const -68719476735
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $211
+  local.tee $206
   i32.const 17392
   call $~lib/string/String.__eq
   i32.eqz
@@ -15147,7 +15436,7 @@
   i64.const -868719476735
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $212
+  local.tee $207
   i32.const 17440
   call $~lib/string/String.__eq
   i32.eqz
@@ -15162,7 +15451,7 @@
   i64.const -999868719476735
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $213
+  local.tee $208
   i32.const 17488
   call $~lib/string/String.__eq
   i32.eqz
@@ -15177,7 +15466,7 @@
   i64.const -19999868719476735
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $214
+  local.tee $209
   i32.const 17536
   call $~lib/string/String.__eq
   i32.eqz
@@ -15192,7 +15481,7 @@
   i64.const 9223372036854775807
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $215
+  local.tee $210
   i32.const 17600
   call $~lib/string/String.__eq
   i32.eqz
@@ -15207,7 +15496,7 @@
   i64.const -9223372036854775808
   i32.const 10
   call $~lib/util/number/itoa64
-  local.tee $216
+  local.tee $211
   i32.const 17664
   call $~lib/string/String.__eq
   i32.eqz
@@ -15222,7 +15511,7 @@
   i64.const 0
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $217
+  local.tee $212
   i32.const 2432
   call $~lib/string/String.__eq
   i32.eqz
@@ -15237,7 +15526,7 @@
   i64.const 1
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $218
+  local.tee $213
   i32.const 2496
   call $~lib/string/String.__eq
   i32.eqz
@@ -15252,7 +15541,7 @@
   i64.const 12
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $219
+  local.tee $214
   i32.const 12768
   call $~lib/string/String.__eq
   i32.eqz
@@ -15267,7 +15556,7 @@
   i64.const 1234
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $220
+  local.tee $215
   i32.const 15040
   call $~lib/string/String.__eq
   i32.eqz
@@ -15282,7 +15571,7 @@
   i64.const 1111111
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $221
+  local.tee $216
   i32.const 15136
   call $~lib/string/String.__eq
   i32.eqz
@@ -15297,7 +15586,7 @@
   i64.const 8589934591
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $222
+  local.tee $217
   i32.const 17728
   call $~lib/string/String.__eq
   i32.eqz
@@ -15312,7 +15601,7 @@
   i64.const 5942249508321
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $223
+  local.tee $218
   i32.const 17776
   call $~lib/string/String.__eq
   i32.eqz
@@ -15327,7 +15616,7 @@
   i64.const 76310993685985
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $224
+  local.tee $219
   i32.const 17824
   call $~lib/string/String.__eq
   i32.eqz
@@ -15342,7 +15631,7 @@
   i64.const 920735923817967
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $225
+  local.tee $220
   i32.const 17872
   call $~lib/string/String.__eq
   i32.eqz
@@ -15357,7 +15646,7 @@
   i64.const 9927935178558959
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $226
+  local.tee $221
   i32.const 17920
   call $~lib/string/String.__eq
   i32.eqz
@@ -15372,7 +15661,7 @@
   i64.const 81985529216486895
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $227
+  local.tee $222
   i32.const 17968
   call $~lib/string/String.__eq
   i32.eqz
@@ -15387,7 +15676,7 @@
   i64.const 1311768467463790320
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $228
+  local.tee $223
   i32.const 18016
   call $~lib/string/String.__eq
   i32.eqz
@@ -15402,7 +15691,7 @@
   i64.const 9223372036854775807
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $229
+  local.tee $224
   i32.const 18064
   call $~lib/string/String.__eq
   i32.eqz
@@ -15417,7 +15706,7 @@
   i64.const -1
   i32.const 16
   call $~lib/util/number/utoa64
-  local.tee $230
+  local.tee $225
   i32.const 18112
   call $~lib/string/String.__eq
   i32.eqz
@@ -15432,7 +15721,7 @@
   i64.const -9223372036854775807
   i32.const 16
   call $~lib/util/number/itoa64
-  local.tee $231
+  local.tee $226
   i32.const 18160
   call $~lib/string/String.__eq
   i32.eqz
@@ -15447,7 +15736,7 @@
   i64.const -9223372036854775808
   i32.const 16
   call $~lib/util/number/itoa64
-  local.tee $232
+  local.tee $227
   i32.const 18224
   call $~lib/string/String.__eq
   i32.eqz
@@ -15462,7 +15751,7 @@
   i64.const -9223372036854775808
   i32.const 16
   call $~lib/util/number/itoa64
-  local.tee $233
+  local.tee $228
   i32.const 18224
   call $~lib/string/String.__eq
   i32.eqz
@@ -15477,7 +15766,7 @@
   i64.const 0
   i32.const 2
   call $~lib/util/number/utoa64
-  local.tee $234
+  local.tee $229
   i32.const 2432
   call $~lib/string/String.__eq
   i32.eqz
@@ -15492,7 +15781,7 @@
   i64.const 1
   i32.const 2
   call $~lib/util/number/utoa64
-  local.tee $235
+  local.tee $230
   i32.const 2496
   call $~lib/string/String.__eq
   i32.eqz
@@ -15507,7 +15796,7 @@
   i64.const 7
   i32.const 2
   call $~lib/util/number/utoa64
-  local.tee $236
+  local.tee $231
   i32.const 15552
   call $~lib/string/String.__eq
   i32.eqz
@@ -15522,7 +15811,7 @@
   i64.const 14
   i32.const 2
   call $~lib/util/number/utoa64
-  local.tee $237
+  local.tee $232
   i32.const 15584
   call $~lib/string/String.__eq
   i32.eqz
@@ -15537,7 +15826,7 @@
   i64.const 59
   i32.const 2
   call $~lib/util/number/utoa64
-  local.tee $238
+  local.tee $233
   i32.const 15648
   call $~lib/string/String.__eq
   i32.eqz
@@ -15552,7 +15841,7 @@
   i64.const 4095
   i32.const 2
   call $~lib/util/number/utoa64
-  local.tee $239
+  local.tee $234
   i32.const 15680
   call $~lib/string/String.__eq
   i32.eqz
@@ -15567,7 +15856,7 @@
   i64.const 4294967295
   i32.const 2
   call $~lib/util/number/utoa64
-  local.tee $240
+  local.tee $235
   i32.const 16048
   call $~lib/string/String.__eq
   i32.eqz
@@ -15582,7 +15871,7 @@
   i64.const 562949953421311
   i32.const 2
   call $~lib/util/number/utoa64
-  local.tee $241
+  local.tee $236
   i32.const 18288
   call $~lib/string/String.__eq
   i32.eqz
@@ -15597,7 +15886,7 @@
   i64.const -1
   i32.const 2
   call $~lib/util/number/utoa64
-  local.tee $242
+  local.tee $237
   i32.const 18416
   call $~lib/string/String.__eq
   i32.eqz
@@ -15612,7 +15901,7 @@
   i64.const -8589934591
   i32.const 2
   call $~lib/util/number/itoa64
-  local.tee $243
+  local.tee $238
   i32.const 18560
   call $~lib/string/String.__eq
   i32.eqz
@@ -15627,7 +15916,7 @@
   i64.const -1
   i32.const 3
   call $~lib/util/number/utoa64
-  local.tee $244
+  local.tee $239
   i32.const 18656
   call $~lib/string/String.__eq
   i32.eqz
@@ -15642,7 +15931,7 @@
   i64.const -1
   i32.const 4
   call $~lib/util/number/utoa64
-  local.tee $245
+  local.tee $240
   i32.const 18768
   call $~lib/string/String.__eq
   i32.eqz
@@ -15657,7 +15946,7 @@
   i64.const -1
   i32.const 5
   call $~lib/util/number/utoa64
-  local.tee $246
+  local.tee $241
   i32.const 18848
   call $~lib/string/String.__eq
   i32.eqz
@@ -15672,7 +15961,7 @@
   i64.const -1
   i32.const 8
   call $~lib/util/number/utoa64
-  local.tee $247
+  local.tee $242
   i32.const 18928
   call $~lib/string/String.__eq
   i32.eqz
@@ -15687,7 +15976,7 @@
   i64.const -1
   i32.const 11
   call $~lib/util/number/utoa64
-  local.tee $248
+  local.tee $243
   i32.const 18992
   call $~lib/string/String.__eq
   i32.eqz
@@ -15702,7 +15991,7 @@
   i64.const -1
   i32.const 15
   call $~lib/util/number/utoa64
-  local.tee $249
+  local.tee $244
   i32.const 19056
   call $~lib/string/String.__eq
   i32.eqz
@@ -15717,7 +16006,7 @@
   i64.const -1
   i32.const 17
   call $~lib/util/number/utoa64
-  local.tee $250
+  local.tee $245
   i32.const 19120
   call $~lib/string/String.__eq
   i32.eqz
@@ -15732,7 +16021,7 @@
   i64.const -1
   i32.const 21
   call $~lib/util/number/utoa64
-  local.tee $251
+  local.tee $246
   i32.const 19168
   call $~lib/string/String.__eq
   i32.eqz
@@ -15747,7 +16036,7 @@
   i64.const -1
   i32.const 27
   call $~lib/util/number/utoa64
-  local.tee $252
+  local.tee $247
   i32.const 19216
   call $~lib/string/String.__eq
   i32.eqz
@@ -15762,7 +16051,7 @@
   i64.const -1
   i32.const 32
   call $~lib/util/number/utoa64
-  local.tee $253
+  local.tee $248
   i32.const 19264
   call $~lib/string/String.__eq
   i32.eqz
@@ -15777,7 +16066,7 @@
   i64.const -1
   i32.const 36
   call $~lib/util/number/utoa64
-  local.tee $254
+  local.tee $249
   i32.const 19312
   call $~lib/string/String.__eq
   i32.eqz
@@ -15791,7 +16080,7 @@
   end
   f64.const 0
   call $~lib/util/number/dtoa
-  local.tee $255
+  local.tee $250
   i32.const 19360
   call $~lib/string/String.__eq
   i32.eqz
@@ -15805,7 +16094,7 @@
   end
   f64.const -0
   call $~lib/util/number/dtoa
-  local.tee $256
+  local.tee $251
   i32.const 19360
   call $~lib/string/String.__eq
   i32.eqz
@@ -15819,7 +16108,7 @@
   end
   f64.const nan:0x8000000000000
   call $~lib/util/number/dtoa
-  local.tee $257
+  local.tee $252
   i32.const 6336
   call $~lib/string/String.__eq
   i32.eqz
@@ -15833,7 +16122,7 @@
   end
   f64.const inf
   call $~lib/util/number/dtoa
-  local.tee $258
+  local.tee $253
   i32.const 19392
   call $~lib/string/String.__eq
   i32.eqz
@@ -15847,7 +16136,7 @@
   end
   f64.const -inf
   call $~lib/util/number/dtoa
-  local.tee $259
+  local.tee $254
   i32.const 7552
   call $~lib/string/String.__eq
   i32.eqz
@@ -15861,7 +16150,7 @@
   end
   f64.const 2.220446049250313e-16
   call $~lib/util/number/dtoa
-  local.tee $260
+  local.tee $255
   i32.const 6848
   call $~lib/string/String.__eq
   i32.eqz
@@ -15875,7 +16164,7 @@
   end
   f64.const -2.220446049250313e-16
   call $~lib/util/number/dtoa
-  local.tee $261
+  local.tee $256
   i32.const 20336
   call $~lib/string/String.__eq
   i32.eqz
@@ -15889,7 +16178,7 @@
   end
   f64.const 1797693134862315708145274e284
   call $~lib/util/number/dtoa
-  local.tee $262
+  local.tee $257
   i32.const 6912
   call $~lib/string/String.__eq
   i32.eqz
@@ -15903,7 +16192,7 @@
   end
   f64.const -1797693134862315708145274e284
   call $~lib/util/number/dtoa
-  local.tee $263
+  local.tee $258
   i32.const 20400
   call $~lib/string/String.__eq
   i32.eqz
@@ -15917,7 +16206,7 @@
   end
   f64.const 4185580496821356722454785e274
   call $~lib/util/number/dtoa
-  local.tee $264
+  local.tee $259
   i32.const 20464
   call $~lib/string/String.__eq
   i32.eqz
@@ -15931,7 +16220,7 @@
   end
   f64.const 2.2250738585072014e-308
   call $~lib/util/number/dtoa
-  local.tee $265
+  local.tee $260
   i32.const 20528
   call $~lib/string/String.__eq
   i32.eqz
@@ -15945,7 +16234,7 @@
   end
   f64.const 4.940656e-318
   call $~lib/util/number/dtoa
-  local.tee $266
+  local.tee $261
   i32.const 20592
   call $~lib/string/String.__eq
   i32.eqz
@@ -15959,7 +16248,7 @@
   end
   f64.const 9060801153433600
   call $~lib/util/number/dtoa
-  local.tee $267
+  local.tee $262
   i32.const 20640
   call $~lib/string/String.__eq
   i32.eqz
@@ -15973,7 +16262,7 @@
   end
   f64.const 4708356024711512064
   call $~lib/util/number/dtoa
-  local.tee $268
+  local.tee $263
   i32.const 20704
   call $~lib/string/String.__eq
   i32.eqz
@@ -15987,7 +16276,7 @@
   end
   f64.const 9409340012568248320
   call $~lib/util/number/dtoa
-  local.tee $269
+  local.tee $264
   i32.const 20768
   call $~lib/string/String.__eq
   i32.eqz
@@ -16001,7 +16290,7 @@
   end
   f64.const 5e-324
   call $~lib/util/number/dtoa
-  local.tee $270
+  local.tee $265
   i32.const 6976
   call $~lib/string/String.__eq
   i32.eqz
@@ -16015,7 +16304,7 @@
   end
   f64.const 1
   call $~lib/util/number/dtoa
-  local.tee $271
+  local.tee $266
   i32.const 20832
   call $~lib/string/String.__eq
   i32.eqz
@@ -16029,7 +16318,7 @@
   end
   f64.const 0.1
   call $~lib/util/number/dtoa
-  local.tee $272
+  local.tee $267
   i32.const 4112
   call $~lib/string/String.__eq
   i32.eqz
@@ -16043,7 +16332,7 @@
   end
   f64.const -1
   call $~lib/util/number/dtoa
-  local.tee $273
+  local.tee $268
   i32.const 20864
   call $~lib/string/String.__eq
   i32.eqz
@@ -16057,7 +16346,7 @@
   end
   f64.const -0.1
   call $~lib/util/number/dtoa
-  local.tee $274
+  local.tee $269
   i32.const 20896
   call $~lib/string/String.__eq
   i32.eqz
@@ -16071,7 +16360,7 @@
   end
   f64.const 1e6
   call $~lib/util/number/dtoa
-  local.tee $275
+  local.tee $270
   i32.const 20928
   call $~lib/string/String.__eq
   i32.eqz
@@ -16085,7 +16374,7 @@
   end
   f64.const 1e-06
   call $~lib/util/number/dtoa
-  local.tee $276
+  local.tee $271
   i32.const 20976
   call $~lib/string/String.__eq
   i32.eqz
@@ -16099,7 +16388,7 @@
   end
   f64.const -1e6
   call $~lib/util/number/dtoa
-  local.tee $277
+  local.tee $272
   i32.const 21008
   call $~lib/string/String.__eq
   i32.eqz
@@ -16113,7 +16402,7 @@
   end
   f64.const -1e-06
   call $~lib/util/number/dtoa
-  local.tee $278
+  local.tee $273
   i32.const 21056
   call $~lib/string/String.__eq
   i32.eqz
@@ -16127,7 +16416,7 @@
   end
   f64.const 1e7
   call $~lib/util/number/dtoa
-  local.tee $279
+  local.tee $274
   i32.const 21104
   call $~lib/string/String.__eq
   i32.eqz
@@ -16141,7 +16430,7 @@
   end
   f64.const 1e-07
   call $~lib/util/number/dtoa
-  local.tee $280
+  local.tee $275
   i32.const 21152
   call $~lib/string/String.__eq
   i32.eqz
@@ -16155,7 +16444,7 @@
   end
   f64.const 1.e+308
   call $~lib/util/number/dtoa
-  local.tee $281
+  local.tee $276
   i32.const 4336
   call $~lib/string/String.__eq
   i32.eqz
@@ -16169,7 +16458,7 @@
   end
   f64.const -1.e+308
   call $~lib/util/number/dtoa
-  local.tee $282
+  local.tee $277
   i32.const 21184
   call $~lib/string/String.__eq
   i32.eqz
@@ -16183,7 +16472,7 @@
   end
   f64.const inf
   call $~lib/util/number/dtoa
-  local.tee $283
+  local.tee $278
   i32.const 19392
   call $~lib/string/String.__eq
   i32.eqz
@@ -16197,7 +16486,7 @@
   end
   f64.const -inf
   call $~lib/util/number/dtoa
-  local.tee $284
+  local.tee $279
   i32.const 7552
   call $~lib/string/String.__eq
   i32.eqz
@@ -16211,7 +16500,7 @@
   end
   f64.const 1e-308
   call $~lib/util/number/dtoa
-  local.tee $285
+  local.tee $280
   i32.const 21216
   call $~lib/string/String.__eq
   i32.eqz
@@ -16225,7 +16514,7 @@
   end
   f64.const -1e-308
   call $~lib/util/number/dtoa
-  local.tee $286
+  local.tee $281
   i32.const 21248
   call $~lib/string/String.__eq
   i32.eqz
@@ -16239,7 +16528,7 @@
   end
   f64.const 1e-323
   call $~lib/util/number/dtoa
-  local.tee $287
+  local.tee $282
   i32.const 21280
   call $~lib/string/String.__eq
   i32.eqz
@@ -16253,7 +16542,7 @@
   end
   f64.const -1e-323
   call $~lib/util/number/dtoa
-  local.tee $288
+  local.tee $283
   i32.const 21312
   call $~lib/string/String.__eq
   i32.eqz
@@ -16267,7 +16556,7 @@
   end
   f64.const 0
   call $~lib/util/number/dtoa
-  local.tee $289
+  local.tee $284
   i32.const 19360
   call $~lib/string/String.__eq
   i32.eqz
@@ -16281,7 +16570,7 @@
   end
   f64.const 4294967272
   call $~lib/util/number/dtoa
-  local.tee $290
+  local.tee $285
   i32.const 21344
   call $~lib/string/String.__eq
   i32.eqz
@@ -16295,7 +16584,7 @@
   end
   f64.const 1.2312145673456234e-08
   call $~lib/util/number/dtoa
-  local.tee $291
+  local.tee $286
   i32.const 21392
   call $~lib/string/String.__eq
   i32.eqz
@@ -16309,7 +16598,7 @@
   end
   f64.const 555555555.5555556
   call $~lib/util/number/dtoa
-  local.tee $292
+  local.tee $287
   i32.const 21456
   call $~lib/string/String.__eq
   i32.eqz
@@ -16323,7 +16612,7 @@
   end
   f64.const 0.9999999999999999
   call $~lib/util/number/dtoa
-  local.tee $293
+  local.tee $288
   i32.const 21520
   call $~lib/string/String.__eq
   i32.eqz
@@ -16337,7 +16626,7 @@
   end
   f64.const 1
   call $~lib/util/number/dtoa
-  local.tee $294
+  local.tee $289
   i32.const 20832
   call $~lib/string/String.__eq
   i32.eqz
@@ -16351,7 +16640,7 @@
   end
   f64.const 12.34
   call $~lib/util/number/dtoa
-  local.tee $295
+  local.tee $290
   i32.const 21584
   call $~lib/string/String.__eq
   i32.eqz
@@ -16365,7 +16654,7 @@
   end
   f64.const 0.3333333333333333
   call $~lib/util/number/dtoa
-  local.tee $296
+  local.tee $291
   i32.const 21616
   call $~lib/string/String.__eq
   i32.eqz
@@ -16379,7 +16668,7 @@
   end
   f64.const 1234e17
   call $~lib/util/number/dtoa
-  local.tee $297
+  local.tee $292
   i32.const 21680
   call $~lib/string/String.__eq
   i32.eqz
@@ -16393,7 +16682,7 @@
   end
   f64.const 1234e18
   call $~lib/util/number/dtoa
-  local.tee $298
+  local.tee $293
   i32.const 21744
   call $~lib/string/String.__eq
   i32.eqz
@@ -16407,7 +16696,7 @@
   end
   f64.const 2.71828
   call $~lib/util/number/dtoa
-  local.tee $299
+  local.tee $294
   i32.const 21792
   call $~lib/string/String.__eq
   i32.eqz
@@ -16421,7 +16710,7 @@
   end
   f64.const 0.0271828
   call $~lib/util/number/dtoa
-  local.tee $5
+  local.tee $295
   i32.const 21824
   call $~lib/string/String.__eq
   i32.eqz
@@ -16435,7 +16724,7 @@
   end
   f64.const 271.828
   call $~lib/util/number/dtoa
-  local.tee $2
+  local.tee $296
   i32.const 21872
   call $~lib/string/String.__eq
   i32.eqz
@@ -16449,7 +16738,7 @@
   end
   f64.const 1.1e+128
   call $~lib/util/number/dtoa
-  local.tee $4
+  local.tee $297
   i32.const 21904
   call $~lib/string/String.__eq
   i32.eqz
@@ -16463,7 +16752,7 @@
   end
   f64.const 1.1e-64
   call $~lib/util/number/dtoa
-  local.tee $1
+  local.tee $298
   i32.const 21936
   call $~lib/string/String.__eq
   i32.eqz
@@ -16477,7 +16766,7 @@
   end
   f64.const 0.000035689
   call $~lib/util/number/dtoa
-  local.tee $0
+  local.tee $299
   i32.const 21968
   call $~lib/string/String.__eq
   i32.eqz
@@ -16490,10 +16779,6 @@
    unreachable
   end
   global.get $std/string/str
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
-  local.get $8
   call $~lib/rt/pure/__release
   local.get $9
   call $~lib/rt/pure/__release
@@ -16508,6 +16793,10 @@
   local.get $14
   call $~lib/rt/pure/__release
   local.get $15
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
   call $~lib/rt/pure/__release
   local.get $16
   call $~lib/rt/pure/__release
@@ -16563,15 +16852,19 @@
   call $~lib/rt/pure/__release
   local.get $43
   call $~lib/rt/pure/__release
-  local.get $47
-  call $~lib/rt/pure/__release
-  local.get $48
+  local.get $45
   call $~lib/rt/pure/__release
   local.get $46
   call $~lib/rt/pure/__release
-  local.get $45
-  call $~lib/rt/pure/__release
   local.get $44
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $47
+  call $~lib/rt/pure/__release
+  local.get $48
   call $~lib/rt/pure/__release
   local.get $49
   call $~lib/rt/pure/__release
@@ -16699,15 +16992,21 @@
   call $~lib/rt/pure/__release
   local.get $111
   call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
   local.get $112
   call $~lib/rt/pure/__release
   local.get $113
   call $~lib/rt/pure/__release
   local.get $114
   call $~lib/rt/pure/__release
-  local.get $116
-  call $~lib/rt/pure/__release
   local.get $115
+  call $~lib/rt/pure/__release
+  local.get $116
   call $~lib/rt/pure/__release
   local.get $117
   call $~lib/rt/pure/__release
@@ -17074,16 +17373,6 @@
   local.get $298
   call $~lib/rt/pure/__release
   local.get $299
-  call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $1
-  call $~lib/rt/pure/__release
-  local.get $0
   call $~lib/rt/pure/__release
  )
  (func $std/string/getString (result i32)

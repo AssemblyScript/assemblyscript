@@ -2,10 +2,10 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
  (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
@@ -943,17 +943,14 @@
   end
   local.get $0
  )
- (func $rc/ternary-mismatch/Ref#constructor (result i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
- )
  (func $rc/ternary-mismatch/test1 (param $0 i32) (result i32)
   local.get $0
   if (result i32)
-   call $rc/ternary-mismatch/Ref#constructor
+   call $~lib/rt/tlsf/maybeInitialize
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
+   call $~lib/rt/pure/__retain
   else
    global.get $rc/ternary-mismatch/gloRef
    call $~lib/rt/pure/__retain
@@ -976,11 +973,19 @@
    global.get $rc/ternary-mismatch/gloRef
    call $~lib/rt/pure/__retain
   else
-   call $rc/ternary-mismatch/Ref#constructor
+   call $~lib/rt/tlsf/maybeInitialize
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
+   call $~lib/rt/pure/__retain
   end
  )
  (func $~start
-  call $rc/ternary-mismatch/Ref#constructor
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   global.set $rc/ternary-mismatch/gloRef
   i32.const 1
   call $rc/ternary-mismatch/test1

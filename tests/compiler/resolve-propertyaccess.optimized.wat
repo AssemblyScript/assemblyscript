@@ -1,8 +1,8 @@
 (module
  (type $none_=>_none (func))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -125,7 +125,7 @@
   local.get $0
   i32.const 31
   i32.shr_u
-  local.tee $2
+  local.tee $1
   if
    i32.const 0
    local.get $0
@@ -172,51 +172,46 @@
   i32.const 100000
   i32.lt_u
   select
-  local.get $2
+  local.get $1
   i32.add
-  local.tee $3
+  local.tee $2
   i32.const 1
   i32.shl
   i32.const 1
   call $~lib/rt/stub/__alloc
-  local.tee $4
-  local.set $5
+  local.tee $3
+  local.set $4
   loop $do-continue|0
    local.get $0
    i32.const 10
+   i32.rem_u
+   local.set $5
+   local.get $0
+   i32.const 10
    i32.div_u
-   local.get $5
-   local.get $3
+   local.set $0
+   local.get $4
+   local.get $2
    i32.const 1
    i32.sub
-   local.tee $3
+   local.tee $2
    i32.const 1
    i32.shl
    i32.add
-   local.get $0
-   i32.const 10
-   i32.rem_u
+   local.get $5
    i32.const 48
    i32.add
    i32.store16
-   local.tee $0
+   local.get $0
    br_if $do-continue|0
   end
-  local.get $2
+  local.get $1
   if
-   local.get $4
+   local.get $3
    i32.const 45
    i32.store16
   end
-  local.get $4
- )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
+  local.get $3
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -311,10 +306,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0

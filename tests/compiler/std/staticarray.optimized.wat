@@ -2,12 +2,12 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
  (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
@@ -30,18 +30,14 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/staticarray/StaticArray<i32>#get:length (param $0 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
   local.get $0
   i32.const 16
   i32.sub
   i32.load offset=12
   i32.const 2
   i32.shr_u
- )
- (func $~lib/staticarray/StaticArray<i32>#__get (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  local.get $0
-  call $~lib/staticarray/StaticArray<i32>#get:length
   i32.ge_u
   if
    i32.const 1072
@@ -61,7 +57,11 @@
  (func $~lib/staticarray/StaticArray<i32>#__set (param $0 i32) (param $1 i32)
   i32.const 1
   local.get $0
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 2
+  i32.shr_u
   i32.ge_u
   if
    i32.const 1072
@@ -1080,14 +1080,6 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  local.get $0
-  local.get $1
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
- )
  (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1262,9 +1254,12 @@
   end
  )
  (func $~lib/rt/__allocBuffer (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $1
   local.get $2
   if
@@ -1326,13 +1321,6 @@
   end
   local.get $0
  )
- (func $std/staticarray/test (result i32)
-  i32.const 12
-  i32.const 3
-  i32.const 1296
-  call $~lib/rt/__allocBuffer
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1472
@@ -1343,6 +1331,15 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
+ )
+ (func $std/staticarray/Ref#constructor (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 0
+  i32.const 4
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
  )
  (func $start:std/staticarray
   (local $0 i32)
@@ -1359,8 +1356,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1040
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 1036
+  i32.load
+  i32.const 2
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -1412,8 +1411,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1264
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 1260
+  i32.load
+  i32.const 2
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -1440,7 +1441,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $std/staticarray/test
+  i32.const 12
+  i32.const 3
+  i32.const 1296
+  call $~lib/rt/__allocBuffer
+  call $~lib/rt/pure/__retain
   global.set $std/staticarray/arr3
   global.get $std/staticarray/arr3
   i32.const 0
@@ -1482,7 +1487,11 @@
    unreachable
   end
   global.get $std/staticarray/arr3
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 2
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -1509,7 +1518,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $std/staticarray/test
+  i32.const 12
+  i32.const 3
+  i32.const 1296
+  call $~lib/rt/__allocBuffer
+  call $~lib/rt/pure/__retain
   global.get $std/staticarray/arr3
   call $~lib/rt/pure/__release
   global.set $std/staticarray/arr3
@@ -1532,16 +1545,10 @@
   call $~lib/rt/__allocBuffer
   call $~lib/rt/pure/__retain
   local.tee $0
-  i32.const 0
-  i32.const 4
-  call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
+  call $std/staticarray/Ref#constructor
   i32.store
   local.get $0
-  i32.const 0
-  i32.const 4
-  call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
+  call $std/staticarray/Ref#constructor
   i32.store offset=4
   local.get $0
   global.set $std/staticarray/arr4

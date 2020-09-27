@@ -2,8 +2,8 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
@@ -1042,14 +1042,6 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  local.get $0
-  local.get $1
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
- )
  (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
@@ -1461,6 +1453,7 @@
    select
   end
   local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $2
   i32.const 0
   i32.lt_s
@@ -1492,7 +1485,9 @@
   select
   local.tee $2
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $3
   local.get $0
   local.get $1
@@ -1509,9 +1504,12 @@
   local.get $0
   i32.eqz
   if
+   call $~lib/rt/tlsf/maybeInitialize
    i32.const 12
    i32.const 2
-   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
    call $~lib/rt/pure/__retain
    local.set $0
   end
@@ -1537,12 +1535,15 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 1
   local.get $1
   i32.shl
   local.tee $3
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $3
   call $~lib/memory/memory.fill
@@ -1581,9 +1582,12 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 8
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $0
   i32.const 8
   call $~lib/memory/memory.fill
@@ -1816,20 +1820,29 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 5
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $5
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 16
   i32.const 3
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 8
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   i32.const 1376
   i32.const 8
@@ -1849,9 +1862,12 @@
   i32.store offset=12
   local.get $0
   call $~lib/rt/pure/__retain
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 9
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
@@ -1864,9 +1880,12 @@
   i32.load offset=12
   local.tee $0
   local.set $8
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 15
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.tee $3
   i32.const 0

@@ -1487,9 +1487,9 @@ export class Module {
       this.setAllowInliningFunctionsWithLoops(optimizeLevel >= 3);
     } else {
       this.setAlwaysInlineMaxSize(
-        optimizeLevel == 0 && shrinkLevel >= 0
+        optimizeLevel <= 1 || shrinkLevel >= 2
           ? 2
-          : 4
+          : 6
       );
       this.setFlexibleInlineMaxSize(65);
       this.setOneCallerInlineMaxSize(80);

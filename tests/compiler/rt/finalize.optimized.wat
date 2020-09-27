@@ -3,11 +3,11 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
@@ -1049,14 +1049,6 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  local.get $0
-  local.get $1
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
- )
  (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
@@ -1264,20 +1256,16 @@
   end
   local.get $0
  )
- (func $~lib/staticarray/StaticArray<usize>#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 2
-  i32.shr_u
- )
  (func $rt/finalize/expect (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $rt/finalize/expectedWriteIndex
   global.get $rt/finalize/expected
-  call $~lib/staticarray/StaticArray<usize>#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 2
+  i32.shr_u
   i32.ge_s
   if
    i32.const 0
@@ -1293,10 +1281,13 @@
   i32.add
   global.set $rt/finalize/expectedWriteIndex
   local.get $1
-  local.tee $2
   global.get $rt/finalize/expected
-  local.tee $1
-  call $~lib/staticarray/StaticArray<usize>#get:length
+  local.tee $2
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 2
+  i32.shr_u
   i32.ge_u
   if
    i32.const 1408
@@ -1306,8 +1297,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $2
+  local.get $1
   i32.const 2
   i32.shl
   i32.add
@@ -1319,18 +1310,24 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 40
   i32.const 3
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $0
   i32.const 40
   call $~lib/memory/memory.fill
   local.get $0
   call $~lib/rt/pure/__retain
   global.set $rt/finalize/expected
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 16
   i32.const 4
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.tee $2
   i32.const 0
@@ -1344,9 +1341,12 @@
   local.get $2
   i32.const 0
   i32.store offset=12
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 0
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $0
   i32.const 0
   call $~lib/memory/memory.fill
@@ -1405,16 +1405,22 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 4
   i32.const 5
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.tee $1
   i32.const 0
   i32.store
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 4
   i32.const 6
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.tee $2
   i32.const 0
@@ -1770,9 +1776,13 @@
   i32.const 256
   i32.gt_u
   select
-  local.tee $4
+  local.set $4
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $4
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $0
   local.get $3
