@@ -105,10 +105,10 @@ export function bitrev<T extends number>(value: T): T {
       }
       if (sizeof<T>() == 4) {
         return <T>(
-          (<u32>load<u8>(REV_LUT + <usize>(value        & 0xFF)) << 24) |
-          (<u32>load<u8>(REV_LUT + <usize>(value >>>  8 & 0xFF)) << 16) |
-          (<u32>load<u8>(REV_LUT + <usize>(value >>> 16 & 0xFF)) <<  8) |
-          (<u32>load<u8>(REV_LUT + <usize>(value >>> 24)))
+          (<u32>load<u8>(REV_LUT + <usize><u8>(value       )) << 24) |
+          (<u32>load<u8>(REV_LUT + <usize><u8>(value >>>  8)) << 16) |
+          (<u32>load<u8>(REV_LUT + <usize><u8>(value >>> 16)) <<  8) |
+          (<u32>load<u8>(REV_LUT + <usize><u8>(value >>> 24)))
         );
       }
     }
