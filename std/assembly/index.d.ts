@@ -1183,6 +1183,8 @@ declare function INFO(message?: any): void;
 declare function bswap<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
 /** Performs the sign-agnostic reverse bytes only for last 16-bit **/
 declare function bswap16<T = i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
+/** Performs the sign-agnostic reverse bits **/
+declare function bitrev<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64 | isize | usize>(value: T): T;
 
 // Standard library
 
