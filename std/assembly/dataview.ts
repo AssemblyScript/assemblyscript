@@ -57,7 +57,7 @@ export class DataView {
       (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i16 = load<i16>(this.dataStart + <usize>byteOffset);
-    return littleEndian ? result : bswap<i16>(result);
+    return littleEndian ? result : bswap<u16>(result);
   }
 
   getInt32(byteOffset: i32, littleEndian: boolean = false): i32 {
@@ -65,7 +65,7 @@ export class DataView {
       (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i32 = load<i32>(this.dataStart + <usize>byteOffset);
-    return littleEndian ? result : bswap<i32>(result);
+    return littleEndian ? result : bswap<u32>(result);
   }
 
   getUint8(byteOffset: i32): u8 {
@@ -114,14 +114,14 @@ export class DataView {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
-    store<i16>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i16>(value));
+    store<i16>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u16>(value));
   }
 
   setInt32(byteOffset: i32, value: i32, littleEndian: boolean = false): void {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
-    store<i32>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i32>(value));
+    store<i32>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u32>(value));
   }
 
   setUint8(byteOffset: i32, value: u8): void {
@@ -150,7 +150,7 @@ export class DataView {
       (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i64 = load<i64>(this.dataStart + <usize>byteOffset);
-    return littleEndian ? result : bswap<i64>(result);
+    return littleEndian ? result : bswap<u64>(result);
   }
 
   getUint64(byteOffset: i32, littleEndian: boolean = false): u64 {
@@ -165,7 +165,7 @@ export class DataView {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
-    store<i64>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i64>(value));
+    store<i64>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u64>(value));
   }
 
   setUint64(byteOffset: i32, value: u64, littleEndian: boolean = false): void {
