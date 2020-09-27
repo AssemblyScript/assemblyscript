@@ -91,7 +91,7 @@ export function bitrev<T extends number>(value: T): T {
         n = (n & 0x33333333) << 2 | (n & 0xCCCCCCCC) >> 2;
         n = (n & 0x0F0F0F0F) << 4 | (n & 0xF0F0F0F0) >> 4;
         n = (n & 0x00FF00FF) << 8 | (n & 0xFF00FF00) >> 8;
-        n = rotl<u32>(n, 16);
+        n = rotr<u32>(n, 16);
         return <T>n;
       }
     } else {
@@ -116,7 +116,7 @@ export function bitrev<T extends number>(value: T): T {
     if (sizeof<T>() == 8) {
       // Don't use lookups due to it slower for 64-bits
       let t: u64, n = <u64>value;
-      n = rotl<u64>(n, 32);
+      n = rotr<u64>(n, 32);
       n = (n & 0x0001FFFF0001FFFF) << 15 |
           (n & 0xFFFE0000FFFE0000) >> 17;
       t = (n ^ (n >> 10)) & 0x003F801F003F801F;
