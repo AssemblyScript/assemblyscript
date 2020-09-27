@@ -155,17 +155,25 @@ globalScope["copysign"] = function copysign(x, y) {
   return Math.abs(x) * Math.sign(y);
 };
 
-globalScope["bswap"] = function bswap(value) {
-  var a = value >> 8 & 0x00FF00FF;
-  var b = (value & 0x00FF00FF) << 8;
-  value = a | b;
-  a = value >> 16 & 0x0000FFFF;
-  b = (value & 0x0000FFFF) << 16;
+globalScope["bswap"] = function bswap(n) {
+  var a = n >> 8 & 0x00FF00FF;
+  var b = (n & 0x00FF00FF) << 8;
+  n = a | b;
+  a = n >> 16 & 0x0000FFFF;
+  b = (n & 0x0000FFFF) << 16;
   return a | b;
 };
 
-globalScope["bswap16"] = function bswap16(value) {
-  return ((value << 8) & 0xFF00) | ((value >> 8) & 0x00FF) | (value & 0xFFFF0000);
+globalScope["bswap16"] = function bswap16(n) {
+  return ((n << 8) & 0xFF00) | ((n >> 8) & 0x00FF) | (n & 0xFFFF0000);
+};
+
+globalScope["bitrev"] = function bitrev(n) {
+  n = (n & 0x55555555) << 1 | (n & 0xAAAAAAAA) >>> 1;
+  n = (n & 0x33333333) << 2 | (n & 0xCCCCCCCC) >>> 2;
+  n = (n & 0x0F0F0F0F) << 4 | (n & 0xF0F0F0F0) >>> 4;
+  n = (n & 0x00FF00FF) << 8 | (n & 0xFF00FF00) >>> 8;
+  return n << 16 | n >>> 16;
 };
 
 function UnreachableError() {
