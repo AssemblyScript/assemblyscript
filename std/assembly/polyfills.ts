@@ -94,19 +94,6 @@ export function bitrev<T extends number>(value: T): T {
         n = rotl<u32>(n, 16);
         return <T>n;
       }
-      if (sizeof<T>() == 8) {
-        let t: u64, n = <u64>value;
-        n = rotl<u64>(n, 32);
-        n = (n & 0x0001FFFF0001FFFF) << 15 |
-            (n & 0xFFFE0000FFFE0000) >> 17;
-        t = (n ^ (n >> 10)) & 0x003F801F003F801F;
-        n = (t | (t << 10)) ^ n;
-        t = (n ^ (n >>  4)) & 0x0E0384210E038421;
-        n = (t | (t <<  4)) ^ n;
-        t = (n ^ (n >>  2)) & 0x2248884222488842;
-        n = (t | (t <<  2)) ^ n;
-        return <T>n;
-      }
     } else {
       if (sizeof<T>() == 1) {
         return <T>load<u8>(REV_LUT + value);
@@ -125,18 +112,20 @@ export function bitrev<T extends number>(value: T): T {
           (<u32>load<u8>(REV_LUT + (value >>> 24)))
         );
       }
-      if (sizeof<T>() == 8) {
-        return <T>(
-          (<u64>load<u8>(REV_LUT + <usize>(value        & 0xFF)) << 56) |
-          (<u64>load<u8>(REV_LUT + <usize>(value >>>  8 & 0xFF)) << 48) |
-          (<u64>load<u8>(REV_LUT + <usize>(value >>> 16 & 0xFF)) << 40) |
-          (<u64>load<u8>(REV_LUT + <usize>(value >>> 24 & 0xFF)) << 32) |
-          (<u64>load<u8>(REV_LUT + <usize>(value >>> 32 & 0xFF)) << 24) |
-          (<u64>load<u8>(REV_LUT + <usize>(value >>> 40 & 0xFF)) << 16) |
-          (<u64>load<u8>(REV_LUT + <usize>(value >>> 48 & 0xFF)) <<  8) |
-          (<u64>load<u8>(REV_LUT + <usize>(value >>> 56)))
-        );
-      }
+    }
+    if (sizeof<T>() == 8) {
+      // Don't use lookups due to it slower for 64-bits
+      let t: u64, n = <u64>value;
+      n = rotl<u64>(n, 32);
+      n = (n & 0x0001FFFF0001FFFF) << 15 |
+          (n & 0xFFFE0000FFFE0000) >> 17;
+      t = (n ^ (n >> 10)) & 0x003F801F003F801F;
+      n = (t | (t << 10)) ^ n;
+      t = (n ^ (n >>  4)) & 0x0E0384210E038421;
+      n = (t | (t <<  4)) ^ n;
+      t = (n ^ (n >>  2)) & 0x2248884222488842;
+      n = (t | (t <<  2)) ^ n;
+      return <T>n;
     }
   }
   assert(false);
