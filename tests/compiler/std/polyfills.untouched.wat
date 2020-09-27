@@ -1,7 +1,7 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i64_=>_i64 (func (param i64) (result i64)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -714,6 +714,194 @@
   i32.add
   i32.load8_u
   i32.or
+  return
+ )
+ (func $~lib/polyfills/bitrev<u64> (param $0 i64) (result i64)
+  (local $1 i64)
+  (local $2 i64)
+  i32.const 1
+  drop
+  i32.const 0
+  i32.const 0
+  i32.gt_s
+  drop
+  i32.const 8
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $0
+  local.set $2
+  local.get $2
+  i64.const 32
+  i64.rotr
+  local.set $2
+  local.get $2
+  i64.const 562945658585087
+  i64.and
+  i64.const 15
+  i64.shl
+  local.get $2
+  i64.const -562945658585088
+  i64.and
+  i64.const 17
+  i64.shr_u
+  i64.or
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 10
+  i64.shr_u
+  i64.xor
+  i64.const 17873794169274399
+  i64.and
+  local.set $1
+  local.get $1
+  local.get $1
+  i64.const 10
+  i64.shl
+  i64.or
+  local.get $2
+  i64.xor
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 4
+  i64.shr_u
+  i64.xor
+  i64.const 1009796018965021729
+  i64.and
+  local.set $1
+  local.get $1
+  local.get $1
+  i64.const 4
+  i64.shl
+  i64.or
+  local.get $2
+  i64.xor
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 2
+  i64.shr_u
+  i64.xor
+  i64.const 2470374213237114946
+  i64.and
+  local.set $1
+  local.get $1
+  local.get $1
+  i64.const 2
+  i64.shl
+  i64.or
+  local.get $2
+  i64.xor
+  local.set $2
+  local.get $2
+  return
+ )
+ (func $~lib/polyfills/bitrev<i64> (param $0 i64) (result i64)
+  (local $1 i64)
+  (local $2 i64)
+  i32.const 1
+  drop
+  i32.const 0
+  i32.const 0
+  i32.gt_s
+  drop
+  i32.const 8
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 2
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $0
+  local.set $2
+  local.get $2
+  i64.const 32
+  i64.rotr
+  local.set $2
+  local.get $2
+  i64.const 562945658585087
+  i64.and
+  i64.const 15
+  i64.shl
+  local.get $2
+  i64.const -562945658585088
+  i64.and
+  i64.const 17
+  i64.shr_u
+  i64.or
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 10
+  i64.shr_u
+  i64.xor
+  i64.const 17873794169274399
+  i64.and
+  local.set $1
+  local.get $1
+  local.get $1
+  i64.const 10
+  i64.shl
+  i64.or
+  local.get $2
+  i64.xor
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 4
+  i64.shr_u
+  i64.xor
+  i64.const 1009796018965021729
+  i64.and
+  local.set $1
+  local.get $1
+  local.get $1
+  i64.const 4
+  i64.shl
+  i64.or
+  local.get $2
+  i64.xor
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 2
+  i64.shr_u
+  i64.xor
+  i64.const 2470374213237114946
+  i64.and
+  local.set $1
+  local.get $1
+  local.get $1
+  i64.const 2
+  i64.shl
+  i64.or
+  local.get $2
+  i64.xor
+  local.set $2
+  local.get $2
   return
  )
  (func $start:std/polyfills
@@ -1518,7 +1706,7 @@
    unreachable
   end
   i32.const 128
-  call $~lib/polyfills/bitrev<i32>
+  call $~lib/polyfills/bitrev<u32>
   i32.const 16777216
   i32.eq
   i32.eqz
@@ -1643,6 +1831,188 @@
    i32.const 0
    i32.const 32
    i32.const 82
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 0
+  call $~lib/polyfills/bitrev<u64>
+  i64.const 0
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 84
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 0
+  call $~lib/polyfills/bitrev<i64>
+  i64.const 0
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 85
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 1
+  call $~lib/polyfills/bitrev<u64>
+  i64.const -9223372036854775808
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 86
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 1
+  call $~lib/polyfills/bitrev<i64>
+  i64.const -9223372036854775808
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 87
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 2
+  call $~lib/polyfills/bitrev<u64>
+  i64.const 4611686018427387904
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 88
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 2
+  call $~lib/polyfills/bitrev<i64>
+  i64.const 4611686018427387904
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 89
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 128
+  call $~lib/polyfills/bitrev<u64>
+  i64.const 72057594037927936
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 90
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 128
+  call $~lib/polyfills/bitrev<i64>
+  i64.const 72057594037927936
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 91
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 1311768467407717153
+  call $~lib/polyfills/bitrev<u64>
+  i64.const -8880351995053331384
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 92
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 1311768467407717153
+  call $~lib/polyfills/bitrev<i64>
+  i64.const -8880351995053331384
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 93
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const -9223372036854775808
+  call $~lib/polyfills/bitrev<u64>
+  i64.const 1
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 94
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const -9223372036854775808
+  call $~lib/polyfills/bitrev<i64>
+  i64.const 1
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 95
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const -1
+  call $~lib/polyfills/bitrev<u64>
+  i64.const -1
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 96
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const -1
+  call $~lib/polyfills/bitrev<i64>
+  i64.const -1
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 97
    i32.const 1
    call $~lib/builtins/abort
    unreachable
