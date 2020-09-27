@@ -71,19 +71,19 @@ export function bitrev<T extends number>(value: T): T {
   if (isInteger<T>()) {
     if (ASC_SHRINK_LEVEL > 0) {
       if (sizeof<T>() == 1) {
-        let n = <u32>value;
-        return <T><u8>((
+        let n = <u32>value & 0xFF;
+        return <T>((
           (n * 0x0802 & 0x22110) |
           (n * 0x8020 & 0x88440)
         ) * 0x10101 >> 16);
       }
       if (sizeof<T>() == 2) {
         let t: u32, n = <u32>value;
-        t = n | ((n & 0x000000FF) << 16);
+        n = (n & 0xFFFF) | ((n & 0xFF) << 16);
         t = n & 0x0F0F0F0F; n = (t << 8) | (t ^ n);
         t = n & 0x33333333; n = (t << 4) | (t ^ n);
         t = n & 0x55555555; n = (t << 2) | (t ^ n);
-        return <T><u16>(n >> 15);
+        return <T>(n >> 15);
       }
       if (sizeof<T>() == 4) {
         let n = <u32>value;
@@ -95,12 +95,12 @@ export function bitrev<T extends number>(value: T): T {
       }
     } else {
       if (sizeof<T>() == 1) {
-        return <T><u8>load<u8>(REV_LUT + value);
+        return <T>load<u8>(REV_LUT + (value & 0xFF));
       }
       if (sizeof<T>() == 2) {
         return <T>(
           (<u16>load<u8>(REV_LUT + (value & 0xFF)) << 8) |
-           <u16>load<u8>(REV_LUT + (value >>> 8))
+           <u16>load<u8>(REV_LUT + (value >>> 8 & 0xFF))
         );
       }
       if (sizeof<T>() == 4) {

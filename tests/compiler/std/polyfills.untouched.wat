@@ -520,6 +520,8 @@
   i32.shl
   i32.const 24
   i32.shr_s
+  i32.const 255
+  i32.and
   i32.add
   i32.load8_u
   return
@@ -553,6 +555,8 @@
   i32.and
   i32.const 8
   i32.shr_u
+  i32.const 255
+  i32.and
   i32.add
   i32.load8_u
   i32.or
@@ -589,10 +593,8 @@
   i32.shr_s
   i32.const 8
   i32.shr_u
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.const 255
+  i32.and
   i32.add
   i32.load8_u
   i32.or

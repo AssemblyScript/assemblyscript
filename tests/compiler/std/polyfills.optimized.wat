@@ -33,6 +33,8 @@
   i32.shl
   i32.const 24
   i32.shr_s
+  i32.const 255
+  i32.and
   local.tee $0
   i32.const 2050
   i32.mul
@@ -54,6 +56,13 @@
   local.get $0
   i32.const 65535
   i32.and
+  local.tee $0
+  local.get $0
+  i32.const 255
+  i32.and
+  i32.const 16
+  i32.shl
+  i32.or
   local.tee $0
   i32.const 252645135
   i32.and
@@ -94,6 +103,15 @@
   i32.shl
   i32.const 16
   i32.shr_s
+  local.tee $0
+  i32.const 65535
+  i32.and
+  local.get $0
+  i32.const 255
+  i32.and
+  i32.const 16
+  i32.shl
+  i32.or
   local.tee $0
   i32.const 252645135
   i32.and
