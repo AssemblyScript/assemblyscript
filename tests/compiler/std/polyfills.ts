@@ -80,5 +80,3 @@ assert(bitrev<u32>(<u32>0x87654321) == <u32>0x84C2A6E1);
 assert(bitrev<i32>(<i32>0x87654321) == <i32>0x84C2A6E1);
 assert(bitrev<u32>(<u32>0xFFFFFFFF) == <u32>0xFFFFFFFF);
 assert(bitrev<i32>(<i32>0xFFFFFFFF) == <i32>0xFFFFFFFF);
-
-assert(false);

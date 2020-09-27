@@ -1645,16 +1645,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 84
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
  (func $~start
   call $start:std/polyfills
