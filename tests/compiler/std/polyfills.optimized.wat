@@ -28,85 +28,12 @@
   i32.const 16
   i32.shr_u
  )
- (func $~lib/polyfills/bitrev<i8> (param $0 i32) (result i32)
-  local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  i32.const 255
-  i32.and
-  local.tee $0
-  i32.const 2050
-  i32.mul
-  i32.const 139536
-  i32.and
-  local.get $0
-  i32.const 32800
-  i32.mul
-  i32.const 558144
-  i32.and
-  i32.or
-  i32.const 65793
-  i32.mul
-  i32.const 16
-  i32.shr_u
- )
  (func $~lib/polyfills/bitrev<u16> (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 65535
   i32.and
   local.tee $0
-  local.get $0
-  i32.const 255
-  i32.and
-  i32.const 16
-  i32.shl
-  i32.or
-  local.tee $0
-  i32.const 252645135
-  i32.and
-  local.tee $1
-  i32.const 8
-  i32.shl
-  local.get $0
-  local.get $1
-  i32.xor
-  i32.or
-  local.tee $0
-  i32.const 858993459
-  i32.and
-  local.tee $1
-  i32.const 4
-  i32.shl
-  local.get $0
-  local.get $1
-  i32.xor
-  i32.or
-  local.tee $0
-  i32.const 1431655765
-  i32.and
-  local.tee $1
-  i32.const 2
-  i32.shl
-  local.get $0
-  local.get $1
-  i32.xor
-  i32.or
-  i32.const 15
-  i32.shr_u
- )
- (func $~lib/polyfills/bitrev<i16> (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  local.tee $0
-  i32.const 65535
-  i32.and
   local.get $0
   i32.const 255
   i32.and
@@ -267,7 +194,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/polyfills/bitrev<i8>
+  call $~lib/polyfills/bitrev<u8>
   i32.const 255
   i32.and
   if
@@ -293,7 +220,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/polyfills/bitrev<i8>
+  call $~lib/polyfills/bitrev<u8>
   i32.const 255
   i32.and
   i32.const 128
@@ -321,7 +248,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/polyfills/bitrev<i8>
+  call $~lib/polyfills/bitrev<u8>
   i32.const 255
   i32.and
   i32.const 64
@@ -349,7 +276,7 @@
    unreachable
   end
   i32.const 51
-  call $~lib/polyfills/bitrev<i8>
+  call $~lib/polyfills/bitrev<u8>
   i32.const 255
   i32.and
   i32.const 204
@@ -377,7 +304,7 @@
    unreachable
   end
   i32.const 127
-  call $~lib/polyfills/bitrev<i8>
+  call $~lib/polyfills/bitrev<u8>
   i32.const 255
   i32.and
   i32.const 254
@@ -405,7 +332,7 @@
    unreachable
   end
   i32.const 129
-  call $~lib/polyfills/bitrev<i8>
+  call $~lib/polyfills/bitrev<u8>
   i32.const 255
   i32.and
   i32.const 129
@@ -433,7 +360,7 @@
    unreachable
   end
   i32.const 255
-  call $~lib/polyfills/bitrev<i8>
+  call $~lib/polyfills/bitrev<u8>
   i32.const 255
   i32.and
   i32.const 255
@@ -459,7 +386,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/polyfills/bitrev<i16>
+  call $~lib/polyfills/bitrev<u16>
   i32.const 65535
   i32.and
   if
@@ -485,7 +412,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/polyfills/bitrev<i16>
+  call $~lib/polyfills/bitrev<u16>
   i32.const 65535
   i32.and
   i32.const 32768
@@ -513,7 +440,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/polyfills/bitrev<i16>
+  call $~lib/polyfills/bitrev<u16>
   i32.const 65535
   i32.and
   i32.const 16384
@@ -541,7 +468,7 @@
    unreachable
   end
   i32.const 13107
-  call $~lib/polyfills/bitrev<i16>
+  call $~lib/polyfills/bitrev<u16>
   i32.const 65535
   i32.and
   i32.const 52428
@@ -569,7 +496,7 @@
    unreachable
   end
   i32.const 32767
-  call $~lib/polyfills/bitrev<i16>
+  call $~lib/polyfills/bitrev<u16>
   i32.const 65535
   i32.and
   i32.const 65534
@@ -597,7 +524,7 @@
    unreachable
   end
   i32.const 34097
-  call $~lib/polyfills/bitrev<i16>
+  call $~lib/polyfills/bitrev<u16>
   i32.const 65535
   i32.and
   i32.const 36001
@@ -625,7 +552,7 @@
    unreachable
   end
   i32.const 65535
-  call $~lib/polyfills/bitrev<i16>
+  call $~lib/polyfills/bitrev<u16>
   i32.const 65535
   i32.and
   i32.const 65535
