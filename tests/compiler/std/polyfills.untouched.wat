@@ -516,10 +516,6 @@
   drop
   global.get $~lib/polyfills/REV_LUT
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
   i32.const 255
   i32.and
   i32.add

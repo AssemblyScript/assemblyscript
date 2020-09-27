@@ -95,20 +95,20 @@ export function bitrev<T extends number>(value: T): T {
       }
     } else {
       if (sizeof<T>() == 1) {
-        return <T>load<u8>(REV_LUT + (value & 0xFF));
+        return <T>load<u8>(REV_LUT + <usize><u8>value);
       }
       if (sizeof<T>() == 2) {
         return <T>(
-          (<u16>load<u8>(REV_LUT + (value & 0xFF)) << 8) |
-           <u16>load<u8>(REV_LUT + (value >>> 8 & 0xFF))
+          (<u16>load<u8>(REV_LUT + <usize><u8>(value)) << 8) |
+           <u16>load<u8>(REV_LUT + <usize><u8>(value >>> 8))
         );
       }
       if (sizeof<T>() == 4) {
         return <T>(
-          (<u32>load<u8>(REV_LUT + (value        & 0xFF)) << 24) |
-          (<u32>load<u8>(REV_LUT + (value >>>  8 & 0xFF)) << 16) |
-          (<u32>load<u8>(REV_LUT + (value >>> 16 & 0xFF)) <<  8) |
-          (<u32>load<u8>(REV_LUT + (value >>> 24)))
+          (<u32>load<u8>(REV_LUT + <usize>(value        & 0xFF)) << 24) |
+          (<u32>load<u8>(REV_LUT + <usize>(value >>>  8 & 0xFF)) << 16) |
+          (<u32>load<u8>(REV_LUT + <usize>(value >>> 16 & 0xFF)) <<  8) |
+          (<u32>load<u8>(REV_LUT + <usize>(value >>> 24)))
         );
       }
     }
