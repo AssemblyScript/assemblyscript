@@ -1,7 +1,7 @@
 import { DEBUG, BLOCK_OVERHEAD } from "rt/common";
 import { Block, freeBlock, ROOT } from "rt/tlsf";
 import { TypeinfoFlags } from "shared/typeinfo";
-import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
+import { onincrement, ondecrement } from "./rtrace";
 
 // === A Pure Reference Counting Garbage Collector ===
 // see: https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
