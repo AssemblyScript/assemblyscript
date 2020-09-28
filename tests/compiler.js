@@ -8,7 +8,7 @@ const colorsUtil = require("../cli/util/colors");
 const optionsUtil = require("../cli/util/options");
 const diff = require("./util/diff");
 const asc = require("../cli/asc.js");
-const rtrace = require("../lib/rtrace");
+const { Rtrace } = require("../lib/rtrace");
 const cluster = require("cluster");
 const coreCount = require("physical-cpu-count");
 
@@ -121,6 +121,7 @@ function runTest(basename) {
   stderr.isTTY = true;
 
   var asc_flags = [];
+  var asc_rtrace = !!config.asc_rtrace;
   var v8_flags = "";
   var v8_no_flags = "";
   var missing_features = [];
@@ -302,6 +303,54 @@ function runTest(basename) {
       } else {
         instantiateUntouched.end(SKIPPED);
       }
+
+      if (!asc_rtrace) return;
+
+      stdout.length = 0;
+      stderr.length = 0;
+
+      // Build rtraced
+      var cmd = [
+        basename + ".ts",
+        "--baseDir", basedir,
+        "--binaryFile", // -> stdout
+        "--debug",
+        "--use", "ASC_RTRACE=1",
+        "--explicitStart",
+        "--runPasses", "instrument-memory"
+      ];
+      if (asc_flags) {
+        Array.prototype.push.apply(cmd, asc_flags);
+      }
+      const compileRtraced = section("compile rtraced");
+      asc.main(cmd, {
+        stdout: stdout,
+        stderr: stderr
+      }, err => {
+        if (err) {
+          stderr.write("---\n");
+          stderr.write(err.stack);
+          stderr.write("\n---\n");
+          failed = true;
+          failedMessages.set(basename, err.message);
+          failedTests.add(basename);
+          compileRtraced.end(FAILURE);
+          return 1;
+        } else {
+          compileRtraced.end(SUCCESS);
+        }
+        let rtracedBuffer = stdout.toBuffer();
+        const instantiateRtrace = section("instantiate rtrace");
+        v8.setFlagsFromString("--experimental-wasm-bigint");
+        if (!testInstantiate(basename, rtracedBuffer, glue, stderr)) {
+          failed = true;
+          failedTests.add(basename);
+          instantiateRtrace.end(FAILURE);
+        } else {
+          instantiateRtrace.end(SUCCESS);
+        }
+        v8.setFlagsFromString("--no-experimental-wasm-bigint");
+      });
     });
     if (failed) return 1;
   });
@@ -327,21 +376,23 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
     }
 
-    function onerror(e) {
-      console.log("  ERROR: " + e);
-      failed = true;
-      failedMessages.set(basename, e.message);
-    }
-
-    function oninfo(i) {
-      console.log("  " + i);
-    }
-
-    let rtr = rtrace(onerror, args.rtraceVerbose ? oninfo : null);
+    let rtrace = new Rtrace({
+      onerror(err, info) {
+        console.log("  ERROR: " + err.stack);
+        failed = true;
+        failedMessages.set(basename, err.message);
+      },
+      oninfo(msg, info) {
+        if (!args.rtraceVerbose) return;
+        console.log("  " + msg);
+      },
+      getMemory() {
+        return instance.exports.memory;
+      }
+    });
 
     var imports = {
-      rtrace: rtr,
-      env: {
+      env: Object.assign({
         memory,
         abort: function(msg, file, line, column) {
           console.log(colorsUtil.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
@@ -352,10 +403,11 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
         seed: function() {
           return 0xA5534817; // make tests deterministic
         }
-      },
+      }, rtrace.env),
       Math,
       Date,
-      Reflect
+      Reflect,
+      rtrace
     };
     if (glue.preInstantiate) {
       console.log("  [call preInstantiate]");
@@ -375,7 +427,7 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       console.log("  [call postStart]");
       glue.postStart(instance);
     }
-    let leakCount = rtr.check();
+    let leakCount = rtrace.check();
     if (leakCount) {
       let msg = "memory leak detected: " + leakCount + " leaking";
       failed = true;
@@ -383,12 +435,14 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       console.log("  " + msg);
     }
     if (!failed) {
-      if (rtr.active) {
+      if (rtrace.active) {
         console.log("  " +
-          rtr.allocCount + " allocs, " +
-          rtr.freeCount + " frees, " +
-          rtr.incrementCount + " increments, " +
-          rtr.decrementCount + " decrements"
+          rtrace.allocCount + " allocs, " +
+          rtrace.resizeCount + " resizes, " +
+          rtrace.moveCount + " moves, " +
+          rtrace.freeCount + " frees, " +
+          rtrace.incrementCount + " increments, " +
+          rtrace.decrementCount + " decrements"
         );
       }
       return true;

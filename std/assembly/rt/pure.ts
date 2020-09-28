@@ -184,12 +184,8 @@ function growRoots(): void {
   var oldSize = CUR - oldRoots;
   var newSize = max(oldSize * 2, 64 << alignof<usize>());
   var newRoots = __alloc(newSize, 0);
-  if (isDefined(ASC_RTRACE)) onfree(changetype<Block>(newRoots - BLOCK_OVERHEAD)); // neglect unmanaged
   memory.copy(newRoots, oldRoots, oldSize);
-  if (oldRoots) {
-    if (isDefined(ASC_RTRACE)) onalloc(changetype<Block>(oldRoots - BLOCK_OVERHEAD)); // neglect unmanaged
-    __free(oldRoots);
-  }
+  if (oldRoots) __free(oldRoots);
   ROOTS = newRoots;
   CUR = newRoots + oldSize;
   END = newRoots + newSize;

@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
@@ -8,10 +8,6 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
- (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
- (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
- (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
  (data (i32.const 1024) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1072) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
@@ -22,9 +18,8 @@
  (data (i32.const 1344) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\04\00\00\00 ")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
- (export "_start" (func $~start))
  (export "memory" (memory $0))
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -891,8 +886,6 @@
    i32.store
   end
   local.get $2
-  call $~lib/rt/rtrace/onalloc
-  local.get $2
  )
  (func $~lib/rt/tlsf/__alloc (param $0 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
@@ -935,8 +928,6 @@
    i32.const 1
    i32.add
    i32.store offset=4
-   local.get $1
-   call $~lib/rt/rtrace/onincrement
    local.get $1
    i32.load
    i32.const 1
@@ -1147,13 +1138,6 @@
   call $~lib/rt/pure/__release
  )
  (func $~start
-  global.get $~started
-  if
-   return
-  else
-   i32.const 1
-   global.set $~started
-  end
   call $start:managed-cast
  )
  (func $~lib/rt/pure/decrement (param $0 i32)
@@ -1165,8 +1149,6 @@
   i32.const 268435455
   i32.and
   local.set $1
-  local.get $0
-  call $~lib/rt/rtrace/ondecrement
   local.get $0
   i32.load
   i32.const 1
@@ -1230,8 +1212,6 @@
    global.get $~lib/rt/tlsf/ROOT
    local.get $0
    call $~lib/rt/tlsf/insertBlock
-   local.get $0
-   call $~lib/rt/rtrace/onfree
   else
    local.get $1
    i32.const 0

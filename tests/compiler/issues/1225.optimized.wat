@@ -1,16 +1,12 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
- (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
- (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
- (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
  (data (i32.const 1024) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1072) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
@@ -890,8 +886,6 @@
    i32.store
   end
   local.get $1
-  call $~lib/rt/rtrace/onalloc
-  local.get $1
  )
  (func $issues/1225/normal (result i32)
   global.get $issues/1225/x
@@ -940,8 +934,6 @@
    i32.const 1
    i32.add
    i32.store offset=4
-   local.get $1
-   call $~lib/rt/rtrace/onincrement
    local.get $1
    i32.load
    i32.const 1
@@ -1023,8 +1015,6 @@
   i32.and
   local.set $1
   local.get $0
-  call $~lib/rt/rtrace/ondecrement
-  local.get $0
   i32.load
   i32.const 1
   i32.and
@@ -1087,8 +1077,6 @@
    global.get $~lib/rt/tlsf/ROOT
    local.get $0
    call $~lib/rt/tlsf/insertBlock
-   local.get $0
-   call $~lib/rt/rtrace/onfree
   else
    local.get $1
    i32.const 0

@@ -5,17 +5,34 @@ A tiny utility that records allocations, retains, releases and frees performed b
 Instructions
 ------------
 
-Compile your module that uses the full or half runtime with `-use ASC_RTRACE=1` and include an instance of this module as the import named `rtrace`.
+Compile your module that uses the full or half runtime with `-use ASC_RTRACE=1 --explicitStart` and include an instance of this module as the import named `rtrace`.
 
 ```js
-var rtr = rtrace(e => {
-  // handle error
+var rtrace = new Rtrace({
+  onerror(err, info) {
+    // handle error
+  },
+  oninfo(msg, info) {
+    // print info, optional
+  },
+  getMemory() {
+    // obtain the module's memory,
+    // e.g. with --explicitStart:
+    return instance.exports.memory;
+  }
 });
 
-WebAssembly.instantiate(..., { rtrace: rtr, ... });
+var { module, instance } = await WebAssembly.instantiate(..., {
+  rtrace,
+  env: Object.assign({ //
+    ...                // only required when instrumenting memory
+  }, rtrace.env),      //
+  ...
+});
+instance.exports._start();
 ...
 
-if (rtr.active) {
+if (rtrace.active) {
   let leakCount = rtr.check();
   if (leakCount) {
     // handle error
