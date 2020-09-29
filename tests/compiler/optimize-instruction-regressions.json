@@ -1,7 +1,0 @@
-{
-  "asc_flags": [
-    "--runtime none",
-    "-O0",
-    "--runPasses optimize-instructions"
-  ]
-}
