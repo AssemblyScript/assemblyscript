@@ -2092,7 +2092,7 @@
         i32.and
         local.tee $1
         i32.const 65536
-        i32.lt_s
+        i32.lt_u
         if
          local.get $6
          local.get $5
@@ -2758,7 +2758,7 @@
          i32.and
          local.tee $3
          i32.const 65536
-         i32.lt_s
+         i32.lt_u
          if
           local.get $9
           local.get $10
