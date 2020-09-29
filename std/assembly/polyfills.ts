@@ -28,8 +28,8 @@ export function bswap<T extends number>(value: T): T {
     }
     if (sizeof<T>() == 4) {
       return <T>(
-        rotl<u32>(value & 0xFF00FF00, 8) |
-        rotr<u32>(value & 0x00FF00FF, 8)
+        rotl(<u32>value & 0xFF00FF00, 8) |
+        rotr(<u32>value & 0x00FF00FF, 8)
       );
     }
     if (sizeof<T>() == 8) {
