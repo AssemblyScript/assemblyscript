@@ -2895,7 +2895,7 @@
    i32.shr_u
    local.tee $0
    i32.const 1
-   i32.le_s
+   i32.le_u
    br_if $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
    local.get $2
    i32.load offset=4

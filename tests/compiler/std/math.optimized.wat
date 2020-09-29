@@ -3274,7 +3274,7 @@
   i64.const 9223372036854775807
   i64.and
   i64.const 52
-  i64.shr_s
+  i64.shr_u
   i64.const 1045
   i64.sub
   local.tee $2
@@ -3383,12 +3383,12 @@
   local.get $6
   i64.mul
   i64.add
-  local.get $1
-  i64.const 32
-  i64.shr_u
   local.get $2
   i64.const 32
   i64.shr_s
+  local.get $1
+  i64.const 32
+  i64.shr_u
   i64.mul
   local.tee $4
   local.get $9
@@ -3997,7 +3997,7 @@
    end
    local.get $2
    i32.const 23
-   i32.shr_s
+   i32.shr_u
    i32.const 152
    i32.sub
    local.tee $1
@@ -5578,7 +5578,7 @@
   local.set $9
   local.get $10
   i32.const 1533
-  i32.gt_s
+  i32.gt_u
   if (result f64)
    f64.const 5260135901548373507240989e186
    local.set $9
@@ -5592,7 +5592,7 @@
   else
    local.get $6
    i32.const 573
-   i32.lt_s
+   i32.lt_u
    if (result f64)
     f64.const 1.90109156629516e-211
     local.set $9
@@ -7188,7 +7188,7 @@
   i32.const 1
   local.get $9
   i32.const 2146435072
-  i32.gt_s
+  i32.gt_u
   i32.const 1
   local.get $18
   i32.const 0
@@ -7214,19 +7214,19 @@
   if (result i32)
    local.get $9
    i32.const 1128267776
-   i32.ge_s
+   i32.ge_u
    if (result i32)
     i32.const 2
    else
     local.get $9
     i32.const 1072693248
-    i32.ge_s
+    i32.ge_u
     if (result i32)
      i32.const 52
      i32.const 20
      local.get $9
      i32.const 20
-     i32.shr_s
+     i32.shr_u
      i32.const 1023
      i32.sub
      local.tee $11
@@ -7429,11 +7429,11 @@
   local.set $10
   local.get $9
   i32.const 1105199104
-  i32.gt_s
+  i32.gt_u
   if (result f64)
    local.get $9
    i32.const 1139802112
-   i32.gt_s
+   i32.gt_u
    if
     local.get $4
     i32.const 1072693247
@@ -7825,7 +7825,7 @@
      i32.const 2147483647
      i32.and
      i32.const 1083231232
-     i32.ge_s
+     i32.ge_u
      i32.const 0
      local.get $5
      local.get $12
@@ -7846,7 +7846,7 @@
     i32.and
     local.tee $11
     i32.const 20
-    i32.shr_s
+    i32.shr_u
     i32.const 1023
     i32.sub
     local.set $5
@@ -7869,7 +7869,7 @@
      i32.const 2147483647
      i32.and
      i32.const 20
-     i32.shr_s
+     i32.shr_u
      i32.const 1023
      i32.sub
      local.tee $5
@@ -9424,7 +9424,7 @@
    end
    local.get $2
    i32.const 23
-   i32.shr_s
+   i32.shr_u
    i32.const 152
    i32.sub
    local.tee $1
@@ -9806,7 +9806,7 @@
   i32.const 2147483647
   i32.and
   i32.const 1072010280
-  i32.ge_s
+  i32.ge_u
   local.tee $7
   if
    f64.const 0.7853981633974483
@@ -9992,7 +9992,7 @@
   i32.and
   local.tee $4
   i32.const 1072243195
-  i32.le_s
+  i32.le_u
   if
    local.get $4
    i32.const 1044381696
@@ -10276,7 +10276,7 @@
    end
    local.get $2
    i32.const 23
-   i32.shr_s
+   i32.shr_u
    i32.const 152
    i32.sub
    local.tee $1
