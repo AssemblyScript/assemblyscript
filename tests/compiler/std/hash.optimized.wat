@@ -21,7 +21,7 @@
    i32.sub
    i32.load offset=12
    i32.const 1
-   i32.shr_s
+   i32.shr_u
    i32.const 1
    i32.shl
    local.set $3

@@ -94,7 +94,7 @@
    i32.const -65536
    i32.and
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    local.tee $3
    local.get $5
    local.get $3
@@ -312,7 +312,7 @@
   i32.const 2
   i32.const 1073741808
   local.get $1
-  i32.shr_s
+  i32.shr_u
   i32.gt_u
   if
    i32.const 1040
@@ -350,7 +350,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   i32.ge_u
   if
    i32.const 1152
@@ -374,7 +374,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   i32.ge_u
   if
    i32.const 1152
@@ -463,7 +463,7 @@
   local.get $3
   local.get $11
   i64.extend_i32_s
-  i64.shr_s
+  i64.shr_u
   i32.wrap_i64
   local.tee $2
   call $~lib/util/number/decimalCount32
@@ -710,7 +710,7 @@
    i64.mul
    local.tee $3
    local.get $13
-   i64.shr_s
+   i64.shr_u
    local.tee $1
    local.get $6
    i64.extend_i32_s
@@ -1366,7 +1366,7 @@
   f64.ne
   i32.add
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.add
   local.tee $4
@@ -1394,12 +1394,12 @@
   local.set $2
   local.get $6
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   local.tee $6
   global.get $~lib/util/number/_frc_plus
   local.tee $5
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   local.tee $7
   i64.mul
   local.get $2
@@ -1412,11 +1412,11 @@
   local.tee $5
   i64.mul
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.tee $7
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.get $5
   local.get $6
@@ -1428,7 +1428,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   i64.const 1
   i64.sub
@@ -1449,7 +1449,7 @@
   i64.shl
   local.tee $3
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   local.tee $7
   i64.mul
   local.get $2
@@ -1462,11 +1462,11 @@
   local.tee $3
   i64.mul
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.tee $7
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.get $3
   local.get $6
@@ -1478,7 +1478,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   global.get $~lib/util/number/_exp_pow
   local.tee $4
@@ -1499,7 +1499,7 @@
   global.get $~lib/util/number/_frc_minus
   local.tee $3
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   local.tee $5
   i64.mul
   local.get $2
@@ -1512,11 +1512,11 @@
   local.tee $2
   i64.mul
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.tee $3
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.get $2
   local.get $6
@@ -1528,7 +1528,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   i64.const 1
   i64.add
@@ -1548,7 +1548,7 @@
   i32.sub
   i32.load offset=12
   i32.const 1
-  i32.shr_s
+  i32.shr_u
  )
  (func $~lib/string/String#substring (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

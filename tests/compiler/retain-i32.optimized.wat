@@ -1,7 +1,5 @@
 (module
  (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1024) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s")
  (export "memory" (memory $0))
@@ -23,10 +21,10 @@
    end
   end
   i32.const 0
-  i32.const 1040
-  i32.const 78
-  i32.const 1
-  call $~lib/builtins/abort
-  unreachable
+  i32.load8_s
+  drop
+  i32.const 0
+  i32.load8_s
+  drop
  )
 )

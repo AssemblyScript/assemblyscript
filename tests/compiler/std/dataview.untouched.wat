@@ -115,7 +115,7 @@
    local.set $4
    local.get $3
    i32.const 4
-   i32.shr_s
+   i32.shr_u
    local.set $5
   else
    i32.const 31
@@ -127,7 +127,7 @@
    local.get $4
    i32.const 4
    i32.sub
-   i32.shr_s
+   i32.shr_u
    i32.const 1
    i32.const 4
    i32.shl
@@ -501,7 +501,7 @@
    local.set $9
    local.get $8
    i32.const 4
-   i32.shr_s
+   i32.shr_u
    local.set $10
   else
    i32.const 31
@@ -513,7 +513,7 @@
    local.get $9
    i32.const 4
    i32.sub
-   i32.shr_s
+   i32.shr_u
    i32.const 1
    i32.const 4
    i32.shl
@@ -826,7 +826,7 @@
    i32.xor
    i32.and
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    local.set $3
    local.get $3
    local.get $2
@@ -990,7 +990,7 @@
    local.set $2
    local.get $1
    i32.const 4
-   i32.shr_s
+   i32.shr_u
    local.set $3
   else
    local.get $1
@@ -1020,7 +1020,7 @@
    local.get $2
    i32.const 4
    i32.sub
-   i32.shr_s
+   i32.shr_u
    i32.const 1
    i32.const 4
    i32.shl
@@ -1210,7 +1210,7 @@
   i32.xor
   i32.and
   i32.const 16
-  i32.shr_s
+  i32.shr_u
   local.set $4
   local.get $2
   local.tee $3
@@ -1784,7 +1784,7 @@
   local.get $1
   i32.const 1073741808
   local.get $2
-  i32.shr_s
+  i32.shr_u
   i32.gt_u
   if
    i32.const 32
@@ -1982,7 +1982,7 @@
  (func $~lib/dataview/DataView#getFloat32 (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -2035,7 +2035,7 @@
   drop
   local.get $0
   i64.const 8
-  i64.shr_s
+  i64.shr_u
   i64.const 71777214294589695
   i64.and
   local.set $1
@@ -2051,7 +2051,7 @@
   local.set $3
   local.get $3
   i64.const 16
-  i64.shr_s
+  i64.shr_u
   i64.const 281470681808895
   i64.and
   local.set $1
@@ -2071,7 +2071,7 @@
  (func $~lib/dataview/DataView#getFloat64 (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -2137,9 +2137,9 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.or
@@ -2149,7 +2149,7 @@
   (local $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 2
   i32.add
@@ -2207,7 +2207,7 @@
   (local $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -2257,7 +2257,7 @@
   drop
   local.get $0
   i64.const 8
-  i64.shr_s
+  i64.shr_u
   i64.const 71777214294589695
   i64.and
   local.set $1
@@ -2273,7 +2273,7 @@
   local.set $3
   local.get $3
   i64.const 16
-  i64.shr_s
+  i64.shr_u
   i64.const 281470681808895
   i64.and
   local.set $1
@@ -2294,7 +2294,7 @@
   (local $3 i64)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -2357,7 +2357,7 @@
   i32.const 65535
   i32.and
   i32.const 8
-  i32.shr_s
+  i32.shr_u
   i32.const 255
   i32.and
   i32.or
@@ -2367,7 +2367,7 @@
   (local $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 2
   i32.add
@@ -2401,7 +2401,7 @@
   (local $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -2435,7 +2435,7 @@
   (local $3 i64)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -2468,7 +2468,7 @@
  (func $~lib/dataview/DataView#setFloat32 (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -2506,7 +2506,7 @@
  (func $~lib/dataview/DataView#setFloat64 (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -2564,7 +2564,7 @@
  (func $~lib/dataview/DataView#setInt16 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 2
   i32.add
@@ -2596,7 +2596,7 @@
  (func $~lib/dataview/DataView#setInt32 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -2628,7 +2628,7 @@
  (func $~lib/dataview/DataView#setInt64 (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -2680,7 +2680,7 @@
  (func $~lib/dataview/DataView#setUint16 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 2
   i32.add
@@ -2712,7 +2712,7 @@
  (func $~lib/dataview/DataView#setUint32 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -2744,7 +2744,7 @@
  (func $~lib/dataview/DataView#setUint64 (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   local.get $1
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -3153,7 +3153,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -7946
   i32.eq
   i32.eqz
@@ -3172,7 +3172,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 22752
   i32.eq
   i32.eqz
@@ -3191,7 +3191,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -24744
   i32.eq
   i32.eqz
@@ -3210,7 +3210,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -32097
   i32.eq
   i32.eqz
@@ -3229,7 +3229,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 25986
   i32.eq
   i32.eqz
@@ -3248,7 +3248,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 17253
   i32.eq
   i32.eqz
@@ -3267,7 +3267,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 24387
   i32.eq
   i32.eqz
@@ -3286,7 +3286,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -2336
   i32.eq
   i32.eqz
@@ -3305,7 +3305,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -8104
   i32.eq
   i32.eqz
@@ -3324,7 +3324,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 22687
   i32.eq
   i32.eqz
@@ -3343,7 +3343,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -24702
   i32.eq
   i32.eqz
@@ -3362,7 +3362,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -32155
   i32.eq
   i32.eqz
@@ -3381,7 +3381,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 25923
   i32.eq
   i32.eqz
@@ -3400,7 +3400,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 17247
   i32.eq
   i32.eqz
@@ -4232,7 +4232,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -13360
   i32.eq
   i32.eqz
@@ -4256,7 +4256,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 14689
   i32.eq
   i32.eqz

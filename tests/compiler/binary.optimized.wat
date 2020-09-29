@@ -31,7 +31,7 @@
     local.set $2
     local.get $1
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.set $1
     local.get $0
     local.get $0
@@ -81,11 +81,11 @@
   global.set $binary/i
   global.get $binary/i
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   global.set $binary/i
   global.get $binary/i
   i32.const 1
-  i32.shr_s
+  i32.shr_u
   global.set $binary/i
   global.get $binary/i
   i32.const 1

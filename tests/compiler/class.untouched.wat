@@ -154,7 +154,7 @@
    i32.xor
    i32.and
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    local.set $3
    local.get $1
    local.tee $4
@@ -480,7 +480,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   i32.gt_u
   if
    i32.const 32

@@ -7,6 +7,6 @@
  (export "exportedExported" (func $abi/exported))
  (export "exportedInternal" (func $abi/exported))
  (func $abi/exported (result i32)
-  i32.const 128
+  i32.const -128
  )
 )

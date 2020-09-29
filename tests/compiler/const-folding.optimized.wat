@@ -9,7 +9,7 @@
   i64.shl
   local.get $0
   i64.const 63
-  i64.shr_s
+  i64.shr_u
   i64.add
  )
 )

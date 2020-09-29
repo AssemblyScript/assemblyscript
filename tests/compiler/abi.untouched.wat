@@ -30,7 +30,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.eqz
   i32.eqz
   if
@@ -49,7 +49,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_u
+   i32.shr_s
    i32.const 2
    i32.div_s
    local.set $0
@@ -58,7 +58,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_u
+   i32.shr_s
    i32.const 2
    i32.div_s
    local.set $0
@@ -67,7 +67,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.eqz
   i32.eqz
   if
@@ -86,9 +86,9 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_u
+   i32.shr_s
    i32.const 24
-   i32.shr_u
+   i32.shr_s
    local.set $0
   else
    local.get $0
@@ -111,7 +111,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   global.set $abi/y
   global.get $abi/y
   i32.eqz
@@ -186,7 +186,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
  )
  (func $abi/exportedExported (result i32)
   call $abi/exported
@@ -196,7 +196,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
  )
  (func $~start
   call $start:abi

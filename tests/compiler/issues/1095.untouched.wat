@@ -91,7 +91,7 @@
    local.set $4
    local.get $3
    i32.const 4
-   i32.shr_s
+   i32.shr_u
    local.set $5
   else
    i32.const 31
@@ -103,7 +103,7 @@
    local.get $4
    i32.const 4
    i32.sub
-   i32.shr_s
+   i32.shr_u
    i32.const 1
    i32.const 4
    i32.shl
@@ -477,7 +477,7 @@
    local.set $9
    local.get $8
    i32.const 4
-   i32.shr_s
+   i32.shr_u
    local.set $10
   else
    i32.const 31
@@ -489,7 +489,7 @@
    local.get $9
    i32.const 4
    i32.sub
-   i32.shr_s
+   i32.shr_u
    i32.const 1
    i32.const 4
    i32.shl
@@ -802,7 +802,7 @@
    i32.xor
    i32.and
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    local.set $3
    local.get $3
    local.get $2
@@ -966,7 +966,7 @@
    local.set $2
    local.get $1
    i32.const 4
-   i32.shr_s
+   i32.shr_u
    local.set $3
   else
    local.get $1
@@ -996,7 +996,7 @@
    local.get $2
    i32.const 4
    i32.sub
-   i32.shr_s
+   i32.shr_u
    i32.const 1
    i32.const 4
    i32.shl
@@ -1186,7 +1186,7 @@
   i32.xor
   i32.and
   i32.const 16
-  i32.shr_s
+  i32.shr_u
   local.set $4
   local.get $2
   local.tee $3

@@ -107,7 +107,7 @@
   i32.sub
   i32.load offset=12
   i32.const 1
-  i32.shr_s
+  i32.shr_u
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
@@ -463,7 +463,7 @@
   i32.const -42
   local.tee $0
   i32.const 31
-  i32.shr_u
+  i32.shr_s
   local.tee $1
   local.get $0
   i32.add
@@ -508,7 +508,7 @@
   i32.const -42
   local.tee $0
   i32.const 31
-  i32.shr_u
+  i32.shr_s
   local.tee $1
   local.get $0
   i32.add
@@ -589,7 +589,7 @@
   i64.const -42
   local.tee $2
   i64.const 63
-  i64.shr_u
+  i64.shr_s
   local.tee $3
   local.get $2
   i64.add
@@ -616,7 +616,7 @@
   i64.const -42
   local.tee $2
   i64.const 63
-  i64.shr_u
+  i64.shr_s
   local.tee $3
   local.get $2
   i64.add
@@ -1440,17 +1440,9 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 80
-   i32.const 324
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   global.get $~lib/builtins/i8.MAX_VALUE
   i32.const 127
   i32.eq
@@ -1460,17 +1452,9 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 80
-   i32.const 326
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   global.get $~lib/builtins/i16.MAX_VALUE
   i32.const 32767
   i32.eq

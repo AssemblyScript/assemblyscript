@@ -48,19 +48,19 @@
   local.set $3
   local.get $2
   i64.const 52
-  i64.shr_s
+  i64.shr_u
   i64.const 2047
   i64.and
   local.set $4
   local.get $3
   i64.const 52
-  i64.shr_s
+  i64.shr_u
   i64.const 2047
   i64.and
   local.set $5
   local.get $2
   i64.const 63
-  i64.shr_s
+  i64.shr_u
   local.set $6
   local.get $3
   i64.const 1
@@ -137,7 +137,7 @@
    local.get $2
    i64.const -1
    i64.const 12
-   i64.shr_s
+   i64.shr_u
    i64.and
    local.set $2
    local.get $2
@@ -171,7 +171,7 @@
    local.get $3
    i64.const -1
    i64.const 12
-   i64.shr_s
+   i64.shr_u
    i64.and
    local.set $3
    local.get $3
@@ -271,7 +271,7 @@
    i64.sub
    i64.const 1
    i64.add
-   i64.shr_s
+   i64.shr_u
    local.set $2
   end
   local.get $2
@@ -365,13 +365,13 @@
   local.set $3
   local.get $2
   i32.const 23
-  i32.shr_s
+  i32.shr_u
   i32.const 255
   i32.and
   local.set $4
   local.get $3
   i32.const 23
-  i32.shr_s
+  i32.shr_u
   i32.const 255
   i32.and
   local.set $5
@@ -452,7 +452,7 @@
    local.get $2
    i32.const -1
    i32.const 9
-   i32.shr_s
+   i32.shr_u
    i32.and
    local.set $2
    local.get $2
@@ -484,7 +484,7 @@
    local.get $3
    i32.const -1
    i32.const 9
-   i32.shr_s
+   i32.shr_u
    i32.and
    local.set $3
    local.get $3
@@ -584,7 +584,7 @@
    i32.sub
    i32.const 1
    i32.add
-   i32.shr_s
+   i32.shr_u
    local.set $2
   end
   local.get $2

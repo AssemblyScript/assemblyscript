@@ -119,7 +119,7 @@
            end
            local.get $1
            i32.const 1
-           i32.shr_s
+           i32.shr_u
            local.set $1
            local.get $0
            local.get $0
@@ -137,7 +137,7 @@
           end
           local.get $1
           i32.const 1
-          i32.shr_s
+          i32.shr_u
           local.set $1
           local.get $0
           local.get $0
@@ -155,7 +155,7 @@
          end
          local.get $1
          i32.const 1
-         i32.shr_s
+         i32.shr_u
          local.set $1
          local.get $0
          local.get $0
@@ -173,7 +173,7 @@
         end
         local.get $1
         i32.const 1
-        i32.shr_s
+        i32.shr_u
         local.set $1
         local.get $0
         local.get $0
@@ -212,7 +212,7 @@
     end
     local.get $1
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.set $1
     local.get $0
     local.get $0
@@ -339,11 +339,11 @@
    local.set $6
    local.get $5
    i64.const 52
-   i64.shr_s
+   i64.shr_u
    local.set $7
    local.get $6
    i64.const 52
-   i64.shr_s
+   i64.shr_u
    local.set $8
    local.get $7
    i64.const 1
@@ -430,7 +430,7 @@
      i64.lt_u
      local.get $6
      i64.const 63
-     i64.shr_s
+     i64.shr_u
      i64.const 0
      i64.ne
      i32.eqz
@@ -462,7 +462,7 @@
      local.set $10
      local.get $5
      i64.const 63
-     i64.shr_s
+     i64.shr_u
      i32.wrap_i64
      if (result i32)
       block $~lib/util/math/checkint|inlined.0 (result i32)
@@ -470,7 +470,7 @@
        local.set $9
        local.get $9
        i64.const 52
-       i64.shr_s
+       i64.shr_u
        i64.const 2047
        i64.and
        local.set $11
@@ -532,7 +532,7 @@
      end
      local.get $6
      i64.const 63
-     i64.shr_s
+     i64.shr_u
      i64.const 0
      i64.ne
      if (result f64)
@@ -546,7 +546,7 @@
     end
     local.get $5
     i64.const 63
-    i64.shr_s
+    i64.shr_u
     i64.const 0
     i64.ne
     if
@@ -555,7 +555,7 @@
       local.set $9
       local.get $9
       i64.const 52
-      i64.shr_s
+      i64.shr_u
       i64.const 2047
       i64.and
       local.set $11
@@ -706,14 +706,14 @@
    i64.const 52
    i64.const 7
    i64.sub
-   i64.shr_s
+   i64.shr_u
    i64.const 127
    i64.and
    i32.wrap_i64
    local.set $12
    local.get $11
    i64.const 52
-   i64.shr_u
+   i64.shr_s
    local.set $13
    local.get $9
    local.get $11
@@ -932,7 +932,7 @@
     local.set $9
     local.get $9
     i64.const 52
-    i64.shr_s
+    i64.shr_u
     i32.wrap_i64
     i32.const 2047
     i32.and
@@ -961,7 +961,7 @@
      if
       local.get $9
       i64.const 63
-      i64.shr_s
+      i64.shr_u
       i64.const 0
       i64.ne
       if (result f64)
@@ -1235,13 +1235,13 @@
   local.set $3
   local.get $2
   i32.const 23
-  i32.shr_s
+  i32.shr_u
   i32.const 255
   i32.and
   local.set $4
   local.get $3
   i32.const 23
-  i32.shr_s
+  i32.shr_u
   i32.const 255
   i32.and
   local.set $5
@@ -1322,7 +1322,7 @@
    local.get $2
    i32.const -1
    i32.const 9
-   i32.shr_s
+   i32.shr_u
    i32.and
    local.set $2
    local.get $2
@@ -1354,7 +1354,7 @@
    local.get $3
    i32.const -1
    i32.const 9
-   i32.shr_s
+   i32.shr_u
    i32.and
    local.set $3
    local.get $3
@@ -1454,7 +1454,7 @@
    i32.sub
    i32.const 1
    i32.add
-   i32.shr_s
+   i32.shr_u
    local.set $2
   end
   local.get $2
@@ -1647,7 +1647,7 @@
      i32.lt_u
      local.get $6
      i32.const 31
-     i32.shr_s
+     i32.shr_u
      i32.eqz
      i32.eq
      if
@@ -1679,14 +1679,14 @@
      local.set $9
      local.get $5
      i32.const 31
-     i32.shr_s
+     i32.shr_u
      if (result i32)
       block $~lib/util/math/checkintf|inlined.0 (result i32)
        local.get $6
        local.set $8
        local.get $8
        i32.const 23
-       i32.shr_s
+       i32.shr_u
        i32.const 255
        i32.and
        local.set $10
@@ -1744,7 +1744,7 @@
      end
      local.get $6
      i32.const 31
-     i32.shr_s
+     i32.shr_u
      if (result f32)
       f32.const 1
       local.get $9
@@ -1756,14 +1756,14 @@
     end
     local.get $5
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     if
      block $~lib/util/math/checkintf|inlined.1 (result i32)
       local.get $6
       local.set $8
       local.get $8
       i32.const 23
-      i32.shr_s
+      i32.shr_u
       i32.const 255
       i32.and
       local.set $10
@@ -1866,7 +1866,7 @@
    i32.const 23
    i32.const 4
    i32.sub
-   i32.shr_s
+   i32.shr_u
    i32.const 15
    i32.and
    local.set $11
@@ -1880,7 +1880,7 @@
    local.set $13
    local.get $12
    i32.const 23
-   i32.shr_u
+   i32.shr_s
    local.set $14
    i32.const 6152
    local.get $11
@@ -1961,7 +1961,7 @@
    local.get $21
    i64.reinterpret_f64
    i64.const 47
-   i64.shr_s
+   i64.shr_u
    i64.const 65535
    i64.and
    i64.const 32959
@@ -2110,19 +2110,19 @@
   local.set $3
   local.get $2
   i64.const 52
-  i64.shr_s
+  i64.shr_u
   i64.const 2047
   i64.and
   local.set $4
   local.get $3
   i64.const 52
-  i64.shr_s
+  i64.shr_u
   i64.const 2047
   i64.and
   local.set $5
   local.get $2
   i64.const 63
-  i64.shr_s
+  i64.shr_u
   local.set $6
   local.get $3
   i64.const 1
@@ -2199,7 +2199,7 @@
    local.get $2
    i64.const -1
    i64.const 12
-   i64.shr_s
+   i64.shr_u
    i64.and
    local.set $2
    local.get $2
@@ -2233,7 +2233,7 @@
    local.get $3
    i64.const -1
    i64.const 12
-   i64.shr_s
+   i64.shr_u
    i64.and
    local.set $3
    local.get $3
@@ -2333,7 +2333,7 @@
    i64.sub
    i64.const 1
    i64.add
-   i64.shr_s
+   i64.shr_u
    local.set $2
   end
   local.get $2
@@ -2400,11 +2400,11 @@
   drop
   global.get $binary/i
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   drop
   global.get $binary/i
   i32.const 1
-  i32.shr_s
+  i32.shr_u
   drop
   global.get $binary/i
   i32.const 1
@@ -2472,11 +2472,11 @@
   global.set $binary/i
   global.get $binary/i
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   global.set $binary/i
   global.get $binary/i
   i32.const 1
-  i32.shr_s
+  i32.shr_u
   global.set $binary/i
   global.get $binary/i
   i32.const 1
@@ -2512,11 +2512,11 @@
   global.set $binary/i
   global.get $binary/i
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   global.set $binary/i
   global.get $binary/i
   i32.const 1
-  i32.shr_s
+  i32.shr_u
   global.set $binary/i
   global.get $binary/i
   i32.const 1
@@ -2585,11 +2585,11 @@
   drop
   global.get $binary/I
   i64.const 1
-  i64.shr_u
+  i64.shr_s
   drop
   global.get $binary/I
   i64.const 1
-  i64.shr_s
+  i64.shr_u
   drop
   global.get $binary/I
   i64.const 1
@@ -2659,11 +2659,11 @@
   global.set $binary/I
   global.get $binary/I
   i64.const 1
-  i64.shr_u
+  i64.shr_s
   global.set $binary/I
   global.get $binary/I
   i64.const 1
-  i64.shr_s
+  i64.shr_u
   global.set $binary/I
   global.get $binary/I
   i64.const 1
@@ -2699,11 +2699,11 @@
   global.set $binary/I
   global.get $binary/I
   i64.const 1
-  i64.shr_u
+  i64.shr_s
   global.set $binary/I
   global.get $binary/I
   i64.const 1
-  i64.shr_s
+  i64.shr_u
   global.set $binary/I
   global.get $binary/I
   i64.const 1

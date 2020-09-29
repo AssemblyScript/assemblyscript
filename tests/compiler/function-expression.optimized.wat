@@ -244,7 +244,7 @@
    i32.const -65536
    i32.and
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    local.tee $0
    local.get $1
    local.get $0

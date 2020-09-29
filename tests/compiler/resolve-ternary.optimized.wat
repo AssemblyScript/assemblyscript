@@ -94,7 +94,7 @@
   if
    local.get $2
    i32.const 4
-   i32.shr_s
+   i32.shr_u
    local.set $2
   else
    local.get $2
@@ -105,7 +105,7 @@
    local.tee $3
    i32.const 4
    i32.sub
-   i32.shr_s
+   i32.shr_u
    i32.const 16
    i32.xor
    local.set $2
@@ -395,7 +395,7 @@
   if
    local.get $3
    i32.const 4
-   i32.shr_s
+   i32.shr_u
    local.set $3
   else
    local.get $3
@@ -406,7 +406,7 @@
    local.tee $4
    i32.const 4
    i32.sub
-   i32.shr_s
+   i32.shr_u
    i32.const 16
    i32.xor
    local.set $3
@@ -698,7 +698,7 @@
   if
    local.get $1
    i32.const 4
-   i32.shr_s
+   i32.shr_u
    local.set $1
   else
    i32.const 31
@@ -725,7 +725,7 @@
    local.get $2
    i32.const 4
    i32.sub
-   i32.shr_s
+   i32.shr_u
    i32.const 16
    i32.xor
    local.set $1
@@ -977,7 +977,7 @@
     i32.const -65536
     i32.and
     i32.const 16
-    i32.shr_s
+    i32.shr_u
     local.set $5
     local.get $3
     local.get $5
@@ -1195,7 +1195,7 @@
   i32.sub
   i32.load offset=12
   i32.const 1
-  i32.shr_s
+  i32.shr_u
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -1366,7 +1366,7 @@
   local.get $3
   local.get $10
   i64.extend_i32_s
-  i64.shr_s
+  i64.shr_u
   i32.wrap_i64
   local.tee $2
   call $~lib/util/number/decimalCount32
@@ -1613,7 +1613,7 @@
    i64.mul
    local.tee $3
    local.get $1
-   i64.shr_s
+   i64.shr_u
    local.tee $7
    local.get $6
    i64.extend_i32_s
@@ -2155,34 +2155,34 @@
   global.get $~lib/util/number/_frc_pow
   local.tee $2
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   local.set $3
   local.get $2
   i64.const 4294967295
   i64.and
   local.tee $2
-  i64.const -2147483648
-  i64.mul
+  i64.const 31
+  i64.shl
   local.get $2
   i64.const 10
   i64.shl
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.set $1
   local.get $0
   local.get $0
   local.get $3
-  i64.const -2147483648
-  i64.mul
+  i64.const 31
+  i64.shl
   local.get $2
-  i64.const -2147483648
-  i64.mul
+  i64.const 31
+  i64.shl
   i64.const 0
   i64.add
   local.tee $5
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.get $5
   i64.const 4294967295
@@ -2199,11 +2199,11 @@
   i32.const 1
   i32.add
   local.get $3
-  i64.const -2147483648
-  i64.mul
+  i64.const 31
+  i64.shl
   local.get $1
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.get $1
   i64.const 4294967295
@@ -2215,7 +2215,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   i64.const 1
   i64.sub
@@ -2234,11 +2234,11 @@
   i64.const 4294966784
   i64.mul
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.tee $1
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   local.get $3
   i64.const 4294966784
@@ -2250,7 +2250,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_s
+  i64.shr_u
   i64.add
   i64.const 1
   i64.add

@@ -59,7 +59,7 @@
   i32.const 65535
   i32.and
   i32.const 8
-  i32.shr_s
+  i32.shr_u
   i32.const 255
   i32.and
   i32.or
@@ -79,9 +79,9 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.or
@@ -155,7 +155,7 @@
   drop
   local.get $0
   i64.const 8
-  i64.shr_s
+  i64.shr_u
   i64.const 71777214294589695
   i64.and
   local.set $1
@@ -171,7 +171,7 @@
   local.set $3
   local.get $3
   i64.const 16
-  i64.shr_s
+  i64.shr_u
   i64.const 281470681808895
   i64.and
   local.set $1
@@ -208,7 +208,7 @@
   drop
   local.get $0
   i64.const 8
-  i64.shr_s
+  i64.shr_u
   i64.const 71777214294589695
   i64.and
   local.set $1
@@ -224,7 +224,7 @@
   local.set $3
   local.get $3
   i64.const 16
-  i64.shr_s
+  i64.shr_u
   i64.const 281470681808895
   i64.and
   local.set $1
@@ -352,7 +352,7 @@
   i32.const 65535
   i32.and
   i32.const 8
-  i32.shr_s
+  i32.shr_u
   i32.const 255
   i32.and
   i32.or
@@ -379,9 +379,9 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.or
@@ -412,7 +412,7 @@
   i32.and
   local.get $0
   i32.const 8
-  i32.shr_s
+  i32.shr_u
   i32.const 255
   i32.and
   i32.or
@@ -447,7 +447,7 @@
   i32.and
   local.get $0
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.or
@@ -478,12 +478,12 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const 170
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.eq
   i32.eqz
   if
@@ -514,12 +514,12 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 48042
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.eq
   i32.eqz
   if
@@ -628,12 +628,12 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const 170
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.eq
   i32.eqz
   if
@@ -664,12 +664,12 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 48042
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.eq
   i32.eqz
   if

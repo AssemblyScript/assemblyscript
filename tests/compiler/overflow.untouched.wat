@@ -21,7 +21,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const -128
   i32.eq
   i32.eqz
@@ -41,7 +41,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const 127
   i32.eq
   i32.eqz
@@ -64,7 +64,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const -128
   i32.eq
   i32.eqz
@@ -87,7 +87,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const 127
   i32.eq
   i32.eqz
@@ -107,7 +107,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const -128
   i32.eq
   i32.eqz
@@ -127,7 +127,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const 127
   i32.eq
   i32.eqz
@@ -148,7 +148,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const -128
   i32.eq
   i32.eqz
@@ -169,7 +169,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const 127
   i32.eq
   i32.eqz
@@ -187,7 +187,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.const -128
   i32.eq
   i32.eqz
@@ -209,7 +209,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -32768
   i32.eq
   i32.eqz
@@ -229,7 +229,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 32767
   i32.eq
   i32.eqz
@@ -252,7 +252,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -32768
   i32.eq
   i32.eqz
@@ -275,7 +275,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 32767
   i32.eq
   i32.eqz
@@ -295,7 +295,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -32768
   i32.eq
   i32.eqz
@@ -315,7 +315,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 32767
   i32.eq
   i32.eqz
@@ -336,7 +336,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -32768
   i32.eq
   i32.eqz
@@ -357,7 +357,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 32767
   i32.eq
   i32.eqz
@@ -375,7 +375,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const -32768
   i32.eq
   i32.eqz

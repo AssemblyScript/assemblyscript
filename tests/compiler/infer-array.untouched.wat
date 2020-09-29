@@ -61,7 +61,7 @@
    i32.xor
    i32.and
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    local.set $3
    local.get $1
    local.tee $4
@@ -408,7 +408,7 @@
         local.get $0
         local.get $3
         i32.const 24
-        i32.shr_s
+        i32.shr_u
         local.get $4
         i32.const 8
         i32.shl
@@ -424,7 +424,7 @@
         i32.add
         local.get $4
         i32.const 24
-        i32.shr_s
+        i32.shr_u
         local.get $3
         i32.const 8
         i32.shl
@@ -440,7 +440,7 @@
         i32.add
         local.get $3
         i32.const 24
-        i32.shr_s
+        i32.shr_u
         local.get $4
         i32.const 8
         i32.shl
@@ -456,7 +456,7 @@
         i32.add
         local.get $4
         i32.const 24
-        i32.shr_s
+        i32.shr_u
         local.get $3
         i32.const 8
         i32.shl
@@ -529,7 +529,7 @@
        local.get $0
        local.get $3
        i32.const 16
-       i32.shr_s
+       i32.shr_u
        local.get $4
        i32.const 16
        i32.shl
@@ -545,7 +545,7 @@
        i32.add
        local.get $4
        i32.const 16
-       i32.shr_s
+       i32.shr_u
        local.get $3
        i32.const 16
        i32.shl
@@ -561,7 +561,7 @@
        i32.add
        local.get $3
        i32.const 16
-       i32.shr_s
+       i32.shr_u
        local.get $4
        i32.const 16
        i32.shl
@@ -577,7 +577,7 @@
        i32.add
        local.get $4
        i32.const 16
-       i32.shr_s
+       i32.shr_u
        local.get $3
        i32.const 16
        i32.shl
@@ -636,7 +636,7 @@
       local.get $0
       local.get $3
       i32.const 8
-      i32.shr_s
+      i32.shr_u
       local.get $4
       i32.const 24
       i32.shl
@@ -652,7 +652,7 @@
       i32.add
       local.get $4
       i32.const 8
-      i32.shr_s
+      i32.shr_u
       local.get $3
       i32.const 24
       i32.shl
@@ -668,7 +668,7 @@
       i32.add
       local.get $3
       i32.const 8
-      i32.shr_s
+      i32.shr_u
       local.get $4
       i32.const 24
       i32.shl
@@ -684,7 +684,7 @@
       i32.add
       local.get $4
       i32.const 8
-      i32.shr_s
+      i32.shr_u
       local.get $3
       i32.const 24
       i32.shl

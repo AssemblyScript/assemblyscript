@@ -172,7 +172,7 @@
   i32.sub
   i32.load offset=12
   i32.const 1
-  i32.shr_s
+  i32.shr_u
  )
  (func $std/array-access/stringArrayPropertyAccess (param $0 i32) (result i32)
   (local $1 i32)

@@ -32,7 +32,7 @@
   local.get $4
   local.get $0
   i64.const 63
-  i64.shr_s
+  i64.shr_u
   local.get $1
   i64.and
   i64.or

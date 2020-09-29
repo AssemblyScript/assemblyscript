@@ -103,7 +103,7 @@
    i32.const -65536
    i32.and
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    local.tee $2
    local.get $4
    local.get $2
@@ -171,7 +171,7 @@
     local.set $2
     local.get $1
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.set $1
     local.get $0
     local.get $0
@@ -851,11 +851,11 @@
   local.tee $0
   i32.load
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.get $0
   i32.load offset=4
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   call $std/operator-overloading/Tester#constructor
   global.set $std/operator-overloading/sres
   global.get $std/operator-overloading/sres
@@ -887,11 +887,11 @@
   local.tee $0
   i32.load
   i32.const 3
-  i32.shr_s
+  i32.shr_u
   local.get $0
   i32.load offset=4
   i32.const 3
-  i32.shr_s
+  i32.shr_u
   call $std/operator-overloading/Tester#constructor
   global.set $std/operator-overloading/ures
   global.get $std/operator-overloading/ures
