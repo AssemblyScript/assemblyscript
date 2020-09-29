@@ -32,7 +32,7 @@
    i32.const -65536
    i32.and
    i32.const 16
-   i32.shr_u
+   i32.shr_s
    local.tee $1
    local.get $2
    local.get $1

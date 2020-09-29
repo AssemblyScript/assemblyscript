@@ -108,7 +108,7 @@
    i32.xor
    i32.and
    i32.const 16
-   i32.shr_u
+   i32.shr_s
    local.set $3
    local.get $1
    local.tee $4
@@ -451,7 +451,7 @@
            end
            local.get $1
            i32.const 1
-           i32.shr_u
+           i32.shr_s
            local.set $1
            local.get $0
            local.get $0
@@ -469,7 +469,7 @@
           end
           local.get $1
           i32.const 1
-          i32.shr_u
+          i32.shr_s
           local.set $1
           local.get $0
           local.get $0
@@ -487,7 +487,7 @@
          end
          local.get $1
          i32.const 1
-         i32.shr_u
+         i32.shr_s
          local.set $1
          local.get $0
          local.get $0
@@ -505,7 +505,7 @@
         end
         local.get $1
         i32.const 1
-        i32.shr_u
+        i32.shr_s
         local.set $1
         local.get $0
         local.get $0
@@ -544,7 +544,7 @@
     end
     local.get $1
     i32.const 1
-    i32.shr_u
+    i32.shr_s
     local.set $1
     local.get $0
     local.get $0
@@ -846,11 +846,11 @@
   local.get $0
   i32.load
   local.get $1
-  i32.shr_s
+  i32.shr_u
   local.get $0
   i32.load offset=4
   local.get $1
-  i32.shr_s
+  i32.shr_u
   call $std/operator-overloading/Tester#constructor
   local.set $2
   local.get $0
@@ -866,11 +866,11 @@
   local.get $0
   i32.load
   local.get $1
-  i32.shr_u
+  i32.shr_s
   local.get $0
   i32.load offset=4
   local.get $1
-  i32.shr_u
+  i32.shr_s
   call $std/operator-overloading/Tester#constructor
   local.set $2
   local.get $0

@@ -451,7 +451,7 @@
   if
    local.get $2
    i32.const 4
-   i32.shr_u
+   i32.shr_s
    local.set $2
   else
    local.get $2
@@ -462,7 +462,7 @@
    local.tee $3
    i32.const 4
    i32.sub
-   i32.shr_u
+   i32.shr_s
    i32.const 16
    i32.xor
    local.set $2
@@ -752,7 +752,7 @@
   if
    local.get $3
    i32.const 4
-   i32.shr_u
+   i32.shr_s
    local.set $3
   else
    local.get $3
@@ -763,7 +763,7 @@
    local.tee $4
    i32.const 4
    i32.sub
-   i32.shr_u
+   i32.shr_s
    i32.const 16
    i32.xor
    local.set $3
@@ -1079,7 +1079,7 @@
   if
    local.get $1
    i32.const 4
-   i32.shr_u
+   i32.shr_s
    local.set $1
   else
    i32.const 31
@@ -1106,7 +1106,7 @@
    local.get $2
    i32.const 4
    i32.sub
-   i32.shr_u
+   i32.shr_s
    i32.const 16
    i32.xor
    local.set $1
@@ -1338,7 +1338,7 @@
     i32.const -65536
     i32.and
     i32.const 16
-    i32.shr_u
+    i32.shr_s
     local.set $5
     local.get $3
     local.get $5
@@ -2265,7 +2265,7 @@
   i32.sub
   i32.load offset=12
   i32.const 2
-  i32.shr_s
+  i32.shr_u
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
@@ -2437,13 +2437,13 @@
   i32.load offset=8
   local.tee $3
   local.get $2
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    local.get $1
    i32.const 1073741808
    local.get $2
-   i32.shr_u
+   i32.shr_s
    i32.gt_u
    if
     i32.const 1040
@@ -4144,21 +4144,21 @@
   local.get $0
   local.get $0
   i64.const 33
-  i64.shr_u
+  i64.shr_s
   i64.xor
   i64.const -49064778989728563
   i64.mul
   local.tee $0
   local.get $0
   i64.const 33
-  i64.shr_u
+  i64.shr_s
   i64.xor
   i64.const -4265267296055464877
   i64.mul
   local.tee $0
   local.get $0
   i64.const 33
-  i64.shr_u
+  i64.shr_s
   i64.xor
  )
  (func $~lib/math/splitMix32 (param $0 i32) (result i32)
@@ -4168,7 +4168,7 @@
   local.tee $0
   local.get $0
   i32.const 15
-  i32.shr_u
+  i32.shr_s
   i32.xor
   local.get $0
   i32.const 1
@@ -4182,7 +4182,7 @@
   local.get $0
   local.get $0
   i32.const 7
-  i32.shr_u
+  i32.shr_s
   i32.xor
   i32.mul
   i32.add
@@ -4190,7 +4190,7 @@
   local.tee $0
   local.get $0
   i32.const 14
-  i32.shr_u
+  i32.shr_s
   i32.xor
  )
  (func $~lib/math/NativeMath.seedRandom (param $0 i64)
@@ -4336,7 +4336,7 @@
   i32.const 31
   i32.add
   i32.const 5
-  i32.shr_u
+  i32.shr_s
   i32.const 2
   i32.shl
   local.tee $2
@@ -4364,24 +4364,24 @@
      local.get $5
      local.get $2
      i32.const 6
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
      i32.load
      local.get $2
      i32.const 1
-     i32.shr_s
+     i32.shr_u
      i32.const 31
      i32.and
-     i32.shr_u
+     i32.shr_s
      i32.const 1
      i32.and
      i32.eq
      if
       local.get $2
       i32.const 1
-      i32.shr_s
+      i32.shr_u
       local.set $2
       br $while-continue|1
      end
@@ -4389,7 +4389,7 @@
     local.get $0
     local.get $2
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.tee $2
     i32.const 2
     i32.shl
@@ -4416,7 +4416,7 @@
      local.get $5
      local.get $3
      i32.const 5
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
@@ -4482,7 +4482,7 @@
      local.get $5
      local.get $1
      i32.const 5
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
@@ -4490,7 +4490,7 @@
      local.get $1
      i32.const 31
      i32.and
-     i32.shr_u
+     i32.shr_s
      i32.const 1
      i32.and
      local.get $1
@@ -4534,7 +4534,7 @@
        local.get $5
        local.get $1
        i32.const 5
-       i32.shr_u
+       i32.shr_s
        i32.const 2
        i32.shl
        i32.add
@@ -4561,7 +4561,7 @@
       end
       local.get $1
       i32.const 1
-      i32.shr_s
+      i32.shr_u
       local.set $1
       br $while-continue|4
      end
@@ -4677,7 +4677,7 @@
   local.tee $2
   local.get $2
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   i32.const 1
   i32.shr_u
   i32.xor
@@ -4687,7 +4687,7 @@
   local.tee $3
   local.get $3
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   i32.const 1
   i32.shr_u
   i32.xor
@@ -4874,7 +4874,7 @@
   i32.const 31
   i32.add
   i32.const 5
-  i32.shr_u
+  i32.shr_s
   i32.const 2
   i32.shl
   local.tee $2
@@ -4902,24 +4902,24 @@
      local.get $5
      local.get $2
      i32.const 6
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
      i32.load
      local.get $2
      i32.const 1
-     i32.shr_s
+     i32.shr_u
      i32.const 31
      i32.and
-     i32.shr_u
+     i32.shr_s
      i32.const 1
      i32.and
      i32.eq
      if
       local.get $2
       i32.const 1
-      i32.shr_s
+      i32.shr_u
       local.set $2
       br $while-continue|1
      end
@@ -4927,7 +4927,7 @@
     local.get $0
     local.get $2
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.tee $2
     i32.const 3
     i32.shl
@@ -4954,7 +4954,7 @@
      local.get $5
      local.get $3
      i32.const 5
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
@@ -5020,7 +5020,7 @@
      local.get $5
      local.get $1
      i32.const 5
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
@@ -5028,7 +5028,7 @@
      local.get $1
      i32.const 31
      i32.and
-     i32.shr_u
+     i32.shr_s
      i32.const 1
      i32.and
      local.get $1
@@ -5072,7 +5072,7 @@
        local.get $5
        local.get $1
        i32.const 5
-       i32.shr_u
+       i32.shr_s
        i32.const 2
        i32.shl
        i32.add
@@ -5099,7 +5099,7 @@
       end
       local.get $1
       i32.const 1
-      i32.shr_s
+      i32.shr_u
       local.set $1
       br $while-continue|4
      end
@@ -5215,7 +5215,7 @@
   local.tee $2
   local.get $2
   i64.const 63
-  i64.shr_s
+  i64.shr_u
   i64.const 1
   i64.shr_u
   i64.xor
@@ -5225,7 +5225,7 @@
   local.tee $3
   local.get $3
   i64.const 63
-  i64.shr_s
+  i64.shr_u
   i64.const 1
   i64.shr_u
   i64.xor
@@ -5433,7 +5433,7 @@
   i32.const 31
   i32.add
   i32.const 5
-  i32.shr_u
+  i32.shr_s
   i32.const 2
   i32.shl
   local.tee $2
@@ -5461,24 +5461,24 @@
      local.get $4
      local.get $2
      i32.const 6
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
      i32.load
      local.get $2
      i32.const 1
-     i32.shr_s
+     i32.shr_u
      i32.const 31
      i32.and
-     i32.shr_u
+     i32.shr_s
      i32.const 1
      i32.and
      i32.eq
      if
       local.get $2
       i32.const 1
-      i32.shr_s
+      i32.shr_u
       local.set $2
       br $while-continue|1
      end
@@ -5486,7 +5486,7 @@
     local.get $0
     local.get $2
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.tee $7
     i32.const 2
     i32.shl
@@ -5513,7 +5513,7 @@
      local.get $4
      local.get $3
      i32.const 5
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
@@ -5579,7 +5579,7 @@
      local.get $4
      local.get $1
      i32.const 5
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
@@ -5587,7 +5587,7 @@
      local.get $1
      i32.const 31
      i32.and
-     i32.shr_u
+     i32.shr_s
      i32.const 1
      i32.and
      local.get $1
@@ -5631,7 +5631,7 @@
        local.get $4
        local.get $1
        i32.const 5
-       i32.shr_u
+       i32.shr_s
        i32.const 2
        i32.shl
        i32.add
@@ -5658,7 +5658,7 @@
       end
       local.get $1
       i32.const 1
-      i32.shr_s
+      i32.shr_u
       local.set $1
       br $while-continue|4
      end
@@ -5851,17 +5851,17 @@
   local.tee $0
   local.get $0
   i64.const 17
-  i64.shr_u
+  i64.shr_s
   i64.xor
   i64.xor
   local.get $1
   i64.const 26
-  i64.shr_u
+  i64.shr_s
   i64.xor
   global.set $~lib/math/random_state1_64
   local.get $1
   i64.const 12
-  i64.shr_u
+  i64.shr_s
   i64.const 4607182418800017408
   i64.or
   f64.reinterpret_i64
@@ -6529,7 +6529,7 @@
   i32.sub
   i32.load offset=12
   i32.const 1
-  i32.shr_u
+  i32.shr_s
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7290,7 +7290,7 @@
   end
   local.get $0
   i32.const 31
-  i32.shr_u
+  i32.shr_s
   local.tee $1
   if
    i32.const 0
@@ -7706,7 +7706,7 @@
   local.get $3
   local.get $11
   i64.extend_i32_s
-  i64.shr_u
+  i64.shr_s
   i32.wrap_i64
   local.tee $2
   call $~lib/util/number/decimalCount32
@@ -7953,7 +7953,7 @@
    i64.mul
    local.tee $3
    local.get $13
-   i64.shr_u
+   i64.shr_s
    local.tee $1
    local.get $6
    i64.extend_i32_s
@@ -8409,7 +8409,7 @@
   f64.ne
   i32.add
   i32.const 3
-  i32.shr_s
+  i32.shr_u
   i32.const 1
   i32.add
   local.tee $4
@@ -8437,12 +8437,12 @@
   local.set $2
   local.get $6
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   local.tee $6
   global.get $~lib/util/number/_frc_plus
   local.tee $5
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   local.tee $7
   i64.mul
   local.get $2
@@ -8455,11 +8455,11 @@
   local.tee $5
   i64.mul
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.tee $7
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.get $5
   local.get $6
@@ -8471,7 +8471,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   i64.const 1
   i64.sub
@@ -8492,7 +8492,7 @@
   i64.shl
   local.tee $3
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   local.tee $7
   i64.mul
   local.get $2
@@ -8505,11 +8505,11 @@
   local.tee $3
   i64.mul
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.tee $7
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.get $3
   local.get $6
@@ -8521,7 +8521,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   global.get $~lib/util/number/_exp_pow
   local.tee $4
@@ -8542,7 +8542,7 @@
   global.get $~lib/util/number/_frc_minus
   local.tee $3
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   local.tee $5
   i64.mul
   local.get $2
@@ -8555,11 +8555,11 @@
   local.tee $2
   i64.mul
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.tee $3
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.get $2
   local.get $6
@@ -8571,7 +8571,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   i64.const 1
   i64.add
@@ -9201,9 +9201,9 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_s
+  i32.shr_u
   i32.const 0
-  i32.lt_s
+  i32.lt_u
   local.tee $2
   if
    local.get $0
@@ -9218,7 +9218,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_s
+  i32.shr_u
   i32.const 10
   i32.lt_u
   if
@@ -9231,7 +9231,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_s
+   i32.shr_u
    i32.const 48
    i32.or
    i32.store16
@@ -9245,7 +9245,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_s
+  i32.shr_u
   local.tee $2
   call $~lib/util/number/decimalCount32
   i32.add
@@ -9903,7 +9903,7 @@
     drop
     local.get $3
     i64.const 63
-    i64.shr_u
+    i64.shr_s
     i32.wrap_i64
     local.tee $0
     if
@@ -18653,7 +18653,7 @@
   i32.const 31
   i32.add
   i32.const 5
-  i32.shr_u
+  i32.shr_s
   i32.const 2
   i32.shl
   local.tee $2
@@ -18681,24 +18681,24 @@
      local.get $4
      local.get $2
      i32.const 6
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
      i32.load
      local.get $2
      i32.const 1
-     i32.shr_s
+     i32.shr_u
      i32.const 31
      i32.and
-     i32.shr_u
+     i32.shr_s
      i32.const 1
      i32.and
      i32.eq
      if
       local.get $2
       i32.const 1
-      i32.shr_s
+      i32.shr_u
       local.set $2
       br $while-continue|1
      end
@@ -18706,7 +18706,7 @@
     local.get $0
     local.get $2
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.tee $7
     i32.add
     i32.load8_u
@@ -18729,7 +18729,7 @@
      local.get $4
      local.get $3
      i32.const 5
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
@@ -18789,7 +18789,7 @@
      local.get $4
      local.get $1
      i32.const 5
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
@@ -18797,7 +18797,7 @@
      local.get $1
      i32.const 31
      i32.and
-     i32.shr_u
+     i32.shr_s
      i32.const 1
      i32.and
      local.get $1
@@ -18839,7 +18839,7 @@
        local.get $4
        local.get $1
        i32.const 5
-       i32.shr_u
+       i32.shr_s
        i32.const 2
        i32.shl
        i32.add
@@ -18864,7 +18864,7 @@
       end
       local.get $1
       i32.const 1
-      i32.shr_s
+      i32.shr_u
       local.set $1
       br $while-continue|4
      end

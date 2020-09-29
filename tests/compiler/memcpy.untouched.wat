@@ -279,7 +279,7 @@
         local.get $0
         local.get $4
         i32.const 24
-        i32.shr_u
+        i32.shr_s
         local.get $5
         i32.const 8
         i32.shl
@@ -295,7 +295,7 @@
         i32.add
         local.get $5
         i32.const 24
-        i32.shr_u
+        i32.shr_s
         local.get $4
         i32.const 8
         i32.shl
@@ -311,7 +311,7 @@
         i32.add
         local.get $4
         i32.const 24
-        i32.shr_u
+        i32.shr_s
         local.get $5
         i32.const 8
         i32.shl
@@ -327,7 +327,7 @@
         i32.add
         local.get $5
         i32.const 24
-        i32.shr_u
+        i32.shr_s
         local.get $4
         i32.const 8
         i32.shl
@@ -400,7 +400,7 @@
        local.get $0
        local.get $4
        i32.const 16
-       i32.shr_u
+       i32.shr_s
        local.get $5
        i32.const 16
        i32.shl
@@ -416,7 +416,7 @@
        i32.add
        local.get $5
        i32.const 16
-       i32.shr_u
+       i32.shr_s
        local.get $4
        i32.const 16
        i32.shl
@@ -432,7 +432,7 @@
        i32.add
        local.get $4
        i32.const 16
-       i32.shr_u
+       i32.shr_s
        local.get $5
        i32.const 16
        i32.shl
@@ -448,7 +448,7 @@
        i32.add
        local.get $5
        i32.const 16
-       i32.shr_u
+       i32.shr_s
        local.get $4
        i32.const 16
        i32.shl
@@ -507,7 +507,7 @@
       local.get $0
       local.get $4
       i32.const 8
-      i32.shr_u
+      i32.shr_s
       local.get $5
       i32.const 24
       i32.shl
@@ -523,7 +523,7 @@
       i32.add
       local.get $5
       i32.const 8
-      i32.shr_u
+      i32.shr_s
       local.get $4
       i32.const 24
       i32.shl
@@ -539,7 +539,7 @@
       i32.add
       local.get $4
       i32.const 8
-      i32.shr_u
+      i32.shr_s
       local.get $5
       i32.const 24
       i32.shl
@@ -555,7 +555,7 @@
       i32.add
       local.get $5
       i32.const 8
-      i32.shr_u
+      i32.shr_s
       local.get $4
       i32.const 24
       i32.shl

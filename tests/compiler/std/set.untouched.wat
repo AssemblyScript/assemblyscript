@@ -108,7 +108,7 @@
    local.set $4
    local.get $3
    i32.const 4
-   i32.shr_u
+   i32.shr_s
    local.set $5
   else
    i32.const 31
@@ -120,7 +120,7 @@
    local.get $4
    i32.const 4
    i32.sub
-   i32.shr_u
+   i32.shr_s
    i32.const 1
    i32.const 4
    i32.shl
@@ -494,7 +494,7 @@
    local.set $9
    local.get $8
    i32.const 4
-   i32.shr_u
+   i32.shr_s
    local.set $10
   else
    i32.const 31
@@ -506,7 +506,7 @@
    local.get $9
    i32.const 4
    i32.sub
-   i32.shr_u
+   i32.shr_s
    i32.const 1
    i32.const 4
    i32.shl
@@ -819,7 +819,7 @@
    i32.xor
    i32.and
    i32.const 16
-   i32.shr_u
+   i32.shr_s
    local.set $3
    local.get $3
    local.get $2
@@ -983,7 +983,7 @@
    local.set $2
    local.get $1
    i32.const 4
-   i32.shr_u
+   i32.shr_s
    local.set $3
   else
    local.get $1
@@ -1013,7 +1013,7 @@
    local.get $2
    i32.const 4
    i32.sub
-   i32.shr_u
+   i32.shr_s
    i32.const 1
    i32.const 4
    i32.shl
@@ -1203,7 +1203,7 @@
   i32.xor
   i32.and
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $2
   local.tee $3
@@ -1869,7 +1869,7 @@
      i32.const 24
      i32.shl
      i32.const 24
-     i32.shr_s
+     i32.shr_u
      i32.eq
     else
      i32.const 0
@@ -1911,7 +1911,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_s
+   i32.shr_u
    call $~lib/util/hash/hash8
    br $~lib/util/hash/HASH<i8>|inlined.0
   end
@@ -2103,7 +2103,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_s
+   i32.shr_u
    call $~lib/util/hash/hash8
    br $~lib/util/hash/HASH<i8>|inlined.1
   end
@@ -2223,7 +2223,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 0
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 192
@@ -2585,7 +2585,7 @@
         local.get $0
         local.get $3
         i32.const 24
-        i32.shr_u
+        i32.shr_s
         local.get $4
         i32.const 8
         i32.shl
@@ -2601,7 +2601,7 @@
         i32.add
         local.get $4
         i32.const 24
-        i32.shr_u
+        i32.shr_s
         local.get $3
         i32.const 8
         i32.shl
@@ -2617,7 +2617,7 @@
         i32.add
         local.get $3
         i32.const 24
-        i32.shr_u
+        i32.shr_s
         local.get $4
         i32.const 8
         i32.shl
@@ -2633,7 +2633,7 @@
         i32.add
         local.get $4
         i32.const 24
-        i32.shr_u
+        i32.shr_s
         local.get $3
         i32.const 8
         i32.shl
@@ -2706,7 +2706,7 @@
        local.get $0
        local.get $3
        i32.const 16
-       i32.shr_u
+       i32.shr_s
        local.get $4
        i32.const 16
        i32.shl
@@ -2722,7 +2722,7 @@
        i32.add
        local.get $4
        i32.const 16
-       i32.shr_u
+       i32.shr_s
        local.get $3
        i32.const 16
        i32.shl
@@ -2738,7 +2738,7 @@
        i32.add
        local.get $3
        i32.const 16
-       i32.shr_u
+       i32.shr_s
        local.get $4
        i32.const 16
        i32.shl
@@ -2754,7 +2754,7 @@
        i32.add
        local.get $4
        i32.const 16
-       i32.shr_u
+       i32.shr_s
        local.get $3
        i32.const 16
        i32.shl
@@ -2813,7 +2813,7 @@
       local.get $0
       local.get $3
       i32.const 8
-      i32.shr_u
+      i32.shr_s
       local.get $4
       i32.const 24
       i32.shl
@@ -2829,7 +2829,7 @@
       i32.add
       local.get $4
       i32.const 8
-      i32.shr_u
+      i32.shr_s
       local.get $3
       i32.const 24
       i32.shl
@@ -2845,7 +2845,7 @@
       i32.add
       local.get $3
       i32.const 8
-      i32.shr_u
+      i32.shr_s
       local.get $4
       i32.const 24
       i32.shl
@@ -2861,7 +2861,7 @@
       i32.add
       local.get $4
       i32.const 8
-      i32.shr_u
+      i32.shr_s
       local.get $3
       i32.const 24
       i32.shl
@@ -3735,13 +3735,13 @@
   local.get $1
   local.get $3
   local.get $2
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    local.get $1
    i32.const 1073741808
    local.get $2
-   i32.shr_u
+   i32.shr_s
    i32.gt_u
    if
     i32.const 192
@@ -3971,7 +3971,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_s
+   i32.shr_u
    call $~lib/util/hash/hash8
    br $~lib/util/hash/HASH<i8>|inlined.3
   end
@@ -4000,7 +4000,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $4
   i32.const 1
@@ -4099,7 +4099,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_s
+   i32.shr_u
    i32.const 100
    i32.lt_s
    local.set $3
@@ -4161,7 +4161,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_s
+   i32.shr_u
    i32.const 100
    i32.lt_s
    local.set $4
@@ -4279,7 +4279,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_s
+   i32.shr_u
    i32.const 50
    i32.lt_s
    local.set $7
@@ -4341,7 +4341,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_s
+   i32.shr_u
    i32.const 50
    i32.lt_s
    local.set $8
@@ -4854,7 +4854,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 0
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 192
@@ -5116,7 +5116,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $4
   i32.const 1
@@ -5598,7 +5598,7 @@
   local.get $1
   local.get $0
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.xor
   i32.const 16777619
   i32.mul
@@ -5636,7 +5636,7 @@
      i32.const 16
      i32.shl
      i32.const 16
-     i32.shr_s
+     i32.shr_u
      i32.eq
     else
      i32.const 0
@@ -5682,7 +5682,7 @@
    i32.const 16
    i32.shl
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    call $~lib/util/hash/hash16
    br $~lib/util/hash/HASH<i16>|inlined.0
   end
@@ -5882,7 +5882,7 @@
    i32.const 16
    i32.shl
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    call $~lib/util/hash/hash16
    br $~lib/util/hash/HASH<i16>|inlined.1
   end
@@ -6002,7 +6002,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 192
@@ -6241,7 +6241,7 @@
    i32.const 16
    i32.shl
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    call $~lib/util/hash/hash16
    br $~lib/util/hash/HASH<i16>|inlined.3
   end
@@ -6270,7 +6270,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $4
   i32.const 1
@@ -6369,7 +6369,7 @@
    i32.const 16
    i32.shl
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    i32.const 100
    i32.lt_s
    local.set $3
@@ -6431,7 +6431,7 @@
    i32.const 16
    i32.shl
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    i32.const 100
    i32.lt_s
    local.set $4
@@ -6549,7 +6549,7 @@
    i32.const 16
    i32.shl
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    i32.const 50
    i32.lt_s
    local.set $7
@@ -6611,7 +6611,7 @@
    i32.const 16
    i32.shl
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    i32.const 50
    i32.lt_s
    local.set $8
@@ -7136,7 +7136,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 192
@@ -7402,7 +7402,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $4
   i32.const 1
@@ -7884,7 +7884,7 @@
   local.get $1
   local.get $0
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -7894,7 +7894,7 @@
   local.get $1
   local.get $0
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -7904,7 +7904,7 @@
   local.get $1
   local.get $0
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.xor
   i32.const 16777619
   i32.mul
@@ -8308,7 +8308,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 192
@@ -8576,7 +8576,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $4
   i32.const 1
@@ -9428,7 +9428,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 192
@@ -9696,7 +9696,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $4
   i32.const 1
@@ -10160,7 +10160,7 @@
   local.set $1
   local.get $0
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i32.wrap_i64
   local.set $2
   i32.const -2128831035
@@ -10176,7 +10176,7 @@
   local.get $3
   local.get $1
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -10186,7 +10186,7 @@
   local.get $3
   local.get $1
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -10196,7 +10196,7 @@
   local.get $3
   local.get $1
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.xor
   i32.const 16777619
   i32.mul
@@ -10212,7 +10212,7 @@
   local.get $3
   local.get $2
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -10222,7 +10222,7 @@
   local.get $3
   local.get $2
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -10232,7 +10232,7 @@
   local.get $3
   local.get $2
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.xor
   i32.const 16777619
   i32.mul
@@ -10650,7 +10650,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 192
@@ -10923,7 +10923,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $4
   i32.const 1
@@ -11790,7 +11790,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 192
@@ -12063,7 +12063,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $4
   i32.const 1
@@ -12897,7 +12897,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 192
@@ -13159,7 +13159,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $4
   i32.const 1
@@ -14005,7 +14005,7 @@
   local.get $1
   i32.const 1073741808
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 192
@@ -14271,7 +14271,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $4
   local.get $4
   i32.const 1

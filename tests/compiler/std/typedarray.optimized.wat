@@ -314,7 +314,7 @@
  (data (i32.const 12464) "\n\00\00\00\01\00\00\00\00\00\00\00\n\00\00\00\00\ff\00\00\00d\n\ff\ff")
  (data (i32.const 12496) "\n\00\00\00\01\00\00\00\00\00\00\00\n\00\00\00\01\ffd\ff\00\00d\n\ff")
  (table $0 123 funcref)
- (elem (i32.const 1) $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0)
+ (elem (i32.const 1) $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
@@ -385,7 +385,7 @@
   if
    local.get $2
    i32.const 4
-   i32.shr_u
+   i32.shr_s
    local.set $2
   else
    local.get $2
@@ -396,7 +396,7 @@
    local.tee $3
    i32.const 4
    i32.sub
-   i32.shr_u
+   i32.shr_s
    i32.const 16
    i32.xor
    local.set $2
@@ -686,7 +686,7 @@
   if
    local.get $3
    i32.const 4
-   i32.shr_u
+   i32.shr_s
    local.set $3
   else
    local.get $3
@@ -697,7 +697,7 @@
    local.tee $4
    i32.const 4
    i32.sub
-   i32.shr_u
+   i32.shr_s
    i32.const 16
    i32.xor
    local.set $3
@@ -1013,7 +1013,7 @@
   if
    local.get $1
    i32.const 4
-   i32.shr_u
+   i32.shr_s
    local.set $1
   else
    i32.const 31
@@ -1040,7 +1040,7 @@
    local.get $2
    i32.const 4
    i32.sub
-   i32.shr_u
+   i32.shr_s
    i32.const 16
    i32.xor
    local.set $1
@@ -1272,7 +1272,7 @@
     i32.const -65536
     i32.and
     i32.const 16
-    i32.shr_u
+    i32.shr_s
     local.set $5
     local.get $3
     local.get $5
@@ -1605,7 +1605,7 @@
   local.get $1
   i32.const 1073741808
   local.get $2
-  i32.shr_u
+  i32.shr_s
   i32.gt_u
   if
    i32.const 1040
@@ -1906,7 +1906,7 @@
   local.get $4
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.ne
   if
    i32.const 0
@@ -1946,7 +1946,7 @@
   local.get $5
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.ne
   if
    i32.const 0
@@ -1986,7 +1986,7 @@
   local.get $6
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.ne
   if
    i32.const 0
@@ -2026,7 +2026,7 @@
   local.get $7
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.ne
   if
    i32.const 0
@@ -2066,7 +2066,7 @@
   local.get $8
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.ne
   if
    i32.const 0
@@ -2106,7 +2106,7 @@
   local.get $9
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.ne
   if
    i32.const 0
@@ -2146,7 +2146,7 @@
   local.get $10
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.ne
   if
    i32.const 0
@@ -2186,7 +2186,7 @@
   local.get $11
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.ne
   if
    i32.const 0
@@ -2224,7 +2224,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -2248,7 +2248,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -2274,7 +2274,7 @@
   local.tee $4
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $3
   local.get $1
   i32.const 0
@@ -2358,7 +2358,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -2385,7 +2385,7 @@
   local.tee $4
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $3
   local.get $1
   i32.const 0
@@ -2618,7 +2618,7 @@
   i32.const 31
   i32.add
   i32.const 5
-  i32.shr_u
+  i32.shr_s
   i32.const 2
   i32.shl
   local.tee $2
@@ -2646,24 +2646,24 @@
      local.get $5
      local.get $2
      i32.const 6
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
      i32.load
      local.get $2
      i32.const 1
-     i32.shr_s
+     i32.shr_u
      i32.const 31
      i32.and
-     i32.shr_u
+     i32.shr_s
      i32.const 1
      i32.and
      i32.eq
      if
       local.get $2
       i32.const 1
-      i32.shr_s
+      i32.shr_u
       local.set $2
       br $while-continue|1
      end
@@ -2671,7 +2671,7 @@
     local.get $0
     local.get $2
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.tee $2
     i32.const 3
     i32.shl
@@ -2698,7 +2698,7 @@
      local.get $5
      local.get $3
      i32.const 5
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
@@ -2764,7 +2764,7 @@
      local.get $5
      local.get $1
      i32.const 5
-     i32.shr_u
+     i32.shr_s
      i32.const 2
      i32.shl
      i32.add
@@ -2772,7 +2772,7 @@
      local.get $1
      i32.const 31
      i32.and
-     i32.shr_u
+     i32.shr_s
      i32.const 1
      i32.and
      local.get $1
@@ -2816,7 +2816,7 @@
        local.get $5
        local.get $1
        i32.const 5
-       i32.shr_u
+       i32.shr_s
        i32.const 2
        i32.shl
        i32.add
@@ -2843,7 +2843,7 @@
       end
       local.get $1
       i32.const 1
-      i32.shr_s
+      i32.shr_u
       local.set $1
       br $while-continue|4
      end
@@ -2892,7 +2892,7 @@
    local.get $2
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.tee $0
    i32.const 1
    i32.le_s
@@ -2963,7 +2963,7 @@
   local.tee $2
   local.get $2
   i64.const 63
-  i64.shr_s
+  i64.shr_u
   i64.const 1
   i64.shr_u
   i64.xor
@@ -2973,7 +2973,7 @@
   local.tee $3
   local.get $3
   i64.const 63
-  i64.shr_s
+  i64.shr_u
   i64.const 1
   i64.shr_u
   i64.xor
@@ -2989,7 +2989,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -3029,11 +3029,11 @@
   local.get $2
   i32.sub
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   i32.or
   local.get $2
   i32.const 31
-  i32.shr_s
+  i32.shr_u
   i32.const -1
   i32.xor
   i32.and
@@ -3546,7 +3546,7 @@
   local.get $5
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $1
   local.get $2
   i32.const 0
@@ -3653,13 +3653,13 @@
    local.get $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    i32.ne
    br_if $folding-inner0
    local.get $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.set $3
    loop $for-loop|0
     local.get $2
@@ -3702,7 +3702,7 @@
   local.tee $4
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $3
   local.get $1
   i32.const 0
@@ -3787,7 +3787,7 @@
   local.tee $5
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.tee $4
   local.get $3
   local.get $4
@@ -3972,7 +3972,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -3996,7 +3996,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -4037,7 +4037,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -4081,7 +4081,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -4105,7 +4105,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -4151,7 +4151,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -4195,7 +4195,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -4219,7 +4219,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -4327,7 +4327,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.sub
   local.set $0
@@ -4389,7 +4389,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.sub
   local.set $0
@@ -4701,7 +4701,7 @@
   local.get $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $0
   local.get $1
   i32.load offset=4
@@ -4773,7 +4773,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -4810,7 +4810,7 @@
   local.get $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $0
   local.get $1
   i32.load offset=4
@@ -4882,7 +4882,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -4919,7 +4919,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $0
   local.get $1
   i32.load offset=4
@@ -5005,7 +5005,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $0
   local.get $1
   i32.load offset=4
@@ -5077,7 +5077,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -5119,7 +5119,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $0
   local.get $1
   i32.load offset=4
@@ -5191,7 +5191,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -5228,7 +5228,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $0
   local.get $1
   i32.load offset=4
@@ -5300,7 +5300,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -5342,7 +5342,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $0
   local.get $1
   i32.load offset=4
@@ -5414,7 +5414,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.ge_u
   if
    i32.const 1376
@@ -5456,7 +5456,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $0
   local.get $1
   i32.load offset=4
@@ -5528,9 +5528,9 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_s
+  i32.shr_u
   i32.const 2
-  i32.gt_s
+  i32.gt_u
  )
  (func $~lib/rt/tlsf/reallocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6211,9 +6211,9 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_s
+  i32.shr_u
   i32.const 2
-  i32.gt_s
+  i32.gt_u
  )
  (func $~lib/typedarray/Int16Array#filter (param $0 i32) (result i32)
   (local $1 i32)
@@ -6233,7 +6233,7 @@
   local.get $3
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $0
   i32.const 12
   i32.const 6
@@ -6356,7 +6356,7 @@
   local.get $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -6438,7 +6438,7 @@
   local.get $3
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $0
   i32.const 12
   i32.const 7
@@ -6561,7 +6561,7 @@
   local.get $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -6641,7 +6641,7 @@
   local.get $3
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $0
   i32.const 12
   i32.const 8
@@ -6764,7 +6764,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -6844,7 +6844,7 @@
   local.get $3
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $0
   i32.const 12
   i32.const 9
@@ -6967,7 +6967,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -7047,7 +7047,7 @@
   local.get $3
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $0
   i32.const 12
   i32.const 10
@@ -7170,7 +7170,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -7250,7 +7250,7 @@
   local.get $3
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $0
   i32.const 12
   i32.const 11
@@ -7373,7 +7373,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -7453,7 +7453,7 @@
   local.get $3
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $0
   i32.const 12
   i32.const 12
@@ -7576,7 +7576,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -7656,7 +7656,7 @@
   local.get $3
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $0
   i32.const 12
   i32.const 13
@@ -7779,7 +7779,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -7838,8 +7838,10 @@
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 255
-  i32.and
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_u
   i32.const 2
   i32.eq
  )
@@ -7907,9 +7909,18 @@
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_u
+  i32.eqz
+ )
+ (func $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
   i32.const 255
   i32.and
-  i32.eqz
+  i32.const 2
+  i32.eq
  )
  (func $~lib/typedarray/Uint8Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -7973,10 +7984,18 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
+ (func $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.const 255
+  i32.and
+  i32.eqz
+ )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 65535
-  i32.and
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_u
   i32.const 2
   i32.eq
  )
@@ -8002,7 +8021,7 @@
    local.get $0
    i32.load offset=8
    i32.const 1
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -8048,9 +8067,18 @@
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_u
+  i32.eqz
+ )
+ (func $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
   i32.const 65535
   i32.and
-  i32.eqz
+  i32.const 2
+  i32.eq
  )
  (func $~lib/typedarray/Uint16Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -8074,7 +8102,7 @@
    local.get $0
    i32.load offset=8
    i32.const 1
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -8118,6 +8146,12 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
+ (func $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.const 65535
+  i32.and
+  i32.eqz
+ )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.const 2
@@ -8145,7 +8179,7 @@
    local.get $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -8220,7 +8254,7 @@
    local.get $0
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -8295,7 +8329,7 @@
    local.get $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -8371,7 +8405,7 @@
    local.get $0
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -8485,8 +8519,10 @@
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 255
-  i32.and
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_u
   i32.const 4
   i32.eq
  )
@@ -8553,6 +8589,13 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
+ (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.const 255
+  i32.and
+  i32.const 4
+  i32.eq
+ )
  (func $~lib/typedarray/Int16Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -8574,7 +8617,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $5
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
    loop $for-loop|0
@@ -8622,8 +8665,10 @@
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 65535
-  i32.and
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_u
   i32.const 4
   i32.eq
  )
@@ -8648,7 +8693,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $5
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
    loop $for-loop|0
@@ -8694,6 +8739,13 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
+ (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.const 65535
+  i32.and
+  i32.const 4
+  i32.eq
+ )
  (func $~lib/typedarray/Int32Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -8715,7 +8767,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $5
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
    loop $for-loop|0
@@ -8787,7 +8839,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $5
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
    loop $for-loop|0
@@ -8859,7 +8911,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $5
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
    loop $for-loop|0
@@ -8931,7 +8983,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $5
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
    loop $for-loop|0
@@ -8983,19 +9035,14 @@
   f64.eq
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $2
-  call $~lib/rt/pure/__retain
   local.get $0
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_s
-  i32.const 2
-  i32.rem_s
+  i32.shr_u
+  i32.const 1
+  i32.and
   i32.eqz
-  local.set $0
-  call $~lib/rt/pure/__release
-  local.get $0
  )
  (func $~lib/typedarray/Int8Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9130,19 +9177,14 @@
   call $~lib/rt/pure/__release
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $2
-  call $~lib/rt/pure/__retain
   local.get $0
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_s
-  i32.const 2
-  i32.rem_s
+  i32.shr_u
+  i32.const 1
+  i32.and
   i32.eqz
-  local.set $0
-  call $~lib/rt/pure/__release
-  local.get $0
  )
  (func $~lib/typedarray/Int16Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9166,7 +9208,7 @@
    local.get $0
    i32.load offset=8
    i32.const 1
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -9233,7 +9275,7 @@
    local.get $0
    i32.load offset=8
    i32.const 1
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -9311,7 +9353,7 @@
    local.get $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -9389,7 +9431,7 @@
    local.get $0
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -9453,7 +9495,7 @@
   local.set $4
   local.get $1
   i32.const 23
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   local.tee $2
@@ -9486,8 +9528,6 @@
    local.get $2
    if (result i32)
     local.get $1
-    i32.const 8388607
-    i32.and
     i32.const 8388608
     i32.or
    else
@@ -9510,15 +9550,15 @@
     i32.gt_s
     if
      local.get $1
-     i32.const 8388608
+     i32.const 1082130432
      i32.ge_u
      if (result i32)
       local.get $1
-      i32.const 8388608
+      i32.const 1082130432
       i32.eq
       br_if $folding-inner0
       local.get $1
-      i32.const 8388608
+      i32.const 1082130432
       i32.sub
      else
       local.get $1
@@ -9534,15 +9574,15 @@
     end
    end
    local.get $1
-   i32.const 8388608
+   i32.const 1082130432
    i32.ge_u
    if
     local.get $1
-    i32.const 8388608
+    i32.const 1082130432
     i32.eq
     br_if $folding-inner0
     local.get $1
-    i32.const 8388608
+    i32.const 1082130432
     i32.sub
     local.set $1
    end
@@ -9573,7 +9613,7 @@
     i32.const 1
     local.get $2
     i32.sub
-    i32.shr_u
+    i32.shr_s
    end
    local.get $4
    i32.or
@@ -9617,7 +9657,7 @@
    local.get $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -9671,11 +9711,11 @@
   i64.reinterpret_f64
   local.tee $1
   i64.const 63
-  i64.shr_u
+  i64.shr_s
   local.set $4
   local.get $1
   i64.const 52
-  i64.shr_u
+  i64.shr_s
   i64.const 2047
   i64.and
   local.tee $2
@@ -9723,8 +9763,6 @@
     i64.shl
    else
     local.get $1
-    i64.const 4503599627370495
-    i64.and
     i64.const 4503599627370496
     i64.or
    end
@@ -9735,15 +9773,15 @@
     i64.gt_s
     if
      local.get $1
-     i64.const 4503599627370496
+     i64.const 4616189618054758400
      i64.ge_u
      if (result i64)
       local.get $1
-      i64.const 4503599627370496
+      i64.const 4616189618054758400
       i64.eq
       br_if $folding-inner0
       local.get $1
-      i64.const 4503599627370496
+      i64.const 4616189618054758400
       i64.sub
      else
       local.get $1
@@ -9759,15 +9797,15 @@
     end
    end
    local.get $1
-   i64.const 4503599627370496
+   i64.const 4616189618054758400
    i64.ge_u
    if
     local.get $1
-    i64.const 4503599627370496
+    i64.const 4616189618054758400
     i64.eq
     br_if $folding-inner0
     local.get $1
-    i64.const 4503599627370496
+    i64.const 4616189618054758400
     i64.sub
     local.set $1
    end
@@ -9800,7 +9838,7 @@
     i64.sub
     i64.const 1
     i64.add
-    i64.shr_u
+    i64.shr_s
    end
    local.get $4
    i64.const 63
@@ -9846,7 +9884,7 @@
    local.get $0
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.set $5
    loop $for-loop|0
     local.get $2
@@ -9892,6 +9930,60 @@
   call $~lib/rt/pure/__release
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $2
+  call $~lib/rt/pure/__retain
+  local.set $2
+  local.get $0
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_u
+  i32.const 6256
+  local.get $1
+  call $~lib/array/Array<i32>#__get
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_u
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1312
+   i32.const 490
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  global.get $std/typedarray/forEachCallCount
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1312
+   i32.const 491
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
+  global.get $std/typedarray/forEachSelf
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1312
+   i32.const 492
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $std/typedarray/forEachCallCount
+  i32.const 1
+  i32.add
+  global.set $std/typedarray/forEachCallCount
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   call $~lib/rt/pure/__retain
   local.set $2
@@ -9993,6 +10085,60 @@
   call $~lib/rt/pure/__release
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $2
+  call $~lib/rt/pure/__retain
+  local.set $2
+  local.get $0
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_u
+  i32.const 6256
+  local.get $1
+  call $~lib/array/Array<i32>#__get
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_u
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1312
+   i32.const 490
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  global.get $std/typedarray/forEachCallCount
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1312
+   i32.const 491
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
+  global.get $std/typedarray/forEachSelf
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1312
+   i32.const 492
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $std/typedarray/forEachCallCount
+  i32.const 1
+  i32.add
+  global.set $std/typedarray/forEachCallCount
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   call $~lib/rt/pure/__retain
   local.set $2
@@ -10109,7 +10255,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $5
   loop $for-loop|0
    local.get $2
@@ -10211,7 +10357,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $5
   loop $for-loop|0
    local.get $2
@@ -10421,7 +10567,7 @@
     i32.const 24
     i32.shl
     i32.const 24
-    i32.shr_s
+    i32.shr_u
     call $~lib/typedarray/Int8Array#__set
     local.get $3
     local.get $0
@@ -10431,7 +10577,7 @@
     i32.const 24
     i32.shl
     i32.const 24
-    i32.shr_s
+    i32.shr_u
     call $~lib/typedarray/Int8Array#__set
     local.get $0
     i32.const 1
@@ -10463,7 +10609,7 @@
     i32.const 24
     i32.shl
     i32.const 24
-    i32.shr_s
+    i32.shr_u
     i32.ne
     if
      i32.const 0
@@ -11061,7 +11207,7 @@
   local.get $3
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.sub
   local.set $0
@@ -11112,7 +11258,7 @@
   local.tee $3
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.tee $0
   i32.const 4
   local.get $0
@@ -11206,7 +11352,7 @@
     i32.const 16
     i32.shl
     i32.const 16
-    i32.shr_s
+    i32.shr_u
     call $~lib/typedarray/Int16Array#__set
     local.get $3
     local.get $0
@@ -11216,7 +11362,7 @@
     i32.const 16
     i32.shl
     i32.const 16
-    i32.shr_s
+    i32.shr_u
     call $~lib/typedarray/Int16Array#__set
     local.get $0
     i32.const 1
@@ -11248,7 +11394,7 @@
     i32.const 16
     i32.shl
     i32.const 16
-    i32.shr_s
+    i32.shr_u
     i32.ne
     if
      i32.const 0
@@ -11351,7 +11497,7 @@
   local.get $3
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.sub
   local.set $0
@@ -11402,7 +11548,7 @@
   local.tee $3
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.tee $0
   i32.const 4
   local.get $0
@@ -11635,7 +11781,7 @@
   local.get $3
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.sub
   local.set $0
@@ -11838,7 +11984,7 @@
   local.tee $3
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.tee $0
   i32.const 4
   local.get $0
@@ -12065,7 +12211,7 @@
   local.get $3
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.sub
   local.set $0
@@ -12116,7 +12262,7 @@
   local.tee $3
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.tee $0
   i32.const 4
   local.get $0
@@ -12341,7 +12487,7 @@
   local.tee $3
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.tee $0
   i32.const 4
   local.get $0
@@ -12571,7 +12717,7 @@
   local.get $3
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.sub
   local.set $0
@@ -12622,7 +12768,7 @@
   local.tee $3
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.tee $0
   i32.const 4
   local.get $0
@@ -12852,7 +12998,7 @@
   local.get $3
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.sub
   local.set $0
@@ -13096,10 +13242,12 @@
      local.get $2
      local.get $4
      i32.add
-     i32.load8_u
+     i32.load8_s
      local.get $1
-     i32.const 255
-     i32.and
+     i32.const 24
+     i32.shl
+     i32.const 24
+     i32.shr_u
      i32.eq
      if
       local.get $0
@@ -13163,10 +13311,12 @@
      local.get $2
      local.get $3
      i32.add
-     i32.load8_u
+     i32.load8_s
      local.get $1
-     i32.const 255
-     i32.and
+     i32.const 24
+     i32.shl
+     i32.const 24
+     i32.shr_u
      i32.eq
      if
       local.get $0
@@ -13235,7 +13385,7 @@
     i32.const 24
     i32.shl
     i32.const 24
-    i32.shr_s
+    i32.shr_u
     call $~lib/typedarray/Int8Array#__set
     local.get $1
     i32.const 1
@@ -13633,6 +13783,165 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
+ (func $~lib/typedarray/Uint8Array#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+   local.get $2
+   local.get $0
+   call $~lib/rt/pure/__retain
+   local.tee $0
+   i32.load offset=8
+   local.tee $3
+   i32.ge_s
+   i32.const 1
+   local.get $3
+   select
+   if
+    local.get $0
+    call $~lib/rt/pure/__release
+    i32.const -1
+    local.set $2
+    br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+   end
+   local.get $2
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $2
+    local.get $3
+    i32.add
+    local.tee $2
+    i32.const 0
+    local.get $2
+    i32.const 0
+    i32.gt_s
+    select
+    local.set $2
+   end
+   local.get $0
+   i32.load offset=4
+   local.set $4
+   loop $while-continue|0
+    local.get $2
+    local.get $3
+    i32.lt_s
+    if
+     local.get $2
+     local.get $4
+     i32.add
+     i32.load8_u
+     local.get $1
+     i32.const 255
+     i32.and
+     i32.eq
+     if
+      local.get $0
+      call $~lib/rt/pure/__release
+      br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+     end
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+     br $while-continue|0
+    end
+   end
+   local.get $0
+   call $~lib/rt/pure/__release
+   i32.const -1
+   local.set $2
+  end
+  local.get $2
+ )
+ (func $~lib/typedarray/Uint8Array#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+   local.get $0
+   call $~lib/rt/pure/__retain
+   local.tee $0
+   i32.load offset=8
+   local.tee $3
+   i32.eqz
+   if
+    local.get $0
+    call $~lib/rt/pure/__release
+    i32.const -1
+    local.set $2
+    br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+   end
+   local.get $2
+   local.get $3
+   i32.add
+   local.get $3
+   i32.const 1
+   i32.sub
+   local.get $2
+   local.get $2
+   local.get $3
+   i32.ge_s
+   select
+   local.get $2
+   i32.const 0
+   i32.lt_s
+   select
+   local.set $2
+   local.get $0
+   i32.load offset=4
+   local.set $3
+   loop $while-continue|0
+    local.get $2
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $2
+     local.get $3
+     i32.add
+     i32.load8_u
+     local.get $1
+     i32.const 255
+     i32.and
+     i32.eq
+     if
+      local.get $0
+      call $~lib/rt/pure/__release
+      br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+     end
+     local.get $2
+     i32.const 1
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
+   end
+   local.get $0
+   call $~lib/rt/pure/__release
+   i32.const -1
+   local.set $2
+  end
+  local.get $2
+ )
+ (func $~lib/typedarray/Uint8Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   i32.load offset=8
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Uint8Array#lastIndexOf
+ )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
   (local $1 i32)
@@ -13670,7 +13979,7 @@
   local.get $0
   i32.const 0
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   if
    i32.const 0
    i32.const 1312
@@ -13682,7 +13991,7 @@
   local.get $0
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -13696,7 +14005,7 @@
   local.get $0
   i32.const -1
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -13710,7 +14019,7 @@
   local.get $0
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -13724,7 +14033,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -13738,7 +14047,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -13752,7 +14061,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -13766,7 +14075,7 @@
   local.get $0
   i32.const 1
   i32.const 10
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -13780,7 +14089,7 @@
   local.get $0
   i32.const 1
   i32.const -100
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -13795,7 +14104,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -13808,7 +14117,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -13823,7 +14132,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -13838,7 +14147,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -13852,7 +14161,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -13866,7 +14175,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -13880,7 +14189,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -13894,7 +14203,7 @@
   local.get $0
   i32.const 1
   i32.const 100
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -13908,7 +14217,7 @@
   local.get $0
   i32.const 1
   i32.const -10
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -13922,7 +14231,7 @@
   local.get $0
   i32.const 1
   i32.const -11
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -13939,7 +14248,7 @@
   local.tee $1
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -13953,7 +14262,7 @@
   local.get $1
   i32.const 4
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   if
    i32.const 0
    i32.const 1312
@@ -13965,7 +14274,7 @@
   local.get $1
   i32.const 5
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -13979,7 +14288,7 @@
   local.get $1
   i32.const 9
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -13993,7 +14302,7 @@
   local.get $1
   i32.const 10
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14007,7 +14316,7 @@
   local.get $1
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14021,7 +14330,7 @@
   local.get $1
   i32.const 5
   i32.const 1
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -14035,7 +14344,7 @@
   local.get $1
   i32.const 5
   i32.const 2
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14092,7 +14401,7 @@
   local.get $0
   i32.const 0
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   if
    i32.const 0
    i32.const 1312
@@ -14104,7 +14413,7 @@
   local.get $0
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14118,7 +14427,7 @@
   local.get $0
   i32.const -1
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14132,7 +14441,7 @@
   local.get $0
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -14146,7 +14455,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -14160,7 +14469,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -14174,7 +14483,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14188,7 +14497,7 @@
   local.get $0
   i32.const 1
   i32.const 10
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14202,7 +14511,7 @@
   local.get $0
   i32.const 1
   i32.const -100
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -14217,7 +14526,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -14230,7 +14539,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -14245,7 +14554,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -14260,7 +14569,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -14274,7 +14583,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -14288,7 +14597,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -14302,7 +14611,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -14316,7 +14625,7 @@
   local.get $0
   i32.const 1
   i32.const 100
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -14330,7 +14639,7 @@
   local.get $0
   i32.const 1
   i32.const -10
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -14344,7 +14653,7 @@
   local.get $0
   i32.const 1
   i32.const -11
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -14361,7 +14670,7 @@
   local.tee $1
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14375,7 +14684,7 @@
   local.get $1
   i32.const 4
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   if
    i32.const 0
    i32.const 1312
@@ -14387,7 +14696,7 @@
   local.get $1
   i32.const 5
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -14401,7 +14710,7 @@
   local.get $1
   i32.const 9
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14415,7 +14724,7 @@
   local.get $1
   i32.const 10
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14429,7 +14738,7 @@
   local.get $1
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14443,7 +14752,7 @@
   local.get $1
   i32.const 5
   i32.const 1
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -14457,7 +14766,7 @@
   local.get $1
   i32.const 5
   i32.const 2
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -14487,7 +14796,7 @@
    local.tee $0
    i32.load offset=8
    i32.const 1
-   i32.shr_u
+   i32.shr_s
    local.tee $3
    i32.ge_s
    i32.const 1
@@ -14528,10 +14837,12 @@
      i32.const 1
      i32.shl
      i32.add
-     i32.load16_u
+     i32.load16_s
      local.get $1
-     i32.const 65535
-     i32.and
+     i32.const 16
+     i32.shl
+     i32.const 16
+     i32.shr_u
      i32.eq
      if
       local.get $0
@@ -14560,7 +14871,7 @@
    local.tee $0
    i32.load offset=8
    i32.const 1
-   i32.shr_u
+   i32.shr_s
    local.tee $3
    i32.eqz
    if
@@ -14599,10 +14910,12 @@
      i32.const 1
      i32.shl
      i32.add
-     i32.load16_u
+     i32.load16_s
      local.get $1
-     i32.const 65535
-     i32.and
+     i32.const 16
+     i32.shl
+     i32.const 16
+     i32.shr_u
      i32.eq
      if
       local.get $0
@@ -14638,7 +14951,7 @@
    local.get $0
    i32.load offset=8
    i32.const 1
-   i32.shr_u
+   i32.shr_s
    local.set $2
   end
   local.get $0
@@ -14673,7 +14986,7 @@
     i32.const 16
     i32.shl
     i32.const 16
-    i32.shr_s
+    i32.shr_u
     call $~lib/typedarray/Int16Array#__set
     local.get $1
     i32.const 1
@@ -15070,6 +15383,175 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
+ (func $~lib/typedarray/Uint16Array#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+   local.get $2
+   local.get $0
+   call $~lib/rt/pure/__retain
+   local.tee $0
+   i32.load offset=8
+   i32.const 1
+   i32.shr_s
+   local.tee $3
+   i32.ge_s
+   i32.const 1
+   local.get $3
+   select
+   if
+    local.get $0
+    call $~lib/rt/pure/__release
+    i32.const -1
+    local.set $2
+    br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+   end
+   local.get $2
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $2
+    local.get $3
+    i32.add
+    local.tee $2
+    i32.const 0
+    local.get $2
+    i32.const 0
+    i32.gt_s
+    select
+    local.set $2
+   end
+   local.get $0
+   i32.load offset=4
+   local.set $4
+   loop $while-continue|0
+    local.get $2
+    local.get $3
+    i32.lt_s
+    if
+     local.get $4
+     local.get $2
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_u
+     local.get $1
+     i32.const 65535
+     i32.and
+     i32.eq
+     if
+      local.get $0
+      call $~lib/rt/pure/__release
+      br $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+     end
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+     br $while-continue|0
+    end
+   end
+   local.get $0
+   call $~lib/rt/pure/__release
+   i32.const -1
+   local.set $2
+  end
+  local.get $2
+ )
+ (func $~lib/typedarray/Uint16Array#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+   local.get $0
+   call $~lib/rt/pure/__retain
+   local.tee $0
+   i32.load offset=8
+   i32.const 1
+   i32.shr_s
+   local.tee $3
+   i32.eqz
+   if
+    local.get $0
+    call $~lib/rt/pure/__release
+    i32.const -1
+    local.set $2
+    br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+   end
+   local.get $2
+   local.get $3
+   i32.add
+   local.get $3
+   i32.const 1
+   i32.sub
+   local.get $2
+   local.get $2
+   local.get $3
+   i32.ge_s
+   select
+   local.get $2
+   i32.const 0
+   i32.lt_s
+   select
+   local.set $2
+   local.get $0
+   i32.load offset=4
+   local.set $3
+   loop $while-continue|0
+    local.get $2
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $3
+     local.get $2
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_u
+     local.get $1
+     i32.const 65535
+     i32.and
+     i32.eq
+     if
+      local.get $0
+      call $~lib/rt/pure/__release
+      br $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+     end
+     local.get $2
+     i32.const 1
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
+   end
+   local.get $0
+   call $~lib/rt/pure/__release
+   i32.const -1
+   local.set $2
+  end
+  local.get $2
+ )
+ (func $~lib/typedarray/Uint16Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   i32.load offset=8
+   i32.const 1
+   i32.shr_s
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Uint16Array#lastIndexOf
+ )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
   (local $1 i32)
@@ -15107,7 +15589,7 @@
   local.get $0
   i32.const 0
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   if
    i32.const 0
    i32.const 1312
@@ -15119,7 +15601,7 @@
   local.get $0
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -15133,7 +15615,7 @@
   local.get $0
   i32.const -1
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -15147,7 +15629,7 @@
   local.get $0
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -15161,7 +15643,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -15175,7 +15657,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -15189,7 +15671,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -15203,7 +15685,7 @@
   local.get $0
   i32.const 1
   i32.const 10
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -15217,7 +15699,7 @@
   local.get $0
   i32.const 1
   i32.const -100
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -15232,7 +15714,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint16Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -15245,7 +15727,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint16Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -15260,7 +15742,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint16Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -15275,7 +15757,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint16Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -15289,7 +15771,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -15303,7 +15785,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -15317,7 +15799,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -15331,7 +15813,7 @@
   local.get $0
   i32.const 1
   i32.const 100
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -15345,7 +15827,7 @@
   local.get $0
   i32.const 1
   i32.const -10
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -15359,7 +15841,7 @@
   local.get $0
   i32.const 1
   i32.const -11
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -15376,7 +15858,7 @@
   local.tee $1
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -15390,7 +15872,7 @@
   local.get $1
   i32.const 4
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   if
    i32.const 0
    i32.const 1312
@@ -15402,7 +15884,7 @@
   local.get $1
   i32.const 5
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -15416,7 +15898,7 @@
   local.get $1
   i32.const 9
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -15430,7 +15912,7 @@
   local.get $1
   i32.const 10
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -15444,7 +15926,7 @@
   local.get $1
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -15458,7 +15940,7 @@
   local.get $1
   i32.const 5
   i32.const 1
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -15472,7 +15954,7 @@
   local.get $1
   i32.const 5
   i32.const 2
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -15502,7 +15984,7 @@
    local.tee $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.tee $3
    i32.ge_s
    i32.const 1
@@ -15573,7 +16055,7 @@
    local.tee $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.tee $3
    i32.eqz
    if
@@ -15649,7 +16131,7 @@
    local.get $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.set $2
   end
   local.get $0
@@ -16508,7 +16990,7 @@
    local.tee $0
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.tee $3
    i32.ge_s
    i32.const 1
@@ -16579,7 +17061,7 @@
    local.tee $0
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.tee $3
    i32.eqz
    if
@@ -16655,7 +17137,7 @@
    local.get $0
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.set $2
   end
   local.get $0
@@ -17515,7 +17997,7 @@
    local.tee $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.tee $3
    i32.ge_s
    i32.const 1
@@ -17586,7 +18068,7 @@
    local.tee $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.tee $3
    i32.eqz
    if
@@ -17662,7 +18144,7 @@
    local.get $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    local.set $2
   end
   local.get $0
@@ -18101,7 +18583,7 @@
    local.tee $0
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.tee $3
    i32.ge_s
    i32.const 1
@@ -18172,7 +18654,7 @@
    local.tee $0
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.tee $3
    i32.eqz
    if
@@ -18248,7 +18730,7 @@
    local.get $0
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    local.set $2
   end
   local.get $0
@@ -18759,7 +19241,7 @@
   end
   local.get $0
   i32.const 31
-  i32.shr_u
+  i32.shr_s
   local.tee $1
   if
    i32.const 0
@@ -18795,7 +19277,7 @@
   i32.sub
   i32.load offset=12
   i32.const 1
-  i32.shr_u
+  i32.shr_s
  )
  (func $~lib/util/number/itoa_buffered<i8> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -18803,9 +19285,9 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_s
+  i32.shr_u
   i32.const 0
-  i32.lt_s
+  i32.lt_u
   local.tee $2
   if
    local.get $0
@@ -18820,7 +19302,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_s
+  i32.shr_u
   i32.const 10
   i32.lt_u
   if
@@ -18833,7 +19315,7 @@
    i32.const 24
    i32.shl
    i32.const 24
-   i32.shr_s
+   i32.shr_u
    i32.const 48
    i32.or
    i32.store16
@@ -18847,7 +19329,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_s
+  i32.shr_u
   local.tee $2
   call $~lib/util/number/decimalCount32
   i32.add
@@ -19387,9 +19869,9 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_s
+  i32.shr_u
   i32.const 0
-  i32.lt_s
+  i32.lt_u
   local.tee $2
   if
    local.get $0
@@ -19404,7 +19886,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_s
+  i32.shr_u
   i32.const 10
   i32.lt_u
   if
@@ -19417,7 +19899,7 @@
    i32.const 16
    i32.shl
    i32.const 16
-   i32.shr_s
+   i32.shr_u
    i32.const 48
    i32.or
    i32.store16
@@ -19431,7 +19913,7 @@
   i32.const 16
   i32.shl
   i32.const 16
-  i32.shr_s
+  i32.shr_u
   local.tee $2
   call $~lib/util/number/decimalCount32
   i32.add
@@ -19571,7 +20053,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   call $~lib/util/string/joinIntegerArray<i16>
   i32.const 7168
   call $~lib/rt/pure/__release
@@ -19735,7 +20217,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   call $~lib/util/string/joinIntegerArray<u16>
   i32.const 7168
   call $~lib/rt/pure/__release
@@ -19912,7 +20394,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   call $~lib/util/string/joinIntegerArray<i32>
   i32.const 7168
   call $~lib/rt/pure/__release
@@ -20067,7 +20549,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   call $~lib/util/string/joinIntegerArray<u32>
   i32.const 7168
   call $~lib/rt/pure/__release
@@ -20247,7 +20729,7 @@
     drop
     local.get $3
     i64.const 63
-    i64.shr_u
+    i64.shr_s
     i32.wrap_i64
     local.tee $0
     if
@@ -20400,7 +20882,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   call $~lib/util/string/joinIntegerArray<i64>
   i32.const 7168
   call $~lib/rt/pure/__release
@@ -20611,7 +21093,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   call $~lib/util/string/joinIntegerArray<u64>
   i32.const 7168
   call $~lib/rt/pure/__release
@@ -20645,7 +21127,7 @@
   local.get $3
   local.get $11
   i64.extend_i32_s
-  i64.shr_u
+  i64.shr_s
   i32.wrap_i64
   local.tee $2
   call $~lib/util/number/decimalCount32
@@ -20892,7 +21374,7 @@
    i64.mul
    local.tee $3
    local.get $13
-   i64.shr_u
+   i64.shr_s
    local.tee $1
    local.get $6
    i64.extend_i32_s
@@ -21348,7 +21830,7 @@
   f64.ne
   i32.add
   i32.const 3
-  i32.shr_s
+  i32.shr_u
   i32.const 1
   i32.add
   local.tee $4
@@ -21376,12 +21858,12 @@
   local.set $2
   local.get $6
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   local.tee $6
   global.get $~lib/util/number/_frc_plus
   local.tee $5
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   local.tee $7
   i64.mul
   local.get $2
@@ -21394,11 +21876,11 @@
   local.tee $5
   i64.mul
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.tee $7
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.get $5
   local.get $6
@@ -21410,7 +21892,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   i64.const 1
   i64.sub
@@ -21431,7 +21913,7 @@
   i64.shl
   local.tee $3
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   local.tee $7
   i64.mul
   local.get $2
@@ -21444,11 +21926,11 @@
   local.tee $3
   i64.mul
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.tee $7
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.get $3
   local.get $6
@@ -21460,7 +21942,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   global.get $~lib/util/number/_exp_pow
   local.tee $4
@@ -21481,7 +21963,7 @@
   global.get $~lib/util/number/_frc_minus
   local.tee $3
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   local.tee $5
   i64.mul
   local.get $2
@@ -21494,11 +21976,11 @@
   local.tee $2
   i64.mul
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.tee $3
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   local.get $2
   local.get $6
@@ -21510,7 +21992,7 @@
   i64.const 2147483647
   i64.add
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i64.add
   i64.const 1
   i64.add
@@ -21780,7 +22262,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   call $~lib/util/string/joinFloatArray<f32>
   i32.const 7168
   call $~lib/rt/pure/__release
@@ -21914,7 +22396,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   call $~lib/util/string/joinFloatArray<f64>
   i32.const 7168
   call $~lib/rt/pure/__release
@@ -22146,7 +22628,7 @@
     i32.const 24
     i32.shl
     i32.const 24
-    i32.shr_s
+    i32.shr_u
     call $~lib/typedarray/Int8Array#__set
     local.get $0
     i32.const 1
@@ -22499,7 +22981,7 @@
     i32.const 16
     i32.shl
     i32.const 16
-    i32.shr_s
+    i32.shr_u
     call $~lib/typedarray/Int16Array#__set
     local.get $0
     i32.const 1
@@ -23805,7 +24287,7 @@
   local.tee $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 6
   i32.add
   local.get $0
@@ -23830,7 +24312,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -23993,7 +24475,7 @@
   local.tee $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.const 4
   i32.add
   local.get $0
@@ -24018,7 +24500,7 @@
   local.get $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -24663,7 +25145,7 @@
     i32.load
     local.tee $3
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     i32.const -1
     i32.xor
     local.get $3
@@ -24671,7 +25153,7 @@
     local.get $3
     i32.sub
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     i32.or
     i32.and
     i32.store8
@@ -24871,7 +25353,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.add
   local.get $1
   i32.load offset=8
@@ -24895,7 +25377,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $7
   loop $for-loop|0
    local.get $3
@@ -24914,7 +25396,7 @@
     local.tee $5
     i32.wrap_i64
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     i32.const -1
     i32.xor
     i64.extend_i32_s
@@ -24924,7 +25406,7 @@
     i32.wrap_i64
     i32.sub
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     i64.extend_i32_s
     i64.or
     i64.and
@@ -25055,7 +25537,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.add
   local.get $1
   i32.load offset=8
@@ -25079,7 +25561,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $7
   loop $for-loop|0
    local.get $3
@@ -25097,7 +25579,7 @@
     i32.load16_s
     local.tee $2
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     i32.const -1
     i32.xor
     local.get $2
@@ -25105,7 +25587,7 @@
     local.get $2
     i32.sub
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     i32.or
     i32.and
     i32.store8
@@ -25175,7 +25657,7 @@
     i32.load8_s
     local.tee $3
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     i32.const -1
     i32.xor
     local.get $3
@@ -25183,7 +25665,7 @@
     local.get $3
     i32.sub
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     i32.or
     i32.and
     i32.store8
@@ -25395,7 +25877,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -25468,7 +25950,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.tee $3
   local.get $1
   i32.load offset=12
@@ -25545,7 +26027,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -25625,13 +26107,13 @@
   local.tee $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 6
   i32.add
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -25652,7 +26134,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -25704,7 +26186,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -25786,7 +26268,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -25847,13 +26329,13 @@
   local.tee $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.const 4
   i32.add
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -25897,7 +26379,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -26113,7 +26595,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.tee $3
   local.get $1
   i32.load offset=12
@@ -26190,7 +26672,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -26272,7 +26754,7 @@
   local.get $0
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -26490,7 +26972,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -26528,7 +27010,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.tee $3
   local.get $1
   i32.load offset=12
@@ -26606,7 +27088,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -26685,13 +27167,13 @@
   local.tee $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 6
   i32.add
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -26712,7 +27194,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -26764,7 +27246,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -26846,7 +27328,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -26911,13 +27393,13 @@
   local.tee $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.const 4
   i32.add
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -26938,7 +27420,7 @@
   local.get $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -26989,7 +27471,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -27196,7 +27678,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.tee $3
   local.get $1
   i32.load offset=12
@@ -27274,7 +27756,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -27355,7 +27837,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -27577,7 +28059,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -27650,7 +28132,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.tee $3
   local.get $1
   i32.load offset=12
@@ -27727,7 +28209,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -27803,13 +28285,13 @@
   local.tee $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 6
   i32.add
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -27855,7 +28337,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -27936,7 +28418,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -28001,13 +28483,13 @@
   local.tee $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.const 4
   i32.add
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -28028,7 +28510,7 @@
   local.get $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -28079,7 +28561,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -28286,7 +28768,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.tee $3
   local.get $1
   i32.load offset=12
@@ -28363,7 +28845,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -28446,7 +28928,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -28674,7 +29156,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.tee $3
   local.get $1
   i32.load offset=12
@@ -28749,13 +29231,13 @@
   local.tee $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 6
   i32.add
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -28776,7 +29258,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -28827,13 +29309,13 @@
   local.tee $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.const 4
   i32.add
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -28854,7 +29336,7 @@
   local.get $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -28965,7 +29447,7 @@
    local.get $1
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    i32.gt_s
    br_if $folding-inner0
    local.get $1
@@ -29028,7 +29510,7 @@
    local.get $0
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    i32.gt_s
    br_if $folding-inner0
    local.get $0
@@ -29082,7 +29564,7 @@
    local.get $1
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    i32.gt_s
    br_if $folding-inner0
    local.get $1
@@ -29140,7 +29622,7 @@
    local.get $1
    i32.load offset=8
    i32.const 2
-   i32.shr_u
+   i32.shr_s
    i32.gt_s
    br_if $folding-inner0
    local.get $1
@@ -29242,7 +29724,7 @@
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.tee $3
   local.get $1
   i32.load offset=12
@@ -29316,13 +29798,13 @@
   local.tee $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 6
   i32.add
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -29343,7 +29825,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -29393,13 +29875,13 @@
   local.tee $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   i32.const 4
   i32.add
   local.get $0
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.gt_s
   if
    i32.const 1376
@@ -29420,7 +29902,7 @@
   local.get $1
   i32.load offset=8
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -29531,7 +30013,7 @@
    local.get $1
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    i32.gt_s
    br_if $folding-inner1
    local.get $1
@@ -29597,7 +30079,7 @@
    local.get $1
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    i32.gt_s
    br_if $folding-inner1
    local.get $1
@@ -29678,7 +30160,7 @@
    local.get $1
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    i32.gt_s
    br_if $folding-inner1
    local.get $1
@@ -29736,7 +30218,7 @@
    local.get $1
    i32.load offset=8
    i32.const 3
-   i32.shr_u
+   i32.shr_s
    i32.gt_s
    br_if $folding-inner1
    local.get $1
@@ -29833,7 +30315,7 @@
   local.tee $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.add
   local.get $0
@@ -29858,7 +30340,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $7
   loop $for-loop|0
    local.get $2
@@ -29922,7 +30404,7 @@
   local.tee $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 8
   i32.add
   local.get $0
@@ -29947,7 +30429,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $7
   loop $for-loop|0
    local.get $2
@@ -29965,7 +30447,7 @@
     i32.load
     local.tee $4
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     i32.const -1
     i32.xor
     local.get $4
@@ -29973,7 +30455,7 @@
     local.get $4
     i32.sub
     i32.const 31
-    i32.shr_s
+    i32.shr_u
     i32.or
     i32.and
     i32.store8
@@ -30009,7 +30491,7 @@
   local.tee $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.get $0
   i32.load offset=8
   i32.gt_s
@@ -30030,7 +30512,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.set $6
   loop $for-loop|0
    local.get $2
@@ -30119,7 +30601,7 @@
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -30201,7 +30683,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.ne
   if
@@ -30295,7 +30777,7 @@
   local.get $1
   i32.load offset=8
   i32.const 3
-  i32.shr_u
+  i32.shr_s
   i32.const 4
   i32.ne
   if
@@ -30831,7 +31313,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -31565,7 +32047,7 @@
   local.tee $2
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 3
   i32.ne
   if
@@ -31633,7 +32115,7 @@
   local.get $1
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 2
   i32.ne
   if
@@ -31686,7 +32168,7 @@
   local.get $3
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.const 1
   i32.ne
   if
@@ -31737,11 +32219,11 @@
   local.get $4
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   local.get $0
   i32.load offset=8
   i32.const 2
-  i32.shr_u
+  i32.shr_s
   i32.ne
   if
    i32.const 0
@@ -31869,8 +32351,10 @@
                 block $folding-inner3
                  block $folding-inner2
                   local.get $3
-                  i32.const 255
-                  i32.and
+                  i32.const 24
+                  i32.shl
+                  i32.const 24
+                  i32.shr_u
                   i32.const 6
                   i32.ne
                   br_if $folding-inner2
@@ -31966,7 +32450,7 @@
                   local.get $2
                   i32.load offset=8
                   i32.const 1
-                  i32.shr_u
+                  i32.shr_s
                   local.set $8
                   loop $for-loop|00
                    local.get $0
@@ -32004,8 +32488,10 @@
                   i32.const 2800
                   call $~lib/rt/pure/__release
                   local.get $3
-                  i32.const 65535
-                  i32.and
+                  i32.const 16
+                  i32.shl
+                  i32.const 16
+                  i32.shr_u
                   i32.const 6
                   i32.ne
                   br_if $folding-inner2
@@ -32045,7 +32531,7 @@
                   local.get $2
                   i32.load offset=8
                   i32.const 1
-                  i32.shr_u
+                  i32.shr_s
                   local.set $8
                   loop $for-loop|01
                    local.get $0
@@ -32226,7 +32712,7 @@
                   local.get $2
                   i32.load offset=8
                   i32.const 2
-                  i32.shr_u
+                  i32.shr_s
                   local.set $7
                   loop $for-loop|02
                    local.get $0
@@ -32301,7 +32787,7 @@
                   local.get $2
                   i32.load offset=8
                   i32.const 3
-                  i32.shr_u
+                  i32.shr_s
                   local.set $7
                   loop $for-loop|03
                    local.get $0
@@ -32412,8 +32898,10 @@
                   i32.const 3056
                   call $~lib/rt/pure/__release
                   local.get $3
-                  i32.const 255
-                  i32.and
+                  i32.const 24
+                  i32.shl
+                  i32.const 24
+                  i32.shr_u
                   i32.const 6
                   i32.ne
                   br_if $folding-inner3
@@ -32507,7 +32995,7 @@
                   local.get $2
                   i32.load offset=8
                   i32.const 1
-                  i32.shr_u
+                  i32.shr_s
                   i32.const 1
                   i32.sub
                   local.set $0
@@ -32547,8 +33035,10 @@
                   i32.const 3152
                   call $~lib/rt/pure/__release
                   local.get $3
-                  i32.const 65535
-                  i32.and
+                  i32.const 16
+                  i32.shl
+                  i32.const 16
+                  i32.shr_u
                   i32.const 6
                   i32.ne
                   br_if $folding-inner3
@@ -32586,7 +33076,7 @@
                   local.get $2
                   i32.load offset=8
                   i32.const 1
-                  i32.shr_u
+                  i32.shr_s
                   i32.const 1
                   i32.sub
                   local.set $0
@@ -32770,7 +33260,7 @@
                    local.get $2
                    i32.load offset=8
                    i32.const 2
-                   i32.shr_u
+                   i32.shr_s
                    i32.const 1
                    i32.sub
                    local.set $0
@@ -32847,7 +33337,7 @@
                    local.get $2
                    i32.load offset=8
                    i32.const 3
-                   i32.shr_u
+                   i32.shr_s
                    i32.const 1
                    i32.sub
                    local.set $0
@@ -34373,7 +34863,7 @@
                    i32.const 24
                    i32.shl
                    i32.const 24
-                   i32.shr_s
+                   i32.shr_u
                    call $~lib/typedarray/Int8Array#__set
                    local.get $0
                    i32.const 1
@@ -34383,7 +34873,7 @@
                    i32.const 24
                    i32.shl
                    i32.const 24
-                   i32.shr_s
+                   i32.shr_u
                    call $~lib/typedarray/Int8Array#__set
                    local.get $0
                    i32.const 2
@@ -34393,7 +34883,7 @@
                    i32.const 24
                    i32.shl
                    i32.const 24
-                   i32.shr_s
+                   i32.shr_u
                    call $~lib/typedarray/Int8Array#__set
                    i32.const 0
                    local.set $1
@@ -34548,7 +35038,7 @@
                    i32.const 16
                    i32.shl
                    i32.const 16
-                   i32.shr_s
+                   i32.shr_u
                    call $~lib/typedarray/Int16Array#__set
                    local.get $0
                    i32.const 1
@@ -34558,7 +35048,7 @@
                    i32.const 16
                    i32.shl
                    i32.const 16
-                   i32.shr_s
+                   i32.shr_u
                    call $~lib/typedarray/Int16Array#__set
                    local.get $0
                    i32.const 2
@@ -34568,7 +35058,7 @@
                    i32.const 16
                    i32.shl
                    i32.const 16
-                   i32.shr_s
+                   i32.shr_u
                    call $~lib/typedarray/Int16Array#__set
                    i32.const 0
                    local.set $1
@@ -34584,7 +35074,7 @@
                    local.get $2
                    i32.load offset=8
                    i32.const 1
-                   i32.shr_u
+                   i32.shr_s
                    local.set $7
                    loop $for-loop|010
                     local.get $1
@@ -34671,7 +35161,7 @@
                    local.get $2
                    i32.load offset=8
                    i32.const 1
-                   i32.shr_u
+                   i32.shr_s
                    local.set $7
                    loop $for-loop|011
                     local.get $1
@@ -34909,7 +35399,7 @@
                    local.get $2
                    i32.load offset=8
                    i32.const 2
-                   i32.shr_u
+                   i32.shr_s
                    local.set $7
                    loop $for-loop|012
                     local.get $1
@@ -34993,7 +35483,7 @@
                    local.get $2
                    i32.load offset=8
                    i32.const 3
-                   i32.shr_u
+                   i32.shr_s
                    local.set $7
                    loop $for-loop|013
                     local.get $1
@@ -35085,7 +35575,7 @@
                     local.tee $1
                     i32.load offset=8
                     i32.const 3
-                    i32.shr_u
+                    i32.shr_s
                     local.tee $3
                     i32.ge_s
                     i32.const 1
@@ -35174,7 +35664,7 @@
                     local.tee $1
                     i32.load offset=8
                     i32.const 2
-                    i32.shr_u
+                    i32.shr_s
                     local.tee $4
                     i32.ge_s
                     i32.const 1

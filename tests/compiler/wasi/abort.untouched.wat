@@ -22,7 +22,7 @@
   i32.sub
   i32.load offset=12
   i32.const 1
-  i32.shr_u
+  i32.shr_s
  )
  (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -70,7 +70,7 @@
      if
       local.get $7
       i32.const 6
-      i32.shr_u
+      i32.shr_s
       i32.const 192
       i32.or
       local.set $8
@@ -130,13 +130,13 @@
         local.set $7
         local.get $7
         i32.const 18
-        i32.shr_u
+        i32.shr_s
         i32.const 240
         i32.or
         local.set $8
         local.get $7
         i32.const 12
-        i32.shr_u
+        i32.shr_s
         i32.const 63
         i32.and
         i32.const 128
@@ -144,7 +144,7 @@
         local.set $10
         local.get $7
         i32.const 6
-        i32.shr_u
+        i32.shr_s
         i32.const 63
         i32.and
         i32.const 128
@@ -184,13 +184,13 @@
       end
       local.get $7
       i32.const 12
-      i32.shr_u
+      i32.shr_s
       i32.const 224
       i32.or
       local.set $9
       local.get $7
       i32.const 6
-      i32.shr_u
+      i32.shr_s
       i32.const 63
       i32.and
       i32.const 128

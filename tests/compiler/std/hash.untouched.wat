@@ -20,7 +20,7 @@
   i32.sub
   i32.load offset=12
   i32.const 1
-  i32.shr_u
+  i32.shr_s
  )
  (func $~lib/rt/stub/__release (param $0 i32)
   nop
@@ -94,7 +94,7 @@
   local.get $1
   local.get $0
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -104,7 +104,7 @@
   local.get $1
   local.get $0
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -114,7 +114,7 @@
   local.get $1
   local.get $0
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.xor
   i32.const 16777619
   i32.mul
@@ -130,7 +130,7 @@
   local.set $1
   local.get $0
   i64.const 32
-  i64.shr_u
+  i64.shr_s
   i32.wrap_i64
   local.set $2
   i32.const -2128831035
@@ -146,7 +146,7 @@
   local.get $3
   local.get $1
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -156,7 +156,7 @@
   local.get $3
   local.get $1
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -166,7 +166,7 @@
   local.get $3
   local.get $1
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.xor
   i32.const 16777619
   i32.mul
@@ -182,7 +182,7 @@
   local.get $3
   local.get $2
   i32.const 8
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -192,7 +192,7 @@
   local.get $3
   local.get $2
   i32.const 16
-  i32.shr_u
+  i32.shr_s
   i32.const 255
   i32.and
   i32.xor
@@ -202,7 +202,7 @@
   local.get $3
   local.get $2
   i32.const 24
-  i32.shr_u
+  i32.shr_s
   i32.xor
   i32.const 16777619
   i32.mul

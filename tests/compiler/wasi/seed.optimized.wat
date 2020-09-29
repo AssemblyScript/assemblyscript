@@ -23,21 +23,21 @@
   local.get $0
   local.get $0
   i64.const 33
-  i64.shr_u
+  i64.shr_s
   i64.xor
   i64.const -49064778989728563
   i64.mul
   local.tee $0
   local.get $0
   i64.const 33
-  i64.shr_u
+  i64.shr_s
   i64.xor
   i64.const -4265267296055464877
   i64.mul
   local.tee $0
   local.get $0
   i64.const 33
-  i64.shr_u
+  i64.shr_s
   i64.xor
  )
  (func $~lib/math/splitMix32 (param $0 i32) (result i32)
@@ -47,7 +47,7 @@
   local.tee $0
   local.get $0
   i32.const 15
-  i32.shr_u
+  i32.shr_s
   i32.xor
   local.get $0
   i32.const 1
@@ -61,7 +61,7 @@
   local.get $0
   local.get $0
   i32.const 7
-  i32.shr_u
+  i32.shr_s
   i32.xor
   i32.mul
   i32.add
@@ -69,7 +69,7 @@
   local.tee $0
   local.get $0
   i32.const 14
-  i32.shr_u
+  i32.shr_s
   i32.xor
  )
  (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (result i32)
@@ -311,7 +311,7 @@
   i32.const 1036
   i32.load
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   call $~lib/string/String.UTF8.encodeUnsafe
   i32.const 23
   i32.add
@@ -473,17 +473,17 @@
   local.tee $1
   local.get $1
   i64.const 17
-  i64.shr_u
+  i64.shr_s
   i64.xor
   i64.xor
   local.get $0
   i64.const 26
-  i64.shr_u
+  i64.shr_s
   i64.xor
   global.set $~lib/math/random_state1_64
   local.get $0
   i64.const 12
-  i64.shr_u
+  i64.shr_s
   i64.const 4607182418800017408
   i64.or
   f64.reinterpret_i64

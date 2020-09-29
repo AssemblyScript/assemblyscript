@@ -17,7 +17,7 @@
   i32.const 24
   i32.shl
   i32.const 24
-  i32.shr_s
+  i32.shr_u
  )
  (func $~start
   i32.const 42

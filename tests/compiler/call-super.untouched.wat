@@ -39,7 +39,7 @@
    i32.xor
    i32.and
    i32.const 16
-   i32.shr_u
+   i32.shr_s
    local.set $3
    local.get $1
    local.tee $4
