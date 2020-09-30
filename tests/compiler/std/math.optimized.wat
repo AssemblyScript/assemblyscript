@@ -187,16 +187,14 @@
    i64.reinterpret_f64
    i64.const 63
    i64.shr_u
-   i64.const 0
-   i64.ne
+   i32.wrap_i64
    i32.const 0
    i32.ne
    local.get $1
    i64.reinterpret_f64
    i64.const 63
    i64.shr_u
-   i64.const 0
-   i64.ne
+   i32.wrap_i64
    i32.const 0
    i32.ne
    i32.eq
@@ -5214,7 +5212,8 @@
      local.get $3
      i64.const 63
      i64.shr_u
-     i64.eqz
+     i32.wrap_i64
+     i32.eqz
      br_if $~lib/util/math/exp2_lut|inlined.0
      drop
      f64.const 0
@@ -11085,8 +11084,7 @@
     local.get $1
     i64.const 1
     i64.and
-    i64.const 0
-    i64.ne
+    i32.wrap_i64
     select
     local.set $2
     local.get $1
