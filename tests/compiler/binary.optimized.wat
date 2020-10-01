@@ -185,6 +185,14 @@
   f32.sub
   global.set $binary/f
   global.get $binary/f
+  f32.const 1
+  f32.mul
+  global.set $binary/f
+  global.get $binary/f
+  f32.const 1
+  f32.div
+  global.set $binary/f
+  global.get $binary/f
   call $~lib/math/NativeMathf.mod
   global.set $binary/f
   global.get $binary/f
@@ -194,6 +202,10 @@
   global.get $binary/f
   f32.const 1
   f32.sub
+  global.set $binary/f
+  global.get $binary/f
+  f32.const 1
+  f32.mul
   global.set $binary/f
   global.get $binary/f
   call $~lib/math/NativeMathf.mod
@@ -210,6 +222,14 @@
   f64.sub
   global.set $binary/F
   global.get $binary/F
+  f64.const 1
+  f64.mul
+  global.set $binary/F
+  global.get $binary/F
+  f64.const 1
+  f64.div
+  global.set $binary/F
+  global.get $binary/F
   call $~lib/math/NativeMath.mod
   global.set $binary/F
   global.get $binary/F
@@ -219,6 +239,10 @@
   global.get $binary/F
   f64.const 1
   f64.sub
+  global.set $binary/F
+  global.get $binary/F
+  f64.const 1
+  f64.mul
   global.set $binary/F
   global.get $binary/F
   call $~lib/math/NativeMath.mod

@@ -8985,17 +8985,15 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   call $~lib/rt/pure/__retain
+  call $~lib/rt/pure/__release
   local.get $0
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  i32.const 2
-  i32.rem_s
+  i32.const 1
+  i32.and
   i32.eqz
-  local.set $0
-  call $~lib/rt/pure/__release
-  local.get $0
  )
  (func $~lib/typedarray/Int8Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9132,17 +9130,15 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   call $~lib/rt/pure/__retain
+  call $~lib/rt/pure/__release
   local.get $0
   i32.const 16
   i32.shl
   i32.const 16
   i32.shr_s
-  i32.const 2
-  i32.rem_s
+  i32.const 1
+  i32.and
   i32.eqz
-  local.set $0
-  call $~lib/rt/pure/__release
-  local.get $0
  )
  (func $~lib/typedarray/Int16Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9281,13 +9277,11 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  local.get $0
-  i32.const 2
-  i32.rem_s
-  i32.eqz
-  local.set $0
   call $~lib/rt/pure/__release
   local.get $0
+  i32.const 1
+  i32.and
+  i32.eqz
  )
  (func $~lib/typedarray/Int32Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9359,13 +9353,11 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  local.get $0
-  i64.const 2
-  i64.rem_s
-  i64.eqz
-  local.set $2
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $0
+  i64.const 1
+  i64.and
+  i64.eqz
  )
  (func $~lib/typedarray/Int64Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

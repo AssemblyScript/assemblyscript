@@ -5212,8 +5212,7 @@
      local.get $3
      i64.const 63
      i64.shr_u
-     i32.wrap_i64
-     i32.eqz
+     i64.eqz
      br_if $~lib/util/math/exp2_lut|inlined.0
      drop
      f64.const 0
