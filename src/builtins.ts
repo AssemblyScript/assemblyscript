@@ -185,6 +185,8 @@ export namespace BuiltinNames {
   export const instantiate = "~lib/builtins/instantiate";
   export const idof = "~lib/builtins/idof";
 
+  export const add = "~lib/builtins/add";
+
   export const i8 = "~lib/builtins/i8";
   export const i16 = "~lib/builtins/i16";
   export const i32 = "~lib/builtins/i32";
@@ -233,6 +235,11 @@ export namespace BuiltinNames {
   export const f64_sqrt = "~lib/builtins/f64.sqrt";
   export const f32_trunc = "~lib/builtins/f32.trunc";
   export const f64_trunc = "~lib/builtins/f64.trunc";
+
+  export const i32_add = "~lib/builtins/i32.add";
+  export const i64_add = "~lib/builtins/i64.add";
+  export const f32_add = "~lib/builtins/f32.add";
+  export const f64_add = "~lib/builtins/f64.add";
 
   export const i32_load8_s = "~lib/builtins/i32.load8_s";
   export const i32_load8_u = "~lib/builtins/i32.load8_u";
@@ -2055,6 +2062,103 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
   return module.store(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset, immAlign);
 }
 builtins.set(BuiltinNames.store, builtin_store);
+
+// add<T?>(left: T, right: T) -> T
+function builtin_add(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2))
+    return module.unreachable();
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var left = operands[0];
+  var arg0 = typeArguments
+    ? compiler.compileExpression(
+        left,
+        typeArguments[0],
+        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+      )
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
+  var type = compiler.currentType;
+  if (type.isValue) {
+    let arg1: ExpressionRef;
+    if (!typeArguments && left.isNumericLiteral) {
+      // prefer right type
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.MUST_WRAP
+      );
+      if (compiler.currentType != type) {
+        arg0 = compiler.compileExpression(
+          left,
+          (type = compiler.currentType),
+          Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        );
+      }
+    } else {
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+      );
+    }
+    let op: BinaryOp = -1;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.BOOL: {
+        op = BinaryOp.AddI32;
+        break;
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        op = BinaryOp.AddI64;
+        break;
+      }
+      case TypeKind.ISIZE: {
+        op = compiler.options.isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32;
+        break;
+      }
+      case TypeKind.USIZE: {
+        op = compiler.options.isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32;
+        break;
+      }
+      case TypeKind.F32:
+        return module.binary(BinaryOp.AddF32, arg0, arg1);
+      case TypeKind.F64:
+        return module.binary(BinaryOp.AddF64, arg0, arg1);
+    }
+    if (op != -1) {
+      let flow = compiler.currentFlow;
+      let nativeType = type.toNativeType();
+      let temp1 = flow.getTempLocal(type);
+      flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+      let temp2 = flow.getTempLocal(type);
+      flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+      let ret =  module.binary(
+        op,
+        module.local_get(temp1.index, nativeType),
+        module.local_get(temp2.index, nativeType)
+      );
+      flow.freeTempLocal(temp2);
+      flow.freeTempLocal(temp1);
+      return ret;
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange,
+    "add",
+    type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.add, builtin_add);
 
 // === Atomics ================================================================================
 
@@ -5579,6 +5683,42 @@ function builtin_f64_trunc(ctx: BuiltinContext): ExpressionRef {
   return builtin_trunc(ctx);
 }
 builtins.set(BuiltinNames.f64_trunc, builtin_f64_trunc);
+
+// f32.add -> add<f32>
+function builtin_f32_add(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.f32;
+  return builtin_add(ctx);
+}
+builtins.set(BuiltinNames.f32_add, builtin_f32_add);
+
+// f64.add -> add<f64>
+function builtin_f64_add(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.f64;
+  return builtin_add(ctx);
+}
+builtins.set(BuiltinNames.f64_add, builtin_f64_add);
+
+// i32.add -> add<i32>
+function builtin_i32_add(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [Type.i32];
+  ctx.contextualType = Type.i32;
+  return builtin_add(ctx);
+}
+builtins.set(BuiltinNames.i32_add, builtin_i32_add);
+
+// i64.add -> add<i64>
+function builtin_i64_add(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [Type.i64];
+  ctx.contextualType = Type.i64;
+  return builtin_add(ctx);
+}
+builtins.set(BuiltinNames.i64_add, builtin_i64_add);
 
 // i32.load8_s -> <i32>load<i8>
 function builtin_i32_load8_s(ctx: BuiltinContext): ExpressionRef {

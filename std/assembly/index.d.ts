@@ -119,6 +119,8 @@ declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
+/** Computes sum of two integers or floats. */
+declare function add<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
