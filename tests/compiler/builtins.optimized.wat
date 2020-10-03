@@ -205,6 +205,10 @@
   global.set $builtins/i
   i32.const 3
   global.set $builtins/i
+  i32.const -1
+  global.set $builtins/i
+  i32.const 2
+  global.set $builtins/i
   i64.const 63
   global.set $builtins/I
   i64.const 0
@@ -223,6 +227,10 @@
   global.set $builtins/I
   i64.const 3
   global.set $builtins/I
+  i64.const -1
+  global.set $builtins/I
+  i64.const 2
+  global.set $builtins/I
   f32.const nan:0x400000
   global.set $builtins/f
   f32.const inf
@@ -236,6 +244,10 @@
   f32.const 1
   global.set $builtins/f
   f32.const 3.75
+  global.set $builtins/f
+  f32.const 1
+  global.set $builtins/f
+  f32.const 3.125
   global.set $builtins/f
   f32.const 2.5
   global.set $builtins/f
@@ -261,6 +273,10 @@
   global.set $builtins/F
   f64.const 3.75
   global.set $builtins/F
+  f64.const 1
+  global.set $builtins/F
+  f64.const 3.125
+  global.set $builtins/F
   f64.const 2.5
   global.set $builtins/F
   f64.const 1.25
@@ -278,6 +294,14 @@
   f64.const 1
   global.set $builtins/F
   f32.const 1
+  global.set $builtins/f
+  f64.const 1
+  global.set $builtins/F
+  f32.const 1
+  global.set $builtins/f
+  f64.const 2
+  global.set $builtins/F
+  f32.const 2
   global.set $builtins/f
   i32.const 8
   i32.load
@@ -479,7 +503,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 273
+   i32.const 288
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -494,7 +518,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 274
+   i32.const 289
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -506,7 +530,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 275
+   i32.const 290
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -518,7 +542,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 278
+   i32.const 293
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -597,7 +621,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 446
+   i32.const 469
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -609,7 +633,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 447
+   i32.const 470
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -621,7 +645,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 448
+   i32.const 471
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -631,7 +655,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 449
+   i32.const 472
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -643,7 +667,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 450
+   i32.const 473
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -653,7 +677,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 451
+   i32.const 474
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -663,7 +687,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 452
+   i32.const 475
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -683,7 +707,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 469
+   i32.const 492
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -695,7 +719,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 470
+   i32.const 493
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -707,7 +731,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 471
+   i32.const 494
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -719,7 +743,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 472
+   i32.const 495
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -731,7 +755,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 473
+   i32.const 496
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -743,7 +767,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 474
+   i32.const 497
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -755,7 +779,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 475
+   i32.const 498
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -767,7 +791,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 476
+   i32.const 499
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -779,7 +803,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 477
+   i32.const 500
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -791,7 +815,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 478
+   i32.const 501
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -803,7 +827,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 479
+   i32.const 502
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -815,7 +839,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 480
+   i32.const 503
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -827,7 +851,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 481
+   i32.const 504
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -839,7 +863,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 482
+   i32.const 505
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -851,7 +875,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 483
+   i32.const 506
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -863,7 +887,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 484
+   i32.const 507
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -875,7 +899,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 485
+   i32.const 508
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -887,7 +911,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 486
+   i32.const 509
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -899,7 +923,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 487
+   i32.const 510
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -911,7 +935,7 @@
   if
    i32.const 0
    i32.const 1088
-   i32.const 488
+   i32.const 511
    i32.const 3
    call $~lib/builtins/abort
    unreachable
