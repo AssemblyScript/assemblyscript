@@ -141,6 +141,7 @@ export namespace BuiltinNames {
   export const isManaged = "~lib/builtins/isManaged";
   export const isVoid = "~lib/builtins/isVoid";
 
+  export const add = "~lib/builtins/add";
   export const clz = "~lib/builtins/clz";
   export const ctz = "~lib/builtins/ctz";
   export const popcnt = "~lib/builtins/popcnt";
@@ -184,8 +185,6 @@ export namespace BuiltinNames {
   export const unchecked = "~lib/builtins/unchecked";
   export const instantiate = "~lib/builtins/instantiate";
   export const idof = "~lib/builtins/idof";
-
-  export const add = "~lib/builtins/add";
 
   export const i8 = "~lib/builtins/i8";
   export const i16 = "~lib/builtins/i16";
