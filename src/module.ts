@@ -105,12 +105,12 @@ export enum ExpressionId {
   RefNull = 40 /* _BinaryenRefNullId */,
   RefIsNull = 41 /* _BinaryenRefIsNullId */,
   RefFunc = 42 /* _BinaryenRefFuncId */,
-  Try = 43 /* _BinaryenTryId */,
-  Throw = 44 /* _BinaryenThrowId */,
-  Rethrow = 45 /* _BinaryenRethrowId */,
-  BrOnExn = 46 /* _BinaryenBrOnExnId */,
-  TupleMake = 47 /* _BinaryenTupleMakeId */,
-  TupleExtract = 48 /* _BinaryenTupleExtractId */
+  Try = 44 /* _BinaryenTryId */,
+  Throw = 45 /* _BinaryenThrowId */,
+  Rethrow = 46 /* _BinaryenRethrowId */,
+  BrOnExn = 47 /* _BinaryenBrOnExnId */,
+  TupleMake = 48 /* _BinaryenTupleMakeId */,
+  TupleExtract = 49 /* _BinaryenTupleExtractId */
 }
 
 export enum UnaryOp {
@@ -249,8 +249,8 @@ export enum BinaryOp {
   OrI32 = 8 /* _BinaryenOrInt32 */,
   XorI32 = 9 /* _BinaryenXorInt32 */,
   ShlI32 = 10 /* _BinaryenShlInt32 */,
-  ShrU32 = 11 /* _BinaryenShrUInt32 */,
-  ShrI32 = 12 /* _BinaryenShrSInt32 */,
+  ShrI32 = 11 /* _BinaryenShrSInt32 */,
+  ShrU32 = 12 /* _BinaryenShrUInt32 */,
   RotlI32 = 13 /* _BinaryenRotLInt32 */,
   RotrI32 = 14 /* _BinaryenRotRInt32 */,
   EqI32 = 15 /* _BinaryenEqInt32 */,
@@ -274,8 +274,8 @@ export enum BinaryOp {
   OrI64 = 33 /* _BinaryenOrInt64 */,
   XorI64 = 34 /* _BinaryenXorInt64 */,
   ShlI64 = 35 /* _BinaryenShlInt64 */,
-  ShrU64 = 36 /* _BinaryenShrUInt64 */,
-  ShrI64 = 37 /* _BinaryenShrSInt64 */,
+  ShrI64 = 36 /* _BinaryenShrSInt64 */,
+  ShrU64 = 37 /* _BinaryenShrUInt64 */,
   RotlI64 = 38 /* _BinaryenRotLInt64 */,
   RotrI64 = 39 /* _BinaryenRotRInt64 */,
   EqI64 = 40 /* _BinaryenEqInt64 */,
