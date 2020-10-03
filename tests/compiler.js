@@ -317,7 +317,7 @@ function runTest(basename) {
         "--debug",
         "--use", "ASC_RTRACE=1",
         "--explicitStart",
-        "--runPasses", "instrument-memory"
+        // "--runPasses", "instrument-memory"
       ];
       if (asc_flags) {
         Array.prototype.push.apply(cmd, asc_flags);
