@@ -5704,7 +5704,7 @@ builtins.set(BuiltinNames.f64_add, builtin_f64_add);
 // i32.add -> add<i32>
 function builtin_i32_add(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
-  ctx.typeArguments = [Type.i32];
+  ctx.typeArguments = [ Type.i32 ];
   ctx.contextualType = Type.i32;
   return builtin_add(ctx);
 }
