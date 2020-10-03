@@ -278,6 +278,8 @@ declare namespace i32 {
   export function store16(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 32-bit integer value to memory. */
   export function store(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  /** Computes sum of two 32-bit integers */
+  export function add(left: i32, right: i32): i32;
   /** Atomic 32-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -376,6 +378,8 @@ declare namespace i64 {
   export function store32(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 64-bit integer value to memory. */
   export function store(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  /** Computes sum of two 64-bit integers */
+  export function add(left: i64, right: i64): i64;  
   /** Atomic 64-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -535,6 +539,8 @@ declare namespace f32 {
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
   export function store(ptr: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
+  /** Computes sum of two 32-bit floats */
+  export function add(left: f32, right: f32): f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: any): f64;
@@ -561,6 +567,8 @@ declare namespace f64 {
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
   export function store(ptr: usize, value: f64, immOffset?: usize, immAlign?: usize): void;
+  /** Computes sum of two 64-bit floats */
+  export function add(left: f64, right: f64): f64;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function v128(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
