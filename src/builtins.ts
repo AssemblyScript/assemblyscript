@@ -2137,26 +2137,21 @@ function builtin_add(ctx: BuiltinContext): ExpressionRef {
         op = compiler.options.isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32;
         break;
       }
-      case TypeKind.F32:
-        return module.binary(BinaryOp.AddF32, arg0, arg1);
-      case TypeKind.F64:
-        return module.binary(BinaryOp.AddF64, arg0, arg1);
+      case TypeKind.F32: {
+        op = BinaryOp.AddF32;
+        break;
+      }
+      case TypeKind.F64: {
+        op = BinaryOp.AddF64;
+        break;
+      }
     }
     if (op != -1) {
-      let flow = compiler.currentFlow;
-      let nativeType = type.toNativeType();
-      let temp1 = flow.getTempLocal(type);
-      flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
-      let temp2 = flow.getTempLocal(type);
-      flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
-      let ret =  module.binary(
+      return module.binary(
         op,
-        module.local_get(temp1.index, nativeType),
-        module.local_get(temp2.index, nativeType)
+        arg0,
+        arg1
       );
-      flow.freeTempLocal(temp2);
-      flow.freeTempLocal(temp1);
-      return ret;
     }
   }
   compiler.error(
@@ -2234,26 +2229,21 @@ function builtin_sub(ctx: BuiltinContext): ExpressionRef {
         op = compiler.options.isWasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32;
         break;
       }
-      case TypeKind.F32:
-        return module.binary(BinaryOp.SubF32, arg0, arg1);
-      case TypeKind.F64:
-        return module.binary(BinaryOp.SubF64, arg0, arg1);
+      case TypeKind.F32: {
+        op = BinaryOp.SubF32;
+        break;
+      }
+      case TypeKind.F64: {
+        op = BinaryOp.SubF64;
+        break;
+      }
     }
     if (op != -1) {
-      let flow = compiler.currentFlow;
-      let nativeType = type.toNativeType();
-      let temp1 = flow.getTempLocal(type);
-      flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
-      let temp2 = flow.getTempLocal(type);
-      flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
-      let ret =  module.binary(
+      return module.binary(
         op,
-        module.local_get(temp1.index, nativeType),
-        module.local_get(temp2.index, nativeType)
+        arg0,
+        arg1
       );
-      flow.freeTempLocal(temp2);
-      flow.freeTempLocal(temp1);
-      return ret;
     }
   }
   compiler.error(
@@ -2331,26 +2321,21 @@ function builtin_mul(ctx: BuiltinContext): ExpressionRef {
         op = compiler.options.isWasm64 ? BinaryOp.MulI64 : BinaryOp.MulI32;
         break;
       }
-      case TypeKind.F32:
-        return module.binary(BinaryOp.MulF32, arg0, arg1);
-      case TypeKind.F64:
-        return module.binary(BinaryOp.MulF64, arg0, arg1);
+      case TypeKind.F32: {
+        op = BinaryOp.MulF32;
+        break;
+      }
+      case TypeKind.F64: {
+        op = BinaryOp.MulF64;
+        break;
+      }
     }
     if (op != -1) {
-      let flow = compiler.currentFlow;
-      let nativeType = type.toNativeType();
-      let temp1 = flow.getTempLocal(type);
-      flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
-      let temp2 = flow.getTempLocal(type);
-      flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
-      let ret =  module.binary(
+      return module.binary(
         op,
-        module.local_get(temp1.index, nativeType),
-        module.local_get(temp2.index, nativeType)
+        arg0,
+        arg1
       );
-      flow.freeTempLocal(temp2);
-      flow.freeTempLocal(temp1);
-      return ret;
     }
   }
   compiler.error(

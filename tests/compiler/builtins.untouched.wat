@@ -488,16 +488,16 @@
   i32.lt_s
   select
   drop
-  local.get $0
-  local.get $1
+  i32.const 1
+  i32.const 2
   i32.add
   drop
-  local.get $0
-  local.get $1
+  i32.const 2
+  i32.const 1
   i32.sub
   drop
-  local.get $0
-  local.get $1
+  i32.const 1
+  i32.const 2
   i32.mul
   drop
   i32.const 1
@@ -581,8 +581,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  i32.const 1
+  i32.const 2
   i32.add
   global.set $builtins/i
   global.get $builtins/i
@@ -597,14 +597,38 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $1
+  i32.const 2
+  i32.const 1
   i32.sub
   global.set $builtins/i
-  local.get $0
-  local.get $1
+  global.get $builtins/i
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 74
+   i32.const 21
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  i32.const 3
   i32.mul
   global.set $builtins/i
+  global.get $builtins/i
+  i32.const 6
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 75
+   i32.const 21
+   call $~lib/builtins/abort
+   unreachable
+  end
   i64.const 1
   i64.clz
   drop
@@ -713,8 +737,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
-  local.get $3
+  i64.const 1
+  i64.const 2
   i64.add
   global.set $builtins/I
   global.get $builtins/I
@@ -729,14 +753,38 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
-  local.get $3
+  i64.const 2
+  i64.const 1
   i64.sub
   global.set $builtins/I
-  local.get $2
-  local.get $3
+  global.get $builtins/I
+  i64.const 1
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 94
+   i32.const 21
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 2
+  i64.const 3
   i64.mul
   global.set $builtins/I
+  global.get $builtins/I
+  i64.const 6
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 95
+   i32.const 21
+   call $~lib/builtins/abort
+   unreachable
+  end
   f32.const nan:0x400000
   drop
   f32.const inf
@@ -839,22 +887,70 @@
   f32.const 1.25
   f32.floor
   global.set $builtins/f
-  f32.const 1.25
+  f32.const 1.5
   f32.const 2.5
   f32.add
   global.set $builtins/f
+  global.get $builtins/f
+  f32.const 4
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 125
+   i32.const 25
+   call $~lib/builtins/abort
+   unreachable
+  end
   f32.const 2.5
   f32.const 1.5
   f32.sub
   global.set $builtins/f
-  f32.const 1.25
-  f32.const 2.5
+  global.get $builtins/f
+  f32.const 1
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 126
+   i32.const 25
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const 1.5
+  f32.const 2
   f32.mul
   global.set $builtins/f
+  global.get $builtins/f
+  f32.const 3
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 127
+   i32.const 25
+   call $~lib/builtins/abort
+   unreachable
+  end
   f32.const 1.25
   f32.const 2.5
   f32.max
   global.set $builtins/f
+  global.get $builtins/f
+  f32.const 2.5
+  f32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 128
+   i32.const 26
+   call $~lib/builtins/abort
+   unreachable
+  end
   f32.const 1.25
   f32.const 2.5
   f32.min
@@ -901,7 +997,7 @@
   f64.const 1.25
   f64.floor
   drop
-  f64.const 1.25
+  f64.const 1.5
   f64.const 2.5
   f64.add
   drop
@@ -909,8 +1005,8 @@
   f64.const 1.5
   f64.sub
   drop
-  f64.const 1.25
-  f64.const 2.5
+  f64.const 1.5
+  f64.const 2
   f64.mul
   drop
   f64.const 1.25
@@ -998,18 +1094,54 @@
   f64.const 1.25
   f64.floor
   global.set $builtins/F
-  f64.const 1.25
+  f64.const 1.5
   f64.const 2.5
   f64.add
   global.set $builtins/F
+  global.get $builtins/F
+  f64.const 4
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 167
+   i32.const 25
+   call $~lib/builtins/abort
+   unreachable
+  end
   f64.const 2.5
   f64.const 1.5
   f64.sub
   global.set $builtins/F
-  f64.const 1.25
-  f64.const 2.5
+  global.get $builtins/F
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 168
+   i32.const 25
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 1.5
+  f64.const 2
   f64.mul
   global.set $builtins/F
+  global.get $builtins/F
+  f64.const 3
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 169
+   i32.const 25
+   call $~lib/builtins/abort
+   unreachable
+  end
   f64.const 1.25
   f64.const 2.5
   f64.max
@@ -1048,7 +1180,7 @@
   f32.max
   global.set $builtins/f
   f64.const 0
-  f64.const 1
+  f64.const 1.5
   f64.add
   global.set $builtins/F
   f32.const 0
@@ -1741,28 +1873,28 @@
   i64.const 1
   i64.popcnt
   drop
-  local.get $6
-  local.get $7
+  i32.const 1
+  i32.const 2
   i32.add
   drop
-  local.get $2
-  local.get $3
+  i64.const 1
+  i64.const 2
   i64.add
   drop
-  local.get $6
-  local.get $7
+  i32.const 2
+  i32.const 1
   i32.sub
   drop
-  local.get $2
-  local.get $3
+  i64.const 2
+  i64.const 1
   i64.sub
   drop
-  local.get $6
-  local.get $7
+  i32.const 2
+  i32.const 1
   i32.mul
   drop
-  local.get $2
-  local.get $3
+  i64.const 2
+  i64.const 1
   i64.mul
   drop
   i32.const 8

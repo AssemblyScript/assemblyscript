@@ -205,9 +205,9 @@
   global.set $builtins/i
   i32.const 3
   global.set $builtins/i
-  i32.const -1
+  i32.const 1
   global.set $builtins/i
-  i32.const 2
+  i32.const 6
   global.set $builtins/i
   i64.const 63
   global.set $builtins/I
@@ -227,9 +227,9 @@
   global.set $builtins/I
   i64.const 3
   global.set $builtins/I
-  i64.const -1
+  i64.const 1
   global.set $builtins/I
-  i64.const 2
+  i64.const 6
   global.set $builtins/I
   f32.const nan:0x400000
   global.set $builtins/f
@@ -243,11 +243,11 @@
   global.set $builtins/f
   f32.const 1
   global.set $builtins/f
-  f32.const 3.75
+  f32.const 4
   global.set $builtins/f
   f32.const 1
   global.set $builtins/f
-  f32.const 3.125
+  f32.const 3
   global.set $builtins/f
   f32.const 2.5
   global.set $builtins/f
@@ -271,11 +271,11 @@
   global.set $builtins/F
   f64.const 1
   global.set $builtins/F
-  f64.const 3.75
+  f64.const 4
   global.set $builtins/F
   f64.const 1
   global.set $builtins/F
-  f64.const 3.125
+  f64.const 3
   global.set $builtins/F
   f64.const 2.5
   global.set $builtins/F
@@ -291,7 +291,7 @@
   global.set $builtins/F
   f32.const 1
   global.set $builtins/f
-  f64.const 1
+  f64.const 1.5
   global.set $builtins/F
   f32.const 1
   global.set $builtins/f
