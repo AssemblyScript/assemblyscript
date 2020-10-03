@@ -49,8 +49,8 @@ assert(!isConstant(b));
 // small integers
 var l: i8;
 l = add<i8>(1, 2); assert(l == 3);
-l = sub<i8>(2, 1); assert(l == 1)
-l = mul<i8>(1, 2); assert(l == 2)
+l = sub<i8>(2, 1); assert(l == 1);
+l = mul<i8>(1, 2); assert(l == 2);
 
 // integers
 
