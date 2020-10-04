@@ -28,10 +28,10 @@
   },
   "devDependencies": {
     "@types/node": "^14.6.4",
-    "@typescript-eslint/eslint-plugin": "^4.1.0",
-    "@typescript-eslint/parser": "^4.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.3.0",
+    "@typescript-eslint/parser": "^4.3.0",
     "diff": "^4.0.2",
-    "eslint": "^7.8.1",
+    "eslint": "^7.10.0",
     "glob": "^7.1.6",
     "physical-cpu-count": "^2.0.0",
     "semantic-release": "github:dcodeIO/semantic-release",
