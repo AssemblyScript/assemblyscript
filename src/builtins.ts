@@ -650,10 +650,10 @@ export class BuiltinContext {
 }
 
 /** Global builtins map. */
-export const builtins = new Map<string,(ctx: BuiltinContext) => ExpressionRef>();
+export const builtins = new Map<string, (ctx: BuiltinContext) => ExpressionRef>();
 
 /** Function builtins map. */
-export const function_builtins = new Map<string,(ctx: BuiltinContext) => ExpressionRef>();
+export const function_builtins = new Map<string, (ctx: BuiltinContext) => ExpressionRef>();
 
 // === Static type evaluation =================================================================
 
@@ -3544,14 +3544,14 @@ function builtin_v128_shuffle(ctx: BuiltinContext): ExpressionRef {
             case 2: {
               let off8 = i << 1;
               let idx8 = idx << 1;
-              writeI8(idx8    , mask, off8);
+              writeI8(idx8, mask, off8);
               writeI8(idx8 + 1, mask, off8 + 1);
               break;
             }
             case 4: {
               let off8 = i << 2;
               let idx8 = idx << 2;
-              writeI8(idx8    , mask, off8);
+              writeI8(idx8, mask, off8);
               writeI8(idx8 + 1, mask, off8 + 1);
               writeI8(idx8 + 2, mask, off8 + 2);
               writeI8(idx8 + 3, mask, off8 + 3);
@@ -3560,7 +3560,7 @@ function builtin_v128_shuffle(ctx: BuiltinContext): ExpressionRef {
             case 8: {
               let off8 = i << 3;
               let idx8 = idx << 3;
-              writeI8(idx8    , mask, off8);
+              writeI8(idx8, mask, off8);
               writeI8(idx8 + 1, mask, off8 + 1);
               writeI8(idx8 + 2, mask, off8 + 2);
               writeI8(idx8 + 3, mask, off8 + 3);

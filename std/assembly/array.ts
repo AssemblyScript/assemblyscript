@@ -405,7 +405,7 @@ export class Array<T> {
   slice(start: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
     var length = this.length_;
     start = start < 0 ? max(start + length, 0) : min(start, length);
-    end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
+    end   = end   < 0 ? max(end   + length, 0) : min(end, length);
     length = max(end - start, 0);
     var slice = changetype<Array<T>>(__allocArray(length, alignof<T>(), idof<Array<T>>())); // retains
     var sliceBase = slice.dataStart;

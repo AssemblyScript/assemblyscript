@@ -262,7 +262,7 @@ F = select<f64>(12.5, 25.0, false);
 if (!i) unreachable();
 
 var fn = function(a: i32, b: i32): i32 { return a + b; };
-assert(fn(1,2) == 3);
+assert(fn(1, 2) == 3);
 assert(5 == call_indirect(fn.index, 2, 3)); // ctxType i32
 assert(fn.name == "");
 assert(fn.length == 2);

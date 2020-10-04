@@ -1641,7 +1641,7 @@ interface Function {
 interface IArguments {}
 interface RegExp {}
 
-declare class Map<K,V> {
+declare class Map<K, V> {
   readonly size: i32;
   has(key: K): bool;
   set(key: K, value: V): this;

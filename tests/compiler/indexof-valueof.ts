@@ -41,14 +41,14 @@ assert(!isSigned<valueof<Uint8ClampedArray>>());
 assert(sizeof<valueof<Uint8ClampedArray>>() == 1);
 
 // map indexes
-assert(isInteger<indexof<Map<i32,i32>>>());
-assert(isFloat<indexof<Map<f32,i32>>>());
-assert(isString<indexof<Map<string,i32>>>());
+assert(isInteger<indexof<Map<i32, i32>>>());
+assert(isFloat<indexof<Map<f32, i32>>>());
+assert(isString<indexof<Map<string, i32>>>());
 
 // map values
-assert(isInteger<valueof<Map<i32,i8>>>());
-assert(isFloat<valueof<Map<i32,f32>>>());
-assert(isString<valueof<Map<i32,string>>>());
+assert(isInteger<valueof<Map<i32, i8>>>());
+assert(isFloat<valueof<Map<i32, f32>>>());
+assert(isString<valueof<Map<i32, string>>>());
 
 // set indexes
 assert(isInteger<indexof<Set<i32>>>());

@@ -10,14 +10,14 @@ export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/s
   // if dst is aligned to 4 bytes as well, copy 4 bytes each
   if ((dest & 3) == 0) {
     while (n >= 16) {
-      store<u32>(dest     , load<u32>(src     ));
+      store<u32>(dest, load<u32>(src     ));
       store<u32>(dest +  4, load<u32>(src +  4));
       store<u32>(dest +  8, load<u32>(src +  8));
       store<u32>(dest + 12, load<u32>(src + 12));
       src += 16; dest += 16; n -= 16;
     }
     if (n & 8) {
-      store<u32>(dest    , load<u32>(src    ));
+      store<u32>(dest, load<u32>(src    ));
       store<u32>(dest + 4, load<u32>(src + 4));
       dest += 8; src += 8;
     }

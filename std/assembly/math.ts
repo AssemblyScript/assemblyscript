@@ -112,7 +112,7 @@ function pio2_right(q0: u64, q1: u64): u64 { // see: jdh8/metallic/blob/master/s
 // @ts-ignore: decorator
 @inline
 function umuldi(u: u64, v: u64): u64 {
-  var u1: u64 , v1: u64, w0: u64, w1: u64, t: u64;
+  var u1: u64, v1: u64, w0: u64, w1: u64, t: u64;
 
   u1 = u & 0xFFFFFFFF;
   v1 = v & 0xFFFFFFFF;

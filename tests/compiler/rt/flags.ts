@@ -57,17 +57,17 @@ test<Set<v128>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_
 test<Set<Ref>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | VALUE_ALIGN_REF | TypeinfoFlags.VALUE_MANAGED);
 test<Set<Ref | null>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | VALUE_ALIGN_REF | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED);
 
-test<Map<v128,i8>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_4 | TypeinfoFlags.VALUE_ALIGN_0 | TypeinfoFlags.VALUE_SIGNED);
-test<Map<i64,i16>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_3 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_ALIGN_1 | TypeinfoFlags.VALUE_SIGNED);
-test<Map<i32,i32>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_2 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_ALIGN_2 | TypeinfoFlags.VALUE_SIGNED);
-test<Map<i16,i64>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_1 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_ALIGN_3 | TypeinfoFlags.VALUE_SIGNED);
-test<Map<i8,v128>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_0 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_ALIGN_4);
-test<Map<Ref,i8>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | KEY_ALIGN_REF | TypeinfoFlags.KEY_MANAGED | TypeinfoFlags.VALUE_ALIGN_0 | TypeinfoFlags.VALUE_SIGNED);
-test<Map<Ref | null,i8>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC |KEY_ALIGN_REF | TypeinfoFlags.KEY_NULLABLE | TypeinfoFlags.KEY_MANAGED | TypeinfoFlags.VALUE_ALIGN_0 | TypeinfoFlags.VALUE_SIGNED);
-test<Map<i8,Ref>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_0 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
-test<Map<i8,Ref | null>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_0 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
-test<Map<Ref | null,Ref | null>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_NULLABLE | TypeinfoFlags.KEY_MANAGED | KEY_ALIGN_REF | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
-test<Map<f32,i32>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_2 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.KEY_FLOAT | TypeinfoFlags.VALUE_ALIGN_2 | TypeinfoFlags.VALUE_SIGNED);
+test<Map<v128, i8>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_4 | TypeinfoFlags.VALUE_ALIGN_0 | TypeinfoFlags.VALUE_SIGNED);
+test<Map<i64, i16>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_3 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_ALIGN_1 | TypeinfoFlags.VALUE_SIGNED);
+test<Map<i32, i32>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_2 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_ALIGN_2 | TypeinfoFlags.VALUE_SIGNED);
+test<Map<i16, i64>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_1 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_ALIGN_3 | TypeinfoFlags.VALUE_SIGNED);
+test<Map<i8, v128>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_0 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_ALIGN_4);
+test<Map<Ref, i8>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | KEY_ALIGN_REF | TypeinfoFlags.KEY_MANAGED | TypeinfoFlags.VALUE_ALIGN_0 | TypeinfoFlags.VALUE_SIGNED);
+test<Map<Ref | null, i8>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC |KEY_ALIGN_REF | TypeinfoFlags.KEY_NULLABLE | TypeinfoFlags.KEY_MANAGED | TypeinfoFlags.VALUE_ALIGN_0 | TypeinfoFlags.VALUE_SIGNED);
+test<Map<i8, Ref>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_0 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
+test<Map<i8, Ref | null>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_0 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
+test<Map<Ref | null, Ref | null>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_NULLABLE | TypeinfoFlags.KEY_MANAGED | KEY_ALIGN_REF | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED | VALUE_ALIGN_REF);
+test<Map<f32, i32>>(TypeinfoFlags.MAP | TypeinfoFlags.ACYCLIC | TypeinfoFlags.KEY_ALIGN_2 | TypeinfoFlags.KEY_SIGNED | TypeinfoFlags.KEY_FLOAT | TypeinfoFlags.VALUE_ALIGN_2 | TypeinfoFlags.VALUE_SIGNED);
 
 // cycle detection
 
@@ -123,13 +123,13 @@ test<InnerCycleSet>(TypeinfoFlags.ACYCLIC);
 // map
 
 class IndirectCycleMapKey {
-  a: Map<IndirectCycleMapKey,i32>;
+  a: Map<IndirectCycleMapKey, i32>;
 }
 
 test<IndirectCycleMapKey>(TypeinfoFlags.NONE);
 
 class IndirectCycleMapValue {
-  a: Map<i32,IndirectCycleMapValue>;
+  a: Map<i32, IndirectCycleMapValue>;
 }
 
 test<IndirectCycleMapValue>(TypeinfoFlags.NONE);

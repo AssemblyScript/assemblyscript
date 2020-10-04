@@ -1703,7 +1703,7 @@ export class Module {
     throw new Error("not implemented"); // JS glue overrides this
   }
 
-  private cachedStrings: Map<string,usize> = new Map();
+  private cachedStrings: Map<string, usize> = new Map();
 
   private allocStringCached(str: string | null): usize {
     if (str === null) return 0;

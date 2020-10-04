@@ -227,7 +227,7 @@ export class Options {
   /** Static table start offset. */
   tableBase: u32 = 0;
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
-  globalAliases: Map<string,string> | null = null;
+  globalAliases: Map<string, string> | null = null;
   /** Features to activate by default. These are the finished proposals. */
   features: Feature = Feature.MUTABLE_GLOBALS;
   /** If true, disallows unsafe features in user code. */
@@ -348,7 +348,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Memory segments being compiled. */
   memorySegments: MemorySegment[] = [];
   /** Map of already compiled static string segments. */
-  stringSegments: Map<string,MemorySegment> = new Map();
+  stringSegments: Map<string, MemorySegment> = new Map();
   /** Function table being compiled. First elem is blank. */
   functionTable: Function[] = [];
   /** Arguments length helper global. */
@@ -6866,7 +6866,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(typeParameterNodes),
         typeArgumentNodes,
         this.currentFlow.actualFunction.parent,
-        uniqueMap<string,Type>(this.currentFlow.contextualTypeArguments),
+        uniqueMap<string, Type>(this.currentFlow.contextualTypeArguments),
         expression
       );
     }
@@ -7393,7 +7393,7 @@ export class Compiler extends DiagnosticEmitter {
       assert(!unboundOverloadPrototype.isBound);
       let unboundOverloadParent = unboundOverloadPrototype.parent;
       let isProperty = unboundOverloadParent.kind == ElementKind.PROPERTY_PROTOTYPE;
-      let classInstances: Map<string,Class> | null;
+      let classInstances: Map<string, Class> | null;
       if (isProperty) {
         let propertyParent = (<PropertyPrototype>unboundOverloadParent).parent;
         assert(propertyParent.kind == ElementKind.CLASS_PROTOTYPE);
@@ -8515,7 +8515,7 @@ export class Compiler extends DiagnosticEmitter {
         let functionInstance = this.resolver.resolveFunction(
           functionPrototype,
           null,
-          uniqueMap<string,Type>(flow.contextualTypeArguments)
+          uniqueMap<string, Type>(flow.contextualTypeArguments)
         );
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
         if (contextualType.isExternalReference) {
@@ -9374,14 +9374,14 @@ export class Compiler extends DiagnosticEmitter {
       classInstance = this.resolver.resolveClass(
         classPrototype,
         classReference.typeArguments,
-        uniqueMap<string,Type>(flow.contextualTypeArguments)
+        uniqueMap<string, Type>(flow.contextualTypeArguments)
       );
     } else {
       classInstance = this.resolver.resolveClassInclTypeArguments(
         classPrototype,
         typeArguments,
         flow.actualFunction.parent, // relative to caller
-        uniqueMap<string,Type>(flow.contextualTypeArguments),
+        uniqueMap<string, Type>(flow.contextualTypeArguments),
         expression
       );
     }

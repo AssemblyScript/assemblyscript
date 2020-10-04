@@ -13,7 +13,7 @@ class Animal<T> {
 assert(sizeof<Animal<f64>>() == sizeof<usize>());
 
 Animal.ONE;
-Animal.add(1,2);
+Animal.add(1, 2);
 Animal.sub<f32>(1, 2);
 
 export function test(animal: Animal<f64>): Animal<f64> {

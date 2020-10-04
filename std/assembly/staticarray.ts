@@ -61,7 +61,7 @@ export class StaticArray<T> {
   static slice<T>(source: StaticArray<T>, start: i32 = 0, end: i32 = i32.MAX_VALUE): StaticArray<T> {
     var length = source.length;
     start = start < 0 ? max(start + length, 0) : min(start, length);
-    end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
+    end   = end   < 0 ? max(end   + length, 0) : min(end, length);
     length = max(end - start, 0);
     var sliceSize = <usize>length << alignof<T>();
     var slice = changetype<StaticArray<T>>(__alloc(sliceSize, idof<StaticArray<T>>())); // retains
@@ -195,7 +195,7 @@ export class StaticArray<T> {
   slice(start: i32 = 0, end: i32 = i32.MAX_VALUE): Array<T> {
     var length = this.length;
     start = start < 0 ? max(start + length, 0) : min(start, length);
-    end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
+    end   = end   < 0 ? max(end   + length, 0) : min(end, length);
     length = max(end - start, 0);
     var slice = changetype<Array<T>>(__allocArray(length, alignof<T>(), idof<Array<T>>())); // retains
     var sliceBase = slice.dataStart;
