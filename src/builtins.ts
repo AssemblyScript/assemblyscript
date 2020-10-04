@@ -2116,16 +2116,20 @@ function builtin_add(ctx: BuiltinContext): ExpressionRef {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
-      case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
       case TypeKind.BOOL: {
         return compiler.ensureSmallIntegerWrap(
           module.binary(BinaryOp.AddI32, arg0, arg1),
           type
         );
       }
+      case TypeKind.I32:
+      case TypeKind.U32:
+      {
+        op = BinaryOp.AddI32;
+        break;
+      }       
       case TypeKind.I64:
       case TypeKind.U64: {
         op = BinaryOp.AddI64;
@@ -2203,16 +2207,20 @@ function builtin_sub(ctx: BuiltinContext): ExpressionRef {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
-      case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
       case TypeKind.BOOL: {
         return compiler.ensureSmallIntegerWrap(
           module.binary(BinaryOp.SubI32, arg0, arg1),
           type
         );
       }
+      case TypeKind.I32:
+      case TypeKind.U32:
+      {
+        op = BinaryOp.SubI32;
+        break;
+      }       
       case TypeKind.I64:
       case TypeKind.U64: {
         op = BinaryOp.SubI64;
@@ -2290,16 +2298,20 @@ function builtin_mul(ctx: BuiltinContext): ExpressionRef {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.I16:
-      case TypeKind.I32:
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32:
       case TypeKind.BOOL: {
         return compiler.ensureSmallIntegerWrap(
           module.binary(BinaryOp.MulI32, arg0, arg1),
           type
         );
       }
+      case TypeKind.I32:
+      case TypeKind.U32:
+      {
+        op = BinaryOp.MulI32;
+        break;
+      }       
       case TypeKind.I64:
       case TypeKind.U64: {
         op = BinaryOp.MulI64;
