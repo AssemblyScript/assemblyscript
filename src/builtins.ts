@@ -2243,11 +2243,7 @@ function builtin_sub(ctx: BuiltinContext): ExpressionRef {
       }
     }
     if (op != -1) {
-      return module.binary(
-        op,
-        arg0,
-        arg1
-      );
+      return module.binary(op, arg0, arg1);
     }
   }
   compiler.error(
