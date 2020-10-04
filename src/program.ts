@@ -2677,7 +2677,7 @@ export abstract class Element {
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
   /** Unsets the specific flag or flags. */
-  unset(flag: CommonFlags): void {this.flags &= ~flag; }
+  unset(flag: CommonFlags): void { this.flags &= ~flag; }
   /** Tests if this element has a specific decorator flag or flags. */
   hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) == flag; }
 
@@ -3012,8 +3012,8 @@ export class File extends Element {
 
   /** Creates an imported namespace from this file. */
   asAliasNamespace(
-    name: string, 
-    parent: Element, 
+    name: string,
+    parent: Element,
     localIdentifier: IdentifierExpression
   ): Namespace {
     var declaration = this.program.makeNativeNamespaceDeclaration(name);

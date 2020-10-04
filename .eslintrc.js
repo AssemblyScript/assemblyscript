@@ -42,6 +42,7 @@ module.exports = {
 
     "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
     "comma-spacing": ["error", { "before": false, "after": true }],
+    "block-spacing": "error",
 
     // This is mostly visual style, making comments look uniform.
     "spaced-comment": ["error", "always", {
