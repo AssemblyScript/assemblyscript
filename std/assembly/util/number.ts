@@ -137,12 +137,10 @@ export function decimalCount32(value: u32): u32 {
     } else {
       return 3 + u32(value >= 10000) + u32(value >= 1000);
     }
+  } else if (value < 10000000) {
+    return 6 + u32(value >= 1000000);
   } else {
-    if (value < 10000000) {
-      return 6 + u32(value >= 1000000);
-    } else {
-      return 8 + u32(value >= 1000000000) + u32(value >= 100000000);
-    }
+    return 8 + u32(value >= 1000000000) + u32(value >= 100000000);
   }
 }
 
@@ -155,12 +153,10 @@ export function decimalCount64High(value: u64): u32 {
     } else {
       return 13 + u32(value >= 100000000000000) + u32(value >= 10000000000000);
     }
+  } else if (value < 100000000000000000) {
+    return 16 + u32(value >= 10000000000000000);
   } else {
-    if (value < 100000000000000000) {
-      return 16 + u32(value >= 10000000000000000);
-    } else {
-      return 18 + u32(value >= 10000000000000000000) + u32(value >= 1000000000000000000);
-    }
+    return 18 + u32(value >= 10000000000000000000) + u32(value >= 1000000000000000000);
   }
 }
 
@@ -758,32 +754,26 @@ export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {
           store<u16>(buffer + (sign << 1), value | CharCode._0);
           return 1 + sign;
         }
-      } else {
-        if (<u64>value < 10) {
-          store<u16>(buffer + (sign << 1), value | CharCode._0);
-          return 1 + sign;
-        }
+      } else if (<u64>value < 10) {
+        store<u16>(buffer + (sign << 1), value | CharCode._0);
+        return 1 + sign;
       }
-    } else {
-      if (value < 10) {
-        store<u16>(buffer, value | CharCode._0);
-        return 1;
-      }
+    } else if (value < 10) {
+      store<u16>(buffer, value | CharCode._0);
+      return 1;
     }
   }
   var decimals = sign;
   if (sizeof<T>() <= 4) {
     decimals += decimalCount32(value);
     utoa32_dec_core(buffer, value, decimals);
+  } else if (<u64>value <= <u64>u32.MAX_VALUE) {
+    let val32 = <u32>value;
+    decimals += decimalCount32(val32);
+    utoa32_dec_core(buffer, val32, decimals);
   } else {
-    if (<u64>value <= <u64>u32.MAX_VALUE) {
-      let val32 = <u32>value;
-      decimals += decimalCount32(val32);
-      utoa32_dec_core(buffer, val32, decimals);
-    } else {
-      decimals += decimalCount64High(value);
-      utoa64_dec_core(buffer, value, decimals);
-    }
+    decimals += decimalCount64High(value);
+    utoa64_dec_core(buffer, value, decimals);
   }
   return decimals;
 }

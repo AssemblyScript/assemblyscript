@@ -392,10 +392,8 @@ export class TSDBuilder extends ExportsWalker {
     if (element.is(CommonFlags.STATIC)) {
       if (isConst) sb.push("static readonly ");
       else sb.push("static ");
-    } else {
-      if (isConst) sb.push("export const ");
-      else sb.push("export var ");
-    }
+    } else if (isConst) sb.push("export const ");
+    else sb.push("export var ");
     sb.push(name);
     sb.push(": ");
     sb.push(this.typeToString(element.type));

@@ -334,14 +334,12 @@ export class Flow {
         }
       }
       local = parentFunction.addLocal(type);
+    } else if (temps !== null && temps.length > 0) {
+      local = assert(temps.pop());
+      local.type = type;
+      local.flags = CommonFlags.NONE;
     } else {
-      if (temps !== null && temps.length > 0) {
-        local = assert(temps.pop());
-        local.type = type;
-        local.flags = CommonFlags.NONE;
-      } else {
-        local = parentFunction.addLocal(type);
-      }
+      local = parentFunction.addLocal(type);
     }
     this.unsetLocalFlag(local.index, ~0);
     return local;

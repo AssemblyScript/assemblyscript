@@ -896,14 +896,12 @@ export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: st
         // @ts-ignore: type
         return changetype<string>(itoa64(<i32>value, 10)); // retains
       }
+    } else if (sizeof<T>() <= 4) {
+      // @ts-ignore: type
+      return changetype<string>(utoa32(<u32>value, 10)); // retains
     } else {
-      if (sizeof<T>() <= 4) {
-        // @ts-ignore: type
-        return changetype<string>(utoa32(<u32>value, 10)); // retains
-      } else {
-        // @ts-ignore: type
-        return changetype<string>(utoa64(<u64>value, 10)); // retains
-      }
+      // @ts-ignore: type
+      return changetype<string>(utoa64(<u64>value, 10)); // retains
     }
   }
 

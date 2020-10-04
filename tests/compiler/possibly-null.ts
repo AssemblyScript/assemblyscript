@@ -11,9 +11,7 @@ export function testTrue(a: Ref | null): void {
 
 export function testFalseElse(a: Ref | null): void {
   if (!a) return;
-  else {
-    if (isNullable(a)) ERROR("should be non-nullable");
-  }
+  else if (isNullable(a)) ERROR("should be non-nullable");
 }
 
 export function testFalseContinuation(a: Ref | null): void {
@@ -29,9 +27,7 @@ export function testNeNull(a: Ref | null): void {
 
 export function testEqNullElse(a: Ref | null): void {
   if (a == null) return;
-  else {
-    if (isNullable(a)) ERROR("should be non-nullable");
-  }
+  else if (isNullable(a)) ERROR("should be non-nullable");
 }
 
 export function testEqNullContinuation(a: Ref | null): void {
@@ -47,9 +43,7 @@ export function testNotEqNull(a: Ref | null): void {
 
 export function testNotNeNullElse(a: Ref | null): void {
   if (!(a != null)) return;
-  else {
-    if (isNullable(a)) ERROR("should be non-nullable");
-  }
+  else if (isNullable(a)) ERROR("should be non-nullable");
 }
 
 export function testNotNeNullContinuation(a: Ref | null): void {

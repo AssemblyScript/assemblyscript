@@ -583,14 +583,12 @@ export namespace NativeMath {
           id = 1;
           x = (x - 1.0) / (x + 1.0);
         }
+      } else if (ix < 0x40038000) {
+        id = 2;
+        x = (x - 1.5) / (1.0 + 1.5 * x);
       } else {
-        if (ix < 0x40038000) {
-          id = 2;
-          x = (x - 1.5) / (1.0 + 1.5 * x);
-        } else {
-          id = 3;
-          x = -1.0 / x;
-        }
+        id = 3;
+        x = -1.0 / x;
       }
     }
     z = x * x;
@@ -2081,14 +2079,12 @@ export namespace NativeMathf {
           id = 1;
           x = (x - 1.0) / (x + 1.0);
         }
+      } else if (ix < 0x401C0000) {
+        id = 2;
+        x = (x - 1.5) / (1.0 + 1.5 * x);
       } else {
-        if (ix < 0x401C0000) {
-          id = 2;
-          x = (x - 1.5) / (1.0 + 1.5 * x);
-        } else {
-          id = 3;
-          x = -1.0 / x;
-        }
+        id = 3;
+        x = -1.0 / x;
       }
     }
     z = x * x;

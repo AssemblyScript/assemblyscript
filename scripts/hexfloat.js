@@ -47,12 +47,10 @@ function parse(input) {
     if (sign === 0) {
       if (fraction === 0) {
         mantissa = sign;
+      } else if (Object.is(sign, -0)) {
+        mantissa = - fraction;
       } else {
-        if (Object.is(sign, -0)) {
-          mantissa = - fraction;
-        } else {
-          mantissa = fraction;
-        }
+        mantissa = fraction;
       }
     } else {
       mantissa = sign * (integerPart + fraction);

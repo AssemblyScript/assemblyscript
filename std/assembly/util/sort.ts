@@ -52,12 +52,10 @@ export function SORT<T>(
   if (isReference<T>()) {
     // TODO replace this to faster stable sort (TimSort) when it implemented
     insertionSort<T>(dataStart, length, comparator);
+  } else if (length < 256) {
+    insertionSort<T>(dataStart, length, comparator);
   } else {
-    if (length < 256) {
-      insertionSort<T>(dataStart, length, comparator);
-    } else {
-      weakHeapSort<T>(dataStart, length, comparator);
-    }
+    weakHeapSort<T>(dataStart, length, comparator);
   }
 }
 

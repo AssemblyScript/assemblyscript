@@ -125,26 +125,22 @@ function decrement(s: Block): void {
     if (isDefined(__GC_ALL_ACYCLIC)) {
       if (DEBUG) assert(!(info & BUFFERED_MASK));
       finalize(s);
+    } else if (!(info & BUFFERED_MASK)) {
+      finalize(s);
     } else {
-      if (!(info & BUFFERED_MASK)) {
-        finalize(s);
-      } else {
-        s.gcInfo = BUFFERED_MASK | COLOR_BLACK | 0;
-      }
+      s.gcInfo = BUFFERED_MASK | COLOR_BLACK | 0;
     }
   } else {
     if (DEBUG) assert(rc > 0);
     if (isDefined(__GC_ALL_ACYCLIC)) {
       s.gcInfo = (info & ~REFCOUNT_MASK) | (rc - 1);
-    } else {
-      if (!(__typeinfo(s.rtId) & TypeinfoFlags.ACYCLIC)) {
-        s.gcInfo = BUFFERED_MASK | COLOR_PURPLE | (rc - 1);
-        if (!(info & BUFFERED_MASK)) {
-          appendRoot(s);
-        }
-      } else {
-        s.gcInfo = (info & ~REFCOUNT_MASK) | (rc - 1);
+    } else if (!(__typeinfo(s.rtId) & TypeinfoFlags.ACYCLIC)) {
+      s.gcInfo = BUFFERED_MASK | COLOR_PURPLE | (rc - 1);
+      if (!(info & BUFFERED_MASK)) {
+        appendRoot(s);
       }
+    } else {
+      s.gcInfo = (info & ~REFCOUNT_MASK) | (rc - 1);
     }
   }
 }
@@ -211,12 +207,10 @@ export function __collect(): void {
       markGray(s);
       store<Block>(cur, s);
       cur += sizeof<usize>();
+    } else if ((info & COLOR_MASK) == COLOR_BLACK && !(info & REFCOUNT_MASK)) {
+      finalize(s);
     } else {
-      if ((info & COLOR_MASK) == COLOR_BLACK && !(info & REFCOUNT_MASK)) {
-        finalize(s);
-      } else {
-        s.gcInfo = info & ~BUFFERED_MASK;
-      }
+      s.gcInfo = info & ~BUFFERED_MASK;
     }
   }
   CUR = cur;

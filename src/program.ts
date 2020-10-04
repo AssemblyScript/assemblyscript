@@ -1848,8 +1848,9 @@ export class Program extends DiagnosticEmitter {
     if (isStatic) { // global function
       assert(declaration.name.kind != NodeKind.CONSTRUCTOR);
       if (!parent.add(name, element)) return null;
-    } else { // actual instance method
-      if (!parent.addInstance(name, element)) return null;
+    } else if (!parent.addInstance(name, element)) {
+      // actual instance method
+      return null;
     }
     this.checkOperatorOverloads(declaration.decorators, element, parent);
     return element;
@@ -1969,14 +1970,12 @@ export class Program extends DiagnosticEmitter {
         );
         return;
       }
-    } else {
-      if (property.setterPrototype) {
-        this.error(
-          DiagnosticCode.Duplicate_property_0,
-          declaration.name.range, name
-        );
-        return;
-      }
+    } else if (property.setterPrototype) {
+      this.error(
+        DiagnosticCode.Duplicate_property_0,
+        declaration.name.range, name
+      );
+      return;
     }
     var element = new FunctionPrototype(
       (isGetter ? GETTER_PREFIX : SETTER_PREFIX) + name,
@@ -2165,17 +2164,15 @@ export class Program extends DiagnosticEmitter {
     if (element) {
       let exports = parent.exports;
       if (!exports) parent.exports = exports = new Map();
-      else {
-        if (exports.has("default")) {
-          let existing = assert(exports.get("default"));
-          this.errorRelated(
-            DiagnosticCode.Duplicate_identifier_0,
-            declaration.name.range,
-            existing.declaration.name.range,
-            "default"
-          );
-          return;
-        }
+      else if (exports.has("default")) {
+        let existing = assert(exports.get("default"));
+        this.errorRelated(
+          DiagnosticCode.Duplicate_identifier_0,
+          declaration.name.range,
+          existing.declaration.name.range,
+          "default"
+        );
+        return;
       }
       exports.set("default", element);
     }

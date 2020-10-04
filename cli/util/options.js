@@ -49,9 +49,11 @@ function parse(argv, config, propagateDefaults = true) {
         option = config[key = match[3].substring(2)];
         if (option && match[4] != null) argv[i--] = match[4];
       }
+    } else if (arg.charCodeAt(0) == 45) {
+      option = config[key = arg]; // exact
     } else {
-      if (arg.charCodeAt(0) == 45) option = config[key = arg]; // exact
-      else { args.push(arg); continue; } // argument
+      args.push(arg); // argument
+      continue;
     }
     if (option) {
       if (option.value) {
@@ -60,29 +62,27 @@ function parse(argv, config, propagateDefaults = true) {
       } else if (option.type == null || option.type === "b") {
         // boolean flag not taking a value
         options[key] = true;
+      } else if (i + 1 < argv.length && argv[i + 1].charCodeAt(0) != 45) {
+        // non-boolean with given value
+        switch (option.type) {
+          case "i": options[key] = parseInt(argv[++i], 10); break;
+          case "I": options[key] = (options[key] || []).concat(parseInt(argv[++i], 10)); break;
+          case "f": options[key] = parseFloat(argv[++i]); break;
+          case "F": options[key] = (options[key] || []).concat(parseFloat(argv[++i])); break;
+          case "s": options[key] = String(argv[++i]); break;
+          case "S": options[key] = (options[key] || []).concat(argv[++i].split(",")); break;
+          default: unknown.push(arg); --i;
+        }
       } else {
-        if (i + 1 < argv.length && argv[i + 1].charCodeAt(0) != 45) {
-          // non-boolean with given value
-          switch (option.type) {
-            case "i": options[key] = parseInt(argv[++i], 10); break;
-            case "I": options[key] = (options[key] || []).concat(parseInt(argv[++i], 10)); break;
-            case "f": options[key] = parseFloat(argv[++i]); break;
-            case "F": options[key] = (options[key] || []).concat(parseFloat(argv[++i])); break;
-            case "s": options[key] = String(argv[++i]); break;
-            case "S": options[key] = (options[key] || []).concat(argv[++i].split(",")); break;
-            default: unknown.push(arg); --i;
-          }
-        } else {
-          // non-boolean with omitted value
-          switch (option.type) {
-            case "i":
-            case "f": options[key] = option.default || 0; break;
-            case "s": options[key] = option.default || ""; break;
-            case "I":
-            case "F":
-            case "S": options[key] = option.default || []; break;
-            default: unknown.push(arg);
-          }
+        // non-boolean with omitted value
+        switch (option.type) {
+          case "i":
+          case "f": options[key] = option.default || 0; break;
+          case "s": options[key] = option.default || ""; break;
+          case "I":
+          case "F":
+          case "S": options[key] = option.default || []; break;
+          default: unknown.push(arg);
         }
       }
     } else unknown.push(arg);
@@ -205,31 +205,29 @@ function merge(config, currentOptions, parentOptions, parentBaseDir) {
       } else {
         mergedOptions[key] = currentValue;
       }
-    } else {
+    } else if (Array.isArray(currentValue)) {
       // both current and parent values present
-      if (Array.isArray(currentValue)) {
-        if (cliOnly) {
-          mergedOptions[key] = currentValue.slice();
-          continue;
-        }
-        let exclude;
-        if (isPath) {
-          parentValue = parentValue.map(value => resolvePath(value, parentBaseDir, useNodeResolution));
-        }
-        if (mutuallyExclusive != null && (exclude = currentOptions[mutuallyExclusive])) {
-          mergedOptions[key] = [
-            ...currentValue,
-            ...parentValue.filter(value => !currentValue.includes(value) && !exclude.includes(value))
-          ];
-        } else {
-          mergedOptions[key] = [
-            ...currentValue,
-            ...parentValue.filter(value => !currentValue.includes(value)) // dedup
-          ];
-        }
-      } else {
-        mergedOptions[key] = currentValue;
+      if (cliOnly) {
+        mergedOptions[key] = currentValue.slice();
+        continue;
       }
+      let exclude;
+      if (isPath) {
+        parentValue = parentValue.map(value => resolvePath(value, parentBaseDir, useNodeResolution));
+      }
+      if (mutuallyExclusive != null && (exclude = currentOptions[mutuallyExclusive])) {
+        mergedOptions[key] = [
+          ...currentValue,
+          ...parentValue.filter(value => !currentValue.includes(value) && !exclude.includes(value))
+        ];
+      } else {
+        mergedOptions[key] = [
+          ...currentValue,
+          ...parentValue.filter(value => !currentValue.includes(value)) // dedup
+        ];
+      }
+    } else {
+      mergedOptions[key] = currentValue;
     }
   }
   return mergedOptions;

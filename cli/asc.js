@@ -164,12 +164,10 @@ exports.compileString = (sources, options) => {
     var opt = exports.options[key];
     if (opt && opt.type === "b") {
       if (val) argv.push("--" + key);
+    } else if (Array.isArray(val)) {
+      val.forEach(val => { argv.push("--" + key, String(val)); });
     } else {
-      if (Array.isArray(val)) {
-        val.forEach(val => { argv.push("--" + key, String(val)); });
-      } else {
-        argv.push("--" + key, String(val));
-      }
+      argv.push("--" + key, String(val));
     }
   });
   exports.main(argv.concat(Object.keys(sources)), {
@@ -542,11 +540,9 @@ exports.main = function main(argv, options, callback) {
           if ((sourceText = readFile(plainName + extension.ext, libDir)) != null) {
             sourcePath = libraryPrefix + plainName + extension.ext;
             break;
-          } else {
-            if ((sourceText = readFile(indexName + extension.ext, libDir)) != null) {
-              sourcePath = libraryPrefix + indexName + extension.ext;
-              break;
-            }
+          } else if ((sourceText = readFile(indexName + extension.ext, libDir)) != null) {
+            sourcePath = libraryPrefix + indexName + extension.ext;
+            break;
           }
         }
         if (sourceText == null) { // paths

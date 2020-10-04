@@ -2794,16 +2794,14 @@ export class Resolver extends DiagnosticEmitter {
       if (!resolvedTypeArguments) return null;
 
     // Otherwise make sure that no type arguments have been specified
-    } else {
-      if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode.Type_0_is_not_generic,
-            reportNode.range, prototype.internalName
-          );
-        }
-        return null;
+    } else if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
       }
+      return null;
     }
 
     // Continue with concrete types
@@ -3205,13 +3203,11 @@ export class Resolver extends DiagnosticEmitter {
             index.setType(operatorInstance.signature.returnType);
           }
         }
-      } else {
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode.Duplicate_decorator,
-            operatorInstance.declaration.range
-          );
-        }
+      } else if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Duplicate_decorator,
+          operatorInstance.declaration.range
+        );
       }
     }
 
@@ -3270,16 +3266,14 @@ export class Resolver extends DiagnosticEmitter {
       if (!resolvedTypeArguments) return null;
 
     // Otherwise make sure that no type arguments have been specified
-    } else {
-      if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode.Type_0_is_not_generic,
-            reportNode.range, prototype.internalName
-          );
-        }
-        return null;
+    } else if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Type_0_is_not_generic,
+          reportNode.range, prototype.internalName
+        );
       }
+      return null;
     }
 
     // Continue with concrete types

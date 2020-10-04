@@ -923,10 +923,8 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
       if (contextualType.isIntegerValue && contextualType.size <= 32) {
         compiler.currentType = Type.u32;
       }
-    } else {
-      if (contextualType.isIntegerValue && contextualType.size == 64) {
-        compiler.currentType = Type.u64;
-      }
+    } else if (contextualType.isIntegerValue && contextualType.size == 64) {
+      compiler.currentType = Type.u64;
     }
     return module.unreachable();
   }
