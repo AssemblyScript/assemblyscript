@@ -42,7 +42,7 @@ var performanceNow =
   performance.msNow      ||
   performance.oNow       ||
   performance.webkitNow  ||
-  function(){ return (new Date()).getTime(); };
+  function() { return (new Date()).getTime(); };
 
 function hrtime(previousTimestamp) {
   var clocktime = performanceNow.call(performance);

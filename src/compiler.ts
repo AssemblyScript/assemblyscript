@@ -10800,7 +10800,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
       case TypeKind.EXNREF:
-      case TypeKind.ANYREF:{
+      case TypeKind.ANYREF: {
         return module.ref_is_null(expr);
       }
       default: {
