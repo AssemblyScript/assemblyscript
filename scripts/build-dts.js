@@ -15,8 +15,7 @@
       return function (filename) {
         return filename;
       };
-    }
-    else {
+    } else {
       const separatorExpression = new RegExp(pathUtil.sep.replace('\\', '\\\\'), 'g');
       return function (filename) {
         return filename.replace(separatorExpression, '/');
@@ -40,8 +39,7 @@
         message +=
           `\n${diagnostic.file.fileName}(${position.line + 1},${position.character + 1}): ` +
           `error TS${diagnostic.code}: ${diagnostic.messageText}`;
-      }
-      else {
+      } else {
         message += `\nerror TS${diagnostic.code}: ${diagnostic.messageText}`;
       }
     });
@@ -74,8 +72,7 @@
       if (replacement != null) {
         code += replacement;
         skip(node);
-      }
-      else {
+      } else {
         ts.forEachChild(node, visit);
       }
     }
@@ -136,8 +133,7 @@
         use to prefix module names with, but in >=2.2 the name option was split
         into two; prefix is what is now used to prefix imports and module names
         in the output.`);
-      }
-      else {
+      } else {
         throw new Error('name and main must be used together.');
       }
     }
@@ -158,20 +154,17 @@
       if (options.project) {
         if (fs.lstatSync(options.project).isDirectory()) {
           tsconfigFilename = pathUtil.join(options.project, 'tsconfig.json');
-        }
-        else {
+        } else {
           // project isn't a diretory, it's a file
           tsconfigFilename = options.project;
         }
-      }
-      else {
+      } else {
         tsconfigFilename = pathUtil.join(options.baseDir, 'tsconfig.json');
       }
       if (fs.existsSync(tsconfigFilename)) {
         verboseMessage(`  parsing "${tsconfigFilename}"`);
         [files, compilerOptions] = getTSConfig(tsconfigFilename);
-      }
-      else {
+      } else {
         sendMessage(`No "tsconfig.json" found at "${tsconfigFilename}"!`);
         return new Promise(function (resolve, reject) {
           reject(new SyntaxError('Unable to resolve configuration.'));
@@ -297,8 +290,7 @@
           if (mainExportDeclaration) {
             output.write(`export * from '${options.main}';` + eol);
           }
-        }
-        else {
+        } else {
           output.write(`import main = require('${options.main}');` + eol + indent);
           output.write('export = main;' + eol);
         }
@@ -335,8 +327,7 @@
           // resolve relative imports relative to the current module id.
           if (moduleId.charAt(0) === '.') {
             resolved = filenameToMid(pathUtil.join(pathUtil.dirname(sourceModuleId), moduleId));
-          }
-          else {
+          } else {
             resolved = moduleId;
           }
           // prefix the import with options.prefix, so that both non-relative imports
@@ -362,12 +353,10 @@
           });
           if (resolveModuleIdResult) {
             resolvedModuleId = resolveModuleIdResult;
-          }
-          else if (options.prefix) {
+          } else if (options.prefix) {
             resolvedModuleId = `${options.prefix}/${resolvedModuleId}`;
           }
-        }
-        else if (options.prefix) {
+        } else if (options.prefix) {
           resolvedModuleId = `${options.prefix}/${resolvedModuleId}`;
         }
         output.write('declare module \'' + resolvedModuleId + '\' {' + eol + indent);
@@ -380,11 +369,9 @@
             // statements.
             const resolved = resolveModuleImport(expression.text);
             return ` require('${resolved}')`;
-          }
-          else if (node.kind === ts.SyntaxKind.DeclareKeyword) {
+          } else if (node.kind === ts.SyntaxKind.DeclareKeyword) {
             return '';
-          }
-          else if (isNodeKindStringLiteral(node) && node.parent &&
+          } else if (isNodeKindStringLiteral(node) && node.parent &&
             (isNodeKindExportDeclaration(node.parent) || isNodeKindImportDeclaration(node.parent))) {
             // This block of code is modifying the names of imported modules
             const text = node.text;
@@ -396,8 +383,7 @@
         });
         output.write(content.replace(nonEmptyLineStart, '$&' + indent));
         output.write(eol + '}' + eol);
-      }
-      else {
+      } else {
         output.write(declarationFile.text);
       }
     }

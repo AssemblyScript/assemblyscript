@@ -40,6 +40,8 @@ module.exports = {
       ]
     }],
 
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+
     // This is mostly visual style, making comments look uniform.
     "spaced-comment": ["error", "always", {
       "markers": ["/"],   // triple-slash

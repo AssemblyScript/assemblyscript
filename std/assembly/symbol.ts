@@ -64,8 +64,12 @@ import { Map } from "./map";
   static readonly unscopables: symbol = changetype<symbol>(11);
 
   static for(key: string): symbol {
-    if (!stringToId) { stringToId = new Map(); idToString = new Map(); }
-    else if (stringToId.has(key)) return changetype<symbol>(stringToId.get(key));
+    if (!stringToId) {
+      stringToId = new Map();
+      idToString = new Map();
+    } else if (stringToId.has(key)) {
+      return changetype<symbol>(stringToId.get(key));
+    }
     var id = nextId++;
     if (!id) unreachable(); // out of ids
     stringToId.set(key, id);
@@ -83,19 +87,21 @@ import { Map } from "./map";
     var id = changetype<usize>(this);
     var str = "";
     switch (<u32>id) {
-      case 1:  { str = "hasInstance"; break; }
-      case 2:  { str = "isConcatSpreadable"; break; }
-      case 3:  { str = "isRegExp"; break; }
-      case 4:  { str = "match"; break; }
-      case 5:  { str = "replace"; break; }
-      case 6:  { str = "search"; break; }
-      case 7:  { str = "species"; break; }
-      case 8:  { str = "split"; break; }
-      case 9:  { str = "toPrimitive"; break; }
-      case 10: { str = "toStringTag"; break; }
-      case 11: { str = "unscopables"; break; }
+      case 1:  str = "hasInstance"; break;
+      case 2:  str = "isConcatSpreadable"; break;
+      case 3:  str = "isRegExp"; break;
+      case 4:  str = "match"; break;
+      case 5:  str = "replace"; break;
+      case 6:  str = "search"; break;
+      case 7:  str = "species"; break;
+      case 8:  str = "split"; break;
+      case 9:  str = "toPrimitive"; break;
+      case 10: str = "toStringTag"; break;
+      case 11: str = "unscopables"; break;
       default: {
-        if (idToString !== null && idToString.has(id)) str = idToString.get(id);
+        if (idToString !== null && idToString.has(id)) {
+          str = idToString.get(id);
+        }
         break;
       }
     }

@@ -167,8 +167,9 @@ exports.compileString = (sources, options) => {
     } else {
       if (Array.isArray(val)) {
         val.forEach(val => { argv.push("--" + key, String(val)); });
+      } else {
+        argv.push("--" + key, String(val));
       }
-      else argv.push("--" + key, String(val));
     }
   });
   exports.main(argv.concat(Object.keys(sources)), {
