@@ -98,6 +98,7 @@ module.exports = {
         "bin/*"
       ],
       rules: {
+        "keyword-spacing": ["error", { "before": true, "after": true }],
         // Node's support for ESM is still not great, but this rule is likely
         // to become activated once compatibility doesn't suck anymore.
         "@typescript-eslint/no-var-requires": "off",

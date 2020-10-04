@@ -1013,7 +1013,7 @@ function getAsconfig(file, baseDir, readFile) {
   let config;
   try {
     config = JSON.parse(contents);
-  } catch(ex) {
+  } catch (ex) {
     throw new Error("Asconfig is not valid json: " + location);
   }
 
