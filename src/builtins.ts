@@ -2225,10 +2225,7 @@ function builtin_sub(ctx: BuiltinContext): ExpressionRef {
         op = BinaryOp.SubI64;
         break;
       }
-      case TypeKind.ISIZE: {
-        op = compiler.options.isWasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32;
-        break;
-      }
+      case TypeKind.ISIZE:
       case TypeKind.USIZE: {
         op = compiler.options.isWasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32;
         break;
