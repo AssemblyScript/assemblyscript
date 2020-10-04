@@ -2319,10 +2319,7 @@ function builtin_mul(ctx: BuiltinContext): ExpressionRef {
         op = BinaryOp.MulI64;
         break;
       }
-      case TypeKind.ISIZE: {
-        op = compiler.options.isWasm64 ? BinaryOp.MulI64 : BinaryOp.MulI32;
-        break;
-      }
+      case TypeKind.ISIZE:
       case TypeKind.USIZE: {
         op = compiler.options.isWasm64 ? BinaryOp.MulI64 : BinaryOp.MulI32;
         break;
