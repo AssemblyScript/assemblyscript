@@ -2131,10 +2131,7 @@ function builtin_add(ctx: BuiltinContext): ExpressionRef {
         op = BinaryOp.AddI64;
         break;
       }
-      case TypeKind.ISIZE: {
-        op = compiler.options.isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32;
-        break;
-      }
+      case TypeKind.ISIZE:
       case TypeKind.USIZE: {
         op = compiler.options.isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32;
         break;
