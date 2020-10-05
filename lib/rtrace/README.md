@@ -12,8 +12,8 @@ var rtrace = new Rtrace({
   onerror(err, info) {
     // handle error
   },
-  oninfo(msg, info) {
-    // print info, optional
+  oninfo(msg) {
+    // print message, optional
   },
   getMemory() {
     // obtain the module's memory,
