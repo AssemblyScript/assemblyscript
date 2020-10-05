@@ -141,6 +141,9 @@ export namespace BuiltinNames {
   export const isManaged = "~lib/builtins/isManaged";
   export const isVoid = "~lib/builtins/isVoid";
 
+  export const add = "~lib/builtins/add";
+  export const sub = "~lib/builtins/sub";
+  export const mul = "~lib/builtins/mul";
   export const clz = "~lib/builtins/clz";
   export const ctz = "~lib/builtins/ctz";
   export const popcnt = "~lib/builtins/popcnt";
@@ -233,6 +236,19 @@ export namespace BuiltinNames {
   export const f64_sqrt = "~lib/builtins/f64.sqrt";
   export const f32_trunc = "~lib/builtins/f32.trunc";
   export const f64_trunc = "~lib/builtins/f64.trunc";
+
+  export const i32_add = "~lib/builtins/i32.add";
+  export const i64_add = "~lib/builtins/i64.add";
+  export const f32_add = "~lib/builtins/f32.add";
+  export const f64_add = "~lib/builtins/f64.add";
+  export const i32_sub = "~lib/builtins/i32.sub";
+  export const i64_sub = "~lib/builtins/i64.sub";
+  export const f32_sub = "~lib/builtins/f32.sub";
+  export const f64_sub = "~lib/builtins/f64.sub";
+  export const i32_mul = "~lib/builtins/i32.mul";
+  export const i64_mul = "~lib/builtins/i64.mul";
+  export const f32_mul = "~lib/builtins/f32.mul";
+  export const f64_mul = "~lib/builtins/f64.mul";
 
   export const i32_load8_s = "~lib/builtins/i32.load8_s";
   export const i32_load8_u = "~lib/builtins/i32.load8_u";
@@ -2053,6 +2069,279 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
   return module.store(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset, immAlign);
 }
 builtins.set(BuiltinNames.store, builtin_store);
+
+// add<T?>(left: T, right: T) -> T
+function builtin_add(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2))
+    return module.unreachable();
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var left = operands[0];
+  var arg0 = typeArguments
+    ? compiler.compileExpression(
+        left,
+        typeArguments[0],
+        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+      )
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
+  var type = compiler.currentType;
+  if (type.isValue) {
+    let arg1: ExpressionRef;
+    if (!typeArguments && left.isNumericLiteral) {
+      // prefer right type
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.MUST_WRAP
+      );
+      if (compiler.currentType != type) {
+        arg0 = compiler.compileExpression(
+          left,
+          (type = compiler.currentType),
+          Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        );
+      }
+    } else {
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+      );
+    }
+    let op: BinaryOp = -1;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        return compiler.ensureSmallIntegerWrap(
+          module.binary(BinaryOp.AddI32, arg0, arg1),
+          type
+        );
+      }
+      case TypeKind.I32:
+      case TypeKind.U32:
+      {
+        op = BinaryOp.AddI32;
+        break;
+      }       
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        op = BinaryOp.AddI64;
+        break;
+      }
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
+        op = compiler.options.isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32;
+        break;
+      }
+      case TypeKind.F32: {
+        op = BinaryOp.AddF32;
+        break;
+      }
+      case TypeKind.F64: {
+        op = BinaryOp.AddF64;
+        break;
+      }
+    }
+    if (op != -1) {
+      return module.binary(op, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange,
+    "add",
+    type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.add, builtin_add);
+
+// sub<T?>(left: T, right: T) -> T
+function builtin_sub(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2))
+    return module.unreachable();
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var left = operands[0];
+  var arg0 = typeArguments
+    ? compiler.compileExpression(
+        left,
+        typeArguments[0],
+        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+      )
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
+  var type = compiler.currentType;
+  if (type.isValue) {
+    let arg1: ExpressionRef;
+    if (!typeArguments && left.isNumericLiteral) {
+      // prefer right type
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.MUST_WRAP
+      );
+      if (compiler.currentType != type) {
+        arg0 = compiler.compileExpression(
+          left,
+          (type = compiler.currentType),
+          Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        );
+      }
+    } else {
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+      );
+    }
+    let op: BinaryOp = -1;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        return compiler.ensureSmallIntegerWrap(
+          module.binary(BinaryOp.SubI32, arg0, arg1),
+          type
+        );
+      }
+      case TypeKind.I32:
+      case TypeKind.U32:
+      {
+        op = BinaryOp.SubI32;
+        break;
+      }       
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        op = BinaryOp.SubI64;
+        break;
+      }
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
+        op = compiler.options.isWasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32;
+        break;
+      }
+      case TypeKind.F32: {
+        op = BinaryOp.SubF32;
+        break;
+      }
+      case TypeKind.F64: {
+        op = BinaryOp.SubF64;
+        break;
+      }
+    }
+    if (op != -1) {
+      return module.binary(op, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange,
+    "sub",
+    type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.sub, builtin_sub);
+
+// mul<T?>(left: T, right: T) -> T
+function builtin_mul(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2))
+    return module.unreachable();
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var left = operands[0];
+  var arg0 = typeArguments
+    ? compiler.compileExpression(
+        left,
+        typeArguments[0],
+        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+      )
+    : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
+  var type = compiler.currentType;
+  if (type.isValue) {
+    let arg1: ExpressionRef;
+    if (!typeArguments && left.isNumericLiteral) {
+      // prefer right type
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.MUST_WRAP
+      );
+      if (compiler.currentType != type) {
+        arg0 = compiler.compileExpression(
+          left,
+          (type = compiler.currentType),
+          Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        );
+      }
+    } else {
+      arg1 = compiler.compileExpression(
+        operands[1],
+        type,
+        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+      );
+    }
+    let op: BinaryOp = -1;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        return compiler.ensureSmallIntegerWrap(
+          module.binary(BinaryOp.MulI32, arg0, arg1),
+          type
+        );
+      }
+      case TypeKind.I32:
+      case TypeKind.U32:
+      {
+        op = BinaryOp.MulI32;
+        break;
+      }       
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        op = BinaryOp.MulI64;
+        break;
+      }
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
+        op = compiler.options.isWasm64 ? BinaryOp.MulI64 : BinaryOp.MulI32;
+        break;
+      }
+      case TypeKind.F32: {
+        op = BinaryOp.MulF32;
+        break;
+      }
+      case TypeKind.F64: {
+        op = BinaryOp.MulF64;
+        break;
+      }
+    }
+    if (op != -1) {
+      return module.binary(op, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange,
+    "mul",
+    type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.mul, builtin_mul);
 
 // === Atomics ================================================================================
 
@@ -5577,6 +5866,114 @@ function builtin_f64_trunc(ctx: BuiltinContext): ExpressionRef {
   return builtin_trunc(ctx);
 }
 builtins.set(BuiltinNames.f64_trunc, builtin_f64_trunc);
+
+// i32.add -> add<i32>
+function builtin_i32_add(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.i32;
+  return builtin_add(ctx);
+}
+builtins.set(BuiltinNames.i32_add, builtin_i32_add);
+
+// i64.add -> add<i64>
+function builtin_i64_add(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.i64;
+  return builtin_add(ctx);
+}
+builtins.set(BuiltinNames.i64_add, builtin_i64_add);
+
+// i32.sub -> sub<i32>
+function builtin_i32_sub(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.i32;
+  return builtin_sub(ctx);
+}
+builtins.set(BuiltinNames.i32_sub, builtin_i32_sub);
+
+// i64.sub -> sub<i64>
+function builtin_i64_sub(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.i64;
+  return builtin_sub(ctx);
+}
+builtins.set(BuiltinNames.i64_sub, builtin_i64_sub);
+
+// i32.mul -> mul<i32>
+function builtin_i32_mul(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.i32;
+  return builtin_mul(ctx);
+}
+builtins.set(BuiltinNames.i32_mul, builtin_i32_mul);
+
+// i64.mul -> mul<i64>
+function builtin_i64_mul(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.i64;
+  return builtin_mul(ctx);
+}
+builtins.set(BuiltinNames.i64_mul, builtin_i64_mul);
+
+// f32.add -> add<f32>
+function builtin_f32_add(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.f32;
+  return builtin_add(ctx);
+}
+builtins.set(BuiltinNames.f32_add, builtin_f32_add);
+
+// f64.add -> add<f64>
+function builtin_f64_add(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.f64;
+  return builtin_add(ctx);
+}
+builtins.set(BuiltinNames.f64_add, builtin_f64_add);
+
+// f32.sub -> sub<f32>
+function builtin_f32_sub(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.f32;
+  return builtin_sub(ctx);
+}
+builtins.set(BuiltinNames.f32_sub, builtin_f32_sub);
+
+// f64.sub -> sub<f64>
+function builtin_f64_sub(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.f64;
+  return builtin_sub(ctx);
+}
+builtins.set(BuiltinNames.f64_sub, builtin_f64_sub);
+
+// f32.mul -> mul<f32>
+function builtin_f32_mul(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.f32;
+  return builtin_mul(ctx);
+}
+builtins.set(BuiltinNames.f32_mul, builtin_f32_mul);
+
+// f64.mul -> mul<f64>
+function builtin_f64_mul(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.f64;
+  return builtin_mul(ctx);
+}
+builtins.set(BuiltinNames.f64_mul, builtin_f64_mul);
 
 // i32.load8_s -> <i32>load<i8>
 function builtin_i32_load8_s(ctx: BuiltinContext): ExpressionRef {

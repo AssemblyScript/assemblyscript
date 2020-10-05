@@ -46,6 +46,12 @@ assert(!isDefined(c));
 assert(isConstant(1));
 assert(!isConstant(b));
 
+// small integers
+var l: i8;
+l = add<i8>(1, 2); assert(l == 3);
+l = sub<i8>(2, 1); assert(l == 1);
+l = mul<i8>(1, 2); assert(l == 2);
+
 // integers
 
 var i: i32;
@@ -58,6 +64,9 @@ rotr<i32>(1, 1);
 abs<i32>(-42);
 max<i32>(1, 2);
 min<i32>(1, 2);
+add<i32>(1, 2);
+sub<i32>(2, 1);
+mul<i32>(1, 2);
 
 i = clz<i32>(1);
 i = ctz<i32>(1);
@@ -67,7 +76,9 @@ i = rotr<i32>(1, 1);
 i = abs<i32>(-42); assert(i == 42);
 i = max<i32>(1, 2); assert(i == 2);
 i = min<i32>(1, 2); assert(i == 1);
-
+i = add<i32>(1, 2); assert(i == 3);
+i = sub<i32>(2, 1); assert(i == 1);
+i = mul<i32>(2, 3); assert(i == 6);
 var I: i64;
 
 clz<i64>(1);
@@ -84,7 +95,10 @@ I = rotl<i64>(1, 1);
 I = rotr<i64>(1, 1);
 I = abs<i64>(-42); assert(I == 42);
 I = max<i64>(1, 2); assert(I == 2);
-I = min<i64>(1, 2); assert(i == 1);
+I = min<i64>(1, 2); assert(I == 1);
+I = add<i64>(1, 2); assert(I == 3);
+I = sub<i64>(2, 1); assert(I == 1);
+I = mul<i64>(2, 3); assert(I == 6);
 
 // floats
 
@@ -114,7 +128,10 @@ f = abs<f32>(1.25);
 f = ceil<f32>(1.25);
 f = copysign<f32>(1.25, 2.5);
 f = floor<f32>(1.25);
-f = max<f32>(1.25, 2.5);
+f = add<f32>(1.5, 2.5); assert(f == 4.0);
+f = sub<f32>(2.5, 1.5); assert(f == 1.0);
+f = mul<f32>(1.5, 2.0); assert(f == 3.0);
+f = max<f32>(1.25, 2.5); assert(f == 2.5);
 f = min<f32>(1.25, 2.5);
 f = nearest<f32>(1.25);
 f = sqrt<f32>(1.25);
@@ -132,6 +149,9 @@ abs<f64>(1.25);
 ceil<f64>(1.25);
 copysign<f64>(1.25, 2.5);
 floor<f64>(1.25);
+add<f64>(1.5, 2.5); 
+sub<f64>(2.5, 1.5); 
+mul<f64>(1.5, 2.0); 
 max<f64>(1.25, 2.5);
 min<f64>(1.25, 2.5);
 nearest<f64>(1.25);
@@ -150,6 +170,9 @@ F = abs<f64>(1.25);
 F = ceil<f64>(1.25);
 F = copysign<f64>(1.25, 2.5);
 F = floor<f64>(1.25);
+F = add<f64>(1.5, 2.5); assert(F == 4.0);
+F = sub<f64>(2.5, 1.5); assert(F == 1.0);
+F = mul<f64>(1.5, 2.0); assert(F == 3.0);
 F = max<f64>(1.25, 2.5);
 F = min<f64>(1.25, 2.5);
 F = nearest<f64>(1.25);
@@ -162,6 +185,12 @@ b = isFinite<f64>(1.25);
 
 F = min(0, 1.0);
 f = max(0, f);
+F = add(0, 1.5);
+f = add(0, f);
+F = sub(2, 1.0);
+f = sub(2, f);
+F = mul(2, 1.0);
+f = mul(2, f);
 
 // load and store
 
@@ -381,6 +410,13 @@ f64.nearest(1.0);
 i32.popcnt(1);
 i64.popcnt(1);
 
+i32.add(1, 2);
+i64.add(1, 2);
+i32.sub(2, 1);
+i64.sub(2, 1);
+i32.mul(2, 1);
+i64.mul(2, 1);
+
 i32.load8_s(8);
 i32.load8_u(8);
 i32.load16_s(8);
@@ -395,6 +431,13 @@ i64.load32_u(8);
 i64.load(8);
 f32.load(8);
 f64.load(8);
+
+f32.add(1.0, 2.0);
+f64.add(1.0, 2.0);
+f32.sub(2.0, 1.0);
+f64.sub(2.0, 1.0);
+f32.mul(1.0, 2.0);
+f64.mul(1.0, 2.0);
 
 f32.max(1.0, 2.0);
 f64.max(1.0, 2.0);
