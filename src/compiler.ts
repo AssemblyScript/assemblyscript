@@ -3544,12 +3544,10 @@ export class Compiler extends DiagnosticEmitter {
     var wrap = (constraints & Constraints.MUST_WRAP) != 0;
     if (currentType != contextualType.nonNullableType) { // allow assigning non-nullable to nullable
       if (constraints & Constraints.CONV_EXPLICIT) {
-        expr = this.convertExpression(expr, currentType, contextualType, true, wrap, expression);
-        wrap = false;
+        expr = this.convertExpression(expr, currentType, contextualType, true, expression);
         this.currentType = contextualType;
       } else if (constraints & Constraints.CONV_IMPLICIT) {
-        expr = this.convertExpression(expr, currentType, contextualType, false, wrap, expression);
-        wrap = false;
+        expr = this.convertExpression(expr, currentType, contextualType, false, expression);
         this.currentType = contextualType;
       }
     }
@@ -3586,16 +3584,16 @@ export class Compiler extends DiagnosticEmitter {
     return expr;
   }
 
+  /** Converts an expression's result from one type to another. */
   convertExpression(
     expr: ExpressionRef,
     /** Original type. */
     fromType: Type,
     /** New type. */
     toType: Type,
-    /** Whether the conversion is explicit.*/
+    /** Whether the conversion is explicit. */
     explicit: bool,
-    /** Whether the result should be wrapped, if a small integer. */
-    wrap: bool,
+    /** Report node. */
     reportNode: Node
   ): ExpressionRef {
     var module = this.module;
@@ -3695,7 +3693,6 @@ export class Compiler extends DiagnosticEmitter {
         if (fromType.kind == TypeKind.F32) {
           if (toType.isBooleanValue) {
             expr = this.makeIsTrueish(expr, Type.f32, reportNode);
-            wrap = false;
           } else if (toType.isSignedIntegerValue) {
             if (toType.isLongIntegerValue) {
               expr = module.unary(UnaryOp.TruncF32ToI64, expr);
@@ -3714,7 +3711,6 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           if (toType.isBooleanValue) {
             expr = this.makeIsTrueish(expr, Type.f64, reportNode);
-            wrap = false;
           } else if (toType.isSignedIntegerValue) {
             if (toType.isLongIntegerValue) {
               expr = module.unary(UnaryOp.TruncF64ToI64, expr);
@@ -3784,7 +3780,6 @@ export class Compiler extends DiagnosticEmitter {
         // i64 to i32 or smaller
         if (toType.isBooleanValue) {
           expr = module.binary(BinaryOp.NeI64, expr, module.i64(0));
-          wrap = false;
         } else if (!toType.isLongIntegerValue) {
           expr = module.unary(UnaryOp.WrapI64, expr); // discards upper bits
         }
@@ -3795,7 +3790,6 @@ export class Compiler extends DiagnosticEmitter {
           fromType.isSignedIntegerValue ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32,
           this.ensureSmallIntegerWrap(expr, fromType) // must clear garbage bits
         );
-        wrap = false;
 
       // i32 to i32
       } else {
@@ -3804,7 +3798,6 @@ export class Compiler extends DiagnosticEmitter {
           // small i32 to larger i32
           if (fromType.size < toType.size) {
             expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
-            wrap = false;
           }
         // same size
         } else {
@@ -3819,9 +3812,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     this.currentType = toType;
-    return wrap
-      ? this.ensureSmallIntegerWrap(expr, toType)
-      : expr;
+    return expr;
   }
 
   private compileAssertionExpression(
@@ -3935,17 +3926,9 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
 
-        leftExpr = this.convertExpression(leftExpr,
-          leftType, commonType,
-          false, false,
-          left
-        );
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr,
-          rightType, commonType,
-          false, false,
-          right
-        );
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
         rightType = commonType;
 
         expr = this.makeLt(leftExpr, rightExpr, commonType);
@@ -3978,17 +3961,9 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
 
-        leftExpr = this.convertExpression(leftExpr,
-          leftType, commonType,
-          false, false,
-          left
-        );
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr,
-          rightType, commonType,
-          false, false,
-          right
-        );
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
         rightType = commonType;
 
         expr = this.makeGt(leftExpr, rightExpr, commonType);
@@ -4021,17 +3996,9 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
 
-        leftExpr = this.convertExpression(leftExpr,
-          leftType, commonType,
-          false, false,
-          left
-        );
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr,
-          rightType, commonType,
-          false, false,
-          right
-        );
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
         rightType = commonType;
 
         expr = this.makeLe(leftExpr, rightExpr, commonType);
@@ -4064,17 +4031,9 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
 
-        leftExpr = this.convertExpression(leftExpr,
-          leftType, commonType,
-          false, false,
-          left
-        );
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr,
-          rightType, commonType,
-          false, false,
-          right
-        );
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
         rightType = commonType;
 
         expr = this.makeGe(leftExpr, rightExpr, commonType);
@@ -4112,17 +4071,9 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
 
-        leftExpr = this.convertExpression(leftExpr,
-          leftType, commonType,
-          false, false,
-          left
-        );
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr,
-          rightType, commonType,
-          false, false,
-          right
-        );
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
         rightType = commonType;
 
         expr = this.makeEq(leftExpr, rightExpr, commonType, expression);
@@ -4159,17 +4110,9 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
 
-        leftExpr = this.convertExpression(leftExpr,
-          leftType, commonType,
-          false, false,
-          left
-        );
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
         leftType = commonType;
-        rightExpr = this.convertExpression(rightExpr,
-          rightType, commonType,
-          false, false,
-          right
-        );
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
         rightType = commonType;
 
         expr = this.makeNe(leftExpr, rightExpr, commonType, expression);
@@ -4215,16 +4158,10 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, leftType = commonType,
-            false, false,
-            left
-          );
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, rightType = commonType,
-            false, false,
-            right
-          );
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
         expr = this.makeAdd(leftExpr, rightExpr, commonType);
         break;
@@ -4266,17 +4203,9 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, false,
-            left
-          );
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
           leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, false,
-            right
-          );
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
           rightType = commonType;
         }
         expr = this.makeSub(leftExpr, rightExpr, commonType);
@@ -4319,17 +4248,9 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, false,
-            left
-          );
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
           leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, false,
-            right
-          );
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
           rightType = commonType;
         }
         expr = this.makeMul(leftExpr, rightExpr, commonType);
@@ -4372,17 +4293,9 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, false,
-            left
-          );
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
           leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, false,
-            right
-          );
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
           rightType = commonType;
         }
         expr = this.makePow(leftExpr, rightExpr, commonType, expression);
@@ -4425,17 +4338,9 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, false,
-            left
-          );
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
           leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, false,
-            right
-          );
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
           rightType = commonType;
         }
         expr = this.makeDiv(leftExpr, rightExpr, commonType);
@@ -4478,17 +4383,9 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, false,
-            left
-          );
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
           leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, false,
-            right
-          );
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
           rightType = commonType;
         }
         expr = this.makeRem(leftExpr, rightExpr, commonType, expression);
@@ -4613,17 +4510,9 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, false,
-            left
-          );
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
           leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, false,
-            right
-          );
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
           rightType = commonType;
         }
         expr = this.makeAnd(leftExpr, rightExpr, commonType);
@@ -4666,17 +4555,9 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, false,
-            left
-          );
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
           leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, false,
-            right
-          );
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
           rightType = commonType;
         }
         expr = this.makeOr(leftExpr, rightExpr, commonType);
@@ -4719,17 +4600,9 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, false,
-            left
-          );
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
           leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, false,
-            right
-          );
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
           rightType = commonType;
         }
         expr = this.makeXor(leftExpr, rightExpr, commonType);
@@ -6129,7 +6002,7 @@ export class Compiler extends DiagnosticEmitter {
     var valueType = this.currentType;
     return this.makeAssignment(
       target,
-      this.convertExpression(valueExpr, valueType, targetType, false, false, valueExpression),
+      this.convertExpression(valueExpr, valueType, targetType, false, valueExpression),
       valueType,
       valueExpression,
       thisExpression,
@@ -7856,7 +7729,7 @@ export class Compiler extends DiagnosticEmitter {
                   operands.push(
                     this.convertExpression(
                       module.global_get(global.internalName, global.type.toNativeType()),
-                      global.type, parameterTypes[i], false, false, initializer
+                      global.type, parameterTypes[i], false, initializer
                     )
                   );
                 }
@@ -9723,18 +9596,10 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = ctxType;
       return module.unreachable();
     }
-    ifThenExpr = this.convertExpression(
-      ifThenExpr,
-      ifThenType, commonType,
-      false, false,
-      ifThen
-    );
-    ifElseExpr = this.convertExpression(
-      ifElseExpr,
-      ifElseType, commonType,
-      false, false,
-      ifElse
-    );
+    ifThenExpr = this.convertExpression(ifThenExpr, ifThenType, commonType, false, ifThen);
+    ifThenType = commonType;
+    ifElseExpr = this.convertExpression(ifElseExpr, ifElseType, commonType, false, ifElse);
+    ifElseType = commonType;
     this.currentType = commonType;
 
     if (ifThenAutoreleaseSkipped != ifElseAutoreleaseSkipped) { // unify to both skipped
@@ -10326,11 +10191,7 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
 
-        expr = this.convertExpression(expr,
-          this.currentType, this.currentType.intType,
-          false, false,
-          expression.operand
-        );
+        expr = this.convertExpression(expr, this.currentType, this.currentType.intType, false, expression.operand);
 
         switch (this.currentType.kind) {
           case TypeKind.I8:
@@ -10422,7 +10283,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             expr = this.compileExpression(operand, Type.auto); // may trigger an error
-            expr = this.convertExpression(expr, this.currentType, Type.void, true, false, operand);
+            expr = this.convertExpression(expr, this.currentType, Type.void, true, operand);
           }
         }
         typeString = "undefined";
@@ -10441,7 +10302,7 @@ export class Compiler extends DiagnosticEmitter {
           default: {
             expr = this.compileExpression(operand, Type.auto);
             let type = this.currentType;
-            expr = this.convertExpression(expr, type, Type.void, true, false, operand);
+            expr = this.convertExpression(expr, type, Type.void, true, operand);
             if (type.isReference) {
               let signatureReference = type.getSignature();
               if (signatureReference) {

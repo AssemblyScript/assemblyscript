@@ -2044,11 +2044,8 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
       inType.size < type.size   // int to larger int (clear garbage bits)
     )
   ) {
-    arg1 = compiler.convertExpression(arg1,
-      inType, type,
-      false, false, // still clears garbage bits when not wrapping
-      operands[1]
-    );
+    // either conversion or memory operation clears garbage bits
+    arg1 = compiler.convertExpression(arg1, inType, type, false, operands[1]);
     inType = type;
   }
   var immOffset = 0;
@@ -2321,11 +2318,8 @@ function builtin_atomic_store(ctx: BuiltinContext): ExpressionRef {
       inType.size < type.size  // int to larger int (clear garbage bits)
     )
   ) {
-    arg1 = compiler.convertExpression(arg1,
-      inType, type,
-      false, false, // still clears garbage bits when not wrapping
-      operands[1]
-    );
+    // either conversion or memory operation clears garbage bits
+    arg1 = compiler.convertExpression(arg1, inType, type, false, operands[1]);
     inType = type;
   }
   var immOffset = operands.length == 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
@@ -2382,11 +2376,8 @@ function builtin_atomic_binary(ctx: BuiltinContext, op: AtomicRMWOp, opName: str
       inType.size < type.size   // int to larger int (clear garbage bits)
     )
   ) {
-    arg1 = compiler.convertExpression(arg1,
-      inType, type,
-      false, false, // still clears garbage bits when not wrapping
-      operands[1]
-    );
+    // either conversion or memory operation clears garbage bits
+    arg1 = compiler.convertExpression(arg1, inType, type, false, operands[1]);
     inType = type;
   }
   var immOffset = operands.length == 3 ? evaluateImmediateOffset(operands[2], compiler) : 0; // reports
@@ -2482,16 +2473,9 @@ function builtin_atomic_cmpxchg(ctx: BuiltinContext): ExpressionRef {
       inType.size < type.size   // int to larger int (clear garbage bits)
     )
   ) {
-    arg1 = compiler.convertExpression(arg1,
-      inType, type,
-      false, false, // still clears garbage bits when not wrapping
-      operands[1]
-    );
-    arg2 = compiler.convertExpression(arg2,
-      inType, type,
-      false, false, // still clears garbage bits when not wrapping
-      operands[2]
-    );
+    // either conversion or memory operation clears garbage bits
+    arg1 = compiler.convertExpression(arg1, inType, type, false, operands[1]);
+    arg2 = compiler.convertExpression(arg2, inType, type, false, operands[2]);
     inType = type;
   }
   var immOffset = operands.length == 4 ? evaluateImmediateOffset(operands[3], compiler) : 0; // reports
