@@ -9,10 +9,6 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
- (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
- (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
- (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
  (data (i32.const 1024) "\03\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\00\01\02")
  (data (i32.const 1056) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\10\04\00\00\10\04\00\00\03\00\00\00\03")
@@ -1073,8 +1069,6 @@
   local.get $4
   call $~lib/rt/tlsf/prepareBlock
   local.get $3
-  call $~lib/rt/rtrace/onalloc
-  local.get $3
  )
  (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
@@ -1118,8 +1112,6 @@
    i32.const 1
    i32.add
    i32.store offset=4
-   local.get $1
-   call $~lib/rt/rtrace/onincrement
    local.get $1
    i32.load
    i32.const 1
@@ -1549,8 +1541,6 @@
   i32.and
   local.set $1
   local.get $0
-  call $~lib/rt/rtrace/ondecrement
-  local.get $0
   i32.load
   i32.const 1
   i32.and
@@ -1631,8 +1621,6 @@
    global.get $~lib/rt/tlsf/ROOT
    local.get $0
    call $~lib/rt/tlsf/insertBlock
-   local.get $0
-   call $~lib/rt/rtrace/onfree
   else
    local.get $1
    i32.const 0
