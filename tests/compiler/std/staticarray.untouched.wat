@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
@@ -9,10 +9,6 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
- (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
- (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
- (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
  (data (i32.const 16) "\0c\00\00\00\01\00\00\00\03\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00")
  (data (i32.const 48) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00")
@@ -33,10 +29,9 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/staticarray/arr3 (mut i32) (i32.const 0))
  (global $std/staticarray/arr4 (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 464))
- (export "_start" (func $~start))
  (export "memory" (memory $0))
+ (start $~start)
  (func $~lib/staticarray/StaticArray<i32>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
@@ -1518,10 +1513,8 @@
   local.get $4
   local.get $3
   call $~lib/rt/tlsf/prepareBlock
-  i32.const 1
+  i32.const 0
   drop
-  local.get $4
-  call $~lib/rt/rtrace/onalloc
   local.get $4
  )
  (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
@@ -2832,10 +2825,8 @@
   i32.const 1
   i32.add
   i32.store offset=4
-  i32.const 1
+  i32.const 0
   drop
-  local.get $0
-  call $~lib/rt/rtrace/onincrement
   i32.const 1
   drop
   local.get $0
@@ -3145,13 +3136,6 @@
   global.set $std/staticarray/arr4
  )
  (func $~start
-  global.get $~started
-  if
-   return
-  else
-   i32.const 1
-   global.set $~started
-  end
   call $start:std/staticarray
  )
  (func $~lib/rt/pure/__collect
@@ -3169,13 +3153,11 @@
   i32.const 1
   i32.or
   i32.store
+  i32.const 0
+  drop
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock
-  i32.const 1
-  drop
-  local.get $1
-  call $~lib/rt/rtrace/onfree
  )
  (func $~lib/rt/pure/finalize (param $0 i32)
   i32.const 0
@@ -3194,10 +3176,8 @@
   i32.const 268435455
   i32.and
   local.set $2
-  i32.const 1
+  i32.const 0
   drop
-  local.get $0
-  call $~lib/rt/rtrace/ondecrement
   i32.const 1
   drop
   local.get $0

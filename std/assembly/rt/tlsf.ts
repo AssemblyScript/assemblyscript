@@ -1,5 +1,5 @@
 import { AL_BITS, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
-import { onfree, onalloc, onrealloc } from "./rtrace";
+import { onalloc, onresize, onmove, onfree } from "./rtrace";
 import { REFCOUNT_MASK } from "./pure";
 
 // === The TLSF (Two-Level Segregate Fit) memory allocator ===
@@ -523,7 +523,7 @@ export function allocateBlock(root: Root, size: usize, id: u32): Block {
   block.rtSize = <u32>size;
   removeBlock(root, <Block>block);
   prepareBlock(root, <Block>block, payloadSize);
-  if (isDefined(ASC_RTRACE)) onalloc(<Block>block);
+  if (isDefined(ASC_RTRACE)) onalloc(block);
   return <Block>block;
 }
 
@@ -531,11 +531,15 @@ export function allocateBlock(root: Root, size: usize, id: u32): Block {
 export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   var payloadSize = prepareSize(size);
   var blockInfo = block.mmInfo;
+  var currentSize = blockInfo & ~TAGS_MASK;
 
   // possibly split and update runtime size if it still fits
-  if (payloadSize <= (blockInfo & ~TAGS_MASK)) {
+  if (payloadSize <= currentSize) {
     prepareBlock(root, block, payloadSize);
     block.rtSize = <u32>size;
+    if (isDefined(ASC_RTRACE)) {
+      if (payloadSize != currentSize) onresize(block, currentSize);
+    }
     return block;
   }
 
@@ -543,7 +547,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   var right = GETRIGHT(block);
   var rightInfo = right.mmInfo;
   if (rightInfo & FREE) {
-    let mergeSize = (blockInfo & ~TAGS_MASK) + BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK);
+    let mergeSize = currentSize + BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK);
     if (mergeSize >= payloadSize) {
       removeBlock(root, right);
       // TODO: this can yield an intermediate block larger than BLOCK_MAXSIZE, which
@@ -551,6 +555,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
       block.mmInfo = (blockInfo & TAGS_MASK) | mergeSize;
       block.rtSize = <u32>size;
       prepareBlock(root, block, payloadSize);
+      if (isDefined(ASC_RTRACE)) onresize(block, currentSize);
       return block;
     }
   }
@@ -560,7 +565,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   newBlock.gcInfo = block.gcInfo; // keep RC
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
   if (changetype<usize>(block) >= __heap_base) {
-    if (isDefined(ASC_RTRACE)) onrealloc(block, newBlock);
+    if (isDefined(ASC_RTRACE)) onmove(block, newBlock);
     freeBlock(root, block);
   }
   return newBlock;
@@ -570,8 +575,8 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
 export function freeBlock(root: Root, block: Block): void {
   var blockInfo = block.mmInfo;
   block.mmInfo = blockInfo | FREE;
-  insertBlock(root, block);
   if (isDefined(ASC_RTRACE)) onfree(block);
+  insertBlock(root, block);
 }
 
 /** Checks that a used block is valid to be freed or reallocated. */

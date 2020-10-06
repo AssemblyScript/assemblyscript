@@ -182,11 +182,9 @@
     i32.add
     local.tee $4
     i32.load offset=4
-    i32.const 1
+    i32.const -2
     local.get $2
-    i32.shl
-    i32.const -1
-    i32.xor
+    i32.rotl
     i32.and
     local.set $1
     local.get $4
@@ -198,11 +196,9 @@
      local.get $0
      local.get $0
      i32.load
-     i32.const 1
+     i32.const -2
      local.get $3
-     i32.shl
-     i32.const -1
-     i32.xor
+     i32.rotl
      i32.and
      i32.store
     end
@@ -2449,7 +2445,7 @@
    if
     i32.const 0
     i32.const 1040
-    i32.const 580
+    i32.const 585
     i32.const 3
     call $~lib/builtins/abort
     unreachable
