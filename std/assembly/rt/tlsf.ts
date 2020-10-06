@@ -462,7 +462,7 @@ function prepareSize(size: usize): usize {
   return max<usize>((size + AL_MASK) & ~AL_MASK, BLOCK_MINSIZE); // align and ensure min size
 }
 
-/** Initilizes the root structure. */
+/** Initializes the root structure. */
 export function maybeInitialize(): Root {
   var root = ROOT;
   if (!root) {
