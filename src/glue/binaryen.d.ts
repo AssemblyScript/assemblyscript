@@ -970,6 +970,8 @@ export declare function _BinaryenGetDebugInfo(): bool;
 export declare function _BinaryenSetDebugInfo(on: bool): void;
 export declare function _BinaryenGetLowMemoryUnused(): bool;
 export declare function _BinaryenSetLowMemoryUnused(on: bool): void;
+export declare function _BinaryenGetFastMath(): bool;
+export declare function _BinaryenSetFastMath(on: bool): void;
 export declare function _BinaryenGetPassArgument(key: BinaryenString): BinaryenString;
 export declare function _BinaryenSetPassArgument(key: BinaryenString, value: BinaryenString): void;
 export declare function _BinaryenClearPassArguments(): void;
