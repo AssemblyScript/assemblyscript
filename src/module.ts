@@ -1386,6 +1386,14 @@ export class Module {
     binaryen._BinaryenSetLowMemoryUnused(on);
   }
 
+  getFastMath(): bool {
+    return binaryen._BinaryenGetFastMath();
+  }
+
+  setFastMath(on: bool): void {
+    binaryen._BinaryenSetFastMath(on);
+  }
+
   getPassArgument(key: string): string | null {
     var cStr = this.allocStringCached(key);
     var ptr = binaryen._BinaryenGetPassArgument(cStr);
@@ -1477,6 +1485,7 @@ export class Module {
     this.setOptimizeLevel(optimizeLevel);
     this.setShrinkLevel(shrinkLevel);
     this.setDebugInfo(debugInfo);
+    this.setFastMath(true);
     this.clearPassArguments();
 
     // Tweak inlining limits based on optimization levels
