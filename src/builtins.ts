@@ -2076,8 +2076,9 @@ builtins.set(BuiltinNames.store, builtin_store);
 function builtin_add(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2))
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2)) {
     return module.unreachable();
+  }
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments;
   var left = operands[0];
@@ -2085,9 +2086,9 @@ function builtin_add(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         left,
         typeArguments[0],
-        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        Constraints.CONV_IMPLICIT
       )
-    : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
+    : compiler.compileExpression(operands[0], Type.auto);
   var type = compiler.currentType;
   if (type.isValue) {
     let arg1: ExpressionRef;
@@ -2095,62 +2096,24 @@ function builtin_add(ctx: BuiltinContext): ExpressionRef {
       // prefer right type
       arg1 = compiler.compileExpression(
         operands[1],
-        type,
-        Constraints.MUST_WRAP
+        type
       );
       if (compiler.currentType != type) {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
-          Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+          Constraints.CONV_IMPLICIT
         );
       }
     } else {
       arg1 = compiler.compileExpression(
         operands[1],
         type,
-        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        Constraints.CONV_IMPLICIT
       );
     }
-    let op: BinaryOp = -1;
-    switch (type.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        return compiler.ensureSmallIntegerWrap(
-          module.binary(BinaryOp.AddI32, arg0, arg1),
-          type
-        );
-      }
-      case TypeKind.I32:
-      case TypeKind.U32:
-      {
-        op = BinaryOp.AddI32;
-        break;
-      }       
-      case TypeKind.I64:
-      case TypeKind.U64: {
-        op = BinaryOp.AddI64;
-        break;
-      }
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
-        op = compiler.options.isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32;
-        break;
-      }
-      case TypeKind.F32: {
-        op = BinaryOp.AddF32;
-        break;
-      }
-      case TypeKind.F64: {
-        op = BinaryOp.AddF64;
-        break;
-      }
-    }
-    if (op != -1) {
-      return module.binary(op, arg0, arg1);
+    if (type.isNumericValue) {
+      return compiler.makeAdd(arg0, arg1, type);
     }
   }
   compiler.error(
@@ -2167,8 +2130,9 @@ builtins.set(BuiltinNames.add, builtin_add);
 function builtin_sub(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2))
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2)) {
     return module.unreachable();
+  }
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments;
   var left = operands[0];
@@ -2176,9 +2140,9 @@ function builtin_sub(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         left,
         typeArguments[0],
-        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        Constraints.CONV_IMPLICIT
       )
-    : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
+    : compiler.compileExpression(operands[0], Type.auto);
   var type = compiler.currentType;
   if (type.isValue) {
     let arg1: ExpressionRef;
@@ -2186,62 +2150,24 @@ function builtin_sub(ctx: BuiltinContext): ExpressionRef {
       // prefer right type
       arg1 = compiler.compileExpression(
         operands[1],
-        type,
-        Constraints.MUST_WRAP
+        type
       );
       if (compiler.currentType != type) {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
-          Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+          Constraints.CONV_IMPLICIT
         );
       }
     } else {
       arg1 = compiler.compileExpression(
         operands[1],
         type,
-        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        Constraints.CONV_IMPLICIT
       );
     }
-    let op: BinaryOp = -1;
-    switch (type.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        return compiler.ensureSmallIntegerWrap(
-          module.binary(BinaryOp.SubI32, arg0, arg1),
-          type
-        );
-      }
-      case TypeKind.I32:
-      case TypeKind.U32:
-      {
-        op = BinaryOp.SubI32;
-        break;
-      }       
-      case TypeKind.I64:
-      case TypeKind.U64: {
-        op = BinaryOp.SubI64;
-        break;
-      }
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
-        op = compiler.options.isWasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32;
-        break;
-      }
-      case TypeKind.F32: {
-        op = BinaryOp.SubF32;
-        break;
-      }
-      case TypeKind.F64: {
-        op = BinaryOp.SubF64;
-        break;
-      }
-    }
-    if (op != -1) {
-      return module.binary(op, arg0, arg1);
+    if (type.isNumericValue) {
+      return compiler.makeSub(arg0, arg1, type);
     }
   }
   compiler.error(
@@ -2258,8 +2184,9 @@ builtins.set(BuiltinNames.sub, builtin_sub);
 function builtin_mul(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
-  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2))
+  if (checkTypeOptional(ctx, true) | checkArgsRequired(ctx, 2)) {
     return module.unreachable();
+  }
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments;
   var left = operands[0];
@@ -2267,9 +2194,9 @@ function builtin_mul(ctx: BuiltinContext): ExpressionRef {
     ? compiler.compileExpression(
         left,
         typeArguments[0],
-        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        Constraints.CONV_IMPLICIT
       )
-    : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
+    : compiler.compileExpression(operands[0], Type.auto);
   var type = compiler.currentType;
   if (type.isValue) {
     let arg1: ExpressionRef;
@@ -2277,62 +2204,24 @@ function builtin_mul(ctx: BuiltinContext): ExpressionRef {
       // prefer right type
       arg1 = compiler.compileExpression(
         operands[1],
-        type,
-        Constraints.MUST_WRAP
+        type
       );
       if (compiler.currentType != type) {
         arg0 = compiler.compileExpression(
           left,
           (type = compiler.currentType),
-          Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+          Constraints.CONV_IMPLICIT
         );
       }
     } else {
       arg1 = compiler.compileExpression(
         operands[1],
         type,
-        Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP
+        Constraints.CONV_IMPLICIT
       );
     }
-    let op: BinaryOp = -1;
-    switch (type.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        return compiler.ensureSmallIntegerWrap(
-          module.binary(BinaryOp.MulI32, arg0, arg1),
-          type
-        );
-      }
-      case TypeKind.I32:
-      case TypeKind.U32:
-      {
-        op = BinaryOp.MulI32;
-        break;
-      }       
-      case TypeKind.I64:
-      case TypeKind.U64: {
-        op = BinaryOp.MulI64;
-        break;
-      }
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
-        op = compiler.options.isWasm64 ? BinaryOp.MulI64 : BinaryOp.MulI32;
-        break;
-      }
-      case TypeKind.F32: {
-        op = BinaryOp.MulF32;
-        break;
-      }
-      case TypeKind.F64: {
-        op = BinaryOp.MulF64;
-        break;
-      }
-    }
-    if (op != -1) {
-      return module.binary(op, arg0, arg1);
+    if (type.isNumericValue) {
+      return compiler.makeMul(arg0, arg1, type);
     }
   }
   compiler.error(
