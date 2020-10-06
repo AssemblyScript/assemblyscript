@@ -2,9 +2,9 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
@@ -23,11 +23,6 @@
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
- (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
- (import "rtrace" "onrealloc" (func $~lib/rt/rtrace/onrealloc (param i32 i32)))
- (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
- (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
  (memory $0 1)
  (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 64) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
@@ -484,11 +479,10 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 22424))
- (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
+ (start $~start)
  (func $~lib/rt/pure/increment (param $0 i32)
   (local $1 i32)
   local.get $0
@@ -521,10 +515,8 @@
   i32.const 1
   i32.add
   i32.store offset=4
-  i32.const 1
+  i32.const 0
   drop
-  local.get $0
-  call $~lib/rt/rtrace/onincrement
   i32.const 1
   drop
   local.get $0
@@ -2222,10 +2214,8 @@
   local.get $4
   local.get $3
   call $~lib/rt/tlsf/prepareBlock
-  i32.const 1
+  i32.const 0
   drop
-  local.get $4
-  call $~lib/rt/rtrace/onalloc
   local.get $4
  )
  (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
@@ -7449,7 +7439,7 @@
   if
    i32.const 0
    i32.const 352
-   i32.const 580
+   i32.const 585
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -7466,13 +7456,11 @@
   i32.const 1
   i32.or
   i32.store
+  i32.const 0
+  drop
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock
-  i32.const 1
-  drop
-  local.get $1
-  call $~lib/rt/rtrace/onfree
  )
  (func $~lib/rt/tlsf/reallocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7481,18 +7469,21 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   local.get $2
   call $~lib/rt/tlsf/prepareSize
   local.set $3
   local.get $1
   i32.load
   local.set $4
-  local.get $3
   local.get $4
   i32.const 3
   i32.const -1
   i32.xor
   i32.and
+  local.set $5
+  local.get $3
+  local.get $5
   i32.le_u
   if
    local.get $0
@@ -7502,55 +7493,53 @@
    local.get $1
    local.get $2
    i32.store offset=12
+   i32.const 0
+   drop
    local.get $1
    return
   end
   local.get $1
-  local.set $5
-  local.get $5
+  local.set $6
+  local.get $6
   i32.const 16
   i32.add
-  local.get $5
+  local.get $6
   i32.load
   i32.const 3
   i32.const -1
   i32.xor
   i32.and
   i32.add
-  local.set $6
-  local.get $6
-  i32.load
   local.set $7
   local.get $7
+  i32.load
+  local.set $8
+  local.get $8
   i32.const 1
   i32.and
   if
-   local.get $4
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
+   local.get $5
    i32.const 16
    i32.add
-   local.get $7
+   local.get $8
    i32.const 3
    i32.const -1
    i32.xor
    i32.and
    i32.add
-   local.set $5
-   local.get $5
+   local.set $6
+   local.get $6
    local.get $3
    i32.ge_u
    if
     local.get $0
-    local.get $6
+    local.get $7
     call $~lib/rt/tlsf/removeBlock
     local.get $1
     local.get $4
     i32.const 3
     i32.and
-    local.get $5
+    local.get $6
     i32.or
     i32.store
     local.get $1
@@ -7560,6 +7549,8 @@
     local.get $1
     local.get $3
     call $~lib/rt/tlsf/prepareBlock
+    i32.const 0
+    drop
     local.get $1
     return
    end
@@ -7569,12 +7560,12 @@
   local.get $1
   i32.load offset=8
   call $~lib/rt/tlsf/allocateBlock
-  local.set $8
-  local.get $8
+  local.set $9
+  local.get $9
   local.get $1
   i32.load offset=4
   i32.store offset=4
-  local.get $8
+  local.get $9
   i32.const 16
   i32.add
   local.get $1
@@ -7586,16 +7577,13 @@
   global.get $~lib/heap/__heap_base
   i32.ge_u
   if
-   i32.const 1
+   i32.const 0
    drop
-   local.get $1
-   local.get $8
-   call $~lib/rt/rtrace/onrealloc
    local.get $0
    local.get $1
    call $~lib/rt/tlsf/freeBlock
   end
-  local.get $8
+  local.get $9
  )
  (func $~lib/rt/tlsf/__realloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
@@ -21274,13 +21262,6 @@
   call $~lib/rt/pure/__retain
  )
  (func $~start
-  global.get $~started
-  if
-   return
-  else
-   i32.const 1
-   global.set $~started
-  end
   call $start:std/string
  )
  (func $~lib/rt/pure/finalize (param $0 i32)
@@ -21300,10 +21281,8 @@
   i32.const 268435455
   i32.and
   local.set $2
-  i32.const 1
+  i32.const 0
   drop
-  local.get $0
-  call $~lib/rt/rtrace/ondecrement
   i32.const 1
   drop
   local.get $0

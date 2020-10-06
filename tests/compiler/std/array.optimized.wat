@@ -23,13 +23,8 @@
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
- (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
- (import "rtrace" "onrealloc" (func $~lib/rt/rtrace/onrealloc (param i32 i32)))
- (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
- (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
  (memory $0 1)
  (data (i32.const 1024) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
  (data (i32.const 1072) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
@@ -310,11 +305,9 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
  (global $std/array/ArrayU32 i32 (i32.const 40))
  (global $std/array/ArrayU8 i32 (i32.const 41))
  (global $std/array/ArrayStr i32 (i32.const 42))
- (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "ArrayU32" (global $std/array/ArrayU32))
  (export "ArrayU32#constructor" (func $~lib/array/Array<u32>#constructor@varargs))
@@ -395,6 +388,7 @@
  (export "ArrayStr#flat" (func $~lib/array/Array<u32>#flat))
  (export "ArrayStr#toString" (func $~lib/array/Array<~lib/string/String|null>#toString))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
+ (start $~start)
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 11928
@@ -539,11 +533,9 @@
     i32.add
     local.tee $4
     i32.load offset=4
-    i32.const 1
+    i32.const -2
     local.get $2
-    i32.shl
-    i32.const -1
-    i32.xor
+    i32.rotl
     i32.and
     local.set $1
     local.get $4
@@ -555,11 +547,9 @@
      local.get $0
      local.get $0
      i32.load
-     i32.const 1
+     i32.const -2
      local.get $3
-     i32.shl
-     i32.const -1
-     i32.xor
+     i32.rotl
      i32.and
      i32.store
     end
@@ -1412,8 +1402,6 @@
   local.get $4
   call $~lib/rt/tlsf/prepareBlock
   local.get $3
-  call $~lib/rt/rtrace/onalloc
-  local.get $3
  )
  (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
@@ -1630,8 +1618,6 @@
    i32.const 1
    i32.add
    i32.store offset=4
-   local.get $1
-   call $~lib/rt/rtrace/onincrement
    local.get $1
    i32.load
    i32.const 1
@@ -2306,7 +2292,7 @@
   if
    i32.const 0
    i32.const 1136
-   i32.const 580
+   i32.const 585
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2323,14 +2309,13 @@
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock
-  local.get $1
-  call $~lib/rt/rtrace/onfree
  )
  (func $~lib/rt/tlsf/reallocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $2
   call $~lib/rt/tlsf/prepareSize
   local.tee $3
@@ -2339,6 +2324,7 @@
   local.tee $5
   i32.const -4
   i32.and
+  local.tee $4
   i32.le_u
   if
    local.get $0
@@ -2361,16 +2347,14 @@
   i32.add
   local.tee $6
   i32.load
-  local.tee $4
+  local.tee $7
   i32.const 1
   i32.and
   if
-   local.get $5
-   i32.const -4
-   i32.and
+   local.get $4
    i32.const 16
    i32.add
-   local.get $4
+   local.get $7
    i32.const -4
    i32.and
    i32.add
@@ -2420,9 +2404,6 @@
   i32.const 11928
   i32.ge_u
   if
-   local.get $1
-   local.get $3
-   call $~lib/rt/rtrace/onrealloc
    local.get $0
    local.get $1
    call $~lib/rt/tlsf/freeBlock
@@ -19901,13 +19882,6 @@
   call $~lib/rt/pure/__retain
  )
  (func $~start
-  global.get $~started
-  if
-   return
-  else
-   i32.const 1
-   global.set $~started
-  end
   call $start:std/array
  )
  (func $~lib/rt/pure/decrement (param $0 i32)
@@ -19921,8 +19895,6 @@
   i32.const 268435455
   i32.and
   local.set $1
-  local.get $0
-  call $~lib/rt/rtrace/ondecrement
   local.get $0
   i32.load
   i32.const 1

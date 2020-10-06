@@ -1,12 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
+import * as v8 from "v8";
 import * as binaryen from "binaryen";
-import * as util from "util";
 import * as loader from "../../lib/loader";
+import { Rtrace } from "../../lib/rtrace";
 import * as find from "../../cli/util/find";
 import AssemblyScript from "../../out/assemblyscript";
 
-Error.stackTraceLimit = Infinity;
+v8.setFlagsFromString("--experimental-wasm-bigint");
 
 // Load stdlib
 const libDir = path.join(__dirname, "..", "..", "std", "assembly");
@@ -18,11 +19,27 @@ find.files(libDir, /^(?!.*\.d\.ts$).*\.ts$/).forEach((file: string) => {
 async function test(build: string): Promise<void> {
   await binaryen.ready;
 
+  const rtrace = new Rtrace({
+    onerror(err, info) {
+      console.log(err, info);
+    },
+    oninfo(msg) {
+      // console.log(msg);
+    },
+    getMemory() {
+      return asc.memory;
+    }
+  });
+
   const { exports: asc } = await loader.instantiate<typeof AssemblyScript>(
     fs.promises.readFile(`${ __dirname }/../../out/assemblyscript.${ build }.wasm`),
-    { binaryen }
+    {
+      binaryen,
+      rtrace,
+      env: rtrace.env
+    }
   );
-  console.log(util.inspect(asc, true));
+  if (asc._start) asc._start();
 
   const cachedStrings = new Map<string,number>();
   function cachedString(text: string): number {
@@ -59,8 +76,10 @@ async function test(build: string): Promise<void> {
   console.log("\nParsing backlog ...");
   var nextFilePtr = asc.nextFile(programPtr);
   while (nextFilePtr) {
-    const nextFile = asc.__getString(nextFilePtr);
-    if (!nextFile.startsWith("~lib/")) throw Error("unexpected file: " + nextFile);
+    let nextFile = asc.__getString(nextFilePtr);
+    if (!nextFile.startsWith("~lib/")) { // e.g. "rt/something"
+      nextFile = "~lib/" + nextFile;
+    }
     const text = libraryFiles[nextFile.substring(5)];
     if (text == null) throw Error("missing file: " + nextFile);
     const textPtr = cachedString(libraryFiles[nextFile.substring(5)]);

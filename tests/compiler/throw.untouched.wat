@@ -4,8 +4,6 @@
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
- (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
  (data (i32.const 16) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\001\002\003\00")
  (data (i32.const 48) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\002\003\004\00")
@@ -719,13 +717,11 @@
   i32.const 1
   i32.or
   i32.store
+  i32.const 0
+  drop
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock
-  i32.const 1
-  drop
-  local.get $1
-  call $~lib/rt/rtrace/onfree
  )
  (func $~lib/rt/pure/finalize (param $0 i32)
   i32.const 0
@@ -744,10 +740,8 @@
   i32.const 268435455
   i32.and
   local.set $2
-  i32.const 1
+  i32.const 0
   drop
-  local.get $0
-  call $~lib/rt/rtrace/ondecrement
   i32.const 1
   drop
   local.get $0
