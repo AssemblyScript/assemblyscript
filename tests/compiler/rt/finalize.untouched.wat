@@ -2188,11 +2188,11 @@
   i32.const 1
   i32.or
   i32.store
+  i32.const 0
+  drop
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock
-  i32.const 0
-  drop
  )
  (func $~lib/rt/pure/finalize (param $0 i32)
   i32.const 1
@@ -3524,7 +3524,7 @@
   if
    i32.const 0
    i32.const 144
-   i32.const 580
+   i32.const 585
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3567,16 +3567,12 @@
   i32.const 0
   call $~lib/rt/tlsf/__alloc
   local.set $5
-  i32.const 0
-  drop
   local.get $5
   local.get $0
   local.get $1
   call $~lib/memory/memory.copy
   local.get $0
   if
-   i32.const 0
-   drop
    local.get $0
    call $~lib/rt/tlsf/__free
   end
