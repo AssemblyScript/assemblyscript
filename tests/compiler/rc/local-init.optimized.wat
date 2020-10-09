@@ -1,16 +1,12 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
- (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
- (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
- (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
  (data (i32.const 1028) "\01\00\00\00\01")
  (data (i32.const 1040) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
@@ -153,11 +149,9 @@
     i32.add
     local.tee $4
     i32.load offset=4
-    i32.const 1
+    i32.const -2
     local.get $2
-    i32.shl
-    i32.const -1
-    i32.xor
+    i32.rotl
     i32.and
     local.set $1
     local.get $4
@@ -169,11 +163,9 @@
      local.get $0
      local.get $0
      i32.load
-     i32.const 1
+     i32.const -2
      local.get $3
-     i32.shl
-     i32.const -1
-     i32.xor
+     i32.rotl
      i32.and
      i32.store
     end
@@ -887,8 +879,6 @@
    i32.store
   end
   local.get $1
-  call $~lib/rt/rtrace/onalloc
-  local.get $1
  )
  (func $~start
   (local $0 i32)
@@ -930,8 +920,6 @@
    i32.add
    i32.store offset=4
    local.get $1
-   call $~lib/rt/rtrace/onincrement
-   local.get $1
    i32.load
    i32.const 1
    i32.and
@@ -963,8 +951,6 @@
   i32.const 268435455
   i32.and
   local.set $1
-  local.get $0
-  call $~lib/rt/rtrace/ondecrement
   local.get $0
   i32.load
   i32.const 1
@@ -1028,8 +1014,6 @@
    global.get $~lib/rt/tlsf/ROOT
    local.get $0
    call $~lib/rt/tlsf/insertBlock
-   local.get $0
-   call $~lib/rt/rtrace/onfree
   else
    local.get $1
    i32.const 0

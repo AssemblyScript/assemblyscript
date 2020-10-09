@@ -1603,7 +1603,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 580
+   i32.const 585
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2873,11 +2873,11 @@
   i32.const 1
   i32.or
   i32.store
+  i32.const 0
+  drop
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock
-  i32.const 0
-  drop
  )
  (func $~lib/rt/tlsf/reallocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -2886,18 +2886,21 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   local.get $2
   call $~lib/rt/tlsf/prepareSize
   local.set $3
   local.get $1
   i32.load
   local.set $4
-  local.get $3
   local.get $4
   i32.const 3
   i32.const -1
   i32.xor
   i32.and
+  local.set $5
+  local.get $3
+  local.get $5
   i32.le_u
   if
    local.get $0
@@ -2907,55 +2910,53 @@
    local.get $1
    local.get $2
    i32.store offset=12
+   i32.const 0
+   drop
    local.get $1
    return
   end
   local.get $1
-  local.set $5
-  local.get $5
+  local.set $6
+  local.get $6
   i32.const 16
   i32.add
-  local.get $5
+  local.get $6
   i32.load
   i32.const 3
   i32.const -1
   i32.xor
   i32.and
   i32.add
-  local.set $6
-  local.get $6
-  i32.load
   local.set $7
   local.get $7
+  i32.load
+  local.set $8
+  local.get $8
   i32.const 1
   i32.and
   if
-   local.get $4
-   i32.const 3
-   i32.const -1
-   i32.xor
-   i32.and
+   local.get $5
    i32.const 16
    i32.add
-   local.get $7
+   local.get $8
    i32.const 3
    i32.const -1
    i32.xor
    i32.and
    i32.add
-   local.set $5
-   local.get $5
+   local.set $6
+   local.get $6
    local.get $3
    i32.ge_u
    if
     local.get $0
-    local.get $6
+    local.get $7
     call $~lib/rt/tlsf/removeBlock
     local.get $1
     local.get $4
     i32.const 3
     i32.and
-    local.get $5
+    local.get $6
     i32.or
     i32.store
     local.get $1
@@ -2965,6 +2966,8 @@
     local.get $1
     local.get $3
     call $~lib/rt/tlsf/prepareBlock
+    i32.const 0
+    drop
     local.get $1
     return
    end
@@ -2974,12 +2977,12 @@
   local.get $1
   i32.load offset=8
   call $~lib/rt/tlsf/allocateBlock
-  local.set $8
-  local.get $8
+  local.set $9
+  local.get $9
   local.get $1
   i32.load offset=4
   i32.store offset=4
-  local.get $8
+  local.get $9
   i32.const 16
   i32.add
   local.get $1
@@ -2997,7 +3000,7 @@
    local.get $1
    call $~lib/rt/tlsf/freeBlock
   end
-  local.get $8
+  local.get $9
  )
  (func $~lib/rt/tlsf/__realloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
@@ -3675,16 +3678,12 @@
   i32.const 0
   call $~lib/rt/tlsf/__alloc
   local.set $5
-  i32.const 0
-  drop
   local.get $5
   local.get $0
   local.get $1
   call $~lib/memory/memory.copy
   local.get $0
   if
-   i32.const 0
-   drop
    local.get $0
    call $~lib/rt/tlsf/__free
   end

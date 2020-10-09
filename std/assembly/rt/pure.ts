@@ -1,7 +1,7 @@
 import { DEBUG, BLOCK_OVERHEAD } from "rt/common";
 import { Block, freeBlock, ROOT } from "rt/tlsf";
 import { TypeinfoFlags } from "shared/typeinfo";
-import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
+import { onincrement, ondecrement } from "./rtrace";
 
 // === A Pure Reference Counting Garbage Collector ===
 // see: https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
@@ -184,12 +184,8 @@ function growRoots(): void {
   var oldSize = CUR - oldRoots;
   var newSize = max(oldSize * 2, 64 << alignof<usize>());
   var newRoots = __alloc(newSize, 0);
-  if (isDefined(ASC_RTRACE)) onfree(changetype<Block>(newRoots - BLOCK_OVERHEAD)); // neglect unmanaged
   memory.copy(newRoots, oldRoots, oldSize);
-  if (oldRoots) {
-    if (isDefined(ASC_RTRACE)) onalloc(changetype<Block>(oldRoots - BLOCK_OVERHEAD)); // neglect unmanaged
-    __free(oldRoots);
-  }
+  if (oldRoots) __free(oldRoots);
   ROOTS = newRoots;
   CUR = newRoots + oldSize;
   END = newRoots + newSize;

@@ -1,7 +1,7 @@
 (module
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -9,10 +9,6 @@
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
- (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
- (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
- (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
  (data (i32.const 16) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00f\00o\00r\00.\00t\00s\00")
  (data (i32.const 48) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
@@ -24,10 +20,9 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
- (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 208))
- (export "_start" (func $~start))
  (export "memory" (memory $0))
+ (start $~start)
  (func $for/testInitExpression
   (local $0 i32)
   (local $1 i32)
@@ -1867,10 +1862,8 @@
   local.get $4
   local.get $3
   call $~lib/rt/tlsf/prepareBlock
-  i32.const 1
+  i32.const 0
   drop
-  local.get $4
-  call $~lib/rt/rtrace/onalloc
   local.get $4
  )
  (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
@@ -1913,10 +1906,8 @@
   i32.const 1
   i32.add
   i32.store offset=4
-  i32.const 1
+  i32.const 0
   drop
-  local.get $0
-  call $~lib/rt/rtrace/onincrement
   i32.const 1
   drop
   local.get $0
@@ -2309,13 +2300,6 @@
   end
  )
  (func $~start
-  global.get $~started
-  if
-   return
-  else
-   i32.const 1
-   global.set $~started
-  end
   call $start:for
  )
  (func $~lib/rt/pure/__collect
@@ -2333,13 +2317,11 @@
   i32.const 1
   i32.or
   i32.store
+  i32.const 0
+  drop
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock
-  i32.const 1
-  drop
-  local.get $1
-  call $~lib/rt/rtrace/onfree
  )
  (func $~lib/rt/pure/finalize (param $0 i32)
   i32.const 0
@@ -2358,10 +2340,8 @@
   i32.const 268435455
   i32.and
   local.set $2
-  i32.const 1
+  i32.const 0
   drop
-  local.get $0
-  call $~lib/rt/rtrace/ondecrement
   i32.const 1
   drop
   local.get $0
