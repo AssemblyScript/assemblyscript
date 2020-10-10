@@ -52,6 +52,10 @@ l = add<i8>(1, 2); assert(l == 3);
 l = sub<i8>(2, 1); assert(l == 1);
 l = mul<i8>(1, 2); assert(l == 2);
 
+var v: u8;
+v = rotl<u8>(<u8>0b10001111, 3); assert(v == 0b01111100);
+v = rotr<u8>(<u8>0b10101010, 1); assert(v == 0b01010101);
+
 // integers
 
 var i: i32;
@@ -149,9 +153,9 @@ abs<f64>(1.25);
 ceil<f64>(1.25);
 copysign<f64>(1.25, 2.5);
 floor<f64>(1.25);
-add<f64>(1.5, 2.5); 
-sub<f64>(2.5, 1.5); 
-mul<f64>(1.5, 2.0); 
+add<f64>(1.5, 2.5);
+sub<f64>(2.5, 1.5);
+mul<f64>(1.5, 2.0);
 max<f64>(1.25, 2.5);
 min<f64>(1.25, 2.5);
 nearest<f64>(1.25);
