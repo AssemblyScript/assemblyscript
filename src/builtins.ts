@@ -1126,8 +1126,8 @@ function builtin_popcnt(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (type.isValue) {
     switch (compiler.currentType.kind) {
-      case TypeKind.BOOL: // not wrapped
-      case TypeKind.I8:
+      case TypeKind.BOOL: return arg0;
+      case TypeKind.I8: // not wrapped
       case TypeKind.U8:
       case TypeKind.I16:
       case TypeKind.U16:
