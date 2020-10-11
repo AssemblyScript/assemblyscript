@@ -5648,10 +5648,10 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.set $4
   block $folding-inner0
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $4
    local.get $0
    i32.load offset=12
    local.tee $2
@@ -18846,10 +18846,10 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.set $4
   block $folding-inner0
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $4
    local.get $0
    i32.load offset=12
    local.tee $2

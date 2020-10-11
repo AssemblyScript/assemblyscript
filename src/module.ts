@@ -1581,9 +1581,6 @@ export class Module {
         passes.push("merge-locals");
       }
       passes.push("vacuum");
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-        passes.push("code-folding");
-      }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("simplify-globals-optimizing");
       }
@@ -1621,6 +1618,9 @@ export class Module {
       } else {
         passes.push("simplify-globals");
         passes.push("vacuum");
+      }
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        passes.push("code-folding");
       }
       // precompute works best after global optimizations
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {

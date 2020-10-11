@@ -1376,53 +1376,53 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  local.get $0
-  i32.const 8
-  i32.shr_u
-  local.tee $2
-  i32.const 5672
-  i32.add
-  i32.load8_u
-  local.get $2
-  i32.const 2032
-  i32.add
-  i32.load8_u
-  i32.const 86
-  i32.mul
-  i32.const 2032
-  i32.add
-  local.get $0
-  i32.const 255
-  i32.and
-  local.tee $5
-  i32.const 3
-  i32.div_u
-  i32.add
-  i32.load8_u
-  local.get $5
-  i32.const 3
-  i32.rem_u
-  i32.const 2
-  i32.shl
-  i32.const 4700
-  i32.add
-  i32.load
-  i32.mul
-  i32.const 11
-  i32.shr_u
-  i32.const 6
-  i32.rem_u
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.const 4712
-  i32.add
-  i32.load
-  local.tee $2
-  i32.const 8
-  i32.shr_s
-  local.set $3
   block $folding-inner0
+   local.get $0
+   i32.const 8
+   i32.shr_u
+   local.tee $2
+   i32.const 5672
+   i32.add
+   i32.load8_u
+   local.get $2
+   i32.const 2032
+   i32.add
+   i32.load8_u
+   i32.const 86
+   i32.mul
+   i32.const 2032
+   i32.add
+   local.get $0
+   i32.const 255
+   i32.and
+   local.tee $5
+   i32.const 3
+   i32.div_u
+   i32.add
+   i32.load8_u
+   local.get $5
+   i32.const 3
+   i32.rem_u
+   i32.const 2
+   i32.shl
+   i32.const 4700
+   i32.add
+   i32.load
+   i32.mul
+   i32.const 11
+   i32.shr_u
+   i32.const 6
+   i32.rem_u
+   i32.add
+   i32.const 2
+   i32.shl
+   i32.const 4712
+   i32.add
+   i32.load
+   local.tee $2
+   i32.const 8
+   i32.shr_s
+   local.set $3
    local.get $2
    i32.const 255
    i32.and

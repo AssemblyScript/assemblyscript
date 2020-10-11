@@ -4488,13 +4488,13 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.set $1
-  local.get $2
-  call $~lib/rt/pure/__retain
-  local.set $2
   block $folding-inner0
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $1
+   local.get $2
+   call $~lib/rt/pure/__retain
+   local.set $2
    local.get $0
    call $~lib/string/String#get:length
    local.tee $3
@@ -4770,13 +4770,13 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.set $7
-  local.get $2
-  call $~lib/rt/pure/__retain
-  local.set $5
   block $folding-inner0
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $7
+   local.get $2
+   call $~lib/rt/pure/__retain
+   local.set $5
    local.get $0
    call $~lib/string/String#get:length
    local.tee $4
@@ -5558,223 +5558,218 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.set $1
-  block $folding-inner0
-   local.get $2
-   i32.eqz
-   br_if $folding-inner0
+  block $folding-inner1
    local.get $1
-   i32.eqz
-   if
-    i32.const 1
-    call $~lib/rt/__allocArray
-    call $~lib/rt/pure/__retain
-    local.tee $2
-    i32.load offset=4
-    local.get $0
-    call $~lib/rt/pure/__retain
-    i32.store
-    local.get $1
-    call $~lib/rt/pure/__release
+   call $~lib/rt/pure/__retain
+   local.set $1
+   block $folding-inner0
     local.get $2
-    return
-   end
-   local.get $0
-   call $~lib/string/String#get:length
-   local.set $4
-   i32.const 2147483647
-   local.get $2
-   local.get $2
-   i32.const 0
-   i32.lt_s
-   select
-   local.set $2
-   local.get $1
-   call $~lib/string/String#get:length
-   local.tee $6
-   if
-    local.get $4
+    i32.eqz
+    br_if $folding-inner0
+    local.get $1
     i32.eqz
     if
      i32.const 1
      call $~lib/rt/__allocArray
      call $~lib/rt/pure/__retain
-     local.tee $0
+     local.tee $2
      i32.load offset=4
-     i32.const 1280
+     local.get $0
+     call $~lib/rt/pure/__retain
      i32.store
      local.get $1
      call $~lib/rt/pure/__release
-     local.get $0
+     local.get $2
      return
     end
-   else
-    local.get $4
-    i32.eqz
-    br_if $folding-inner0
-    local.get $4
+    local.get $0
+    call $~lib/string/String#get:length
+    local.set $4
+    i32.const 2147483647
     local.get $2
-    local.get $4
     local.get $2
+    i32.const 0
     i32.lt_s
     select
-    local.tee $5
+    local.set $2
+    local.get $1
+    call $~lib/string/String#get:length
+    local.tee $6
+    if
+     local.get $4
+     i32.eqz
+     if
+      i32.const 1
+      call $~lib/rt/__allocArray
+      call $~lib/rt/pure/__retain
+      local.tee $0
+      i32.load offset=4
+      i32.const 1280
+      i32.store
+      local.get $1
+      call $~lib/rt/pure/__release
+      local.get $0
+      return
+     end
+    else
+     local.get $4
+     i32.eqz
+     br_if $folding-inner0
+     local.get $4
+     local.get $2
+     local.get $4
+     local.get $2
+     i32.lt_s
+     select
+     local.tee $5
+     call $~lib/rt/__allocArray
+     call $~lib/rt/pure/__retain
+     local.tee $4
+     i32.load offset=4
+     local.set $6
+     loop $for-loop|0
+      local.get $3
+      local.get $5
+      i32.lt_s
+      if
+       i32.const 2
+       i32.const 1
+       call $~lib/rt/tlsf/__alloc
+       local.tee $2
+       local.get $0
+       local.get $3
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.load16_u
+       i32.store16
+       local.get $6
+       local.get $3
+       i32.const 2
+       i32.shl
+       i32.add
+       local.get $2
+       i32.store
+       local.get $2
+       call $~lib/rt/pure/__retain
+       drop
+       local.get $3
+       i32.const 1
+       i32.add
+       local.set $3
+       br $for-loop|0
+      end
+     end
+     local.get $1
+     call $~lib/rt/pure/__release
+     local.get $4
+     return
+    end
+    i32.const 0
     call $~lib/rt/__allocArray
     call $~lib/rt/pure/__retain
-    local.tee $4
-    i32.load offset=4
-    local.set $6
-    loop $for-loop|0
-     local.get $3
+    local.set $3
+    loop $while-continue|1
+     local.get $0
+     local.get $1
      local.get $5
-     i32.lt_s
+     call $~lib/string/String#indexOf
+     local.tee $8
+     i32.const -1
+     i32.xor
      if
-      i32.const 2
+      local.get $8
+      local.get $5
+      i32.sub
+      local.tee $7
+      i32.const 0
+      i32.gt_s
+      if
+       local.get $7
+       i32.const 1
+       i32.shl
+       local.tee $7
+       i32.const 1
+       call $~lib/rt/tlsf/__alloc
+       local.tee $9
+       local.get $0
+       local.get $5
+       i32.const 1
+       i32.shl
+       i32.add
+       local.get $7
+       call $~lib/memory/memory.copy
+       local.get $3
+       local.get $9
+       call $~lib/array/Array<~lib/string/String>#push
+      else
+       local.get $3
+       i32.const 1280
+       call $~lib/array/Array<~lib/string/String>#push
+      end
+      local.get $2
+      local.get $10
       i32.const 1
-      call $~lib/rt/tlsf/__alloc
-      local.tee $2
-      local.get $0
-      local.get $3
-      i32.const 1
-      i32.shl
       i32.add
-      i32.load16_u
-      i32.store16
+      local.tee $10
+      i32.eq
+      br_if $folding-inner1
       local.get $6
-      local.get $3
-      i32.const 2
-      i32.shl
+      local.get $8
       i32.add
-      local.get $2
-      i32.store
-      local.get $2
-      call $~lib/rt/pure/__retain
-      drop
-      local.get $3
-      i32.const 1
-      i32.add
-      local.set $3
-      br $for-loop|0
+      local.set $5
+      br $while-continue|1
      end
     end
-    local.get $1
-    call $~lib/rt/pure/__release
+    local.get $5
+    i32.eqz
+    if
+     local.get $3
+     local.get $0
+     call $~lib/array/Array<~lib/string/String>#push
+     br $folding-inner1
+    end
     local.get $4
-    return
+    local.get $5
+    i32.sub
+    local.tee $2
+    i32.const 0
+    i32.gt_s
+    if
+     local.get $2
+     i32.const 1
+     i32.shl
+     local.tee $2
+     i32.const 1
+     call $~lib/rt/tlsf/__alloc
+     local.tee $4
+     local.get $0
+     local.get $5
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $2
+     call $~lib/memory/memory.copy
+     local.get $3
+     local.get $4
+     call $~lib/array/Array<~lib/string/String>#push
+    else
+     local.get $3
+     i32.const 1280
+     call $~lib/array/Array<~lib/string/String>#push
+    end
+    br $folding-inner1
    end
    i32.const 0
    call $~lib/rt/__allocArray
    call $~lib/rt/pure/__retain
-   local.set $3
-   loop $while-continue|1
-    local.get $0
-    local.get $1
-    local.get $5
-    call $~lib/string/String#indexOf
-    local.tee $8
-    i32.const -1
-    i32.xor
-    if
-     local.get $8
-     local.get $5
-     i32.sub
-     local.tee $7
-     i32.const 0
-     i32.gt_s
-     if
-      local.get $7
-      i32.const 1
-      i32.shl
-      local.tee $7
-      i32.const 1
-      call $~lib/rt/tlsf/__alloc
-      local.tee $9
-      local.get $0
-      local.get $5
-      i32.const 1
-      i32.shl
-      i32.add
-      local.get $7
-      call $~lib/memory/memory.copy
-      local.get $3
-      local.get $9
-      call $~lib/array/Array<~lib/string/String>#push
-     else
-      local.get $3
-      i32.const 1280
-      call $~lib/array/Array<~lib/string/String>#push
-     end
-     local.get $2
-     local.get $10
-     i32.const 1
-     i32.add
-     local.tee $10
-     i32.eq
-     if
-      local.get $1
-      call $~lib/rt/pure/__release
-      local.get $3
-      return
-     end
-     local.get $6
-     local.get $8
-     i32.add
-     local.set $5
-     br $while-continue|1
-    end
-   end
-   local.get $5
-   i32.eqz
-   if
-    local.get $3
-    local.get $0
-    call $~lib/array/Array<~lib/string/String>#push
-    local.get $1
-    call $~lib/rt/pure/__release
-    local.get $3
-    return
-   end
-   local.get $4
-   local.get $5
-   i32.sub
-   local.tee $2
-   i32.const 0
-   i32.gt_s
-   if
-    local.get $2
-    i32.const 1
-    i32.shl
-    local.tee $2
-    i32.const 1
-    call $~lib/rt/tlsf/__alloc
-    local.tee $4
-    local.get $0
-    local.get $5
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $2
-    call $~lib/memory/memory.copy
-    local.get $3
-    local.get $4
-    call $~lib/array/Array<~lib/string/String>#push
-   else
-    local.get $3
-    i32.const 1280
-    call $~lib/array/Array<~lib/string/String>#push
-   end
    local.get $1
    call $~lib/rt/pure/__release
-   local.get $3
    return
   end
-  i32.const 0
-  call $~lib/rt/__allocArray
-  call $~lib/rt/pure/__retain
   local.get $1
   call $~lib/rt/pure/__release
+  local.get $3
  )
  (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
