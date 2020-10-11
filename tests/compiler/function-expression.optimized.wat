@@ -26,7 +26,6 @@
  (data (i32.const 1600) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\11")
  (table $0 18 funcref)
  (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|2 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0)
- (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-expression~anonymous|0 (param $0 i32) (result i32)
@@ -70,92 +69,9 @@
  (func $function-expression/testField~anonymous|0 (result i32)
   i32.const 1584
  )
- (func $function-expression/testField
+ (func $start:function-expression
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
-  local.tee $2
-  i32.const 16
-  i32.add
-  local.tee $0
-  memory.size
-  local.tee $3
-  i32.const 16
-  i32.shl
-  local.tee $1
-  i32.gt_u
-  if
-   local.get $3
-   local.get $0
-   local.get $1
-   i32.sub
-   i32.const 65535
-   i32.add
-   i32.const -65536
-   i32.and
-   i32.const 16
-   i32.shr_u
-   local.tee $1
-   local.get $3
-   local.get $1
-   i32.gt_s
-   select
-   memory.grow
-   i32.const 0
-   i32.lt_s
-   if
-    local.get $1
-    memory.grow
-    i32.const 0
-    i32.lt_s
-    if
-     unreachable
-    end
-   end
-  end
-  local.get $0
-  global.set $~lib/rt/stub/offset
-  local.get $2
-  i32.const 16
-  i32.sub
-  local.tee $0
-  i32.const 16
-  i32.store
-  local.get $0
-  i32.const 1
-  i32.store offset=4
-  local.get $0
-  i32.const 8
-  i32.store offset=8
-  local.get $0
-  i32.const 4
-  i32.store offset=12
-  local.get $2
-  i32.const 1616
-  i32.store
-  i32.const 1
-  local.get $2
-  i32.load
-  i32.load
-  call_indirect (type $none_=>_i32)
-  i32.load
-  call_indirect (type $i32_=>_i32)
-  i32.const 25
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1072
-   i32.const 82
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $start:function-expression
   i32.const 1
   i32.const 1040
   i32.load
@@ -313,9 +229,72 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1664
+  memory.size
+  local.tee $1
+  i32.const 16
+  i32.shl
+  local.tee $0
+  i32.gt_u
+  if
+   local.get $1
+   i32.const 67199
+   local.get $0
+   i32.sub
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.tee $0
+   local.get $1
+   local.get $0
+   i32.gt_s
+   select
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $0
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
   i32.const 1632
-  global.set $~lib/rt/stub/offset
-  call $function-expression/testField
+  i32.const 16
+  i32.store
+  i32.const 1636
+  i32.const 1
+  i32.store
+  i32.const 1640
+  i32.const 8
+  i32.store
+  i32.const 1644
+  i32.const 4
+  i32.store
+  i32.const 1648
+  i32.const 1616
+  i32.store
+  i32.const 1
+  i32.const 1648
+  i32.load
+  i32.load
+  call_indirect (type $none_=>_i32)
+  i32.load
+  call_indirect (type $i32_=>_i32)
+  i32.const 25
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1072
+   i32.const 82
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~start
   call $start:function-expression

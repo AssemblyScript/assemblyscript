@@ -277,16 +277,16 @@
    local.set $1
    local.get $2
    if
-    local.get $0
+    local.get $3
     i32.load16_u
     local.tee $2
-    local.get $3
+    local.get $0
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $2
      local.get $4
+     local.get $2
      i32.sub
      return
     end
@@ -303,7 +303,7 @@
   end
   i32.const 0
  )
- (func $~start
+ (func $start:resolve-function-expression
   (local $0 i32)
   (local $1 i32)
   i32.const 2
@@ -376,5 +376,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $~start
+  call $start:resolve-function-expression
  )
 )

@@ -140,10 +140,9 @@
   i32.const 0
   i32.const 0
   call $~lib/rt/stub/__alloc
-  local.tee $1
+  local.set $1
   local.get $0
   i32.load
-  i32.ne
   drop
   local.get $0
   local.get $1

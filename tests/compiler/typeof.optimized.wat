@@ -76,16 +76,16 @@
    local.set $2
    local.get $3
    if
-    local.get $1
+    local.get $0
     i32.load16_u
     local.tee $3
-    local.get $0
+    local.get $1
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $4
      local.get $3
+     local.get $4
      i32.sub
      return
     end
