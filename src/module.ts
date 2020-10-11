@@ -1546,12 +1546,12 @@ export class Module {
       //   passes.push("post-assemblyscript");
       // }
       passes.push("optimize-instructions");
-      passes.push("remove-unused-brs");
-      passes.push("remove-unused-names");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("dce");
         passes.push("inlining");
       }
+      passes.push("remove-unused-brs");
+      passes.push("remove-unused-names");
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("precompute-propagate");
       } else {
