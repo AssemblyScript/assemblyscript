@@ -9,7 +9,7 @@
  (type $i32_i32_f32_=>_none (func (param i32 i32 f32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
- (type $f32_=>_i32 (func (param f32) (result i32)))
+ (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -292,6 +292,7 @@
  )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.eqz
   if
@@ -325,25 +326,29 @@
   i32.const 2
   local.get $1
   i32.shl
-  local.tee $1
+  local.tee $3
   i32.const 0
   call $~lib/rt/stub/__alloc
   local.tee $2
-  local.get $1
+  local.get $3
   call $~lib/memory/memory.fill
   local.get $0
+  local.tee $1
+  local.get $2
+  local.tee $0
+  local.get $1
   i32.load
+  i32.ne
   drop
   local.get $0
-  local.get $2
   i32.store
-  local.get $0
-  local.get $2
-  i32.store offset=4
-  local.get $0
   local.get $1
-  i32.store offset=8
   local.get $0
+  i32.store offset=4
+  local.get $1
+  local.get $3
+  i32.store offset=8
+  local.get $1
  )
  (func $~lib/typedarray/Float32Array#__set (param $0 i32) (param $1 i32) (param $2 f32)
   local.get $1
@@ -1557,45 +1562,41 @@
   i32.const 0
   local.get $0
   call $~lib/string/String#get:length
-  local.tee $4
-  i32.lt_s
-  local.set $2
-  local.get $1
-  i32.const 0
-  local.get $1
-  i32.const 0
-  i32.gt_s
-  select
-  local.tee $3
-  local.get $4
-  i32.lt_s
-  local.set $1
-  i32.const 0
-  local.get $4
-  local.get $2
-  select
   local.tee $2
-  local.get $3
-  local.get $4
-  local.get $1
+  i32.const 0
+  local.get $2
+  i32.lt_s
   select
   local.tee $3
-  local.get $2
-  local.get $3
+  local.get $1
+  i32.const 0
+  local.get $1
+  i32.const 0
   i32.gt_s
+  select
+  local.tee $1
+  local.get $2
+  local.get $1
+  local.get $2
+  i32.lt_s
+  select
+  local.tee $1
+  local.get $3
+  local.get $1
+  i32.gt_s
+  select
+  i32.const 1
+  i32.shl
+  local.tee $4
+  local.get $3
+  local.get $1
+  local.get $3
+  local.get $1
+  i32.lt_s
   select
   i32.const 1
   i32.shl
   local.tee $1
-  local.get $2
-  local.get $3
-  local.get $2
-  local.get $3
-  i32.lt_s
-  select
-  i32.const 1
-  i32.shl
-  local.tee $2
   i32.sub
   local.tee $3
   i32.eqz
@@ -1604,12 +1605,12 @@
    return
   end
   i32.const 0
-  local.get $1
   local.get $4
+  local.get $2
   i32.const 1
   i32.shl
   i32.eq
-  local.get $2
+  local.get $1
   select
   if
    local.get $0
@@ -1618,110 +1619,103 @@
   local.get $3
   i32.const 1
   call $~lib/rt/stub/__alloc
-  local.tee $1
+  local.tee $2
   local.get $0
-  local.get $2
+  local.get $1
   i32.add
   local.get $3
   call $~lib/memory/memory.copy
-  local.get $1
+  local.get $2
  )
- (func $~lib/number/F32#toString (param $0 f32) (result i32)
+ (func $~lib/util/number/dtoa (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 f64)
-  (local $4 i32)
-  block $__inlined_func$~lib/util/number/dtoa
+  (local $3 i32)
+  local.get $0
+  f64.const 0
+  f64.eq
+  if
+   i32.const 1280
+   return
+  end
+  local.get $0
+  local.get $0
+  f64.sub
+  f64.const 0
+  f64.ne
+  if
    local.get $0
-   f64.promote_f32
-   local.tee $3
-   f64.const 0
-   f64.eq
-   if
-    i32.const 1280
-    local.set $1
-    br $__inlined_func$~lib/util/number/dtoa
-   end
-   local.get $3
-   local.get $3
-   f64.sub
-   f64.const 0
+   local.get $0
    f64.ne
    if
-    local.get $3
-    local.get $3
-    f64.ne
-    if
-     i32.const 1312
-     local.set $1
-     br $__inlined_func$~lib/util/number/dtoa
-    end
-    i32.const 1344
-    i32.const 1392
-    local.get $3
-    f64.const 0
-    f64.lt
-    select
-    local.set $1
-    br $__inlined_func$~lib/util/number/dtoa
+    i32.const 1312
+    return
    end
-   i32.const 56
-   i32.const 1
-   call $~lib/rt/stub/__alloc
-   local.tee $1
-   local.get $3
-   call $~lib/util/number/dtoa_core
-   local.tee $2
-   i32.const 28
-   i32.eq
-   br_if $__inlined_func$~lib/util/number/dtoa
-   local.get $1
-   local.get $2
-   call $~lib/string/String#substring
-   local.get $1
-   i32.const 15
-   i32.and
-   i32.eqz
-   i32.const 0
-   local.get $1
+   i32.const 1344
+   i32.const 1392
+   local.get $0
+   f64.const 0
+   f64.lt
    select
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 2352
-    i32.const 68
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
+   return
+  end
+  i32.const 56
+  i32.const 1
+  call $~lib/rt/stub/__alloc
+  local.tee $1
+  local.get $0
+  call $~lib/util/number/dtoa_core
+  local.tee $2
+  i32.const 28
+  i32.eq
+  if
    local.get $1
-   i32.const 16
-   i32.sub
-   local.tee $4
-   i32.load offset=4
-   i32.const 1
-   i32.ne
-   if
-    i32.const 0
-    i32.const 2352
-    i32.const 70
-    i32.const 14
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/rt/stub/offset
-   local.get $1
-   local.get $4
-   i32.load
-   i32.add
-   i32.eq
-   if
-    local.get $4
-    global.set $~lib/rt/stub/offset
-   end
-   local.set $1
+   return
   end
   local.get $1
+  local.get $2
+  call $~lib/string/String#substring
+  local.get $1
+  i32.const 15
+  i32.and
+  i32.eqz
+  i32.const 0
+  local.get $1
+  select
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 2352
+   i32.const 68
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 16
+  i32.sub
+  local.tee $3
+  i32.load offset=4
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 2352
+   i32.const 70
+   i32.const 14
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/rt/stub/offset
+  local.get $1
+  local.get $3
+  i32.load
+  i32.add
+  i32.eq
+  if
+   local.get $3
+   global.set $~lib/rt/stub/offset
+  end
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -1773,16 +1767,16 @@
    local.set $2
    local.get $3
    if
-    local.get $0
+    local.get $1
     i32.load16_u
     local.tee $3
-    local.get $1
+    local.get $0
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $3
      local.get $4
+     local.get $3
      i32.sub
      return
     end
@@ -1870,36 +1864,31 @@
   i32.add
   i32.load8_u
  )
- (func $~lib/number/U8#toString (param $0 i32) (result i32)
+ (func $~lib/util/number/utoa32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  block $__inlined_func$~lib/util/number/utoa32
-   local.get $0
-   i32.const 255
-   i32.and
-   local.tee $1
-   i32.eqz
-   if
-    i32.const 2752
-    local.set $0
-    br $__inlined_func$~lib/util/number/utoa32
-   end
-   local.get $1
-   call $~lib/util/number/decimalCount32
-   local.tee $2
-   i32.const 1
-   i32.shl
-   i32.const 1
-   call $~lib/rt/stub/__alloc
-   local.tee $0
-   local.get $1
-   local.get $2
-   call $~lib/util/number/utoa_dec_simple<u32>
+  local.get $0
+  i32.eqz
+  if
+   i32.const 2752
+   return
   end
   local.get $0
+  call $~lib/util/number/decimalCount32
+  local.tee $1
+  i32.const 1
+  i32.shl
+  i32.const 1
+  call $~lib/rt/stub/__alloc
+  local.tee $2
+  local.get $0
+  local.get $1
+  call $~lib/util/number/utoa_dec_simple<u32>
+  local.get $2
  )
  (func $start:resolve-elementaccess
   (local $0 i32)
+  (local $1 i32)
   i32.const 2960
   global.set $~lib/rt/stub/offset
   i32.const 12
@@ -1919,7 +1908,8 @@
   global.get $resolve-elementaccess/arr
   i32.const 0
   call $~lib/typedarray/Float32Array#__get
-  call $~lib/number/F32#toString
+  f64.promote_f32
+  call $~lib/util/number/dtoa
   i32.const 2400
   call $~lib/string/String.__eq
   i32.eqz
@@ -1934,7 +1924,8 @@
   global.get $resolve-elementaccess/arr
   i32.const 1
   call $~lib/typedarray/Float32Array#__get
-  call $~lib/number/F32#toString
+  f64.promote_f32
+  call $~lib/util/number/dtoa
   i32.const 2496
   call $~lib/string/String.__eq
   i32.eqz
@@ -1958,7 +1949,8 @@
   local.get $0
   i32.const 0
   call $~lib/typedarray/Float32Array#__get
-  call $~lib/number/F32#toString
+  f64.promote_f32
+  call $~lib/util/number/dtoa
   i32.const 2528
   call $~lib/string/String.__eq
   i32.eqz
@@ -1994,7 +1986,9 @@
   i32.const 12
   i32.const 4
   call $~lib/rt/stub/__alloc
-  local.tee $0
+  local.tee $1
+  local.set $0
+  local.get $1
   if (result i32)
    local.get $0
   else
@@ -2016,7 +2010,9 @@
   global.get $resolve-elementaccess/buf
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
-  call $~lib/number/U8#toString
+  i32.const 255
+  i32.and
+  call $~lib/util/number/utoa32
   i32.const 2880
   call $~lib/string/String.__eq
   i32.eqz
@@ -2031,7 +2027,9 @@
   global.get $resolve-elementaccess/buf
   i32.const 1
   call $~lib/typedarray/Uint8Array#__get
-  call $~lib/number/U8#toString
+  i32.const 255
+  i32.and
+  call $~lib/util/number/utoa32
   i32.const 2912
   call $~lib/string/String.__eq
   i32.eqz
@@ -2055,7 +2053,9 @@
   local.get $0
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
-  call $~lib/number/U8#toString
+  i32.const 255
+  i32.and
+  call $~lib/util/number/utoa32
   i32.const 2944
   call $~lib/string/String.__eq
   i32.eqz

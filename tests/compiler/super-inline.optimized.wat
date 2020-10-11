@@ -93,7 +93,7 @@
    i32.sub
    i32.load
    i32.const 4
-   i32.ne
+   i32.eq
    br_if $__inlined_func$super-inline/Foo#a@virtual
   end
   i32.const 4

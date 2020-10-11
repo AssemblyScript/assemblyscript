@@ -29437,15 +29437,15 @@
   (local $14 i32)
   i32.const 3
   call $~lib/typedarray/Int64Array#constructor
-  local.tee $7
+  local.tee $6
   i32.const 0
   i64.const 7
   call $~lib/typedarray/Int64Array#__set
-  local.get $7
+  local.get $6
   i32.const 1
   i64.const 8
   call $~lib/typedarray/Int64Array#__set
-  local.get $7
+  local.get $6
   i32.const 2
   i64.const 9
   call $~lib/typedarray/Int64Array#__set
@@ -29469,93 +29469,95 @@
   call $~lib/typedarray/Uint8Array#__set
   i32.const 3
   call $~lib/typedarray/Int16Array#constructor
-  local.tee $8
+  local.tee $7
   i32.const 0
   i32.const 1000
   call $~lib/typedarray/Int16Array#__set
-  local.get $8
+  local.get $7
   i32.const 1
   i32.const 1001
   call $~lib/typedarray/Int16Array#__set
-  local.get $8
+  local.get $7
   i32.const 2
   i32.const 1002
   call $~lib/typedarray/Int16Array#__set
   i32.const 10
   call $~lib/typedarray/Float64Array#constructor
-  local.tee $13
+  local.tee $14
   call $~lib/rt/pure/__retain
-  local.tee $3
+  local.tee $0
   call $~lib/rt/pure/__retain
-  local.set $1
-  block $folding-inner1
+  local.set $2
+  block $folding-inner0
    i32.const 8496
    call $~lib/rt/pure/__retain
-   local.tee $2
+   local.tee $3
    i32.load offset=12
-   local.get $1
+   local.get $2
    i32.load offset=8
    i32.const 3
    i32.shr_u
    i32.gt_s
-   br_if $folding-inner1
-   local.get $1
-   i32.load offset=4
-   local.set $4
+   br_if $folding-inner0
    local.get $2
+   i32.load offset=4
+   local.set $8
+   local.get $3
    i32.load offset=4
    local.set $9
-   local.get $2
+   local.get $3
    i32.load offset=12
-   local.set $6
+   local.set $10
    loop $for-loop|0
-    local.get $0
-    local.get $6
+    local.get $1
+    local.get $10
     i32.lt_s
     if
-     local.get $4
-     local.get $0
+     local.get $8
+     local.get $1
      i32.const 3
      i32.shl
      i32.add
      local.get $9
-     local.get $0
+     local.get $1
      i32.const 2
      i32.shl
      i32.add
      i32.load
      f64.convert_i32_s
      f64.store
-     local.get $0
+     local.get $1
      i32.const 1
      i32.add
-     local.set $0
+     local.set $1
      br $for-loop|0
     end
    end
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
-   local.get $1
+   local.get $2
    call $~lib/rt/pure/__release
    i32.const 8496
    call $~lib/rt/pure/__release
-   local.get $3
+   local.get $0
    i32.const 10
    i32.const 3
    i32.const 62
    i32.const 12048
    call $~lib/rt/__allocArray
    call $~lib/rt/pure/__retain
-   local.tee $9
+   local.tee $8
    call $std/typedarray/valuesEqual<~lib/typedarray/Float64Array>
+   local.get $0
+   local.set $1
    i32.const 0
-   local.set $0
-   local.get $3
+   local.set $2
+   local.get $1
    call $~lib/rt/pure/__retain
    local.set $1
    i32.const 8560
    call $~lib/rt/pure/__retain
-   local.tee $2
+   local.tee $3
    i32.load offset=12
    i32.const 3
    i32.add
@@ -29564,62 +29566,69 @@
    i32.const 3
    i32.shr_u
    i32.gt_s
-   br_if $folding-inner1
+   if
+    i32.const 1376
+    i32.const 1440
+    i32.const 1775
+    i32.const 47
+    call $~lib/builtins/abort
+    unreachable
+   end
    local.get $1
    i32.load offset=4
    i32.const 24
    i32.add
    local.set $4
-   local.get $2
+   local.get $3
    i32.load offset=4
-   local.set $6
-   local.get $2
+   local.set $9
+   local.get $3
    i32.load offset=12
    local.set $10
    loop $for-loop|00
-    local.get $0
+    local.get $2
     local.get $10
     i32.lt_s
     if
      local.get $4
-     local.get $0
+     local.get $2
      i32.const 3
      i32.shl
      i32.add
-     local.get $6
-     local.get $0
+     local.get $9
+     local.get $2
      i32.const 2
      i32.shl
      i32.add
      f32.load
      f64.promote_f32
      f64.store
-     local.get $0
+     local.get $2
      i32.const 1
      i32.add
-     local.set $0
+     local.set $2
      br $for-loop|00
     end
    end
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    i32.const 8560
    call $~lib/rt/pure/__release
-   local.get $3
+   local.get $0
    i32.const 10
    i32.const 3
    i32.const 62
    i32.const 12192
    call $~lib/rt/__allocArray
    call $~lib/rt/pure/__retain
-   local.tee $6
+   local.tee $9
    call $std/typedarray/valuesEqual<~lib/typedarray/Float64Array>
-   local.get $3
-   local.get $7
+   local.get $0
+   local.get $6
    call $~lib/typedarray/Float64Array#set<~lib/typedarray/Int64Array>
-   local.get $3
+   local.get $0
    i32.const 10
    i32.const 3
    i32.const 62
@@ -29629,145 +29638,145 @@
    local.tee $10
    call $std/typedarray/valuesEqual<~lib/typedarray/Float64Array>
    i32.const 0
-   local.set $0
+   local.set $1
    local.get $5
    call $~lib/rt/pure/__retain
    local.set $4
-   local.get $3
+   local.get $0
    call $~lib/rt/pure/__retain
-   local.set $1
+   local.set $2
    local.get $4
    call $~lib/rt/pure/__retain
-   local.tee $2
+   local.tee $3
    i32.load offset=8
-   local.get $1
+   local.get $2
    i32.load offset=8
    i32.const 3
    i32.shr_u
    i32.gt_s
-   br_if $folding-inner1
-   local.get $1
+   br_if $folding-inner0
+   local.get $2
    i32.load offset=4
    local.set $11
-   local.get $2
+   local.get $3
    i32.load offset=4
    local.set $12
-   local.get $2
+   local.get $3
    i32.load offset=8
-   local.set $14
+   local.set $13
    loop $for-loop|001
-    local.get $0
-    local.get $14
+    local.get $1
+    local.get $13
     i32.lt_s
     if
      local.get $11
-     local.get $0
+     local.get $1
      i32.const 3
      i32.shl
      i32.add
-     local.get $0
+     local.get $1
      local.get $12
      i32.add
      i32.load8_u
      f64.convert_i32_u
      f64.store
-     local.get $0
+     local.get $1
      i32.const 1
      i32.add
-     local.set $0
+     local.set $1
      br $for-loop|001
     end
    end
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
-   local.get $1
+   local.get $2
    call $~lib/rt/pure/__release
    local.get $4
    call $~lib/rt/pure/__release
-   local.get $3
-   local.get $8
+   local.get $0
+   local.get $7
    call $~lib/typedarray/Float64Array#set<~lib/typedarray/Int16Array>
    i32.const 0
-   local.set $0
-   local.get $3
-   call $~lib/rt/pure/__retain
    local.set $1
+   local.get $0
+   call $~lib/rt/pure/__retain
+   local.set $2
    i32.const 8704
    call $~lib/rt/pure/__retain
-   local.tee $2
+   local.tee $3
    i32.load offset=12
    i32.const 7
    i32.add
-   local.get $1
+   local.get $2
    i32.load offset=8
    i32.const 3
    i32.shr_u
    i32.gt_s
-   br_if $folding-inner1
-   local.get $1
+   br_if $folding-inner0
+   local.get $2
    i32.load offset=4
    i32.const 56
    i32.add
-   local.set $4
-   local.get $2
-   i32.load offset=4
    local.set $11
-   local.get $2
-   i32.load offset=12
+   local.get $3
+   i32.load offset=4
    local.set $12
+   local.get $3
+   i32.load offset=12
+   local.set $13
    loop $for-loop|01
-    local.get $0
-    local.get $12
+    local.get $1
+    local.get $13
     i32.lt_s
     if
-     local.get $4
-     local.get $0
+     local.get $11
+     local.get $1
      i32.const 3
      i32.shl
      i32.add
-     local.get $0
-     local.get $11
+     local.get $1
+     local.get $12
      i32.add
      i32.load8_s
      f64.convert_i32_s
      f64.store
-     local.get $0
+     local.get $1
      i32.const 1
      i32.add
-     local.set $0
+     local.set $1
      br $for-loop|01
     end
    end
-   local.get $2
+   local.get $3
    call $~lib/rt/pure/__release
-   local.get $1
+   local.get $2
    call $~lib/rt/pure/__release
    i32.const 8704
    call $~lib/rt/pure/__release
-   local.get $3
+   local.get $0
    i32.const 10
    i32.const 3
    i32.const 62
    i32.const 12384
    call $~lib/rt/__allocArray
    call $~lib/rt/pure/__retain
-   local.tee $0
+   local.tee $1
    call $std/typedarray/valuesEqual<~lib/typedarray/Float64Array>
-   local.get $0
+   local.get $1
    call $~lib/rt/pure/__release
-   local.get $7
+   local.get $6
    call $~lib/rt/pure/__release
    local.get $5
    call $~lib/rt/pure/__release
+   local.get $7
+   call $~lib/rt/pure/__release
+   local.get $14
+   call $~lib/rt/pure/__release
+   local.get $0
+   call $~lib/rt/pure/__release
    local.get $8
    call $~lib/rt/pure/__release
-   local.get $13
-   call $~lib/rt/pure/__release
-   local.get $3
-   call $~lib/rt/pure/__release
    local.get $9
-   call $~lib/rt/pure/__release
-   local.get $6
    call $~lib/rt/pure/__release
    local.get $10
    call $~lib/rt/pure/__release
