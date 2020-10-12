@@ -3758,23 +3758,28 @@
   end
   local.set $6
   global.get $~lib/math/rempio2_y0
-  local.set $0
+  local.set $3
   global.get $~lib/math/rempio2_y1
   local.set $4
   local.get $6
   i32.const 1
   i32.and
   if (result f64)
-   local.get $0
-   local.get $0
+   local.get $3
+   local.get $3
    f64.mul
-   local.tee $3
-   local.get $0
+   local.tee $0
+   local.get $3
    f64.mul
-   local.tee $1
+   local.set $1
    local.get $3
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $4
+   f64.const 0.5
+   f64.mul
+   local.get $1
+   local.get $0
+   local.get $0
    f64.const 2.7557313707070068e-06
    f64.mul
    f64.const -1.984126982985795e-04
@@ -3782,31 +3787,18 @@
    f64.mul
    f64.const 0.00833333333332249
    f64.add
-   local.get $3
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $0
+   local.get $0
    f64.mul
    f64.mul
-   local.get $3
+   local.get $0
    f64.const 1.58969099521155e-10
    f64.mul
    f64.const -2.5050760253406863e-08
    f64.add
    f64.mul
    f64.add
-   local.tee $7
-   f64.mul
-   f64.const -0.16666666666666632
-   f64.add
-   f64.mul
-   drop
-   local.get $0
-   local.get $3
-   local.get $4
-   f64.const 0.5
-   f64.mul
-   local.get $1
-   local.get $7
    f64.mul
    f64.sub
    f64.mul
@@ -3819,10 +3811,10 @@
    f64.sub
   else
    f64.const 1
-   local.get $0
-   local.get $0
+   local.get $3
+   local.get $3
    f64.mul
-   local.tee $3
+   local.tee $0
    f64.const 0.5
    f64.mul
    local.tee $1
@@ -3833,10 +3825,10 @@
    f64.sub
    local.get $1
    f64.sub
-   local.get $3
-   local.get $3
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $0
+   local.get $0
+   local.get $0
    f64.const 2.480158728947673e-05
    f64.mul
    f64.const -0.001388888888887411
@@ -3845,14 +3837,14 @@
    f64.const 0.0416666666666666
    f64.add
    f64.mul
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $0
    f64.mul
    local.tee $1
    local.get $1
    f64.mul
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $0
    f64.const -1.1359647557788195e-11
    f64.mul
    f64.const 2.087572321298175e-09
@@ -3863,7 +3855,7 @@
    f64.mul
    f64.add
    f64.mul
-   local.get $0
+   local.get $3
    local.get $4
    f64.mul
    f64.sub
@@ -9184,7 +9176,7 @@
   end
   local.set $6
   global.get $~lib/math/rempio2_y0
-  local.set $0
+  local.set $3
   global.get $~lib/math/rempio2_y1
   local.set $4
   local.get $6
@@ -9192,10 +9184,10 @@
   i32.and
   if (result f64)
    f64.const 1
-   local.get $0
-   local.get $0
+   local.get $3
+   local.get $3
    f64.mul
-   local.tee $3
+   local.tee $0
    f64.const 0.5
    f64.mul
    local.tee $1
@@ -9206,10 +9198,10 @@
    f64.sub
    local.get $1
    f64.sub
-   local.get $3
-   local.get $3
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $0
+   local.get $0
+   local.get $0
    f64.const 2.480158728947673e-05
    f64.mul
    f64.const -0.001388888888887411
@@ -9218,14 +9210,14 @@
    f64.const 0.0416666666666666
    f64.add
    f64.mul
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $0
    f64.mul
    local.tee $1
    local.get $1
    f64.mul
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $0
    f64.const -1.1359647557788195e-11
    f64.mul
    f64.const 2.087572321298175e-09
@@ -9236,23 +9228,28 @@
    f64.mul
    f64.add
    f64.mul
-   local.get $0
+   local.get $3
    local.get $4
    f64.mul
    f64.sub
    f64.add
    f64.add
   else
-   local.get $0
-   local.get $0
+   local.get $3
+   local.get $3
    f64.mul
-   local.tee $3
-   local.get $0
+   local.tee $0
+   local.get $3
    f64.mul
-   local.tee $1
+   local.set $1
    local.get $3
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $4
+   f64.const 0.5
+   f64.mul
+   local.get $1
+   local.get $0
+   local.get $0
    f64.const 2.7557313707070068e-06
    f64.mul
    f64.const -1.984126982985795e-04
@@ -9260,31 +9257,18 @@
    f64.mul
    f64.const 0.00833333333332249
    f64.add
-   local.get $3
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $0
+   local.get $0
    f64.mul
    f64.mul
-   local.get $3
+   local.get $0
    f64.const 1.58969099521155e-10
    f64.mul
    f64.const -2.5050760253406863e-08
    f64.add
    f64.mul
    f64.add
-   local.tee $7
-   f64.mul
-   f64.const -0.16666666666666632
-   f64.add
-   f64.mul
-   drop
-   local.get $0
-   local.get $3
-   local.get $4
-   f64.const 0.5
-   f64.mul
-   local.get $1
-   local.get $7
    f64.mul
    f64.sub
    f64.mul
@@ -10882,7 +10866,7 @@
   local.get $4
   local.get $2
   global.get $~lib/math/rempio2_y1
-  local.tee $7
+  local.tee $1
   f64.const 0.5
   f64.mul
   local.get $0
@@ -10899,7 +10883,7 @@
   local.get $2
   local.get $2
   f64.mul
-  local.tee $1
+  local.tee $7
   f64.mul
   local.get $2
   f64.const 1.58969099521155e-10
@@ -10911,7 +10895,7 @@
   f64.mul
   f64.sub
   f64.mul
-  local.get $7
+  local.get $1
   f64.sub
   local.get $0
   f64.const -0.16666666666666632
@@ -10944,8 +10928,8 @@
   f64.const 0.0416666666666666
   f64.add
   f64.mul
-  local.get $1
-  local.get $1
+  local.get $7
+  local.get $7
   f64.mul
   local.get $2
   local.get $2
@@ -10960,7 +10944,7 @@
   f64.add
   f64.mul
   local.get $4
-  local.get $7
+  local.get $1
   f64.mul
   f64.sub
   f64.add
