@@ -2,10 +2,10 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1024) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00l\00o\00g\00i\00c\00a\00l\00.\00t\00s")
@@ -929,13 +929,6 @@
   end
   local.get $0
  )
- (func $logical/Obj#constructor (result i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1232
@@ -951,8 +944,13 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  call $logical/Obj#constructor
-  local.tee $1
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  local.get $0
   call $~lib/rt/pure/__retain
   local.tee $0
   call $~lib/rt/pure/__release
@@ -966,12 +964,18 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $logical/Obj#constructor
-  local.tee $0
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
-  local.tee $2
+  local.tee $0
+  local.set $2
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $0
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -981,9 +985,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   call $~lib/rt/pure/__release
-  local.get $0
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/rt/pure/decrement (param $0 i32)

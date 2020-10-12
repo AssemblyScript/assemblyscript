@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (memory $0 0)
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $super-inline/foo (mut i32) (i32.const 0))
@@ -72,20 +72,11 @@
   i32.store offset=12
   local.get $3
  )
- (func $super-inline/Foo#constructor (param $0 i32) (result i32)
-  local.get $0
-  if (result i32)
-   local.get $0
-  else
-   i32.const 3
-   call $~lib/rt/stub/__alloc
-  end
- )
  (func $~start
   i32.const 1024
   global.set $~lib/rt/stub/offset
-  i32.const 0
-  call $super-inline/Foo#constructor
+  i32.const 3
+  call $~lib/rt/stub/__alloc
   global.set $super-inline/foo
   block $__inlined_func$super-inline/Foo#a@virtual
    global.get $super-inline/foo
@@ -93,12 +84,16 @@
    i32.sub
    i32.load
    i32.const 4
-   i32.ne
+   i32.eq
    br_if $__inlined_func$super-inline/Foo#a@virtual
   end
   i32.const 4
   call $~lib/rt/stub/__alloc
-  call $super-inline/Foo#constructor
-  drop
+  i32.eqz
+  if
+   i32.const 3
+   call $~lib/rt/stub/__alloc
+   drop
+  end
  )
 )

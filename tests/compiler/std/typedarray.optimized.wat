@@ -25,6 +25,7 @@
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
  (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
  (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $f32_i32_i32_=>_f32 (func (param f32 i32 i32) (result f32)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
@@ -37,7 +38,6 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $f32_=>_f32 (func (param f32) (result f32)))
  (type $f64_=>_f64 (func (param f64) (result f64)))
@@ -1337,14 +1337,6 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  local.get $0
-  local.get $1
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
- )
  (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
@@ -1573,9 +1565,12 @@
   local.get $0
   i32.eqz
   if
+   call $~lib/rt/tlsf/maybeInitialize
    i32.const 12
    i32.const 2
-   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
    call $~lib/rt/pure/__retain
    local.set $0
   end
@@ -1601,19 +1596,21 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $1
   local.get $2
   i32.shl
   local.tee $3
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   i32.const 0
   local.get $3
   call $~lib/memory/memory.fill
   local.get $1
-  local.set $2
-  local.get $1
+  local.tee $2
   local.get $0
   i32.load
   local.tee $4
@@ -1637,106 +1634,132 @@
   local.get $0
  )
  (func $~lib/typedarray/Int8Array#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 3
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
  )
- (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $0
-  i32.load
-  i32.sub
- )
  (func $~lib/typedarray/Uint8Array#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 4
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
  )
  (func $~lib/typedarray/Uint8ClampedArray#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 5
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
  )
  (func $~lib/typedarray/Int16Array#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 6
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 1
   call $~lib/arraybuffer/ArrayBufferView#constructor
  )
  (func $~lib/typedarray/Uint16Array#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 7
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 1
   call $~lib/arraybuffer/ArrayBufferView#constructor
  )
  (func $~lib/typedarray/Int32Array#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 8
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
  )
  (func $~lib/typedarray/Uint32Array#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 9
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
  )
  (func $~lib/typedarray/Int64Array#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 10
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 3
   call $~lib/arraybuffer/ArrayBufferView#constructor
  )
  (func $~lib/typedarray/Uint64Array#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 11
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 3
   call $~lib/arraybuffer/ArrayBufferView#constructor
  )
  (func $~lib/typedarray/Float32Array#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 12
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
  )
  (func $~lib/typedarray/Float64Array#constructor (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 13
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.get $0
   i32.const 3
@@ -1757,7 +1780,10 @@
   local.get $0
   call $~lib/typedarray/Int8Array#constructor
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -1793,7 +1819,10 @@
   local.get $0
   call $~lib/typedarray/Uint8Array#constructor
   local.tee $2
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $2
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -1829,7 +1858,10 @@
   local.get $0
   call $~lib/typedarray/Uint8ClampedArray#constructor
   local.tee $3
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $3
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -1865,7 +1897,10 @@
   local.get $0
   call $~lib/typedarray/Int16Array#constructor
   local.tee $4
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $4
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -1905,7 +1940,10 @@
   local.get $0
   call $~lib/typedarray/Uint16Array#constructor
   local.tee $5
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $5
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -1945,7 +1983,10 @@
   local.get $0
   call $~lib/typedarray/Int32Array#constructor
   local.tee $6
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $6
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -1985,7 +2026,10 @@
   local.get $0
   call $~lib/typedarray/Uint32Array#constructor
   local.tee $7
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $7
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -2025,7 +2069,10 @@
   local.get $0
   call $~lib/typedarray/Int64Array#constructor
   local.tee $8
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $8
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -2065,7 +2112,10 @@
   local.get $0
   call $~lib/typedarray/Uint64Array#constructor
   local.tee $9
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $9
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -2105,7 +2155,10 @@
   local.get $0
   call $~lib/typedarray/Float32Array#constructor
   local.tee $10
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $10
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -2145,7 +2198,10 @@
   local.get $0
   call $~lib/typedarray/Float64Array#constructor
   local.tee $11
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $11
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -2306,9 +2362,12 @@
    select
   end
   local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 8
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $4
   i32.load
@@ -2417,9 +2476,12 @@
    select
   end
   local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 13
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $4
   i32.load
@@ -2598,6 +2660,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
   local.set $7
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $1
   i32.const 31
   i32.add
@@ -2607,7 +2670,9 @@
   i32.shl
   local.tee $2
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $5
   i32.const 0
   local.get $2
@@ -3299,35 +3364,40 @@
  (func $~lib/rt/__allocArray (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 16
   local.get $2
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
   i32.shl
-  local.tee $1
-  local.set $5
-  local.get $1
+  local.tee $5
+  local.tee $6
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.set $4
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  local.set $1
   local.get $3
   if
-   local.get $4
+   local.get $1
    local.get $3
-   local.get $5
+   local.get $6
    call $~lib/memory/memory.copy
   end
-  local.get $4
-  local.tee $3
+  local.get $1
   call $~lib/rt/pure/__retain
   i32.store
   local.get $2
-  local.get $3
+  local.get $1
   i32.store offset=4
   local.get $2
-  local.get $1
+  local.get $5
   i32.store offset=8
   local.get $2
   local.get $0
@@ -3350,13 +3420,6 @@
   local.get $1
   local.get $0
   i32.load offset=4
-  i32.add
-  i32.load8_s
- )
- (func $~lib/array/Array<i8>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
   i32.add
   i32.load8_s
  )
@@ -3388,7 +3451,6 @@
      local.get $0
      local.get $2
      call $~lib/typedarray/Int8Array#__get
-     local.set $4
      local.get $2
      local.get $1
      i32.load offset=12
@@ -3401,10 +3463,11 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $1
      local.get $2
-     call $~lib/array/Array<i8>#__uget
-     local.get $4
+     local.get $1
+     i32.load offset=4
+     i32.add
+     i32.load8_s
      i32.ne
      br_if $folding-inner0
      local.get $2
@@ -3479,9 +3542,12 @@
    select
   end
   local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 3
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $4
   i32.load
@@ -4431,13 +4497,19 @@
   local.get $2
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 3
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $3
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $1
@@ -4507,13 +4579,19 @@
   local.get $2
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 4
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $3
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $1
@@ -4602,13 +4680,19 @@
   local.get $2
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 5
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $3
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $1
@@ -4682,16 +4766,22 @@
   local.get $1
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 6
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 1
   i32.shl
   local.tee $7
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $3
@@ -4791,16 +4881,22 @@
   local.get $1
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 7
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 1
   i32.shl
   local.tee $7
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $3
@@ -4900,16 +4996,22 @@
   local.get $1
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 8
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 2
   i32.shl
   local.tee $7
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $3
@@ -4986,16 +5088,22 @@
   local.get $1
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 9
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 2
   i32.shl
   local.tee $7
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $3
@@ -5100,16 +5208,22 @@
   local.get $1
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 10
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 3
   i32.shl
   local.tee $7
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $3
@@ -5209,16 +5323,22 @@
   local.get $1
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 11
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 3
   i32.shl
   local.tee $7
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $3
@@ -5323,16 +5443,22 @@
   local.get $1
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 12
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 2
   i32.shl
   local.tee $7
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $3
@@ -5437,16 +5563,22 @@
   local.get $1
   i32.load offset=4
   local.set $6
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 13
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 3
   i32.shl
   local.tee $7
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
   loop $for-loop|0
    local.get $3
@@ -5635,13 +5767,19 @@
   local.get $2
   i32.load offset=8
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 3
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $3
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $2
   i32.load offset=4
@@ -5735,7 +5873,10 @@
   local.get $0
   call $~lib/typedarray/Int8Array#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -5827,13 +5968,19 @@
   local.get $2
   i32.load offset=8
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 4
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $3
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $2
   i32.load offset=4
@@ -5927,7 +6074,10 @@
   local.get $0
   call $~lib/typedarray/Uint8Array#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -6012,13 +6162,19 @@
   local.get $2
   i32.load offset=8
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 5
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $3
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $2
   i32.load offset=4
@@ -6112,7 +6268,10 @@
   local.get $0
   call $~lib/typedarray/Uint8ClampedArray#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -6208,15 +6367,21 @@
   i32.const 1
   i32.shr_u
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 6
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 1
   i32.shl
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $3
   i32.load offset=4
@@ -6317,7 +6482,10 @@
   local.get $0
   call $~lib/typedarray/Int16Array#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -6413,15 +6581,21 @@
   i32.const 1
   i32.shr_u
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 7
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 1
   i32.shl
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $3
   i32.load offset=4
@@ -6522,7 +6696,10 @@
   local.get $0
   call $~lib/typedarray/Uint16Array#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -6616,15 +6793,21 @@
   i32.const 2
   i32.shr_u
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 8
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 2
   i32.shl
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $3
   i32.load offset=4
@@ -6725,7 +6908,10 @@
   local.get $0
   call $~lib/typedarray/Int32Array#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -6819,15 +7005,21 @@
   i32.const 2
   i32.shr_u
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 9
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 2
   i32.shl
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $3
   i32.load offset=4
@@ -6928,7 +7120,10 @@
   local.get $0
   call $~lib/typedarray/Uint32Array#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -7022,15 +7217,21 @@
   i32.const 3
   i32.shr_u
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 10
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 3
   i32.shl
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $3
   i32.load offset=4
@@ -7131,7 +7332,10 @@
   local.get $0
   call $~lib/typedarray/Int64Array#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -7225,15 +7429,21 @@
   i32.const 3
   i32.shr_u
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 11
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 3
   i32.shl
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $3
   i32.load offset=4
@@ -7334,7 +7544,10 @@
   local.get $0
   call $~lib/typedarray/Uint64Array#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -7428,15 +7641,21 @@
   i32.const 2
   i32.shr_u
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 12
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 2
   i32.shl
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $3
   i32.load offset=4
@@ -7537,7 +7756,10 @@
   local.get $0
   call $~lib/typedarray/Float32Array#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -7631,15 +7853,21 @@
   i32.const 3
   i32.shr_u
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 13
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $4
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 3
   i32.shl
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $6
   local.get $3
   i32.load offset=4
@@ -7740,7 +7968,10 @@
   local.get $0
   call $~lib/typedarray/Float64Array#filter
   local.tee $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -10604,9 +10835,12 @@
    select
   end
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 4
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $3
   i32.load
@@ -10826,9 +11060,12 @@
    select
   end
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 5
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $3
   i32.load
@@ -11106,9 +11343,12 @@
    select
   end
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 6
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $3
   i32.load
@@ -11396,9 +11636,12 @@
    select
   end
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 7
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $3
   i32.load
@@ -11832,9 +12075,12 @@
    select
   end
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 9
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $3
   i32.load
@@ -12110,9 +12356,12 @@
    select
   end
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 10
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $3
   i32.load
@@ -12335,9 +12584,12 @@
    select
   end
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 11
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $3
   i32.load
@@ -12616,9 +12868,12 @@
    select
   end
   local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 12
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $3
   i32.load
@@ -18725,7 +18980,7 @@
   local.get $0
   i32.const 31
   i32.shr_u
-  local.tee $1
+  local.tee $2
   if
    i32.const 0
    local.get $0
@@ -18734,33 +18989,30 @@
   end
   local.get $0
   call $~lib/util/number/decimalCount32
-  local.get $1
+  local.get $2
   i32.add
   local.tee $3
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
-  local.tee $2
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  local.tee $1
   local.get $0
   local.get $3
   call $~lib/util/number/utoa_dec_simple<u32>
-  local.get $1
+  local.get $2
   if
-   local.get $2
+   local.get $1
    i32.const 45
    i32.store16
   end
-  local.get $2
+  local.get $1
   call $~lib/rt/pure/__retain
- )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
  )
  (func $~lib/util/number/itoa_buffered<i8> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -18829,7 +19081,11 @@
   (local $4 i32)
   i32.const 0
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $2
   i32.const 0
   local.get $2
@@ -18885,9 +19141,12 @@
    call $~lib/rt/pure/__retain
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $3
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   local.get $1
@@ -18931,7 +19190,11 @@
   end
   local.get $4
   local.get $3
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $5
   i32.const 11
   i32.add
@@ -18941,8 +19204,13 @@
   local.tee $7
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
@@ -19142,10 +19410,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -19176,16 +19452,21 @@
   end
   local.get $0
   call $~lib/util/number/decimalCount32
-  local.tee $1
+  local.tee $2
   i32.const 1
   i32.shl
-  i32.const 1
-  call $~lib/rt/tlsf/__alloc
-  local.tee $2
-  local.get $0
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $1
-  call $~lib/util/number/utoa_dec_simple<u32>
+  i32.const 1
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  local.tee $1
+  local.get $0
   local.get $2
+  call $~lib/util/number/utoa_dec_simple<u32>
+  local.get $1
   call $~lib/rt/pure/__retain
  )
  (func $~lib/util/number/itoa_buffered<u8> (param $0 i32) (param $1 i32) (result i32)
@@ -19252,7 +19533,11 @@
   end
   local.get $4
   local.get $3
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $5
   i32.const 10
   i32.add
@@ -19262,8 +19547,13 @@
   local.tee $7
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
@@ -19441,7 +19731,11 @@
   end
   local.get $4
   local.get $3
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $5
   i32.const 11
   i32.add
@@ -19451,8 +19745,13 @@
   local.tee $7
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
@@ -19605,7 +19904,11 @@
   end
   local.get $4
   local.get $3
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $5
   i32.const 10
   i32.add
@@ -19615,8 +19918,13 @@
   local.tee $7
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
@@ -19782,7 +20090,11 @@
   end
   local.get $4
   local.get $3
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $5
   i32.const 11
   i32.add
@@ -19792,8 +20104,13 @@
   local.tee $7
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
@@ -19937,7 +20254,11 @@
   end
   local.get $4
   local.get $3
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $5
   i32.const 10
   i32.add
@@ -19947,8 +20268,13 @@
   local.tee $7
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
@@ -20113,6 +20439,81 @@
    br_if $do-continue|0
   end
  )
+ (func $~lib/util/number/itoa64 (param $0 i64) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  i64.eqz
+  if
+   i32.const 7040
+   return
+  end
+  local.get $0
+  i64.const 63
+  i64.shr_u
+  i32.wrap_i64
+  local.tee $2
+  if
+   i64.const 0
+   local.get $0
+   i64.sub
+   local.set $0
+  end
+  local.get $0
+  i64.const 4294967295
+  i64.le_u
+  if
+   local.get $0
+   i32.wrap_i64
+   local.tee $3
+   call $~lib/util/number/decimalCount32
+   local.get $2
+   i32.add
+   local.tee $4
+   i32.const 1
+   i32.shl
+   local.set $1
+   call $~lib/rt/tlsf/maybeInitialize
+   local.get $1
+   i32.const 1
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
+   local.tee $1
+   local.get $3
+   local.get $4
+   call $~lib/util/number/utoa_dec_simple<u32>
+  else
+   local.get $0
+   call $~lib/util/number/decimalCount64High
+   local.get $2
+   i32.add
+   local.tee $3
+   i32.const 1
+   i32.shl
+   local.set $1
+   call $~lib/rt/tlsf/maybeInitialize
+   local.get $1
+   i32.const 1
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
+   local.tee $1
+   local.get $0
+   local.get $3
+   call $~lib/util/number/utoa_dec_simple<u64>
+  end
+  local.get $2
+  if
+   local.get $1
+   i32.const 45
+   i32.store16
+  end
+  local.get $1
+  call $~lib/rt/pure/__retain
+ )
  (func $~lib/util/number/itoa_buffered<i64> (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -20176,117 +20577,66 @@
  )
  (func $~lib/util/string/joinIntegerArray<i64> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i64)
+  (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   i32.const 7168
   call $~lib/rt/pure/__retain
-  local.set $4
+  local.set $3
   local.get $1
   i32.const 1
   i32.sub
-  local.tee $5
+  local.tee $4
   i32.const 0
   i32.lt_s
   if
-   local.get $4
+   local.get $3
    call $~lib/rt/pure/__release
    i32.const 6832
    return
   end
-  local.get $5
+  local.get $4
   i32.eqz
   if
-   block $__inlined_func$~lib/util/number/itoa64 (result i32)
-    i32.const 7040
-    local.get $0
-    i64.load
-    i32.wrap_i64
-    i64.extend_i32_s
-    local.tee $3
-    i64.eqz
-    br_if $__inlined_func$~lib/util/number/itoa64
-    drop
-    local.get $3
-    i64.const 63
-    i64.shr_u
-    i32.wrap_i64
-    local.tee $0
-    if
-     i64.const 0
-     local.get $3
-     i64.sub
-     local.set $3
-    end
-    local.get $3
-    i64.const 4294967295
-    i64.le_u
-    if
-     local.get $3
-     i32.wrap_i64
-     local.tee $2
-     call $~lib/util/number/decimalCount32
-     local.get $0
-     i32.add
-     local.tee $5
-     i32.const 1
-     i32.shl
-     i32.const 1
-     call $~lib/rt/tlsf/__alloc
-     local.tee $1
-     local.get $2
-     local.get $5
-     call $~lib/util/number/utoa_dec_simple<u32>
-    else
-     local.get $3
-     call $~lib/util/number/decimalCount64High
-     local.get $0
-     i32.add
-     local.tee $2
-     i32.const 1
-     i32.shl
-     i32.const 1
-     call $~lib/rt/tlsf/__alloc
-     local.tee $1
-     local.get $3
-     local.get $2
-     call $~lib/util/number/utoa_dec_simple<u64>
-    end
-    local.get $0
-    if
-     local.get $1
-     i32.const 45
-     i32.store16
-    end
-    local.get $1
-    call $~lib/rt/pure/__retain
-   end
-   local.get $4
+   local.get $0
+   i64.load
+   i32.wrap_i64
+   i64.extend_i32_s
+   call $~lib/util/number/itoa64
+   local.get $3
    call $~lib/rt/pure/__release
    return
   end
-  local.get $5
   local.get $4
-  call $~lib/string/String#get:length
-  local.tee $6
+  local.get $3
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+  local.tee $5
   i32.const 21
   i32.add
   i32.mul
   i32.const 21
   i32.add
-  local.tee $8
+  local.tee $7
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
-   local.get $7
-   local.get $5
+   local.get $6
+   local.get $4
    i32.lt_s
    if
     local.get $1
@@ -20295,7 +20645,7 @@
     i32.shl
     i32.add
     local.get $0
-    local.get $7
+    local.get $6
     i32.const 3
     i32.shl
     i32.add
@@ -20304,38 +20654,38 @@
     local.get $2
     i32.add
     local.set $2
-    local.get $6
+    local.get $5
     if
      local.get $1
      local.get $2
      i32.const 1
      i32.shl
      i32.add
-     local.get $4
-     local.get $6
+     local.get $3
+     local.get $5
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
      local.get $2
-     local.get $6
+     local.get $5
      i32.add
      local.set $2
     end
-    local.get $7
+    local.get $6
     i32.const 1
     i32.add
-    local.set $7
+    local.set $6
     br $for-loop|0
    end
   end
-  local.get $8
+  local.get $7
   local.get $1
   local.get $2
   i32.const 1
   i32.shl
   i32.add
   local.get $0
-  local.get $5
+  local.get $4
   i32.const 3
   i32.shl
   i32.add
@@ -20349,13 +20699,13 @@
    local.get $1
    local.get $0
    call $~lib/string/String#substring
-   local.get $4
+   local.get $3
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    return
   end
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $1
  )
@@ -20453,8 +20803,13 @@
      local.tee $2
      i32.const 1
      i32.shl
+     local.set $0
+     call $~lib/rt/tlsf/maybeInitialize
+     local.get $0
      i32.const 1
-     call $~lib/rt/tlsf/__alloc
+     call $~lib/rt/tlsf/allocateBlock
+     i32.const 16
+     i32.add
      local.tee $0
      local.get $1
      local.get $2
@@ -20465,8 +20820,13 @@
      local.tee $1
      i32.const 1
      i32.shl
+     local.set $0
+     call $~lib/rt/tlsf/maybeInitialize
+     local.get $0
      i32.const 1
-     call $~lib/rt/tlsf/__alloc
+     call $~lib/rt/tlsf/allocateBlock
+     i32.const 16
+     i32.add
      local.tee $0
      local.get $5
      local.get $1
@@ -20481,7 +20841,11 @@
   end
   local.get $4
   local.get $3
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $6
   i32.const 20
   i32.add
@@ -20491,8 +20855,13 @@
   local.tee $8
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
@@ -21521,9 +21890,12 @@
    call $~lib/rt/pure/__retain
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 56
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   local.get $0
   call $~lib/util/number/dtoa_core
@@ -21648,7 +22020,11 @@
   end
   local.get $4
   local.get $3
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $5
   i32.const 28
   i32.add
@@ -21658,8 +22034,13 @@
   local.tee $7
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
@@ -21784,7 +22165,11 @@
   end
   local.get $4
   local.get $3
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $5
   i32.const 28
   i32.add
@@ -21794,8 +22179,13 @@
   local.tee $7
   i32.const 1
   i32.shl
+  local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $1
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
@@ -21897,9 +22287,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $1
   i32.const 0
   local.get $0
@@ -21966,9 +22359,12 @@
     unreachable
    end
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 4
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $3
   call $~lib/rt/pure/__retain
@@ -22041,6 +22437,7 @@
    select
   end
   local.set $1
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $2
   i32.const 0
   i32.lt_s
@@ -22072,7 +22469,9 @@
   select
   local.tee $2
   i32.const 0
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $3
   local.get $0
   local.get $1
@@ -22097,13 +22496,13 @@
   call $~lib/typedarray/Int8Array#constructor
   local.tee $5
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $1
   loop $for-loop|0
    local.get $0
    local.get $3
    i32.lt_s
    if
-    local.get $2
+    local.get $1
     local.get $0
     i32.const 8432
     local.get $0
@@ -22120,14 +22519,20 @@
     br $for-loop|0
    end
   end
-  local.get $2
+  local.get $1
   i32.load
-  local.get $2
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
-  local.get $2
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
-  local.get $2
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
+  local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $4
@@ -22141,10 +22546,10 @@
   i32.const 16
   i32.sub
   i32.load offset=12
-  local.tee $1
+  local.tee $2
   local.set $7
   i32.const 0
-  local.get $1
+  local.get $2
   i32.gt_u
   if
    i32.const 1376
@@ -22154,22 +22559,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 3
-  call $~lib/rt/tlsf/__alloc
-  local.tee $1
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
   i32.store
-  local.get $1
+  local.get $2
   local.get $7
   i32.store offset=8
-  local.get $1
+  local.get $2
   local.get $0
   i32.store offset=4
-  local.get $1
+  local.get $2
   call $~lib/rt/pure/__retain
-  local.set $1
+  local.set $2
   local.get $0
   call $~lib/rt/pure/__release
   local.get $6
@@ -22181,10 +22589,10 @@
    local.get $3
    i32.lt_s
    if
-    local.get $2
+    local.get $1
     local.get $0
     call $~lib/typedarray/Int8Array#__get
-    local.get $1
+    local.get $2
     local.get $0
     call $~lib/typedarray/Int8Array#__get
     i32.ne
@@ -22207,11 +22615,11 @@
   call $~lib/rt/pure/__release
   i32.const 8432
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   call $~lib/rt/pure/__release
   local.get $4
   call $~lib/rt/pure/__release
-  local.get $1
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint8Array,u8>
@@ -22251,11 +22659,17 @@
   local.get $1
   i32.load
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load
+  i32.sub
   local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $3
@@ -22320,13 +22734,13 @@
   call $~lib/typedarray/Uint8ClampedArray#constructor
   local.tee $5
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $1
   loop $for-loop|0
    local.get $0
    local.get $3
    i32.lt_s
    if
-    local.get $2
+    local.get $1
     local.get $0
     i32.const 8432
     local.get $0
@@ -22341,14 +22755,20 @@
     br $for-loop|0
    end
   end
-  local.get $2
+  local.get $1
   i32.load
-  local.get $2
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
-  local.get $2
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
-  local.get $2
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
+  local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $4
@@ -22362,10 +22782,10 @@
   i32.const 16
   i32.sub
   i32.load offset=12
-  local.tee $1
+  local.tee $2
   local.set $7
   i32.const 0
-  local.get $1
+  local.get $2
   i32.gt_u
   if
    i32.const 1376
@@ -22375,22 +22795,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 5
-  call $~lib/rt/tlsf/__alloc
-  local.tee $1
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
   i32.store
-  local.get $1
+  local.get $2
   local.get $7
   i32.store offset=8
-  local.get $1
+  local.get $2
   local.get $0
   i32.store offset=4
-  local.get $1
+  local.get $2
   call $~lib/rt/pure/__retain
-  local.set $1
+  local.set $2
   local.get $0
   call $~lib/rt/pure/__release
   local.get $6
@@ -22402,10 +22825,10 @@
    local.get $3
    i32.lt_s
    if
-    local.get $2
+    local.get $1
     local.get $0
     call $~lib/typedarray/Uint8ClampedArray#__get
-    local.get $1
+    local.get $2
     local.get $0
     call $~lib/typedarray/Uint8ClampedArray#__get
     i32.ne
@@ -22428,11 +22851,11 @@
   call $~lib/rt/pure/__release
   i32.const 8432
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   call $~lib/rt/pure/__release
   local.get $4
   call $~lib/rt/pure/__release
-  local.get $1
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Int16Array,i16>
@@ -22476,11 +22899,17 @@
   local.get $1
   i32.load
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load
+  i32.sub
   local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $4
@@ -22516,9 +22945,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 6
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
@@ -22615,11 +23047,17 @@
   local.get $1
   i32.load
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load
+  i32.sub
   local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $4
@@ -22655,9 +23093,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 7
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
@@ -22752,11 +23193,17 @@
   local.get $1
   i32.load
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load
+  i32.sub
   local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $4
@@ -22792,9 +23239,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 8
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
@@ -22889,11 +23339,17 @@
   local.get $1
   i32.load
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load
+  i32.sub
   local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $4
@@ -22929,9 +23385,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 9
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
@@ -23027,11 +23486,17 @@
   local.get $1
   i32.load
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load
+  i32.sub
   local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $4
@@ -23067,9 +23532,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 10
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
@@ -23165,11 +23633,17 @@
   local.get $1
   i32.load
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load
+  i32.sub
   local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $4
@@ -23205,9 +23679,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 11
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
@@ -23303,11 +23780,17 @@
   local.get $1
   i32.load
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load
+  i32.sub
   local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $4
@@ -23343,9 +23826,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 12
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
@@ -23441,11 +23927,17 @@
   local.get $1
   i32.load
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load
+  i32.sub
   local.get $1
   i32.load offset=8
+  local.get $1
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.add
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $4
@@ -23481,9 +23973,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $~lib/rt/tlsf/maybeInitialize
   i32.const 12
   i32.const 13
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
@@ -23616,7 +24111,7 @@
   local.set $1
   local.get $0
   i32.load offset=8
-  local.tee $3
+  local.tee $4
   local.get $1
   i32.load offset=12
   i32.ne
@@ -23630,26 +24125,30 @@
   end
   loop $for-loop|0
    local.get $2
-   local.get $3
+   local.get $4
    i32.lt_s
    if
+    local.get $2
+    local.get $1
+    i32.load offset=4
+    i32.add
+    i32.load8_s
+    local.tee $3
+    local.set $5
+    local.get $3
     local.get $2
     local.get $0
     i32.load offset=4
     i32.add
     i32.load8_s
-    local.tee $4
-    local.get $1
-    local.get $2
-    call $~lib/array/Array<i8>#__uget
-    local.tee $5
+    local.tee $3
     i32.ne
     if
      i32.const 8768
      i32.const 3
      local.get $2
      f64.convert_i32_s
-     local.get $4
+     local.get $3
      f64.convert_i32_s
      local.get $5
      f64.convert_i32_s
@@ -24195,20 +24694,6 @@
   local.get $8
   call $~lib/rt/pure/__release
  )
- (func $~lib/typedarray/Uint8Array#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  local.get $0
-  i32.load offset=4
-  i32.add
-  i32.load8_u
- )
- (func $~lib/array/Array<u8>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.add
-  i32.load8_u
- )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -24222,7 +24707,7 @@
   local.set $1
   local.get $0
   i32.load offset=8
-  local.tee $3
+  local.tee $4
   local.get $1
   i32.load offset=12
   i32.ne
@@ -24236,24 +24721,30 @@
   end
   loop $for-loop|0
    local.get $2
-   local.get $3
+   local.get $4
    i32.lt_s
    if
-    local.get $0
     local.get $2
-    call $~lib/typedarray/Uint8Array#__uget
-    local.tee $4
     local.get $1
+    i32.load offset=4
+    i32.add
+    i32.load8_u
+    local.tee $3
+    local.set $5
+    local.get $3
     local.get $2
-    call $~lib/array/Array<u8>#__uget
-    local.tee $5
+    local.get $0
+    i32.load offset=4
+    i32.add
+    i32.load8_u
+    local.tee $3
     i32.ne
     if
      i32.const 8976
      i32.const 3
      local.get $2
      f64.convert_i32_s
-     local.get $4
+     local.get $3
      f64.convert_i32_u
      local.get $5
      f64.convert_i32_u
@@ -24667,7 +25158,7 @@
   local.set $1
   local.get $0
   i32.load offset=8
-  local.tee $3
+  local.tee $4
   local.get $1
   i32.load offset=12
   i32.ne
@@ -24681,24 +25172,30 @@
   end
   loop $for-loop|0
    local.get $2
-   local.get $3
+   local.get $4
    i32.lt_s
    if
-    local.get $0
     local.get $2
-    call $~lib/typedarray/Uint8Array#__uget
-    local.tee $4
     local.get $1
+    i32.load offset=4
+    i32.add
+    i32.load8_u
+    local.tee $3
+    local.set $5
+    local.get $3
     local.get $2
-    call $~lib/array/Array<u8>#__uget
-    local.tee $5
+    local.get $0
+    i32.load offset=4
+    i32.add
+    i32.load8_u
+    local.tee $3
     i32.ne
     if
      i32.const 9184
      i32.const 3
      local.get $2
      f64.convert_i32_s
-     local.get $4
+     local.get $3
      f64.convert_i32_u
      local.get $5
      f64.convert_i32_u
@@ -30096,7 +30593,10 @@
    unreachable
   end
   local.get $0
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $0
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -30178,7 +30678,10 @@
    unreachable
   end
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.const 4
   i32.ne
   if
@@ -30218,46 +30721,46 @@
   call $~lib/rt/pure/__release
   i32.const 8
   call $~lib/typedarray/Float64Array#constructor
-  local.tee $0
+  local.tee $1
   i32.const 0
   f64.const 1
   call $~lib/typedarray/Float64Array#__set
-  local.get $0
+  local.get $1
   i32.const 1
   f64.const 2
   call $~lib/typedarray/Float64Array#__set
-  local.get $0
+  local.get $1
   i32.const 2
   f64.const 7
   call $~lib/typedarray/Float64Array#__set
-  local.get $0
+  local.get $1
   i32.const 3
   f64.const 6
   call $~lib/typedarray/Float64Array#__set
-  local.get $0
+  local.get $1
   i32.const 4
   f64.const 5
   call $~lib/typedarray/Float64Array#__set
-  local.get $0
+  local.get $1
   i32.const 5
   f64.const 4
   call $~lib/typedarray/Float64Array#__set
-  local.get $0
+  local.get $1
   i32.const 6
   f64.const 3
   call $~lib/typedarray/Float64Array#__set
-  local.get $0
+  local.get $1
   i32.const 7
   f64.const 8
   call $~lib/typedarray/Float64Array#__set
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 6
   call $~lib/typedarray/Float64Array#subarray
-  local.set $1
-  local.get $0
-  call $~lib/rt/pure/__release
+  local.set $0
   local.get $1
+  call $~lib/rt/pure/__release
+  local.get $0
   i32.load offset=8
   i32.const 3
   i32.shr_u
@@ -30271,8 +30774,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  local.get $0
+  i32.load offset=4
+  local.get $0
+  i32.load
+  i32.sub
   i32.const 16
   i32.ne
   if
@@ -30283,7 +30789,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   i32.load offset=8
   i32.const 32
   i32.ne
@@ -30297,19 +30803,19 @@
   end
   i32.const 0
   global.set $~argumentsLength
-  local.get $1
+  local.get $0
   i32.const 1504
   call $~lib/typedarray/Float64Array#sort
   i32.const 1504
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release
-  local.get $1
+  local.get $0
   i32.const 0
   call $~lib/typedarray/Float64Array#__get
   f64.const 4
   f64.eq
   if (result i32)
-   local.get $1
+   local.get $0
    i32.const 1
    call $~lib/typedarray/Float64Array#__get
    f64.const 5
@@ -30318,7 +30824,7 @@
    i32.const 0
   end
   if (result i32)
-   local.get $1
+   local.get $0
    i32.const 2
    call $~lib/typedarray/Float64Array#__get
    f64.const 6
@@ -30327,7 +30833,7 @@
    i32.const 0
   end
   if (result i32)
-   local.get $1
+   local.get $0
    i32.const 3
    call $~lib/typedarray/Float64Array#__get
    f64.const 7
@@ -30344,7 +30850,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
   i32.const 3
   call $~lib/typedarray/Uint8ClampedArray#constructor
@@ -30564,7 +31070,10 @@
    unreachable
   end
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.const 1
   i32.ne
   if
@@ -30808,7 +31317,10 @@
    unreachable
   end
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.const 4
   i32.ne
   if
@@ -30941,7 +31453,10 @@
    unreachable
   end
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   i32.const 1
   i32.ne
   if
@@ -30994,7 +31509,10 @@
    unreachable
   end
   local.get $2
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $2
+  i32.load
+  i32.sub
   i32.const 2
   i32.ne
   if
@@ -31047,7 +31565,10 @@
    unreachable
   end
   local.get $3
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $3
+  i32.load
+  i32.sub
   i32.const 3
   i32.ne
   if
@@ -31542,7 +32063,10 @@
    unreachable
   end
   local.get $2
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $2
+  i32.load
+  i32.sub
   i32.const 4
   i32.ne
   if
@@ -31610,7 +32134,10 @@
    unreachable
   end
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -31663,7 +32190,10 @@
    unreachable
   end
   local.get $3
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $3
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1312
@@ -31717,9 +32247,15 @@
    unreachable
   end
   local.get $4
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $4
+  i32.load
+  i32.sub
   local.get $0
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $0
+  i32.load
+  i32.sub
   i32.ne
   if
    i32.const 0

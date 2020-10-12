@@ -1,9 +1,9 @@
 (module
+ (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
@@ -21,8 +21,9 @@
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
  (export "__release" (func $~lib/rt/pure/__release))
- (export "__collect" (func $~start))
+ (export "__collect" (func $~lib/rt/pure/__collect))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1091,6 +1092,13 @@
   end
  )
  (func $~start
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 0
+  i32.const 3
+  call $~lib/rt/tlsf/allocateBlock
+  drop
+ )
+ (func $~lib/rt/pure/__collect
   nop
  )
  (func $~lib/rt/pure/decrement (param $0 i32)
