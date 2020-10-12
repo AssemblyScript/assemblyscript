@@ -252,6 +252,7 @@
   f64.eq
  )
  (func $std/mod/test_fmod (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  (local $3 i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.mod

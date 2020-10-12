@@ -1519,7 +1519,6 @@ export class Module {
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("simplify-locals-notee-nostructure");
-        passes.push("rse");
         passes.push("vacuum");
         passes.push("ssa-nomerge");
         passes.push("simplify-globals-optimizing");
@@ -1547,6 +1546,7 @@ export class Module {
       // }
       passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        passes.push("rse");
         passes.push("dce");
       }
       passes.push("remove-unused-brs");
