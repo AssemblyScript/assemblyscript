@@ -4570,10 +4570,10 @@
   (local $4 i32)
   (local $5 f32)
   (local $6 f32)
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.set $3
   block $folding-inner0
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $3
    local.get $0
    i32.load offset=12
    local.tee $2
@@ -5102,10 +5102,10 @@
   (local $4 i32)
   (local $5 f64)
   (local $6 f64)
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.set $3
   block $folding-inner0
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $3
    local.get $0
    i32.load offset=12
    local.tee $2
@@ -6822,29 +6822,31 @@
   block $__inlined_func$~lib/string/String#concat (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
-   local.tee $2
+   local.tee $0
    i32.const 7984
-   local.get $2
+   local.get $0
    select
    local.set $3
    local.get $1
    call $~lib/rt/pure/__retain
-   local.tee $5
+   local.tee $1
+   local.set $2
+   local.get $2
    call $~lib/rt/pure/__retain
-   local.tee $0
+   local.tee $2
    i32.eqz
    if
-    local.get $0
+    local.get $2
     i32.const 7984
     i32.ne
     if
-     local.get $0
+     local.get $2
      call $~lib/rt/pure/__release
     end
     i32.const 7984
-    local.set $0
+    local.set $2
    end
-   local.get $0
+   local.get $2
    i32.const 16
    i32.sub
    i32.load offset=12
@@ -6863,38 +6865,38 @@
    i32.shl
    local.tee $4
    i32.add
-   local.tee $1
+   local.tee $5
    i32.eqz
    if
-    local.get $0
+    local.get $2
     call $~lib/rt/pure/__release
     i32.const 7840
     br $__inlined_func$~lib/string/String#concat
    end
    call $~lib/rt/tlsf/maybeInitialize
-   local.get $1
+   local.get $5
    i32.const 1
    call $~lib/rt/tlsf/allocateBlock
    i32.const 16
    i32.add
    call $~lib/rt/pure/__retain
-   local.tee $1
+   local.tee $5
    local.get $3
    local.get $4
    call $~lib/memory/memory.copy
-   local.get $1
    local.get $4
+   local.get $5
    i32.add
-   local.get $0
+   local.get $2
    local.get $6
    call $~lib/memory/memory.copy
-   local.get $0
+   local.get $2
    call $~lib/rt/pure/__release
-   local.get $1
+   local.get $5
   end
-  local.get $2
+  local.get $0
   call $~lib/rt/pure/__release
-  local.get $5
+  local.get $1
   call $~lib/rt/pure/__release
  )
  (func $std/array/createRandomString (param $0 i32) (result i32)

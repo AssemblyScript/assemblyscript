@@ -2,12 +2,11 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $f32_=>_i32 (func (param f32) (result i32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i64_i32_i64_i32_i64_=>_i32 (func (param i32 i64 i32 i64 i32 i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -1270,9 +1269,7 @@
   global.get $~lib/util/number/_K
   call $~lib/util/number/prettify
  )
- (func $~lib/util/number/dtoa (result i32)
-  (local $0 i32)
-  (local $1 i32)
+ (func $~lib/string/String#substring (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1322,12 +1319,8 @@
   local.tee $3
   i32.eqz
   if
-   i32.const 0
-   i32.const 2512
-   i32.const 68
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
+   i32.const 2496
+   return
   end
   i32.const 0
   local.get $4
@@ -1338,12 +1331,8 @@
   local.get $1
   select
   if
-   i32.const 0
-   i32.const 2512
-   i32.const 70
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
+   local.get $0
+   return
   end
   local.get $3
   call $~lib/rt/stub/__alloc
@@ -1407,6 +1396,8 @@
  )
  (func $start:number
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
   i32.const 2768
   global.set $~lib/rt/stub/offset
   global.get $number/a
@@ -1422,7 +1413,61 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/util/number/dtoa
+  i32.const 56
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  call $~lib/util/number/dtoa_core
+  local.tee $1
+  i32.const 28
+  i32.ne
+  if (result i32)
+   local.get $0
+   local.get $1
+   call $~lib/string/String#substring
+   local.get $0
+   i32.const 15
+   i32.and
+   i32.eqz
+   i32.const 0
+   local.get $0
+   select
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 2512
+    i32.const 68
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   i32.const 16
+   i32.sub
+   local.tee $2
+   i32.load offset=4
+   i32.const 1
+   i32.ne
+   if
+    i32.const 0
+    i32.const 2512
+    i32.const 70
+    i32.const 14
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/rt/stub/offset
+   local.get $0
+   local.get $2
+   i32.load
+   i32.add
+   i32.eq
+   if
+    local.get $2
+    global.set $~lib/rt/stub/offset
+   end
+  else
+   local.get $0
+  end
   i32.const 2560
   call $~lib/string/String.__eq
   i32.eqz
