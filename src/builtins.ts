@@ -1177,16 +1177,21 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U8:
       case TypeKind.U16: {
         // (value << (shift & mask)) | (value >>> ((0 - shift) & mask))
-        let mask   = module.i32(type.size - 1);
-        let shiftL = module.binary(BinaryOp.AndI32, arg1, mask);
-        let shiftR = module.binary(
-          BinaryOp.AndI32,
-          module.binary(BinaryOp.SubI32, module.i32(0), arg1),
-          mask
-        );
         return module.binary(BinaryOp.OrI32,
-          module.binary(BinaryOp.ShlI32, arg0, shiftL),
-          module.binary(BinaryOp.ShrU32, arg0, shiftR)
+          module.binary(
+            BinaryOp.ShlI32,
+            arg0,
+            module.binary(BinaryOp.AndI32, arg1, module.i32(type.size - 1))
+          ),
+          module.binary(
+            BinaryOp.ShrU32,
+            arg0,
+            module.binary(
+              BinaryOp.AndI32,
+              module.binary(BinaryOp.SubI32, module.i32(0), arg1),
+              module.i32(type.size - 1)
+            )
+          )
         );
       }
       case TypeKind.I32:
@@ -1235,16 +1240,21 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U8:
       case TypeKind.U16: {
         // (value >>> (shift & mask)) | (value << ((0 - shift) & mask))
-        let mask   = module.i32(type.size - 1);
-        let shiftL = module.binary(BinaryOp.AndI32, arg1, mask);
-        let shiftR = module.binary(
-          BinaryOp.AndI32,
-          module.binary(BinaryOp.SubI32, module.i32(0), arg1),
-          mask
-        );
         return module.binary(BinaryOp.OrI32,
-          module.binary(BinaryOp.ShrU32, arg0, shiftL),
-          module.binary(BinaryOp.ShlI32, arg0, shiftR)
+          module.binary(
+            BinaryOp.ShrU32,
+            arg0,
+            module.binary(BinaryOp.AndI32, arg1, module.i32(type.size - 1))
+          ),
+          module.binary(
+            BinaryOp.ShlI32,
+            arg0,
+            module.binary(
+              BinaryOp.AndI32,
+              module.binary(BinaryOp.SubI32, module.i32(0), arg1),
+              module.i32(type.size - 1)
+            )
+          )
         );
       }
       case TypeKind.I32:
