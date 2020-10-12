@@ -934,11 +934,11 @@
    i32.const 0
    i32.store
    loop $for-loop|0
-    local.get $2
+    local.get $0
     i32.const 23
     i32.lt_u
     if
-     local.get $2
+     local.get $0
      i32.const 2
      i32.shl
      i32.const 18912
@@ -946,14 +946,14 @@
      i32.const 0
      i32.store offset=4
      i32.const 0
-     local.set $0
+     local.set $2
      loop $for-loop|1
-      local.get $0
+      local.get $2
       i32.const 16
       i32.lt_u
       if
-       local.get $0
        local.get $2
+       local.get $0
        i32.const 4
        i32.shl
        i32.add
@@ -963,17 +963,17 @@
        i32.add
        i32.const 0
        i32.store offset=96
-       local.get $0
+       local.get $2
        i32.const 1
        i32.add
-       local.set $0
+       local.set $2
        br $for-loop|1
       end
      end
-     local.get $2
+     local.get $0
      i32.const 1
      i32.add
-     local.set $2
+     local.set $0
      br $for-loop|0
     end
    end
@@ -2381,6 +2381,8 @@
     i32.add
     i32.load16_u
     local.tee $3
+    local.set $2
+    local.get $3
     i32.const 7
     i32.shr_u
     if
@@ -2784,8 +2786,8 @@
      i32.const 1
      i32.shl
      i32.add
-     local.get $3
-     local.get $3
+     local.get $2
+     local.get $2
      i32.const 65
      i32.sub
      i32.const 26
