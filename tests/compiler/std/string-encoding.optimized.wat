@@ -1308,10 +1308,8 @@
  )
  (func $std/string-encoding/testUTF16Encode
   (local $0 i32)
-  (local $1 i32)
   i32.const 1040
   call $~lib/string/String.UTF16.encode
-  local.tee $1
   local.tee $0
   i32.const 16
   i32.sub
@@ -1466,7 +1464,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
  )
  (func $~lib/string/String.UTF16.decodeUnsafe (param $0 i32) (param $1 i32) (result i32)
@@ -2099,11 +2097,9 @@
  )
  (func $std/string-encoding/testUTF8Encode
   (local $0 i32)
-  (local $1 i32)
   i32.const 1040
   i32.const 0
   call $~lib/string/String.UTF8.encode
-  local.tee $1
   local.tee $0
   i32.const 16
   i32.sub
@@ -2238,16 +2234,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
  )
  (func $std/string-encoding/testUTF8EncodeNullTerminated
   (local $0 i32)
-  (local $1 i32)
   i32.const 1040
   i32.const 1
   call $~lib/string/String.UTF8.encode
-  local.tee $1
   local.tee $0
   i32.const 16
   i32.sub
@@ -2392,7 +2386,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
  )
  (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)

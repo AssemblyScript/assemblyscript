@@ -19466,12 +19466,10 @@
   local.get $0
   i32.load offset=4
   local.set $5
+  local.get $3
   local.get $0
   i32.load offset=12
   local.tee $4
-  local.set $6
-  local.get $3
-  local.get $4
   local.get $3
   local.get $4
   i32.lt_s
@@ -19494,7 +19492,7 @@
    local.get $1
    local.get $4
    local.get $1
-   local.get $6
+   local.get $4
    i32.lt_s
    select
   end
