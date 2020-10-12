@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
@@ -327,14 +327,6 @@
   call $~lib/memory/memory.fill
   local.get $1
  )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
- )
  (func $~lib/util/hash/hashStr (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -344,7 +336,11 @@
   local.get $0
   if
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.const 1
    i32.shl
    local.set $3
@@ -465,10 +461,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -1317,52 +1321,53 @@
    end
   end
  )
- (func $~lib/string/String.__concat (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $__inlined_func$~lib/string/String#concat
-   local.get $0
-   i32.const 1888
-   local.get $0
-   select
-   local.tee $3
-   call $~lib/string/String#get:length
-   i32.const 1
-   i32.shl
-   local.tee $2
-   local.get $1
-   i32.const 1888
-   local.get $1
-   select
-   local.tee $1
-   call $~lib/string/String#get:length
-   i32.const 1
-   i32.shl
-   local.tee $4
-   i32.add
-   local.tee $0
-   i32.eqz
-   if
-    i32.const 1392
-    local.set $0
-    br $__inlined_func$~lib/string/String#concat
-   end
-   local.get $0
-   i32.const 1
-   call $~lib/rt/stub/__alloc
-   local.tee $0
-   local.get $3
-   local.get $2
-   call $~lib/memory/memory.copy
-   local.get $0
-   local.get $2
-   i32.add
-   local.get $1
-   local.get $4
-   call $~lib/memory/memory.copy
-  end
+  local.get $1
+  i32.const 1888
+  local.get $1
+  select
+  local.tee $3
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  i32.shl
+  local.tee $4
   local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  i32.shl
+  local.tee $1
+  i32.add
+  local.tee $2
+  i32.eqz
+  if
+   i32.const 1392
+   return
+  end
+  local.get $2
+  i32.const 1
+  call $~lib/rt/stub/__alloc
+  local.tee $2
+  local.get $0
+  local.get $1
+  call $~lib/memory/memory.copy
+  local.get $1
+  local.get $2
+  i32.add
+  local.get $3
+  local.get $4
+  call $~lib/memory/memory.copy
+  local.get $2
  )
  (func $~lib/symbol/_Symbol#toString (param $0 i32) (result i32)
   i32.const 1856
@@ -1433,9 +1438,13 @@
     i32.const 1392
    end
   end
-  call $~lib/string/String.__concat
+  call $~lib/string/String#concat
+  local.tee $0
+  i32.const 1888
+  local.get $0
+  select
   i32.const 1920
-  call $~lib/string/String.__concat
+  call $~lib/string/String#concat
  )
  (func $start:std/symbol
   (local $0 i32)

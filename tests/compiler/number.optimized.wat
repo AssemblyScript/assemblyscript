@@ -232,14 +232,6 @@
    i32.const 1232
   end
  )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
- )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -333,10 +325,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -1276,94 +1276,50 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  i32.const 56
-  call $~lib/rt/stub/__alloc
+  i32.const 0
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $2
-  call $~lib/util/number/dtoa_core
-  local.tee $3
-  i32.const 28
-  i32.eq
-  if
-   local.get $2
-   return
-  end
-  local.get $2
-  local.set $0
-  block $__inlined_func$~lib/string/String#substring
-   i32.const 0
-   local.get $2
-   call $~lib/string/String#get:length
-   local.tee $1
-   i32.const 0
-   local.get $1
-   i32.lt_s
-   select
-   local.tee $4
-   local.get $3
-   i32.const 0
-   local.get $3
-   i32.const 0
-   i32.gt_s
-   select
-   local.tee $3
-   local.get $1
-   local.get $3
-   local.get $1
-   i32.lt_s
-   select
-   local.tee $3
-   local.get $4
-   local.get $3
-   i32.gt_s
-   select
-   i32.const 1
-   i32.shl
-   local.tee $5
-   local.get $4
-   local.get $3
-   local.get $4
-   local.get $3
-   i32.lt_s
-   select
-   i32.const 1
-   i32.shl
-   local.tee $4
-   i32.sub
-   local.tee $3
-   i32.eqz
-   if
-    i32.const 2496
-    local.set $0
-    br $__inlined_func$~lib/string/String#substring
-   end
-   i32.const 0
-   local.get $5
-   local.get $1
-   i32.const 1
-   i32.shl
-   i32.eq
-   local.get $4
-   select
-   br_if $__inlined_func$~lib/string/String#substring
-   local.get $3
-   call $~lib/rt/stub/__alloc
-   local.tee $1
-   local.get $0
-   local.get $4
-   i32.add
-   local.get $3
-   call $~lib/memory/memory.copy
-   local.get $1
-   local.set $0
-  end
-  local.get $2
-  i32.const 15
-  i32.and
-  i32.eqz
   i32.const 0
   local.get $2
+  i32.lt_s
   select
+  local.tee $3
+  local.get $1
+  i32.const 0
+  local.get $1
+  i32.const 0
+  i32.gt_s
+  select
+  local.tee $1
+  local.get $2
+  local.get $1
+  local.get $2
+  i32.lt_s
+  select
+  local.tee $1
+  local.get $3
+  local.get $1
+  i32.gt_s
+  select
+  i32.const 1
+  i32.shl
+  local.tee $4
+  local.get $3
+  local.get $1
+  local.get $3
+  local.get $1
+  i32.lt_s
+  select
+  i32.const 1
+  i32.shl
+  local.tee $1
+  i32.sub
+  local.tee $3
   i32.eqz
   if
    i32.const 0
@@ -1373,13 +1329,14 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  local.get $4
   local.get $2
-  i32.const 16
-  i32.sub
-  local.tee $1
-  i32.load offset=4
   i32.const 1
-  i32.ne
+  i32.shl
+  i32.eq
+  local.get $1
+  select
   if
    i32.const 0
    i32.const 2512
@@ -1388,17 +1345,15 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/rt/stub/offset
-  local.get $2
-  local.get $1
-  i32.load
-  i32.add
-  i32.eq
-  if
-   local.get $1
-   global.set $~lib/rt/stub/offset
-  end
+  local.get $3
+  call $~lib/rt/stub/__alloc
+  local.tee $2
   local.get $0
+  local.get $1
+  i32.add
+  local.get $3
+  call $~lib/memory/memory.copy
+  local.get $2
  )
  (func $~lib/number/F32.isSafeInteger (param $0 f32) (result i32)
   local.get $0

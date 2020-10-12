@@ -1,11 +1,11 @@
 (module
  (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1024) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00w\00h\00i\00l\00e\00.\00t\00s")
@@ -969,15 +969,10 @@
   end
   local.get $1
  )
- (func $while/Ref#constructor (result i32)
-  (local $0 i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  local.tee $0
+  local.get $0
   i32.const 1216
   i32.gt_u
   if
@@ -1270,9 +1265,13 @@
   global.set $while/ran
   i32.const 0
   local.set $2
-  call $while/Ref#constructor
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   local.set $0
-  loop $while-continue|05
+  loop $while-continue|02
    local.get $0
    if
     local.get $2
@@ -1290,14 +1289,18 @@
       call $~lib/rt/pure/__release
      end
     else
-     call $while/Ref#constructor
+     call $~lib/rt/tlsf/maybeInitialize
+     call $~lib/rt/tlsf/allocateBlock
+     i32.const 16
+     i32.add
+     call $~lib/rt/pure/__retain
      local.set $1
      local.get $0
      call $~lib/rt/pure/__release
     end
     local.get $1
     local.set $0
-    br $while-continue|05
+    br $while-continue|02
    end
   end
   local.get $2
@@ -1338,11 +1341,19 @@
   global.set $while/ran
   i32.const 0
   local.set $2
-  call $while/Ref#constructor
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   local.set $0
-  loop $while-continue|06
+  loop $while-continue|03
    block $while-break|0
-    call $while/Ref#constructor
+    call $~lib/rt/tlsf/maybeInitialize
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
+    call $~lib/rt/pure/__retain
     local.tee $1
     call $~lib/rt/pure/__release
     local.get $1
@@ -1363,7 +1374,7 @@
       local.set $0
       br $while-break|0
      end
-     br $while-continue|06
+     br $while-continue|03
     end
    end
   end
@@ -1405,14 +1416,14 @@
   global.set $while/ran
   i32.const 0
   local.set $2
-  loop $while-continue|02
+  loop $while-continue|024
    local.get $2
    i32.const 1
    i32.add
    local.tee $2
    i32.const 1
    i32.lt_s
-   br_if $while-continue|02
+   br_if $while-continue|024
   end
   i32.const 1
   global.set $while/ran
@@ -1420,14 +1431,14 @@
   global.set $while/ran
   i32.const 0
   local.set $2
-  loop $while-continue|03
+  loop $while-continue|035
    local.get $2
    i32.const 1
    i32.add
    local.tee $2
    i32.const 1
    i32.lt_s
-   br_if $while-continue|03
+   br_if $while-continue|035
   end
   i32.const 1
   global.set $while/ran

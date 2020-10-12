@@ -220,14 +220,6 @@
   end
   local.get $3
  )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
- )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -303,7 +295,7 @@
   end
   i32.const 0
  )
- (func $start:resolve-function-expression
+ (func $~start
   (local $0 i32)
   (local $1 i32)
   i32.const 2
@@ -353,10 +345,16 @@
     i32.eqz
     br_if $folding-inner0
     local.get $0
-    call $~lib/string/String#get:length
+    i32.const 16
+    i32.sub
+    i32.load offset=12
+    i32.const 1
+    i32.shr_u
     local.tee $1
-    i32.const 1536
-    call $~lib/string/String#get:length
+    i32.const 1532
+    i32.load
+    i32.const 1
+    i32.shr_u
     i32.ne
     br_if $folding-inner0
     local.get $0
@@ -376,8 +374,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  call $start:resolve-function-expression
  )
 )

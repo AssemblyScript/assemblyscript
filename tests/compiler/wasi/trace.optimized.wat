@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $none_=>_none (func))
@@ -192,14 +192,6 @@
   local.get $0
   i32.store offset=12
   local.get $3
- )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
  )
  (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -1607,19 +1599,21 @@
   i32.const 544106784
   i32.store
   i32.const 2000
-  i32.const 2000
-  call $~lib/string/String#get:length
+  i32.const 1996
+  i32.load
+  i32.const 1
+  i32.shr_u
   i32.const 23
   call $~lib/string/String.UTF8.encodeUnsafe
   i32.const 23
   i32.add
-  local.tee $3
+  local.tee $2
   i32.const 40
   i32.store8
   local.get $0
   call $~lib/util/number/decimalCount32
   local.tee $4
-  local.get $3
+  local.get $2
   i32.const 1
   i32.add
   i32.add
@@ -1730,8 +1724,10 @@
   drop
   local.get $6
   i32.const 1040
-  i32.const 1040
-  call $~lib/string/String#get:length
+  i32.const 1036
+  i32.load
+  i32.const 1
+  i32.shr_u
   local.get $7
   call $~lib/string/String.UTF8.encodeUnsafe
   i32.store offset=4

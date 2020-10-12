@@ -1,8 +1,6 @@
 (module
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $f32_=>_f32 (func (param f32) (result f32)))
- (type $f64_=>_f64 (func (param f64) (result f64)))
  (memory $0 0)
  (global $binary/i (mut i32) (i32.const 0))
  (global $binary/I (mut i64) (i64.const 0))
@@ -42,23 +40,9 @@
   end
   local.get $2
  )
- (func $~lib/math/NativeMathf.mod (param $0 f32) (result f32)
-  local.get $0
-  local.get $0
-  f32.trunc
-  f32.sub
-  local.get $0
-  f32.copysign
- )
- (func $~lib/math/NativeMath.mod (param $0 f64) (result f64)
-  local.get $0
-  local.get $0
-  f64.trunc
-  f64.sub
-  local.get $0
-  f64.copysign
- )
  (func $start:binary
+  (local $0 f32)
+  (local $1 f64)
   global.get $binary/i
   call $~lib/math/ipow32
   drop
@@ -174,8 +158,21 @@
   i64.const 0
   global.set $binary/I
   global.get $binary/f
-  call $~lib/math/NativeMathf.mod
-  drop
+  f32.const 1
+  f32.add
+  global.set $binary/f
+  global.get $binary/f
+  f32.const 1
+  f32.sub
+  global.set $binary/f
+  global.get $binary/f
+  local.tee $0
+  local.get $0
+  f32.trunc
+  f32.sub
+  local.get $0
+  f32.copysign
+  global.set $binary/f
   global.get $binary/f
   f32.const 1
   f32.add
@@ -185,22 +182,13 @@
   f32.sub
   global.set $binary/f
   global.get $binary/f
-  call $~lib/math/NativeMathf.mod
-  global.set $binary/f
-  global.get $binary/f
-  f32.const 1
-  f32.add
-  global.set $binary/f
-  global.get $binary/f
-  f32.const 1
+  local.tee $0
+  local.get $0
+  f32.trunc
   f32.sub
+  local.get $0
+  f32.copysign
   global.set $binary/f
-  global.get $binary/f
-  call $~lib/math/NativeMathf.mod
-  global.set $binary/f
-  global.get $binary/F
-  call $~lib/math/NativeMath.mod
-  drop
   global.get $binary/F
   f64.const 1
   f64.add
@@ -210,7 +198,12 @@
   f64.sub
   global.set $binary/F
   global.get $binary/F
-  call $~lib/math/NativeMath.mod
+  local.tee $1
+  local.get $1
+  f64.trunc
+  f64.sub
+  local.get $1
+  f64.copysign
   global.set $binary/F
   global.get $binary/F
   f64.const 1
@@ -221,7 +214,12 @@
   f64.sub
   global.set $binary/F
   global.get $binary/F
-  call $~lib/math/NativeMath.mod
+  local.tee $1
+  local.get $1
+  f64.trunc
+  f64.sub
+  local.get $1
+  f64.copysign
   global.set $binary/F
  )
  (func $~start
