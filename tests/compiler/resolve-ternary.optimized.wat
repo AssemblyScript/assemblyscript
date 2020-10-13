@@ -1185,14 +1185,6 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
- )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -1310,10 +1302,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -2261,7 +2261,11 @@
   (local $4 i32)
   i32.const 0
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $2
   i32.const 0
   local.get $2
@@ -2317,9 +2321,12 @@
    call $~lib/rt/pure/__retain
    return
   end
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $3
   i32.const 1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $2
   local.get $0
   local.get $1
@@ -2368,19 +2375,24 @@
   (local $4 i32)
   i32.const 1
   call $~lib/util/number/decimalCount32
-  local.tee $0
-  i32.const 1
-  i32.shl
-  i32.const 1
-  call $~lib/rt/tlsf/__alloc
   local.tee $1
   i32.const 1
+  i32.shl
+  local.set $0
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
-  call $~lib/util/number/utoa_dec_simple<u32>
-  local.get $1
-  call $~lib/rt/pure/__retain
+  i32.const 1
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.tee $0
+  i32.const 1
+  local.get $1
+  call $~lib/util/number/utoa_dec_simple<u32>
   local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $1
+  local.get $1
   i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
@@ -2393,35 +2405,38 @@
    unreachable
   end
   block $__inlined_func$~lib/util/number/dtoa
+   call $~lib/rt/tlsf/maybeInitialize
    i32.const 56
    i32.const 1
-   call $~lib/rt/tlsf/__alloc
-   local.tee $1
-   call $~lib/util/number/dtoa_core
+   call $~lib/rt/tlsf/allocateBlock
+   i32.const 16
+   i32.add
    local.tee $0
+   call $~lib/util/number/dtoa_core
+   local.tee $1
    i32.const 28
    i32.eq
    if
-    local.get $1
+    local.get $0
     call $~lib/rt/pure/__retain
-    local.set $0
+    local.set $1
     br $__inlined_func$~lib/util/number/dtoa
    end
-   local.get $1
    local.get $0
-   call $~lib/string/String#substring
-   local.set $0
-   call $~lib/rt/tlsf/maybeInitialize
    local.get $1
+   call $~lib/string/String#substring
+   local.set $1
+   call $~lib/rt/tlsf/maybeInitialize
+   local.get $0
    i32.const 16
    i32.sub
    local.set $2
-   local.get $1
+   local.get $0
    i32.const 15
    i32.and
    i32.eqz
    i32.const 0
-   local.get $1
+   local.get $0
    select
    if (result i32)
     local.get $2
@@ -2453,7 +2468,7 @@
    local.get $2
    call $~lib/rt/tlsf/freeBlock
   end
-  local.get $0
+  local.get $1
   i32.const 2688
   call $~lib/string/String.__eq
   i32.eqz
@@ -2508,7 +2523,7 @@
    unreachable
   end
   call $~lib/rt/pure/__release
-  local.get $0
+  local.get $1
   call $~lib/rt/pure/__release
   i32.const 2720
   call $~lib/rt/pure/__release

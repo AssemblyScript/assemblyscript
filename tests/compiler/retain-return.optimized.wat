@@ -938,15 +938,12 @@
   end
   local.get $0
  )
- (func $retain-return/Ref#constructor (result i32)
+ (func $retain-return/returnNew (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
   call $~lib/rt/pure/__retain
- )
- (func $retain-return/returnNew (result i32)
-  call $retain-return/Ref#constructor
  )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
@@ -969,15 +966,23 @@
  )
  (func $start:retain-return
   (local $0 i32)
-  call $retain-return/Ref#constructor
-  call $~lib/rt/pure/__release
-  call $retain-return/Ref#constructor
-  call $~lib/rt/pure/__release
-  call $retain-return/Ref#constructor
-  call $~lib/rt/pure/__release
-  call $retain-return/Ref#constructor
-  call $~lib/rt/pure/__release
-  call $retain-return/Ref#constructor
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  drop
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  drop
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  drop
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  drop
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   global.set $retain-return/ref
   i32.const 1200
   i32.load
