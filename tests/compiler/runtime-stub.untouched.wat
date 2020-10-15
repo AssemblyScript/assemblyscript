@@ -51,16 +51,12 @@
   local.get $1
   i32.const 16
   i32.shl
-  i32.const 4
-  i32.add
   i32.const 15
   i32.add
   i32.const 15
   i32.const -1
   i32.xor
   i32.and
-  i32.const 4
-  i32.sub
   local.set $2
   local.get $0
   local.get $2

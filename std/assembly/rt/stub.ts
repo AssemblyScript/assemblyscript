@@ -9,7 +9,7 @@ import { AL_MASK, OBJECT, OBJECT_OVERHEAD, BLOCK_MAXSIZE, BLOCK_OVERHEAD, BLOCK,
 function maybeGrowMemory(newOffset: usize): void {
   // assumes newOffset is aligned
   var pagesBefore = memory.size();
-  var maxOffset = (((<usize>pagesBefore << 16) + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
+  var maxOffset = ((<usize>pagesBefore << 16) + AL_MASK) & ~AL_MASK;
   if (newOffset > maxOffset) {
     let pagesNeeded = <i32>(((newOffset - maxOffset + 0xffff) & ~0xffff) >>> 16);
     let pagesWanted = max(pagesBefore, pagesNeeded); // double memory

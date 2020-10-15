@@ -44,7 +44,7 @@ async function test(build: string): Promise<void> {
   const cachedStrings = new Map<string,number>();
   function cachedString(text: string): number {
     if (cachedStrings.has(text)) return cachedStrings.get(text);
-    var ptr = asc.__retain(asc.__allocString(text));
+    var ptr = asc.__retain(asc.__newString(text));
     cachedStrings.set(text, ptr);
     return ptr;
   }

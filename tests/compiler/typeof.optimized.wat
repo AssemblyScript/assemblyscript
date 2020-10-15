@@ -357,12 +357,10 @@
   local.tee $1
   i32.const 16
   i32.shl
-  i32.const 19
+  i32.const 15
   i32.add
   i32.const -16
   i32.and
-  i32.const 4
-  i32.sub
   local.tee $0
   i32.gt_u
   if
