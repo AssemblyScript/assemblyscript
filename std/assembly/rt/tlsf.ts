@@ -38,7 +38,7 @@ import { onalloc, onresize, onmove, onfree } from "./rtrace";
 // [07]: < 32K        [19]: < 128M
 // [08]: < 64K        [20]: < 256M
 // [09]: < 128K       [21]: < 512M
-// [10]: < 256K       [22]: <= 1G - OFFSET
+// [10]: < 256K       [22]: <= 1G - OVERHEAD
 // [11]: < 512K
 // VMs limit to 2GB total (currently), making one 1G block max (or three 512M etc.) due to block overhead
 
