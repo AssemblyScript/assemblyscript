@@ -4,9 +4,8 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -24,18 +23,14 @@
  (global $std/staticarray/arr4 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/staticarray/StaticArray<i32>#get:length (param $0 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
   local.get $0
   i32.const 20
   i32.sub
   i32.load offset=16
   i32.const 2
   i32.shr_u
- )
- (func $~lib/staticarray/StaticArray<i32>#__get (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  local.get $0
-  call $~lib/staticarray/StaticArray<i32>#get:length
   i32.ge_u
   if
    i32.const 1088
@@ -55,7 +50,11 @@
  (func $~lib/staticarray/StaticArray<i32>#__set (param $0 i32) (param $1 i32)
   i32.const 1
   local.get $0
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 2
+  i32.shr_u
   i32.ge_u
   if
    i32.const 1088
@@ -1313,13 +1312,6 @@
   end
   local.get $0
  )
- (func $std/staticarray/test (result i32)
-  i32.const 12
-  i32.const 3
-  i32.const 1312
-  call $~lib/rt/__newBuffer
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1504
@@ -1346,8 +1338,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1056
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 1052
+  i32.load
+  i32.const 2
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -1399,8 +1393,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1280
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 1276
+  i32.load
+  i32.const 2
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -1427,7 +1423,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $std/staticarray/test
+  i32.const 12
+  i32.const 3
+  i32.const 1312
+  call $~lib/rt/__newBuffer
+  call $~lib/rt/pure/__retain
   global.set $std/staticarray/arr3
   global.get $std/staticarray/arr3
   i32.const 0
@@ -1469,7 +1469,11 @@
    unreachable
   end
   global.get $std/staticarray/arr3
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 2
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -1496,7 +1500,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $std/staticarray/test
+  i32.const 12
+  i32.const 3
+  i32.const 1312
+  call $~lib/rt/__newBuffer
+  call $~lib/rt/pure/__retain
   global.get $std/staticarray/arr3
   call $~lib/rt/pure/__release
   global.set $std/staticarray/arr3

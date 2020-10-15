@@ -4,7 +4,6 @@
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1036) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01")
@@ -31,13 +30,6 @@
   local.get $0
   local.get $1
   f64.add
- )
- (func $function-types/doAddWithFn<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
-  local.get $1
-  local.get $2
-  i32.load
-  call_indirect (type $i32_i32_=>_i32)
  )
  (func $start:function-types
   i32.const 1056
@@ -90,7 +82,8 @@
   i32.const 2
   i32.const 3
   global.get $function-types/i32Adder
-  call $function-types/doAddWithFn<i32>
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
   i32.const 5
   i32.ne
   if
@@ -119,7 +112,8 @@
   i32.const 4
   i32.const 5
   i32.const 1216
-  call $function-types/doAddWithFn<i32>
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
   i32.const 9
   i32.ne
   if
@@ -133,7 +127,8 @@
   i32.const 1
   i32.const 2
   i32.const 1056
-  call $function-types/doAddWithFn<i32>
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if
@@ -147,7 +142,8 @@
   i32.const 1
   i32.const 2
   i32.const 1056
-  call $function-types/doAddWithFn<i32>
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if

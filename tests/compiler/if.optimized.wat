@@ -1,6 +1,5 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -11,7 +10,6 @@
  (export "ifThen" (func $if/ifThen))
  (export "ifThenElseBlock" (func $if/ifThenElse))
  (export "ifAlwaysReturns" (func $if/ifAlwaysReturns))
- (start $~start)
  (func $if/ifThenElse (param $0 i32) (result i32)
   local.get $0
   i32.eqz
@@ -37,29 +35,5 @@
    unreachable
   end
   i32.const 1
- )
- (func $~start
-  i32.const 0
-  call $if/ifThen
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 17
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  call $if/ifThen
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 18
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
 )

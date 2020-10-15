@@ -1111,14 +1111,6 @@
   i32.const 16
   i32.add
  )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 1
-  i32.shr_u
- )
  (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1303,7 +1295,11 @@
   local.tee $1
   local.get $0
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1
+  i32.shr_u
   i32.const 1
   i32.shl
   call $~lib/memory/memory.copy
@@ -1314,10 +1310,8 @@
  )
  (func $std/string-encoding/testUTF16Encode
   (local $0 i32)
-  (local $1 i32)
   i32.const 1056
   call $~lib/string/String.UTF16.encode
-  local.tee $1
   local.tee $0
   i32.const 20
   i32.sub
@@ -1472,7 +1466,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
  )
  (func $~lib/string/String.UTF16.decodeUnsafe (param $0 i32) (param $1 i32) (result i32)
@@ -1622,10 +1616,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 20
+   i32.sub
+   i32.load offset=16
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 20
+   i32.sub
+   i32.load offset=16
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -2074,7 +2076,11 @@
   local.set $2
   local.get $0
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1
+  i32.shr_u
   local.get $2
   local.get $1
   call $~lib/string/String.UTF8.encodeUnsafe
@@ -2085,11 +2091,9 @@
  )
  (func $std/string-encoding/testUTF8Encode
   (local $0 i32)
-  (local $1 i32)
   i32.const 1056
   i32.const 0
   call $~lib/string/String.UTF8.encode
-  local.tee $1
   local.tee $0
   i32.const 20
   i32.sub
@@ -2224,16 +2228,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
  )
  (func $std/string-encoding/testUTF8EncodeNullTerminated
   (local $0 i32)
-  (local $1 i32)
   i32.const 1056
   i32.const 1
   call $~lib/string/String.UTF8.encode
-  local.tee $1
   local.tee $0
   i32.const 20
   i32.sub
@@ -2378,7 +2380,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
  )
  (func $~lib/rt/tlsf/checkUsedBlock (param $0 i32) (result i32)

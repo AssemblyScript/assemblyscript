@@ -1,8 +1,8 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -12,14 +12,6 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 1
-  i32.shr_u
- )
  (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -299,23 +291,23 @@
    end
   end
  )
- (func $~start
+ (func $start:empty
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 1148
   global.set $~lib/rt/stub/offset
-  i32.const 2
-  i32.const 1056
-  call $~lib/string/String#get:length
-  local.tee $0
-  i32.lt_s
-  local.set $1
   block $__inlined_func$~lib/string/String#substring
    i32.const 2
+   i32.const 1052
+   i32.load
+   i32.const 1
+   i32.shr_u
+   local.tee $0
+   i32.const 2
    local.get $0
-   local.get $1
+   i32.lt_s
    select
    local.tee $1
    i32.const 2147483647
@@ -373,7 +365,11 @@
    call $~lib/memory/memory.copy
   end
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -391,5 +387,8 @@
   i32.const 0
   call $~lib/rt/stub/__alloc
   drop
+ )
+ (func $~start
+  call $start:empty
  )
 )

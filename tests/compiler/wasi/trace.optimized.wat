@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_=>_none (func (param i32)))
@@ -181,14 +181,6 @@
   local.get $5
   i32.store
   local.get $4
- )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 1
-  i32.shr_u
  )
  (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -1602,19 +1594,21 @@
   i32.const 544106784
   i32.store
   i32.const 2016
-  i32.const 2016
-  call $~lib/string/String#get:length
+  i32.const 2012
+  i32.load
+  i32.const 1
+  i32.shr_u
   i32.const 23
   call $~lib/string/String.UTF8.encodeUnsafe
   i32.const 23
   i32.add
-  local.tee $3
+  local.tee $2
   i32.const 40
   i32.store8
   i32.const 95
   call $~lib/util/number/decimalCount32
   local.tee $4
-  local.get $3
+  local.get $2
   i32.const 1
   i32.add
   i32.add
@@ -1691,76 +1685,73 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   call $~lib/string/String.UTF8.byteLength
-  local.tee $7
-  i32.const 56
-  i32.gt_s
-  local.set $6
-  local.get $7
+  local.tee $6
   i32.const 56
   local.get $6
+  i32.const 56
+  i32.gt_s
   select
   i32.const 13
   i32.add
   call $~lib/rt/stub/__alloc
-  local.tee $7
+  local.tee $6
   i32.const 8
   i32.add
   local.tee $8
   i32.const 4
   i32.add
-  local.set $6
+  local.set $7
+  local.get $6
   local.get $7
-  local.get $6
   i32.store
-  local.get $6
+  local.get $7
   i64.const 9071406388179572
   i64.store
-  local.get $7
+  local.get $6
   i32.const 7
   i32.store offset=4
   i32.const 2
-  local.get $7
+  local.get $6
   i32.const 1
   local.get $8
   call $~lib/bindings/wasi_snapshot_preview1/fd_write
   drop
-  local.get $7
-  i32.const 1056
-  i32.const 1056
-  call $~lib/string/String#get:length
   local.get $6
+  i32.const 1056
+  i32.const 1052
+  i32.load
+  i32.const 1
+  i32.shr_u
+  local.get $7
   call $~lib/string/String.UTF8.encodeUnsafe
   i32.store offset=4
   i32.const 2
-  local.get $7
+  local.get $6
   i32.const 1
   local.get $8
   call $~lib/bindings/wasi_snapshot_preview1/fd_write
   drop
   local.get $0
   if (result i32)
-   local.get $6
+   local.get $7
    i32.const 32
    i32.store8
    local.get $6
+   local.get $7
    i32.const 1
    i32.add
-   local.tee $6
+   local.tee $7
+   local.get $7
    local.get $1
    call $~lib/util/number/dtoa_buffered
-   local.set $9
    local.get $7
-   local.get $6
-   local.get $9
-   local.get $6
    call $~lib/string/String.UTF8.encodeUnsafe
    i32.const 1
    i32.add
    i32.store offset=4
    i32.const 2
-   local.get $7
+   local.get $6
    i32.const 1
    local.get $8
    call $~lib/bindings/wasi_snapshot_preview1/fd_write
@@ -1769,18 +1760,18 @@
    i32.const 1
    i32.gt_s
    if
+    local.get $6
     local.get $7
-    local.get $6
-    local.get $6
+    local.get $7
     local.get $2
     call $~lib/util/number/dtoa_buffered
-    local.get $6
+    local.get $7
     call $~lib/string/String.UTF8.encodeUnsafe
     i32.const 1
     i32.add
     i32.store offset=4
     i32.const 2
-    local.get $7
+    local.get $6
     i32.const 1
     local.get $8
     call $~lib/bindings/wasi_snapshot_preview1/fd_write
@@ -1789,18 +1780,18 @@
     i32.const 2
     i32.gt_s
     if
+     local.get $6
      local.get $7
-     local.get $6
-     local.get $6
+     local.get $7
      local.get $3
      call $~lib/util/number/dtoa_buffered
-     local.get $6
+     local.get $7
      call $~lib/string/String.UTF8.encodeUnsafe
      i32.const 1
      i32.add
      i32.store offset=4
      i32.const 2
-     local.get $7
+     local.get $6
      i32.const 1
      local.get $8
      call $~lib/bindings/wasi_snapshot_preview1/fd_write
@@ -1809,18 +1800,18 @@
      i32.const 3
      i32.gt_s
      if
+      local.get $6
       local.get $7
-      local.get $6
-      local.get $6
+      local.get $7
       local.get $4
       call $~lib/util/number/dtoa_buffered
-      local.get $6
+      local.get $7
       call $~lib/string/String.UTF8.encodeUnsafe
       i32.const 1
       i32.add
       i32.store offset=4
       i32.const 2
-      local.get $7
+      local.get $6
       i32.const 1
       local.get $8
       call $~lib/bindings/wasi_snapshot_preview1/fd_write
@@ -1829,18 +1820,18 @@
       i32.const 4
       i32.gt_s
       if
+       local.get $6
        local.get $7
-       local.get $6
-       local.get $6
+       local.get $7
        local.get $5
        call $~lib/util/number/dtoa_buffered
-       local.get $6
+       local.get $7
        call $~lib/string/String.UTF8.encodeUnsafe
        i32.const 1
        i32.add
        i32.store offset=4
        i32.const 2
-       local.get $7
+       local.get $6
        i32.const 1
        local.get $8
        call $~lib/bindings/wasi_snapshot_preview1/fd_write
@@ -1849,29 +1840,29 @@
      end
     end
    end
-   local.get $6
+   local.get $7
    i32.const 1
    i32.sub
   else
-   local.get $6
+   local.get $7
   end
   i32.const 10
   i32.store8
-  local.get $7
+  local.get $6
   i32.const 1
   i32.store offset=4
   i32.const 2
-  local.get $7
+  local.get $6
   i32.const 1
   local.get $8
   call $~lib/bindings/wasi_snapshot_preview1/fd_write
   drop
-  local.get $7
+  local.get $6
   i32.const 15
   i32.and
   i32.eqz
   i32.const 0
-  local.get $7
+  local.get $6
   select
   i32.eqz
   if
@@ -1879,8 +1870,8 @@
    unreachable
   end
   global.get $~lib/rt/stub/offset
-  local.get $7
-  local.get $7
+  local.get $6
+  local.get $6
   i32.const 4
   i32.sub
   local.tee $0

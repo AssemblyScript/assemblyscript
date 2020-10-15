@@ -326,31 +326,31 @@
   i32.const 16
   local.get $2
   call $~lib/rt/stub/__new
-  local.set $2
+  local.tee $2
   local.get $0
   local.get $1
   i32.shl
-  local.tee $4
+  local.tee $1
   local.set $5
-  local.get $4
+  local.get $1
   i32.const 0
   call $~lib/rt/stub/__new
-  local.set $1
+  local.set $4
   local.get $3
   if
-   local.get $1
+   local.get $4
    local.get $3
    local.get $5
    call $~lib/memory/memory.copy
   end
-  local.get $2
-  local.get $1
+  local.get $4
+  local.tee $3
   i32.store
   local.get $2
-  local.get $1
+  local.get $3
   i32.store offset=4
   local.get $2
-  local.get $4
+  local.get $1
   i32.store offset=8
   local.get $2
   local.get $0

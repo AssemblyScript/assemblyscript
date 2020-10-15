@@ -36,25 +36,22 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   i32.const 1164
   i32.load
-  local.set $1
+  local.set $2
   loop $for-loop|0
-   local.get $1
+   local.get $0
+   local.get $2
    i32.const 1164
    i32.load
-   local.tee $2
-   i32.lt_s
-   local.set $3
-   local.get $0
-   local.get $1
+   local.tee $3
    local.get $2
    local.get $3
+   i32.lt_s
    select
    i32.lt_s
    if
-    local.get $4
+    local.get $1
     i32.const 1156
     i32.load
     local.get $0
@@ -67,7 +64,7 @@
     i32.const 1200
     i32.load
     call_indirect (type $i32_f32_i32_i32_=>_i32)
-    local.set $4
+    local.set $1
     local.get $0
     i32.const 1
     i32.add

@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -95,7 +95,14 @@
   i32.const 16
   i32.add
  )
- (func $rt/instanceof/Animal#constructor (param $0 i32) (result i32)
+ (func $rt/instanceof/Cat#constructor (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 4
+   call $~lib/rt/stub/__new
+   local.set $0
+  end
   local.get $0
   if (result i32)
    local.get $0
@@ -103,16 +110,6 @@
    i32.const 3
    call $~lib/rt/stub/__new
   end
- )
- (func $rt/instanceof/Cat#constructor (param $0 i32) (result i32)
-  local.get $0
-  if (result i32)
-   local.get $0
-  else
-   i32.const 4
-   call $~lib/rt/stub/__new
-  end
-  call $rt/instanceof/Animal#constructor
  )
  (func $~lib/rt/__instanceof (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -148,8 +145,8 @@
   (local $0 i32)
   i32.const 1148
   global.set $~lib/rt/stub/offset
-  i32.const 0
-  call $rt/instanceof/Animal#constructor
+  i32.const 3
+  call $~lib/rt/stub/__new
   global.set $rt/instanceof/animal
   i32.const 0
   call $rt/instanceof/Cat#constructor
@@ -263,8 +260,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $rt/instanceof/Animal#constructor
+  i32.const 3
+  call $~lib/rt/stub/__new
   global.set $rt/instanceof/nullableAnimal
   i32.const 0
   call $rt/instanceof/Cat#constructor

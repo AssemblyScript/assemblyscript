@@ -3,8 +3,8 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -1259,20 +1259,16 @@
   end
   local.get $0
  )
- (func $~lib/staticarray/StaticArray<usize>#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 2
-  i32.shr_u
- )
  (func $rt/finalize/expect (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $rt/finalize/expectedWriteIndex
   global.get $rt/finalize/expected
-  call $~lib/staticarray/StaticArray<usize>#get:length
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 2
+  i32.shr_u
   i32.ge_s
   if
    i32.const 0
@@ -1288,10 +1284,13 @@
   i32.add
   global.set $rt/finalize/expectedWriteIndex
   local.get $1
-  local.tee $2
   global.get $rt/finalize/expected
-  local.tee $1
-  call $~lib/staticarray/StaticArray<usize>#get:length
+  local.tee $2
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 2
+  i32.shr_u
   i32.ge_u
   if
    i32.const 1456
@@ -1301,8 +1300,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $2
+  local.get $1
   i32.const 2
   i32.shl
   i32.add

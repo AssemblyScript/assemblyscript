@@ -252,14 +252,6 @@
    i32.const 1248
   end
  )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 1
-  i32.shr_u
- )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -353,10 +345,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 20
+   i32.sub
+   i32.load offset=16
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 20
+   i32.sub
+   i32.load offset=16
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -1162,10 +1162,10 @@
  (func $~lib/util/number/dtoa_core (result i32)
   (local $0 i64)
   (local $1 i64)
-  (local $2 i32)
+  (local $2 i64)
   (local $3 i64)
-  (local $4 f64)
-  (local $5 i64)
+  (local $4 i32)
+  (local $5 f64)
   i32.const -4
   global.set $~lib/util/number/_K
   i32.const 1992
@@ -1175,14 +1175,17 @@
   i32.load16_s
   global.set $~lib/util/number/_exp_pow
   global.get $~lib/util/number/_frc_pow
-  local.tee $1
-  i64.const 32
-  i64.shr_u
-  local.set $3
-  local.get $1
+  local.tee $3
   i64.const 4294967295
   i64.and
-  local.tee $1
+  local.set $1
+  local.get $3
+  i64.const 32
+  i64.shr_u
+  local.tee $3
+  i64.const 31
+  i64.shl
+  local.get $1
   i64.const 31
   i64.shl
   local.get $1
@@ -1191,41 +1194,11 @@
   i64.const 32
   i64.shr_u
   i64.add
-  local.set $0
-  local.get $3
-  i64.const 31
-  i64.shl
-  local.get $1
-  i64.const 31
-  i64.shl
-  i64.const 0
-  i64.add
-  local.tee $5
-  i64.const 32
-  i64.shr_u
-  i64.add
-  local.get $5
-  i64.const 4294967295
-  i64.and
-  i64.const 0
-  i64.add
-  i64.const 2147483647
-  i64.add
-  i64.const 32
-  i64.shr_u
-  i64.add
-  global.get $~lib/util/number/_exp_pow
   local.tee $2
-  i32.const 2
-  i32.add
-  local.get $3
-  i64.const 31
-  i64.shl
-  local.get $0
   i64.const 32
   i64.shr_u
   i64.add
-  local.get $0
+  local.get $2
   i64.const 4294967295
   i64.and
   local.get $3
@@ -1239,8 +1212,35 @@
   i64.add
   i64.const 1
   i64.sub
-  local.tee $0
+  local.set $0
+  local.get $3
+  i64.const 31
+  i64.shl
+  local.get $1
+  i64.const 31
+  i64.shl
+  i64.const 0
+  i64.add
+  local.tee $2
+  i64.const 32
+  i64.shr_u
+  i64.add
   local.get $2
+  i64.const 4294967295
+  i64.and
+  i64.const 0
+  i64.add
+  i64.const 2147483647
+  i64.add
+  i64.const 32
+  i64.shr_u
+  i64.add
+  global.get $~lib/util/number/_exp_pow
+  local.tee $4
+  i32.const 2
+  i32.add
+  local.get $0
+  local.get $4
   i32.const 2
   i32.add
   local.get $0

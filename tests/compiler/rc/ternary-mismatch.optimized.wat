@@ -955,17 +955,9 @@
  (func $~start
   call $rc/ternary-mismatch/Ref#constructor
   global.set $rc/ternary-mismatch/gloRef
-  i32.const 1
-  call $rc/ternary-mismatch/test1
+  call $rc/ternary-mismatch/Ref#constructor
   call $~lib/rt/pure/__release
-  i32.const 0
-  call $rc/ternary-mismatch/test1
-  call $~lib/rt/pure/__release
-  i32.const 1
-  call $rc/ternary-mismatch/test2
-  call $~lib/rt/pure/__release
-  i32.const 0
-  call $rc/ternary-mismatch/test2
+  call $rc/ternary-mismatch/Ref#constructor
   call $~lib/rt/pure/__release
   global.get $rc/ternary-mismatch/gloRef
   call $~lib/rt/pure/__release

@@ -462,7 +462,7 @@ function prepareSize(size: usize): usize {
   return computeSize(size);
 }
 
-/** Initilizes the root structure. */
+/** Initializes the root structure. */
 function initialize(): void {
   var rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
   var pagesBefore = memory.size();

@@ -1259,13 +1259,6 @@
   call $~lib/rt/pure/__release
   local.get $4
  )
- (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $0
-  i32.load
-  i32.sub
- )
  (func $~lib/polyfills/bswap<u32> (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
@@ -1858,7 +1851,10 @@
   local.get $1
   i32.load
   local.get $1
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $1
+  i32.load
+  i32.sub
   local.get $1
   i32.load offset=8
   call $~lib/dataview/DataView#constructor
@@ -3379,7 +3375,10 @@
   local.get $0
   call $~lib/rt/pure/__release
   local.get $2
-  call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.load offset=4
+  local.get $2
+  i32.load
+  i32.sub
   if
    i32.const 0
    i32.const 1552

@@ -370,7 +370,7 @@
   end
  )
  (func $~lib/util/number/utoa64 (param $0 i64) (result i32)
-  (local $1 i64)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -386,16 +386,16 @@
   if
    local.get $0
    i32.wrap_i64
-   local.tee $2
+   local.tee $1
    call $~lib/util/number/decimalCount32
-   local.tee $3
+   local.tee $2
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/stub/__new
-   local.tee $4
+   local.tee $3
+   local.get $1
    local.get $2
-   local.get $3
    call $~lib/util/number/utoa_dec_simple<u32>
   else
    local.get $0
@@ -442,39 +442,42 @@
    i64.const 1000000000000000
    i64.lt_u
    select
-   local.tee $2
+   local.tee $1
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/stub/__new
-   local.tee $4
-   local.set $3
+   local.tee $3
+   local.set $2
    loop $do-continue|0
-    local.get $0
-    i64.const 10
-    i64.div_u
-    local.get $3
-    local.get $2
-    i32.const 1
-    i32.sub
-    local.tee $2
-    i32.const 1
-    i32.shl
-    i32.add
     local.get $0
     i64.const 10
     i64.rem_u
     i32.wrap_i64
+    local.set $4
+    local.get $0
+    i64.const 10
+    i64.div_u
+    local.set $0
+    local.get $2
+    local.get $1
+    i32.const 1
+    i32.sub
+    local.tee $1
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $4
     i32.const 48
     i32.add
     i32.store16
-    local.tee $0
+    local.get $0
     i64.const 0
     i64.ne
     br_if $do-continue|0
    end
   end
-  local.get $4
+  local.get $3
  )
  (func $resolve-access/arrayAccess (result i32)
   (local $0 i32)

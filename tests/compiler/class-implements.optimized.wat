@@ -109,8 +109,8 @@
  (func $~start
   i32.const 1100
   global.set $~lib/rt/stub/offset
-  i32.const 0
-  call $class-implements/A#constructor
+  i32.const 3
+  call $~lib/rt/stub/__new
   drop
   i32.const 5
   call $~lib/rt/stub/__new

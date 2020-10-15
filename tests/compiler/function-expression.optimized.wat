@@ -1,7 +1,7 @@
 (module
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -41,13 +41,6 @@
   local.get $0
   local.get $1
   i32.add
- )
- (func $function-expression/testOmitted (param $0 i32) (result i32)
-  i32.const 1
-  i32.const 2
-  local.get $0
-  i32.load
-  call_indirect (type $i32_i32_=>_i32)
  )
  (func $start:function-expression~anonymous|4 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -116,8 +109,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  i32.const 2
   i32.const 1248
-  call $function-expression/testOmitted
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if
@@ -128,8 +124,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  i32.const 2
   i32.const 1280
-  call $function-expression/testOmitted
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
   i32.const 1
   i32.ne
   if
@@ -140,8 +139,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  i32.const 2
   i32.const 1312
-  call $function-expression/testOmitted
+  i32.load
+  call_indirect (type $i32_i32_=>_i32)
   i32.const 42
   i32.ne
   if
