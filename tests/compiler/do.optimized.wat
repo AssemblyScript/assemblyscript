@@ -1,11 +1,11 @@
 (module
  (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1024) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00d\00o\00.\00t\00s")
@@ -964,15 +964,10 @@
   end
   local.get $1
  )
- (func $do/Ref#constructor (result i32)
-  (local $0 i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  local.tee $0
+  local.get $0
   i32.const 1216
   i32.gt_u
   if
@@ -1247,7 +1242,11 @@
   global.set $do/ran
   i32.const 0
   global.set $do/ran
-  call $do/Ref#constructor
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   local.set $1
   loop $do-continue|05
    local.get $2
@@ -1265,7 +1264,11 @@
      call $~lib/rt/pure/__release
     end
    else
-    call $do/Ref#constructor
+    call $~lib/rt/tlsf/maybeInitialize
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
+    call $~lib/rt/pure/__retain
     local.set $0
     local.get $1
     call $~lib/rt/pure/__release
@@ -1312,7 +1315,11 @@
   global.set $do/ran
   i32.const 0
   local.set $2
-  call $do/Ref#constructor
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   local.set $1
   loop $do-continue|06
    block $do-break|0
@@ -1332,7 +1339,11 @@
      local.set $1
      br $do-break|0
     end
-    call $do/Ref#constructor
+    call $~lib/rt/tlsf/maybeInitialize
+    call $~lib/rt/tlsf/allocateBlock
+    i32.const 16
+    i32.add
+    call $~lib/rt/pure/__retain
     local.tee $0
     call $~lib/rt/pure/__release
     local.get $0

@@ -1126,8 +1126,8 @@ function builtin_popcnt(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (type.isValue) {
     switch (compiler.currentType.kind) {
-      case TypeKind.BOOL: // not wrapped
-      case TypeKind.I8:
+      case TypeKind.BOOL: return arg0;
+      case TypeKind.I8: // not wrapped
       case TypeKind.U8:
       case TypeKind.I16:
       case TypeKind.U16:
@@ -1171,14 +1171,27 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
   if (type.isValue) {
     let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
     switch (type.kind) {
+      case TypeKind.BOOL: return arg0;
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        return compiler.ensureSmallIntegerWrap(
-          module.binary(BinaryOp.RotlI32, arg0, arg1),
-          type
+      case TypeKind.U16: {
+        // (value << (shift & mask)) | (value >>> ((0 - shift) & mask))
+        return module.binary(BinaryOp.OrI32,
+          module.binary(
+            BinaryOp.ShlI32,
+            arg0,
+            module.binary(BinaryOp.AndI32, arg1, module.i32(type.size - 1))
+          ),
+          module.binary(
+            BinaryOp.ShrU32,
+            arg0,
+            module.binary(
+              BinaryOp.AndI32,
+              module.binary(BinaryOp.SubI32, module.i32(0), arg1),
+              module.i32(type.size - 1)
+            )
+          )
         );
       }
       case TypeKind.I32:
@@ -1221,14 +1234,27 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
   if (type.isValue) {
     let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
     switch (type.kind) {
+      case TypeKind.BOOL: return arg0;
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        return compiler.ensureSmallIntegerWrap(
-          module.binary(BinaryOp.RotrI32, arg0, arg1),
-          type
+      case TypeKind.U16: {
+        // (value >>> (shift & mask)) | (value << ((0 - shift) & mask))
+        return module.binary(BinaryOp.OrI32,
+          module.binary(
+            BinaryOp.ShrU32,
+            arg0,
+            module.binary(BinaryOp.AndI32, arg1, module.i32(type.size - 1))
+          ),
+          module.binary(
+            BinaryOp.ShlI32,
+            arg0,
+            module.binary(
+              BinaryOp.AndI32,
+              module.binary(BinaryOp.SubI32, module.i32(0), arg1),
+              module.i32(type.size - 1)
+            )
+          )
         );
       }
       case TypeKind.I32:
@@ -2914,7 +2940,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.EXTERNREF:
       case TypeKind.EXNREF:
       case TypeKind.ANYREF: return module.if(module.ref_is_null(arg0), abort);
-          
+
     }
   } else {
     compiler.currentType = type.nonNullableType;

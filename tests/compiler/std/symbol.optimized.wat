@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
@@ -327,14 +327,6 @@
   call $~lib/memory/memory.fill
   local.get $1
  )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
- )
  (func $~lib/util/hash/hashStr (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -344,7 +336,11 @@
   local.get $0
   if
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.const 1
    i32.shl
    local.set $3
@@ -353,11 +349,11 @@
     local.get $3
     i32.lt_u
     if
+     local.get $1
      local.get $0
      local.get $2
      i32.add
      i32.load8_u
-     local.get $1
      i32.xor
      i32.const 16777619
      i32.mul
@@ -465,10 +461,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -532,24 +536,24 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $3
+  local.tee $5
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $5
-  local.get $3
+  local.set $4
+  local.get $5
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $6
+  local.tee $8
   i32.const 12
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $3
   local.get $0
   i32.load offset=8
-  local.tee $4
+  local.tee $5
   local.get $0
   i32.load offset=16
   i32.const 12
@@ -559,38 +563,38 @@
   local.get $3
   local.set $2
   loop $while-continue|0
-   local.get $4
+   local.get $5
    local.get $7
    i32.ne
    if
-    local.get $4
+    local.get $5
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
      local.get $2
-     local.get $4
+     local.get $5
      i32.load
      i32.store
      local.get $2
-     local.get $4
+     local.get $5
      i32.load offset=4
      i32.store offset=4
      local.get $2
      local.get $4
+     local.get $5
      i32.load
      call $~lib/util/hash/hashStr
      local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $5
      i32.add
-     local.tee $8
+     local.tee $6
      i32.load
      i32.store offset=8
-     local.get $8
+     local.get $6
      local.get $2
      i32.store
      local.get $2
@@ -598,15 +602,18 @@
      i32.add
      local.set $2
     end
-    local.get $4
+    local.get $5
     i32.const 12
     i32.add
-    local.set $4
+    local.set $5
     br $while-continue|0
    end
   end
+  local.get $4
+  local.tee $5
   local.get $0
   i32.load
+  i32.ne
   drop
   local.get $0
   local.get $5
@@ -614,14 +621,17 @@
   local.get $0
   local.get $1
   i32.store offset=4
+  local.get $3
+  local.tee $1
   local.get $0
   i32.load offset=8
+  i32.ne
   drop
   local.get $0
-  local.get $3
+  local.get $1
   i32.store offset=8
   local.get $0
-  local.get $6
+  local.get $8
   i32.store offset=12
   local.get $0
   local.get $0
@@ -798,24 +808,24 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $3
+  local.tee $5
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $5
-  local.get $3
+  local.set $4
+  local.get $5
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $6
+  local.tee $8
   i32.const 12
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $3
   local.get $0
   i32.load offset=8
-  local.tee $4
+  local.tee $5
   local.get $0
   i32.load offset=16
   i32.const 12
@@ -825,38 +835,38 @@
   local.get $3
   local.set $2
   loop $while-continue|0
-   local.get $4
+   local.get $5
    local.get $7
    i32.ne
    if
-    local.get $4
+    local.get $5
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
      local.get $2
-     local.get $4
+     local.get $5
      i32.load
      i32.store
      local.get $2
-     local.get $4
+     local.get $5
      i32.load offset=4
      i32.store offset=4
      local.get $2
      local.get $4
+     local.get $5
      i32.load
      call $~lib/util/hash/hash32
      local.get $1
      i32.and
      i32.const 2
      i32.shl
-     local.get $5
      i32.add
-     local.tee $8
+     local.tee $6
      i32.load
      i32.store offset=8
-     local.get $8
+     local.get $6
      local.get $2
      i32.store
      local.get $2
@@ -864,15 +874,18 @@
      i32.add
      local.set $2
     end
-    local.get $4
+    local.get $5
     i32.const 12
     i32.add
-    local.set $4
+    local.set $5
     br $while-continue|0
    end
   end
+  local.get $4
+  local.tee $5
   local.get $0
   i32.load
+  i32.ne
   drop
   local.get $0
   local.get $5
@@ -880,14 +893,17 @@
   local.get $0
   local.get $1
   i32.store offset=4
+  local.get $3
+  local.tee $1
   local.get $0
   i32.load offset=8
+  i32.ne
   drop
   local.get $0
-  local.get $3
+  local.get $1
   i32.store offset=8
   local.get $0
-  local.get $6
+  local.get $8
   i32.store offset=12
   local.get $0
   local.get $0
@@ -1303,52 +1319,53 @@
    end
   end
  )
- (func $~lib/string/String.__concat (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $__inlined_func$~lib/string/String#concat
-   local.get $0
-   i32.const 1888
-   local.get $0
-   select
-   local.tee $3
-   call $~lib/string/String#get:length
-   i32.const 1
-   i32.shl
-   local.tee $2
-   local.get $1
-   i32.const 1888
-   local.get $1
-   select
-   local.tee $1
-   call $~lib/string/String#get:length
-   i32.const 1
-   i32.shl
-   local.tee $4
-   i32.add
-   local.tee $0
-   i32.eqz
-   if
-    i32.const 1392
-    local.set $0
-    br $__inlined_func$~lib/string/String#concat
-   end
-   local.get $0
-   i32.const 1
-   call $~lib/rt/stub/__alloc
-   local.tee $0
-   local.get $3
-   local.get $2
-   call $~lib/memory/memory.copy
-   local.get $0
-   local.get $2
-   i32.add
-   local.get $1
-   local.get $4
-   call $~lib/memory/memory.copy
-  end
+  local.get $1
+  i32.const 1888
+  local.get $1
+  select
+  local.tee $3
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  i32.shl
+  local.tee $4
   local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  i32.shl
+  local.tee $1
+  i32.add
+  local.tee $2
+  i32.eqz
+  if
+   i32.const 1392
+   return
+  end
+  local.get $2
+  i32.const 1
+  call $~lib/rt/stub/__alloc
+  local.tee $2
+  local.get $0
+  local.get $1
+  call $~lib/memory/memory.copy
+  local.get $1
+  local.get $2
+  i32.add
+  local.get $3
+  local.get $4
+  call $~lib/memory/memory.copy
+  local.get $2
  )
  (func $~lib/symbol/_Symbol#toString (param $0 i32) (result i32)
   i32.const 1856
@@ -1419,13 +1436,16 @@
     i32.const 1392
    end
   end
-  call $~lib/string/String.__concat
+  call $~lib/string/String#concat
+  local.tee $0
+  i32.const 1888
+  local.get $0
+  select
   i32.const 1920
-  call $~lib/string/String.__concat
+  call $~lib/string/String#concat
  )
  (func $start:std/symbol
   (local $0 i32)
-  (local $1 i32)
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
   call $~lib/symbol/Symbol
@@ -1485,7 +1505,6 @@
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol.keyFor
   local.tee $0
-  local.get $0
   i32.eqz
   if
    i32.const 1344
@@ -1495,11 +1514,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
   global.set $std/symbol/key3
   global.get $std/symbol/sym4
   call $~lib/symbol/_Symbol.keyFor
   local.tee $0
-  local.get $0
   i32.eqz
   if
    i32.const 1344
@@ -1509,6 +1528,7 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
   global.set $std/symbol/key4
   global.get $std/symbol/key3
   i32.const 1040
