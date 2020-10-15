@@ -354,15 +354,15 @@ export function utoa32(value: u32, radix: i32): String {
 
   if (radix == 10) {
     let decimals = decimalCount32(value);
-    out = __alloc(decimals << 1, idof<String>());
+    out = __new(decimals << 1, idof<String>());
     utoa32_dec_core(out, value, decimals);
   } else if (radix == 16) {
     let decimals = (31 - clz(value) >> 2) + 1;
-    out = __alloc(decimals << 1, idof<String>());
+    out = __new(decimals << 1, idof<String>());
     utoa32_hex_core(out, value, decimals);
   } else {
     let decimals = ulog_base(value, radix);
-    out = __alloc(decimals << 1, idof<String>());
+    out = __new(decimals << 1, idof<String>());
     utoa64_any_core(out, value, decimals, radix);
   }
   return changetype<String>(out); // retains
@@ -380,16 +380,16 @@ export function itoa32(value: i32, radix: i32): String {
 
   if (radix == 10) {
     let decimals = decimalCount32(value) + sign;
-    out = __alloc(decimals << 1, idof<String>());
+    out = __new(decimals << 1, idof<String>());
     utoa32_dec_core(out, value, decimals);
   } else if (radix == 16) {
     let decimals = (31 - clz(value) >> 2) + 1 + sign;
-    out = __alloc(decimals << 1, idof<String>());
+    out = __new(decimals << 1, idof<String>());
     utoa32_hex_core(out, value, decimals);
   } else {
     let val32 = u32(value);
     let decimals = ulog_base(val32, radix) + sign;
-    out = __alloc(decimals << 1, idof<String>());
+    out = __new(decimals << 1, idof<String>());
     utoa64_any_core(out, val32, decimals, radix);
   }
   if (sign) store<u16>(out, CharCode.MINUS);
@@ -407,20 +407,20 @@ export function utoa64(value: u64, radix: i32): String {
     if (value <= u32.MAX_VALUE) {
       let val32    = <u32>value;
       let decimals = decimalCount32(val32);
-      out = __alloc(decimals << 1, idof<String>());
+      out = __new(decimals << 1, idof<String>());
       utoa32_dec_core(out, val32, decimals);
     } else {
       let decimals = decimalCount64High(value);
-      out = __alloc(decimals << 1, idof<String>());
+      out = __new(decimals << 1, idof<String>());
       utoa64_dec_core(out, value, decimals);
     }
   } else if (radix == 16) {
     let decimals = (63 - u32(clz(value)) >> 2) + 1;
-    out = __alloc(decimals << 1, idof<String>());
+    out = __new(decimals << 1, idof<String>());
     utoa64_hex_core(out, value, decimals);
   } else {
     let decimals = ulog_base(value, radix);
-    out = __alloc(decimals << 1, idof<String>());
+    out = __new(decimals << 1, idof<String>());
     utoa64_any_core(out, value, decimals, radix);
   }
   return changetype<String>(out); // retains
@@ -440,20 +440,20 @@ export function itoa64(value: i64, radix: i32): String {
     if (<u64>value <= <u64>u32.MAX_VALUE) {
       let val32    = <u32>value;
       let decimals = decimalCount32(val32) + sign;
-      out = __alloc(decimals << 1, idof<String>());
+      out = __new(decimals << 1, idof<String>());
       utoa32_dec_core(out, val32, decimals);
     } else {
       let decimals = decimalCount64High(value) + sign;
-      out = __alloc(decimals << 1, idof<String>());
+      out = __new(decimals << 1, idof<String>());
       utoa64_dec_core(out, value, decimals);
     }
   } else if (radix == 16) {
     let decimals = (63 - u32(clz(value)) >> 2) + 1 + sign;
-    out = __alloc(decimals << 1, idof<String>());
+    out = __new(decimals << 1, idof<String>());
     utoa64_hex_core(out, value, decimals);
   } else {
     let decimals = ulog_base(value, radix) + sign;
-    out = __alloc(decimals << 1, idof<String>());
+    out = __new(decimals << 1, idof<String>());
     utoa64_any_core(out, value, decimals, radix);
   }
   if (sign) store<u16>(out, CharCode.MINUS);
@@ -728,18 +728,19 @@ function dtoa_core(buffer: usize, value: f64): i32 {
   return len + sign;
 }
 
+// @ts-ignore: decorator
+@lazy @inline const dtoa_buf = memory.data(MAX_DOUBLE_LENGTH << 1);
+
 export function dtoa(value: f64): String {
   if (value == 0) return "0.0";
   if (!isFinite(value)) {
     if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
-  var buffer = __alloc(MAX_DOUBLE_LENGTH << 1, idof<String>());
-  var length = dtoa_core(buffer, value);
-  if (length == MAX_DOUBLE_LENGTH) return changetype<String>(buffer);
-  var result = changetype<String>(buffer).substring(0, length);
-  __free(buffer);
-  return result;
+  var size = dtoa_core(dtoa_buf, value) << 1;
+  var result = __new(size, idof<String>());
+  memory.copy(result, dtoa_buf, size);
+  return changetype<String>(result);
 }
 
 export function itoa_buffered<T extends number>(buffer: usize, value: T): u32 {

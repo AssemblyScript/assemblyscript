@@ -4,7 +4,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1024) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s")
+ (data (i32.const 1036) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s")
  (global $std/pointer/one (mut i32) (i32.const 0))
  (global $std/pointer/two (mut i32) (i32.const 0))
  (global $std/pointer/add (mut i32) (i32.const 0))
@@ -206,7 +206,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 83
    i32.const 1
    call $~lib/builtins/abort
@@ -218,7 +218,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 84
    i32.const 1
    call $~lib/builtins/abort
@@ -233,7 +233,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 87
    i32.const 1
    call $~lib/builtins/abort
@@ -248,7 +248,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 90
    i32.const 1
    call $~lib/builtins/abort
@@ -259,7 +259,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 92
    i32.const 1
    call $~lib/builtins/abort
@@ -276,7 +276,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 94
    i32.const 1
    call $~lib/builtins/abort
@@ -287,7 +287,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 95
    i32.const 1
    call $~lib/builtins/abort
@@ -298,7 +298,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 97
    i32.const 1
    call $~lib/builtins/abort
@@ -317,7 +317,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 100
    i32.const 1
    call $~lib/builtins/abort
@@ -329,7 +329,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 101
    i32.const 1
    call $~lib/builtins/abort
@@ -341,7 +341,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 102
    i32.const 1
    call $~lib/builtins/abort
@@ -388,7 +388,7 @@
   i32.eq
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 105
    i32.const 1
    call $~lib/builtins/abort
@@ -400,7 +400,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 106
    i32.const 1
    call $~lib/builtins/abort
@@ -412,7 +412,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 107
    i32.const 1
    call $~lib/builtins/abort
@@ -432,7 +432,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 113
    i32.const 1
    call $~lib/builtins/abort
@@ -444,7 +444,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 114
    i32.const 1
    call $~lib/builtins/abort
@@ -456,7 +456,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 116
    i32.const 1
    call $~lib/builtins/abort
@@ -468,7 +468,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 117
    i32.const 1
    call $~lib/builtins/abort
@@ -480,7 +480,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 119
    i32.const 1
    call $~lib/builtins/abort
@@ -492,7 +492,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 120
    i32.const 1
    call $~lib/builtins/abort
@@ -507,7 +507,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 123
    i32.const 1
    call $~lib/builtins/abort
@@ -519,7 +519,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 124
    i32.const 1
    call $~lib/builtins/abort
@@ -531,7 +531,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 125
    i32.const 1
    call $~lib/builtins/abort
@@ -546,7 +546,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 128
    i32.const 1
    call $~lib/builtins/abort
@@ -558,7 +558,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 129
    i32.const 1
    call $~lib/builtins/abort

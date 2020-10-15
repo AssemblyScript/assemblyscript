@@ -229,14 +229,18 @@ export namespace CommonNames {
   export const alloc = "__alloc";
   export const realloc = "__realloc";
   export const free = "__free";
+  export const new_ = "__new";
+  export const renew = "__renew";
   export const retain = "__retain";
   export const release = "__release";
   export const collect = "__collect";
   export const typeinfo = "__typeinfo";
   export const instanceof_ = "__instanceof";
   export const visit = "__visit";
-  export const allocBuffer = "__allocBuffer";
-  export const allocArray = "__allocArray";
+  export const newBuffer = "__newBuffer";
+  export const newArray = "__newArray";
+  export const BLOCK = "~lib/rt/common/BLOCK";
+  export const OBJECT = "~lib/rt/common/OBJECT";
 }
 
 // shared

@@ -6,7 +6,9 @@ The runtime provides the functionality necessary to dynamically allocate and dea
 Interface
 ---------
 
-* **__alloc**(size: `usize`, id: `u32` = 0): `usize`<br />
+### Memory manager
+
+* **__alloc**(size: `usize`): `usize`<br />
   Dynamically allocates a chunk of memory of at least the specified size and returns its address.
   Alignment is guaranteed to be 16 bytes to fit up to v128 values naturally.
 
@@ -15,6 +17,16 @@ Interface
 
 * **__free**(ref: `usize`): `void`<br />
   Frees a dynamically allocated chunk of memory by its address.
+
+### Garbage collector
+
+* **__new**(size: `usize`, id: `u32` = 0): `usize`<br />
+  Dynamically allocates a GC object of at least the specified size and returns its address.
+  Alignment is guaranteed to be 16 bytes to fit up to v128 values naturally.
+  GC-allocated objects cannot be used with `__realloc` and `__free`.
+
+* **__renew**(ptr: `usize`, size: `usize`): `usize`<br />
+  Like `__realloc`, but for `__new`ed GC objects.
 
 * **__retain**(ref: `usize`): `usize`<br />
   Retains a reference to an object. The object doesn't become collected as long as there's at least one retained reference. Returns the retained reference.
@@ -65,7 +77,7 @@ The underlying reference counting implementation works very similar to other imp
 
 Differences to other implementations include:
 
-* A new object from `__alloc` doesn't start with a reference count of 1, but 0.
+* A new object from `__new` doesn't start with a reference count of 1, but 0.
 * When an object is returned from a function, it remains at RC + 1 and the caller is expected to release it.
 * Functions with reference type arguments retain each such argument when called, and release it again when exited. This can't be counted on, however, because the compiler may decide to eliminate these where unnecessary.
 * Getters, setters, operator overloads and constructors are function calls and behave like one.
@@ -78,7 +90,7 @@ Even though the rules are simple, working with the runtime internals within stan
 **GOOD:** In case of doubt, the following pattern is universal:
 
 ```ts
-var ref = changetype<Ref>(__alloc(SIZE, idof<Ref>())); // assignment retains, RC=1
+var ref = changetype<Ref>(__new(SIZE, idof<Ref>())); // assignment retains, RC=1
 // ... safe ...
 return ref; // knows `ref` is already retained and simply returns it
 ```
@@ -86,7 +98,7 @@ return ref; // knows `ref` is already retained and simply returns it
 **BAD:** A pattern one shouldn't use is:
 
 ```ts
-var ptr = __alloc(SIZE, idof<Ref>()); // RC=0
+var ptr = __new(SIZE, idof<Ref>()); // RC=0
 // ... not safe while RC=0 ... e.g.:
 someFunc(changetype<Ref>(ptr)); // might, or might not, free the object!
 ```

@@ -9,13 +9,13 @@
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00i\00n\00f\00e\00r\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s\00")
- (data (i32.const 64) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
- (data (i32.const 96) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00P\00\00\00P\00\00\00\0c\00\00\00\03\00\00\00")
- (data (i32.const 128) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 12) " \00\00\00\01\00\00\00\00\00\00\00\01\00\00\00 \00\00\00i\00n\00f\00e\00r\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s\00")
+ (data (i32.const 76) "\0c\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
+ (data (i32.const 108) "\10\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\10\00\00\00`\00\00\00`\00\00\00\0c\00\00\00\03\00\00\00")
+ (data (i32.const 156) "\08\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
  (table $0 2 funcref)
  (elem (i32.const 1) $start:infer-generic~anonymous|0)
- (global $infer-generic/arr i32 (i32.const 112))
+ (global $infer-generic/arr i32 (i32.const 128))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
@@ -128,7 +128,7 @@
    unreachable
   end
   global.get $infer-generic/arr
-  i32.const 144
+  i32.const 176
   i32.const 0
   call $~lib/array/Array<f32>#reduce<bool>
   drop

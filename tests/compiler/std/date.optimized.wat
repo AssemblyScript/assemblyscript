@@ -7,7 +7,7 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
  (memory $0 1)
- (data (i32.const 1024) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
+ (data (i32.const 1036) "\16\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
  (global $std/date/creationTime (mut i64) (i64.const 0))
  (global $std/date/date (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -29,7 +29,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -48,7 +48,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 2
    i32.const 1
    call $~lib/builtins/abort
@@ -69,7 +69,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 5
    i32.const 1
    call $~lib/builtins/abort
@@ -81,7 +81,7 @@
   i64.le_s
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 7
    i32.const 1
    call $~lib/builtins/abort
@@ -89,16 +89,22 @@
   end
   global.get $std/date/creationTime
   local.set $2
-  i32.const 1104
+  i32.const 1116
   memory.size
   local.tee $1
   i32.const 16
   i32.shl
+  i32.const 19
+  i32.add
+  i32.const -16
+  i32.and
+  i32.const 4
+  i32.sub
   local.tee $0
   i32.gt_u
   if
    local.get $1
-   i32.const 66639
+   i32.const 66651
    local.get $0
    i32.sub
    i32.const -65536
@@ -123,33 +129,36 @@
     end
    end
   end
-  i32.const 1072
-  i32.const 16
+  i32.const 1084
+  i32.const 28
   i32.store
-  i32.const 1076
-  i32.const 1
+  i32.const 1088
+  i32.const 0
   i32.store
-  i32.const 1080
+  i32.const 1092
+  i32.const 0
+  i32.store
+  i32.const 1096
   i32.const 3
   i32.store
-  i32.const 1084
+  i32.const 1100
   i32.const 8
   i32.store
-  i32.const 1088
+  i32.const 1104
   i64.const 0
   i64.store
-  i32.const 1088
+  i32.const 1104
   local.get $2
   i64.store
-  i32.const 1088
+  i32.const 1104
   global.set $std/date/date
   global.get $std/date/creationTime
-  i32.const 1088
+  i32.const 1104
   i64.load
   i64.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 10
    i32.const 1
    call $~lib/builtins/abort
@@ -168,7 +177,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 12
    i32.const 1
    call $~lib/builtins/abort

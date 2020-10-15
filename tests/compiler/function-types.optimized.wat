@@ -7,11 +7,11 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1024) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\01")
- (data (i32.const 1056) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00t\00y\00p\00e\00s\00.\00t\00s")
- (data (i32.const 1120) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\02")
- (data (i32.const 1152) "\08\00\00\00\01\00\00\00\05\00\00\00\08\00\00\00\03")
- (data (i32.const 1184) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\04")
+ (data (i32.const 1036) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01")
+ (data (i32.const 1068) "\"\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\"\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00t\00y\00p\00e\00s\00.\00t\00s")
+ (data (i32.const 1132) "\08\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\02")
+ (data (i32.const 1164) "\08\00\00\00\01\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\03")
+ (data (i32.const 1196) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\04")
  (table $0 5 funcref)
  (elem (i32.const 1) $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|0 $function-types/makeAdder<f64>~anonymous|0 $function-types/makeAdder<i32>~anonymous|0)
  (global $function-types/i32Adder (mut i32) (i32.const 0))
@@ -40,18 +40,18 @@
   call_indirect (type $i32_i32_=>_i32)
  )
  (func $start:function-types
-  i32.const 1040
+  i32.const 1056
   global.set $function-types/i32Adder
   i32.const 1
   i32.const 2
-  i32.const 1040
+  i32.const 1056
   i32.load
   call_indirect (type $i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if
    i32.const 0
-   i32.const 1072
+   i32.const 1088
    i32.const 11
    i32.const 1
    call $~lib/builtins/abort
@@ -59,14 +59,14 @@
   end
   i64.const 10
   i64.const 20
-  i32.const 1136
+  i32.const 1152
   i32.load
   call_indirect (type $i64_i64_=>_i64)
   i64.const 30
   i64.ne
   if
    i32.const 0
-   i32.const 1072
+   i32.const 1088
    i32.const 15
    i32.const 1
    call $~lib/builtins/abort
@@ -74,14 +74,14 @@
   end
   f64.const 1.5
   f64.const 2.5
-  i32.const 1168
+  i32.const 1184
   i32.load
   call_indirect (type $f64_f64_=>_f64)
   f64.const 4
   f64.ne
   if
    i32.const 0
-   i32.const 1072
+   i32.const 1088
    i32.const 17
    i32.const 1
    call $~lib/builtins/abort
@@ -95,7 +95,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1072
+   i32.const 1088
    i32.const 23
    i32.const 1
    call $~lib/builtins/abort
@@ -103,14 +103,14 @@
   end
   i32.const 3
   i32.const 4
-  i32.const 1040
+  i32.const 1056
   i32.load
   call_indirect (type $i32_i32_=>_i32)
   i32.const 7
   i32.ne
   if
    i32.const 0
-   i32.const 1072
+   i32.const 1088
    i32.const 29
    i32.const 1
    call $~lib/builtins/abort
@@ -118,13 +118,13 @@
   end
   i32.const 4
   i32.const 5
-  i32.const 1200
+  i32.const 1216
   call $function-types/doAddWithFn<i32>
   i32.const 9
   i32.ne
   if
    i32.const 0
-   i32.const 1072
+   i32.const 1088
    i32.const 35
    i32.const 1
    call $~lib/builtins/abort
@@ -132,13 +132,13 @@
   end
   i32.const 1
   i32.const 2
-  i32.const 1040
+  i32.const 1056
   call $function-types/doAddWithFn<i32>
   i32.const 3
   i32.ne
   if
    i32.const 0
-   i32.const 1072
+   i32.const 1088
    i32.const 41
    i32.const 1
    call $~lib/builtins/abort
@@ -146,13 +146,13 @@
   end
   i32.const 1
   i32.const 2
-  i32.const 1040
+  i32.const 1056
   call $function-types/doAddWithFn<i32>
   i32.const 3
   i32.ne
   if
    i32.const 0
-   i32.const 1072
+   i32.const 1088
    i32.const 42
    i32.const 1
    call $~lib/builtins/abort

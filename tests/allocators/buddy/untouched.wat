@@ -9,9 +9,9 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00N\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d\00")
- (data (i32.const 64) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s\00")
- (data (i32.const 112) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00b\00u\00d\00d\00y\00.\00t\00s\00")
+ (data (i32.const 12) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00N\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d\00")
+ (data (i32.const 76) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s\00")
+ (data (i32.const 124) "\"\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\"\00\00\00a\00s\00s\00e\00m\00b\00l\00y\00/\00b\00u\00d\00d\00y\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $assembly/buddy/HEADER_SIZE i32 (i32.const 8))
  (global $assembly/buddy/MIN_ALLOC_LOG2 i32 (i32.const 4))
@@ -29,17 +29,16 @@
  (global $assembly/buddy/base_ptr (mut i32) (i32.const 0))
  (global $assembly/buddy/max_ptr (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 164))
+ (global $~lib/heap/__heap_base i32 (i32.const 180))
  (export "memory" (memory $0))
- (export "memory.copy" (func $~lib/memory/memory.copy))
  (export "memory.init" (func $~lib/memory/memory.init))
  (export "memory.drop" (func $~lib/memory/memory.drop))
  (export "memory.repeat" (func $~lib/memory/memory.repeat))
  (export "memory.compare" (func $~lib/memory/memory.compare))
  (export "__alloc" (func $assembly/buddy/__mem_allocate))
  (export "__free" (func $assembly/buddy/__mem_free))
- (start $start)
- (func $start:assembly/buddy (; 1 ;)
+ (start $~start)
+ (func $start:assembly/buddy
   global.get $~lib/heap/__heap_base
   global.set $assembly/buddy/BUCKETS_START
   global.get $assembly/buddy/BUCKETS_START
@@ -57,26 +56,26 @@
   i32.add
   global.set $assembly/buddy/NODE_IS_SPLIT_END
  )
- (func $start:assembly/index (; 2 ;)
+ (func $start:assembly/index
   call $start:assembly/buddy
  )
- (func $~lib/memory/memory.init (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/memory/memory.init (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   i32.const 32
-  i32.const 80
+  i32.const 96
   i32.const 35
-  i32.const 4
+  i32.const 5
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/memory/memory.drop (; 4 ;) (param $0 i32)
+ (func $~lib/memory/memory.drop (param $0 i32)
   i32.const 32
-  i32.const 80
+  i32.const 96
   i32.const 42
-  i32.const 4
+  i32.const 5
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/util/memory/memcpy (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1100,7 +1099,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 6 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1119,20 +1118,21 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
+   i32.const 0
+   i32.const 1
+   i32.lt_s
+   drop
    local.get $4
-   local.get $3
-   i32.add
    local.get $5
+   i32.sub
+   local.get $3
+   i32.sub
+   i32.const 0
+   local.get $3
+   i32.const 1
+   i32.shl
+   i32.sub
    i32.le_u
-   if (result i32)
-    i32.const 1
-   else
-    local.get $5
-    local.get $3
-    i32.add
-    local.get $4
-    i32.le_u
-   end
    if
     local.get $5
     local.get $4
@@ -1144,6 +1144,10 @@
    local.get $4
    i32.lt_u
    if
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -1239,6 +1243,10 @@
      end
     end
    else
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -1320,7 +1328,7 @@
    end
   end
  )
- (func $~lib/memory/memory.repeat (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/memory/memory.repeat (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1351,7 +1359,7 @@
    end
   end
  )
- (func $~lib/memory/memory.compare (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/memory/memory.compare (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1374,6 +1382,10 @@
     i32.const 0
     br $~lib/util/memory/memcmp|inlined.0
    end
+   i32.const 0
+   i32.const 2
+   i32.lt_s
+   drop
    local.get $5
    i32.const 7
    i32.and
@@ -1497,7 +1509,7 @@
    i32.const 0
   end
  )
- (func $assembly/buddy/update_max_ptr (; 9 ;) (param $0 i32) (result i32)
+ (func $assembly/buddy/update_max_ptr (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1522,9 +1534,9 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 128
+    i32.const 144
     i32.const 176
-    i32.const 4
+    i32.const 5
     call $~lib/builtins/abort
     unreachable
    end
@@ -1545,16 +1557,16 @@
   end
   i32.const 1
  )
- (func $assembly/buddy/buckets$get (; 10 ;) (param $0 i32) (result i32)
+ (func $assembly/buddy/buckets$get (param $0 i32) (result i32)
   local.get $0
-  i32.const 27
+  global.get $assembly/buddy/BUCKET_COUNT
   i32.lt_u
   i32.eqz
   if
    i32.const 0
-   i32.const 128
+   i32.const 144
    i32.const 96
-   i32.const 2
+   i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
@@ -1564,7 +1576,7 @@
   i32.mul
   i32.add
  )
- (func $assembly/buddy/list_init (; 11 ;) (param $0 i32)
+ (func $assembly/buddy/list_init (param $0 i32)
   local.get $0
   local.get $0
   i32.store
@@ -1572,7 +1584,7 @@
   local.get $0
   i32.store offset=4
  )
- (func $assembly/buddy/list_push (; 12 ;) (param $0 i32) (param $1 i32)
+ (func $assembly/buddy/list_push (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -1590,7 +1602,7 @@
   local.get $1
   i32.store
  )
- (func $assembly/buddy/bucket_for_request (; 13 ;) (param $0 i32) (result i32)
+ (func $assembly/buddy/bucket_for_request (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1620,7 +1632,7 @@
   end
   local.get $1
  )
- (func $assembly/buddy/node_for_ptr (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/buddy/node_for_ptr (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   global.get $assembly/buddy/base_ptr
   i32.sub
@@ -1635,16 +1647,16 @@
   i32.const 1
   i32.sub
  )
- (func $assembly/buddy/node_is_split$get (; 15 ;) (param $0 i32) (result i32)
+ (func $assembly/buddy/node_is_split$get (param $0 i32) (result i32)
   local.get $0
-  i32.const 8388608
+  global.get $assembly/buddy/SPLIT_COUNT
   i32.lt_u
   i32.eqz
   if
    i32.const 0
-   i32.const 128
+   i32.const 144
    i32.const 142
-   i32.const 2
+   i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
@@ -1653,7 +1665,7 @@
   i32.add
   i32.load8_u
  )
- (func $assembly/buddy/parent_is_split (; 16 ;) (param $0 i32) (result i32)
+ (func $assembly/buddy/parent_is_split (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.sub
@@ -1673,7 +1685,7 @@
   i32.const 1
   i32.eq
  )
- (func $assembly/buddy/list_remove (; 17 ;) (param $0 i32)
+ (func $assembly/buddy/list_remove (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1689,7 +1701,7 @@
   local.get $1
   i32.store
  )
- (func $assembly/buddy/ptr_for_node (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/buddy/ptr_for_node (param $0 i32) (param $1 i32) (result i32)
   global.get $assembly/buddy/base_ptr
   local.get $0
   i32.const 1
@@ -1704,16 +1716,16 @@
   i32.shl
   i32.add
  )
- (func $assembly/buddy/node_is_split$set (; 19 ;) (param $0 i32) (param $1 i32)
+ (func $assembly/buddy/node_is_split$set (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 8388608
+  global.get $assembly/buddy/SPLIT_COUNT
   i32.lt_u
   i32.eqz
   if
    i32.const 0
-   i32.const 128
+   i32.const 144
    i32.const 147
-   i32.const 2
+   i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
@@ -1723,7 +1735,7 @@
   local.get $1
   i32.store8
  )
- (func $assembly/buddy/flip_parent_is_split (; 20 ;) (param $0 i32)
+ (func $assembly/buddy/flip_parent_is_split (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 1
@@ -1746,7 +1758,7 @@
   i32.xor
   call $assembly/buddy/node_is_split$set
  )
- (func $assembly/buddy/lower_bucket_limit (; 21 ;) (param $0 i32) (result i32)
+ (func $assembly/buddy/lower_bucket_limit (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1787,7 +1799,7 @@
     call $assembly/buddy/ptr_for_node
     local.set $3
     local.get $3
-    i32.const 8
+    global.get $assembly/buddy/List.SIZE
     i32.add
     call $assembly/buddy/update_max_ptr
     i32.eqz
@@ -1824,7 +1836,7 @@
   end
   i32.const 1
  )
- (func $assembly/buddy/list_pop (; 22 ;) (param $0 i32) (result i32)
+ (func $assembly/buddy/list_pop (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.load
@@ -1840,7 +1852,7 @@
   call $assembly/buddy/list_remove
   local.get $1
  )
- (func $assembly/buddy/__mem_allocate (; 23 ;) (param $0 i32) (result i32)
+ (func $assembly/buddy/__mem_allocate (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1850,7 +1862,9 @@
   (local $7 i32)
   (local $8 i32)
   local.get $0
-  i32.const 1073741816
+  global.get $assembly/buddy/MAX_ALLOC
+  global.get $assembly/buddy/HEADER_SIZE
+  i32.sub
   i32.gt_u
   if
    unreachable
@@ -1876,7 +1890,7 @@
    i32.sub
    global.set $assembly/buddy/bucket_limit
    global.get $assembly/buddy/base_ptr
-   i32.const 8
+   global.get $assembly/buddy/List.SIZE
    i32.add
    call $assembly/buddy/update_max_ptr
    i32.eqz
@@ -2041,7 +2055,7 @@
   end
   i32.const 0
  )
- (func $assembly/buddy/__mem_free (; 24 ;) (param $0 i32)
+ (func $assembly/buddy/__mem_free (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2117,7 +2131,7 @@
   call $assembly/buddy/ptr_for_node
   call $assembly/buddy/list_push
  )
- (func $start (; 25 ;)
+ (func $~start
   call $start:assembly/index
  )
 )

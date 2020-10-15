@@ -1,6 +1,6 @@
 /// <reference path="./rt/index.d.ts" />
 
-import { BLOCK, BLOCK_MAXSIZE, BLOCK_OVERHEAD } from "./rt/common";
+import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { idof } from "./builtins";
 import { Array } from "./array";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
@@ -19,7 +19,7 @@ export class StaticArray<T> {
   static fromArray<T>(source: Array<T>): StaticArray<T> {
     var length = source.length;
     var outSize = <usize>length << alignof<T>();
-    var out = __alloc(outSize, idof<StaticArray<T>>());
+    var out = __new(outSize, idof<StaticArray<T>>());
     if (isManaged<T>()) {
       let sourcePtr = source.dataStart;
       for (let i = 0; i < length; ++i) {
@@ -37,7 +37,7 @@ export class StaticArray<T> {
     var otherLen = select(0, other.length, other === null);
     var outLen = sourceLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
-    var out = changetype<StaticArray<T>>(__alloc(<usize>outLen << alignof<T>(), idof<StaticArray<T>>())); // retains
+    var out = changetype<StaticArray<T>>(__new(<usize>outLen << alignof<T>(), idof<StaticArray<T>>())); // retains
     var outStart = changetype<usize>(out);
     var sourceSize = <usize>sourceLen << alignof<T>();
     if (isManaged<T>()) {
@@ -64,7 +64,7 @@ export class StaticArray<T> {
     end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
     length = max(end - start, 0);
     var sliceSize = <usize>length << alignof<T>();
-    var slice = changetype<StaticArray<T>>(__alloc(sliceSize, idof<StaticArray<T>>())); // retains
+    var slice = changetype<StaticArray<T>>(__new(sliceSize, idof<StaticArray<T>>())); // retains
     var sourcePtr = changetype<usize>(source) + (<usize>start << alignof<T>());
     if (isManaged<T>()) {
       let off: usize = 0;
@@ -82,13 +82,13 @@ export class StaticArray<T> {
   constructor(length: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     var outSize = <usize>length << alignof<T>();
-    var out = __alloc(outSize, idof<StaticArray<T>>());
+    var out = __new(outSize, idof<StaticArray<T>>());
     memory.fill(out, 0, outSize);
     return changetype<StaticArray<T>>(out); // retains
   }
 
   get length(): i32 {
-    return changetype<BLOCK>(changetype<usize>(this) - BLOCK_OVERHEAD).rtSize >>> alignof<T>();
+    return changetype<OBJECT>(changetype<usize>(this) - TOTAL_OVERHEAD).rtSize >>> alignof<T>();
   }
 
   @operator("[]") private __get(index: i32): T {
@@ -169,7 +169,7 @@ export class StaticArray<T> {
     var otherLen = select(0, other.length, other === null);
     var outLen = thisLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
-    var out = changetype<Array<T>>(__allocArray(outLen, alignof<T>(), idof<Array<T>>())); // retains
+    var out = changetype<Array<T>>(__newArray(outLen, alignof<T>(), idof<Array<T>>())); // retains
     var outStart = out.dataStart;
     var thisSize = <usize>thisLen << alignof<T>();
     if (isManaged<T>()) {
@@ -197,7 +197,7 @@ export class StaticArray<T> {
     start = start < 0 ? max(start + length, 0) : min(start, length);
     end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
     length = max(end - start, 0);
-    var slice = changetype<Array<T>>(__allocArray(length, alignof<T>(), idof<Array<T>>())); // retains
+    var slice = changetype<Array<T>>(__newArray(length, alignof<T>(), idof<Array<T>>())); // retains
     var sliceBase = slice.dataStart;
     var thisBase = changetype<usize>(this) + (<usize>start << alignof<T>());
     if (isManaged<T>()) {
@@ -235,7 +235,7 @@ export class StaticArray<T> {
   @unsafe private __visit_impl(cookie: u32): void {
     if (isManaged<T>()) {
       let cur = changetype<usize>(this);
-      let end = cur + changetype<BLOCK>(changetype<usize>(this) - BLOCK_OVERHEAD).rtSize;
+      let end = cur + changetype<OBJECT>(changetype<usize>(this) - TOTAL_OVERHEAD).rtSize;
       while (cur < end) {
         let val = load<usize>(cur);
         if (val) __visit(val, cookie);

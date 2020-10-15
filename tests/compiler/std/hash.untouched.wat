@@ -4,10 +4,10 @@
  (type $i32_=>_none (func (param i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (memory $0 1)
- (data (i32.const 16) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
- (data (i32.const 32) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a\00")
- (data (i32.const 64) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00a\00b\00")
- (data (i32.const 96) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
+ (data (i32.const 12) "\00\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 44) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a\00")
+ (data (i32.const 76) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00a\00b\00")
+ (data (i32.const 108) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
@@ -16,9 +16,9 @@
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
-  i32.const 16
+  i32.const 20
   i32.sub
-  i32.load offset=12
+  i32.load offset=16
   i32.const 1
   i32.shr_u
  )
@@ -246,7 +246,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.1 (result i32)
-   i32.const 48
+   i32.const 64
    local.set $0
    i32.const 1
    drop
@@ -261,7 +261,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.2 (result i32)
-   i32.const 80
+   i32.const 96
    local.set $1
    i32.const 1
    drop
@@ -276,7 +276,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.3 (result i32)
-   i32.const 112
+   i32.const 128
    local.set $0
    i32.const 1
    drop

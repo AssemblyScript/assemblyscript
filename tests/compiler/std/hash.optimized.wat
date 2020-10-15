@@ -2,10 +2,10 @@
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (memory $0 1)
- (data (i32.const 1028) "\01\00\00\00\01")
- (data (i32.const 1040) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
- (data (i32.const 1072) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00a\00b")
- (data (i32.const 1104) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
+ (data (i32.const 1040) "\01\00\00\00\00\00\00\00\01")
+ (data (i32.const 1068) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a")
+ (data (i32.const 1100) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00a\00b")
+ (data (i32.const 1132) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/util/hash/hashStr (param $0 i32)
@@ -17,9 +17,9 @@
   local.get $0
   if
    local.get $0
-   i32.const 16
+   i32.const 20
    i32.sub
-   i32.load offset=12
+   i32.load offset=16
    i32.const 1
    i32.shr_u
    i32.const 1
@@ -51,13 +51,13 @@
  (func $~start
   i32.const 0
   call $~lib/util/hash/hashStr
-  i32.const 1040
-  call $~lib/util/hash/hashStr
   i32.const 1056
   call $~lib/util/hash/hashStr
   i32.const 1088
   call $~lib/util/hash/hashStr
   i32.const 1120
+  call $~lib/util/hash/hashStr
+  i32.const 1152
   call $~lib/util/hash/hashStr
  )
 )

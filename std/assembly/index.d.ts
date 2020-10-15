@@ -1244,8 +1244,6 @@ declare namespace memory {
 
 /** Garbage collector interface. */
 declare namespace gc {
-  /** Can be set to `false` to disable automatic collection. Defaults to `true`. */
-  export var auto: bool;
   /** Performs a full garbage collection cycle. */
   export function collect(): void;
 }

@@ -1835,9 +1835,21 @@ export class Compiler extends DiagnosticEmitter {
   // === Memory ===================================================================================
 
   /** Adds a static memory segment with the specified data. */
-  addMemorySegment(buffer: Uint8Array, alignment: i32 = 16): MemorySegment {
+  addAlignedMemorySegment(buffer: Uint8Array, alignment: i32 = 16): MemorySegment {
     assert(isPowerOf2(alignment));
     var memoryOffset = i64_align(this.memoryOffset, alignment);
+    var segment = new MemorySegment(buffer, memoryOffset);
+    this.memorySegments.push(segment);
+    this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length, 0));
+    return segment;
+  }
+
+  /** Adds a static memory segment representing a runtime object. */
+  addRuntimeMemorySegment(buffer: Uint8Array): MemorySegment {
+    // Runtime objects imply a full BLOCK and OBJECT header, see rt/common.ts
+    // ((memoryOffset + sizeof_usize + AL_MASK) & ~AL_MASK) - sizeof_usize
+    var usizeSize = this.options.usizeType.byteSize;
+    var memoryOffset = i64_sub(i64_align(i64_add(this.memoryOffset, i64_new(usizeSize)), 16), i64_new(usizeSize));
     var segment = new MemorySegment(buffer, memoryOffset);
     this.memorySegments.push(segment);
     this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length, 0));
@@ -1859,7 +1871,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0; i < len; ++i) {
         writeI16(stringValue.charCodeAt(i), buf, rtHeaderSize + (i << 1));
       }
-      stringSegment = this.addMemorySegment(buf);
+      stringSegment = this.addRuntimeMemorySegment(buf);
       segments.set(stringValue, stringSegment);
     }
     var ptr = i64_add(stringSegment.offset, i64_new(rtHeaderSize));
@@ -1954,9 +1966,9 @@ export class Compiler extends DiagnosticEmitter {
     var program = this.program;
     var arrayBufferInstance = program.arrayBufferInstance;
     var buf = arrayBufferInstance.createBuffer(values.length * elementType.byteSize);
-    writeI32(id, buf, 8); // use specified rtId
+    this.program.OBJECTInstance.writeField("rtId", id, buf, 0); // use specified rtId
     assert(this.writeStaticBuffer(buf, program.runtimeHeaderSize, elementType, values) == buf.length);
-    return this.addMemorySegment(buf);
+    return this.addRuntimeMemorySegment(buf);
   }
 
   /** Adds an array header to static memory and returns the created segment. */
@@ -1974,7 +1986,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(arrayInstance.writeField("dataStart", bufferAddress, buf));
     assert(arrayInstance.writeField("byteLength", bufferLength, buf));
     assert(arrayInstance.writeField("length_", arrayLength, buf));
-    return this.addMemorySegment(buf);
+    return this.addRuntimeMemorySegment(buf);
   }
 
   // === Table ====================================================================================
@@ -1998,7 +2010,7 @@ export class Compiler extends DiagnosticEmitter {
       let buf = rtInstance.createBuffer();
       assert(rtInstance.writeField("_index", index, buf));
       assert(rtInstance.writeField("_env", 0, buf));
-      instance.memorySegment = memorySegment = this.addMemorySegment(buf);
+      instance.memorySegment = memorySegment = this.addRuntimeMemorySegment(buf);
     }
     return i64_add(memorySegment.offset, i64_new(program.runtimeHeaderSize));
   }
@@ -8880,8 +8892,8 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
-        // __allocArray(length, alignLog2, classId, staticBuffer)
-        let expr = this.makeCallDirect(program.allocArrayInstance, [
+        // __newArray(length, alignLog2, classId, staticBuffer)
+        let expr = this.makeCallDirect(program.newArrayInstance, [
           module.i32(length),
           program.options.isWasm64
             ? module.i64(elementType.alignLog2)
@@ -8919,11 +8931,11 @@ export class Compiler extends DiagnosticEmitter {
     var nativeArrayType = arrayType.toNativeType();
 
     var stmts = new Array<ExpressionRef>();
-    // tempThis = __allocArray(length, alignLog2, classId, source = 0)
+    // tempThis = __newArray(length, alignLog2, classId, source = 0)
     stmts.push(
       module.local_set(tempThis.index,
         this.makeRetain(
-          this.makeCallDirect(program.allocArrayInstance, [
+          this.makeCallDirect(program.newArrayInstance, [
             module.i32(length),
             program.options.isWasm64
               ? module.i64(elementType.alignLog2)
@@ -9055,9 +9067,9 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new chunk of memory and return a copy of the buffer
       } else {
-        // __allocBuffer(bufferSize, id, buffer)
+        // __newBuffer(bufferSize, id, buffer)
         let expr = this.makeRetain(
-          this.makeCallDirect(program.allocBufferInstance, [
+          this.makeCallDirect(program.newBufferInstance, [
             isWasm64
               ? module.i64(bufferSize)
               : module.i32(bufferSize),
@@ -9094,11 +9106,11 @@ export class Compiler extends DiagnosticEmitter {
     var nativeArrayType = arrayType.toNativeType();
 
     var stmts = new Array<ExpressionRef>();
-    // tempThis = __allocBuffer(bufferSize, classId)
+    // tempThis = __newBuffer(bufferSize, classId)
     stmts.push(
       module.local_set(tempThis.index,
         this.makeRetain(
-          this.makeCallDirect(program.allocBufferInstance, [
+          this.makeCallDirect(program.newBufferInstance, [
             isWasm64
               ? module.i64(bufferSize)
               : module.i32(bufferSize),
@@ -10859,24 +10871,29 @@ export class Compiler extends DiagnosticEmitter {
   makeAllocation(
     classInstance: Class
   ): ExpressionRef {
-    // TODO: investigate if it's possible to allocate with RC=1 immediately
     var program = this.program;
     assert(classInstance.program == program);
     var module = this.module;
     var options = this.options;
     this.currentType = classInstance.type;
-    var allocInstance = program.allocInstance;
-    this.compileFunction(allocInstance);
-    return module.call(allocInstance.internalName, [
-      options.isWasm64
-        ? module.i64(classInstance.nextMemoryOffset)
-        : module.i32(classInstance.nextMemoryOffset),
-      module.i32(
-        classInstance.hasDecorator(DecoratorFlags.UNMANAGED)
-          ? 0
-          : classInstance.id
-      )
-    ], options.nativeSizeType);
+    if (classInstance.hasDecorator(DecoratorFlags.UNMANAGED)) {
+      let allocInstance = program.allocInstance;
+      this.compileFunction(allocInstance);
+      return module.call(allocInstance.internalName, [
+        options.isWasm64
+          ? module.i64(classInstance.nextMemoryOffset)
+          : module.i32(classInstance.nextMemoryOffset)
+      ], options.nativeSizeType);
+    } else {
+      let newInstance = program.newInstance;
+      this.compileFunction(newInstance);
+      return module.call(newInstance.internalName, [
+        options.isWasm64
+          ? module.i64(classInstance.nextMemoryOffset)
+          : module.i32(classInstance.nextMemoryOffset),
+        module.i32(classInstance.id)
+      ], options.nativeSizeType);
+    }
   }
 
   /** Makes the initializers for a class's fields within the constructor. */

@@ -4,8 +4,8 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1024) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s")
- (data (i32.const 1072) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\01")
+ (data (i32.const 1036) " \00\00\00\01\00\00\00\00\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s")
+ (data (i32.const 1100) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01")
  (table $0 2 funcref)
  (elem (i32.const 1) $call-optional/opt@varargs)
  (global $~argumentsLength (mut i32) (i32.const 0))
@@ -50,7 +50,7 @@
   call $call-optional/opt@varargs
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 4
    i32.const 1
    call $~lib/builtins/abort
@@ -66,7 +66,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 5
    i32.const 1
    call $~lib/builtins/abort
@@ -80,7 +80,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 6
    i32.const 1
    call $~lib/builtins/abort
@@ -91,12 +91,12 @@
   i32.const 3
   i32.const 0
   i32.const 0
-  i32.const 1088
+  i32.const 1120
   i32.load
   call_indirect (type $i32_i32_i32_=>_i32)
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 9
    i32.const 1
    call $~lib/builtins/abort
@@ -107,14 +107,14 @@
   i32.const 3
   i32.const 4
   i32.const 0
-  i32.const 1088
+  i32.const 1120
   i32.load
   call_indirect (type $i32_i32_i32_=>_i32)
   i32.const 5
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 10
    i32.const 1
    call $~lib/builtins/abort
@@ -125,14 +125,14 @@
   i32.const 3
   i32.const 4
   i32.const 5
-  i32.const 1088
+  i32.const 1120
   i32.load
   call_indirect (type $i32_i32_i32_=>_i32)
   i32.const 12
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 11
    i32.const 1
    call $~lib/builtins/abort

@@ -87,7 +87,7 @@ function weakHeapSort<T>(
   const shift32 = alignof<u32>();
 
   var bitsetSize = (<usize>length + 31) >> 5 << shift32;
-  var bitset = __alloc(bitsetSize, 0); // indexed in 32-bit chunks below
+  var bitset = __alloc(bitsetSize); // indexed in 32-bit chunks below
   memory.fill(bitset, 0, bitsetSize);
 
   // see: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.21.1863&rep=rep1&type=pdf

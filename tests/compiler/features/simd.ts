@@ -49,7 +49,7 @@ function test_v128(): void {
       v128(16, 2, 14, 4, 12, 6, 10, 8, 8, 10, 6, 12, 4, 14, 2, 16),
   );
   {
-    let ptr = __alloc(64, 0);
+    let ptr = __alloc(64);
     v128.store(ptr, v128.load(ptr, 16), 32);
     __free(ptr);
   }

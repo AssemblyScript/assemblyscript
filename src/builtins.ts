@@ -2879,7 +2879,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     }
     let buf = new Uint8Array(numElements * elementType.byteSize);
     assert(compiler.writeStaticBuffer(buf, 0, elementType, exprs) == buf.byteLength);
-    offset = compiler.addMemorySegment(buf, align).offset;
+    offset = compiler.addAlignedMemorySegment(buf, align).offset;
   } else { // data(size[, align])
     let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
     let precomp = module.runExpression(arg0, ExpressionRunnerFlags.PreserveSideeffects);
@@ -2908,7 +2908,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
         return module.unreachable();
       }
     }
-    offset = compiler.addMemorySegment(new Uint8Array(size), align).offset;
+    offset = compiler.addAlignedMemorySegment(new Uint8Array(size), align).offset;
   }
   // FIXME: what if recompiles happen? recompiles are bad.
   compiler.currentType = usizeType;
@@ -8835,7 +8835,7 @@ export function compileRTTI(compiler: Compiler): void {
   }
   assert(off == size);
   var usizeType = program.options.usizeType;
-  var segment = compiler.addMemorySegment(data);
+  var segment = compiler.addAlignedMemorySegment(data);
   if (usizeType.size == 8) {
     let offset = segment.offset;
     module.addGlobal(BuiltinNames.rtti_base, NativeType.I64, false, module.i64(i64_low(offset), i64_high(offset)));

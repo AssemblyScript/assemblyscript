@@ -1,7 +1,7 @@
-import { AL_MASK, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE, AL_SIZE, DEBUG } from "rt/common";
+import { AL_MASK, OBJECT, OBJECT_OVERHEAD, BLOCK_MAXSIZE, BLOCK_OVERHEAD, BLOCK, OBJECT_MAXSIZE, TOTAL_OVERHEAD } from "rt/common";
 
 // @ts-ignore: decorator
-@lazy var startOffset: usize = (__heap_base + AL_MASK) & ~AL_MASK;
+@lazy var startOffset: usize = ((__heap_base + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
 
 // @ts-ignore: decorator
 @lazy var offset: usize = startOffset;
@@ -9,7 +9,7 @@ import { AL_MASK, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE, AL_SIZE, DEBUG } from "r
 function maybeGrowMemory(newOffset: usize): void {
   // assumes newOffset is aligned
   var pagesBefore = memory.size();
-  var maxOffset = <usize>pagesBefore << 16;
+  var maxOffset = (((<usize>pagesBefore << 16) + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
   if (newOffset > maxOffset) {
     let pagesNeeded = <i32>(((newOffset - maxOffset + 0xffff) & ~0xffff) >>> 16);
     let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
@@ -20,19 +20,33 @@ function maybeGrowMemory(newOffset: usize): void {
   offset = newOffset;
 }
 
+function computeSize(size: usize): usize {
+  return ((size + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
+}
+
 // @ts-ignore: decorator
 @unsafe @global
-export function __alloc(size: usize, id: u32): usize {
+export function __alloc(size: usize): usize {
   if (size > BLOCK_MAXSIZE) unreachable();
+  var block = changetype<BLOCK>(offset);
   var ptr = offset + BLOCK_OVERHEAD;
-  var actualSize = max<usize>((size + AL_MASK) & ~AL_MASK, AL_SIZE);
-  maybeGrowMemory(ptr + actualSize);
-  var block = changetype<BLOCK>(ptr - BLOCK_OVERHEAD);
-  block.mmInfo = actualSize;
-  if (DEBUG) block.gcInfo = 1;
-  block.rtId = id;
-  block.rtSize = <u32>size;
+  var payloadSize = computeSize(size);
+  maybeGrowMemory(ptr + payloadSize);
+  block.mmInfo = payloadSize;
   return ptr;
+}
+
+// @ts-ignore: decorator
+@unsafe @global
+export function __new(size: usize, id: u32): usize {
+  if (size > OBJECT_MAXSIZE) unreachable();
+  var ptr = __alloc(OBJECT_OVERHEAD + size);
+  var object = changetype<OBJECT>(ptr - BLOCK_OVERHEAD);
+  object.gcInfo = 0;
+  object.gcInfo2 = 0;
+  object.rtId = id;
+  object.rtSize = <u32>size;
+  return ptr + OBJECT_OVERHEAD;
 }
 
 // @ts-ignore: decorator
@@ -41,25 +55,38 @@ export function __realloc(ptr: usize, size: usize): usize {
   assert(ptr != 0 && !(ptr & AL_MASK)); // must exist and be aligned
   var block = changetype<BLOCK>(ptr - BLOCK_OVERHEAD);
   var actualSize = block.mmInfo;
-  if (DEBUG) assert(block.gcInfo == 1);
   var isLast = ptr + actualSize == offset;
-  var alignedSize = (size + AL_MASK) & ~AL_MASK;
+  var payloadSize = computeSize(size);
   if (size > actualSize) {
     if (isLast) { // last block: grow
       if (size > BLOCK_MAXSIZE) unreachable();
-      maybeGrowMemory(ptr + alignedSize);
-      block.mmInfo = alignedSize;
+      maybeGrowMemory(ptr + payloadSize);
+      block.mmInfo = payloadSize;
     } else { // copy to new block at least double the size
-      let newPtr = __alloc(max<usize>(alignedSize, actualSize << 1), block.rtId);
-      memory.copy(newPtr, ptr, block.rtSize);
+      let newPtr = __alloc(max<usize>(payloadSize, actualSize << 1));
+      memory.copy(newPtr, ptr, actualSize);
       block = changetype<BLOCK>((ptr = newPtr) - BLOCK_OVERHEAD);
     }
   } else if (isLast) { // last block: shrink
-    offset = ptr + alignedSize;
-    block.mmInfo = alignedSize;
+    offset = ptr + payloadSize;
+    block.mmInfo = payloadSize;
   }
-  block.rtSize = <u32>size;
   return ptr;
+}
+
+// @ts-ignore: decorator
+@unsafe @global
+export function __renew(oldPtr: usize, size: usize): usize {
+  if (size > OBJECT_MAXSIZE) unreachable();
+  var object = changetype<OBJECT>(oldPtr - TOTAL_OVERHEAD);
+  var oldRtId = object.rtId;
+  var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size);
+  object = changetype<OBJECT>(newPtr - BLOCK_OVERHEAD);
+  object.gcInfo = 0;
+  object.gcInfo2 = 0;
+  object.rtId = oldRtId;
+  object.rtSize = <u32>size;
+  return newPtr + OBJECT_OVERHEAD;
 }
 
 // @ts-ignore: decorator
@@ -67,7 +94,6 @@ export function __realloc(ptr: usize, size: usize): usize {
 export function __free(ptr: usize): void {
   assert(ptr != 0 && !(ptr & AL_MASK)); // must exist and be aligned
   var block = changetype<BLOCK>(ptr - BLOCK_OVERHEAD);
-  if (DEBUG) assert(block.gcInfo == 1);
   if (ptr + block.mmInfo == offset) { // last block: discard
     offset = changetype<usize>(block);
   }

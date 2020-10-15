@@ -14,7 +14,7 @@ function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
     let newCapacity = minSize << alignLog2;
-    let newData = __realloc(oldData, newCapacity); // keeps RC
+    let newData = __renew(oldData, newCapacity); // keeps RC
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     if (newData !== oldData) { // oldData has been free'd
       store<usize>(array, newData, offsetof<ArrayBufferView>("buffer"));
@@ -56,7 +56,7 @@ export class Array<T> {
   constructor(length: i32 = 0) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     var bufferSize = <usize>length << alignof<T>();
-    var buffer = __alloc(bufferSize, idof<ArrayBuffer>());
+    var buffer = __new(bufferSize, idof<ArrayBuffer>());
     memory.fill(buffer, 0, bufferSize);
     this.buffer = changetype<ArrayBuffer>(buffer); // retains
     this.dataStart = buffer;
@@ -227,7 +227,7 @@ export class Array<T> {
     var otherLen = select(0, other.length_, other === null);
     var outLen = thisLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
-    var out = changetype<Array<T>>(__allocArray(outLen, alignof<T>(), idof<Array<T>>())); // retains
+    var out = changetype<Array<T>>(__newArray(outLen, alignof<T>(), idof<Array<T>>())); // retains
     var outStart = out.dataStart;
     var thisSize = <usize>thisLen << alignof<T>();
     if (isManaged<T>()) {
@@ -311,7 +311,7 @@ export class Array<T> {
 
   map<U>(fn: (value: T, index: i32, array: Array<T>) => U): Array<U> {
     var length = this.length_;
-    var out = changetype<Array<U>>(__allocArray(length, alignof<U>(), idof<Array<U>>())); // retains
+    var out = changetype<Array<U>>(__newArray(length, alignof<U>(), idof<Array<U>>())); // retains
     var outStart = out.dataStart;
     for (let index = 0; index < min(length, this.length_); ++index) {
       let result = fn(load<T>(this.dataStart + (<usize>index << alignof<T>())), index, this); // retains
@@ -326,7 +326,7 @@ export class Array<T> {
   }
 
   filter(fn: (value: T, index: i32, array: Array<T>) => bool): Array<T> {
-    var result = changetype<Array<T>>(__allocArray(0, alignof<T>(), idof<Array<T>>())); // retains
+    var result = changetype<Array<T>>(__newArray(0, alignof<T>(), idof<Array<T>>())); // retains
     for (let index = 0, length = this.length_; index < min(length, this.length_); ++index) {
       let value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
       if (fn(value, index, this)) result.push(value);
@@ -407,7 +407,7 @@ export class Array<T> {
     start = start < 0 ? max(start + length, 0) : min(start, length);
     end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
     length = max(end - start, 0);
-    var slice = changetype<Array<T>>(__allocArray(length, alignof<T>(), idof<Array<T>>())); // retains
+    var slice = changetype<Array<T>>(__newArray(length, alignof<T>(), idof<Array<T>>())); // retains
     var sliceBase = slice.dataStart;
     var thisBase = this.dataStart + (<usize>start << alignof<T>());
     if (isManaged<T>()) {
@@ -428,7 +428,7 @@ export class Array<T> {
     var length  = this.length_;
     start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
     deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
-    var result = changetype<Array<T>>(__allocArray(deleteCount, alignof<T>(), idof<Array<T>>())); // retains
+    var result = changetype<Array<T>>(__newArray(deleteCount, alignof<T>(), idof<Array<T>>())); // retains
     var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());
@@ -516,10 +516,10 @@ export class Array<T> {
 
     // calculate the byteLength of the resulting backing ArrayBuffer
     var byteLength = <usize>size << usize(alignof<valueof<T>>());
-    var dataStart = __alloc(byteLength, idof<ArrayBuffer>());
+    var dataStart = __new(byteLength, idof<ArrayBuffer>());
 
     // create the return value and initialize it
-    var result = __alloc(offsetof<T>(), idof<T>());
+    var result = __new(offsetof<T>(), idof<T>());
     store<i32>(result, size, offsetof<T>("length_"));
 
     // byteLength, dataStart, and buffer are all readonly
