@@ -1863,10 +1863,8 @@
   end
   call $~lib/rt/tlsf/maybeInitialize
   local.get $8
-  i32.const 3
+  i32.const 6
   i32.mul
-  i32.const 1
-  i32.shl
   i32.const 1
   call $~lib/rt/tlsf/allocateBlock
   i32.const 16
