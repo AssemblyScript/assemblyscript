@@ -502,13 +502,15 @@
    unreachable
   end
   i32.const 143
+  local.tee $0
   i32.const 3
+  local.tee $1
   i32.const 7
   i32.and
   i32.shl
-  i32.const 143
+  local.get $0
   i32.const 0
-  i32.const 3
+  local.get $1
   i32.sub
   i32.const 7
   i32.and
@@ -530,13 +532,15 @@
    unreachable
   end
   i32.const 170
+  local.tee $0
   i32.const 1
+  local.tee $1
   i32.const 7
   i32.and
   i32.shr_u
-  i32.const 170
+  local.get $0
   i32.const 0
-  i32.const 1
+  local.get $1
   i32.sub
   i32.const 7
   i32.and

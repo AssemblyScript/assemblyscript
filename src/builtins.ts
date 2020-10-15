@@ -1177,22 +1177,40 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U8:
       case TypeKind.U16: {
         // (value << (shift & mask)) | (value >>> ((0 - shift) & mask))
-        return module.binary(BinaryOp.OrI32,
+        let flow = compiler.currentFlow;
+        let temp1 = flow.getTempLocal(type);
+        flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+        let temp2 = flow.getTempLocal(type);
+        flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+
+        let ret = module.binary(BinaryOp.OrI32,
           module.binary(
             BinaryOp.ShlI32,
-            arg0,
-            module.binary(BinaryOp.AndI32, arg1, module.i32(type.size - 1))
+            module.local_tee(temp1.index, arg0),
+            module.binary(
+              BinaryOp.AndI32,
+              module.local_tee(temp2.index, arg1),
+              module.i32(type.size - 1)
+            )
           ),
           module.binary(
             BinaryOp.ShrU32,
-            arg0,
+            module.local_get(temp1.index, NativeType.I32),
             module.binary(
               BinaryOp.AndI32,
-              module.binary(BinaryOp.SubI32, module.i32(0), arg1),
+              module.binary(
+                BinaryOp.SubI32,
+                module.i32(0),
+                module.local_get(temp2.index, NativeType.I32)
+              ),
               module.i32(type.size - 1)
             )
           )
         );
+        flow.freeTempLocal(temp2);
+        flow.freeTempLocal(temp1);
+
+        return ret;
       }
       case TypeKind.I32:
       case TypeKind.U32: return module.binary(BinaryOp.RotlI32, arg0, arg1);
@@ -1240,22 +1258,40 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U8:
       case TypeKind.U16: {
         // (value >>> (shift & mask)) | (value << ((0 - shift) & mask))
-        return module.binary(BinaryOp.OrI32,
+        let flow = compiler.currentFlow;
+        let temp1 = flow.getTempLocal(type);
+        flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+        let temp2 = flow.getTempLocal(type);
+        flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+
+        let ret = module.binary(BinaryOp.OrI32,
           module.binary(
             BinaryOp.ShrU32,
-            arg0,
-            module.binary(BinaryOp.AndI32, arg1, module.i32(type.size - 1))
+            module.local_tee(temp1.index, arg0),
+            module.binary(
+              BinaryOp.AndI32,
+              module.local_tee(temp2.index, arg1),
+              module.i32(type.size - 1)
+            )
           ),
           module.binary(
             BinaryOp.ShlI32,
-            arg0,
+            module.local_get(temp1.index, NativeType.I32),
             module.binary(
               BinaryOp.AndI32,
-              module.binary(BinaryOp.SubI32, module.i32(0), arg1),
+              module.binary(
+                BinaryOp.SubI32,
+                module.i32(0),
+                module.local_get(temp2.index, NativeType.I32)
+              ),
               module.i32(type.size - 1)
             )
           )
         );
+        flow.freeTempLocal(temp2);
+        flow.freeTempLocal(temp1);
+
+        return ret;
       }
       case TypeKind.I32:
       case TypeKind.U32: return module.binary(BinaryOp.RotrI32, arg0, arg1);
