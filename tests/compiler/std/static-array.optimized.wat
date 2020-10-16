@@ -547,12 +547,10 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   i32.const 1
   local.get $0
   i32.load offset=8
-  local.tee $3
+  local.tee $4
   local.get $1
   i32.shr_u
   i32.gt_u
@@ -573,53 +571,36 @@
    local.get $0
    i32.load
    local.tee $5
-   local.set $2
    i32.const 1
    local.get $1
    i32.shl
    local.tee $1
-   local.set $4
+   local.set $2
    local.get $1
    i32.const 1073741804
    i32.gt_u
    if
     unreachable
    end
-   local.get $2
-   i32.const 20
-   i32.sub
-   i32.load offset=12
-   local.set $6
-   local.get $2
    i32.const 16
    i32.sub
-   local.get $4
+   local.get $2
    i32.const 16
    i32.add
    call $~lib/rt/stub/__realloc
-   local.tee $7
+   local.tee $3
    i32.const 4
    i32.sub
-   local.tee $2
-   i32.const 0
-   i32.store offset=4
    local.get $2
-   i32.const 0
-   i32.store offset=8
-   local.get $2
-   local.get $6
-   i32.store offset=12
-   local.get $2
-   local.get $4
    i32.store offset=16
+   local.get $4
    local.get $3
-   local.get $7
    i32.const 16
    i32.add
    local.tee $2
    i32.add
    local.get $1
-   local.get $3
+   local.get $4
    i32.sub
    call $~lib/memory/memory.fill
    local.get $2

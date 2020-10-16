@@ -1508,7 +1508,7 @@
   (local $4 i32)
   i32.const 3
   local.set $1
-  i32.const 95
+  i32.const 89
   local.set $0
   i32.const 0
   i32.const 12
@@ -1531,7 +1531,7 @@
   local.tee $2
   i32.const 40
   i32.store8
-  i32.const 95
+  i32.const 89
   call $~lib/util/number/decimalCount32
   local.tee $4
   local.get $2

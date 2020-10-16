@@ -78,14 +78,8 @@ export function __realloc(ptr: usize, size: usize): usize {
 @unsafe @global
 export function __renew(oldPtr: usize, size: usize): usize {
   if (size > OBJECT_MAXSIZE) unreachable();
-  var object = changetype<OBJECT>(oldPtr - TOTAL_OVERHEAD);
-  var oldRtId = object.rtId;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size);
-  object = changetype<OBJECT>(newPtr - BLOCK_OVERHEAD);
-  object.gcInfo = 0;
-  object.gcInfo2 = 0;
-  object.rtId = oldRtId;
-  object.rtSize = <u32>size;
+  changetype<OBJECT>(newPtr - BLOCK_OVERHEAD).rtSize = <u32>size;
   return newPtr + OBJECT_OVERHEAD;
 }
 

@@ -2892,9 +2892,6 @@
  )
  (func $~lib/rt/pure/__renew (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
   local.get $1
   i32.const 1073741804
   i32.gt_u
@@ -2907,40 +2904,19 @@
    unreachable
   end
   local.get $0
-  i32.const 20
-  i32.sub
-  local.set $2
-  local.get $2
-  i32.load offset=4
-  local.set $3
-  local.get $2
-  i32.load offset=12
-  local.set $4
-  local.get $0
   i32.const 16
   i32.sub
   i32.const 16
   local.get $1
   i32.add
   call $~lib/rt/tlsf/__realloc
-  local.set $5
-  local.get $5
-  i32.const 4
-  i32.sub
   local.set $2
   local.get $2
-  local.get $3
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  i32.store offset=8
-  local.get $2
-  local.get $4
-  i32.store offset=12
-  local.get $2
+  i32.const 4
+  i32.sub
   local.get $1
   i32.store offset=16
-  local.get $5
+  local.get $2
   i32.const 16
   i32.add
  )

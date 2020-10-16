@@ -286,15 +286,8 @@ export function __new(size: usize, id: u32): usize {
 @global @unsafe
 export function __renew(oldPtr: usize, size: usize): usize {
   if (size > OBJECT_MAXSIZE) throw new Error("allocation too large");
-  var object = changetype<OBJECT>(oldPtr - TOTAL_OVERHEAD);
-  var oldGcInfo = object.gcInfo;
-  var oldRtId = object.rtId;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size);
-  object = changetype<OBJECT>(newPtr - BLOCK_OVERHEAD);
-  object.gcInfo = oldGcInfo;
-  object.gcInfo2 = 0;
-  object.rtId = oldRtId;
-  object.rtSize = <u32>size;
+  changetype<OBJECT>(newPtr - BLOCK_OVERHEAD).rtSize = <u32>size;
   return newPtr + OBJECT_OVERHEAD;
 }
 
