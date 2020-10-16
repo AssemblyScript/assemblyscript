@@ -8,7 +8,7 @@ export interface ResultObject {
 
 /** WebAssembly imports with an optional env object and two levels of nesting. */
 export type Imports = {
-  [key: string]: Record<string,unknown> | any;  /** env?: {} not allowed without the '| any' */
+  [key: string]: Record<string,unknown> | undefined;  /** env?: {} not allowed without the '| undefined' anymore */
   env?: {
     memory?: WebAssembly.Memory;
     table?: WebAssembly.Table;
