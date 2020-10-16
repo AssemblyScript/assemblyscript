@@ -119,12 +119,14 @@ declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
-/** Computes sum of two integers or floats. */
+/** Computes the sum of two integers or floats. */
 declare function add<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
-/** Computes difference of two integers or floats. */
+/** Computes the difference of two integers or floats. */
 declare function sub<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
-/** Computes product of two integers or floats. */
+/** Computes the product of two integers or floats. */
 declare function mul<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
+/** Computes the quotient of two integers or floats. */
+declare function div<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
@@ -282,12 +284,28 @@ declare namespace i32 {
   export function store16(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 32-bit integer value to memory. */
   export function store(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
-  /** Computes sum of two 32-bit integers */
+  /** Performs the sign-agnostic count leading zero bits operation on a 32-bit integer. All zero bits are considered leading if the value is zero. */
+  export function clz(value: i32): i32;
+  /** Performs the sign-agnostic count tailing zero bits operation on a 32-bit integer. All zero bits are considered trailing if the value is zero. */
+  export function ctz(value: i32): i32;
+  /** Performs the sign-agnostic count number of one bits operation on a 32-bit integer. */
+  export function popcnt(value: i32): i32;
+  /** Performs the sign-agnostic rotate left operation on a 32-bit integer. */
+  export function rotl(value: i32, shift: i32): i32;
+  /** Performs the sign-agnostic rotate right operation on a 32-bit integer. */
+  export function rotr(value: i32, shift: i32): i32;
+  /** Reinterprets the bits of the specified 32-bit float as a 32-bit integer. */
+  export function reinterpret_f32(value: f32): i32;
+  /** Computes the sum of two 32-bit integers. */
   export function add(left: i32, right: i32): i32;
-  /** Computes difference of two 32-bit integers */
+  /** Computes the difference of two 32-bit integers. */
   export function sub(left: i32, right: i32): i32;
-  /** Computes product of two 32-bit integers */
-  export function mul(left: i32, right: i32): i32;    
+  /** Computes the product of two 32-bit integers. */
+  export function mul(left: i32, right: i32): i32;
+  /** Computes the signed quotient of two 32-bit integers. */
+  export function div_s(left: i32, right: i32): i32;
+  /** Computes the unsigned quotient of two 32-bit integers. */
+  export function div_u(left: i32, right: i32): i32;
   /** Atomic 32-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -386,12 +404,28 @@ declare namespace i64 {
   export function store32(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 64-bit integer value to memory. */
   export function store(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
-  /** Computes sum of two 64-bit integers */
+  /** Performs the sign-agnostic count leading zero bits operation on a 64-bit integer. All zero bits are considered leading if the value is zero. */
+  export function clz(value: i64): i64;
+  /** Performs the sign-agnostic count tailing zero bits operation on a 64-bit integer. All zero bits are considered trailing if the value is zero. */
+  export function ctz(value: i64): i64;
+  /** Performs the sign-agnostic count number of one bits operation on a 64-bit integer. */
+  export function popcnt(value: i64): i64;
+  /** Performs the sign-agnostic rotate left operation on a 64-bit integer. */
+  export function rotl(value: i64, shift: i64): i64;
+  /** Performs the sign-agnostic rotate right operation on a 64-bit integer. */
+  export function rotr(value: i64, shift: i64): i64;
+  /** Reinterprets the bits of the specified 64-bit float as a 64-bit integer. */
+  export function reinterpret_f64(value: f64): i64;
+  /** Computes the sum of two 64-bit integers. */
   export function add(left: i64, right: i64): i64;
-  /** Computes difference of two 64-bit integers */
+  /** Computes the difference of two 64-bit integers. */
   export function sub(left: i64, right: i64): i64;
-  /** Computes product of two 64-bit integers */
-  export function mul(left: i64, right: i64): i64;      
+  /** Computes the product of two 64-bit integers. */
+  export function mul(left: i64, right: i64): i64;
+  /** Computes the signed quotient of two 64-bit integers. */
+  export function div_s(left: i64, right: i64): i64;
+  /** Computes the unsigned quotient of two 64-bit integers. */
+  export function div_u(left: i64, right: i64): i64;
   /** Atomic 64-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -551,12 +585,34 @@ declare namespace f32 {
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
   export function store(ptr: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
-  /** Computes sum of two 32-bit floats */
+  /** Computes the sum of two 32-bit floats. */
   export function add(left: f32, right: f32): f32;
-  /** Computes difference of two 32-bit floats */
+  /** Computes the difference of two 32-bit floats. */
   export function sub(left: f32, right: f32): f32;
-  /** Computes product of two 32-bit floats */
-  export function mul(left: f32, right: f32): f32;     
+  /** Computes the product of two 32-bit floats. */
+  export function mul(left: f32, right: f32): f32;
+  /** Computes the quotient of two 32-bit floats. */
+  export function div(left: f32, right: f32): f32;
+  /** Computes the absolute value of a 32-bit float. */
+  export function abs(value: f32): f32;
+  /** Determines the maximum of two 32-bit floats. If either operand is `NaN`, returns `NaN`. */
+  export function max(left: f32, right: f32): f32;
+  /** Determines the minimum of two 32-bit floats. If either operand is `NaN`, returns `NaN`. */
+  export function min(left: f32, right: f32): f32;
+  /** Performs the ceiling operation on a 32-bit float. */
+  export function ceil(value: f32): f32;
+  /** Composes a 32-bit float from the magnitude of `x` and the sign of `y`. */
+  export function copysign(x: f32, y: f32): f32;
+  /** Performs the floor operation on a 32-bit float. */
+  export function floor(value: f32): f32;
+  /** Rounds to the nearest integer tied to even of a 32-bit float. */
+  export function nearest(value: f32): f32;
+  /** Reinterprets the bits of the specified 32-bit integer as a 32-bit float. */
+  export function reinterpret_i32(value: i32): f32;
+  /** Calculates the square root of a 32-bit float. */
+  export function sqrt(value: f32): f32;
+  /** Rounds to the nearest integer towards zero of a 32-bit float. */
+  export function trunc(value: f32): f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: any): f64;
@@ -583,12 +639,34 @@ declare namespace f64 {
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
   export function store(ptr: usize, value: f64, immOffset?: usize, immAlign?: usize): void;
-  /** Computes sum of two 64-bit floats */
+  /** Computes the sum of two 64-bit floats. */
   export function add(left: f64, right: f64): f64;
-  /** Computes difference of two 64-bit floats */
+  /** Computes the difference of two 64-bit floats. */
   export function sub(left: f64, right: f64): f64;
-  /** Computes product of two 64-bit floats */
-  export function mul(left: f64, right: f64): f64;    
+  /** Computes the product of two 64-bit floats. */
+  export function mul(left: f64, right: f64): f64;
+  /** Computes the quotient of two 64-bit floats. */
+  export function div(left: f64, right: f64): f64;
+  /** Computes the absolute value of a 64-bit float. */
+  export function abs(value: f64): f64;
+  /** Determines the maximum of two 64-bit floats. If either operand is `NaN`, returns `NaN`. */
+  export function max(left: f64, right: f64): f64;
+  /** Determines the minimum of two 64-bit floats. If either operand is `NaN`, returns `NaN`. */
+  export function min(left: f64, right: f64): f64;
+  /** Performs the ceiling operation on a 64-bit float. */
+  export function ceil(value: f64): f64;
+  /** Composes a 64-bit float from the magnitude of `x` and the sign of `y`. */
+  export function copysign(x: f64, y: f64): f64;
+  /** Performs the floor operation on a 64-bit float. */
+  export function floor(value: f64): f64;
+  /** Rounds to the nearest integer tied to even of a 64-bit float. */
+  export function nearest(value: f64): f64;
+  /** Reinterprets the bits of the specified 64-bit integer as a 64-bit float. */
+  export function reinterpret_i64(value: i64): f64;
+  /** Calculates the square root of a 64-bit float. */
+  export function sqrt(value: f64): f64;
+  /** Rounds to the nearest integer towards zero of a 64-bit float. */
+  export function trunc(value: f64): f64;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function v128(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
