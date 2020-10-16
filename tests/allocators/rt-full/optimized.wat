@@ -10,20 +10,22 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1036) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1100) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1164) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
- (data (i32.const 1216) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1100) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
+ (data (i32.const 1164) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1228) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00n\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d")
+ (data (i32.const 1280) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 ")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 1216))
+ (global $~lib/rt/__rtti_base i32 (i32.const 1280))
  (export "memory" (memory $0))
- (export "__alloc" (func $~lib/rt/tlsf/__alloc))
- (export "__realloc" (func $~lib/rt/tlsf/__realloc))
- (export "__free" (func $~lib/rt/tlsf/__free))
  (export "__new" (func $~lib/rt/pure/__new))
  (export "__renew" (func $~lib/rt/pure/__renew))
  (export "__retain" (func $~lib/rt/pure/__retain))
  (export "__release" (func $~lib/rt/pure/__release))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
+ (export "heap.alloc" (func $~lib/heap/heap.alloc))
+ (export "heap.realloc" (func $~lib/heap/heap.realloc))
+ (export "heap.free" (func $~lib/heap/heap.free))
+ (export "heap.reset" (func $~lib/heap/heap.reset))
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -421,10 +423,10 @@
   if
    unreachable
   end
-  i32.const 1248
+  i32.const 1312
   i32.const 0
   i32.store
-  i32.const 2816
+  i32.const 2880
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -435,7 +437,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 1248
+    i32.const 1312
     i32.add
     i32.const 0
     i32.store offset=4
@@ -453,7 +455,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 1248
+      i32.const 1312
       i32.add
       i32.const 0
       i32.store offset=96
@@ -471,13 +473,13 @@
     br $for-loop|0
    end
   end
-  i32.const 1248
-  i32.const 2820
+  i32.const 1312
+  i32.const 2884
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 1248
+  i32.const 1312
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
@@ -486,7 +488,7 @@
   i32.ge_u
   if
    i32.const 1056
-   i32.const 1120
+   i32.const 1184
    i32.const 461
    i32.const 30
    call $~lib/builtins/abort
@@ -769,6 +771,43 @@
   i32.const 4
   i32.add
  )
+ (func $~lib/rt/pure/__new (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  i32.const 1073741804
+  i32.gt_u
+  if
+   i32.const 1056
+   i32.const 1120
+   i32.const 275
+   i32.const 30
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 16
+  i32.add
+  call $~lib/rt/tlsf/__alloc
+  local.tee $3
+  i32.const 4
+  i32.sub
+  local.tee $2
+  i32.const 0
+  i32.store offset=4
+  local.get $2
+  i32.const 0
+  i32.store offset=8
+  local.get $2
+  local.get $1
+  i32.store offset=12
+  local.get $2
+  local.get $0
+  i32.store offset=16
+  local.get $3
+  i32.const 16
+  i32.add
+ )
  (func $~lib/rt/tlsf/checkUsedBlock (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
@@ -989,7 +1028,7 @@
   i32.and
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 1244
+  i32.const 1308
   i32.ge_u
   if
    local.get $0
@@ -1011,7 +1050,7 @@
    call $~lib/rt/tlsf/initialize
   end
   local.get $0
-  i32.const 1244
+  i32.const 1308
   i32.lt_u
   if
    global.get $~lib/rt/tlsf/ROOT
@@ -1094,60 +1133,6 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/tlsf/__free (param $0 i32)
-  local.get $0
-  i32.const 1244
-  i32.lt_u
-  if
-   return
-  end
-  global.get $~lib/rt/tlsf/ROOT
-  i32.eqz
-  if
-   call $~lib/rt/tlsf/initialize
-  end
-  global.get $~lib/rt/tlsf/ROOT
-  local.get $0
-  call $~lib/rt/tlsf/checkUsedBlock
-  call $~lib/rt/tlsf/freeBlock
- )
- (func $~lib/rt/pure/__new (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  i32.const 1073741804
-  i32.gt_u
-  if
-   i32.const 1056
-   i32.const 1184
-   i32.const 275
-   i32.const 30
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.const 16
-  i32.add
-  call $~lib/rt/tlsf/__alloc
-  local.tee $3
-  i32.const 4
-  i32.sub
-  local.tee $2
-  i32.const 0
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  i32.store offset=8
-  local.get $2
-  local.get $1
-  i32.store offset=12
-  local.get $2
-  local.get $0
-  i32.store offset=16
-  local.get $3
-  i32.const 16
-  i32.add
- )
  (func $~lib/rt/pure/__renew (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -1157,7 +1142,7 @@
   i32.gt_u
   if
    i32.const 1056
-   i32.const 1184
+   i32.const 1120
    i32.const 288
    i32.const 30
    call $~lib/builtins/abort
@@ -1201,7 +1186,7 @@
  (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  i32.const 1244
+  i32.const 1308
   i32.gt_u
   if
    local.get $0
@@ -1221,7 +1206,7 @@
  )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
-  i32.const 1244
+  i32.const 1308
   i32.gt_u
   if
    local.get $0
@@ -1229,6 +1214,39 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
+ )
+ (func $~lib/heap/heap.alloc (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/rt/tlsf/__alloc
+ )
+ (func $~lib/heap/heap.realloc (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  call $~lib/rt/tlsf/__realloc
+ )
+ (func $~lib/heap/heap.free (param $0 i32)
+  local.get $0
+  i32.const 1308
+  i32.ge_u
+  if
+   global.get $~lib/rt/tlsf/ROOT
+   i32.eqz
+   if
+    call $~lib/rt/tlsf/initialize
+   end
+   global.get $~lib/rt/tlsf/ROOT
+   local.get $0
+   call $~lib/rt/tlsf/checkUsedBlock
+   call $~lib/rt/tlsf/freeBlock
+  end
+ )
+ (func $~lib/heap/heap.reset
+  i32.const 1248
+  i32.const 1184
+  i32.const 598
+  i32.const 3
+  call $~lib/builtins/abort
+  unreachable
  )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
@@ -1260,7 +1278,7 @@
      if
       local.get $2
       local.tee $1
-      i32.const 1244
+      i32.const 1308
       i32.ge_u
       if
        local.get $1

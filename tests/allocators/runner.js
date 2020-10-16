@@ -1,7 +1,7 @@
 function runner(exports, runs, allocs) {
-  const alloc = exports["__alloc"];
-  const free  = exports["__free"];
-  const reset = exports["__reset"];
+  const alloc = exports["heap.alloc"];
+  const free  = exports["heap.free"];
+  const reset = exports["heap.reset"];
   const fill  = exports["memory.fill"];
 
   const ptrs = [];
