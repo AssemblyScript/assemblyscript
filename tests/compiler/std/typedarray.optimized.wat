@@ -2744,8 +2744,6 @@
      local.get $2
      i32.const 1
      i32.shr_s
-     i32.const 31
-     i32.and
      i32.shr_u
      i32.const 1
      i32.and
@@ -2797,8 +2795,6 @@
      i32.load
      i32.const 1
      local.get $3
-     i32.const 31
-     i32.and
      i32.shl
      i32.xor
      i32.store
@@ -2860,8 +2856,6 @@
      i32.add
      i32.load
      local.get $1
-     i32.const 31
-     i32.and
      i32.shr_u
      i32.const 1
      i32.and
@@ -2915,8 +2909,6 @@
        i32.load
        i32.const 1
        local.get $1
-       i32.const 31
-       i32.and
        i32.shl
        i32.xor
        i32.store

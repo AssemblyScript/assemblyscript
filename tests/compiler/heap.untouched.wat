@@ -1,40 +1,29 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 12) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
- (data (i32.const 76) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s\00")
- (data (i32.const 140) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
- (data (i32.const 192) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 12) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
+ (data (i32.const 76) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
+ (data (i32.const 140) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00n\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d\00")
  (table $0 1 funcref)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
+ (global $heap/ptr (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 192))
- (global $~lib/heap/__heap_base i32 (i32.const 236))
- (global $implicit-getter-setter/Basic i32 (i32.const 3))
- (global $implicit-getter-setter/Managed i32 (i32.const 4))
+ (global $~lib/heap/__heap_base i32 (i32.const 192))
  (export "memory" (memory $0))
- (export "__new" (func $~lib/rt/pure/__new))
- (export "__renew" (func $~lib/rt/pure/__renew))
- (export "__retain" (func $~lib/rt/pure/__retain))
- (export "__release" (func $~lib/rt/pure/__release))
- (export "__rtti_base" (global $~lib/rt/__rtti_base))
- (export "Basic" (global $implicit-getter-setter/Basic))
- (export "Basic#get:val" (func $implicit-getter-setter/Basic#get:val))
- (export "Basic#set:val" (func $implicit-getter-setter/Basic#set:val))
- (export "Basic#constructor" (func $implicit-getter-setter/Basic#constructor))
- (export "Managed" (global $implicit-getter-setter/Managed))
- (export "Managed#get:foo" (func $implicit-getter-setter/Managed#get:foo))
- (export "Managed#set:foo" (func $implicit-getter-setter/Managed#set:foo))
- (export "Managed#constructor" (func $implicit-getter-setter/Managed#constructor))
+ (export "heap.alloc" (func $~lib/heap/heap.alloc))
+ (export "heap.realloc" (func $~lib/heap/heap.realloc))
+ (export "heap.free" (func $~lib/heap/heap.free))
+ (export "heap.reset" (func $~lib/heap/heap.reset))
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -57,7 +46,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 272
    i32.const 14
    call $~lib/builtins/abort
@@ -84,7 +73,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 274
    i32.const 14
    call $~lib/builtins/abort
@@ -138,7 +127,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 287
    i32.const 14
    call $~lib/builtins/abort
@@ -270,7 +259,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 200
    i32.const 14
    call $~lib/builtins/abort
@@ -287,7 +276,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 202
    i32.const 14
    call $~lib/builtins/abort
@@ -382,7 +371,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 160
+    i32.const 32
     i32.const 223
     i32.const 16
     call $~lib/builtins/abort
@@ -447,7 +436,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 238
    i32.const 14
    call $~lib/builtins/abort
@@ -465,7 +454,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 239
    i32.const 14
    call $~lib/builtins/abort
@@ -524,7 +513,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 255
    i32.const 14
    call $~lib/builtins/abort
@@ -629,7 +618,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 380
    i32.const 14
    call $~lib/builtins/abort
@@ -672,7 +661,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 160
+    i32.const 32
     i32.const 387
     i32.const 16
     call $~lib/builtins/abort
@@ -705,7 +694,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 160
+    i32.const 32
     i32.const 400
     i32.const 5
     call $~lib/builtins/abort
@@ -942,8 +931,8 @@
   i32.const 1073741820
   i32.ge_u
   if
+   i32.const 96
    i32.const 32
-   i32.const 160
    i32.const 461
    i32.const 30
    call $~lib/builtins/abort
@@ -1027,7 +1016,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 333
    i32.const 14
    call $~lib/builtins/abort
@@ -1092,7 +1081,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 160
+     i32.const 32
      i32.const 346
      i32.const 18
      call $~lib/builtins/abort
@@ -1243,7 +1232,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 360
    i32.const 14
    call $~lib/builtins/abort
@@ -1352,7 +1341,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 160
+    i32.const 32
     i32.const 498
     i32.const 16
     call $~lib/builtins/abort
@@ -1372,7 +1361,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 500
    i32.const 14
    call $~lib/builtins/abort
@@ -1401,44 +1390,9 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/pure/__new (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
+ (func $~lib/heap/heap.alloc (param $0 i32) (result i32)
   local.get $0
-  i32.const 1073741804
-  i32.gt_u
-  if
-   i32.const 32
-   i32.const 96
-   i32.const 275
-   i32.const 30
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 16
-  local.get $0
-  i32.add
   call $~lib/rt/tlsf/__alloc
-  local.set $2
-  local.get $2
-  i32.const 4
-  i32.sub
-  local.set $3
-  local.get $3
-  i32.const 0
-  i32.store offset=4
-  local.get $3
-  i32.const 0
-  i32.store offset=8
-  local.get $3
-  local.get $1
-  i32.store offset=12
-  local.get $3
-  local.get $0
-  i32.store offset=16
-  local.get $2
-  i32.const 16
-  i32.add
  )
  (func $~lib/rt/tlsf/checkUsedBlock (param $0 i32) (result i32)
   (local $1 i32)
@@ -1469,7 +1423,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 32
    i32.const 563
    i32.const 3
    call $~lib/builtins/abort
@@ -2890,346 +2844,55 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/pure/__renew (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $1
-  i32.const 1073741804
-  i32.gt_u
-  if
-   i32.const 32
-   i32.const 96
-   i32.const 288
-   i32.const 30
-   call $~lib/builtins/abort
-   unreachable
-  end
+ (func $~lib/heap/heap.realloc (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.const 20
-  i32.sub
-  local.set $2
-  local.get $2
-  i32.load offset=4
-  local.set $3
-  local.get $2
-  i32.load offset=12
-  local.set $4
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.const 16
   local.get $1
-  i32.add
   call $~lib/rt/tlsf/__realloc
-  local.set $5
-  local.get $5
-  i32.const 4
-  i32.sub
-  local.set $2
-  local.get $2
-  local.get $3
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  i32.store offset=8
-  local.get $2
-  local.get $4
-  i32.store offset=12
-  local.get $2
-  local.get $1
-  i32.store offset=16
-  local.get $5
-  i32.const 16
-  i32.add
  )
- (func $~lib/rt/pure/increment (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.set $1
-  local.get $1
-  i32.const 268435455
-  i32.const -1
-  i32.xor
-  i32.and
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const 268435455
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 109
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.store offset=4
-  i32.const 0
-  drop
-  i32.const 1
-  drop
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 112
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
-  local.get $0
-  global.get $~lib/heap/__heap_base
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 20
-   i32.sub
-   call $~lib/rt/pure/increment
-  end
-  local.get $0
- )
- (func $~lib/rt/pure/__release (param $0 i32)
-  local.get $0
-  global.get $~lib/heap/__heap_base
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 20
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
- (func $implicit-getter-setter/Basic#constructor (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 4
-   i32.const 3
-   call $~lib/rt/pure/__new
-   call $~lib/rt/pure/__retain
-   local.set $0
-  end
-  local.get $0
-  local.get $1
-  i32.store
-  local.get $0
- )
- (func $implicit-getter-setter/Basic#get:val (param $0 i32) (result i32)
-  local.get $0
-  i32.load
- )
- (func $implicit-getter-setter/Basic#set:val (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store
- )
- (func $implicit-getter-setter/Managed#constructor (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 4
-   i32.const 4
-   call $~lib/rt/pure/__new
-   call $~lib/rt/pure/__retain
-   local.set $0
-  end
-  local.get $0
-  local.get $1
-  call $~lib/rt/pure/__retain
-  i32.store
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.set $1
-  local.get $1
-  call $~lib/rt/pure/__release
-  local.get $0
- )
- (func $implicit-getter-setter/Managed#get:foo (param $0 i32) (result i32)
-  local.get $0
-  i32.load
-  call $~lib/rt/pure/__retain
- )
- (func $implicit-getter-setter/Managed#set:foo (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  local.get $1
-  local.get $0
-  i32.load
-  local.tee $2
-  i32.ne
-  if
-   local.get $1
-   call $~lib/rt/pure/__retain
-   drop
-   local.get $2
-   call $~lib/rt/pure/__release
-  end
-  local.get $1
-  i32.store
- )
- (func $~lib/rt/pure/finalize (param $0 i32)
-  i32.const 0
-  drop
-  global.get $~lib/rt/tlsf/ROOT
-  local.get $0
-  call $~lib/rt/tlsf/freeBlock
- )
- (func $~lib/rt/pure/decrement (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.load offset=4
-  local.set $1
-  local.get $1
-  i32.const 268435455
-  i32.and
-  local.set $2
-  i32.const 0
-  drop
-  i32.const 1
-  drop
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 122
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  i32.const 1
-  i32.eq
-  if
-   local.get $0
-   i32.const 20
-   i32.add
-   i32.const 1
-   call $~lib/rt/__visit_members
-   i32.const 1
-   drop
-   i32.const 1
-   drop
-   local.get $1
-   i32.const -2147483648
-   i32.and
-   i32.eqz
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 96
-    i32.const 126
-    i32.const 18
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   call $~lib/rt/pure/finalize
-  else
-   i32.const 1
-   drop
-   local.get $2
-   i32.const 0
-   i32.gt_u
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 96
-    i32.const 136
-    i32.const 16
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 1
-   drop
-   local.get $0
-   local.get $1
-   i32.const 268435455
-   i32.const -1
-   i32.xor
-   i32.and
-   local.get $2
-   i32.const 1
-   i32.sub
-   i32.or
-   i32.store offset=4
-  end
- )
- (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/__free (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
   if
    return
   end
-  i32.const 1
-  drop
-  i32.const 1
-  drop
-  local.get $1
-  i32.const 1
-  i32.eq
+  global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
-   i32.const 0
-   i32.const 96
-   i32.const 69
-   i32.const 16
-   call $~lib/builtins/abort
-   unreachable
+   call $~lib/rt/tlsf/initialize
   end
+  global.get $~lib/rt/tlsf/ROOT
   local.get $0
-  i32.const 20
-  i32.sub
-  call $~lib/rt/pure/decrement
+  call $~lib/rt/tlsf/checkUsedBlock
+  call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  block $switch$1$default
-   block $switch$1$case$4
-    block $switch$1$case$2
-     local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$2 $switch$1$case$4 $switch$1$default
-    end
-    return
-   end
-   local.get $0
-   i32.load
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   return
-  end
+ (func $~lib/heap/heap.free (param $0 i32)
+  local.get $0
+  call $~lib/rt/tlsf/__free
+ )
+ (func $start:heap
+  i32.const 16
+  call $~lib/heap/heap.alloc
+  global.set $heap/ptr
+  global.get $heap/ptr
+  i32.const 32
+  call $~lib/heap/heap.realloc
+  global.set $heap/ptr
+  global.get $heap/ptr
+  call $~lib/heap/heap.free
+ )
+ (func $~lib/rt/tlsf/__reset
+  i32.const 160
+  i32.const 32
+  i32.const 598
+  i32.const 3
+  call $~lib/builtins/abort
   unreachable
+ )
+ (func $~lib/heap/heap.reset
+  call $~lib/rt/tlsf/__reset
+ )
+ (func $~start
+  call $start:heap
  )
 )

@@ -591,3 +591,9 @@ export function __free(ptr: usize): void {
   if (!ROOT) initialize();
   freeBlock(ROOT, checkUsedBlock(ptr));
 }
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __reset(): void {
+  throw new Error("not implemented");
+}
