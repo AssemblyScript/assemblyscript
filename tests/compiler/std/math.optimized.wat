@@ -185,15 +185,11 @@
    i64.const 63
    i64.shr_u
    i32.wrap_i64
-   i32.const 0
-   i32.ne
    local.get $1
    i64.reinterpret_f64
    i64.const 63
    i64.shr_u
    i32.wrap_i64
-   i32.const 0
-   i32.ne
    i32.eq
    if
     local.get $2
@@ -371,14 +367,10 @@
    i32.reinterpret_f32
    i32.const 31
    i32.shr_u
-   i32.const 0
-   i32.ne
    local.get $1
    i32.reinterpret_f32
    i32.const 31
    i32.shr_u
-   i32.const 0
-   i32.ne
    i32.eq
    if
     local.get $2
