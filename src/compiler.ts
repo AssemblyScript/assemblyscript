@@ -5646,7 +5646,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I16:
       case TypeKind.U8:
       case TypeKind.U16: {
-        // leftExpr << (rightExpr & (7|15))
+        // leftExpr << (rightExpr & (1|7|15))
         return module.binary(
           BinaryOp.ShlI32,
           leftExpr,
@@ -5693,7 +5693,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16: {
-        // leftExpr >>> (rightExpr & (7|15))
+        // leftExpr >>> (rightExpr & (1|7|15))
         return module.binary(
           BinaryOp.ShrU32,
           this.ensureSmallIntegerWrap(leftExpr, type),
@@ -5744,7 +5744,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I16:
       case TypeKind.U8:
       case TypeKind.U16: {
-        // leftExpr >>> (rightExpr & (7|15))
+        // leftExpr >>> (rightExpr & (1|7|15))
         return module.binary(
           BinaryOp.ShrU32,
           this.ensureSmallIntegerWrap(leftExpr, type),
