@@ -5641,12 +5641,12 @@ export class Compiler extends DiagnosticEmitter {
     // Cares about garbage bits on the RHS, but only for types smaller than 5 bits
     var module = this.module;
     switch (type.kind) {
-      case TypeKind.BOOL:
+      case TypeKind.BOOL: return leftExpr;
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
       case TypeKind.U16: {
-        // leftExpr << (rightExpr & (1|7|15))
+        // leftExpr << (rightExpr & (7|15))
         return module.binary(
           BinaryOp.ShlI32,
           leftExpr,
@@ -5681,6 +5681,7 @@ export class Compiler extends DiagnosticEmitter {
     // and signedness
     var module = this.module;
     switch (type.kind) {
+      case TypeKind.BOOL: return leftExpr;
       case TypeKind.I8:
       case TypeKind.I16: {
         // leftExpr >> (rightExpr & (7|15))
@@ -5690,10 +5691,9 @@ export class Compiler extends DiagnosticEmitter {
           module.binary(BinaryOp.AndI32, rightExpr, module.i32(type.size - 1))
         );
       }
-      case TypeKind.BOOL:
       case TypeKind.U8:
       case TypeKind.U16: {
-        // leftExpr >>> (rightExpr & (1|7|15))
+        // leftExpr >>> (rightExpr & (7|15))
         return module.binary(
           BinaryOp.ShrU32,
           this.ensureSmallIntegerWrap(leftExpr, type),
@@ -5739,12 +5739,12 @@ export class Compiler extends DiagnosticEmitter {
     // Cares about garbage bits on the LHS, but on the RHS only for types smaller than 5 bits
     var module = this.module;
     switch (type.kind) {
-      case TypeKind.BOOL:
+      case TypeKind.BOOL: return leftExpr;
       case TypeKind.I8:
       case TypeKind.I16:
       case TypeKind.U8:
       case TypeKind.U16: {
-        // leftExpr >>> (rightExpr & (1|7|15))
+        // leftExpr >>> (rightExpr & (7|15))
         return module.binary(
           BinaryOp.ShrU32,
           this.ensureSmallIntegerWrap(leftExpr, type),
