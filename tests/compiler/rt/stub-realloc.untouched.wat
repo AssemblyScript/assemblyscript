@@ -19,7 +19,7 @@
  (global $rt/stub-realloc/newLastPtr (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 144))
- (global $~lib/heap/__heap_base i32 (i32.const 172))
+ (global $~lib/memory/__heap_base i32 (i32.const 172))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "__new" (func $~lib/rt/stub/__new))
@@ -1740,7 +1740,7 @@
    i32.const 1
    global.set $~started
   end
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

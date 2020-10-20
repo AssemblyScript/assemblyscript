@@ -8,7 +8,7 @@
  (table $0 1 funcref)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 8))
+ (global $~lib/memory/__heap_base i32 (i32.const 8))
  (global $extends-recursive/Child i32 (i32.const 3))
  (export "memory" (memory $0))
  (export "Child" (global $extends-recursive/Child))
@@ -211,7 +211,7 @@
   i32.store
  )
  (func $~start
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

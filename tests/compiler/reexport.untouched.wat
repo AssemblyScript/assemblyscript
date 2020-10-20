@@ -23,7 +23,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $reexport/car (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 56))
+ (global $~lib/memory/__heap_base i32 (i32.const 56))
  (global $exports/Car i32 (i32.const 3))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $exports/vehicles.Car i32 (i32.const 4))
@@ -299,7 +299,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

@@ -15,7 +15,7 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 88))
+ (global $~lib/memory/__heap_base i32 (i32.const 88))
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
  (start $~start)
@@ -479,7 +479,7 @@
    unreachable
   end
   call $inlining/test_funcs
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

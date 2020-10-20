@@ -22,7 +22,7 @@
  (global $rt/instanceof/nullBlackcat (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 64))
- (global $~lib/heap/__heap_base i32 (i32.const 116))
+ (global $~lib/memory/__heap_base i32 (i32.const 116))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/computeSize (param $0 i32) (result i32)
@@ -247,7 +247,7 @@
  )
  (func $start:rt/instanceof
   (local $0 i32)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

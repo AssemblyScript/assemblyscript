@@ -44,7 +44,7 @@
  (global $resolve-propertyaccess/Enum.VALUE i32 (i32.const 4))
  (global $resolve-propertyaccess/Class.staticField (mut i32) (i32.const 5))
  (global $resolve-propertyaccess/Class.lazyStaticField (mut i32) (i32.const 55))
- (global $~lib/heap/__heap_base i32 (i32.const 2244))
+ (global $~lib/memory/__heap_base i32 (i32.const 2244))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
@@ -995,7 +995,7 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

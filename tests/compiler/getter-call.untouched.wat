@@ -11,7 +11,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 40))
+ (global $~lib/memory/__heap_base i32 (i32.const 40))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $~start)
@@ -197,7 +197,7 @@
   local.get $2
  )
  (func $~start
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

@@ -607,7 +607,7 @@ export namespace BuiltinNames {
   export const v64x2_load_splat = "~lib/builtins/v64x2.load_splat";
 
   // internals
-  export const heap_base = "~lib/heap/__heap_base";
+  export const heap_base = "~lib/memory/__heap_base";
   export const rtti_base = "~lib/rt/__rtti_base";
   export const visit_globals = "~lib/rt/__visit_globals";
   export const visit_members = "~lib/rt/__visit_members";

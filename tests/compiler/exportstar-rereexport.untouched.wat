@@ -20,7 +20,7 @@
  (global $reexport/car (mut i32) (i32.const 0))
  (global $rereexport/car (mut i32) (i32.const 0))
  (global $rereexport/exportsNamespaceCar (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 108))
+ (global $~lib/memory/__heap_base i32 (i32.const 108))
  (export "memory" (memory $0))
  (export "a" (global $export/a))
  (export "renamed_a" (global $export/a))
@@ -249,7 +249,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

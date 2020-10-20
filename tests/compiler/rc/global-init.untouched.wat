@@ -14,7 +14,7 @@
  (global $rc/global-init/a (mut i32) (i32.const 0))
  (global $rc/global-init/b (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 160))
+ (global $~lib/memory/__heap_base i32 (i32.const 160))
  (export "memory" (memory $0))
  (start $~start)
  (func $rc/global-init/getRef (result i32)
@@ -73,7 +73,7 @@
  )
  (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -85,7 +85,7 @@
  )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -819,7 +819,7 @@
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.lt_u
   if
    return

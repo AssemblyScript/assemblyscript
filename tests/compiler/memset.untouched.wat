@@ -7,7 +7,7 @@
  (data (i32.const 12) "\12\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $memset/dest (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 52))
+ (global $~lib/memory/__heap_base i32 (i32.const 52))
  (export "memory" (memory $0))
  (start $~start)
  (func $memset/memset (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -274,7 +274,7 @@
   local.get $3
  )
  (func $start:memset
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   global.set $memset/dest
   global.get $memset/dest
   i32.const 1

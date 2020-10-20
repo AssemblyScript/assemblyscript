@@ -14,7 +14,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 64))
- (global $~lib/heap/__heap_base i32 (i32.const 92))
+ (global $~lib/memory/__heap_base i32 (i32.const 92))
  (export "memory" (memory $0))
  (export "__new" (func $~lib/rt/stub/__new))
  (export "__renew" (func $~lib/rt/stub/__renew))
@@ -1550,7 +1550,7 @@
   global.set $~lib/rt/stub/offset
  )
  (func $~start
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

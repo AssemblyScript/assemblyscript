@@ -18,7 +18,7 @@
  (global $while/ran (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 240))
+ (global $~lib/memory/__heap_base i32 (i32.const 240))
  (export "memory" (memory $0))
  (start $~start)
  (func $while/testSimple
@@ -1227,7 +1227,7 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 15
   i32.add
   i32.const 15
@@ -1933,7 +1933,7 @@
  )
  (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -1957,7 +1957,7 @@
  )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -2476,7 +2476,7 @@
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.lt_u
   if
    return

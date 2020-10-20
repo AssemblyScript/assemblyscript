@@ -31,7 +31,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $typeof/c (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 356))
+ (global $~lib/memory/__heap_base i32 (i32.const 356))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
@@ -644,7 +644,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

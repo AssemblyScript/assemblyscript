@@ -15,10 +15,10 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $heap/ptr (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (export "heap.alloc" (func $~lib/heap/heap.alloc))
- (export "heap.realloc" (func $~lib/heap/heap.realloc))
- (export "heap.free" (func $~lib/heap/heap.free))
- (export "heap.reset" (func $~lib/heap/heap.reset))
+ (export "heap.alloc" (func $~lib/memory/heap.alloc))
+ (export "heap.realloc" (func $~lib/memory/heap.realloc))
+ (export "heap.free" (func $~lib/memory/heap.free))
+ (export "heap.reset" (func $~lib/memory/heap.reset))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -985,7 +985,7 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $1
  )
- (func $~lib/heap/heap.alloc (param $0 i32) (result i32)
+ (func $~lib/memory/heap.alloc (param $0 i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -1239,7 +1239,7 @@
   end
   local.get $2
  )
- (func $~lib/heap/heap.realloc (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/memory/heap.realloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1335,7 +1335,7 @@
   i32.const 4
   i32.add
  )
- (func $~lib/heap/heap.free (param $0 i32)
+ (func $~lib/memory/heap.free (param $0 i32)
   local.get $0
   i32.const 1216
   i32.ge_u
@@ -1351,7 +1351,7 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/heap/heap.reset
+ (func $~lib/memory/heap.reset
   i32.const 1184
   i32.const 1056
   i32.const 598
@@ -1361,13 +1361,13 @@
  )
  (func $~start
   i32.const 16
-  call $~lib/heap/heap.alloc
+  call $~lib/memory/heap.alloc
   global.set $heap/ptr
   global.get $heap/ptr
   i32.const 32
-  call $~lib/heap/heap.realloc
+  call $~lib/memory/heap.realloc
   global.set $heap/ptr
   global.get $heap/ptr
-  call $~lib/heap/heap.free
+  call $~lib/memory/heap.free
  )
 )

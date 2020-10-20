@@ -17,7 +17,7 @@
  (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/builtins/u16.MAX_VALUE i32 (i32.const 65535))
- (global $~lib/heap/__heap_base i32 (i32.const 128))
+ (global $~lib/memory/__heap_base i32 (i32.const 128))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/stub/computeSize (param $0 i32) (result i32)
@@ -2973,7 +2973,7 @@
   local.get $0
  )
  (func $start:features/simd
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

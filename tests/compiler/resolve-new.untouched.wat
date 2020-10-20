@@ -8,7 +8,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $resolve-new/foo (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 8))
+ (global $~lib/memory/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/stub/computeSize (param $0 i32) (result i32)
@@ -169,7 +169,7 @@
  )
  (func $start:resolve-new
   (local $0 i32)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

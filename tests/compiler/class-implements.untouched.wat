@@ -12,7 +12,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $class-implements/a (mut i32) (i32.const 0))
  (global $class-implements/c (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 72))
+ (global $~lib/memory/__heap_base i32 (i32.const 72))
  (global $class-implements/A i32 (i32.const 3))
  (global $class-implements/C i32 (i32.const 5))
  (export "memory" (memory $0))
@@ -206,7 +206,7 @@
   i32.const 2
  )
  (func $start:class-implements
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

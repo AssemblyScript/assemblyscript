@@ -19,7 +19,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/date/date (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 56))
+ (global $~lib/memory/__heap_base i32 (i32.const 56))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/stub/computeSize (param $0 i32) (result i32)
@@ -316,7 +316,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

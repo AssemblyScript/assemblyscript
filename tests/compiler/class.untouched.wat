@@ -17,7 +17,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 108))
+ (global $~lib/memory/__heap_base i32 (i32.const 108))
  (export "memory" (memory $0))
  (export "test" (func $class/test))
  (export "testGenericInitializer" (func $class/testGenericInitializer))
@@ -580,7 +580,7 @@
  )
  (func $~start
   call $start:class
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

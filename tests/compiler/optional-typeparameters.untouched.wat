@@ -11,7 +11,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $optional-typeparameters/tConcrete (mut i32) (i32.const 0))
  (global $optional-typeparameters/tDerived (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 8))
+ (global $~lib/memory/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
  (start $~start)
  (func $optional-typeparameters/testConcrete<i32,i32> (param $0 i32) (result i32)
@@ -199,7 +199,7 @@
   i32.const 2
   call $optional-typeparameters/testDerived<i32,i32>
   drop
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

@@ -18,7 +18,7 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 192))
- (global $~lib/heap/__heap_base i32 (i32.const 220))
+ (global $~lib/memory/__heap_base i32 (i32.const 220))
  (export "memory" (memory $0))
  (export "__new" (func $~lib/rt/pure/__new))
  (export "__renew" (func $~lib/rt/pure/__renew))
@@ -777,7 +777,7 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 15
   i32.add
   i32.const 15
@@ -2753,7 +2753,7 @@
   i32.and
   call $~lib/memory/memory.copy
   local.get $1
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.ge_u
   if
    i32.const 0
@@ -2862,7 +2862,7 @@
    call $~lib/rt/tlsf/initialize
   end
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.lt_u
   if (result i32)
    global.get $~lib/rt/tlsf/ROOT
@@ -2963,7 +2963,7 @@
  )
  (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -2975,7 +2975,7 @@
  )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -3079,7 +3079,7 @@
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.lt_u
   if
    return

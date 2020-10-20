@@ -71,7 +71,7 @@
  (global $resolve-binary/foo (mut i32) (i32.const 0))
  (global $resolve-binary/bar (mut i32) (i32.const 0))
  (global $resolve-binary/bar2 (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 9784))
+ (global $~lib/memory/__heap_base i32 (i32.const 9784))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/number/Bool#toString (param $0 i32) (param $1 i32) (result i32)
@@ -5116,7 +5116,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

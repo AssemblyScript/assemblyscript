@@ -35,7 +35,7 @@
  (global $function-expression/globalFunc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 616))
+ (global $~lib/memory/__heap_base i32 (i32.const 616))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-expression~anonymous|0 (param $0 i32) (result i32)
@@ -605,7 +605,7 @@
   end
   call $function-expression/testGlobal
   call $function-expression/testLocal
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

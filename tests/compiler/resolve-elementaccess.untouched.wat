@@ -55,7 +55,7 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $resolve-elementaccess/buf (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 3412))
+ (global $~lib/memory/__heap_base i32 (i32.const 3412))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/stub/__release (param $0 i32)
@@ -3934,7 +3934,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add
   i32.const 15

@@ -3535,6 +3535,8 @@ export class Function extends TypedElement {
   virtualStub: Function | null = null;
   /** Runtime memory segment, if created. */
   memorySegment: MemorySegment | null = null;
+  /** Original function, if a stub. */
+  original: Function;
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
@@ -3570,6 +3572,7 @@ export class Function extends TypedElement {
     this.flags = prototype.flags | CommonFlags.RESOLVED;
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
+    this.original = this;
     var program = prototype.program;
     this.type = signature.type;
     if (!prototype.is(CommonFlags.AMBIENT)) {
@@ -3614,12 +3617,13 @@ export class Function extends TypedElement {
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
   newStub(postfix: string): Function {
     var stub = new Function(
-      this.name + STUB_DELIMITER + postfix,
+      this.original.name + STUB_DELIMITER + postfix,
       this.prototype,
       this.typeArguments,
       this.signature.clone(),
       this.contextualTypeArguments
     );
+    stub.original = this.original;
     stub.set(this.flags & ~CommonFlags.COMPILED | CommonFlags.STUB);
     return stub;
   }
