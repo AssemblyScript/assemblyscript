@@ -167,6 +167,8 @@
   end
   local.get $0
   local.get $1
+  i32.const 7
+  i32.and
   i32.shl
   i32.const 24
   i32.shl
@@ -174,6 +176,8 @@
   i32.shr_s
   local.get $0
   local.get $1
+  i32.const 7
+  i32.and
   i32.shl
   i32.const 24
   i32.shl
@@ -311,11 +315,15 @@
   end
   local.get $0
   local.get $1
+  i32.const 7
+  i32.and
   i32.shl
   i32.const 255
   i32.and
   local.get $0
   local.get $1
+  i32.const 7
+  i32.and
   i32.shl
   i32.const 255
   i32.and

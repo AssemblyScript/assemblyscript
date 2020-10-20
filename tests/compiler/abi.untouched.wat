@@ -88,6 +88,8 @@
    i32.const 24
    i32.shr_s
    i32.const 24
+   i32.const 7
+   i32.and
    i32.shr_s
    local.set $0
   else
