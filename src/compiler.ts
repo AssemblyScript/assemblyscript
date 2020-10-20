@@ -2410,9 +2410,9 @@ export class Compiler extends DiagnosticEmitter {
         flow.inherit(condFlow);
 
         // Detect if local flags are incompatible before and after looping, and
-        // if so recompile by unifying local flags between iterations.
+        // if so recompile by unifying local flags between iterations. Note that
+        // this may be necessary multiple times where locals depend on each other.
         if (Flow.hasIncompatibleLocalStates(flowBefore, flow)) {
-          assert(!flowAfter); // should work on the first attempt
           outerFlow.popBreakLabel();
           this.currentFlow = outerFlow;
           return this.doCompileDoStatement(statement, flow);
@@ -2603,9 +2603,9 @@ export class Compiler extends DiagnosticEmitter {
       );
 
       // Detect if local flags are incompatible before and after looping, and if
-      // so recompile by unifying local flags between iterations.
+      // so recompile by unifying local flags between iterations. Note that this
+      // may be necessary multiple times where locals depend on each other.
       if (Flow.hasIncompatibleLocalStates(flowBefore, flow)) {
-        assert(!flowAfter); // should work on the first attempt
         assert(!bodyFlow.hasScopedLocals);
         flow.freeScopedLocals();
         outerFlow.popBreakLabel();
@@ -3344,10 +3344,10 @@ export class Compiler extends DiagnosticEmitter {
       else flow.inheritBranch(bodyFlow);
 
       // Detect if local flags are incompatible before and after looping, and
-      // if so recompile by unifying local flags between iterations.
+      // if so recompile by unifying local flags between iterations. Note that
+      // this may be necessary multiple times where locals depend on each other.
       // Here: Only relevant if flow does not always break.
       if (!breaks && Flow.hasIncompatibleLocalStates(flowBefore, flow)) {
-        assert(!flowAfter); // should work on the first attempt
         flow.freeTempLocal(tcond);
         outerFlow.popBreakLabel();
         this.currentFlow = outerFlow;
