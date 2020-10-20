@@ -3535,8 +3535,8 @@ export class Function extends TypedElement {
   virtualStub: Function | null = null;
   /** Runtime memory segment, if created. */
   memorySegment: MemorySegment | null = null;
-  /** Original function, if a stub. */
-  original: Function;
+  /** Original function, if a stub. Otherwise `this`. */
+  original!: Function;
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
