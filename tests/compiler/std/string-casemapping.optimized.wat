@@ -1903,10 +1903,8 @@
    return
   end
   local.get $8
-  i32.const 3
+  i32.const 6
   i32.mul
-  i32.const 1
-  i32.shl
   call $~lib/rt/pure/__new
   local.set $6
   i32.const 1276
@@ -2160,8 +2158,6 @@
      i32.sub
      i32.const 26
      i32.lt_u
-     i32.const 0
-     i32.ne
      i32.const 5
      i32.shl
      i32.const -1
@@ -2819,8 +2815,6 @@
      i32.sub
      i32.const 26
      i32.lt_u
-     i32.const 0
-     i32.ne
      i32.const 5
      i32.shl
      i32.or
