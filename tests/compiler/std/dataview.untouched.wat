@@ -2145,7 +2145,7 @@
   i32.const 8
   i32.const 15
   i32.and
-  i32.shr_s
+  i32.shr_u
   i32.const 255
   i32.and
   i32.or
@@ -2271,30 +2271,6 @@
   local.get $1
   i32.add
   i32.load8_u
- )
- (func $~lib/polyfills/bswap<u16> (param $0 i32) (result i32)
-  i32.const 1
-  drop
-  i32.const 2
-  i32.const 2
-  i32.eq
-  drop
-  local.get $0
-  i32.const 8
-  i32.const 15
-  i32.and
-  i32.shl
-  local.get $0
-  i32.const 65535
-  i32.and
-  i32.const 8
-  i32.const 15
-  i32.and
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.or
-  return
  )
  (func $~lib/dataview/DataView#getUint16 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
