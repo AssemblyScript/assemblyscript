@@ -54,7 +54,7 @@ jobs:
       run: npm run check
     - name: Test sources
       run: |
-        if [[ `node bin/asc --version` != *"-dev" ]]; then
+        if [[ `node bin/asc --version` != "0.0.0" ]]; then
           echo "ERROR: Not testing sources"
           exit 1
         fi
