@@ -30,7 +30,7 @@ export declare interface RtraceOptions {
 export declare class Rtrace {
   [key: string]: unknown; // can be used as a Wasm import
 
-  /** Creates a new `RTrace` instance. */
+  /** Creates a new `Rtrace` instance. */
   constructor(options: RtraceOptions);
 
   /** Checks if rtrace is active, i.e. at least one event has occurred. */
