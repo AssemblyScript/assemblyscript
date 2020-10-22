@@ -22,7 +22,7 @@
  *
  * Uses the low-level API exported from src/index.ts so it works with the compiler compiled to
  * JavaScript as well as the compiler compiled to WebAssembly (eventually). Runs the sources
- * directly through ts-node if distribution files are not present (indicated by a `-dev` version).
+ * directly through ts-node if distribution files are not present.
  *
  * Can also be packaged as a bundle suitable for in-browser use with the standard library injected
  * in the build step. See dist/asc.js for the bundle and webpack.config.js for building details.
@@ -75,15 +75,16 @@ if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
 
 // Use distribution files if present, otherwise run the sources directly.
 var assemblyscript;
-var isDev = false;
 (function loadAssemblyScript() {
   try {
+    // note that this case will always trigger in recent node.js versions for typical installs
+    // see: https://nodejs.org/api/packages.html#packages_self_referencing_a_package_using_its_name
     assemblyscript = require("assemblyscript");
   } catch (e) {
-    try { // `asc` on the command line
+    try { // `asc` on the command line (unnecessary in recent node)
       assemblyscript = dynrequire("../dist/assemblyscript.js");
     } catch (e) {
-      try { // `asc` on the command line without dist files
+      try { // `asc` on the command line without dist files (unnecessary in recent node)
         dynrequire("ts-node").register({
           project: path.join(__dirname, "..", "src", "tsconfig.json"),
           skipIgnore: true,
@@ -91,7 +92,6 @@ var isDev = false;
         });
         dynrequire("../src/glue/js");
         assemblyscript = dynrequire("../src");
-        isDev = true;
       } catch (e_ts) {
         try { // `require("dist/asc.js")` in explicit browser tests
           assemblyscript = dynrequire("./assemblyscript");
@@ -105,9 +105,6 @@ var isDev = false;
 
 /** Whether this is a webpack bundle or not. */
 exports.isBundle = typeof BUNDLE_VERSION === "string";
-
-/** Whether asc runs the sources directly or not. */
-exports.isDev = isDev;
 
 /** AssemblyScript version. */
 exports.version = exports.isBundle ? BUNDLE_VERSION : dynrequire("../package.json").version;
@@ -241,7 +238,7 @@ exports.main = function main(argv, options, callback) {
 
   // Just print the version if requested
   if (opts.version) {
-    stdout.write("Version " + exports.version + (isDev ? "-dev" : "") + EOL);
+    stdout.write("Version " + exports.version + EOL);
     return callback(null);
   }
 
