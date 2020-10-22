@@ -1320,10 +1320,20 @@ declare namespace memory {
   export function data<T>(values: T[], align?: i32): usize;
 }
 
+/** Heap memory interface. */
+declare namespace heap {
+  /** Allocates a chunk of memory of at least the specified size. */
+  export function alloc(size: usize): usize;
+  /** Reallocates a chunk of memory to have at least the specified size. */
+  export function realloc(ptr: usize, size: usize): usize;
+  /** Frees a chunk of memory. */
+  export function free(ptr: usize): void;
+  /** Resets the heap. Stub/none runtime only. */
+  export function reset(): void;
+}
+
 /** Garbage collector interface. */
 declare namespace gc {
-  /** Can be set to `false` to disable automatic collection. Defaults to `true`. */
-  export var auto: bool;
   /** Performs a full garbage collection cycle. */
   export function collect(): void;
 }

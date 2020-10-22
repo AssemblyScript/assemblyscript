@@ -10,7 +10,8 @@ function test(file) {
         throw Error("Assertion failed: " + (msg ? "'" + getString(msg) + "' " : "") + "at " + getString(file) + ":" + line + ":" + column);
       },
       log(ptr) { console.log(getString(ptr)); },
-      logi(i) { console.log(i); }
+      logi(i) { console.log(i); },
+      trace(...args) { console.log("trace", args); }
     }
   }).exports;
 

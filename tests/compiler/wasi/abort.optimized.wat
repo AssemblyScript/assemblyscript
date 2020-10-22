@@ -7,8 +7,8 @@
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (memory $0 1)
- (data (i32.const 1024) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00t\00h\00e\00 \00m\00e\00s\00s\00a\00g\00e")
- (data (i32.const 1072) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00w\00a\00s\00i\00/\00a\00b\00o\00r\00t\00.\00t\00s")
+ (data (i32.const 1036) "\16\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00t\00h\00e\00 \00m\00e\00s\00s\00a\00g\00e")
+ (data (i32.const 1084) "\1a\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00w\00a\00s\00i\00/\00a\00b\00o\00r\00t\00.\00t\00s")
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "test" (func $wasi/abort/test))
@@ -242,8 +242,8 @@
   i32.const 12
   i64.const 9071471065260641
   i64.store
-  i32.const 1040
-  i32.const 1036
+  i32.const 1056
+  i32.const 1052
   i32.load
   i32.const 1
   i32.shr_u
@@ -258,8 +258,8 @@
   i32.const 4
   i32.add
   local.tee $1
-  i32.const 1088
-  i32.const 1084
+  i32.const 1104
+  i32.const 1100
   i32.load
   i32.const 1
   i32.shr_u

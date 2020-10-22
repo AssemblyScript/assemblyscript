@@ -4,11 +4,11 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1024) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
- (data (i32.const 1072) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00a\00s\00s\00e\00r\00t\00-\00n\00o\00n\00n\00u\00l\00l\00.\00t\00s")
- (data (i32.const 1136) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 1200) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 1248) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
+ (data (i32.const 1036) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
+ (data (i32.const 1100) "\"\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\"\00\00\00a\00s\00s\00e\00r\00t\00-\00n\00o\00n\00n\00u\00l\00l\00.\00t\00s")
+ (data (i32.const 1164) "$\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 1228) "\1a\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 1276) "^\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (export "testVar" (func $assert-nonnull/testVar))
@@ -27,8 +27,8 @@
   local.get $0
   i32.eqz
   if
-   i32.const 1040
-   i32.const 1088
+   i32.const 1056
+   i32.const 1120
    i32.const 2
    i32.const 10
    call $~lib/builtins/abort
@@ -40,8 +40,8 @@
   local.get $0
   i32.eqz
   if
-   i32.const 1040
-   i32.const 1088
+   i32.const 1056
+   i32.const 1120
    i32.const 11
    i32.const 10
    call $~lib/builtins/abort
@@ -56,8 +56,8 @@
   local.tee $0
   i32.eqz
   if
-   i32.const 1040
-   i32.const 1088
+   i32.const 1056
+   i32.const 1120
    i32.const 15
    i32.const 10
    call $~lib/builtins/abort
@@ -69,8 +69,8 @@
   local.get $0
   i32.eqz
   if
-   i32.const 1040
-   i32.const 1088
+   i32.const 1056
+   i32.const 1120
    i32.const 19
    i32.const 10
    call $~lib/builtins/abort
@@ -81,8 +81,8 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 1152
-   i32.const 1216
+   i32.const 1184
+   i32.const 1248
    i32.const 104
    i32.const 42
    call $~lib/builtins/abort
@@ -94,8 +94,8 @@
   local.tee $0
   i32.eqz
   if
-   i32.const 1264
-   i32.const 1216
+   i32.const 1296
+   i32.const 1248
    i32.const 108
    i32.const 40
    call $~lib/builtins/abort
@@ -109,8 +109,8 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 1152
-   i32.const 1216
+   i32.const 1184
+   i32.const 1248
    i32.const 104
    i32.const 42
    call $~lib/builtins/abort
@@ -126,8 +126,8 @@
   local.tee $0
   i32.eqz
   if
-   i32.const 1040
-   i32.const 1088
+   i32.const 1056
+   i32.const 1120
    i32.const 23
    i32.const 10
    call $~lib/builtins/abort
@@ -155,8 +155,8 @@
    local.get $0
    return
   end
-  i32.const 1040
-  i32.const 1088
+  i32.const 1056
+  i32.const 1120
   i32.const 27
   i32.const 10
   call $~lib/builtins/abort
@@ -182,8 +182,8 @@
    local.get $0
    return
   end
-  i32.const 1040
-  i32.const 1088
+  i32.const 1056
+  i32.const 1120
   i32.const 31
   i32.const 10
   call $~lib/builtins/abort
@@ -198,8 +198,8 @@
   local.get $0
   i32.eqz
   if
-   i32.const 1040
-   i32.const 1088
+   i32.const 1056
+   i32.const 1120
    i32.const 39
    i32.const 13
    call $~lib/builtins/abort
@@ -216,8 +216,8 @@
   local.tee $0
   i32.eqz
   if
-   i32.const 1040
-   i32.const 1088
+   i32.const 1056
+   i32.const 1120
    i32.const 44
    i32.const 10
    call $~lib/builtins/abort
@@ -239,8 +239,8 @@
   local.tee $0
   i32.eqz
   if
-   i32.const 1040
-   i32.const 1088
+   i32.const 1056
+   i32.const 1120
    i32.const 52
    i32.const 10
    call $~lib/builtins/abort

@@ -1,13 +1,13 @@
 (module
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_v128 (func (result v128)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00")
- (data (i32.const 64) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s\00")
+ (data (i32.const 12) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00")
+ (data (i32.const 76) " \00\00\00\01\00\00\00\00\00\00\00\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $~lib/ASC_FEATURE_SIMD i32 (i32.const 1))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -17,9 +17,22 @@
  (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/builtins/u16.MAX_VALUE i32 (i32.const 65535))
- (global $~lib/heap/__heap_base i32 (i32.const 112))
+ (global $~lib/memory/__heap_base i32 (i32.const 128))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/rt/stub/computeSize (param $0 i32) (result i32)
+  local.get $0
+  i32.const 4
+  i32.add
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  i32.const 4
+  i32.sub
+ )
  (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -31,6 +44,12 @@
   local.get $1
   i32.const 16
   i32.shl
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
   local.set $2
   local.get $0
   local.get $2
@@ -74,59 +93,32 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   local.get $0
-  i32.const 1073741808
+  i32.const 1073741820
   i32.gt_u
   if
    unreachable
   end
   global.get $~lib/rt/stub/offset
-  i32.const 16
+  local.set $1
+  global.get $~lib/rt/stub/offset
+  i32.const 4
   i32.add
   local.set $2
   local.get $0
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  local.tee $3
-  i32.const 16
-  local.tee $4
-  local.get $3
-  local.get $4
-  i32.gt_u
-  select
-  local.set $5
+  call $~lib/rt/stub/computeSize
+  local.set $3
   local.get $2
-  local.get $5
+  local.get $3
   i32.add
   call $~lib/rt/stub/maybeGrowMemory
-  local.get $2
-  i32.const 16
-  i32.sub
-  local.set $6
-  local.get $6
-  local.get $5
-  i32.store
-  i32.const 1
-  drop
-  local.get $6
-  i32.const 1
-  i32.store offset=4
-  local.get $6
   local.get $1
-  i32.store offset=8
-  local.get $6
-  local.get $0
-  i32.store offset=12
+  local.get $3
+  i32.store
   local.get $2
  )
  (func $~lib/rt/stub/__free (param $0 i32)
@@ -146,30 +138,15 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 68
+   i32.const 89
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.const 16
+  i32.const 4
   i32.sub
   local.set $1
-  i32.const 1
-  drop
-  local.get $1
-  i32.load offset=4
-  i32.const 1
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 70
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $0
   local.get $1
   i32.load
@@ -243,7 +220,6 @@
   i32.ne
   drop
   i32.const 64
-  i32.const 0
   call $~lib/rt/stub/__alloc
   local.set $0
   local.get $0
@@ -272,7 +248,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 61
    i32.const 3
    call $~lib/builtins/abort
@@ -290,7 +266,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 63
    i32.const 3
    call $~lib/builtins/abort
@@ -309,7 +285,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 65
    i32.const 3
    call $~lib/builtins/abort
@@ -326,7 +302,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 66
    i32.const 3
    call $~lib/builtins/abort
@@ -343,7 +319,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 67
    i32.const 3
    call $~lib/builtins/abort
@@ -404,7 +380,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 108
    i32.const 3
    call $~lib/builtins/abort
@@ -421,7 +397,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 113
    i32.const 3
    call $~lib/builtins/abort
@@ -438,7 +414,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 114
    i32.const 3
    call $~lib/builtins/abort
@@ -453,7 +429,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 115
    i32.const 3
    call $~lib/builtins/abort
@@ -470,7 +446,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 116
    i32.const 3
    call $~lib/builtins/abort
@@ -487,7 +463,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 121
    i32.const 3
    call $~lib/builtins/abort
@@ -611,7 +587,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 159
    i32.const 3
    call $~lib/builtins/abort
@@ -628,7 +604,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 160
    i32.const 3
    call $~lib/builtins/abort
@@ -645,7 +621,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 161
    i32.const 3
    call $~lib/builtins/abort
@@ -662,7 +638,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 162
    i32.const 3
    call $~lib/builtins/abort
@@ -679,7 +655,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 163
    i32.const 3
    call $~lib/builtins/abort
@@ -696,7 +672,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 164
    i32.const 3
    call $~lib/builtins/abort
@@ -713,7 +689,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 165
    i32.const 3
    call $~lib/builtins/abort
@@ -730,7 +706,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 166
    i32.const 3
    call $~lib/builtins/abort
@@ -747,7 +723,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 167
    i32.const 3
    call $~lib/builtins/abort
@@ -764,7 +740,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 168
    i32.const 3
    call $~lib/builtins/abort
@@ -814,7 +790,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 175
    i32.const 3
    call $~lib/builtins/abort
@@ -832,7 +808,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 177
    i32.const 3
    call $~lib/builtins/abort
@@ -851,7 +827,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 179
    i32.const 3
    call $~lib/builtins/abort
@@ -868,7 +844,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 180
    i32.const 3
    call $~lib/builtins/abort
@@ -885,7 +861,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 181
    i32.const 3
    call $~lib/builtins/abort
@@ -946,7 +922,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 222
    i32.const 3
    call $~lib/builtins/abort
@@ -963,7 +939,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 227
    i32.const 3
    call $~lib/builtins/abort
@@ -980,7 +956,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 228
    i32.const 3
    call $~lib/builtins/abort
@@ -995,7 +971,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 229
    i32.const 3
    call $~lib/builtins/abort
@@ -1012,7 +988,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 230
    i32.const 3
    call $~lib/builtins/abort
@@ -1029,7 +1005,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 235
    i32.const 3
    call $~lib/builtins/abort
@@ -1153,7 +1129,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 273
    i32.const 3
    call $~lib/builtins/abort
@@ -1170,7 +1146,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 274
    i32.const 3
    call $~lib/builtins/abort
@@ -1187,7 +1163,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 275
    i32.const 3
    call $~lib/builtins/abort
@@ -1204,7 +1180,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 276
    i32.const 3
    call $~lib/builtins/abort
@@ -1221,7 +1197,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 277
    i32.const 3
    call $~lib/builtins/abort
@@ -1238,7 +1214,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 278
    i32.const 3
    call $~lib/builtins/abort
@@ -1255,7 +1231,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 279
    i32.const 3
    call $~lib/builtins/abort
@@ -1272,7 +1248,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 280
    i32.const 3
    call $~lib/builtins/abort
@@ -1289,7 +1265,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 281
    i32.const 3
    call $~lib/builtins/abort
@@ -1306,7 +1282,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 282
    i32.const 3
    call $~lib/builtins/abort
@@ -1404,7 +1380,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 316
    i32.const 3
    call $~lib/builtins/abort
@@ -1422,7 +1398,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 318
    i32.const 3
    call $~lib/builtins/abort
@@ -1441,7 +1417,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 320
    i32.const 3
    call $~lib/builtins/abort
@@ -1458,7 +1434,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 321
    i32.const 3
    call $~lib/builtins/abort
@@ -1475,7 +1451,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 322
    i32.const 3
    call $~lib/builtins/abort
@@ -1536,7 +1512,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 363
    i32.const 3
    call $~lib/builtins/abort
@@ -1549,7 +1525,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 368
    i32.const 3
    call $~lib/builtins/abort
@@ -1562,7 +1538,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 369
    i32.const 3
    call $~lib/builtins/abort
@@ -1579,7 +1555,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 370
    i32.const 3
    call $~lib/builtins/abort
@@ -1596,7 +1572,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 375
    i32.const 3
    call $~lib/builtins/abort
@@ -1676,7 +1652,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 389
    i32.const 3
    call $~lib/builtins/abort
@@ -1693,7 +1669,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 390
    i32.const 3
    call $~lib/builtins/abort
@@ -1710,7 +1686,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 391
    i32.const 3
    call $~lib/builtins/abort
@@ -1727,7 +1703,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 392
    i32.const 3
    call $~lib/builtins/abort
@@ -1744,7 +1720,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 393
    i32.const 3
    call $~lib/builtins/abort
@@ -1761,7 +1737,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 394
    i32.const 3
    call $~lib/builtins/abort
@@ -1778,7 +1754,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 395
    i32.const 3
    call $~lib/builtins/abort
@@ -1795,7 +1771,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 396
    i32.const 3
    call $~lib/builtins/abort
@@ -1812,7 +1788,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 397
    i32.const 3
    call $~lib/builtins/abort
@@ -1829,7 +1805,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 398
    i32.const 3
    call $~lib/builtins/abort
@@ -1919,7 +1895,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 436
    i32.const 3
    call $~lib/builtins/abort
@@ -1937,7 +1913,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 438
    i32.const 3
    call $~lib/builtins/abort
@@ -1956,7 +1932,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 440
    i32.const 3
    call $~lib/builtins/abort
@@ -1973,7 +1949,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 441
    i32.const 3
    call $~lib/builtins/abort
@@ -1989,7 +1965,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 442
    i32.const 3
    call $~lib/builtins/abort
@@ -2002,7 +1978,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 447
    i32.const 3
    call $~lib/builtins/abort
@@ -2015,7 +1991,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 448
    i32.const 3
    call $~lib/builtins/abort
@@ -2032,7 +2008,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 449
    i32.const 3
    call $~lib/builtins/abort
@@ -2049,7 +2025,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 454
    i32.const 3
    call $~lib/builtins/abort
@@ -2144,7 +2120,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 495
    i32.const 3
    call $~lib/builtins/abort
@@ -2162,7 +2138,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 497
    i32.const 3
    call $~lib/builtins/abort
@@ -2181,7 +2157,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 499
    i32.const 3
    call $~lib/builtins/abort
@@ -2198,7 +2174,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 500
    i32.const 3
    call $~lib/builtins/abort
@@ -2215,7 +2191,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 501
    i32.const 3
    call $~lib/builtins/abort
@@ -2236,7 +2212,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 503
    i32.const 3
    call $~lib/builtins/abort
@@ -2253,7 +2229,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 504
    i32.const 3
    call $~lib/builtins/abort
@@ -2269,7 +2245,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 505
    i32.const 3
    call $~lib/builtins/abort
@@ -2282,7 +2258,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 506
    i32.const 3
    call $~lib/builtins/abort
@@ -2295,7 +2271,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 507
    i32.const 3
    call $~lib/builtins/abort
@@ -2312,7 +2288,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 508
    i32.const 3
    call $~lib/builtins/abort
@@ -2329,7 +2305,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 513
    i32.const 3
    call $~lib/builtins/abort
@@ -2360,7 +2336,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 522
    i32.const 3
    call $~lib/builtins/abort
@@ -2377,7 +2353,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 523
    i32.const 3
    call $~lib/builtins/abort
@@ -2394,7 +2370,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 524
    i32.const 3
    call $~lib/builtins/abort
@@ -2411,7 +2387,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 525
    i32.const 3
    call $~lib/builtins/abort
@@ -2428,7 +2404,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 526
    i32.const 3
    call $~lib/builtins/abort
@@ -2445,7 +2421,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 527
    i32.const 3
    call $~lib/builtins/abort
@@ -2462,7 +2438,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 528
    i32.const 3
    call $~lib/builtins/abort
@@ -2479,7 +2455,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 529
    i32.const 3
    call $~lib/builtins/abort
@@ -2495,7 +2471,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 530
    i32.const 3
    call $~lib/builtins/abort
@@ -2550,7 +2526,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 557
    i32.const 3
    call $~lib/builtins/abort
@@ -2568,7 +2544,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 559
    i32.const 3
    call $~lib/builtins/abort
@@ -2587,7 +2563,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 561
    i32.const 3
    call $~lib/builtins/abort
@@ -2604,7 +2580,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 562
    i32.const 3
    call $~lib/builtins/abort
@@ -2621,7 +2597,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 563
    i32.const 3
    call $~lib/builtins/abort
@@ -2642,7 +2618,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 565
    i32.const 3
    call $~lib/builtins/abort
@@ -2659,7 +2635,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 566
    i32.const 3
    call $~lib/builtins/abort
@@ -2675,7 +2651,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 567
    i32.const 3
    call $~lib/builtins/abort
@@ -2688,7 +2664,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 568
    i32.const 3
    call $~lib/builtins/abort
@@ -2701,7 +2677,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 569
    i32.const 3
    call $~lib/builtins/abort
@@ -2718,7 +2694,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 570
    i32.const 3
    call $~lib/builtins/abort
@@ -2735,7 +2711,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 575
    i32.const 3
    call $~lib/builtins/abort
@@ -2766,7 +2742,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 584
    i32.const 3
    call $~lib/builtins/abort
@@ -2783,7 +2759,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 585
    i32.const 3
    call $~lib/builtins/abort
@@ -2800,7 +2776,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 586
    i32.const 3
    call $~lib/builtins/abort
@@ -2817,7 +2793,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 587
    i32.const 3
    call $~lib/builtins/abort
@@ -2834,7 +2810,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 588
    i32.const 3
    call $~lib/builtins/abort
@@ -2851,7 +2827,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 589
    i32.const 3
    call $~lib/builtins/abort
@@ -2868,7 +2844,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 590
    i32.const 3
    call $~lib/builtins/abort
@@ -2885,7 +2861,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 591
    i32.const 3
    call $~lib/builtins/abort
@@ -2901,7 +2877,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 592
    i32.const 3
    call $~lib/builtins/abort
@@ -2955,7 +2931,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 620
    i32.const 3
    call $~lib/builtins/abort
@@ -2974,7 +2950,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 80
+   i32.const 96
    i32.const 626
    i32.const 3
    call $~lib/builtins/abort
@@ -2997,13 +2973,17 @@
   local.get $0
  )
  (func $start:features/simd
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
+  i32.const 4
+  i32.add
   i32.const 15
   i32.add
   i32.const 15
   i32.const -1
   i32.xor
   i32.and
+  i32.const 4
+  i32.sub
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset

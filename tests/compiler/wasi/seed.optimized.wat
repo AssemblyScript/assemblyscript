@@ -10,7 +10,7 @@
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (memory $0 1)
- (data (i32.const 1024) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
+ (data (i32.const 1036) "\18\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
@@ -77,12 +77,12 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 1040
+  i32.const 1056
   local.set $2
   local.get $0
   i32.const 1
   i32.shl
-  i32.const 1040
+  i32.const 1056
   i32.add
   local.set $3
   i32.const 23
@@ -308,7 +308,7 @@
   i32.const 19
   i32.const 544106784
   i32.store
-  i32.const 1036
+  i32.const 1052
   i32.load
   i32.const 1
   i32.shr_u

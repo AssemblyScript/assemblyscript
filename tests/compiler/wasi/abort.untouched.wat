@@ -7,8 +7,8 @@
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (memory $0 1)
- (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00t\00h\00e\00 \00m\00e\00s\00s\00a\00g\00e\00")
- (data (i32.const 64) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00w\00a\00s\00i\00/\00a\00b\00o\00r\00t\00.\00t\00s\00")
+ (data (i32.const 12) "\16\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00t\00h\00e\00 \00m\00e\00s\00s\00a\00g\00e\00")
+ (data (i32.const 60) "\1a\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00w\00a\00s\00i\00/\00a\00b\00o\00r\00t\00.\00t\00s\00")
  (table $0 1 funcref)
  (export "_start" (func $~start))
  (export "memory" (memory $0))
@@ -18,9 +18,9 @@
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
-  i32.const 16
+  i32.const 20
   i32.sub
-  i32.load offset=12
+  i32.load offset=16
   i32.const 1
   i32.shr_u
  )

@@ -8,33 +8,33 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 1028) "\01\00\00\00\01")
- (data (i32.const 1040) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
- (data (i32.const 1072) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
- (data (i32.const 1120) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\01")
- (data (i32.const 1152) "8\00\00\00\01\00\00\00\01\00\00\008\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00(\00)\00 \00{\00 \00[\00n\00a\00t\00i\00v\00e\00 \00c\00o\00d\00e\00]\00 \00}")
- (data (i32.const 1232) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00i\00g\00n\00a\00t\00u\00r\00e\00s")
- (data (i32.const 1280) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00t\00e\00s\00t\00i\00n\00g")
- (data (i32.const 1312) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00F\00u\00n\00c\00t\00i\00o\00n")
- (data (i32.const 1344) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00C")
- (data (i32.const 1376) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00S\00t\00r\00i\00n\00g")
- (data (i32.const 1408) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00b\00o\00o\00l")
- (data (i32.const 1440) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00i\008")
- (data (i32.const 1472) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00u\008")
- (data (i32.const 1504) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\001\006")
- (data (i32.const 1536) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00u\001\006")
- (data (i32.const 1568) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\003\002")
- (data (i32.const 1600) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00u\003\002")
- (data (i32.const 1632) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00f\003\002")
- (data (i32.const 1664) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\006\004")
- (data (i32.const 1696) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00u\006\004")
- (data (i32.const 1728) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00f\006\004")
- (data (i32.const 1760) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00i\00s\00i\00z\00e")
- (data (i32.const 1792) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00u\00s\00i\00z\00e")
- (data (i32.const 1824) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00v\00o\00i\00d")
- (data (i32.const 1856) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00o\00m\00e\00 \00v\00a\00l\00u\00e")
- (data (i32.const 1904) "\08\00\00\00\01\00\00\00\0b\00\00\00\08\00\00\00\02")
- (data (i32.const 1936) "\08\00\00\00\01\00\00\00\0c\00\00\00\08\00\00\00\03")
+ (data (i32.const 1040) "\01\00\00\00\00\00\00\00\01")
+ (data (i32.const 1068) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
+ (data (i32.const 1100) "\16\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00b\00u\00i\00l\00t\00i\00n\00s\00.\00t\00s")
+ (data (i32.const 1148) "\08\00\00\00\01\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\01")
+ (data (i32.const 1180) "8\00\00\00\01\00\00\00\00\00\00\00\01\00\00\008\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00(\00)\00 \00{\00 \00[\00n\00a\00t\00i\00v\00e\00 \00c\00o\00d\00e\00]\00 \00}")
+ (data (i32.const 1260) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00s\00i\00g\00n\00a\00t\00u\00r\00e\00s")
+ (data (i32.const 1308) "\0e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00t\00e\00s\00t\00i\00n\00g")
+ (data (i32.const 1356) "\10\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00F\00u\00n\00c\00t\00i\00o\00n")
+ (data (i32.const 1404) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00C")
+ (data (i32.const 1436) "\0c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00S\00t\00r\00i\00n\00g")
+ (data (i32.const 1468) "\08\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00b\00o\00o\00l")
+ (data (i32.const 1500) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00i\008")
+ (data (i32.const 1532) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00u\008")
+ (data (i32.const 1564) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00i\001\006")
+ (data (i32.const 1596) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00u\001\006")
+ (data (i32.const 1628) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00i\003\002")
+ (data (i32.const 1660) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00u\003\002")
+ (data (i32.const 1692) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00f\003\002")
+ (data (i32.const 1724) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00i\006\004")
+ (data (i32.const 1756) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00u\006\004")
+ (data (i32.const 1788) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00f\006\004")
+ (data (i32.const 1820) "\n\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00i\00s\00i\00z\00e")
+ (data (i32.const 1852) "\n\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00u\00s\00i\00z\00e")
+ (data (i32.const 1884) "\08\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00v\00o\00i\00d")
+ (data (i32.const 1916) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00s\00o\00m\00e\00 \00v\00a\00l\00u\00e")
+ (data (i32.const 1964) "\08\00\00\00\01\00\00\00\00\00\00\00\0b\00\00\00\08\00\00\00\02")
+ (data (i32.const 1996) "\08\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\08\00\00\00\03")
  (table $0 4 funcref)
  (elem (i32.const 1) $start:builtins~anonymous|0 $start:builtins~anonymous|1 $start:builtins~anonymous|2)
  (global $builtins/i (mut i32) (i32.const 0))
@@ -142,16 +142,16 @@
    select
    br_if $folding-inner0
    local.get $0
-   i32.const 16
+   i32.const 20
    i32.sub
-   i32.load offset=12
+   i32.load offset=16
    i32.const 1
    i32.shr_u
    local.tee $2
    local.get $1
-   i32.const 16
+   i32.const 20
    i32.sub
-   i32.load offset=12
+   i32.load offset=16
    i32.const 1
    i32.shr_u
    i32.ne
@@ -507,14 +507,14 @@
   global.set $builtins/F
   i32.const 1
   i32.const 2
-  i32.const 1136
+  i32.const 1168
   i32.load
   call_indirect (type $i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 307
    i32.const 1
    call $~lib/builtins/abort
@@ -522,38 +522,38 @@
   end
   i32.const 2
   i32.const 3
-  i32.const 1136
+  i32.const 1168
   i32.load
   call_indirect (type $i32_i32_=>_i32)
   i32.const 5
   i32.ne
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 308
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1040
-  i32.const 1040
+  i32.const 1056
+  i32.const 1056
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 309
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1168
-  i32.const 1168
+  i32.const 1200
+  i32.const 1200
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 312
    i32.const 1
    call $~lib/builtins/abort
@@ -632,7 +632,7 @@
   call $~lib/atomics/Atomics.isLockFree
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 494
    i32.const 1
    call $~lib/builtins/abort
@@ -644,7 +644,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 495
    i32.const 1
    call $~lib/builtins/abort
@@ -656,7 +656,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 496
    i32.const 1
    call $~lib/builtins/abort
@@ -666,7 +666,7 @@
   call $~lib/atomics/Atomics.isLockFree
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 497
    i32.const 1
    call $~lib/builtins/abort
@@ -678,7 +678,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 498
    i32.const 1
    call $~lib/builtins/abort
@@ -688,7 +688,7 @@
   call $~lib/atomics/Atomics.isLockFree
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 499
    i32.const 1
    call $~lib/builtins/abort
@@ -698,13 +698,13 @@
   call $~lib/atomics/Atomics.isLockFree
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 500
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1248
+  i32.const 1280
   i32.const 5
   f64.const 0
   f64.const 0
@@ -712,241 +712,241 @@
   f64.const 26
   f64.const 26
   call $~lib/builtins/trace
-  i32.const 1328
-  i32.const 1328
+  i32.const 1376
+  i32.const 1376
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 517
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1328
-  i32.const 1328
+  i32.const 1376
+  i32.const 1376
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 518
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1360
-  i32.const 1360
+  i32.const 1424
+  i32.const 1424
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 519
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1392
-  i32.const 1392
+  i32.const 1456
+  i32.const 1456
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 520
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1424
-  i32.const 1424
+  i32.const 1488
+  i32.const 1488
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 521
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1456
-  i32.const 1456
+  i32.const 1520
+  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 522
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1488
-  i32.const 1488
+  i32.const 1552
+  i32.const 1552
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 523
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1520
-  i32.const 1520
+  i32.const 1584
+  i32.const 1584
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 524
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1552
-  i32.const 1552
+  i32.const 1616
+  i32.const 1616
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 525
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1584
-  i32.const 1584
+  i32.const 1648
+  i32.const 1648
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 526
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1616
-  i32.const 1616
+  i32.const 1680
+  i32.const 1680
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 527
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1648
-  i32.const 1648
+  i32.const 1712
+  i32.const 1712
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 528
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1680
-  i32.const 1680
+  i32.const 1744
+  i32.const 1744
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 529
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1712
-  i32.const 1712
+  i32.const 1776
+  i32.const 1776
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 530
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1744
-  i32.const 1744
+  i32.const 1808
+  i32.const 1808
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 531
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1776
-  i32.const 1776
+  i32.const 1840
+  i32.const 1840
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 532
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1808
-  i32.const 1808
+  i32.const 1872
+  i32.const 1872
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 533
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1840
-  i32.const 1840
+  i32.const 1904
+  i32.const 1904
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 534
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1392
-  i32.const 1392
+  i32.const 1456
+  i32.const 1456
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 535
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1328
-  i32.const 1328
+  i32.const 1376
+  i32.const 1376
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1088
+   i32.const 1120
    i32.const 536
    i32.const 3
    call $~lib/builtins/abort

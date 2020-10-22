@@ -5,11 +5,11 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1024) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 1088) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 1136) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
- (data (i32.const 1252) "\01\00\00\00\01")
- (data (i32.const 1264) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l")
+ (data (i32.const 1036) "$\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 1100) "\1a\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 1148) "^\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
+ (data (i32.const 1280) "\01\00\00\00\00\00\00\00\01")
+ (data (i32.const 1308) "\08\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l")
  (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $std/array-access/stringArrayPropertyAccess))
@@ -22,8 +22,8 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 1040
-   i32.const 1104
+   i32.const 1056
+   i32.const 1120
    i32.const 104
    i32.const 42
    call $~lib/builtins/abort
@@ -39,8 +39,8 @@
   local.tee $0
   i32.eqz
   if
-   i32.const 1152
-   i32.const 1104
+   i32.const 1168
+   i32.const 1120
    i32.const 108
    i32.const 40
    call $~lib/builtins/abort
@@ -57,8 +57,8 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 1040
-   i32.const 1104
+   i32.const 1056
+   i32.const 1120
    i32.const 104
    i32.const 42
    call $~lib/builtins/abort
@@ -72,16 +72,16 @@
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
-  i32.const 16
+  i32.const 20
   i32.sub
-  i32.load offset=12
+  i32.load offset=16
   i32.const 1
   i32.shr_u
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 1264
+  i32.const 1296
   local.set $3
   local.get $0
   local.get $1
@@ -161,7 +161,7 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 1260
+  i32.const 1292
   i32.load
   i32.const 1
   i32.shr_u
@@ -170,9 +170,9 @@
   local.get $1
   i32.const 0
   local.get $0
-  i32.const 16
+  i32.const 20
   i32.sub
-  i32.load offset=12
+  i32.load offset=16
   i32.const 1
   i32.shr_u
   local.tee $1
@@ -206,9 +206,9 @@
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
   i32.const 1
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
-  i32.const 16
+  i32.const 20
   i32.sub
-  i32.load offset=12
+  i32.load offset=16
   i32.const 1
   i32.shr_u
  )

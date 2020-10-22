@@ -1,1 +1,1 @@
-export { __free };
+export { heap };

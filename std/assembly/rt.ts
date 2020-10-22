@@ -1,6 +1,6 @@
 import { Typeinfo, TypeinfoFlags } from "./shared/typeinfo";
 import { E_INDEXOUTOFRANGE } from "./util/error";
-import { BLOCK, BLOCK_OVERHEAD } from "./rt/common";
+import { OBJECT, TOTAL_OVERHEAD } from "./rt/common";
 import { ArrayBufferView } from "./arraybuffer";
 
 // @ts-ignore: decorator
@@ -26,7 +26,7 @@ export function __typeinfo(id: u32): TypeinfoFlags {
 // @ts-ignore: decorator
 @unsafe
 export function __instanceof(ref: usize, superId: u32): bool { // keyword
-  var id = changetype<BLOCK>(ref - BLOCK_OVERHEAD).rtId;
+  var id = changetype<OBJECT>(ref - TOTAL_OVERHEAD).rtId;
   var ptr = __rtti_base;
   if (id <= load<u32>(ptr)) {
     do if (id == superId) return true;
@@ -37,18 +37,18 @@ export function __instanceof(ref: usize, superId: u32): bool { // keyword
 
 // @ts-ignore: decorator
 @unsafe
-export function __allocBuffer(size: usize, id: u32, data: usize = 0): usize {
-  var buffer = __alloc(size, id);
+export function __newBuffer(size: usize, id: u32, data: usize = 0): usize {
+  var buffer = __new(size, id);
   if (data) memory.copy(buffer, data, size);
   return buffer;
 }
 
 // @ts-ignore: decorator
 @unsafe
-export function __allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
-  var array = __alloc(offsetof<i32[]>(), id);
+export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
+  var array = __new(offsetof<i32[]>(), id);
   var bufferSize = <usize>length << alignLog2;
-  var buffer = __allocBuffer(bufferSize, idof<ArrayBuffer>(), data);
+  var buffer = __newBuffer(bufferSize, idof<ArrayBuffer>(), data);
   store<usize>(array, __retain(buffer), offsetof<ArrayBufferView>("buffer"));
   store<usize>(array, buffer, offsetof<ArrayBufferView>("dataStart"));
   store<i32>(array, bufferSize, offsetof<ArrayBufferView>("byteLength"));
@@ -58,24 +58,33 @@ export function __allocArray(length: i32, alignLog2: usize, id: u32, data: usize
 
 // These are provided by the respective implementation, included as another entry file by asc:
 
+// // @ts-ignore: decorator
 // @builtin @unsafe
-// export declare function __alloc(size: usize, id: u32): usize;
+// export declare function __alloc(size: usize): usize;
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
-// export declare function __realloc(ref: usize, size: usize): usize;
+// export declare function __realloc(ptr: usize, size: usize): usize;
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
-// export declare function __free(ref: usize): void;
+// export declare function __free(ptr: usize): void;
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
-// export declare function __retain(ref: usize): usize;
+// export declare function __new(size: usize, id: u32): usize;
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
-// export declare function __release(ref: usize): void;
+// export declare function __renew(ptr: usize, size: usize): usize;
+
+// // @ts-ignore: decorator
+// @builtin @unsafe
+// export declare function __retain(ptr: usize): usize;
+
+// // @ts-ignore: decorator
+// @builtin @unsafe
+// export declare function __release(ptr: usize): void;
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
@@ -83,4 +92,4 @@ export function __allocArray(length: i32, alignLog2: usize, id: u32, data: usize
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
-// export declare function __visit(ref: usize, cookie: u32): void;
+// export declare function __visit(ptr: usize, cookie: u32): void;

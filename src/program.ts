@@ -632,7 +632,7 @@ export class Program extends DiagnosticEmitter {
 
   // Runtime interface
 
-  /** Gets the runtime `__alloc(size: usize, id: u32): usize` instance. */
+  /** Gets the runtime `__alloc(size: usize): usize` instance. */
   get allocInstance(): Function {
     var cached = this._allocInstance;
     if (!cached) this._allocInstance = cached = this.requireFunction(CommonNames.alloc);
@@ -655,6 +655,22 @@ export class Program extends DiagnosticEmitter {
     return cached;
   }
   private _freeInstance: Function | null = null;
+
+  /** Gets the runtime `__new(size: usize, id: u32): usize` instance. */
+  get newInstance(): Function {
+    var cached = this._newInstance;
+    if (!cached) this._newInstance = cached = this.requireFunction(CommonNames.new_);
+    return cached;
+  }
+  private _newInstance: Function | null = null;
+
+  /** Gets the runtime `__renew(ptr: usize, size: usize): usize` instance. */
+  get renewInstance(): Function {
+    var cached = this._renewInstance;
+    if (!cached) this._renewInstance = cached = this.requireFunction(CommonNames.renew);
+    return cached;
+  }
+  private _renewInstance: Function | null = null;
 
   /** Gets the runtime `__retain(ptr: usize): usize` instance. */
   get retainInstance(): Function {
@@ -704,21 +720,37 @@ export class Program extends DiagnosticEmitter {
   }
   private _instanceofInstance: Function | null = null;
 
-  /** Gets the runtime `__allocBuffer(size: usize, id: u32, data: usize = 0): usize` instance. */
-  get allocBufferInstance(): Function {
-    var cached = this._allocBufferInstance;
-    if (!cached) this._allocBufferInstance = cached = this.requireFunction(CommonNames.allocBuffer);
+  /** Gets the runtime `__newBuffer(size: usize, id: u32, data: usize = 0): usize` instance. */
+  get newBufferInstance(): Function {
+    var cached = this._newBufferInstance;
+    if (!cached) this._newBufferInstance = cached = this.requireFunction(CommonNames.newBuffer);
     return cached;
   }
-  private _allocBufferInstance: Function | null = null;
+  private _newBufferInstance: Function | null = null;
 
-  /** Gets the runtime `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` instance. */
-  get allocArrayInstance(): Function {
-    var cached = this._allocArrayInstance;
-    if (!cached) this._allocArrayInstance = cached = this.requireFunction(CommonNames.allocArray);
+  /** Gets the runtime `__newArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` instance. */
+  get newArrayInstance(): Function {
+    var cached = this._newArrayInstance;
+    if (!cached) this._newArrayInstance = cached = this.requireFunction(CommonNames.newArray);
     return cached;
   }
-  private _allocArrayInstance: Function | null = null;
+  private _newArrayInstance: Function | null = null;
+
+  /** Gets the runtime's internal `BLOCK` instance. */
+  get BLOCKInstance(): Class {
+    var cached = this._BLOCKInstance;
+    if (!cached) this._BLOCKInstance = cached = this.requireClass(CommonNames.BLOCK);
+    return cached;
+  }
+  private _BLOCKInstance: Class | null = null;
+
+  /** Gets the runtime's internal `OBJECT` instance. */
+  get OBJECTInstance(): Class {
+    var cached = this._OBJECTInstance;
+    if (!cached) this._OBJECTInstance = cached = this.requireClass(CommonNames.OBJECT);
+    return cached;
+  }
+  private _OBJECTInstance: Class | null = null;
 
   // Utility
 
@@ -739,8 +771,21 @@ export class Program extends DiagnosticEmitter {
 
   /** Gets the size of a runtime header. */
   get runtimeHeaderSize(): i32 {
-    return 16;
+    var cached = this._runtimeHeaderSize;
+    if (!cached) {
+      // see: rt/common.ts
+      var blockOverhead = this.BLOCKInstance.nextMemoryOffset;
+      var totalOverhead = this.OBJECTInstance.nextMemoryOffset;
+      const AL_SIZE = 16;
+      const AL_MASK = AL_SIZE - 1;
+      var objectOverhead = (totalOverhead - blockOverhead + AL_MASK) & ~AL_MASK;
+      var headerSize = blockOverhead + objectOverhead;
+      assert(headerSize == 20);
+      this._runtimeHeaderSize = cached = headerSize;
+    }
+    return cached;
   }
+  private _runtimeHeaderSize: u32 = 0;
 
   /** Creates a native variable declaration. */
   makeNativeVariableDeclaration(
@@ -3490,6 +3535,8 @@ export class Function extends TypedElement {
   virtualStub: Function | null = null;
   /** Runtime memory segment, if created. */
   memorySegment: MemorySegment | null = null;
+  /** Original function, if a stub. Otherwise `this`. */
+  original!: Function;
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
@@ -3525,6 +3572,7 @@ export class Function extends TypedElement {
     this.flags = prototype.flags | CommonFlags.RESOLVED;
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
+    this.original = this;
     var program = prototype.program;
     this.type = signature.type;
     if (!prototype.is(CommonFlags.AMBIENT)) {
@@ -3569,12 +3617,13 @@ export class Function extends TypedElement {
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
   newStub(postfix: string): Function {
     var stub = new Function(
-      this.name + STUB_DELIMITER + postfix,
+      this.original.name + STUB_DELIMITER + postfix,
       this.prototype,
       this.typeArguments,
       this.signature.clone(),
       this.contextualTypeArguments
     );
+    stub.original = this.original;
     stub.set(this.flags & ~CommonFlags.COMPILED | CommonFlags.STUB);
     return stub;
   }
@@ -4253,11 +4302,13 @@ export class Class extends TypedElement {
     var buffer = new Uint8Array(this.program.runtimeHeaderSize + size);
     assert(!this.program.options.isWasm64); // TODO: WASM64, mmInfo is usize
     // see: std/assembly/rt/common.ts
-    assert(size < (1 << 28));     // 1 bit BUFFERED + 3 bits color
-    writeI32(size, buffer, 0);    // mmInfo = 0
-    writeI32(1, buffer, 4);       // gcInfo (RC) = 1
-    writeI32(this.id, buffer, 8); // rtId
-    writeI32(size, buffer, 12);   // rtSize
+    assert(size < (1 << 28));      // 1 bit BUFFERED + 3 bits color
+    var OBJECT = this.program.OBJECTInstance;
+    OBJECT.writeField("mmInfo", size, buffer, 0);
+    OBJECT.writeField("gcInfo", 1, buffer, 0); // RC = 1
+    OBJECT.writeField("gcInfo2", 0, buffer, 0);
+    OBJECT.writeField("rtId", this.id, buffer, 0);
+    OBJECT.writeField("rtSize", size, buffer, 0);
     return buffer;
   }
 
