@@ -1,4 +1,4 @@
-# RTrace
+# AssemblyScript Rtrace
 
 A tiny utility that records allocations, retains, releases and frees performed by the runtime and emits an error if something is off. Also checks for leaks.
 
