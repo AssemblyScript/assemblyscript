@@ -47,7 +47,7 @@
   "types": "index.d.ts",
   "exports": {
     ".": "./index.js",
-    "./lib/loader": {
+    "./loader": {
       "import": "./lib/loader/index.js",
       "require": "./lib/loader/umd/index.js"
     }

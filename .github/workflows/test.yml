@@ -63,7 +63,7 @@ jobs:
       run: npm run build
     - name: Test distribution
       run: |
-        if [[ `node bin/asc --version` == *"-dev" ]]; then
+        if [[ `node bin/asc --version` == "0.0.0" ]]; then
           echo "ERROR: Not testing distribution"
           exit 1
         fi
