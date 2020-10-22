@@ -33,6 +33,7 @@ jobs:
         node node_modules/semantic-release/bin/semantic-release.js --unstable
         cd lib/loader
         if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
+          npm run build
           npm config set "//registry.npmjs.org/:_authToken=${NPM_TOKEN}"
           npm publish --access public
         fi

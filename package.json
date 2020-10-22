@@ -21,7 +21,7 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "98.0.0-nightly.20201019",
+    "binaryen": "98.0.0-nightly.20201022",
     "long": "^4.0.0",
     "source-map-support": "^0.5.19",
     "ts-node": "^6.2.0"
@@ -42,8 +42,16 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
+  "type": "commonjs",
   "main": "index.js",
   "types": "index.d.ts",
+  "exports": {
+    ".": "./index.js",
+    "./lib/loader": {
+      "import": "./lib/loader/index.js",
+      "require": "./lib/loader/umd/index.js"
+    }
+  },
   "bin": {
     "asc": "bin/asc",
     "asinit": "bin/asinit"
@@ -83,6 +91,10 @@
     "lib/rtrace/package.json",
     "lib/loader/index.d.ts",
     "lib/loader/index.js",
+    "lib/loader/package.json",
+    "lib/loader/umd/index.d.ts",
+    "lib/loader/umd/index.js",
+    "lib/loader/umd/package.json",
     "lib/loader/README.md",
     "bin/",
     "cli/",

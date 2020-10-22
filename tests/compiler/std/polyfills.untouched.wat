@@ -54,11 +54,15 @@
   drop
   local.get $0
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shl
   local.get $0
   i32.const 65535
   i32.and
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shr_u
   i32.const 255
   i32.and
@@ -74,6 +78,8 @@
   drop
   local.get $0
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shl
   local.get $0
   i32.const 16
@@ -81,6 +87,8 @@
   i32.const 16
   i32.shr_s
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shr_s
   i32.const 255
   i32.and
@@ -347,11 +355,15 @@
   drop
   local.get $0
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shl
   local.get $0
   i32.const 65535
   i32.and
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shr_u
   i32.const 255
   i32.and
@@ -374,6 +386,8 @@
   drop
   local.get $0
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shl
   local.get $0
   i32.const 16
@@ -381,6 +395,8 @@
   i32.const 16
   i32.shr_s
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shr_s
   i32.const 255
   i32.and

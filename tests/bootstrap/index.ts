@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as v8 from "v8";
 import * as binaryen from "binaryen";
-import * as loader from "../../lib/loader";
+import * as loader from "../../lib/loader/umd";
 import { Rtrace } from "../../lib/rtrace";
 import * as find from "../../cli/util/find";
 import AssemblyScript from "../../out/assemblyscript";
