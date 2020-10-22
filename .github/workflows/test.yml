@@ -53,21 +53,11 @@ jobs:
     - name: Check sources
       run: npm run check
     - name: Test sources
-      run: |
-        if [[ `node bin/asc --version` != "0.0.0" ]]; then
-          echo "ERROR: Not testing sources"
-          exit 1
-        fi
-        npm test
+      run: npm test
     - name: Build distribution files
       run: npm run build
     - name: Test distribution
-      run: |
-        if [[ `node bin/asc --version` == "0.0.0" ]]; then
-          echo "ERROR: Not testing distribution"
-          exit 1
-        fi
-        npm test
+      run: npm test
     - name: Test browser build
       run: node tests/browser-asc
   test-windows:
