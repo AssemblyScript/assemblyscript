@@ -50,6 +50,10 @@
     "./lib/loader": {
       "import": "./lib/loader/index.js",
       "require": "./lib/loader/umd/index.js"
+    },
+    "./lib/rtrace": {
+      "import": "./lib/rtrace/index.js",
+      "require": "./lib/rtrace/umd/index.js"
     }
   },
   "bin": {
@@ -85,10 +89,6 @@
     "astest": "ts-node tests/bootstrap"
   },
   "releaseFiles": [
-    "lib/rtrace/index.d.ts",
-    "lib/rtrace/index.js",
-    "lib/rtrace/README.md",
-    "lib/rtrace/package.json",
     "lib/loader/index.d.ts",
     "lib/loader/index.js",
     "lib/loader/package.json",
@@ -96,6 +96,13 @@
     "lib/loader/umd/index.js",
     "lib/loader/umd/package.json",
     "lib/loader/README.md",
+    "lib/rtrace/index.d.ts",
+    "lib/rtrace/index.js",
+    "lib/rtrace/package.json",
+    "lib/rtrace/umd/index.d.ts",
+    "lib/rtrace/umd/index.js",
+    "lib/rtrace/umd/package.json",
+    "lib/rtrace/README.md",
     "bin/",
     "cli/",
     "dist/",

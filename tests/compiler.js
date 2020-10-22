@@ -8,7 +8,7 @@ const colorsUtil = require("../cli/util/colors");
 const optionsUtil = require("../cli/util/options");
 const diff = require("./util/diff");
 const asc = require("../cli/asc.js");
-const { Rtrace } = require("../lib/rtrace");
+const { Rtrace } = require("../lib/rtrace/umd");
 const cluster = require("cluster");
 const coreCount = require("physical-cpu-count");
 
