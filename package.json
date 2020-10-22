@@ -42,8 +42,16 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
+  "type": "commonjs",
   "main": "index.js",
   "types": "index.d.ts",
+  "exports": {
+    ".": "./index.js",
+    "./lib/loader": {
+      "import": "./lib/loader/index.js",
+      "require": "./lib/loader/umd/index.js"
+    }
+  },
   "bin": {
     "asc": "bin/asc",
     "asinit": "bin/asinit"
