@@ -1647,7 +1647,7 @@
   if
    i32.const 128
    i32.const 64
-   i32.const 275
+   i32.const 269
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -3333,7 +3333,7 @@
   if
    i32.const 128
    i32.const 64
-   i32.const 288
+   i32.const 282
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -5258,15 +5258,9 @@
    i32.gt_s
   end
   if
-<<<<<<< HEAD
-   i32.const 17552
-   i32.const 17680
-   i32.const 397
-=======
    i32.const 17760
    i32.const 17888
-   i32.const 401
->>>>>>> master
+   i32.const 397
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -7266,13 +7260,8 @@
    i32.eqz
    if
     i32.const 0
-<<<<<<< HEAD
-    i32.const 48
-    i32.const 134
-=======
     i32.const 64
-    i32.const 136
->>>>>>> master
+    i32.const 134
     i32.const 16
     call $~lib/builtins/abort
     unreachable

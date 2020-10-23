@@ -1441,7 +1441,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 275
+   i32.const 269
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -1676,126 +1676,6 @@
     i32.const 1
     i32.add
     local.set $1
-<<<<<<< HEAD
-    local.get $1
-    i64.const 0
-    i64.ne
-    local.set $7
-    local.get $7
-    br_if $do-continue|1
-   end
-  end
- )
- (func $~lib/util/number/itoa32 (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  local.get $1
-  i32.const 2
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.const 36
-   i32.gt_s
-  end
-  if
-   i32.const 192
-   i32.const 320
-   i32.const 369
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.eqz
-  if
-   i32.const 384
-   return
-  end
-  local.get $0
-  i32.const 31
-  i32.shr_u
-  local.set $2
-  local.get $2
-  if
-   i32.const 0
-   local.get $0
-   i32.sub
-   local.set $0
-  end
-  i32.const 0
-  local.set $3
-  local.get $1
-  i32.const 10
-  i32.eq
-  if
-   local.get $0
-   call $~lib/util/number/decimalCount32
-   local.get $2
-   i32.add
-   local.set $4
-   local.get $4
-   i32.const 1
-   i32.shl
-   i32.const 1
-   call $~lib/rt/tlsf/__alloc
-   local.set $3
-   local.get $3
-   local.set $7
-   local.get $0
-   local.set $6
-   local.get $4
-   local.set $5
-   i32.const 0
-   i32.const 1
-   i32.ge_s
-   drop
-   local.get $7
-   local.get $6
-   local.get $5
-   call $~lib/util/number/utoa32_dec_lut
-  else
-   local.get $1
-   i32.const 16
-   i32.eq
-   if
-    i32.const 31
-    local.get $0
-    i32.clz
-    i32.sub
-    i32.const 2
-    i32.shr_s
-    i32.const 1
-    i32.add
-    local.get $2
-    i32.add
-    local.set $4
-    local.get $4
-    i32.const 1
-    i32.shl
-    i32.const 1
-    call $~lib/rt/tlsf/__alloc
-    local.set $3
-    local.get $3
-    local.set $7
-    local.get $0
-    local.set $6
-    local.get $4
-    local.set $5
-    i32.const 0
-    i32.const 1
-    i32.ge_s
-    drop
-    local.get $7
-    local.get $6
-    i64.extend_i32_u
-=======
->>>>>>> master
     local.get $5
     i32.load8_u
     i32.store8
@@ -3049,7 +2929,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 288
+   i32.const 282
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -3582,7 +3462,7 @@
   if
    i32.const 224
    i32.const 352
-   i32.const 373
+   i32.const 369
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -5461,13 +5341,8 @@
    i32.eqz
    if
     i32.const 0
-<<<<<<< HEAD
-    i32.const 144
-    i32.const 134
-=======
     i32.const 96
-    i32.const 136
->>>>>>> master
+    i32.const 134
     i32.const 16
     call $~lib/builtins/abort
     unreachable

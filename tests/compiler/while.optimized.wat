@@ -1496,13 +1496,8 @@
    i32.le_u
    if
     i32.const 0
-<<<<<<< HEAD
-    i32.const 1184
-    i32.const 134
-=======
     i32.const 1168
-    i32.const 136
->>>>>>> master
+    i32.const 134
     i32.const 16
     call $~lib/builtins/abort
     unreachable

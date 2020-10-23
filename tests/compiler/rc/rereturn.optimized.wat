@@ -996,7 +996,7 @@
   if
    i32.const 1056
    i32.const 1120
-   i32.const 275
+   i32.const 269
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -1290,7 +1290,7 @@
   if
    i32.const 1056
    i32.const 1120
-   i32.const 288
+   i32.const 282
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -1538,13 +1538,8 @@
    i32.le_u
    if
     i32.const 0
-<<<<<<< HEAD
-    i32.const 1152
-    i32.const 134
-=======
     i32.const 1120
-    i32.const 136
->>>>>>> master
+    i32.const 134
     i32.const 16
     call $~lib/builtins/abort
     unreachable

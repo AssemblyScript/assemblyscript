@@ -3704,15 +3704,11 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.unary(UnaryOp.TruncF32ToU32, expr);
           }
         // f64 to int
-        } else {
-          if (toType.isBooleanValue) {
-            expr = this.makeIsTrueish(expr, Type.f64, reportNode);
-          } else if (toType.isSignedIntegerValue) {
-            if (toType.isLongIntegerValue) {
-              expr = module.unary(UnaryOp.TruncF64ToI64, expr);
-            } else {
-              expr = module.unary(UnaryOp.TruncF64ToI32, expr);
-            }
+        } else if (toType.isBooleanValue) {
+          expr = this.makeIsTrueish(expr, Type.f64, reportNode);
+        } else if (toType.isSignedIntegerValue) {
+          if (toType.isLongIntegerValue) {
+            expr = module.unary(UnaryOp.TruncF64ToI64, expr);
           } else {
             expr = module.unary(UnaryOp.TruncF64ToI32, expr);
           }
@@ -3762,44 +3758,35 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
     // int to int
-    } else {
-      // i64 to ...
-      if (fromType.isLongIntegerValue) {
+    } else if (fromType.isLongIntegerValue) {
 
-        // i64 to i32 or smaller
-        if (toType.isBooleanValue) {
-          expr = module.binary(BinaryOp.NeI64, expr, module.i64(0));
-        } else if (!toType.isLongIntegerValue) {
-          expr = module.unary(UnaryOp.WrapI64, expr); // discards upper bits
-        }
+      // i64 to i32 or smaller
+      if (toType.isBooleanValue) {
+        expr = module.binary(BinaryOp.NeI64, expr, module.i64(0));
+      } else if (!toType.isLongIntegerValue) {
+        expr = module.unary(UnaryOp.WrapI64, expr); // discards upper bits
+      }
 
-      // i32 or smaller to i64
-      } else if (toType.isLongIntegerValue) {
-        expr = module.unary(
-          fromType.isSignedIntegerValue ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32,
-          this.ensureSmallIntegerWrap(expr, fromType) // must clear garbage bits
-        );
+    // i32 or smaller to i64
+    } else if (toType.isLongIntegerValue) {
+      expr = module.unary(
+        fromType.isSignedIntegerValue ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32,
+        this.ensureSmallIntegerWrap(expr, fromType) // must clear garbage bits
+      );
 
-      // i32 to i32
-      } else {
-        // small i32 to ...
-        if (fromType.isShortIntegerValue) {
-          // small i32 to larger i32
-          if (fromType.size < toType.size) {
-            expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
-          }
-        // same size
-        } else {
-          if (!explicit && !this.options.isWasm64 && fromType.isVaryingIntegerValue && !toType.isVaryingIntegerValue) {
-            this.warning(
-              DiagnosticCode.Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit,
-              reportNode.range, fromType.toString(), toType.toString()
-            );
-          }
-        }
+    // i32 to i32
+    } else if (fromType.isShortIntegerValue) {
+      // small i32 to larger i32
+      if (fromType.size < toType.size) {
+        expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
       }
     // same size
-    } else if (!explicit && !this.options.isWasm64 && fromType.isVaryingIntegerValue && !toType.isVaryingIntegerValue) {
+    } else if (
+      !explicit &&
+      !this.options.isWasm64 &&
+      fromType.isVaryingIntegerValue &&
+      !toType.isVaryingIntegerValue
+    ) {
       this.warning(
         DiagnosticCode.Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit,
         reportNode.range, fromType.toString(), toType.toString()

@@ -8218,13 +8218,8 @@
   i32.eqz
   if
    i32.const 0
-<<<<<<< HEAD
-   i32.const 3616
-   i32.const 1397
-=======
    i32.const 3632
-   i32.const 1399
->>>>>>> master
+   i32.const 1397
    i32.const 5
    call $~lib/builtins/abort
    unreachable
