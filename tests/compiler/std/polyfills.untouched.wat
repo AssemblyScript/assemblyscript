@@ -5,7 +5,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
+ (data (i32.const 12) " \00\00\00\01\00\00\00\00\00\00\00\01\00\00\00 \00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
@@ -54,11 +54,15 @@
   drop
   local.get $0
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shl
   local.get $0
   i32.const 65535
   i32.and
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shr_u
   i32.const 255
   i32.and
@@ -74,6 +78,8 @@
   drop
   local.get $0
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shl
   local.get $0
   i32.const 16
@@ -81,6 +87,8 @@
   i32.const 16
   i32.shr_s
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shr_s
   i32.const 255
   i32.and
@@ -347,11 +355,15 @@
   drop
   local.get $0
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shl
   local.get $0
   i32.const 65535
   i32.and
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shr_u
   i32.const 255
   i32.and
@@ -374,6 +386,8 @@
   drop
   local.get $0
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shl
   local.get $0
   i32.const 16
@@ -381,6 +395,8 @@
   i32.const 16
   i32.shr_s
   i32.const 8
+  i32.const 15
+  i32.and
   i32.shr_s
   i32.const 255
   i32.and

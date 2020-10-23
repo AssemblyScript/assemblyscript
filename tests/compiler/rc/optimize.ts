@@ -143,7 +143,7 @@ export namespace FinalizeARC {
   export namespace eliminates {
 
     export function unnecessaryAllocation(): void {
-      __release(__retain(__alloc(1, 0)));
+      __release(__retain(__new(1, 0)));
     }
 
     export function unnecessaryPair(a: usize): void {

@@ -7,24 +7,24 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
- (data (i32.const 48) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
- (data (i32.const 112) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00")
- (data (i32.const 144) "\08\00\00\00\01\00\00\00\04\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00")
- (data (i32.const 176) "\08\00\00\00\01\00\00\00\05\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00")
- (data (i32.const 208) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00")
- (data (i32.const 240) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00")
- (data (i32.const 272) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00")
- (data (i32.const 304) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00")
- (data (i32.const 336) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\t\00\00\00\00\00\00\00")
- (data (i32.const 368) "\08\00\00\00\01\00\00\00\06\00\00\00\08\00\00\00\n\00\00\00\00\00\00\00")
- (data (i32.const 400) "\08\00\00\00\01\00\00\00\05\00\00\00\08\00\00\00\0b\00\00\00\00\00\00\00")
- (data (i32.const 432) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\0c\00\00\00\00\00\00\00")
- (data (i32.const 464) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\0d\00\00\00\00\00\00\00")
- (data (i32.const 496) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\0e\00\00\00\00\00\00\00")
- (data (i32.const 528) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\0f\00\00\00\00\00\00\00")
- (data (i32.const 560) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\10\00\00\00\00\00\00\00")
- (data (i32.const 592) "\08\00\00\00\01\00\00\00\07\00\00\00\08\00\00\00\11\00\00\00\00\00\00\00")
+ (data (i32.const 12) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 44) ",\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00,\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
+ (data (i32.const 108) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00")
+ (data (i32.const 140) "\08\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00")
+ (data (i32.const 172) "\08\00\00\00\01\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00")
+ (data (i32.const 204) "\08\00\00\00\01\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00")
+ (data (i32.const 236) "\08\00\00\00\01\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00")
+ (data (i32.const 268) "\08\00\00\00\01\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00")
+ (data (i32.const 300) "\08\00\00\00\01\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00")
+ (data (i32.const 332) "\08\00\00\00\01\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\t\00\00\00\00\00\00\00")
+ (data (i32.const 364) "\08\00\00\00\01\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\n\00\00\00\00\00\00\00")
+ (data (i32.const 396) "\08\00\00\00\01\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\0b\00\00\00\00\00\00\00")
+ (data (i32.const 428) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\0c\00\00\00\00\00\00\00")
+ (data (i32.const 460) "\08\00\00\00\01\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\0d\00\00\00\00\00\00\00")
+ (data (i32.const 492) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\0e\00\00\00\00\00\00\00")
+ (data (i32.const 524) "\08\00\00\00\01\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\0f\00\00\00\00\00\00\00")
+ (data (i32.const 556) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\10\00\00\00\00\00\00\00")
+ (data (i32.const 588) "\08\00\00\00\01\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\11\00\00\00\00\00\00\00")
  (table $0 18 funcref)
  (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0 $function-expression/testNullable~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testLocal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testField~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0)
  (global $function-expression/f1 (mut i32) (i32.const 32))
@@ -35,7 +35,7 @@
  (global $function-expression/globalFunc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 616))
+ (global $~lib/memory/__heap_base i32 (i32.const 616))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-expression~anonymous|0 (param $0 i32) (result i32)
@@ -227,6 +227,19 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
+ (func $~lib/rt/stub/computeSize (param $0 i32) (result i32)
+  local.get $0
+  i32.const 4
+  i32.add
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  i32.const 4
+  i32.sub
+ )
  (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -238,6 +251,12 @@
   local.get $1
   i32.const 16
   i32.shl
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
   local.set $2
   local.get $0
   local.get $2
@@ -281,60 +300,67 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   local.get $0
-  i32.const 1073741808
+  i32.const 1073741820
   i32.gt_u
   if
    unreachable
   end
   global.get $~lib/rt/stub/offset
-  i32.const 16
+  local.set $1
+  global.get $~lib/rt/stub/offset
+  i32.const 4
   i32.add
   local.set $2
   local.get $0
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  local.tee $3
-  i32.const 16
-  local.tee $4
-  local.get $3
-  local.get $4
-  i32.gt_u
-  select
-  local.set $5
+  call $~lib/rt/stub/computeSize
+  local.set $3
   local.get $2
-  local.get $5
+  local.get $3
   i32.add
   call $~lib/rt/stub/maybeGrowMemory
+  local.get $1
+  local.get $3
+  i32.store
+  local.get $2
+ )
+ (func $~lib/rt/stub/__new (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  i32.const 1073741804
+  i32.gt_u
+  if
+   unreachable
+  end
+  i32.const 16
+  local.get $0
+  i32.add
+  call $~lib/rt/stub/__alloc
+  local.set $2
+  local.get $2
+  i32.const 4
+  i32.sub
+  local.set $3
+  local.get $3
+  i32.const 0
+  i32.store offset=4
+  local.get $3
+  i32.const 0
+  i32.store offset=8
+  local.get $3
+  local.get $1
+  i32.store offset=12
+  local.get $3
+  local.get $0
+  i32.store offset=16
   local.get $2
   i32.const 16
-  i32.sub
-  local.set $6
-  local.get $6
-  local.get $5
-  i32.store
-  i32.const 1
-  drop
-  local.get $6
-  i32.const 1
-  i32.store offset=4
-  local.get $6
-  local.get $1
-  i32.store offset=8
-  local.get $6
-  local.get $0
-  i32.store offset=12
-  local.get $2
+  i32.add
  )
  (func $function-expression/FieldClass#constructor (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -342,7 +368,7 @@
   if
    i32.const 4
    i32.const 8
-   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__new
    call $~lib/rt/stub/__retain
    local.set $0
   end
@@ -579,13 +605,17 @@
   end
   call $function-expression/testGlobal
   call $function-expression/testLocal
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/memory/__heap_base
+  i32.const 4
+  i32.add
   i32.const 15
   i32.add
   i32.const 15
   i32.const -1
   i32.xor
   i32.and
+  i32.const 4
+  i32.sub
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset

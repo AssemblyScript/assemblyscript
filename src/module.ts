@@ -1496,9 +1496,9 @@ export class Module {
       this.setAllowInliningFunctionsWithLoops(optimizeLevel >= 3);
     } else {
       this.setAlwaysInlineMaxSize(
-        optimizeLevel == 0 && shrinkLevel >= 0
+        optimizeLevel <= 1 || shrinkLevel >= 2
           ? 2
-          : 4
+          : 6
       );
       this.setFlexibleInlineMaxSize(65);
       this.setOneCallerInlineMaxSize(80);
@@ -1526,11 +1526,12 @@ export class Module {
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
         passes.push("merge-blocks");
-        passes.push("precompute");
+        passes.push("precompute-propagate");
       }
       if (optimizeLevel >= 3) {
         passes.push("flatten");
         passes.push("simplify-locals-notee-nostructure");
+        passes.push("merge-locals");
         passes.push("vacuum");
 
         passes.push("code-folding");
@@ -1548,12 +1549,11 @@ export class Module {
       passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("dce");
-        passes.push("inlining");
       }
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
-      passes.push("inlining-optimizing");
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        passes.push("inlining");
         passes.push("precompute-propagate");
       } else {
         passes.push("precompute");
@@ -1581,9 +1581,6 @@ export class Module {
         passes.push("merge-locals");
       }
       passes.push("vacuum");
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-        passes.push("code-folding");
-      }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("simplify-globals-optimizing");
       }
@@ -1622,6 +1619,9 @@ export class Module {
         passes.push("simplify-globals");
         passes.push("vacuum");
       }
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        passes.push("code-folding");
+      }
       // precompute works best after global optimizations
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("precompute-propagate");
@@ -1656,7 +1656,7 @@ export class Module {
           passes.push("simplify-locals");
           passes.push("vacuum");
 
-          passes.push("inlining-optimizing");
+          passes.push("inlining");
           passes.push("precompute-propagate");
           passes.push("vacuum");
 

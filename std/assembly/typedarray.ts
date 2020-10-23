@@ -1488,7 +1488,7 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   end   = end   < 0 ? max(len + end,   0) : min(end,   len);
   end   = max(end, begin);
 
-  var out = __alloc(offsetof<TArray>(), idof<TArray>());
+  var out = __new(offsetof<TArray>(), idof<TArray>());
   store<usize>(out, __retain(changetype<usize>(array.buffer)), offsetof<TArray>("buffer"));
   store<usize>(out, array.dataStart + (<usize>begin << alignof<T>()), offsetof<TArray>("dataStart"));
   store<u32>(out, (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
@@ -1558,8 +1558,8 @@ function MAP<TArray extends ArrayBufferView, T>(
   var dataStart = array.dataStart;
 
   var byteLength = len << alignof<T>();
-  var out = __alloc(offsetof<TArray>(), idof<TArray>());
-  var buffer = __alloc(byteLength, idof<ArrayBuffer>());
+  var out = __new(offsetof<TArray>(), idof<TArray>());
+  var buffer = __new(byteLength, idof<ArrayBuffer>());
   for (let i = 0; i < len; i++) {
     store<T>(
       buffer + (<usize>i << alignof<T>()),
@@ -1579,8 +1579,8 @@ function FILTER<TArray extends ArrayBufferView, T>(
   fn: (value: T, index: i32, self: TArray) => bool,
 ): TArray {
   var len = array.length;
-  var out = __alloc(offsetof<TArray>(), idof<TArray>());
-  var buffer = __alloc(len << alignof<T>(), idof<ArrayBuffer>());
+  var out = __new(offsetof<TArray>(), idof<TArray>());
+  var buffer = __new(len << alignof<T>(), idof<ArrayBuffer>());
   var dataStart  = array.dataStart;
   var j: usize = 0;
   for (let i = 0; i < len; i++) {
@@ -1594,7 +1594,7 @@ function FILTER<TArray extends ArrayBufferView, T>(
   }
   // shrink output buffer
   var byteLength = j << alignof<T>();
-  var data = __realloc(buffer, byteLength);
+  var data = __renew(buffer, byteLength);
   store<usize>(out, __retain(data), offsetof<TArray>("buffer"));
   store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
   store<usize>(out, data, offsetof<TArray>("dataStart"));
@@ -1755,7 +1755,7 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
       throw new RangeError(E_INVALIDLENGTH);
     }
   }
-  var out = __alloc(offsetof<TArray>(), idof<TArray>());
+  var out = __new(offsetof<TArray>(), idof<TArray>());
   store<usize>(out, __retain(changetype<usize>(buffer)), offsetof<TArray>("buffer"));
   store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
   store<usize>(out, changetype<usize>(buffer) + <usize>byteOffset, offsetof<TArray>("dataStart"));

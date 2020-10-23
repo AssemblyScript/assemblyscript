@@ -849,7 +849,7 @@ export function joinBooleanArray(dataStart: usize, length: i32, separator: strin
   var sepLen = separator.length;
   var valueLen = 5; // max possible length of element len("false")
   var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-  var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
+  var result = changetype<string>(__new(estLen << 1, idof<string>())); // retains
   var offset = 0;
   var value: bool;
   for (let i = 0; i < lastIndex; ++i) {
@@ -908,7 +908,7 @@ export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: st
   var sepLen = separator.length;
   const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
   var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-  var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
+  var result = changetype<string>(__new(estLen << 1, idof<string>())); // retains
   var offset = 0;
   var value: T;
   for (let i = 0; i < lastIndex; ++i) {
@@ -944,7 +944,7 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
   const valueLen = MAX_DOUBLE_LENGTH;
   var sepLen = separator.length;
   var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-  var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
+  var result = changetype<string>(__new(estLen << 1, idof<string>())); // retains
   var offset = 0;
   var value: T;
   for (let i = 0; i < lastIndex; ++i) {
@@ -983,7 +983,7 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
   }
   var offset = 0;
   var sepLen = separator.length;
-  var result = __alloc((estLen + sepLen * lastIndex) << 1, idof<string>());
+  var result = __new((estLen + sepLen * lastIndex) << 1, idof<string>());
   for (let i = 0; i < lastIndex; ++i) {
     value = load<string>(dataStart + (<usize>i << alignof<string>()));
     if (value !== null) {

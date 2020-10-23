@@ -1829,9 +1829,21 @@ export class Compiler extends DiagnosticEmitter {
   // === Memory ===================================================================================
 
   /** Adds a static memory segment with the specified data. */
-  addMemorySegment(buffer: Uint8Array, alignment: i32 = 16): MemorySegment {
+  addAlignedMemorySegment(buffer: Uint8Array, alignment: i32 = 16): MemorySegment {
     assert(isPowerOf2(alignment));
     var memoryOffset = i64_align(this.memoryOffset, alignment);
+    var segment = new MemorySegment(buffer, memoryOffset);
+    this.memorySegments.push(segment);
+    this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length, 0));
+    return segment;
+  }
+
+  /** Adds a static memory segment representing a runtime object. */
+  addRuntimeMemorySegment(buffer: Uint8Array): MemorySegment {
+    // Runtime objects imply a full BLOCK and OBJECT header, see rt/common.ts
+    // ((memoryOffset + sizeof_usize + AL_MASK) & ~AL_MASK) - sizeof_usize
+    var usizeSize = this.options.usizeType.byteSize;
+    var memoryOffset = i64_sub(i64_align(i64_add(this.memoryOffset, i64_new(usizeSize)), 16), i64_new(usizeSize));
     var segment = new MemorySegment(buffer, memoryOffset);
     this.memorySegments.push(segment);
     this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length, 0));
@@ -1853,7 +1865,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0; i < len; ++i) {
         writeI16(stringValue.charCodeAt(i), buf, rtHeaderSize + (i << 1));
       }
-      stringSegment = this.addMemorySegment(buf);
+      stringSegment = this.addRuntimeMemorySegment(buf);
       segments.set(stringValue, stringSegment);
     }
     var ptr = i64_add(stringSegment.offset, i64_new(rtHeaderSize));
@@ -1948,9 +1960,9 @@ export class Compiler extends DiagnosticEmitter {
     var program = this.program;
     var arrayBufferInstance = program.arrayBufferInstance;
     var buf = arrayBufferInstance.createBuffer(values.length * elementType.byteSize);
-    writeI32(id, buf, 8); // use specified rtId
+    this.program.OBJECTInstance.writeField("rtId", id, buf, 0); // use specified rtId
     assert(this.writeStaticBuffer(buf, program.runtimeHeaderSize, elementType, values) == buf.length);
-    return this.addMemorySegment(buf);
+    return this.addRuntimeMemorySegment(buf);
   }
 
   /** Adds an array header to static memory and returns the created segment. */
@@ -1968,7 +1980,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(arrayInstance.writeField("dataStart", bufferAddress, buf));
     assert(arrayInstance.writeField("byteLength", bufferLength, buf));
     assert(arrayInstance.writeField("length_", arrayLength, buf));
-    return this.addMemorySegment(buf);
+    return this.addRuntimeMemorySegment(buf);
   }
 
   // === Table ====================================================================================
@@ -1992,7 +2004,7 @@ export class Compiler extends DiagnosticEmitter {
       let buf = rtInstance.createBuffer();
       assert(rtInstance.writeField("_index", index, buf));
       assert(rtInstance.writeField("_env", 0, buf));
-      instance.memorySegment = memorySegment = this.addMemorySegment(buf);
+      instance.memorySegment = memorySegment = this.addRuntimeMemorySegment(buf);
     }
     return i64_add(memorySegment.offset, i64_new(program.runtimeHeaderSize));
   }
@@ -2404,9 +2416,9 @@ export class Compiler extends DiagnosticEmitter {
         flow.inherit(condFlow);
 
         // Detect if local flags are incompatible before and after looping, and
-        // if so recompile by unifying local flags between iterations.
+        // if so recompile by unifying local flags between iterations. Note that
+        // this may be necessary multiple times where locals depend on each other.
         if (Flow.hasIncompatibleLocalStates(flowBefore, flow)) {
-          assert(!flowAfter); // should work on the first attempt
           outerFlow.popBreakLabel();
           this.currentFlow = outerFlow;
           return this.doCompileDoStatement(statement, flow);
@@ -2597,9 +2609,9 @@ export class Compiler extends DiagnosticEmitter {
       );
 
       // Detect if local flags are incompatible before and after looping, and if
-      // so recompile by unifying local flags between iterations.
+      // so recompile by unifying local flags between iterations. Note that this
+      // may be necessary multiple times where locals depend on each other.
       if (Flow.hasIncompatibleLocalStates(flowBefore, flow)) {
-        assert(!flowAfter); // should work on the first attempt
         assert(!bodyFlow.hasScopedLocals);
         flow.freeScopedLocals();
         outerFlow.popBreakLabel();
@@ -3336,10 +3348,10 @@ export class Compiler extends DiagnosticEmitter {
       else flow.inheritBranch(bodyFlow);
 
       // Detect if local flags are incompatible before and after looping, and
-      // if so recompile by unifying local flags between iterations.
+      // if so recompile by unifying local flags between iterations. Note that
+      // this may be necessary multiple times where locals depend on each other.
       // Here: Only relevant if flow does not always break.
       if (!breaks && Flow.hasIncompatibleLocalStates(flowBefore, flow)) {
-        assert(!flowAfter); // should work on the first attempt
         flow.freeTempLocal(tcond);
         outerFlow.popBreakLabel();
         this.currentFlow = outerFlow;
@@ -3536,12 +3548,10 @@ export class Compiler extends DiagnosticEmitter {
     var wrap = (constraints & Constraints.MUST_WRAP) != 0;
     if (currentType != contextualType.nonNullableType) { // allow assigning non-nullable to nullable
       if (constraints & Constraints.CONV_EXPLICIT) {
-        expr = this.convertExpression(expr, currentType, contextualType, true, wrap, expression);
-        wrap = false;
+        expr = this.convertExpression(expr, currentType, contextualType, true, expression);
         this.currentType = contextualType;
       } else if (constraints & Constraints.CONV_IMPLICIT) {
-        expr = this.convertExpression(expr, currentType, contextualType, false, wrap, expression);
-        wrap = false;
+        expr = this.convertExpression(expr, currentType, contextualType, false, expression);
         this.currentType = contextualType;
       }
     }
@@ -3578,16 +3588,16 @@ export class Compiler extends DiagnosticEmitter {
     return expr;
   }
 
+  /** Converts an expression's result from one type to another. */
   convertExpression(
     expr: ExpressionRef,
     /** Original type. */
     fromType: Type,
     /** New type. */
     toType: Type,
-    /** Whether the conversion is explicit.*/
+    /** Whether the conversion is explicit. */
     explicit: bool,
-    /** Whether the result should be wrapped, if a small integer. */
-    wrap: bool,
+    /** Report node. */
     reportNode: Node
   ): ExpressionRef {
     var module = this.module;
@@ -3682,7 +3692,6 @@ export class Compiler extends DiagnosticEmitter {
         if (fromType.kind == TypeKind.F32) {
           if (toType.isBooleanValue) {
             expr = this.makeIsTrueish(expr, Type.f32, reportNode);
-            wrap = false;
           } else if (toType.isSignedIntegerValue) {
             if (toType.isLongIntegerValue) {
               expr = module.unary(UnaryOp.TruncF32ToI64, expr);
@@ -3695,12 +3704,15 @@ export class Compiler extends DiagnosticEmitter {
             expr = module.unary(UnaryOp.TruncF32ToU32, expr);
           }
         // f64 to int
-        } else if (toType.isBooleanValue) {
-          expr = this.makeIsTrueish(expr, Type.f64, reportNode);
-          wrap = false;
-        } else if (toType.isSignedIntegerValue) {
-          if (toType.isLongIntegerValue) {
-            expr = module.unary(UnaryOp.TruncF64ToI64, expr);
+        } else {
+          if (toType.isBooleanValue) {
+            expr = this.makeIsTrueish(expr, Type.f64, reportNode);
+          } else if (toType.isSignedIntegerValue) {
+            if (toType.isLongIntegerValue) {
+              expr = module.unary(UnaryOp.TruncF64ToI64, expr);
+            } else {
+              expr = module.unary(UnaryOp.TruncF64ToI32, expr);
+            }
           } else {
             expr = module.unary(UnaryOp.TruncF64ToI32, expr);
           }
@@ -3750,28 +3762,41 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
     // int to int
-    } else if (fromType.isLongIntegerValue) {
-      // i64 to i32 or smaller
-      if (toType.isBooleanValue) {
-        expr = module.binary(BinaryOp.NeI64, expr, module.i64(0));
-        wrap = false;
-      } else if (!toType.isLongIntegerValue) {
-        expr = module.unary(UnaryOp.WrapI64, expr); // discards upper bits
-      }
-      // i32 or smaller to i64
-    } else if (toType.isLongIntegerValue) {
-      expr = module.unary(
-        fromType.isSignedIntegerValue ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32,
-        this.ensureSmallIntegerWrap(expr, fromType) // must clear garbage bits
-      );
-      wrap = false;
+    } else {
+      // i64 to ...
+      if (fromType.isLongIntegerValue) {
 
-    // i32 to i32
-    } else if (fromType.isShortIntegerValue) {
-      // small i32 to larger i32
-      if (fromType.size < toType.size) {
-        expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
-        wrap = false;
+        // i64 to i32 or smaller
+        if (toType.isBooleanValue) {
+          expr = module.binary(BinaryOp.NeI64, expr, module.i64(0));
+        } else if (!toType.isLongIntegerValue) {
+          expr = module.unary(UnaryOp.WrapI64, expr); // discards upper bits
+        }
+
+      // i32 or smaller to i64
+      } else if (toType.isLongIntegerValue) {
+        expr = module.unary(
+          fromType.isSignedIntegerValue ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32,
+          this.ensureSmallIntegerWrap(expr, fromType) // must clear garbage bits
+        );
+
+      // i32 to i32
+      } else {
+        // small i32 to ...
+        if (fromType.isShortIntegerValue) {
+          // small i32 to larger i32
+          if (fromType.size < toType.size) {
+            expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
+          }
+        // same size
+        } else {
+          if (!explicit && !this.options.isWasm64 && fromType.isVaryingIntegerValue && !toType.isVaryingIntegerValue) {
+            this.warning(
+              DiagnosticCode.Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit,
+              reportNode.range, fromType.toString(), toType.toString()
+            );
+          }
+        }
       }
     // same size
     } else if (!explicit && !this.options.isWasm64 && fromType.isVaryingIntegerValue && !toType.isVaryingIntegerValue) {
@@ -3782,9 +3807,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     this.currentType = toType;
-    return wrap
-      ? this.ensureSmallIntegerWrap(expr, toType)
-      : expr;
+    return expr;
   }
 
   private compileAssertionExpression(
@@ -3885,18 +3908,11 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "<", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
         commonType = Type.commonDenominator(leftType, rightType, true);
-        if (!commonType) {
+        if (!commonType || !commonType.isNumericValue) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, "<", leftType.toString(), rightType.toString()
@@ -3904,71 +3920,13 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-        leftExpr = this.convertExpression(leftExpr,
-          leftType, leftType = commonType,
-          false, true, // !
-          left
-        );
-        rightExpr = this.convertExpression(rightExpr,
-          rightType, rightType = commonType,
-          false, true, // !
-          right
-        );
-        switch (commonType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.I32: {
-            expr = module.binary(BinaryOp.LtI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I64: {
-            expr = module.binary(BinaryOp.LtI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.LtI64
-                : BinaryOp.LtI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.LtU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.LtU64
-                : BinaryOp.LtU32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.LtU64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            expr = module.binary(BinaryOp.LtF32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F64: {
-            expr = module.binary(BinaryOp.LtF64, leftExpr, rightExpr);
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+        leftType = commonType;
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+        rightType = commonType;
+
+        expr = this.makeLt(leftExpr, rightExpr, commonType);
         this.currentType = Type.bool;
         break;
       }
@@ -3985,31 +3943,11 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, ">", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
         commonType = Type.commonDenominator(leftType, rightType, true);
-        if (commonType) {
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, true, // !
-            left
-          );
-          leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, true, // !
-            right
-          );
-          rightType = commonType;
-        } else {
+        if (!commonType || !commonType.isNumericValue) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, ">", leftType.toString(), rightType.toString()
@@ -4017,61 +3955,13 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-        switch (commonType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.I32: {
-            expr = module.binary(BinaryOp.GtI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.GtI64
-                : BinaryOp.GtI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.I64: {
-            expr = module.binary(BinaryOp.GtI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.GtU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.GtU64
-                : BinaryOp.GtU32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.GtU64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            expr = module.binary(BinaryOp.GtF32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F64: {
-            expr = module.binary(BinaryOp.GtF64, leftExpr, rightExpr);
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+        leftType = commonType;
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+        rightType = commonType;
+
+        expr = this.makeGt(leftExpr, rightExpr, commonType);
         this.currentType = Type.bool;
         break;
       }
@@ -4088,28 +3978,11 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "<=", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        if (commonType = Type.commonDenominator(leftType, rightType, true)) {
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, leftType = commonType,
-            false, true, // !
-            left
-          );
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, rightType = commonType,
-            false, true, // !
-            right
-          );
-        } else {
+        commonType = Type.commonDenominator(leftType, rightType, true);
+        if (!commonType || !commonType.isNumericValue) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, "<=", leftType.toString(), rightType.toString()
@@ -4117,61 +3990,13 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-        switch (commonType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.I32: {
-            expr = module.binary(BinaryOp.LeI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.LeI64
-                : BinaryOp.LeI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.I64: {
-            expr = module.binary(BinaryOp.LeI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.LeU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.LeU64
-                : BinaryOp.LeU32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.LeU64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            expr = module.binary(BinaryOp.LeF32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F64: {
-            expr = module.binary(BinaryOp.LeF64, leftExpr, rightExpr);
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+        leftType = commonType;
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+        rightType = commonType;
+
+        expr = this.makeLe(leftExpr, rightExpr, commonType);
         this.currentType = Type.bool;
         break;
       }
@@ -4188,28 +4013,11 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, ">=", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        if (commonType = Type.commonDenominator(leftType, rightType, true)) {
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, leftType = commonType,
-            false, true, // !
-            left
-          );
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, rightType = commonType,
-            false, true, // !
-            right
-          );
-        } else {
+        commonType = Type.commonDenominator(leftType, rightType, true);
+        if (!commonType || !commonType.isNumericValue) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, ">=", leftType.toString(), rightType.toString()
@@ -4217,72 +4025,19 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-        switch (commonType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.I32: {
-            expr = module.binary(BinaryOp.GeI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.GeI64
-                : BinaryOp.GeI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.I64: {
-            expr = module.binary(BinaryOp.GeI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.GeU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.GeU64
-                : BinaryOp.GeU32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.GeU64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            expr = module.binary(BinaryOp.GeF32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F64: {
-            expr = module.binary(BinaryOp.GeF64, leftExpr, rightExpr);
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+        leftType = commonType;
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+        rightType = commonType;
+
+        expr = this.makeGe(leftExpr, rightExpr, commonType);
         this.currentType = Type.bool;
         break;
       }
 
       case Token.EQUALS_EQUALS_EQUALS:
       case Token.EQUALS_EQUALS: {
-
-        // NOTE that this favors correctness, in terms of emitting a binary expression, over
-        // checking for a possible use of unary EQZ. while the most classic of all optimizations,
-        // that's not what the source told us to do. for reference, `!left` emits unary EQZ.
-
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
@@ -4302,20 +4057,7 @@ export class Compiler extends DiagnosticEmitter {
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
         commonType = Type.commonDenominator(leftType, rightType, false);
-        if (commonType) {
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, true, // !
-            left
-          );
-          leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, true, // !
-            right
-          );
-          rightType = commonType;
-        } else {
+        if (!commonType) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, operatorTokenToString(expression.operator), leftType.toString(), rightType.toString()
@@ -4323,65 +4065,13 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-        switch (commonType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.I32:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.EqI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.EqI64
-                : BinaryOp.EqI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.EqI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            expr = module.binary(BinaryOp.EqF32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F64: {
-            expr = module.binary(BinaryOp.EqF64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.V128: {
-            expr = module.unary(UnaryOp.AllTrueI8x16,
-              module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
-            );
-            break;
-          }
-          case TypeKind.FUNCREF:
-          case TypeKind.EXTERNREF:
-          case TypeKind.EXNREF:
-          case TypeKind.ANYREF: {
-            this.error(
-              DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-              expression.range,
-              "ref.eq",
-              commonType.toString()
-            );
-            expr = module.unreachable();
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+        leftType = commonType;
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+        rightType = commonType;
+
+        expr = this.makeEq(leftExpr, rightExpr, commonType, expression);
         this.currentType = Type.bool;
         break;
       }
@@ -4406,20 +4096,7 @@ export class Compiler extends DiagnosticEmitter {
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
         commonType = Type.commonDenominator(leftType, rightType, false);
-        if (commonType) {
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, commonType,
-            false, true, // !
-            left
-          );
-          leftType = commonType;
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, commonType,
-            false, true, // !
-            right
-          );
-          rightType = commonType;
-        } else {
+        if (!commonType) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, operatorTokenToString(expression.operator), leftType.toString(), rightType.toString()
@@ -4427,65 +4104,13 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
-        switch (commonType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.I32:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.NeI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.NeI64
-                : BinaryOp.NeI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.NeI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            expr = module.binary(BinaryOp.NeF32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F64: {
-            expr = module.binary(BinaryOp.NeF64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.V128: {
-            expr = module.unary(UnaryOp.AnyTrueI8x16,
-              module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
-            );
-            break;
-          }
-          case TypeKind.FUNCREF:
-          case TypeKind.EXTERNREF:
-          case TypeKind.EXNREF:
-          case TypeKind.ANYREF: {
-            this.error(
-              DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-              expression.range,
-              "ref.eq",
-              commonType.toString()
-            );
-            expr = module.unreachable();
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+
+        leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+        leftType = commonType;
+        rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+        rightType = commonType;
+
+        expr = this.makeNe(leftExpr, rightExpr, commonType, expression);
         this.currentType = Type.bool;
         break;
       }
@@ -4506,31 +4131,21 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "+", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
-
         if (compound) {
+          if (!leftType.isNumericValue) {
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "+", leftType.toString()
+            );
+            return module.unreachable();
+          }
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
+          rightType = commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
-            leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
-              false, false,
-              left
-            );
-            rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
-              false, false,
-              right
-            );
-          } else {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "+", leftType.toString(), rightType.toString()
@@ -4538,47 +4153,12 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
-        switch (this.currentType.kind) {
-          case TypeKind.I8:   // addition might overflow
-          case TypeKind.I16:  // ^
-          case TypeKind.U8:   // ^
-          case TypeKind.U16:  // ^
-          case TypeKind.BOOL: // ^
-          case TypeKind.I32:
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.AddI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.AddI64
-                : BinaryOp.AddI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.AddI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            expr = module.binary(BinaryOp.AddF32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F64: {
-            expr = module.binary(BinaryOp.AddF64, leftExpr, rightExpr);
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+        expr = this.makeAdd(leftExpr, rightExpr, commonType);
         break;
       }
       case Token.MINUS_EQUALS: compound = true;
@@ -4595,35 +4175,22 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "-", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         if (compound) {
+          if (!leftType.isNumericValue) {
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "-", leftType.toString()
+            );
+            return module.unreachable();
+          }
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
+          rightType = commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonDenominator(leftType, rightType, false);
-          if (commonType) {
-            leftExpr = this.convertExpression(leftExpr,
-              leftType, commonType,
-              false, false,
-              left
-            );
-            leftType = commonType;
-            rightExpr = this.convertExpression(rightExpr,
-              rightType, commonType,
-              false, false,
-              right
-            );
-            rightType = commonType;
-          } else {
+          if (!commonType || !leftType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "-", leftType.toString(), rightType.toString()
@@ -4631,47 +4198,12 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
-        switch (this.currentType.kind) {
-          case TypeKind.I8:   // subtraction might overflow
-          case TypeKind.I16:  // ^
-          case TypeKind.U8:   // ^
-          case TypeKind.U16:  // ^
-          case TypeKind.BOOL: // ^
-          case TypeKind.I32:
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.SubI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.SubI64
-                : BinaryOp.SubI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.SubI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            expr = module.binary(BinaryOp.SubF32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F64: {
-            expr = module.binary(BinaryOp.SubF64, leftExpr, rightExpr);
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+        expr = this.makeSub(leftExpr, rightExpr, commonType);
         break;
       }
       case Token.ASTERISK_EQUALS: compound = true;
@@ -4688,35 +4220,22 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "*", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         if (compound) {
-          leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
+          if (!leftType.isNumericValue) {
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "*", leftType.toString()
+            );
+            return module.unreachable();
+          }
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
+          rightType = commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonDenominator(leftType, rightType, false);
-          if (commonType) {
-            leftExpr = this.convertExpression(leftExpr,
-              leftType, commonType,
-              false, false,
-              left
-            );
-            leftType = commonType;
-            rightExpr = this.convertExpression(rightExpr,
-              rightType, commonType,
-              false, false,
-              right
-            );
-            rightType = commonType;
-          } else {
+          if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "*", leftType.toString(), rightType.toString()
@@ -4724,47 +4243,12 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
-        switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL:
-          case TypeKind.I32:
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.MulI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.MulI64
-                : BinaryOp.MulI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.MulI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            expr = module.binary(BinaryOp.MulF32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F64: {
-            expr = module.binary(BinaryOp.MulF64, leftExpr, rightExpr);
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+        expr = this.makeMul(leftExpr, rightExpr, commonType);
         break;
       }
       case Token.ASTERISK_ASTERISK_EQUALS: compound = true;
@@ -4781,35 +4265,22 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "**", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
+
         if (compound) {
-          leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
+          if (!leftType.isNumericValue) {
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "**", leftType.toString()
+            );
+            return module.unreachable();
+          }
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
           rightType = commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonDenominator(leftType, rightType, false);
-          if (commonType) {
-            leftExpr = this.convertExpression(leftExpr,
-              leftType, commonType,
-              false, true, // !
-              left
-            );
-            leftType = commonType;
-            rightExpr = this.convertExpression(rightExpr,
-              rightType, commonType,
-              false, true, // !
-              right
-            );
-            rightType = commonType;
-          } else {
+          if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "**", leftType.toString(), rightType.toString()
@@ -4817,171 +4288,12 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
-
-        let instance: Function | null;
-        switch (commonType.kind) {
-          case TypeKind.BOOL: {
-            expr = module.select(
-              module.i32(1),
-              module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
-              leftExpr
-            );
-            break;
-          }
-          case TypeKind.I8:
-          case TypeKind.U8:
-          case TypeKind.I16:
-          case TypeKind.U16:
-          case TypeKind.I32:
-          case TypeKind.U32: {
-            instance = this.i32PowInstance;
-            if (!instance) {
-              let prototype = this.program.lookupGlobal(CommonNames.ipow32);
-              if (!prototype) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, "ipow32"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-              this.i32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-            }
-            if (!instance || !this.compileFunction(instance)) {
-              expr = module.unreachable();
-            } else {
-              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
-              if (commonType.size != 32) {
-                expr = this.ensureSmallIntegerWrap(expr, commonType);
-              }
-            }
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            instance = this.i64PowInstance;
-            if (!instance) {
-              let prototype = this.program.lookupGlobal(CommonNames.ipow64);
-              if (!prototype) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, "ipow64"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-              this.i64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-            }
-            if (!instance || !this.compileFunction(instance)) {
-              expr = module.unreachable();
-            } else {
-              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
-            }
-            break;
-          }
-          case TypeKind.ISIZE:
-          case TypeKind.USIZE: {
-            let isWasm64 = this.options.isWasm64;
-            instance = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
-            if (!instance) {
-              let prototype = this.program.lookupGlobal(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
-              if (!prototype) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, isWasm64 ? "ipow64" : "ipow32"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-              instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-              if (isWasm64) {
-                this.i64PowInstance = instance;
-              } else {
-                this.i32PowInstance = instance;
-              }
-            }
-            if (!instance || !this.compileFunction(instance)) {
-              expr = module.unreachable();
-            } else {
-              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
-            }
-            break;
-          }
-          case TypeKind.F32: {
-            instance = this.f32PowInstance;
-            if (!instance) {
-              let namespace = this.program.lookupGlobal(CommonNames.Mathf);
-              if (!namespace) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, "Mathf"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              let namespaceMembers = namespace.members;
-              if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, "Mathf.pow"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              let prototype = assert(namespaceMembers.get(CommonNames.pow));
-              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-              this.f32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-            }
-            if (!instance || !this.compileFunction(instance)) {
-              expr = module.unreachable();
-            } else {
-              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
-            }
-            break;
-          }
-          // Math.pow otherwise (result is f64)
-          case TypeKind.F64: {
-            instance = this.f64PowInstance;
-            if (!instance) {
-              let namespace = this.program.lookupGlobal(CommonNames.Math);
-              if (!namespace) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, "Math"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              let namespaceMembers = namespace.members;
-              if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, "Math.pow"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              let prototype = assert(namespaceMembers.get(CommonNames.pow));
-              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-              this.f64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-            }
-            if (!instance || !this.compileFunction(instance)) {
-              expr = module.unreachable();
-            } else {
-              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
-            }
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-            break;
-          }
-        }
+        expr = this.makePow(leftExpr, rightExpr, commonType, expression);
         break;
       }
       case Token.SLASH_EQUALS: compound = true;
@@ -4998,36 +4310,22 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "/", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         if (compound) {
-          leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
+          if (!leftType.isNumericValue) {
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "/", leftType.toString()
+            );
+            return module.unreachable();
+          }
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
+          rightType = commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonDenominator(leftType, rightType, false);
-          if (commonType) {
-            leftExpr = this.convertExpression(leftExpr,
-              leftType, commonType,
-              false, true, // !
-              left
-            );
-            leftType = commonType;
-            rightExpr = this.convertExpression(rightExpr,
-              rightType, commonType,
-              false, true, // !
-              right
-            );
-            rightType = commonType;
-          } else {
+          if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "/", leftType.toString(), rightType.toString()
@@ -5035,65 +4333,12 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
-        switch (this.currentType.kind) {
-          case TypeKind.I8:  // signed div on signed small integers might overflow, e.g. -128/-1
-          case TypeKind.I16: // ^
-          case TypeKind.I32: {
-            expr = module.binary(BinaryOp.DivI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.DivI64
-                : BinaryOp.DivI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.I64: {
-            expr = module.binary(BinaryOp.DivI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.DivU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.DivU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.DivU64
-                : BinaryOp.DivU32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.DivU64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            expr = module.binary(BinaryOp.DivF32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F64: {
-            expr = module.binary(BinaryOp.DivF64, leftExpr, rightExpr);
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+        expr = this.makeDiv(leftExpr, rightExpr, commonType);
         break;
       }
       case Token.PERCENT_EQUALS: compound = true;
@@ -5110,36 +4355,22 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "%", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         if (compound) {
-          leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
+          if (!leftType.isNumericValue) {
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "%", leftType.toString()
+            );
+            return module.unreachable();
+          }
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
+          rightType = commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonDenominator(leftType, rightType, false);
-          if (commonType) {
-            leftExpr = this.convertExpression(leftExpr,
-              leftType, commonType,
-              false, true, // !
-              left
-            );
-            leftType = commonType;
-            rightExpr = this.convertExpression(rightExpr,
-              rightType, commonType,
-              false, true, // !
-              right
-            );
-            rightType = commonType;
-          } else {
+          if (!commonType || !commonType.isNumericValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "%", leftType.toString(), rightType.toString()
@@ -5147,124 +4378,12 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
-        switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16: {
-            expr = module.binary(BinaryOp.RemI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I32: {
-            expr = module.binary(BinaryOp.RemI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.RemI64
-                : BinaryOp.RemI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.I64: {
-            expr = module.binary(BinaryOp.RemI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.RemU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.RemU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.RemU64
-                : BinaryOp.RemU32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.RemU64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.F32: {
-            let instance = this.f32ModInstance;
-            if (!instance) {
-              let namespace = this.program.lookupGlobal(CommonNames.Mathf);
-              if (!namespace) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, "Mathf"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              let namespaceMembers = namespace.members;
-              if (!namespaceMembers || !namespaceMembers.has(CommonNames.mod)) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, "Mathf.mod"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              let prototype = assert(namespaceMembers.get(CommonNames.mod));
-              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-              this.f32ModInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-            }
-            if (!instance || !this.compileFunction(instance)) {
-              expr = module.unreachable();
-            } else {
-              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
-            }
-            break;
-          }
-          case TypeKind.F64: {
-            let instance = this.f64ModInstance;
-            if (!instance) {
-              let namespace = this.program.lookupGlobal(CommonNames.Math);
-              if (!namespace) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, "Math"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              let namespaceMembers = namespace.members;
-              if (!namespaceMembers || !namespaceMembers.has(CommonNames.mod)) {
-                this.error(
-                  DiagnosticCode.Cannot_find_name_0,
-                  expression.range, "Math.mod"
-                );
-                expr = module.unreachable();
-                break;
-              }
-              let prototype = assert(namespaceMembers.get(CommonNames.mod));
-              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-              this.f64ModInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-            }
-            if (!instance || !this.compileFunction(instance)) {
-              expr = module.unreachable();
-            } else {
-              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
-            }
-            break;
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+        expr = this.makeRem(leftExpr, rightExpr, commonType, expression);
         break;
       }
       case Token.LESSTHAN_LESSTHAN_EQUALS: compound = true;
@@ -5281,56 +4400,17 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
+        if (!leftType.isIntegerValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
             expression.range, "<<", leftType.toString()
           );
-          return this.module.unreachable();
+          return module.unreachable();
         }
-
         rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
         rightType = this.currentType;
-        switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL:
-          case TypeKind.I32:
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.ShlI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.ShlI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.ShlI64
-                : BinaryOp.ShlI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.F32:
-          case TypeKind.F64: {
-            this.error(
-              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "<<", this.currentType.toString()
-            );
-            return module.unreachable();
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+
+        expr = this.makeShl(leftExpr, rightExpr, rightType);
         break;
       }
       case Token.GREATERTHAN_GREATERTHAN_EQUALS: compound = true;
@@ -5347,7 +4427,7 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
+        if (!leftType.isIntegerValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
             expression.range, ">>", leftType.toString()
@@ -5355,70 +4435,10 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.unreachable();
         }
 
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType); // must clear garbage bits
         rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
         rightType = this.currentType;
-        switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16: {
-            expr = module.binary(BinaryOp.ShrI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I32: {
-            expr = module.binary(BinaryOp.ShrI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I64: {
-            expr = module.binary(BinaryOp.ShrI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.ShrI64
-                : BinaryOp.ShrI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.ShrU64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.ShrU64
-                : BinaryOp.ShrU32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.F32:
-          case TypeKind.F64: {
-            this.error(
-              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, ">>", this.currentType.toString()
-            );
-            return module.unreachable();
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+
+        expr = this.makeShr(leftExpr, rightExpr, rightType);
         break;
       }
       case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS: compound = true;
@@ -5435,59 +4455,17 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
+        if (!leftType.isIntegerValue) {
           this.error(
             DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
             expression.range, ">>>", leftType.toString()
           );
-          return this.module.unreachable();
+          return module.unreachable();
         }
-
-        leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType); // must clear garbage bits
         rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
         rightType = this.currentType;
-        switch (this.currentType.kind) {
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL: { // assumes that unsigned shr on unsigned small integers does not overflow
-            expr = module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
-          }
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.I32:
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.ShrU64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.ShrU64
-                : BinaryOp.ShrU32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.F32:
-          case TypeKind.F64: {
-            this.error(
-              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, ">>>", this.currentType.toString()
-            );
-            return module.unreachable();
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+
+        expr = this.makeShru(leftExpr, rightExpr, rightType);
         break;
       }
       case Token.AMPERSAND_EQUALS: compound = true;
@@ -5504,32 +4482,22 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "&", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         if (compound) {
+          if (!leftType.isIntegerValue) {
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "&", leftType.toString()
+            );
+            return module.unreachable();
+          }
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
+          rightType = commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
-            leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
-              false, false,
-              left
-            );
-            rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
-              false, false,
-              right
-            );
-          } else {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (!commonType || !commonType.isIntegerValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "&", leftType.toString(), rightType.toString()
@@ -5537,47 +4505,12 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
-        switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.I32:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL:
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.AndI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.AndI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.AndI64
-                : BinaryOp.AndI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.F32:
-          case TypeKind.F64: {
-            this.error(
-              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "&", this.currentType.toString()
-            );
-            return module.unreachable();
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+        expr = this.makeAnd(leftExpr, rightExpr, commonType);
         break;
       }
       case Token.BAR_EQUALS: compound = true;
@@ -5594,35 +4527,22 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "|", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         if (compound) {
+          if (!leftType.isIntegerValue) {
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "|", leftType.toString()
+            );
+            return module.unreachable();
+          }
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
+          rightType = commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonDenominator(leftType, rightType, false);
-          if (commonType) {
-            leftExpr = this.convertExpression(leftExpr,
-              leftType, commonType,
-              false, false,
-              left
-            );
-            leftType = commonType;
-            rightExpr = this.convertExpression(rightExpr,
-              rightType, commonType,
-              false, false,
-              right
-            );
-            rightType = commonType;
-          } else {
+          if (!commonType || !commonType.isIntegerValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "|", leftType.toString(), rightType.toString()
@@ -5630,50 +4550,12 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
-        switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I32:
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.OrI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.OrI64
-                : BinaryOp.OrI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.F32:
-          case TypeKind.F64: {
-            this.error(
-              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "|", this.currentType.toString()
-            );
-            return module.unreachable();
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+        expr = this.makeOr(leftExpr, rightExpr, commonType);
         break;
       }
       case Token.CARET_EQUALS: compound = true;
@@ -5690,35 +4572,22 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
         }
-        if (!leftType.isValue) {
-          this.error(
-            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-            expression.range, "^", leftType.toString()
-          );
-          return this.module.unreachable();
-        }
 
         if (compound) {
+          if (!leftType.isIntegerValue) {
+            this.error(
+              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+              expression.range, "^", leftType.toString()
+            );
+            return module.unreachable();
+          }
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
+          rightType = commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonDenominator(leftType, rightType, false);
-          if (commonType) {
-            leftExpr = this.convertExpression(leftExpr,
-              leftType, commonType,
-              false, false,
-              left
-            );
-            leftType = commonType;
-            rightExpr = this.convertExpression(rightExpr,
-              rightType, commonType,
-              false, false,
-              right
-            );
-            rightType = commonType;
-          } else {
+          if (!commonType || !commonType.isIntegerValue) {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
               expression.range, "^", leftType.toString(), rightType.toString()
@@ -5726,50 +4595,12 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = contextualType;
             return module.unreachable();
           }
+          leftExpr = this.convertExpression(leftExpr, leftType, commonType, false, left);
+          leftType = commonType;
+          rightExpr = this.convertExpression(rightExpr, rightType, commonType, false, right);
+          rightType = commonType;
         }
-        switch (this.currentType.kind) {
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.BOOL: {
-            expr = module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I32:
-          case TypeKind.U32: {
-            expr = module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.I64:
-          case TypeKind.U64: {
-            expr = module.binary(BinaryOp.XorI64, leftExpr, rightExpr);
-            break;
-          }
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
-            expr = module.binary(
-              this.options.isWasm64
-                ? BinaryOp.XorI64
-                : BinaryOp.XorI32,
-              leftExpr,
-              rightExpr
-            );
-            break;
-          }
-          case TypeKind.F32:
-          case TypeKind.F64: {
-            this.error(
-              DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
-              expression.range, "^", this.currentType.toString()
-            );
-            return module.unreachable();
-          }
-          default: {
-            assert(false);
-            expr = module.unreachable();
-          }
-        }
+        expr = this.makeXor(leftExpr, rightExpr, commonType);
         break;
       }
 
@@ -6018,6 +4849,1026 @@ export class Compiler extends DiagnosticEmitter {
     );
   }
 
+  makeLt(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Cares about garbage bits and signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.I32: {
+        return module.binary(BinaryOp.LtI32, leftExpr, rightExpr);
+      }
+      case TypeKind.I64: {
+        return module.binary(BinaryOp.LtI64, leftExpr, rightExpr);
+      }
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.LtI64
+            : BinaryOp.LtI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.LtU32, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.LtU64
+            : BinaryOp.LtU32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.LtU64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        return module.binary(BinaryOp.LtF32, leftExpr, rightExpr);
+      }
+      case TypeKind.F64: {
+        return module.binary(BinaryOp.LtF64, leftExpr, rightExpr);
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeGt(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Cares about garbage bits and signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.I32: {
+        return module.binary(BinaryOp.GtI32, leftExpr, rightExpr);
+      }
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.GtI64
+            : BinaryOp.GtI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.I64: {
+        return module.binary(BinaryOp.GtI64, leftExpr, rightExpr);
+      }
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.GtU32, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.GtU64
+            : BinaryOp.GtU32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.GtU64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        return module.binary(BinaryOp.GtF32, leftExpr, rightExpr);
+      }
+      case TypeKind.F64: {
+        return module.binary(BinaryOp.GtF64, leftExpr, rightExpr);
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeLe(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Cares about garbage bits and signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.I32: {
+        return module.binary(BinaryOp.LeI32, leftExpr, rightExpr);
+      }
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.LeI64
+            : BinaryOp.LeI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.I64: {
+        return module.binary(BinaryOp.LeI64, leftExpr, rightExpr);
+      }
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.LeU32, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.LeU64
+            : BinaryOp.LeU32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.LeU64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        return module.binary(BinaryOp.LeF32, leftExpr, rightExpr);
+      }
+      case TypeKind.F64: {
+        return module.binary(BinaryOp.LeF64, leftExpr, rightExpr);
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeGe(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Cares about garbage bits and signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.I32: {
+        return module.binary(BinaryOp.GeI32, leftExpr, rightExpr);
+      }
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.GeI64
+            : BinaryOp.GeI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.I64: {
+        return module.binary(BinaryOp.GeI64, leftExpr, rightExpr);
+      }
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.GeU32, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.GeU64
+            : BinaryOp.GeU32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.GeU64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        return module.binary(BinaryOp.GeF32, leftExpr, rightExpr);
+      }
+      case TypeKind.F64: {
+        return module.binary(BinaryOp.GeF64, leftExpr, rightExpr);
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeEq(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type, reportNode: Node): ExpressionRef {
+    // Cares about garbage bits
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.I32:
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.EqI32, leftExpr, rightExpr);
+      }
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.EqI64
+            : BinaryOp.EqI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.EqI64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        return module.binary(BinaryOp.EqF32, leftExpr, rightExpr);
+      }
+      case TypeKind.F64: {
+        return module.binary(BinaryOp.EqF64, leftExpr, rightExpr);
+      }
+      case TypeKind.V128: {
+        return module.unary(UnaryOp.AllTrueI8x16,
+          module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
+        );
+      }
+      case TypeKind.FUNCREF:
+      case TypeKind.EXTERNREF:
+      case TypeKind.EXNREF:
+      case TypeKind.ANYREF: {
+        this.error(
+          DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+          reportNode.range,
+          "ref.eq",
+          type.toString()
+        );
+        return module.unreachable();
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeNe(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type, reportNode: Node): ExpressionRef {
+    // Cares about garbage bits
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.I32:
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.NeI32, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE:
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.NeI64
+            : BinaryOp.NeI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.NeI64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        return module.binary(BinaryOp.NeF32, leftExpr, rightExpr);
+      }
+      case TypeKind.F64: {
+        return module.binary(BinaryOp.NeF64, leftExpr, rightExpr);
+      }
+      case TypeKind.V128: {
+        return module.unary(UnaryOp.AnyTrueI8x16,
+          module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
+        );
+      }
+      case TypeKind.FUNCREF:
+      case TypeKind.EXTERNREF:
+      case TypeKind.EXNREF:
+      case TypeKind.ANYREF: {
+        this.error(
+          DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+          reportNode.range,
+          "ref.eq",
+          type.toString()
+        );
+        return module.unreachable();
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeAdd(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Does not care about garbage bits or signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL:
+      case TypeKind.I32:
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.AddI32, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE:
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.AddI64
+            : BinaryOp.AddI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.AddI64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        return module.binary(BinaryOp.AddF32, leftExpr, rightExpr);
+      }
+      case TypeKind.F64: {
+        return module.binary(BinaryOp.AddF64, leftExpr, rightExpr);
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeSub(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Does not care about garbage bits or signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL:
+      case TypeKind.I32:
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.SubI32, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE:
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.SubI64
+            : BinaryOp.SubI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.SubI64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        return module.binary(BinaryOp.SubF32, leftExpr, rightExpr);
+      }
+      case TypeKind.F64: {
+        return module.binary(BinaryOp.SubF64, leftExpr, rightExpr);
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeMul(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Does not care about garbage bits or signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL:
+      case TypeKind.I32:
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.MulI32, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE:
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.MulI64
+            : BinaryOp.MulI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.MulI64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        return module.binary(BinaryOp.MulF32, leftExpr, rightExpr);
+      }
+      case TypeKind.F64: {
+        return module.binary(BinaryOp.MulF64, leftExpr, rightExpr);
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makePow(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type, reportNode: Node): ExpressionRef {
+    // Cares about garbage bits
+    let module = this.module;
+    switch (type.kind) {
+      case TypeKind.BOOL: {
+        return module.select(
+          module.i32(1),
+          module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
+          leftExpr
+        );
+      }
+      case TypeKind.I8:
+      case TypeKind.U8:
+      case TypeKind.I16:
+      case TypeKind.U16: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.I32:
+      case TypeKind.U32: {
+        let instance = this.i32PowInstance;
+        if (!instance) {
+          let prototype = this.program.lookupGlobal(CommonNames.ipow32);
+          if (!prototype) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, "ipow32"
+            );
+            return module.unreachable();
+          }
+          assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.i32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+        }
+        if (!instance || !this.compileFunction(instance)) {
+          return module.unreachable();
+        }
+        let expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], reportNode);
+        if (type.size < 32) {
+          // TODO: this is necessary because i32PowInstance is generic, and deals with 32-bit integers,
+          // so its flow does not indicate whether returned SMIs are wrapped. worth to avoid?
+          expr = this.ensureSmallIntegerWrap(expr, type);
+        }
+        return expr;
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        let instance = this.i64PowInstance;
+        if (!instance) {
+          let prototype = this.program.lookupGlobal(CommonNames.ipow64);
+          if (!prototype) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, "ipow64"
+            );
+            return module.unreachable();
+          }
+          assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.i64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+        }
+        if (!instance || !this.compileFunction(instance)) {
+          return module.unreachable();
+        }
+        return this.makeCallDirect(instance, [ leftExpr, rightExpr ], reportNode);
+      }
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
+        let isWasm64 = this.options.isWasm64;
+        let instance = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
+        if (!instance) {
+          let prototype = this.program.lookupGlobal(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
+          if (!prototype) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, isWasm64 ? "ipow64" : "ipow32"
+            );
+            return module.unreachable();
+          }
+          assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+          if (isWasm64) {
+            this.i64PowInstance = instance;
+          } else {
+            this.i32PowInstance = instance;
+          }
+        }
+        if (!instance || !this.compileFunction(instance)) {
+          return module.unreachable();
+        }
+        return this.makeCallDirect(instance, [ leftExpr, rightExpr ], reportNode);
+      }
+      case TypeKind.F32: {
+        let instance = this.f32PowInstance;
+        if (!instance) {
+          let namespace = this.program.lookupGlobal(CommonNames.Mathf);
+          if (!namespace) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, "Mathf"
+            );
+            return module.unreachable();
+          }
+          let namespaceMembers = namespace.members;
+          if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, "Mathf.pow"
+            );
+            return module.unreachable();
+          }
+          let prototype = assert(namespaceMembers.get(CommonNames.pow));
+          assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.f32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+        }
+        if (!instance || !this.compileFunction(instance)) {
+          return module.unreachable();
+        }
+        return this.makeCallDirect(instance, [ leftExpr, rightExpr ], reportNode);
+      }
+      // Math.pow otherwise (result is f64)
+      case TypeKind.F64: {
+        let instance = this.f64PowInstance;
+        if (!instance) {
+          let namespace = this.program.lookupGlobal(CommonNames.Math);
+          if (!namespace) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, "Math"
+            );
+            return module.unreachable();
+          }
+          let namespaceMembers = namespace.members;
+          if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, "Math.pow"
+            );
+            return module.unreachable();
+          }
+          let prototype = assert(namespaceMembers.get(CommonNames.pow));
+          assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.f64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+        }
+        if (!instance || !this.compileFunction(instance)) {
+          return module.unreachable();
+        }
+        return this.makeCallDirect(instance, [ leftExpr, rightExpr ], reportNode);
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeDiv(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Cares about garbage bits and signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.I32: {
+        return module.binary(BinaryOp.DivI32, leftExpr, rightExpr);
+      }
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.DivI64
+            : BinaryOp.DivI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.I64: {
+        return module.binary(BinaryOp.DivI64, leftExpr, rightExpr);
+      }
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.DivU32, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.DivU64
+            : BinaryOp.DivU32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.DivU64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        return module.binary(BinaryOp.DivF32, leftExpr, rightExpr);
+      }
+      case TypeKind.F64: {
+        return module.binary(BinaryOp.DivF64, leftExpr, rightExpr);
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeRem(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type, reportNode: Node): ExpressionRef {
+    // Cares about garbage bits and signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.I32: {
+        return module.binary(BinaryOp.RemI32, leftExpr, rightExpr);
+      }
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.RemI64
+            : BinaryOp.RemI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.I64: {
+        return module.binary(BinaryOp.RemI64, leftExpr, rightExpr);
+      }
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        leftExpr = this.ensureSmallIntegerWrap(leftExpr, type);
+        rightExpr = this.ensureSmallIntegerWrap(rightExpr, type);
+        // falls through
+      }
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.RemU32, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.RemU64
+            : BinaryOp.RemU32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.RemU64, leftExpr, rightExpr);
+      }
+      case TypeKind.F32: {
+        let instance = this.f32ModInstance;
+        if (!instance) {
+          let namespace = this.program.lookupGlobal(CommonNames.Mathf);
+          if (!namespace) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, "Mathf"
+            );
+            return module.unreachable();
+          }
+          let namespaceMembers = namespace.members;
+          if (!namespaceMembers || !namespaceMembers.has(CommonNames.mod)) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, "Mathf.mod"
+            );
+            return module.unreachable();
+          }
+          let prototype = assert(namespaceMembers.get(CommonNames.mod));
+          assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.f32ModInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+        }
+        if (!instance || !this.compileFunction(instance)) {
+          return module.unreachable();
+        }
+        return this.makeCallDirect(instance, [ leftExpr, rightExpr ], reportNode);
+      }
+      case TypeKind.F64: {
+        let instance = this.f64ModInstance;
+        if (!instance) {
+          let namespace = this.program.lookupGlobal(CommonNames.Math);
+          if (!namespace) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, "Math"
+            );
+            return module.unreachable();
+          }
+          let namespaceMembers = namespace.members;
+          if (!namespaceMembers || !namespaceMembers.has(CommonNames.mod)) {
+            this.error(
+              DiagnosticCode.Cannot_find_name_0,
+              reportNode.range, "Math.mod"
+            );
+            return module.unreachable();
+          }
+          let prototype = assert(namespaceMembers.get(CommonNames.mod));
+          assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          this.f64ModInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+        }
+        if (!instance || !this.compileFunction(instance)) {
+          return module.unreachable();
+        }
+        return this.makeCallDirect(instance, [ leftExpr, rightExpr ], reportNode);
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeShl(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Cares about garbage bits on the RHS, but only for types smaller than 5 bits
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.BOOL: return leftExpr;
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16: {
+        // leftExpr << (rightExpr & (7|15))
+        return module.binary(
+          BinaryOp.ShlI32,
+          leftExpr,
+          module.binary(BinaryOp.AndI32, rightExpr, module.i32(type.size - 1))
+        );
+      }
+      case TypeKind.I32:
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.ShlI32, leftExpr, rightExpr);
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.ShlI64, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE:
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.ShlI64
+            : BinaryOp.ShlI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeShr(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Cares about garbage bits on the LHS, but on the RHS only for types smaller than 5 bits,
+    // and signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.BOOL: return leftExpr;
+      case TypeKind.I8:
+      case TypeKind.I16: {
+        // leftExpr >> (rightExpr & (7|15))
+        return module.binary(
+          BinaryOp.ShrI32,
+          this.ensureSmallIntegerWrap(leftExpr, type),
+          module.binary(BinaryOp.AndI32, rightExpr, module.i32(type.size - 1))
+        );
+      }
+      case TypeKind.U8:
+      case TypeKind.U16: {
+        // leftExpr >>> (rightExpr & (7|15))
+        return module.binary(
+          BinaryOp.ShrU32,
+          this.ensureSmallIntegerWrap(leftExpr, type),
+          module.binary(BinaryOp.AndI32, rightExpr, module.i32(type.size - 1))
+        );
+      }
+      case TypeKind.I32: {
+        return module.binary(BinaryOp.ShrI32, leftExpr, rightExpr);
+      }
+      case TypeKind.I64: {
+        return module.binary(BinaryOp.ShrI64, leftExpr, rightExpr);
+      }
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.ShrI64
+            : BinaryOp.ShrI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
+      }
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.ShrU64, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.ShrU64
+            : BinaryOp.ShrU32,
+          leftExpr,
+          rightExpr
+        );
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeShru(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Cares about garbage bits on the LHS, but on the RHS only for types smaller than 5 bits
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.BOOL: return leftExpr;
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16: {
+        // leftExpr >>> (rightExpr & (7|15))
+        return module.binary(
+          BinaryOp.ShrU32,
+          this.ensureSmallIntegerWrap(leftExpr, type),
+          module.binary(BinaryOp.AndI32, rightExpr, module.i32(type.size - 1))
+        );
+      }
+      case TypeKind.I32:
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.ShrU32, leftExpr, rightExpr);
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.ShrU64, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE:
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.ShrU64
+            : BinaryOp.ShrU32,
+          leftExpr,
+          rightExpr
+        );
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeAnd(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Does not care about garbage bits or signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL:
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.AndI32, leftExpr, rightExpr);
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.AndI64, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE:
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.AndI64
+            : BinaryOp.AndI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeOr(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Does not care about garbage bits or signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        return module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
+      }
+      case TypeKind.I32:
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.OrI32, leftExpr, rightExpr);
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.OrI64, leftExpr, rightExpr);
+      }
+      case TypeKind.USIZE:
+      case TypeKind.ISIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.OrI64
+            : BinaryOp.OrI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
+  makeXor(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type): ExpressionRef {
+    // Does not care about garbage bits or signedness
+    var module = this.module;
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.BOOL: {
+        return module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
+      }
+      case TypeKind.I32:
+      case TypeKind.U32: {
+        return module.binary(BinaryOp.XorI32, leftExpr, rightExpr);
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        return module.binary(BinaryOp.XorI64, leftExpr, rightExpr);
+      }
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: {
+        return module.binary(
+          this.options.isWasm64
+            ? BinaryOp.XorI64
+            : BinaryOp.XorI32,
+          leftExpr,
+          rightExpr
+        );
+      }
+    }
+    assert(false);
+    return module.unreachable();
+  }
+
   private compileUnaryOverload(
     operatorInstance: Function,
     value: Expression,
@@ -6156,7 +6007,7 @@ export class Compiler extends DiagnosticEmitter {
     var valueType = this.currentType;
     return this.makeAssignment(
       target,
-      this.convertExpression(valueExpr, valueType, targetType, false, false, valueExpression),
+      this.convertExpression(valueExpr, valueType, targetType, false, valueExpression),
       valueType,
       valueExpression,
       thisExpression,
@@ -7881,7 +7732,7 @@ export class Compiler extends DiagnosticEmitter {
                   operands.push(
                     this.convertExpression(
                       module.global_get(global.internalName, global.type.toNativeType()),
-                      global.type, parameterTypes[i], false, false, initializer
+                      global.type, parameterTypes[i], false, initializer
                     )
                   );
                 }
@@ -8835,8 +8686,8 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
-        // __allocArray(length, alignLog2, classId, staticBuffer)
-        let expr = this.makeCallDirect(program.allocArrayInstance, [
+        // __newArray(length, alignLog2, classId, staticBuffer)
+        let expr = this.makeCallDirect(program.newArrayInstance, [
           module.i32(length),
           program.options.isWasm64
             ? module.i64(elementType.alignLog2)
@@ -8874,11 +8725,11 @@ export class Compiler extends DiagnosticEmitter {
     var nativeArrayType = arrayType.toNativeType();
 
     var stmts = new Array<ExpressionRef>();
-    // tempThis = __allocArray(length, alignLog2, classId, source = 0)
+    // tempThis = __newArray(length, alignLog2, classId, source = 0)
     stmts.push(
       module.local_set(tempThis.index,
         this.makeRetain(
-          this.makeCallDirect(program.allocArrayInstance, [
+          this.makeCallDirect(program.newArrayInstance, [
             module.i32(length),
             program.options.isWasm64
               ? module.i64(elementType.alignLog2)
@@ -9010,9 +8861,9 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new chunk of memory and return a copy of the buffer
       } else {
-        // __allocBuffer(bufferSize, id, buffer)
+        // __newBuffer(bufferSize, id, buffer)
         let expr = this.makeRetain(
-          this.makeCallDirect(program.allocBufferInstance, [
+          this.makeCallDirect(program.newBufferInstance, [
             isWasm64
               ? module.i64(bufferSize)
               : module.i32(bufferSize),
@@ -9049,11 +8900,11 @@ export class Compiler extends DiagnosticEmitter {
     var nativeArrayType = arrayType.toNativeType();
 
     var stmts = new Array<ExpressionRef>();
-    // tempThis = __allocBuffer(bufferSize, classId)
+    // tempThis = __newBuffer(bufferSize, classId)
     stmts.push(
       module.local_set(tempThis.index,
         this.makeRetain(
-          this.makeCallDirect(program.allocBufferInstance, [
+          this.makeCallDirect(program.newBufferInstance, [
             isWasm64
               ? module.i64(bufferSize)
               : module.i32(bufferSize),
@@ -9742,18 +9593,10 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = ctxType;
       return module.unreachable();
     }
-    ifThenExpr = this.convertExpression(
-      ifThenExpr,
-      ifThenType, commonType,
-      false, false,
-      ifThen
-    );
-    ifElseExpr = this.convertExpression(
-      ifElseExpr,
-      ifElseType, commonType,
-      false, false,
-      ifElse
-    );
+    ifThenExpr = this.convertExpression(ifThenExpr, ifThenType, commonType, false, ifThen);
+    ifThenType = commonType;
+    ifElseExpr = this.convertExpression(ifElseExpr, ifElseType, commonType, false, ifElse);
+    ifElseType = commonType;
     this.currentType = commonType;
 
     if (ifThenAutoreleaseSkipped != ifElseAutoreleaseSkipped) { // unify to both skipped
@@ -10345,11 +10188,7 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
 
-        expr = this.convertExpression(expr,
-          this.currentType, this.currentType.intType,
-          false, false,
-          expression.operand
-        );
+        expr = this.convertExpression(expr, this.currentType, this.currentType.intType, false, expression.operand);
 
         switch (this.currentType.kind) {
           case TypeKind.I8:
@@ -10441,7 +10280,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           default: {
             expr = this.compileExpression(operand, Type.auto); // may trigger an error
-            expr = this.convertExpression(expr, this.currentType, Type.void, true, false, operand);
+            expr = this.convertExpression(expr, this.currentType, Type.void, true, operand);
           }
         }
         typeString = "undefined";
@@ -10460,7 +10299,7 @@ export class Compiler extends DiagnosticEmitter {
           default: {
             expr = this.compileExpression(operand, Type.auto);
             let type = this.currentType;
-            expr = this.convertExpression(expr, type, Type.void, true, false, operand);
+            expr = this.convertExpression(expr, type, Type.void, true, operand);
             if (type.isReference) {
               let signatureReference = type.getSignature();
               if (signatureReference) {
@@ -10814,24 +10653,29 @@ export class Compiler extends DiagnosticEmitter {
   makeAllocation(
     classInstance: Class
   ): ExpressionRef {
-    // TODO: investigate if it's possible to allocate with RC=1 immediately
     var program = this.program;
     assert(classInstance.program == program);
     var module = this.module;
     var options = this.options;
     this.currentType = classInstance.type;
-    var allocInstance = program.allocInstance;
-    this.compileFunction(allocInstance);
-    return module.call(allocInstance.internalName, [
-      options.isWasm64
-        ? module.i64(classInstance.nextMemoryOffset)
-        : module.i32(classInstance.nextMemoryOffset),
-      module.i32(
-        classInstance.hasDecorator(DecoratorFlags.UNMANAGED)
-          ? 0
-          : classInstance.id
-      )
-    ], options.nativeSizeType);
+    if (classInstance.hasDecorator(DecoratorFlags.UNMANAGED)) {
+      let allocInstance = program.allocInstance;
+      this.compileFunction(allocInstance);
+      return module.call(allocInstance.internalName, [
+        options.isWasm64
+          ? module.i64(classInstance.nextMemoryOffset)
+          : module.i32(classInstance.nextMemoryOffset)
+      ], options.nativeSizeType);
+    } else {
+      let newInstance = program.newInstance;
+      this.compileFunction(newInstance);
+      return module.call(newInstance.internalName, [
+        options.isWasm64
+          ? module.i64(classInstance.nextMemoryOffset)
+          : module.i32(classInstance.nextMemoryOffset),
+        module.i32(classInstance.id)
+      ], options.nativeSizeType);
+    }
   }
 
   /** Makes the initializers for a class's fields within the constructor. */

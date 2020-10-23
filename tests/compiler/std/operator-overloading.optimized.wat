@@ -5,7 +5,7 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1024) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 1036) "6\00\00\00\01\00\00\00\00\00\00\00\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/operator-overloading/a1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/a2 (mut i32) (i32.const 0))
@@ -75,22 +75,28 @@
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__new (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   global.get $~lib/rt/stub/offset
-  i32.const 16
+  global.get $~lib/rt/stub/offset
+  i32.const 4
   i32.add
   local.tee $3
-  i32.const 16
+  i32.const 28
   i32.add
   local.tee $1
   memory.size
   local.tee $4
   i32.const 16
   i32.shl
+  i32.const 15
+  i32.add
+  i32.const -16
+  i32.and
   local.tee $2
   i32.gt_u
   if
@@ -124,27 +130,31 @@
   end
   local.get $1
   global.set $~lib/rt/stub/offset
+  i32.const 28
+  i32.store
   local.get $3
-  i32.const 16
+  i32.const 4
   i32.sub
   local.tee $1
-  i32.const 16
-  i32.store
-  local.get $1
-  i32.const 1
+  i32.const 0
   i32.store offset=4
   local.get $1
-  local.get $0
+  i32.const 0
   i32.store offset=8
   local.get $1
-  i32.const 8
+  local.get $0
   i32.store offset=12
+  local.get $1
+  i32.const 8
+  i32.store offset=16
   local.get $3
+  i32.const 16
+  i32.add
  )
  (func $std/operator-overloading/Tester#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 3
-  call $~lib/rt/stub/__alloc
+  call $~lib/rt/stub/__new
   local.tee $2
   local.get $0
   i32.store
@@ -217,7 +227,7 @@
  (func $std/operator-overloading/TesterInlineStatic#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 4
-  call $~lib/rt/stub/__alloc
+  call $~lib/rt/stub/__new
   local.tee $2
   local.get $0
   i32.store
@@ -229,7 +239,7 @@
  (func $std/operator-overloading/TesterInlineInstance#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 5
-  call $~lib/rt/stub/__alloc
+  call $~lib/rt/stub/__new
   local.tee $2
   local.get $0
   i32.store
@@ -241,7 +251,7 @@
  (func $start:std/operator-overloading
   (local $0 i32)
   (local $1 i32)
-  i32.const 1104
+  i32.const 1116
   global.set $~lib/rt/stub/offset
   i32.const 1
   i32.const 2
@@ -280,7 +290,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 145
    i32.const 1
    call $~lib/builtins/abort
@@ -321,7 +331,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 151
    i32.const 1
    call $~lib/builtins/abort
@@ -364,7 +374,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 157
    i32.const 1
    call $~lib/builtins/abort
@@ -407,7 +417,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 163
    i32.const 1
    call $~lib/builtins/abort
@@ -449,7 +459,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 169
    i32.const 1
    call $~lib/builtins/abort
@@ -492,7 +502,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 175
    i32.const 1
    call $~lib/builtins/abort
@@ -535,7 +545,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 181
    i32.const 1
    call $~lib/builtins/abort
@@ -578,7 +588,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 187
    i32.const 1
    call $~lib/builtins/abort
@@ -621,7 +631,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 193
    i32.const 1
    call $~lib/builtins/abort
@@ -644,7 +654,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 199
    i32.const 1
    call $~lib/builtins/abort
@@ -665,7 +675,7 @@
   global.get $std/operator-overloading/eqf
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 205
    i32.const 1
    call $~lib/builtins/abort
@@ -678,7 +688,7 @@
   global.get $std/operator-overloading/eq
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 209
    i32.const 1
    call $~lib/builtins/abort
@@ -693,7 +703,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 213
    i32.const 1
    call $~lib/builtins/abort
@@ -729,7 +739,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 219
    i32.const 1
    call $~lib/builtins/abort
@@ -765,7 +775,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 225
    i32.const 1
    call $~lib/builtins/abort
@@ -801,7 +811,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 231
    i32.const 1
    call $~lib/builtins/abort
@@ -837,7 +847,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 237
    i32.const 1
    call $~lib/builtins/abort
@@ -873,7 +883,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 242
    i32.const 1
    call $~lib/builtins/abort
@@ -909,7 +919,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 247
    i32.const 1
    call $~lib/builtins/abort
@@ -945,7 +955,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 252
    i32.const 1
    call $~lib/builtins/abort
@@ -979,7 +989,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 257
    i32.const 1
    call $~lib/builtins/abort
@@ -1021,7 +1031,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 262
    i32.const 1
    call $~lib/builtins/abort
@@ -1063,7 +1073,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 267
    i32.const 1
    call $~lib/builtins/abort
@@ -1075,13 +1085,11 @@
   global.set $std/operator-overloading/excl
   global.get $std/operator-overloading/excl
   local.tee $0
-  local.set $1
-  local.get $0
   i32.load
   if (result i32)
    i32.const 0
   else
-   local.get $1
+   local.get $0
    i32.load offset=4
    i32.eqz
   end
@@ -1099,7 +1107,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 272
    i32.const 1
    call $~lib/builtins/abort
@@ -1110,7 +1118,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 273
    i32.const 1
    call $~lib/builtins/abort
@@ -1122,12 +1130,10 @@
   global.set $std/operator-overloading/incdec
   global.get $std/operator-overloading/incdec
   local.tee $0
+  local.get $0
   i32.load
   i32.const 1
   i32.add
-  local.set $1
-  local.get $0
-  local.get $1
   i32.store
   local.get $0
   local.get $0
@@ -1152,7 +1158,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 279
    i32.const 1
    call $~lib/builtins/abort
@@ -1160,12 +1166,10 @@
   end
   global.get $std/operator-overloading/incdec
   local.tee $0
+  local.get $0
   i32.load
   i32.const 1
   i32.sub
-  local.set $1
-  local.get $0
-  local.get $1
   i32.store
   local.get $0
   local.get $0
@@ -1188,7 +1192,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 282
    i32.const 1
    call $~lib/builtins/abort
@@ -1224,7 +1228,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 287
    i32.const 1
    call $~lib/builtins/abort
@@ -1245,7 +1249,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 288
    i32.const 1
    call $~lib/builtins/abort
@@ -1279,7 +1283,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 291
    i32.const 1
    call $~lib/builtins/abort
@@ -1298,7 +1302,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 292
    i32.const 1
    call $~lib/builtins/abort
@@ -1352,7 +1356,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 312
    i32.const 1
    call $~lib/builtins/abort
@@ -1406,7 +1410,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 332
    i32.const 1
    call $~lib/builtins/abort

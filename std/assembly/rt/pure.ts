@@ -1,7 +1,7 @@
-import { DEBUG, BLOCK_OVERHEAD } from "rt/common";
+import { BLOCK_OVERHEAD, DEBUG, OBJECT, OBJECT_MAXSIZE, OBJECT_OVERHEAD, TOTAL_OVERHEAD } from "rt/common";
 import { Block, freeBlock, ROOT } from "rt/tlsf";
 import { TypeinfoFlags } from "shared/typeinfo";
-import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
+import { onincrement, ondecrement } from "./rtrace";
 
 // === A Pure Reference Counting Garbage Collector ===
 // see: https://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon03Pure.pdf
@@ -67,9 +67,9 @@ function __visit(ref: usize, cookie: i32): void { // eslint-disable-line @typesc
   if (ref < __heap_base) return;
   if (isDefined(__GC_ALL_ACYCLIC)) {
     if (DEBUG) assert(cookie == VISIT_DECREMENT);
-    decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
+    decrement(changetype<OBJECT>(ref - TOTAL_OVERHEAD));
   } else {
-    let s = changetype<Block>(ref - BLOCK_OVERHEAD);
+    let s = changetype<OBJECT>(ref - TOTAL_OVERHEAD);
     switch (cookie) {
       case VISIT_DECREMENT: {
         decrement(s);
@@ -104,7 +104,7 @@ function __visit(ref: usize, cookie: i32): void { // eslint-disable-line @typesc
 }
 
 /** Increments the reference count of the specified block by one.*/
-function increment(s: Block): void {
+function increment(s: OBJECT): void {
   var info = s.gcInfo;
   assert((info & ~REFCOUNT_MASK) == ((info + 1) & ~REFCOUNT_MASK)); // overflow
   s.gcInfo = info + 1;
@@ -115,13 +115,13 @@ function increment(s: Block): void {
 /** Decrements the reference count of the specified block by one, possibly freeing it. */
 // @ts-ignore: decorator
 @lazy
-function decrement(s: Block): void {
+function decrement(s: OBJECT): void {
   var info = s.gcInfo;
   var rc = info & REFCOUNT_MASK;
   if (isDefined(ASC_RTRACE)) ondecrement(s);
   if (DEBUG) assert(!(s.mmInfo & 1)); // used
   if (rc == 1) {
-    __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_DECREMENT);
+    __visit_members(changetype<usize>(s) + TOTAL_OVERHEAD, VISIT_DECREMENT);
     if (isDefined(__GC_ALL_ACYCLIC)) {
       if (DEBUG) assert(!(info & BUFFERED_MASK));
       finalize(s);
@@ -146,11 +146,11 @@ function decrement(s: Block): void {
 }
 
 /** Finalizes the specified block, giving it back to the memory manager. */
-function finalize(s: Block): void {
+function finalize(s: OBJECT): void {
   if (isDefined(__finalize)) {
-    __finalize(changetype<usize>(s) + BLOCK_OVERHEAD);
+    __finalize(changetype<usize>(s) + TOTAL_OVERHEAD);
   }
-  freeBlock(ROOT, s);
+  freeBlock(ROOT, changetype<Block>(s));
 }
 
 /** Buffer of possible roots. */
@@ -164,13 +164,13 @@ function finalize(s: Block): void {
 @lazy var END: usize = 0;
 
 /** Appends a block to possible roots. */
-function appendRoot(s: Block): void {
+function appendRoot(s: OBJECT): void {
   var cur = CUR;
   if (cur >= END) {
     growRoots(); // TBD: either that or pick a default and force collection on overflow
     cur = CUR;
   }
-  store<Block>(cur, s);
+  store<OBJECT>(cur, s);
   CUR = cur + sizeof<usize>();
 }
 
@@ -179,13 +179,9 @@ function growRoots(): void {
   var oldRoots = ROOTS;
   var oldSize = CUR - oldRoots;
   var newSize = max(oldSize * 2, 64 << alignof<usize>());
-  var newRoots = __alloc(newSize, 0);
-  if (isDefined(ASC_RTRACE)) onfree(changetype<Block>(newRoots - BLOCK_OVERHEAD)); // neglect unmanaged
+  var newRoots = __alloc(newSize);
   memory.copy(newRoots, oldRoots, oldSize);
-  if (oldRoots) {
-    if (isDefined(ASC_RTRACE)) onalloc(changetype<Block>(oldRoots - BLOCK_OVERHEAD)); // neglect unmanaged
-    __free(oldRoots);
-  }
+  if (oldRoots) __free(oldRoots);
   ROOTS = newRoots;
   CUR = newRoots + oldSize;
   END = newRoots + newSize;
@@ -201,11 +197,11 @@ export function __collect(): void {
   var roots = ROOTS;
   var cur = roots;
   for (let pos = cur, end = CUR; pos < end; pos += sizeof<usize>()) {
-    let s = load<Block>(pos);
+    let s = load<OBJECT>(pos);
     let info = s.gcInfo;
     if ((info & COLOR_MASK) == COLOR_PURPLE && (info & REFCOUNT_MASK) > 0) {
       markGray(s);
-      store<Block>(cur, s);
+      store<OBJECT>(cur, s);
       cur += sizeof<usize>();
     } else if ((info & COLOR_MASK) == COLOR_BLACK && !(info & REFCOUNT_MASK)) {
       finalize(s);
@@ -217,12 +213,12 @@ export function __collect(): void {
 
   // scanRoots
   for (let pos = roots; pos < cur; pos += sizeof<usize>()) {
-    scan(load<Block>(pos));
+    scan(load<OBJECT>(pos));
   }
 
   // collectRoots
   for (let pos = roots; pos < cur; pos += sizeof<usize>()) {
-    let s = load<Block>(pos);
+    let s = load<OBJECT>(pos);
     s.gcInfo = s.gcInfo & ~BUFFERED_MASK;
     collectWhite(s);
   }
@@ -230,52 +226,74 @@ export function __collect(): void {
 }
 
 /** Marks a block as gray (possible member of cycle) during the collection phase. */
-function markGray(s: Block): void {
+function markGray(s: OBJECT): void {
   var info = s.gcInfo;
   if ((info & COLOR_MASK) != COLOR_GRAY) {
     s.gcInfo = (info & ~COLOR_MASK) | COLOR_GRAY;
-    __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_MARKGRAY);
+    __visit_members(changetype<usize>(s) + TOTAL_OVERHEAD, VISIT_MARKGRAY);
   }
 }
 
 /** Scans a block during the collection phase, determining whether it is garbage or not. */
-function scan(s: Block): void {
+function scan(s: OBJECT): void {
   var info = s.gcInfo;
   if ((info & COLOR_MASK) == COLOR_GRAY) {
     if ((info & REFCOUNT_MASK) > 0) {
       scanBlack(s);
     } else {
       s.gcInfo = (info & ~COLOR_MASK) | COLOR_WHITE;
-      __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_SCAN);
+      __visit_members(changetype<usize>(s) + TOTAL_OVERHEAD, VISIT_SCAN);
     }
   }
 }
 
 /** Marks a block as black (in use) if it was found to be reachable during the collection phase. */
-function scanBlack(s: Block): void {
+function scanBlack(s: OBJECT): void {
   s.gcInfo = (s.gcInfo & ~COLOR_MASK) | COLOR_BLACK;
-  __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_SCANBLACK);
+  __visit_members(changetype<usize>(s) + TOTAL_OVERHEAD, VISIT_SCANBLACK);
 }
 
 /** Collects all white (member of a garbage cycle) nodes when completing the collection phase.  */
-function collectWhite(s: Block): void {
+function collectWhite(s: OBJECT): void {
   var info = s.gcInfo;
   if ((info & COLOR_MASK) == COLOR_WHITE && !(info & BUFFERED_MASK)) {
     s.gcInfo = (info & ~COLOR_MASK) | COLOR_BLACK;
-    __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_COLLECTWHITE);
+    __visit_members(changetype<usize>(s) + TOTAL_OVERHEAD, VISIT_COLLECTWHITE);
     finalize(s);
   }
 }
 
 // @ts-ignore: decorator
 @global @unsafe
+export function __new(size: usize, id: u32): usize {
+  if (size > OBJECT_MAXSIZE) throw new Error("allocation too large");
+  var ptr = __alloc(OBJECT_OVERHEAD + size);
+  var object = changetype<OBJECT>(ptr - BLOCK_OVERHEAD);
+  object.gcInfo = 0; // RC=0
+  object.gcInfo2 = 0;
+  object.rtId = id;
+  object.rtSize = <u32>size;
+  return ptr + OBJECT_OVERHEAD;
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __renew(oldPtr: usize, size: usize): usize {
+  if (size > OBJECT_MAXSIZE) throw new Error("allocation too large");
+  var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size);
+  changetype<OBJECT>(newPtr - BLOCK_OVERHEAD).rtSize = <u32>size;
+  return newPtr + OBJECT_OVERHEAD;
+}
+
+// @ts-ignore: decorator
+@global @unsafe
 export function __retain(ptr: usize): usize {
-  if (ptr > __heap_base) increment(changetype<Block>(ptr - BLOCK_OVERHEAD));
+  if (ptr > __heap_base) increment(changetype<OBJECT>(ptr - TOTAL_OVERHEAD));
   return ptr;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __release(ptr: usize): void {
-  if (ptr > __heap_base) decrement(changetype<Block>(ptr - BLOCK_OVERHEAD));
+  if (ptr > __heap_base) decrement(changetype<OBJECT>(ptr - TOTAL_OVERHEAD));
 }

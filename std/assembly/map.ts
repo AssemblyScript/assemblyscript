@@ -1,7 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { HASH } from "./util/hash";
-import { E_KEYNOTFOUND } from "util/error";
+import { E_KEYNOTFOUND } from "./util/error";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
 

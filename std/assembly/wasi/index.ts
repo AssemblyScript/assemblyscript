@@ -70,7 +70,7 @@ function trace( // eslint-disable-line @typescript-eslint/no-unused-vars
   // 4: iov.buf_len
   // 8: len
   // 12: buf...
-  var iovPtr = __alloc(offsetof<iovec>() + sizeof<usize>() + 1 + <usize>(max(String.UTF8.byteLength(message), MAX_DOUBLE_LENGTH << 1)), 0);
+  var iovPtr = __alloc(offsetof<iovec>() + sizeof<usize>() + 1 + <usize>(max(String.UTF8.byteLength(message), MAX_DOUBLE_LENGTH << 1)));
   var lenPtr = iovPtr + offsetof<iovec>();
   var bufPtr = lenPtr + sizeof<usize>();
   changetype<iovec>(iovPtr).buf = bufPtr;

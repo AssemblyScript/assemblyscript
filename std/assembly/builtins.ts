@@ -133,6 +133,10 @@ export declare function sub<T>(left: T, right: T): T;
 export declare function mul<T>(left: T, right: T): T;
 
 // @ts-ignore: decorator
+@builtin
+export declare function div<T>(left: T, right: T): T;
+
+// @ts-ignore: decorator
 @unsafe @builtin
 export declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 
@@ -313,6 +317,14 @@ export namespace i32 {
   // @ts-ignore: decorator
   @builtin
   export declare function mul(left: i32, right:i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function div_s(left: i32, right:i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function div_u(left: i32, right:i32): i32;
 
   // @ts-ignore: decorator
   @builtin
@@ -515,7 +527,15 @@ export namespace i64 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function mul(left: i64, right:i64): i64;   
+  export declare function mul(left: i64, right:i64): i64;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function div_s(left: i64, right:i64): i64;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function div_u(left: i64, right:i64): i64;
 
   // @ts-ignore: decorator
   @builtin
@@ -952,7 +972,11 @@ export namespace f32 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function mul(left: f32, right: f32): f32;    
+  export declare function mul(left: f32, right: f32): f32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function div(left: f32, right: f32): f32;
 }
 
 // @ts-ignore: decorator
@@ -1055,7 +1079,11 @@ export namespace f64 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function mul(left: f64, right: f64): f64;   
+  export declare function mul(left: f64, right: f64): f64;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function div(left: f64, right: f64): f64;
 }
 
 // @ts-ignore: decorator

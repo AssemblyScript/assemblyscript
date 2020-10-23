@@ -101,7 +101,11 @@ module.exports = {
         "keyword-spacing": ["error", { "before": true, "after": true }],
         // Node's support for ESM is still not great, but this rule is likely
         // to become activated once compatibility doesn't suck anymore.
+        // We are testing both ESM and UMD, so don't limit us.
         "@typescript-eslint/no-var-requires": "off",
+
+        // This rule does not behave well in JS files.
+        "@typescript-eslint/explicit-module-boundary-types": "off",
 
         // Enforcing to remove function parameters on stubs makes code less
         // maintainable, so we instead allow unused function parameters.

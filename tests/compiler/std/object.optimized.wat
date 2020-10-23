@@ -2,17 +2,16 @@
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1024) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00.\00t\00s")
- (data (i32.const 1072) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
- (data (i32.const 1104) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00b")
- (data (i32.const 1136) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00a\00b")
- (data (i32.const 1172) "\01\00\00\00\01")
+ (data (i32.const 1036) "\1a\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00.\00t\00s")
+ (data (i32.const 1084) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a")
+ (data (i32.const 1116) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00b")
+ (data (i32.const 1148) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00a\00b")
+ (data (i32.const 1184) "\01\00\00\00\00\00\00\00\01")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/object/Object.is<f64> (param $0 f64) (param $1 f64) (result i32)
@@ -63,14 +62,6 @@
   i32.const 0
   i32.ne
   i32.eq
- )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -148,38 +139,45 @@
   end
   i32.const 0
  )
- (func $~lib/object/Object.is<~lib/string/String> (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  block $__inlined_func$~lib/string/String.__eq (result i32)
+  local.get $0
+  local.get $1
+  i32.eq
+  if
+   i32.const 1
+   return
+  end
+  block $folding-inner0
+   local.get $1
+   i32.eqz
    i32.const 1
    local.get $0
+   select
+   br_if $folding-inner0
+   local.get $0
+   i32.const 20
+   i32.sub
+   i32.load offset=16
+   i32.const 1
+   i32.shr_u
+   local.tee $2
    local.get $1
-   i32.eq
-   br_if $__inlined_func$~lib/string/String.__eq
-   drop
-   block $folding-inner0
-    local.get $1
-    i32.eqz
-    i32.const 1
-    local.get $0
-    select
-    br_if $folding-inner0
-    local.get $0
-    call $~lib/string/String#get:length
-    local.tee $2
-    local.get $1
-    call $~lib/string/String#get:length
-    i32.ne
-    br_if $folding-inner0
-    local.get $0
-    local.get $1
-    local.get $2
-    call $~lib/util/string/compareImpl
-    i32.eqz
-    br $__inlined_func$~lib/string/String.__eq
-   end
-   i32.const 0
+   i32.const 20
+   i32.sub
+   i32.load offset=16
+   i32.const 1
+   i32.shr_u
+   i32.ne
+   br_if $folding-inner0
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/util/string/compareImpl
+   i32.eqz
+   return
   end
+  i32.const 0
  )
  (func $start:std/object
   f64.const 0
@@ -189,7 +187,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 4
    i32.const 1
    call $~lib/builtins/abort
@@ -200,7 +198,7 @@
   call $~lib/object/Object.is<f64>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 5
    i32.const 1
    call $~lib/builtins/abort
@@ -211,7 +209,7 @@
   call $~lib/object/Object.is<f64>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 6
    i32.const 1
    call $~lib/builtins/abort
@@ -222,7 +220,7 @@
   call $~lib/object/Object.is<f64>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 7
    i32.const 1
    call $~lib/builtins/abort
@@ -233,7 +231,7 @@
   call $~lib/object/Object.is<f64>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 8
    i32.const 1
    call $~lib/builtins/abort
@@ -246,7 +244,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 9
    i32.const 1
    call $~lib/builtins/abort
@@ -259,7 +257,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 11
    i32.const 1
    call $~lib/builtins/abort
@@ -272,7 +270,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 12
    i32.const 1
    call $~lib/builtins/abort
@@ -283,7 +281,7 @@
   call $~lib/object/Object.is<f64>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 13
    i32.const 1
    call $~lib/builtins/abort
@@ -294,7 +292,7 @@
   call $~lib/object/Object.is<f64>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 14
    i32.const 1
    call $~lib/builtins/abort
@@ -305,7 +303,7 @@
   call $~lib/object/Object.is<f64>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 15
    i32.const 1
    call $~lib/builtins/abort
@@ -316,7 +314,7 @@
   call $~lib/object/Object.is<f64>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 16
    i32.const 1
    call $~lib/builtins/abort
@@ -329,7 +327,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 17
    i32.const 1
    call $~lib/builtins/abort
@@ -342,7 +340,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 19
    i32.const 1
    call $~lib/builtins/abort
@@ -353,7 +351,7 @@
   call $~lib/object/Object.is<f32>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 20
    i32.const 1
    call $~lib/builtins/abort
@@ -364,7 +362,7 @@
   call $~lib/object/Object.is<f32>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 21
    i32.const 1
    call $~lib/builtins/abort
@@ -375,7 +373,7 @@
   call $~lib/object/Object.is<f32>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 22
    i32.const 1
    call $~lib/builtins/abort
@@ -386,7 +384,7 @@
   call $~lib/object/Object.is<f32>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 23
    i32.const 1
    call $~lib/builtins/abort
@@ -399,7 +397,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 24
    i32.const 1
    call $~lib/builtins/abort
@@ -412,7 +410,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 26
    i32.const 1
    call $~lib/builtins/abort
@@ -425,7 +423,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 27
    i32.const 1
    call $~lib/builtins/abort
@@ -436,7 +434,7 @@
   call $~lib/object/Object.is<f32>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 28
    i32.const 1
    call $~lib/builtins/abort
@@ -447,7 +445,7 @@
   call $~lib/object/Object.is<f32>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 29
    i32.const 1
    call $~lib/builtins/abort
@@ -458,7 +456,7 @@
   call $~lib/object/Object.is<f32>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 30
    i32.const 1
    call $~lib/builtins/abort
@@ -469,7 +467,7 @@
   call $~lib/object/Object.is<f32>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 31
    i32.const 1
    call $~lib/builtins/abort
@@ -482,7 +480,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 32
    i32.const 1
    call $~lib/builtins/abort
@@ -493,7 +491,7 @@
   call $~lib/object/Object.is<f64>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 34
    i32.const 1
    call $~lib/builtins/abort
@@ -504,7 +502,7 @@
   call $~lib/object/Object.is<f64>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 35
    i32.const 1
    call $~lib/builtins/abort
@@ -517,7 +515,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 36
    i32.const 1
    call $~lib/builtins/abort
@@ -530,7 +528,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 41
    i32.const 1
    call $~lib/builtins/abort
@@ -541,7 +539,7 @@
   call $~lib/object/Object.is<bool>
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 42
    i32.const 1
    call $~lib/builtins/abort
@@ -554,42 +552,42 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 43
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1088
-  i32.const 1088
-  call $~lib/object/Object.is<~lib/string/String>
+  i32.const 1104
+  i32.const 1104
+  call $~lib/string/String.__eq
   i32.const 1
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 45
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1088
-  i32.const 1120
-  call $~lib/object/Object.is<~lib/string/String>
+  i32.const 1104
+  i32.const 1136
+  call $~lib/string/String.__eq
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 46
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1088
-  i32.const 1152
-  call $~lib/object/Object.is<~lib/string/String>
+  i32.const 1104
+  i32.const 1168
+  call $~lib/string/String.__eq
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 47
    i32.const 1
    call $~lib/builtins/abort
@@ -597,34 +595,34 @@
   end
   i32.const 0
   i32.const 0
-  call $~lib/object/Object.is<~lib/string/String>
+  call $~lib/string/String.__eq
   i32.const 1
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 49
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1184
+  i32.const 1200
   i32.const 0
-  call $~lib/object/Object.is<~lib/string/String>
+  call $~lib/string/String.__eq
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 50
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
-  i32.const 1184
-  call $~lib/object/Object.is<~lib/string/String>
+  i32.const 1200
+  call $~lib/string/String.__eq
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 51
    i32.const 1
    call $~lib/builtins/abort

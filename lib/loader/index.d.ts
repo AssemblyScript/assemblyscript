@@ -8,7 +8,7 @@ export interface ResultObject {
 
 /** WebAssembly imports with an optional env object and two levels of nesting. */
 export type Imports = {
-  [key: string]: Record<string, unknown>;
+  [key: string]: Record<string,unknown> | undefined;
   env?: {
     memory?: WebAssembly.Memory;
     table?: WebAssembly.Table;
@@ -25,10 +25,6 @@ export interface ASUtil {
 
   /** Explicit start function, if requested. */
   _start(): void;
-  /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
-  __allocString(str: string): number;
-  /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
-  __allocArray(id: number, values: ArrayLike<number>): number;
 
   /** Copies a string's value from the module's memory. */
   __getString(ptr: number): string;
@@ -85,14 +81,18 @@ export interface ASUtil {
   /** Gets a live view on a Float64Array's values in the module's memory. */
   __getFloat64ArrayView(ptr: number): Float64Array;
 
+  /** Allocates an instance of the class represented by the specified id. */
+  __new(size: number, id: number): number;
+  /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
+  __newString(str: string): number;
+  /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
+  __newArray(id: number, values: ArrayLike<number>): number;
   /** Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer. */
   __retain(ptr: number): number;
   /** Releases a previously retained reference to a managed object, allowing the runtime to collect it once its reference count reaches zero. */
   __release(ptr: number): void;
   /** Forcefully resets the heap to its initial offset, effectively clearing dynamic memory. Stub runtime only. */
   __reset?(): void;
-  /** Allocates an instance of the class represented by the specified id. */
-  __alloc(size: number, id: number): number;
   /** Tests whether a managed object is an instance of the class represented by the specified base id. */
   __instanceof(ptr: number, baseId: number): boolean;
   /** Forces a cycle collection. Only relevant if objects potentially forming reference cycles are used. */
