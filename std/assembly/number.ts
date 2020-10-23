@@ -114,9 +114,9 @@ export abstract class Isize {
 
   toString(this: isize, radix: i32 = 10): String {
     if (sizeof<isize>() == 4) {
-      return itoa32(this, radix);
+      return itoa32(<i32>this, radix);
     } else {
-      return itoa64(this, radix);
+      return itoa64(<i64>this, radix);
     }
   }
 }
@@ -217,10 +217,10 @@ export abstract class Usize {
   }
 
   toString(this: usize, radix: i32 = 10): String {
-    if (sizeof<isize>() == 4) {
-      return utoa32(this, radix);
+    if (sizeof<usize>() == 4) {
+      return utoa32(<u32>this, radix);
     } else {
-      return utoa64(this, radix);
+      return utoa64(<u64>this, radix);
     }
   }
 }
