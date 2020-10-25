@@ -1,7 +1,8 @@
 name: Publish
 on:
-  schedule:
-  - cron: '0 0 * * *'
+  push:
+  # schedule:
+  # - cron: '0 0 * * *'
 jobs:
   release:
     name: Packages
@@ -16,28 +17,46 @@ jobs:
         node-version: current
     - name: Install dependencies
       run: npm ci
-    - name: Build distribution files
+    - name: Build packages
       run: |
-        npm run clean
-        npm run build
-    - name: Test distribution files
-      run: npm test
+        VERSION=$(npx aspublish --version)
+        if [[ "$VERSION" == "" ]]; then
+          echo "Changes do not trigger a release"
+        elif [[ "$VERSION" != "0."* ]]; then
+          echo "Unexpected version: $VERSION"
+          exit 1
+        else
+          echo "Building version: $VERSION"
+          npm version $VERSION --no-git-tag-version
+          npm run build
+          npm test
+          cd lib/loader
+          npm version $VERSION --no-git-tag-version
+          npm run build
+          npm test
+          cd ../rtrace
+          npm version $VERSION --no-git-tag-version
+          npm run build
+          npm test
+          cd ../..
+        fi
     - name: Publish packages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      # Upon success, the main package's postversion script will update other
-      # versions as well, unless no new release has been tagged.
       run: |
-        npx aspublish
+        if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
+          echo "would aspublish"
+          # npx aspublish
+        fi
         cd lib/loader
         if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
-          npm run build
-          npm publish --access public
+          echo "would publish loader"
+          # npm publish --access public
         fi
         cd ../rtrace
         if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
-          npm run build
-          npm publish --access public
+          echo "would publish rtrace"
+          # npm publish --access public
         fi
         cd ../..

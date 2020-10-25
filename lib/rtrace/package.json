@@ -27,7 +27,8 @@
     "require": "./umd/index.js"
   },
   "scripts": {
-    "build": "npx esm2umd rtrace index.js > umd/index.js"
+    "build": "npx esm2umd rtrace index.js > umd/index.js",
+    "test": ""
   },
   "files": [
     "index.d.ts",
