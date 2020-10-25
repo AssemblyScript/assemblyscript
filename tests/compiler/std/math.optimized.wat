@@ -6538,7 +6538,7 @@
    i64.eqz
    if (result i64)
     local.get $2
-    i64.const 0
+    i64.const 1
     local.get $4
     local.get $2
     i64.const 12
@@ -6547,8 +6547,6 @@
     i64.sub
     local.tee $4
     i64.sub
-    i64.const 1
-    i64.add
     i64.shl
    else
     local.get $2
@@ -6562,7 +6560,7 @@
    i64.eqz
    if (result i64)
     local.get $3
-    i64.const 0
+    i64.const 1
     local.get $5
     local.get $3
     i64.const 12
@@ -6571,8 +6569,6 @@
     i64.sub
     local.tee $5
     i64.sub
-    i64.const 1
-    i64.add
     i64.shl
    else
     local.get $3
@@ -6648,11 +6644,9 @@
     i64.or
    else
     local.get $2
-    i64.const 0
+    i64.const 1
     local.get $4
     i64.sub
-    i64.const 1
-    i64.add
     i64.shr_u
    end
    local.get $7
@@ -8347,7 +8341,7 @@
   i64.eqz
   if (result i64)
    local.get $2
-   i64.const 0
+   i64.const 1
    local.get $3
    local.get $2
    i64.const 12
@@ -8356,8 +8350,6 @@
    i64.sub
    local.tee $3
    i64.sub
-   i64.const 1
-   i64.add
    i64.shl
   else
    local.get $2
@@ -8371,7 +8363,7 @@
   i64.eqz
   if (result i64)
    local.get $4
-   i64.const 0
+   i64.const 1
    local.get $5
    local.get $4
    i64.const 12
@@ -8380,8 +8372,6 @@
    i64.sub
    local.tee $5
    i64.sub
-   i64.const 1
-   i64.add
    i64.shl
   else
    local.get $4
@@ -8488,11 +8478,9 @@
   i64.shl
   i64.or
   local.get $2
-  i64.const 0
+  i64.const 1
   local.get $3
   i64.sub
-  i64.const 1
-  i64.add
   i64.shr_u
   local.get $3
   i64.const 0
