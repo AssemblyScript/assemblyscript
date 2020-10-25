@@ -1212,8 +1212,6 @@
   local.get $1
   i64.const 31
   i64.shl
-  i64.const 0
-  i64.add
   local.tee $2
   i64.const 32
   i64.shr_u
@@ -1221,8 +1219,6 @@
   local.get $2
   i64.const 4294967295
   i64.and
-  i64.const 0
-  i64.add
   i64.const 2147483647
   i64.add
   i64.const 32

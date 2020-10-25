@@ -21,7 +21,7 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "98.0.0-nightly.20201022",
+    "binaryen": "98.0.0-nightly.20201025",
     "long": "^4.0.0",
     "source-map-support": "^0.5.19",
     "ts-node": "^6.2.0"
