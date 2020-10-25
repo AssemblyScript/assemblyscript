@@ -28,7 +28,7 @@
   },
   "scripts": {
     "build": "npx esm2umd rtrace index.js > umd/index.js",
-    "test": ""
+    "test": "node tests"
   },
   "files": [
     "index.d.ts",

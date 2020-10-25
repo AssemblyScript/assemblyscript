@@ -27,15 +27,15 @@ jobs:
           exit 1
         else
           echo "Building version: $VERSION"
-          npm version "$VERSION" --git-tag-version=0
+          npm --git-tag-version=0 version "$VERSION"
           npm run build
           npm test
           cd lib/loader
-          npm version "$VERSION" --git-tag-version=0
+          npm --git-tag-version=0 version "$VERSION"
           npm run build
           npm test
           cd ../rtrace
-          npm version "$VERSION" --git-tag-version=0
+          npm --git-tag-version=0 version "$VERSION"
           npm run build
           npm test
           cd ../..
