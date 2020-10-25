@@ -16,7 +16,10 @@ jobs:
       with:
         node-version: current
     - name: Install dependencies
-      run: npm ci
+      run: | # npm>=7 is currently broken: https://github.com/npm/cli/issues/1973
+        npm -g install npm@6
+        npm -v
+        npm ci
     - name: Build packages
       run: |
         VERSION=$(npx aspublish --version)
@@ -27,15 +30,15 @@ jobs:
           exit 1
         else
           echo "Building version: $VERSION"
-          npm --git-tag-version=0 version "$VERSION"
+          npm version "$VERSION" --no-git-tag-version
           npm run build
           npm test
           cd lib/loader
-          npm --git-tag-version=0 version "$VERSION"
+          npm version "$VERSION" --no-git-tag-version
           npm run build
           npm test
           cd ../rtrace
-          npm --git-tag-version=0 version "$VERSION"
+          npm version "$VERSION" --no-git-tag-version
           npm run build
           npm test
           cd ../..
