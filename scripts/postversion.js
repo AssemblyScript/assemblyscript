@@ -9,7 +9,8 @@ if (!/^0\./.test(mainPkg.version)) {
 
 // Sync lib with main package
 [
-  "lib/loader"
+  "lib/loader",
+  "lib/rtrace"
 ].forEach(dir => {
   const pkgFile = path.join(__dirname, "..", dir, "package.json");
   const pkg = require(pkgFile);
