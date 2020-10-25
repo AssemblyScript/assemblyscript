@@ -1,8 +1,7 @@
 name: Publish
 on:
-  push:
-  # schedule:
-  # - cron: '0 0 * * *'
+  schedule:
+  - cron: '0 0 * * *'
 jobs:
   release:
     name: Packages
@@ -11,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
       with:
-        ref: aspublish
+        ref: master
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: current
@@ -49,17 +48,14 @@ jobs:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
         if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
-          echo "would aspublish"
-          # npx aspublish
+          npx aspublish
         fi
         cd lib/loader
         if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
-          echo "would publish loader"
-          # npm publish --access public
+          npm publish --access public
         fi
         cd ../rtrace
         if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
-          echo "would publish rtrace"
-          # npm publish --access public
+          npm publish --access public
         fi
         cd ../..
