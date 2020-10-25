@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
       with:
-        ref: master
+        ref: aspublish
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: current
