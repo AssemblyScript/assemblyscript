@@ -1583,7 +1583,7 @@ export namespace NativeMath {
     }
     var ux1 = ux << 1;
     if (ux1 <= uy1) {
-      return ux1 == uy1 ? 0 * x : x;
+      return x * f64(ux1 != uy1);
     }
     if (!ex) {
       ex -= builtin_clz<i64>(ux << 12);
@@ -2890,7 +2890,7 @@ export namespace NativeMathf {
     }
     var ux1 = ux << 1;
     if (ux1 <= uy1) {
-      return ux1 == uy1 ? 0 * x : x;
+      return x * f32(ux1 != uy1);
     }
     if (!ex) {
       ex -= builtin_clz<u32>(ux << 9);

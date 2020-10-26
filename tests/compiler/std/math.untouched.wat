@@ -9227,16 +9227,12 @@
   local.get $7
   i64.le_u
   if
+   local.get $0
    local.get $9
    local.get $7
-   i64.eq
-   if (result f64)
-    f64.const 0
-    local.get $0
-    f64.mul
-   else
-    local.get $0
-   end
+   i64.ne
+   f64.convert_i32_u
+   f64.mul
    return
   end
   local.get $4
@@ -9516,16 +9512,12 @@
   local.get $7
   i32.le_u
   if
+   local.get $0
    local.get $9
    local.get $7
-   i32.eq
-   if (result f32)
-    f32.const 0
-    local.get $0
-    f32.mul
-   else
-    local.get $0
-   end
+   i32.ne
+   f32.convert_i32_u
+   f32.mul
    return
   end
   local.get $4

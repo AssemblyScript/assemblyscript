@@ -85,13 +85,11 @@
   i64.le_u
   if
    local.get $0
-   f64.const 0
-   f64.mul
-   local.get $0
    local.get $6
    local.get $8
-   i64.eq
-   select
+   i64.ne
+   f64.convert_i32_u
+   f64.mul
    return
   end
   local.get $4
@@ -337,13 +335,11 @@
   i32.le_u
   if
    local.get $0
-   f32.const 0
-   f32.mul
-   local.get $0
    local.get $6
    local.get $8
-   i32.eq
-   select
+   i32.ne
+   f32.convert_i32_u
+   f32.mul
    return
   end
   local.get $4
