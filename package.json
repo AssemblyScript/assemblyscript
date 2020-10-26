@@ -46,6 +46,9 @@
   "types": "index.d.ts",
   "exports": {
     ".": "./index.js",
+    "./cli/asc": "./cli/asc.js",
+    "./dist/asc": "./dist/asc.js",
+    "./cli/util/options": "./cli/util/options.js",
     "./lib/loader": {
       "import": "./lib/loader/index.js",
       "require": "./lib/loader/umd/index.js"
