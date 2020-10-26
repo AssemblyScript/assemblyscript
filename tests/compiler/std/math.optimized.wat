@@ -6487,8 +6487,8 @@
   local.get $0
   i64.reinterpret_f64
   local.tee $2
-  i64.const 63
-  i64.shr_u
+  i64.const -9223372036854775808
+  i64.and
   local.set $7
   i32.const 1
   local.get $1
@@ -6519,146 +6519,151 @@
    f64.div
    return
   end
-  block $folding-inner0
-   local.get $2
-   i64.const 1
-   i64.shl
-   local.tee $8
+  local.get $2
+  i64.const 1
+  i64.shl
+  local.tee $8
+  local.get $6
+  i64.le_u
+  if
+   local.get $0
+   f64.const 0
+   f64.mul
+   local.get $0
    local.get $6
-   i64.le_u
-   if
-    local.get $6
-    local.get $8
-    i64.eq
-    br_if $folding-inner0
-    local.get $0
-    return
-   end
-   local.get $4
-   i64.eqz
-   if (result i64)
-    local.get $2
-    i64.const 1
-    local.get $4
-    local.get $2
-    i64.const 12
-    i64.shl
-    i64.clz
-    i64.sub
-    local.tee $4
-    i64.sub
-    i64.shl
-   else
-    local.get $2
-    i64.const 4503599627370495
-    i64.and
-    i64.const 4503599627370496
-    i64.or
-   end
-   local.set $2
-   local.get $5
-   i64.eqz
-   if (result i64)
-    local.get $3
-    i64.const 1
-    local.get $5
-    local.get $3
-    i64.const 12
-    i64.shl
-    i64.clz
-    i64.sub
-    local.tee $5
-    i64.sub
-    i64.shl
-   else
-    local.get $3
-    i64.const 4503599627370495
-    i64.and
-    i64.const 4503599627370496
-    i64.or
-   end
-   local.set $3
-   loop $while-continue|0
-    local.get $4
-    local.get $5
-    i64.gt_s
-    if
-     local.get $2
-     local.get $3
-     i64.ge_u
-     if (result i64)
-      local.get $2
-      local.get $3
-      i64.eq
-      br_if $folding-inner0
-      local.get $2
-      local.get $3
-      i64.sub
-     else
-      local.get $2
-     end
-     i64.const 1
-     i64.shl
-     local.set $2
-     local.get $4
-     i64.const 1
-     i64.sub
-     local.set $4
-     br $while-continue|0
-    end
-   end
-   local.get $2
-   local.get $3
-   i64.ge_u
-   if
-    local.get $2
-    local.get $3
-    i64.eq
-    br_if $folding-inner0
-    local.get $2
-    local.get $3
-    i64.sub
-    local.set $2
-   end
-   local.get $2
-   local.get $2
-   i64.const 11
-   i64.shl
-   i64.clz
-   local.tee $3
-   i64.shl
-   local.set $2
-   local.get $4
-   local.get $3
-   i64.sub
-   local.tee $4
-   i64.const 0
-   i64.gt_s
-   if (result i64)
-    local.get $2
-    i64.const 4503599627370496
-    i64.sub
-    local.get $4
-    i64.const 52
-    i64.shl
-    i64.or
-   else
-    local.get $2
-    i64.const 1
-    local.get $4
-    i64.sub
-    i64.shr_u
-   end
-   local.get $7
-   i64.const 63
-   i64.shl
-   i64.or
-   f64.reinterpret_i64
+   local.get $8
+   i64.eq
+   select
    return
   end
-  local.get $0
-  f64.const 0
-  f64.mul
+  local.get $4
+  i64.eqz
+  if (result i64)
+   local.get $2
+   i64.const 1
+   local.get $4
+   local.get $2
+   i64.const 12
+   i64.shl
+   i64.clz
+   i64.sub
+   local.tee $4
+   i64.sub
+   i64.shl
+  else
+   local.get $2
+   i64.const 4503599627370495
+   i64.and
+   i64.const 4503599627370496
+   i64.or
+  end
+  local.set $2
+  local.get $5
+  i64.eqz
+  if (result i64)
+   local.get $3
+   i64.const 1
+   local.get $5
+   local.get $3
+   i64.const 12
+   i64.shl
+   i64.clz
+   i64.sub
+   local.tee $5
+   i64.sub
+   i64.shl
+  else
+   local.get $3
+   i64.const 4503599627370495
+   i64.and
+   i64.const 4503599627370496
+   i64.or
+  end
+  local.set $3
+  loop $while-continue|0
+   local.get $4
+   local.get $5
+   i64.gt_s
+   if
+    local.get $2
+    local.get $3
+    i64.ge_u
+    if (result i64)
+     local.get $2
+     local.get $3
+     i64.eq
+     if
+      local.get $0
+      f64.const 0
+      f64.mul
+      return
+     end
+     local.get $2
+     local.get $3
+     i64.sub
+    else
+     local.get $2
+    end
+    i64.const 1
+    i64.shl
+    local.set $2
+    local.get $4
+    i64.const 1
+    i64.sub
+    local.set $4
+    br $while-continue|0
+   end
+  end
+  local.get $2
+  local.get $3
+  i64.ge_u
+  if
+   local.get $2
+   local.get $3
+   i64.eq
+   if
+    local.get $0
+    f64.const 0
+    f64.mul
+    return
+   end
+   local.get $2
+   local.get $3
+   i64.sub
+   local.set $2
+  end
+  local.get $2
+  local.get $2
+  i64.const 11
+  i64.shl
+  i64.clz
+  local.tee $3
+  i64.shl
+  local.set $2
+  local.get $4
+  local.get $3
+  i64.sub
+  local.tee $4
+  i64.const 0
+  i64.gt_s
+  if (result i64)
+   local.get $2
+   i64.const 4503599627370496
+   i64.sub
+   local.get $4
+   i64.const 52
+   i64.shl
+   i64.or
+  else
+   local.get $2
+   i64.const 1
+   local.get $4
+   i64.sub
+   i64.shr_u
+  end
+  local.get $7
+  i64.or
+  f64.reinterpret_i64
  )
  (func $std/math/test_mod (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   local.get $0
@@ -6741,142 +6746,149 @@
    f32.div
    return
   end
-  block $folding-inner0
-   local.get $2
-   i32.const 1
-   i32.shl
-   local.tee $8
+  local.get $2
+  i32.const 1
+  i32.shl
+  local.tee $8
+  local.get $6
+  i32.le_u
+  if
+   local.get $0
+   f32.const 0
+   f32.mul
+   local.get $0
    local.get $6
-   i32.le_u
-   if
-    local.get $6
-    local.get $8
-    i32.eq
-    br_if $folding-inner0
-    local.get $0
-    return
-   end
-   local.get $4
-   if (result i32)
-    local.get $2
-    i32.const 8388607
-    i32.and
-    i32.const 8388608
-    i32.or
-   else
-    local.get $2
-    i32.const 1
-    local.get $4
-    local.get $2
-    i32.const 9
-    i32.shl
-    i32.clz
-    i32.sub
-    local.tee $4
-    i32.sub
-    i32.shl
-   end
-   local.set $2
-   local.get $5
-   if (result i32)
-    local.get $3
-    i32.const 8388607
-    i32.and
-    i32.const 8388608
-    i32.or
-   else
-    local.get $3
-    i32.const 1
-    local.get $5
-    local.get $3
-    i32.const 9
-    i32.shl
-    i32.clz
-    i32.sub
-    local.tee $5
-    i32.sub
-    i32.shl
-   end
-   local.set $3
-   loop $while-continue|0
-    local.get $4
-    local.get $5
-    i32.gt_s
-    if
-     local.get $2
-     local.get $3
-     i32.ge_u
-     if (result i32)
-      local.get $2
-      local.get $3
-      i32.eq
-      br_if $folding-inner0
-      local.get $2
-      local.get $3
-      i32.sub
-     else
-      local.get $2
-     end
-     i32.const 1
-     i32.shl
-     local.set $2
-     local.get $4
-     i32.const 1
-     i32.sub
-     local.set $4
-     br $while-continue|0
-    end
-   end
-   local.get $2
-   local.get $3
-   i32.ge_u
-   if
-    local.get $2
-    local.get $3
-    i32.eq
-    br_if $folding-inner0
-    local.get $2
-    local.get $3
-    i32.sub
-    local.set $2
-   end
-   local.get $2
-   local.get $2
-   i32.const 8
-   i32.shl
-   i32.clz
-   local.tee $3
-   i32.shl
-   local.set $2
-   local.get $4
-   local.get $3
-   i32.sub
-   local.tee $4
-   i32.const 0
-   i32.gt_s
-   if (result i32)
-    local.get $2
-    i32.const 8388608
-    i32.sub
-    local.get $4
-    i32.const 23
-    i32.shl
-    i32.or
-   else
-    local.get $2
-    i32.const 1
-    local.get $4
-    i32.sub
-    i32.shr_u
-   end
-   local.get $7
-   i32.or
-   f32.reinterpret_i32
+   local.get $8
+   i32.eq
+   select
    return
   end
-  local.get $0
-  f32.const 0
-  f32.mul
+  local.get $4
+  if (result i32)
+   local.get $2
+   i32.const 8388607
+   i32.and
+   i32.const 8388608
+   i32.or
+  else
+   local.get $2
+   i32.const 1
+   local.get $4
+   local.get $2
+   i32.const 9
+   i32.shl
+   i32.clz
+   i32.sub
+   local.tee $4
+   i32.sub
+   i32.shl
+  end
+  local.set $2
+  local.get $5
+  if (result i32)
+   local.get $3
+   i32.const 8388607
+   i32.and
+   i32.const 8388608
+   i32.or
+  else
+   local.get $3
+   i32.const 1
+   local.get $5
+   local.get $3
+   i32.const 9
+   i32.shl
+   i32.clz
+   i32.sub
+   local.tee $5
+   i32.sub
+   i32.shl
+  end
+  local.set $3
+  loop $while-continue|0
+   local.get $4
+   local.get $5
+   i32.gt_s
+   if
+    local.get $2
+    local.get $3
+    i32.ge_u
+    if (result i32)
+     local.get $2
+     local.get $3
+     i32.eq
+     if
+      local.get $0
+      f32.const 0
+      f32.mul
+      return
+     end
+     local.get $2
+     local.get $3
+     i32.sub
+    else
+     local.get $2
+    end
+    i32.const 1
+    i32.shl
+    local.set $2
+    local.get $4
+    i32.const 1
+    i32.sub
+    local.set $4
+    br $while-continue|0
+   end
+  end
+  local.get $2
+  local.get $3
+  i32.ge_u
+  if
+   local.get $2
+   local.get $3
+   i32.eq
+   if
+    local.get $0
+    f32.const 0
+    f32.mul
+    return
+   end
+   local.get $2
+   local.get $3
+   i32.sub
+   local.set $2
+  end
+  local.get $2
+  local.get $2
+  i32.const 8
+  i32.shl
+  i32.clz
+  local.tee $3
+  i32.shl
+  local.set $2
+  local.get $4
+  local.get $3
+  i32.sub
+  local.tee $4
+  i32.const 0
+  i32.gt_s
+  if (result i32)
+   local.get $2
+   i32.const 8388608
+   i32.sub
+   local.get $4
+   i32.const 23
+   i32.shl
+   i32.or
+  else
+   local.get $2
+   i32.const 1
+   local.get $4
+   i32.sub
+   i32.shr_u
+  end
+  local.get $7
+  i32.or
+  f32.reinterpret_i32
  )
  (func $~lib/math/NativeMath.pow (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)

@@ -9185,8 +9185,8 @@
   i64.and
   local.set $5
   local.get $2
-  i64.const 63
-  i64.shr_u
+  i64.const -9223372036854775808
+  i64.and
   local.set $6
   local.get $3
   i64.const 1
@@ -9230,13 +9230,13 @@
    local.get $9
    local.get $7
    i64.eq
-   if
+   if (result f64)
     f64.const 0
     local.get $0
     f64.mul
-    return
+   else
+    local.get $0
    end
-   local.get $0
    return
   end
   local.get $4
@@ -9402,11 +9402,7 @@
   end
   local.get $2
   local.get $6
-  i64.const 63
-  i64.shl
   i64.or
-  local.set $2
-  local.get $2
   f64.reinterpret_i64
  )
  (func $std/math/test_mod (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
@@ -9523,13 +9519,13 @@
    local.get $9
    local.get $7
    i32.eq
-   if
+   if (result f32)
     f32.const 0
     local.get $0
     f32.mul
-    return
+   else
+    local.get $0
    end
-   local.get $0
    return
   end
   local.get $4
@@ -9692,8 +9688,6 @@
   local.get $2
   local.get $6
   i32.or
-  local.set $2
-  local.get $2
   f32.reinterpret_i32
  )
  (func $std/math/test_modf (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
