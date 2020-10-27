@@ -86,13 +86,13 @@ export namespace heap {
     return __realloc(ptr, size);
   }
 
-  /** Frees a chunk of memory. */
+  /** Frees a chunk of memory. Does hardly anything (most recent block only) with the stub/none runtime. */
   // @ts-ignore: decorator
   @unsafe export function free(ptr: usize): void {
     __free(ptr);
   }
 
-  /** Resets the heap. Stub/none runtime only. */
+  /** Dangerously resets the entire heap. Specific to the stub/none runtime. */
   // @ts-ignore: decorator
   @unsafe export function reset(): void {
     __reset();
