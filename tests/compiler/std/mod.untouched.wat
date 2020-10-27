@@ -59,8 +59,8 @@
   i64.and
   local.set $5
   local.get $2
-  i64.const -9223372036854775808
-  i64.and
+  i64.const 63
+  i64.shr_u
   local.set $6
   local.get $3
   i64.const 1
@@ -272,6 +272,8 @@
   end
   local.get $2
   local.get $6
+  i64.const 63
+  i64.shl
   i64.or
   f64.reinterpret_i64
  )

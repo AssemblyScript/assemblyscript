@@ -1575,7 +1575,7 @@ export namespace NativeMath {
     var uy = reinterpret<u64>(y);
     var ex = <i64>(ux >> 52 & 0x7FF);
     var ey = <i64>(uy >> 52 & 0x7FF);
-    var sm = ux & 0x8000000000000000;
+    var sx = ux >> 63;
     var uy1 = uy << 1;
     if (uy1 == 0 || ex == 0x7FF || isNaN<f64>(y)) {
       let m = x * y;
@@ -1621,7 +1621,7 @@ export namespace NativeMath {
     } else {
       ux >>= -ex + 1;
     }
-    return reinterpret<f64>(ux | sm);
+    return reinterpret<f64>(ux | (sx << 63));
   }
 
   export function rem(x: f64, y: f64): f64 { // see: musl/src/math/remquo.c

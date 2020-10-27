@@ -6487,8 +6487,8 @@
   local.get $0
   i64.reinterpret_f64
   local.tee $2
-  i64.const -9223372036854775808
-  i64.and
+  i64.const 63
+  i64.shr_u
   local.set $7
   i32.const 1
   local.get $1
@@ -6660,6 +6660,8 @@
    i64.shr_u
   end
   local.get $7
+  i64.const 63
+  i64.shl
   i64.or
   f64.reinterpret_i64
  )
