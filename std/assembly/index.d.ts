@@ -1326,9 +1326,9 @@ declare namespace heap {
   export function alloc(size: usize): usize;
   /** Reallocates a chunk of memory to have at least the specified size. */
   export function realloc(ptr: usize, size: usize): usize;
-  /** Frees a chunk of memory. */
+  /** Frees a chunk of memory. Does hardly anything (most recent block only) with the stub/none runtime. */
   export function free(ptr: usize): void;
-  /** Resets the heap. Stub/none runtime only. */
+  /** Dangerously resets the entire heap. Specific to the stub/none runtime. */
   export function reset(): void;
 }
 
