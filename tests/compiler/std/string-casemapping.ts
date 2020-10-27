@@ -115,27 +115,27 @@ for (let i = 0; i <= 0x10FFFF; i++) {
   let source = String.fromCodePoint(i);
   let origLower = source.toLowerCase();
   let origUpper = source.toUpperCase();
-  let code1: u64, code2: u64;
+  let code1: i64, code2: i64;
 
   // collect all code points for lower case on AssemblyScript side
-  let origLowerCode = <u64>origLower.codePointAt(0);
-  if ((code1 = origLower.codePointAt(1)) >= 0) origLowerCode += <u64>code1 << 16;
-  if ((code2 = origLower.codePointAt(2)) >= 0) origLowerCode += <u64>code2 << 32;
+  let origLowerCode = <i64>origLower.codePointAt(0);
+  if ((code1 = origLower.codePointAt(1)) >= 0) origLowerCode += <i64>code1 << 16;
+  if ((code2 = origLower.codePointAt(2)) >= 0) origLowerCode += <i64>code2 << 32;
 
   // collect all code points for upper case on AssemblyScript side
-  let origUpperCode = <u64>origUpper.codePointAt(0);
-  if ((code1 = origUpper.codePointAt(1)) >= 0) origUpperCode += <u64>code1 << 16;
-  if ((code2 = origUpper.codePointAt(2)) >= 0) origUpperCode += <u64>code2 << 32;
+  let origUpperCode = <i64>origUpper.codePointAt(0);
+  if ((code1 = origUpper.codePointAt(1)) >= 0) origUpperCode += <i64>code1 << 16;
+  if ((code2 = origUpper.codePointAt(2)) >= 0) origUpperCode += <i64>code2 << 32;
 
   // collect all code points for lower case on JavaScript side
-  let expectLowerCode = <u64>toLowerCaseFromIndex(i, 0);
-  if ((code1 = <i64>toLowerCaseFromIndex(i, 1)) >= 0) expectLowerCode += <u64>code1 << 16;
-  if ((code2 = <i64>toLowerCaseFromIndex(i, 2)) >= 0) expectLowerCode += <u64>code2 << 32;
+  let expectLowerCode = <i64>toLowerCaseFromIndex(i, 0);
+  if ((code1 = <i64>toLowerCaseFromIndex(i, 1)) >= 0) expectLowerCode += <i64>code1 << 16;
+  if ((code2 = <i64>toLowerCaseFromIndex(i, 2)) >= 0) expectLowerCode += <i64>code2 << 32;
 
   // collect all code points for upper case on JavaScript side
-  let expectUpperCode = <u64>toUpperCaseFromIndex(i, 0);
-  if ((code1 = <i64>toUpperCaseFromIndex(i, 1)) >= 0) expectUpperCode += <u64>code1 << 16;
-  if ((code2 = <i64>toUpperCaseFromIndex(i, 2)) >= 0) expectUpperCode += <u64>code2 << 32;
+  let expectUpperCode = <i64>toUpperCaseFromIndex(i, 0);
+  if ((code1 = <i64>toUpperCaseFromIndex(i, 1)) >= 0) expectUpperCode += <i64>code1 << 16;
+  if ((code2 = <i64>toUpperCaseFromIndex(i, 2)) >= 0) expectUpperCode += <i64>code2 << 32;
 
   if (origLowerCode != expectLowerCode) {
     trace("origLowerCode != expectLowerCode", 1, i);

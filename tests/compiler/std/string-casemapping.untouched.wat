@@ -5239,14 +5239,15 @@
    end
   end
  )
- (func $~lib/util/number/utoa64 (param $0 i64) (param $1 i32) (result i32)
+ (func $~lib/util/number/itoa64 (param $0 i64) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i64)
+  (local $8 i32)
+  (local $9 i64)
   local.get $1
   i32.const 2
   i32.lt_s
@@ -5260,7 +5261,7 @@
   if
    i32.const 17760
    i32.const 17888
-   i32.const 401
+   i32.const 431
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -5273,8 +5274,20 @@
    i32.const 17952
    return
   end
-  i32.const 0
+  local.get $0
+  i64.const 63
+  i64.shr_u
+  i32.wrap_i64
   local.set $2
+  local.get $2
+  if
+   i64.const 0
+   local.get $0
+   i64.sub
+   local.set $0
+  end
+  i32.const 0
+  local.set $3
   local.get $1
   i32.const 10
   i32.eq
@@ -5286,53 +5299,57 @@
    if
     local.get $0
     i32.wrap_i64
-    local.set $3
-    local.get $3
-    call $~lib/util/number/decimalCount32
     local.set $4
     local.get $4
+    call $~lib/util/number/decimalCount32
+    local.get $2
+    i32.add
+    local.set $5
+    local.get $5
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/pure/__new
-    local.set $2
-    local.get $2
-    local.set $7
+    local.set $3
     local.get $3
-    local.set $6
+    local.set $8
     local.get $4
+    local.set $7
+    local.get $5
+    local.set $6
+    i32.const 0
+    i32.const 1
+    i32.ge_s
+    drop
+    local.get $8
+    local.get $7
+    local.get $6
+    call $~lib/util/number/utoa32_dec_lut
+   else
+    local.get $0
+    call $~lib/util/number/decimalCount64High
+    local.get $2
+    i32.add
     local.set $5
+    local.get $5
+    i32.const 1
+    i32.shl
+    i32.const 1
+    call $~lib/rt/pure/__new
+    local.set $3
+    local.get $3
+    local.set $7
+    local.get $0
+    local.set $9
+    local.get $5
+    local.set $6
     i32.const 0
     i32.const 1
     i32.ge_s
     drop
     local.get $7
+    local.get $9
     local.get $6
-    local.get $5
-    call $~lib/util/number/utoa32_dec_lut
-   else
-    local.get $0
-    call $~lib/util/number/decimalCount64High
-    local.set $4
-    local.get $4
-    i32.const 1
-    i32.shl
-    i32.const 1
-    call $~lib/rt/pure/__new
-    local.set $2
-    local.get $2
-    local.set $6
-    local.get $0
-    local.set $8
-    local.get $4
-    local.set $5
-    i32.const 0
-    i32.const 1
-    i32.ge_s
-    drop
-    local.get $6
-    local.get $8
-    local.get $5
     call $~lib/util/number/utoa64_dec_lut
    end
   else
@@ -5349,52 +5366,62 @@
     i32.shr_s
     i32.const 1
     i32.add
-    local.set $4
-    local.get $4
+    local.get $2
+    i32.add
+    local.set $5
+    local.get $5
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/pure/__new
-    local.set $2
-    local.get $2
     local.set $3
+    local.get $3
+    local.set $4
     local.get $0
+    local.set $9
+    local.get $5
     local.set $8
-    local.get $4
-    local.set $7
     i32.const 0
     i32.const 1
     i32.ge_s
     drop
-    local.get $3
+    local.get $4
+    local.get $9
     local.get $8
-    local.get $7
     call $~lib/util/number/utoa_hex_lut
    else
     local.get $0
     local.get $1
     call $~lib/util/number/ulog_base
-    local.set $4
-    local.get $4
+    local.get $2
+    i32.add
+    local.set $5
+    local.get $5
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/pure/__new
-    local.set $2
-    local.get $2
+    local.set $3
+    local.get $3
     local.get $0
-    local.get $4
+    local.get $5
     local.get $1
     call $~lib/util/number/utoa64_any_core
    end
   end
   local.get $2
+  if
+   local.get $3
+   i32.const 45
+   i32.store16
+  end
+  local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/number/U64#toString (param $0 i64) (param $1 i32) (result i32)
+ (func $~lib/number/I64#toString (param $0 i64) (param $1 i32) (result i32)
   local.get $0
   local.get $1
-  call $~lib/util/number/utoa64
+  call $~lib/util/number/itoa64
  )
  (func $~lib/string/String#concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -6770,7 +6797,7 @@
     i64.extend_i32_s
     local.tee $91
     i64.const 0
-    i64.ge_u
+    i64.ge_s
     if
      local.get $93
      local.get $91
@@ -6785,7 +6812,7 @@
     i64.extend_i32_s
     local.tee $92
     i64.const 0
-    i64.ge_u
+    i64.ge_s
     if
      local.get $93
      local.get $92
@@ -6805,7 +6832,7 @@
     i64.extend_i32_s
     local.tee $91
     i64.const 0
-    i64.ge_u
+    i64.ge_s
     if
      local.get $94
      local.get $91
@@ -6820,7 +6847,7 @@
     i64.extend_i32_s
     local.tee $92
     i64.const 0
-    i64.ge_u
+    i64.ge_s
     if
      local.get $94
      local.get $92
@@ -6840,7 +6867,7 @@
     i64.extend_i32_s
     local.tee $91
     i64.const 0
-    i64.ge_u
+    i64.ge_s
     if
      local.get $95
      local.get $91
@@ -6855,7 +6882,7 @@
     i64.extend_i32_s
     local.tee $92
     i64.const 0
-    i64.ge_u
+    i64.ge_s
     if
      local.get $95
      local.get $92
@@ -6875,7 +6902,7 @@
     i64.extend_i32_s
     local.tee $91
     i64.const 0
-    i64.ge_u
+    i64.ge_s
     if
      local.get $96
      local.get $91
@@ -6890,7 +6917,7 @@
     i64.extend_i32_s
     local.tee $92
     i64.const 0
-    i64.ge_u
+    i64.ge_s
     if
      local.get $96
      local.get $92
@@ -6915,7 +6942,7 @@
      i32.const 17696
      local.get $93
      i32.const 10
-     call $~lib/number/U64#toString
+     call $~lib/number/I64#toString
      local.tee $97
      call $~lib/string/String.__concat
      local.tee $98
@@ -6929,7 +6956,7 @@
      i32.const 19568
      local.get $95
      i32.const 10
-     call $~lib/number/U64#toString
+     call $~lib/number/I64#toString
      local.tee $99
      call $~lib/string/String.__concat
      local.tee $100
@@ -6965,7 +6992,7 @@
      i32.const 19728
      local.get $94
      i32.const 10
-     call $~lib/number/U64#toString
+     call $~lib/number/I64#toString
      local.tee $100
      call $~lib/string/String.__concat
      local.tee $99
@@ -6979,7 +7006,7 @@
      i32.const 19792
      local.get $96
      i32.const 10
-     call $~lib/number/U64#toString
+     call $~lib/number/I64#toString
      local.tee $98
      call $~lib/string/String.__concat
      local.tee $97
