@@ -1583,19 +1583,18 @@ export namespace NativeMath {
     }
     var ux1 = ux << 1;
     if (ux1 <= uy1) {
-      if (ux1 == uy1) return 0 * x;
-      return x;
+      return x * f64(ux1 != uy1);
     }
     if (!ex) {
       ex -= builtin_clz<i64>(ux << 12);
-      ux <<= -ex + 1;
+      ux <<= 1 - ex;
     } else {
       ux &= <u64>-1 >> 12;
       ux |= 1 << 52;
     }
     if (!ey) {
       ey -= builtin_clz<i64>(uy << 12);
-      uy <<= -ey + 1;
+      uy <<= 1 - ey;
     } else {
       uy &= <u64>-1 >> 12;
       uy |= 1 << 52;
@@ -1622,8 +1621,7 @@ export namespace NativeMath {
     } else {
       ux >>= -ex + 1;
     }
-    ux |= sx << 63;
-    return reinterpret<f64>(ux);
+    return reinterpret<f64>(ux | (sx << 63));
   }
 
   export function rem(x: f64, y: f64): f64 { // see: musl/src/math/remquo.c
@@ -1640,14 +1638,14 @@ export namespace NativeMath {
     var uxi = ux;
     if (!ex) {
       ex -= builtin_clz<i64>(uxi << 12);
-      uxi <<= -ex + 1;
+      uxi <<= 1 - ex;
     } else {
       uxi &= <u64>-1 >> 12;
       uxi |= 1 << 52;
     }
     if (!ey) {
       ey -= builtin_clz<i64>(uy << 12);
-      uy <<= -ey + 1;
+      uy <<= 1 - ey;
     } else {
       uy &= <u64>-1 >> 12;
       uy |= 1 << 52;
@@ -2884,7 +2882,7 @@ export namespace NativeMathf {
     var uy = reinterpret<u32>(y);
     var ex = <i32>(ux >> 23 & 0xFF);
     var ey = <i32>(uy >> 23 & 0xFF);
-    var sx = ux & 0x80000000;
+    var sm = ux & 0x80000000;
     var uy1 = uy << 1;
     if (uy1 == 0 || ex == 0xFF || isNaN<f32>(y)) {
       let m = x * y;
@@ -2892,19 +2890,18 @@ export namespace NativeMathf {
     }
     var ux1 = ux << 1;
     if (ux1 <= uy1) {
-      if (ux1 == uy1) return 0 * x;
-      return x;
+      return x * f32(ux1 != uy1);
     }
     if (!ex) {
       ex -= builtin_clz<u32>(ux << 9);
-      ux <<= -ex + 1;
+      ux <<= 1 - ex;
     } else {
       ux &= <u32>-1 >> 9;
       ux |= 1 << 23;
     }
     if (!ey) {
       ey -= builtin_clz<u32>(uy << 9);
-      uy <<= -ey + 1;
+      uy <<= 1 - ey;
     } else {
       uy &= <u32>-1 >> 9;
       uy |= 1 << 23;
@@ -2931,8 +2928,7 @@ export namespace NativeMathf {
     } else {
       ux >>= -ex + 1;
     }
-    ux |= sx;
-    return reinterpret<f32>(ux);
+    return reinterpret<f32>(ux | sm);
   }
 
   export function rem(x: f32, y: f32): f32 { // see: musl/src/math/remquof.c
@@ -2946,14 +2942,14 @@ export namespace NativeMathf {
     if (ux << 1 == 0) return x;
     if (!ex) {
       ex -= builtin_clz<u32>(uxi << 9);
-      uxi <<= -ex + 1;
+      uxi <<= 1 - ex;
     } else {
       uxi &= <u32>-1 >> 9;
       uxi |= 1 << 23;
     }
     if (!ey) {
       ey -= builtin_clz<u32>(uy << 9);
-      uy <<= -ey + 1;
+      uy <<= 1 - ey;
     } else {
       uy &= <u32>-1 >> 9;
       uy |= 1 << 23;

@@ -19101,16 +19101,12 @@
   local.get $7
   i32.le_u
   if
+   local.get $0
    local.get $9
    local.get $7
-   i32.eq
-   if
-    f32.const 0
-    local.get $0
-    f32.mul
-    return
-   end
-   local.get $0
+   i32.ne
+   f32.convert_i32_u
+   f32.mul
    return
   end
   local.get $4
@@ -19124,11 +19120,9 @@
    i32.sub
    local.set $4
    local.get $2
-   i32.const 0
+   i32.const 1
    local.get $4
    i32.sub
-   i32.const 1
-   i32.add
    i32.shl
    local.set $2
   else
@@ -19156,11 +19150,9 @@
    i32.sub
    local.set $5
    local.get $3
-   i32.const 0
+   i32.const 1
    local.get $5
    i32.sub
-   i32.const 1
-   i32.add
    i32.shl
    local.set $3
   else
@@ -19273,8 +19265,6 @@
   local.get $2
   local.get $6
   i32.or
-  local.set $2
-  local.get $2
   f32.reinterpret_i32
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
@@ -19528,16 +19518,12 @@
   local.get $7
   i64.le_u
   if
+   local.get $0
    local.get $9
    local.get $7
-   i64.eq
-   if
-    f64.const 0
-    local.get $0
-    f64.mul
-    return
-   end
-   local.get $0
+   i64.ne
+   f64.convert_i32_u
+   f64.mul
    return
   end
   local.get $4
@@ -19553,11 +19539,9 @@
    i64.sub
    local.set $4
    local.get $2
-   i64.const 0
+   i64.const 1
    local.get $4
    i64.sub
-   i64.const 1
-   i64.add
    i64.shl
    local.set $2
   else
@@ -19587,11 +19571,9 @@
    i64.sub
    local.set $5
    local.get $3
-   i64.const 0
+   i64.const 1
    local.get $5
    i64.sub
-   i64.const 1
-   i64.add
    i64.shl
    local.set $3
   else
@@ -19706,8 +19688,6 @@
   i64.const 63
   i64.shl
   i64.or
-  local.set $2
-  local.get $2
   f64.reinterpret_i64
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
