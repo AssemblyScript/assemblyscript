@@ -3659,10 +3659,9 @@
    i32.const 46
    i32.eq
    if
-    local.get $2
     local.get $0
-    i32.sub
-    i32.eqz
+    local.get $2
+    i32.eq
     local.set $2
     local.get $0
     i32.const 2
