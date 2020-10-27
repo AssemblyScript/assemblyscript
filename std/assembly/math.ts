@@ -1587,14 +1587,14 @@ export namespace NativeMath {
     }
     if (!ex) {
       ex -= builtin_clz<i64>(ux << 12);
-      ux <<= -ex + 1;
+      ux <<= 1 - ex;
     } else {
       ux &= <u64>-1 >> 12;
       ux |= 1 << 52;
     }
     if (!ey) {
       ey -= builtin_clz<i64>(uy << 12);
-      uy <<= -ey + 1;
+      uy <<= 1 - ey;
     } else {
       uy &= <u64>-1 >> 12;
       uy |= 1 << 52;
@@ -1638,14 +1638,14 @@ export namespace NativeMath {
     var uxi = ux;
     if (!ex) {
       ex -= builtin_clz<i64>(uxi << 12);
-      uxi <<= -ex + 1;
+      uxi <<= 1 - ex;
     } else {
       uxi &= <u64>-1 >> 12;
       uxi |= 1 << 52;
     }
     if (!ey) {
       ey -= builtin_clz<i64>(uy << 12);
-      uy <<= -ey + 1;
+      uy <<= 1 - ey;
     } else {
       uy &= <u64>-1 >> 12;
       uy |= 1 << 52;
@@ -2894,14 +2894,14 @@ export namespace NativeMathf {
     }
     if (!ex) {
       ex -= builtin_clz<u32>(ux << 9);
-      ux <<= -ex + 1;
+      ux <<= 1 - ex;
     } else {
       ux &= <u32>-1 >> 9;
       ux |= 1 << 23;
     }
     if (!ey) {
       ey -= builtin_clz<u32>(uy << 9);
-      uy <<= -ey + 1;
+      uy <<= 1 - ey;
     } else {
       uy &= <u32>-1 >> 9;
       uy |= 1 << 23;
@@ -2942,14 +2942,14 @@ export namespace NativeMathf {
     if (ux << 1 == 0) return x;
     if (!ex) {
       ex -= builtin_clz<u32>(uxi << 9);
-      uxi <<= -ex + 1;
+      uxi <<= 1 - ex;
     } else {
       uxi &= <u32>-1 >> 9;
       uxi |= 1 << 23;
     }
     if (!ey) {
       ey -= builtin_clz<u32>(uy << 9);
-      uy <<= -ey + 1;
+      uy <<= 1 - ey;
     } else {
       uy &= <u32>-1 >> 9;
       uy |= 1 << 23;
