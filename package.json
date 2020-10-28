@@ -53,7 +53,13 @@
     "./lib/rtrace": {
       "import": "./lib/rtrace/index.js",
       "require": "./lib/rtrace/umd/index.js"
-    }
+    },
+    "./*": "./*.js",
+    "./cli/asc": "./cli/asc.js",
+    "./cli/transform": "./cli/transform.js",
+    "./cli/util/options": "./cli/util/options.js",
+    "./dist/assemblyscript": "./dist/assemblyscript.js",
+    "./dist/asc": "./dist/asc.js"
   },
   "bin": {
     "asc": "bin/asc",
