@@ -1530,9 +1530,9 @@ export class Module {
       }
       if (optimizeLevel >= 3) {
         passes.push("flatten");
+        passes.push("vacuum");
         passes.push("simplify-locals-notee-nostructure");
         passes.push("merge-locals");
-        passes.push("vacuum");
 
         passes.push("code-folding");
         passes.push("flatten");
