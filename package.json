@@ -53,7 +53,8 @@
     "./lib/rtrace": {
       "import": "./lib/rtrace/index.js",
       "require": "./lib/rtrace/umd/index.js"
-    }
+    },
+    "./*": "./*.js"
   },
   "bin": {
     "asc": "bin/asc",
