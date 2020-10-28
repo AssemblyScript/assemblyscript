@@ -1536,6 +1536,7 @@ export class Module {
 
         passes.push("code-folding");
         passes.push("flatten");
+        passes.push("vacuum");
         passes.push("local-cse");
         passes.push("reorder-locals");
       }
@@ -1550,8 +1551,8 @@ export class Module {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("dce");
       }
-      passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
+      passes.push("remove-unused-brs");
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("inlining");
         passes.push("precompute-propagate");

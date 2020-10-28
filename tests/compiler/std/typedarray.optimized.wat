@@ -9609,8 +9609,8 @@
   i32.eq
   if
    local.get $0
-   f32.const 2
-   f32.mul
+   local.get $0
+   f32.add
    local.tee $0
    local.get $0
    f32.div
@@ -9836,8 +9836,8 @@
   i64.eq
   if
    local.get $0
-   f64.const 2
-   f64.mul
+   local.get $0
+   f64.add
    local.tee $0
    local.get $0
    f64.div
