@@ -16,6 +16,7 @@
   <a href="https://assemblyscript.org">About</a> &nbsp;·&nbsp;
   <a href="https://assemblyscript.org/introduction.html">Introduction</a> &nbsp;·&nbsp;
   <a href="https://assemblyscript.org/quick-start.html">Quick&nbsp;start</a> &nbsp;·&nbsp;
+  <a href="https://assemblyscript.org/examples.html">Examples</a> &nbsp;·&nbsp;
   <a href="https://assemblyscript.org/development.html">Development&nbsp;instructions</a>
 </h3>
 <br>
