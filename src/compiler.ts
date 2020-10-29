@@ -5418,6 +5418,24 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.ISIZE:
       case TypeKind.USIZE: {
         let isWasm64 = this.options.isWasm64;
+        if (
+          getExpressionId(leftExpr) == ExpressionId.Const &&
+          getExpressionId(rightExpr) == ExpressionId.Const
+        ) {
+          if (isWasm64) {
+            let leftValue = i64_new(getConstValueI64Low(leftExpr), getConstValueI64High(leftExpr));
+            let rightValue = i64_new(getConstValueI64Low(rightExpr), getConstValueI64High(rightExpr));
+            let result = i64_pow(leftValue, rightValue);
+            return module.i64(i64_low(result), i64_high(result));
+          } else {
+            let leftValue = getConstValueI32(leftExpr);
+            let rightValue = getConstValueI32(rightExpr);
+            return module.i32(i64_low(i64_pow(
+              i64_new(leftValue),
+              i64_new(rightValue)
+            )));
+          }
+        }
         let instance = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
         if (!instance) {
           let prototype = this.program.lookupGlobal(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
