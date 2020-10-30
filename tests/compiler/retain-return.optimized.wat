@@ -1059,36 +1059,29 @@
   i32.eq
   if
    block $__inlined_func$~lib/rt/__visit_members
-    block $switch$1$default
-     block $switch$1$case$7
-      block $switch$1$case$6
-       block $switch$1$case$4
-        local.get $0
-        i32.const 12
-        i32.add
-        i32.load
-        br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$case$6 $switch$1$case$7 $switch$1$default
-       end
+    block $folding-inner0
+     block $switch$1$default
+      block $switch$1$case$4
        local.get $0
-       i32.load offset=20
-       local.tee $1
-       if
-        local.get $1
-        call $~lib/rt/pure/__visit
-       end
-       br $__inlined_func$~lib/rt/__visit_members
+       i32.const 12
+       i32.add
+       i32.load
+       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $folding-inner0 $folding-inner0 $switch$1$default
       end
       local.get $0
-      i32.load offset=24
-      call $~lib/rt/pure/__visit
+      i32.load offset=20
+      local.tee $1
+      if
+       local.get $1
+       call $~lib/rt/pure/__visit
+      end
       br $__inlined_func$~lib/rt/__visit_members
      end
-     local.get $0
-     i32.load offset=24
-     call $~lib/rt/pure/__visit
-     br $__inlined_func$~lib/rt/__visit_members
+     unreachable
     end
-    unreachable
+    local.get $0
+    i32.load offset=24
+    call $~lib/rt/pure/__visit
    end
    local.get $2
    i32.const -2147483648

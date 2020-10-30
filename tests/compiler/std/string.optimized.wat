@@ -2950,7 +2950,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $folding-inner0
+  block $folding-inner1
    local.get $0
    call $~lib/rt/pure/__retain
    local.tee $2
@@ -2961,7 +2961,7 @@
    i32.shr_u
    local.tee $0
    i32.eqz
-   br_if $folding-inner0
+   br_if $folding-inner1
    local.get $2
    local.tee $3
    i32.load16_u
@@ -2999,7 +2999,7 @@
     i32.sub
     local.tee $0
     i32.eqz
-    br_if $folding-inner0
+    br_if $folding-inner1
     i32.const -1
     i32.const 1
     local.get $1
@@ -3132,7 +3132,7 @@
       if
        local.get $5
        i32.eqz
-       br_if $folding-inner0
+       br_if $folding-inner1
        br $while-break|2
       end
       local.get $1
@@ -5722,14 +5722,14 @@
   (local $10 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  local.set $4
+  local.set $5
   block $folding-inner2
    block $folding-inner1
     block $folding-inner0
      local.get $2
      i32.eqz
      br_if $folding-inner0
-     local.get $4
+     local.get $5
      i32.eqz
      if
       i32.const 1
@@ -5758,7 +5758,7 @@
      i32.lt_s
      select
      local.set $2
-     local.get $4
+     local.get $5
      i32.const 20
      i32.sub
      i32.load offset=16
@@ -5793,7 +5793,7 @@
       local.tee $2
       call $~lib/rt/__newArray
       call $~lib/rt/pure/__retain
-      local.tee $5
+      local.tee $4
       i32.load offset=4
       local.set $3
       loop $for-loop|0
@@ -5829,9 +5829,9 @@
         br $for-loop|0
        end
       end
-      local.get $4
-      call $~lib/rt/pure/__release
       local.get $5
+      call $~lib/rt/pure/__release
+      local.get $4
       return
      end
      i32.const 0
@@ -5840,15 +5840,15 @@
      local.set $1
      loop $while-continue|1
       local.get $0
-      local.get $4
       local.get $5
+      local.get $4
       call $~lib/string/String#indexOf
       local.tee $6
       i32.const -1
       i32.xor
       if
        local.get $6
-       local.get $5
+       local.get $4
        i32.sub
        local.tee $7
        i32.const 0
@@ -5862,7 +5862,7 @@
         call $~lib/rt/pure/__new
         local.tee $9
         local.get $0
-        local.get $5
+        local.get $4
         i32.const 1
         i32.shl
         i32.add
@@ -5886,11 +5886,11 @@
        local.get $6
        local.get $8
        i32.add
-       local.set $5
+       local.set $4
        br $while-continue|1
       end
      end
-     local.get $5
+     local.get $4
      i32.eqz
      if
       local.get $1
@@ -5899,7 +5899,7 @@
       br $folding-inner2
      end
      local.get $3
-     local.get $5
+     local.get $4
      i32.sub
      local.tee $2
      i32.const 0
@@ -5913,7 +5913,7 @@
       call $~lib/rt/pure/__new
       local.tee $3
       local.get $0
-      local.get $5
+      local.get $4
       i32.const 1
       i32.shl
       i32.add
@@ -5927,19 +5927,22 @@
       i32.const 1328
       call $~lib/array/Array<~lib/string/String>#push
      end
-     br $folding-inner2
+     local.get $5
+     call $~lib/rt/pure/__release
+     local.get $1
+     return
     end
     i32.const 0
     call $~lib/rt/__newArray
     call $~lib/rt/pure/__retain
     local.set $0
    end
-   local.get $4
+   local.get $5
    call $~lib/rt/pure/__release
    local.get $0
    return
   end
-  local.get $4
+  local.get $5
   call $~lib/rt/pure/__release
   local.get $1
  )
