@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
@@ -2643,10 +2643,41 @@
    unreachable
   end
  )
- (func $~lib/array/Array<~lib/string/String>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  block $folding-inner0
+   block $switch$1$default
+    block $switch$1$case$5
+     block $switch$1$case$4
+      block $switch$1$case$2
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $folding-inner0 $folding-inner0 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+      end
+      return
+     end
+     local.get $0
+     i32.load
+     local.tee $0
+     if
+      local.get $0
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.get $1
+    call $~lib/rt/pure/__visit
+    return
+   end
+   unreachable
+  end
   local.get $0
   i32.load offset=4
   local.tee $2
@@ -2680,48 +2711,5 @@
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
- )
- (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  block $switch$1$default
-   block $switch$1$case$7
-    block $switch$1$case$6
-     block $switch$1$case$5
-      block $switch$1$case$4
-       block $switch$1$case$2
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$4 $switch$1$case$4 $switch$1$default
-       end
-       return
-      end
-      local.get $0
-      i32.load
-      local.tee $0
-      if
-       local.get $0
-       local.get $1
-       call $~lib/rt/pure/__visit
-      end
-      return
-     end
-     local.get $0
-     i32.load
-     local.get $1
-     call $~lib/rt/pure/__visit
-     return
-    end
-    local.get $0
-    local.get $1
-    call $~lib/array/Array<~lib/string/String>#__visit_impl
-    return
-   end
-   local.get $0
-   local.get $1
-   call $~lib/array/Array<~lib/string/String>#__visit_impl
-   return
-  end
-  unreachable
  )
 )
