@@ -99,9 +99,9 @@
    i32.const 16
    i32.shr_u
    local.tee $3
-   local.get $5
    local.get $3
-   i32.gt_s
+   local.get $5
+   i32.lt_s
    select
    memory.grow
    i32.const 0
@@ -368,7 +368,6 @@
   call $~lib/rt/__newArray
   drop
   block $folding-inner0
-   i32.const 1
    i32.const 2
    i32.const 2
    i32.const 5
@@ -376,7 +375,8 @@
    call $~lib/rt/__newArray
    local.tee $0
    i32.load offset=12
-   i32.ge_u
+   i32.const 1
+   i32.le_u
    br_if $folding-inner0
    local.get $0
    i32.load offset=4
@@ -397,7 +397,6 @@
    i32.const 1328
    call $~lib/rt/__newArray
    drop
-   i32.const 1
    i32.const 3
    i32.const 2
    i32.const 6
@@ -405,7 +404,8 @@
    call $~lib/rt/__newArray
    local.tee $0
    i32.load offset=12
-   i32.ge_u
+   i32.const 1
+   i32.le_u
    br_if $folding-inner0
    local.get $0
    i32.load offset=4

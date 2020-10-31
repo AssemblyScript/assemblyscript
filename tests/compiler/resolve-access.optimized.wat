@@ -82,9 +82,9 @@
    i32.const 16
    i32.shr_u
    local.tee $3
-   local.get $5
    local.get $3
-   i32.gt_s
+   local.get $5
+   i32.lt_s
    select
    memory.grow
    i32.const 0
@@ -496,10 +496,10 @@
   local.get $0
   i32.const 1
   i32.store offset=12
-  i32.const 0
   local.get $0
   i32.load offset=12
-  i32.ge_u
+  i32.const 0
+  i32.le_u
   if
    i32.const 1088
    i32.const 1152

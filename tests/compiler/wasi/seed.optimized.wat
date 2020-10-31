@@ -128,11 +128,11 @@
       i32.const 2
       i32.add
      else
+      local.get $3
       local.get $2
       i32.const 2
       i32.add
-      local.get $3
-      i32.lt_u
+      i32.gt_u
       i32.const 0
       local.get $1
       i32.const 64512

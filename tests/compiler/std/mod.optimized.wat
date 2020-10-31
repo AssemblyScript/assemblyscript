@@ -77,12 +77,12 @@
    f64.div
    return
   end
+  local.get $6
   local.get $2
   i64.const 1
   i64.shl
   local.tee $8
-  local.get $6
-  i64.le_u
+  i64.ge_u
   if
    local.get $0
    local.get $6
@@ -325,12 +325,12 @@
    f32.div
    return
   end
+  local.get $6
   local.get $2
   i32.const 1
   i32.shl
   local.tee $8
-  local.get $6
-  i32.le_u
+  i32.ge_u
   if
    local.get $0
    local.get $6

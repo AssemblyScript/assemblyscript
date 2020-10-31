@@ -56,9 +56,9 @@
    i32.const 16
    i32.shr_u
    local.tee $1
-   local.get $2
    local.get $1
-   i32.gt_s
+   local.get $2
+   i32.lt_s
    select
    memory.grow
    i32.const 0
@@ -364,9 +364,9 @@
     i32.const 1
     i32.shl
     local.tee $1
-    local.get $2
     local.get $1
-    i32.gt_u
+    local.get $2
+    i32.lt_u
     select
     call $~lib/rt/stub/__alloc
     local.tee $1

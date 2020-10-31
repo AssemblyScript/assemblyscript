@@ -88,9 +88,9 @@
    i32.const 16
    i32.shr_u
    local.tee $1
-   local.get $2
    local.get $1
-   i32.gt_s
+   local.get $2
+   i32.lt_s
    select
    memory.grow
    i32.const 0
@@ -341,9 +341,9 @@
     i32.const 1
     i32.shl
     local.tee $1
-    local.get $2
     local.get $1
-    i32.gt_u
+    local.get $2
+    i32.lt_u
     select
     local.tee $2
     i32.const 1073741820
@@ -547,19 +547,19 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  i32.const 1
   local.get $0
   i32.load offset=8
   local.tee $4
   local.get $1
   i32.shr_u
-  i32.gt_u
+  i32.const 1
+  i32.lt_u
   if
-   i32.const 1
    i32.const 1073741820
    local.get $1
    i32.shr_u
-   i32.gt_u
+   i32.const 1
+   i32.lt_u
    if
     i32.const 1584
     i32.const 1536
@@ -721,10 +721,10 @@
   end
   i32.const 1676
   global.set $~lib/rt/stub/offset
-  i32.const 0
   i32.const 1100
   i32.load
-  i32.ge_u
+  i32.const 0
+  i32.le_u
   if
    i32.const 1088
    i32.const 2
@@ -785,10 +785,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
   i32.const 1196
   i32.load
-  i32.ge_u
+  i32.const 0
+  i32.le_u
   if
    i32.const 1184
    i32.const 3
@@ -849,10 +849,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
   i32.const 1276
   i32.load
-  i32.ge_u
+  i32.const 0
+  i32.le_u
   if
    i32.const 1264
    i32.const 2
@@ -913,10 +913,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
   i32.const 1372
   i32.load
-  i32.ge_u
+  i32.const 0
+  i32.le_u
   if
    i32.const 1360
    i32.const 3

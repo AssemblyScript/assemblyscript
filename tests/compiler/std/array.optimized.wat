@@ -1069,10 +1069,10 @@
  (func $~lib/rt/tlsf/initialize
   (local $0 i32)
   (local $1 i32)
-  i32.const 1
   memory.size
   local.tee $0
-  i32.gt_s
+  i32.const 1
+  i32.lt_s
   if (result i32)
    i32.const 1
    local.get $0
@@ -1461,12 +1461,12 @@
     unreachable
    end
   end
+  local.get $2
   local.get $1
   i32.load
   i32.const -4
   i32.and
-  local.get $2
-  i32.lt_u
+  i32.gt_u
   if
    i32.const 0
    i32.const 1280
@@ -2326,9 +2326,9 @@
      br_if $folding-inner1
     end
     loop $for-loop|0
-     local.get $3
      local.get $2
-     i32.lt_s
+     local.get $3
+     i32.gt_s
      if
       local.get $0
       local.get $3
@@ -2523,6 +2523,7 @@
      i32.const 1
      i32.and
      if
+      local.get $5
       local.get $4
       i32.const 4
       i32.add
@@ -2531,8 +2532,7 @@
       i32.and
       i32.add
       local.tee $4
-      local.get $5
-      i32.ge_u
+      i32.le_u
       if
        local.get $3
        local.get $7
@@ -2687,11 +2687,11 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  local.get $1
   local.get $0
   i32.load offset=12
   local.tee $2
-  local.get $1
-  i32.gt_s
+  i32.lt_s
   if
    local.get $0
    i32.load offset=4
@@ -2881,9 +2881,9 @@
   local.get $1
   i32.sub
   local.tee $1
-  local.get $2
   local.get $1
-  i32.lt_s
+  local.get $2
+  i32.gt_s
   select
   i32.const 2
   i32.shl
@@ -2986,9 +2986,9 @@
    i32.add
    local.set $1
    loop $while-continue|0
-    local.get $2
     local.get $1
-    i32.lt_u
+    local.get $2
+    i32.gt_u
     if
      local.get $2
      i32.load
@@ -3197,9 +3197,9 @@
   local.tee $1
   i32.sub
   local.tee $2
-  i32.const 2
   local.get $2
-  i32.lt_s
+  i32.const 2
+  i32.gt_s
   select
   local.tee $2
   i32.const 0
@@ -3303,9 +3303,9 @@
   local.get $0
   i32.load offset=12
   local.tee $3
-  i32.const 0
   local.get $3
-  i32.lt_s
+  i32.const 0
+  i32.gt_s
   select
   local.set $2
   i32.const 1
@@ -3313,9 +3313,9 @@
   local.get $2
   i32.sub
   local.tee $1
-  i32.const 1
   local.get $1
-  i32.lt_s
+  i32.const 1
+  i32.gt_s
   select
   local.tee $1
   i32.const 0
@@ -3445,9 +3445,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $4
    local.get $3
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -3538,9 +3538,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $4
    local.get $3
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -3632,9 +3632,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $4
    local.get $3
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -3729,9 +3729,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $4
    local.get $3
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -3953,9 +3953,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $4
    local.get $3
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -4044,9 +4044,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $5
    local.get $3
-   i32.lt_s
+   local.get $5
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -4149,9 +4149,9 @@
    local.get $0
    i32.load offset=12
    local.tee $4
-   local.get $5
    local.get $4
-   i32.lt_s
+   local.get $5
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -4377,9 +4377,9 @@
   call $~lib/rt/pure/__retain
   local.set $5
   loop $for-loop|0
-   local.get $4
    local.get $1
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    if
     local.get $0
     local.get $4
@@ -4621,6 +4621,7 @@
     i32.const 1
     local.set $1
     loop $while-continue|3
+     local.get $3
      local.get $5
      local.get $1
      i32.const 5
@@ -4638,8 +4639,7 @@
      i32.shl
      i32.add
      local.tee $2
-     local.get $3
-     i32.lt_s
+     i32.gt_s
      if
       local.get $2
       local.set $1
@@ -4920,9 +4920,9 @@
   call $~lib/rt/pure/__retain
   local.set $5
   loop $for-loop|0
-   local.get $4
    local.get $1
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    if
     local.get $0
     local.get $4
@@ -5147,6 +5147,7 @@
     i32.const 1
     local.set $1
     loop $while-continue|3
+     local.get $3
      local.get $5
      local.get $1
      i32.const 5
@@ -5164,8 +5165,7 @@
      i32.shl
      i32.add
      local.tee $2
-     local.get $3
-     i32.lt_s
+     i32.gt_s
      if
       local.get $2
       local.set $1
@@ -5467,9 +5467,9 @@
   call $~lib/rt/pure/__retain
   local.set $5
   loop $for-loop|0
-   local.get $4
    local.get $1
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    if
     local.get $0
     local.get $4
@@ -5694,6 +5694,7 @@
     i32.const 1
     local.set $1
     loop $while-continue|3
+     local.get $3
      local.get $4
      local.get $1
      i32.const 5
@@ -5711,8 +5712,7 @@
      i32.shl
      i32.add
      local.tee $2
-     local.get $3
-     i32.lt_s
+     i32.gt_s
      if
       local.get $2
       local.set $1
@@ -5918,9 +5918,9 @@
   call $~lib/array/Array<i32>#constructor
   local.set $2
   loop $for-loop|0
-   local.get $1
    local.get $0
-   i32.lt_s
+   local.get $1
+   i32.gt_s
    if
     local.get $2
     local.get $1
@@ -5987,9 +5987,9 @@
   call $~lib/array/Array<i32>#constructor
   local.set $2
   loop $for-loop|0
-   local.get $1
    local.get $0
-   i32.lt_s
+   local.get $1
+   i32.gt_s
    if
     local.get $2
     local.get $1
@@ -6278,9 +6278,9 @@
   call $~lib/rt/pure/__retain
   local.set $6
   loop $for-loop|0
-   local.get $3
    local.get $1
-   i32.lt_s
+   local.get $3
+   i32.gt_s
    if
     local.get $0
     local.get $3
@@ -6790,9 +6790,9 @@
    local.get $1
    local.get $3
    local.get $2
-   local.get $3
    local.get $2
-   i32.lt_s
+   local.get $3
+   i32.gt_s
    select
    call $~lib/util/string/compareImpl
    local.get $0
@@ -7122,9 +7122,9 @@
   i32.const 8256
   local.set $1
   loop $for-loop|0
-   local.get $4
    local.get $0
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    if
     local.get $1
     local.tee $2
@@ -7199,9 +7199,9 @@
   i32.const 1
   i32.shr_u
   local.tee $2
-  i32.const 0
   local.get $2
-  i32.lt_s
+  i32.const 0
+  i32.gt_s
   select
   local.tee $3
   local.get $1
@@ -7217,18 +7217,18 @@
   i32.lt_s
   select
   local.tee $1
-  local.get $3
   local.get $1
-  i32.gt_s
+  local.get $3
+  i32.lt_s
   select
   i32.const 1
   i32.shl
   local.tee $4
   local.get $3
   local.get $1
-  local.get $3
   local.get $1
-  i32.lt_s
+  local.get $3
+  i32.gt_s
   select
   i32.const 1
   i32.shl
@@ -7323,9 +7323,9 @@
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|1
-   local.get $6
    local.get $4
-   i32.lt_s
+   local.get $6
+   i32.gt_s
    if
     local.get $0
     local.get $6
@@ -7625,9 +7625,9 @@
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
-   local.get $6
    local.get $4
-   i32.lt_s
+   local.get $6
+   i32.gt_s
    if
     local.get $1
     local.get $3
@@ -7808,9 +7808,9 @@
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
-   local.get $6
    local.get $4
-   i32.lt_s
+   local.get $6
+   i32.gt_s
    if
     local.get $1
     local.get $3
@@ -8074,6 +8074,7 @@
     i32.const 1
     i32.sub
     local.set $9
+    local.get $5
     local.get $7
     local.get $2
     i64.extend_i32_u
@@ -8082,8 +8083,7 @@
     i64.shl
     i64.add
     local.tee $1
-    local.get $5
-    i64.le_u
+    i64.ge_u
     if
      local.get $9
      global.get $~lib/util/number/_K
@@ -8126,11 +8126,11 @@
       i64.lt_u
       select
       i32.const 0
+      local.get $10
       local.get $5
       local.get $1
       i64.sub
-      local.get $10
-      i64.ge_u
+      i64.le_u
       i32.const 0
       local.get $1
       local.get $8
@@ -8251,11 +8251,11 @@
     i64.lt_u
     select
     i32.const 0
+    local.get $10
     local.get $5
     local.get $1
     i64.sub
-    local.get $10
-    i64.ge_u
+    i64.le_u
     i32.const 0
     local.get $1
     local.get $8
@@ -8374,9 +8374,9 @@
     i32.const 0
     i32.le_s
     i32.const 0
-    i32.const -6
     local.get $3
-    i32.lt_s
+    i32.const -6
+    i32.gt_s
     select
     if (result i32)
      local.get $0
@@ -8969,9 +8969,9 @@
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
-   local.get $7
    local.get $5
-   i32.lt_s
+   local.get $7
+   i32.gt_s
    if
     local.get $1
     local.get $2
@@ -9524,9 +9524,9 @@
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
-   local.get $6
    local.get $4
-   i32.lt_s
+   local.get $6
+   i32.gt_s
    if
     local.get $1
     local.get $2
@@ -9677,9 +9677,9 @@
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
-   local.get $6
    local.get $4
-   i32.lt_s
+   local.get $6
+   i32.gt_s
    if
     local.get $1
     local.get $2
@@ -9957,9 +9957,9 @@
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
-   local.get $7
    local.get $4
-   i32.lt_s
+   local.get $7
+   i32.gt_s
    if
     local.get $1
     local.get $2
@@ -10207,9 +10207,9 @@
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
-   local.get $7
    local.get $5
-   i32.lt_s
+   local.get $7
+   i32.gt_s
    if
     local.get $1
     local.get $2
@@ -10550,9 +10550,9 @@
   call $~lib/rt/pure/__retain
   local.set $1
   loop $for-loop|0
-   local.get $6
    local.get $4
-   i32.lt_s
+   local.get $6
+   i32.gt_s
    if
     local.get $1
     local.get $3
@@ -13435,11 +13435,11 @@
   i32.const 0
   local.set $1
   block $__inlined_func$~lib/array/Array<f32>#indexOf
-   i32.const 0
    local.get $0
    i32.load offset=12
    local.tee $2
-   i32.ge_s
+   i32.const 0
+   i32.le_s
    i32.const 1
    local.get $2
    select
@@ -13497,11 +13497,11 @@
   i32.const 0
   local.set $1
   block $__inlined_func$~lib/array/Array<f64>#indexOf
-   i32.const 0
    local.get $2
    i32.load offset=12
    local.tee $7
-   i32.ge_s
+   i32.const 0
+   i32.le_s
    i32.const 1
    local.get $7
    select
@@ -13696,7 +13696,6 @@
    i32.const 0
    local.set $0
    i32.const 0
-   i32.const 0
    i32.const 1
    i32.const 2
    i32.const 9
@@ -13706,7 +13705,8 @@
    local.tee $7
    i32.load offset=12
    local.tee $2
-   i32.ge_s
+   i32.const 0
+   i32.le_s
    i32.const 1
    local.get $2
    select
@@ -13759,7 +13759,6 @@
    i32.const 0
    local.set $2
    i32.const 0
-   i32.const 0
    i32.const 1
    i32.const 3
    i32.const 10
@@ -13769,7 +13768,8 @@
    local.tee $0
    i32.load offset=12
    local.tee $3
-   i32.ge_s
+   i32.const 0
+   i32.le_s
    i32.const 1
    local.get $3
    select
@@ -17668,9 +17668,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $5
    local.get $3
-   i32.lt_s
+   local.get $5
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -17980,9 +17980,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $4
    local.get $3
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -18032,9 +18032,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $4
    local.get $3
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -18291,9 +18291,9 @@
   local.get $1
   i32.sub
   local.tee $1
-  local.get $2
   local.get $1
-  i32.lt_s
+  local.get $2
+  i32.gt_s
   select
   call $~lib/memory/memory.copy
   local.get $0
@@ -18343,9 +18343,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $4
    local.get $3
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -18395,9 +18395,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $5
    local.get $3
-   i32.lt_s
+   local.get $5
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -18487,9 +18487,9 @@
    local.get $0
    i32.load offset=12
    local.tee $3
-   local.get $4
    local.get $3
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -18724,9 +18724,9 @@
    i32.add
    local.set $1
    loop $while-continue|0
-    local.get $2
     local.get $1
-    i32.lt_u
+    local.get $2
+    i32.gt_u
     if
      local.get $2
      i32.load8_u
@@ -18763,9 +18763,9 @@
   call $~lib/rt/pure/__retain
   local.set $5
   loop $for-loop|0
-   local.get $4
    local.get $1
-   i32.lt_s
+   local.get $4
+   i32.gt_s
    if
     local.get $0
     local.get $4
@@ -18972,6 +18972,7 @@
     i32.const 1
     local.set $1
     loop $while-continue|3
+     local.get $3
      local.get $4
      local.get $1
      i32.const 5
@@ -18989,8 +18990,7 @@
      i32.shl
      i32.add
      local.tee $2
-     local.get $3
-     i32.lt_s
+     i32.gt_s
      if
       local.get $2
       local.set $1
@@ -19179,9 +19179,9 @@
   else
    local.get $2
    local.get $1
-   local.get $2
    local.get $1
-   i32.lt_s
+   local.get $2
+   i32.gt_s
    select
   end
   local.set $2
@@ -19201,16 +19201,16 @@
   else
    local.get $3
    local.get $1
-   local.get $3
    local.get $1
-   i32.lt_s
+   local.get $3
+   i32.gt_s
    select
   end
   local.set $1
   loop $for-loop|0
-   local.get $2
    local.get $1
-   i32.lt_s
+   local.get $2
+   i32.gt_s
    if
     local.get $4
     local.get $5
@@ -19390,9 +19390,9 @@
   i32.load offset=4
   local.set $0
   loop $for-loop|0
-   local.get $4
    local.get $2
-   i32.lt_u
+   local.get $4
+   i32.gt_u
    if
     local.get $3
     local.get $4
@@ -19544,9 +19544,9 @@
   i32.add
   i32.lt_s
   i32.const 0
-  local.get $2
   local.get $1
-  i32.lt_s
+  local.get $2
+  i32.gt_s
   select
   if
    local.get $2
@@ -19710,9 +19710,9 @@
    local.get $0
    i32.load offset=12
    local.tee $1
-   local.get $5
    local.get $1
-   i32.lt_s
+   local.get $5
+   i32.gt_s
    select
    i32.lt_s
    if
@@ -20046,9 +20046,9 @@
    i32.add
    local.set $1
    loop $while-continue|0
-    local.get $2
     local.get $1
-    i32.lt_u
+    local.get $2
+    i32.gt_u
     if
      local.get $2
      i32.load
@@ -20336,9 +20336,9 @@
    i32.const 1
    i32.sub
    local.get $2
-   local.get $2
    local.get $0
-   i32.ge_s
+   local.get $2
+   i32.le_s
    select
    local.get $2
    i32.const 0
@@ -20564,9 +20564,9 @@
    i32.const 1
    i32.sub
    local.get $2
-   local.get $2
    local.get $0
-   i32.ge_s
+   local.get $2
+   i32.le_s
    select
    local.get $2
    i32.const 0
@@ -20821,9 +20821,9 @@
    i32.const 1
    i32.sub
    local.get $2
-   local.get $2
    local.get $0
-   i32.ge_s
+   local.get $2
+   i32.le_s
    select
    local.get $2
    i32.const 0

@@ -589,10 +589,10 @@
  (func $~lib/rt/tlsf/initialize
   (local $0 i32)
   (local $1 i32)
-  i32.const 1
   memory.size
   local.tee $0
-  i32.gt_s
+  i32.const 1
+  i32.lt_s
   if (result i32)
    i32.const 1
    local.get $0
@@ -977,12 +977,12 @@
     unreachable
    end
   end
+  local.get $2
   local.get $1
   i32.load
   i32.const -4
   i32.and
-  local.get $2
-  i32.lt_u
+  i32.gt_u
   if
    i32.const 0
    i32.const 1296
@@ -1208,18 +1208,18 @@
   local.get $4
   i32.const 0
   i32.store offset=8
-  local.get $2
-  i32.const 1073741820
-  i32.gt_u
-  local.get $1
-  local.get $2
-  i32.add
   local.get $0
   call $~lib/rt/pure/__retain
   local.tee $0
   i32.const 20
   i32.sub
   i32.load offset=16
+  local.get $1
+  local.get $2
+  i32.add
+  i32.lt_u
+  local.get $2
+  i32.const 1073741820
   i32.gt_u
   i32.or
   if
@@ -1276,12 +1276,12 @@
   local.get $1
   i32.const 31
   i32.shr_u
+  local.get $0
+  i32.load offset=8
   local.get $1
   i32.const 4
   i32.add
-  local.get $0
-  i32.load offset=8
-  i32.gt_s
+  i32.lt_s
   i32.or
   if
    i32.const 1360
@@ -1335,10 +1335,10 @@
   i64.rotr
  )
  (func $~lib/dataview/DataView#getFloat64 (param $0 i32) (param $1 i32) (result f64)
-  i32.const 8
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 8
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -1396,12 +1396,12 @@
   local.get $1
   i32.const 31
   i32.shr_u
+  local.get $0
+  i32.load offset=8
   local.get $1
   i32.const 2
   i32.add
-  local.get $0
-  i32.load offset=8
-  i32.gt_s
+  i32.lt_s
   i32.or
   if
    i32.const 1360
@@ -1429,12 +1429,12 @@
   local.get $1
   i32.const 31
   i32.shr_u
+  local.get $0
+  i32.load offset=8
   local.get $1
   i32.const 4
   i32.add
-  local.get $0
-  i32.load offset=8
-  i32.gt_s
+  i32.lt_s
   i32.or
   if
    i32.const 1360
@@ -1460,10 +1460,10 @@
  )
  (func $~lib/dataview/DataView#getInt64 (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
-  i32.const 8
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 8
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -1518,12 +1518,12 @@
   local.get $1
   i32.const 31
   i32.shr_u
+  local.get $0
+  i32.load offset=8
   local.get $1
   i32.const 2
   i32.add
-  local.get $0
-  i32.load offset=8
-  i32.gt_s
+  i32.lt_s
   i32.or
   if
    i32.const 1360
@@ -1551,12 +1551,12 @@
   local.get $1
   i32.const 31
   i32.shr_u
+  local.get $0
+  i32.load offset=8
   local.get $1
   i32.const 4
   i32.add
-  local.get $0
-  i32.load offset=8
-  i32.gt_s
+  i32.lt_s
   i32.or
   if
    i32.const 1360
@@ -1582,10 +1582,10 @@
  )
  (func $~lib/dataview/DataView#getUint64 (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
-  i32.const 8
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 8
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -1607,10 +1607,10 @@
   end
  )
  (func $~lib/dataview/DataView#setFloat32 (param $0 i32) (param $1 f32) (param $2 i32)
-  i32.const 4
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 4
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -1635,10 +1635,10 @@
   end
  )
  (func $~lib/dataview/DataView#setFloat64 (param $0 i32) (param $1 f64) (param $2 i32)
-  i32.const 8
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 8
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -1663,10 +1663,10 @@
   end
  )
  (func $~lib/dataview/DataView#setInt16 (param $0 i32) (param $1 i32) (param $2 i32)
-  i32.const 2
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 2
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -1687,10 +1687,10 @@
   i32.store16
  )
  (func $~lib/dataview/DataView#setInt32 (param $0 i32) (param $1 i32) (param $2 i32)
-  i32.const 4
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 4
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -1711,10 +1711,10 @@
   i32.store
  )
  (func $~lib/dataview/DataView#setInt64 (param $0 i32) (param $1 i64) (param $2 i32)
-  i32.const 8
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 8
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -1735,10 +1735,10 @@
   i64.store
  )
  (func $~lib/dataview/DataView#setUint16 (param $0 i32) (param $1 i32) (param $2 i32)
-  i32.const 2
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 2
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -1759,10 +1759,10 @@
   i32.store16
  )
  (func $~lib/dataview/DataView#setUint32 (param $0 i32) (param $1 i32) (param $2 i32)
-  i32.const 4
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 4
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -1783,10 +1783,10 @@
   i32.store
  )
  (func $~lib/dataview/DataView#setUint64 (param $0 i32) (param $1 i64) (param $2 i32)
-  i32.const 8
   local.get $0
   i32.load offset=8
-  i32.gt_s
+  i32.const 8
+  i32.lt_s
   if
    i32.const 1360
    i32.const 1488
@@ -3082,10 +3082,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
   local.get $0
   i32.load offset=8
-  i32.ge_u
+  i32.const 0
+  i32.le_u
   if
    i32.const 1360
    i32.const 1488
@@ -3221,10 +3221,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
   local.get $0
   i32.load offset=8
-  i32.ge_u
+  i32.const 0
+  i32.le_u
   if
    i32.const 1360
    i32.const 1488

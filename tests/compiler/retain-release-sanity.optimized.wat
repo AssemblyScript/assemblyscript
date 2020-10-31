@@ -590,10 +590,10 @@
  (func $~lib/rt/tlsf/initialize
   (local $0 i32)
   (local $1 i32)
-  i32.const 1
   memory.size
   local.tee $0
-  i32.gt_s
+  i32.const 1
+  i32.lt_s
   if (result i32)
    i32.const 1
    local.get $0
@@ -982,12 +982,12 @@
     unreachable
    end
   end
+  local.get $2
   local.get $1
   i32.load
   i32.const -4
   i32.and
-  local.get $2
-  i32.lt_u
+  i32.gt_u
   if
    i32.const 0
    i32.const 1280
@@ -1578,6 +1578,7 @@
      i32.const 1
      i32.and
      if
+      local.get $5
       local.get $4
       i32.const 4
       i32.add
@@ -1586,8 +1587,7 @@
       i32.and
       i32.add
       local.tee $4
-      local.get $5
-      i32.ge_u
+      i32.le_u
       if
        local.get $3
        local.get $7
@@ -2438,9 +2438,9 @@
   global.get $~lib/rt/pure/CUR
   local.set $0
   loop $for-loop|0
-   local.get $4
    local.get $0
-   i32.lt_u
+   local.get $4
+   i32.gt_u
    if
     local.get $4
     i32.load

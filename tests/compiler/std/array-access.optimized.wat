@@ -49,13 +49,13 @@
   local.get $0
  )
  (func $std/array-access/i32ArrayArrayElementAccess (param $0 i32) (result i32)
-  i32.const 1
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
   local.tee $0
   i32.load offset=12
-  i32.ge_u
+  i32.const 1
+  i32.le_u
   if
    i32.const 1056
    i32.const 1120
@@ -161,13 +161,14 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   i32.const 1292
   i32.load
   i32.const 1
   i32.shr_u
-  local.tee $1
-  local.set $2
-  local.get $1
+  local.tee $3
+  local.set $4
+  local.get $3
   i32.const 0
   local.get $0
   i32.const 20
@@ -176,11 +177,11 @@
   i32.const 1
   i32.shr_u
   local.tee $1
-  i32.const 0
   local.get $1
-  i32.lt_s
+  i32.const 0
+  i32.gt_u
   select
-  local.tee $3
+  local.tee $2
   i32.add
   local.get $1
   i32.gt_s
@@ -189,8 +190,8 @@
    return
   end
   local.get $0
-  local.get $3
   local.get $2
+  local.get $4
   call $~lib/util/string/compareImpl
   i32.eqz
  )

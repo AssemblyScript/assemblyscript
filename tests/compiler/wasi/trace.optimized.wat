@@ -62,11 +62,11 @@
       i32.const 2
       i32.add
      else
+      local.get $2
       local.get $0
       i32.const 2
       i32.add
-      local.get $2
-      i32.lt_u
+      i32.gt_u
       i32.const 0
       local.get $3
       i32.const 64512
@@ -161,11 +161,11 @@
       i32.const 2
       i32.add
      else
+      local.get $4
       local.get $0
       i32.const 2
       i32.add
-      local.get $4
-      i32.lt_u
+      i32.gt_u
       i32.const 0
       local.get $3
       i32.const 64512
@@ -501,6 +501,7 @@
     i32.const 1
     i32.sub
     local.set $9
+    local.get $5
     local.get $7
     local.get $2
     i64.extend_i32_u
@@ -509,8 +510,7 @@
     i64.shl
     i64.add
     local.tee $1
-    local.get $5
-    i64.le_u
+    i64.ge_u
     if
      local.get $9
      global.get $~lib/util/number/_K
@@ -553,11 +553,11 @@
       i64.lt_u
       select
       i32.const 0
+      local.get $10
       local.get $5
       local.get $1
       i64.sub
-      local.get $10
-      i64.ge_u
+      i64.le_u
       i32.const 0
       local.get $1
       local.get $8
@@ -678,11 +678,11 @@
     i64.lt_u
     select
     i32.const 0
+    local.get $10
     local.get $5
     local.get $1
     i64.sub
-    local.get $10
-    i64.ge_u
+    i64.le_u
     i32.const 0
     local.get $1
     local.get $8
@@ -1001,9 +1001,9 @@
     i32.const 0
     i32.le_s
     i32.const 0
-    i32.const -6
     local.get $3
-    i32.lt_s
+    i32.const -6
+    i32.gt_s
     select
     if (result i32)
      local.get $0
