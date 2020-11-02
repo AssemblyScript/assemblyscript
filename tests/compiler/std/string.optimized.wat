@@ -6255,16 +6255,16 @@
    i32.const 2576
    return
   end
+  i32.const 0
+  local.get $0
+  i32.sub
+  local.get $0
   local.get $0
   i32.const 31
   i32.shr_u
   local.tee $2
-  if
-   i32.const 0
-   local.get $0
-   i32.sub
-   local.set $0
-  end
+  select
+  local.set $0
   local.get $1
   i32.const 10
   i32.eq
@@ -6655,17 +6655,17 @@
    i32.const 2576
    return
   end
+  i64.const 0
+  local.get $0
+  i64.sub
+  local.get $0
   local.get $0
   i64.const 63
   i64.shr_u
   i32.wrap_i64
   local.tee $2
-  if
-   i64.const 0
-   local.get $0
-   i64.sub
-   local.set $0
-  end
+  select
+  local.set $0
   local.get $1
   i32.const 10
   i32.eq

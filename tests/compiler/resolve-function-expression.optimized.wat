@@ -50,17 +50,16 @@
    i32.const 1424
    return
   end
+  i32.const 0
+  local.get $0
+  i32.sub
+  local.get $0
   local.get $0
   i32.const 31
   i32.shr_u
   local.tee $5
-  if
-   i32.const 0
-   local.get $0
-   i32.sub
-   local.set $0
-  end
-  local.get $0
+  select
+  local.tee $0
   i32.const 10
   i32.ge_u
   i32.const 1

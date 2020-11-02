@@ -142,17 +142,16 @@
    i32.const 1248
    return
   end
+  i32.const 0
+  local.get $0
+  i32.sub
+  local.get $0
   local.get $0
   i32.const 31
   i32.shr_u
-  local.tee $1
-  if
-   i32.const 0
-   local.get $0
-   i32.sub
-   local.set $0
-  end
-  local.get $0
+  local.tee $2
+  select
+  local.tee $0
   i32.const 10
   i32.ge_u
   i32.const 1
@@ -192,9 +191,9 @@
   i32.const 100000
   i32.lt_u
   select
-  local.get $1
+  local.get $2
   i32.add
-  local.tee $2
+  local.tee $1
   i32.const 1
   i32.shl
   i32.const 1
@@ -211,10 +210,10 @@
    i32.div_u
    local.set $0
    local.get $4
-   local.get $2
+   local.get $1
    i32.const 1
    i32.sub
-   local.tee $2
+   local.tee $1
    i32.const 1
    i32.shl
    i32.add
@@ -225,7 +224,7 @@
    local.get $0
    br_if $do-continue|0
   end
-  local.get $1
+  local.get $2
   if
    local.get $3
    i32.const 45

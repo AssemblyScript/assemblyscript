@@ -210,19 +210,24 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $0
-  if (result i32)
+  block $__inlined_func$~lib/util/number/itoa32
+   local.get $0
+   i32.eqz
+   if
+    i32.const 1248
+    local.set $0
+    br $__inlined_func$~lib/util/number/itoa32
+   end
+   i32.const 0
+   local.get $0
+   i32.sub
+   local.get $0
    local.get $0
    i32.const 31
    i32.shr_u
    local.tee $1
-   if
-    i32.const 0
-    local.get $0
-    i32.sub
-    local.set $0
-   end
-   local.get $0
+   select
+   local.tee $2
    call $~lib/util/number/decimalCount32
    local.get $1
    i32.add
@@ -230,20 +235,18 @@
    i32.const 1
    i32.shl
    call $~lib/rt/stub/__new
-   local.tee $2
-   local.get $0
+   local.tee $0
+   local.get $2
    local.get $3
    call $~lib/util/number/utoa_dec_simple<u32>
    local.get $1
    if
-    local.get $2
+    local.get $0
     i32.const 45
     i32.store16
    end
-   local.get $2
-  else
-   i32.const 1248
   end
+  local.get $0
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)

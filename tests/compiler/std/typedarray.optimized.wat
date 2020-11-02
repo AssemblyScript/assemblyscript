@@ -18903,19 +18903,18 @@
    i32.const 7152
    return
   end
+  i32.const 0
+  local.get $0
+  i32.sub
+  local.get $0
   local.get $0
   i32.const 31
   i32.shr_u
+  local.tee $0
+  select
   local.tee $1
-  if
-   i32.const 0
-   local.get $0
-   i32.sub
-   local.set $0
-  end
-  local.get $0
   call $~lib/util/number/decimalCount32
-  local.get $1
+  local.get $0
   i32.add
   local.tee $3
   i32.const 1
@@ -18923,10 +18922,10 @@
   i32.const 1
   call $~lib/rt/pure/__new
   local.tee $2
-  local.get $0
+  local.get $1
   local.get $3
   call $~lib/util/number/utoa_dec_simple<u32>
-  local.get $1
+  local.get $0
   if
    local.get $2
    i32.const 45
@@ -20419,18 +20418,17 @@
     i64.eqz
     br_if $__inlined_func$~lib/util/number/itoa64
     drop
+    i64.const 0
+    local.get $3
+    i64.sub
+    local.get $3
     local.get $3
     i64.const 63
     i64.shr_u
     i32.wrap_i64
     local.tee $0
-    if
-     i64.const 0
-     local.get $3
-     i64.sub
-     local.set $3
-    end
-    local.get $3
+    select
+    local.tee $3
     i64.const 4294967295
     i64.le_u
     if

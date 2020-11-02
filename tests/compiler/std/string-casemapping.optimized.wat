@@ -2501,6 +2501,8 @@
         i32.const 1
         i32.shl
         i32.add
+        i32.const 962
+        i32.const 963
         local.get $8
         i32.const 1
         i32.gt_u
@@ -2730,11 +2732,7 @@
         else
          i32.const 0
         end
-        if (result i32)
-         i32.const 962
-        else
-         i32.const 963
-        end
+        select
         i32.store16
        else
         local.get $1
@@ -2962,18 +2960,17 @@
    i32.const 18720
    return
   end
+  i64.const 0
+  local.get $0
+  i64.sub
+  local.get $0
   local.get $0
   i64.const 63
   i64.shr_u
   i32.wrap_i64
   local.tee $3
-  if
-   i64.const 0
-   local.get $0
-   i64.sub
-   local.set $0
-  end
-  local.get $0
+  select
+  local.tee $0
   i64.const 4294967295
   i64.le_u
   if
