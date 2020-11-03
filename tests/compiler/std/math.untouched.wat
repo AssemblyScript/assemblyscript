@@ -14,6 +14,7 @@
  (type $i64_=>_none (func (param i64)))
  (type $f64_=>_none (func (param f64)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i64_i64_i64_i64_i64_i32_=>_i32 (func (param i64 i64 i64 i64 i64 i32) (result i32)))
  (type $f32_=>_i32 (func (param f32) (result i32)))
  (type $f32_i32_f32_f32_i32_=>_i32 (func (param f32 i32 f32 f32 i32) (result i32)))
@@ -16206,6 +16207,211 @@
     local.get $0
     local.get $0
     i64.mul
+    local.set $0
+    br $while-continue|1
+   end
+  end
+  local.get $2
+ )
+ (func $~lib/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 1
+  local.set $2
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
+  local.get $1
+  i32.const 0
+  i32.le_s
+  if
+   local.get $0
+   i32.const -1
+   i32.eq
+   if
+    i32.const -1
+    i32.const 1
+    local.get $1
+    i32.const 1
+    i32.and
+    select
+    return
+   end
+   local.get $1
+   i32.const 0
+   i32.eq
+   local.get $0
+   i32.const 1
+   i32.eq
+   i32.or
+   return
+  else
+   local.get $1
+   i32.const 1
+   i32.eq
+   if
+    local.get $0
+    return
+   else
+    local.get $1
+    i32.const 2
+    i32.eq
+    if
+     local.get $0
+     local.get $0
+     i32.mul
+     return
+    else
+     local.get $1
+     i32.const 32
+     i32.lt_s
+     if
+      i32.const 32
+      local.get $1
+      i32.clz
+      i32.sub
+      local.set $3
+      block $break|0
+       block $case4|0
+        block $case3|0
+         block $case2|0
+          block $case1|0
+           block $case0|0
+            local.get $3
+            local.set $4
+            local.get $4
+            i32.const 5
+            i32.eq
+            br_if $case0|0
+            local.get $4
+            i32.const 4
+            i32.eq
+            br_if $case1|0
+            local.get $4
+            i32.const 3
+            i32.eq
+            br_if $case2|0
+            local.get $4
+            i32.const 2
+            i32.eq
+            br_if $case3|0
+            local.get $4
+            i32.const 1
+            i32.eq
+            br_if $case4|0
+            br $break|0
+           end
+           local.get $1
+           i32.const 1
+           i32.and
+           if
+            local.get $2
+            local.get $0
+            i32.mul
+            local.set $2
+           end
+           local.get $1
+           i32.const 1
+           i32.shr_u
+           local.set $1
+           local.get $0
+           local.get $0
+           i32.mul
+           local.set $0
+          end
+          local.get $1
+          i32.const 1
+          i32.and
+          if
+           local.get $2
+           local.get $0
+           i32.mul
+           local.set $2
+          end
+          local.get $1
+          i32.const 1
+          i32.shr_u
+          local.set $1
+          local.get $0
+          local.get $0
+          i32.mul
+          local.set $0
+         end
+         local.get $1
+         i32.const 1
+         i32.and
+         if
+          local.get $2
+          local.get $0
+          i32.mul
+          local.set $2
+         end
+         local.get $1
+         i32.const 1
+         i32.shr_u
+         local.set $1
+         local.get $0
+         local.get $0
+         i32.mul
+         local.set $0
+        end
+        local.get $1
+        i32.const 1
+        i32.and
+        if
+         local.get $2
+         local.get $0
+         i32.mul
+         local.set $2
+        end
+        local.get $1
+        i32.const 1
+        i32.shr_u
+        local.set $1
+        local.get $0
+        local.get $0
+        i32.mul
+        local.set $0
+       end
+       local.get $1
+       i32.const 1
+       i32.and
+       if
+        local.get $2
+        local.get $0
+        i32.mul
+        local.set $2
+       end
+      end
+      local.get $2
+      return
+     end
+    end
+   end
+  end
+  loop $while-continue|1
+   local.get $1
+   local.set $3
+   local.get $3
+   if
+    local.get $1
+    i32.const 1
+    i32.and
+    if
+     local.get $2
+     local.get $0
+     i32.mul
+     local.set $2
+    end
+    local.get $1
+    i32.const 1
+    i32.shr_u
+    local.set $1
+    local.get $0
+    local.get $0
+    i32.mul
     local.set $0
     br $while-continue|1
    end
@@ -58578,37 +58784,117 @@
   i32.eq
   drop
   i32.const 1
+  i32.const 3
+  call $~lib/math/ipow32
   i32.const 1
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4082
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const -2
+  i32.const 3
+  call $~lib/math/ipow32
   i32.const -8
-  i32.const -8
   i32.eq
-  drop
-  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4083
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const -1
+  i32.const 0
+  call $~lib/math/ipow32
   i32.const 1
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4084
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const -1
   i32.const -1
-  i32.eq
-  drop
-  i32.const 1
-  i32.const 1
-  i32.eq
-  drop
-  i32.const -1
+  call $~lib/math/ipow32
   i32.const -1
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4085
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const -1
+  i32.const -2
+  call $~lib/math/ipow32
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4086
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const -1
+  i32.const -3
+  call $~lib/math/ipow32
+  i32.const -1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4087
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 0
+  i32.const -2
+  call $~lib/math/ipow32
   i32.const 0
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4089
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 0
+  i32.const -1
+  call $~lib/math/ipow32
   i32.const 0
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4090
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   i32.const 0
   i32.const 0
@@ -58628,17 +58914,47 @@
   i32.eq
   drop
   i32.const 0
+  i32.const 2
+  call $~lib/math/ipow32
   i32.const 0
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4093
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
+  i32.const -2
+  call $~lib/math/ipow32
   i32.const 1
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4095
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
+  i32.const -1
+  call $~lib/math/ipow32
   i32.const 1
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4096
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   i32.const 0
   i32.const 0
@@ -58658,81 +58974,267 @@
   i32.eq
   drop
   i32.const 1
+  i32.const 2
+  call $~lib/math/ipow32
   i32.const 1
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4099
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
+  i32.const 3
+  call $~lib/math/ipow32
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
   i32.const 1
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4101
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const -2
+  i32.const 3
+  call $~lib/math/ipow32
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
   i32.const -8
-  i32.const -8
   i32.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4102
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 4
+  i32.const 7
+  call $~lib/math/ipow32
+  i32.const 65535
+  i32.and
   i32.const 16384
-  i32.const 16384
   i32.eq
-  drop
-  i32.const 65536
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4103
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 4
+  i32.const 8
+  call $~lib/math/ipow32
   i32.const 65535
   i32.and
   i32.const 0
   i32.eq
-  drop
-  i32.const 9765625
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4104
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 5
+  i32.const 10
+  call $~lib/math/ipow32
   i32.const 65535
   i32.and
   i32.const 761
   i32.eq
-  drop
-  i64.const 1
-  i64.const 1
-  i64.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4105
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i64.const 0
   i64.const 0
-  i64.eq
-  drop
-  i64.const 1
+  call $~lib/math/ipow64
   i64.const 1
   i64.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4107
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 0
+  i64.const 1
+  call $~lib/math/ipow64
+  i64.const 0
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4108
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 1
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.const 1
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4109
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 2
+  i64.const 3
+  call $~lib/math/ipow64
   i64.const 8
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4110
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 4294967295
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.const 12884901887
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4111
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 65535
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.const 281462092005375
+  i64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4112
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 65535
   i64.const 8
-  i64.eq
-  drop
-  i64.const 12884901887
-  i64.const 12884901887
-  i64.eq
-  drop
-  i64.const 281462092005375
-  i64.const 281462092005375
-  i64.eq
-  drop
-  i64.const -15762478437236735
+  call $~lib/math/ipow64
   i64.const -15762478437236735
   i64.eq
-  drop
-  i64.const -3925184889716469295
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4113
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 61731
+  i64.const 4
+  call $~lib/math/ipow64
   i64.const -3925184889716469295
   i64.eq
-  drop
-  i64.const -3925184889716469295
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4114
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 61731
+  i64.const 4
+  call $~lib/math/ipow64
   i64.const -3925184889716469295
   i64.eq
-  drop
-  i64.const 185729602441375
-  i64.const 39161983393079000
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4115
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 57055
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.const 339590
+  i64.const 3
+  call $~lib/math/ipow64
   i64.add
-  i64.const 39347712995520376
+  i64.const 340126
+  i64.const 3
+  call $~lib/math/ipow64
   i64.ne
-  drop
-  i64.const 185729602441375
-  i64.const 39161983393079000
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4117
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 57055
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.const 339590
+  i64.const 3
+  call $~lib/math/ipow64
   i64.add
   i64.const 39347712995520375
   i64.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4118
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 1
   f64.convert_i32_u
   f64.const 0.5
@@ -58778,14 +59280,34 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 1
-  f64.const 1
-  f64.eq
-  drop
-  f64.const 1
+  f64.const 0
+  f64.const 0
+  call $~lib/math/NativeMath.pow
   f64.const 1
   f64.eq
-  drop
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4123
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 1
+  f64.const 1
+  call $~lib/math/NativeMath.pow
+  f64.const 1
+  f64.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 4124
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~start
   call $start:std/math

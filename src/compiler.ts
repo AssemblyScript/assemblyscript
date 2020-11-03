@@ -5333,6 +5333,10 @@ export class Compiler extends DiagnosticEmitter {
   makePow(leftExpr: ExpressionRef, rightExpr: ExpressionRef, type: Type, reportNode: Node): ExpressionRef {
     // Cares about garbage bits
     let module = this.module;
+    let canOptimize = (
+      this.options.optimizeLevelHint != 0 ||
+      this.options.shrinkLevelHint != 0
+    );
     switch (type.kind) {
       case TypeKind.BOOL: {
         return module.select(
@@ -5352,6 +5356,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I32:
       case TypeKind.U32: {
         if (
+          canOptimize &&
           getExpressionId(leftExpr) == ExpressionId.Const &&
           getExpressionId(rightExpr) == ExpressionId.Const
         ) {
@@ -5389,6 +5394,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I64:
       case TypeKind.U64: {
         if (
+          canOptimize &&
           getExpressionId(leftExpr) == ExpressionId.Const &&
           getExpressionId(rightExpr) == ExpressionId.Const
         ) {
@@ -5419,6 +5425,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.USIZE: {
         let isWasm64 = this.options.isWasm64;
         if (
+          canOptimize &&
           getExpressionId(leftExpr) == ExpressionId.Const &&
           getExpressionId(rightExpr) == ExpressionId.Const
         ) {
@@ -5461,6 +5468,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.F32: {
         if (
+          canOptimize &&
           getExpressionId(leftExpr) == ExpressionId.Const &&
           getExpressionId(rightExpr) == ExpressionId.Const
         ) {
@@ -5498,6 +5506,7 @@ export class Compiler extends DiagnosticEmitter {
       // Math.pow otherwise (result is f64)
       case TypeKind.F64: {
         if (
+          canOptimize &&
           getExpressionId(leftExpr) == ExpressionId.Const &&
           getExpressionId(rightExpr) == ExpressionId.Const
         ) {
