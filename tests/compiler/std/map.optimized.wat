@@ -5884,24 +5884,24 @@
   i32.const 13
   call $~lib/rt/pure/__new
   call $~lib/rt/pure/__retain
-  local.tee $3
+  local.tee $1
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
   i32.store
-  local.get $3
+  local.get $1
   i32.const 3
   i32.store offset=4
-  local.get $3
+  local.get $1
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
   i32.store offset=8
-  local.get $3
+  local.get $1
   i32.const 4
   i32.store offset=12
-  local.get $3
+  local.get $1
   i32.const 0
   i32.store offset=16
-  local.get $3
+  local.get $1
   i32.const 0
   i32.store offset=20
   call $~lib/map/Map<i32,i32>#constructor
@@ -5931,13 +5931,13 @@
     i32.shl
     i32.add
     i32.load16_s
-    local.set $1
+    local.set $3
     local.get $6
     local.get $2
     call $~lib/array/Array<i32>#__get
     local.set $7
     local.get $0
-    local.get $1
+    local.get $3
     call $~lib/map/Map<i16,i32>#has
     i32.eqz
     if
@@ -5962,17 +5962,17 @@
      call $~lib/builtins/abort
      unreachable
     end
+    local.get $1
     local.get $3
-    local.get $1
-    local.get $1
+    local.get $3
     call $~lib/map/Map<i16,i16>#set
     call $~lib/rt/pure/__release
     local.get $5
     local.get $7
     i32.const 20
     i32.sub
-    local.tee $1
-    local.get $1
+    local.tee $3
+    local.get $3
     call $~lib/map/Map<i32,i32>#set
     call $~lib/rt/pure/__release
     local.get $2
@@ -5982,7 +5982,7 @@
     br $for-loop|4
    end
   end
-  local.get $3
+  local.get $1
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -6175,7 +6175,7 @@
   call $~lib/rt/pure/__release
   local.get $6
   call $~lib/rt/pure/__release
-  local.get $3
+  local.get $1
   call $~lib/rt/pure/__release
   local.get $5
   call $~lib/rt/pure/__release
@@ -7100,24 +7100,24 @@
   i32.const 16
   call $~lib/rt/pure/__new
   call $~lib/rt/pure/__retain
-  local.tee $3
+  local.tee $1
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
   i32.store
-  local.get $3
+  local.get $1
   i32.const 3
   i32.store offset=4
-  local.get $3
+  local.get $1
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
   i32.store offset=8
-  local.get $3
+  local.get $1
   i32.const 4
   i32.store offset=12
-  local.get $3
+  local.get $1
   i32.const 0
   i32.store offset=16
-  local.get $3
+  local.get $1
   i32.const 0
   i32.store offset=20
   call $~lib/map/Map<i32,i32>#constructor
@@ -7147,13 +7147,13 @@
     i32.shl
     i32.add
     i32.load16_u
-    local.set $1
+    local.set $3
     local.get $6
     local.get $2
     call $~lib/array/Array<i32>#__get
     local.set $7
     local.get $0
-    local.get $1
+    local.get $3
     call $~lib/map/Map<u16,i32>#has
     i32.eqz
     if
@@ -7178,17 +7178,17 @@
      call $~lib/builtins/abort
      unreachable
     end
+    local.get $1
     local.get $3
-    local.get $1
-    local.get $1
+    local.get $3
     call $~lib/map/Map<u16,u16>#set
     call $~lib/rt/pure/__release
     local.get $5
     local.get $7
     i32.const 20
     i32.sub
-    local.tee $1
-    local.get $1
+    local.tee $3
+    local.get $3
     call $~lib/map/Map<i32,i32>#set
     call $~lib/rt/pure/__release
     local.get $2
@@ -7198,7 +7198,7 @@
     br $for-loop|4
    end
   end
-  local.get $3
+  local.get $1
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -7383,7 +7383,7 @@
   call $~lib/rt/pure/__release
   local.get $6
   call $~lib/rt/pure/__release
-  local.get $3
+  local.get $1
   call $~lib/rt/pure/__release
   local.get $5
   call $~lib/rt/pure/__release
@@ -13119,8 +13119,7 @@
    call $~lib/rt/tlsf/freeBlock
   else
    local.get $1
-   i32.const 0
-   i32.le_u
+   i32.eqz
    if
     i32.const 0
     i32.const 1120

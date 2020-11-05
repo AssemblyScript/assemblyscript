@@ -723,8 +723,7 @@
   global.set $~lib/rt/stub/offset
   i32.const 1100
   i32.load
-  i32.const 0
-  i32.le_u
+  i32.eqz
   if
    i32.const 1088
    i32.const 2
@@ -787,8 +786,7 @@
   end
   i32.const 1196
   i32.load
-  i32.const 0
-  i32.le_u
+  i32.eqz
   if
    i32.const 1184
    i32.const 3
@@ -851,8 +849,7 @@
   end
   i32.const 1276
   i32.load
-  i32.const 0
-  i32.le_u
+  i32.eqz
   if
    i32.const 1264
    i32.const 2
@@ -915,8 +912,7 @@
   end
   i32.const 1372
   i32.load
-  i32.const 0
-  i32.le_u
+  i32.eqz
   if
    i32.const 1360
    i32.const 3

@@ -78,8 +78,7 @@
   end
   local.get $0
   i32.load offset=12
-  i32.const 0
-  i32.le_u
+  i32.eqz
   if
    i32.const 1184
    i32.const 1248
@@ -106,8 +105,7 @@
  (func $~lib/array/Array<assert-nonnull/Foo|null>#__get (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
-  i32.const 0
-  i32.le_u
+  i32.eqz
   if
    i32.const 1184
    i32.const 1248

@@ -1527,8 +1527,7 @@
    call $~lib/rt/tlsf/freeBlock
   else
    local.get $1
-   i32.const 0
-   i32.le_u
+   i32.eqz
    if
     i32.const 0
     i32.const 1120

@@ -1528,16 +1528,7 @@
   select
  )
  (func $~lib/util/number/utoa_dec_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
   loop $do-continue|0
-   local.get $1
-   i32.const 10
-   i32.rem_u
-   local.set $3
-   local.get $1
-   i32.const 10
-   i32.div_u
-   local.set $1
    local.get $0
    local.get $2
    i32.const 1
@@ -1546,11 +1537,16 @@
    i32.const 1
    i32.shl
    i32.add
-   local.get $3
+   local.get $1
+   i32.const 10
+   i32.rem_u
    i32.const 48
    i32.add
    i32.store16
    local.get $1
+   i32.const 10
+   i32.div_u
+   local.tee $1
    br_if $do-continue|0
   end
  )
@@ -2634,8 +2630,7 @@
    call $~lib/rt/tlsf/freeBlock
   else
    local.get $1
-   i32.const 0
-   i32.le_u
+   i32.eqz
    if
     i32.const 0
     i32.const 1120
