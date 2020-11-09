@@ -572,10 +572,10 @@
  (func $~lib/rt/tlsf/initialize
   (local $0 i32)
   (local $1 i32)
-  i32.const 1
   memory.size
   local.tee $0
-  i32.gt_s
+  i32.const 1
+  i32.lt_s
   if (result i32)
    i32.const 1
    local.get $0
@@ -777,86 +777,10 @@
    end
   end
  )
- (func $~lib/rt/tlsf/prepareBlock (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  local.get $1
-  i32.load
-  local.set $3
-  local.get $2
-  i32.const 4
-  i32.add
-  i32.const 15
-  i32.and
-  if
-   i32.const 0
-   i32.const 1232
-   i32.const 360
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $3
-  i32.const -4
-  i32.and
-  local.get $2
-  i32.sub
-  local.tee $4
-  i32.const 16
-  i32.ge_u
-  if
-   local.get $1
-   local.get $2
-   local.get $3
-   i32.const 2
-   i32.and
-   i32.or
-   i32.store
-   local.get $2
-   local.get $1
-   i32.const 4
-   i32.add
-   i32.add
-   local.tee $1
-   local.get $4
-   i32.const 4
-   i32.sub
-   i32.const 1
-   i32.or
-   i32.store
-   local.get $0
-   local.get $1
-   call $~lib/rt/tlsf/insertBlock
-  else
-   local.get $1
-   local.get $3
-   i32.const -2
-   i32.and
-   i32.store
-   local.get $1
-   i32.const 4
-   i32.add
-   local.tee $0
-   local.get $1
-   i32.load
-   i32.const -4
-   i32.and
-   i32.add
-   local.get $0
-   local.get $1
-   i32.load
-   i32.const -4
-   i32.and
-   i32.add
-   i32.load
-   i32.const -3
-   i32.and
-   i32.store
-  end
- )
  (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $1
   i32.const 1073741820
   i32.ge_u
@@ -960,12 +884,12 @@
     unreachable
    end
   end
+  local.get $2
   local.get $1
   i32.load
   i32.const -4
   i32.and
-  local.get $2
-  i32.lt_u
+  i32.gt_u
   if
    i32.const 0
    i32.const 1232
@@ -977,10 +901,79 @@
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/removeBlock
-  local.get $0
   local.get $1
+  i32.load
+  local.set $3
   local.get $2
-  call $~lib/rt/tlsf/prepareBlock
+  i32.const 4
+  i32.add
+  i32.const 15
+  i32.and
+  if
+   i32.const 0
+   i32.const 1232
+   i32.const 360
+   i32.const 14
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $3
+  i32.const -4
+  i32.and
+  local.get $2
+  i32.sub
+  local.tee $4
+  i32.const 16
+  i32.ge_u
+  if
+   local.get $1
+   local.get $2
+   local.get $3
+   i32.const 2
+   i32.and
+   i32.or
+   i32.store
+   local.get $2
+   local.get $1
+   i32.const 4
+   i32.add
+   i32.add
+   local.tee $2
+   local.get $4
+   i32.const 4
+   i32.sub
+   i32.const 1
+   i32.or
+   i32.store
+   local.get $0
+   local.get $2
+   call $~lib/rt/tlsf/insertBlock
+  else
+   local.get $1
+   local.get $3
+   i32.const -2
+   i32.and
+   i32.store
+   local.get $1
+   i32.const 4
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.load
+   i32.const -4
+   i32.and
+   i32.add
+   local.get $0
+   local.get $1
+   i32.load
+   i32.const -4
+   i32.and
+   i32.add
+   i32.load
+   i32.const -3
+   i32.and
+   i32.store
+  end
   local.get $1
  )
  (func $~lib/rt/tlsf/__alloc (param $0 i32) (result i32)
@@ -1424,80 +1417,6 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $object-literal/testUnmanaged (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.load
-  i32.const 123
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1296
-   i32.const 27
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.load offset=4
-  i32.const 1392
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1296
-   i32.const 28
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.load offset=4
-  call $~lib/rt/pure/__release
-  local.get $0
-  i32.const 1496
-  i32.ge_u
-  if
-   global.get $~lib/rt/tlsf/ROOT
-   i32.eqz
-   if
-    call $~lib/rt/tlsf/initialize
-   end
-   global.get $~lib/rt/tlsf/ROOT
-   local.get $0
-   i32.const 4
-   i32.sub
-   local.set $1
-   local.get $0
-   i32.const 15
-   i32.and
-   i32.eqz
-   i32.const 0
-   local.get $0
-   select
-   if (result i32)
-    local.get $1
-    i32.load
-    i32.const 1
-    i32.and
-    i32.eqz
-   else
-    i32.const 0
-   end
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1232
-    i32.const 563
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
-   call $~lib/rt/tlsf/freeBlock
-  end
- )
  (func $object-literal/testOmittedTypes (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1858,16 +1777,16 @@
    i32.const 1
    i32.shr_u
    local.tee $1
-   i32.const 0
    local.get $1
-   i32.lt_s
+   i32.const 0
+   i32.gt_s
    select
    local.tee $2
    i32.const 5
    local.get $1
-   i32.const 5
    local.get $1
-   i32.lt_s
+   i32.const 5
+   i32.gt_s
    select
    local.tee $3
    local.get $2
@@ -1916,7 +1835,75 @@
   end
   i32.store offset=4
   local.get $0
-  call $object-literal/testUnmanaged
+  i32.load
+  i32.const 123
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1296
+   i32.const 27
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load offset=4
+  i32.const 1392
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1296
+   i32.const 28
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load offset=4
+  call $~lib/rt/pure/__release
+  local.get $0
+  i32.const 1496
+  i32.ge_u
+  if
+   global.get $~lib/rt/tlsf/ROOT
+   i32.eqz
+   if
+    call $~lib/rt/tlsf/initialize
+   end
+   global.get $~lib/rt/tlsf/ROOT
+   local.get $0
+   i32.const 4
+   i32.sub
+   local.set $1
+   local.get $0
+   i32.const 15
+   i32.and
+   i32.eqz
+   i32.const 0
+   local.get $0
+   select
+   if (result i32)
+    local.get $1
+    i32.load
+    i32.const 1
+    i32.and
+    i32.eqz
+   else
+    i32.const 0
+   end
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1232
+    i32.const 563
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
+   call $~lib/rt/tlsf/freeBlock
+  end
   i32.const 65
   i32.const 4
   call $~lib/rt/pure/__new
@@ -2162,10 +2149,95 @@
   i32.const 1
   i32.eq
   if
-   local.get $0
-   i32.const 20
-   i32.add
-   call $~lib/rt/__visit_members
+   block $__inlined_func$~lib/rt/__visit_members
+    block $switch$1$default
+     block $switch$1$case$8
+      block $switch$1$case$5
+       block $switch$1$case$4
+        local.get $0
+        i32.const 12
+        i32.add
+        i32.load
+        br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$case$5 $__inlined_func$~lib/rt/__visit_members $switch$1$case$5 $switch$1$case$8 $switch$1$default
+       end
+       local.get $0
+       i32.load offset=20
+       local.tee $1
+       if
+        local.get $1
+        call $~lib/rt/pure/__visit
+       end
+       br $__inlined_func$~lib/rt/__visit_members
+      end
+      local.get $0
+      i32.load offset=24
+      local.tee $1
+      if
+       local.get $1
+       call $~lib/rt/pure/__visit
+      end
+      br $__inlined_func$~lib/rt/__visit_members
+     end
+     local.get $0
+     i32.load offset=20
+     local.tee $1
+     if
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     local.get $0
+     i32.load offset=24
+     local.tee $1
+     if
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     local.get $0
+     i32.load offset=28
+     local.tee $1
+     if
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     local.get $0
+     i32.load offset=32
+     local.tee $1
+     if
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     local.get $0
+     i32.load offset=36
+     local.tee $1
+     if
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     local.get $0
+     i32.load offset=40
+     local.tee $1
+     if
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     local.get $0
+     i32.load offset=44
+     local.tee $1
+     if
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     local.get $0
+     i32.load offset=48
+     local.tee $1
+     if
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     br $__inlined_func$~lib/rt/__visit_members
+    end
+    unreachable
+   end
    local.get $2
    i32.const -2147483648
    i32.and
@@ -2182,8 +2254,7 @@
    call $~lib/rt/tlsf/freeBlock
   else
    local.get $1
-   i32.const 0
-   i32.le_u
+   i32.eqz
    if
     i32.const 0
     i32.const 1168
@@ -2214,98 +2285,5 @@
   i32.const 20
   i32.sub
   call $~lib/rt/pure/decrement
- )
- (func $~lib/rt/__visit_members (param $0 i32)
-  (local $1 i32)
-  block $switch$1$default
-   block $switch$1$case$8
-    block $switch$1$case$5
-     block $switch$1$case$4
-      block $switch$1$case$2
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$2 $switch$1$case$5 $switch$1$case$8 $switch$1$default
-      end
-      return
-     end
-     local.get $0
-     i32.load
-     local.tee $0
-     if
-      local.get $0
-      call $~lib/rt/pure/__visit
-     end
-     return
-    end
-    local.get $0
-    i32.load offset=4
-    local.tee $0
-    if
-     local.get $0
-     call $~lib/rt/pure/__visit
-    end
-    return
-   end
-   local.get $0
-   i32.load
-   local.tee $1
-   if
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=4
-   local.tee $1
-   if
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=8
-   local.tee $1
-   if
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=12
-   local.tee $1
-   if
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=16
-   local.tee $1
-   if
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=20
-   local.tee $1
-   if
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=24
-   local.tee $1
-   if
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=28
-   local.tee $0
-   if
-    local.get $0
-    call $~lib/rt/pure/__visit
-   end
-   return
-  end
-  unreachable
  )
 )

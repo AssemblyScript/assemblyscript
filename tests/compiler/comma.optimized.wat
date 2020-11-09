@@ -81,9 +81,9 @@
   i32.const 2
   global.set $comma/a
   loop $for-loop|0
-   local.get $0
    global.get $comma/a
-   i32.lt_s
+   local.get $0
+   i32.gt_s
    if
     global.get $comma/a
     i32.const 1

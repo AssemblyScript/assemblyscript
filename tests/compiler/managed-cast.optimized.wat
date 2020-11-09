@@ -1,7 +1,7 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -565,85 +565,6 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/initialize
-  (local $0 i32)
-  (local $1 i32)
-  i32.const 1
-  memory.size
-  local.tee $0
-  i32.gt_s
-  if (result i32)
-   i32.const 1
-   local.get $0
-   i32.sub
-   memory.grow
-   i32.const 0
-   i32.lt_s
-  else
-   i32.const 0
-  end
-  if
-   unreachable
-  end
-  i32.const 1472
-  i32.const 0
-  i32.store
-  i32.const 3040
-  i32.const 0
-  i32.store
-  loop $for-loop|0
-   local.get $1
-   i32.const 23
-   i32.lt_u
-   if
-    local.get $1
-    i32.const 2
-    i32.shl
-    i32.const 1472
-    i32.add
-    i32.const 0
-    i32.store offset=4
-    i32.const 0
-    local.set $0
-    loop $for-loop|1
-     local.get $0
-     i32.const 16
-     i32.lt_u
-     if
-      local.get $0
-      local.get $1
-      i32.const 4
-      i32.shl
-      i32.add
-      i32.const 2
-      i32.shl
-      i32.const 1472
-      i32.add
-      i32.const 0
-      i32.store offset=96
-      local.get $0
-      i32.const 1
-      i32.add
-      local.set $0
-      br $for-loop|1
-     end
-    end
-    local.get $1
-    i32.const 1
-    i32.add
-    local.set $1
-    br $for-loop|0
-   end
-  end
-  i32.const 1472
-  i32.const 3044
-  memory.size
-  i32.const 16
-  i32.shl
-  call $~lib/rt/tlsf/addMemory
-  i32.const 1472
-  global.set $~lib/rt/tlsf/ROOT
- )
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -730,9 +651,9 @@
    local.set $1
    local.get $2
    local.get $1
-   local.get $2
    local.get $1
-   i32.gt_s
+   local.get $2
+   i32.lt_s
    select
    memory.grow
    i32.const 0
@@ -849,7 +770,81 @@
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
-   call $~lib/rt/tlsf/initialize
+   memory.size
+   local.tee $2
+   i32.const 1
+   i32.lt_s
+   if (result i32)
+    i32.const 1
+    local.get $2
+    i32.sub
+    memory.grow
+    i32.const 0
+    i32.lt_s
+   else
+    i32.const 0
+   end
+   if
+    unreachable
+   end
+   i32.const 1472
+   i32.const 0
+   i32.store
+   i32.const 3040
+   i32.const 0
+   i32.store
+   loop $for-loop|0
+    local.get $1
+    i32.const 23
+    i32.lt_u
+    if
+     local.get $1
+     i32.const 2
+     i32.shl
+     i32.const 1472
+     i32.add
+     i32.const 0
+     i32.store offset=4
+     i32.const 0
+     local.set $2
+     loop $for-loop|1
+      local.get $2
+      i32.const 16
+      i32.lt_u
+      if
+       local.get $2
+       local.get $1
+       i32.const 4
+       i32.shl
+       i32.add
+       i32.const 2
+       i32.shl
+       i32.const 1472
+       i32.add
+       i32.const 0
+       i32.store offset=96
+       local.get $2
+       i32.const 1
+       i32.add
+       local.set $2
+       br $for-loop|1
+      end
+     end
+     local.get $1
+     i32.const 1
+     i32.add
+     local.set $1
+     br $for-loop|0
+    end
+   end
+   i32.const 1472
+   i32.const 3044
+   memory.size
+   i32.const 16
+   i32.shl
+   call $~lib/rt/tlsf/addMemory
+   i32.const 1472
+   global.set $~lib/rt/tlsf/ROOT
   end
   global.get $~lib/rt/tlsf/ROOT
   call $~lib/rt/tlsf/allocateBlock
@@ -1001,7 +996,7 @@
   (local $9 i32)
   call $managed-cast/Cat#constructor
   call $managed-cast/Cat#constructor
-  local.tee $5
+  local.tee $3
   call $~lib/rt/pure/__retain
   local.tee $0
   i32.eqz
@@ -1016,13 +1011,13 @@
   local.get $0
   call $~lib/rt/pure/__release
   call $managed-cast/Cat#constructor
+  local.tee $4
+  call $managed-cast/testDowncastToNullable
+  call $managed-cast/Cat#constructor
+  local.tee $5
+  call $managed-cast/testDowncastToNullable
+  call $managed-cast/Cat#constructor
   local.tee $6
-  call $managed-cast/testDowncastToNullable
-  call $managed-cast/Cat#constructor
-  local.tee $7
-  call $managed-cast/testDowncastToNullable
-  call $managed-cast/Cat#constructor
-  local.tee $8
   call $~lib/rt/pure/__retain
   local.tee $0
   call $~lib/rt/__instanceof
@@ -1038,10 +1033,10 @@
   local.get $0
   call $~lib/rt/pure/__release
   call $managed-cast/Cat#constructor
-  local.tee $9
+  local.tee $7
   call $~lib/rt/pure/__retain
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   i32.eqz
   if
    i32.const 1248
@@ -1061,13 +1056,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   call $~lib/rt/pure/__release
   call $managed-cast/Cat#constructor
-  local.tee $2
+  local.tee $8
   call $~lib/rt/pure/__retain
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   call $~lib/rt/__instanceof
   i32.eqz
   if
@@ -1079,14 +1074,14 @@
    unreachable
   end
   call $~lib/rt/pure/__retain
-  local.get $0
+  local.get $1
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release
   call $managed-cast/Cat#constructor
-  local.tee $1
+  local.tee $9
   call $~lib/rt/pure/__retain
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   call $~lib/rt/__instanceof
   i32.eqz
   if
@@ -1098,9 +1093,13 @@
    unreachable
   end
   call $~lib/rt/pure/__retain
-  local.get $0
+  local.get $1
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
   call $~lib/rt/pure/__release
   local.get $5
   call $~lib/rt/pure/__release
@@ -1111,10 +1110,6 @@
   local.get $8
   call $~lib/rt/pure/__release
   local.get $9
-  call $~lib/rt/pure/__release
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $1
   call $~lib/rt/pure/__release
  )
  (func $~start
@@ -1194,8 +1189,7 @@
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $1
-   i32.const 0
-   i32.le_u
+   i32.eqz
    if
     i32.const 0
     i32.const 1120
