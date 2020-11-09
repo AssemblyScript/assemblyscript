@@ -350,11 +350,11 @@
   call $~lib/string/String#get:length
   local.set $5
   local.get $2
-  local.tee $3
-  i32.const 0
   local.tee $4
-  local.get $3
+  i32.const 0
+  local.tee $3
   local.get $4
+  local.get $3
   i32.gt_s
   select
   local.tee $3
