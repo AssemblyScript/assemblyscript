@@ -4301,20 +4301,20 @@
           local.get $12
           i32.const 30
           i32.add
-          local.tee $14
+          local.tee $16
           local.get $8
-          local.tee $15
+          local.tee $14
+          local.get $16
           local.get $14
-          local.get $15
           i32.lt_s
           select
-          local.set $14
+          local.set $16
           loop $while-continue|2
            local.get $12
-           local.get $14
+           local.get $16
            i32.lt_s
-           local.set $15
-           local.get $15
+           local.set $14
+           local.get $14
            if
             local.get $10
             local.get $12
@@ -4322,8 +4322,8 @@
             i32.shl
             i32.add
             i32.load16_u
-            local.set $18
-            local.get $18
+            local.set $15
+            local.get $15
             i32.const 64512
             i32.and
             i32.const 55296
@@ -4341,49 +4341,49 @@
              i32.shl
              i32.add
              i32.load16_u offset=2
-             local.set $16
-             local.get $16
+             local.set $18
+             local.get $18
              i32.const 64512
              i32.and
              i32.const 56320
              i32.eq
              if
-              local.get $18
+              local.get $15
               i32.const 55296
               i32.sub
               i32.const 10
               i32.shl
-              local.get $16
+              local.get $18
               i32.const 56320
               i32.sub
               i32.add
               i32.const 65536
               i32.add
-              local.set $18
+              local.set $15
              end
             end
+            local.get $15
+            local.set $18
             local.get $18
-            local.set $16
-            local.get $16
             i32.const 918000
             i32.lt_u
             if (result i32)
              i32.const 5954
-             local.get $16
+             local.get $18
              call $~lib/util/string/stagedBinaryLookup
             else
              i32.const 0
             end
             i32.eqz
             if
+             local.get $15
+             local.set $18
              local.get $18
-             local.set $16
-             local.get $16
              i32.const 127370
              i32.lt_u
              if (result i32)
               i32.const 8962
-              local.get $16
+              local.get $18
               call $~lib/util/string/stagedBinaryLookup
              else
               i32.const 0
@@ -4392,7 +4392,7 @@
              br $~lib/util/string/isFinalSigma|inlined.0
             end
             local.get $12
-            local.get $18
+            local.get $15
             i32.const 65536
             i32.ge_u
             i32.const 1
@@ -4464,7 +4464,7 @@
           i32.shr_u
           i32.const 55296
           i32.or
-          local.set $14
+          local.set $16
           local.get $7
           i32.const 1023
           i32.and
@@ -4476,7 +4476,7 @@
           i32.const 1
           i32.shl
           i32.add
-          local.get $14
+          local.get $16
           local.get $13
           i32.const 16
           i32.shl
