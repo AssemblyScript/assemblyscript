@@ -88,6 +88,7 @@ import {
 } from "./program";
 
 import {
+  findUsedLocals,
   FlowFlags,
   LocalFlags
 } from "./flow";
@@ -1484,7 +1485,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
     if (op != -1) {
       let flow = compiler.currentFlow;
       let nativeType = type.toNativeType();
-      let temp1 = flow.getTempLocal(type);
+      let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
       flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
       let temp2 = flow.getTempLocal(type);
       flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
@@ -1563,7 +1564,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
     if (op != -1) {
       let flow = compiler.currentFlow;
       let nativeType = type.toNativeType();
-      let temp1 = flow.getTempLocal(type);
+      let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
       flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
       let temp2 = flow.getTempLocal(type);
       flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);

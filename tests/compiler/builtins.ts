@@ -561,3 +561,15 @@ assert(isInteger<ReturnType<() => i32>>());
 assert(isInteger<returnof<() => i32>>());
 assert(isManaged<returnof<() => C>>());
 assert(isManaged<ReturnType<() => C>>());
+
+// Issue #1537: Make sure temp. locals are not confused
+
+function max3(a: i32, b: i32, c: i32): i32 {
+  return max(a, max(b, c));
+}
+assert(max3(3, 2, 1) == 3);
+
+function min3(a: i32, b: i32, c: i32): i32 {
+  return min(a, min(b, c));
+}
+assert(min3(1, 2, 3) == 1);

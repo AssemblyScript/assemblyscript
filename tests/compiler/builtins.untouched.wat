@@ -3,6 +3,7 @@
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
@@ -341,6 +342,46 @@
  (func $start:builtins~anonymous|2 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   nop
  )
+ (func $builtins/max3 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  local.tee $5
+  local.get $1
+  local.tee $3
+  local.get $2
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_s
+  select
+  local.tee $3
+  local.get $5
+  local.get $3
+  i32.gt_s
+  select
+ )
+ (func $builtins/min3 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  local.tee $5
+  local.get $1
+  local.tee $3
+  local.get $2
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.lt_s
+  select
+  local.tee $3
+  local.get $5
+  local.get $3
+  i32.lt_s
+  select
+ )
  (func $start:builtins
   (local $0 i32)
   (local $1 i32)
@@ -609,11 +650,11 @@
   i32.xor
   drop
   i32.const 1
-  local.tee $0
-  i32.const 2
   local.tee $1
-  local.get $0
+  i32.const 2
+  local.tee $0
   local.get $1
+  local.get $0
   i32.gt_s
   select
   drop
@@ -682,11 +723,11 @@
    unreachable
   end
   i32.const 1
-  local.tee $0
-  i32.const 2
   local.tee $1
-  local.get $0
+  i32.const 2
+  local.tee $0
   local.get $1
+  local.get $0
   i32.gt_s
   select
   global.set $builtins/i
@@ -854,11 +895,11 @@
    unreachable
   end
   i64.const 1
-  local.tee $2
-  i64.const 2
   local.tee $3
-  local.get $2
+  i64.const 2
+  local.tee $2
   local.get $3
+  local.get $2
   i64.gt_s
   select
   global.set $builtins/I
@@ -2756,6 +2797,36 @@
   drop
   i32.const 1
   drop
+  i32.const 3
+  i32.const 2
+  i32.const 1
+  call $builtins/max3
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 570
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32.const 2
+  i32.const 3
+  call $builtins/min3
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 575
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
