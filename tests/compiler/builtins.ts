@@ -573,3 +573,13 @@ function min3(a: i32, b: i32, c: i32): i32 {
   return min(a, min(b, c));
 }
 assert(min3(1, 2, 3) == 1);
+
+function rotl3(a: i8, b: i8, c: i8): i32 {
+  return rotl(a, rotl(b, c));
+}
+assert(rotl3(3, 2, 1) == 48);
+
+function rotr3(a: i8, b: i8, c: i8): i32 {
+  return rotr(a, rotr(b, c));
+}
+assert(rotr3(48, 8, 1) == 3);

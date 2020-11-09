@@ -1186,7 +1186,7 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U16: {
         // (value << (shift & mask)) | (value >>> ((0 - shift) & mask))
         let flow = compiler.currentFlow;
-        let temp1 = flow.getTempLocal(type);
+        let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
         flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
         let temp2 = flow.getTempLocal(type);
         flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
@@ -1267,7 +1267,7 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U16: {
         // (value >>> (shift & mask)) | (value << ((0 - shift) & mask))
         let flow = compiler.currentFlow;
-        let temp1 = flow.getTempLocal(type);
+        let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
         flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
         let temp2 = flow.getTempLocal(type);
         flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
