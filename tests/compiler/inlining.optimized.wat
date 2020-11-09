@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -79,9 +79,9 @@
    i32.const 16
    i32.shr_u
    local.tee $3
-   local.get $5
    local.get $3
-   i32.gt_s
+   local.get $5
+   i32.lt_s
    select
    memory.grow
    i32.const 0
@@ -119,8 +119,24 @@
   i32.const 16
   i32.add
  )
- (func $inlining/test_ctor
+ (func $~start
   (local $0 i32)
+  i32.const 2
+  i32.const 1104
+  i32.load
+  call_indirect (type $i32_=>_i32)
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 68
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1116
+  global.set $~lib/rt/stub/offset
   i32.const 16
   i32.const 5
   call $~lib/rt/stub/__new
@@ -198,24 +214,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  i32.const 2
-  i32.const 1104
-  i32.load
-  call_indirect (type $i32_=>_i32)
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 68
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1116
-  global.set $~lib/rt/stub/offset
-  call $inlining/test_ctor
  )
 )

@@ -61,9 +61,9 @@
    i32.const 16
    i32.shr_u
    local.tee $1
-   local.get $2
    local.get $1
-   i32.gt_s
+   local.get $2
+   i32.lt_s
    select
    memory.grow
    i32.const 0
@@ -303,30 +303,24 @@
    i32.const 1
    i32.shr_u
    local.tee $0
-   i32.const 2
    local.get $0
-   i32.lt_s
+   i32.const 2
+   i32.gt_s
    select
    local.tee $1
-   i32.const 2147483647
    local.get $0
-   i32.const 2147483647
    local.get $0
-   i32.lt_s
-   select
-   local.tee $2
    local.get $1
-   local.get $2
-   i32.gt_s
+   i32.lt_s
    select
    i32.const 1
    i32.shl
    local.tee $3
    local.get $1
-   local.get $2
+   local.get $0
+   local.get $0
    local.get $1
-   local.get $2
-   i32.lt_s
+   i32.gt_s
    select
    i32.const 1
    i32.shl
