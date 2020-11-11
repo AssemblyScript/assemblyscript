@@ -1705,7 +1705,7 @@ export class Module {
     return binary;
   }
 
-  toText(): string {
+  toText(watFormat: bool = true): string {
     throw new Error("not implemented"); // JS glue overrides this
   }
 
