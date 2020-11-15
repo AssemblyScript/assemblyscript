@@ -1434,7 +1434,7 @@ declare class DataView {
 
 interface ArrayLike<T> {
   length: i32;
-  // [key: number]: T;
+  [key: number]: T;
 }
 
 /** Interface for a typed view on an array buffer. */
