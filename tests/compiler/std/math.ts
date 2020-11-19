@@ -4041,50 +4041,72 @@ assert(NativeMath.clz32(f64.EPSILON) == 32);
 
 // ipow64 /////////////////////////////////////////////////////////////////////////////////////
 
-assert(ipow64(0, 0) == 1);
-assert(ipow64(0, 1) == 0);
-assert(ipow64(0, 2) == 0);
-assert(ipow64(0, 3) == 0);
+var x: i64;
 
-assert(ipow64(1, 0) == 1);
-assert(ipow64(1, 1) == 1);
-assert(ipow64(1, 2) == 1);
-assert(ipow64(1, 3) == 1);
+x = 0;
+assert(ipow64(x, 0) == 1);
+assert(ipow64(x, 1) == 0);
+assert(ipow64(x, 2) == 0);
+assert(ipow64(x, 3) == 0);
 
-assert(ipow64(2, 0) == 1);
-assert(ipow64(2, 1) == 2);
-assert(ipow64(2, 2) == 4);
-assert(ipow64(2, 3) == 8);
+x = 1;
+assert(ipow64(x, 0) == 1);
+assert(ipow64(x, 1) == 1);
+assert(ipow64(x, 2) == 1);
+assert(ipow64(x, 3) == 1);
 
-assert(ipow64(-1, 0) ==  1);
-assert(ipow64(-1, 1) == -1);
-assert(ipow64(-1, 2) ==  1);
-assert(ipow64(-1, 3) == -1);
+x = 2;
+assert(ipow64(x, 0) == 1);
+assert(ipow64(x, 1) == 2);
+assert(ipow64(x, 2) == 4);
+assert(ipow64(x, 3) == 8);
 
-assert(ipow64(-2, 0) ==  1);
-assert(ipow64(-2, 1) == -2);
-assert(ipow64(-2, 2) ==  4);
-assert(ipow64(-2, 3) == -8);
+x = -1;
+assert(ipow64(x, 0) ==  1);
+assert(ipow64(x, 1) == -1);
+assert(ipow64(x, 2) ==  1);
+assert(ipow64(x, 3) == -1);
 
-assert(ipow64(2,  63) ==  9223372036854775808);
-assert(ipow64(3,  40) ==  12157665459056928801);
-assert(ipow64(2,  64) ==  0);                   // should overflow
-assert(ipow64(3,  41) == -420491770248316829);  // should overflow
-assert(ipow64(3, 128) == -9204772141784466943); // should overflow
+x = -2;
+assert(ipow64(x, 0) ==  1);
+assert(ipow64(x, 1) == -2);
+assert(ipow64(x, 2) ==  4);
+assert(ipow64(x, 3) == -8);
 
-assert(ipow64(1, -1) == 1);
-assert(ipow64(2, -1) == 0);
+x = 2;
+assert(ipow64(x,  63) ==  9223372036854775808);
+assert(ipow64(x,  64) ==  0);
+
+x = 3;
+assert(ipow64(x,  40) ==  12157665459056928801); // should overflow
+assert(ipow64(x,  41) == -420491770248316829);   // should overflow
+assert(ipow64(x, 128) == -9204772141784466943);  // should overflow
+
+x = 1;
+assert(ipow64(x, -1) == 1);
+
+x = 2;
+assert(ipow64(x, -1) == 0);
 
 // integer pow operators
 
-assert(  0  ** 0 ==  1);
-assert(  0  ** 1 ==  0);
-assert(  1  ** 3 ==  1);
-assert((-2) ** 3 == -8);
-assert((-1) ** 0 ==  1);
-assert((-1) ** -1 == -1);
-assert((-1) ** -2 ==  1);
-assert((-1) ** -3 == -1);
+var y: i32;
+
+y = 0;
+assert(y  ** 0 ==  1);
+assert(y  ** 1 ==  0);
+
+y = 1;
+assert(y  ** 3 ==  1);
+
+y = -2;
+assert(y ** 3 == -8);
+
+y = -1;
+assert(y **  0 ==  1);
+assert(y ** -1 == -1);
+assert(y ** -2 ==  1);
+assert(y ** -3 == -1);
 
 assert(false ** -2 == 0);
 assert(false ** -1 == 0);
@@ -4104,13 +4126,24 @@ assert((<u16>4) ** 7 ==  16384);
 assert((<u16>4) ** 8 ==  0);   // should overflow
 assert((<u16>5) ** 10 == 761); // should overflow
 
-assert((<u64>0) ** 0 == 1);
-assert((<u64>0) ** 1 == 0);
-assert((<u64>1) ** 3 == 1);
-assert((<u64>2) ** 3 == 8);
-assert((<u64>0xFFFFFFFF) ** 3 == 12884901887);
-assert((<u64>0xFFFF) ** 3 == 281462092005375);
-assert((<u64>0xFFFF) ** 8 == 18430981595272314881);
+let ux: u64;
+ux = 0;
+assert(ux ** 0 == 1);
+assert(ux ** 1 == 0);
+
+ux = 1;
+assert(ux ** 3 == 1);
+
+ux = 2;
+assert(ux ** 3 == 8);
+
+ux = 0xFFFFFFFF;
+assert(ux ** 3 == 12884901887);
+
+ux = 0xFFFF;
+assert(ux ** 3 == 281462092005375);
+assert(ux ** 8 == 18430981595272314881);
+
 assert(0xF123 ** 4 as u64 == 14521559183993082321);
 assert(0xF123 as u64 ** 4 == 14521559183993082321);
 // Fermat's Last Theorem
