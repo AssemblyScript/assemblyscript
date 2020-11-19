@@ -128,11 +128,11 @@
       i32.const 2
       i32.add
      else
+      local.get $3
       local.get $2
       i32.const 2
       i32.add
-      local.get $3
-      i32.lt_u
+      i32.gt_u
       i32.const 0
       local.get $1
       i32.const 64512
@@ -294,11 +294,10 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   i32.const 5
-  local.set $1
+  local.set $2
   i32.const 1399
-  local.set $0
+  local.set $1
   i32.const 0
   i32.const 12
   i32.store
@@ -315,73 +314,73 @@
   call $~lib/string/String.UTF8.encodeUnsafe
   i32.const 23
   i32.add
-  local.tee $2
+  local.tee $0
   i32.const 40
   i32.store8
   i32.const 1399
   call $~lib/util/number/decimalCount32
-  local.tee $4
-  local.get $2
+  local.tee $3
+  local.get $0
   i32.const 1
   i32.add
   i32.add
-  local.set $3
+  local.set $0
   loop $do-continue|0
    local.get $0
-   i32.const 10
-   i32.div_u
-   local.get $3
    i32.const 1
    i32.sub
-   local.tee $3
-   local.get $0
+   local.tee $0
+   local.get $1
    i32.const 10
    i32.rem_u
    i32.const 48
    i32.add
    i32.store8
-   local.tee $0
+   local.get $1
+   i32.const 10
+   i32.div_u
+   local.tee $1
    br_if $do-continue|0
   end
+  local.get $0
   local.get $3
-  local.get $4
   i32.add
   local.tee $0
   i32.const 58
   i32.store8
   i32.const 5
   call $~lib/util/number/decimalCount32
-  local.tee $2
+  local.tee $1
   local.get $0
   i32.const 1
   i32.add
   i32.add
-  local.set $3
+  local.set $0
   loop $do-continue|1
-   local.get $1
-   i32.const 10
-   i32.div_u
-   local.get $3
+   local.get $0
    i32.const 1
    i32.sub
-   local.tee $3
-   local.get $1
+   local.tee $0
+   local.get $2
    i32.const 10
    i32.rem_u
    i32.const 48
    i32.add
    i32.store8
-   local.tee $1
+   local.get $2
+   i32.const 10
+   i32.div_u
+   local.tee $2
    br_if $do-continue|1
   end
-  local.get $2
-  local.get $3
+  local.get $0
+  local.get $1
   i32.add
-  local.tee $1
+  local.tee $0
   i32.const 2601
   i32.store16
   i32.const 4
-  local.get $1
+  local.get $0
   i32.const -10
   i32.add
   i32.store

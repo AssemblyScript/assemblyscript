@@ -899,10 +899,10 @@
  (func $~lib/rt/tlsf/initialize
   (local $0 i32)
   (local $1 i32)
-  i32.const 1
   memory.size
   local.tee $0
-  i32.gt_s
+  i32.const 1
+  i32.lt_s
   if (result i32)
    i32.const 1
    local.get $0
@@ -1291,12 +1291,12 @@
     unreachable
    end
   end
+  local.get $2
   local.get $1
   i32.load
   i32.const -4
   i32.and
-  local.get $2
-  i32.lt_u
+  i32.gt_u
   if
    i32.const 0
    i32.const 1216
@@ -1480,9 +1480,9 @@
       i32.sub
       return
      else
-      local.get $6
       local.get $5
-      i32.gt_u
+      local.get $6
+      i32.lt_u
       if (result i32)
        local.get $3
       else
@@ -1829,6 +1829,7 @@
      i32.const 1
      i32.and
      if
+      local.get $5
       local.get $4
       i32.const 4
       i32.add
@@ -1837,8 +1838,7 @@
       i32.and
       i32.add
       local.tee $4
-      local.get $5
-      i32.ge_u
+      i32.le_u
       if
        local.get $3
        local.get $7
@@ -2020,9 +2020,9 @@
         local.set $9
         block $~lib/util/casemap/bsearch|inlined.0
          loop $while-continue|1
-          local.get $9
           local.get $1
-          i32.le_s
+          local.get $9
+          i32.ge_s
           if
            local.get $1
            local.get $9
@@ -2501,6 +2501,8 @@
         i32.const 1
         i32.shl
         i32.add
+        i32.const 962
+        i32.const 963
         local.get $8
         i32.const 1
         i32.gt_u
@@ -2514,9 +2516,9 @@
           i32.const 30
           i32.sub
           local.tee $1
-          i32.const 0
           local.get $1
-          i32.gt_s
+          i32.const 0
+          i32.lt_s
           select
           local.set $9
           loop $while-continue|1
@@ -2645,9 +2647,9 @@
           select
           local.set $2
           loop $while-continue|2
-           local.get $3
            local.get $2
-           i32.lt_s
+           local.get $3
+           i32.gt_s
            if
             local.get $0
             local.get $3
@@ -2730,11 +2732,7 @@
         else
          i32.const 0
         end
-        if (result i32)
-         i32.const 962
-        else
-         i32.const 963
-        end
+        select
         i32.store16
        else
         local.get $1
@@ -2955,25 +2953,23 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   i64.eqz
   if
    i32.const 18720
    return
   end
+  i64.const 0
+  local.get $0
+  i64.sub
+  local.get $0
   local.get $0
   i64.const 63
   i64.shr_u
   i32.wrap_i64
   local.tee $3
-  if
-   i64.const 0
-   local.get $0
-   i64.sub
-   local.set $0
-  end
-  local.get $0
+  select
+  local.tee $0
   i64.const 4294967295
   i64.le_u
   if
@@ -3028,14 +3024,6 @@
    local.tee $4
    local.set $5
    loop $do-continue|0
-    local.get $1
-    i32.const 10
-    i32.rem_u
-    local.set $6
-    local.get $1
-    i32.const 10
-    i32.div_u
-    local.set $1
     local.get $5
     local.get $2
     i32.const 1
@@ -3044,11 +3032,16 @@
     i32.const 1
     i32.shl
     i32.add
-    local.get $6
+    local.get $1
+    i32.const 10
+    i32.rem_u
     i32.const 48
     i32.add
     i32.store16
     local.get $1
+    i32.const 10
+    i32.div_u
+    local.tee $1
     br_if $do-continue|0
    end
   else
@@ -3105,15 +3098,6 @@
    local.tee $4
    local.set $2
    loop $do-continue|00
-    local.get $0
-    i64.const 10
-    i64.rem_u
-    i32.wrap_i64
-    local.set $5
-    local.get $0
-    i64.const 10
-    i64.div_u
-    local.set $0
     local.get $2
     local.get $1
     i32.const 1
@@ -3122,11 +3106,17 @@
     i32.const 1
     i32.shl
     i32.add
-    local.get $5
+    local.get $0
+    i64.const 10
+    i64.rem_u
+    i32.wrap_i64
     i32.const 48
     i32.add
     i32.store16
     local.get $0
+    i64.const 10
+    i64.div_u
+    local.tee $0
     i64.const 0
     i64.ne
     br_if $do-continue|00
@@ -3194,8 +3184,6 @@
    local.tee $0
    i32.eqz
    if
-    local.get $1
-    call $~lib/rt/pure/__release
     i32.const 1056
     local.set $0
     br $__inlined_func$~lib/string/String#concat
@@ -3213,9 +3201,9 @@
    local.get $1
    local.get $6
    call $~lib/memory/memory.copy
-   local.get $1
-   call $~lib/rt/pure/__release
   end
+  local.get $1
+  call $~lib/rt/pure/__release
   local.get $2
   call $~lib/rt/pure/__release
   local.get $5
@@ -4972,8 +4960,7 @@
    call $~lib/rt/tlsf/freeBlock
   else
    local.get $1
-   i32.const 0
-   i32.le_u
+   i32.eqz
    if
     i32.const 0
     i32.const 1088

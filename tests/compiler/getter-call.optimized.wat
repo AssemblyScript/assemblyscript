@@ -48,9 +48,9 @@
    i32.const 16
    i32.shr_u
    local.tee $1
-   local.get $2
    local.get $1
-   i32.gt_s
+   local.get $2
+   i32.lt_s
    select
    memory.grow
    i32.const 0

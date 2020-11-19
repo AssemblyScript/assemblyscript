@@ -93,7 +93,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1388
   memory.size
   local.tee $1
   i32.const 16
@@ -103,7 +102,8 @@
   i32.const -16
   i32.and
   local.tee $0
-  i32.gt_u
+  i32.const 1388
+  i32.lt_u
   if
    local.get $1
    i32.const 66923
@@ -114,9 +114,9 @@
    i32.const 16
    i32.shr_u
    local.tee $0
-   local.get $1
    local.get $0
-   i32.gt_s
+   local.get $1
+   i32.lt_s
    select
    memory.grow
    i32.const 0
