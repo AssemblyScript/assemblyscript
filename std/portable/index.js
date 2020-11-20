@@ -270,7 +270,7 @@ Array.prototype.sort = function sort(comparator) {
 globalScope["isInteger"] = Number.isInteger;
 
 globalScope["isFloat"] = function isFloat(arg) {
-  return typeof arg === "number";
+  return typeof arg === "number" && !isInteger(arg);
 };
 
 globalScope["isNullable"] = function isNullable(arg) {
