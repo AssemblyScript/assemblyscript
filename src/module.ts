@@ -97,7 +97,7 @@ export enum ExpressionId {
   SIMDTernary = 32 /* _BinaryenSIMDTernaryId */,
   SIMDShift = 33 /* _BinaryenSIMDShiftId */,
   SIMDLoad = 34 /* _BinaryenSIMDLoadId */,
-  SIMDLoadStoreLane = 35 /* SIMDLoadStoreLaneId */,
+  // SIMDLoadStoreLane = 35,
   MemoryInit = 36 /* _BinaryenMemoryInitId */,
   DataDrop = 37 /* _BinaryenDataDropId */,
   MemoryCopy = 38 /* _BinaryenMemoryCopyId */,
