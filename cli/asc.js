@@ -856,19 +856,22 @@ exports.main = function main(argv, options, callback) {
 
     // Write text (also fallback)
     if (opts.textFile != null || !hasOutput) {
-      let wat;
+      let out;
       if (opts.textFile != null && opts.textFile.length) {
+        // use superset text format when extension is `.wast`.
+        // Otherwise use official stack IR format (wat).
+        let watFormat = !opts.textFile.endsWith('.wast');
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          wat = module.toText();
+          out = module.toText(watFormat);
         });
-        writeFile(opts.textFile, wat, baseDir);
+        writeFile(opts.textFile, out, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          wat = module.toText();
+          out = module.toText();
         });
-        writeStdout(wat);
+        writeStdout(out);
       }
     }
 
