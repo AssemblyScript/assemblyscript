@@ -3099,11 +3099,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -3124,11 +3124,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -3229,11 +3229,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -3254,11 +3254,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -4027,11 +4027,11 @@
    select
   else
    local.get $5
-   local.tee $10
-   local.get $9
    local.tee $11
-   local.get $10
+   local.get $9
+   local.tee $10
    local.get $11
+   local.get $10
    i32.lt_s
    select
   end
@@ -4052,11 +4052,11 @@
    select
   else
    local.get $4
-   local.tee $10
-   local.get $9
    local.tee $11
-   local.get $10
+   local.get $9
+   local.tee $10
    local.get $11
+   local.get $10
    i32.lt_s
    select
   end
@@ -5514,11 +5514,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -5539,11 +5539,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -5627,11 +5627,11 @@
    select
   else
    local.get $5
-   local.tee $10
-   local.get $9
    local.tee $11
-   local.get $10
+   local.get $9
+   local.tee $10
    local.get $11
+   local.get $10
    i32.lt_s
    select
   end
@@ -5652,11 +5652,11 @@
    select
   else
    local.get $4
-   local.tee $10
-   local.get $9
    local.tee $11
-   local.get $10
+   local.get $9
+   local.tee $10
    local.get $11
+   local.get $10
    i32.lt_s
    select
   end
@@ -5669,8 +5669,8 @@
    local.get $5
    local.get $4
    i32.lt_s
-   local.set $10
-   local.get $10
+   local.set $11
+   local.get $11
    if
     local.get $8
     local.get $5
@@ -5800,11 +5800,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -5825,11 +5825,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -5905,11 +5905,11 @@
    local.get $8
    local.get $6
    i32.add
-   local.tee $10
-   i32.const 0
    local.tee $11
-   local.get $10
+   i32.const 0
+   local.tee $10
    local.get $11
+   local.get $10
    i32.gt_s
    select
   else
@@ -5939,15 +5939,15 @@
    select
   else
    local.get $5
-   local.tee $11
-   local.get $8
    local.tee $12
-   local.get $11
+   local.get $8
+   local.tee $11
    local.get $12
+   local.get $11
    i32.lt_s
    select
   end
-  local.set $11
+  local.set $12
   local.get $4
   i32.const 0
   i32.lt_s
@@ -5955,48 +5955,48 @@
    local.get $8
    local.get $4
    i32.add
-   local.tee $12
+   local.tee $11
    i32.const 0
    local.tee $13
-   local.get $12
+   local.get $11
    local.get $13
    i32.gt_s
    select
   else
    local.get $4
-   local.tee $12
-   local.get $8
    local.tee $13
-   local.get $12
+   local.get $8
+   local.tee $11
    local.get $13
+   local.get $11
    i32.lt_s
    select
   end
-  local.set $12
+  local.set $13
+  local.get $13
   local.get $12
-  local.get $11
   i32.sub
-  local.tee $13
+  local.tee $11
   local.get $8
   local.get $10
   i32.sub
   local.tee $14
-  local.get $13
+  local.get $11
   local.get $14
   i32.lt_s
   select
-  local.set $13
+  local.set $11
   local.get $9
   local.get $10
   i32.const 2
   i32.shl
   i32.add
   local.get $9
-  local.get $11
+  local.get $12
   i32.const 2
   i32.shl
   i32.add
-  local.get $13
+  local.get $11
   i32.const 2
   i32.shl
   call $~lib/memory/memory.copy
@@ -19037,11 +19037,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -19062,11 +19062,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -19363,11 +19363,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -19388,11 +19388,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -19689,11 +19689,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -19714,11 +19714,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -20021,11 +20021,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -20046,11 +20046,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -20561,11 +20561,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -20586,11 +20586,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -20881,11 +20881,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -20906,11 +20906,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -21204,11 +21204,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -21229,11 +21229,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -21527,11 +21527,11 @@
    select
   else
    local.get $4
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -21552,11 +21552,11 @@
    select
   else
    local.get $3
-   local.tee $7
-   local.get $6
    local.tee $8
-   local.get $7
+   local.get $6
+   local.tee $7
    local.get $8
+   local.get $7
    i32.lt_s
    select
   end
@@ -29976,11 +29976,11 @@
   local.get $5
   i32.gt_s
   select
-  local.tee $4
-  local.get $3
   local.tee $5
-  local.get $4
+  local.get $3
+  local.tee $4
   local.get $5
+  local.get $4
   i32.lt_s
   select
   local.set $6
@@ -29992,11 +29992,11 @@
   local.get $5
   i32.gt_s
   select
-  local.tee $4
-  local.get $3
   local.tee $5
-  local.get $4
+  local.get $3
+  local.tee $4
   local.get $5
+  local.get $4
   i32.lt_s
   select
   local.set $7
@@ -30012,11 +30012,11 @@
   i32.shl
   local.set $8
   local.get $6
-  local.tee $4
-  local.get $7
   local.tee $5
-  local.get $4
+  local.get $7
+  local.tee $4
   local.get $5
+  local.get $4
   i32.gt_s
   select
   i32.const 1
@@ -35038,11 +35038,11 @@
    select
   else
    local.get $1
-   local.tee $4
-   local.get $3
    local.tee $5
-   local.get $4
+   local.get $3
+   local.tee $4
    local.get $5
+   local.get $4
    i32.lt_s
    select
   end
@@ -35063,11 +35063,11 @@
    select
   else
    local.get $2
-   local.tee $4
-   local.get $3
    local.tee $5
-   local.get $4
+   local.get $3
+   local.tee $4
    local.get $5
+   local.get $4
    i32.lt_s
    select
   end

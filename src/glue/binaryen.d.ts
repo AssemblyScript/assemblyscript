@@ -105,6 +105,7 @@ export declare function _BinaryenMemoryFillId(): BinaryenExpressionId;
 export declare function _BinaryenRefNullId(): BinaryenExpressionId;
 export declare function _BinaryenRefIsNullId(): BinaryenExpressionId;
 export declare function _BinaryenRefFuncId(): BinaryenExpressionId;
+export declare function _BinaryenRefEqId(): BinaryenExpressionId;
 export declare function _BinaryenTryId(): BinaryenExpressionId;
 export declare function _BinaryenThrowId(): BinaryenExpressionId;
 export declare function _BinaryenRethrowId(): BinaryenExpressionId;

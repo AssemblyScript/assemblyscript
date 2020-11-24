@@ -222,11 +222,11 @@
      i32.add
      i32.const 53
      i32.sub
-     local.tee $3
-     i32.const -1022
      local.tee $4
-     local.get $3
+     i32.const -1022
+     local.tee $3
      local.get $4
+     local.get $3
      i32.gt_s
      select
      local.set $1
@@ -451,11 +451,11 @@
      i32.add
      i32.const 24
      i32.sub
-     local.tee $3
-     i32.const -126
      local.tee $4
-     local.get $3
+     i32.const -126
+     local.tee $3
      local.get $4
+     local.get $3
      i32.gt_s
      select
      local.set $1

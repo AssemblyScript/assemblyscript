@@ -3069,11 +3069,11 @@
    select
   else
    local.get $1
-   local.tee $4
-   local.get $3
    local.tee $5
-   local.get $4
+   local.get $3
+   local.tee $4
    local.get $5
+   local.get $4
    i32.lt_s
    select
   end
@@ -3094,11 +3094,11 @@
    select
   else
    local.get $2
-   local.tee $4
-   local.get $3
    local.tee $5
-   local.get $4
+   local.get $3
+   local.tee $4
    local.get $5
+   local.get $4
    i32.lt_s
    select
   end

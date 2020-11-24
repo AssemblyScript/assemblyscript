@@ -3025,11 +3025,11 @@
   local.get $5
   i32.gt_s
   select
-  local.tee $4
-  local.get $3
   local.tee $5
-  local.get $4
+  local.get $3
+  local.tee $4
   local.get $5
+  local.get $4
   i32.lt_s
   select
   local.set $6
@@ -3041,11 +3041,11 @@
   local.get $5
   i32.gt_s
   select
-  local.tee $4
-  local.get $3
   local.tee $5
-  local.get $4
+  local.get $3
+  local.tee $4
   local.get $5
+  local.get $4
   i32.lt_s
   select
   local.set $7
@@ -3061,11 +3061,11 @@
   i32.shl
   local.set $8
   local.get $6
-  local.tee $4
-  local.get $7
   local.tee $5
-  local.get $4
+  local.get $7
+  local.tee $4
   local.get $5
+  local.get $4
   i32.gt_s
   select
   i32.const 1

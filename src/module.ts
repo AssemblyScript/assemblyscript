@@ -86,8 +86,8 @@ export enum ExpressionId {
   MemoryGrow = 21 /* _BinaryenMemoryGrowId */,
   Nop = 22 /* _BinaryenNopId */,
   Unreachable = 23 /* _BinaryenUnreachableId */,
-  AtomicCmpxchg = 25 /* _BinaryenAtomicCmpxchgId */,
   AtomicRMW = 24 /* _BinaryenAtomicRMWId */,
+  AtomicCmpxchg = 25 /* _BinaryenAtomicCmpxchgId */,
   AtomicWait = 26 /* _BinaryenAtomicWaitId */,
   AtomicNotify = 27 /* _BinaryenAtomicNotifyId */,
   AtomicFence = 28 /* _BinaryenAtomicFenceId */,
@@ -97,6 +97,7 @@ export enum ExpressionId {
   SIMDTernary = 32 /* _BinaryenSIMDTernaryId */,
   SIMDShift = 33 /* _BinaryenSIMDShiftId */,
   SIMDLoad = 34 /* _BinaryenSIMDLoadId */,
+  // SIMDLoadStoreLane = 35,
   MemoryInit = 36 /* _BinaryenMemoryInitId */,
   DataDrop = 37 /* _BinaryenDataDropId */,
   MemoryCopy = 38 /* _BinaryenMemoryCopyId */,
@@ -105,6 +106,7 @@ export enum ExpressionId {
   RefNull = 41 /* _BinaryenRefNullId */,
   RefIsNull = 42 /* _BinaryenRefIsNullId */,
   RefFunc = 43 /* _BinaryenRefFuncId */,
+  RefEq = 44 /* _BinaryenRefEqId */,
   Try = 45 /* _BinaryenTryId */,
   Throw = 46 /* _BinaryenThrowId */,
   Rethrow = 47 /* _BinaryenRethrowId */,
@@ -193,6 +195,7 @@ export enum UnaryOp {
   AllTrueI8x16 = 70 /* _BinaryenAllTrueVecI8x16 */,
   BitmaskI8x16 = 71 /* __BinaryenBitmaskVecI8x16 */,
   AbsI16x8 = 72 /* __BinaryenAbsVecI16x8 */,
+  // PopcntVecI8x16
   NegI16x8 = 74 /* _BinaryenNegVecI16x8 */,
   AnyTrueI16x8 = 75 /* _BinaryenAnyTrueVecI16x8 */,
   AllTrueI16x8 = 76 /* _BinaryenAllTrueVecI16x8 */,
@@ -386,6 +389,11 @@ export enum BinaryOp {
   MaxI16x8 = 143 /* _BinaryenMaxSVecI16x8 */,
   MaxU16x8 = 144 /* _BinaryenMaxUVecI16x8 */,
   AvgrU16x8 = 145 /* _BinaryenAvgrUVecI16x8 */,
+  // Q15MulrSatSVecI16x8,
+  // ExtMulLowSVecI16x8,
+  // ExtMulHighSVecI16x8,
+  // ExtMulLowUVecI16x8,
+  // ExtMulHighUVecI16x8,
   AddI32x4 = 151 /* _BinaryenAddVecI32x4 */,
   SubI32x4 = 152 /* _BinaryenSubVecI32x4 */,
   MulI32x4 = 153 /* _BinaryenMulVecI32x4 */,
@@ -396,7 +404,10 @@ export enum BinaryOp {
   DotI16x8 = 158 /* _BinaryenDotSVecI16x8ToVecI32x4 */,
   AddI64x2 = 163 /* _BinaryenAddVecI64x2 */,
   SubI64x2 = 164 /* _BinaryenSubVecI64x2 */,
-
+  // ExtMulLowSVecI64x2
+  // ExtMulHighSVecI64x2
+  // ExtMulLowUVecI64x2
+  // ExtMulHighUVecI64x2
   AddF32x4 = 170 /* _BinaryenAddVecF32x4 */,
   SubF32x4 = 171 /* _BinaryenSubVecF32x4 */,
   MulF32x4 = 172 /* _BinaryenMulVecF32x4 */,
@@ -1694,7 +1705,7 @@ export class Module {
     return binary;
   }
 
-  toText(): string {
+  toText(watFormat: bool = true): string {
     throw new Error("not implemented"); // JS glue overrides this
   }
 
