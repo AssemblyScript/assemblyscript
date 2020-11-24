@@ -1,4 +1,4 @@
-import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE } from "./common";
+import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG } from "./common";
 
 // === Tri-Color Mark & Sweep garbage collector ===
 // Largely based on Bach Le's μgc, see: https://github.com/bullno1/ugc
@@ -110,14 +110,12 @@ function init(): void {
   unlink(): void {
     var next = this.next;
     var prev = this.prev;
-    if (TRACE) trace("   unlink", 3, objToPtr(prev), objToPtr(this), objToPtr(next));
     next.prev = prev;
     prev.next = next;
   }
 
   /** Marks this object as gray, that is reachable with unscanned children. */
   makeGray(): void {
-    if (TRACE) trace("   makeGray", 1, objToPtr(this));
     const gray = 2;
     if (this == iter) iter = this.prev;
     this.unlink();
@@ -132,7 +130,6 @@ function init(): void {
   /** Inserts an object. */
   push(obj: Object): void {
     var prev = this.prev;
-    if (TRACE) trace("   push", 3, objToPtr(prev), objToPtr(obj), objToPtr(this));
     obj.next = this;
     obj.prev = prev;
     prev.next = obj;
@@ -141,7 +138,6 @@ function init(): void {
 
   /** Clears this list. */
   @inline clear(): void {
-    if (TRACE) trace("   clear", 1, objToPtr(this));
     this.nextWithColor = changetype<usize>(this);
     this.prev = this;
   }
@@ -161,21 +157,17 @@ function step(): void {
       init();
       // fall through
     case STATE_IDLE: {
-      if (TRACE) trace("gc~step/IDLE");
       __visit_globals(VISIT_MARK);
       markExternals();
       state = STATE_MARK;
-      if (TRACE) trace("gc~state = MARK");
       break;
     }
     case STATE_MARK: {
       obj = iter.next;
       if (obj !== toSpace) {
-        if (TRACE) trace("gc~step/MARK iterate", 1, objToPtr(obj));
         iter = obj;
         mark(obj);
       } else {
-        if (TRACE) trace("gc~step/MARK finish");
         __visit_globals(VISIT_MARK);
         markExternals();
         obj = iter.next;
@@ -186,7 +178,6 @@ function step(): void {
           white = i32(!white);
           iter = from.next;
           state = STATE_SWEEP;
-          if (TRACE) trace("gc~state = SWEEP");
         }
       }
       break;
@@ -194,17 +185,14 @@ function step(): void {
     case STATE_SWEEP: {
       obj = iter;
       if (obj !== toSpace) {
-        if (TRACE) trace("gc~step/SWEEP free", 1, objToPtr(obj));
         iter = obj.next;
         if (isDefined(__finalize)) {
           __finalize(changetype<usize>(obj) + TOTAL_OVERHEAD);
         }
         __free(changetype<usize>(obj) + BLOCK_OVERHEAD);
       } else {
-        if (TRACE) trace("gc~step/SWEEP finish");
         toSpace.clear();
         state = STATE_IDLE;
-        if (TRACE) trace("gc~state = IDLE");
       }
       break;
     }
@@ -230,7 +218,6 @@ function objToPtr(obj: Object): usize {
 export function __new(size: usize, id: i32): usize {
   if (state == STATE_INIT) init();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
-  if (TRACE) trace("new", 3, size, id, objToPtr(obj));
   obj.rtId = id;
   obj.rtSize = <u32>size;
   fromSpace.push(obj);
@@ -242,7 +229,6 @@ export function __new(size: usize, id: i32): usize {
 @global @unsafe
 export function __renew(oldPtr: usize, size: usize): usize {
   if (state == STATE_INIT) init();
-  if (TRACE) trace("renew", 2, oldPtr, size);
   if (size > OBJECT_MAXSIZE) throw new Error("allocation too large");
   var oldObj = changetype<Object>(oldPtr - TOTAL_OVERHEAD);
   var nextWithColor = oldObj.nextWithColor;
@@ -265,7 +251,6 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
   if (!childPtr) return;
   if (state == STATE_INIT) init();
   if (DEBUG) assert(parentPtr);
-  if (TRACE) trace("link", 3, parentPtr, childPtr, i32(expectMultiple));
   var black = i32(!white);
   var parent = ptrToObj(parentPtr);
   if (parent.color == black) {
@@ -301,7 +286,6 @@ export function __mark(ptr: usize): void {
 // @ts-ignore: decorator
 @global @unsafe
 export function __collect(): void {
-  if (TRACE) trace("collect");
   do step(); while (state != STATE_IDLE);
 }
 

@@ -51,8 +51,6 @@
   drop
   global.get $~lib/rt/tcms/fromSpace
   local.set $0
-  i32.const 0
-  drop
   local.get $0
   local.get $0
   call $~lib/rt/tcms/Object#set:nextWithColor
@@ -61,8 +59,6 @@
   call $~lib/rt/tcms/Object#set:prev
   global.get $~lib/rt/tcms/toSpace
   local.set $0
-  i32.const 0
-  drop
   local.get $0
   local.get $0
   call $~lib/rt/tcms/Object#set:nextWithColor
@@ -1485,8 +1481,6 @@
   local.get $0
   i32.load offset=8
   local.set $2
-  i32.const 0
-  drop
   local.get $1
   local.get $0
   call $~lib/rt/tcms/Object#set:next
@@ -1528,8 +1522,6 @@
   i32.const 4
   i32.sub
   local.set $2
-  i32.const 0
-  drop
   local.get $2
   local.get $1
   call $~lib/rt/tcms/Object#set:rtId
@@ -1571,8 +1563,6 @@
   local.get $0
   i32.load offset=8
   local.set $2
-  i32.const 0
-  drop
   local.get $1
   local.get $2
   call $~lib/rt/tcms/Object#set:prev
@@ -1581,8 +1571,6 @@
   call $~lib/rt/tcms/Object#set:next
  )
  (func $~lib/rt/tcms/Object#makeGray (param $0 i32)
-  i32.const 0
-  drop
   local.get $0
   global.get $~lib/rt/tcms/iter
   i32.eq
@@ -1622,13 +1610,11 @@
   if
    i32.const 0
    i32.const 208
-   i32.const 267
+   i32.const 253
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  drop
   global.get $~lib/rt/tcms/white
   i32.eqz
   local.set $3
@@ -1774,14 +1760,10 @@
       call $~lib/rt/tcms/init
      end
      i32.const 0
-     drop
-     i32.const 0
      call $~lib/rt/__visit_globals
      call $~lib/rt/tcms/markExternals
      i32.const 2
      global.set $~lib/rt/tcms/state
-     i32.const 0
-     drop
      br $break|0
     end
     global.get $~lib/rt/tcms/iter
@@ -1791,15 +1773,11 @@
     global.get $~lib/rt/tcms/toSpace
     i32.ne
     if
-     i32.const 0
-     drop
      local.get $0
      global.set $~lib/rt/tcms/iter
      local.get $0
      call $~lib/rt/tcms/mark
     else
-     i32.const 0
-     drop
      i32.const 0
      call $~lib/rt/__visit_globals
      call $~lib/rt/tcms/markExternals
@@ -1824,8 +1802,6 @@
       global.set $~lib/rt/tcms/iter
       i32.const 3
       global.set $~lib/rt/tcms/state
-      i32.const 0
-      drop
      end
     end
     br $break|0
@@ -1836,8 +1812,6 @@
    global.get $~lib/rt/tcms/toSpace
    i32.ne
    if
-    i32.const 0
-    drop
     local.get $0
     call $~lib/rt/tcms/Object#get:next
     global.set $~lib/rt/tcms/iter
@@ -1848,12 +1822,8 @@
     i32.add
     call $~lib/rt/tlsf/__free
    else
-    i32.const 0
-    drop
     global.get $~lib/rt/tcms/toSpace
     local.set $1
-    i32.const 0
-    drop
     local.get $1
     local.get $1
     call $~lib/rt/tcms/Object#set:nextWithColor
@@ -1862,16 +1832,12 @@
     call $~lib/rt/tcms/Object#set:prev
     i32.const 1
     global.set $~lib/rt/tcms/state
-    i32.const 0
-    drop
    end
    br $break|0
   end
  )
  (func $~lib/rt/tcms/__collect
   (local $0 i32)
-  i32.const 0
-  drop
   loop $do-continue|0
    call $~lib/rt/tcms/step
    global.get $~lib/rt/tcms/state

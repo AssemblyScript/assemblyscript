@@ -1333,7 +1333,7 @@
   if
    i32.const 1312
    i32.const 1472
-   i32.const 246
+   i32.const 232
    i32.const 30
    call $~lib/builtins/abort
    unreachable

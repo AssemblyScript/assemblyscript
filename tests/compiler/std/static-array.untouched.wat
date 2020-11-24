@@ -99,8 +99,6 @@
   drop
   global.get $~lib/rt/tcms/fromSpace
   local.set $0
-  i32.const 0
-  drop
   local.get $0
   local.get $0
   call $~lib/rt/tcms/Object#set:nextWithColor
@@ -109,8 +107,6 @@
   call $~lib/rt/tcms/Object#set:prev
   global.get $~lib/rt/tcms/toSpace
   local.set $0
-  i32.const 0
-  drop
   local.get $0
   local.get $0
   call $~lib/rt/tcms/Object#set:nextWithColor
@@ -2973,15 +2969,13 @@
   if
    call $~lib/rt/tcms/init
   end
-  i32.const 0
-  drop
   local.get $1
   i32.const 1073741804
   i32.gt_u
   if
    i32.const 656
    i32.const 720
-   i32.const 246
+   i32.const 232
    i32.const 30
    call $~lib/builtins/abort
    unreachable

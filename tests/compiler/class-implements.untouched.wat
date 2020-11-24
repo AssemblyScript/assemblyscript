@@ -51,8 +51,6 @@
   drop
   global.get $~lib/rt/tcms/fromSpace
   local.set $0
-  i32.const 0
-  drop
   local.get $0
   local.get $0
   call $~lib/rt/tcms/Object#set:nextWithColor
@@ -61,8 +59,6 @@
   call $~lib/rt/tcms/Object#set:prev
   global.get $~lib/rt/tcms/toSpace
   local.set $0
-  i32.const 0
-  drop
   local.get $0
   local.get $0
   call $~lib/rt/tcms/Object#set:nextWithColor
@@ -1485,8 +1481,6 @@
   local.get $0
   i32.load offset=8
   local.set $2
-  i32.const 0
-  drop
   local.get $1
   local.get $0
   call $~lib/rt/tcms/Object#set:next
@@ -1528,8 +1522,6 @@
   i32.const 4
   i32.sub
   local.set $2
-  i32.const 0
-  drop
   local.get $2
   local.get $1
   call $~lib/rt/tcms/Object#set:rtId
