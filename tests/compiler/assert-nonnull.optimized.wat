@@ -76,14 +76,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
   local.get $0
   i32.load offset=12
-  i32.ge_u
+  i32.eqz
   if
    i32.const 1184
    i32.const 1248
-   i32.const 104
+   i32.const 92
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -96,7 +95,7 @@
   if
    i32.const 1296
    i32.const 1248
-   i32.const 108
+   i32.const 96
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -104,14 +103,13 @@
   local.get $0
  )
  (func $~lib/array/Array<assert-nonnull/Foo|null>#__get (param $0 i32) (result i32)
-  i32.const 0
   local.get $0
   i32.load offset=12
-  i32.ge_u
+  i32.eqz
   if
    i32.const 1184
    i32.const 1248
-   i32.const 104
+   i32.const 92
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -136,18 +134,16 @@
   local.get $0
  )
  (func $assert-nonnull/testAll (param $0 i32) (result i32)
-  (local $1 i32)
   block $folding-inner0
    local.get $0
-   local.tee $1
    i32.eqz
    br_if $folding-inner0
-   local.get $1
+   local.get $0
    call $~lib/array/Array<assert-nonnull/Foo|null>#__get
    local.tee $0
-   local.get $0
    i32.eqz
    br_if $folding-inner0
+   local.get $0
    i32.load
    local.tee $0
    i32.eqz
@@ -163,18 +159,16 @@
   unreachable
  )
  (func $assert-nonnull/testAll2 (param $0 i32) (result i32)
-  (local $1 i32)
   block $folding-inner0
    local.get $0
-   local.tee $1
    i32.eqz
    br_if $folding-inner0
-   local.get $1
+   local.get $0
    call $~lib/array/Array<assert-nonnull/Foo|null>#__get
    local.tee $0
-   local.get $0
    i32.eqz
    br_if $folding-inner0
+   local.get $0
    i32.load
    local.tee $0
    i32.eqz

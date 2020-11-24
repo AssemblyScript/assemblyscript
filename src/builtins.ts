@@ -2843,9 +2843,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     for (let i = 0; i < numElements; ++i) {
       let elementExpression = expressions[i];
       if (elementExpression.kind != NodeKind.OMITTED) {
-        let expr = compiler.compileExpression(elementExpression, elementType,
-          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-        );
+        let expr = compiler.compileExpression(elementExpression, elementType, Constraints.CONV_IMPLICIT);
         let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
         if (precomp) {
           expr = precomp;
@@ -8661,7 +8659,8 @@ export function compileVisitGlobals(compiler: Compiler): void {
             module.call(visitInstance.internalName, [
               compiler.options.isWasm64
                 ? module.i64(i64_low(value), i64_high(value))
-                : module.i32(i64_low(value))
+                : module.i32(i64_low(value)),
+              module.local_get(0, NativeType.I32) // cookie
             ], NativeType.None)
           );
         }
@@ -8853,7 +8852,6 @@ export function compileRTTI(compiler: Compiler): void {
     let instance = assert(managedClasses.get(instanceId));
     assert(instanceId == lastId++);
     let flags: TypeinfoFlags = 0;
-    if (instance.isAcyclic) flags |= TypeinfoFlags.ACYCLIC;
     if (instance !== abvInstance && instance.extends(abvPrototype)) {
       let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.ARRAYBUFFERVIEW;

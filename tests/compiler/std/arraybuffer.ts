@@ -50,3 +50,5 @@
   assert(ArrayBuffer.isView(new Int32Array(1)));
   assert(ArrayBuffer.isView(new DataView(arr8.buffer)));
 }
+
+__collect();

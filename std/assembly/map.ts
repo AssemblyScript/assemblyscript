@@ -110,14 +110,9 @@ export class Map<K,V> {
     var hashCode = HASH<K>(key);
     var entry = this.find(key, hashCode); // unmanaged!
     if (entry) {
+      entry.value = value;
       if (isManaged<V>()) {
-        let oldRef = changetype<usize>(entry.value);
-        if (changetype<usize>(value) != oldRef) {
-          entry.value = changetype<V>(__retain(changetype<usize>(value)));
-          __release(oldRef);
-        }
-      } else {
-        entry.value = value;
+        __link(changetype<usize>(this), changetype<usize>(value), true);
       }
     } else {
       // check if rehashing is necessary
@@ -132,12 +127,14 @@ export class Map<K,V> {
       let entries = this.entries;
       entry = changetype<MapEntry<K,V>>(changetype<usize>(entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<K,V>());
       // link with the map
-      entry.key = isManaged<K>()
-        ? changetype<K>(__retain(changetype<usize>(key)))
-        : key;
-      entry.value = isManaged<V>()
-        ? changetype<V>(__retain(changetype<usize>(value)))
-        : value;
+      entry.key = key;
+      if (isManaged<K>()) {
+        __link(changetype<usize>(this), changetype<usize>(key), true);
+      }
+      entry.value = value;
+      if (isManaged<V>()) {
+        __link(changetype<usize>(this), changetype<usize>(value), true);
+      }
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
@@ -150,8 +147,6 @@ export class Map<K,V> {
   delete(key: K): bool {
     var entry = this.find(key, HASH<K>(key));
     if (!entry) return false;
-    if (isManaged<K>()) __release(changetype<usize>(entry.key));
-    if (isManaged<V>()) __release(changetype<usize>(entry.value));
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate

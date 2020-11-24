@@ -140,12 +140,12 @@ jobs:
         npm run build
         cd ..
         npm test rt-full
-    - name: Test stub runtime
-      run: |
-        cd tests/allocators/rt-stub
-        npm run build
-        cd ..
-        npm test rt-stub
+    # - name: Test stub runtime
+    #   run: |
+    #     cd tests/allocators/rt-stub
+    #     npm run build
+    #     cd ..
+    #     npm test rt-stub
   test-loader:
     name: "Loader"
     runs-on: ubuntu-latest

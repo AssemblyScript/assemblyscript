@@ -5,9 +5,7 @@
  (type $none_=>_none (func))
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 12) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
@@ -27,12 +25,8 @@
   local.get $1
   i32.add
  )
- (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
-  local.get $0
- )
  (func $function-types/makeAdder<i32> (result i32)
   i32.const 32
-  call $~lib/rt/stub/__retain
  )
  (func $function-types/makeAdder<i64>~anonymous|0 (param $0 i64) (param $1 i64) (result i64)
   local.get $0
@@ -41,7 +35,6 @@
  )
  (func $function-types/makeAdder<i64> (result i32)
   i32.const 128
-  call $~lib/rt/stub/__retain
  )
  (func $function-types/makeAdder<f64>~anonymous|0 (param $0 f64) (param $1 f64) (result f64)
   local.get $0
@@ -50,16 +43,8 @@
  )
  (func $function-types/makeAdder<f64> (result i32)
   i32.const 160
-  call $~lib/rt/stub/__retain
- )
- (func $~lib/rt/stub/__release (param $0 i32)
-  nop
  )
  (func $function-types/doAddWithFn<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  local.get $2
-  call $~lib/rt/stub/__retain
-  local.set $2
   local.get $0
   local.get $1
   i32.const 2
@@ -67,26 +52,15 @@
   local.get $2
   i32.load
   call_indirect (type $i32_i32_=>_i32)
-  local.set $3
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $3
  )
  (func $function-types/doAdd<i32> (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
   i32.const 2
   global.set $~argumentsLength
   call $function-types/makeAdder<i32>
-  local.tee $2
   i32.load
   call_indirect (type $i32_i32_=>_i32)
-  local.set $3
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $3
  )
  (func $function-types/addI32 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -94,10 +68,6 @@
   i32.add
  )
  (func $function-types/makeAndAdd<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  local.get $2
-  call $~lib/rt/stub/__retain
-  local.set $2
   local.get $0
   local.get $1
   i32.const 2
@@ -105,14 +75,8 @@
   local.get $2
   i32.load
   call_indirect (type $i32_i32_=>_i32)
-  local.set $3
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $3
  )
  (func $function-types/makeAndAdd<i32>@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -124,21 +88,14 @@
     unreachable
    end
    call $function-types/makeAdder<i32>
-   local.tee $3
    local.set $2
   end
   local.get $0
   local.get $1
   local.get $2
   call $function-types/makeAndAdd<i32>
-  local.set $4
-  local.get $3
-  call $~lib/rt/stub/__release
-  local.get $4
  )
  (func $start:function-types
-  (local $0 i32)
-  (local $1 i32)
   call $function-types/makeAdder<i32>
   global.set $function-types/i32Adder
   i32.const 1
@@ -184,7 +141,6 @@
   i32.const 2
   global.set $~argumentsLength
   call $function-types/makeAdder<f64>
-  local.tee $0
   i32.load
   call_indirect (type $f64_f64_=>_f64)
   f64.const 4
@@ -262,7 +218,6 @@
   i32.const 1
   i32.const 2
   call $function-types/makeAdder<i32>
-  local.tee $1
   call $function-types/makeAndAdd<i32>
   i32.const 3
   i32.eq
@@ -275,10 +230,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
  )
  (func $~start
   call $start:function-types

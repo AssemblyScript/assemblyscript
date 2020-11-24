@@ -1,6 +1,6 @@
 {
   "asc_flags": [
-    "--runtime none"
+    "--noExportRuntime"
   ],
   "stderr": [
     "AS204: Type 'i32' cannot be nullable.",

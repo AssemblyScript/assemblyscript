@@ -2,7 +2,6 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -26,17 +25,8 @@
  (export "testRet" (func $assert-nonnull/testRet))
  (export "testObjFn" (func $assert-nonnull/testObjFn))
  (export "testObjRet" (func $assert-nonnull/testObjRet))
- (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~lib/rt/stub/__release (param $0 i32)
-  nop
- )
  (func $assert-nonnull/testVar (param $0 i32) (result i32)
   (local $1 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -49,17 +39,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
  )
  (func $assert-nonnull/testObj (param $0 i32) (result i32)
   (local $1 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -73,17 +55,9 @@
    unreachable
   end
   i32.load
-  call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
  )
  (func $assert-nonnull/testProp (param $0 i32) (result i32)
   (local $1 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   i32.load
   local.tee $1
@@ -97,11 +71,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
  )
  (func $~lib/array/Array<assert-nonnull/Foo>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -111,7 +80,6 @@
   i32.shl
   i32.add
   i32.load
-  call $~lib/rt/stub/__retain
  )
  (func $~lib/array/Array<assert-nonnull/Foo>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -122,7 +90,7 @@
   if
    i32.const 160
    i32.const 224
-   i32.const 104
+   i32.const 92
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -141,7 +109,7 @@
   if
    i32.const 272
    i32.const 224
-   i32.const 108
+   i32.const 96
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -150,9 +118,6 @@
  )
  (func $assert-nonnull/testArr (param $0 i32) (result i32)
   (local $1 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -167,10 +132,6 @@
   end
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo>#__get
-  local.set $1
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
  )
  (func $~lib/array/Array<assert-nonnull/Foo|null>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -180,7 +141,6 @@
   i32.shl
   i32.add
   i32.load
-  call $~lib/rt/stub/__retain
  )
  (func $~lib/array/Array<assert-nonnull/Foo|null>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -191,7 +151,7 @@
   if
    i32.const 160
    i32.const 224
-   i32.const 104
+   i32.const 92
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -210,9 +170,6 @@
  (func $assert-nonnull/testElem (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $0
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo|null>#__get
   local.tee $1
@@ -226,18 +183,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
  )
  (func $assert-nonnull/testAll (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -253,9 +201,8 @@
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo|null>#__get
   local.tee $1
-  local.tee $2
   if (result i32)
-   local.get $2
+   local.get $1
   else
    i32.const 32
    i32.const 96
@@ -265,9 +212,9 @@
    unreachable
   end
   i32.load
-  local.tee $2
+  local.tee $1
   if (result i32)
-   local.get $2
+   local.get $1
   else
    i32.const 32
    i32.const 96
@@ -276,20 +223,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $assert-nonnull/testAll2 (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -305,9 +241,8 @@
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo|null>#__get
   local.tee $1
-  local.tee $2
   if (result i32)
-   local.get $2
+   local.get $1
   else
    i32.const 32
    i32.const 96
@@ -317,9 +252,9 @@
    unreachable
   end
   i32.load
-  local.tee $2
+  local.tee $1
   if (result i32)
-   local.get $2
+   local.get $1
   else
    i32.const 32
    i32.const 96
@@ -328,38 +263,17 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $assert-nonnull/testFn (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   i32.const 0
   global.set $~argumentsLength
   local.get $0
   i32.load
   call_indirect (type $none_=>_i32)
-  local.tee $1
-  local.set $2
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $assert-nonnull/testFn2 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -372,36 +286,23 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/rt/stub/__retain
   local.set $2
   i32.const 0
   global.set $~argumentsLength
   local.get $2
   i32.load
   call_indirect (type $none_=>_i32)
-  local.tee $1
-  local.set $3
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $3
  )
  (func $assert-nonnull/testRet (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   i32.const 0
   global.set $~argumentsLength
   local.get $0
   i32.load
   call_indirect (type $none_=>_i32)
   local.tee $1
-  local.tee $2
   if (result i32)
-   local.get $2
+   local.get $1
   else
    i32.const 32
    i32.const 96
@@ -410,38 +311,17 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $assert-nonnull/testObjFn (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   i32.const 0
   global.set $~argumentsLength
   local.get $0
   i32.load offset=4
   i32.load
   call_indirect (type $none_=>_i32)
-  local.tee $1
-  local.set $2
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $assert-nonnull/testObjRet (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   i32.const 0
   global.set $~argumentsLength
   local.get $0
@@ -449,9 +329,8 @@
   i32.load
   call_indirect (type $none_=>_i32)
   local.tee $1
-  local.tee $2
   if (result i32)
-   local.get $2
+   local.get $1
   else
    i32.const 32
    i32.const 96
@@ -460,12 +339,5 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
  )
 )

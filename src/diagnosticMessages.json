@@ -44,7 +44,6 @@
   "Exported generic function or class has no concrete instances.": 232,
   "Property '{0}' is always assigned before being used.": 233,
 
-  "Type '{0}' is cyclic. Module will include deferred garbage collection.": 900,
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,
   "Expression compiles to a dynamic check at runtime.": 903,

@@ -1,6 +1,6 @@
 {
   "asc_flags": [
-    "--runtime none"
+    "--noExportRuntime"
   ],
   "stderr": [
     "TS2511: Cannot create an instance of an abstract class.",

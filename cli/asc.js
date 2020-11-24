@@ -34,6 +34,11 @@ const fs = require("fs");
 const path = require("path");
 const process = require("process"); // ensure shim
 
+process.exit = ((exit) => function(code) {
+  if (code) console.log(new Error("exit " + code.toString()).stack);
+  exit(code);
+})(process.exit);
+
 const utf8 = require("./util/utf8");
 const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
@@ -360,6 +365,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setNoUnsafe(compilerOptions, opts.noUnsafe);
   assemblyscript.setPedantic(compilerOptions, opts.pedantic);
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
+  assemblyscript.setNoExportRuntime(compilerOptions, opts.noExportRuntime);
 
   // Add or override aliases if specified
   if (opts.use) {
@@ -624,18 +630,11 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  // Include runtime template before entry files so its setup runs first
+  // Include runtime before entry files so its setup runs first
   {
-    let runtimeName = String(opts.runtime);
-    let runtimePath = "rt/index-" + runtimeName;
+    let runtimePath = opts.noExportRuntime ? "rt/index-noexport" : "rt/index";
     let runtimeText = exports.libraryFiles[runtimePath];
-    if (runtimeText == null) {
-      runtimePath = runtimeName;
-      runtimeText = readFile(runtimePath + extension.ext, baseDir);
-      if (runtimeText == null) return callback(Error("Runtime '" + runtimeName + "' not found."));
-    } else {
-      runtimePath = "~lib/" + runtimePath;
-    }
+    if (runtimeText == null) return callback(Error("Runtime entry not found."));
     stats.parseCount++;
     stats.parseTime += measure(() => {
       assemblyscript.parse(program, runtimeText, runtimePath + extension.ext, true);
@@ -754,7 +753,6 @@ exports.main = function main(argv, options, callback) {
 
   // Optimize the module
   const debugInfo = opts.debug;
-  const usesARC = opts.runtime == "half" || opts.runtime == "full";
   const converge = opts.converge;
   const runPasses = [];
   if (opts.runPasses) {
@@ -771,13 +769,13 @@ exports.main = function main(argv, options, callback) {
 
   stats.optimizeTime += measure(() => {
     stats.optimizeCount++;
-    module.optimize(optimizeLevel, shrinkLevel, debugInfo, usesARC);
+    module.optimize(optimizeLevel, shrinkLevel, debugInfo);
     module.runPasses(runPasses);
     if (converge) {
       let last = module.toBinary();
       do {
         stats.optimizeCount++;
-        module.optimize(optimizeLevel, shrinkLevel, debugInfo, usesARC);
+        module.optimize(optimizeLevel, shrinkLevel, debugInfo);
         module.runPasses(runPasses);
         let next = module.toBinary();
         if (next.output.length >= last.output.length) {

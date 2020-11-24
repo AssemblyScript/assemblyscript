@@ -1,6 +1,6 @@
 {
   "asc_flags": [
-    "--runtime none"
+    "--noExportRuntime"
   ],
   "stderr": [
     "AS103: Feature 'simd' is not enabled.",

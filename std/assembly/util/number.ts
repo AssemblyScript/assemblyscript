@@ -365,7 +365,7 @@ export function utoa32(value: u32, radix: i32): String {
     out = __new(decimals << 1, idof<String>());
     utoa64_any_core(out, value, decimals, radix);
   }
-  return changetype<String>(out); // retains
+  return changetype<String>(out);
 }
 
 export function itoa32(value: i32, radix: i32): String {
@@ -393,7 +393,7 @@ export function itoa32(value: i32, radix: i32): String {
     utoa64_any_core(out, val32, decimals, radix);
   }
   if (sign) store<u16>(out, CharCode.MINUS);
-  return changetype<String>(out); // retains
+  return changetype<String>(out);
 }
 
 export function utoa64(value: u64, radix: i32): String {
@@ -423,7 +423,7 @@ export function utoa64(value: u64, radix: i32): String {
     out = __new(decimals << 1, idof<String>());
     utoa64_any_core(out, value, decimals, radix);
   }
-  return changetype<String>(out); // retains
+  return changetype<String>(out);
 }
 
 export function itoa64(value: i64, radix: i32): String {
@@ -457,7 +457,7 @@ export function itoa64(value: i64, radix: i32): String {
     utoa64_any_core(out, value, decimals, radix);
   }
   if (sign) store<u16>(out, CharCode.MINUS);
-  return changetype<String>(out); // retains
+  return changetype<String>(out);
 }
 
 // @ts-ignore: decorator

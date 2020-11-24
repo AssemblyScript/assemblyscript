@@ -1328,14 +1328,6 @@ declare namespace heap {
   export function realloc(ptr: usize, size: usize): usize;
   /** Frees a chunk of memory. Does hardly anything (most recent block only) with the stub/none runtime. */
   export function free(ptr: usize): void;
-  /** Dangerously resets the entire heap. Specific to the stub/none runtime. */
-  export function reset(): void;
-}
-
-/** Garbage collector interface. */
-declare namespace gc {
-  /** Performs a full garbage collection cycle. */
-  export function collect(): void;
 }
 
 /** Table operations. */

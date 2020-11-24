@@ -1,6 +1,6 @@
 {
   "asc_flags": [
-    "--runtime none"
+    "--noExportRuntime"
   ],
   "stderr": [
     "AS232: Exported generic function or class has no concrete instances.",

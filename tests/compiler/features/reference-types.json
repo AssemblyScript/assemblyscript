@@ -5,6 +5,6 @@
     "gc"
   ],
   "asc_flags": [
-    "--runtime none"
+    "--noExportRuntime"
   ]
 }

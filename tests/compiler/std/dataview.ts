@@ -165,3 +165,5 @@
   assert(view.byteOffset == 0);
   assert(view.byteLength == 8);
 }
+
+__collect();

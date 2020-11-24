@@ -15,6 +15,7 @@ export type Imports = {
     seed?(): number;
     abort?(msg: number, file: number, line: number, column: number): void;
     trace?(msg: number, numArgs?: number, ...args: number[]): void;
+    mark?(): void;
   };
 };
 
@@ -87,14 +88,18 @@ export interface ASUtil {
   __newString(str: string): number;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
   __newArray(id: number, values: ArrayLike<number>): number;
-  /** Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer. */
+  /** Retains a reference to a managed object externally, preventing it from becoming collected. */
   __retain(ptr: number): number;
-  /** Releases a previously retained reference to a managed object, allowing the runtime to collect it once its reference count reaches zero. */
+  /** Releases a reference to a managed object, allowing it to become collected. */
   __release(ptr: number): void;
-  /** Forcefully resets the heap to its initial offset, effectively clearing dynamic memory. Stub runtime only. */
-  __reset?(): void;
+  /** Keeps a reference to a managed object alive externally while it is reachable. */
+  __keepalive(ptr: number): number;
   /** Tests whether a managed object is an instance of the class represented by the specified base id. */
   __instanceof(ptr: number, baseId: number): boolean;
+  /** Introduces a link from a parent object to a child object, i.e. upon `parent.field = child`. */
+  __link(parentPtr: number, childPtr: number, expectMultiple: boolean): void;
+  /** Marks an externally retained value as reachable during the collection phase. */
+  __mark(ptr: number): void;
   /** Forces a cycle collection. Only relevant if objects potentially forming reference cycles are used. */
   __collect(): void;
 }

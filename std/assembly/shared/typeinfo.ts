@@ -36,7 +36,7 @@ export const enum TypeinfoFlags {
   /** Type is a `Map`. */
   MAP = 1 << 4,
   /** Type is inherently acyclic. */
-  ACYCLIC = 1 << 5,
+  // ACYCLIC = 1 << 5,
   /** Value alignment of 1 byte. */
   VALUE_ALIGN_0 = 1 << 6,
   /** Value alignment of 2 bytes. */

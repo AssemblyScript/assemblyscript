@@ -67,19 +67,11 @@
     "type": "b",
     "default": false
   },
-  "runtime": {
+  "noExportRuntime": {
     "category": "Optimization",
-    "description": [
-      "Specifies the runtime variant to include in the program.",
-      "",
-      " full  Default runtime based on TLSF and reference counting.",
-      " half  Same as 'full', but not exported to the host.",
-      " stub  Minimal stub implementation without free/GC support.",
-      " none  Same as 'stub', but not exported to the host.",
-      ""
-    ],
-    "type": "s",
-    "default": "full"
+    "description": "Does not export the runtime helpers (e.g. __new).",
+    "type": "b",
+    "default": false
   },
 
   "outFile": {

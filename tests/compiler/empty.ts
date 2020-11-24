@@ -1,9 +1,23 @@
-var a = "hello";
+function foo(a: usize): void {
+  /* nop */
+}
 
-assert(a.substring(2).length == 3);
+class Obj {
+  foo: Obj | null;
+}
 
-class A {}
-new A();
+var obj: Obj | null = new Obj();
+(<Obj>obj).foo;
+(<Obj>obj).foo = obj;
+foo(changetype<usize>(obj));
 
-@unmanaged class B {}
-new B();
+var arr: i32[] | null = new Array<i32>(3);
+
+__collect();
+__collect();
+
+obj = null;
+arr = null;
+
+__collect();
+__collect();

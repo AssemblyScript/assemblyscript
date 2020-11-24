@@ -1,6 +1,6 @@
 # AssemblyScript Rtrace
 
-A tiny utility to sanitize the AssemblyScript runtime. Records allocations, retains, releases and frees performed by the runtime and emits an error if something is off. Also checks for leaks.
+A tiny utility to sanitize the AssemblyScript runtime. Records allocations and frees performed by the runtime and emits an error if something is off. Also checks for leaks.
 
 Instructions
 ------------
@@ -40,4 +40,4 @@ if (rtrace.active) {
 }
 ```
 
-Note that references retained in globals which are not cleared before execution concludes appear as leaks, including their inner members. A TypedArray would leak itself and its backing ArrayBuffer in this case for example. This is perfectly normal and clearing all globals avoids this.
+Note that references in globals which are not cleared before collection is performed appear as leaks, including their inner members. A TypedArray would leak itself and its backing ArrayBuffer in this case for example. This is perfectly normal and clearing all globals avoids this.

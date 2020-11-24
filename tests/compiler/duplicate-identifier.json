@@ -1,6 +1,6 @@
 {
   "asc_flags": [
-    "--runtime none"
+    "--noExportRuntime"
   ],
   "stderr": [
     "TS2300: Duplicate identifier 'a'", "var a: f32", "var a: i32",

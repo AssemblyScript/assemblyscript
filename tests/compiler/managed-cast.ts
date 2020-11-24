@@ -48,3 +48,5 @@ function testUpcastFromToNullable(animal: Animal | null): void {
   if (maybeCat) maybeCat.meow();
 }
 testUpcastFromToNullable(new Cat());
+
+__collect();

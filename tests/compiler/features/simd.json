@@ -3,7 +3,7 @@
     "simd"
   ],
   "asc_flags": [
-    "--runtime none"
+    "--noExportRuntime"
   ],
   "skipInstantiate": true
 }

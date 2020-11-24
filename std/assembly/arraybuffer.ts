@@ -18,7 +18,7 @@ export abstract class ArrayBufferView {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     var buffer = __new(length = length << alignLog2, idof<ArrayBuffer>());
     memory.fill(buffer, 0, <usize>length);
-    this.buffer = changetype<ArrayBuffer>(buffer); // retains
+    this.buffer = changetype<ArrayBuffer>(buffer); // links
     this.dataStart = buffer;
     this.byteLength = length;
   }
@@ -49,7 +49,7 @@ export abstract class ArrayBufferView {
     if (<u32>length > <u32>BLOCK_MAXSIZE) throw new RangeError(E_INVALIDLENGTH);
     var buffer = __new(<usize>length, idof<ArrayBuffer>());
     memory.fill(buffer, 0, <usize>length);
-    return changetype<ArrayBuffer>(buffer); // retains
+    return changetype<ArrayBuffer>(buffer);
   }
 
   get byteLength(): i32 {
@@ -63,7 +63,7 @@ export abstract class ArrayBufferView {
     var outSize = <usize>max(end - begin, 0);
     var out = __new(outSize, idof<ArrayBuffer>());
     memory.copy(out, changetype<usize>(this) + <usize>begin, outSize);
-    return changetype<ArrayBuffer>(out); // retains
+    return changetype<ArrayBuffer>(out);
   }
 
   toString(): string {

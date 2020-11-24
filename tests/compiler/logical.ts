@@ -90,3 +90,5 @@ function testContextualBoolOr(someObj: Obj, someInt: i32): bool {
   return someObj || someInt;
 }
 assert(testContextualBoolOr(new Obj(), 0));
+
+__collect();

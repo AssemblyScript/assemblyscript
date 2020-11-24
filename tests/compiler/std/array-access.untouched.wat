@@ -1,7 +1,6 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
@@ -20,9 +19,6 @@
  (export "stringArrayMethodCall" (func $std/array-access/stringArrayMethodCall))
  (export "stringArrayArrayPropertyAccess" (func $std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
- (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
-  local.get $0
- )
  (func $~lib/array/Array<~lib/array/Array<i32>>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
@@ -31,10 +27,6 @@
   i32.shl
   i32.add
   i32.load
-  call $~lib/rt/stub/__retain
- )
- (func $~lib/rt/stub/__release (param $0 i32)
-  nop
  )
  (func $~lib/array/Array<~lib/array/Array<i32>>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -45,7 +37,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 104
+   i32.const 92
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -64,7 +56,7 @@
   if
    i32.const 144
    i32.const 96
-   i32.const 108
+   i32.const 96
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -89,7 +81,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 104
+   i32.const 92
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -103,23 +95,11 @@
   local.get $2
  )
  (func $std/array-access/i32ArrayArrayElementAccess (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
-  local.tee $1
   i32.const 1
   call $~lib/array/Array<i32>#__get
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $~lib/array/Array<~lib/string/String>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -129,7 +109,6 @@
   i32.shl
   i32.add
   i32.load
-  call $~lib/rt/stub/__retain
  )
  (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -140,7 +119,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 104
+   i32.const 92
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -159,7 +138,7 @@
   if
    i32.const 144
    i32.const 96
-   i32.const 108
+   i32.const 96
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -175,22 +154,10 @@
   i32.shr_u
  )
  (func $std/array-access/stringArrayPropertyAccess (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/string/String>#__get
-  local.tee $1
   call $~lib/string/String#get:length
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
@@ -198,13 +165,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $2
-  call $~lib/rt/stub/__retain
-  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -291,12 +251,6 @@
      local.get $8
      local.get $9
      i32.sub
-     local.set $10
-     local.get $0
-     call $~lib/rt/stub/__release
-     local.get $2
-     call $~lib/rt/stub/__release
-     local.get $10
      return
     end
     local.get $5
@@ -311,12 +265,6 @@
    end
   end
   i32.const 0
-  local.set $7
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $7
  )
  (func $~lib/string/String#startsWith (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -325,43 +273,28 @@
   (local $6 i32)
   (local $7 i32)
   local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $1
   i32.const 0
   i32.eq
   if
    i32.const 304
-   local.tee $3
-   local.get $1
-   local.tee $4
-   i32.ne
-   if
-    local.get $3
-    call $~lib/rt/stub/__retain
-    local.set $3
-    local.get $4
-    call $~lib/rt/stub/__release
-   end
-   local.get $3
    local.set $1
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $5
+  local.set $3
   local.get $2
-  local.tee $3
-  i32.const 0
   local.tee $4
-  local.get $3
+  i32.const 0
+  local.tee $5
   local.get $4
+  local.get $5
   i32.gt_s
   select
-  local.tee $3
-  local.get $5
   local.tee $4
   local.get $3
+  local.tee $5
   local.get $4
+  local.get $5
   i32.lt_s
   select
   local.set $6
@@ -371,14 +304,10 @@
   local.get $7
   local.get $6
   i32.add
-  local.get $5
+  local.get $3
   i32.gt_s
   if
    i32.const 0
-   local.set $3
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $3
    return
   end
   local.get $0
@@ -388,30 +317,14 @@
   local.get $7
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $3
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $3
  )
  (func $std/array-access/stringArrayMethodCall (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/string/String>#__get
-  local.tee $1
   i32.const 272
   i32.const 0
   call $~lib/string/String#startsWith
-  local.set $2
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -421,7 +334,6 @@
   i32.shl
   i32.add
   i32.load
-  call $~lib/rt/stub/__retain
  )
  (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -432,7 +344,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 104
+   i32.const 92
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -451,7 +363,7 @@
   if
    i32.const 144
    i32.const 96
-   i32.const 108
+   i32.const 96
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -459,53 +371,21 @@
   local.get $2
  )
  (func $std/array-access/stringArrayArrayPropertyAccess (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get
-  local.tee $1
   i32.const 1
   call $~lib/array/Array<~lib/string/String>#__get
-  local.tee $2
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $3
  )
  (func $std/array-access/stringArrayArrayMethodCall (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get
-  local.tee $1
   i32.const 1
   call $~lib/array/Array<~lib/string/String>#__get
-  local.tee $2
   i32.const 272
   i32.const 0
   call $~lib/string/String#startsWith
-  local.set $3
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $3
  )
 )

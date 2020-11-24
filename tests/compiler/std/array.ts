@@ -1037,8 +1037,7 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 }
 
 // Unleak globals
-__release(changetype<usize>(arr));
-
+arr = changetype<Array<i32>>(0);
 
 // Array#flat //////////////////////////////////////////////////////////////////////////////////
 {
@@ -1068,3 +1067,5 @@ export class ArrayU8 extends Array<u8> {}
 export class ArrayStr extends Array<string> {}
 // TODO:
 // export class ArrayArrayI32 extends Array<Array<i32>> {}
+
+__collect();

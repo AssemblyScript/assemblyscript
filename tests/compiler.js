@@ -402,6 +402,9 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
         },
         seed: function() {
           return 0xA5534817; // make tests deterministic
+        },
+        mark: function() {
+          // override in tests
         }
       }, rtrace.env),
       Math,
@@ -438,11 +441,9 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       if (rtrace.active) {
         console.log("  " +
           rtrace.allocCount + " allocs, " +
-          rtrace.resizeCount + " resizes, " +
-          rtrace.moveCount + " moves, " +
           rtrace.freeCount + " frees, " +
-          rtrace.incrementCount + " increments, " +
-          rtrace.decrementCount + " decrements"
+          rtrace.resizeCount + " resizes, " +
+          rtrace.moveCount + " moves"
         );
       }
       return true;

@@ -129,6 +129,11 @@ export function setLowMemoryLimit(options: Options, lowMemoryLimit: i32): void {
   options.lowMemoryLimit = lowMemoryLimit;
 }
 
+/** Sets the `noExportRuntime` option. */
+export function setNoExportRuntime(options: Options, noExportRuntime: bool): void {
+  options.noExportRuntime = noExportRuntime;
+}
+
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */

@@ -35,3 +35,5 @@ var arr4: StaticArray<Ref> = [ new Ref(), new Ref() ];
 
 arr3 = changetype<StaticArray<i32>>(0); // unleak
 arr4 = changetype<StaticArray<Ref>>(0);
+
+__collect();

@@ -1,6 +1,6 @@
 {
   "asc_flags": [
-    "--runtime half"
+    "--noExportRuntime"
   ],
   "asc_rtrace": true
 }

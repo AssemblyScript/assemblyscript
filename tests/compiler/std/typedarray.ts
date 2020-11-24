@@ -821,3 +821,5 @@ testTypedArraySet<Float64Array>();
   targetClampedArray.set(e, 5);
   valuesEqual<Uint8ClampedArray>(targetClampedArray, [1, 255, 100, 255, 0, 0, 100, 10, 255, 0]);
 }
+
+__collect();

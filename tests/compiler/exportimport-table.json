@@ -1,6 +1,6 @@
 {
   "asc_flags": [
-    "--runtime none",
+    "--noExportRuntime",
     "--importTable",
     "--exportTable"
   ]

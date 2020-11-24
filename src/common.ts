@@ -231,8 +231,7 @@ export namespace CommonNames {
   export const free = "__free";
   export const new_ = "__new";
   export const renew = "__renew";
-  export const retain = "__retain";
-  export const release = "__release";
+  export const link = "__link";
   export const collect = "__collect";
   export const typeinfo = "__typeinfo";
   export const instanceof_ = "__instanceof";

@@ -672,21 +672,13 @@ export class Program extends DiagnosticEmitter {
   }
   private _renewInstance: Function | null = null;
 
-  /** Gets the runtime `__retain(ptr: usize): usize` instance. */
-  get retainInstance(): Function {
-    var cached = this._retainInstance;
-    if (!cached) this._retainInstance = cached = this.requireFunction(CommonNames.retain);
+  /** Gets the runtime `__link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void` instance. */
+  get linkInstance(): Function {
+    var cached = this._linkInstance;
+    if (!cached) this._linkInstance = cached = this.requireFunction(CommonNames.link);
     return cached;
   }
-  private _retainInstance: Function | null = null;
-
-  /** Gets the runtime `__release(ptr: usize): void` instance. */
-  get releaseInstance(): Function {
-    var cached = this._releaseInstance;
-    if (!cached) this._releaseInstance = cached = this.requireFunction(CommonNames.release);
-    return cached;
-  }
-  private _releaseInstance: Function | null = null;
+  private _linkInstance: Function | null = null;
 
   /** Gets the runtime `__collect(): void` instance. */
   get collectInstance(): Function {
@@ -2488,7 +2480,7 @@ export class Program extends DiagnosticEmitter {
         default: assert(false); // namespace member expected
       }
     }
-    if (original != element) copyMembers(original, element); // retain original parent
+    if (original != element) copyMembers(original, element); // keep original parent
     return element;
   }
 
@@ -2563,17 +2555,6 @@ export class Program extends DiagnosticEmitter {
   //   } while (current = current.base);
   //   return null;
   // }
-
-  /** Finds all cyclic classes. */
-  findCyclicClasses(): Set<Class> {
-    var cyclics = new Set<Class>();
-    // TODO: for (let instance of this.managedClasses.values()) {
-    for (let _values = Map_values(this.managedClasses), i = 0, k = _values.length; i < k; ++i) {
-      let instance = unchecked(_values[i]);
-      if (!instance.isAcyclic) cyclics.add(instance);
-    }
-    return cyclics;
-  }
 }
 
 /** Indicates the specific kind of an {@link Element}. */
@@ -3542,8 +3523,6 @@ export class Function extends TypedElement {
   nextInlineId: i32 = 0;
   /** Counting id of anonymous inner functions. */
   nextAnonymousId: i32 = 0;
-  /** Counting id of autorelease variables. */
-  nextAutoreleaseId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(
@@ -4076,12 +4055,6 @@ export class ClassPrototype extends DeclaredElement {
   }
 }
 
-const enum AcyclicState {
-  UNKNOWN,
-  ACYCLIC,
-  NOT_ACYCLIC
-}
-
 /** A resolved class. */
 export class Class extends TypedElement {
 
@@ -4105,8 +4078,6 @@ export class Class extends TypedElement {
   indexSignature: IndexSignature | null = null;
   /** Unique class id. */
   private _id: u32 = 0;
-  /** Remembers acyclic state. */
-  private _acyclic: AcyclicState = AcyclicState.UNKNOWN;
   /** Runtime type information flags. */
   rttiFlags: u32 = 0;
   /** Wrapped type, if a wrapper for a basic type. */
@@ -4437,100 +4408,6 @@ export class Class extends TypedElement {
     }
     assert(false);
     return Type.void;
-  }
-
-  /** Tests if this class is inherently acyclic. */
-  get isAcyclic(): bool {
-    var acyclic = this._acyclic;
-    if (acyclic == AcyclicState.UNKNOWN) {
-      let hasCycle = this.cyclesTo(this);
-      if (hasCycle) this._acyclic = acyclic = AcyclicState.NOT_ACYCLIC;
-      else this._acyclic = acyclic = AcyclicState.ACYCLIC;
-    }
-    return acyclic == AcyclicState.ACYCLIC;
-  }
-
-  /** Tests if this class potentially forms a reference cycle to another one. */
-  private cyclesTo(other: Class, except: Set<Class> = new Set()): bool {
-    // TODO: The pure RC paper describes acyclic data structures as classes that may contain
-    //
-    // - scalars
-    // - references to classes that are both acyclic and final (here: Java); and
-    // - arrays (in our case: also sets, maps) of either of the above
-    //
-    // Our implementation, however, treats all objects that do not reference themselves directly
-    // or indirectly as acylic, allowing them to contain inner cycles of other non-acyclic objects.
-    // This contradicts the second assumption and must be revisited when actually implementing RC.
-
-    if (except.has(this)) return false;
-    except.add(this); // don't recurse indefinitely
-
-    // Find out if any field references 'other' directly or indirectly
-    var current: Class | null;
-    var instanceMembers = this.members;
-    if (instanceMembers) {
-      // TODO: for (let member of instanceMembers.values()) {
-      for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
-        let member = unchecked(_values[i]);
-        if (member.kind == ElementKind.FIELD) {
-          let fieldType = (<Field>member).type;
-          if (fieldType.isReference) {
-            if ((current = fieldType.getClass()) !== null && (
-              current === other ||
-              current.cyclesTo(other, except)
-            )) return true;
-          }
-        }
-      }
-    }
-
-    // Do the same for non-field data
-    var basePrototype: ClassPrototype | null;
-
-    // Array<T->other?>
-    if ((basePrototype = this.program.arrayPrototype) !== null && this.prototype.extends(basePrototype)) {
-      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
-      assert(typeArguments.length == 1);
-      if (
-        (current = typeArguments[0].classReference) !== null &&
-        (
-          current === other ||
-          current.cyclesTo(other, except)
-        )
-      ) return true;
-
-    // Set<K->other?>
-    } else if ((basePrototype = this.program.setPrototype) !== null && this.prototype.extends(basePrototype)) {
-      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
-      assert(typeArguments.length == 1);
-      if (
-        (current = typeArguments[0].classReference) !== null &&
-        (
-          current === other ||
-          current.cyclesTo(other, except)
-        )
-      ) return true;
-
-    // Map<K->other?,V->other?>
-    } else if ((basePrototype = this.program.mapPrototype) !== null && this.prototype.extends(basePrototype)) {
-      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
-      assert(typeArguments.length == 2);
-      if (
-        (current = typeArguments[0].classReference) !== null &&
-        (
-          current === other ||
-          current.cyclesTo(other, except)
-        )
-      ) return true;
-      if (
-        (current = typeArguments[1].classReference) !== null &&
-        (
-          current === other ||
-          current.cyclesTo(other, except)
-        )
-      ) return true;
-    }
-    return false;
   }
 
   /** Gets all extendees of this class (that do not have the specified instance member). */

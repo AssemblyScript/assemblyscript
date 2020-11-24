@@ -44,16 +44,15 @@ async function test(build: string): Promise<void> {
   const cachedStrings = new Map<string,number>();
   function cachedString(text: string): number {
     if (cachedStrings.has(text)) return cachedStrings.get(text);
-    var ptr = asc.__retain(asc.__newString(text));
-    cachedStrings.set(text, ptr);
+    var ptr = asc.__newString(text);
+    cachedStrings.set(text, asc.__retain(ptr));
     return ptr;
   }
 
   const programPtr = ((): number => {
     const optionsPtr = asc.newOptions();
-    const ptr = asc.newProgram(optionsPtr);
-    asc.__release(optionsPtr);
-    return ptr;
+    asc.setNoExportRuntime(optionsPtr, true);
+    return asc.newProgram(optionsPtr);
   })();
 
   console.log("\nParsing standard library ...");
@@ -67,36 +66,45 @@ async function test(build: string): Promise<void> {
 
   console.log("\nParsing runtime ...");
   {
-    const textPtr = cachedString(libraryFiles["rt/index-stub"]);
-    const pathPtr = cachedString("~lib/rt/index-stub.ts");
+    const rt = "rt/index-noexport";
+    const textPtr = cachedString(libraryFiles[rt]);
+    const pathPtr = cachedString("~lib/" + rt + ".ts");
     console.log("  " + asc.__getString(pathPtr));
     asc.parse(programPtr, textPtr, pathPtr, true);
   }
 
-  console.log("\nParsing backlog ...");
-  var nextFilePtr = asc.nextFile(programPtr);
-  while (nextFilePtr) {
-    let nextFile = asc.__getString(nextFilePtr);
-    if (!nextFile.startsWith("~lib/")) { // e.g. "rt/something"
-      nextFile = "~lib/" + nextFile;
-    }
-    const text = libraryFiles[nextFile.substring(5)];
-    if (text == null) throw Error("missing file: " + nextFile);
-    const textPtr = cachedString(libraryFiles[nextFile.substring(5)]);
-    const pathPtr = cachedString(nextFile + ".ts");
-    console.log("  " + asc.__getString(pathPtr));
-    asc.parse(programPtr, textPtr, pathPtr, false);
-    asc.__release(nextFilePtr);
-    nextFilePtr = asc.nextFile(programPtr);
+  function parseBacklog() {
+    console.log("\nParsing backlog ...");
+    do {
+      var nextFilePtr = asc.nextFile(programPtr);
+      if (!nextFilePtr) break;
+      let nextFile = asc.__getString(nextFilePtr);
+      if (!nextFile.startsWith("~lib/")) { // e.g. "rt/something"
+        nextFile = "~lib/" + nextFile;
+      }
+      let text = libraryFiles[nextFile.substring(5)];
+      if (text == null) {
+        text = libraryFiles[nextFile.substring(5) + "/index"];
+        if (text == null) throw Error("missing file: " + nextFile);
+        nextFile += "/index";
+      }
+      const textPtr = cachedString(libraryFiles[nextFile.substring(5)]);
+      const pathPtr = cachedString(nextFile + ".ts");
+      console.log("  " + asc.__getString(pathPtr));
+      asc.parse(programPtr, textPtr, pathPtr, false);
+    } while (true);
   }
+  parseBacklog();
 
   console.log("\nParsing entry file ...");
   {
-    const textPtr = cachedString("export function add(a: i32, b: i32): i32 { return a + b; }\n");
+    const textPtr = cachedString(`export function add(a: i32, b: i32): i32 { return a + b; }\n`);
     const pathPtr = cachedString("index.ts");
     console.log("  " + asc.__getString(pathPtr));
     asc.parse(programPtr, textPtr, pathPtr, true);
   }
+
+  parseBacklog();
 
   console.log("\nInitializing program ...");
   {
@@ -105,12 +113,42 @@ async function test(build: string): Promise<void> {
     const modulePtr = asc.compile(programPtr);
     const moduleRef = new Uint32Array(asc.memory.buffer, modulePtr)[0];
     console.log(binaryen.wrapModule(moduleRef).emitText());
-    asc.__release(modulePtr);
   }
 
-  asc.__release(programPtr);
-  cachedStrings.forEach(asc.__release);
+  cachedStrings.forEach(ptr => asc.__release(ptr));
+  cachedStrings.clear();
 
-  console.log("\nSo far, so good.");
+  console.log("\nChecking diagnostics ...");
+  {
+    let diagnosticPtr;
+    let numErrors = 0;
+    while ((diagnosticPtr = asc.nextDiagnostic(programPtr)) != 0) {
+      let textPtr = asc.formatDiagnostic(diagnosticPtr, true, true);
+      console.log(" " + asc.__getString(textPtr) + "\n");
+      if (asc.isError(diagnosticPtr)) ++numErrors;
+    }
+    console.log("Errors: " + numErrors);
+  }
+
+  const collectStart = Date.now();
+  asc.__collect();
+  console.log("\nCollect took " + (Date.now() - collectStart) + " ms");
+
+  if (rtrace.active) {
+    console.log("\n" +
+      asc.memory.buffer.byteLength + "b of memory, " +
+      rtrace.allocCount + " allocs, " +
+      rtrace.freeCount + " frees, " +
+      rtrace.resizeCount + " resizes, " +
+      rtrace.moveCount + " moves"
+    );
+    if (rtrace.allocCount - rtrace.freeCount > 50) {
+      // Last manual check had 41 expected live global objects
+      rtrace.oninfo = msg => console.log(msg);
+      rtrace.check();
+    }
+  }
 }
 test("untouched");
+// test("optimized");
+// test("rtraced");

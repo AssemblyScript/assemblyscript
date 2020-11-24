@@ -737,4 +737,6 @@ export function getString(): string {
 
 // Unleak globals
 
-__release(changetype<usize>(str));
+str = changetype<string>(0);
+
+__collect();

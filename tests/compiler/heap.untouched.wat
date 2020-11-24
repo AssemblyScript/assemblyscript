@@ -1,8 +1,8 @@
 (module
- (type $none_=>_none (func))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
@@ -11,19 +11,37 @@
  (memory $0 1)
  (data (i32.const 12) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 76) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
- (data (i32.const 140) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00n\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d\00")
  (table $0 1 funcref)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $heap/ptr (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 192))
+ (global $~lib/memory/__heap_base i32 (i32.const 136))
  (export "memory" (memory $0))
  (export "heap.alloc" (func $~lib/memory/heap.alloc))
  (export "heap.realloc" (func $~lib/memory/heap.realloc))
  (export "heap.free" (func $~lib/memory/heap.free))
- (export "heap.reset" (func $~lib/memory/heap.reset))
  (start $~start)
+ (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+ )
+ (func $~lib/rt/common/BLOCK#set:mmInfo (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+ )
+ (func $~lib/rt/tlsf/Block#set:prev (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=4
+ )
+ (func $~lib/rt/tlsf/Block#set:next (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=8
+ )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -143,13 +161,13 @@
   if
    local.get $6
    local.get $7
-   i32.store offset=8
+   call $~lib/rt/tlsf/Block#set:next
   end
   local.get $7
   if
    local.get $7
    local.get $6
-   i32.store offset=4
+   call $~lib/rt/tlsf/Block#set:prev
   end
   local.get $1
   local.get $0
@@ -235,7 +253,7 @@
      i32.const -1
      i32.xor
      i32.and
-     i32.store
+     call $~lib/rt/tlsf/Root#set:flMap
     end
    end
   end
@@ -330,7 +348,7 @@
     local.get $3
     i32.or
     local.tee $2
-    i32.store
+    call $~lib/rt/common/BLOCK#set:mmInfo
     local.get $1
     local.set $6
     local.get $6
@@ -405,7 +423,7 @@
     local.get $7
     i32.or
     local.tee $2
-    i32.store
+    call $~lib/rt/common/BLOCK#set:mmInfo
     local.get $6
     local.set $1
    end
@@ -414,7 +432,7 @@
   local.get $5
   i32.const 2
   i32.or
-  i32.store
+  call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $2
   i32.const 3
   i32.const -1
@@ -538,15 +556,15 @@
   local.set $11
   local.get $1
   i32.const 0
-  i32.store offset=4
+  call $~lib/rt/tlsf/Block#set:prev
   local.get $1
   local.get $11
-  i32.store offset=8
+  call $~lib/rt/tlsf/Block#set:next
   local.get $11
   if
    local.get $11
    local.get $1
-   i32.store offset=4
+   call $~lib/rt/tlsf/Block#set:prev
   end
   local.get $0
   local.set $12
@@ -574,7 +592,7 @@
   local.get $9
   i32.shl
   i32.or
-  i32.store
+  call $~lib/rt/tlsf/Root#set:flMap
   local.get $0
   local.set $13
   local.get $9
@@ -732,13 +750,13 @@
   i32.const 2
   i32.and
   i32.or
-  i32.store
+  call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $8
   i32.const 0
-  i32.store offset=4
+  call $~lib/rt/tlsf/Block#set:prev
   local.get $8
   i32.const 0
-  i32.store offset=8
+  call $~lib/rt/tlsf/Block#set:next
   local.get $1
   i32.const 4
   i32.add
@@ -749,7 +767,7 @@
   i32.const 0
   i32.const 2
   i32.or
-  i32.store
+  call $~lib/rt/common/BLOCK#set:mmInfo
   local.get $0
   local.set $9
   local.get $4
@@ -818,7 +836,7 @@
   local.set $3
   local.get $3
   i32.const 0
-  i32.store
+  call $~lib/rt/tlsf/Root#set:flMap
   local.get $3
   local.set $5
   i32.const 0
@@ -1258,7 +1276,7 @@
    i32.const 2
    i32.and
    i32.or
-   i32.store
+   call $~lib/rt/common/BLOCK#set:mmInfo
    local.get $1
    i32.const 4
    i32.add
@@ -1271,7 +1289,7 @@
    i32.sub
    i32.const 1
    i32.or
-   i32.store
+   call $~lib/rt/common/BLOCK#set:mmInfo
    local.get $0
    local.get $5
    call $~lib/rt/tlsf/insertBlock
@@ -1282,7 +1300,7 @@
    i32.const -1
    i32.xor
    i32.and
-   i32.store
+   call $~lib/rt/common/BLOCK#set:mmInfo
    local.get $1
    local.set $5
    local.get $5
@@ -1312,7 +1330,7 @@
    i32.const -1
    i32.xor
    i32.and
-   i32.store
+   call $~lib/rt/common/BLOCK#set:mmInfo
   end
  )
  (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (result i32)
@@ -2690,7 +2708,7 @@
   i32.load
   i32.const 1
   i32.or
-  i32.store
+  call $~lib/rt/common/BLOCK#set:mmInfo
   i32.const 0
   drop
   local.get $0
@@ -2803,7 +2821,7 @@
     i32.and
     local.get $6
     i32.or
-    i32.store
+    call $~lib/rt/common/BLOCK#set:mmInfo
     local.get $0
     local.get $1
     local.get $3
@@ -2880,17 +2898,6 @@
   global.set $heap/ptr
   global.get $heap/ptr
   call $~lib/memory/heap.free
- )
- (func $~lib/rt/tlsf/__reset
-  i32.const 160
-  i32.const 32
-  i32.const 598
-  i32.const 3
-  call $~lib/builtins/abort
-  unreachable
- )
- (func $~lib/memory/heap.reset
-  call $~lib/rt/tlsf/__reset
  )
  (func $~start
   call $start:heap

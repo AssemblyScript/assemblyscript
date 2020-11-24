@@ -3,7 +3,6 @@
  (type $none_=>_none (func))
  (type $i32_f32_i32_i32_=>_i32 (func (param i32 f32 i32 i32) (result i32)))
  (type $f32_=>_f32 (func (param f32) (result f32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
@@ -28,17 +27,7 @@
   local.get $1
   f64.eq
  )
- (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~lib/rt/stub/__release (param $0 i32)
-  nop
- )
  (func $start:infer-generic~anonymous|0 (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
-  (local $4 i32)
-  local.get $3
-  call $~lib/rt/stub/__retain
-  local.set $3
   local.get $0
   if (result i32)
    local.get $1
@@ -47,10 +36,6 @@
   else
    i32.const 0
   end
-  local.set $4
-  local.get $3
-  call $~lib/rt/stub/__release
-  local.get $4
  )
  (func $~lib/array/Array<f32>#reduce<bool> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -58,9 +43,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
   local.get $2
   local.set $3
   i32.const 0
@@ -107,10 +89,6 @@
    end
   end
   local.get $3
-  local.set $5
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $5
  )
  (func $start:infer-generic
   (local $0 i32)
@@ -142,57 +120,24 @@
  )
  (func $infer-generic/inferEncapsulatedClass<f32> (param $0 i32) (result i32)
   local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $0
  )
  (func $infer-generic/test2 (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   call $infer-generic/inferEncapsulatedClass<f32>
-  local.set $1
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
  )
  (func $infer-generic/inferEncapsulatedFunction<f32,f64> (param $0 i32) (result i32)
   local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $0
  )
  (func $infer-generic/test3 (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   call $infer-generic/inferEncapsulatedFunction<f32,f64>
-  local.set $1
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
  )
  (func $infer-generic/inferEncapsulatedFunctionMixed<f32,f64> (param $0 i32) (result i32)
   local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $0
  )
  (func $infer-generic/test4 (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $0
   call $infer-generic/inferEncapsulatedFunctionMixed<f32,f64>
-  local.set $1
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
  )
  (func $~start
   call $start:infer-generic

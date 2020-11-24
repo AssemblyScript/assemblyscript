@@ -2,7 +2,7 @@
   "targets": {
     "release": {
       "optimize": true,
-      "runtime": "stub",
+      "noExportRuntime": false,
       "initialMemory": 30,
       "explicitStart": true,
       "measure": true,

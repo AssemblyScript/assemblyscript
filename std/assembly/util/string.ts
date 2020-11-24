@@ -849,7 +849,7 @@ export function joinBooleanArray(dataStart: usize, length: i32, separator: strin
   var sepLen = separator.length;
   var valueLen = 5; // max possible length of element len("false")
   var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-  var result = changetype<string>(__new(estLen << 1, idof<string>())); // retains
+  var result = changetype<string>(__new(estLen << 1, idof<string>()));
   var offset = 0;
   var value: bool;
   for (let i = 0; i < lastIndex; ++i) {
@@ -891,18 +891,18 @@ export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: st
     if (isSigned<T>()) {
       if (sizeof<T>() <= 4) {
         // @ts-ignore: type
-        return changetype<string>(itoa32(<i32>value, 10)); // retains
+        return changetype<string>(itoa32(<i32>value, 10));
       } else {
         // @ts-ignore: type
-        return changetype<string>(itoa64(<i32>value, 10)); // retains
+        return changetype<string>(itoa64(<i32>value, 10));
       }
     } else {
       if (sizeof<T>() <= 4) {
         // @ts-ignore: type
-        return changetype<string>(utoa32(<u32>value, 10)); // retains
+        return changetype<string>(utoa32(<u32>value, 10));
       } else {
         // @ts-ignore: type
-        return changetype<string>(utoa64(<u64>value, 10)); // retains
+        return changetype<string>(utoa64(<u64>value, 10));
       }
     }
   }
@@ -910,7 +910,7 @@ export function joinIntegerArray<T>(dataStart: usize, length: i32, separator: st
   var sepLen = separator.length;
   const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
   var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-  var result = changetype<string>(__new(estLen << 1, idof<string>())); // retains
+  var result = changetype<string>(__new(estLen << 1, idof<string>()));
   var offset = 0;
   var value: T;
   for (let i = 0; i < lastIndex; ++i) {
@@ -940,13 +940,13 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
     return changetype<string>(dtoa(
       // @ts-ignore: type
       load<T>(dataStart))
-    ); // retains
+    );
   }
 
   const valueLen = MAX_DOUBLE_LENGTH;
   var sepLen = separator.length;
   var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-  var result = changetype<string>(__new(estLen << 1, idof<string>())); // retains
+  var result = changetype<string>(__new(estLen << 1, idof<string>()));
   var offset = 0;
   var value: T;
   for (let i = 0; i < lastIndex; ++i) {
@@ -1014,7 +1014,7 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
       <usize>value.length << 1
     );
   }
-  return changetype<string>(result); // retains
+  return changetype<string>(result);
 }
 
 export function joinReferenceArray<T>(dataStart: usize, length: i32, separator: string): string {

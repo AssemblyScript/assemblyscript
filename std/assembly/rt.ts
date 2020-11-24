@@ -49,7 +49,8 @@ export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize =
   var array = __new(offsetof<i32[]>(), id);
   var bufferSize = <usize>length << alignLog2;
   var buffer = __newBuffer(bufferSize, idof<ArrayBuffer>(), data);
-  store<usize>(array, __retain(buffer), offsetof<ArrayBufferView>("buffer"));
+  store<usize>(array, buffer, offsetof<ArrayBufferView>("buffer"));
+  __link(array, buffer, false);
   store<usize>(array, buffer, offsetof<ArrayBufferView>("dataStart"));
   store<i32>(array, bufferSize, offsetof<ArrayBufferView>("byteLength"));
   store<i32>(array, length, offsetof<i32[]>("length_"));
@@ -80,11 +81,7 @@ export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize =
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
-// export declare function __retain(ptr: usize): usize;
-
-// // @ts-ignore: decorator
-// @builtin @unsafe
-// export declare function __release(ptr: usize): void;
+// export declare function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void;
 
 // // @ts-ignore: decorator
 // @builtin @unsafe

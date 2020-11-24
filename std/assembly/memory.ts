@@ -91,10 +91,4 @@ export namespace heap {
   @unsafe export function free(ptr: usize): void {
     __free(ptr);
   }
-
-  /** Dangerously resets the entire heap. Specific to the stub/none runtime. */
-  // @ts-ignore: decorator
-  @unsafe export function reset(): void {
-    __reset();
-  }
 }

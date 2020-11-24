@@ -6,6 +6,7 @@ var expectedReadIndex = 0;
 
 function expect(ptr: usize): void {
   assert(expectedWriteIndex < expected.length);
+  trace("alloc", 1, ptr);
   expected[expectedWriteIndex++] = ptr;
 }
 
@@ -14,17 +15,19 @@ function expect(ptr: usize): void {
 // @ts-ignore
 @global function __finalize(ptr: usize): void {
   trace("finalize", 1, ptr);
-  assert(ptr == unchecked(expected[expectedReadIndex++]));
+  if (expected) assert(ptr == expected[expectedReadIndex]);
+  expectedReadIndex++;
 }
 
 // Simple test with locals becoming finalized immediately
 
 function testSimple(): void {
   var a = new Array<i32>(0);
-  expect(changetype<usize>(a.buffer));
   expect(changetype<usize>(a));
+  expect(changetype<usize>(a.buffer));
 }
 testSimple();
+__collect();
 assert(expectedWriteIndex == 2);
 assert(expectedReadIndex == expectedWriteIndex);
 
@@ -42,8 +45,8 @@ function testCyclic(): void {
   var bar = new Bar();
   foo.bar = bar;
   bar.foo = foo;
-  expect(changetype<usize>(bar));
   expect(changetype<usize>(foo));
+  expect(changetype<usize>(bar));
 }
 
 testCyclic();
@@ -55,5 +58,6 @@ assert(expectedReadIndex == expectedWriteIndex);
 
 expect(changetype<usize>(expected));
 expected = changetype<StaticArray<usize>>(0);
+__collect();
 assert(expectedWriteIndex == 5);
 assert(expectedReadIndex == expectedWriteIndex);

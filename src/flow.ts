@@ -66,7 +66,6 @@ import {
   getIfCondition,
   getConstValueI64High,
   getUnaryValue,
-  getCallOperandAt,
   traverse
 } from "./module";
 
@@ -165,16 +164,7 @@ export enum LocalFlags {
   /** Local is non-null. */
   NONNULL = 1 << 2,
   /** Local is initialized. */
-  INITIALIZED = 1 << 3,
-  /** Local is retained. */
-  RETAINED = 1 << 4,
-
-  /** Local must be conditionally retained. */
-  CONDITIONALLY_RETAINED = 1 << 5,
-
-  /** Any retained flag. */
-  ANY_RETAINED = RETAINED
-               | CONDITIONALLY_RETAINED
+  INITIALIZED = 1 << 3
 }
 
 /** Flags indicating the current state of a field. */
@@ -347,17 +337,6 @@ export class Flow {
     return local;
   }
 
-  /** Gets a local that sticks around until this flow is exited, and then released. */
-  getAutoreleaseLocal(type: Type, except: Set<i32> | null = null): Local {
-    var local = this.getTempLocal(type, except);
-    local.set(CommonFlags.SCOPED);
-    var scopedLocals = this.scopedLocals;
-    if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
-    scopedLocals.set("~auto" + (this.parentFunction.nextAutoreleaseId++).toString(), local);
-    this.setLocalFlag(local.index, LocalFlags.RETAINED);
-    return local;
-  }
-
   /** Frees the temporary local for reuse. */
   freeTempLocal(local: Local): void {
     if (local.is(CommonFlags.INLINED)) return;
@@ -460,27 +439,26 @@ export class Flow {
   /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
   addScopedAlias(name: string, type: Type, index: i32, reportNode: Node | null = null): Local {
     var scopedLocals = this.scopedLocals;
-    if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
-    else {
-      let existingLocal = scopedLocals.get(name);
-      if (existingLocal) {
-        if (reportNode) {
-          if (!existingLocal.declaration.range.source.isNative) {
-            this.parentFunction.program.errorRelated(
-              DiagnosticCode.Duplicate_identifier_0,
-              reportNode.range,
-              existingLocal.declaration.name.range,
-              name
-            );
-          } else {
-            this.parentFunction.program.error(
-              DiagnosticCode.Duplicate_identifier_0,
-              reportNode.range, name
-            );
-          }
+    if (!scopedLocals) {
+      this.scopedLocals = scopedLocals = new Map();
+    } else if (scopedLocals.has(name)) {
+      let existingLocal = assert(scopedLocals.get(name));
+      if (reportNode) {
+        if (!existingLocal.declaration.range.source.isNative) {
+          this.parentFunction.program.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            reportNode.range,
+            existingLocal.declaration.name.range,
+            name
+          );
+        } else {
+          this.parentFunction.program.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            reportNode.range, name
+          );
         }
-        return existingLocal;
       }
+      return existingLocal;
     }
     assert(index < this.parentFunction.localsByIndex.length);
     var scopedAlias = new Local(name, index, type, this.parentFunction);
@@ -774,24 +752,12 @@ export class Flow {
     for (let i = 0; i < maxLocalFlags; ++i) {
       let thisFlags = i < numThisLocalFlags ? thisLocalFlags[i] : 0;
       let otherFlags = i < numOtherLocalFlags ? otherLocalFlags[i] : 0;
-      let newFlags = thisFlags & otherFlags & (
+      thisLocalFlags[i] = thisFlags & otherFlags & (
         LocalFlags.CONSTANT  |
         LocalFlags.WRAPPED   |
         LocalFlags.NONNULL   |
         LocalFlags.INITIALIZED
       );
-      if (thisFlags & LocalFlags.RETAINED) {
-        if (otherFlags & LocalFlags.RETAINED) {
-          newFlags |= LocalFlags.RETAINED;
-        } else {
-          newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
-        }
-      } else if (otherFlags & LocalFlags.RETAINED) {
-        newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
-      } else {
-        newFlags |= (thisFlags | otherFlags) & LocalFlags.CONDITIONALLY_RETAINED;
-      }
-      thisLocalFlags[i] = newFlags;
     }
 
     // field flags do not matter here since there's only INITIALIZED, which can
@@ -912,24 +878,12 @@ export class Flow {
       for (let i = 0; i < maxLocalFlags; ++i) {
         let leftFlags = i < numLeftLocalFlags ? leftLocalFlags[i] : 0;
         let rightFlags = i < numRightLocalFlags ? rightLocalFlags[i] : 0;
-        let newFlags = leftFlags & rightFlags & (
+        thisLocalFlags[i] = leftFlags & rightFlags & (
           LocalFlags.CONSTANT  |
           LocalFlags.WRAPPED   |
           LocalFlags.NONNULL   |
           LocalFlags.INITIALIZED
         );
-        if (leftFlags & LocalFlags.RETAINED) {
-          if (rightFlags & LocalFlags.RETAINED) {
-            newFlags |= LocalFlags.RETAINED;
-          } else {
-            newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
-          }
-        } else if (rightFlags & LocalFlags.RETAINED) {
-          newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
-        } else {
-          newFlags |= (leftFlags | rightFlags) & LocalFlags.CONDITIONALLY_RETAINED;
-        }
-        thisLocalFlags[i] = newFlags;
       }
     }
 
@@ -990,11 +944,6 @@ export class Flow {
       if (this.isLocalFlag(i, LocalFlags.NONNULL) != other.isLocalFlag(i, LocalFlags.NONNULL)) {
         this.unsetLocalFlag(i, LocalFlags.NONNULL); // assume possibly null
       }
-      assert(
-        // having different retain states would be a problem because the compiler
-        // either can't release a retained local or would release a non-retained local
-        this.isAnyLocalFlag(i, LocalFlags.ANY_RETAINED) == other.isAnyLocalFlag(i, LocalFlags.ANY_RETAINED)
-      );
     }
   }
 
@@ -1120,15 +1069,6 @@ export class Flow {
             }
             break;
           }
-        }
-        break;
-      }
-      case ExpressionId.Call: {
-        let name = getCallTarget(expr);
-        let program = this.parentFunction.program;
-        if (name == program.retainInstance.internalName) {
-          // __retain just passes through the argument
-          this.inheritNonnullIfTrue(getCallOperandAt(expr, 0), iff);
         }
         break;
       }

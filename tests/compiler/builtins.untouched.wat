@@ -3,7 +3,6 @@
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -97,12 +96,6 @@
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name (param $0 i32) (result i32)
   i32.const 32
  )
- (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~lib/rt/stub/__release (param $0 i32)
-  nop
- )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 20
@@ -117,13 +110,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $2
-  call $~lib/rt/stub/__retain
-  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -210,12 +196,6 @@
      local.get $8
      local.get $9
      i32.sub
-     local.set $10
-     local.get $0
-     call $~lib/rt/stub/__release
-     local.get $2
-     call $~lib/rt/stub/__release
-     local.get $10
      return
     end
     local.get $5
@@ -230,33 +210,14 @@
    end
   end
   i32.const 0
-  local.set $7
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $7
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
   local.get $0
   local.get $1
   i32.eq
   if
    i32.const 1
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
    return
   end
   local.get $0
@@ -271,44 +232,26 @@
   end
   if
    i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
    i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
    return
   end
   local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $2
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:length (param $0 i32) (result i32)
   i32.const 2
@@ -351,8 +294,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
   i32.const 1
   drop
   i32.const 0
@@ -1701,7 +1642,6 @@
   end
   global.get $builtins/fn
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:name
-  local.tee $0
   i32.const 32
   call $~lib/string/String.__eq
   i32.eqz
@@ -1741,7 +1681,6 @@
   end
   global.get $builtins/fn
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#toString
-  local.tee $1
   i32.const 176
   call $~lib/string/String.__eq
   i32.eqz
@@ -2380,30 +2319,30 @@
    unreachable
   end
   i32.const 0
-  local.set $6
+  local.set $0
   i32.const 0
+  local.set $1
+  i32.const 23
+  local.set $6
+  i32.const 24
   local.set $7
-  i32.const 25
+  i32.const 24
   local.set $8
-  i32.const 26
-  local.set $9
-  i32.const 26
-  local.set $10
   i32.const 256
   i32.const 5
+  local.get $0
+  f64.convert_i32_u
+  local.get $1
+  f64.convert_i32_u
   local.get $6
   f64.convert_i32_u
   local.get $7
   f64.convert_i32_u
   local.get $8
   f64.convert_i32_u
-  local.get $9
-  f64.convert_i32_u
-  local.get $10
-  f64.convert_i32_u
   call $~lib/builtins/trace
-  local.get $6
-  local.get $7
+  local.get $0
+  local.get $1
   i32.eq
   i32.eqz
   if
@@ -2414,8 +2353,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
   local.get $6
-  local.get $8
   i32.ne
   i32.eqz
   if
@@ -2426,8 +2365,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $8
-  i32.const 25
+  local.get $6
+  i32.const 23
   i32.eq
   i32.eqz
   if
@@ -2438,8 +2377,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $9
-  local.get $10
+  local.get $7
+  local.get $8
   i32.eq
   i32.eqz
   if
@@ -2756,10 +2695,6 @@
   drop
   i32.const 1
   drop
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
  )
  (func $builtins/test
   nop

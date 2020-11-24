@@ -1,6 +1,6 @@
 {
   "asc_flags": [
-    "--runtime none"
+    "--noExportRuntime"
   ],
   "stderr": [
     "TS2564: Property 'field-initialization-errors/Ref.a' has no initializer",

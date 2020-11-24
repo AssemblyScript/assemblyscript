@@ -1,9 +1,10 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_f64 (func (result f64)))
- (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i64_=>_none (func (param i64)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -115,8 +116,10 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
+ (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
+  local.get $1
+  i32.store
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
@@ -397,8 +400,10 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/__release (param $0 i32)
-  nop
+ (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=4
  )
  (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
@@ -406,15 +411,9 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
   i32.const 0
   i32.const 12
-  i32.store
+  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
   i32.const 12
   local.set $4
   local.get $4
@@ -552,7 +551,7 @@
   local.get $4
   i32.const 12
   i32.sub
-  i32.store offset=4
+  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
   i32.const 2
   i32.const 0
   i32.const 1
@@ -561,10 +560,6 @@
   drop
   i32.const 255
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
  )
  (func $~lib/math/NativeMath.seedRandom (param $0 i64)
   i32.const 1

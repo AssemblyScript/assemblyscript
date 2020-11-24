@@ -1,1 +1,1 @@
-export { __free };
+export { __alloc, __realloc, __free };

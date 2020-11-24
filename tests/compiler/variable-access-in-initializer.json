@@ -1,6 +1,6 @@
 {
   "asc_flags": [
-    "--runtime none"
+    "--noExportRuntime"
   ],
   "stderr": [
     "TS2448: Variable 'variable-access-in-initializer/a' used before its declaration.",
