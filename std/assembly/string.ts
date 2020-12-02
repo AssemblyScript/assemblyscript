@@ -360,19 +360,21 @@ import { Array } from "./array";
   }
 
   replaceAll(search: String, replacement: String): String {
-    var len: usize = this.length;
-    var slen: usize = search.length;
-    if (len <= slen) {
-      return len < slen ? this : select<String>(replacement, this, search == this);
+    var thisLen: usize = this.length;
+    var searchLen: usize = search.length;
+    if (thisLen <= searchLen) {
+      return thisLen < searchLen
+        ? this
+        : select<String>(replacement, this, search == this);
     }
-    var rlen: usize = replacement.length;
-    if (!slen) {
-      if (!rlen) return this;
+    var replaceLen: usize = replacement.length;
+    if (!searchLen) {
+      if (!replaceLen) return this;
       // Special case: 'abc'.replaceAll('', '-') -> '-a-b-c-'
-      let out = __new((len + (len + 1) * rlen) << 1, idof<String>());
-      memory.copy(out, changetype<usize>(replacement), rlen << 1);
-      let offset = rlen;
-      for (let i: usize = 0; i < len; ++i) {
+      let out = __new((thisLen + (thisLen + 1) * replaceLen) << 1, idof<String>());
+      memory.copy(out, changetype<usize>(replacement), replaceLen << 1);
+      let offset = replaceLen;
+      for (let i: usize = 0; i < thisLen; ++i) {
         store<u16>(
           changetype<usize>(out) + (offset++ << 1),
           load<u16>(changetype<usize>(this) + (i << 1))
@@ -380,32 +382,31 @@ import { Array } from "./array";
         memory.copy(
           out + (offset << 1),
           changetype<usize>(replacement),
-          rlen << 1
+          replaceLen << 1
         );
-        offset += rlen;
+        offset += replaceLen;
       }
       return changetype<String>(out);
     }
     var prev: isize = 0, next: isize = 0;
-    if (slen == rlen) {
+    if (searchLen == replaceLen) {
       // Fast path when search and replacement have same length
-      let size = len << 1;
-      let out = __new(size, idof<String>());
-      memory.copy(out, changetype<usize>(this), size);
+      let outSize = thisLen << 1;
+      let out = __new(outSize, idof<String>());
+      memory.copy(out, changetype<usize>(this), outSize);
       while (~(next = <isize>this.indexOf(search, <i32>prev))) {
-        memory.copy(out + (next << 1), changetype<usize>(replacement), rlen << 1);
-        prev = next + slen;
+        memory.copy(out + (next << 1), changetype<usize>(replacement), replaceLen << 1);
+        prev = next + searchLen;
       }
       return changetype<String>(out);
     }
-    var out: usize = 0, offset: usize = 0, resLen = len;
+    var out: usize = 0, offset: usize = 0, outSize = thisLen;
     while (~(next = <isize>this.indexOf(search, <i32>prev))) {
-      if (!out) out = __new(len << 1, idof<String>());
+      if (!out) out = __new(thisLen << 1, idof<String>());
       let chunk = next - prev;
-      if ((offset + chunk + rlen) > resLen) {
-        let newLength = resLen << 1;
-        out = __renew(out, newLength << 1);
-        resLen = newLength;
+      if (offset + chunk + replaceLen > outSize) {
+        outSize <<= 1;
+        out = __renew(out, outSize << 1);
       }
       memory.copy(
         out + (offset << 1),
@@ -416,17 +417,16 @@ import { Array } from "./array";
       memory.copy(
         out + (offset << 1),
         changetype<usize>(replacement),
-        rlen << 1
+        replaceLen << 1
       );
-      offset += rlen;
-      prev = next + slen;
+      offset += replaceLen;
+      prev = next + searchLen;
     }
     if (offset) {
-      let rest = len - prev;
-      if ((offset + rest) > resLen) {
-        let newLength = resLen << 1;
-        out = __renew(out, newLength << 1);
-        resLen = newLength;
+      let rest = thisLen - prev;
+      if (offset + rest > outSize) {
+        outSize <<= 1;
+        out = __renew(out, outSize << 1);
       }
       if (rest) {
         memory.copy(
@@ -436,7 +436,9 @@ import { Array } from "./array";
         );
       }
       rest += offset;
-      if (resLen > rest) out = __renew(out, rest << 1);
+      if (outSize > rest) {
+        out = __renew(out, rest << 1);
+      }
       return changetype<String>(out);
     }
     return this;

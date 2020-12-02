@@ -7859,15 +7859,13 @@
      local.get $15
      i32.const 1
      i32.shl
-     local.set $8
+     local.set $15
      local.get $13
-     local.get $8
+     local.get $15
      i32.const 1
      i32.shl
      call $~lib/rt/pure/__renew
      local.set $13
-     local.get $8
-     local.set $15
     end
     local.get $13
     local.get $14
@@ -7923,15 +7921,13 @@
     local.get $15
     i32.const 1
     i32.shl
-    local.set $8
+    local.set $15
     local.get $13
-    local.get $8
+    local.get $15
     i32.const 1
     i32.shl
     call $~lib/rt/pure/__renew
     local.set $13
-    local.get $8
-    local.set $15
    end
    local.get $5
    if
