@@ -401,12 +401,12 @@ import { Array } from "./array";
     var out: usize = 0, offset: usize = 0, resLen = len;
     while (~(next = <isize>this.indexOf(search, <i32>prev))) {
       if (!out) out = __new(len << 1, idof<String>());
-      if (offset > resLen) {
+      let chunk = next - prev;
+      if ((offset + chunk + rlen) > resLen) {
         let newLength = resLen << 1;
         out = __renew(out, newLength << 1);
         resLen = newLength;
       }
-      let chunk = next - prev;
       memory.copy(
         out + (offset << 1),
         changetype<usize>(this) + (prev << 1),
@@ -422,12 +422,12 @@ import { Array } from "./array";
       prev = next + slen;
     }
     if (offset) {
-      if (offset > resLen) {
+      let rest = len - prev;
+      if ((offset + rest) > resLen) {
         let newLength = resLen << 1;
         out = __renew(out, newLength << 1);
         resLen = newLength;
       }
-      let rest = len - prev;
       if (rest) {
         memory.copy(
           out + (offset << 1),
