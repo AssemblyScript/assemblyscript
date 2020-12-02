@@ -57,10 +57,10 @@ export class Array<T> {
   constructor(length: i32 = 0) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     var bufferSize = <usize>length << alignof<T>();
-    var buffer = __new(bufferSize, idof<ArrayBuffer>());
-    memory.fill(buffer, 0, bufferSize);
-    this.buffer = changetype<ArrayBuffer>(buffer); // links
-    this.dataStart = buffer;
+    var buffer = changetype<ArrayBuffer>(__new(bufferSize, idof<ArrayBuffer>()));
+    memory.fill(changetype<usize>(buffer), 0, bufferSize);
+    this.buffer = buffer; // links
+    this.dataStart = changetype<usize>(buffer);
     this.byteLength = <i32>bufferSize;
     this.length_ = length;
   }
@@ -469,17 +469,17 @@ export class Array<T> {
 
     // calculate the byteLength of the resulting backing ArrayBuffer
     var byteLength = <usize>size << usize(alignof<valueof<T>>());
-    var dataStart = __new(byteLength, idof<ArrayBuffer>());
+    var outBuffer = changetype<ArrayBuffer>(__new(byteLength, idof<ArrayBuffer>()));
 
     // create the return value and initialize it
-    var result = __new(offsetof<T>(), idof<T>());
-    store<i32>(result, size, offsetof<T>("length_"));
+    var outArray = changetype<T>(__new(offsetof<T>(), idof<T>()));
+    store<i32>(changetype<usize>(outArray), size, offsetof<T>("length_"));
 
     // byteLength, dataStart, and buffer are all readonly
-    store<i32>(result, byteLength, offsetof<T>("byteLength"));
-    store<usize>(result, dataStart, offsetof<T>("dataStart"));
-    store<usize>(result, dataStart, offsetof<T>("buffer"));
-    __link(result, dataStart, false);
+    store<i32>(changetype<usize>(outArray), byteLength, offsetof<T>("byteLength"));
+    store<usize>(changetype<usize>(outArray), changetype<usize>(outBuffer), offsetof<T>("dataStart"));
+    store<usize>(changetype<usize>(outArray), changetype<usize>(outBuffer), offsetof<T>("buffer"));
+    __link(changetype<usize>(outArray), changetype<usize>(outBuffer), false);
 
     // set the elements
     var resultOffset: usize = 0;
@@ -492,7 +492,7 @@ export class Array<T> {
       // copy the underlying buffer data to the result buffer
       let childDataLength = load<i32>(child, offsetof<T>("byteLength"));
       memory.copy(
-        dataStart + resultOffset,
+        changetype<usize>(outBuffer) + resultOffset,
         load<usize>(child, offsetof<T>("dataStart")),
         <usize>childDataLength
       );
@@ -504,12 +504,12 @@ export class Array<T> {
     // if the `valueof<T>` type is managed, we must link each reference
     if (isManaged<valueof<T>>()) {
       for (let i = 0; i < size; i++) {
-        let ref = load<usize>(dataStart + (<usize>i << usize(alignof<valueof<T>>())));
-        __link(dataStart, ref, true);
+        let ref = load<usize>(changetype<usize>(outBuffer) + (<usize>i << usize(alignof<valueof<T>>())));
+        __link(changetype<usize>(outBuffer), ref, true);
       }
     }
 
-    return changetype<T>(result);
+    return outArray;
   }
 
   toString(): string {

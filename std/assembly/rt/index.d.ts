@@ -18,6 +18,11 @@ declare function __visit(ptr: usize, cookie: i32): void;
 declare function __visit_globals(cookie: u32): void;
 declare function __visit_members(ptr: usize, cookie: u32): void;
 
+// Stack
+declare const __stack_base: usize;
+declare const __stack_size: usize;
+declare var __stackptr: usize;
+
 // Allocation helpers
 declare function __newBuffer(size: usize, id: u32, data?: usize): usize;
 declare function __newArray(length: i32, alignLog2: usize, id: u32, data?: usize): usize;

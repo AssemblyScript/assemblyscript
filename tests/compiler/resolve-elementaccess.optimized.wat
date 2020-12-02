@@ -2,17 +2,17 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f32_=>_none (func (param i32 i32 f32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i64_i32_i64_i32_i64_i32_=>_i32 (func (param i64 i32 i64 i32 i64 i32) (result i32)))
  (type $f32_=>_i32 (func (param f32) (result i32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 1036) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
  (data (i32.const 1084) "&\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (data (i32.const 1196) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
@@ -38,9 +38,12 @@
  (data (i32.const 3132) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\001")
  (data (i32.const 3164) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\002")
  (data (i32.const 3196) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\001\001")
+ (data (i32.const 3228) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00s\00t\00a\00c\00k\00 \00o\00v\00e\00r\00f\00l\00o\00w")
+ (data (i32.const 3276) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $resolve-elementaccess/arr (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
@@ -49,6 +52,7 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $resolve-elementaccess/buf (mut i32) (i32.const 0))
+ (global $~lib/rt/__stackptr (mut i32) (i32.const 3316))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tcms/init
@@ -995,10 +999,10 @@
   if
    memory.size
    local.tee $3
-   i32.const 1
+   i32.const 2
    i32.lt_s
    if (result i32)
-    i32.const 1
+    i32.const 2
     local.get $3
     i32.sub
     memory.grow
@@ -1010,10 +1014,10 @@
    if
     unreachable
    end
-   i32.const 3232
+   i32.const 68864
    i32.const 0
    i32.store
-   i32.const 4800
+   i32.const 70432
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -1024,7 +1028,7 @@
      local.get $2
      i32.const 2
      i32.shl
-     i32.const 3232
+     i32.const 68864
      i32.add
      i32.const 0
      i32.store offset=4
@@ -1042,7 +1046,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 3232
+       i32.const 68864
        i32.add
        i32.const 0
        i32.store offset=96
@@ -1060,13 +1064,13 @@
      br $for-loop|0
     end
    end
-   i32.const 3232
-   i32.const 4804
+   i32.const 68864
+   i32.const 70436
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 3232
+   i32.const 68864
    global.set $~lib/rt/tlsf/ROOT
   end
   global.get $~lib/rt/tlsf/ROOT
@@ -1086,6 +1090,10 @@
   local.get $2
   i32.const 0
   call $~lib/rt/tcms/Object#set:color
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   i32.const 20
   i32.add
@@ -1253,6 +1261,10 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
   local.get $0
   i32.eqz
   if
@@ -1270,6 +1282,9 @@
   local.get $0
   i32.const 0
   i32.store offset=8
+  local.get $3
+  local.get $0
+  i32.store
   i32.const 1073741820
   local.get $1
   i32.shr_u
@@ -1286,11 +1301,11 @@
   i32.const 2
   local.get $1
   i32.shl
-  local.tee $3
+  local.tee $4
   i32.const 0
   call $~lib/rt/tcms/__new
   local.tee $1
-  local.get $3
+  local.get $4
   call $~lib/memory/memory.fill
   local.get $0
   local.get $1
@@ -1307,7 +1322,7 @@
    if
     i32.const 0
     i32.const 1344
-    i32.const 253
+    i32.const 302
     i32.const 14
     call $~lib/builtins/abort
     unreachable
@@ -1342,13 +1357,13 @@
      i32.load offset=4
      i32.const -4
      i32.and
-     local.tee $4
+     local.tee $5
      local.get $2
      i32.load offset=8
-     local.tee $5
+     local.tee $6
      i32.store offset=8
+     local.get $6
      local.get $5
-     local.get $4
      call $~lib/rt/tcms/Object#set:next
      i32.const 1168
      local.get $2
@@ -1363,11 +1378,19 @@
   local.get $1
   i32.store offset=4
   local.get $0
-  local.get $3
+  local.get $4
   i32.store offset=8
+  local.get $3
+  global.set $~lib/rt/__stackptr
   local.get $0
  )
  (func $~lib/typedarray/Float32Array#__set (param $0 i32) (param $1 i32) (param $2 f32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $3
+  local.get $0
+  i32.store
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1390,8 +1413,17 @@
   i32.add
   local.get $2
   f32.store
+  local.get $3
+  global.set $~lib/rt/__stackptr
  )
  (func $~lib/typedarray/Float32Array#__get (param $0 i32) (param $1 i32) (result f32)
+  (local $2 i32)
+  (local $3 f32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $2
+  local.get $0
+  i32.store
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1413,6 +1445,8 @@
   i32.shl
   i32.add
   f32.load
+  local.get $2
+  global.set $~lib/rt/__stackptr
  )
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
@@ -2609,14 +2643,128 @@
   end
   local.get $2
  )
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $1
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1
+  i32.shr_u
+  local.get $1
+  global.set $~lib/rt/__stackptr
+ )
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.tee $4
+  local.get $0
+  i32.store
+  local.get $4
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  i32.const 7
+  i32.and
+  local.get $1
+  i32.const 7
+  i32.and
+  i32.or
+  i32.eqz
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.ge_u
+  select
+  if
+   loop $do-continue|0
+    local.get $0
+    i64.load
+    local.get $1
+    i64.load
+    i64.eq
+    if
+     local.get $0
+     i32.const 8
+     i32.add
+     local.set $0
+     local.get $1
+     i32.const 8
+     i32.add
+     local.set $1
+     local.get $2
+     i32.const 4
+     i32.sub
+     local.tee $2
+     i32.const 4
+     i32.ge_u
+     br_if $do-continue|0
+    end
+   end
+  end
+  loop $while-continue|1
+   local.get $2
+   local.tee $3
+   i32.const 1
+   i32.sub
+   local.set $2
+   local.get $3
+   if
+    local.get $1
+    i32.load16_u
+    local.tee $3
+    local.get $0
+    i32.load16_u
+    local.tee $5
+    i32.ne
+    if
+     local.get $4
+     global.set $~lib/rt/__stackptr
+     local.get $5
+     local.get $3
+     i32.sub
+     return
+    end
+    local.get $0
+    i32.const 2
+    i32.add
+    local.set $0
+    local.get $1
+    i32.const 2
+    i32.add
+    local.set $1
+    br $while-continue|1
+   end
+  end
+  local.get $4
+  global.set $~lib/rt/__stackptr
+  i32.const 0
+ )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.tee $2
+  local.get $0
+  i32.store
+  local.get $2
+  local.get $1
+  i32.store offset=4
   local.get $0
   local.get $1
   i32.eq
   if
+   local.get $2
+   global.set $~lib/rt/__stackptr
    i32.const 1
    return
   end
@@ -2626,106 +2774,38 @@
   local.get $0
   select
   if
+   local.get $2
+   global.set $~lib/rt/__stackptr
    i32.const 0
    return
   end
   local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 1
-  i32.shr_u
-  local.tee $2
+  call $~lib/string/String#get:length
+  local.tee $3
   local.get $1
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 1
-  i32.shr_u
+  call $~lib/string/String#get:length
   i32.ne
   if
+   local.get $2
+   global.set $~lib/rt/__stackptr
    i32.const 0
    return
   end
-  block $__inlined_func$~lib/util/string/compareImpl (result i32)
-   local.get $0
-   local.tee $3
-   i32.const 7
-   i32.and
-   local.get $1
-   i32.const 7
-   i32.and
-   i32.or
-   i32.eqz
-   i32.const 0
-   local.get $2
-   local.tee $0
-   i32.const 4
-   i32.ge_u
-   select
-   if
-    loop $do-continue|0
-     local.get $3
-     i64.load
-     local.get $1
-     i64.load
-     i64.eq
-     if
-      local.get $3
-      i32.const 8
-      i32.add
-      local.set $3
-      local.get $1
-      i32.const 8
-      i32.add
-      local.set $1
-      local.get $0
-      i32.const 4
-      i32.sub
-      local.tee $0
-      i32.const 4
-      i32.ge_u
-      br_if $do-continue|0
-     end
-    end
-   end
-   loop $while-continue|1
-    local.get $0
-    local.tee $2
-    i32.const 1
-    i32.sub
-    local.set $0
-    local.get $2
-    if
-     local.get $3
-     i32.load16_u
-     local.tee $2
-     local.get $1
-     i32.load16_u
-     local.tee $4
-     i32.ne
-     if
-      local.get $2
-      local.get $4
-      i32.sub
-      br $__inlined_func$~lib/util/string/compareImpl
-     end
-     local.get $3
-     i32.const 2
-     i32.add
-     local.set $3
-     local.get $1
-     i32.const 2
-     i32.add
-     local.set $1
-     br $while-continue|1
-    end
-   end
-   i32.const 0
-  end
+  local.get $0
+  local.get $1
+  local.get $3
+  call $~lib/util/string/compareImpl
   i32.eqz
+  local.get $2
+  global.set $~lib/rt/__stackptr
  )
  (func $~lib/typedarray/Uint8Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $3
+  local.get $0
+  i32.store
   local.get $1
   local.get $0
   i32.load offset=8
@@ -2744,8 +2824,16 @@
   i32.add
   local.get $2
   i32.store8
+  local.get $3
+  global.set $~lib/rt/__stackptr
  )
  (func $~lib/typedarray/Uint8Array#__get (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $2
+  local.get $0
+  i32.store
   local.get $1
   local.get $0
   i32.load offset=8
@@ -2763,42 +2851,58 @@
   i32.load offset=4
   i32.add
   i32.load8_u
+  local.get $2
+  global.set $~lib/rt/__stackptr
  )
- (func $~lib/number/U8#toString (param $0 i32) (result i32)
+ (func $~lib/util/number/utoa32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  block $__inlined_func$~lib/util/number/utoa32
-   local.get $0
-   i32.const 255
-   i32.and
-   local.tee $1
-   i32.eqz
-   if
-    i32.const 3024
-    local.set $0
-    br $__inlined_func$~lib/util/number/utoa32
-   end
-   local.get $1
-   call $~lib/util/number/decimalCount32
-   local.tee $2
-   i32.const 1
-   i32.shl
-   i32.const 1
-   call $~lib/rt/tcms/__new
-   local.tee $0
-   local.get $1
-   local.get $2
-   call $~lib/util/number/utoa_dec_simple<u32>
-  end
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
   local.get $0
+  i32.eqz
+  if
+   local.get $1
+   global.set $~lib/rt/__stackptr
+   i32.const 3024
+   return
+  end
+  local.get $1
+  local.get $0
+  call $~lib/util/number/decimalCount32
+  local.tee $3
+  i32.const 1
+  i32.shl
+  i32.const 1
+  call $~lib/rt/tcms/__new
+  local.tee $2
+  i32.store
+  local.get $2
+  local.get $0
+  local.get $3
+  call $~lib/util/number/utoa_dec_simple<u32>
+  local.get $1
+  global.set $~lib/rt/__stackptr
+  local.get $2
  )
  (func $start:resolve-elementaccess
   (local $0 i32)
+  (local $1 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $1
   i32.const 12
   i32.const 3
   call $~lib/rt/tcms/__new
+  local.tee $0
+  i32.store
+  local.get $0
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.get $1
+  global.set $~lib/rt/__stackptr
   global.set $resolve-elementaccess/arr
   global.get $resolve-elementaccess/arr
   i32.const 0
@@ -2886,16 +2990,25 @@
   i32.const 12
   i32.const 4
   call $~lib/rt/tcms/__new
-  local.tee $0
-  if (result i32)
-   local.get $0
-  else
+  local.set $0
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $1
+  local.get $0
+  i32.eqz
+  if
    i32.const 12
    i32.const 5
    call $~lib/rt/tcms/__new
+   local.set $0
   end
+  local.get $0
+  i32.store
+  local.get $0
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.get $1
+  global.set $~lib/rt/__stackptr
   global.set $resolve-elementaccess/buf
   global.get $resolve-elementaccess/buf
   i32.const 0
@@ -2908,7 +3021,9 @@
   global.get $resolve-elementaccess/buf
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
-  call $~lib/number/U8#toString
+  i32.const 255
+  i32.and
+  call $~lib/util/number/utoa32
   i32.const 3152
   call $~lib/string/String.__eq
   i32.eqz
@@ -2923,7 +3038,9 @@
   global.get $resolve-elementaccess/buf
   i32.const 1
   call $~lib/typedarray/Uint8Array#__get
-  call $~lib/number/U8#toString
+  i32.const 255
+  i32.and
+  call $~lib/util/number/utoa32
   i32.const 3184
   call $~lib/string/String.__eq
   i32.eqz
@@ -2947,7 +3064,9 @@
   local.get $0
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
-  call $~lib/number/U8#toString
+  i32.const 255
+  i32.and
+  call $~lib/util/number/utoa32
   i32.const 3216
   call $~lib/string/String.__eq
   i32.eqz
@@ -2983,5 +3102,40 @@
  )
  (func $~start
   call $start:resolve-elementaccess
+ )
+ (func $~lib/rt/__stack_prepare (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  global.get $~lib/rt/__stackptr
+  local.tee $1
+  i32.add
+  local.tee $0
+  i32.const 68852
+  i32.gt_u
+  if
+   i32.const 3248
+   i32.const 3296
+   i32.const 118
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  global.set $~lib/rt/__stackptr
+  loop $while-continue|0
+   local.get $0
+   i32.const 4
+   i32.sub
+   local.tee $0
+   local.get $1
+   i32.ge_u
+   if
+    local.get $0
+    i32.const 0
+    i32.store
+    br $while-continue|0
+   end
+  end
+  local.get $1
  )
 )

@@ -51,4 +51,5 @@
   assert(ArrayBuffer.isView(new DataView(arr8.buffer)));
 }
 
+__stackptr = __stack_base;
 __collect();

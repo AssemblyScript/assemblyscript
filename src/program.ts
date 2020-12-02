@@ -688,6 +688,30 @@ export class Program extends DiagnosticEmitter {
   }
   private _collectInstance: Function | null = null;
 
+  /** Gets the runtime `__stackify(ptr: usize, offset: usize): usize` instance. */
+  get stackifyInstance(): Function {
+    var cached = this._stackifyInstance;
+    if (!cached) this._stackifyInstance = cached = this.requireFunction(BuiltinNames.stackify);
+    return cached;
+  }
+  private _stackifyInstance: Function | null = null;
+
+  /** Gets the runtime `__stack_prepare(frameSize: usize): usize` instance. */
+  get stackPrepareInstance(): Function {
+    var cached = this._stackPrepareInstance;
+    if (!cached) this._stackPrepareInstance = cached = this.requireFunction(BuiltinNames.stack_prepare);
+    return cached;
+  }
+  private _stackPrepareInstance: Function | null = null;
+
+  /** Gets the runtime `__stack_restore(sp: usize): void` instance. */
+  get stackRestoreInstance(): Function {
+    var cached = this._stackRestoreInstance;
+    if (!cached) this._stackRestoreInstance = cached = this.requireFunction(BuiltinNames.stack_restore);
+    return cached;
+  }
+  private _stackRestoreInstance: Function | null = null;
+
   /** Gets the runtime `__visit(ptr: usize, cookie: u32): void` instance. */
   get visitInstance(): Function {
     var cached = this._visitInstance;

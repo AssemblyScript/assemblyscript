@@ -22,6 +22,7 @@
  (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "doThrow" (func $throw/doThrow))
  (start $~start)
@@ -848,17 +849,21 @@
     i32.const 4
     i32.add
     call $~lib/rt/tlsf/__free
-   else
-    global.get $~lib/rt/tcms/toSpace
-    local.tee $0
-    local.get $0
-    i32.store offset=4
-    local.get $0
-    local.get $0
-    i32.store offset=8
+    global.get $~lib/rt/tcms/total
     i32.const 1
-    global.set $~lib/rt/tcms/state
+    i32.sub
+    global.set $~lib/rt/tcms/total
+    return
    end
+   global.get $~lib/rt/tcms/toSpace
+   local.tee $0
+   local.get $0
+   i32.store offset=4
+   local.get $0
+   local.get $0
+   i32.store offset=8
+   i32.const 1
+   global.set $~lib/rt/tcms/state
   end
  )
  (func $throw/doThrow
@@ -893,12 +898,23 @@
     br $while-continue|0
    end
   end
-  loop $do-continue|0
+  global.get $~lib/rt/tcms/state
+  i32.const 1
+  i32.eq
+  i32.const 1
+  global.get $~lib/rt/tcms/state
+  select
+  if
    call $~lib/rt/tcms/step
+  end
+  loop $while-continue|00
    global.get $~lib/rt/tcms/state
    i32.const 1
    i32.ne
-   br_if $do-continue|0
+   if
+    call $~lib/rt/tcms/step
+    br $while-continue|00
+   end
   end
  )
  (func $~lib/rt/tcms/Object#set:next (param $0 i32) (param $1 i32)

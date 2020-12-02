@@ -4,6 +4,7 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "mark" (func $~lib/rt/tcms/markExternals))
@@ -28,6 +29,7 @@
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 464))
  (export "memory" (memory $0))
  (export "doThrow" (func $throw/doThrow))
@@ -154,11 +156,14 @@
   call $~lib/rt/tcms/Object#set:nextWithColor
  )
  (func $~lib/rt/tcms/mark (param $0 i32)
+  (local $1 i32)
   local.get $0
   global.get $~lib/rt/tcms/white
   i32.eqz
   call $~lib/rt/tcms/Object#set:color
   local.get $0
+  local.set $1
+  local.get $1
   i32.const 20
   i32.add
   i32.const 0
@@ -1133,7 +1138,20 @@
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/tcms/step
+ (func $~lib/rt/tcms/free (param $0 i32) (result i32)
+  i32.const 0
+  drop
+  local.get $0
+  i32.const 4
+  i32.add
+  call $~lib/rt/tlsf/__free
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.sub
+  global.set $~lib/rt/tcms/total
+  i32.const 1
+ )
+ (func $~lib/rt/tcms/step (result i32)
   (local $0 i32)
   (local $1 i32)
   block $break|0
@@ -1163,9 +1181,7 @@
       end
       call $~lib/rt/tcms/init
      end
-     i32.const 0
-     call $~lib/rt/__visit_globals
-     call $~lib/rt/tcms/markExternals
+     call $~lib/rt/tcms/markRoots
      i32.const 2
      global.set $~lib/rt/tcms/state
      br $break|0
@@ -1182,9 +1198,7 @@
      local.get $0
      call $~lib/rt/tcms/mark
     else
-     i32.const 0
-     call $~lib/rt/__visit_globals
-     call $~lib/rt/tcms/markExternals
+     call $~lib/rt/tcms/markRoots
      global.get $~lib/rt/tcms/iter
      call $~lib/rt/tcms/Object#get:next
      local.set $0
@@ -1219,37 +1233,51 @@
     local.get $0
     call $~lib/rt/tcms/Object#get:next
     global.set $~lib/rt/tcms/iter
-    i32.const 0
-    drop
     local.get $0
-    i32.const 4
-    i32.add
-    call $~lib/rt/tlsf/__free
-   else
-    global.get $~lib/rt/tcms/toSpace
-    local.set $1
-    local.get $1
-    local.get $1
-    call $~lib/rt/tcms/Object#set:nextWithColor
-    local.get $1
-    local.get $1
-    call $~lib/rt/tcms/Object#set:prev
-    i32.const 1
-    global.set $~lib/rt/tcms/state
+    call $~lib/rt/tcms/free
+    return
    end
+   global.get $~lib/rt/tcms/toSpace
+   local.set $1
+   local.get $1
+   local.get $1
+   call $~lib/rt/tcms/Object#set:nextWithColor
+   local.get $1
+   local.get $1
+   call $~lib/rt/tcms/Object#set:prev
+   i32.const 1
+   global.set $~lib/rt/tcms/state
    br $break|0
   end
+  i32.const 0
  )
  (func $~lib/rt/tcms/__collect
   (local $0 i32)
-  loop $do-continue|0
+  global.get $~lib/rt/tcms/state
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   global.get $~lib/rt/tcms/state
+   i32.const 1
+   i32.eq
+  end
+  if
    call $~lib/rt/tcms/step
+   drop
+  end
+  loop $while-continue|0
    global.get $~lib/rt/tcms/state
    i32.const 1
    i32.ne
    local.set $0
    local.get $0
-   br_if $do-continue|0
+   if
+    call $~lib/rt/tcms/step
+    drop
+    br $while-continue|0
+   end
   end
  )
  (func $start:throw
@@ -1272,6 +1300,13 @@
  )
  (func $~start
   call $start:throw
+ )
+ (func $~lib/rt/tcms/markRoots
+  i32.const 0
+  call $~lib/rt/__visit_globals
+  i32.const 0
+  drop
+  call $~lib/rt/tcms/markExternals
  )
  (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
   local.get $0

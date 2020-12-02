@@ -851,6 +851,10 @@ export declare function _BinaryenFunctionGetParams(func: BinaryenFunctionRef): B
 export declare function _BinaryenFunctionGetResults(func: BinaryenFunctionRef): BinaryenType;
 export declare function _BinaryenFunctionGetNumVars(func: BinaryenFunctionRef): BinaryenIndex;
 export declare function _BinaryenFunctionGetVar(func: BinaryenFunctionRef, index: BinaryenIndex): BinaryenType;
+export declare function _BinaryenFunctionGetNumLocals(func: BinaryenFunctionRef): BinaryenIndex;
+export declare function _BinaryenFunctionHasLocalName(func: BinaryenFunctionRef, index: BinaryenIndex): bool;
+export declare function _BinaryenFunctionGetLocalName(func: BinaryenFunctionRef, index: BinaryenIndex): BinaryenString;
+export declare function _BinaryenFunctionSetLocalName(func: BinaryenFunctionRef, index: BinaryenIndex, name: BinaryenString): void;
 export declare function _BinaryenFunctionGetBody(func: BinaryenFunctionRef): BinaryenExpressionRef;
 export declare function _BinaryenFunctionSetBody(func: BinaryenFunctionRef, bodyExpr: BinaryenExpressionRef): void;
 export declare function _BinaryenFunctionOptimize(func: BinaryenFunctionRef, module: BinaryenModuleRef): void;

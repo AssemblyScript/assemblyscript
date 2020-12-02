@@ -3,13 +3,13 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 1036) "\08\00\00\00\01")
  (data (i32.const 1052) "\08\00\00\00\01")
  (data (i32.const 1116) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
@@ -21,9 +21,13 @@
  (data (i32.const 1548) "&\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s")
  (data (i32.const 1612) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\000")
  (data (i32.const 1644) "H\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z")
+ (data (i32.const 1740) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00s\00t\00a\00c\00k\00 \00o\00v\00e\00r\00f\00l\00o\00w")
+ (data (i32.const 1788) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/__stackptr (mut i32) (i32.const 1828))
  (export "memory" (memory $0))
  (export "arrayAccess" (func $resolve-access/arrayAccess))
  (export "fieldAccess" (func $resolve-access/fieldAccess))
@@ -972,10 +976,10 @@
   if
    memory.size
    local.tee $3
-   i32.const 1
+   i32.const 2
    i32.lt_s
    if (result i32)
-    i32.const 1
+    i32.const 2
     local.get $3
     i32.sub
     memory.grow
@@ -987,10 +991,10 @@
    if
     unreachable
    end
-   i32.const 1744
+   i32.const 67376
    i32.const 0
    i32.store
-   i32.const 3312
+   i32.const 68944
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -1001,7 +1005,7 @@
      local.get $2
      i32.const 2
      i32.shl
-     i32.const 1744
+     i32.const 67376
      i32.add
      i32.const 0
      i32.store offset=4
@@ -1019,7 +1023,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 1744
+       i32.const 67376
        i32.add
        i32.const 0
        i32.store offset=96
@@ -1037,13 +1041,13 @@
      br $for-loop|0
     end
    end
-   i32.const 1744
-   i32.const 3316
+   i32.const 67376
+   i32.const 68948
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 1744
+   i32.const 67376
    global.set $~lib/rt/tlsf/ROOT
   end
   global.get $~lib/rt/tlsf/ROOT
@@ -1063,6 +1067,10 @@
   local.get $2
   i32.const 0
   call $~lib/rt/tcms/Object#set:color
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   i32.const 20
   i32.add
@@ -1307,9 +1315,15 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
   local.get $0
   i64.eqz
   if
+   local.get $3
+   global.set $~lib/rt/__stackptr
    i32.const 1632
    return
   end
@@ -1317,20 +1331,24 @@
   i64.const 4294967295
   i64.le_u
   if
+   local.get $3
    local.get $0
    i32.wrap_i64
-   local.tee $1
-   call $~lib/util/number/decimalCount32
    local.tee $2
+   call $~lib/util/number/decimalCount32
+   local.tee $4
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/tcms/__new
-   local.tee $3
+   local.tee $1
+   i32.store
    local.get $1
    local.get $2
+   local.get $4
    call $~lib/util/number/utoa_dec_simple<u32>
   else
+   local.get $3
    local.get $0
    i64.const 100000000000
    i64.ge_u
@@ -1375,19 +1393,19 @@
    i64.const 1000000000000000
    i64.lt_u
    select
-   local.tee $1
+   local.tee $4
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/tcms/__new
-   local.tee $3
-   local.set $2
+   local.tee $1
+   i32.store offset=4
    loop $do-continue|0
-    local.get $2
     local.get $1
+    local.get $4
     i32.const 1
     i32.sub
-    local.tee $1
+    local.tee $4
     i32.const 1
     i32.shl
     i32.add
@@ -1408,6 +1426,8 @@
    end
   end
   local.get $3
+  global.set $~lib/rt/__stackptr
+  local.get $1
  )
  (func $resolve-access/arrayAccess (result i32)
   (local $0 i32)
@@ -1415,15 +1435,31 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i64)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.tee $3
   i32.const 16
   i32.const 3
   call $~lib/rt/tcms/__new
-  local.set $0
+  local.tee $0
+  i32.store
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $1
   i32.const 8
   i32.const 0
   call $~lib/rt/tcms/__new
   local.tee $2
+  i32.store
+  local.get $2
   call $~lib/memory/memory.copy
+  local.get $1
+  global.set $~lib/rt/__stackptr
+  local.get $3
+  local.get $2
+  i32.store offset=4
   local.get $0
   local.get $2
   i32.store
@@ -1439,7 +1475,7 @@
    if
     i32.const 0
     i32.const 1264
-    i32.const 253
+    i32.const 302
     i32.const 14
     call $~lib/builtins/abort
     unreachable
@@ -1474,13 +1510,13 @@
      i32.load offset=4
      i32.const -4
      i32.and
-     local.tee $3
+     local.tee $4
      local.get $1
      i32.load offset=8
-     local.tee $4
+     local.tee $5
      i32.store offset=8
+     local.get $5
      local.get $4
-     local.get $3
      call $~lib/rt/tcms/Object#set:next
      i32.const 1088
      local.get $1
@@ -1500,6 +1536,13 @@
   local.get $0
   i32.const 1
   i32.store offset=12
+  local.get $3
+  global.set $~lib/rt/__stackptr
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $2
+  local.get $0
+  i32.store
   local.get $0
   i32.load offset=12
   i32.eqz
@@ -1511,9 +1554,18 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $1
+  local.get $0
+  i32.store
   local.get $0
   i32.load offset=4
   i64.load
+  local.get $1
+  global.set $~lib/rt/__stackptr
+  local.get $2
+  global.set $~lib/rt/__stackptr
   call $~lib/util/number/utoa64
  )
  (func $resolve-access/Container#constructor (result i32)
@@ -1540,33 +1592,86 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   call $resolve-access/Container#constructor
   local.tee $0
   i64.const 1
   i64.store
-  block $__inlined_func$~lib/util/number/utoa32
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.tee $1
+  local.get $0
+  i32.store
+  local.get $0
+  i64.load
+  i32.wrap_i64
+  local.set $0
+  local.get $1
+  global.set $~lib/rt/__stackptr
+  block $__inlined_func$~lib/util/number/utoa32 (result i32)
+   i32.const 4
+   call $~lib/rt/__stack_prepare
+   local.set $2
    local.get $0
-   i64.load
-   i32.wrap_i64
-   local.tee $1
    i32.eqz
    if
+    local.get $2
+    global.set $~lib/rt/__stackptr
     i32.const 1632
-    local.set $0
     br $__inlined_func$~lib/util/number/utoa32
    end
-   local.get $1
+   local.get $2
+   local.get $0
    call $~lib/util/number/decimalCount32
-   local.tee $2
+   local.tee $3
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/tcms/__new
-   local.tee $0
+   local.tee $1
+   i32.store
    local.get $1
-   local.get $2
+   local.get $0
+   local.get $3
    call $~lib/util/number/utoa_dec_simple<u32>
+   local.get $2
+   global.set $~lib/rt/__stackptr
+   local.get $1
+  end
+ )
+ (func $~lib/rt/__stack_prepare (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  global.get $~lib/rt/__stackptr
+  local.tee $1
+  i32.add
+  local.tee $0
+  i32.const 67364
+  i32.gt_u
+  if
+   i32.const 1760
+   i32.const 1808
+   i32.const 118
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
   end
   local.get $0
+  global.set $~lib/rt/__stackptr
+  loop $while-continue|0
+   local.get $0
+   i32.const 4
+   i32.sub
+   local.tee $0
+   local.get $1
+   i32.ge_u
+   if
+    local.get $0
+    i32.const 0
+    i32.store
+    br $while-continue|0
+   end
+  end
+  local.get $1
  )
 )

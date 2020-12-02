@@ -2358,7 +2358,7 @@ function allocU32Array(u32s: u32[] | null): usize {
   return ptr;
 }
 
-function allocPtrArray(ptrs: usize[] | null): usize {
+export function allocPtrArray(ptrs: usize[] | null): usize {
   if (!ptrs) return 0;
   // TODO: WASM64
   assert(ASC_TARGET != Target.WASM64);
@@ -2597,7 +2597,8 @@ export function traverse<T>(
       break;
     }
     case ExpressionId.Return: {
-      visit(binaryen._BinaryenReturnGetValue(expr), data);
+      let value = binaryen._BinaryenReturnGetValue(expr);
+      if (value) visit(value, data);
       break;
     }
     case ExpressionId.MemorySize:

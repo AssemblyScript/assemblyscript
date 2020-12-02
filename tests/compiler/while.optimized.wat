@@ -1,16 +1,19 @@
 (module
  (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "mark" (func $~lib/rt/tcms/markExternals))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 1036) "\10\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00w\00h\00i\00l\00e\00.\00t\00s")
  (data (i32.const 1116) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1180) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1244) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00s\00t\00a\00c\00k\00 \00o\00v\00e\00r\00f\00l\00o\00w")
+ (data (i32.const 1292) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (global $while/ran (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 1072))
@@ -18,6 +21,8 @@
  (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/__stackptr (mut i32) (i32.const 1332))
  (export "memory" (memory $0))
  (start $~start)
  (func $while/testNested
@@ -681,10 +686,10 @@
   (local $1 i32)
   memory.size
   local.tee $0
-  i32.const 1
+  i32.const 2
   i32.lt_s
   if (result i32)
-   i32.const 1
+   i32.const 2
    local.get $0
    i32.sub
    memory.grow
@@ -696,10 +701,10 @@
   if
    unreachable
   end
-  i32.const 1248
+  i32.const 66880
   i32.const 0
   i32.store
-  i32.const 2816
+  i32.const 68448
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -710,7 +715,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 1248
+    i32.const 66880
     i32.add
     i32.const 0
     i32.store offset=4
@@ -728,7 +733,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 1248
+      i32.const 66880
       i32.add
       i32.const 0
       i32.store offset=96
@@ -746,13 +751,13 @@
     br $for-loop|0
    end
   end
-  i32.const 1248
-  i32.const 2820
+  i32.const 66880
+  i32.const 68452
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 1248
+  i32.const 66880
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
@@ -1018,9 +1023,79 @@
   local.get $0
   global.get $~lib/rt/tcms/white
   call $~lib/rt/tcms/Object#set:color
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $0
   i32.const 20
   i32.add
+ )
+ (func $~lib/rt/tcms/mark (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  global.get $~lib/rt/tcms/white
+  i32.eqz
+  call $~lib/rt/tcms/Object#set:color
+  block $__inlined_func$~lib/rt/__visit_members
+   block $switch$1$default
+    block $switch$1$case$4
+     local.get $0
+     i32.const 12
+     i32.add
+     i32.load
+     br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$default
+    end
+    local.get $0
+    i32.load offset=20
+    local.tee $0
+    if
+     local.get $0
+     if
+      global.get $~lib/rt/tcms/white
+      local.get $0
+      i32.const 20
+      i32.sub
+      local.tee $0
+      i32.load offset=4
+      i32.const 3
+      i32.and
+      i32.eq
+      if
+       local.get $0
+       global.get $~lib/rt/tcms/iter
+       i32.eq
+       if
+        local.get $0
+        i32.load offset=8
+        global.set $~lib/rt/tcms/iter
+       end
+       local.get $0
+       i32.load offset=4
+       i32.const -4
+       i32.and
+       local.tee $1
+       local.get $0
+       i32.load offset=8
+       local.tee $2
+       i32.store offset=8
+       local.get $2
+       local.get $1
+       call $~lib/rt/tcms/Object#set:next
+       global.get $~lib/rt/tcms/toSpace
+       local.get $0
+       call $~lib/rt/tcms/ObjectList#push
+       local.get $0
+       i32.const 2
+       call $~lib/rt/tcms/Object#set:color
+      end
+     end
+    end
+    br $__inlined_func$~lib/rt/__visit_members
+   end
+   unreachable
+  end
  )
  (func $~lib/rt/tcms/step
   (local $0 i32)
@@ -1036,7 +1111,7 @@
       end
       call $~lib/rt/tcms/init
      end
-     call $~lib/rt/tcms/markExternals
+     call $~lib/rt/tcms/markRoots
      i32.const 2
      global.set $~lib/rt/tcms/state
      br $break|0
@@ -1052,69 +1127,9 @@
      local.get $0
      global.set $~lib/rt/tcms/iter
      local.get $0
-     global.get $~lib/rt/tcms/white
-     i32.eqz
-     call $~lib/rt/tcms/Object#set:color
-     block $__inlined_func$~lib/rt/__visit_members
-      block $switch$1$default
-       block $switch$1$case$4
-        local.get $0
-        i32.const 12
-        i32.add
-        i32.load
-        br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$default
-       end
-       local.get $0
-       i32.load offset=20
-       local.tee $0
-       if
-        local.get $0
-        if
-         global.get $~lib/rt/tcms/white
-         local.get $0
-         i32.const 20
-         i32.sub
-         local.tee $0
-         i32.load offset=4
-         i32.const 3
-         i32.and
-         i32.eq
-         if
-          local.get $0
-          global.get $~lib/rt/tcms/iter
-          i32.eq
-          if
-           local.get $0
-           i32.load offset=8
-           global.set $~lib/rt/tcms/iter
-          end
-          local.get $0
-          i32.load offset=4
-          i32.const -4
-          i32.and
-          local.tee $2
-          local.get $0
-          i32.load offset=8
-          local.tee $1
-          i32.store offset=8
-          local.get $1
-          local.get $2
-          call $~lib/rt/tcms/Object#set:next
-          global.get $~lib/rt/tcms/toSpace
-          local.get $0
-          call $~lib/rt/tcms/ObjectList#push
-          local.get $0
-          i32.const 2
-          call $~lib/rt/tcms/Object#set:color
-         end
-        end
-       end
-       br $__inlined_func$~lib/rt/__visit_members
-      end
-      unreachable
-     end
+     call $~lib/rt/tcms/mark
     else
-     call $~lib/rt/tcms/markExternals
+     call $~lib/rt/tcms/markRoots
      global.get $~lib/rt/tcms/toSpace
      global.get $~lib/rt/tcms/iter
      i32.load offset=4
@@ -1155,8 +1170,8 @@
     local.get $0
     i32.const 4
     i32.add
-    local.tee $2
-    i32.const 1240
+    local.tee $1
+    i32.const 66868
     i32.ge_u
     if
      global.get $~lib/rt/tlsf/ROOT
@@ -1165,16 +1180,16 @@
       call $~lib/rt/tlsf/initialize
      end
      global.get $~lib/rt/tlsf/ROOT
-     local.get $2
+     local.get $1
      i32.const 4
      i32.sub
      local.set $0
-     local.get $2
+     local.get $1
      i32.const 15
      i32.and
      i32.eqz
      i32.const 0
-     local.get $2
+     local.get $1
      select
      if (result i32)
       local.get $0
@@ -1203,17 +1218,21 @@
      local.get $0
      call $~lib/rt/tlsf/insertBlock
     end
-   else
-    global.get $~lib/rt/tcms/toSpace
-    local.tee $0
-    local.get $0
-    i32.store offset=4
-    local.get $0
-    local.get $0
-    i32.store offset=8
+    global.get $~lib/rt/tcms/total
     i32.const 1
-    global.set $~lib/rt/tcms/state
+    i32.sub
+    global.set $~lib/rt/tcms/total
+    return
    end
+   global.get $~lib/rt/tcms/toSpace
+   local.tee $0
+   local.get $0
+   i32.store offset=4
+   local.get $0
+   local.get $0
+   i32.store offset=8
+   i32.const 1
+   global.set $~lib/rt/tcms/state
   end
  )
  (func $start:while
@@ -1276,14 +1295,14 @@
   i32.const 0
   global.set $while/ran
   i32.const 1
-  local.set $1
+  local.set $0
   loop $while-continue|00
-   local.get $1
-   local.tee $0
+   local.get $0
+   local.tee $1
    i32.const 1
    i32.sub
-   local.set $1
-   local.get $0
+   local.set $0
+   local.get $1
    if (result i32)
     local.get $2
     i32.const 1
@@ -1294,7 +1313,7 @@
    end
    br_if $while-continue|00
   end
-  local.get $1
+  local.get $0
   i32.const -1
   i32.ne
   if
@@ -1452,28 +1471,36 @@
   i32.const 0
   global.set $while/ran
   i32.const 0
+  local.set $0
+  call $~lib/rt/__stack_prepare
   local.set $1
   call $while/Ref#constructor
-  local.set $0
+  local.set $2
   loop $while-continue|04
-   local.get $0
+   local.get $2
    if
-    local.get $1
+    local.get $0
     i32.const 1
     i32.add
-    local.tee $1
+    local.tee $0
     i32.const 10
     i32.eq
-    if (result i32)
+    if
+     local.get $1
      i32.const 0
+     i32.store
+     i32.const 0
+     local.set $2
     else
+     local.get $1
      call $while/Ref#constructor
+     local.tee $2
+     i32.store offset=4
     end
-    local.set $0
     br $while-continue|04
    end
   end
-  local.get $1
+  local.get $0
   i32.const 10
   i32.ne
   if
@@ -1484,7 +1511,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $2
   if
    i32.const 0
    i32.const 1056
@@ -1495,32 +1522,39 @@
   end
   i32.const 1
   global.set $while/ran
+  local.get $1
+  global.set $~lib/rt/__stackptr
   i32.const 0
   global.set $while/ran
   i32.const 0
-  local.set $1
-  call $while/Ref#constructor
+  local.set $2
+  call $~lib/rt/__stack_prepare
   local.set $0
+  call $while/Ref#constructor
+  local.set $1
   loop $while-continue|05
    call $while/Ref#constructor
    if
     block $while-break|0
-     local.get $1
+     local.get $2
      i32.const 1
      i32.add
-     local.tee $1
+     local.tee $2
      i32.const 10
      i32.eq
      if
+      local.get $0
       i32.const 0
-      local.set $0
+      i32.store
+      i32.const 0
+      local.set $1
       br $while-break|0
      end
      br $while-continue|05
     end
    end
   end
-  local.get $1
+  local.get $2
   i32.const 10
   i32.ne
   if
@@ -1531,7 +1565,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   if
    i32.const 0
    i32.const 1056
@@ -1542,18 +1576,20 @@
   end
   i32.const 1
   global.set $while/ran
+  local.get $0
+  global.set $~lib/rt/__stackptr
   i32.const 0
   global.set $while/ran
   i32.const 0
   local.set $0
-  loop $while-continue|056
+  loop $while-continue|046
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 1
    i32.lt_s
-   br_if $while-continue|056
+   br_if $while-continue|046
   end
   i32.const 1
   global.set $while/ran
@@ -1561,26 +1597,104 @@
   global.set $while/ran
   i32.const 0
   local.set $0
-  loop $while-continue|06
+  loop $while-continue|057
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 1
    i32.lt_s
-   br_if $while-continue|06
+   br_if $while-continue|057
   end
   i32.const 1
   global.set $while/ran
-  loop $do-continue|0
+  global.get $~lib/rt/tcms/state
+  i32.const 1
+  i32.eq
+  i32.const 1
+  global.get $~lib/rt/tcms/state
+  select
+  if
    call $~lib/rt/tcms/step
+  end
+  loop $while-continue|06
    global.get $~lib/rt/tcms/state
    i32.const 1
    i32.ne
-   br_if $do-continue|0
+   if
+    call $~lib/rt/tcms/step
+    br $while-continue|06
+   end
   end
  )
  (func $~start
   call $start:while
+ )
+ (func $~lib/rt/__stack_prepare (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  global.get $~lib/rt/__stackptr
+  local.tee $1
+  i32.const 4
+  i32.add
+  local.tee $0
+  i32.const 66868
+  i32.gt_u
+  if
+   i32.const 1264
+   i32.const 1312
+   i32.const 118
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  global.set $~lib/rt/__stackptr
+  loop $while-continue|0
+   local.get $1
+   local.get $0
+   i32.const 4
+   i32.sub
+   local.tee $0
+   i32.le_u
+   if
+    local.get $0
+    i32.const 0
+    i32.store
+    br $while-continue|0
+   end
+  end
+  local.get $1
+ )
+ (func $~lib/rt/tcms/markRoots
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 1332
+  local.set $0
+  global.get $~lib/rt/__stackptr
+  local.set $1
+  loop $while-continue|0
+   local.get $0
+   local.get $1
+   i32.lt_u
+   if
+    local.get $0
+    i32.load
+    local.tee $2
+    if
+     local.get $2
+     i32.const 20
+     i32.sub
+     call $~lib/rt/tcms/mark
+    end
+    local.get $0
+    i32.const 4
+    i32.add
+    local.set $0
+    br $while-continue|0
+   end
+  end
+  call $~lib/rt/tcms/markExternals
  )
 )

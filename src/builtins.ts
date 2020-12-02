@@ -612,6 +612,12 @@ export namespace BuiltinNames {
   export const rtti_base = "~lib/rt/__rtti_base";
   export const visit_globals = "~lib/rt/__visit_globals";
   export const visit_members = "~lib/rt/__visit_members";
+  export const stackify = "~lib/rt/__stackify";
+  export const stack_base = "~lib/rt/__stack_base";
+  export const stack_size = "~lib/rt/__stack_size";
+  export const stackptr = "~lib/rt/__stackptr";
+  export const stack_prepare = "~lib/rt/__stack_prepare";
+  export const stack_restore = "~lib/rt/__stack_restore";
 
   // std/number.ts
   export const isNaN = "~lib/number/isNaN";

@@ -19,19 +19,19 @@ export class StaticArray<T> {
   static fromArray<T>(source: Array<T>): StaticArray<T> {
     var length = source.length;
     var outSize = <usize>length << alignof<T>();
-    var out = __new(outSize, idof<StaticArray<T>>());
+    var out = changetype<StaticArray<T>>(__new(outSize, idof<StaticArray<T>>()));
     if (isManaged<T>()) {
       let sourcePtr = source.dataStart;
       for (let i = 0; i < length; ++i) {
         let off = <usize>i << alignof<T>();
         let ref = load<usize>(sourcePtr + off);
-        store<usize>(out + off, ref);
-        __link(out, ref, true);
+        store<usize>(changetype<usize>(out) + off, ref);
+        __link(changetype<usize>(out), ref, true);
       }
     } else {
-      memory.copy(out, source.dataStart, outSize);
+      memory.copy(changetype<usize>(out), source.dataStart, outSize);
     }
-    return changetype<StaticArray<T>>(out);
+    return out;
   }
 
   static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T> {
@@ -87,9 +87,9 @@ export class StaticArray<T> {
   constructor(length: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     var outSize = <usize>length << alignof<T>();
-    var out = __new(outSize, idof<StaticArray<T>>());
-    memory.fill(out, 0, outSize);
-    return changetype<StaticArray<T>>(out);
+    var out = changetype<StaticArray<T>>(__new(outSize, idof<StaticArray<T>>()));
+    memory.fill(changetype<usize>(out), 0, outSize);
+    return out;
   }
 
   get length(): i32 {

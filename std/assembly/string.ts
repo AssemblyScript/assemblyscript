@@ -13,35 +13,35 @@ import { Array } from "./array";
 
   static fromCharCode(unit: i32, surr: i32 = -1): String {
     var hasSur = surr > 0;
-    var out = __new(2 << i32(hasSur), idof<String>());
-    store<u16>(out, <u16>unit);
-    if (hasSur) store<u16>(out, <u16>surr, 2);
-    return changetype<String>(out); // __commit_with_value(out) (eliminated)
+    var out = changetype<String>(__new(2 << i32(hasSur), idof<String>()));
+    store<u16>(changetype<usize>(out), <u16>unit);
+    if (hasSur) store<u16>(changetype<usize>(out), <u16>surr, 2);
+    return out;
   }
 
   static fromCharCodes(units: Array<i32>): String {
     var length = units.length;
-    var out = __new(<usize>length << 1, idof<String>());
+    var out = changetype<String>(__new(<usize>length << 1, idof<String>()));
     var ptr = units.dataStart;
     for (let i = 0; i < length; ++i) {
-      store<u16>(out + (<usize>i << 1), load<i32>(ptr + (<usize>i << 2)));
+      store<u16>(changetype<usize>(out) + (<usize>i << 1), load<i32>(ptr + (<usize>i << 2)));
     }
-    return changetype<String>(out);
+    return out;
   }
 
   static fromCodePoint(code: i32): String {
     assert(<u32>code <= 0x10FFFF);
     var hasSur = code > 0xFFFF;
-    var out = __new(2 << i32(hasSur), idof<String>());
+    var out = changetype<String>(__new(2 << i32(hasSur), idof<String>()));
     if (!hasSur) {
-      store<u16>(out, <u16>code);
+      store<u16>(changetype<usize>(out), <u16>code);
     } else {
       code -= 0x10000;
       let hi = (code & 0x03FF) | 0xDC00;
       let lo = (code >>> 10) | 0xD800;
-      store<u32>(out, lo | (hi << 16));
+      store<u32>(changetype<usize>(out), lo | (hi << 16));
     }
-    return changetype<String>(out);
+    return out;
   }
 
   get length(): i32 {
@@ -50,9 +50,9 @@ import { Array } from "./array";
 
   @operator("[]") charAt(pos: i32): String {
     if (<u32>pos >= <u32>this.length) return changetype<String>("");
-    var out = __new(2, idof<String>());
-    store<u16>(out, load<u16>(changetype<usize>(this) + (<usize>pos << 1)));
-    return changetype<String>(out);
+    var out = changetype<String>(__new(2, idof<String>()));
+    store<u16>(changetype<usize>(out), load<u16>(changetype<usize>(this) + (<usize>pos << 1)));
+    return out;
   }
 
   charCodeAt(pos: i32): i32 {
@@ -201,9 +201,9 @@ import { Array } from "./array";
     if (intStart < 0) intStart = max(len + intStart, 0);
     var size = min(max(end, 0), len - intStart) << 1;
     if (size <= 0) return changetype<String>("");
-    var out = __new(size, idof<String>());
-    memory.copy(out, changetype<usize>(this) + (intStart << 1), size);
-    return changetype<String>(out);
+    var out = changetype<String>(__new(size, idof<String>()));
+    memory.copy(changetype<usize>(out), changetype<usize>(this) + (intStart << 1), size);
+    return out;
   }
 
   substring(start: i32, end: i32 = i32.MAX_VALUE): String {
@@ -215,9 +215,9 @@ import { Array } from "./array";
     var size = toPos - fromPos;
     if (!size) return changetype<String>("");
     if (!fromPos && toPos == len << 1) return this;
-    var out = __new(size, idof<String>());
-    memory.copy(out, changetype<usize>(this) + fromPos, size);
-    return changetype<String>(out);
+    var out = changetype<String>(__new(size, idof<String>()));
+    memory.copy(changetype<usize>(out), changetype<usize>(this) + fromPos, size);
+    return out;
   }
 
   trim(): String {
@@ -232,9 +232,9 @@ import { Array } from "./array";
     }
     if (!size) return changetype<String>("");
     if (!offset && size == len << 1) return this;
-    var out = __new(size, idof<String>());
-    memory.copy(out, changetype<usize>(this) + offset, size);
-    return changetype<String>(out);
+    var out = changetype<String>(__new(size, idof<String>()));
+    memory.copy(changetype<usize>(out), changetype<usize>(this) + offset, size);
+    return out;
   }
 
   @inline
@@ -256,9 +256,9 @@ import { Array } from "./array";
     if (!offset) return this;
     size -= offset;
     if (!size) return changetype<String>("");
-    var out = __new(size, idof<String>());
-    memory.copy(out, changetype<usize>(this) + offset, size);
-    return changetype<String>(out);
+    var out = changetype<String>(__new(size, idof<String>()));
+    memory.copy(changetype<usize>(out), changetype<usize>(this) + offset, size);
+    return out;
   }
 
   trimEnd(): String {
@@ -269,9 +269,9 @@ import { Array } from "./array";
     }
     if (!size) return changetype<String>("");
     if (size == originalSize) return this;
-    var out = __new(size, idof<String>());
-    memory.copy(out, changetype<usize>(this), size);
-    return changetype<String>(out);
+    var out = changetype<String>(__new(size, idof<String>()));
+    memory.copy(changetype<usize>(out), changetype<usize>(this), size);
+    return out;
   }
 
   padStart(length: i32, pad: string = " "): String {
@@ -280,18 +280,18 @@ import { Array } from "./array";
     var padSize = <usize>pad.length << 1;
     if (targetSize < thisSize || !padSize) return this;
     var prependSize = targetSize - thisSize;
-    var out = __new(targetSize, idof<String>());
+    var out = changetype<String>(__new(targetSize, idof<String>()));
     if (prependSize > padSize) {
       let repeatCount = (prependSize - 2) / padSize;
       let restBase = repeatCount * padSize;
       let restSize = prependSize - restBase;
-      memory.repeat(out, changetype<usize>(pad), padSize, repeatCount);
-      memory.copy(out + restBase, changetype<usize>(pad), restSize);
+      memory.repeat(changetype<usize>(out), changetype<usize>(pad), padSize, repeatCount);
+      memory.copy(changetype<usize>(out) + restBase, changetype<usize>(pad), restSize);
     } else {
-      memory.copy(out, changetype<usize>(pad), prependSize);
+      memory.copy(changetype<usize>(out), changetype<usize>(pad), prependSize);
     }
-    memory.copy(out + prependSize, changetype<usize>(this), thisSize);
-    return changetype<String>(out);
+    memory.copy(changetype<usize>(out) + prependSize, changetype<usize>(this), thisSize);
+    return out;
   }
 
   padEnd(length: i32, pad: string = " "): String {
@@ -300,18 +300,18 @@ import { Array } from "./array";
     var padSize = <usize>pad.length << 1;
     if (targetSize < thisSize || !padSize) return this;
     var appendSize = targetSize - thisSize;
-    var out = __new(targetSize, idof<String>());
-    memory.copy(out, changetype<usize>(this), thisSize);
+    var out = changetype<String>(__new(targetSize, idof<String>()));
+    memory.copy(changetype<usize>(out), changetype<usize>(this), thisSize);
     if (appendSize > padSize) {
       let repeatCount = (appendSize - 2) / padSize;
       let restBase = repeatCount * padSize;
       let restSize = appendSize - restBase;
-      memory.repeat(out + thisSize, changetype<usize>(pad), padSize, repeatCount);
-      memory.copy(out + thisSize + restBase, changetype<usize>(pad), restSize);
+      memory.repeat(changetype<usize>(out) + thisSize, changetype<usize>(pad), padSize, repeatCount);
+      memory.copy(changetype<usize>(out) + thisSize + restBase, changetype<usize>(pad), restSize);
     } else {
-      memory.copy(out + thisSize, changetype<usize>(pad), appendSize);
+      memory.copy(changetype<usize>(out) + thisSize, changetype<usize>(pad), appendSize);
     }
-    return changetype<String>(out);
+    return out;
   }
 
   repeat(count: i32 = 0): String {
@@ -324,9 +324,9 @@ import { Array } from "./array";
 
     if (count == 0 || !length) return changetype<String>("");
     if (count == 1) return this;
-    var out = __new((length * count) << 1, idof<String>());
-    memory.repeat(out, changetype<usize>(this), <usize>length << 1, count);
-    return changetype<String>(out);
+    var out = changetype<String>(__new((length * count) << 1, idof<String>()));
+    memory.repeat(changetype<usize>(out), changetype<usize>(this), <usize>length << 1, count);
+    return out;
   }
 
   replace(search: String, replacement: String): String {
@@ -341,19 +341,19 @@ import { Array } from "./array";
       len -= slen;
       let olen = len + rlen;
       if (olen) {
-        let out = __new(olen << 1, idof<String>());
-        memory.copy(out, changetype<usize>(this), index << 1);
+        let out = changetype<String>(__new(olen << 1, idof<String>()));
+        memory.copy(changetype<usize>(out), changetype<usize>(this), index << 1);
         memory.copy(
-          out + (index << 1),
+          changetype<usize>(out) + (index << 1),
           changetype<usize>(replacement),
           rlen << 1
         );
         memory.copy(
-          out + ((index + rlen) << 1),
+          changetype<usize>(out) + ((index + rlen) << 1),
           changetype<usize>(this) + ((index + slen) << 1),
           (len - index) << 1
         );
-        return changetype<String>(out);
+        return out;
       }
     }
     return this;
@@ -369,8 +369,8 @@ import { Array } from "./array";
     if (!slen) {
       if (!rlen) return this;
       // Special case: 'abc'.replaceAll('', '-') -> '-a-b-c-'
-      let out = __new((len + (len + 1) * rlen) << 1, idof<String>());
-      memory.copy(out, changetype<usize>(replacement), rlen << 1);
+      let out = changetype<String>(__new((len + (len + 1) * rlen) << 1, idof<String>()));
+      memory.copy(changetype<usize>(out), changetype<usize>(replacement), rlen << 1);
       let offset = rlen;
       for (let i: usize = 0; i < len; ++i) {
         store<u16>(
@@ -378,43 +378,43 @@ import { Array } from "./array";
           load<u16>(changetype<usize>(this) + (i << 1))
         );
         memory.copy(
-          out + (offset << 1),
+          changetype<usize>(out) + (offset << 1),
           changetype<usize>(replacement),
           rlen << 1
         );
         offset += rlen;
       }
-      return changetype<String>(out);
+      return out;
     }
     var prev: isize = 0, next: isize = 0;
     if (slen == rlen) {
       // Fast path when search and replacement have same length
       let size = len << 1;
-      let out = __new(size, idof<String>());
-      memory.copy(out, changetype<usize>(this), size);
+      let out = changetype<String>(__new(size, idof<String>()));
+      memory.copy(changetype<usize>(out), changetype<usize>(this), size);
       while (~(next = <isize>this.indexOf(search, <i32>prev))) {
-        memory.copy(out + (next << 1), changetype<usize>(replacement), rlen << 1);
+        memory.copy(changetype<usize>(out) + (next << 1), changetype<usize>(replacement), rlen << 1);
         prev = next + slen;
       }
-      return changetype<String>(out);
+      return out;
     }
-    var out: usize = 0, offset: usize = 0, resLen = len;
+    var out: String = changetype<String>(0), offset: usize = 0, resLen = len;
     while (~(next = <isize>this.indexOf(search, <i32>prev))) {
-      if (!out) out = __new(len << 1, idof<String>());
+      if (!out) out = changetype<String>(__new(len << 1, idof<String>()));
       if (offset > resLen) {
         let newLength = resLen << 1;
-        out = __renew(out, newLength << 1);
+        out = changetype<String>(__renew(changetype<usize>(out), newLength << 1));
         resLen = newLength;
       }
       let chunk = next - prev;
       memory.copy(
-        out + (offset << 1),
+        changetype<usize>(out) + (offset << 1),
         changetype<usize>(this) + (prev << 1),
         chunk << 1
       );
       offset += chunk;
       memory.copy(
-        out + (offset << 1),
+        changetype<usize>(out) + (offset << 1),
         changetype<usize>(replacement),
         rlen << 1
       );
@@ -424,20 +424,20 @@ import { Array } from "./array";
     if (offset) {
       if (offset > resLen) {
         let newLength = resLen << 1;
-        out = __renew(out, newLength << 1);
+        out = changetype<String>(__renew(changetype<usize>(out), newLength << 1));
         resLen = newLength;
       }
       let rest = len - prev;
       if (rest) {
         memory.copy(
-          out + (offset << 1),
+          changetype<usize>(out) + (offset << 1),
           changetype<usize>(this) + (prev << 1),
           rest << 1
         );
       }
       rest += offset;
-      if (resLen > rest) out = __renew(out, rest << 1);
-      return changetype<String>(out);
+      if (resLen > rest) out = changetype<String>(__renew(changetype<usize>(out), rest << 1));
+      return out;
     }
     return this;
   }
@@ -448,9 +448,9 @@ import { Array } from "./array";
     end   = end   < 0 ? max(end   + len, 0) : min(end,   len);
     len   = end - start;
     if (len <= 0) return changetype<String>("");
-    var out = __new(len << 1, idof<String>());
-    memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
-    return changetype<String>(out);
+    var out = changetype<String>(__new(len << 1, idof<String>()));
+    memory.copy(changetype<usize>(out), changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
+    return out;
   }
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
@@ -467,10 +467,10 @@ import { Array } from "./array";
       // @ts-ignore: cast
       let resultStart = result.dataStart as usize;
       for (let i: isize = 0; i < length; ++i) {
-        let charStr = __new(2, idof<String>());
-        store<u16>(charStr, load<u16>(changetype<usize>(this) + (<usize>i << 1)));
-        store<usize>(resultStart + (<usize>i << alignof<usize>()), charStr); // result[i] = charStr
-        __link(changetype<usize>(result), charStr, true);
+        let charStr = changetype<String>(__new(2, idof<String>()));
+        store<u16>(changetype<usize>(charStr), load<u16>(changetype<usize>(this) + (<usize>i << 1)));
+        store<usize>(resultStart + (<usize>i << alignof<usize>()), changetype<usize>(charStr)); // result[i] = charStr
+        __link(changetype<usize>(result), changetype<usize>(charStr), true);
       }
       return result;
     } else if (!length) {
@@ -484,9 +484,9 @@ import { Array } from "./array";
     while (~(end = this.indexOf(separator, start))) {
       let len = end - start;
       if (len > 0) {
-        let out = __new(<usize>len << 1, idof<String>());
-        memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
-        result.push(changetype<String>(out));
+        let out = changetype<String>(__new(<usize>len << 1, idof<String>()));
+        memory.copy(changetype<usize>(out), changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
+        result.push(out);
       } else {
         result.push(changetype<String>(""));
       }
@@ -499,9 +499,9 @@ import { Array } from "./array";
     }
     var len = length - start;
     if (len > 0) {
-      let out = __new(<usize>len << 1, idof<String>());
-      memory.copy(out, changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
-      result.push(changetype<String>(out));
+      let out = changetype<String>(__new(<usize>len << 1, idof<String>()));
+      memory.copy(changetype<usize>(out), changetype<usize>(this) + (<usize>start << 1), <usize>len << 1);
+      result.push(out);
     } else {
       result.push(changetype<String>("")); // static ""
     }
@@ -511,12 +511,12 @@ import { Array } from "./array";
   toLowerCase(): String {
     var len = <usize>this.length;
     if (!len) return this;
-    var codes = __new(len * 2 * 2, idof<String>());
+    var codes = changetype<String>(__new(len * 2 * 2, idof<String>()));
     var j: usize = 0;
     for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <u32>load<u16>(changetype<usize>(this) + (i << 1));
       if (isAscii(c)) {
-        store<u16>(codes + (j << 1), toLower8(c));
+        store<u16>(changetype<usize>(codes) + (j << 1), toLower8(c));
       } else {
         // check and read surrogate pair
         if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
@@ -526,7 +526,7 @@ import { Array } from "./array";
             c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
             ++i;
             if (c >= 0x20000) {
-              store<u32>(codes + (j << 1), c0 | (c1 << 16));
+              store<u32>(changetype<usize>(codes) + (j << 1), c0 | (c1 << 16));
               ++j;
               continue;
             }
@@ -535,7 +535,7 @@ import { Array } from "./array";
         // check special casing for lower table. It has one ently so instead lookup we just inline this.
         if (c == 0x0130) {
           // 0x0130 -> [0x0069, 0x0307]
-          store<u32>(codes + (j << 1), (0x0307 << 16) | 0x0069);
+          store<u32>(changetype<usize>(codes) + (j << 1), (0x0307 << 16) | 0x0069);
           ++j;
         } else if (c == 0x03A3) { // 'Σ'
           // Σ maps to σ but except at the end of a word where it maps to ς
@@ -543,40 +543,39 @@ import { Array } from "./array";
           if (len > 1 && isFinalSigma(changetype<usize>(this), i, len)) {
             sigma = 0x03C2; // ς
           }
-          store<u16>(codes + (j << 1), sigma);
+          store<u16>(changetype<usize>(codes) + (j << 1), sigma);
         } else if (c - 0x24B6 <= 0x24CF - 0x24B6) {
           // Range 0x24B6 <= c <= 0x24CF not covered by casemap and require special early handling
-          store<u16>(codes + (j << 1), c + 26);
+          store<u16>(changetype<usize>(codes) + (j << 1), c + 26);
         } else {
           let code = casemap(c, 0) & 0x1FFFFF;
           if (code < 0x10000) {
-            store<u16>(codes + (j << 1), code);
+            store<u16>(changetype<usize>(codes) + (j << 1), code);
           } else {
             // store as surrogare pair
             code -= 0x10000;
             let lo = (code >>> 10) | 0xD800;
             let hi = (code & 0x03FF) | 0xDC00;
-            store<u32>(codes + (j << 1), lo | (hi << 16));
+            store<u32>(changetype<usize>(codes) + (j << 1), lo | (hi << 16));
             ++j;
           }
         }
       }
     }
-    codes = __renew(codes, j << 1);
-    return changetype<String>(codes);
+    return changetype<String>(__renew(changetype<usize>(codes), j << 1));
   }
 
   toUpperCase(): String {
     var len = <usize>this.length;
     if (!len) return this;
-    var codes = __new(len * 3 * 2, idof<String>());
+    var codes = changetype<String>(__new(len * 3 * 2, idof<String>()));
     var specialsPtr = changetype<usize>(SPECIALS_UPPER);
     var specialsLen = SPECIALS_UPPER.length;
     var j: usize = 0;
     for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <u32>load<u16>(changetype<usize>(this) + (i << 1));
       if (isAscii(c)) {
-        store<u16>(codes + (j << 1), toUpper8(c));
+        store<u16>(changetype<usize>(codes) + (j << 1), toUpper8(c));
       } else {
         // check and read surrogate pair
         if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
@@ -586,7 +585,7 @@ import { Array } from "./array";
             c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
             ++i;
             if (c >= 0x20000) {
-              store<u32>(codes + (j << 1), c0 | (c1 << 16));
+              store<u32>(changetype<usize>(codes) + (j << 1), c0 | (c1 << 16));
               ++j;
               continue;
             }
@@ -595,7 +594,7 @@ import { Array } from "./array";
         // Range 0x24D0 <= c <= 0x24E9 not covered by casemap and require special early handling
         if (c - 0x24D0 <= 0x24E9 - 0x24D0) {
           // monkey patch
-          store<u16>(codes + (j << 1), c - 26);
+          store<u16>(changetype<usize>(codes) + (j << 1), c - 26);
         } else {
           let index: usize = -1;
           // Fast range check. See first and last rows in specialsUpper table
@@ -606,27 +605,26 @@ import { Array } from "./array";
             // load next 3 code points from row with `index` offset for specialsUpper table
             let ab = load<u32>(specialsPtr + (index << 1), 2);
             let cc = load<u16>(specialsPtr + (index << 1), 6);
-            store<u32>(codes + (j << 1), ab, 0);
-            store<u16>(codes + (j << 1), cc, 4);
+            store<u32>(changetype<usize>(codes) + (j << 1), ab, 0);
+            store<u16>(changetype<usize>(codes) + (j << 1), cc, 4);
             j += 1 + usize(cc != 0);
           } else {
             let code = casemap(c, 1) & 0x1FFFFF;
             if (code < 0x10000) {
-              store<u16>(codes + (j << 1), code);
+              store<u16>(changetype<usize>(codes) + (j << 1), code);
             } else {
               // store as surrogare pair
               code -= 0x10000;
               let lo = (code >>> 10) | 0xD800;
               let hi = (code & 0x03FF) | 0xDC00;
-              store<u32>(codes + (j << 1), lo | (hi << 16));
+              store<u32>(changetype<usize>(codes) + (j << 1), lo | (hi << 16));
               ++j;
             }
           }
         }
       }
     }
-    codes = __renew(codes, j << 1);
-    return changetype<String>(codes);
+    return changetype<String>(__renew(changetype<usize>(codes), j << 1));
   }
 
   toString(): String {
@@ -677,9 +675,9 @@ export namespace String {
     }
 
     export function encode(str: string, nullTerminated: bool = false): ArrayBuffer {
-      var buf = __new(<usize>byteLength(str, nullTerminated), idof<ArrayBuffer>());
-      encodeUnsafe(changetype<usize>(str), str.length, buf, nullTerminated);
-      return changetype<ArrayBuffer>(buf);
+      var buf = changetype<ArrayBuffer>(__new(<usize>byteLength(str, nullTerminated), idof<ArrayBuffer>()));
+      encodeUnsafe(changetype<usize>(str), str.length, changetype<usize>(buf), nullTerminated);
+      return buf;
     }
 
     // @ts-ignore: decorator
@@ -736,8 +734,8 @@ export namespace String {
       var bufOff = buf;
       var bufEnd = buf + len;
       assert(bufEnd >= bufOff); // guard wraparound
-      var str = __new(len << 1, idof<String>()); // max is one u16 char per u8 byte
-      var strOff = str;
+      var str = changetype<String>(__new(len << 1, idof<String>())); // max is one u16 char per u8 byte
+      var strOff = changetype<usize>(str);
       while (bufOff < bufEnd) {
         let u0 = <u32>load<u8>(bufOff); ++bufOff;
         if (!(u0 & 128)) {
@@ -772,7 +770,7 @@ export namespace String {
         }
         strOff += 2;
       }
-      return changetype<String>(__renew(str, strOff - str));
+      return changetype<String>(__renew(changetype<usize>(str), strOff - changetype<usize>(str)));
     }
   }
 
@@ -783,9 +781,9 @@ export namespace String {
     }
 
     export function encode(str: string): ArrayBuffer {
-      var buf = __new(<usize>byteLength(str), idof<ArrayBuffer>());
-      encodeUnsafe(changetype<usize>(str), str.length, buf);
-      return changetype<ArrayBuffer>(buf);
+      var buf = changetype<ArrayBuffer>(__new(<usize>byteLength(str), idof<ArrayBuffer>()));
+      encodeUnsafe(changetype<usize>(str), str.length, changetype<usize>(buf));
+      return buf;
     }
 
     // @ts-ignore: decorator
@@ -803,9 +801,9 @@ export namespace String {
     // @ts-ignore: decorator
     @unsafe
     export function decodeUnsafe(buf: usize, len: usize): String {
-      var str = __new(len &= ~1, idof<String>());
-      memory.copy(str, buf, len);
-      return changetype<String>(str);
+      var str = changetype<String>(__new(len &= ~1, idof<String>()));
+      memory.copy(changetype<usize>(str), buf, len);
+      return str;
     }
   }
 }

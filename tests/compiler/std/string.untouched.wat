@@ -10,10 +10,10 @@
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (type $i32_=>_f64 (func (param i32) (result f64)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
@@ -24,7 +24,7 @@
  (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "mark" (func $~lib/rt/tcms/markExternals))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 12) " \00\00\00\01\00\00\00\00\00\00\00\01\00\00\00 \00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 76) "\1a\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
  (data (i32.const 124) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\df\00")
@@ -454,6 +454,8 @@
  (data (i32.const 23724) "\10\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\10\00\00\001\00.\001\00e\00+\001\002\008\00")
  (data (i32.const 23772) "\0e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\001\00.\001\00e\00-\006\004\00")
  (data (i32.const 23820) "\16\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\16\00\00\000\00.\000\000\000\000\003\005\006\008\009\00")
+ (data (i32.const 23868) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00s\00t\00a\00c\00k\00 \00o\00v\00e\00r\00f\00l\00o\00w\00")
+ (data (i32.const 23916) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $std/string/str (mut i32) (i32.const 32))
  (global $std/string/nullStr (mut i32) (i32.const 0))
@@ -465,6 +467,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/string/String.MAX_LENGTH i32 (i32.const 536870910))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
@@ -486,17 +489,42 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 23864))
+ (global $~lib/ASC_FEATURE_BULK_MEMORY i32 (i32.const 0))
+ (global $~lib/rt/__stack_base i32 (i32.const 23956))
+ (global $~lib/rt/__stack_size i32 (i32.const 65536))
+ (global $~lib/rt/__stackptr (mut i32) (i32.const 23956))
+ (global $~lib/memory/__heap_base i32 (i32.const 89492))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
  (start $~start)
+ (func $~lib/rt/__stackify (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+ )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 20
   i32.sub
   i32.load offset=16
   i32.const 1
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
@@ -504,6 +532,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $2
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -590,6 +635,10 @@
      local.get $8
      local.get $9
      i32.sub
+     local.set $11
+     local.get $10
+     call $~lib/rt/__stack_restore
+     local.get $11
      return
     end
     local.get $5
@@ -604,14 +653,39 @@
    end
   end
   i32.const 0
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $3
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
   if
    i32.const 1
+   local.set $4
+   local.get $3
+   call $~lib/rt/__stack_restore
+   local.get $4
    return
   end
   local.get $0
@@ -626,6 +700,10 @@
   end
   if
    i32.const 0
+   local.set $4
+   local.get $3
+   call $~lib/rt/__stack_restore
+   local.get $4
    return
   end
   local.get $0
@@ -637,6 +715,10 @@
   i32.ne
   if
    i32.const 0
+   local.set $4
+   local.get $3
+   call $~lib/rt/__stack_restore
+   local.get $4
    return
   end
   local.get $0
@@ -646,14 +728,33 @@
   local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/string/String#charCodeAt (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   call $~lib/string/String#get:length
   i32.ge_u
   if
    i32.const -1
+   local.set $3
+   local.get $2
+   call $~lib/rt/__stack_restore
+   local.get $3
    return
   end
   local.get $0
@@ -662,8 +763,23 @@
   i32.shl
   i32.add
   i32.load16_u
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/string/String.__not (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 0
   i32.eq
@@ -674,6 +790,10 @@
    call $~lib/string/String#get:length
    i32.eqz
   end
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/rt/tcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
   local.get $0
@@ -2176,6 +2296,10 @@
   local.get $2
   global.get $~lib/rt/tcms/white
   call $~lib/rt/tcms/Object#set:color
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   local.set $3
   local.get $3
@@ -2290,11 +2414,32 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $1
   i32.const 0
   i32.eq
   if
    i32.const 688
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $1
   end
   local.get $0
@@ -2326,6 +2471,10 @@
   i32.gt_s
   if
    i32.const 0
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $0
@@ -2335,17 +2484,42 @@
   local.get $7
   call $~lib/util/string/compareImpl
   i32.eqz
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $~lib/string/String#endsWith (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $1
   i32.const 0
   i32.eq
   if
    i32.const 0
+   local.set $8
+   local.get $7
+   call $~lib/rt/__stack_restore
+   local.get $8
    return
   end
   local.get $2
@@ -2377,6 +2551,10 @@
   i32.lt_s
   if
    i32.const 0
+   local.set $8
+   local.get $7
+   call $~lib/rt/__stack_restore
+   local.get $8
    return
   end
   local.get $0
@@ -2386,6 +2564,10 @@
   local.get $5
   call $~lib/util/string/compareImpl
   i32.eqz
+  local.set $8
+  local.get $7
+  call $~lib/rt/__stack_restore
+  local.get $8
  )
  (func $~lib/string/String#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -2393,6 +2575,23 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $1
   call $~lib/string/String#get:length
   local.set $3
@@ -2400,6 +2599,10 @@
   i32.eqz
   if
    i32.const 0
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $0
@@ -2409,6 +2612,10 @@
   i32.eqz
   if
    i32.const -1
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $2
@@ -2447,6 +2654,10 @@
     i32.eqz
     if
      local.get $7
+     local.set $9
+     local.get $8
+     call $~lib/rt/__stack_restore
+     local.get $9
      return
     end
     local.get $7
@@ -2457,14 +2668,39 @@
    end
   end
   i32.const -1
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $~lib/string/String#includes (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $3
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   local.get $1
   local.get $2
   call $~lib/string/String#indexOf
   i32.const -1
   i32.ne
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -3759,6 +3995,23 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $2
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
@@ -3784,6 +4037,10 @@
   end
   if
    local.get $0
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $4
@@ -3836,6 +4093,10 @@
   local.get $3
   call $~lib/memory/memory.copy
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/string/String#padEnd (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3846,6 +4107,23 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $2
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
@@ -3871,6 +4149,10 @@
   end
   if
    local.get $0
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $4
@@ -3927,6 +4209,10 @@
    call $~lib/memory/memory.copy
   end
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/string/String#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3934,6 +4220,23 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $1
   call $~lib/string/String#get:length
   local.set $3
@@ -3942,6 +4245,10 @@
   if
    local.get $0
    call $~lib/string/String#get:length
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $0
@@ -3951,6 +4258,10 @@
   i32.eqz
   if
    i32.const -1
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $2
@@ -3987,6 +4298,10 @@
     i32.eqz
     if
      local.get $7
+     local.set $9
+     local.get $8
+     call $~lib/rt/__stack_restore
+     local.get $9
      return
     end
     local.get $7
@@ -3997,15 +4312,40 @@
    end
   end
   i32.const -1
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $~lib/string/String#localeCompare (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $0
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $1
   local.get $0
   i32.eq
   if
    i32.const 0
+   local.set $5
+   local.get $4
+   call $~lib/rt/__stack_restore
+   local.get $5
    return
   end
   local.get $0
@@ -4024,12 +4364,20 @@
    local.get $3
    i32.gt_s
    select
+   local.set $5
+   local.get $4
+   call $~lib/rt/__stack_restore
+   local.get $5
    return
   end
   local.get $3
   i32.eqz
   if
    i32.const 0
+   local.set $5
+   local.get $4
+   call $~lib/rt/__stack_restore
+   local.get $5
    return
   end
   local.get $0
@@ -4038,6 +4386,10 @@
   i32.const 0
   local.get $3
   call $~lib/util/string/compareImpl
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/util/string/isSpace (param $0 i32) (result i32)
   (local $1 i32)
@@ -4127,6 +4479,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $5
+  local.get $0
+  local.get $5
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
@@ -4161,6 +4524,10 @@
   i32.eqz
   if
    local.get $0
+   local.set $6
+   local.get $5
+   call $~lib/rt/__stack_restore
+   local.get $6
    return
   end
   local.get $1
@@ -4171,6 +4538,10 @@
   i32.eqz
   if
    i32.const 240
+   local.set $6
+   local.get $5
+   call $~lib/rt/__stack_restore
+   local.get $6
    return
   end
   local.get $1
@@ -4184,12 +4555,27 @@
   local.get $1
   call $~lib/memory/memory.copy
   local.get $4
+  local.set $6
+  local.get $5
+  call $~lib/rt/__stack_restore
+  local.get $6
  )
  (func $~lib/string/String#trimEnd (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $5
+  local.get $0
+  local.get $5
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
@@ -4224,6 +4610,10 @@
   i32.eqz
   if
    i32.const 240
+   local.set $6
+   local.get $5
+   call $~lib/rt/__stack_restore
+   local.get $6
    return
   end
   local.get $2
@@ -4231,6 +4621,10 @@
   i32.eq
   if
    local.get $0
+   local.set $6
+   local.get $5
+   call $~lib/rt/__stack_restore
+   local.get $6
    return
   end
   local.get $2
@@ -4242,6 +4636,10 @@
   local.get $2
   call $~lib/memory/memory.copy
   local.get $4
+  local.set $6
+  local.get $5
+  call $~lib/rt/__stack_restore
+  local.get $6
  )
  (func $~lib/string/String#trim (param $0 i32) (result i32)
   (local $1 i32)
@@ -4249,6 +4647,17 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $6
+  local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $1
@@ -4312,6 +4721,10 @@
   i32.eqz
   if
    i32.const 240
+   local.set $7
+   local.get $6
+   call $~lib/rt/__stack_restore
+   local.get $7
    return
   end
   local.get $4
@@ -4327,6 +4740,10 @@
   end
   if
    local.get $0
+   local.set $7
+   local.get $6
+   call $~lib/rt/__stack_restore
+   local.get $7
    return
   end
   local.get $2
@@ -4340,6 +4757,10 @@
   local.get $2
   call $~lib/memory/memory.copy
   local.get $5
+  local.set $7
+  local.get $6
+  call $~lib/rt/__stack_restore
+  local.get $7
  )
  (func $~lib/util/string/strtol<f64> (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
@@ -4348,6 +4769,17 @@
   (local $5 i32)
   (local $6 f64)
   (local $7 f64)
+  (local $8 i32)
+  (local $9 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $2
@@ -4357,6 +4789,10 @@
    i32.const 1
    drop
    f64.const nan:0x8000000000000
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $0
@@ -4405,6 +4841,10 @@
     i32.const 1
     drop
     f64.const nan:0x8000000000000
+    local.set $9
+    local.get $8
+    call $~lib/rt/__stack_restore
+    local.get $9
     return
    end
    local.get $4
@@ -4437,6 +4877,10 @@
     i32.const 1
     drop
     f64.const nan:0x8000000000000
+    local.set $9
+    local.get $8
+    call $~lib/rt/__stack_restore
+    local.get $9
     return
    end
    local.get $1
@@ -4629,6 +5073,10 @@
        i32.const 1
        drop
        f64.const nan:0x8000000000000
+       local.set $9
+       local.get $8
+       call $~lib/rt/__stack_restore
+       local.get $9
        return
       end
       br $while-break|2
@@ -4652,22 +5100,71 @@
   local.get $6
   local.get $7
   f64.mul
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $~lib/string/parseInt (param $0 i32) (param $1 i32) (result f64)
+  (local $2 i32)
+  (local $3 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/util/string/strtol<f64>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/number/F32.parseInt (param $0 i32) (param $1 i32) (result f32)
+  (local $2 i32)
+  (local $3 f32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/util/string/strtol<f64>
   f32.demote_f64
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/number/F64.parseInt (param $0 i32) (param $1 i32) (result f64)
+  (local $2 i32)
+  (local $3 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/util/string/strtol<f64>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/util/string/strtol<i32> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -4676,6 +5173,17 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $2
@@ -4685,6 +5193,10 @@
    i32.const 0
    drop
    i32.const 0
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $0
@@ -4733,6 +5245,10 @@
     i32.const 0
     drop
     i32.const 0
+    local.set $9
+    local.get $8
+    call $~lib/rt/__stack_restore
+    local.get $9
     return
    end
    local.get $4
@@ -4765,6 +5281,10 @@
     i32.const 0
     drop
     i32.const 0
+    local.set $9
+    local.get $8
+    call $~lib/rt/__stack_restore
+    local.get $9
     return
    end
    local.get $1
@@ -4950,6 +5470,10 @@
        i32.const 0
        drop
        i32.const 0
+       local.set $9
+       local.get $8
+       call $~lib/rt/__stack_restore
+       local.get $9
        return
       end
       br $while-break|2
@@ -4971,11 +5495,30 @@
   local.get $6
   local.get $7
   i32.mul
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $~lib/number/I32.parseInt (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/util/string/strtol<i32>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/util/string/strtol<i64> (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
@@ -4984,6 +5527,17 @@
   (local $5 i32)
   (local $6 i64)
   (local $7 i64)
+  (local $8 i32)
+  (local $9 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $2
@@ -4993,6 +5547,10 @@
    i32.const 0
    drop
    i64.const 0
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $0
@@ -5041,6 +5599,10 @@
     i32.const 0
     drop
     i64.const 0
+    local.set $9
+    local.get $8
+    call $~lib/rt/__stack_restore
+    local.get $9
     return
    end
    local.get $4
@@ -5073,6 +5635,10 @@
     i32.const 0
     drop
     i64.const 0
+    local.set $9
+    local.get $8
+    call $~lib/rt/__stack_restore
+    local.get $9
     return
    end
    local.get $1
@@ -5260,6 +5826,10 @@
        i32.const 0
        drop
        i64.const 0
+       local.set $9
+       local.get $8
+       call $~lib/rt/__stack_restore
+       local.get $9
        return
       end
       br $while-break|2
@@ -5283,11 +5853,30 @@
   local.get $6
   local.get $7
   i64.mul
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $~lib/number/I64.parseInt (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/util/string/strtol<i64>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -5610,6 +6199,17 @@
   (local $22 i64)
   (local $23 i64)
   (local $24 i64)
+  (local $25 i32)
+  (local $26 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $25
+  local.get $0
+  local.get $25
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $1
@@ -5617,6 +6217,10 @@
   i32.eqz
   if
    f64.const nan:0x8000000000000
+   local.set $26
+   local.get $25
+   call $~lib/rt/__stack_restore
+   local.get $26
    return
   end
   local.get $0
@@ -5654,6 +6258,10 @@
   i32.eqz
   if
    f64.const nan:0x8000000000000
+   local.set $26
+   local.get $25
+   call $~lib/rt/__stack_restore
+   local.get $26
    return
   end
   local.get $3
@@ -5667,6 +6275,10 @@
    i32.eqz
    if
     f64.const nan:0x8000000000000
+    local.set $26
+    local.get $25
+    call $~lib/rt/__stack_restore
+    local.get $26
     return
    end
    local.get $2
@@ -5689,6 +6301,10 @@
     i32.eqz
     if
      f64.const nan:0x8000000000000
+     local.set $26
+     local.get $25
+     call $~lib/rt/__stack_restore
+     local.get $26
      return
     end
     local.get $2
@@ -5726,9 +6342,17 @@
     f64.const inf
     local.get $4
     f64.mul
+    local.set $26
+    local.get $25
+    call $~lib/rt/__stack_restore
+    local.get $26
     return
    end
    f64.const nan:0x8000000000000
+   local.set $26
+   local.get $25
+   call $~lib/rt/__stack_restore
+   local.get $26
    return
   end
   local.get $3
@@ -5745,6 +6369,10 @@
   end
   if
    f64.const nan:0x8000000000000
+   local.set $26
+   local.get $25
+   call $~lib/rt/__stack_restore
+   local.get $26
    return
   end
   local.get $2
@@ -5774,6 +6402,10 @@
   i32.le_s
   if
    f64.const 0
+   local.set $26
+   local.get $25
+   call $~lib/rt/__stack_restore
+   local.get $26
    return
   end
   i32.const 0
@@ -5810,6 +6442,10 @@
    end
    if
     f64.const nan:0x8000000000000
+    local.set $26
+    local.get $25
+    call $~lib/rt/__stack_restore
+    local.get $26
     return
    end
    i32.const 1
@@ -5843,6 +6479,10 @@
    i32.le_s
    if
     f64.const 0
+    local.set $26
+    local.get $25
+    call $~lib/rt/__stack_restore
+    local.get $26
     return
    end
    local.get $9
@@ -5863,6 +6503,10 @@
    end
    if
     f64.const nan:0x8000000000000
+    local.set $26
+    local.get $25
+    call $~lib/rt/__stack_restore
+    local.get $26
     return
    end
   end
@@ -6500,21 +7144,61 @@
   end
   local.get $4
   f64.copysign
+  local.set $26
+  local.get $25
+  call $~lib/rt/__stack_restore
+  local.get $26
  )
  (func $~lib/string/parseFloat (param $0 i32) (result f64)
+  (local $1 i32)
+  (local $2 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/util/string/strtod
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/string/String#concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $6
+  local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $1
   i32.const 0
   i32.eq
   if
    i32.const 688
+   local.get $6
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $1
   end
   local.get $0
@@ -6536,6 +7220,10 @@
   i32.eq
   if
    i32.const 240
+   local.set $7
+   local.get $6
+   call $~lib/rt/__stack_restore
+   local.get $7
    return
   end
   local.get $4
@@ -6553,8 +7241,29 @@
   local.get $3
   call $~lib/memory/memory.copy
   local.get $5
+  local.set $7
+  local.get $6
+  call $~lib/rt/__stack_restore
+  local.get $7
  )
  (func $~lib/string/String.__concat (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.const 688
   local.get $0
@@ -6563,18 +7272,60 @@
   select
   local.get $1
   call $~lib/string/String#concat
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/string/String.__ne (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
   i32.eqz
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/string/String.__gt (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $6
+  local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -6594,6 +7345,10 @@
   end
   if
    i32.const 0
+   local.set $7
+   local.get $6
+   call $~lib/rt/__stack_restore
+   local.get $7
    return
   end
   local.get $0
@@ -6603,6 +7358,10 @@
   i32.eqz
   if
    i32.const 0
+   local.set $7
+   local.get $6
+   call $~lib/rt/__stack_restore
+   local.get $7
    return
   end
   local.get $1
@@ -6612,6 +7371,10 @@
   i32.eqz
   if
    i32.const 1
+   local.set $7
+   local.get $6
+   call $~lib/rt/__stack_restore
+   local.get $7
    return
   end
   local.get $0
@@ -6629,12 +7392,33 @@
   call $~lib/util/string/compareImpl
   i32.const 0
   i32.gt_s
+  local.set $7
+  local.get $6
+  call $~lib/rt/__stack_restore
+  local.get $7
  )
  (func $~lib/string/String.__lt (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $6
+  local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -6654,6 +7438,10 @@
   end
   if
    i32.const 0
+   local.set $7
+   local.get $6
+   call $~lib/rt/__stack_restore
+   local.get $7
    return
   end
   local.get $1
@@ -6663,6 +7451,10 @@
   i32.eqz
   if
    i32.const 0
+   local.set $7
+   local.get $6
+   call $~lib/rt/__stack_restore
+   local.get $7
    return
   end
   local.get $0
@@ -6672,6 +7464,10 @@
   i32.eqz
   if
    i32.const 1
+   local.set $7
+   local.get $6
+   call $~lib/rt/__stack_restore
+   local.get $7
    return
   end
   local.get $0
@@ -6689,22 +7485,79 @@
   call $~lib/util/string/compareImpl
   i32.const 0
   i32.lt_s
+  local.set $7
+  local.get $6
+  call $~lib/rt/__stack_restore
+  local.get $7
  )
  (func $~lib/string/String.__gte (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   local.get $1
   call $~lib/string/String.__lt
   i32.eqz
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/string/String.__lte (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   local.get $1
   call $~lib/string/String.__gt
   i32.eqz
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/string/String#repeat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $0
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $2
@@ -6743,6 +7596,10 @@
   end
   if
    i32.const 240
+   local.set $5
+   local.get $4
+   call $~lib/rt/__stack_restore
+   local.get $5
    return
   end
   local.get $1
@@ -6750,6 +7607,10 @@
   i32.eq
   if
    local.get $0
+   local.set $5
+   local.get $4
+   call $~lib/rt/__stack_restore
+   local.get $5
    return
   end
   local.get $2
@@ -6768,6 +7629,10 @@
   local.get $1
   call $~lib/memory/memory.repeat
   local.get $3
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/string/String#replace (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6776,6 +7641,29 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 12
+  call $~lib/rt/__stack_prepare
+  local.set $9
+  local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $2
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   call $~lib/string/String#get:length
   local.set $3
@@ -6799,6 +7687,10 @@
     call $~lib/string/String.__eq
     select
    end
+   local.set $10
+   local.get $9
+   call $~lib/rt/__stack_restore
+   local.get $10
    return
   end
   local.get $0
@@ -6866,10 +7758,18 @@
     i32.shl
     call $~lib/memory/memory.copy
     local.get $8
+    local.set $10
+    local.get $9
+    call $~lib/rt/__stack_restore
+    local.get $10
     return
    end
   end
   local.get $0
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/rt/tlsf/checkUsedBlock (param $0 i32) (result i32)
   (local $1 i32)
@@ -7086,7 +7986,7 @@
   if
    i32.const 448
    i32.const 12400
-   i32.const 232
+   i32.const 281
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -7155,6 +8055,29 @@
   (local $13 i32)
   (local $14 i32)
   (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $16
+  local.get $0
+  local.get $16
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $16
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $2
+  local.get $16
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   call $~lib/string/String#get:length
   local.set $3
@@ -7178,6 +8101,10 @@
     call $~lib/string/String.__eq
     select
    end
+   local.set $17
+   local.get $16
+   call $~lib/rt/__stack_restore
+   local.get $17
    return
   end
   local.get $2
@@ -7190,6 +8117,10 @@
    i32.eqz
    if
     local.get $0
+    local.set $17
+    local.get $16
+    call $~lib/rt/__stack_restore
+    local.get $17
     return
    end
    local.get $3
@@ -7260,6 +8191,10 @@
     end
    end
    local.get $6
+   local.set $17
+   local.get $16
+   call $~lib/rt/__stack_restore
+   local.get $17
    return
   end
   i32.const 0
@@ -7311,6 +8246,10 @@
     end
    end
    local.get $6
+   local.set $17
+   local.get $16
+   call $~lib/rt/__stack_restore
+   local.get $17
    return
   end
   i32.const 0
@@ -7331,13 +8270,17 @@
    local.get $6
    if
     local.get $13
-    i32.eqz
+    call $~lib/string/String.__not
     if
      local.get $3
      i32.const 1
      i32.shl
      i32.const 1
      call $~lib/rt/tcms/__new
+     local.get $16
+     i32.const 12
+     i32.add
+     call $~lib/rt/__stackify
      local.set $13
     end
     local.get $14
@@ -7353,6 +8296,10 @@
      i32.const 1
      i32.shl
      call $~lib/rt/tcms/__renew
+     local.get $16
+     i32.const 16
+     i32.add
+     call $~lib/rt/__stackify
      local.set $13
      local.get $7
      local.set $15
@@ -7415,6 +8362,10 @@
     i32.const 1
     i32.shl
     call $~lib/rt/tcms/__renew
+    local.get $16
+    i32.const 16
+    i32.add
+    call $~lib/rt/__stackify
     local.set $13
     local.get $6
     local.set $15
@@ -7453,18 +8404,41 @@
     i32.const 1
     i32.shl
     call $~lib/rt/tcms/__renew
+    local.get $16
+    i32.const 16
+    i32.add
+    call $~lib/rt/__stackify
     local.set $13
    end
    local.get $13
+   local.set $17
+   local.get $16
+   call $~lib/rt/__stack_restore
+   local.get $17
    return
   end
   local.get $0
+  local.set $17
+  local.get $16
+  call $~lib/rt/__stack_restore
+  local.get $17
  )
  (func $~lib/string/String#slice (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $3
@@ -7527,6 +8501,10 @@
   i32.le_s
   if
    i32.const 240
+   local.set $8
+   local.get $7
+   call $~lib/rt/__stack_restore
+   local.get $8
    return
   end
   local.get $3
@@ -7546,6 +8524,10 @@
   i32.shl
   call $~lib/memory/memory.copy
   local.get $6
+  local.set $8
+  local.get $7
+  call $~lib/rt/__stack_restore
+  local.get $8
  )
  (func $~lib/string/String#substr (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7555,6 +8537,17 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.set $3
   local.get $2
@@ -7603,6 +8596,10 @@
   i32.le_s
   if
    i32.const 240
+   local.set $11
+   local.get $10
+   call $~lib/rt/__stack_restore
+   local.get $11
    return
   end
   local.get $8
@@ -7618,6 +8615,10 @@
   local.get $8
   call $~lib/memory/memory.copy
   local.get $9
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/string/String#substring (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7629,6 +8630,17 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $12
+  local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $3
@@ -7694,6 +8706,10 @@
   i32.eqz
   if
    i32.const 240
+   local.set $13
+   local.get $12
+   call $~lib/rt/__stack_restore
+   local.get $13
    return
   end
   local.get $8
@@ -7709,6 +8725,10 @@
   end
   if
    local.get $0
+   local.set $13
+   local.get $12
+   call $~lib/rt/__stack_restore
+   local.get $13
    return
   end
   local.get $10
@@ -7722,12 +8742,25 @@
   local.get $10
   call $~lib/memory/memory.copy
   local.get $11
+  local.set $13
+  local.get $12
+  call $~lib/rt/__stack_restore
+  local.get $13
  )
  (func $~lib/rt/__newBuffer (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
   local.get $0
   local.get $1
   call $~lib/rt/tcms/__new
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $2
   if
@@ -7737,6 +8770,10 @@
    call $~lib/memory/memory.copy
   end
   local.get $3
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
   local.get $0
@@ -7808,7 +8845,7 @@
   if
    i32.const 0
    i32.const 12400
-   i32.const 253
+   i32.const 302
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -7853,9 +8890,18 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
   i32.const 16
   local.get $2
   call $~lib/rt/tcms/__new
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $0
   local.get $1
@@ -7865,6 +8911,10 @@
   i32.const 0
   local.get $3
   call $~lib/rt/__newBuffer
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   local.get $4
   local.get $6
@@ -7883,6 +8933,10 @@
   local.get $0
   i32.store offset=12
   local.get $4
+  local.set $8
+  local.get $7
+  call $~lib/rt/__stack_restore
+  local.get $8
  )
  (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -8167,6 +9221,23 @@
  (func $~lib/array/Array<~lib/string/String>#push (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $0
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=12
   local.set $2
@@ -8196,6 +9267,10 @@
   local.get $3
   call $~lib/array/Array<~lib/string/String>#set:length_
   local.get $3
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/string/String#split (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -8210,6 +9285,23 @@
   (local $12 i32)
   (local $13 i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $15
+  local.get $0
+  local.get $15
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $15
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $2
   i32.eqz
   if
@@ -8218,6 +9310,10 @@
    i32.const 3
    i32.const 0
    call $~lib/rt/__newArray
+   local.set $16
+   local.get $15
+   call $~lib/rt/__stack_restore
+   local.get $16
    return
   end
   local.get $1
@@ -8237,6 +9333,10 @@
    local.get $0
    i32.store
    local.get $3
+   local.set $16
+   local.get $15
+   call $~lib/rt/__stack_restore
+   local.get $16
    return
   end
   local.get $0
@@ -8263,6 +9363,10 @@
     i32.const 3
     i32.const 0
     call $~lib/rt/__newArray
+    local.set $16
+    local.get $15
+    call $~lib/rt/__stack_restore
+    local.get $16
     return
    end
    local.get $5
@@ -8323,6 +9427,10 @@
     end
    end
    local.get $3
+   local.set $16
+   local.get $15
+   call $~lib/rt/__stack_restore
+   local.get $16
    return
   else
    local.get $5
@@ -8339,6 +9447,10 @@
     i32.const 240
     i32.store
     local.get $4
+    local.set $16
+    local.get $15
+    call $~lib/rt/__stack_restore
+    local.get $16
     return
    end
   end
@@ -8407,6 +9519,10 @@
     i32.eq
     if
      local.get $10
+     local.set $16
+     local.get $15
+     call $~lib/rt/__stack_restore
+     local.get $16
      return
     end
     local.get $11
@@ -8424,6 +9540,10 @@
    call $~lib/array/Array<~lib/string/String>#push
    drop
    local.get $10
+   local.set $16
+   local.get $15
+   call $~lib/rt/__stack_restore
+   local.get $16
    return
   end
   local.get $5
@@ -8461,12 +9581,42 @@
    drop
   end
   local.get $10
+  local.set $16
+  local.get $15
+  call $~lib/rt/__stack_restore
+  local.get $16
  )
  (func $~lib/array/Array<~lib/string/String>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/array/Array<~lib/string/String>#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -8474,9 +9624,24 @@
   i32.shl
   i32.add
   i32.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=12
@@ -8509,6 +9674,10 @@
    unreachable
   end
   local.get $2
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
@@ -8934,6 +10103,11 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $1
   i32.const 2
   i32.lt_s
@@ -8956,6 +10130,10 @@
   i32.eqz
   if
    i32.const 1536
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $0
@@ -8969,8 +10147,6 @@
    i32.sub
    local.set $0
   end
-  i32.const 0
-  local.set $3
   local.get $1
   i32.const 10
   i32.eq
@@ -8985,6 +10161,10 @@
    i32.shl
    i32.const 1
    call $~lib/rt/tcms/__new
+   local.get $8
+   i32.const 0
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $3
    local.set $7
@@ -9021,6 +10201,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $8
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.set $7
@@ -9052,6 +10236,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $8
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.get $4
@@ -9068,6 +10256,10 @@
    i32.store16
   end
   local.get $3
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $~lib/util/number/utoa32 (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9075,6 +10267,11 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   local.get $1
   i32.const 2
   i32.lt_s
@@ -9097,10 +10294,12 @@
   i32.eqz
   if
    i32.const 1536
+   local.set $8
+   local.get $7
+   call $~lib/rt/__stack_restore
+   local.get $8
    return
   end
-  i32.const 0
-  local.set $2
   local.get $1
   i32.const 10
   i32.eq
@@ -9113,6 +10312,10 @@
    i32.shl
    i32.const 1
    call $~lib/rt/tcms/__new
+   local.get $7
+   i32.const 0
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $2
    local.set $6
@@ -9147,6 +10350,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $7
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.set $6
@@ -9174,6 +10381,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $7
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.get $0
@@ -9184,6 +10395,10 @@
    end
   end
   local.get $2
+  local.set $8
+  local.get $7
+  call $~lib/rt/__stack_restore
+  local.get $8
  )
  (func $~lib/util/number/decimalCount64High (param $0 i64) (result i32)
   local.get $0
@@ -9375,6 +10590,11 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i64)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $1
   i32.const 2
   i32.lt_s
@@ -9399,10 +10619,12 @@
   i32.eqz
   if
    i32.const 1536
+   local.set $10
+   local.get $9
+   call $~lib/rt/__stack_restore
+   local.get $10
    return
   end
-  i32.const 0
-  local.set $2
   local.get $1
   i32.const 10
   i32.eq
@@ -9423,6 +10645,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $9
+    i32.const 0
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.set $7
@@ -9447,6 +10673,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $9
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.set $6
@@ -9483,6 +10713,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $9
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.set $3
@@ -9508,6 +10742,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $9
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.get $0
@@ -9517,6 +10755,10 @@
    end
   end
   local.get $2
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/util/number/itoa64 (param $0 i64) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9527,6 +10769,11 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $1
   i32.const 2
   i32.lt_s
@@ -9551,6 +10798,10 @@
   i32.eqz
   if
    i32.const 1536
+   local.set $11
+   local.get $10
+   call $~lib/rt/__stack_restore
+   local.get $11
    return
   end
   local.get $0
@@ -9565,8 +10816,6 @@
    i64.sub
    local.set $0
   end
-  i32.const 0
-  local.set $3
   local.get $1
   i32.const 10
   i32.eq
@@ -9589,6 +10838,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $10
+    i32.const 0
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.set $8
@@ -9615,6 +10868,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $10
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.set $7
@@ -9653,6 +10910,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $10
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.set $4
@@ -9680,6 +10941,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $10
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.get $0
@@ -9695,6 +10960,10 @@
    i32.store16
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
@@ -10996,11 +12265,14 @@
   local.get $2
  )
  (func $~lib/rt/tcms/mark (param $0 i32)
+  (local $1 i32)
   local.get $0
   global.get $~lib/rt/tcms/white
   i32.eqz
   call $~lib/rt/tcms/Object#set:color
   local.get $0
+  local.set $1
+  local.get $1
   i32.const 20
   i32.add
   i32.const 0
@@ -11023,7 +12295,20 @@
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/tcms/step
+ (func $~lib/rt/tcms/free (param $0 i32) (result i32)
+  i32.const 0
+  drop
+  local.get $0
+  i32.const 4
+  i32.add
+  call $~lib/rt/tlsf/__free
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.sub
+  global.set $~lib/rt/tcms/total
+  i32.const 1
+ )
+ (func $~lib/rt/tcms/step (result i32)
   (local $0 i32)
   (local $1 i32)
   block $break|0
@@ -11053,9 +12338,7 @@
       end
       call $~lib/rt/tcms/init
      end
-     i32.const 0
-     call $~lib/rt/__visit_globals
-     call $~lib/rt/tcms/markExternals
+     call $~lib/rt/tcms/markRoots
      i32.const 2
      global.set $~lib/rt/tcms/state
      br $break|0
@@ -11072,9 +12355,7 @@
      local.get $0
      call $~lib/rt/tcms/mark
     else
-     i32.const 0
-     call $~lib/rt/__visit_globals
-     call $~lib/rt/tcms/markExternals
+     call $~lib/rt/tcms/markRoots
      global.get $~lib/rt/tcms/iter
      call $~lib/rt/tcms/Object#get:next
      local.set $0
@@ -11109,37 +12390,51 @@
     local.get $0
     call $~lib/rt/tcms/Object#get:next
     global.set $~lib/rt/tcms/iter
-    i32.const 0
-    drop
     local.get $0
-    i32.const 4
-    i32.add
-    call $~lib/rt/tlsf/__free
-   else
-    global.get $~lib/rt/tcms/toSpace
-    local.set $1
-    local.get $1
-    local.get $1
-    call $~lib/rt/tcms/Object#set:nextWithColor
-    local.get $1
-    local.get $1
-    call $~lib/rt/tcms/Object#set:prev
-    i32.const 1
-    global.set $~lib/rt/tcms/state
+    call $~lib/rt/tcms/free
+    return
    end
+   global.get $~lib/rt/tcms/toSpace
+   local.set $1
+   local.get $1
+   local.get $1
+   call $~lib/rt/tcms/Object#set:nextWithColor
+   local.get $1
+   local.get $1
+   call $~lib/rt/tcms/Object#set:prev
+   i32.const 1
+   global.set $~lib/rt/tcms/state
    br $break|0
   end
+  i32.const 0
  )
  (func $~lib/rt/tcms/__collect
   (local $0 i32)
-  loop $do-continue|0
+  global.get $~lib/rt/tcms/state
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   global.get $~lib/rt/tcms/state
+   i32.const 1
+   i32.eq
+  end
+  if
    call $~lib/rt/tcms/step
+   drop
+  end
+  loop $while-continue|0
    global.get $~lib/rt/tcms/state
    i32.const 1
    i32.ne
    local.set $0
    local.get $0
-   br_if $do-continue|0
+   if
+    call $~lib/rt/tcms/step
+    drop
+    br $while-continue|0
+   end
   end
  )
  (func $start:std/string
@@ -11147,6 +12442,10 @@
   (local $1 f32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
   global.get $std/string/str
   i32.const 32
   i32.eq
@@ -16188,6 +17487,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16215,6 +17518,10 @@
   i32.const 240
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16233,6 +17540,10 @@
   i32.const 1136
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16260,6 +17571,10 @@
   i32.const 5632
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16287,6 +17602,10 @@
   i32.const 1136
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16332,6 +17651,10 @@
   i32.const 13632
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16377,6 +17700,10 @@
   i32.const 1136
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16431,6 +17758,10 @@
   i32.const 1136
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16485,6 +17816,10 @@
   i32.const 1136
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16539,6 +17874,10 @@
   i32.const 240
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16584,6 +17923,10 @@
   i32.const 240
   i32.const 0
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16602,6 +17945,10 @@
   i32.const 240
   i32.const 1
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16629,6 +17976,10 @@
   i32.const 1136
   i32.const 1
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16656,6 +18007,10 @@
   i32.const 240
   i32.const 4
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16701,6 +18056,10 @@
   i32.const 240
   i32.const -1
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -16746,6 +18105,10 @@
   i32.const 1136
   i32.const -1
   call $~lib/string/String#split
+  local.get $4
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   call $~lib/array/Array<~lib/string/String>#get:length
@@ -19418,13 +20781,109 @@
   end
   i32.const 0
   global.set $std/string/str
+  global.get $~lib/rt/__stack_base
+  global.set $~lib/rt/__stackptr
   call $~lib/rt/tcms/__collect
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $std/string/getString (result i32)
   global.get $std/string/str
  )
  (func $~start
   call $start:std/string
+ )
+ (func $~lib/rt/__stack_prepare (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/rt/__stackptr
+  local.set $1
+  local.get $1
+  local.get $0
+  i32.add
+  local.set $2
+  local.get $2
+  global.get $~lib/rt/__stack_base
+  global.get $~lib/rt/__stack_size
+  i32.add
+  i32.le_u
+  i32.eqz
+  if
+   i32.const 23888
+   i32.const 23936
+   i32.const 118
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
+  global.set $~lib/rt/__stackptr
+  i32.const 0
+  drop
+  loop $while-continue|0
+   local.get $2
+   i32.const 4
+   i32.sub
+   local.tee $2
+   local.get $1
+   i32.ge_u
+   local.set $3
+   local.get $3
+   if
+    local.get $2
+    i32.const 0
+    i32.store
+    br $while-continue|0
+   end
+  end
+  local.get $1
+ )
+ (func $~lib/rt/__stack_restore (param $0 i32)
+  local.get $0
+  global.set $~lib/rt/__stackptr
+ )
+ (func $~lib/rt/tcms/markRoots
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 0
+  call $~lib/rt/__visit_globals
+  i32.const 1
+  drop
+  global.get $~lib/rt/__stack_base
+  local.set $0
+  global.get $~lib/rt/__stackptr
+  local.set $1
+  loop $while-continue|0
+   local.get $0
+   local.get $1
+   i32.lt_u
+   local.set $2
+   local.get $2
+   if
+    local.get $0
+    i32.load
+    local.set $3
+    local.get $3
+    if
+     local.get $3
+     local.set $4
+     local.get $4
+     i32.const 20
+     i32.sub
+     call $~lib/rt/tcms/mark
+    end
+    local.get $0
+    i32.const 4
+    i32.add
+    local.set $0
+    br $while-continue|0
+   end
+  end
+  call $~lib/rt/tcms/markExternals
  )
  (func $~lib/rt/tcms/__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -19485,6 +20944,16 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $6
+  local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 1
   drop
   local.get $0
@@ -19524,14 +20993,28 @@
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<i32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)

@@ -1,0 +1,162 @@
+
+> assemblyscript@0.0.0 astest D:\Dev\public\AssemblyScript\assemblyscript
+> ts-node tests/bootstrap
+
+
+Initializing program ...
+what? Error: 
+    at Rtrace.store_val_i32 (D:\Dev\public\AssemblyScript\assemblyscript\lib\rtrace\umd\index.js:375:30)
+    at ~lib/rt/tlsf/Block#set:next (wasm://wasm/00555942:0:177463)
+    at ~lib/rt/tlsf/insertBlock (wasm://wasm/00555942:0:178641)
+    at ~lib/rt/tlsf/prepareBlock (wasm://wasm/00555942:0:180211)
+    at ~lib/rt/tlsf/allocateBlock (wasm://wasm/00555942:0:180458)
+    at ~lib/rt/tlsf/__alloc (wasm://wasm/00555942:0:180488)
+    at ~lib/rt/tcms/__new (wasm://wasm/00555942:0:181637)
+    at ~lib/arraybuffer/ArrayBuffer#constructor (wasm://wasm/00555942:0:189019)
+    at ~lib/set/Set<~lib/string/String>#constructor (wasm://wasm/00555942:0:382833)
+    at src/parser/Parser#constructor (wasm://wasm/00555942:0:688927)
+    at src/program/Program#constructor (wasm://wasm/00555942:0:695498)
+    at src/index/newProgram (wasm://wasm/00555942:0:695697)
+    at Object.curr.<computed> [as newProgram] (D:\Dev\public\AssemblyScript\assemblyscript\lib\loader\umd\index.js:543:20)
+    at D:\Dev\public\AssemblyScript\assemblyscript\tests\bootstrap\index.ts:55:39
+    at step (D:\Dev\public\AssemblyScript\assemblyscript\tests\bootstrap\index.ts:33:23)
+    at Object.next (D:\Dev\public\AssemblyScript\assemblyscript\tests\bootstrap\index.ts:14:53)
+    at fulfilled (D:\Dev\public\AssemblyScript\assemblyscript\tests\bootstrap\index.ts:5:58)
+what? Error: 
+    at Rtrace.store_val_i32 (D:\Dev\public\AssemblyScript\assemblyscript\lib\rtrace\umd\index.js:375:30)
+    at ~lib/rt/tlsf/Block#set:next (wasm://wasm/00555942:0:177463)
+    at ~lib/rt/tlsf/insertBlock (wasm://wasm/00555942:0:178641)
+    at ~lib/rt/tlsf/prepareBlock (wasm://wasm/00555942:0:180211)
+    at ~lib/rt/tlsf/allocateBlock (wasm://wasm/00555942:0:180458)
+    at ~lib/rt/tlsf/__alloc (wasm://wasm/00555942:0:180488)
+    at ~lib/rt/tcms/__new (wasm://wasm/00555942:0:181637)
+    at ~lib/set/Set<~lib/string/String>#constructor (wasm://wasm/00555942:0:382772)
+    at src/parser/Parser#constructor (wasm://wasm/00555942:0:688947)
+    at src/program/Program#constructor (wasm://wasm/00555942:0:695498)
+    at src/index/newProgram (wasm://wasm/00555942:0:695697)
+    at Object.curr.<computed> [as newProgram] (D:\Dev\public\AssemblyScript\assemblyscript\lib\loader\umd\index.js:543:20)
+    at D:\Dev\public\AssemblyScript\assemblyscript\tests\bootstrap\index.ts:55:39
+    at step (D:\Dev\public\AssemblyScript\assemblyscript\tests\bootstrap\index.ts:33:23)
+    at Object.next (D:\Dev\public\AssemblyScript\assemblyscript\tests\bootstrap\index.ts:14:53)
+    at fulfilled (D:\Dev\public\AssemblyScript\assemblyscript\tests\bootstrap\index.ts:5:58)
+
+Parsing standard library ...
+  ~lib/array.ts
+  ~lib/arraybuffer.ts
+  ~lib/atomics.ts
+  ~lib/builtins.ts
+  ~lib/compat.ts
+  ~lib/dataview.ts
+  ~lib/date.ts
+  ~lib/diagnostics.ts
+  ~lib/error.ts
+  ~lib/function.ts
+  ~lib/iterator.ts
+  ~lib/map.ts
+  ~lib/math.ts
+  ~lib/memory.ts
+  ~lib/number.ts
+  ~lib/object.ts
+  ~lib/polyfills.ts
+  ~lib/reference.ts
+  ~lib/regexp.ts
+  ~lib/rt.ts
+  ~lib/set.ts
+  ~lib/staticarray.ts
+  ~lib/string.ts
+  ~lib/symbol.ts
+  ~lib/table.ts
+  ~lib/typedarray.ts
+  ~lib/vector.ts
+
+Parsing runtime ...
+  ~lib/rt/index-noexport.ts
+
+Parsing backlog ...
+  ~lib/rt/common.ts
+  ~lib/util/sort.ts
+  ~lib/util/string.ts
+  ~lib/builtins.ts
+  ~lib/util/error.ts
+  ~lib/rt/common.ts
+  ~lib/builtins.ts
+  ~lib/util/error.ts
+  ~lib/util/error.ts
+  ~lib/rt/common.ts
+  ~lib/util/error.ts
+  ~lib/bindings/Date.ts
+  ~lib/util/hash.ts
+  ~lib/util/error.ts
+  ~lib/bindings/Math.ts
+  ~lib/util/math.ts
+  ~lib/util/memory.ts
+  ~lib/util/error.ts
+  ~lib/util/number.ts
+  ~lib/util/string.ts
+  ~lib/shared/typeinfo.ts
+  ~lib/util/error.ts
+  ~lib/rt/common.ts
+  ~lib/util/hash.ts
+  ~lib/rt/common.ts
+  ~lib/util/error.ts
+  ~lib/util/string.ts
+  ~lib/rt/common.ts
+  ~lib/util/string.ts
+  ~lib/util/casemap.ts
+  ~lib/util/error.ts
+  ~lib/util/error.ts
+  ~lib/util/sort.ts
+  ~lib/util/error.ts
+  ~lib/util/string.ts
+  ~lib/rt/tlsf.ts
+  ~lib/rt/tcms.ts
+  ~lib/util/string.ts
+  ~lib/util/number.ts
+  ~lib/rt/rtrace.ts
+  ~lib/rt/rtrace.ts
+
+Parsing entry file ...
+  index.ts
+
+Parsing backlog ...
+
+Initializing program ...
+
+Compiling program ...
+(module
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (memory $0 0)
+ (table $0 1 funcref)
+ (export "memory" (memory $0))
+ (export "add" (func $index/add))
+ (start $~start)
+ (func $start:~lib/rt/rtrace
+  (drop
+   (i32.const 0)
+  )
+ )
+ (func $start:~lib/rt/tlsf
+  (call $start:~lib/rt/rtrace)
+ )
+ (func $start:~lib/rt/index-noexport
+  (call $start:~lib/rt/tlsf)
+ )
+ (func $index/add (param $0 i32) (param $1 i32) (result i32)
+  (i32.add
+   (local.get $0)
+   (local.get $1)
+  )
+ )
+ (func $~start
+  (call $start:~lib/rt/index-noexport)
+ )
+)
+
+
+Checking diagnostics ...
+Errors: 0
+
+Collect took 767444 ms
+
+25165824b of memory, 414296 allocs, 414253 frees, 2669 resizes, 2568 moves

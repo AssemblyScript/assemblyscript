@@ -22,6 +22,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 240))
  (global $extends-recursive/Child i32 (i32.const 3))
  (export "memory" (memory $0))
@@ -1529,13 +1530,24 @@
   local.get $2
   global.get $~lib/rt/tcms/white
   call $~lib/rt/tcms/Object#set:color
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   local.set $3
   local.get $3
   i32.const 20
   i32.add
  )
+ (func $~lib/rt/__stackify (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+ )
  (func $extends-recursive/Parent#constructor (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
   i32.eqz
   if
@@ -1546,6 +1558,9 @@
   end
   local.get $0
   i32.const 0
+  i32.const 0
+  call $~lib/rt/__stackify
+  local.tee $1
   i32.store
   local.get $0
  )
@@ -1637,7 +1652,7 @@
   if
    i32.const 0
    i32.const 208
-   i32.const 253
+   i32.const 302
    i32.const 14
    call $~lib/builtins/abort
    unreachable

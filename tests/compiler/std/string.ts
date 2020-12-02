@@ -739,4 +739,5 @@ export function getString(): string {
 
 str = changetype<string>(0);
 
+__stackptr = __stack_base;
 __collect();

@@ -118,4 +118,5 @@ function testOmittedFoo(foo: OmittedFoo): void {
 
 testOmittedFoo({});
 
+__stackptr = __stack_base;
 __collect();

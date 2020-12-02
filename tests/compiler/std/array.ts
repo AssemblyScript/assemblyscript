@@ -1036,9 +1036,6 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assert(subarrU32.toString() == "1");
 }
 
-// Unleak globals
-arr = changetype<Array<i32>>(0);
-
 // Array#flat //////////////////////////////////////////////////////////////////////////////////
 {
   var flatTarget: i32[][] = [[0], [1, 2, 3], [4, 5, 6], [7, 8, 9]];
@@ -1065,7 +1062,10 @@ arr = changetype<Array<i32>>(0);
 export class ArrayU32 extends Array<u32> {}
 export class ArrayU8 extends Array<u8> {}
 export class ArrayStr extends Array<string> {}
-// TODO:
+// FIXME: Fails on 'sort' due to operators '>', '<'
 // export class ArrayArrayI32 extends Array<Array<i32>> {}
 
+// Unleak globals and the start function stack
+arr = changetype<Array<i32>>(0);
+__stackptr = __stack_base;
 __collect();

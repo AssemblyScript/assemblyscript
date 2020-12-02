@@ -49,11 +49,10 @@ async function test(build: string): Promise<void> {
     return ptr;
   }
 
-  const programPtr = ((): number => {
-    const optionsPtr = asc.newOptions();
-    asc.setNoExportRuntime(optionsPtr, true);
-    return asc.newProgram(optionsPtr);
-  })();
+  console.log("\nInitializing program ...");
+  const optionsPtr = asc.newOptions();
+  asc.setNoExportRuntime(optionsPtr, true);
+  const programPtr = asc.__retain(asc.newProgram(optionsPtr));
 
   console.log("\nParsing standard library ...");
   Object.keys(libraryFiles).forEach((libPath: string) => {
@@ -115,9 +114,6 @@ async function test(build: string): Promise<void> {
     console.log(binaryen.wrapModule(moduleRef).emitText());
   }
 
-  cachedStrings.forEach(ptr => asc.__release(ptr));
-  cachedStrings.clear();
-
   console.log("\nChecking diagnostics ...");
   {
     let diagnosticPtr;
@@ -129,6 +125,10 @@ async function test(build: string): Promise<void> {
     }
     console.log("Errors: " + numErrors);
   }
+
+  cachedStrings.forEach(ptr => asc.__release(ptr));
+  cachedStrings.clear();
+  asc.__release(programPtr);
 
   const collectStart = Date.now();
   asc.__collect();
@@ -149,6 +149,6 @@ async function test(build: string): Promise<void> {
     }
   }
 }
-test("untouched");
+// test("untouched");
 // test("optimized");
-// test("rtraced");
+test("rtraced");

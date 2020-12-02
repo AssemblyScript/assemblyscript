@@ -39,6 +39,7 @@
  (type $i32_i32_f64_=>_none (func (param i32 i32 f64)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
@@ -48,7 +49,7 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "mark" (func $~lib/rt/tcms/markExternals))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 12) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 60) "&\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00")
  (data (i32.const 128) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -308,6 +309,8 @@
  (data (i32.const 13308) "P\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00P\00\00\00\00\00\00\00\00\00Y@\00\00\00\00\00@Y@\00\00\00\00\00\80Y@\00\00\00\00\00\c0Y@\00\00\00\00\00@\8f@\00\00\00\00\00H\8f@\00\00\00\00\00P\8f@\00\00\00\00\00\80[\c0\00\00\00\00\00\c0[\c0\00\00\00\00\00\00\\\c0")
  (data (i32.const 13420) "\n\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\00\ff\00\00\00d\n\ff\ff\00")
  (data (i32.const 13452) "\n\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\01\ffd\ff\00\00d\n\ff\00")
+ (data (i32.const 13484) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00s\00t\00a\00c\00k\00 \00o\00v\00e\00r\00f\00l\00o\00w\00")
+ (data (i32.const 13532) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00")
  (table $0 123 funcref)
  (elem (i32.const 1) $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0)
  (global $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT i32 (i32.const 1))
@@ -328,6 +331,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
@@ -348,9 +352,19 @@
  (global $std/typedarray/setSource2 (mut i32) (i32.const 9248))
  (global $std/typedarray/setSource3 (mut i32) (i32.const 9344))
  (global $std/typedarray/setSource7 (mut i32) (i32.const 9424))
- (global $~lib/memory/__heap_base i32 (i32.const 13484))
+ (global $~lib/ASC_FEATURE_BULK_MEMORY i32 (i32.const 0))
+ (global $~lib/rt/__stack_base i32 (i32.const 13572))
+ (global $~lib/rt/__stack_size i32 (i32.const 65536))
+ (global $~lib/rt/__stackptr (mut i32) (i32.const 13572))
+ (global $~lib/memory/__heap_base i32 (i32.const 79108))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/rt/__stackify (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+ )
  (func $~lib/rt/tcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -1852,6 +1866,10 @@
   local.get $2
   global.get $~lib/rt/tcms/white
   call $~lib/rt/tcms/Object#set:color
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   local.set $3
   local.get $3
@@ -2141,7 +2159,7 @@
   if
    i32.const 0
    i32.const 320
-   i32.const 253
+   i32.const 302
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -2203,6 +2221,11 @@
  )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
   local.get $0
   i32.eqz
   if
@@ -2220,6 +2243,12 @@
   local.get $0
   i32.const 0
   i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   i32.const 1073741820
   local.get $2
@@ -2254,8 +2283,17 @@
   local.get $1
   call $~lib/arraybuffer/ArrayBufferView#set:byteLength
   local.get $0
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Int8Array#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2265,24 +2303,69 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $0
   i32.load
   i32.sub
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Int8Array#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Uint8Array#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2292,17 +2375,47 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint8Array#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Uint8ClampedArray#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2312,17 +2425,47 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint8ClampedArray#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Int16Array#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2332,19 +2475,49 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 1
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Int16Array#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
   i32.const 1
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Uint16Array#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2354,19 +2527,49 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 1
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint16Array#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
   i32.const 1
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Int32Array#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2376,19 +2579,49 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Int32Array#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
   i32.const 2
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Uint32Array#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2398,19 +2631,49 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint32Array#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
   i32.const 2
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Int64Array#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2420,19 +2683,49 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 3
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Int64Array#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
   i32.const 3
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Uint64Array#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2442,19 +2735,49 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 3
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint64Array#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
   i32.const 3
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Float32Array#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2464,19 +2787,49 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Float32Array#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
   i32.const 2
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Float64Array#constructor (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
   local.get $0
   i32.eqz
   if
@@ -2486,17 +2839,42 @@
    local.set $0
   end
   local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
   local.get $1
   i32.const 3
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Float64Array#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=8
   i32.const 3
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testInstantiate (param $0 i32)
   (local $1 i32)
@@ -3007,6 +3385,16 @@
   end
  )
  (func $~lib/typedarray/Int32Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -3029,8 +3417,21 @@
   i32.add
   local.get $2
   i32.store
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int32Array#__get (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -3052,6 +3453,10 @@
   i32.shl
   i32.add
   i32.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Int32Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3060,7 +3465,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -3158,8 +3578,22 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Float64Array#__set (param $0 i32) (param $1 i32) (param $2 f64)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -3182,6 +3616,8 @@
   i32.add
   local.get $2
   f64.store
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float64Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3190,7 +3626,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -3288,6 +3739,10 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/util/sort/insertionSort<f64> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -3297,6 +3752,16 @@
   (local $7 i32)
   (local $8 f64)
   (local $9 i32)
+  (local $10 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $2
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   i32.const 0
   local.set $3
   loop $for-loop|0
@@ -3379,6 +3844,8 @@
     br $for-loop|0
    end
   end
+  local.get $10
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/rt/tlsf/checkUsedBlock (param $0 i32) (result i32)
   (local $1 i32)
@@ -3458,6 +3925,16 @@
   (local $10 f64)
   (local $11 i32)
   (local $12 f64)
+  (local $13 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $13
+  local.get $2
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 31
   i32.add
@@ -3736,6 +4213,8 @@
   local.get $0
   local.get $12
   f64.store
+  local.get $13
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float64Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3747,10 +4226,35 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 20
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
+   local.get $11
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $11
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    call $~lib/typedarray/Float64Array#get:length
@@ -3800,6 +4304,10 @@
    local.get $4
    local.set $9
    local.get $2
+   local.get $11
+   i32.const 16
+   i32.add
+   call $~lib/rt/__stackify
    local.set $8
    i32.const 0
    drop
@@ -3819,6 +4327,10 @@
    end
    local.get $3
   end
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/util/sort/COMPARATOR<f64>~anonymous|0 (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
@@ -3854,6 +4366,17 @@
   i32.sub
  )
  (func $~lib/typedarray/Float64Array#sort@varargs (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -3874,13 +4397,32 @@
     i32.const 576
     br $~lib/util/sort/COMPARATOR<f64>|inlined.0
    end
+   local.get $2
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $1
   end
   local.get $0
   local.get $1
   call $~lib/typedarray/Float64Array#sort
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Float64Array#__get (param $0 i32) (param $1 i32) (result f64)
+  (local $2 i32)
+  (local $3 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -3902,8 +4444,22 @@
   i32.shl
   i32.add
   f64.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint8ClampedArray#__set (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -3934,8 +4490,21 @@
   i32.or
   i32.and
   i32.store8
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#__get (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -3953,8 +4522,22 @@
   local.get $1
   i32.add
   i32.load8_u
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Int8Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -3973,6 +4556,8 @@
   i32.add
   local.get $2
   i32.store8
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int8Array#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -3983,7 +4568,22 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $7
   local.get $1
   local.set $6
@@ -4065,6 +4665,10 @@
    call $~lib/memory/memory.fill
   end
   local.get $7
+  local.set $13
+  local.get $12
+  call $~lib/rt/__stack_restore
+  local.get $13
  )
  (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -5321,9 +5925,18 @@
  )
  (func $~lib/rt/__newBuffer (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
   local.get $0
   local.get $1
   call $~lib/rt/tcms/__new
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $2
   if
@@ -5333,14 +5946,27 @@
    call $~lib/memory/memory.copy
   end
   local.get $3
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/rt/__newArray (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
   i32.const 16
   local.get $2
   call $~lib/rt/tcms/__new
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $0
   local.get $1
@@ -5350,6 +5976,10 @@
   i32.const 0
   local.get $3
   call $~lib/rt/__newBuffer
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   local.get $4
   local.get $6
@@ -5368,12 +5998,42 @@
   local.get $0
   i32.store offset=12
   local.get $4
+  local.set $8
+  local.get $7
+  call $~lib/rt/__stack_restore
+  local.get $8
  )
  (func $~lib/array/Array<i8>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Int8Array#__get (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -5391,8 +6051,23 @@
   local.get $1
   i32.add
   i32.load8_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<i8>#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -5400,9 +6075,24 @@
   i32.shl
   i32.add
   i32.load8_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<i8>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=12
@@ -5422,11 +6112,32 @@
   i32.const 0
   drop
   local.get $2
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/isInt8ArrayEqual (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $5
+  local.get $0
+  local.get $5
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $5
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Int8Array#get:length
   local.get $1
@@ -5434,6 +6145,10 @@
   i32.ne
   if
    i32.const 0
+   local.set $6
+   local.get $5
+   call $~lib/rt/__stack_restore
+   local.get $6
    return
   end
   i32.const 0
@@ -5457,6 +6172,10 @@
     i32.ne
     if
      i32.const 0
+     local.set $6
+     local.get $5
+     call $~lib/rt/__stack_restore
+     local.get $6
      return
     end
     local.get $2
@@ -5467,6 +6186,10 @@
    end
   end
   i32.const 1
+  local.set $6
+  local.get $5
+  call $~lib/rt/__stack_restore
+  local.get $6
  )
  (func $~lib/typedarray/Int8Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -5475,7 +6198,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -5573,6 +6311,10 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Int32Array#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -5583,7 +6325,22 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $7
   local.get $1
   local.set $6
@@ -5673,12 +6430,42 @@
    end
   end
   local.get $7
+  local.set $13
+  local.get $12
+  call $~lib/rt/__stack_restore
+  local.get $13
  )
  (func $~lib/array/Array<i32>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/array/Array<i32>#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -5686,9 +6473,24 @@
   i32.shl
   i32.add
   i32.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=12
@@ -5708,11 +6510,32 @@
   i32.const 0
   drop
   local.get $2
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/isInt32ArrayEqual (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $5
+  local.get $0
+  local.get $5
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $5
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Int32Array#get:length
   local.get $1
@@ -5720,6 +6543,10 @@
   i32.ne
   if
    i32.const 0
+   local.set $6
+   local.get $5
+   call $~lib/rt/__stack_restore
+   local.get $6
    return
   end
   i32.const 0
@@ -5743,6 +6570,10 @@
     i32.ne
     if
      i32.const 0
+     local.set $6
+     local.get $5
+     call $~lib/rt/__stack_restore
+     local.get $6
      return
     end
     local.get $2
@@ -5753,6 +6584,10 @@
    end
   end
   i32.const 1
+  local.set $6
+  local.get $5
+  call $~lib/rt/__stack_restore
+  local.get $6
  )
  (func $~lib/typedarray/Int32Array#slice (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -5761,7 +6596,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -5848,6 +6698,10 @@
   i32.shl
   call $~lib/memory/memory.copy
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Int32Array#copyWithin (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -5861,7 +6715,22 @@
   (local $12 i32)
   (local $13 i32)
   (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $15
   local.get $0
+  local.get $15
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $15
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $7
   local.get $1
   local.set $6
@@ -5987,11 +6856,30 @@
   i32.shl
   call $~lib/memory/memory.copy
   local.get $7
+  local.set $16
+  local.get $15
+  call $~lib/rt/__stack_restore
+  local.get $16
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Int8Array#reduce<i8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6001,9 +6889,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -6045,6 +6958,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -6088,6 +7005,16 @@
   end
  )
  (func $~lib/typedarray/Uint8Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -6106,11 +7033,28 @@
   i32.add
   local.get $2
   i32.store8
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Uint8Array#reduce<u8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6120,9 +7064,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -6164,6 +7133,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -6205,9 +7178,24 @@
   end
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Uint8ClampedArray#reduce<u8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6217,9 +7205,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -6261,6 +7274,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -6302,6 +7319,16 @@
   end
  )
  (func $~lib/typedarray/Int16Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -6324,11 +7351,28 @@
   i32.add
   local.get $2
   i32.store16
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Int16Array#reduce<i16> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6338,9 +7382,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -6382,6 +7451,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -6425,6 +7498,16 @@
   end
  )
  (func $~lib/typedarray/Uint16Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -6447,11 +7530,28 @@
   i32.add
   local.get $2
   i32.store16
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Uint16Array#reduce<u16> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6461,9 +7561,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -6505,6 +7630,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -6546,9 +7675,24 @@
   end
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Int32Array#reduce<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6558,9 +7702,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -6602,6 +7771,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -6641,6 +7814,16 @@
   end
  )
  (func $~lib/typedarray/Uint32Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -6663,11 +7846,28 @@
   i32.add
   local.get $2
   i32.store
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint32Array,u32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Uint32Array#reduce<u32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -6677,9 +7877,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -6721,6 +7946,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -6760,6 +7989,16 @@
   end
  )
  (func $~lib/typedarray/Int64Array#__set (param $0 i32) (param $1 i32) (param $2 i64)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -6782,11 +8021,28 @@
   i32.add
   local.get $2
   i64.store
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
+  (local $4 i32)
+  (local $5 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i64.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Int64Array#reduce<i64> (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
   (local $3 i64)
@@ -6796,9 +8052,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i64)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -6840,6 +8121,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -6879,6 +8164,16 @@
   end
  )
  (func $~lib/typedarray/Uint64Array#__set (param $0 i32) (param $1 i32) (param $2 i64)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -6901,11 +8196,28 @@
   i32.add
   local.get $2
   i64.store
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint64Array,u64>~anonymous|0 (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
+  (local $4 i32)
+  (local $5 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i64.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Uint64Array#reduce<u64> (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
   (local $3 i64)
@@ -6915,9 +8227,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i64)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -6959,6 +8296,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -6998,6 +8339,16 @@
   end
  )
  (func $~lib/typedarray/Float32Array#__set (param $0 i32) (param $1 i32) (param $2 f32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -7020,11 +8371,28 @@
   i32.add
   local.get $2
   f32.store
+  local.get $3
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 f32) (param $2 i32) (param $3 i32) (result f32)
+  (local $4 i32)
+  (local $5 f32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   f32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Float32Array#reduce<f32> (param $0 i32) (param $1 i32) (param $2 f32) (result f32)
   (local $3 f32)
@@ -7034,9 +8402,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 f32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -7078,6 +8471,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -7117,9 +8514,24 @@
   end
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 f64) (param $2 i32) (param $3 i32) (result f64)
+  (local $4 i32)
+  (local $5 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   f64.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Float64Array#reduce<f64> (param $0 i32) (param $1 i32) (param $2 f64) (result f64)
   (local $3 f64)
@@ -7129,9 +8541,34 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 f64)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $10
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $10
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -7173,6 +8610,10 @@
    end
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -7212,9 +8653,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Int8Array#reduceRight<i8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7223,9 +8679,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -7267,6 +8748,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -7310,9 +8795,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Uint8Array#reduceRight<u8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7321,9 +8821,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -7365,6 +8890,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -7406,9 +8935,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Uint8ClampedArray#reduceRight<u8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7417,9 +8961,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -7461,6 +9030,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -7502,9 +9075,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Int16Array#reduceRight<i16> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7513,9 +9101,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -7557,6 +9170,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -7600,9 +9217,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Uint16Array#reduceRight<u16> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7611,9 +9243,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -7655,6 +9312,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -7696,9 +9357,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Int32Array#reduceRight<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7707,9 +9383,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -7751,6 +9452,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -7790,9 +9495,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint32Array,u32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 i32)
+  (local $5 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Uint32Array#reduceRight<u32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -7801,9 +9521,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -7845,6 +9590,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -7884,9 +9633,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int64Array,i64>~anonymous|0 (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
+  (local $4 i32)
+  (local $5 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i64.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Int64Array#reduceRight<i64> (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
   (local $3 i64)
@@ -7895,9 +9659,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i64)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -7939,6 +9728,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -7978,9 +9771,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint64Array,u64>~anonymous|0 (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i32) (result i64)
+  (local $4 i32)
+  (local $5 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   i64.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Uint64Array#reduceRight<u64> (param $0 i32) (param $1 i32) (param $2 i64) (result i64)
   (local $3 i64)
@@ -7989,9 +9797,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i64)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -8033,6 +9866,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -8072,9 +9909,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 f32) (param $2 i32) (param $3 i32) (result f32)
+  (local $4 i32)
+  (local $5 f32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   f32.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Float32Array#reduceRight<f32> (param $0 i32) (param $1 i32) (param $2 f32) (result f32)
   (local $3 f32)
@@ -8083,9 +9935,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 f32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -8127,6 +10004,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -8166,9 +10047,24 @@
   end
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 f64) (param $2 i32) (param $3 i32) (result f64)
+  (local $4 i32)
+  (local $5 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $3
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $3
   local.get $0
   local.get $1
   f64.add
+  local.set $5
+  local.get $4
+  call $~lib/rt/__stack_restore
+  local.get $5
  )
  (func $~lib/typedarray/Float64Array#reduceRight<f64> (param $0 i32) (param $1 i32) (param $2 f64) (result f64)
   (local $3 f64)
@@ -8177,9 +10073,34 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 f64)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $9
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $9
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -8221,6 +10142,10 @@
    end
   end
   local.get $3
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -8260,9 +10185,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   i32.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int8Array#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -8274,9 +10214,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Int8Array#get:length
@@ -8345,6 +10310,10 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -8413,9 +10382,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   i32.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint8Array#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -8427,9 +10411,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Uint8Array#get:length
@@ -8498,8 +10507,23 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Uint8Array#__get (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -8517,6 +10541,10 @@
   local.get $1
   i32.add
   i32.load8_u
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -8585,9 +10613,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   i32.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint8ClampedArray#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -8599,9 +10642,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Uint8ClampedArray#get:length
@@ -8670,6 +10738,10 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -8738,9 +10810,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   i32.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int16Array#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -8752,9 +10839,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Int16Array#get:length
@@ -8823,8 +10935,23 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Int16Array#__get (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -8846,6 +10973,10 @@
   i32.shl
   i32.add
   i32.load16_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -8914,9 +11045,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   i32.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint16Array#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -8928,9 +11074,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Uint16Array#get:length
@@ -8999,8 +11170,23 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Uint16Array#__get (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -9022,6 +11208,10 @@
   i32.shl
   i32.add
   i32.load16_u
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -9090,9 +11280,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   i32.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int32Array#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9104,9 +11309,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Int32Array#get:length
@@ -9175,6 +11405,10 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -9243,9 +11477,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint32Array,u32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   i32.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint32Array#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9257,9 +11506,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Uint32Array#get:length
@@ -9328,8 +11602,23 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Uint32Array#__get (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -9351,6 +11640,10 @@
   i32.shl
   i32.add
   i32.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -9419,9 +11712,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i64)
+  (local $3 i32)
+  (local $4 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   i64.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int64Array#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9433,9 +11741,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Int64Array#get:length
@@ -9504,8 +11837,23 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Int64Array#__get (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -9527,6 +11875,10 @@
   i32.shl
   i32.add
   i64.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -9595,9 +11947,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint64Array,u64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i64)
+  (local $3 i32)
+  (local $4 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   i64.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint64Array#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9609,9 +11976,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Uint64Array#get:length
@@ -9680,8 +12072,23 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Uint64Array#__get (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -9703,6 +12110,10 @@
   i32.shl
   i32.add
   i64.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -9771,9 +12182,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 i32) (param $2 i32) (result f32)
+  (local $3 i32)
+  (local $4 f32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   f32.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Float32Array#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9785,9 +12211,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Float32Array#get:length
@@ -9856,8 +12307,23 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Float32Array#__get (param $0 i32) (param $1 i32) (result f32)
+  (local $2 i32)
+  (local $3 f32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   local.get $0
   i32.load offset=8
@@ -9879,6 +12345,10 @@
   i32.shl
   i32.add
   f32.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -9947,9 +12417,24 @@
   end
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 i32) (param $2 i32) (result f64)
+  (local $3 i32)
+  (local $4 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $0
   f64.mul
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Float64Array#map (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9961,9 +12446,34 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Float64Array#get:length
@@ -10032,6 +12542,10 @@
   local.get $6
   i32.store offset=8
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -10100,6 +12614,17 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 24
   i32.shl
@@ -10107,6 +12632,10 @@
   i32.shr_s
   i32.const 2
   i32.gt_s
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/rt/tlsf/moveBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -10273,7 +12802,7 @@
   if
    i32.const 256
    i32.const 320
-   i32.const 232
+   i32.const 281
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -10340,9 +12869,34 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Int8Array#get:length
@@ -10429,6 +12983,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -10531,11 +13089,26 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 2
   i32.gt_u
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint8Array#filter (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -10549,9 +13122,34 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Uint8Array#get:length
@@ -10638,6 +13236,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -10740,11 +13342,26 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 2
   i32.gt_u
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint8ClampedArray#filter (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -10758,9 +13375,34 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Uint8ClampedArray#get:length
@@ -10847,6 +13489,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -10949,6 +13595,17 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 16
   i32.shl
@@ -10956,6 +13613,10 @@
   i32.shr_s
   i32.const 2
   i32.gt_s
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int16Array#filter (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -10969,9 +13630,34 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Int16Array#get:length
@@ -11058,6 +13744,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -11160,11 +13850,26 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 65535
   i32.and
   i32.const 2
   i32.gt_u
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint16Array#filter (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -11178,9 +13883,34 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Uint16Array#get:length
@@ -11267,6 +13997,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -11369,9 +14103,24 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 2
   i32.gt_s
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int32Array#filter (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -11385,9 +14134,34 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Int32Array#get:length
@@ -11474,6 +14248,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -11576,9 +14354,24 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 2
   i32.gt_u
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint32Array#filter (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -11592,9 +14385,34 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Uint32Array#get:length
@@ -11681,6 +14499,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -11783,9 +14605,24 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 2
   i64.gt_s
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int64Array#filter (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -11799,9 +14636,34 @@
   (local $10 i32)
   (local $11 i64)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Int64Array#get:length
@@ -11888,6 +14750,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -11990,9 +14856,24 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 2
   i64.gt_u
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint64Array#filter (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -12006,9 +14887,34 @@
   (local $10 i32)
   (local $11 i64)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Uint64Array#get:length
@@ -12095,6 +15001,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -12197,9 +15107,24 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f32.const 2
   f32.gt
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Float32Array#filter (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -12213,9 +15138,34 @@
   (local $10 i32)
   (local $11 f32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Float32Array#get:length
@@ -12302,6 +15252,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -12404,9 +15358,24 @@
   end
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f64.const 2
   f64.gt
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Float64Array#filter (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -12420,9 +15389,34 @@
   (local $10 i32)
   (local $11 f64)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $13
   local.get $0
+  local.get $13
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $13
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $13
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $13
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   call $~lib/typedarray/Float64Array#get:length
@@ -12509,6 +15503,10 @@
   local.get $10
   i32.store offset=4
   local.get $5
+  local.set $14
+  local.get $13
+  call $~lib/rt/__stack_restore
+  local.get $14
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -12611,6 +15609,17 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 24
   i32.shl
@@ -12618,6 +15627,10 @@
   i32.shr_s
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int8Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -12626,10 +15639,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -12672,8 +15710,23 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 24
   i32.shl
@@ -12681,6 +15734,10 @@
   i32.shr_s
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -12735,11 +15792,26 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint8Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -12748,10 +15820,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -12794,13 +15891,32 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -12855,11 +15971,26 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint8ClampedArray#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -12868,10 +15999,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -12914,13 +16070,32 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -12975,6 +16150,17 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 16
   i32.shl
@@ -12982,6 +16168,10 @@
   i32.shr_s
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int16Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -12990,10 +16180,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -13036,8 +16251,23 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 16
   i32.shl
@@ -13045,6 +16275,10 @@
   i32.shr_s
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -13099,11 +16333,26 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 65535
   i32.and
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint16Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13112,10 +16361,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -13158,13 +16432,32 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 65535
   i32.and
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -13219,9 +16512,24 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int32Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13230,10 +16538,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -13276,11 +16609,30 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -13335,9 +16687,24 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint32Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13346,10 +16713,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -13392,11 +16784,30 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -13451,9 +16862,24 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 2
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int64Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13462,10 +16888,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -13508,11 +16959,30 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 0
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -13567,9 +17037,24 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 2
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint64Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13578,10 +17063,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -13624,11 +17134,30 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|1 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 0
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -13683,9 +17212,24 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f32.const 2
   f32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Float32Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13694,10 +17238,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -13740,11 +17309,30 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f32.const 0
   f32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -13799,9 +17387,24 @@
   end
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f64.const 2
   f64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Float64Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13810,10 +17413,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/SOME<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -13856,11 +17484,30 @@
    end
    i32.const 0
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f64.const 0
   f64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -13915,6 +17562,17 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 24
   i32.shl
@@ -13922,6 +17580,10 @@
   i32.shr_s
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int8Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13930,10 +17592,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -13976,8 +17663,23 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 24
   i32.shl
@@ -13985,6 +17687,10 @@
   i32.shr_s
   i32.const 4
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -14040,11 +17746,26 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint8Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14053,10 +17774,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -14099,13 +17845,32 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 4
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -14161,11 +17926,26 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint8ClampedArray#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14174,10 +17954,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -14220,13 +18025,32 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 4
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -14282,6 +18106,17 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 16
   i32.shl
@@ -14289,6 +18124,10 @@
   i32.shr_s
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int16Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14297,10 +18136,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -14343,8 +18207,23 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 16
   i32.shl
@@ -14352,6 +18231,10 @@
   i32.shr_s
   i32.const 4
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -14407,11 +18290,26 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 65535
   i32.and
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint16Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14420,10 +18318,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -14466,13 +18389,32 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 65535
   i32.and
   i32.const 4
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -14528,9 +18470,24 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int32Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14539,10 +18496,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -14585,11 +18567,30 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 4
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -14645,9 +18646,24 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint32Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14656,10 +18672,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -14702,11 +18743,30 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 4
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -14762,9 +18822,24 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 2
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int64Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14773,10 +18848,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -14819,11 +18919,30 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 4
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -14879,9 +18998,24 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 2
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint64Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14890,10 +19024,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -14936,11 +19095,30 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|1 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 4
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -14996,9 +19174,24 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f32.const 2
   f32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Float32Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15007,10 +19200,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -15053,11 +19271,30 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f32.const 4
   f32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -15113,9 +19350,24 @@
   end
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f64.const 2
   f64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Float64Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15124,10 +19376,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -15170,11 +19447,30 @@
    end
    i32.const -1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f64.const 4
   f64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -15230,6 +19526,17 @@
   end
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 24
   i32.shl
@@ -15239,6 +19546,10 @@
   i32.rem_s
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int8Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15247,10 +19558,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -15296,8 +19632,23 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 24
   i32.shl
@@ -15305,6 +19656,10 @@
   i32.shr_s
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -15359,6 +19714,17 @@
   end
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
@@ -15366,6 +19732,10 @@
   i32.rem_u
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint8Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15374,10 +19744,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -15423,13 +19818,32 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -15484,6 +19898,17 @@
   end
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
@@ -15491,6 +19916,10 @@
   i32.rem_u
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint8ClampedArray#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15499,10 +19928,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -15548,13 +20002,32 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 255
   i32.and
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -15609,6 +20082,17 @@
   end
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 16
   i32.shl
@@ -15618,6 +20102,10 @@
   i32.rem_s
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int16Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15626,10 +20114,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -15675,8 +20188,23 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 16
   i32.shl
@@ -15684,6 +20212,10 @@
   i32.shr_s
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -15738,6 +20270,17 @@
   end
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 65535
   i32.and
@@ -15745,6 +20288,10 @@
   i32.rem_u
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint16Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15753,10 +20300,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -15802,13 +20374,32 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 65535
   i32.and
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -15863,11 +20454,26 @@
   end
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 2
   i32.rem_s
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int32Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15876,10 +20482,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -15925,11 +20556,30 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -15984,11 +20634,26 @@
   end
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 2
   i32.rem_u
   i32.const 0
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint32Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -15997,10 +20662,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -16046,11 +20736,30 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i32.const 2
   i32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -16105,11 +20814,26 @@
   end
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 2
   i64.rem_s
   i64.const 0
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int64Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -16118,10 +20842,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -16167,11 +20916,30 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|1 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 2
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -16226,11 +20994,26 @@
   end
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 2
   i64.rem_u
   i64.const 0
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Uint64Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -16239,10 +21022,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -16288,11 +21096,30 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|1 (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   i64.const 2
   i64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -16598,11 +21425,26 @@
   f32.reinterpret_i32
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f32.const 2
   call $~lib/math/NativeMathf.mod
   f32.const 0
   f32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Float32Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -16611,10 +21453,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -16660,11 +21527,30 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|1 (param $0 f32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f32.const 2
   f32.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -16976,11 +21862,26 @@
   f64.reinterpret_i64
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f64.const 2
   call $~lib/math/NativeMath.mod
   f64.const 0
   f64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Float64Array#every (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -16989,10 +21890,35 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   block $~lib/typedarray/EVERY<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
+   local.get $8
+   i32.const 8
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $1
+   local.get $8
+   i32.const 12
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $3
    i32.load offset=4
@@ -17038,11 +21964,30 @@
    end
    i32.const 1
   end
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|1 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   f64.const 2
   f64.eq
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -17098,6 +22043,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -17150,6 +22105,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int8Array#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -17158,9 +22115,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -17197,6 +22178,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -17256,6 +22239,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -17304,6 +22297,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8Array#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -17312,9 +22307,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -17351,6 +22370,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -17404,6 +22425,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -17452,6 +22483,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -17460,9 +22493,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -17499,6 +22556,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -17552,6 +22611,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -17604,6 +22673,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int16Array#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -17612,9 +22683,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -17651,6 +22746,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -17710,6 +22807,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -17758,6 +22865,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint16Array#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -17766,9 +22875,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -17805,6 +22938,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -17858,6 +22993,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -17902,6 +23047,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int32Array#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -17910,9 +23057,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -17949,6 +23120,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -17996,6 +23169,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint32Array,u32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -18040,6 +23223,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint32Array#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -18048,9 +23233,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -18087,6 +23296,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -18134,6 +23345,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -18179,6 +23400,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int64Array#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -18187,9 +23410,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -18226,6 +23473,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -18276,6 +23525,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint64Array,u64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -18321,6 +23580,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint64Array#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -18329,9 +23590,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -18368,6 +23653,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -18418,6 +23705,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 (param $0 f32) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -18463,6 +23760,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float32Array#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -18471,9 +23770,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -18510,6 +23833,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -18560,6 +23885,16 @@
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0 (param $0 f64) (param $1 i32) (param $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $4
+  local.get $2
+  local.get $4
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   global.get $std/typedarray/forEachValues
   local.get $1
   call $~lib/array/Array<i32>#__get
@@ -18605,6 +23940,8 @@
   i32.const 1
   i32.add
   global.set $std/typedarray/forEachCallCount
+  local.get $4
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float64Array#forEach (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -18613,9 +23950,33 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $1
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $2
   local.get $3
   i32.load offset=4
@@ -18652,6 +24013,8 @@
     br $for-loop|0
    end
   end
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -18709,7 +24072,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -18762,6 +24140,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -18935,7 +24317,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -18988,6 +24385,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Uint8Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -18996,7 +24397,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -19094,6 +24510,10 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -19261,7 +24681,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -19314,6 +24749,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Uint8ClampedArray#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -19322,7 +24761,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -19420,6 +24874,10 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -19587,7 +25045,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -19640,6 +25113,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Int16Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -19648,7 +25125,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -19746,6 +25238,10 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -19919,7 +25415,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -19972,6 +25483,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Uint16Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -19980,7 +25495,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -20078,6 +25608,10 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -20245,7 +25779,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -20298,6 +25847,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -20459,7 +26012,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -20512,6 +26080,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Uint32Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -20520,7 +26092,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -20618,6 +26205,10 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -20779,7 +26370,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i64)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -20832,6 +26438,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Int64Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -20840,7 +26450,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -20938,6 +26563,10 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -21102,7 +26731,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i64)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -21155,6 +26799,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Uint64Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -21163,7 +26811,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -21261,6 +26924,10 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -21425,7 +27092,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 f32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -21478,6 +27160,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Float32Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -21486,7 +27172,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -21584,6 +27285,10 @@
   i32.shl
   i32.store offset=8
   local.get $7
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -21748,7 +27453,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 f64)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.load offset=4
@@ -21801,6 +27521,10 @@
    end
   end
   local.get $1
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $std/typedarray/testArrayReverse<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -21964,8 +27688,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -22041,6 +27780,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Int8Array#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -22050,8 +27793,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -22123,8 +27881,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Int8Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -22143,6 +27916,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Int8Array#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -22619,8 +28396,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -22694,6 +28486,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Uint8Array#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -22703,8 +28499,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -22774,8 +28585,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Uint8Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -22794,6 +28620,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Uint8Array#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -23268,8 +29098,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -23343,6 +29188,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Uint8ClampedArray#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -23352,8 +29201,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -23423,8 +29287,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Uint8ClampedArray#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -23443,6 +29322,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Uint8ClampedArray#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -23917,8 +29800,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -23994,6 +29892,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Int16Array#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -24003,8 +29905,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -24076,8 +29993,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Int16Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -24096,6 +30028,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Int16Array#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -24572,8 +30508,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -24647,6 +30598,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Uint16Array#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -24656,8 +30611,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -24727,8 +30697,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Uint16Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -24747,6 +30732,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Uint16Array#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -25221,8 +31210,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -25294,6 +31298,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Int32Array#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -25303,8 +31311,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -25372,8 +31395,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Int32Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -25392,6 +31430,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Int32Array#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -25864,8 +31906,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -25937,6 +31994,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Uint32Array#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -25946,8 +32007,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -26015,8 +32091,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Uint32Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -26035,6 +32126,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Uint32Array#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -26507,8 +32602,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -26580,6 +32690,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Int64Array#lastIndexOf (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
@@ -26589,8 +32703,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -26658,8 +32787,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Int64Array#lastIndexOf@varargs (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -26678,6 +32822,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Int64Array#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -27151,8 +33299,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -27224,6 +33387,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Uint64Array#lastIndexOf (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
@@ -27233,8 +33400,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -27302,8 +33484,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Uint64Array#lastIndexOf@varargs (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -27322,6 +33519,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Uint64Array#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -27795,8 +33996,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -27868,6 +34084,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Float32Array#lastIndexOf (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -27877,8 +34097,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -27946,8 +34181,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Float32Array#lastIndexOf@varargs (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -27966,6 +34216,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Float32Array#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -28439,8 +34693,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -28512,6 +34781,10 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Float64Array#lastIndexOf (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
@@ -28521,8 +34794,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
+   local.get $10
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -28590,8 +34878,23 @@
    end
    i32.const -1
   end
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/typedarray/Float64Array#lastIndexOf@varargs (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $1of1
    block $0of1
     block $outOfRange
@@ -28610,6 +34913,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Float64Array#lastIndexOf
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -29084,8 +35391,23 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 f64)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INCLUDES<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
+   local.get $11
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -29173,6 +35495,10 @@
    i32.const 0
    br $~lib/typedarray/INCLUDES<~lib/typedarray/Float64Array,f64>|inlined.0
   end
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Float32Array#includes (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -29183,8 +35509,23 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 f32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $~lib/typedarray/INCLUDES<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
+   local.get $11
+   i32.const 4
+   i32.add
+   call $~lib/rt/__stackify
    local.set $5
    local.get $1
    local.set $4
@@ -29272,6 +35613,10 @@
    i32.const 0
    br $~lib/typedarray/INCLUDES<~lib/typedarray/Float32Array,f32>|inlined.0
   end
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
@@ -29697,6 +36042,11 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $1
   i32.const 2
   i32.lt_s
@@ -29719,6 +36069,10 @@
   i32.eqz
   if
    i32.const 6176
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $0
@@ -29732,8 +36086,6 @@
    i32.sub
    local.set $0
   end
-  i32.const 0
-  local.set $3
   local.get $1
   i32.const 10
   i32.eq
@@ -29748,6 +36100,10 @@
    i32.shl
    i32.const 1
    call $~lib/rt/tcms/__new
+   local.get $8
+   i32.const 0
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $3
    local.set $7
@@ -29784,6 +36140,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $8
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.set $7
@@ -29815,6 +36175,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $8
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.get $4
@@ -29831,14 +36195,33 @@
    i32.store16
   end
   local.get $3
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 20
   i32.sub
   i32.load offset=16
   i32.const 1
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/util/number/itoa_buffered<i8> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -29949,6 +36332,17 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $12
+  local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $3
@@ -30014,6 +36408,10 @@
   i32.eqz
   if
    i32.const 5952
+   local.set $13
+   local.get $12
+   call $~lib/rt/__stack_restore
+   local.get $13
    return
   end
   local.get $8
@@ -30029,6 +36427,10 @@
   end
   if
    local.get $0
+   local.set $13
+   local.get $12
+   call $~lib/rt/__stack_restore
+   local.get $13
    return
   end
   local.get $10
@@ -30042,6 +36444,10 @@
   local.get $10
   call $~lib/memory/memory.copy
   local.get $11
+  local.set $13
+  local.get $12
+  call $~lib/rt/__stack_restore
+  local.get $13
  )
  (func $~lib/util/string/joinIntegerArray<i8> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -30052,6 +36458,17 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $2
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -30061,6 +36478,10 @@
   i32.lt_s
   if
    i32.const 5952
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $3
@@ -30078,6 +36499,10 @@
    local.get $4
    i32.const 10
    call $~lib/util/number/itoa32
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $2
@@ -30174,17 +36599,46 @@
    i32.const 0
    local.get $8
    call $~lib/string/String#substring
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Int8Array#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Int8Array#get:length
   local.get $1
   call $~lib/util/string/joinIntegerArray<i8>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
@@ -30192,6 +36646,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $2
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -30278,6 +36749,10 @@
      local.get $8
      local.get $9
      i32.sub
+     local.set $11
+     local.get $10
+     call $~lib/rt/__stack_restore
+     local.get $11
      return
     end
     local.get $5
@@ -30292,14 +36767,39 @@
    end
   end
   i32.const 0
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $3
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
   if
    i32.const 1
+   local.set $4
+   local.get $3
+   call $~lib/rt/__stack_restore
+   local.get $4
    return
   end
   local.get $0
@@ -30314,6 +36814,10 @@
   end
   if
    i32.const 0
+   local.set $4
+   local.get $3
+   call $~lib/rt/__stack_restore
+   local.get $4
    return
   end
   local.get $0
@@ -30325,6 +36829,10 @@
   i32.ne
   if
    i32.const 0
+   local.set $4
+   local.get $3
+   call $~lib/rt/__stack_restore
+   local.get $4
    return
   end
   local.get $0
@@ -30334,11 +36842,30 @@
   local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/typedarray/Int8Array#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Int8Array#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -30402,6 +36929,11 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   local.get $1
   i32.const 2
   i32.lt_s
@@ -30424,10 +36956,12 @@
   i32.eqz
   if
    i32.const 6176
+   local.set $8
+   local.get $7
+   call $~lib/rt/__stack_restore
+   local.get $8
    return
   end
-  i32.const 0
-  local.set $2
   local.get $1
   i32.const 10
   i32.eq
@@ -30440,6 +36974,10 @@
    i32.shl
    i32.const 1
    call $~lib/rt/tcms/__new
+   local.get $7
+   i32.const 0
+   i32.add
+   call $~lib/rt/__stackify
    local.set $2
    local.get $2
    local.set $6
@@ -30474,6 +37012,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $7
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.set $6
@@ -30501,6 +37043,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $7
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.get $0
@@ -30511,6 +37057,10 @@
    end
   end
   local.get $2
+  local.set $8
+  local.get $7
+  call $~lib/rt/__stack_restore
+  local.get $8
  )
  (func $~lib/util/number/itoa_buffered<u8> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -30584,6 +37134,17 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $2
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -30593,6 +37154,10 @@
   i32.lt_s
   if
    i32.const 5952
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $3
@@ -30610,6 +37175,10 @@
    local.get $4
    i32.const 10
    call $~lib/util/number/utoa32
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $2
@@ -30706,22 +37275,66 @@
    i32.const 0
    local.get $8
    call $~lib/string/String#substring
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Uint8Array#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Uint8Array#get:length
   local.get $1
   call $~lib/util/string/joinIntegerArray<u8>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint8Array#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Uint8Array#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -30780,17 +37393,53 @@
   end
  )
  (func $~lib/typedarray/Uint8ClampedArray#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Uint8ClampedArray#get:length
   local.get $1
   call $~lib/util/string/joinIntegerArray<u8>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint8ClampedArray#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Uint8ClampedArray#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -30956,6 +37605,17 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $2
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -30965,6 +37625,10 @@
   i32.lt_s
   if
    i32.const 5952
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $3
@@ -30982,6 +37646,10 @@
    local.get $4
    i32.const 10
    call $~lib/util/number/itoa32
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $2
@@ -31078,22 +37746,66 @@
    i32.const 0
    local.get $8
    call $~lib/string/String#substring
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Int16Array#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Int16Array#get:length
   local.get $1
   call $~lib/util/string/joinIntegerArray<i16>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Int16Array#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Int16Array#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -31223,6 +37935,17 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $2
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -31232,6 +37955,10 @@
   i32.lt_s
   if
    i32.const 5952
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $3
@@ -31249,6 +37976,10 @@
    local.get $4
    i32.const 10
    call $~lib/util/number/utoa32
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $2
@@ -31345,22 +38076,66 @@
    i32.const 0
    local.get $8
    call $~lib/string/String#substring
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Uint16Array#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Uint16Array#get:length
   local.get $1
   call $~lib/util/string/joinIntegerArray<u16>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint16Array#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Uint16Array#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -31506,6 +38281,17 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $2
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -31515,6 +38301,10 @@
   i32.lt_s
   if
    i32.const 5952
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $3
@@ -31532,6 +38322,10 @@
    local.get $4
    i32.const 10
    call $~lib/util/number/itoa32
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $2
@@ -31628,22 +38422,66 @@
    i32.const 0
    local.get $8
    call $~lib/string/String#substring
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Int32Array#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Int32Array#get:length
   local.get $1
   call $~lib/util/string/joinIntegerArray<i32>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Int32Array#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Int32Array#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -31765,6 +38603,17 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $2
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -31774,6 +38623,10 @@
   i32.lt_s
   if
    i32.const 5952
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $3
@@ -31791,6 +38644,10 @@
    local.get $4
    i32.const 10
    call $~lib/util/number/utoa32
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $2
@@ -31887,22 +38744,66 @@
    i32.const 0
    local.get $8
    call $~lib/string/String#substring
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $7
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Uint32Array#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Uint32Array#get:length
   local.get $1
   call $~lib/util/string/joinIntegerArray<u32>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint32Array#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Uint32Array#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -32151,6 +39052,11 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $10
   local.get $1
   i32.const 2
   i32.lt_s
@@ -32175,6 +39081,10 @@
   i32.eqz
   if
    i32.const 6176
+   local.set $11
+   local.get $10
+   call $~lib/rt/__stack_restore
+   local.get $11
    return
   end
   local.get $0
@@ -32189,8 +39099,6 @@
    i64.sub
    local.set $0
   end
-  i32.const 0
-  local.set $3
   local.get $1
   i32.const 10
   i32.eq
@@ -32213,6 +39121,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $10
+    i32.const 0
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.set $8
@@ -32239,6 +39151,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $10
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.set $7
@@ -32277,6 +39193,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $10
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.set $4
@@ -32304,6 +39224,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $10
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.get $0
@@ -32319,6 +39243,10 @@
    i32.store16
   end
   local.get $3
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/util/number/itoa_buffered<i64> (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
@@ -32440,6 +39368,17 @@
   (local $9 i64)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $12
+  local.get $2
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -32449,6 +39388,10 @@
   i32.lt_s
   if
    i32.const 5952
+   local.set $13
+   local.get $12
+   call $~lib/rt/__stack_restore
+   local.get $13
    return
   end
   local.get $3
@@ -32468,6 +39411,10 @@
    i64.extend_i32_s
    i32.const 10
    call $~lib/util/number/itoa64
+   local.set $13
+   local.get $12
+   call $~lib/rt/__stack_restore
+   local.get $13
    return
   end
   local.get $2
@@ -32564,22 +39511,66 @@
    i32.const 0
    local.get $8
    call $~lib/string/String#substring
+   local.set $13
+   local.get $12
+   call $~lib/rt/__stack_restore
+   local.get $13
    return
   end
   local.get $7
+  local.set $13
+  local.get $12
+  call $~lib/rt/__stack_restore
+  local.get $13
  )
  (func $~lib/typedarray/Int64Array#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Int64Array#get:length
   local.get $1
   call $~lib/util/string/joinIntegerArray<i64>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Int64Array#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Int64Array#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -32645,6 +39636,11 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i64)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $1
   i32.const 2
   i32.lt_s
@@ -32669,10 +39665,12 @@
   i32.eqz
   if
    i32.const 6176
+   local.set $10
+   local.get $9
+   call $~lib/rt/__stack_restore
+   local.get $10
    return
   end
-  i32.const 0
-  local.set $2
   local.get $1
   i32.const 10
   i32.eq
@@ -32693,6 +39691,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $9
+    i32.const 0
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.set $7
@@ -32717,6 +39719,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $9
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.set $6
@@ -32753,6 +39759,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $9
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.set $3
@@ -32778,6 +39788,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $9
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $2
     local.get $2
     local.get $0
@@ -32787,6 +39801,10 @@
    end
   end
   local.get $2
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/util/number/itoa_buffered<u64> (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
@@ -32884,6 +39902,17 @@
   (local $9 i64)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $12
+  local.get $2
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -32893,6 +39922,10 @@
   i32.lt_s
   if
    i32.const 5952
+   local.set $13
+   local.get $12
+   call $~lib/rt/__stack_restore
+   local.get $13
    return
   end
   local.get $3
@@ -32910,6 +39943,10 @@
    local.get $4
    i32.const 10
    call $~lib/util/number/utoa64
+   local.set $13
+   local.get $12
+   call $~lib/rt/__stack_restore
+   local.get $13
    return
   end
   local.get $2
@@ -33006,22 +40043,66 @@
    i32.const 0
    local.get $8
    call $~lib/string/String#substring
+   local.set $13
+   local.get $12
+   call $~lib/rt/__stack_restore
+   local.get $13
    return
   end
   local.get $7
+  local.set $13
+  local.get $12
+  call $~lib/rt/__stack_restore
+  local.get $13
  )
  (func $~lib/typedarray/Uint64Array#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Uint64Array#get:length
   local.get $1
   call $~lib/util/string/joinIntegerArray<u64>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Uint64Array#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Uint64Array#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -34459,6 +41540,17 @@
   (local $8 f32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $2
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -34468,6 +41560,10 @@
   i32.lt_s
   if
    i32.const 5952
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $3
@@ -34477,6 +41573,10 @@
    f32.load
    f64.promote_f32
    call $~lib/util/number/dtoa
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $2
@@ -34575,22 +41675,66 @@
    i32.const 0
    local.get $7
    call $~lib/string/String#substring
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $6
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Float32Array#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Float32Array#get:length
   local.get $1
   call $~lib/util/string/joinFloatArray<f32>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Float32Array#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Float32Array#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -34657,6 +41801,17 @@
   (local $8 f64)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $11
+  local.get $2
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -34666,6 +41821,10 @@
   i32.lt_s
   if
    i32.const 5952
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $3
@@ -34674,6 +41833,10 @@
    local.get $0
    f64.load
    call $~lib/util/number/dtoa
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $2
@@ -34770,22 +41933,66 @@
    i32.const 0
    local.get $7
    call $~lib/string/String#substring
+   local.set $12
+   local.get $11
+   call $~lib/rt/__stack_restore
+   local.get $12
    return
   end
   local.get $6
+  local.set $12
+  local.get $11
+  call $~lib/rt/__stack_restore
+  local.get $12
  )
  (func $~lib/typedarray/Float64Array#join (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   i32.load offset=4
   local.get $0
   call $~lib/typedarray/Float64Array#get:length
   local.get $1
   call $~lib/util/string/joinFloatArray<f64>
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/typedarray/Float64Array#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 7760
   call $~lib/typedarray/Float64Array#join
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $std/typedarray/testArrayJoinAndToString<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -34845,6 +42052,17 @@
  )
  (func $~lib/arraybuffer/ArrayBuffer#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
   i32.const 1073741820
   i32.gt_u
@@ -34865,12 +42083,31 @@
   local.get $1
   call $~lib/memory/memory.fill
   local.get $2
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 20
   i32.sub
   i32.load offset=16
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Uint8Array.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -34879,7 +42116,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -34973,8 +42225,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Uint8Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -34996,6 +42263,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Uint8Array.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/arraybuffer/ArrayBuffer#slice (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -35003,6 +42274,17 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $8
+  local.get $0
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $3
@@ -35078,6 +42360,10 @@
   local.get $6
   call $~lib/memory/memory.copy
   local.get $7
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $~lib/typedarray/Int8Array.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -35086,7 +42372,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -35180,8 +42481,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Int8Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -35203,6 +42519,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Int8Array.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Int8Array,i8>
   (local $0 i32)
@@ -35212,6 +42532,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -35266,6 +42590,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Int8Array.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -35299,6 +42627,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
@@ -35308,6 +42638,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -35362,6 +42696,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Uint8Array.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -35395,6 +42733,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -35403,7 +42743,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -35497,8 +42852,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Uint8ClampedArray.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -35520,6 +42890,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Uint8ClampedArray.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint8ClampedArray,u8>
   (local $0 i32)
@@ -35529,6 +42903,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -35585,6 +42963,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Uint8ClampedArray.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -35618,6 +43000,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int16Array.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -35626,7 +43010,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -35720,8 +43119,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Int16Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -35743,6 +43157,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Int16Array.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Int16Array,i16>
   (local $0 i32)
@@ -35752,6 +43170,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -35812,6 +43234,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Int16Array.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -35845,6 +43271,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint16Array.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -35853,7 +43281,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -35947,8 +43390,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Uint16Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -35970,6 +43428,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Uint16Array.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
@@ -35979,6 +43441,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -36039,6 +43505,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Uint16Array.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -36072,6 +43542,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int32Array.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -36080,7 +43552,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -36174,8 +43661,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Int32Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -36197,6 +43699,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Int32Array.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Int32Array,i32>
   (local $0 i32)
@@ -36206,6 +43712,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -36266,6 +43776,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Int32Array.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -36299,6 +43813,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint32Array.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -36307,7 +43823,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -36401,8 +43932,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Uint32Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -36424,6 +43970,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Uint32Array.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint32Array,u32>
   (local $0 i32)
@@ -36433,6 +43983,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -36495,6 +44049,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Uint32Array.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -36528,6 +44086,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int64Array.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -36536,7 +44096,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -36630,8 +44205,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Int64Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -36653,6 +44243,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Int64Array.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Int64Array,i64>
   (local $0 i32)
@@ -36662,6 +44256,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -36727,6 +44325,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Int64Array.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -36760,6 +44362,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint64Array.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -36768,7 +44372,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -36862,8 +44481,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Uint64Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -36885,6 +44519,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Uint64Array.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint64Array,u64>
   (local $0 i32)
@@ -36894,6 +44532,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -36961,6 +44603,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Uint64Array.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -36994,6 +44640,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float32Array.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -37002,7 +44650,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -37096,8 +44759,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Float32Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -37119,6 +44797,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Float32Array.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Float32Array,f32>
   (local $0 i32)
@@ -37128,6 +44810,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -37197,6 +44883,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Float32Array.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -37230,6 +44920,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float64Array.wrap (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -37238,7 +44930,22 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $9
   local.get $0
+  local.get $9
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.get $9
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
   local.set $4
@@ -37332,8 +45039,23 @@
   i32.add
   i32.store offset=4
   local.get $8
+  local.set $10
+  local.get $9
+  call $~lib/rt/__stack_restore
+  local.get $10
  )
  (func $~lib/typedarray/Float64Array.wrap@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   block $2of2
    block $1of2
     block $0of2
@@ -37355,6 +45077,10 @@
   local.get $1
   local.get $2
   call $~lib/typedarray/Float64Array.wrap
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Float64Array,f64>
   (local $0 i32)
@@ -37364,6 +45090,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $7
   global.get $std/typedarray/testArrayWrapValues
   local.set $0
   local.get $0
@@ -37435,6 +45165,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Float64Array.wrap@varargs
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $6
   i32.const 0
   local.set $3
@@ -37468,6 +45202,8 @@
     br $for-loop|1
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int8Array#set<~lib/array/Array<i32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -37478,9 +45214,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -37593,13 +45353,30 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int8Array#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   i32.add
   i32.load8_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int8Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -37607,6 +45384,22 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Int8Array#get:length
   local.set $2
@@ -37673,10 +45466,27 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<f32>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Int8Array#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -37688,9 +45498,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -37807,6 +45641,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int8Array#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -37817,9 +45653,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -37932,10 +45792,27 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<f64>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Int8Array#set<~lib/array/Array<f64>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -37947,9 +45824,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f64)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -38066,14 +45967,40 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int8Array#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -38138,6 +46065,8 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int8Array#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -38148,9 +46077,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -38263,14 +46216,40 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int8Array#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -38335,6 +46314,8 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Int8Array>
   (local $0 i32)
@@ -38476,9 +46457,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -38591,19 +46596,62 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<u8>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Uint8Array#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   i32.add
   i32.load8_u
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<u8>#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -38611,6 +46659,10 @@
   i32.shl
   i32.add
   i32.load8_u
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -38618,6 +46670,22 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Uint8Array#get:length
   local.set $2
@@ -38684,6 +46752,8 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8Array#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -38695,9 +46765,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -38814,6 +46908,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8Array#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -38824,9 +46920,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -38939,6 +47059,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8Array#set<~lib/array/Array<f64>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -38950,9 +47072,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f64)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -39069,14 +47215,40 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8Array#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -39141,6 +47313,8 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8Array#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -39151,9 +47325,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -39266,14 +47464,40 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8Array#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -39338,6 +47562,8 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Uint8Array>
   (local $0 i32)
@@ -39480,9 +47706,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -39602,13 +47852,30 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   i32.add
   i32.load8_u
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint8ClampedArray> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -39616,6 +47883,22 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Uint8ClampedArray#get:length
   local.set $2
@@ -39682,6 +47965,8 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -39693,9 +47978,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -39810,6 +48119,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -39821,9 +48132,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i64)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -39947,6 +48282,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#set<~lib/array/Array<f64>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -39958,9 +48295,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f64)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -40075,14 +48436,40 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -40147,6 +48534,8 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -40158,9 +48547,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -40280,6 +48693,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -40291,9 +48706,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -40413,6 +48852,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Uint8ClampedArray>
   (local $0 i32)
@@ -40554,9 +48995,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -40669,12 +49134,40 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<i16>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Int16Array#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -40682,8 +49175,23 @@
   i32.shl
   i32.add
   i32.load16_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<i16>#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -40691,6 +49199,10 @@
   i32.shl
   i32.add
   i32.load16_s
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -40698,6 +49210,22 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Int16Array#get:length
   local.set $2
@@ -40764,6 +49292,8 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int16Array#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -40775,9 +49305,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -40894,6 +49448,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int16Array#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -40904,9 +49460,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -41019,6 +49599,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int16Array#set<~lib/array/Array<f64>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -41030,9 +49612,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f64)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -41149,6 +49755,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int16Array#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -41159,9 +49767,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -41274,14 +49906,40 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int16Array#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -41346,6 +50004,8 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int16Array#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -41356,9 +50016,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -41471,6 +50155,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Int16Array>
   (local $0 i32)
@@ -41612,9 +50298,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -41727,12 +50437,40 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<u16>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Uint16Array#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -41740,8 +50478,23 @@
   i32.shl
   i32.add
   i32.load16_u
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<u16>#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -41749,6 +50502,10 @@
   i32.shl
   i32.add
   i32.load16_u
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint16Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -41756,6 +50513,22 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Uint16Array#get:length
   local.set $2
@@ -41822,6 +50595,8 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint16Array#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -41833,9 +50608,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -41952,6 +50751,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint16Array#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -41962,9 +50763,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -42077,6 +50902,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint16Array#set<~lib/array/Array<f64>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -42088,9 +50915,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f64)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -42207,6 +51058,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint16Array#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -42217,9 +51070,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -42332,14 +51209,40 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint16Array#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -42404,6 +51307,8 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint16Array#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -42414,9 +51319,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -42529,6 +51458,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Uint16Array>
   (local $0 i32)
@@ -42665,9 +51596,33 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -42732,8 +51687,21 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int32Array#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -42741,6 +51709,10 @@
   i32.shl
   i32.add
   i32.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int32Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -42748,6 +51720,22 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Int32Array#get:length
   local.set $2
@@ -42814,6 +51802,8 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int32Array#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -42825,9 +51815,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -42944,6 +51958,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int32Array#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -42954,9 +51970,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -43069,6 +52109,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int32Array#set<~lib/array/Array<f64>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -43080,9 +52122,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f64)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -43199,6 +52265,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int32Array#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -43209,9 +52277,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -43324,6 +52416,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int32Array#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -43334,9 +52428,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -43449,6 +52567,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int32Array#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -43459,9 +52579,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -43574,6 +52718,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Int32Array>
   (local $0 i32)
@@ -43710,9 +52856,33 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -43777,12 +52947,40 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<u32>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Uint32Array#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -43790,8 +52988,23 @@
   i32.shl
   i32.add
   i32.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<u32>#__uget (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -43799,6 +53012,10 @@
   i32.shl
   i32.add
   i32.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint32Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -43806,6 +53023,22 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Uint32Array#get:length
   local.set $2
@@ -43872,6 +53105,8 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint32Array#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -43883,9 +53118,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -44002,6 +53261,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint32Array#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -44012,9 +53273,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -44127,6 +53412,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint32Array#set<~lib/array/Array<f64>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -44138,9 +53425,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f64)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -44257,6 +53568,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint32Array#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -44267,9 +53580,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -44382,6 +53719,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint32Array#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -44392,9 +53731,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -44507,6 +53870,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint32Array#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -44517,9 +53882,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -44632,6 +54021,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Uint32Array>
   (local $0 i32)
@@ -44773,9 +54164,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -44888,12 +54303,40 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<i64>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Int64Array#__uget (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -44901,8 +54344,23 @@
   i32.shl
   i32.add
   i64.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<i64>#__uget (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -44910,6 +54368,10 @@
   i32.shl
   i32.add
   i64.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -44917,6 +54379,22 @@
   (local $4 i32)
   (local $5 i64)
   (local $6 i64)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Int64Array#get:length
   local.set $2
@@ -44983,6 +54461,8 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int64Array#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -44994,9 +54474,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -45113,14 +54617,40 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int64Array#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -45185,6 +54715,8 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int64Array#set<~lib/array/Array<f64>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -45196,9 +54728,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f64)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -45315,6 +54871,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int64Array#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -45325,9 +54883,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -45440,6 +55022,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int64Array#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -45450,9 +55034,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -45565,6 +55173,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Int64Array#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -45575,9 +55185,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -45690,6 +55324,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Int64Array>
   (local $0 i32)
@@ -45831,9 +55467,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -45946,12 +55606,40 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<u64>#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=12
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/typedarray/Uint64Array#__uget (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -45959,8 +55647,23 @@
   i32.shl
   i32.add
   i64.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<u64>#__uget (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -45968,6 +55671,10 @@
   i32.shl
   i32.add
   i64.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Uint64Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -45975,6 +55682,22 @@
   (local $4 i32)
   (local $5 i64)
   (local $6 i64)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Uint64Array#get:length
   local.set $2
@@ -46041,6 +55764,8 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint64Array#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -46052,9 +55777,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -46171,14 +55920,40 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint64Array#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -46243,6 +56018,8 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint64Array#set<~lib/array/Array<f64>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -46254,9 +56031,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f64)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -46373,6 +56174,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint64Array#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -46383,9 +56186,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -46498,6 +56325,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint64Array#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -46508,9 +56337,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -46623,6 +56476,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint64Array#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -46633,9 +56488,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -46748,6 +56627,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Uint64Array>
   (local $0 i32)
@@ -46889,9 +56770,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -47005,8 +56910,21 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float32Array#__uget (param $0 i32) (param $1 i32) (result f32)
+  (local $2 i32)
+  (local $3 f32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -47014,8 +56932,23 @@
   i32.shl
   i32.add
   f32.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<f32>#__uget (param $0 i32) (param $1 i32) (result f32)
+  (local $2 i32)
+  (local $3 f32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -47023,6 +56956,10 @@
   i32.shl
   i32.add
   f32.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Float32Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -47030,6 +56967,22 @@
   (local $4 i32)
   (local $5 f32)
   (local $6 f32)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Float32Array#get:length
   local.set $2
@@ -47096,14 +57049,40 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float32Array#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $6
   local.get $0
+  local.get $6
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $6
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $6
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $6
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -47168,6 +57147,8 @@
   local.get $4
   i32.load offset=8
   call $~lib/memory/memory.copy
+  local.get $6
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float32Array#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -47178,9 +57159,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -47294,6 +57299,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float32Array#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -47304,9 +57311,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -47420,6 +57451,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float32Array#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -47430,9 +57463,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -47546,6 +57603,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float32Array#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -47556,9 +57615,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -47672,6 +57755,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Float32Array>
   (local $0 i32)
@@ -47802,9 +57887,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -47918,8 +58027,21 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float64Array#__uget (param $0 i32) (param $1 i32) (result f64)
+  (local $2 i32)
+  (local $3 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -47927,8 +58049,23 @@
   i32.shl
   i32.add
   f64.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/array/Array<f64>#__uget (param $0 i32) (param $1 i32) (result f64)
+  (local $2 i32)
+  (local $3 f64)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
@@ -47936,6 +58073,10 @@
   i32.shl
   i32.add
   f64.load
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Float64Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -47943,6 +58084,22 @@
   (local $4 i32)
   (local $5 f64)
   (local $6 f64)
+  (local $7 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $7
+  local.get $0
+  local.get $7
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $7
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   call $~lib/typedarray/Float64Array#get:length
   local.set $2
@@ -48007,6 +58164,8 @@
     br $for-loop|0
    end
   end
+  local.get $7
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float64Array#set<~lib/array/Array<f32>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -48017,9 +58176,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -48133,6 +58316,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float64Array#set<~lib/typedarray/Int64Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -48143,9 +58328,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -48259,6 +58468,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float64Array#set<~lib/typedarray/Uint8Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -48269,9 +58480,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -48385,6 +58620,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float64Array#set<~lib/typedarray/Int16Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -48395,9 +58632,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -48511,6 +58772,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Float64Array#set<~lib/array/Array<i8>> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -48521,9 +58784,33 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $11
   local.get $0
+  local.get $11
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $11
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $11
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $11
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -48637,6 +58924,8 @@
     br $for-loop|0
    end
   end
+  local.get $11
+  call $~lib/rt/__stack_restore
  )
  (func $std/typedarray/testTypedArraySet<~lib/typedarray/Float64Array>
   (local $0 i32)
@@ -48768,9 +59057,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 f32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -48885,6 +59198,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#set<~lib/typedarray/Int32Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -48896,9 +59211,33 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  (local $12 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $12
   local.get $0
+  local.get $12
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $12
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $12
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $12
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -49018,6 +59357,8 @@
     br $for-loop|0
    end
   end
+  local.get $12
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/typedarray/Uint8ClampedArray#set<~lib/typedarray/Uint32Array> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -49031,9 +59372,33 @@
   (local $11 i32)
   (local $12 i32)
   (local $13 i32)
+  (local $14 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $14
   local.get $0
+  local.get $14
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $14
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $0
+  local.get $14
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $5
   local.get $1
+  local.get $14
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $2
   local.set $3
@@ -49144,19 +59509,37 @@
     br $for-loop|0
    end
   end
+  local.get $14
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/rt/tcms/mark (param $0 i32)
+  (local $1 i32)
   local.get $0
   global.get $~lib/rt/tcms/white
   i32.eqz
   call $~lib/rt/tcms/Object#set:color
   local.get $0
+  local.set $1
+  local.get $1
   i32.const 20
   i32.add
   i32.const 0
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/tcms/step
+ (func $~lib/rt/tcms/free (param $0 i32) (result i32)
+  i32.const 0
+  drop
+  local.get $0
+  i32.const 4
+  i32.add
+  call $~lib/rt/tlsf/__free
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.sub
+  global.set $~lib/rt/tcms/total
+  i32.const 1
+ )
+ (func $~lib/rt/tcms/step (result i32)
   (local $0 i32)
   (local $1 i32)
   block $break|0
@@ -49186,9 +59569,7 @@
       end
       call $~lib/rt/tcms/init
      end
-     i32.const 0
-     call $~lib/rt/__visit_globals
-     call $~lib/rt/tcms/markExternals
+     call $~lib/rt/tcms/markRoots
      i32.const 2
      global.set $~lib/rt/tcms/state
      br $break|0
@@ -49205,9 +59586,7 @@
      local.get $0
      call $~lib/rt/tcms/mark
     else
-     i32.const 0
-     call $~lib/rt/__visit_globals
-     call $~lib/rt/tcms/markExternals
+     call $~lib/rt/tcms/markRoots
      global.get $~lib/rt/tcms/iter
      call $~lib/rt/tcms/Object#get:next
      local.set $0
@@ -49242,37 +59621,51 @@
     local.get $0
     call $~lib/rt/tcms/Object#get:next
     global.set $~lib/rt/tcms/iter
-    i32.const 0
-    drop
     local.get $0
-    i32.const 4
-    i32.add
-    call $~lib/rt/tlsf/__free
-   else
-    global.get $~lib/rt/tcms/toSpace
-    local.set $1
-    local.get $1
-    local.get $1
-    call $~lib/rt/tcms/Object#set:nextWithColor
-    local.get $1
-    local.get $1
-    call $~lib/rt/tcms/Object#set:prev
-    i32.const 1
-    global.set $~lib/rt/tcms/state
+    call $~lib/rt/tcms/free
+    return
    end
+   global.get $~lib/rt/tcms/toSpace
+   local.set $1
+   local.get $1
+   local.get $1
+   call $~lib/rt/tcms/Object#set:nextWithColor
+   local.get $1
+   local.get $1
+   call $~lib/rt/tcms/Object#set:prev
+   i32.const 1
+   global.set $~lib/rt/tcms/state
    br $break|0
   end
+  i32.const 0
  )
  (func $~lib/rt/tcms/__collect
   (local $0 i32)
-  loop $do-continue|0
+  global.get $~lib/rt/tcms/state
+  i32.const 0
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   global.get $~lib/rt/tcms/state
+   i32.const 1
+   i32.eq
+  end
+  if
    call $~lib/rt/tcms/step
+   drop
+  end
+  loop $while-continue|0
    global.get $~lib/rt/tcms/state
    i32.const 1
    i32.ne
    local.set $0
    local.get $0
-   br_if $do-continue|0
+   if
+    call $~lib/rt/tcms/step
+    drop
+    br $while-continue|0
+   end
   end
  )
  (func $start:std/typedarray
@@ -49284,6 +59677,10 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  i32.const 16
+  call $~lib/rt/__stack_prepare
+  local.set $8
   global.get $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT
   i32.const 1
   i32.eq
@@ -49435,6 +59832,10 @@
   i32.const 1
   i32.const 2
   call $~lib/typedarray/Int32Array#subarray
+  local.get $8
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
   local.set $0
   local.get $0
   call $~lib/typedarray/Int32Array#get:length
@@ -49533,6 +59934,10 @@
   i32.const 2
   i32.const 6
   call $~lib/typedarray/Float64Array#subarray
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $0
   local.get $0
   call $~lib/typedarray/Float64Array#get:length
@@ -50373,6 +60778,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const 1
@@ -50398,6 +60807,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const 1
@@ -50423,6 +60836,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const 2
@@ -50448,6 +60865,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const 0
@@ -50473,6 +60894,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const 1
@@ -50498,6 +60923,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const 1
@@ -50523,6 +60952,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const 0
@@ -50548,6 +60981,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const 0
@@ -50573,6 +61010,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const -4
@@ -50598,6 +61039,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const -4
@@ -50623,6 +61068,10 @@
   i32.const 0
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#slice
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $3
   local.get $3
   i32.const -4
@@ -51129,6 +61578,10 @@
   i32.const 0
   i32.const 2
   call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.get $8
+  i32.const 8
+  i32.add
+  call $~lib/rt/__stackify
   local.set $1
   local.get $1
   i32.const 2
@@ -51136,6 +61589,10 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/typedarray/Uint8Array.wrap@varargs
+  local.get $8
+  i32.const 12
+  i32.add
+  call $~lib/rt/__stackify
   local.set $4
   local.get $4
   call $~lib/typedarray/Uint8Array#get:length
@@ -51298,10 +61755,106 @@
   i32.const 13472
   call $~lib/rt/__newArray
   call $std/typedarray/valuesEqual<~lib/typedarray/Uint8ClampedArray>
+  global.get $~lib/rt/__stack_base
+  global.set $~lib/rt/__stackptr
   call $~lib/rt/tcms/__collect
+  local.get $8
+  call $~lib/rt/__stack_restore
  )
  (func $~start
   call $start:std/typedarray
+ )
+ (func $~lib/rt/__stack_prepare (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/rt/__stackptr
+  local.set $1
+  local.get $1
+  local.get $0
+  i32.add
+  local.set $2
+  local.get $2
+  global.get $~lib/rt/__stack_base
+  global.get $~lib/rt/__stack_size
+  i32.add
+  i32.le_u
+  i32.eqz
+  if
+   i32.const 13504
+   i32.const 13552
+   i32.const 118
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
+  global.set $~lib/rt/__stackptr
+  i32.const 0
+  drop
+  loop $while-continue|0
+   local.get $2
+   i32.const 4
+   i32.sub
+   local.tee $2
+   local.get $1
+   i32.ge_u
+   local.set $3
+   local.get $3
+   if
+    local.get $2
+    i32.const 0
+    i32.store
+    br $while-continue|0
+   end
+  end
+  local.get $1
+ )
+ (func $~lib/rt/__stack_restore (param $0 i32)
+  local.get $0
+  global.set $~lib/rt/__stackptr
+ )
+ (func $~lib/rt/tcms/markRoots
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 0
+  call $~lib/rt/__visit_globals
+  i32.const 1
+  drop
+  global.get $~lib/rt/__stack_base
+  local.set $0
+  global.get $~lib/rt/__stackptr
+  local.set $1
+  loop $while-continue|0
+   local.get $0
+   local.get $1
+   i32.lt_u
+   local.set $2
+   local.get $2
+   if
+    local.get $0
+    i32.load
+    local.set $3
+    local.get $3
+    if
+     local.get $3
+     local.set $4
+     local.get $4
+     i32.const 20
+     i32.sub
+     call $~lib/rt/tcms/mark
+    end
+    local.get $0
+    i32.const 4
+    i32.add
+    local.set $0
+    br $while-continue|0
+   end
+  end
+  call $~lib/rt/tcms/markExternals
  )
  (func $~lib/rt/tcms/__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -51397,354 +61950,1014 @@
   call $~lib/rt/tcms/__visit
  )
  (func $~lib/function/Function<%28f64%2Cf64%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<i8>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<i32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i8%2Ci8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u8%2Cu8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i16%2Ci16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u16%2Cu16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u32%2Cu32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i64%2Ci64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u64%2Cu64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28f32%2Cf32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28f64%2Cf64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>i8>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>u8>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>u8>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>i16>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>u16>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>u32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>i64>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>u64>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>f32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>f64>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i8%2Ci32%2C~lib/typedarray/Int8Array%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8Array%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u8%2Ci32%2C~lib/typedarray/Uint8ClampedArray%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i16%2Ci32%2C~lib/typedarray/Int16Array%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u16%2Ci32%2C~lib/typedarray/Uint16Array%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i32%2Ci32%2C~lib/typedarray/Int32Array%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u32%2Ci32%2C~lib/typedarray/Uint32Array%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28i64%2Ci32%2C~lib/typedarray/Int64Array%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28u64%2Ci32%2C~lib/typedarray/Uint64Array%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28f32%2Ci32%2C~lib/typedarray/Float32Array%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/function/Function<%28f64%2Ci32%2C~lib/typedarray/Float64Array%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<f32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<f64>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<u8>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<i16>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<u16>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<u32>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<i64>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/array/Array<u64>#__visit_impl (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   i32.const 0
   drop
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+  local.get $2
+  call $~lib/rt/__stack_restore
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)

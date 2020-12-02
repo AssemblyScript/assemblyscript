@@ -1,6 +1,7 @@
 {
   "asc_flags": [
-    "--noExportRuntime"
+    "--noExportRuntime",
+    "--explicitStart"
   ],
   "asc_rtrace": true
 }

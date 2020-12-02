@@ -89,7 +89,7 @@
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized && npm run asbuild:rtraced",
     "asbuild:untouched": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.untouched.wat -b out/assemblyscript.untouched.wasm -d out/assemblyscript.d.ts --debug --measure --explicitStart",
     "asbuild:optimized": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.optimized.wat -b out/assemblyscript.optimized.wasm -O3 --measure --explicitStart",
-    "asbuild:rtraced": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.rtraced.wat -b out/assemblyscript.rtraced.wasm --debug --measure --explicitStart --use ASC_RTRACE=1",
+    "asbuild:rtraced": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.rtraced.wat -b out/assemblyscript.rtraced.wasm --debug --measure --explicitStart --use ASC_RTRACE=1 --runPasses instrument-memory",
     "astest": "ts-node tests/bootstrap"
   },
   "releaseFiles": [

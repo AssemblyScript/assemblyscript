@@ -5,6 +5,7 @@
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
@@ -16,7 +17,7 @@
  (type $f64_i32_=>_i32 (func (param f64 i32) (result i32)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (memory $0 1)
+ (memory $0 2)
  (data (i32.const 12) "\08\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e\00")
  (data (i32.const 44) "\n\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e\00")
  (data (i32.const 76) "\"\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\"\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00b\00i\00n\00a\00r\00y\00.\00t\00s\00")
@@ -59,6 +60,8 @@
  (data (i32.const 9868) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00d\00i\00v\00")
  (data (i32.const 9900) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00r\00e\00m\00")
  (data (i32.const 9932) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00p\00o\00w\00")
+ (data (i32.const 9964) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00s\00t\00a\00c\00k\00 \00o\00v\00e\00r\00f\00l\00o\00w\00")
+ (data (i32.const 10012) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $resolve-binary/a (mut i32) (i32.const 0))
@@ -70,6 +73,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/util/math/log_tail (mut f64) (f64.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
@@ -80,7 +84,11 @@
  (global $resolve-binary/foo (mut i32) (i32.const 0))
  (global $resolve-binary/bar (mut i32) (i32.const 0))
  (global $resolve-binary/bar2 (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 9960))
+ (global $~lib/ASC_FEATURE_BULK_MEMORY i32 (i32.const 0))
+ (global $~lib/rt/__stack_base i32 (i32.const 10052))
+ (global $~lib/rt/__stack_size i32 (i32.const 65536))
+ (global $~lib/rt/__stackptr (mut i32) (i32.const 10052))
+ (global $~lib/memory/__heap_base i32 (i32.const 75588))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/number/Bool#toString (param $0 i32) (param $1 i32) (result i32)
@@ -91,13 +99,34 @@
    i32.const 64
   end
  )
+ (func $~lib/rt/__stackify (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $0
+ )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
+  local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $0
   i32.const 20
   i32.sub
   i32.load offset=16
   i32.const 1
   i32.shr_u
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
@@ -105,6 +134,23 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $10
+  local.get $0
+  local.get $10
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $2
+  local.get $10
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -191,6 +237,10 @@
      local.get $8
      local.get $9
      i32.sub
+     local.set $11
+     local.get $10
+     call $~lib/rt/__stack_restore
+     local.get $11
      return
     end
     local.get $5
@@ -205,14 +255,39 @@
    end
   end
   i32.const 0
+  local.set $11
+  local.get $10
+  call $~lib/rt/__stack_restore
+  local.get $11
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $3
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
   if
    i32.const 1
+   local.set $4
+   local.get $3
+   call $~lib/rt/__stack_restore
+   local.get $4
    return
   end
   local.get $0
@@ -227,6 +302,10 @@
   end
   if
    i32.const 0
+   local.set $4
+   local.get $3
+   call $~lib/rt/__stack_restore
+   local.get $4
    return
   end
   local.get $0
@@ -238,6 +317,10 @@
   i32.ne
   if
    i32.const 0
+   local.set $4
+   local.get $3
+   call $~lib/rt/__stack_restore
+   local.get $4
    return
   end
   local.get $0
@@ -247,6 +330,10 @@
   local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
+  local.set $4
+  local.get $3
+  call $~lib/rt/__stack_restore
+  local.get $4
  )
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
@@ -1804,6 +1891,10 @@
   local.get $2
   global.get $~lib/rt/tcms/white
   call $~lib/rt/tcms/Object#set:color
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   local.set $3
   local.get $3
@@ -2179,6 +2270,11 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $8
   local.get $1
   i32.const 2
   i32.lt_s
@@ -2201,6 +2297,10 @@
   i32.eqz
   if
    i32.const 384
+   local.set $9
+   local.get $8
+   call $~lib/rt/__stack_restore
+   local.get $9
    return
   end
   local.get $0
@@ -2214,8 +2314,6 @@
    i32.sub
    local.set $0
   end
-  i32.const 0
-  local.set $3
   local.get $1
   i32.const 10
   i32.eq
@@ -2230,6 +2328,10 @@
    i32.shl
    i32.const 1
    call $~lib/rt/tcms/__new
+   local.get $8
+   i32.const 0
+   i32.add
+   call $~lib/rt/__stackify
    local.set $3
    local.get $3
    local.set $7
@@ -2266,6 +2368,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $8
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.set $7
@@ -2297,6 +2403,10 @@
     i32.shl
     i32.const 1
     call $~lib/rt/tcms/__new
+    local.get $8
+    i32.const 4
+    i32.add
+    call $~lib/rt/__stackify
     local.set $3
     local.get $3
     local.get $4
@@ -2313,6 +2423,10 @@
    i32.store16
   end
   local.get $3
+  local.set $9
+  local.get $8
+  call $~lib/rt/__stack_restore
+  local.get $9
  )
  (func $~lib/number/I32#toString (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -6072,43 +6186,310 @@
   local.get $0
  )
  (func $resolve-binary/Foo#lt (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9600
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $~lib/string/String#toString (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
   local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $resolve-binary/Foo#gt (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9632
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Foo#le (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9664
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Foo#ge (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9696
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Foo#eq (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9728
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Foo#ne (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9760
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Foo#add (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9792
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Foo.sub (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9824
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Foo#mul (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9856
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Foo#div (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9888
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Foo#rem (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9920
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Foo#pow (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
   i32.const 9952
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Bar#constructor (param $0 i32) (result i32)
   local.get $0
@@ -6122,10 +6503,46 @@
   local.get $0
  )
  (func $resolve-binary/Bar#add (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  i32.const 8
+  call $~lib/rt/__stack_prepare
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
   local.get $1
+  local.get $2
+  i32.const 4
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $1
+  local.get $1
+  local.set $3
+  local.get $2
+  call $~lib/rt/__stack_restore
+  local.get $3
  )
  (func $resolve-binary/Bar#self (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 4
+  call $~lib/rt/__stack_prepare
+  local.set $1
   local.get $0
+  local.get $1
+  i32.const 0
+  i32.add
+  call $~lib/rt/__stackify
+  local.set $0
+  local.get $0
+  local.set $2
+  local.get $1
+  call $~lib/rt/__stack_restore
+  local.get $2
  )
  (func $start:resolve-binary
   i32.const 1
@@ -7013,5 +7430,55 @@
  )
  (func $~start
   call $start:resolve-binary
+ )
+ (func $~lib/rt/__stack_prepare (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/rt/__stackptr
+  local.set $1
+  local.get $1
+  local.get $0
+  i32.add
+  local.set $2
+  local.get $2
+  global.get $~lib/rt/__stack_base
+  global.get $~lib/rt/__stack_size
+  i32.add
+  i32.le_u
+  i32.eqz
+  if
+   i32.const 9984
+   i32.const 10032
+   i32.const 118
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
+  global.set $~lib/rt/__stackptr
+  i32.const 0
+  drop
+  loop $while-continue|0
+   local.get $2
+   i32.const 4
+   i32.sub
+   local.tee $2
+   local.get $1
+   i32.ge_u
+   local.set $3
+   local.get $3
+   if
+    local.get $2
+    i32.const 0
+    i32.store
+    br $while-continue|0
+   end
+  end
+  local.get $1
+ )
+ (func $~lib/rt/__stack_restore (param $0 i32)
+  local.get $0
+  global.set $~lib/rt/__stackptr
  )
 )
