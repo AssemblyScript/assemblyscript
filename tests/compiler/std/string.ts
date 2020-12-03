@@ -424,6 +424,12 @@ assert("abc".replaceAll("abd", "-") == "abc");
 assert("abc".replaceAll("", "+") == "+a+b+c+");
 assert("abc".replaceAll("", "") == "abc");
 
+// regressions
+assert("abcde".replaceAll("a", "---") == "---bcde");
+assert("ab".replaceAll("ab", "-----") == "-----");
+assert("aaa".replaceAll("a", "----") == "------------");
+assert("aaa".replaceAll("aa", "---") == "---a");
+
 // test cases for slice method
 str = "abcdefghijklmn";
 assert(str.slice(0) == "abcdefghijklmn");
