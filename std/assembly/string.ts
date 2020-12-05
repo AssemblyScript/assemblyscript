@@ -360,19 +360,21 @@ import { Array } from "./array";
   }
 
   replaceAll(search: String, replacement: String): String {
-    var len: usize = this.length;
-    var slen: usize = search.length;
-    if (len <= slen) {
-      return len < slen ? this : select<String>(replacement, this, search == this);
+    var thisLen: usize = this.length;
+    var searchLen: usize = search.length;
+    if (thisLen <= searchLen) {
+      return thisLen < searchLen
+        ? this
+        : select<String>(replacement, this, search == this);
     }
-    var rlen: usize = replacement.length;
-    if (!slen) {
-      if (!rlen) return this;
+    var replaceLen: usize = replacement.length;
+    if (!searchLen) {
+      if (!replaceLen) return this;
       // Special case: 'abc'.replaceAll('', '-') -> '-a-b-c-'
-      let out = changetype<String>(__new((len + (len + 1) * rlen) << 1, idof<String>()));
-      memory.copy(changetype<usize>(out), changetype<usize>(replacement), rlen << 1);
-      let offset = rlen;
-      for (let i: usize = 0; i < len; ++i) {
+      let out = changetype<String>(__new((thisLen + (thisLen + 1) * replaceLen) << 1, idof<String>()));
+      memory.copy(changetype<usize>(out), changetype<usize>(replacement), replaceLen << 1);
+      let offset = replaceLen;
+      for (let i: usize = 0; i < thisLen; ++i) {
         store<u16>(
           changetype<usize>(out) + (offset++ << 1),
           load<u16>(changetype<usize>(this) + (i << 1))
@@ -380,33 +382,32 @@ import { Array } from "./array";
         memory.copy(
           changetype<usize>(out) + (offset << 1),
           changetype<usize>(replacement),
-          rlen << 1
+          replaceLen << 1
         );
-        offset += rlen;
+        offset += replaceLen;
       }
       return out;
     }
     var prev: isize = 0, next: isize = 0;
-    if (slen == rlen) {
+    if (searchLen == replaceLen) {
       // Fast path when search and replacement have same length
-      let size = len << 1;
-      let out = changetype<String>(__new(size, idof<String>()));
-      memory.copy(changetype<usize>(out), changetype<usize>(this), size);
+      let outSize = thisLen << 1;
+      let out = changetype<String>(__new(outSize, idof<String>()));
+      memory.copy(changetype<usize>(out), changetype<usize>(this), outSize);
       while (~(next = <isize>this.indexOf(search, <i32>prev))) {
-        memory.copy(changetype<usize>(out) + (next << 1), changetype<usize>(replacement), rlen << 1);
-        prev = next + slen;
+        memory.copy(changetype<usize>(out) + (next << 1), changetype<usize>(replacement), replaceLen << 1);
+        prev = next + searchLen;
       }
       return out;
     }
-    var out: String = changetype<String>(0), offset: usize = 0, resLen = len;
+    var out: String | null = null, offset: usize = 0, outSize = thisLen;
     while (~(next = <isize>this.indexOf(search, <i32>prev))) {
-      if (!out) out = changetype<String>(__new(len << 1, idof<String>()));
-      if (offset > resLen) {
-        let newLength = resLen << 1;
-        out = changetype<String>(__renew(changetype<usize>(out), newLength << 1));
-        resLen = newLength;
-      }
+      if (!out) out = changetype<String>(__new(thisLen << 1, idof<String>()));
       let chunk = next - prev;
+      if (offset + chunk + replaceLen > outSize) {
+        outSize <<= 1;
+        out = changetype<String>(__renew(changetype<usize>(out), outSize << 1));
+      }
       memory.copy(
         changetype<usize>(out) + (offset << 1),
         changetype<usize>(this) + (prev << 1),
@@ -416,18 +417,17 @@ import { Array } from "./array";
       memory.copy(
         changetype<usize>(out) + (offset << 1),
         changetype<usize>(replacement),
-        rlen << 1
+        replaceLen << 1
       );
-      offset += rlen;
-      prev = next + slen;
+      offset += replaceLen;
+      prev = next + searchLen;
     }
-    if (offset) {
-      if (offset > resLen) {
-        let newLength = resLen << 1;
-        out = changetype<String>(__renew(changetype<usize>(out), newLength << 1));
-        resLen = newLength;
+    if (out) {
+      let rest = thisLen - prev;
+      if (offset + rest > outSize) {
+        outSize <<= 1;
+        out = changetype<String>(__renew(changetype<usize>(out), outSize << 1));
       }
-      let rest = len - prev;
       if (rest) {
         memory.copy(
           changetype<usize>(out) + (offset << 1),
@@ -436,7 +436,9 @@ import { Array } from "./array";
         );
       }
       rest += offset;
-      if (resLen > rest) out = changetype<String>(__renew(changetype<usize>(out), rest << 1));
+      if (outSize > rest) {
+        out = changetype<String>(__renew(changetype<usize>(out), rest << 1));
+      }
       return out;
     }
     return this;
