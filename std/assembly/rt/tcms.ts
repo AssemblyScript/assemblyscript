@@ -1,5 +1,5 @@
 import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE } from "./common";
-import { onvisit } from "./rtrace";
+import { onvisit, oncollect } from "./rtrace";
 
 // === Tri-Color Mark & Sweep garbage collector ===
 // Largely based on Bach Le's μgc, see: https://github.com/bullno1/ugc
@@ -120,17 +120,6 @@ function init(): void {
       assert(prev == null);
       return; // static data not yet linked
     }
-    if (prev == null) { // FIXME
-      trace("mmInfo", 1, this.mmInfo);
-      trace("gcInfo", 1, this.nextWithColor);
-      trace("gcInfo2", 1, changetype<usize>(this.prev));
-      if (ASC_TARGET) {
-        trace(" at", 1, changetype<usize>(this) + offsetof<Object>("prev"));
-      }
-      trace("rtId", 1, this.rtId);
-      trace("rtSize", 1, this.rtSize);
-      assert(false);
-    }
     next.prev = assert(prev);
     prev.next = next;
   }
@@ -141,7 +130,6 @@ function init(): void {
     if (this == iter) iter = assert(this.prev);
     this.unlink();
     toSpace.push(this);
-    // trace("makeGray", 3, changetype<usize>(this), this.rtId, this.color);
     this.color = gray;
   }
 }
@@ -169,24 +157,8 @@ function init(): void {
 /** Visits external objects. */
 // @ts-ignore: decorator
 @external("env", "mark")
-declare function visitExternals(): void;
+declare function __visit_externals(cookie: u32): void;
 
-/** Visits all objects considered to be roots. */
-// @ts-ignore: decorator
-@lazy
-function visitRoots(): void {
-  // trace("visitRoots");
-  __visit_globals(VISIT_SCAN);
-  if (isDefined(ASC_STACK)) {
-    var cur = __stack_base;
-    var end = __stackptr;
-    while (cur < end) {
-      __visit(load<usize>(cur), VISIT_SCAN);
-      cur += sizeof<usize>();
-    }
-  }
-  visitExternals();
-}
 /** Performs a single step according to the current state. */
 function step(): usize {
   var obj: Object;
@@ -195,9 +167,9 @@ function step(): usize {
       init();
       // fall through
     case STATE_IDLE: {
-      visitRoots();
+      __visit_globals(VISIT_SCAN);
+      __visit_externals(VISIT_SCAN);
       state = STATE_MARK;
-      // trace("state->MARK");
       // fall through
     }
     case STATE_MARK: {
@@ -206,10 +178,10 @@ function step(): usize {
       if (obj != toSpace) {
         iter = obj;
         obj.color = black;
-        // trace("mark", 3, changetype<usize>(obj), obj.rtId, obj.color);
         __visit_members(objToPtr(obj), VISIT_SCAN);
       } else {
-        visitRoots();
+        __visit_globals(VISIT_SCAN);
+        __visit_externals(VISIT_SCAN);
         obj = iter.next;
         if (obj == toSpace) { // empty
           let from = fromSpace;
@@ -267,46 +239,6 @@ function free(obj: Object): void {
   __free(changetype<usize>(obj) + BLOCK_OVERHEAD);
 }
 
-// Automation heuristic
-
-// @ts-ignore: decorator
-@inline const STEPSIZE: usize = 100;
-
-/** Number of objects currently managed by the GC. */
-// @ts-ignore: decorator
-@lazy var total: usize = 0;
-/** Size of all objects currently managed by the GC. */
-// @ts-ignore: decorator
-@lazy var totalMem: usize = 0;
-/** Threshold of objects for the next schedule GC step. */
-// @ts-ignore: decorator
-@lazy var threshold: usize = STEPSIZE;
-/** Number of objects the GC is behind schedule. */
-// @ts-ignore: decorator
-@lazy var debt: usize = 0;
-
-/** Automatically performs a series of GC steps. */
-function auto(): void {
-  if (total < threshold) return;
-  if (TRACE) trace("GC (incremental) at mem/objs", 2, totalMem, total);
-  debt = total - threshold;
-  let limit: isize = 2 * STEPSIZE;
-  do {
-    limit -= step();
-    if (state == STATE_IDLE) {
-      threshold = 2 * total;
-      if (TRACE) trace(" down to mem/objs (sweep complete)", 2, totalMem, total);
-      return;
-    }
-  } while (limit > 0);
-  if (debt < STEPSIZE) {
-    threshold = total + STEPSIZE;
-  } else {
-    debt -= STEPSIZE;
-    threshold = total;
-  }
-}
-
 // Helpers
 
 // @ts-ignore: decorator
@@ -327,7 +259,6 @@ function objToPtr(obj: Object): usize {
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
   if (state == STATE_INIT) init();
-  // auto();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   fromSpace.push(obj); // sets next/prev
   obj.color = white;
@@ -335,7 +266,6 @@ export function __new(size: usize, id: i32): usize {
   obj.rtSize = <u32>size;
   var ptr = objToPtr(obj);
   memory.fill(ptr, 0, size);
-  // trace("new", 4, changetype<usize>(obj), obj.rtId, obj.color, ptr);
   total += 1;
   totalMem += obj.size;
   return ptr;
@@ -385,10 +315,7 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
 function __visit(ptr: usize, cookie: i32): void { // eslint-disable-line @typescript-eslint/no-unused-vars
   if (!ptr) return;
   let obj = ptrToObj(ptr);
-  // trace("visit", 3, changetype<usize>(obj), obj.rtId, obj.color);
-  if (isDefined(ASC_RTRACE)) {
-    if (!onvisit(obj, __stackptr)) return;
-  }
+  if (isDefined(ASC_RTRACE)) if (!onvisit(obj)) return;
   if (obj.color == white) obj.makeGray();
 }
 
@@ -400,7 +327,12 @@ export function __mark(ptr: usize): void {
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __collect(): void {
+export function __collect(incremental: bool = false): void {
+  if (incremental) collectIncremental();
+  else collectFull();
+}
+
+function collectFull(): void {
   if (TRACE) trace("GC (full) at mem/objs", 2, totalMem, total);
   if (state > STATE_IDLE) {
     // finish current cycle
@@ -409,6 +341,53 @@ export function __collect(): void {
   // perform a full cycle
   step();
   while (state != STATE_IDLE) step();
-  if (TRACE) trace("GC (full) done at mem/objs", 2, totalMem, total);
   threshold = 2 * total;
+  if (TRACE) trace("GC (full) done at mem/objs", 2, totalMem, total);
+  if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
+}
+
+
+// Garbage collector automation
+
+/** Incremental GC granularity. */
+// @ts-ignore: decorator
+@inline const STEPSIZE: usize = 100;
+/** Number of objects currently managed by the GC. */
+// @ts-ignore: decorator
+@lazy var total: usize = 0;
+/** Size in memory of all objects currently managed by the GC. */
+// @ts-ignore: decorator
+@lazy var totalMem: usize = 0;
+/** Threshold of objects for the next scheduled GC step. */
+// @ts-ignore: decorator
+@lazy var threshold: usize = STEPSIZE;
+/** Number of objects the GC is behind schedule. */
+// @ts-ignore: decorator
+@lazy var debt: usize = 0;
+/** Current scope depth. Value > 0 indicates that it is not safe to automatically collect. */
+// @ts-ignore: decorator
+@lazy var depth = 0;
+
+/** Performs a reasonable amount of incremental GC steps. */
+function collectIncremental(): void {
+  assert(!depth);
+  if (total < threshold) return;
+  if (TRACE) trace("GC (incremental) at mem/objs", 2, totalMem, total);
+  debt = total - threshold;
+  let limit: isize = 2 * STEPSIZE;
+  do {
+    limit -= step();
+    if (state == STATE_IDLE) {
+      threshold = 2 * total;
+      if (TRACE) trace("└ down to mem/objs (sweep complete)", 2, totalMem, total);
+      if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
+      return;
+    }
+  } while (limit > 0);
+  if (debt < STEPSIZE) {
+    threshold = total + STEPSIZE;
+  } else {
+    debt -= STEPSIZE;
+    threshold = total;
+  }
 }

@@ -41,7 +41,6 @@ import {
   getBlockChildCount,
   getBlockChildAt,
   getBlockName,
-  getLocalSetIndex,
   needsExplicitUnreachable,
   getLocalSetValue,
   getGlobalGetName,
@@ -195,10 +194,6 @@ import {
   v128_zero
 } from "./util";
 
-import {
-  stackify
-} from "./passes";
-
 /** Compiler options. */
 export class Options {
 
@@ -301,8 +296,6 @@ export const enum RuntimeFeatures {
   NONE = 0,
   /** Requires heap setup. */
   HEAP = 1 << 0,
-  /** Requires a managed stack. */
-  STACK = 1 << 1,
   /** Requires runtime type information setup. */
   RTTI = 1 << 2,
   /** Requires the built-in globals visitor. */
@@ -437,15 +430,9 @@ export class Compiler extends DiagnosticEmitter {
     if (options.isWasm64) {
       module.addGlobal(BuiltinNames.heap_base, NativeType.I64, true, module.i64(0));
       module.addGlobal(BuiltinNames.rtti_base, NativeType.I64, true, module.i64(0));
-      module.addGlobal(BuiltinNames.stack_base, NativeType.I64, true, module.i64(0));
-      module.addGlobal(BuiltinNames.stack_size, NativeType.I64, true, module.i64(0));
-      module.addGlobal(BuiltinNames.stackptr, NativeType.I64, true, module.i64(0));
     } else {
       module.addGlobal(BuiltinNames.heap_base, NativeType.I32, true, module.i32(0));
       module.addGlobal(BuiltinNames.rtti_base, NativeType.I32, true, module.i32(0));
-      module.addGlobal(BuiltinNames.stack_base, NativeType.I32, true, module.i32(0));
-      module.addGlobal(BuiltinNames.stack_size, NativeType.I32, true, module.i32(0));
-      module.addGlobal(BuiltinNames.stackptr, NativeType.I32, true, module.i32(0));
     }
 
     // compile entry file(s) while traversing reachable elements
@@ -467,14 +454,15 @@ export class Compiler extends DiagnosticEmitter {
       if (!startIsEmpty && explicitStart) {
         module.addGlobal(BuiltinNames.started, NativeType.I32, true, module.i32(0));
         startFunctionBody.unshift(
+          module.global_set(BuiltinNames.started, module.i32(1))
+        );
+        startFunctionBody.unshift(
           module.if(
             module.global_get(BuiltinNames.started, NativeType.I32),
-            module.return(),
-            module.global_set(BuiltinNames.started, module.i32(1))
+            module.return()
           )
         );
       }
-      // no stackify, only calls other start functions
       let funcRef = module.addFunction(
         startFunctionInstance.internalName,
         signature.nativeParams,
@@ -488,9 +476,6 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile lazy functions
-    if (this.runtimeFeatures & RuntimeFeatures.STACK) {
-      program.registerConstantInteger(CommonNames.ASC_STACK, Type.bool, i64_new(1));
-    }
     var lazyFunctions = this.lazyFunctions;
     do {
       let functionsToCompile = new Array<Function>();
@@ -538,39 +523,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
-
-    // finalize stack
-    module.removeGlobal(BuiltinNames.stack_base);
-    module.removeGlobal(BuiltinNames.stack_size);
-    module.removeGlobal(BuiltinNames.stackptr);
-    if (this.runtimeFeatures & RuntimeFeatures.STACK) {
-      let stackBase = i64_align(memoryOffset, options.usizeType.byteSize);
-      let stackSize = 65536; // TODO: make configurable
-      memoryOffset = i64_add(stackBase, i64_new(stackSize));
-      if (options.isWasm64) {
-        module.addGlobal(BuiltinNames.stack_base, NativeType.I64, false,
-          module.i64(i64_low(stackBase), i64_high(stackBase))
-        );
-        module.addGlobal(BuiltinNames.stack_size, NativeType.I64, false,
-          module.i64(stackSize)
-        );
-        module.addGlobal(BuiltinNames.stackptr, NativeType.I64, true,
-          module.i64(i64_low(stackBase), i64_high(stackBase))
-        );
-
-      } else {
-        module.addGlobal(BuiltinNames.stack_base, NativeType.I32, false,
-          module.i32(i64_low(stackBase))
-        );
-        module.addGlobal(BuiltinNames.stack_size, NativeType.I32, false,
-          module.i32(stackSize)
-        );
-        module.addGlobal(BuiltinNames.stackptr, NativeType.I32, true,
-          module.i32(i64_low(stackBase))
-        );
-      }
-    }
-    this.memoryOffset = memoryOffset;
 
     // finalize heap
     module.removeGlobal(BuiltinNames.heap_base);
@@ -1015,14 +967,12 @@ export class Compiler extends DiagnosticEmitter {
       let numLocals = locals.length;
       let varTypes = new Array<NativeType>(numLocals);
       for (let i = 0; i < numLocals; ++i) varTypes[i] = locals[i].type.toNativeType();
-      stackify(this,
-        module.addFunction(
-          startFunction.internalName,
-          startSignature.nativeParams,
-          startSignature.nativeResults,
-          varTypes,
-          module.flatten(startFunctionBody)
-        )
+      module.addFunction(
+        startFunction.internalName,
+        startSignature.nativeParams,
+        startSignature.nativeResults,
+        varTypes,
+        module.flatten(startFunctionBody)
       );
       previousBody.push(
         module.call(startFunction.internalName, null, NativeType.None)
@@ -1428,55 +1378,20 @@ export class Compiler extends DiagnosticEmitter {
       let flow = instance.flow;
       this.currentFlow = flow;
       let stmts = new Array<ExpressionRef>();
-      let body: ExpressionRef;
 
-      // stackify managed arguments
-      let thisType = signature.thisType;
-      let parameterTypes = signature.parameterTypes;
-      let index = 0;
-      if (thisType) {
-        if (thisType.isManaged) {
-          stmts.push(
-            module.local_set(0,
-              this.makeStackify(
-                module.local_get(0, thisType.toNativeType()),
-                thisType
-              )
-            )
-          );
-        }
-        ++index;
+      if (!this.compileFunctionBody(instance, stmts)) {
+        stmts.push(module.unreachable());
       }
-      for (let i = 0, k = parameterTypes.length; i < k; ++i, ++index) {
-        let paramemterType = parameterTypes[i];
-        if (paramemterType.isManaged) {
-          stmts.push(
-            module.local_set(index,
-              this.makeStackify(
-                module.local_get(index, paramemterType.toNativeType()),
-                paramemterType
-              )
-            )
-          );
-        }
-      }
-
-      if (this.compileFunctionBody(instance, stmts)) {
-        body = module.flatten(stmts, instance.signature.returnType.toNativeType());
-      } else {
-        body = module.unreachable();
-      }
+     
       this.currentFlow = previousFlow;
 
       // create the function
-      funcRef = stackify(this,
-        module.addFunction(
-          instance.internalName,
-          signature.nativeParams,
-          signature.nativeResults,
-          typesToNativeTypes(instance.additionalLocals),
-          body
-        )
+      funcRef = module.addFunction(
+        instance.internalName,
+        signature.nativeParams,
+        signature.nativeResults,
+        typesToNativeTypes(instance.additionalLocals),
+        module.flatten(stmts, instance.signature.returnType.toNativeType())
       );
 
     // imported function
@@ -1577,7 +1492,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         this.makeFieldInitializationInConstructor(classInstance, allocStmts);
 
-        // Insert right before the body, but behind eventual (stackify) preludes
+        // Insert right before the body
         for (let i = stmts.length - 1; i >= bodyStartIndex; --i) {
           stmts[i + 1] = stmts[i];
         }
@@ -3097,19 +3012,14 @@ export class Compiler extends DiagnosticEmitter {
           if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
         }
         if (initExpr) {
-          if (flow.isNonnull(initExpr, type)) flow.setLocalFlag(local.index, LocalFlags.NONNULL);
-          if (type.isManaged) {
-            initExpr = this.makeStackify(initExpr, type);
-          }
           initializers.push(
-            module.local_set(local.index, initExpr)
+            this.makeLocalAssignment(local, initExpr, type, false)
           );
+        } else {
+          // no need to assign zero
           if (local.type.isShortIntegerValue) {
-            if (!flow.canOverflow(initExpr, type)) flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
-            else flow.unsetLocalFlag(local.index, LocalFlags.WRAPPED);
+            flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
           }
-        } else if (local.type.isShortIntegerValue) {
-          flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
         }
       }
     }
@@ -5975,20 +5885,6 @@ export class Compiler extends DiagnosticEmitter {
     return module.unreachable();
   }
 
-  /** Makes a stackify call, typically when assigning to a managed local. */
-  private makeStackify(expr: ExpressionRef, type: Type): ExpressionRef {
-    assert(type.isManaged);
-    var module = this.module;
-    var stackifyInstance = this.program.stackifyInstance;
-    this.compileFunction(stackifyInstance);
-    return module.call(stackifyInstance.internalName, [
-      expr,
-      this.program.options.isWasm64
-        ? module.i64(0)
-        : module.i32(0)
-    ], type.toNativeType());
-  }
-
   /** Makes an assignment to a local, keeping track of wrap and null states. */
   private makeLocalAssignment(
     /** Local to assign to. */
@@ -6014,9 +5910,6 @@ export class Compiler extends DiagnosticEmitter {
     if (type.isShortIntegerValue) {
       if (!flow.canOverflow(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.WRAPPED);
       else flow.unsetLocalFlag(localIndex, LocalFlags.WRAPPED);
-    }
-    if (type.isManaged) {
-      valueExpr = this.makeStackify(valueExpr, type);
     }
     if (tee) { // local = value
       this.currentType = type;
@@ -6524,24 +6417,10 @@ export class Compiler extends DiagnosticEmitter {
       index = 1;
     }
     var parameterTypes = signature.parameterTypes;
-    var temps = new Array<Local>();
     for (let i = 0; i < numArguments; ++i, ++index) {
       let paramType = parameterTypes[i];
-      let paramExpr = this.compileExpression(argumentExpressions[i], paramType,
-        Constraints.CONV_IMPLICIT
-      );
-      if (paramType.isManaged) {
-        let paramLocal = this.currentFlow.getTempLocal(paramType);
-        temps.push(paramLocal);
-        paramExpr = this.module.local_tee(paramLocal.index,
-          this.makeStackify(paramExpr, paramType)
-        );
-      }
-      temps.push(this.currentFlow.getTempLocal(paramType));
+      let paramExpr = this.compileExpression(argumentExpressions[i], paramType, Constraints.CONV_IMPLICIT);
       operands[index] = paramExpr;
-    }
-    for (let i = 0, k = temps.length; i < k; ++i) {
-      this.currentFlow.freeTempLocal(temps[i]);
     }
     assert(index == numArgumentsInclThis);
     return this.makeCallDirect(instance, operands, reportNode, (constraints & Constraints.WILL_DROP) != 0);
@@ -6579,9 +6458,6 @@ export class Compiler extends DiagnosticEmitter {
       // inlining is aware of wrap/nonnull states:
       if (!previousFlow.canOverflow(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
       if (flow.isNonnull(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
-      if (paramType.isManaged) {
-        paramExpr = this.makeStackify(paramExpr, paramType);
-      }
       body.unshift(
         module.local_set(argumentLocal.index, paramExpr)
       );
@@ -6593,11 +6469,7 @@ export class Compiler extends DiagnosticEmitter {
       let thisType = assert(instance.signature.thisType);
       let thisLocal = flow.addScopedLocal(CommonNames.this_, thisType, usedLocals);
       body.unshift(
-        module.local_set(thisLocal.index,
-          thisType.isManaged
-            ? this.makeStackify(thisArg, thisType)
-            : thisArg
-        )
+        module.local_set(thisLocal.index, thisArg)
       );
       let base = classInstance.base;
       if (base) flow.addScopedAlias(CommonNames.super_, base.type, thisLocal.index);
@@ -6616,14 +6488,8 @@ export class Compiler extends DiagnosticEmitter {
         Constraints.CONV_IMPLICIT
       );
       let argumentLocal = flow.addScopedLocal(instance.getParameterName(i), initType);
-      if (!flow.canOverflow(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
-      if (flow.isNonnull(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
       body.push(
-        module.local_set(argumentLocal.index,
-          initType.isManaged
-            ? this.makeStackify(initExpr, initType)
-            : initExpr
-        )
+        this.makeLocalAssignment(argumentLocal, initExpr, initType, false)
       );
     }
 
@@ -6687,21 +6553,9 @@ export class Compiler extends DiagnosticEmitter {
     var stmts = new Array<ExpressionRef>();
 
     // forward `this` if applicable
-    // note that we have to stackify managed arguments in case initializer
-    // expressions of omitted arguments trigger GC work
     var module = this.module;
     var thisType = originalSignature.thisType;
     if (thisType) {
-      if (thisType.isManaged) {
-        stmts.push(
-          module.local_set(0,
-            this.makeStackify(
-              module.local_get(0, thisType.toNativeType()),
-              thisType
-            )
-          )
-        );
-      }
       forwardedOperands[0] = module.local_get(0, thisType.toNativeType());
       operandIndex = 1;
     }
@@ -6709,16 +6563,6 @@ export class Compiler extends DiagnosticEmitter {
     // forward required arguments
     for (let i = 0; i < minArguments; ++i, ++operandIndex) {
       let paramType = originalParameterTypes[i];
-      if (paramType.isManaged) {
-        stmts.push(
-          module.local_set(operandIndex,
-            this.makeStackify(
-              module.local_get(operandIndex, paramType.toNativeType()),
-              paramType
-            )
-          )
-        );
-      }
       forwardedOperands[operandIndex] = module.local_get(operandIndex, paramType.toNativeType());
     }
     assert(operandIndex == minOperands);
@@ -6768,9 +6612,6 @@ export class Compiler extends DiagnosticEmitter {
           type,
           Constraints.CONV_IMPLICIT
         );
-        if (type.isManaged) {
-          initExpr = this.makeStackify(initExpr, type);
-        }
         initExpr = module.local_set(operandIndex, initExpr);
       } else {
         this.error(
@@ -6796,14 +6637,12 @@ export class Compiler extends DiagnosticEmitter {
     flow.freeScopedLocals();
     this.currentFlow = previousFlow;
 
-    var funcRef = stackify(this,
-      module.addFunction(
-        stub.internalName,
-        stub.signature.nativeParams,
-        stub.signature.nativeResults,
-        typesToNativeTypes(stub.additionalLocals),
-        module.flatten(stmts, returnType.toNativeType())
-      )
+    var funcRef = module.addFunction(
+      stub.internalName,
+      stub.signature.nativeParams,
+      stub.signature.nativeResults,
+      typesToNativeTypes(stub.additionalLocals),
+      module.flatten(stmts, returnType.toNativeType())
     );
     stub.set(CommonFlags.COMPILED);
     stub.finalize(module, funcRef);
@@ -7975,7 +7814,6 @@ export class Compiler extends DiagnosticEmitter {
     var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
     var isStatic = !elementType.isExternalReference;
-    var nativeElementType = elementType.toNativeType();
     for (let i = 0; i < length; ++i) {
       let elementExpression = expressions[i];
       if (elementExpression.kind != NodeKind.OMITTED) {
@@ -8030,8 +7868,8 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // otherwise compile an explicit instantiation with indexed sets
-    var setter = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
-    if (!setter) {
+    var indexedSet = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
+    if (!indexedSet) {
       flow.freeTempLocal(tempThis);
       flow.freeTempLocal(tempDataStart);
       this.error(
@@ -8071,16 +7909,14 @@ export class Compiler extends DiagnosticEmitter {
         )
       )
     );
-    for (let i = 0, alignLog2 = elementType.alignLog2; i < length; ++i) {
-      let valueExpr = values[i];
-      // store<T>(tempData, value, immOffset)
+    for (let i = 0; i < length; ++i) {
+      // this[i] = value
       stmts.push(
-        module.store(elementType.byteSize,
-          module.local_get(tempDataStart.index, nativeArrayType),
-          valueExpr,
-          nativeElementType,
-          i << alignLog2
-        )
+        module.call(indexedSet.internalName, [
+          module.local_get(tempThis.index, nativeArrayType),
+          module.i32(i),
+          values[i]
+        ], NativeType.None)
       );
     }
     // -> tempThis
@@ -8089,6 +7925,7 @@ export class Compiler extends DiagnosticEmitter {
     );
     flow.freeTempLocal(tempThis);
     flow.freeTempLocal(tempDataStart);
+    if (length) this.compileFunction(indexedSet);
     this.currentType = arrayType;
     return module.flatten(stmts, nativeArrayType);
   }
@@ -8116,7 +7953,6 @@ export class Compiler extends DiagnosticEmitter {
     var expressions = expression.elementExpressions;
     var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
-    var nativeElementType = elementType.toNativeType();
     var isStatic = !elementType.isExternalReference;
     for (let i = 0; i < length; ++i) {
       let elementExpression = expressions[i];
@@ -8170,8 +8006,8 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // otherwise compile an explicit instantiation with indexed sets
-    var setter = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
-    if (!setter) {
+    var indexedSet = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
+    if (!indexedSet) {
       flow.freeTempLocal(tempThis);
       this.error(
         DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
@@ -8186,27 +8022,22 @@ export class Compiler extends DiagnosticEmitter {
     // tempThis = __newBuffer(bufferSize, classId)
     stmts.push(
       module.local_set(tempThis.index,
-        this.makeStackify(
-          this.makeCallDirect(program.newBufferInstance, [
-            isWasm64
-              ? module.i64(bufferSize)
-              : module.i32(bufferSize),
-            module.i32(arrayInstance.id)
-          ], expression),
-          arrayInstance.type
-        )
+        this.makeCallDirect(program.newBufferInstance, [
+          isWasm64
+            ? module.i64(bufferSize)
+            : module.i32(bufferSize),
+          module.i32(arrayInstance.id)
+        ], expression)
       )
     );
-    for (let i = 0, alignLog2 = elementType.alignLog2; i < length; ++i) {
-      let valueExpr = values[i];
-      // store<T>(tempThis, value, immOffset)
+    for (let i = 0; i < length; ++i) {
+      // array[i] = value
       stmts.push(
-        module.store(elementType.byteSize,
+        module.call(indexedSet.internalName, [
           module.local_get(tempThis.index, nativeArrayType),
-          valueExpr,
-          nativeElementType,
-          i << alignLog2
-        )
+          module.i32(i),
+          values[i]
+        ], NativeType.None)
       );
     }
     // -> tempThis
@@ -8214,6 +8045,7 @@ export class Compiler extends DiagnosticEmitter {
       module.local_get(tempThis.index, nativeArrayType)
     );
     flow.freeTempLocal(tempThis);
+    if (length) this.compileFunction(indexedSet);
     this.currentType = arrayType;
     return module.flatten(stmts, nativeArrayType);
   }
@@ -8312,14 +8144,12 @@ export class Compiler extends DiagnosticEmitter {
 
       let expr = this.compileExpression(values[i], fieldType, Constraints.CONV_IMPLICIT);
       exprs.push(
-        module.store( // TODO: handle setters as well
-          fieldType.byteSize,
+        module.call(fieldInstance.internalSetterName, [
           module.local_get(tempLocal.index, nativeClassType),
-          expr,
-          fieldType.toNativeType(),
-          fieldInstance.memoryOffset
-        )
+          expr
+        ], NativeType.None)
       );
+      this.compileFieldSetter(fieldInstance);
 
       // This member is no longer omitted, so delete from our omitted fields
       omittedFields.delete(fieldInstance);
@@ -8363,14 +8193,12 @@ export class Compiler extends DiagnosticEmitter {
         case TypeKind.F32:
         case TypeKind.F64: {
           exprs.push(
-            module.store( // TODO: handle setters as well
-              fieldType.byteSize,
+            module.call(fieldInstance.internalSetterName, [
               module.local_get(tempLocal.index, nativeClassType),
-              this.makeZero(fieldType, expression),
-              fieldType.toNativeType(),
-              fieldInstance.memoryOffset
-            )
+              this.makeZero(fieldType, expression)
+            ], NativeType.None)
           );
+          this.compileFieldSetter(fieldInstance);
           continue;
         }
       }
@@ -8390,12 +8218,10 @@ export class Compiler extends DiagnosticEmitter {
     // instead checks conditions above with provided fields taken into account.
 
     // allocate a new instance first and assign 'this' to the temp. local
-    var instantiateExpr = this.compileInstantiate(ctor, [], Constraints.NONE, expression);
-    if (classType.isManaged) {
-      instantiateExpr = this.makeStackify(instantiateExpr, classType);
-    }
     exprs.unshift(
-      module.local_set(tempLocal.index, instantiateExpr)
+      module.local_set(tempLocal.index,
+        this.compileInstantiate(ctor, [], Constraints.NONE, expression)
+      )
     );
 
     // once all field values have been set, return 'this'
@@ -8536,7 +8362,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // {
       //   this = <COND_ALLOC>
-      //   IF_DERIVED: this = __stackify(super(this, ...args))
+      //   IF_DERIVED: this = super(this, ...args)
       //   this.a = X
       //   this.b = Y
       //   return this
@@ -8552,12 +8378,10 @@ export class Compiler extends DiagnosticEmitter {
         for (let i = 1; i <= numParameters; ++i) {
           operands[i] = module.local_get(i, parameterTypes[i - 1].toNativeType());
         }
-        let superExpr = this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode, false);
-        if (baseClass.type.isManaged) {
-          superExpr = this.makeStackify(superExpr, baseClass.type);
-        }
         stmts.push(
-          module.local_set(0, superExpr)
+          module.local_set(0,
+            this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode, false)
+          )
         );
       }
       this.makeFieldInitializationInConstructor(classInstance, stmts);
@@ -8575,10 +8399,12 @@ export class Compiler extends DiagnosticEmitter {
       if (numLocals > numOperands) {
         for (let i = numOperands; i < numLocals; ++i) varTypes.push(locals[i].type.toNativeType());
       }
-      let funcRef = stackify(this,
-        module.addFunction(instance.internalName, signature.nativeParams, signature.nativeResults, varTypes,
-          module.flatten(stmts, nativeSizeType)
-        )
+      let funcRef = module.addFunction(
+        instance.internalName,
+        signature.nativeParams,
+        signature.nativeResults,
+        varTypes,
+        module.flatten(stmts, nativeSizeType)
       );
       instance.finalize(module, funcRef);
     }
@@ -9920,15 +9746,13 @@ export class Compiler extends DiagnosticEmitter {
     var classType = classInstance.type;
     var nativeClassType = classType.toNativeType();
     assert(nativeClassType == this.options.nativeSizeType);
-    var allocExpr = this.makeAllocation(classInstance);
-    if (classType.isManaged) {
-      allocExpr = this.makeStackify(allocExpr, classType);
-    }
     return module.if(
       module.unary(nativeClassType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
         module.local_get(thisIndex, nativeClassType)
       ),
-      module.local_set(thisIndex, allocExpr)
+      module.local_set(thisIndex,
+        this.makeAllocation(classInstance)
+      )
     );
   }
 
@@ -9981,12 +9805,6 @@ export class Compiler extends DiagnosticEmitter {
       // fall back to use initializer if present
       } else if (initializerNode) {
         initExpr = this.compileExpression(initializerNode, fieldType, Constraints.CONV_IMPLICIT);
-        if (fieldType.isManaged) {
-          let temp = flow.getTempLocal(fieldType); // keep it
-          initExpr = module.local_tee(temp.index,
-            this.makeStackify(initExpr, fieldType)
-          );
-        }
 
       // otherwise initialize with zero
       } else {

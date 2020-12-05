@@ -1,10 +1,13 @@
 import { BLOCK } from "./common";
 
-export declare function onalloc(s: BLOCK): void;
-export declare function onresize(s: BLOCK, oldSize: usize): void;
-export declare function onmove(sOld: BLOCK, sNew: BLOCK): void;
-export declare function onvisit(s: BLOCK, stackPtr: usize): bool;
-export declare function onfree(s: BLOCK): void;
-export declare function oninit(heapBase: usize, stackBase: usize, stackSize: usize): void;
+export declare function oninit(heapBase: usize): void;
 
-if (isDefined(ASC_RTRACE)) oninit(__heap_base, __stack_base, __stack_size);
+// Memory Allocator
+export declare function onalloc(block: BLOCK): void;
+export declare function onresize(block: BLOCK, oldSizeInclOverhead: usize): void;
+export declare function onmove(oldBlock: BLOCK, newBlock: BLOCK): void;
+export declare function onfree(block: BLOCK): void;
+
+// Garbage collector
+export declare function onvisit(block: BLOCK): bool;
+export declare function oncollect(totalObjects: usize, totalMemory: usize): void;

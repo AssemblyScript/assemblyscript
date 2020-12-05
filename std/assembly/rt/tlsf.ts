@@ -1,5 +1,5 @@
 import { AL_BITS, AL_SIZE, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
-import { onalloc, onresize, onmove, onfree } from "./rtrace";
+import { oninit, onalloc, onresize, onmove, onfree } from "./rtrace";
 
 // === The TLSF (Two-Level Segregate Fit) memory allocator ===
 // see: http://www.gii.upv.es/tlsf/
@@ -464,6 +464,7 @@ function prepareSize(size: usize): usize {
 
 /** Initializes the root structure. */
 function initialize(): void {
+  if (isDefined(ASC_RTRACE)) oninit(__heap_base);
   var rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
   var pagesBefore = memory.size();
   var pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
@@ -514,7 +515,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   if (payloadSize <= blockSize) {
     prepareBlock(root, block, payloadSize);
     if (isDefined(ASC_RTRACE)) {
-      if (payloadSize != blockSize) onresize(block, blockSize);
+      if (payloadSize != blockSize) onresize(block, BLOCK_OVERHEAD + blockSize);
     }
     return block;
   }
@@ -530,7 +531,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
       // is immediately split though. does this trigger any assertions / issues?
       block.mmInfo = (blockInfo & TAGS_MASK) | mergeSize;
       prepareBlock(root, block, payloadSize);
-      if (isDefined(ASC_RTRACE)) onresize(block, blockSize);
+      if (isDefined(ASC_RTRACE)) onresize(block, BLOCK_OVERHEAD + blockSize);
       return block;
     }
   }
@@ -552,8 +553,8 @@ function moveBlock(root: Root, block: Block, newSize: usize): Block {
 
 /** Frees a block. */
 export function freeBlock(root: Root, block: Block): void {
-  block.mmInfo = block.mmInfo | FREE;
   if (isDefined(ASC_RTRACE)) onfree(block);
+  block.mmInfo = block.mmInfo | FREE;
   insertBlock(root, block);
 }
 

@@ -792,6 +792,8 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  i32.const 0
+  drop
   global.get $~lib/memory/__heap_base
   i32.const 15
   i32.add
@@ -1358,7 +1360,7 @@
    if
     i32.const 0
     i32.const 32
-    i32.const 498
+    i32.const 499
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -1378,7 +1380,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 500
+   i32.const 501
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1440,7 +1442,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 563
+   i32.const 564
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2701,14 +2703,14 @@
   end
  )
  (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $1
   local.get $1
   i32.load
   i32.const 1
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
-  i32.const 0
-  drop
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock

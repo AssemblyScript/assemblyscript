@@ -2,39 +2,56 @@
 export declare interface BlockInfo {
   /** Pointer to the block. */
   ptr: number,
-  /** Block size. */
+  /** Block size including overhead. */
   size: number,
-  /** Runtime header. */
-  header: {
-    /** Memory manager info bits. */
-    mmInfo: number,
-    /** Garbage collector info bits. */
-    gcInfo: number,
-    /** Runtime id. */
-    rtId: number,
-    /** Runtime size. */
-    rtSize: number
+  /** Memory manager info. */
+  mmInfo: {
+    tags: string,
+    size: number
   },
-  toString(): string
+  /** Garbage collector info. */
+  gcInfo: {
+    color: string,
+    next: number,
+    prev: number
+  },
+  /** Runtime id. */
+  rtId: number,
+  /** Runtime size. */
+  rtSize: number
 }
+
+type ErrorCallback = (error: Error, info: BlockInfo) => void;
+type InfoCallback = (msg: string) => void;
 
 export declare interface RtraceOptions {
   /** Function being called when a problem is detected. */
-  onerror?: (error: Error, info: BlockInfo) => void,
+  onerror?: ErrorCallback,
   /** Function being called with information messages. */
-  oninfo?: (msg: string) => void,
+  oninfo?: InfoCallback,
   /** Obtains the module's memory instance. */
   getMemory(): WebAssembly.Memory;
 }
 
-export declare class Rtrace {
-  [key: string]: unknown; // can be used as a Wasm import
-
+export declare class Rtrace  {
   /** Creates a new `Rtrace` instance. */
   constructor(options: RtraceOptions);
 
   /** Checks if rtrace is active, i.e. at least one event has occurred. */
   readonly active: boolean;
+  /** Number of seen allocation events. */
+  readonly allocCount: number;
+  /** Number of seen resize events during realloc. */
+  readonly resizeCount: number;
+  /** Number of seens move events during realloc. */
+  readonly moveCount: number;
+  /** Number of seen free events. */
+  readonly freeCount: number;
+  /** Heap base offset reported by the module. */
+  readonly heapBase: number;
+
+  /** Installs Rtrace on the specified imports object. */
+  install(imports: Record<string,Record<string,unknown>>): Record<string,Record<string,unknown>>;
 
   /** Checks if there are any leaks and emits them via `oninfo`. Returns the number of live blocks. */
   check(): number;
@@ -51,12 +68,18 @@ export declare class Rtrace {
   /** A function that is called when a heap allocation is freed. */
   onfree(ptr: number): void;
 
-  /** A function that is called when a reference counting increment occurs. */
-  onincrement(ptr: number): void;
+  /** A function that is called when an object is visited by the GC. Should return `true`, unless there's an error. */
+  onvisit(ptr: number): boolean;
 
-  /** A function that is called when a reference counting decrement occurs. */
-  ondecrement(ptr: number): void;
+  /** A function that is called after a collection phase. */
+  oncollect(totalObjects: number, totalMemory: number): void;
 
   /** Obtains information about a block. */
   getBlockInfo(ptr: number): BlockInfo;
+
+  /** Error message callback. */
+  onerror: ErrorCallback;
+
+  /** Info message callback. */
+  oninfo: InfoCallback;
 }

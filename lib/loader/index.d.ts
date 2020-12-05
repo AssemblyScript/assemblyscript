@@ -100,8 +100,8 @@ export interface ASUtil {
   __link(parentPtr: number, childPtr: number, expectMultiple: boolean): void;
   /** Marks an externally retained value as reachable during the collection phase. */
   __mark(ptr: number): void;
-  /** Forces a cycle collection. Only relevant if objects potentially forming reference cycles are used. */
-  __collect(): void;
+  /** Performs garbage collection. */
+  __collect(incremental?: boolean): void;
 }
 
 /** Asynchronously instantiates an AssemblyScript module from anything that can be instantiated. */

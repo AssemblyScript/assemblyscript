@@ -8,7 +8,7 @@ Instructions
 Compile your module that uses the full or half runtime with `-use ASC_RTRACE=1 --explicitStart` and include an instance of this module as the import named `rtrace`.
 
 ```js
-var rtrace = new Rtrace({
+const rtrace = new Rtrace({
   onerror(err, info) {
     // handle error
   },
@@ -22,13 +22,11 @@ var rtrace = new Rtrace({
   }
 });
 
-var { module, instance } = await WebAssembly.instantiate(..., {
-  rtrace,
-  env: Object.assign({ //
-    ...                // only required when instrumenting memory
-  }, rtrace.env),      //
-  ...
-});
+const { module, instance } = await WebAssembly.instantiate(...,
+  rtrace.install({
+    ...imports...
+  })
+);
 instance.exports._start();
 ...
 

@@ -166,5 +166,4 @@
   assert(view.byteLength == 8);
 }
 
-__stackptr = __stack_base;
 __collect();

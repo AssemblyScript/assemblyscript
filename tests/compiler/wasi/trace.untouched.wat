@@ -2,8 +2,8 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
@@ -13,7 +13,7 @@
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
- (memory $0 2)
+ (memory $0 1)
  (data (i32.const 12) "\16\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00t\00h\00e\00 \00m\00e\00s\00s\00a\00g\00e\00")
  (data (i32.const 60) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 124) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
@@ -21,8 +21,6 @@
  (data (i32.const 880) "<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
  (data (i32.const 1056) "\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
  (data (i32.const 1096) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
- (data (i32.const 1500) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00s\00t\00a\00c\00k\00 \00o\00v\00e\00r\00f\00l\00o\00w\00")
- (data (i32.const 1548) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
@@ -34,36 +32,15 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/ASC_FEATURE_BULK_MEMORY i32 (i32.const 0))
- (global $~lib/rt/__stack_base i32 (i32.const 1588))
- (global $~lib/rt/__stack_size i32 (i32.const 65536))
- (global $~lib/rt/__stackptr (mut i32) (i32.const 1588))
- (global $~lib/memory/__heap_base i32 (i32.const 67124))
+ (global $~lib/memory/__heap_base i32 (i32.const 1496))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/__stackify (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  local.get $0
-  i32.store
-  local.get $0
- )
  (func $~lib/string/String.UTF8.byteLength (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  i32.const 4
-  call $~lib/rt/__stack_prepare
-  local.set $7
-  local.get $0
-  local.get $7
-  i32.const 0
-  i32.add
-  call $~lib/rt/__stackify
-  local.set $0
   local.get $0
   local.set $2
   local.get $2
@@ -161,10 +138,6 @@
    end
   end
   local.get $4
-  local.set $8
-  local.get $7
-  call $~lib/rt/__stack_restore
-  local.get $8
  )
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0
@@ -177,27 +150,12 @@
   i32.store
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  i32.const 4
-  call $~lib/rt/__stack_prepare
-  local.set $1
-  local.get $0
-  local.get $1
-  i32.const 0
-  i32.add
-  call $~lib/rt/__stackify
-  local.set $0
   local.get $0
   i32.const 20
   i32.sub
   i32.load offset=16
   i32.const 1
   i32.shr_u
-  local.set $2
-  local.get $1
-  call $~lib/rt/__stack_restore
-  local.get $2
  )
  (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -481,22 +439,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  i32.const 8
-  call $~lib/rt/__stack_prepare
-  local.set $9
-  local.get $0
-  local.get $9
-  i32.const 0
-  i32.add
-  call $~lib/rt/__stackify
-  local.set $0
-  local.get $1
-  local.get $9
-  i32.const 4
-  i32.add
-  call $~lib/rt/__stackify
-  local.set $1
   i32.const 0
   i32.const 12
   call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
@@ -646,8 +588,6 @@
   drop
   i32.const 255
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
-  local.get $9
-  call $~lib/rt/__stack_restore
  )
  (func $~lib/rt/common/BLOCK#set:mmInfo (param $0 i32) (param $1 i32)
   local.get $0
@@ -1416,6 +1356,8 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  i32.const 0
+  drop
   global.get $~lib/memory/__heap_base
   i32.const 15
   i32.add
@@ -1982,7 +1924,7 @@
    if
     i32.const 0
     i32.const 80
-    i32.const 498
+    i32.const 499
     i32.const 16
     call $~lib/wasi/index/abort
     unreachable
@@ -2002,7 +1944,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 500
+   i32.const 501
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable
@@ -4776,7 +4718,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 563
+   i32.const 564
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
@@ -4784,14 +4726,14 @@
   local.get $1
  )
  (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $1
   local.get $1
   i32.load
   i32.const 1
   i32.or
   call $~lib/rt/common/BLOCK#set:mmInfo
-  i32.const 0
-  drop
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock
@@ -4819,16 +4761,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
-  i32.const 4
-  call $~lib/rt/__stack_prepare
-  local.set $12
-  local.get $0
-  local.get $12
-  i32.const 0
-  i32.add
-  call $~lib/rt/__stackify
-  local.set $0
   i32.const 8
   i32.const 4
   i32.add
@@ -5020,8 +4952,6 @@
   drop
   local.get $9
   call $~lib/rt/tlsf/__free
-  local.get $12
-  call $~lib/rt/__stack_restore
  )
  (func $start:wasi/trace
   i32.const 32
@@ -5054,60 +4984,9 @@
   global.get $~started
   if
    return
-  else
-   i32.const 1
-   global.set $~started
   end
+  i32.const 1
+  global.set $~started
   call $start:wasi/trace
- )
- (func $~lib/rt/__stack_prepare (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  global.get $~lib/rt/__stackptr
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.add
-  local.set $2
-  local.get $2
-  global.get $~lib/rt/__stack_base
-  global.get $~lib/rt/__stack_size
-  i32.add
-  i32.le_u
-  i32.eqz
-  if
-   i32.const 1520
-   i32.const 1568
-   i32.const 118
-   i32.const 3
-   call $~lib/wasi/index/abort
-   unreachable
-  end
-  local.get $2
-  global.set $~lib/rt/__stackptr
-  i32.const 0
-  drop
-  loop $while-continue|0
-   local.get $2
-   i32.const 4
-   i32.sub
-   local.tee $2
-   local.get $1
-   i32.ge_u
-   local.set $3
-   local.get $3
-   if
-    local.get $2
-    i32.const 0
-    i32.store
-    br $while-continue|0
-   end
-  end
-  local.get $1
- )
- (func $~lib/rt/__stack_restore (param $0 i32)
-  local.get $0
-  global.set $~lib/rt/__stackptr
  )
 )

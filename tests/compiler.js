@@ -391,8 +391,8 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       }
     });
 
-    var imports = {
-      env: Object.assign({
+    var imports = rtrace.install({
+      env: {
         memory,
         abort: function(msg, file, line, column) {
           console.log(colorsUtil.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
@@ -406,12 +406,11 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
         mark: function() {
           // override in tests
         }
-      }, rtrace.env),
+      },
       Math,
       Date,
-      Reflect,
-      rtrace
-    };
+      Reflect
+    });
     if (glue.preInstantiate) {
       console.log("  [call preInstantiate]");
       glue.preInstantiate(imports, exports);

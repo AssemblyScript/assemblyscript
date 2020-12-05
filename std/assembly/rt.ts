@@ -38,7 +38,7 @@ export function __instanceof(ref: usize, superId: u32): bool { // keyword
 // @ts-ignore: decorator
 @unsafe
 export function __newBuffer(size: usize, id: u32, data: usize = 0): usize {
-  var buffer = __stackify(__new(size, id), 0);
+  var buffer = __new(size, id);
   if (data) memory.copy(buffer, data, size);
   return buffer;
 }
@@ -46,9 +46,9 @@ export function __newBuffer(size: usize, id: u32, data: usize = 0): usize {
 // @ts-ignore: decorator
 @unsafe
 export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
-  var array = __stackify(__new(offsetof<i32[]>(), id), 0);
+  var array = __new(offsetof<i32[]>(), id);
   var bufferSize = <usize>length << alignLog2;
-  var buffer = __stackify(__newBuffer(bufferSize, idof<ArrayBuffer>(), data), 0);
+  var buffer = __newBuffer(bufferSize, idof<ArrayBuffer>(), data);
   store<usize>(array, buffer, offsetof<ArrayBufferView>("buffer"));
   __link(array, buffer, false);
   store<usize>(array, buffer, offsetof<ArrayBufferView>("dataStart"));
@@ -85,52 +85,8 @@ export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize =
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
-// export declare function __collect(): void;
+// export declare function __collect(incremental: bool = false): void;
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
 // export declare function __visit(ptr: usize, cookie: u32): void;
-
-// @ts-ignore: decorator
-@builtin
-export declare const __stack_base: usize;
-// @ts-ignore: decorator
-@builtin
-export declare const __stack_size: usize;
-// @ts-ignore: decorator
-@builtin
-export declare var __stackptr: usize;
-
-// @ts-ignore: decorator
-@unsafe
-export function __stackify(objPtr: usize, addr: usize): usize {
-  store<usize>(addr, objPtr);
-  return objPtr;
-}
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-// @ts-ignore: decorator
-@unsafe @lazy
-function __stack_prepare(frameSize: usize): usize {
-  var start = __stackptr;
-  var end = start + frameSize;
-  assert(end <= __stack_base + __stack_size, "stack overflow");
-  __stackptr = end;
-  if (ASC_FEATURE_BULK_MEMORY) {
-    memory.fill(start, 0, frameSize);
-  } else {
-    while ((end -= sizeof<usize>()) >= start) {
-      store<usize>(end, 0);
-    }
-  }
-  return start;
-}
-
-// @ts-ignore: decorator
-@unsafe @lazy
-function __stack_restore(sp: usize): void {
-  __stackptr = sp;
-}
-
-/* eslint-enable @typescript-eslint/no-unused-vars */

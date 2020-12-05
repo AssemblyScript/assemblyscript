@@ -2,12 +2,14 @@ import * as fs from "fs";
 import * as path from "path";
 import * as v8 from "v8";
 import * as binaryen from "binaryen";
-import { instantiate } from "../../lib/loader/umd";
-import { Rtrace } from "../../lib/rtrace/umd";
+import { instantiate } from "../../lib/loader/umd/index";
+import { Rtrace } from "../../lib/rtrace/umd/index";
 import * as find from "../../cli/util/find";
 import AssemblyScript from "../../out/assemblyscript";
 
 v8.setFlagsFromString("--experimental-wasm-bigint");
+
+const incremental = true; // whether to use incremental GC
 
 // Load stdlib
 const libDir = path.join(__dirname, "..", "..", "std", "assembly");
@@ -19,7 +21,7 @@ find.files(libDir, /^(?!.*\.d\.ts$).*\.ts$/).forEach((file: string) => {
 async function test(build: string): Promise<void> {
   await binaryen.ready;
 
-  const rtrace = new Rtrace({
+  const rtrace: Rtrace = new Rtrace({
     onerror(err, info) {
       console.log(err, info);
     },
@@ -33,19 +35,19 @@ async function test(build: string): Promise<void> {
 
   const { exports: asc } = await instantiate<typeof AssemblyScript>(
     fs.promises.readFile(`${ __dirname }/../../out/assemblyscript.${ build }.wasm`),
-    {
-      binaryen,
-      rtrace,
-      env: rtrace.env
-    }
+    rtrace.install({
+      binaryen
+    })
   );
+
   if (asc._start) asc._start();
+  if (incremental) asc.__collect(true);
 
   const cachedStrings = new Map<string,number>();
   function cachedString(text: string): number {
     if (cachedStrings.has(text)) return cachedStrings.get(text);
-    var ptr = asc.__newString(text);
-    cachedStrings.set(text, asc.__retain(ptr));
+    var ptr = asc.__retain(asc.__newString(text));
+    cachedStrings.set(text, ptr);
     return ptr;
   }
 
@@ -53,6 +55,7 @@ async function test(build: string): Promise<void> {
   const optionsPtr = asc.newOptions();
   asc.setNoExportRuntime(optionsPtr, true);
   const programPtr = asc.__retain(asc.newProgram(optionsPtr));
+  if (incremental) asc.__collect(true);
 
   console.log("\nParsing standard library ...");
   Object.keys(libraryFiles).forEach((libPath: string) => {
@@ -61,6 +64,7 @@ async function test(build: string): Promise<void> {
     const pathPtr = cachedString("~lib/" + libPath + ".ts");
     console.log("  " + asc.__getString(pathPtr));
     asc.parse(programPtr, textPtr, pathPtr, false);
+    if (incremental) asc.__collect(true);
   });
 
   console.log("\nParsing runtime ...");
@@ -70,6 +74,7 @@ async function test(build: string): Promise<void> {
     const pathPtr = cachedString("~lib/" + rt + ".ts");
     console.log("  " + asc.__getString(pathPtr));
     asc.parse(programPtr, textPtr, pathPtr, true);
+    if (incremental) asc.__collect(true);
   }
 
   function parseBacklog() {
@@ -91,6 +96,7 @@ async function test(build: string): Promise<void> {
       const pathPtr = cachedString(nextFile + ".ts");
       console.log("  " + asc.__getString(pathPtr));
       asc.parse(programPtr, textPtr, pathPtr, false);
+      if (incremental) asc.__collect(true);
     } while (true);
   }
   parseBacklog();
@@ -101,6 +107,7 @@ async function test(build: string): Promise<void> {
     const pathPtr = cachedString("index.ts");
     console.log("  " + asc.__getString(pathPtr));
     asc.parse(programPtr, textPtr, pathPtr, true);
+    if (incremental) asc.__collect(true);
   }
 
   parseBacklog();
@@ -109,9 +116,11 @@ async function test(build: string): Promise<void> {
   {
     asc.initializeProgram(programPtr);
     console.log("\nCompiling program ...");
-    const modulePtr = asc.compile(programPtr);
+    const modulePtr = asc.__retain(asc.compile(programPtr));
     const moduleRef = new Uint32Array(asc.memory.buffer, modulePtr)[0];
     console.log(binaryen.wrapModule(moduleRef).emitText());
+    asc.__release(modulePtr);
+    if (incremental) asc.__collect(true);
   }
 
   console.log("\nChecking diagnostics ...");
@@ -124,15 +133,17 @@ async function test(build: string): Promise<void> {
       if (asc.isError(diagnosticPtr)) ++numErrors;
     }
     console.log("Errors: " + numErrors);
+    if (incremental) asc.__collect(true);
   }
+  console.log();
 
   cachedStrings.forEach(ptr => asc.__release(ptr));
   cachedStrings.clear();
   asc.__release(programPtr);
 
-  const collectStart = Date.now();
-  asc.__collect();
-  console.log("\nCollect took " + (Date.now() - collectStart) + " ms");
+  let collectStart = Date.now();
+  asc.__collect(); // full
+  console.log("Collect took " + (Date.now() - collectStart) + " ms\n");
 
   if (rtrace.active) {
     console.log("\n" +
@@ -142,7 +153,7 @@ async function test(build: string): Promise<void> {
       rtrace.resizeCount + " resizes, " +
       rtrace.moveCount + " moves"
     );
-    if (rtrace.allocCount - rtrace.freeCount > 50) {
+    if (rtrace.allocCount - rtrace.freeCount > 45) {
       // Last manual check had 41 expected live global objects
       rtrace.oninfo = msg => console.log(msg);
       rtrace.check();

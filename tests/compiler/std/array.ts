@@ -1067,5 +1067,4 @@ export class ArrayStr extends Array<string> {}
 
 // Unleak globals and the start function stack
 arr = changetype<Array<i32>>(0);
-__stackptr = __stack_base;
 __collect();
