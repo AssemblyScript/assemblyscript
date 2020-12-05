@@ -160,6 +160,6 @@ async function test(build: string): Promise<void> {
     }
   }
 }
-// test("untouched");
+test("untouched");
 // test("optimized");
-test("rtraced");
+// test("rtraced");
