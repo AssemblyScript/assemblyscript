@@ -1486,7 +1486,7 @@ export class Module {
       binaryen._BinaryenModuleRunPasses(this.ref, cArr, numNames);
     }
     binaryen._free(cArr);
-    for (let i = numNames; i >= 0; --i) binaryen._free(cStrs[i]);
+    for (let i = numNames - 1; i >= 0; --i) binaryen._free(cStrs[i]);
   }
 
   optimize(optimizeLevel: i32, shrinkLevel: i32, debugInfo: bool = false): void {
