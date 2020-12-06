@@ -9542,8 +9542,12 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     var parameterTypes = signature.parameterTypes;
+    var parameterNodes = reportNode.parameters;
     for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-      if (!this.checkTypeSupported(parameterTypes[i], reportNode.parameters[i])) {
+      let parameterReportNode: Node;
+      if (parameterNodes.length > i) parameterReportNode = parameterNodes[i];
+      else parameterReportNode = reportNode;
+      if (!this.checkTypeSupported(parameterTypes[i], parameterReportNode)) {
         supported = false;
       }
     }

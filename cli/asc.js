@@ -131,7 +131,8 @@ const {
   __newString,
   __getString,
   __retain,
-  __release
+  __release,
+  __collect
 } = assemblyscript;
 
 /** Whether this is a webpack bundle or not. */
@@ -446,6 +447,15 @@ exports.main = function main(argv, options, callback) {
   // Initialize the program
   const program = __retain(assemblyscript.newProgram(compilerOptions));
   __release(compilerOptions);
+
+  // Instrument callback to perform GC
+  callback = (function(callback) {
+    return function wrappedCallback(err) {
+      __release(program);
+      __collect();
+      return callback(err);
+    };
+  })(callback);
 
   // Set up transforms
   const transforms = [];

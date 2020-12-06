@@ -590,7 +590,7 @@ export class Flow {
   /** Tests if the specified `this` field has the specified flag or flags. */
   isThisFieldFlag(field: Field, flag: FieldFlags): bool {
     var fieldFlags = this.thisFieldFlags;
-    if (fieldFlags) {
+    if (fieldFlags != null && fieldFlags.has(field)) {
       return (changetype<FieldFlags>(fieldFlags.get(field)) & flag) == flag;
     }
     return false;

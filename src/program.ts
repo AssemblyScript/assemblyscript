@@ -4244,9 +4244,8 @@ export class Class extends TypedElement {
     var instance: Class | null = this;
     do {
       let overloads = instance.overloads;
-      if (overloads) {
-        let overload = overloads.get(kind);
-        if (overload) return overload;
+      if (overloads != null && overloads.has(kind)) {
+        return assert(overloads.get(kind));
       }
       instance = instance.base;
     } while (instance);
