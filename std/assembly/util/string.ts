@@ -1122,6 +1122,7 @@ function parseExp(ptr: usize, len: i32): i32 {
   var code = <u32>load<u16>(ptr);
   // check code is 'e' or 'E'
   if ((code | 32) != CharCode.e) return 0;
+  if (!--len) return 0;
 
   code = <u32>load<u16>(ptr += 2);
   if (code == CharCode.MINUS) {

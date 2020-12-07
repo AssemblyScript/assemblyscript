@@ -6336,6 +6336,15 @@
      i32.const 0
      br $~lib/util/string/parseExp|inlined.0
     end
+    local.get $5
+    i32.const 1
+    i32.sub
+    local.tee $5
+    i32.eqz
+    if
+     i32.const 0
+     br $~lib/util/string/parseExp|inlined.0
+    end
     local.get $11
     i32.const 2
     i32.add
