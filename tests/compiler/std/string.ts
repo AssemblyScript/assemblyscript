@@ -173,6 +173,7 @@ assert(parseFloat("1e-60") == 1e-60);
 assert(parseFloat("1e60") == 1e+60);
 
 // special cases
+assert(parseFloat("123.4e") == 123.4);
 assert(parseFloat("-.00000") == -0.0);
 assert(parseFloat("1x") == 1.0);
 assert(parseFloat("-11e-1string") == -1.1);
