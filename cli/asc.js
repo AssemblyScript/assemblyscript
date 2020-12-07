@@ -81,15 +81,15 @@ Object.defineProperty(exports, "ready", {
 if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
 
 // Use distribution files if present, otherwise run the sources directly.
-var assemblyscript;
 function loadAssemblyScriptJS() {
+  var exports;
   try {
     // note that this case will always trigger in recent node.js versions for typical installs
     // see: https://nodejs.org/api/packages.html#packages_self_referencing_a_package_using_its_name
-    assemblyscript = require("assemblyscript");
+    exports = require("assemblyscript");
   } catch (e) {
     try { // `asc` on the command line (unnecessary in recent node)
-      assemblyscript = dynrequire("../dist/assemblyscript.js");
+      exports = dynrequire("../dist/assemblyscript.js");
     } catch (e) {
       try { // `asc` on the command line without dist files (unnecessary in recent node)
         dynrequire("ts-node").register({
@@ -98,42 +98,57 @@ function loadAssemblyScriptJS() {
           compilerOptions: { target: "ES2016" }
         });
         dynrequire("../src/glue/js");
-        assemblyscript = dynrequire("../src");
+        exports = dynrequire("../src");
       } catch (e_ts) {
         try { // `require("dist/asc.js")` in explicit browser tests
-          assemblyscript = dynrequire("./assemblyscript");
+          exports = dynrequire("./assemblyscript");
         } catch (e) {
           throw Error(e_ts.stack + "\n---\n" + e.stack);
         }
       }
     }
   }
-  Object.assign(assemblyscript, require("./glue/js"));
+  return exports;
 }
 
 // Highly experimental, do not use. `npm run asbuild`, `asc --wasm ...`.
-function loadAssemblyScriptWasm() {
+function loadAssemblyScriptWasm(build) {
+  if (!build) build = "untouched";
   const loader = require("../lib/loader/umd/index");
-  const module = loader.instantiateSync(fs.readFileSync(__dirname + "/../out/assemblyscript.untouched.wasm"), { binaryen });
-  assemblyscript = module.exports;
-  if (assemblyscript._start) assemblyscript._start();
+  const rtrace = new (require("../lib/rtrace/umd/index").Rtrace)({
+    onerror(err, info) { console.log(err, info); },
+    // oninfo(msg) { console.log(msg); },
+    getMemory() { return assemblyscript.memory; }
+  });
+  const { exports } = loader.instantiateSync(fs.readFileSync(`${__dirname}/../out/assemblyscript.${build}.wasm`), rtrace.install({ binaryen }));
+  if (exports._start) exports._start();
+  return exports;
 }
 
-const wasmArg = process.argv.indexOf("--wasm");
-if (~wasmArg) {
-  process.argv.splice(wasmArg, 1);
-  loadAssemblyScriptWasm();
-} else {
-  loadAssemblyScriptJS();
-}
+var assemblyscript, isWasm = false, __newString, __getString, __retain, __release, __collect;
 
-const {
-  __newString,
-  __getString,
-  __retain,
-  __release,
-  __collect
-} = assemblyscript;
+function loadAssemblyScript() {
+  const wasmArg = process.argv.findIndex(arg => arg == "--wasm" || arg.startsWith("--wasm:"));
+  if (~wasmArg) {
+    isWasm = true;
+    let build = process.argv[wasmArg].slice(7);
+    process.argv.splice(wasmArg, 1);
+    assemblyscript = loadAssemblyScriptWasm(build);
+    __newString = assemblyscript.__newString;
+    __getString = assemblyscript.__getString;
+    __retain = assemblyscript.__retain;
+    __release = assemblyscript.__release;
+    __collect = assemblyscript.__collect;
+  } else {
+    assemblyscript = loadAssemblyScriptJS();
+    __newString = str => str;
+    __getString = ptr => ptr;
+    __retain = ptr => ptr;
+    __release = ptr => undefined;
+    __collect = incremental => undefined;
+  }
+}
+loadAssemblyScript();
 
 /** Whether this is a webpack bundle or not. */
 exports.isBundle = typeof BUNDLE_VERSION === "string";
@@ -218,6 +233,11 @@ exports.main = function main(argv, options, callback) {
   } else if (!options) {
     options = {};
   }
+
+  // FIXME: AS compiled to Wasm passes all the tests individually, but runs into
+  // issues when running multiple tests in succession and reusing the same
+  // compiler instance with GCs in between, indicating a runtime bug. For now:
+  if (isWasm) loadAssemblyScript();
 
   const stdout = options.stdout || process.stdout;
   const stderr = options.stderr || process.stderr;

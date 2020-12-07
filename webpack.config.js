@@ -68,7 +68,8 @@ const bin = {
   externals: [
     "binaryen",
     "assemblyscript",
-    "../lib/loader/umd/index"
+    "../lib/loader/umd/index",
+    "../lib/rtrace/umd/index"
   ],
   node: {
     "buffer": false,
