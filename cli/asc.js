@@ -128,7 +128,7 @@ function loadAssemblyScriptWasm(build) {
 var assemblyscript, __newString, __getString, __retain, __release, __collect;
 
 function loadAssemblyScript() {
-  const wasmArg = process.argv.findIndex(arg => arg == "--wasm" || arg.startsWith("--wasm:"));
+  const wasmArg = process.argv.findIndex(arg => (arg == "--wasm" || arg.startsWith("--wasm:")));
   if (~wasmArg) {
     let build = process.argv[wasmArg].slice(7);
     process.argv.splice(wasmArg, 1);
