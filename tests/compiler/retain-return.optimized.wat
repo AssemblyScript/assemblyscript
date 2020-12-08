@@ -1052,14 +1052,14 @@
   i32.eq
   if
    block $__inlined_func$~lib/rt/__visit_members
-    block $folding-inner0
-     block $switch$1$default
-      block $switch$1$case$4
+    block $folding-inner1
+     block $invalid
+      block $~lib/arraybuffer/ArrayBufferView
        local.get $0
        i32.const 12
        i32.add
        i32.load
-       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $folding-inner0 $folding-inner0 $switch$1$default
+       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/arraybuffer/ArrayBufferView $__inlined_func$~lib/rt/__visit_members $folding-inner1 $folding-inner1 $invalid
       end
       local.get $0
       i32.load offset=20
