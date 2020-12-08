@@ -1558,31 +1558,30 @@
   i32.eq
   if
    block $__inlined_func$~lib/rt/__visit_members
-    block $switch$1$default
-     block $switch$1$case$4
+    block $folding-inner1
+     block $invalid
       local.get $0
       i32.const 12
       i32.add
       i32.load
-      br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$default
+      br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $folding-inner1 $__inlined_func$~lib/rt/__visit_members $folding-inner1 $invalid
      end
-     local.get $0
-     i32.load offset=20
-     local.tee $1
+     unreachable
+    end
+    local.get $0
+    i32.load offset=20
+    local.tee $1
+    if
+     local.get $1
+     i32.const 1260
+     i32.ge_u
      if
       local.get $1
-      i32.const 1260
-      i32.ge_u
-      if
-       local.get $1
-       i32.const 20
-       i32.sub
-       call $~lib/rt/pure/decrement
-      end
+      i32.const 20
+      i32.sub
+      call $~lib/rt/pure/decrement
      end
-     br $__inlined_func$~lib/rt/__visit_members
     end
-    unreachable
    end
    local.get $2
    i32.const -2147483648

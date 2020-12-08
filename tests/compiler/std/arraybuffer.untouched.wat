@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -4161,7 +4161,24 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/array/Array<i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $~lib/array/Array<i32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -4169,33 +4186,179 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i32>#__visit
+ )
+ (func $~lib/typedarray/Int8Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint8Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint8ClampedArray~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Int16Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint16Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Int32Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint32Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Int64Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Uint64Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Float32Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/typedarray/Float64Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/dataview/DataView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
-  block $switch$1$default
-   block $switch$1$case$5
-    block $switch$1$case$4
-     block $switch$1$case$2
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
+  block $invalid
+   block $~lib/dataview/DataView
+    block $~lib/typedarray/Float64Array
+     block $~lib/typedarray/Float32Array
+      block $~lib/typedarray/Uint64Array
+       block $~lib/typedarray/Int64Array
+        block $~lib/typedarray/Uint32Array
+         block $~lib/typedarray/Int32Array
+          block $~lib/typedarray/Uint16Array
+           block $~lib/typedarray/Int16Array
+            block $~lib/typedarray/Uint8ClampedArray
+             block $~lib/typedarray/Uint8Array
+              block $~lib/typedarray/Int8Array
+               block $~lib/array/Array<i32>
+                block $~lib/arraybuffer/ArrayBufferView
+                 block $~lib/string/String
+                  block $~lib/arraybuffer/ArrayBuffer
+                   local.get $0
+                   i32.const 8
+                   i32.sub
+                   i32.load
+                   br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $~lib/typedarray/Int8Array $~lib/typedarray/Uint8Array $~lib/typedarray/Uint8ClampedArray $~lib/typedarray/Int16Array $~lib/typedarray/Uint16Array $~lib/typedarray/Int32Array $~lib/typedarray/Uint32Array $~lib/typedarray/Int64Array $~lib/typedarray/Uint64Array $~lib/typedarray/Float32Array $~lib/typedarray/Float64Array $~lib/dataview/DataView $invalid
+                  end
+                  local.get $0
+                  local.get $1
+                  call $~lib/arraybuffer/ArrayBuffer~visit
+                  return
+                 end
+                 local.get $0
+                 local.get $1
+                 call $~lib/string/String~visit
+                 return
+                end
+                local.get $0
+                local.get $1
+                call $~lib/arraybuffer/ArrayBufferView~visit
+                return
+               end
+               local.get $0
+               local.get $1
+               call $~lib/array/Array<i32>~visit
+               return
+              end
+              local.get $0
+              local.get $1
+              call $~lib/typedarray/Int8Array~visit
+              return
+             end
+             local.get $0
+             local.get $1
+             call $~lib/typedarray/Uint8Array~visit
+             return
+            end
+            local.get $0
+            local.get $1
+            call $~lib/typedarray/Uint8ClampedArray~visit
+            return
+           end
+           local.get $0
+           local.get $1
+           call $~lib/typedarray/Int16Array~visit
+           return
+          end
+          local.get $0
+          local.get $1
+          call $~lib/typedarray/Uint16Array~visit
+          return
+         end
+         local.get $0
+         local.get $1
+         call $~lib/typedarray/Int32Array~visit
+         return
+        end
+        local.get $0
+        local.get $1
+        call $~lib/typedarray/Uint32Array~visit
+        return
+       end
+       local.get $0
+       local.get $1
+       call $~lib/typedarray/Int64Array~visit
+       return
+      end
       local.get $0
-      i32.const 8
-      i32.sub
-      i32.load
-      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+      local.get $1
+      call $~lib/typedarray/Uint64Array~visit
+      return
      end
+     local.get $0
+     local.get $1
+     call $~lib/typedarray/Float32Array~visit
      return
     end
     local.get $0
-    i32.load
-    local.tee $2
-    if
-     local.get $2
-     local.get $1
-     call $~lib/rt/pure/__visit
-    end
+    local.get $1
+    call $~lib/typedarray/Float64Array~visit
     return
    end
    local.get $0
    local.get $1
-   call $~lib/array/Array<i32>#__visit_impl
+   call $~lib/dataview/DataView~visit
    return
   end
   unreachable

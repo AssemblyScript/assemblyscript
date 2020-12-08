@@ -2246,37 +2246,36 @@
   end
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  block $switch$1$default
-   block $switch$1$case$6
-    block $switch$1$case$5
-     block $switch$1$case$4
-      block $switch$1$case$2
+  block $folding-inner1
+   block $folding-inner0
+    block $invalid
+     block $~lib/array/Array<i32>
+      block $~lib/staticarray/StaticArray<usize>
        local.get $0
        i32.const 8
        i32.sub
        i32.load
-       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+       br_table $folding-inner0 $folding-inner0 $folding-inner1 $~lib/staticarray/StaticArray<usize> $~lib/array/Array<i32> $folding-inner1 $folding-inner1 $invalid
       end
       return
      end
      local.get $0
      i32.load
-     local.tee $0
-     if
-      local.get $0
-      local.get $1
-      call $~lib/rt/pure/__visit
-     end
+     local.get $1
+     call $~lib/rt/pure/__visit
      return
     end
-    return
+    unreachable
    end
-   local.get $0
-   i32.load
-   local.get $1
-   call $~lib/rt/pure/__visit
    return
   end
-  unreachable
+  local.get $0
+  i32.load
+  local.tee $0
+  if
+   local.get $0
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
  )
 )

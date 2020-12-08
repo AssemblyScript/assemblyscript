@@ -563,7 +563,7 @@ export class Array<T> {
 
   // RT integration
 
-  @unsafe private __visit_impl(cookie: u32): void {
+  @unsafe private __visit(cookie: u32): void {
     if (isManaged<T>()) {
       let cur = this.dataStart;
       let end = cur + (<usize>this.length_ << alignof<T>());

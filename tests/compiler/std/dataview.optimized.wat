@@ -3,8 +3,8 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
@@ -3410,31 +3410,26 @@
   i32.eq
   if
    block $__inlined_func$~lib/rt/__visit_members
-    block $switch$1$default
-     block $switch$1$case$4
-      local.get $0
-      i32.const 12
-      i32.add
-      i32.load
-      br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$default
-     end
-     local.get $0
-     i32.load offset=20
-     local.tee $1
-     if
-      local.get $1
-      i32.const 1584
-      i32.ge_u
-      if
-       local.get $1
+    block $folding-inner1
+     block $invalid
+      block $~lib/typedarray/Uint8Array
+       local.get $0
        i32.const 20
+       i32.add
+       local.tee $1
+       i32.const 8
        i32.sub
-       call $~lib/rt/pure/decrement
+       i32.load
+       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $folding-inner1 $~lib/typedarray/Uint8Array $folding-inner1 $invalid
       end
+      local.get $1
+      call $~lib/arraybuffer/ArrayBufferView~visit
+      br $__inlined_func$~lib/rt/__visit_members
      end
-     br $__inlined_func$~lib/rt/__visit_members
+     unreachable
     end
-    unreachable
+    local.get $1
+    call $~lib/arraybuffer/ArrayBufferView~visit
    end
    local.get $2
    i32.const -2147483648
@@ -3476,6 +3471,22 @@
    i32.and
    i32.or
    i32.store offset=4
+  end
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32)
+  local.get $0
+  i32.load
+  local.tee $0
+  if
+   local.get $0
+   i32.const 1584
+   i32.ge_u
+   if
+    local.get $0
+    i32.const 20
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
  )
 )

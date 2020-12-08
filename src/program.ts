@@ -4117,6 +4117,8 @@ export class Class extends TypedElement {
   implementers: Set<Class> | null = null;
   /** Whether the field initialization check has already been performed. */
   didCheckFieldInitialization: bool = false;
+  /** Runtime visitor function reference. */
+  visitRef: FunctionRef = 0;
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {
@@ -4273,9 +4275,8 @@ export class Class extends TypedElement {
     var instance: Class | null = this;
     do {
       let overloads = instance.overloads;
-      if (overloads) {
-        let overload = overloads.get(kind);
-        if (overload) return overload;
+      if (overloads != null && overloads.has(kind)) {
+        return assert(overloads.get(kind));
       }
       instance = instance.base;
     } while (instance);

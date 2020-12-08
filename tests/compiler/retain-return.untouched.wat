@@ -1821,51 +1821,90 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/function/Function<%28%29=>retain-return/Ref>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $retain-return/Ref~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/function/Function<%28%29=>retain-return/Ref>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/function/Function<%28retain-return/Ref%29=>retain-return/Ref>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28%29=>retain-return/Ref>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28%29=>retain-return/Ref>#__visit
+ )
+ (func $~lib/function/Function<%28retain-return/Ref%29=>retain-return/Ref>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/pure/__visit
+ )
+ (func $~lib/function/Function<%28retain-return/Ref%29=>retain-return/Ref>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28retain-return/Ref%29=>retain-return/Ref>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  block $switch$1$default
-   block $switch$1$case$7
-    block $switch$1$case$6
-     block $switch$1$case$4
-      block $switch$1$case$2
+  block $invalid
+   block $~lib/function/Function<%28retain-return/Ref%29=>retain-return/Ref>
+    block $~lib/function/Function<%28%29=>retain-return/Ref>
+     block $retain-return/Ref
+      block $~lib/arraybuffer/ArrayBufferView
+       block $~lib/string/String
+        block $~lib/arraybuffer/ArrayBuffer
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load
+         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $retain-return/Ref $~lib/function/Function<%28%29=>retain-return/Ref> $~lib/function/Function<%28retain-return/Ref%29=>retain-return/Ref> $invalid
+        end
+        local.get $0
+        local.get $1
+        call $~lib/arraybuffer/ArrayBuffer~visit
+        return
+       end
        local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$2 $switch$1$case$6 $switch$1$case$7 $switch$1$default
+       local.get $1
+       call $~lib/string/String~visit
+       return
       end
+      local.get $0
+      local.get $1
+      call $~lib/arraybuffer/ArrayBufferView~visit
       return
      end
      local.get $0
-     i32.load
-     local.tee $2
-     if
-      local.get $2
-      local.get $1
-      call $~lib/rt/pure/__visit
-     end
+     local.get $1
+     call $retain-return/Ref~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/function/Function<%28%29=>retain-return/Ref>#__visit_impl
+    call $~lib/function/Function<%28%29=>retain-return/Ref>~visit
     return
    end
    local.get $0
    local.get $1
-   call $~lib/function/Function<%28retain-return/Ref%29=>retain-return/Ref>#__visit_impl
+   call $~lib/function/Function<%28retain-return/Ref%29=>retain-return/Ref>~visit
    return
   end
   unreachable

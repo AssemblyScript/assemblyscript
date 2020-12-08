@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -3844,7 +3844,62 @@
    end
   end
  )
- (func $~lib/array/Array<extends-baseaggregate/B1>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $extends-baseaggregate/B1~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $extends-baseaggregate/A1~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=16
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $extends-baseaggregate/C1~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $extends-baseaggregate/A2~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $extends-baseaggregate/A1~visit
+ )
+ (func $~lib/array/Array<extends-baseaggregate/B1>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3889,7 +3944,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<extends-baseaggregate/B1>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<extends-baseaggregate/B1>#__visit
+ )
+ (func $~lib/array/Array<extends-baseaggregate/A2>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3933,51 +3993,72 @@
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
+ )
+ (func $~lib/array/Array<extends-baseaggregate/A2>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<extends-baseaggregate/A2>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  block $switch$1$default
-   block $switch$1$case$10
-    block $switch$1$case$9
-     block $switch$1$case$6
-      block $switch$1$case$4
-       block $switch$1$case$2
+  block $invalid
+   block $~lib/array/Array<extends-baseaggregate/A2>
+    block $~lib/array/Array<extends-baseaggregate/B1>
+     block $extends-baseaggregate/A2
+      block $extends-baseaggregate/C1
+       block $extends-baseaggregate/A1
+        block $extends-baseaggregate/B1
+         block $~lib/arraybuffer/ArrayBufferView
+          block $~lib/string/String
+           block $~lib/arraybuffer/ArrayBuffer
+            local.get $0
+            i32.const 8
+            i32.sub
+            i32.load
+            br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $extends-baseaggregate/B1 $extends-baseaggregate/A1 $extends-baseaggregate/C1 $extends-baseaggregate/A2 $~lib/array/Array<extends-baseaggregate/B1> $~lib/array/Array<extends-baseaggregate/A2> $invalid
+           end
+           local.get $0
+           local.get $1
+           call $~lib/arraybuffer/ArrayBuffer~visit
+           return
+          end
+          local.get $0
+          local.get $1
+          call $~lib/string/String~visit
+          return
+         end
+         local.get $0
+         local.get $1
+         call $~lib/arraybuffer/ArrayBufferView~visit
+         return
+        end
         local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$6 $switch$1$case$4 $switch$1$case$6 $switch$1$case$9 $switch$1$case$10 $switch$1$default
+        local.get $1
+        call $extends-baseaggregate/B1~visit
+        return
        end
+       local.get $0
+       local.get $1
+       call $extends-baseaggregate/A1~visit
        return
       end
       local.get $0
-      i32.load
-      local.tee $2
-      if
-       local.get $2
-       local.get $1
-       call $~lib/rt/pure/__visit
-      end
+      local.get $1
+      call $extends-baseaggregate/C1~visit
       return
      end
      local.get $0
-     i32.load offset=16
-     local.tee $2
-     if
-      local.get $2
-      local.get $1
-      call $~lib/rt/pure/__visit
-     end
+     local.get $1
+     call $extends-baseaggregate/A2~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/array/Array<extends-baseaggregate/B1>#__visit_impl
+    call $~lib/array/Array<extends-baseaggregate/B1>~visit
     return
    end
    local.get $0
    local.get $1
-   call $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl
+   call $~lib/array/Array<extends-baseaggregate/A2>~visit
    return
   end
   unreachable
