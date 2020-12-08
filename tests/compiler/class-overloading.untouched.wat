@@ -16,6 +16,7 @@
  (data (i32.const 204) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00F\00")
  (data (i32.const 236) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00I\00B\00")
  (data (i32.const 268) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00I\00C\00")
+ (data (i32.const 300) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00n\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d\00")
  (table $0 1 funcref)
  (global $class-overloading/which (mut i32) (i32.const 32))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -25,8 +26,9 @@
  (global $class-overloading/c (mut i32) (i32.const 0))
  (global $class-overloading/ia (mut i32) (i32.const 0))
  (global $class-overloading/ic (mut i32) (i32.const 0))
+ (global $class-overloading/b2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 292))
+ (global $~lib/memory/__heap_base i32 (i32.const 352))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/computeSize (param $0 i32) (result i32)
@@ -589,6 +591,41 @@
   end
   local.get $0
  )
+ (func $class-overloading/A2#constructor (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 13
+   call $~lib/rt/stub/__new
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+ )
+ (func $class-overloading/B2#constructor (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 14
+   call $~lib/rt/stub/__new
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+  call $class-overloading/A2#constructor
+  local.set $0
+  local.get $0
+ )
+ (func $class-overloading/A2#foo (param $0 i32) (result i32)
+  i32.const 320
+  i32.const 128
+  i32.const 198
+  i32.const 5
+  call $~lib/builtins/abort
+  unreachable
+ )
  (func $start:class-overloading
   (local $0 i32)
   global.get $~lib/memory/__heap_base
@@ -1074,6 +1111,22 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  call $class-overloading/B2#constructor
+  global.set $class-overloading/b2
+  global.get $class-overloading/b2
+  call $class-overloading/A2#foo@virtual
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 128
+   i32.const 209
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~start
   global.get $~started
@@ -1401,5 +1454,103 @@
    return
   end
   unreachable
+ )
+ (func $class-overloading/A1#constructor (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 16
+   call $~lib/rt/stub/__new
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+ )
+ (func $class-overloading/B1#constructor (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 15
+   call $~lib/rt/stub/__new
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+  call $class-overloading/A1#constructor
+  local.set $0
+  local.get $0
+ )
+ (func $class-overloading/A1#baz (param $0 i32) (result i32)
+  i32.const 320
+  i32.const 128
+  i32.const 186
+  i32.const 5
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $class-overloading/A1#bar (param $0 i32) (result i32)
+  local.get $0
+  call $class-overloading/A1#baz@virtual
+ )
+ (func $class-overloading/B2#foo (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 0
+  call $class-overloading/B1#constructor
+  local.tee $1
+  call $class-overloading/A1#bar
+  local.set $2
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
+ )
+ (func $class-overloading/A2#foo@virtual (param $0 i32) (result i32)
+  (local $1 i32)
+  block $default
+   block $case0
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    local.set $1
+    local.get $1
+    i32.const 14
+    i32.eq
+    br_if $case0
+    br $default
+   end
+   local.get $0
+   call $class-overloading/B2#foo
+   return
+  end
+  local.get $0
+  call $class-overloading/A2#foo
+ )
+ (func $class-overloading/B1#baz (param $0 i32) (result i32)
+  i32.const 3
+ )
+ (func $class-overloading/A1#baz@virtual (param $0 i32) (result i32)
+  (local $1 i32)
+  block $default
+   block $case0
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    local.set $1
+    local.get $1
+    i32.const 15
+    i32.eq
+    br_if $case0
+    br $default
+   end
+   local.get $0
+   call $class-overloading/B1#baz
+   return
+  end
+  local.get $0
+  call $class-overloading/A1#baz
  )
 )
