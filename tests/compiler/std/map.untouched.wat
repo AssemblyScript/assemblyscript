@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -20992,7 +20992,24 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/map/Map<i8,i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $~lib/map/Map<i8,i32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21012,7 +21029,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<i8>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<i8,i32>#__visit
+ )
+ (func $~lib/array/Array<i8>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -21020,7 +21042,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i8>#__visit
+ )
+ (func $~lib/array/Array<i32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -21028,7 +21055,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<i8,i8>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i32>#__visit
+ )
+ (func $~lib/map/Map<i8,i8>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21048,7 +21080,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<i32,i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<i8,i8>#__visit
+ )
+ (func $~lib/map/Map<i32,i32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21068,7 +21105,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u8,i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i32,i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<i32,i32>#__visit
+ )
+ (func $~lib/map/Map<u8,i32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21088,7 +21130,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u8>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<u8,i32>#__visit
+ )
+ (func $~lib/array/Array<u8>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -21096,7 +21143,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u8,u8>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u8>#__visit
+ )
+ (func $~lib/map/Map<u8,u8>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21116,7 +21168,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<i16,i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,u8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<u8,u8>#__visit
+ )
+ (func $~lib/map/Map<i16,i32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21136,7 +21193,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<i16>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<i16,i32>#__visit
+ )
+ (func $~lib/array/Array<i16>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -21144,7 +21206,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<i16,i16>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i16>#__visit
+ )
+ (func $~lib/map/Map<i16,i16>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21164,7 +21231,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u16,i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<i16,i16>#__visit
+ )
+ (func $~lib/map/Map<u16,i32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21184,7 +21256,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u16>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<u16,i32>#__visit
+ )
+ (func $~lib/array/Array<u16>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -21192,7 +21269,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u16,u16>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u16>#__visit
+ )
+ (func $~lib/map/Map<u16,u16>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21212,7 +21294,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u32,i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,u16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<u16,u16>#__visit
+ )
+ (func $~lib/map/Map<u32,i32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21232,7 +21319,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u32,i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<u32,i32>#__visit
+ )
+ (func $~lib/array/Array<u32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -21240,7 +21332,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u32,u32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u32>#__visit
+ )
+ (func $~lib/map/Map<u32,u32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21260,7 +21357,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<i64,i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u32,u32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<u32,u32>#__visit
+ )
+ (func $~lib/map/Map<i64,i32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21280,7 +21382,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<i64>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<i64,i32>#__visit
+ )
+ (func $~lib/array/Array<i64>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -21288,7 +21395,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<i64,i64>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i64>#__visit
+ )
+ (func $~lib/map/Map<i64,i64>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21308,7 +21420,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u64,i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<i64,i64>#__visit
+ )
+ (func $~lib/map/Map<u64,i32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21328,7 +21445,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u64>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u64,i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<u64,i32>#__visit
+ )
+ (func $~lib/array/Array<u64>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -21336,7 +21458,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u64,u64>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u64>#__visit
+ )
+ (func $~lib/map/Map<u64,u64>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21356,7 +21483,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<f32,i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u64,u64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<u64,u64>#__visit
+ )
+ (func $~lib/map/Map<f32,i32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21376,7 +21508,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<f32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f32,i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<f32,i32>#__visit
+ )
+ (func $~lib/array/Array<f32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -21384,7 +21521,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<f32,f32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<f32>#__visit
+ )
+ (func $~lib/map/Map<f32,f32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21404,7 +21546,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<f64,i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f32,f32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<f32,f32>#__visit
+ )
+ (func $~lib/map/Map<f64,i32>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21424,7 +21571,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<f64>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f64,i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<f64,i32>#__visit
+ )
+ (func $~lib/array/Array<f64>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -21432,7 +21584,12 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<f64,f64>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<f64>#__visit
+ )
+ (func $~lib/map/Map<f64,f64>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -21451,202 +21608,210 @@
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
+ )
+ (func $~lib/map/Map<f64,f64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/map/Map<f64,f64>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  block $switch$1$default
-   block $switch$1$case$33
-    block $switch$1$case$32
-     block $switch$1$case$31
-      block $switch$1$case$30
-       block $switch$1$case$29
-        block $switch$1$case$28
-         block $switch$1$case$27
-          block $switch$1$case$26
-           block $switch$1$case$25
-            block $switch$1$case$24
-             block $switch$1$case$23
-              block $switch$1$case$22
-               block $switch$1$case$21
-                block $switch$1$case$20
-                 block $switch$1$case$19
-                  block $switch$1$case$18
-                   block $switch$1$case$17
-                    block $switch$1$case$16
-                     block $switch$1$case$15
-                      block $switch$1$case$14
-                       block $switch$1$case$13
-                        block $switch$1$case$12
-                         block $switch$1$case$11
-                          block $switch$1$case$10
-                           block $switch$1$case$9
-                            block $switch$1$case$8
-                             block $switch$1$case$7
-                              block $switch$1$case$6
-                               block $switch$1$case$5
-                                block $switch$1$case$4
-                                 block $switch$1$case$2
+  block $invalid
+   block $~lib/map/Map<f64,f64>
+    block $~lib/array/Array<f64>
+     block $~lib/map/Map<f64,i32>
+      block $~lib/map/Map<f32,f32>
+       block $~lib/array/Array<f32>
+        block $~lib/map/Map<f32,i32>
+         block $~lib/map/Map<u64,u64>
+          block $~lib/array/Array<u64>
+           block $~lib/map/Map<u64,i32>
+            block $~lib/map/Map<i64,i64>
+             block $~lib/array/Array<i64>
+              block $~lib/map/Map<i64,i32>
+               block $~lib/map/Map<u32,u32>
+                block $~lib/array/Array<u32>
+                 block $~lib/map/Map<u32,i32>
+                  block $~lib/map/Map<u16,u16>
+                   block $~lib/array/Array<u16>
+                    block $~lib/map/Map<u16,i32>
+                     block $~lib/map/Map<i16,i16>
+                      block $~lib/array/Array<i16>
+                       block $~lib/map/Map<i16,i32>
+                        block $~lib/map/Map<u8,u8>
+                         block $~lib/array/Array<u8>
+                          block $~lib/map/Map<u8,i32>
+                           block $~lib/map/Map<i32,i32>
+                            block $~lib/map/Map<i8,i8>
+                             block $~lib/array/Array<i32>
+                              block $~lib/array/Array<i8>
+                               block $~lib/map/Map<i8,i32>
+                                block $~lib/arraybuffer/ArrayBufferView
+                                 block $~lib/string/String
+                                  block $~lib/arraybuffer/ArrayBuffer
+                                   local.get $0
+                                   i32.const 8
+                                   i32.sub
+                                   i32.load
+                                   br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/map/Map<i8,i32> $~lib/array/Array<i8> $~lib/array/Array<i32> $~lib/map/Map<i8,i8> $~lib/map/Map<i32,i32> $~lib/map/Map<u8,i32> $~lib/array/Array<u8> $~lib/map/Map<u8,u8> $~lib/map/Map<i16,i32> $~lib/array/Array<i16> $~lib/map/Map<i16,i16> $~lib/map/Map<u16,i32> $~lib/array/Array<u16> $~lib/map/Map<u16,u16> $~lib/map/Map<u32,i32> $~lib/array/Array<u32> $~lib/map/Map<u32,u32> $~lib/map/Map<i64,i32> $~lib/array/Array<i64> $~lib/map/Map<i64,i64> $~lib/map/Map<u64,i32> $~lib/array/Array<u64> $~lib/map/Map<u64,u64> $~lib/map/Map<f32,i32> $~lib/array/Array<f32> $~lib/map/Map<f32,f32> $~lib/map/Map<f64,i32> $~lib/array/Array<f64> $~lib/map/Map<f64,f64> $invalid
+                                  end
                                   local.get $0
-                                  i32.const 8
-                                  i32.sub
-                                  i32.load
-                                  br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$8 $switch$1$case$9 $switch$1$case$10 $switch$1$case$11 $switch$1$case$12 $switch$1$case$13 $switch$1$case$14 $switch$1$case$15 $switch$1$case$16 $switch$1$case$17 $switch$1$case$18 $switch$1$case$19 $switch$1$case$20 $switch$1$case$21 $switch$1$case$22 $switch$1$case$23 $switch$1$case$24 $switch$1$case$25 $switch$1$case$26 $switch$1$case$27 $switch$1$case$28 $switch$1$case$29 $switch$1$case$30 $switch$1$case$31 $switch$1$case$32 $switch$1$case$33 $switch$1$default
+                                  local.get $1
+                                  call $~lib/arraybuffer/ArrayBuffer~visit
+                                  return
                                  end
+                                 local.get $0
+                                 local.get $1
+                                 call $~lib/string/String~visit
                                  return
                                 end
                                 local.get $0
-                                i32.load
-                                local.tee $2
-                                if
-                                 local.get $2
-                                 local.get $1
-                                 call $~lib/rt/pure/__visit
-                                end
+                                local.get $1
+                                call $~lib/arraybuffer/ArrayBufferView~visit
                                 return
                                end
                                local.get $0
                                local.get $1
-                               call $~lib/map/Map<i8,i32>#__visit_impl
+                               call $~lib/map/Map<i8,i32>~visit
                                return
                               end
                               local.get $0
                               local.get $1
-                              call $~lib/array/Array<i8>#__visit_impl
+                              call $~lib/array/Array<i8>~visit
                               return
                              end
                              local.get $0
                              local.get $1
-                             call $~lib/array/Array<i32>#__visit_impl
+                             call $~lib/array/Array<i32>~visit
                              return
                             end
                             local.get $0
                             local.get $1
-                            call $~lib/map/Map<i8,i8>#__visit_impl
+                            call $~lib/map/Map<i8,i8>~visit
                             return
                            end
                            local.get $0
                            local.get $1
-                           call $~lib/map/Map<i32,i32>#__visit_impl
+                           call $~lib/map/Map<i32,i32>~visit
                            return
                           end
                           local.get $0
                           local.get $1
-                          call $~lib/map/Map<u8,i32>#__visit_impl
+                          call $~lib/map/Map<u8,i32>~visit
                           return
                          end
                          local.get $0
                          local.get $1
-                         call $~lib/array/Array<u8>#__visit_impl
+                         call $~lib/array/Array<u8>~visit
                          return
                         end
                         local.get $0
                         local.get $1
-                        call $~lib/map/Map<u8,u8>#__visit_impl
+                        call $~lib/map/Map<u8,u8>~visit
                         return
                        end
                        local.get $0
                        local.get $1
-                       call $~lib/map/Map<i16,i32>#__visit_impl
+                       call $~lib/map/Map<i16,i32>~visit
                        return
                       end
                       local.get $0
                       local.get $1
-                      call $~lib/array/Array<i16>#__visit_impl
+                      call $~lib/array/Array<i16>~visit
                       return
                      end
                      local.get $0
                      local.get $1
-                     call $~lib/map/Map<i16,i16>#__visit_impl
+                     call $~lib/map/Map<i16,i16>~visit
                      return
                     end
                     local.get $0
                     local.get $1
-                    call $~lib/map/Map<u16,i32>#__visit_impl
+                    call $~lib/map/Map<u16,i32>~visit
                     return
                    end
                    local.get $0
                    local.get $1
-                   call $~lib/array/Array<u16>#__visit_impl
+                   call $~lib/array/Array<u16>~visit
                    return
                   end
                   local.get $0
                   local.get $1
-                  call $~lib/map/Map<u16,u16>#__visit_impl
+                  call $~lib/map/Map<u16,u16>~visit
                   return
                  end
                  local.get $0
                  local.get $1
-                 call $~lib/map/Map<u32,i32>#__visit_impl
+                 call $~lib/map/Map<u32,i32>~visit
                  return
                 end
                 local.get $0
                 local.get $1
-                call $~lib/array/Array<u32>#__visit_impl
+                call $~lib/array/Array<u32>~visit
                 return
                end
                local.get $0
                local.get $1
-               call $~lib/map/Map<u32,u32>#__visit_impl
+               call $~lib/map/Map<u32,u32>~visit
                return
               end
               local.get $0
               local.get $1
-              call $~lib/map/Map<i64,i32>#__visit_impl
+              call $~lib/map/Map<i64,i32>~visit
               return
              end
              local.get $0
              local.get $1
-             call $~lib/array/Array<i64>#__visit_impl
+             call $~lib/array/Array<i64>~visit
              return
             end
             local.get $0
             local.get $1
-            call $~lib/map/Map<i64,i64>#__visit_impl
+            call $~lib/map/Map<i64,i64>~visit
             return
            end
            local.get $0
            local.get $1
-           call $~lib/map/Map<u64,i32>#__visit_impl
+           call $~lib/map/Map<u64,i32>~visit
            return
           end
           local.get $0
           local.get $1
-          call $~lib/array/Array<u64>#__visit_impl
+          call $~lib/array/Array<u64>~visit
           return
          end
          local.get $0
          local.get $1
-         call $~lib/map/Map<u64,u64>#__visit_impl
+         call $~lib/map/Map<u64,u64>~visit
          return
         end
         local.get $0
         local.get $1
-        call $~lib/map/Map<f32,i32>#__visit_impl
+        call $~lib/map/Map<f32,i32>~visit
         return
        end
        local.get $0
        local.get $1
-       call $~lib/array/Array<f32>#__visit_impl
+       call $~lib/array/Array<f32>~visit
        return
       end
       local.get $0
       local.get $1
-      call $~lib/map/Map<f32,f32>#__visit_impl
+      call $~lib/map/Map<f32,f32>~visit
       return
      end
      local.get $0
      local.get $1
-     call $~lib/map/Map<f64,i32>#__visit_impl
+     call $~lib/map/Map<f64,i32>~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/array/Array<f64>#__visit_impl
+    call $~lib/array/Array<f64>~visit
     return
    end
    local.get $0
    local.get $1
-   call $~lib/map/Map<f64,f64>#__visit_impl
+   call $~lib/map/Map<f64,f64>~visit
    return
   end
   unreachable

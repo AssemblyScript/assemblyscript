@@ -2070,76 +2070,86 @@
    unreachable
   end
  )
+ (func $extends-baseaggregate/A1~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=16
+  local.tee $0
+  if
+   local.get $0
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $folding-inner0
-   block $switch$1$default
-    block $switch$1$case$6
-     block $switch$1$case$4
-      block $switch$1$case$2
+  block $folding-inner2
+   block $folding-inner1
+    block $folding-inner0
+     block $invalid
+      block $extends-baseaggregate/A2
+       block $extends-baseaggregate/A1
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $folding-inner0 $folding-inner0 $folding-inner1 $folding-inner1 $extends-baseaggregate/A1 $folding-inner1 $extends-baseaggregate/A2 $folding-inner2 $folding-inner2 $invalid
+       end
        local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$6 $switch$1$case$4 $switch$1$case$6 $folding-inner0 $folding-inner0 $switch$1$default
+       local.get $1
+       call $extends-baseaggregate/A1~visit
+       return
       end
-      return
-     end
-     local.get $0
-     i32.load
-     local.tee $0
-     if
       local.get $0
       local.get $1
-      call $~lib/rt/pure/__visit
+      call $extends-baseaggregate/A1~visit
+      return
      end
-     return
-    end
-    local.get $0
-    i32.load offset=16
-    local.tee $0
-    if
-     local.get $0
-     local.get $1
-     call $~lib/rt/pure/__visit
+     unreachable
     end
     return
    end
-   unreachable
+   local.get $0
+   i32.load
+   local.tee $0
+   if
+    local.get $0
+    local.get $1
+    call $~lib/rt/pure/__visit
+   end
+   return
   end
   local.get $0
-  local.tee $2
   i32.load offset=4
-  local.tee $3
+  local.tee $2
   local.get $0
   i32.load offset=12
   i32.const 2
   i32.shl
   i32.add
-  local.set $4
+  local.set $3
   loop $while-continue|0
+   local.get $2
    local.get $3
-   local.get $4
    i32.lt_u
    if
-    local.get $3
+    local.get $2
     i32.load
-    local.tee $0
+    local.tee $4
     if
-     local.get $0
+     local.get $4
      local.get $1
      call $~lib/rt/pure/__visit
     end
-    local.get $3
+    local.get $2
     i32.const 4
     i32.add
-    local.set $3
+    local.set $2
     br $while-continue|0
    end
   end
-  local.get $2
+  local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit

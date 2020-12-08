@@ -6,7 +6,8 @@ module.exports = {
   umask() {
     return 0;
   },
-  hrtime
+  hrtime,
+  argv: []
 };
 
 // https://github.com/kumavis/browser-process-hrtime v1.0.0

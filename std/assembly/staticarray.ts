@@ -232,7 +232,7 @@ export class StaticArray<T> {
 
   // RT integration
 
-  @unsafe private __visit_impl(cookie: u32): void {
+  @unsafe private __visit(cookie: u32): void {
     if (isManaged<T>()) {
       let cur = changetype<usize>(this);
       let end = cur + changetype<OBJECT>(changetype<usize>(this) - TOTAL_OVERHEAD).rtSize;

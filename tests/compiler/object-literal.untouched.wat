@@ -1,7 +1,7 @@
 (module
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -3981,105 +3981,163 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
-  block $switch$1$default
-   block $switch$1$case$8
-    block $switch$1$case$5
-     block $switch$1$case$4
-      block $switch$1$case$2
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $object-literal/Managed~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $object-literal/OmittedTypes~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $object-literal/MixedOmitted~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $object-literal/OmittedFoo~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+  local.get $0
+  i32.load offset=4
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+  local.get $0
+  i32.load offset=8
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+  local.get $0
+  i32.load offset=12
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+  local.get $0
+  i32.load offset=16
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+  local.get $0
+  i32.load offset=20
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+  local.get $0
+  i32.load offset=24
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+  local.get $0
+  i32.load offset=28
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+ )
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
+  block $invalid
+   block $object-literal/OmittedFoo
+    block $object-literal/MixedOmitted
+     block $object-literal/OmittedTypes
+      block $object-literal/Managed
+       block $~lib/arraybuffer/ArrayBufferView
+        block $~lib/string/String
+         block $~lib/arraybuffer/ArrayBuffer
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $object-literal/Managed $object-literal/OmittedTypes $object-literal/MixedOmitted $object-literal/OmittedFoo $invalid
+         end
+         local.get $0
+         local.get $1
+         call $~lib/arraybuffer/ArrayBuffer~visit
+         return
+        end
+        local.get $0
+        local.get $1
+        call $~lib/string/String~visit
+        return
+       end
        local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$2 $switch$1$case$5 $switch$1$case$8 $switch$1$default
+       local.get $1
+       call $~lib/arraybuffer/ArrayBufferView~visit
+       return
       end
+      local.get $0
+      local.get $1
+      call $object-literal/Managed~visit
       return
      end
      local.get $0
-     i32.load
-     local.tee $2
-     if
-      local.get $2
-      local.get $1
-      call $~lib/rt/pure/__visit
-     end
+     local.get $1
+     call $object-literal/OmittedTypes~visit
      return
     end
     local.get $0
-    i32.load offset=4
-    local.tee $2
-    if
-     local.get $2
-     local.get $1
-     call $~lib/rt/pure/__visit
-    end
+    local.get $1
+    call $object-literal/MixedOmitted~visit
     return
    end
    local.get $0
-   i32.load
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=4
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=8
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=12
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=16
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=20
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=24
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
-   local.get $0
-   i32.load offset=28
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
+   local.get $1
+   call $object-literal/OmittedFoo~visit
    return
   end
   unreachable

@@ -196,7 +196,7 @@ export class Set<T> {
 
   // RT integration
 
-  @unsafe private __visit_impl(cookie: u32): void {
+  @unsafe private __visit(cookie: u32): void {
     __visit(changetype<usize>(this.buckets), cookie);
     var entries = changetype<usize>(this.entries);
     if (isManaged<T>()) {
