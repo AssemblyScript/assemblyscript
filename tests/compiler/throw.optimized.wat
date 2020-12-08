@@ -754,13 +754,13 @@
       local.get $0
       call $~lib/rt/tcms/Object#set:color
       block $__inlined_func$~lib/rt/__visit_members
-       block $switch$1$default
-        block $switch$1$case$4
+       block $invalid
+        block $~lib/arraybuffer/ArrayBufferView
          local.get $1
          i32.const 12
          i32.add
          i32.load
-         br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$default
+         br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/arraybuffer/ArrayBufferView $invalid
         end
         local.get $1
         i32.load offset=20

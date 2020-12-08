@@ -68,8 +68,6 @@ import {
   getConstValueI32,
   getConstValueF32,
   getConstValueF64,
-  Relooper,
-  RelooperBlockRef,
   SIMDLoadOp,
   getLocalGetIndex,
   createType,
@@ -82,7 +80,6 @@ import {
   Field,
   Global,
   DecoratorFlags,
-  Element,
   ClassPrototype,
   Class
 } from "./program";
@@ -8691,134 +8688,184 @@ export function compileVisitGlobals(compiler: Compiler): void {
   );
 }
 
-/** Compiles the `visit_members` function. */
-export function compileVisitMembers(compiler: Compiler): void {
+/** Ensures that the visitor function of the specified class is compiled. */
+function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
+  assert(instance.type.isManaged);
+  if (instance.visitRef) return;
+
   var program = compiler.program;
   var module = compiler.module;
   var usizeType = program.options.usizeType;
   var nativeSizeType = usizeType.toNativeType();
   var nativeSizeSize = usizeType.byteSize;
-  var managedClasses = program.managedClasses;
   var visitInstance = assert(program.visitInstance);
-  var blocks = new Array<RelooperBlockRef>();
-  var relooper = Relooper.create(module);
+  var body = new Array<ExpressionRef>();
 
-  // this function is @lazy: make sure it exists
-  compiler.compileFunction(visitInstance, true);
+  // If the class has a base class, call its visitor first
+  var base = instance.base;
+  if (base) {
+    body.push(
+      module.call(base.internalName + "~visit", [
+        module.local_get(0, nativeSizeType), // this
+        module.local_get(1, NativeType.I32)  // cookie
+      ], NativeType.None)
+    );
+  }
 
-  var outer = relooper.addBlockWithSwitch(
-    module.nop(),
-    module.load(nativeSizeSize, false,
-      nativeSizeType == NativeType.I64
-        ? module.binary(BinaryOp.SubI64,
-            module.local_get(0, nativeSizeType),
-            module.i64(8)
-          )
-        : module.binary(BinaryOp.SubI32,
-            module.local_get(0, nativeSizeType),
-            module.i32(8) // rtId is at -8
-          ),
-      NativeType.I32,
-      0
-    )
-  );
-
-  var lastId = 0;
-  // TODO: for (let [instanceId, instance] of managedClasses) {
-  for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
-    let instanceId = _keys[i];
-    let instance = assert(managedClasses.get(instanceId));
-    assert(instance.type.isManaged);
-    assert(instanceId == lastId++);
-
-    let visitImpl: Element | null;
-    let code = new Array<ExpressionRef>();
-
-    // if a library element, check if it implements a custom traversal function
-    if (instance.isDeclaredInLibrary && (visitImpl = instance.lookupInSelf("__visit_impl")) !== null) {
-      assert(visitImpl.kind == ElementKind.FUNCTION_PROTOTYPE);
-      let visitFunc = program.resolver.resolveFunction(<FunctionPrototype>visitImpl, null);
-      if (!visitFunc || !compiler.compileFunction(visitFunc)) {
-        code.push(
+  // Some standard library components provide a custom visitor implementation,
+  // for example to visit all members of a collection, e.g. arrays and maps.
+  var hasVisitImpl = false;
+  if (instance.isDeclaredInLibrary) {
+    let visitPrototype = instance.lookupInSelf("__visit");
+    if (visitPrototype) {
+      assert(visitPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+      let visitInstance = program.resolver.resolveFunction(<FunctionPrototype>visitPrototype, null);
+      if (!visitInstance || !compiler.compileFunction(visitInstance)) {
+        body.push(
           module.unreachable()
         );
       } else {
-        let visitSig = visitFunc.signature;
-        let visitThisType = assert(visitSig.thisType);
+        let visitSignature = visitInstance.signature;
+        let visitThisType = assert(visitSignature.thisType);
         assert(
-          visitSig.parameterTypes.length == 1 &&
-          visitSig.parameterTypes[0] == Type.u32 &&
-          visitSig.returnType == Type.void &&
+          visitSignature.parameterTypes.length == 1 &&
+          visitSignature.parameterTypes[0] == Type.u32 &&
+          visitSignature.returnType == Type.void &&
           instance.type.isStrictlyAssignableTo(visitThisType) // incl. implemented on super
         );
-        code.push(
-          module.call(visitFunc.internalName, [
-            module.local_get(0, nativeSizeType), // ref
+        body.push(
+          module.call(visitInstance.internalName, [
+            module.local_get(0, nativeSizeType), // this
             module.local_get(1, NativeType.I32)  // cookie
           ], NativeType.None)
         );
       }
+      hasVisitImpl = true;
+    }
+  }
 
-    // otherwise generate traversal logic for own fields
-    } else {
-      let members = instance.members;
-      if (members) {
-        // TODO: for (let member of members.values()) {
-        for (let _values = Map_values(members), j = 0, l = _values.length; j < l; ++j) {
-          let member = unchecked(_values[j]);
-          if (member.kind == ElementKind.FIELD) {
-            if ((<Field>member).parent === instance) {
-              let fieldType = (<Field>member).type;
-              if (fieldType.isManaged) {
-                let fieldOffset = (<Field>member).memoryOffset;
-                assert(fieldOffset >= 0);
-                code.push(
-                  // if ($2 = value) FIELDCLASS~traverse($2)
-                  module.if(
-                    module.local_tee(2,
-                      module.load(nativeSizeSize, false,
-                        module.local_get(0, nativeSizeType),
-                        nativeSizeType, fieldOffset
-                      )
-                    ),
-                    module.call(visitInstance.internalName, [
-                      module.local_get(2, nativeSizeType), // ref
-                      module.local_get(1, NativeType.I32)  // cookie
-                    ], NativeType.None)
-                  )
-                );
-              }
+  // Otherwise, if there is no custom visitor, generate a visitor function
+  // according to class layout, visiting all _own_ managed members.
+  var needsTempValue = false;
+  if (!hasVisitImpl) {
+    let members = instance.members;
+    if (members) {
+      // TODO: for (let member of members.values()) {
+      for (let _values = Map_values(members), j = 0, l = _values.length; j < l; ++j) {
+        let member = unchecked(_values[j]);
+        if (member.kind == ElementKind.FIELD) {
+          if ((<Field>member).parent === instance) {
+            let fieldType = (<Field>member).type;
+            if (fieldType.isManaged) {
+              let fieldOffset = (<Field>member).memoryOffset;
+              assert(fieldOffset >= 0);
+              needsTempValue = true;
+              body.push(
+                // if ($2 = value) __visit($2, $1)
+                module.if(
+                  module.local_tee(2,
+                    module.load(nativeSizeSize, false,
+                      module.local_get(0, nativeSizeType),
+                      nativeSizeType, fieldOffset
+                    )
+                  ),
+                  module.call(visitInstance.internalName, [
+                    module.local_get(2, nativeSizeType), // value
+                    module.local_get(1, NativeType.I32)  // cookie
+                  ], NativeType.None)
+                )
+              );
             }
           }
         }
       }
     }
-    if (!instance.base) code.push(module.return());
-    let block = relooper.addBlock(
-      module.flatten(code)
-    );
-    relooper.addBranchForSwitch(outer, block, [ instanceId ]);
-    blocks.push(block);
   }
-  // TODO: for (let [instanceId, instance] of managedClasses) {
-  for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
-    let instanceId = unchecked(_keys[i]);
-    let instance = assert(managedClasses.get(instanceId));
-    let base = instance.base;
-    if (base) relooper.addBranch(blocks[instanceId], blocks[base.id]);
-  }
-  blocks.push(
-    relooper.addBlock(
-      module.unreachable()
-    )
+
+  // Create the visitor function
+  instance.visitRef = module.addFunction(instance.internalName + "~visit",
+    createType([nativeSizeType, NativeType.I32]),
+    NativeType.None,
+    needsTempValue ? [ nativeSizeType ] : null,
+    module.flatten(body, NativeType.None)
   );
-  relooper.addBranchForSwitch(outer, blocks[blocks.length - 1], []); // default
-  compiler.compileFunction(visitInstance);
+
+  // And make sure the base visitor function exists
+  if (base) ensureVisitMembersOf(compiler, base);
+}
+
+/** Compiles the `__visit_members` function. */
+export function compileVisitMembers(compiler: Compiler): void {
+  var program = compiler.program;
+  var module = compiler.module;
+  var usizeType = program.options.usizeType;
+  var nativeSizeType = usizeType.toNativeType();
+  var managedClasses = program.managedClasses;
+  var visitInstance = assert(program.visitInstance);
+  compiler.compileFunction(visitInstance, true); // is lazy, make sure it is compiled
+
+  // Prepare a mapping of class names to visitor calls. Each name corresponds to
+  // the respective sequential (0..N) class id.
+  var names = new Array<string>();
+  var cases = new Array<ExpressionRef>();
+  var nextId = 0;
+  for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
+    let instanceId = _keys[i];
+    assert(instanceId == nextId++);
+    let instance = assert(managedClasses.get(instanceId));
+    names[i] = instance.internalName;
+    cases[i] = module.block(null, [
+      module.call(instance.internalName + "~visit", [
+        module.local_get(0, nativeSizeType), // this
+        module.local_get(1, NativeType.I32)  // cookie
+      ], NativeType.None),
+      module.return()
+    ], NativeType.None);
+    ensureVisitMembersOf(compiler, instance);
+  }
+
+  // Make a br_table of the mapping, calling visitor functions by unique class id
+  var current = module.block(names[0], [
+    module.switch(names, "invalid",
+      // load<u32>(changetype<usize>(this) - 8)
+      module.load(4, false,
+        nativeSizeType == NativeType.I64
+          ? module.binary(BinaryOp.SubI64,
+              module.local_get(0, nativeSizeType),
+              module.i64(8)
+            )
+          : module.binary(BinaryOp.SubI32,
+              module.local_get(0, nativeSizeType),
+              module.i32(8) // rtId is at -8
+            ),
+        NativeType.I32, 0
+      )
+    )
+  ], NativeType.None);
+
+  // Wrap blocks in order
+  for (let i = 0, k = names.length - 1; i < k; ++i) {
+    current = module.block(names[i + 1], [
+      current,
+      cases[i]
+    ], NativeType.None);
+  }
+
+  // Wrap the last id in an 'invalid' block to break out of on invalid ids
+  current = module.block("invalid", [
+    current,
+    cases[names.length - 1]
+  ], NativeType.None);
+
+  // Add the function, executing an unreachable if breaking to 'invalid'
   module.addFunction(BuiltinNames.visit_members,
-    createType([ usizeType.toNativeType(), NativeType.I32 ]), // ref, cookie
+    createType([ nativeSizeType, NativeType.I32 ]), // this, cookie
     NativeType.None, // => void
-    [ nativeSizeType ],
-    relooper.renderAndDispose(outer, 2)
+    null,
+    module.flatten([
+      current,
+      module.unreachable()
+    ])
   );
 }
 

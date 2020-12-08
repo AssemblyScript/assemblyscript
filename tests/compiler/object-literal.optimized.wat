@@ -2165,15 +2165,15 @@
      local.get $0
      call $~lib/rt/tcms/Object#set:color
      block $__inlined_func$~lib/rt/__visit_members
-      block $switch$1$default
-       block $switch$1$case$8
-        block $switch$1$case$5
-         block $switch$1$case$4
+      block $folding-inner1
+       block $invalid
+        block $object-literal/OmittedFoo
+         block $~lib/arraybuffer/ArrayBufferView
           local.get $1
           i32.const 12
           i32.add
           i32.load
-          br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$case$5 $__inlined_func$~lib/rt/__visit_members $switch$1$case$5 $switch$1$case$8 $switch$1$default
+          br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/arraybuffer/ArrayBufferView $folding-inner1 $__inlined_func$~lib/rt/__visit_members $folding-inner1 $object-literal/OmittedFoo $invalid
          end
          local.get $1
          i32.load offset=20
@@ -2185,7 +2185,56 @@
          br $__inlined_func$~lib/rt/__visit_members
         end
         local.get $1
+        i32.load offset=20
+        local.tee $0
+        if
+         local.get $0
+         call $~lib/rt/tcms/__visit
+        end
+        local.get $1
         i32.load offset=24
+        local.tee $0
+        if
+         local.get $0
+         call $~lib/rt/tcms/__visit
+        end
+        local.get $1
+        i32.load offset=28
+        local.tee $0
+        if
+         local.get $0
+         call $~lib/rt/tcms/__visit
+        end
+        local.get $1
+        i32.load offset=32
+        local.tee $0
+        if
+         local.get $0
+         call $~lib/rt/tcms/__visit
+        end
+        local.get $1
+        i32.load offset=36
+        local.tee $0
+        if
+         local.get $0
+         call $~lib/rt/tcms/__visit
+        end
+        local.get $1
+        i32.load offset=40
+        local.tee $0
+        if
+         local.get $0
+         call $~lib/rt/tcms/__visit
+        end
+        local.get $1
+        i32.load offset=44
+        local.tee $0
+        if
+         local.get $0
+         call $~lib/rt/tcms/__visit
+        end
+        local.get $1
+        i32.load offset=48
         local.tee $1
         if
          local.get $1
@@ -2193,65 +2242,15 @@
         end
         br $__inlined_func$~lib/rt/__visit_members
        end
-       local.get $1
-       i32.load offset=20
-       local.tee $0
-       if
-        local.get $0
-        call $~lib/rt/tcms/__visit
-       end
-       local.get $1
-       i32.load offset=24
-       local.tee $0
-       if
-        local.get $0
-        call $~lib/rt/tcms/__visit
-       end
-       local.get $1
-       i32.load offset=28
-       local.tee $0
-       if
-        local.get $0
-        call $~lib/rt/tcms/__visit
-       end
-       local.get $1
-       i32.load offset=32
-       local.tee $0
-       if
-        local.get $0
-        call $~lib/rt/tcms/__visit
-       end
-       local.get $1
-       i32.load offset=36
-       local.tee $0
-       if
-        local.get $0
-        call $~lib/rt/tcms/__visit
-       end
-       local.get $1
-       i32.load offset=40
-       local.tee $0
-       if
-        local.get $0
-        call $~lib/rt/tcms/__visit
-       end
-       local.get $1
-       i32.load offset=44
-       local.tee $0
-       if
-        local.get $0
-        call $~lib/rt/tcms/__visit
-       end
-       local.get $1
-       i32.load offset=48
-       local.tee $1
-       if
-        local.get $1
-        call $~lib/rt/tcms/__visit
-       end
-       br $__inlined_func$~lib/rt/__visit_members
+       unreachable
       end
-      unreachable
+      local.get $1
+      i32.load offset=24
+      local.tee $1
+      if
+       local.get $1
+       call $~lib/rt/tcms/__visit
+      end
      end
     else
      i32.const 0

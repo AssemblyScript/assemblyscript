@@ -31,7 +31,7 @@ type auto = i32;
 
   // RT integration
 
-  @unsafe private __visit_impl(cookie: u32): void {
+  @unsafe private __visit(cookie: u32): void {
     // Env is either `null` (nop) or compiler-generated
     __visit(this._env, cookie);
   }

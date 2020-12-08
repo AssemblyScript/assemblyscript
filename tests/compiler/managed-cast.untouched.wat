@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -2685,27 +2685,67 @@
   (local $1 i32)
   nop
  )
- (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
-  block $switch$1$default
-   block $switch$1$case$4
-    block $switch$1$case$2
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/tcms/__visit
+  end
+ )
+ (func $managed-cast/Cat~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $managed-cast/Animal~visit
+ )
+ (func $managed-cast/Animal~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
+  block $invalid
+   block $managed-cast/Animal
+    block $managed-cast/Cat
+     block $~lib/arraybuffer/ArrayBufferView
+      block $~lib/string/String
+       block $~lib/arraybuffer/ArrayBuffer
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $managed-cast/Cat $managed-cast/Animal $invalid
+       end
+       local.get $0
+       local.get $1
+       call $~lib/arraybuffer/ArrayBuffer~visit
+       return
+      end
+      local.get $0
+      local.get $1
+      call $~lib/string/String~visit
+      return
+     end
      local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$2 $switch$1$case$2 $switch$1$default
+     local.get $1
+     call $~lib/arraybuffer/ArrayBufferView~visit
+     return
     end
+    local.get $0
+    local.get $1
+    call $managed-cast/Cat~visit
     return
    end
    local.get $0
-   i32.load
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/tcms/__visit
-   end
+   local.get $1
+   call $managed-cast/Animal~visit
    return
   end
   unreachable

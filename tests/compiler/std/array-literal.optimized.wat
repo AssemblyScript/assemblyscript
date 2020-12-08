@@ -1594,16 +1594,16 @@
      local.get $1
      call $~lib/rt/tcms/Object#set:color
      block $__inlined_func$~lib/rt/__visit_members
-      block $folding-inner1
-       block $folding-inner0
-        block $switch$1$default
-         block $switch$1$case$4
+      block $folding-inner2
+       block $folding-inner1
+        block $invalid
+         block $~lib/arraybuffer/ArrayBufferView
           local.get $0
           local.tee $1
           i32.const 12
           i32.add
           i32.load
-          br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $folding-inner0 $folding-inner0 $__inlined_func$~lib/rt/__visit_members $folding-inner1 $__inlined_func$~lib/rt/__visit_members $folding-inner1 $switch$1$default
+          br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/arraybuffer/ArrayBufferView $folding-inner1 $folding-inner1 $__inlined_func$~lib/rt/__visit_members $folding-inner2 $__inlined_func$~lib/rt/__visit_members $folding-inner2 $invalid
          end
          local.get $1
          i32.load offset=20

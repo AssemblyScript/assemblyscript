@@ -4447,7 +4447,24 @@
   local.get $0
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<i8>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/tcms/__visit
+  end
+ )
+ (func $~lib/array/Array<i8>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -4455,7 +4472,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i8>#__visit
+ )
+ (func $~lib/array/Array<i32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -4463,7 +4485,15 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<std/array-literal/Ref>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i32>#__visit
+ )
+ (func $std/array-literal/Ref~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/array/Array<std/array-literal/Ref>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4508,7 +4538,15 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<std/array-literal/RefWithCtor>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<std/array-literal/Ref>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<std/array-literal/Ref>#__visit
+ )
+ (func $std/array-literal/RefWithCtor~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/array/Array<std/array-literal/RefWithCtor>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4552,52 +4590,72 @@
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+ )
+ (func $~lib/array/Array<std/array-literal/RefWithCtor>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<std/array-literal/RefWithCtor>#__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  block $switch$1$default
-   block $switch$1$case$10
-    block $switch$1$case$8
-     block $switch$1$case$6
-      block $switch$1$case$5
-       block $switch$1$case$4
-        block $switch$1$case$2
+  block $invalid
+   block $~lib/array/Array<std/array-literal/RefWithCtor>
+    block $std/array-literal/RefWithCtor
+     block $~lib/array/Array<std/array-literal/Ref>
+      block $std/array-literal/Ref
+       block $~lib/array/Array<i32>
+        block $~lib/array/Array<i8>
+         block $~lib/arraybuffer/ArrayBufferView
+          block $~lib/string/String
+           block $~lib/arraybuffer/ArrayBuffer
+            local.get $0
+            i32.const 8
+            i32.sub
+            i32.load
+            br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i8> $~lib/array/Array<i32> $std/array-literal/Ref $~lib/array/Array<std/array-literal/Ref> $std/array-literal/RefWithCtor $~lib/array/Array<std/array-literal/RefWithCtor> $invalid
+           end
+           local.get $0
+           local.get $1
+           call $~lib/arraybuffer/ArrayBuffer~visit
+           return
+          end
+          local.get $0
+          local.get $1
+          call $~lib/string/String~visit
+          return
+         end
          local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$2 $switch$1$case$8 $switch$1$case$2 $switch$1$case$10 $switch$1$default
+         local.get $1
+         call $~lib/arraybuffer/ArrayBufferView~visit
+         return
         end
+        local.get $0
+        local.get $1
+        call $~lib/array/Array<i8>~visit
         return
        end
        local.get $0
-       i32.load
-       local.tee $2
-       if
-        local.get $2
-        local.get $1
-        call $~lib/rt/tcms/__visit
-       end
+       local.get $1
+       call $~lib/array/Array<i32>~visit
        return
       end
       local.get $0
       local.get $1
-      call $~lib/array/Array<i8>#__visit_impl
+      call $std/array-literal/Ref~visit
       return
      end
      local.get $0
      local.get $1
-     call $~lib/array/Array<i32>#__visit_impl
+     call $~lib/array/Array<std/array-literal/Ref>~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/array/Array<std/array-literal/Ref>#__visit_impl
+    call $std/array-literal/RefWithCtor~visit
     return
    end
    local.get $0
    local.get $1
-   call $~lib/array/Array<std/array-literal/RefWithCtor>#__visit_impl
+   call $~lib/array/Array<std/array-literal/RefWithCtor>~visit
    return
   end
   unreachable

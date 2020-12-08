@@ -1721,9 +1721,9 @@
      local.get $1
      call $~lib/rt/tcms/Object#set:color
      block $__inlined_func$~lib/rt/__visit_members
-      block $switch$1$default
-       block $switch$1$case$7
-        block $switch$1$case$4
+      block $invalid
+       block $~lib/staticarray/StaticArray<std/staticarray/Ref>
+        block $~lib/arraybuffer/ArrayBufferView
          local.get $0
          i32.const 20
          i32.add
@@ -1731,7 +1731,7 @@
          i32.const 8
          i32.sub
          i32.load
-         br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$7 $switch$1$default
+         br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/arraybuffer/ArrayBufferView $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/staticarray/StaticArray<std/staticarray/Ref> $invalid
         end
         local.get $0
         i32.load

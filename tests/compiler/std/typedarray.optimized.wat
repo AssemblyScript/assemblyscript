@@ -27710,48 +27710,58 @@
     end
     global.get $~lib/rt/tcms/white
     i32.eqz
-    local.set $0
+    local.set $1
     global.get $~lib/rt/tcms/iter
     i32.load offset=4
     i32.const -4
     i32.and
-    local.tee $1
+    local.tee $0
     global.get $~lib/rt/tcms/toSpace
     i32.ne
     if
-     local.get $1
-     global.set $~lib/rt/tcms/iter
-     local.get $1
      local.get $0
+     global.set $~lib/rt/tcms/iter
+     local.get $0
+     local.get $1
      call $~lib/rt/tcms/Object#set:color
      block $__inlined_func$~lib/rt/__visit_members
-      block $folding-inner1
-       block $folding-inner0
-        block $switch$1$default
-         block $switch$1$case$4
-          local.get $1
-          i32.const 12
-          i32.add
-          i32.load
-          br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $folding-inner0 $folding-inner1 $folding-inner1 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $switch$1$default
+      block $folding-inner3
+       block $folding-inner2
+        block $folding-inner1
+         block $invalid
+          block $~lib/arraybuffer/ArrayBufferView
+           local.get $0
+           i32.const 12
+           i32.add
+           i32.load
+           br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/arraybuffer/ArrayBufferView $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner3 $folding-inner3 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $invalid
+          end
+          local.get $0
+          i32.load offset=20
+          local.tee $0
+          if
+           local.get $0
+           call $~lib/rt/tcms/__visit
+          end
+          br $__inlined_func$~lib/rt/__visit_members
          end
-         local.get $1
-         i32.load offset=20
-         local.tee $1
-         if
-          local.get $1
-          call $~lib/rt/tcms/__visit
-         end
-         br $__inlined_func$~lib/rt/__visit_members
+         unreachable
         end
-        unreachable
+        local.get $0
+        i32.load offset=20
+        local.tee $0
+        if
+         local.get $0
+         call $~lib/rt/tcms/__visit
+        end
+        br $__inlined_func$~lib/rt/__visit_members
        end
-       local.get $1
+       local.get $0
        i32.load offset=24
        call $~lib/rt/tcms/__visit
        br $__inlined_func$~lib/rt/__visit_members
       end
-      local.get $1
+      local.get $0
       i32.load offset=20
       call $~lib/rt/tcms/__visit
      end
@@ -27767,14 +27777,14 @@
      i32.eq
      if
       global.get $~lib/rt/tcms/fromSpace
-      local.set $1
+      local.set $0
       global.get $~lib/rt/tcms/toSpace
       global.set $~lib/rt/tcms/fromSpace
-      local.get $1
-      global.set $~lib/rt/tcms/toSpace
       local.get $0
-      global.set $~lib/rt/tcms/white
+      global.set $~lib/rt/tcms/toSpace
       local.get $1
+      global.set $~lib/rt/tcms/white
+      local.get $0
       i32.load offset=4
       i32.const -4
       i32.and
@@ -27918,11 +27928,10 @@
     return
    end
    global.get $~lib/rt/tcms/toSpace
-   local.tee $1
-   local.get $1
-   i32.store offset=4
-   local.get $1
    local.tee $0
+   local.get $0
+   i32.store offset=4
+   local.get $0
    i32.eqz
    if
     i32.const 0

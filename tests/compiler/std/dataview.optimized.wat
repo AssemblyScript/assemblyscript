@@ -2108,24 +2108,33 @@
      local.get $2
      call $~lib/rt/tcms/Object#set:color
      block $__inlined_func$~lib/rt/__visit_members
-      block $switch$1$default
-       block $switch$1$case$4
+      block $folding-inner1
+       block $invalid
+        block $~lib/typedarray/Uint8Array
+         local.get $0
+         i32.const 12
+         i32.add
+         i32.load
+         br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $folding-inner1 $~lib/typedarray/Uint8Array $folding-inner1 $invalid
+        end
         local.get $0
-        i32.const 12
-        i32.add
-        i32.load
-        br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+        i32.load offset=20
+        local.tee $0
+        if
+         local.get $0
+         call $~lib/rt/tcms/__visit
+        end
+        br $__inlined_func$~lib/rt/__visit_members
        end
-       local.get $0
-       i32.load offset=20
-       local.tee $0
-       if
-        local.get $0
-        call $~lib/rt/tcms/__visit
-       end
-       br $__inlined_func$~lib/rt/__visit_members
+       unreachable
       end
-      unreachable
+      local.get $0
+      i32.load offset=20
+      local.tee $0
+      if
+       local.get $0
+       call $~lib/rt/tcms/__visit
+      end
      end
     else
      i32.const 1408

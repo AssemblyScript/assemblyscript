@@ -125,12 +125,11 @@ function loadAssemblyScriptWasm(build) {
   return exports;
 }
 
-var assemblyscript, isWasm = false, __newString, __getString, __retain, __release, __collect;
+var assemblyscript, __newString, __getString, __retain, __release, __collect;
 
 function loadAssemblyScript() {
   const wasmArg = process.argv.findIndex(arg => arg == "--wasm" || arg.startsWith("--wasm:"));
   if (~wasmArg) {
-    isWasm = true;
     let build = process.argv[wasmArg].slice(7);
     process.argv.splice(wasmArg, 1);
     assemblyscript = loadAssemblyScriptWasm(build);
@@ -233,11 +232,6 @@ exports.main = function main(argv, options, callback) {
   } else if (!options) {
     options = {};
   }
-
-  // FIXME: AS compiled to Wasm passes all the tests individually, but runs into
-  // issues when running multiple tests in succession and reusing the same
-  // compiler instance with GCs in between, indicating a runtime bug. For now:
-  if (isWasm) loadAssemblyScript();
 
   const stdout = options.stdout || process.stdout;
   const stderr = options.stderr || process.stderr;

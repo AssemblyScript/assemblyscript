@@ -4088,6 +4088,8 @@ export class Class extends TypedElement {
   implementers: Set<Class> | null = null;
   /** Whether the field initialization check has already been performed. */
   didCheckFieldInitialization: bool = false;
+  /** Runtime visitor function reference. */
+  visitRef: FunctionRef = 0;
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {

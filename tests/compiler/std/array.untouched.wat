@@ -1,7 +1,7 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
@@ -24773,7 +24773,7 @@
    call $~lib/rt/tcms/Object#makeGray
   end
  )
- (func $~lib/array/Array<u32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -26433,7 +26433,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/array/Array<u8>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u8>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -27729,7 +27729,7 @@
   i32.const 7600
   call $~lib/array/Array<~lib/string/String>#join
  )
- (func $~lib/array/Array<~lib/string/String>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -27821,7 +27821,24 @@
   local.get $0
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/tcms/__visit
+  end
+ )
+ (func $~lib/array/Array<i32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -27829,7 +27846,30 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<std/array/Ref>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i32>#__visit
+ )
+ (func $std/array/Ref~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/typedarray/Uint8Array~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/arraybuffer/ArrayBufferView~visit
+ )
+ (func $~lib/array/Array<u8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u8>#__visit
+ )
+ (func $~lib/array/Array<u32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u32>#__visit
+ )
+ (func $~lib/array/Array<std/array/Ref>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -27874,7 +27914,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<f32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<std/array/Ref>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<std/array/Ref>#__visit
+ )
+ (func $~lib/array/Array<f32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -27882,7 +27927,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<f64>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<f32>#__visit
+ )
+ (func $~lib/array/Array<f64>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -27890,7 +27940,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<std/array/Ref|null>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<f64>#__visit
+ )
+ (func $~lib/array/Array<std/array/Ref|null>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -27935,67 +27990,122 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<std/array/Ref|null>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<std/array/Ref|null>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28f32%2Cf32%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit
+ )
+ (func $~lib/function/Function<%28f32%2Cf32%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28f64%2Cf64%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f32%2Cf32%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f32%2Cf32%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28f64%2Cf64%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28f64%2Cf64%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28f64%2Cf64%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28u32%2Cu32%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit
+ )
+ (func $~lib/function/Function<%28u32%2Cu32%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28u32%2Cu32%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u32%2Cu32%29=>i32>#__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -28040,13 +28150,26 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/array/Array<i32>>#__visit
+ )
+ (func $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<std/array/Proxy<i32>>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>#__visit
+ )
+ (func $std/array/Proxy<i32>~visit (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/array/Array<std/array/Proxy<i32>>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -28091,13 +28214,23 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<std/array/Proxy<i32>>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<std/array/Proxy<i32>>#__visit
+ )
+ (func $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<~lib/string/String|null>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>#__visit
+ )
+ (func $~lib/array/Array<~lib/string/String|null>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -28142,19 +28275,39 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String|null>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/string/String|null>#__visit
+ )
+ (func $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>#__visit
+ )
+ (func $~lib/array/Array<~lib/string/String>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/string/String>#__visit
+ )
+ (func $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>#__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=4
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<bool>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>#__visit
+ )
+ (func $~lib/array/Array<bool>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -28162,7 +28315,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<i8>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<bool>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<bool>#__visit
+ )
+ (func $~lib/array/Array<i8>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -28170,7 +28328,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<u16>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i8>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i8>#__visit
+ )
+ (func $~lib/array/Array<u16>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -28178,7 +28341,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<u64>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u16>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u16>#__visit
+ )
+ (func $~lib/array/Array<u64>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -28186,7 +28354,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<i64>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u64>#__visit
+ )
+ (func $~lib/array/Array<i64>#__visit (param $0 i32) (param $1 i32)
   i32.const 0
   drop
   local.get $0
@@ -28194,7 +28367,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<~lib/array/Array<u8>>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i64>#__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<u8>>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -28239,7 +28417,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<~lib/array/Array<u32>>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<u8>>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/array/Array<u8>>#__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<u32>>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -28284,7 +28467,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<u32>>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/array/Array<u32>>#__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -28329,7 +28517,12 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>#__visit_impl (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>#__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -28373,232 +28566,291 @@
   i32.load
   local.get $1
   call $~lib/rt/tcms/__visit
+ )
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>#__visit
+ )
+ (func $std/array/ArrayU32~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u32>~visit
+ )
+ (func $std/array/ArrayU8~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u8>~visit
+ )
+ (func $std/array/ArrayStr~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/string/String>~visit
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  block $switch$1$default
-   block $switch$1$case$41
-    block $switch$1$case$40
-     block $switch$1$case$39
-      block $switch$1$case$38
-       block $switch$1$case$37
-        block $switch$1$case$36
-         block $switch$1$case$35
-          block $switch$1$case$34
-           block $switch$1$case$33
-            block $switch$1$case$32
-             block $switch$1$case$31
-              block $switch$1$case$30
-               block $switch$1$case$29
-                block $switch$1$case$28
-                 block $switch$1$case$27
-                  block $switch$1$case$25
-                   block $switch$1$case$24
-                    block $switch$1$case$23
-                     block $switch$1$case$22
-                      block $switch$1$case$21
-                       block $switch$1$case$20
-                        block $switch$1$case$19
-                         block $switch$1$case$18
-                          block $switch$1$case$17
-                           block $switch$1$case$16
-                            block $switch$1$case$15
-                             block $switch$1$case$14
-                              block $switch$1$case$13
-                               block $switch$1$case$12
-                                block $switch$1$case$11
-                                 block $switch$1$case$10
-                                  block $switch$1$case$9
-                                   block $switch$1$case$8
-                                    block $switch$1$case$5
-                                     block $switch$1$case$4
-                                      block $switch$1$case$2
+  block $invalid
+   block $std/array/ArrayStr
+    block $std/array/ArrayU8
+     block $std/array/ArrayU32
+      block $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>
+       block $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>
+        block $~lib/array/Array<~lib/array/Array<u32>>
+         block $~lib/array/Array<~lib/array/Array<u8>>
+          block $~lib/array/Array<i64>
+           block $~lib/array/Array<u64>
+            block $~lib/array/Array<u16>
+             block $~lib/array/Array<i8>
+              block $~lib/array/Array<bool>
+               block $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>
+                block $~lib/array/Array<~lib/string/String>
+                 block $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>
+                  block $~lib/array/Array<~lib/string/String|null>
+                   block $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>
+                    block $~lib/array/Array<std/array/Proxy<i32>>
+                     block $std/array/Proxy<i32>
+                      block $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>
+                       block $~lib/array/Array<~lib/array/Array<i32>>
+                        block $~lib/function/Function<%28u32%2Cu32%29=>i32>
+                         block $~lib/function/Function<%28i32%2Ci32%29=>i32>
+                          block $~lib/function/Function<%28f64%2Cf64%29=>i32>
+                           block $~lib/function/Function<%28f32%2Cf32%29=>i32>
+                            block $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>
+                             block $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>
+                              block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>
+                               block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>
+                                block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>
+                                 block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>
+                                  block $~lib/array/Array<std/array/Ref|null>
+                                   block $~lib/array/Array<f64>
+                                    block $~lib/array/Array<f32>
+                                     block $~lib/array/Array<std/array/Ref>
+                                      block $~lib/array/Array<u32>
+                                       block $~lib/array/Array<u8>
+                                        block $~lib/typedarray/Uint8Array
+                                         block $std/array/Ref
+                                          block $~lib/array/Array<i32>
+                                           block $~lib/arraybuffer/ArrayBufferView
+                                            block $~lib/string/String
+                                             block $~lib/arraybuffer/ArrayBuffer
+                                              local.get $0
+                                              i32.const 8
+                                              i32.sub
+                                              i32.load
+                                              br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $std/array/Ref $~lib/typedarray/Uint8Array $~lib/array/Array<u8> $~lib/array/Array<u32> $~lib/array/Array<std/array/Ref> $~lib/array/Array<f32> $~lib/array/Array<f64> $~lib/array/Array<std/array/Ref|null> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32> $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool> $~lib/function/Function<%28f32%2Cf32%29=>i32> $~lib/function/Function<%28f64%2Cf64%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28u32%2Cu32%29=>i32> $~lib/array/Array<~lib/array/Array<i32>> $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32> $std/array/Proxy<i32> $~lib/array/Array<std/array/Proxy<i32>> $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32> $~lib/array/Array<~lib/string/String|null> $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32> $~lib/array/Array<~lib/string/String> $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32> $~lib/array/Array<bool> $~lib/array/Array<i8> $~lib/array/Array<u16> $~lib/array/Array<u64> $~lib/array/Array<i64> $~lib/array/Array<~lib/array/Array<u8>> $~lib/array/Array<~lib/array/Array<u32>> $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>> $~lib/array/Array<~lib/array/Array<~lib/string/String|null>> $std/array/ArrayU32 $std/array/ArrayU8 $std/array/ArrayStr $invalid
+                                             end
+                                             local.get $0
+                                             local.get $1
+                                             call $~lib/arraybuffer/ArrayBuffer~visit
+                                             return
+                                            end
+                                            local.get $0
+                                            local.get $1
+                                            call $~lib/string/String~visit
+                                            return
+                                           end
+                                           local.get $0
+                                           local.get $1
+                                           call $~lib/arraybuffer/ArrayBufferView~visit
+                                           return
+                                          end
+                                          local.get $0
+                                          local.get $1
+                                          call $~lib/array/Array<i32>~visit
+                                          return
+                                         end
+                                         local.get $0
+                                         local.get $1
+                                         call $std/array/Ref~visit
+                                         return
+                                        end
+                                        local.get $0
+                                        local.get $1
+                                        call $~lib/typedarray/Uint8Array~visit
+                                        return
+                                       end
                                        local.get $0
-                                       i32.const 8
-                                       i32.sub
-                                       i32.load
-                                       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$2 $switch$1$case$4 $switch$1$case$8 $switch$1$case$9 $switch$1$case$10 $switch$1$case$11 $switch$1$case$12 $switch$1$case$13 $switch$1$case$14 $switch$1$case$15 $switch$1$case$16 $switch$1$case$17 $switch$1$case$18 $switch$1$case$19 $switch$1$case$20 $switch$1$case$21 $switch$1$case$22 $switch$1$case$23 $switch$1$case$24 $switch$1$case$25 $switch$1$case$2 $switch$1$case$27 $switch$1$case$28 $switch$1$case$29 $switch$1$case$30 $switch$1$case$31 $switch$1$case$32 $switch$1$case$33 $switch$1$case$34 $switch$1$case$35 $switch$1$case$36 $switch$1$case$37 $switch$1$case$38 $switch$1$case$39 $switch$1$case$40 $switch$1$case$41 $switch$1$case$9 $switch$1$case$8 $switch$1$case$31 $switch$1$default
+                                       local.get $1
+                                       call $~lib/array/Array<u8>~visit
+                                       return
                                       end
+                                      local.get $0
+                                      local.get $1
+                                      call $~lib/array/Array<u32>~visit
                                       return
                                      end
                                      local.get $0
-                                     i32.load
-                                     local.tee $2
-                                     if
-                                      local.get $2
-                                      local.get $1
-                                      call $~lib/rt/tcms/__visit
-                                     end
+                                     local.get $1
+                                     call $~lib/array/Array<std/array/Ref>~visit
                                      return
                                     end
                                     local.get $0
                                     local.get $1
-                                    call $~lib/array/Array<i32>#__visit_impl
+                                    call $~lib/array/Array<f32>~visit
                                     return
                                    end
                                    local.get $0
                                    local.get $1
-                                   call $~lib/array/Array<u8>#__visit_impl
+                                   call $~lib/array/Array<f64>~visit
                                    return
                                   end
                                   local.get $0
                                   local.get $1
-                                  call $~lib/array/Array<u32>#__visit_impl
+                                  call $~lib/array/Array<std/array/Ref|null>~visit
                                   return
                                  end
                                  local.get $0
                                  local.get $1
-                                 call $~lib/array/Array<std/array/Ref>#__visit_impl
+                                 call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit
                                  return
                                 end
                                 local.get $0
                                 local.get $1
-                                call $~lib/array/Array<f32>#__visit_impl
+                                call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>~visit
                                 return
                                end
                                local.get $0
                                local.get $1
-                               call $~lib/array/Array<f64>#__visit_impl
+                               call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>~visit
                                return
                               end
                               local.get $0
                               local.get $1
-                              call $~lib/array/Array<std/array/Ref|null>#__visit_impl
+                              call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit
                               return
                              end
                              local.get $0
                              local.get $1
-                             call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit_impl
+                             call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit
                              return
                             end
                             local.get $0
                             local.get $1
-                            call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>#__visit_impl
+                            call $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit
                             return
                            end
                            local.get $0
                            local.get $1
-                           call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>#__visit_impl
+                           call $~lib/function/Function<%28f32%2Cf32%29=>i32>~visit
                            return
                           end
                           local.get $0
                           local.get $1
-                          call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit_impl
+                          call $~lib/function/Function<%28f64%2Cf64%29=>i32>~visit
                           return
                          end
                          local.get $0
                          local.get $1
-                         call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>#__visit_impl
+                         call $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit
                          return
                         end
                         local.get $0
                         local.get $1
-                        call $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>#__visit_impl
+                        call $~lib/function/Function<%28u32%2Cu32%29=>i32>~visit
                         return
                        end
                        local.get $0
                        local.get $1
-                       call $~lib/function/Function<%28f32%2Cf32%29=>i32>#__visit_impl
+                       call $~lib/array/Array<~lib/array/Array<i32>>~visit
                        return
                       end
                       local.get $0
                       local.get $1
-                      call $~lib/function/Function<%28f64%2Cf64%29=>i32>#__visit_impl
+                      call $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>~visit
                       return
                      end
                      local.get $0
                      local.get $1
-                     call $~lib/function/Function<%28i32%2Ci32%29=>i32>#__visit_impl
+                     call $std/array/Proxy<i32>~visit
                      return
                     end
                     local.get $0
                     local.get $1
-                    call $~lib/function/Function<%28u32%2Cu32%29=>i32>#__visit_impl
+                    call $~lib/array/Array<std/array/Proxy<i32>>~visit
                     return
                    end
                    local.get $0
                    local.get $1
-                   call $~lib/array/Array<~lib/array/Array<i32>>#__visit_impl
+                   call $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>~visit
                    return
                   end
                   local.get $0
                   local.get $1
-                  call $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>#__visit_impl
+                  call $~lib/array/Array<~lib/string/String|null>~visit
                   return
                  end
                  local.get $0
                  local.get $1
-                 call $~lib/array/Array<std/array/Proxy<i32>>#__visit_impl
+                 call $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>~visit
                  return
                 end
                 local.get $0
                 local.get $1
-                call $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>#__visit_impl
+                call $~lib/array/Array<~lib/string/String>~visit
                 return
                end
                local.get $0
                local.get $1
-               call $~lib/array/Array<~lib/string/String|null>#__visit_impl
+               call $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>~visit
                return
               end
               local.get $0
               local.get $1
-              call $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>#__visit_impl
+              call $~lib/array/Array<bool>~visit
               return
              end
              local.get $0
              local.get $1
-             call $~lib/array/Array<~lib/string/String>#__visit_impl
+             call $~lib/array/Array<i8>~visit
              return
             end
             local.get $0
             local.get $1
-            call $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>#__visit_impl
+            call $~lib/array/Array<u16>~visit
             return
            end
            local.get $0
            local.get $1
-           call $~lib/array/Array<bool>#__visit_impl
+           call $~lib/array/Array<u64>~visit
            return
           end
           local.get $0
           local.get $1
-          call $~lib/array/Array<i8>#__visit_impl
+          call $~lib/array/Array<i64>~visit
           return
          end
          local.get $0
          local.get $1
-         call $~lib/array/Array<u16>#__visit_impl
+         call $~lib/array/Array<~lib/array/Array<u8>>~visit
          return
         end
         local.get $0
         local.get $1
-        call $~lib/array/Array<u64>#__visit_impl
+        call $~lib/array/Array<~lib/array/Array<u32>>~visit
         return
        end
        local.get $0
        local.get $1
-       call $~lib/array/Array<i64>#__visit_impl
+       call $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>~visit
        return
       end
       local.get $0
       local.get $1
-      call $~lib/array/Array<~lib/array/Array<u8>>#__visit_impl
+      call $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>~visit
       return
      end
      local.get $0
      local.get $1
-     call $~lib/array/Array<~lib/array/Array<u32>>#__visit_impl
+     call $std/array/ArrayU32~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>#__visit_impl
+    call $std/array/ArrayU8~visit
     return
    end
    local.get $0
    local.get $1
-   call $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>#__visit_impl
+   call $std/array/ArrayStr~visit
    return
   end
   unreachable
