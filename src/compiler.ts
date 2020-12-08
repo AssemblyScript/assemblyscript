@@ -510,9 +510,13 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     var virtualCalls = this.virtualCalls;
-    for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
-      let instance = unchecked(_values[i]);
-      this.finalizeVirtualStub(instance);
+    while (virtualCalls.size) {
+      // finalizing a stub may discover more virtual calls, so do this in a loop
+      for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
+        let instance = unchecked(_values[i]);
+        this.finalizeVirtualStub(instance);
+        virtualCalls.delete(instance);
+      }
     }
 
     // finalize runtime features

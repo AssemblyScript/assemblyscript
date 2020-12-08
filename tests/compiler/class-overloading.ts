@@ -175,3 +175,35 @@ var ic: IC = new CC();
 which = "";
 ic.foo();
 assert(which == "IC");
+
+// Should make stubs for functions discovered when compiling other virtual stubs
+class A1 {
+  public bar(): i32 {
+    return this.baz();
+    // 4) discovers A1#baz
+  }
+  public baz(): i32 {
+    throw new Error("not implemented");
+    // 5) discovers B1#baz (overload)
+  }
+}
+class B1 extends A1 {
+  public baz(): i32 {
+    return 3;
+    // 6) complete
+  }
+}
+class A2 {
+  foo(): i32 {
+    throw new Error("not implemented");
+    // 2) discovers B2#foo (overload)
+  }
+}
+class B2 extends A2 {
+  foo(): i32 {
+    return new B1().bar();
+    // 3) discovers B1#bar (alias of A1#bar)
+  }
+}
+var b2: A2 = new B2();
+assert(b2.foo() == 3); // 1) discovers A2#foo
