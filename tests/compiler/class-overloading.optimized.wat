@@ -14,11 +14,13 @@
  (data (i32.const 1228) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00F")
  (data (i32.const 1260) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00I\00B")
  (data (i32.const 1292) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00I\00C")
+ (data (i32.const 1324) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00n\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d")
  (global $class-overloading/which (mut i32) (i32.const 1056))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $class-overloading/a (mut i32) (i32.const 0))
  (global $class-overloading/ia (mut i32) (i32.const 0))
  (global $class-overloading/ic (mut i32) (i32.const 0))
+ (global $class-overloading/b2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
@@ -264,7 +266,8 @@
   call $class-overloading/B#constructor
  )
  (func $start:class-overloading
-  i32.const 1324
+  (local $0 i32)
+  i32.const 1388
   global.set $~lib/rt/stub/offset
   i32.const 0
   call $class-overloading/B#constructor
@@ -630,6 +633,53 @@
    i32.const 1152
    i32.const 177
    i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 14
+  call $~lib/rt/stub/__new
+  local.tee $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 13
+   call $~lib/rt/stub/__new
+  end
+  global.set $class-overloading/b2
+  block $__inlined_func$class-overloading/A2#foo@virtual
+   global.get $class-overloading/b2
+   i32.const 8
+   i32.sub
+   i32.load
+   i32.const 14
+   i32.eq
+   if
+    i32.const 15
+    call $~lib/rt/stub/__new
+    local.tee $0
+    if (result i32)
+     local.get $0
+    else
+     i32.const 16
+     call $~lib/rt/stub/__new
+    end
+    i32.const 8
+    i32.sub
+    i32.load
+    i32.const 15
+    i32.eq
+    br_if $__inlined_func$class-overloading/A2#foo@virtual
+    i32.const 1344
+    i32.const 1152
+    i32.const 186
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 1344
+   i32.const 1152
+   i32.const 198
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
