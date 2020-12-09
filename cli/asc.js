@@ -989,11 +989,7 @@ exports.main = function main(argv, options, callback) {
       writeStdout.used = true;
     }
     stats.writeTime += measure(() => {
-      if (typeof contents === "string") {
-        stdout.write(contents);
-      } else {
-        stdout.write(contents);
-      }
+      stdout.write(contents);
     });
   }
 };
