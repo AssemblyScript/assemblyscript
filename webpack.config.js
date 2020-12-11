@@ -16,6 +16,8 @@ function preamble(name) {
 
 // Build the C-like library
 const lib = {
+  mode: "production",
+  target: ["web", "es6"],
   entry: [ "./src/glue/js", "./src/index.ts" ],
   module: {
     rules: [
@@ -54,7 +56,7 @@ const lib = {
           }
         },
         parallel: true,
-        sourceMap: true
+        extractComments: false
       })
     ],
   }
@@ -63,6 +65,8 @@ const lib = {
 // Build asc for browser usage
 const shimDir = path.join(__dirname, "cli", "shim");
 const bin = {
+  mode: "production",
+  target: ["web", "es6"],
   context: path.join(__dirname, "cli"),
   entry: [ "./asc.js" ],
   externals: [
@@ -70,13 +74,7 @@ const bin = {
     "assemblyscript"
   ],
   node: {
-    "buffer": false,
-    "fs": false,
-    "global": true,
-    "os": false,
-    "path": false,
-    "process": false,
-    "crypto": false
+    global: true
   },
   output: {
     filename: "asc.js",
@@ -122,7 +120,7 @@ const bin = {
           }
         },
         parallel: true,
-        sourceMap: true
+        extractComments: false
       })
     ],
   }
