@@ -146,7 +146,7 @@ exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : (() => { // se
 })();
 
 /** Convenience function that parses and compiles source strings directly. */
-exports.compileString = (sources, options) => {
+exports.compileString = (sources, options, transforms) => {
   if (typeof sources === "string") sources = { ["input" + defaultExtension.ext]: sources };
   const output = Object.create({
     stdout: createMemoryStream(),
@@ -173,7 +173,8 @@ exports.compileString = (sources, options) => {
     stderr: output.stderr,
     readFile: name => Object.prototype.hasOwnProperty.call(sources, name) ? sources[name] : null,
     writeFile: (name, contents) => { output[name] = contents; },
-    listFiles: () => []
+    listFiles: () => [],
+    transforms
   });
   return output;
 };
@@ -416,31 +417,42 @@ exports.main = function main(argv, options, callback) {
 
   // Set up transforms
   const transforms = [];
-  if (opts.transform) {
+  if (opts.transform || options.transforms) {
     let tsNodeRegistered = false;
-    let transformArgs = unique(opts.transform);
-    for (let i = 0, k = transformArgs.length; i < k; ++i) {
-      let filename = transformArgs[i].trim();
-      if (!tsNodeRegistered && filename.endsWith(".ts")) { // ts-node requires .ts specifically
-        dynrequire("ts-node").register({ transpileOnly: true, skipProject: true, compilerOptions: { target: "ES2016" } });
-        tsNodeRegistered = true;
+    let transformArgs = [...unique(opts.transform), ...unique(options.transforms)];
+
+    function resolveTranform(filenameOrClass) {
+      if (typeof filenameOrClass === 'string') {
+        if (!tsNodeRegistered && filenameOrClass.endsWith(".ts")) { // ts-node requires .ts specifically
+          dynrequire("ts-node").register({ transpileOnly: true, skipProject: true, compilerOptions: { target: "ES2016" } });
+          tsNodeRegistered = true;
+        }
+
+        return dynrequire(dynrequire.resolve(filenameOrClass, {paths: [baseDir, process.cwd()]}));
+      } else {
+        return filenameOrClass;
       }
+    }
+
+    for (let i = 0, k = transformArgs.length; i < k; ++i) {
       try {
-        const classOrModule = dynrequire(dynrequire.resolve(filename, { paths: [baseDir, process.cwd()] }));
-        if (typeof classOrModule === "function") {
-          Object.assign(classOrModule.prototype, {
-            program,
-            baseDir,
-            stdout,
-            stderr,
-            log: console.error,
-            readFile,
-            writeFile,
-            listFiles
-          });
-          transforms.push(new classOrModule());
+        const transform = resolveTranform(transformArgs[i]);
+        const proto = {
+          program,
+          baseDir,
+          stdout,
+          stderr,
+          log: console.error,
+          readFile,
+          writeFile,
+          listFiles
+        };
+        if (typeof transform === "function") {
+          Object.assign(transform.prototype, proto);
+          transforms.push(new transform());
         } else {
-          transforms.push(classOrModule); // legacy module
+          Object.assign(transform, proto);
+          transforms.push(transform);
         }
       } catch (e) {
         return callback(e);

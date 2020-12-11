@@ -4,6 +4,7 @@
  */
 
 import { OptionDescription } from "./util/options";
+import { Transform } from "./transform";
 export { OptionDescription };
 
 /** Ready promise resolved once/if the compiler is ready. */
@@ -157,10 +158,16 @@ export interface APIOptions {
   writeFile?: (filename: string, contents: Uint8Array, baseDir: string) => void;
   /** Lists all files within a directory. */
   listFiles?: (dirname: string, baseDir: string) => string[] | null;
+  /** Hook into the compilation process before, while and after the module is being compiled. */
+  transforms ?: Array<Transform | (new (...args : never[]) => Transform)>;
 }
 
 /** Convenience function that parses and compiles source strings directly. */
-export function compileString(sources: { [key: string]: string } | string, options?: CompilerOptions): {
+export function compileString(
+    sources: { [key: string]: string } | string,
+    options?: CompilerOptions,
+    transforms ?: Array<Transform | (new (...args : never[]) => Transform)>
+): {
   /** Standard output. */
   stdout: OutputStream,
   /** Standard error. */
