@@ -1037,7 +1037,7 @@ exports.main = function main(argv, options, callback) {
       let text;
       stats.readCount++;
       stats.readTime += measure(() => {
-        text = fs.readFileSync(name, { encoding: "utf8" });
+        text = fs.readFileSync(name, "utf8");
       });
       return text;
     } catch (e) {
@@ -1053,10 +1053,7 @@ exports.main = function main(argv, options, callback) {
         filename = path.basename(filename);
         const outputFilePath = path.join(dirPath, filename);
         if (!fs.existsSync(dirPath)) mkdirp(dirPath);
-        fs.writeFileSync(
-          outputFilePath, contents,
-          typeof contents === "string" ? { encoding: "utf8" } : void 0
-        );
+        fs.writeFileSync(outputFilePath, contents);
       });
       return true;
     } catch (e) {
@@ -1084,11 +1081,7 @@ exports.main = function main(argv, options, callback) {
       writeStdout.used = true;
     }
     stats.writeTime += measure(() => {
-      if (typeof contents === "string") {
-        stdout.write(contents, "utf8");
-      } else {
-        stdout.write(contents);
-      }
+      stdout.write(contents);
     });
   }
 };

@@ -33,6 +33,13 @@ export declare interface RtraceOptions {
   getMemory(): WebAssembly.Memory;
 }
 
+/** Overhead between a pointer to a block and its unmanaged data. */
+export declare const BLOCK_OVERHEAD;
+/** Overhead between a pointer to a block's unmanaged data to its managed data. */
+export declare const OBJECT_OVERHEAD;
+/** Overhead between a pointer to a block and its managed data. */
+export declare const TOTAL_OVERHEAD;
+
 export declare class Rtrace  {
   /** Creates a new `Rtrace` instance. */
   constructor(options: RtraceOptions);
