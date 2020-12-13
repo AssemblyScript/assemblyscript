@@ -85,8 +85,9 @@ export class Set<T> {
       changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
     while (entry) {
-      if (!(entry.taggedNext & EMPTY) && entry.key == key) return entry;
-      entry = changetype<SetEntry<T>>(entry.taggedNext & ~EMPTY);
+      let next = entry.taggedNext;
+      if (!(next & EMPTY) && entry.key == key) return entry;
+      entry = changetype<SetEntry<T>>(next & ~EMPTY);
     }
     return null;
   }
@@ -157,8 +158,9 @@ export class Set<T> {
       let oldEntry = changetype<SetEntry<T>>(oldPtr); // unmanaged!
       if (!(oldEntry.taggedNext & EMPTY)) {
         let newEntry = changetype<SetEntry<T>>(newPtr); // unmanaged!
-        newEntry.key = oldEntry.key;
-        let newBucketIndex = HASH<T>(oldEntry.key) & newBucketsMask;
+        let oldEntryKey = oldEntry.key;
+        newEntry.key = oldEntryKey;
+        let newBucketIndex = HASH<T>(oldEntryKey) & newBucketsMask;
         let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
         newEntry.taggedNext = load<usize>(newBucketPtrBase);
         store<usize>(newBucketPtrBase, newPtr);
