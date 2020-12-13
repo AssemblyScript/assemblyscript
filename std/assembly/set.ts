@@ -85,9 +85,9 @@ export class Set<T> {
       changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
     while (entry) {
-      let next = entry.taggedNext;
-      if (!(next & EMPTY) && entry.key == key) return entry;
-      entry = changetype<SetEntry<T>>(next & ~EMPTY);
+      let taggedNext = entry.taggedNext;
+      if (!(taggedNext & EMPTY) && entry.key == key) return entry;
+      entry = changetype<SetEntry<T>>(taggedNext & ~EMPTY);
     }
     return null;
   }
