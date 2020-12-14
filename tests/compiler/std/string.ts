@@ -10,6 +10,14 @@ assert(changetype<usize>(str) == changetype<usize>("hi, I'm a string"));
 assert("\xDF" == "ß");
 assert("\xDF\xDF" == "ßß");
 assert("\xDFab" == "ßab");
+assert("1" < "10");
+assert("10" > "1");
+assert("1" == "1");
+assert("11" == "11");
+assert("123" == "123");
+assert("123" != "122");
+assert("1234" == "1234");
+assert("1233" != "1234");
 
 assert(str.length == 16);
 assert(str.charCodeAt(0) == 0x68);

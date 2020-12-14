@@ -122,7 +122,8 @@ import { Array } from "./array";
     var rightLength = right.length;
     if (!rightLength) return true;
     // @ts-ignore: string <-> String
-    return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) > 0;
+    var res = compareImpl(left, 0, right, 0, min(leftLength, rightLength));
+    return res == 0 ? leftLength > rightLength : res > 0;
   }
 
   @operator(">=") private static __gte(left: String, right: String): bool {
@@ -136,7 +137,8 @@ import { Array } from "./array";
     var leftLength  = left.length;
     if (!leftLength) return true;
     // @ts-ignore: string <-> String
-    return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) < 0;
+    var res = compareImpl(left, 0, right, 0, min(leftLength, rightLength));
+    return res == 0 ? leftLength < rightLength : res < 0;
   }
 
   @operator("<=") private static __lte(left: String, right: String): bool {
