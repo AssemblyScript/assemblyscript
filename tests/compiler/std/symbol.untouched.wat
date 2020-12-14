@@ -581,6 +581,8 @@
    return
   end
   i32.const 0
+  i32.const 374761393
+  i32.add
   local.set $2
   local.get $0
   call $~lib/string/String#get:length
@@ -731,11 +733,6 @@
    local.get $7
    i32.sub
    local.set $3
-  else
-   i32.const 0
-   i32.const 374761393
-   i32.add
-   local.set $2
   end
   i32.const 0
   local.set $11

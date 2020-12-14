@@ -71,7 +71,7 @@ function hashStr(key: string): u32 {
     return XXH32_SEED;
   }
 
-  var h: u32 = 0;
+  var h: u32 = XXH32_SEED + XXH32_P5;
   var len = key.length << 1;
 
   if (len >= 16) {
@@ -92,9 +92,6 @@ function hashStr(key: string): u32 {
     }
     h = rotl(s1, 1) + rotl(s2, 7) + rotl(s3, 12) + rotl(s4, 18);
     len -= i;
-
-  } else {
-    h = XXH32_SEED + XXH32_P5;
   }
 
   var i = 0;

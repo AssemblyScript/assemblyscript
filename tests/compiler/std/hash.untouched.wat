@@ -8,6 +8,12 @@
  (data (i32.const 44) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a\00")
  (data (i32.const 76) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00a\00b\00")
  (data (i32.const 108) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
+ (data (i32.const 140) "\08\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00a\00b\00c\00d\00")
+ (data (i32.const 172) "\n\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00a\00b\00c\00d\00e\00")
+ (data (i32.const 204) "\0c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00a\00b\00c\00d\00e\00f\00")
+ (data (i32.const 236) "\0e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00a\00b\00c\00d\00e\00f\00g\00")
+ (data (i32.const 284) "\10\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00")
+ (data (i32.const 332) "\12\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00i\00")
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
@@ -52,6 +58,8 @@
    return
   end
   i32.const 0
+  i32.const 374761393
+  i32.add
   local.set $2
   local.get $0
   call $~lib/string/String#get:length
@@ -202,11 +210,6 @@
    local.get $7
    i32.sub
    local.set $3
-  else
-   i32.const 0
-   i32.const 374761393
-   i32.add
-   local.set $2
   end
   i32.const 0
   local.set $11
@@ -493,6 +496,96 @@
    call $~lib/rt/stub/__release
    local.get $1
    br $~lib/util/hash/HASH<~lib/string/String>|inlined.3
+  end
+  call $std/hash/check
+  drop
+  block $~lib/util/hash/HASH<~lib/string/String>|inlined.4 (result i32)
+   i32.const 160
+   local.set $1
+   i32.const 1
+   drop
+   local.get $1
+   call $~lib/util/hash/hashStr
+   local.set $0
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $0
+   br $~lib/util/hash/HASH<~lib/string/String>|inlined.4
+  end
+  call $std/hash/check
+  drop
+  block $~lib/util/hash/HASH<~lib/string/String>|inlined.5 (result i32)
+   i32.const 192
+   local.set $0
+   i32.const 1
+   drop
+   local.get $0
+   call $~lib/util/hash/hashStr
+   local.set $1
+   local.get $0
+   call $~lib/rt/stub/__release
+   local.get $1
+   br $~lib/util/hash/HASH<~lib/string/String>|inlined.5
+  end
+  call $std/hash/check
+  drop
+  block $~lib/util/hash/HASH<~lib/string/String>|inlined.6 (result i32)
+   i32.const 224
+   local.set $1
+   i32.const 1
+   drop
+   local.get $1
+   call $~lib/util/hash/hashStr
+   local.set $0
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $0
+   br $~lib/util/hash/HASH<~lib/string/String>|inlined.6
+  end
+  call $std/hash/check
+  drop
+  block $~lib/util/hash/HASH<~lib/string/String>|inlined.7 (result i32)
+   i32.const 256
+   local.set $0
+   i32.const 1
+   drop
+   local.get $0
+   call $~lib/util/hash/hashStr
+   local.set $1
+   local.get $0
+   call $~lib/rt/stub/__release
+   local.get $1
+   br $~lib/util/hash/HASH<~lib/string/String>|inlined.7
+  end
+  call $std/hash/check
+  drop
+  block $~lib/util/hash/HASH<~lib/string/String>|inlined.8 (result i32)
+   i32.const 304
+   local.set $1
+   i32.const 1
+   drop
+   local.get $1
+   call $~lib/util/hash/hashStr
+   local.set $0
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $0
+   br $~lib/util/hash/HASH<~lib/string/String>|inlined.8
+  end
+  call $std/hash/check
+  drop
+  block $~lib/util/hash/HASH<~lib/string/String>|inlined.9 (result i32)
+   i32.const 352
+   local.set $0
+   i32.const 1
+   drop
+   local.get $0
+   call $~lib/util/hash/hashStr
+   local.set $1
+   local.get $0
+   call $~lib/rt/stub/__release
+   local.get $1
+   br $~lib/util/hash/HASH<~lib/string/String>|inlined.9
   end
   call $std/hash/check
   drop

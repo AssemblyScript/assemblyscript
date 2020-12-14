@@ -6,6 +6,12 @@
  (data (i32.const 1068) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a")
  (data (i32.const 1100) "\04\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00a\00b")
  (data (i32.const 1132) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
+ (data (i32.const 1164) "\08\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00a\00b\00c\00d")
+ (data (i32.const 1196) "\n\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00a\00b\00c\00d\00e")
+ (data (i32.const 1228) "\0c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00a\00b\00c\00d\00e\00f")
+ (data (i32.const 1260) "\0e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00a\00b\00c\00d\00e\00f\00g")
+ (data (i32.const 1308) "\10\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00a\00b\00c\00d\00e\00f\00g\00h")
+ (data (i32.const 1356) "\12\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00i")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/util/hash/hashStr (param $0 i32)
@@ -30,30 +36,30 @@
   i32.shr_u
   i32.const 1
   i32.shl
-  local.tee $3
+  local.tee $2
   i32.const 16
   i32.ge_s
   if (result i32)
    i32.const 606290984
    local.set $1
    i32.const -2048144777
-   local.set $6
+   local.set $5
    i32.const 1640531535
-   local.set $7
-   local.get $3
+   local.set $6
+   local.get $2
    i32.const 16
    i32.sub
-   local.set $3
+   local.set $7
    loop $while-continue|0
     local.get $3
-    local.get $5
-    i32.ge_s
+    local.get $7
+    i32.le_s
     if
      local.get $1
      local.get $0
-     local.get $5
+     local.get $3
      i32.add
-     local.tee $8
+     local.tee $2
      i32.load
      i32.const -2048144777
      i32.mul
@@ -63,8 +69,8 @@
      i32.const -1640531535
      i32.mul
      local.set $1
-     local.get $6
-     local.get $8
+     local.get $5
+     local.get $2
      i32.load offset=4
      i32.const -2048144777
      i32.mul
@@ -73,9 +79,9 @@
      i32.rotl
      i32.const -1640531535
      i32.mul
-     local.set $6
-     local.get $4
+     local.set $5
      local.get $8
+     local.get $2
      i32.load offset=8
      i32.const -2048144777
      i32.mul
@@ -84,9 +90,9 @@
      i32.rotl
      i32.const -1640531535
      i32.mul
-     local.set $4
-     local.get $7
-     local.get $8
+     local.set $8
+     local.get $6
+     local.get $2
      i32.load offset=12
      i32.const -2048144777
      i32.mul
@@ -95,30 +101,30 @@
      i32.rotl
      i32.const -1640531535
      i32.mul
-     local.set $7
-     local.get $5
+     local.set $6
+     local.get $3
      i32.const 16
      i32.add
-     local.set $5
+     local.set $3
      br $while-continue|0
     end
    end
+   local.get $7
    local.get $3
-   local.get $5
    i32.sub
-   local.set $3
+   local.set $2
    local.get $1
    i32.const 1
    i32.rotl
-   local.get $6
+   local.get $5
    i32.const 7
    i32.rotl
    i32.add
-   local.get $4
+   local.get $8
    i32.const 12
    i32.rotl
    i32.add
-   local.get $7
+   local.get $6
    i32.const 18
    i32.rotl
    i32.add
@@ -126,18 +132,18 @@
    i32.const 374761393
   end
   local.set $1
-  local.get $3
+  local.get $2
   i32.const 4
   i32.sub
-  local.set $4
+  local.set $3
   loop $while-continue|1
-   local.get $2
+   local.get $3
    local.get $4
-   i32.le_s
+   i32.ge_s
    if
     local.get $1
     local.get $0
-    local.get $2
+    local.get $4
     i32.add
     i32.load
     i32.const -1028477379
@@ -148,21 +154,21 @@
     i32.const 668265263
     i32.mul
     local.set $1
-    local.get $2
+    local.get $4
     i32.const 4
     i32.add
-    local.set $2
+    local.set $4
     br $while-continue|1
    end
   end
   loop $while-continue|2
-   local.get $2
+   local.get $3
    local.get $4
-   i32.lt_s
+   i32.gt_s
    if
     local.get $1
     local.get $0
-    local.get $2
+    local.get $4
     i32.add
     i32.load8_u
     i32.const 374761393
@@ -173,10 +179,10 @@
     i32.const -1640531535
     i32.mul
     local.set $1
-    local.get $2
+    local.get $4
     i32.const 1
     i32.add
-    local.set $2
+    local.set $4
     br $while-continue|2
    end
   end
@@ -193,6 +199,18 @@
   i32.const 1120
   call $~lib/util/hash/hashStr
   i32.const 1152
+  call $~lib/util/hash/hashStr
+  i32.const 1184
+  call $~lib/util/hash/hashStr
+  i32.const 1216
+  call $~lib/util/hash/hashStr
+  i32.const 1248
+  call $~lib/util/hash/hashStr
+  i32.const 1280
+  call $~lib/util/hash/hashStr
+  i32.const 1328
+  call $~lib/util/hash/hashStr
+  i32.const 1376
   call $~lib/util/hash/hashStr
  )
 )
