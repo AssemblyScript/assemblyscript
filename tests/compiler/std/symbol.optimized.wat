@@ -343,14 +343,15 @@
   call $~lib/memory/memory.fill
   local.get $1
  )
- (func $~lib/util/hash/hashStr (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash<~lib/string/String> (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i64)
   i32.const -2128831035
-  local.set $1
+  local.set $2
   local.get $0
-  if
+  if (result i32)
    local.get $0
    i32.const 20
    i32.sub
@@ -359,30 +360,165 @@
    i32.shr_u
    i32.const 1
    i32.shl
-   local.set $3
-   loop $for-loop|0
-    local.get $2
-    local.get $3
-    i32.lt_u
+   local.set $1
+   loop $while-continue|0
+    local.get $1
+    i32.const 8
+    i32.ge_s
     if
-     local.get $1
-     local.get $0
      local.get $2
+     local.get $0
+     local.get $3
      i32.add
-     i32.load8_u
+     i64.load
+     local.tee $4
+     i32.wrap_i64
+     local.tee $2
+     i32.const 255
+     i32.and
      i32.xor
      i32.const 16777619
      i32.mul
-     local.set $1
      local.get $2
-     i32.const 1
-     i32.add
+     i32.const 8
+     i32.shr_u
+     i32.const 255
+     i32.and
+     i32.xor
+     i32.const 16777619
+     i32.mul
+     local.get $2
+     i32.const 16
+     i32.shr_u
+     i32.const 255
+     i32.and
+     i32.xor
+     i32.const 16777619
+     i32.mul
+     local.get $2
+     i32.const 24
+     i32.shr_u
+     i32.xor
+     i32.const 16777619
+     i32.mul
+     local.get $4
+     i64.const 32
+     i64.shr_u
+     i32.wrap_i64
+     local.tee $2
+     i32.const 255
+     i32.and
+     i32.xor
+     i32.const 16777619
+     i32.mul
+     local.get $2
+     i32.const 8
+     i32.shr_u
+     i32.const 255
+     i32.and
+     i32.xor
+     i32.const 16777619
+     i32.mul
+     local.get $2
+     i32.const 16
+     i32.shr_u
+     i32.const 255
+     i32.and
+     i32.xor
+     i32.const 16777619
+     i32.mul
+     local.get $2
+     i32.const 24
+     i32.shr_u
+     i32.xor
+     i32.const 16777619
+     i32.mul
      local.set $2
-     br $for-loop|0
+     local.get $3
+     i32.const 8
+     i32.add
+     local.set $3
+     local.get $1
+     i32.const 8
+     i32.sub
+     local.set $1
+     br $while-continue|0
     end
    end
+   local.get $1
+   i32.const 4
+   i32.ge_s
+   if (result i32)
+    local.get $2
+    local.get $0
+    local.get $3
+    i32.add
+    i32.load
+    local.tee $2
+    i32.const 255
+    i32.and
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    local.get $2
+    i32.const 8
+    i32.shr_u
+    i32.const 255
+    i32.and
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    local.get $2
+    i32.const 16
+    i32.shr_u
+    i32.const 255
+    i32.and
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    local.get $2
+    i32.const 24
+    i32.shr_u
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    local.set $2
+    local.get $3
+    i32.const 4
+    i32.add
+    local.set $3
+    local.get $1
+    i32.const 4
+    i32.sub
+   else
+    local.get $1
+   end
+   i32.const 2
+   i32.ge_s
+   if (result i32)
+    local.get $2
+    local.get $0
+    local.get $3
+    i32.add
+    i32.load16_u
+    local.tee $0
+    i32.const 255
+    i32.and
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    local.get $0
+    i32.const 8
+    i32.shr_u
+    i32.xor
+    i32.const 16777619
+    i32.mul
+   else
+    local.get $2
+   end
+  else
+   i32.const -2128831035
   end
-  local.get $1
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -599,7 +735,7 @@
      local.get $2
      local.get $4
      local.get $7
-     call $~lib/util/hash/hashStr
+     call $~lib/util/hash/hash<~lib/string/String>
      local.get $1
      i32.and
      i32.const 2
@@ -652,7 +788,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash<usize> (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
@@ -784,7 +920,7 @@
      local.get $2
      local.get $4
      local.get $7
-     call $~lib/util/hash/hash32
+     call $~lib/util/hash/hash<usize>
      local.get $1
      i32.and
      i32.const 2
@@ -844,7 +980,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/hash<usize>
   local.tee $3
   call $~lib/map/Map<usize,~lib/string/String>#find
   local.tee $2
@@ -941,12 +1077,12 @@
   if
    global.get $~lib/symbol/stringToId
    i32.const 1056
-   call $~lib/util/hash/hashStr
+   call $~lib/util/hash/hash<~lib/string/String>
    call $~lib/map/Map<~lib/string/String,usize>#find
    if
     global.get $~lib/symbol/stringToId
     i32.const 1056
-    call $~lib/util/hash/hashStr
+    call $~lib/util/hash/hash<~lib/string/String>
     call $~lib/map/Map<~lib/string/String,usize>#find
     local.tee $0
     i32.eqz
@@ -1027,7 +1163,7 @@
   global.get $~lib/symbol/stringToId
   local.tee $1
   i32.const 1056
-  call $~lib/util/hash/hashStr
+  call $~lib/util/hash/hash<~lib/string/String>
   local.tee $3
   call $~lib/map/Map<~lib/string/String,usize>#find
   local.tee $2
@@ -1116,7 +1252,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/hash<usize>
   call $~lib/map/Map<usize,~lib/string/String>#find
   i32.const 0
   i32.ne
@@ -1125,7 +1261,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/hash<usize>
   call $~lib/map/Map<usize,~lib/string/String>#find
   local.tee $0
   i32.eqz

@@ -1,6 +1,4 @@
-// @ts-ignore: decorator
-@inline
-export function HASH<T>(key: T): u32 {
+export function hash<T>(key: T): u32 {
   if (isString<T>()) {
     return hashStr(changetype<string>(key));
   } else if (isReference<T>()) {
@@ -26,19 +24,26 @@ export function HASH<T>(key: T): u32 {
 // @ts-ignore: decorator
 @inline const FNV_PRIME: u32 = 16777619;
 
-function hash8(key: u32): u32 {
-  return (FNV_OFFSET ^ key) * FNV_PRIME;
+
+// @ts-ignore: decorator
+@inline
+function hash8(key: u32, seed: u32 = FNV_OFFSET): u32 {
+  return (seed ^ key) * FNV_PRIME;
 }
 
-function hash16(key: u32): u32 {
-  var v = FNV_OFFSET;
+// @ts-ignore: decorator
+@inline
+function hash16(key: u32, seed: u32 = FNV_OFFSET): u32 {
+  var v = seed;
   v = (v ^ ( key        & 0xff)) * FNV_PRIME;
   v = (v ^ ( key >>  8        )) * FNV_PRIME;
   return v;
 }
 
-function hash32(key: u32): u32 {
-  var v = FNV_OFFSET;
+// @ts-ignore: decorator
+@inline
+function hash32(key: u32, seed: u32 = FNV_OFFSET): u32 {
+  var v = seed;
   v = (v ^ ( key        & 0xff)) * FNV_PRIME;
   v = (v ^ ((key >>  8) & 0xff)) * FNV_PRIME;
   v = (v ^ ((key >> 16) & 0xff)) * FNV_PRIME;
@@ -46,10 +51,12 @@ function hash32(key: u32): u32 {
   return v;
 }
 
-function hash64(key: u64): u32 {
+// @ts-ignore: decorator
+@inline
+function hash64(key: u64, seed: u32 = FNV_OFFSET): u32 {
   var l = <u32> key;
   var h = <u32>(key >>> 32);
-  var v = FNV_OFFSET;
+  var v = seed;
   v = (v ^ ( l        & 0xff)) * FNV_PRIME;
   v = (v ^ ((l >>  8) & 0xff)) * FNV_PRIME;
   v = (v ^ ((l >> 16) & 0xff)) * FNV_PRIME;
@@ -61,11 +68,31 @@ function hash64(key: u64): u32 {
   return v;
 }
 
-function hashStr(key: string): u32 {
-  var v = FNV_OFFSET;
+// @ts-ignore: decorator
+@inline
+function hashStr(key: string, seed: u32 = FNV_OFFSET): u32 {
+  var v = seed;
   if (key !== null) {
-    for (let i: usize = 0, k: usize = key.length << 1; i < k; ++i) {
-      v = (v ^ <u32>load<u8>(changetype<usize>(key) + i)) * FNV_PRIME;
+    let len = key.length << 1;
+    if (ASC_SHRINK_LEVEL > 1) {
+      for (let i: usize = 0; i < len; ++i) {
+        v = (v ^ <u32>load<u8>(changetype<usize>(key) + i)) * FNV_PRIME;
+      }
+    } else {
+      let off: usize = 0;
+      while (len >= 8) {
+        v = hash64(load<u64>(changetype<usize>(key) + off), v);
+        off += 8; len -= 8;
+      }
+      if (len >= 4) {
+        v = hash32(load<u32>(changetype<usize>(key) + off), v);
+        off += 4; len -= 4;
+      }
+      if (len >= 2) {
+        v = hash16(load<u16>(changetype<usize>(key) + off), v);
+        off += 2; len -= 2;
+      }
+      // length always is even so don't need hash8
     }
   }
   return v;

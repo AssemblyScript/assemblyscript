@@ -1,6 +1,6 @@
 /// <reference path="./rt/index.d.ts" />
 
-import { HASH } from "./util/hash";
+import { hash } from "./util/hash";
 
 // A deterministic hash set based on CloseTable from https://github.com/jorendorff/dht
 
@@ -94,11 +94,11 @@ export class Set<T> {
 
   @operator("[]")
   has(key: T): bool {
-    return this.find(key, HASH<T>(key)) !== null;
+    return this.find(key, hash<T>(key)) !== null;
   }
 
   add(key: T): this {
-    var hashCode = HASH<T>(key);
+    var hashCode = hash<T>(key);
     var entry = this.find(key, hashCode); // unmanaged!
     if (!entry) {
       // check if rehashing is necessary
@@ -130,7 +130,7 @@ export class Set<T> {
   }
 
   delete(key: T): bool {
-    var entry = this.find(key, HASH<T>(key)); // unmanaged!
+    var entry = this.find(key, hash<T>(key)); // unmanaged!
     if (!entry) return false;
     if (isManaged<T>()) __release(changetype<usize>(entry.key)); // exact 'key'
     entry.taggedNext |= EMPTY;
@@ -160,7 +160,7 @@ export class Set<T> {
         let newEntry = changetype<SetEntry<T>>(newPtr); // unmanaged!
         let oldEntryKey = oldEntry.key;
         newEntry.key = oldEntryKey;
-        let newBucketIndex = HASH<T>(oldEntryKey) & newBucketsMask;
+        let newBucketIndex = hash<T>(oldEntryKey) & newBucketsMask;
         let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
         newEntry.taggedNext = load<usize>(newBucketPtrBase);
         store<usize>(newBucketPtrBase, newPtr);

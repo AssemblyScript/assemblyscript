@@ -1,6 +1,6 @@
 /// <reference path="./rt/index.d.ts" />
 
-import { HASH } from "./util/hash";
+import { hash } from "./util/hash";
 import { E_KEYNOTFOUND } from "./util/error";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
@@ -96,19 +96,19 @@ export class Map<K,V> {
   }
 
   has(key: K): bool {
-    return this.find(key, HASH<K>(key)) !== null;
+    return this.find(key, hash<K>(key)) !== null;
   }
 
   @operator("[]")
   get(key: K): V {
-    var entry = this.find(key, HASH<K>(key));
+    var entry = this.find(key, hash<K>(key));
     if (!entry) throw new Error(E_KEYNOTFOUND); // cannot represent `undefined`
     return entry.value;
   }
 
   @operator("[]=")
   set(key: K, value: V): this {
-    var hashCode = HASH<K>(key);
+    var hashCode = hash<K>(key);
     var entry = this.find(key, hashCode); // unmanaged!
     if (entry) {
       if (isManaged<V>()) {
@@ -149,7 +149,7 @@ export class Map<K,V> {
   }
 
   delete(key: K): bool {
-    var entry = this.find(key, HASH<K>(key));
+    var entry = this.find(key, hash<K>(key));
     if (!entry) return false;
     if (isManaged<K>()) __release(changetype<usize>(entry.key));
     if (isManaged<V>()) __release(changetype<usize>(entry.value));
@@ -181,7 +181,7 @@ export class Map<K,V> {
         let oldEntryKey = oldEntry.key;
         newEntry.key = oldEntryKey;
         newEntry.value = oldEntry.value;
-        let newBucketIndex = HASH<K>(oldEntryKey) & newBucketsMask;
+        let newBucketIndex = hash<K>(oldEntryKey) & newBucketsMask;
         let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
         newEntry.taggedNext = load<usize>(newBucketPtrBase);
         store<usize>(newBucketPtrBase, newPtr);
