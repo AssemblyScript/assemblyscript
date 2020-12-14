@@ -345,194 +345,121 @@
   call $~lib/memory/memory.fill
   local.get $1
  )
- (func $~lib/util/hash/hashStr (param $0 i32) (result i64)
+ (func $~lib/util/hash/HASH<~lib/string/String> (param $0 i32) (result i64)
   (local $1 i32)
-  (local $2 i64)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i64)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i64)
+  (local $6 i64)
+  (local $7 i64)
+  (local $8 i32)
   local.get $0
-  i32.eqz
-  if
-   i64.const 0
-   return
-  end
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 1
-  i32.shr_u
-  i32.const 1
-  i32.shl
-  local.tee $3
-  i32.const 32
-  i32.ge_s
-  if
-   i64.const 6983438078262162902
-   local.set $2
-   i64.const -4417276706812531889
-   local.set $4
-   i64.const 7046029288634856825
-   local.set $5
-   local.get $3
+  if (result i64)
+   local.get $0
+   i32.const 20
+   i32.sub
+   i32.load offset=16
+   i32.const 1
+   i32.shr_u
+   i32.const 1
+   i32.shl
+   local.tee $2
    i32.const 32
-   i32.sub
-   local.set $3
-   loop $while-continue|0
-    local.get $3
-    local.get $6
-    i32.ge_s
-    if
-     local.get $2
-     local.get $0
-     local.get $6
-     i32.add
-     local.tee $7
-     i64.load
-     i64.const -4417276706812531889
-     i64.mul
-     i64.add
-     i64.const 31
-     i64.rotl
-     i64.const -7046029288634856825
-     i64.mul
-     local.set $2
-     local.get $4
-     local.get $7
-     i64.load offset=8
-     i64.const -4417276706812531889
-     i64.mul
-     i64.add
-     i64.const 31
-     i64.rotl
-     i64.const -7046029288634856825
-     i64.mul
-     local.set $4
-     local.get $8
-     local.get $7
-     i64.load offset=16
-     i64.const -4417276706812531889
-     i64.mul
-     i64.add
-     i64.const 31
-     i64.rotl
-     i64.const -7046029288634856825
-     i64.mul
-     local.set $8
-     local.get $5
-     local.get $7
-     i64.load offset=24
-     i64.const -4417276706812531889
-     i64.mul
-     i64.add
-     i64.const 31
-     i64.rotl
-     i64.const -7046029288634856825
-     i64.mul
-     local.set $5
-     local.get $6
-     i32.const 32
-     i32.add
-     local.set $6
-     br $while-continue|0
-    end
-   end
-   local.get $3
-   i64.extend_i32_s
-   local.get $2
-   i64.const 1
-   i64.rotl
-   local.get $4
-   i64.const 7
-   i64.rotl
-   i64.add
-   local.get $8
-   i64.const 12
-   i64.rotl
-   i64.add
-   local.get $5
-   i64.const 18
-   i64.rotl
-   i64.add
-   local.get $2
-   i64.const -4417276706812531889
-   i64.mul
-   i64.const 31
-   i64.rotl
-   i64.const -7046029288634856825
-   i64.mul
-   i64.xor
-   i64.const -7046029288634856825
-   i64.mul
-   i64.const -8796714831421723037
-   i64.add
-   local.get $4
-   i64.const -4417276706812531889
-   i64.mul
-   i64.const 31
-   i64.rotl
-   i64.const -7046029288634856825
-   i64.mul
-   i64.xor
-   i64.const -7046029288634856825
-   i64.mul
-   i64.const -8796714831421723037
-   i64.add
-   local.get $8
-   i64.const -4417276706812531889
-   i64.mul
-   i64.const 31
-   i64.rotl
-   i64.const -7046029288634856825
-   i64.mul
-   i64.xor
-   i64.const -7046029288634856825
-   i64.mul
-   i64.const -8796714831421723037
-   i64.add
-   local.get $5
-   i64.const -4417276706812531889
-   i64.mul
-   i64.const 31
-   i64.rotl
-   i64.const -7046029288634856825
-   i64.mul
-   i64.xor
-   i64.const -7046029288634856825
-   i64.mul
-   i64.const -8796714831421723037
-   i64.add
-   i64.add
-   local.set $2
-   local.get $3
-   local.get $6
-   i32.sub
-   local.set $3
-  else
-   local.get $3
-   i64.extend_i32_s
-   i64.const 2870177450012600261
-   i64.add
-   local.set $2
-  end
-  local.get $3
-  i32.const 8
-  i32.sub
-  local.set $3
-  loop $while-continue|1
-   local.get $1
-   local.get $3
-   i32.le_s
-   if
+   i32.ge_s
+   if (result i64)
+    i64.const 6983438078262162902
+    local.set $4
+    i64.const -4417276706812531889
+    local.set $5
+    i64.const 7046029288634856825
+    local.set $6
     local.get $2
-    local.get $0
+    local.tee $3
+    i32.const 32
+    i32.sub
+    local.set $8
+    loop $while-continue|0
+     local.get $1
+     local.get $8
+     i32.le_s
+     if
+      local.get $4
+      local.get $0
+      local.get $1
+      i32.add
+      local.tee $2
+      i64.load
+      i64.const -4417276706812531889
+      i64.mul
+      i64.add
+      i64.const 31
+      i64.rotl
+      i64.const -7046029288634856825
+      i64.mul
+      local.set $4
+      local.get $5
+      local.get $2
+      i64.load offset=8
+      i64.const -4417276706812531889
+      i64.mul
+      i64.add
+      i64.const 31
+      i64.rotl
+      i64.const -7046029288634856825
+      i64.mul
+      local.set $5
+      local.get $7
+      local.get $2
+      i64.load offset=16
+      i64.const -4417276706812531889
+      i64.mul
+      i64.add
+      i64.const 31
+      i64.rotl
+      i64.const -7046029288634856825
+      i64.mul
+      local.set $7
+      local.get $6
+      local.get $2
+      i64.load offset=24
+      i64.const -4417276706812531889
+      i64.mul
+      i64.add
+      i64.const 31
+      i64.rotl
+      i64.const -7046029288634856825
+      i64.mul
+      local.set $6
+      local.get $1
+      i32.const 32
+      i32.add
+      local.set $1
+      br $while-continue|0
+     end
+    end
+    local.get $8
     local.get $1
-    i32.add
-    i64.load
+    i32.sub
+    local.set $2
+    local.get $3
+    i64.extend_i32_s
+    local.get $4
+    i64.const 1
+    i64.rotl
+    local.get $5
+    i64.const 7
+    i64.rotl
+    i64.add
+    local.get $7
+    i64.const 12
+    i64.rotl
+    i64.add
+    local.get $6
+    i64.const 18
+    i64.rotl
+    i64.add
+    local.get $4
     i64.const -4417276706812531889
     i64.mul
     i64.const 31
@@ -540,90 +467,164 @@
     i64.const -7046029288634856825
     i64.mul
     i64.xor
-    i64.const 27
-    i64.rotl
     i64.const -7046029288634856825
     i64.mul
     i64.const -8796714831421723037
     i64.add
-    local.set $2
-    local.get $1
-    i32.const 8
-    i32.add
-    local.set $1
-    br $while-continue|1
-   end
-  end
-  local.get $3
-  local.get $1
-  i32.const 4
-  i32.add
-  i32.ge_s
-  if
-   local.get $2
-   local.get $0
-   local.get $1
-   i32.add
-   i64.load32_u
-   i64.const -7046029288634856825
-   i64.mul
-   i64.xor
-   i64.const 23
-   i64.rotl
-   i64.const -4417276706812531889
-   i64.mul
-   i64.const 1609587929392839161
-   i64.add
-   local.set $2
-   local.get $1
-   i32.const 4
-   i32.add
-   local.set $1
-  end
-  loop $while-continue|2
-   local.get $1
-   local.get $3
-   i32.lt_s
-   if
-    local.get $2
-    local.get $0
-    local.get $1
-    i32.add
-    i64.load8_u
-    i64.const 2870177450012600261
+    local.get $5
+    i64.const -4417276706812531889
     i64.mul
-    i64.add
-    i64.const 11
+    i64.const 31
     i64.rotl
     i64.const -7046029288634856825
     i64.mul
-    local.set $2
+    i64.xor
+    i64.const -7046029288634856825
+    i64.mul
+    i64.const -8796714831421723037
+    i64.add
+    local.get $7
+    i64.const -4417276706812531889
+    i64.mul
+    i64.const 31
+    i64.rotl
+    i64.const -7046029288634856825
+    i64.mul
+    i64.xor
+    i64.const -7046029288634856825
+    i64.mul
+    i64.const -8796714831421723037
+    i64.add
+    local.get $6
+    i64.const -4417276706812531889
+    i64.mul
+    i64.const 31
+    i64.rotl
+    i64.const -7046029288634856825
+    i64.mul
+    i64.xor
+    i64.const -7046029288634856825
+    i64.mul
+    i64.const -8796714831421723037
+    i64.add
+    i64.add
+   else
+    local.get $2
+    i64.extend_i32_s
+    i64.const 2870177450012600261
+    i64.add
+   end
+   local.set $4
+   i32.const 0
+   local.set $1
+   local.get $2
+   i32.const 8
+   i32.sub
+   local.set $2
+   loop $while-continue|1
     local.get $1
-    i32.const 1
+    local.get $2
+    i32.le_s
+    if
+     local.get $4
+     local.get $0
+     local.get $1
+     i32.add
+     i64.load
+     i64.const -4417276706812531889
+     i64.mul
+     i64.const 31
+     i64.rotl
+     i64.const -7046029288634856825
+     i64.mul
+     i64.xor
+     i64.const 27
+     i64.rotl
+     i64.const -7046029288634856825
+     i64.mul
+     i64.const -8796714831421723037
+     i64.add
+     local.set $4
+     local.get $1
+     i32.const 8
+     i32.add
+     local.set $1
+     br $while-continue|1
+    end
+   end
+   local.get $2
+   local.get $1
+   i32.const 4
+   i32.add
+   i32.ge_s
+   if
+    local.get $4
+    local.get $0
+    local.get $1
+    i32.add
+    i64.load32_u
+    i64.const -7046029288634856825
+    i64.mul
+    i64.xor
+    i64.const 23
+    i64.rotl
+    i64.const -4417276706812531889
+    i64.mul
+    i64.const 1609587929392839161
+    i64.add
+    local.set $4
+    local.get $1
+    i32.const 4
     i32.add
     local.set $1
-    br $while-continue|2
    end
+   loop $while-continue|2
+    local.get $1
+    local.get $2
+    i32.lt_s
+    if
+     local.get $4
+     local.get $0
+     local.get $1
+     i32.add
+     i64.load8_u
+     i64.const 2870177450012600261
+     i64.mul
+     i64.add
+     i64.const 11
+     i64.rotl
+     i64.const -7046029288634856825
+     i64.mul
+     local.set $4
+     local.get $1
+     i32.const 1
+     i32.add
+     local.set $1
+     br $while-continue|2
+    end
+   end
+   local.get $4
+   local.get $4
+   i64.const 33
+   i64.shr_u
+   i64.xor
+   i64.const -4417276706812531889
+   i64.mul
+   local.tee $4
+   local.get $4
+   i64.const 29
+   i64.shr_u
+   i64.xor
+   i64.const 1609587929392839161
+   i64.mul
+   local.tee $4
+   local.get $4
+   i64.const 32
+   i64.shr_u
+   i64.xor
+  else
+   i64.const 0
   end
-  local.get $2
-  local.get $2
-  i64.const 33
-  i64.shr_u
-  i64.xor
-  i64.const -4417276706812531889
-  i64.mul
-  local.tee $2
-  local.get $2
-  i64.const 29
-  i64.shr_u
-  i64.xor
-  i64.const 1609587929392839161
-  i64.mul
-  local.tee $2
-  local.get $2
-  i64.const 32
-  i64.shr_u
-  i64.xor
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -842,7 +843,7 @@
      local.get $2
      local.get $4
      local.get $7
-     call $~lib/util/hash/hashStr
+     call $~lib/util/hash/HASH<~lib/string/String>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -901,14 +902,11 @@
  (func $~lib/map/Map<~lib/string/String,usize>#set (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i64)
-  (local $4 i64)
-  (local $5 i32)
-  i32.const 1056
-  call $~lib/util/hash/hashStr
-  local.tee $3
-  local.set $4
+  (local $4 i32)
   local.get $0
-  local.get $3
+  i32.const 1056
+  call $~lib/util/hash/HASH<~lib/string/String>
+  local.tee $3
   call $~lib/map/Map<~lib/string/String,usize>#find
   local.tee $2
   if
@@ -951,11 +949,11 @@
    local.get $0
    local.get $0
    i32.load offset=24
-   local.tee $5
+   local.tee $4
    i32.const 1
    i32.add
    i32.store offset=24
-   local.get $5
+   local.get $4
    i32.const 12
    i32.mul
    i32.add
@@ -974,7 +972,7 @@
    local.get $2
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -990,7 +988,7 @@
    i32.store
   end
  )
- (func $~lib/util/hash/hash32 (param $0 i32) (result i64)
+ (func $~lib/util/hash/HASH<usize> (param $0 i32) (result i64)
   (local $1 i64)
   local.get $0
   i64.extend_i32_u
@@ -1127,7 +1125,7 @@
      local.get $2
      local.get $4
      local.get $7
-     call $~lib/util/hash/hash32
+     call $~lib/util/hash/HASH<usize>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -1190,7 +1188,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<usize>
   local.tee $3
   call $~lib/map/Map<usize,~lib/string/String>#find
   local.tee $2
@@ -1285,12 +1283,12 @@
   if
    global.get $~lib/symbol/stringToId
    i32.const 1056
-   call $~lib/util/hash/hashStr
+   call $~lib/util/hash/HASH<~lib/string/String>
    call $~lib/map/Map<~lib/string/String,usize>#find
    if
     global.get $~lib/symbol/stringToId
     i32.const 1056
-    call $~lib/util/hash/hashStr
+    call $~lib/util/hash/HASH<~lib/string/String>
     call $~lib/map/Map<~lib/string/String,usize>#find
     local.tee $0
     i32.eqz
@@ -1380,7 +1378,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<usize>
   call $~lib/map/Map<usize,~lib/string/String>#find
   i32.const 0
   i32.ne
@@ -1389,7 +1387,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<usize>
   call $~lib/map/Map<usize,~lib/string/String>#find
   local.tee $0
   i32.eqz

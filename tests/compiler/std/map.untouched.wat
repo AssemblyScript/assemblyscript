@@ -9,6 +9,7 @@
  (type $i32_i32_i64_=>_i32 (func (param i32 i32 i64) (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
  (type $i32_i64_i64_=>_i32 (func (param i32 i64 i64) (result i32)))
+ (type $i32_=>_i64 (func (param i32) (result i64)))
  (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
@@ -18,6 +19,7 @@
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
  (type $i32_f32_i64_=>_i32 (func (param i32 f32 i64) (result i32)))
  (type $i32_f64_i64_=>_i32 (func (param i32 f64 i64) (result i32)))
+ (type $i64_=>_i64 (func (param i64) (result i64)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -25,8 +27,8 @@
  (type $i32_f32_f32_=>_i32 (func (param i32 f32 f32) (result i32)))
  (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
  (type $i32_f64_f64_=>_i32 (func (param i32 f64 f64) (result i32)))
- (type $i32_=>_i64 (func (param i32) (result i64)))
- (type $i64_=>_i64 (func (param i64) (result i64)))
+ (type $f32_=>_i64 (func (param f32) (result i64)))
+ (type $f64_=>_i64 (func (param f64) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 12) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
@@ -1807,56 +1809,77 @@
   i32.store offset=28
   local.get $0
  )
- (func $~lib/util/hash/hash32 (param $0 i32) (result i64)
+ (func $~lib/util/hash/HASH<i8> (param $0 i32) (result i64)
   (local $1 i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 1
+  i32.const 4
+  i32.le_u
+  drop
+  local.get $0
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  local.set $2
+  i64.const 1
+  local.set $1
   i64.const 0
   i64.const 2870177450012600261
   i64.add
-  i64.const 4
-  i64.add
-  local.set $1
   local.get $1
-  local.get $0
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $2
   i64.extend_i32_u
   i64.const -7046029288634856825
   i64.mul
   i64.xor
-  local.set $1
-  local.get $1
+  local.set $3
+  local.get $3
   i64.const 23
   i64.rotl
   i64.const -4417276706812531889
   i64.mul
   i64.const 1609587929392839161
   i64.add
-  local.set $1
-  local.get $1
-  local.get $1
+  local.set $3
+  local.get $3
+  local.get $3
   i64.const 33
   i64.shr_u
   i64.xor
-  local.set $1
-  local.get $1
+  local.set $3
+  local.get $3
   i64.const -4417276706812531889
   i64.mul
-  local.set $1
-  local.get $1
-  local.get $1
+  local.set $3
+  local.get $3
+  local.get $3
   i64.const 29
   i64.shr_u
   i64.xor
-  local.set $1
-  local.get $1
+  local.set $3
+  local.get $3
   i64.const 1609587929392839161
   i64.mul
-  local.set $1
-  local.get $1
-  local.get $1
+  local.set $3
+  local.get $3
+  local.get $3
   i64.const 32
   i64.shr_u
   i64.xor
-  local.set $1
-  local.get $1
+  local.set $3
+  local.get $3
+  return
  )
  (func $~lib/map/Map<i8,i32>#find (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
@@ -1914,30 +1937,10 @@
   i32.const 0
  )
  (func $~lib/map/Map<i8,i32>#has (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i8>|inlined.0 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i8>|inlined.0
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i8>
   call $~lib/map/Map<i8,i32>#find
   i32.const 0
   i32.ne
@@ -2017,23 +2020,8 @@
      local.get $10
      i32.load offset=4
      i32.store offset=4
-     block $~lib/util/hash/HASH<i8>|inlined.2 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 1
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<i8>|inlined.2
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<i8>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -2115,42 +2103,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i8,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<i8>|inlined.1 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i8>|inlined.1
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<i8>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<i8,i32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
   else
@@ -2187,8 +2156,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -2200,11 +2169,11 @@
    i32.const 12
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store8
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
    local.get $0
@@ -2215,7 +2184,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -2224,14 +2193,14 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=8
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -2239,33 +2208,13 @@
  )
  (func $~lib/map/Map<i8,i32>#get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i8>|inlined.3 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i8>|inlined.3
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i8>
   call $~lib/map/Map<i8,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 384
@@ -2275,7 +2224,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.load offset=4
  )
  (func $~lib/map/Map<i8,i32>#get:size (param $0 i32) (result i32)
@@ -4512,23 +4461,8 @@
      local.get $10
      i32.load8_s offset=1
      i32.store8 offset=1
-     block $~lib/util/hash/HASH<i8>|inlined.5 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 1
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<i8>|inlined.5
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<i8>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -4610,42 +4544,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i8,i8>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<i8>|inlined.4 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i8>|inlined.4
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<i8>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<i8,i8>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store8 offset=1
   else
@@ -4682,8 +4597,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -4695,11 +4610,11 @@
    i32.const 8
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store8
-   local.get $5
+   local.get $4
    local.get $2
    i32.store8 offset=1
    local.get $0
@@ -4710,7 +4625,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -4719,18 +4634,86 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=4
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
+ )
+ (func $~lib/util/hash/HASH<i32> (param $0 i32) (result i64)
+  (local $1 i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 4
+  i32.const 4
+  i32.le_u
+  drop
+  local.get $0
+  local.set $2
+  i64.const 4
+  local.set $1
+  i64.const 0
+  i64.const 2870177450012600261
+  i64.add
+  local.get $1
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $2
+  i64.extend_i32_u
+  i64.const -7046029288634856825
+  i64.mul
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 23
+  i64.rotl
+  i64.const -4417276706812531889
+  i64.mul
+  i64.const 1609587929392839161
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const -4417276706812531889
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 29
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 1609587929392839161
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 32
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  return
  )
  (func $~lib/map/Map<i32,i32>#find (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
@@ -4858,23 +4841,8 @@
      local.get $10
      i32.load offset=4
      i32.store offset=4
-     block $~lib/util/hash/HASH<i32>|inlined.1 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 4
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<i32>|inlined.1
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<i32>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -4956,38 +4924,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i32,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<i32>|inlined.0 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 4
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i32>|inlined.0
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<i32>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<i32,i32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
   else
@@ -5024,8 +4977,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -5037,11 +4990,11 @@
    i32.const 12
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
    local.get $0
@@ -5052,7 +5005,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -5061,14 +5014,14 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=8
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -5089,30 +5042,11 @@
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i8>|inlined.6 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i8>|inlined.6
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i8>
   call $~lib/map/Map<i8,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 0
@@ -5122,8 +5056,8 @@
   drop
   i32.const 0
   drop
-  local.get $3
-  local.get $3
+  local.get $2
+  local.get $2
   i32.load offset=8
   i32.const 1
   i32.or
@@ -5139,16 +5073,16 @@
   i64.const 1
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $2
+  local.tee $4
   local.get $0
   i32.load offset=28
   local.tee $5
-  local.get $2
+  local.get $4
   local.get $5
   i32.gt_u
   select
@@ -5168,7 +5102,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/map/Map<i8,i32>#rehash
   end
   i32.const 1
@@ -5766,6 +5700,76 @@
   i32.store offset=28
   local.get $0
  )
+ (func $~lib/util/hash/HASH<u8> (param $0 i32) (result i64)
+  (local $1 i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 1
+  i32.const 4
+  i32.le_u
+  drop
+  local.get $0
+  i32.const 255
+  i32.and
+  local.set $2
+  i64.const 1
+  local.set $1
+  i64.const 0
+  i64.const 2870177450012600261
+  i64.add
+  local.get $1
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $2
+  i64.extend_i32_u
+  i64.const -7046029288634856825
+  i64.mul
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 23
+  i64.rotl
+  i64.const -4417276706812531889
+  i64.mul
+  i64.const 1609587929392839161
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const -4417276706812531889
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 29
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 1609587929392839161
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 32
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  return
+ )
  (func $~lib/map/Map<u8,i32>#find (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -5820,28 +5824,10 @@
   i32.const 0
  )
  (func $~lib/map/Map<u8,i32>#has (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u8>|inlined.0 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 255
-   i32.and
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u8>|inlined.0
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u8>
   call $~lib/map/Map<u8,i32>#find
   i32.const 0
   i32.ne
@@ -5921,23 +5907,8 @@
      local.get $10
      i32.load offset=4
      i32.store offset=4
-     block $~lib/util/hash/HASH<u8>|inlined.2 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 1
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<u8>|inlined.2
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<u8>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -6019,40 +5990,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<u8,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<u8>|inlined.1 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   i32.const 255
-   i32.and
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u8>|inlined.1
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<u8>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<u8,i32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
   else
@@ -6089,8 +6043,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -6102,11 +6056,11 @@
    i32.const 12
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store8
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
    local.get $0
@@ -6117,7 +6071,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -6126,14 +6080,14 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=8
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -6141,31 +6095,13 @@
  )
  (func $~lib/map/Map<u8,i32>#get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u8>|inlined.3 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 255
-   i32.and
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u8>|inlined.3
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u8>
   call $~lib/map/Map<u8,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 384
@@ -6175,7 +6111,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.load offset=4
  )
  (func $~lib/map/Map<u8,i32>#get:size (param $0 i32) (result i32)
@@ -6656,23 +6592,8 @@
      local.get $10
      i32.load8_u offset=1
      i32.store8 offset=1
-     block $~lib/util/hash/HASH<u8>|inlined.5 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 1
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<u8>|inlined.5
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<u8>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -6754,40 +6675,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<u8,u8>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<u8>|inlined.4 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   i32.const 255
-   i32.and
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u8>|inlined.4
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<u8>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<u8,u8>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store8 offset=1
   else
@@ -6824,8 +6728,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -6837,11 +6741,11 @@
    i32.const 8
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store8
-   local.get $5
+   local.get $4
    local.get $2
    i32.store8 offset=1
    local.get $0
@@ -6852,7 +6756,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -6861,14 +6765,14 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=4
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -6885,28 +6789,11 @@
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u8>|inlined.6 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 255
-   i32.and
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u8>|inlined.6
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u8>
   call $~lib/map/Map<u8,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 0
@@ -6916,8 +6803,8 @@
   drop
   i32.const 0
   drop
-  local.get $3
-  local.get $3
+  local.get $2
+  local.get $2
   i32.load offset=8
   i32.const 1
   i32.or
@@ -6933,16 +6820,16 @@
   i64.const 1
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $2
+  local.tee $4
   local.get $0
   i32.load offset=28
   local.tee $5
-  local.get $2
+  local.get $4
   local.get $5
   i32.gt_u
   select
@@ -6962,7 +6849,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/map/Map<u8,i32>#rehash
   end
   i32.const 1
@@ -7538,6 +7425,78 @@
   i32.store offset=28
   local.get $0
  )
+ (func $~lib/util/hash/HASH<i16> (param $0 i32) (result i64)
+  (local $1 i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 2
+  i32.const 4
+  i32.le_u
+  drop
+  local.get $0
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_s
+  local.set $2
+  i64.const 2
+  local.set $1
+  i64.const 0
+  i64.const 2870177450012600261
+  i64.add
+  local.get $1
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $2
+  i64.extend_i32_u
+  i64.const -7046029288634856825
+  i64.mul
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 23
+  i64.rotl
+  i64.const -4417276706812531889
+  i64.mul
+  i64.const 1609587929392839161
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const -4417276706812531889
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 29
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 1609587929392839161
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 32
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  return
+ )
  (func $~lib/map/Map<i16,i32>#find (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -7594,30 +7553,10 @@
   i32.const 0
  )
  (func $~lib/map/Map<i16,i32>#has (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i16>|inlined.0 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 2
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i16>|inlined.0
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i16>
   call $~lib/map/Map<i16,i32>#find
   i32.const 0
   i32.ne
@@ -7697,23 +7636,8 @@
      local.get $10
      i32.load offset=4
      i32.store offset=4
-     block $~lib/util/hash/HASH<i16>|inlined.2 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 2
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<i16>|inlined.2
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<i16>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -7795,42 +7719,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i16,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<i16>|inlined.1 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 2
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i16>|inlined.1
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<i16>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<i16,i32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
   else
@@ -7867,8 +7772,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -7880,11 +7785,11 @@
    i32.const 12
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store16
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
    local.get $0
@@ -7895,7 +7800,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -7904,14 +7809,14 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=8
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -7919,33 +7824,13 @@
  )
  (func $~lib/map/Map<i16,i32>#get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i16>|inlined.3 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 2
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i16>|inlined.3
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i16>
   call $~lib/map/Map<i16,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 384
@@ -7955,7 +7840,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.load offset=4
  )
  (func $~lib/map/Map<i16,i32>#get:size (param $0 i32) (result i32)
@@ -8438,23 +8323,8 @@
      local.get $10
      i32.load16_s offset=2
      i32.store16 offset=2
-     block $~lib/util/hash/HASH<i16>|inlined.5 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 2
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<i16>|inlined.5
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<i16>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -8536,42 +8406,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i16,i16>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<i16>|inlined.4 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 2
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i16>|inlined.4
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<i16>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<i16,i16>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store16 offset=2
   else
@@ -8608,8 +8459,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -8621,11 +8472,11 @@
    i32.const 8
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store16
-   local.get $5
+   local.get $4
    local.get $2
    i32.store16 offset=2
    local.get $0
@@ -8636,7 +8487,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -8645,14 +8496,14 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=4
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -8669,30 +8520,11 @@
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i16>|inlined.6 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 2
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i16>|inlined.6
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i16>
   call $~lib/map/Map<i16,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 0
@@ -8702,8 +8534,8 @@
   drop
   i32.const 0
   drop
-  local.get $3
-  local.get $3
+  local.get $2
+  local.get $2
   i32.load offset=8
   i32.const 1
   i32.or
@@ -8719,16 +8551,16 @@
   i64.const 1
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $2
+  local.tee $4
   local.get $0
   i32.load offset=28
   local.tee $5
-  local.get $2
+  local.get $4
   local.get $5
   i32.gt_u
   select
@@ -8748,7 +8580,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/map/Map<i16,i32>#rehash
   end
   i32.const 1
@@ -9346,6 +9178,76 @@
   i32.store offset=28
   local.get $0
  )
+ (func $~lib/util/hash/HASH<u16> (param $0 i32) (result i64)
+  (local $1 i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 2
+  i32.const 4
+  i32.le_u
+  drop
+  local.get $0
+  i32.const 65535
+  i32.and
+  local.set $2
+  i64.const 2
+  local.set $1
+  i64.const 0
+  i64.const 2870177450012600261
+  i64.add
+  local.get $1
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $2
+  i64.extend_i32_u
+  i64.const -7046029288634856825
+  i64.mul
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 23
+  i64.rotl
+  i64.const -4417276706812531889
+  i64.mul
+  i64.const 1609587929392839161
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const -4417276706812531889
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 29
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 1609587929392839161
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 32
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  return
+ )
  (func $~lib/map/Map<u16,i32>#find (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -9400,28 +9302,10 @@
   i32.const 0
  )
  (func $~lib/map/Map<u16,i32>#has (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u16>|inlined.0 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 2
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 65535
-   i32.and
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u16>|inlined.0
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u16>
   call $~lib/map/Map<u16,i32>#find
   i32.const 0
   i32.ne
@@ -9501,23 +9385,8 @@
      local.get $10
      i32.load offset=4
      i32.store offset=4
-     block $~lib/util/hash/HASH<u16>|inlined.2 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 2
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<u16>|inlined.2
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<u16>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -9599,40 +9468,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<u16,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<u16>|inlined.1 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 2
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   i32.const 65535
-   i32.and
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u16>|inlined.1
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<u16>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<u16,i32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
   else
@@ -9669,8 +9521,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -9682,11 +9534,11 @@
    i32.const 12
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store16
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
    local.get $0
@@ -9697,7 +9549,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -9706,14 +9558,14 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=8
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -9721,31 +9573,13 @@
  )
  (func $~lib/map/Map<u16,i32>#get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u16>|inlined.3 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 2
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 65535
-   i32.and
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u16>|inlined.3
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u16>
   call $~lib/map/Map<u16,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 384
@@ -9755,7 +9589,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.load offset=4
  )
  (func $~lib/map/Map<u16,i32>#get:size (param $0 i32) (result i32)
@@ -10236,23 +10070,8 @@
      local.get $10
      i32.load16_u offset=2
      i32.store16 offset=2
-     block $~lib/util/hash/HASH<u16>|inlined.5 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 2
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<u16>|inlined.5
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<u16>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -10334,40 +10153,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<u16,u16>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<u16>|inlined.4 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 2
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   i32.const 65535
-   i32.and
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u16>|inlined.4
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<u16>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<u16,u16>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store16 offset=2
   else
@@ -10404,8 +10206,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -10417,11 +10219,11 @@
    i32.const 8
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store16
-   local.get $5
+   local.get $4
    local.get $2
    i32.store16 offset=2
    local.get $0
@@ -10432,7 +10234,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -10441,14 +10243,14 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=4
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -10465,28 +10267,11 @@
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u16>|inlined.6 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 2
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   i32.const 65535
-   i32.and
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u16>|inlined.6
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u16>
   call $~lib/map/Map<u16,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 0
@@ -10496,8 +10281,8 @@
   drop
   i32.const 0
   drop
-  local.get $3
-  local.get $3
+  local.get $2
+  local.get $2
   i32.load offset=8
   i32.const 1
   i32.or
@@ -10513,16 +10298,16 @@
   i64.const 1
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $2
+  local.tee $4
   local.get $0
   i32.load offset=28
   local.tee $5
-  local.get $2
+  local.get $4
   local.get $5
   i32.gt_u
   select
@@ -10542,7 +10327,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/map/Map<u16,i32>#rehash
   end
   i32.const 1
@@ -11079,55 +10864,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i32,i32>#has (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i32>|inlined.2 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 4
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i32>|inlined.2
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i32>
   call $~lib/map/Map<i32,i32>#find
   i32.const 0
   i32.ne
  )
  (func $~lib/map/Map<i32,i32>#get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i32>|inlined.3 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 4
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i32>|inlined.3
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i32>
   call $~lib/map/Map<i32,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 384
@@ -11137,7 +10890,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.load offset=4
  )
  (func $~lib/map/Map<i32,i32>#keys (param $0 i32) (result i32)
@@ -11281,26 +11034,11 @@
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i32>|inlined.4 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 4
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i32>|inlined.4
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i32>
   call $~lib/map/Map<i32,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 0
@@ -11310,8 +11048,8 @@
   drop
   i32.const 0
   drop
-  local.get $3
-  local.get $3
+  local.get $2
+  local.get $2
   i32.load offset=8
   i32.const 1
   i32.or
@@ -11327,16 +11065,16 @@
   i64.const 1
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $2
+  local.tee $4
   local.get $0
   i32.load offset=28
   local.tee $5
-  local.get $2
+  local.get $4
   local.get $5
   i32.gt_u
   select
@@ -11356,7 +11094,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/map/Map<i32,i32>#rehash
   end
   i32.const 1
@@ -11908,6 +11646,74 @@
   i32.store offset=28
   local.get $0
  )
+ (func $~lib/util/hash/HASH<u32> (param $0 i32) (result i64)
+  (local $1 i64)
+  (local $2 i32)
+  (local $3 i64)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 4
+  i32.const 4
+  i32.le_u
+  drop
+  local.get $0
+  local.set $2
+  i64.const 4
+  local.set $1
+  i64.const 0
+  i64.const 2870177450012600261
+  i64.add
+  local.get $1
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $2
+  i64.extend_i32_u
+  i64.const -7046029288634856825
+  i64.mul
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 23
+  i64.rotl
+  i64.const -4417276706812531889
+  i64.mul
+  i64.const 1609587929392839161
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const -4417276706812531889
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 29
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 1609587929392839161
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 32
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  return
+ )
  (func $~lib/map/Map<u32,i32>#find (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -11960,26 +11766,10 @@
   i32.const 0
  )
  (func $~lib/map/Map<u32,i32>#has (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u32>|inlined.0 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 4
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u32>|inlined.0
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u32>
   call $~lib/map/Map<u32,i32>#find
   i32.const 0
   i32.ne
@@ -12059,23 +11849,8 @@
      local.get $10
      i32.load offset=4
      i32.store offset=4
-     block $~lib/util/hash/HASH<u32>|inlined.2 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 4
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<u32>|inlined.2
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<u32>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -12157,38 +11932,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<u32,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<u32>|inlined.1 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 4
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u32>|inlined.1
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<u32>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<u32,i32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
   else
@@ -12225,8 +11985,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -12238,11 +11998,11 @@
    i32.const 12
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
    local.get $0
@@ -12253,7 +12013,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -12262,14 +12022,14 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=8
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -12277,29 +12037,13 @@
  )
  (func $~lib/map/Map<u32,i32>#get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u32>|inlined.3 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 4
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u32>|inlined.3
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u32>
   call $~lib/map/Map<u32,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 384
@@ -12309,7 +12053,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.load offset=4
  )
  (func $~lib/map/Map<u32,i32>#get:size (param $0 i32) (result i32)
@@ -12788,23 +12532,8 @@
      local.get $10
      i32.load offset=4
      i32.store offset=4
-     block $~lib/util/hash/HASH<u32>|inlined.5 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 4
-      i32.const 4
-      i32.le_u
-      drop
-      local.get $13
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<u32>|inlined.5
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<u32>
      local.get $1
      i64.extend_i32_u
      i64.and
@@ -12886,38 +12615,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<u32,u32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  block $~lib/util/hash/HASH<u32>|inlined.4 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 4
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $3
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u32>|inlined.4
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<u32>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<u32,u32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
   else
@@ -12954,8 +12668,8 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
@@ -12967,11 +12681,11 @@
    i32.const 12
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i32.store
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
    local.get $0
@@ -12982,7 +12696,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -12991,14 +12705,14 @@
    i32.mul
    i32.add
    local.set $6
-   local.get $5
+   local.get $4
    local.get $6
    i32.load
    i32.store offset=8
    local.get $6
-   local.get $5
+   local.get $4
    i32.store
-   local.get $3
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -13015,26 +12729,11 @@
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u32>|inlined.6 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 4
-   i32.const 4
-   i32.le_u
-   drop
-   local.get $2
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u32>|inlined.6
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u32>
   call $~lib/map/Map<u32,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 0
@@ -13044,8 +12743,8 @@
   drop
   i32.const 0
   drop
-  local.get $3
-  local.get $3
+  local.get $2
+  local.get $2
   i32.load offset=8
   i32.const 1
   i32.or
@@ -13061,16 +12760,16 @@
   i64.const 1
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $2
+  local.tee $4
   local.get $0
   i32.load offset=28
   local.tee $5
-  local.get $2
+  local.get $4
   local.get $5
   i32.gt_u
   select
@@ -13090,7 +12789,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/map/Map<u32,i32>#rehash
   end
   i32.const 1
@@ -13642,16 +13341,33 @@
   i32.store offset=28
   local.get $0
  )
- (func $~lib/util/hash/hash64 (param $0 i64) (result i64)
+ (func $~lib/util/hash/HASH<i64> (param $0 i64) (result i64)
   (local $1 i64)
+  (local $2 i64)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 8
+  i32.const 4
+  i32.le_u
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $0
+  local.set $1
   i64.const 0
   i64.const 2870177450012600261
   i64.add
   i64.const 8
   i64.add
-  local.set $1
+  local.set $2
+  local.get $2
   local.get $1
-  local.get $0
   i64.const -4417276706812531889
   i64.mul
   i64.const 31
@@ -13659,42 +13375,43 @@
   i64.const -7046029288634856825
   i64.mul
   i64.xor
-  local.set $1
-  local.get $1
+  local.set $2
+  local.get $2
   i64.const 27
   i64.rotl
   i64.const -7046029288634856825
   i64.mul
   i64.const -8796714831421723037
   i64.add
-  local.set $1
-  local.get $1
-  local.get $1
+  local.set $2
+  local.get $2
+  local.get $2
   i64.const 33
   i64.shr_u
   i64.xor
-  local.set $1
-  local.get $1
+  local.set $2
+  local.get $2
   i64.const -4417276706812531889
   i64.mul
-  local.set $1
-  local.get $1
-  local.get $1
+  local.set $2
+  local.get $2
+  local.get $2
   i64.const 29
   i64.shr_u
   i64.xor
-  local.set $1
-  local.get $1
+  local.set $2
+  local.get $2
   i64.const 1609587929392839161
   i64.mul
-  local.set $1
-  local.get $1
-  local.get $1
+  local.set $2
+  local.get $2
+  local.get $2
   i64.const 32
   i64.shr_u
   i64.xor
-  local.set $1
-  local.get $1
+  local.set $2
+  local.get $2
+  return
  )
  (func $~lib/map/Map<i64,i32>#find (param $0 i32) (param $1 i64) (param $2 i64) (result i32)
   (local $3 i32)
@@ -13748,30 +13465,10 @@
   i32.const 0
  )
  (func $~lib/map/Map<i64,i32>#has (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i64)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i64>|inlined.0 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 8
-   i32.const 4
-   i32.le_u
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $2
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<i64>|inlined.0
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i64>
   call $~lib/map/Map<i64,i32>#find
   i32.const 0
   i32.ne
@@ -13788,9 +13485,8 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i64)
-  (local $13 i64)
+  (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -13852,43 +13548,24 @@
      local.get $10
      i32.load offset=8
      i32.store offset=8
-     block $~lib/util/hash/HASH<i64>|inlined.2 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 8
-      i32.const 4
-      i32.le_u
-      drop
-      i32.const 8
-      i32.const 8
-      i32.eq
-      drop
-      local.get $13
-      call $~lib/util/hash/hash64
-      br $~lib/util/hash/HASH<i64>|inlined.2
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<i64>
      local.get $1
      i64.extend_i32_u
      i64.and
      i32.wrap_i64
-     local.set $14
+     local.set $13
      local.get $3
-     local.get $14
+     local.get $13
      i32.const 4
      i32.mul
      i32.add
-     local.set $15
+     local.set $14
      local.get $11
-     local.get $15
+     local.get $14
      i32.load
      i32.store offset=12
-     local.get $15
+     local.get $14
      local.get $8
      i32.store
      local.get $8
@@ -13906,29 +13583,29 @@
   local.get $0
   local.tee $11
   local.get $3
-  local.tee $14
+  local.tee $13
   local.get $11
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $14
+   local.get $13
    call $~lib/rt/pure/__retain
-   local.set $14
+   local.set $13
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $14
+  local.get $13
   i32.store
   local.get $0
   local.get $1
   i64.extend_i32_u
   i64.store offset=8
   local.get $0
-  local.tee $15
+  local.tee $14
   local.get $5
   local.tee $9
-  local.get $15
+  local.get $14
   i32.load offset=16
   local.tee $11
   i32.ne
@@ -13955,42 +13632,22 @@
  )
  (func $~lib/map/Map<i64,i32>#set (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i64)
-  (local $4 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  block $~lib/util/hash/HASH<i64>|inlined.1 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 8
-   i32.const 4
-   i32.le_u
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $3
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<i64>|inlined.1
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<i64>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<i64,i32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=8
   else
@@ -14027,24 +13684,24 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $6
-   local.get $6
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
-   local.tee $7
+   local.tee $6
    i32.const 1
    i32.add
    i32.store offset=24
-   local.get $7
+   local.get $6
    i32.const 16
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i64.store
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=8
    local.get $0
@@ -14055,7 +13712,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -14063,49 +13720,29 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $7
-   local.get $5
-   local.get $7
+   local.set $6
+   local.get $4
+   local.get $6
    i32.load
    i32.store offset=12
-   local.get $7
-   local.get $5
-   i32.store
    local.get $6
+   local.get $4
+   i32.store
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
  )
  (func $~lib/map/Map<i64,i32>#get (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i64)
-  (local $3 i32)
+  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i64>|inlined.3 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 8
-   i32.const 4
-   i32.le_u
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $2
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<i64>|inlined.3
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i64>
   call $~lib/map/Map<i64,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 384
@@ -14115,7 +13752,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.load offset=8
  )
  (func $~lib/map/Map<i64,i32>#get:size (param $0 i32) (result i32)
@@ -14531,9 +14168,8 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i64)
-  (local $13 i64)
+  (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -14595,43 +14231,24 @@
      local.get $10
      i64.load offset=8
      i64.store offset=8
-     block $~lib/util/hash/HASH<i64>|inlined.5 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 8
-      i32.const 4
-      i32.le_u
-      drop
-      i32.const 8
-      i32.const 8
-      i32.eq
-      drop
-      local.get $13
-      call $~lib/util/hash/hash64
-      br $~lib/util/hash/HASH<i64>|inlined.5
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<i64>
      local.get $1
      i64.extend_i32_u
      i64.and
      i32.wrap_i64
-     local.set $14
+     local.set $13
      local.get $3
-     local.get $14
+     local.get $13
      i32.const 4
      i32.mul
      i32.add
-     local.set $15
+     local.set $14
      local.get $11
-     local.get $15
+     local.get $14
      i32.load
      i32.store offset=16
-     local.get $15
+     local.get $14
      local.get $8
      i32.store
      local.get $8
@@ -14649,29 +14266,29 @@
   local.get $0
   local.tee $11
   local.get $3
-  local.tee $14
+  local.tee $13
   local.get $11
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $14
+   local.get $13
    call $~lib/rt/pure/__retain
-   local.set $14
+   local.set $13
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $14
+  local.get $13
   i32.store
   local.get $0
   local.get $1
   i64.extend_i32_u
   i64.store offset=8
   local.get $0
-  local.tee $15
+  local.tee $14
   local.get $5
   local.tee $9
-  local.get $15
+  local.get $14
   i32.load offset=16
   local.tee $11
   i32.ne
@@ -14698,42 +14315,22 @@
  )
  (func $~lib/map/Map<i64,i64>#set (param $0 i32) (param $1 i64) (param $2 i64) (result i32)
   (local $3 i64)
-  (local $4 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  block $~lib/util/hash/HASH<i64>|inlined.4 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 8
-   i32.const 4
-   i32.le_u
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $3
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<i64>|inlined.4
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<i64>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<i64,i64>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i64.store offset=8
   else
@@ -14770,24 +14367,24 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $6
-   local.get $6
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
-   local.tee $7
+   local.tee $6
    i32.const 1
    i32.add
    i32.store offset=24
-   local.get $7
+   local.get $6
    i32.const 24
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i64.store
-   local.get $5
+   local.get $4
    local.get $2
    i64.store offset=8
    local.get $0
@@ -14798,7 +14395,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -14806,15 +14403,15 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $7
-   local.get $5
-   local.get $7
+   local.set $6
+   local.get $4
+   local.get $6
    i32.load
    i32.store offset=16
-   local.get $7
-   local.get $5
-   i32.store
    local.get $6
+   local.get $4
+   i32.store
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -14825,37 +14422,17 @@
   i32.load offset=28
  )
  (func $~lib/map/Map<i64,i32>#delete (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i64)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i64>|inlined.6 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 8
-   i32.const 4
-   i32.le_u
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $2
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<i64>|inlined.6
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<i64>
   call $~lib/map/Map<i64,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 0
@@ -14865,8 +14442,8 @@
   drop
   i32.const 0
   drop
-  local.get $3
-  local.get $3
+  local.get $2
+  local.get $2
   i32.load offset=12
   i32.const 1
   i32.or
@@ -14882,17 +14459,17 @@
   i64.const 1
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $5
+  local.tee $4
   local.get $0
   i32.load offset=28
-  local.tee $6
+  local.tee $5
+  local.get $4
   local.get $5
-  local.get $6
   i32.gt_u
   select
   i32.ge_u
@@ -14911,7 +14488,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/map/Map<i64,i32>#rehash
   end
   i32.const 1
@@ -15471,6 +15048,78 @@
   i32.store offset=28
   local.get $0
  )
+ (func $~lib/util/hash/HASH<u64> (param $0 i64) (result i64)
+  (local $1 i64)
+  (local $2 i64)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 8
+  i32.const 4
+  i32.le_u
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $0
+  local.set $1
+  i64.const 0
+  i64.const 2870177450012600261
+  i64.add
+  i64.const 8
+  i64.add
+  local.set $2
+  local.get $2
+  local.get $1
+  i64.const -4417276706812531889
+  i64.mul
+  i64.const 31
+  i64.rotl
+  i64.const -7046029288634856825
+  i64.mul
+  i64.xor
+  local.set $2
+  local.get $2
+  i64.const 27
+  i64.rotl
+  i64.const -7046029288634856825
+  i64.mul
+  i64.const -8796714831421723037
+  i64.add
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $2
+  local.get $2
+  i64.const -4417276706812531889
+  i64.mul
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 29
+  i64.shr_u
+  i64.xor
+  local.set $2
+  local.get $2
+  i64.const 1609587929392839161
+  i64.mul
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 32
+  i64.shr_u
+  i64.xor
+  local.set $2
+  local.get $2
+  return
+ )
  (func $~lib/map/Map<u64,i32>#find (param $0 i32) (param $1 i64) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -15523,30 +15172,10 @@
   i32.const 0
  )
  (func $~lib/map/Map<u64,i32>#has (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i64)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u64>|inlined.0 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 8
-   i32.const 4
-   i32.le_u
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $2
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<u64>|inlined.0
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u64>
   call $~lib/map/Map<u64,i32>#find
   i32.const 0
   i32.ne
@@ -15563,9 +15192,8 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i64)
-  (local $13 i64)
+  (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -15627,43 +15255,24 @@
      local.get $10
      i32.load offset=8
      i32.store offset=8
-     block $~lib/util/hash/HASH<u64>|inlined.2 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 8
-      i32.const 4
-      i32.le_u
-      drop
-      i32.const 8
-      i32.const 8
-      i32.eq
-      drop
-      local.get $13
-      call $~lib/util/hash/hash64
-      br $~lib/util/hash/HASH<u64>|inlined.2
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<u64>
      local.get $1
      i64.extend_i32_u
      i64.and
      i32.wrap_i64
-     local.set $14
+     local.set $13
      local.get $3
-     local.get $14
+     local.get $13
      i32.const 4
      i32.mul
      i32.add
-     local.set $15
+     local.set $14
      local.get $11
-     local.get $15
+     local.get $14
      i32.load
      i32.store offset=12
-     local.get $15
+     local.get $14
      local.get $8
      i32.store
      local.get $8
@@ -15681,29 +15290,29 @@
   local.get $0
   local.tee $11
   local.get $3
-  local.tee $14
+  local.tee $13
   local.get $11
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $14
+   local.get $13
    call $~lib/rt/pure/__retain
-   local.set $14
+   local.set $13
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $14
+  local.get $13
   i32.store
   local.get $0
   local.get $1
   i64.extend_i32_u
   i64.store offset=8
   local.get $0
-  local.tee $15
+  local.tee $14
   local.get $5
   local.tee $9
-  local.get $15
+  local.get $14
   i32.load offset=16
   local.tee $11
   i32.ne
@@ -15730,42 +15339,22 @@
  )
  (func $~lib/map/Map<u64,i32>#set (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i64)
-  (local $4 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  block $~lib/util/hash/HASH<u64>|inlined.1 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 8
-   i32.const 4
-   i32.le_u
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $3
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<u64>|inlined.1
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<u64>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<u64,i32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=8
   else
@@ -15802,24 +15391,24 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $6
-   local.get $6
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
-   local.tee $7
+   local.tee $6
    i32.const 1
    i32.add
    i32.store offset=24
-   local.get $7
+   local.get $6
    i32.const 16
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i64.store
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=8
    local.get $0
@@ -15830,7 +15419,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -15838,49 +15427,29 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $7
-   local.get $5
-   local.get $7
+   local.set $6
+   local.get $4
+   local.get $6
    i32.load
    i32.store offset=12
-   local.get $7
-   local.get $5
-   i32.store
    local.get $6
+   local.get $4
+   i32.store
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
  )
  (func $~lib/map/Map<u64,i32>#get (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i64)
-  (local $3 i32)
+  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u64>|inlined.3 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 8
-   i32.const 4
-   i32.le_u
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $2
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<u64>|inlined.3
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u64>
   call $~lib/map/Map<u64,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 384
@@ -15890,7 +15459,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.load offset=8
  )
  (func $~lib/map/Map<u64,i32>#get:size (param $0 i32) (result i32)
@@ -16306,9 +15875,8 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i64)
-  (local $13 i64)
+  (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -16370,43 +15938,24 @@
      local.get $10
      i64.load offset=8
      i64.store offset=8
-     block $~lib/util/hash/HASH<u64>|inlined.5 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 8
-      i32.const 4
-      i32.le_u
-      drop
-      i32.const 8
-      i32.const 8
-      i32.eq
-      drop
-      local.get $13
-      call $~lib/util/hash/hash64
-      br $~lib/util/hash/HASH<u64>|inlined.5
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<u64>
      local.get $1
      i64.extend_i32_u
      i64.and
      i32.wrap_i64
-     local.set $14
+     local.set $13
      local.get $3
-     local.get $14
+     local.get $13
      i32.const 4
      i32.mul
      i32.add
-     local.set $15
+     local.set $14
      local.get $11
-     local.get $15
+     local.get $14
      i32.load
      i32.store offset=16
-     local.get $15
+     local.get $14
      local.get $8
      i32.store
      local.get $8
@@ -16424,29 +15973,29 @@
   local.get $0
   local.tee $11
   local.get $3
-  local.tee $14
+  local.tee $13
   local.get $11
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $14
+   local.get $13
    call $~lib/rt/pure/__retain
-   local.set $14
+   local.set $13
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $14
+  local.get $13
   i32.store
   local.get $0
   local.get $1
   i64.extend_i32_u
   i64.store offset=8
   local.get $0
-  local.tee $15
+  local.tee $14
   local.get $5
   local.tee $9
-  local.get $15
+  local.get $14
   i32.load offset=16
   local.tee $11
   i32.ne
@@ -16473,42 +16022,22 @@
  )
  (func $~lib/map/Map<u64,u64>#set (param $0 i32) (param $1 i64) (param $2 i64) (result i32)
   (local $3 i64)
-  (local $4 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  block $~lib/util/hash/HASH<u64>|inlined.4 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 8
-   i32.const 4
-   i32.le_u
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $3
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<u64>|inlined.4
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<u64>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<u64,u64>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i64.store offset=8
   else
@@ -16545,24 +16074,24 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $6
-   local.get $6
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
-   local.tee $7
+   local.tee $6
    i32.const 1
    i32.add
    i32.store offset=24
-   local.get $7
+   local.get $6
    i32.const 24
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    i64.store
-   local.get $5
+   local.get $4
    local.get $2
    i64.store offset=8
    local.get $0
@@ -16573,7 +16102,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -16581,15 +16110,15 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $7
-   local.get $5
-   local.get $7
+   local.set $6
+   local.get $4
+   local.get $6
    i32.load
    i32.store offset=16
-   local.get $7
-   local.get $5
-   i32.store
    local.get $6
+   local.get $4
+   i32.store
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -16600,37 +16129,17 @@
   i32.load offset=28
  )
  (func $~lib/map/Map<u64,i32>#delete (param $0 i32) (param $1 i64) (result i32)
-  (local $2 i64)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u64>|inlined.6 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 8
-   i32.const 4
-   i32.le_u
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $2
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<u64>|inlined.6
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<u64>
   call $~lib/map/Map<u64,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 0
@@ -16640,8 +16149,8 @@
   drop
   i32.const 0
   drop
-  local.get $3
-  local.get $3
+  local.get $2
+  local.get $2
   i32.load offset=12
   i32.const 1
   i32.or
@@ -16657,17 +16166,17 @@
   i64.const 1
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $5
+  local.tee $4
   local.get $0
   i32.load offset=28
-  local.tee $6
+  local.tee $5
+  local.get $4
   local.get $5
-  local.get $6
   i32.gt_u
   select
   i32.ge_u
@@ -16686,7 +16195,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/map/Map<u64,i32>#rehash
   end
   i32.const 1
@@ -17246,6 +16755,75 @@
   i32.store offset=28
   local.get $0
  )
+ (func $~lib/util/hash/HASH<f32> (param $0 f32) (result i64)
+  (local $1 i32)
+  (local $2 i64)
+  (local $3 i64)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 1
+  drop
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  local.get $0
+  i32.reinterpret_f32
+  local.set $1
+  i64.const 4
+  local.set $2
+  i64.const 0
+  i64.const 2870177450012600261
+  i64.add
+  local.get $2
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $1
+  i64.extend_i32_u
+  i64.const -7046029288634856825
+  i64.mul
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 23
+  i64.rotl
+  i64.const -4417276706812531889
+  i64.mul
+  i64.const 1609587929392839161
+  i64.add
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const -4417276706812531889
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 29
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  i64.const 1609587929392839161
+  i64.mul
+  local.set $3
+  local.get $3
+  local.get $3
+  i64.const 32
+  i64.shr_u
+  i64.xor
+  local.set $3
+  local.get $3
+  return
+ )
  (func $~lib/map/Map<f32,i32>#find (param $0 i32) (param $1 f32) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -17298,27 +16876,10 @@
   i32.const 0
  )
  (func $~lib/map/Map<f32,i32>#has (param $0 i32) (param $1 f32) (result i32)
-  (local $2 f32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<f32>|inlined.0 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
-   drop
-   local.get $2
-   i32.reinterpret_f32
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<f32>|inlined.0
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<f32>
   call $~lib/map/Map<f32,i32>#find
   i32.const 0
   i32.ne
@@ -17335,9 +16896,8 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 f32)
-  (local $13 f32)
+  (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -17399,40 +16959,24 @@
      local.get $10
      i32.load offset=4
      i32.store offset=4
-     block $~lib/util/hash/HASH<f32>|inlined.2 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 1
-      drop
-      i32.const 4
-      i32.const 4
-      i32.eq
-      drop
-      local.get $13
-      i32.reinterpret_f32
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<f32>|inlined.2
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<f32>
      local.get $1
      i64.extend_i32_u
      i64.and
      i32.wrap_i64
-     local.set $14
+     local.set $13
      local.get $3
-     local.get $14
+     local.get $13
      i32.const 4
      i32.mul
      i32.add
-     local.set $15
+     local.set $14
      local.get $11
-     local.get $15
+     local.get $14
      i32.load
      i32.store offset=8
-     local.get $15
+     local.get $14
      local.get $8
      i32.store
      local.get $8
@@ -17450,29 +16994,29 @@
   local.get $0
   local.tee $11
   local.get $3
-  local.tee $14
+  local.tee $13
   local.get $11
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $14
+   local.get $13
    call $~lib/rt/pure/__retain
-   local.set $14
+   local.set $13
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $14
+  local.get $13
   i32.store
   local.get $0
   local.get $1
   i64.extend_i32_u
   i64.store offset=8
   local.get $0
-  local.tee $15
+  local.tee $14
   local.get $5
   local.tee $9
-  local.get $15
+  local.get $14
   i32.load offset=16
   local.tee $11
   i32.ne
@@ -17498,40 +17042,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<f32,i32>#set (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
-  (local $3 f32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  block $~lib/util/hash/HASH<f32>|inlined.1 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
-   drop
-   local.get $3
-   i32.reinterpret_f32
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<f32>|inlined.1
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<f32>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<f32,i32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
   else
@@ -17568,24 +17095,24 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $6
-   local.get $6
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
-   local.tee $7
+   local.tee $6
    i32.const 1
    i32.add
    i32.store offset=24
-   local.get $7
+   local.get $6
    i32.const 12
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    f32.store
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=4
    local.get $0
@@ -17596,7 +17123,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -17604,46 +17131,29 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $7
-   local.get $5
-   local.get $7
+   local.set $6
+   local.get $4
+   local.get $6
    i32.load
    i32.store offset=8
-   local.get $7
-   local.get $5
-   i32.store
    local.get $6
+   local.get $4
+   i32.store
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
  )
  (func $~lib/map/Map<f32,i32>#get (param $0 i32) (param $1 f32) (result i32)
-  (local $2 f32)
-  (local $3 i32)
+  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<f32>|inlined.3 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
-   drop
-   local.get $2
-   i32.reinterpret_f32
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<f32>|inlined.3
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<f32>
   call $~lib/map/Map<f32,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 384
@@ -17653,7 +17163,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.load offset=4
  )
  (func $~lib/map/Map<f32,i32>#get:size (param $0 i32) (result i32)
@@ -18069,9 +17579,8 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 f32)
-  (local $13 f32)
+  (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -18133,40 +17642,24 @@
      local.get $10
      f32.load offset=4
      f32.store offset=4
-     block $~lib/util/hash/HASH<f32>|inlined.5 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 1
-      drop
-      i32.const 4
-      i32.const 4
-      i32.eq
-      drop
-      local.get $13
-      i32.reinterpret_f32
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<f32>|inlined.5
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<f32>
      local.get $1
      i64.extend_i32_u
      i64.and
      i32.wrap_i64
-     local.set $14
+     local.set $13
      local.get $3
-     local.get $14
+     local.get $13
      i32.const 4
      i32.mul
      i32.add
-     local.set $15
+     local.set $14
      local.get $11
-     local.get $15
+     local.get $14
      i32.load
      i32.store offset=8
-     local.get $15
+     local.get $14
      local.get $8
      i32.store
      local.get $8
@@ -18184,29 +17677,29 @@
   local.get $0
   local.tee $11
   local.get $3
-  local.tee $14
+  local.tee $13
   local.get $11
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $14
+   local.get $13
    call $~lib/rt/pure/__retain
-   local.set $14
+   local.set $13
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $14
+  local.get $13
   i32.store
   local.get $0
   local.get $1
   i64.extend_i32_u
   i64.store offset=8
   local.get $0
-  local.tee $15
+  local.tee $14
   local.get $5
   local.tee $9
-  local.get $15
+  local.get $14
   i32.load offset=16
   local.tee $11
   i32.ne
@@ -18232,40 +17725,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<f32,f32>#set (param $0 i32) (param $1 f32) (param $2 f32) (result i32)
-  (local $3 f32)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  block $~lib/util/hash/HASH<f32>|inlined.4 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
-   drop
-   local.get $3
-   i32.reinterpret_f32
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<f32>|inlined.4
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<f32>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<f32,f32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    f32.store offset=4
   else
@@ -18302,24 +17778,24 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $6
-   local.get $6
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
-   local.tee $7
+   local.tee $6
    i32.const 1
    i32.add
    i32.store offset=24
-   local.get $7
+   local.get $6
    i32.const 12
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    f32.store
-   local.get $5
+   local.get $4
    local.get $2
    f32.store offset=4
    local.get $0
@@ -18330,7 +17806,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -18338,15 +17814,15 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $7
-   local.get $5
-   local.get $7
+   local.set $6
+   local.get $4
+   local.get $6
    i32.load
    i32.store offset=8
-   local.get $7
-   local.get $5
-   i32.store
    local.get $6
+   local.get $4
+   i32.store
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -18357,34 +17833,17 @@
   i32.load offset=28
  )
  (func $~lib/map/Map<f32,i32>#delete (param $0 i32) (param $1 f32) (result i32)
-  (local $2 f32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<f32>|inlined.6 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
-   drop
-   local.get $2
-   i32.reinterpret_f32
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<f32>|inlined.6
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<f32>
   call $~lib/map/Map<f32,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 0
@@ -18394,8 +17853,8 @@
   drop
   i32.const 0
   drop
-  local.get $3
-  local.get $3
+  local.get $2
+  local.get $2
   i32.load offset=8
   i32.const 1
   i32.or
@@ -18411,17 +17870,17 @@
   i64.const 1
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $5
+  local.tee $4
   local.get $0
   i32.load offset=28
-  local.tee $6
+  local.tee $5
+  local.get $4
   local.get $5
-  local.get $6
   i32.gt_u
   select
   i32.ge_u
@@ -18440,7 +17899,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/map/Map<f32,i32>#rehash
   end
   i32.const 1
@@ -19000,6 +18459,79 @@
   i32.store offset=28
   local.get $0
  )
+ (func $~lib/util/hash/HASH<f64> (param $0 f64) (result i64)
+  (local $1 i64)
+  (local $2 i64)
+  i32.const 0
+  drop
+  i32.const 0
+  drop
+  i32.const 1
+  drop
+  i32.const 8
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  local.get $0
+  i64.reinterpret_f64
+  local.set $1
+  i64.const 0
+  i64.const 2870177450012600261
+  i64.add
+  i64.const 8
+  i64.add
+  local.set $2
+  local.get $2
+  local.get $1
+  i64.const -4417276706812531889
+  i64.mul
+  i64.const 31
+  i64.rotl
+  i64.const -7046029288634856825
+  i64.mul
+  i64.xor
+  local.set $2
+  local.get $2
+  i64.const 27
+  i64.rotl
+  i64.const -7046029288634856825
+  i64.mul
+  i64.const -8796714831421723037
+  i64.add
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $2
+  local.get $2
+  i64.const -4417276706812531889
+  i64.mul
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 29
+  i64.shr_u
+  i64.xor
+  local.set $2
+  local.get $2
+  i64.const 1609587929392839161
+  i64.mul
+  local.set $2
+  local.get $2
+  local.get $2
+  i64.const 32
+  i64.shr_u
+  i64.xor
+  local.set $2
+  local.get $2
+  return
+ )
  (func $~lib/map/Map<f64,i32>#find (param $0 i32) (param $1 f64) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -19052,31 +18584,10 @@
   i32.const 0
  )
  (func $~lib/map/Map<f64,i32>#has (param $0 i32) (param $1 f64) (result i32)
-  (local $2 f64)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<f64>|inlined.0 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
-   i32.const 8
-   i32.const 4
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $2
-   i64.reinterpret_f64
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<f64>|inlined.0
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<f64>
   call $~lib/map/Map<f64,i32>#find
   i32.const 0
   i32.ne
@@ -19093,9 +18604,8 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 f64)
-  (local $13 f64)
+  (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -19157,44 +18667,24 @@
      local.get $10
      i32.load offset=8
      i32.store offset=8
-     block $~lib/util/hash/HASH<f64>|inlined.2 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 1
-      drop
-      i32.const 8
-      i32.const 4
-      i32.eq
-      drop
-      i32.const 8
-      i32.const 8
-      i32.eq
-      drop
-      local.get $13
-      i64.reinterpret_f64
-      call $~lib/util/hash/hash64
-      br $~lib/util/hash/HASH<f64>|inlined.2
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<f64>
      local.get $1
      i64.extend_i32_u
      i64.and
      i32.wrap_i64
-     local.set $14
+     local.set $13
      local.get $3
-     local.get $14
+     local.get $13
      i32.const 4
      i32.mul
      i32.add
-     local.set $15
+     local.set $14
      local.get $11
-     local.get $15
+     local.get $14
      i32.load
      i32.store offset=12
-     local.get $15
+     local.get $14
      local.get $8
      i32.store
      local.get $8
@@ -19212,29 +18702,29 @@
   local.get $0
   local.tee $11
   local.get $3
-  local.tee $14
+  local.tee $13
   local.get $11
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $14
+   local.get $13
    call $~lib/rt/pure/__retain
-   local.set $14
+   local.set $13
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $14
+  local.get $13
   i32.store
   local.get $0
   local.get $1
   i64.extend_i32_u
   i64.store offset=8
   local.get $0
-  local.tee $15
+  local.tee $14
   local.get $5
   local.tee $9
-  local.get $15
+  local.get $14
   i32.load offset=16
   local.tee $11
   i32.ne
@@ -19260,44 +18750,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<f64,i32>#set (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
-  (local $3 f64)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  block $~lib/util/hash/HASH<f64>|inlined.1 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
-   i32.const 8
-   i32.const 4
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $3
-   i64.reinterpret_f64
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<f64>|inlined.1
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<f64>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<f64,i32>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=8
   else
@@ -19334,24 +18803,24 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $6
-   local.get $6
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
-   local.tee $7
+   local.tee $6
    i32.const 1
    i32.add
    i32.store offset=24
-   local.get $7
+   local.get $6
    i32.const 16
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    f64.store
-   local.get $5
+   local.get $4
    local.get $2
    i32.store offset=8
    local.get $0
@@ -19362,7 +18831,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -19370,50 +18839,29 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $7
-   local.get $5
-   local.get $7
+   local.set $6
+   local.get $4
+   local.get $6
    i32.load
    i32.store offset=12
-   local.get $7
-   local.get $5
-   i32.store
    local.get $6
+   local.get $4
+   i32.store
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
   call $~lib/rt/pure/__retain
  )
  (func $~lib/map/Map<f64,i32>#get (param $0 i32) (param $1 f64) (result i32)
-  (local $2 f64)
-  (local $3 i32)
+  (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<f64>|inlined.3 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
-   i32.const 8
-   i32.const 4
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $2
-   i64.reinterpret_f64
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<f64>|inlined.3
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<f64>
   call $~lib/map/Map<f64,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 384
@@ -19423,7 +18871,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.load offset=8
  )
  (func $~lib/map/Map<f64,i32>#get:size (param $0 i32) (result i32)
@@ -19839,9 +19287,8 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 f64)
-  (local $13 f64)
+  (local $13 i32)
   (local $14 i32)
-  (local $15 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -19903,44 +19350,24 @@
      local.get $10
      f64.load offset=8
      f64.store offset=8
-     block $~lib/util/hash/HASH<f64>|inlined.5 (result i64)
-      local.get $12
-      local.set $13
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 1
-      drop
-      i32.const 8
-      i32.const 4
-      i32.eq
-      drop
-      i32.const 8
-      i32.const 8
-      i32.eq
-      drop
-      local.get $13
-      i64.reinterpret_f64
-      call $~lib/util/hash/hash64
-      br $~lib/util/hash/HASH<f64>|inlined.5
-     end
+     local.get $12
+     call $~lib/util/hash/HASH<f64>
      local.get $1
      i64.extend_i32_u
      i64.and
      i32.wrap_i64
-     local.set $14
+     local.set $13
      local.get $3
-     local.get $14
+     local.get $13
      i32.const 4
      i32.mul
      i32.add
-     local.set $15
+     local.set $14
      local.get $11
-     local.get $15
+     local.get $14
      i32.load
      i32.store offset=16
-     local.get $15
+     local.get $14
      local.get $8
      i32.store
      local.get $8
@@ -19958,29 +19385,29 @@
   local.get $0
   local.tee $11
   local.get $3
-  local.tee $14
+  local.tee $13
   local.get $11
   i32.load
   local.tee $9
   i32.ne
   if
-   local.get $14
+   local.get $13
    call $~lib/rt/pure/__retain
-   local.set $14
+   local.set $13
    local.get $9
    call $~lib/rt/pure/__release
   end
-  local.get $14
+  local.get $13
   i32.store
   local.get $0
   local.get $1
   i64.extend_i32_u
   i64.store offset=8
   local.get $0
-  local.tee $15
+  local.tee $14
   local.get $5
   local.tee $9
-  local.get $15
+  local.get $14
   i32.load offset=16
   local.tee $11
   i32.ne
@@ -20006,44 +19433,23 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<f64,f64>#set (param $0 i32) (param $1 f64) (param $2 f64) (result i32)
-  (local $3 f64)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  block $~lib/util/hash/HASH<f64>|inlined.4 (result i64)
-   local.get $1
-   local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
-   i32.const 8
-   i32.const 4
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $3
-   i64.reinterpret_f64
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<f64>|inlined.4
-  end
-  local.set $4
+  local.get $1
+  call $~lib/util/hash/HASH<f64>
+  local.set $3
   local.get $0
   local.get $1
-  local.get $4
+  local.get $3
   call $~lib/map/Map<f64,f64>#find
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   if
    i32.const 0
    drop
-   local.get $5
+   local.get $4
    local.get $2
    f64.store offset=8
   else
@@ -20080,24 +19486,24 @@
    local.get $0
    i32.load offset=16
    call $~lib/rt/pure/__retain
-   local.set $6
-   local.get $6
+   local.set $5
+   local.get $5
    local.get $0
    local.get $0
    i32.load offset=24
-   local.tee $7
+   local.tee $6
    i32.const 1
    i32.add
    i32.store offset=24
-   local.get $7
+   local.get $6
    i32.const 24
    i32.mul
    i32.add
-   local.set $5
-   local.get $5
+   local.set $4
+   local.get $4
    local.get $1
    f64.store
-   local.get $5
+   local.get $4
    local.get $2
    f64.store offset=8
    local.get $0
@@ -20108,7 +19514,7 @@
    i32.store offset=28
    local.get $0
    i32.load
-   local.get $4
+   local.get $3
    local.get $0
    i64.load offset=8
    i64.and
@@ -20116,15 +19522,15 @@
    i32.const 4
    i32.mul
    i32.add
-   local.set $7
-   local.get $5
-   local.get $7
+   local.set $6
+   local.get $4
+   local.get $6
    i32.load
    i32.store offset=16
-   local.get $7
-   local.get $5
-   i32.store
    local.get $6
+   local.get $4
+   i32.store
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $0
@@ -20135,38 +19541,17 @@
   i32.load offset=28
  )
  (func $~lib/map/Map<f64,i32>#delete (param $0 i32) (param $1 f64) (result i32)
-  (local $2 f64)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<f64>|inlined.6 (result i64)
-   local.get $1
-   local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
-   i32.const 8
-   i32.const 4
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 8
-   i32.eq
-   drop
-   local.get $2
-   i64.reinterpret_f64
-   call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<f64>|inlined.6
-  end
+  local.get $1
+  call $~lib/util/hash/HASH<f64>
   call $~lib/map/Map<f64,i32>#find
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.eqz
   if
    i32.const 0
@@ -20176,8 +19561,8 @@
   drop
   i32.const 0
   drop
-  local.get $3
-  local.get $3
+  local.get $2
+  local.get $2
   i32.load offset=12
   i32.const 1
   i32.or
@@ -20193,17 +19578,17 @@
   i64.const 1
   i64.shr_u
   i32.wrap_i64
-  local.set $4
-  local.get $4
+  local.set $3
+  local.get $3
   i32.const 1
   i32.add
   i32.const 4
-  local.tee $5
+  local.tee $4
   local.get $0
   i32.load offset=28
-  local.tee $6
+  local.tee $5
+  local.get $4
   local.get $5
-  local.get $6
   i32.gt_u
   select
   i32.ge_u
@@ -20222,7 +19607,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/map/Map<f64,i32>#rehash
   end
   i32.const 1

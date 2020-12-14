@@ -1,5 +1,3 @@
-// @ts-ignore: decorator
-@inline
 export function HASH<T>(key: T): u64 {
   if (isString<T>()) {
     return hashStr(changetype<string>(key));
@@ -10,7 +8,7 @@ export function HASH<T>(key: T): u64 {
     if (sizeof<T>() == 4) return hash32(reinterpret<u32>(f32(key)));
     if (sizeof<T>() == 8) return hash64(reinterpret<u64>(f64(key)));
   } else {
-    if (sizeof<T>() <= 4) return hash32(u32(key));
+    if (sizeof<T>() <= 4) return hash32(u32(key), sizeof<T>());
     if (sizeof<T>() == 8) return hash64(u64(key));
   }
   return unreachable();
@@ -32,8 +30,10 @@ export function HASH<T>(key: T): u64 {
 // @ts-ignore: decorator
 @inline const XXH64_SEED: u64 = 0;
 
-function hash32(key: u32): u64 {
-  var h: u64 = XXH64_SEED + XXH64_P5 + 4;
+// @ts-ignore: decorator
+@inline
+function hash32(key: u32, len: u64 = 4): u64 {
+  var h: u64 = XXH64_SEED + XXH64_P5 + len;
   h ^= u64(key) * XXH64_P1;
   h  = rotl(h, 23) * XXH64_P2 + XXH64_P3;
   h ^= h >> 33;
@@ -44,6 +44,8 @@ function hash32(key: u32): u64 {
   return h;
 }
 
+// @ts-ignore: decorator
+@inline
 function hash64(key: u64): u64 {
   var h: u64 = XXH64_SEED + XXH64_P5 + 8;
   h ^= rotl(key * XXH64_P2, 31) * XXH64_P1;
@@ -68,6 +70,8 @@ function mix2(h: u64, s: u64): u64 {
   return (h ^ (rotl(s, 31) * XXH64_P1)) * XXH64_P1 + XXH64_P4;
 }
 
+// @ts-ignore: decorator
+@inline
 function hashStr(key: string): u64 {
   if (key === null) {
     return XXH64_SEED;
@@ -80,6 +84,7 @@ function hashStr(key: string): u64 {
     let s2 = XXH64_SEED + XXH64_P2;
     let s3 = XXH64_SEED;
     let s4 = XXH64_SEED - XXH64_P1;
+    let ln = len;
 
     let i = 0;
     len -= 32;
@@ -102,11 +107,11 @@ function hashStr(key: string): u64 {
     h = mix2(h, s2);
     h = mix2(h, s3);
     h = mix2(h, s4);
+    h += <u64>ln;
 
-    h += u64(len);
     len -= i;
   } else {
-    h = u64(len) + XXH64_SEED + XXH64_P5;
+    h = <u64>len + XXH64_SEED + XXH64_P5;
   }
 
   var i = 0;
