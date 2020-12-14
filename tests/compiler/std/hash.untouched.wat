@@ -65,11 +65,6 @@
   i32.shl
   local.set $2
   i64.const 0
-  i64.const 2870177450012600261
-  i64.add
-  local.get $2
-  i64.extend_i32_s
-  i64.add
   local.set $3
   local.get $2
   i32.const 32
@@ -284,6 +279,14 @@
    local.get $7
    i32.sub
    local.set $2
+  else
+   local.get $2
+   i64.extend_i32_s
+   i64.const 0
+   i64.add
+   i64.const 2870177450012600261
+   i64.add
+   local.set $3
   end
   i32.const 0
   local.set $11

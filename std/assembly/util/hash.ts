@@ -73,7 +73,7 @@ function hashStr(key: string): u64 {
     return XXH64_SEED;
   }
   var len = key.length << 1;
-  var h: u64 = XXH64_SEED + XXH64_P5 + u64(len);
+  var h: u64 = 0;
 
   if (len >= 32) {
     let s1 = XXH64_SEED + XXH64_P1 + XXH64_P2;
@@ -105,6 +105,8 @@ function hashStr(key: string): u64 {
 
     h += u64(len);
     len -= i;
+  } else {
+    h = u64(len) + XXH64_SEED + XXH64_P5;
   }
 
   var i = 0;
