@@ -1,5 +1,3 @@
-// @ts-ignore: decorator
-@inline
 export function HASH<T>(key: T): u32 {
   if (isString<T>()) {
     return hashStr(changetype<string>(key));
@@ -10,7 +8,7 @@ export function HASH<T>(key: T): u32 {
     if (sizeof<T>() == 4) return hash32(reinterpret<u32>(f32(key)));
     if (sizeof<T>() == 8) return hash64(reinterpret<u64>(f64(key)));
   } else {
-    if (sizeof<T>() <= 4) return hash32(u32(key));
+    if (sizeof<T>() <= 4) return hash32(u32(key), sizeof<T>());
     if (sizeof<T>() == 8) return hash64(u64(key));
   }
   return unreachable();
@@ -32,8 +30,10 @@ export function HASH<T>(key: T): u32 {
 // @ts-ignore: decorator
 @inline const XXH32_SEED: u32 = 0;
 
-function hash32(key: u32): u32 {
-  var h: u32 = XXH32_SEED + XXH32_P5;
+// @ts-ignore: decorator
+@inline
+function hash32(key: u32, len: u32 = 4): u32 {
+  var h: u32 = XXH32_SEED + XXH32_P5 + len;
   h += key * XXH32_P3;
   h  = rotl(h, 17) * XXH32_P4;
   h ^= h >> 15;
@@ -44,8 +44,10 @@ function hash32(key: u32): u32 {
   return h;
 }
 
+// @ts-ignore: decorator
+@inline
 function hash64(key: u64): u32 {
-  var h: u32 = XXH32_SEED + XXH32_P5;
+  var h: u32 = XXH32_SEED + XXH32_P5 + 8;
   h += <u32>key * XXH32_P3;
   h  = rotl(h, 17) * XXH32_P4;
   h += <u32>(key >> 32) * XXH32_P3;
@@ -64,13 +66,15 @@ function mix(h: u32, key: u32): u32 {
   return rotl(h + key * XXH32_P2, 13) * XXH32_P1;
 }
 
+// @ts-ignore: decorator
+@inline
 function hashStr(key: string): u32 {
   if (key === null) {
     return XXH32_SEED;
   }
 
-  var h: u32 = XXH32_SEED + XXH32_P5;
   var len = key.length << 1;
+  var h: u32 = len;
 
   if (len >= 16) {
     let s1 = XXH32_SEED + XXH32_P1 + XXH32_P2;
@@ -88,8 +92,10 @@ function hashStr(key: string): u32 {
       s4 = mix(s4, load<u32>(changetype<usize>(key) + i, 12));
       i += 16;
     }
-    h = rotl(s1, 1) + rotl(s2, 7) + rotl(s3, 12) + rotl(s4, 18);
+    h += rotl(s1, 1) + rotl(s2, 7) + rotl(s3, 12) + rotl(s4, 18);
     len -= i;
+  } else {
+    h += XXH32_SEED + XXH32_P5;
   }
 
   var i = 0;
@@ -112,6 +118,5 @@ function hashStr(key: string): u32 {
   h ^= h >> 13;
   h *= XXH32_P3;
   h ^= h >> 16;
-
   return h;
 }
