@@ -58,7 +58,7 @@ export class Map<K,V> {
 
   // buckets referencing their respective first entry, usize[bucketsMask + 1]
   private buckets: ArrayBuffer = new ArrayBuffer(INITIAL_CAPACITY * <i32>BUCKET_SIZE);
-  private bucketsMask: u32 = INITIAL_CAPACITY - 1;
+  private bucketsMask: u64 = INITIAL_CAPACITY - 1;
 
   // entries in insertion order, MapEntry<K,V>[entriesCapacity]
   private entries: ArrayBuffer = new ArrayBuffer(INITIAL_CAPACITY * <i32>ENTRY_SIZE<K,V>());
@@ -83,7 +83,7 @@ export class Map<K,V> {
     this.entriesCount = 0;
   }
 
-  private find(key: K, hashCode: u32): MapEntry<K,V> | null {
+  private find(key: K, hashCode: u64): MapEntry<K,V> | null {
     var entry = load<MapEntry<K,V>>( // unmanaged!
       changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
@@ -123,11 +123,11 @@ export class Map<K,V> {
     } else {
       // check if rehashing is necessary
       if (this.entriesOffset == this.entriesCapacity) {
-        this.rehash(
+        this.rehash(u32(
           this.entriesCount < this.entriesCapacity * FREE_FACTOR_N / FREE_FACTOR_D
             ?  this.bucketsMask           // just rehash if 1/4+ entries are empty
             : (this.bucketsMask << 1) | 1 // grow capacity to next 2^N
-        );
+        ));
       }
       // append new entry
       let entries = this.entries;
@@ -156,7 +156,7 @@ export class Map<K,V> {
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate
-    var halfBucketsMask = this.bucketsMask >> 1;
+    var halfBucketsMask = <u32>(this.bucketsMask >> 1);
     if (
       halfBucketsMask + 1 >= max<u32>(INITIAL_CAPACITY, this.entriesCount) &&
       this.entriesCount < this.entriesCapacity * FREE_FACTOR_N / FREE_FACTOR_D
@@ -181,8 +181,8 @@ export class Map<K,V> {
         let oldEntryKey = oldEntry.key;
         newEntry.key = oldEntryKey;
         newEntry.value = oldEntry.value;
-        let newBucketIndex = HASH<K>(oldEntryKey) & newBucketsMask;
-        let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
+        let newBucketIndex = <usize>(HASH<K>(oldEntryKey) & newBucketsMask);
+        let newBucketPtrBase = changetype<usize>(newBuckets) + newBucketIndex * BUCKET_SIZE;
         newEntry.taggedNext = load<usize>(newBucketPtrBase);
         store<usize>(newBucketPtrBase, newPtr);
         newPtr += ENTRY_SIZE<K,V>();

@@ -1,6 +1,6 @@
 // @ts-ignore: decorator
 @inline
-export function HASH<T>(key: T): u32 {
+export function HASH<T>(key: T): u64 {
   if (isString<T>()) {
     return hashStr(changetype<string>(key));
   } else if (isReference<T>()) {
@@ -10,63 +10,128 @@ export function HASH<T>(key: T): u32 {
     if (sizeof<T>() == 4) return hash32(reinterpret<u32>(f32(key)));
     if (sizeof<T>() == 8) return hash64(reinterpret<u64>(f64(key)));
   } else {
-    if (sizeof<T>() == 1) return hash8 (u32(key));
-    if (sizeof<T>() == 2) return hash16(u32(key));
-    if (sizeof<T>() == 4) return hash32(u32(key));
+    if (sizeof<T>() <= 4) return hash32(u32(key));
     if (sizeof<T>() == 8) return hash64(u64(key));
   }
   return unreachable();
 }
 
-// FNV-1a 32-bit as a starting point, see: http://isthe.com/chongo/tech/comp/fnv/
+// XXHash 32-bit as a starting point, see: https://cyan4973.github.io/xxHash
+
+// primes
+// @ts-ignore: decorator
+@inline const XXH64_P1: u64 = 11400714785074694791;
+// @ts-ignore: decorator
+@inline const XXH64_P2: u64 = 14029467366897019727;
+// @ts-ignore: decorator
+@inline const XXH64_P3: u64 = 1609587929392839161;
+// @ts-ignore: decorator
+@inline const XXH64_P4: u64 = 9650029242287828579;
+// @ts-ignore: decorator
+@inline const XXH64_P5: u64 = 2870177450012600261;
+// @ts-ignore: decorator
+@inline const XXH64_SEED: u64 = 0;
+
+function hash32(key: u32): u64 {
+  var h: u64 = XXH64_SEED + XXH64_P5 + 4;
+  h ^= u64(key) * XXH64_P1;
+  h  = rotl(h, 23) * XXH64_P2 + XXH64_P3;
+  h ^= h >> 33;
+  h *= XXH64_P2;
+  h ^= h >> 29;
+  h *= XXH64_P3;
+  h ^= h >> 32;
+  return h;
+}
+
+function hash64(key: u64): u64 {
+  var h: u64 = XXH64_SEED + XXH64_P5 + 8;
+  h ^= rotl(key * XXH64_P2, 31) * XXH64_P1;
+  h  = rotl(h, 27) * XXH64_P1 + XXH64_P4;
+  h ^= h >> 33;
+  h *= XXH64_P2;
+  h ^= h >> 29;
+  h *= XXH64_P3;
+  h ^= h >> 32;
+  return h;
+}
 
 // @ts-ignore: decorator
-@inline const FNV_OFFSET: u32 = 2166136261;
+@inline
+function mix1(h: u64, key: u64): u64 {
+  return rotl(h + key * XXH64_P2, 31) * XXH64_P1;
+}
 
 // @ts-ignore: decorator
-@inline const FNV_PRIME: u32 = 16777619;
-
-function hash8(key: u32): u32 {
-  return (FNV_OFFSET ^ key) * FNV_PRIME;
+@inline
+function mix2(h: u64, s: u64): u64 {
+  return (h ^ (rotl(s, 31) * XXH64_P1)) * XXH64_P1 + XXH64_P4;
 }
 
-function hash16(key: u32): u32 {
-  var v = FNV_OFFSET;
-  v = (v ^ ( key        & 0xff)) * FNV_PRIME;
-  v = (v ^ ( key >>  8        )) * FNV_PRIME;
-  return v;
-}
-
-function hash32(key: u32): u32 {
-  var v = FNV_OFFSET;
-  v = (v ^ ( key        & 0xff)) * FNV_PRIME;
-  v = (v ^ ((key >>  8) & 0xff)) * FNV_PRIME;
-  v = (v ^ ((key >> 16) & 0xff)) * FNV_PRIME;
-  v = (v ^ ( key >> 24        )) * FNV_PRIME;
-  return v;
-}
-
-function hash64(key: u64): u32 {
-  var l = <u32> key;
-  var h = <u32>(key >>> 32);
-  var v = FNV_OFFSET;
-  v = (v ^ ( l        & 0xff)) * FNV_PRIME;
-  v = (v ^ ((l >>  8) & 0xff)) * FNV_PRIME;
-  v = (v ^ ((l >> 16) & 0xff)) * FNV_PRIME;
-  v = (v ^ ( l >> 24        )) * FNV_PRIME;
-  v = (v ^ ( h        & 0xff)) * FNV_PRIME;
-  v = (v ^ ((h >>  8) & 0xff)) * FNV_PRIME;
-  v = (v ^ ((h >> 16) & 0xff)) * FNV_PRIME;
-  v = (v ^ ( h >> 24        )) * FNV_PRIME;
-  return v;
-}
-
-function hashStr(key: string): u32 {
-  var v = FNV_OFFSET;
-  if (key !== null) {
-    for (let i: usize = 0, k: usize = key.length << 1; i < k; ++i) {
-      v = (v ^ <u32>load<u8>(changetype<usize>(key) + i)) * FNV_PRIME;
-    }
+function hashStr(key: string): u64 {
+  if (key === null) {
+    return XXH64_SEED;
   }
-  return v;
+  var len = key.length << 1;
+  var h: u64 = XXH64_SEED + XXH64_P5 + u64(len);
+
+  if (len >= 32) {
+    let s1 = XXH64_SEED + XXH64_P1 + XXH64_P2;
+    let s2 = XXH64_SEED + XXH64_P2;
+    let s3 = XXH64_SEED;
+    let s4 = XXH64_SEED - XXH64_P1;
+
+    let i = 0;
+    len -= 32;
+
+    while (i <= len) {
+      s1 = mix1(s1, load<u64>(changetype<usize>(key) + i    ));
+      s2 = mix1(s2, load<u64>(changetype<usize>(key) + i,  8));
+      s3 = mix1(s3, load<u64>(changetype<usize>(key) + i, 16));
+      s4 = mix1(s4, load<u64>(changetype<usize>(key) + i, 24));
+      i += 32;
+    }
+    h = rotl(s1, 1) + rotl(s2, 7) + rotl(s3, 12) + rotl(s4, 18);
+
+    s1 *= XXH64_P2;
+    s2 *= XXH64_P2;
+    s3 *= XXH64_P2;
+    s4 *= XXH64_P2;
+
+    h = mix2(h, s1);
+    h = mix2(h, s2);
+    h = mix2(h, s3);
+    h = mix2(h, s4);
+
+    h += u64(len);
+    len -= i;
+  }
+
+  var i = 0;
+  len -= 8;
+
+  while (i <= len) {
+    h ^= rotl(load<u64>(changetype<usize>(key) + i) * XXH64_P2, 31) * XXH64_P1;
+    h  = rotl(h, 27) * XXH64_P1 + XXH64_P4;
+    i += 8;
+  }
+
+  if (i + 4 <= len) {
+    h ^= <u64>load<u32>(changetype<usize>(key) + i) * XXH64_P1;
+    h  = rotl(h, 23) * XXH64_P2 + XXH64_P3;
+    i += 4;
+  }
+
+  while (i < len) {
+    h += <u64>load<u8>(changetype<usize>(key) + i) * XXH64_P5;
+    h = rotl(h, 11) * XXH64_P1;
+    i++;
+  }
+
+  h ^= h >> 33;
+  h *= XXH64_P2;
+  h ^= h >> 29;
+  h *= XXH64_P3;
+  h ^= h >> 32;
+  return h;
 }

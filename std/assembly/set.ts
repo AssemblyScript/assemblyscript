@@ -55,7 +55,7 @@ export class Set<T> {
 
   // buckets referencing their respective first entry, usize[bucketsMask + 1]
   private buckets: ArrayBuffer = new ArrayBuffer(INITIAL_CAPACITY * <i32>BUCKET_SIZE);
-  private bucketsMask: u32 = INITIAL_CAPACITY - 1;
+  private bucketsMask: u64 = INITIAL_CAPACITY - 1;
 
   // entries in insertion order, SetEntry<K>[entriesCapacity]
   private entries: ArrayBuffer = new ArrayBuffer(INITIAL_CAPACITY * <i32>ENTRY_SIZE<T>());
@@ -80,7 +80,7 @@ export class Set<T> {
     this.entriesCount = 0;
   }
 
-  private find(key: T, hashCode: u32): SetEntry<T> | null {
+  private find(key: T, hashCode: u64): SetEntry<T> | null {
     var entry = load<SetEntry<T>>( // unmanaged!
       changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
@@ -103,11 +103,11 @@ export class Set<T> {
     if (!entry) {
       // check if rehashing is necessary
       if (this.entriesOffset == this.entriesCapacity) {
-        this.rehash(
+        this.rehash(u32(
           this.entriesCount < this.entriesCapacity * FREE_FACTOR_N / FREE_FACTOR_D
             ?  this.bucketsMask           // just rehash if 1/4+ entries are empty
             : (this.bucketsMask << 1) | 1 // grow capacity to next 2^N
-        );
+        ));
       }
       // append new entry
       entry = changetype<SetEntry<T>>(changetype<usize>(this.entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<T>());
@@ -136,7 +136,7 @@ export class Set<T> {
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate
-    var halfBucketsMask = this.bucketsMask >> 1;
+    var halfBucketsMask = <u32>(this.bucketsMask >> 1);
     if (
       halfBucketsMask + 1 >= max<u32>(INITIAL_CAPACITY, this.entriesCount) &&
       this.entriesCount < this.entriesCapacity * FREE_FACTOR_N / FREE_FACTOR_D
