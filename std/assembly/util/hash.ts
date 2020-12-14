@@ -92,7 +92,7 @@ function hashStr(key: string, seed: u32 = FNV_OFFSET): u32 {
         v = hash16(load<u16>(changetype<usize>(key) + off), v);
         off += 2; len -= 2;
       }
-      // length always is even so don't need hash8
+      // "len" always even so don't need hash8
     }
   }
   return v;
