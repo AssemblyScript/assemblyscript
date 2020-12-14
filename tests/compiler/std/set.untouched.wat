@@ -1798,12 +1798,51 @@
   i32.store offset=20
   local.get $0
  )
- (func $~lib/util/hash/hash8 (param $0 i32) (result i32)
-  i32.const -2128831035
+ (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const 0
+  i32.const 374761393
+  i32.add
+  local.set $1
+  local.get $1
   local.get $0
-  i32.xor
-  i32.const 16777619
+  i32.const -1028477379
   i32.mul
+  i32.add
+  local.set $1
+  local.get $1
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.set $1
+  local.get $1
+  local.get $1
+  i32.const 15
+  i32.shr_u
+  i32.xor
+  local.set $1
+  local.get $1
+  i32.const -2048144777
+  i32.mul
+  local.set $1
+  local.get $1
+  local.get $1
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  local.set $1
+  local.get $1
+  i32.const -1028477379
+  i32.mul
+  local.set $1
+  local.get $1
+  local.get $1
+  i32.const 16
+  i32.shr_u
+  i32.xor
+  local.set $1
+  local.get $1
  )
  (func $~lib/set/Set<i8>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -1873,15 +1912,15 @@
    i32.const 0
    drop
    i32.const 1
-   i32.const 1
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 24
    i32.shl
    i32.const 24
    i32.shr_s
-   call $~lib/util/hash/hash8
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<i8>|inlined.0
   end
   call $~lib/set/Set<i8>#find
@@ -1969,11 +2008,11 @@
       i32.const 0
       drop
       i32.const 1
-      i32.const 1
-      i32.eq
+      i32.const 4
+      i32.le_u
       drop
       local.get $13
-      call $~lib/util/hash/hash8
+      call $~lib/util/hash/hash32
       br $~lib/util/hash/HASH<i8>|inlined.2
      end
      local.get $1
@@ -2067,15 +2106,15 @@
    i32.const 0
    drop
    i32.const 1
-   i32.const 1
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 24
    i32.shl
    i32.const 24
    i32.shr_s
-   call $~lib/util/hash/hash8
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<i8>|inlined.1
   end
   local.set $3
@@ -3964,15 +4003,15 @@
    i32.const 0
    drop
    i32.const 1
-   i32.const 1
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 24
    i32.shl
    i32.const 24
    i32.shr_s
-   call $~lib/util/hash/hash8
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<i8>|inlined.3
   end
   call $~lib/set/Set<i8>#find
@@ -4541,13 +4580,13 @@
    i32.const 0
    drop
    i32.const 1
-   i32.const 1
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 255
    i32.and
-   call $~lib/util/hash/hash8
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<u8>|inlined.0
   end
   call $~lib/set/Set<u8>#find
@@ -4635,11 +4674,11 @@
       i32.const 0
       drop
       i32.const 1
-      i32.const 1
-      i32.eq
+      i32.const 4
+      i32.le_u
       drop
       local.get $13
-      call $~lib/util/hash/hash8
+      call $~lib/util/hash/hash32
       br $~lib/util/hash/HASH<u8>|inlined.2
      end
      local.get $1
@@ -4733,13 +4772,13 @@
    i32.const 0
    drop
    i32.const 1
-   i32.const 1
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 255
    i32.and
-   call $~lib/util/hash/hash8
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<u8>|inlined.1
   end
   local.set $3
@@ -5086,13 +5125,13 @@
    i32.const 0
    drop
    i32.const 1
-   i32.const 1
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 255
    i32.and
-   call $~lib/util/hash/hash8
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<u8>|inlined.3
   end
   call $~lib/set/Set<u8>#find
@@ -5587,28 +5626,6 @@
   i32.store offset=20
   local.get $0
  )
- (func $~lib/util/hash/hash16 (param $0 i32) (result i32)
-  (local $1 i32)
-  i32.const -2128831035
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.const 8
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $1
-  local.get $1
- )
  (func $~lib/set/Set<i16>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -5677,19 +5694,15 @@
    i32.const 0
    drop
    i32.const 2
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 2
-   i32.const 2
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 16
    i32.shl
    i32.const 16
    i32.shr_s
-   call $~lib/util/hash/hash16
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<i16>|inlined.0
   end
   call $~lib/set/Set<i16>#find
@@ -5777,15 +5790,11 @@
       i32.const 0
       drop
       i32.const 2
-      i32.const 1
-      i32.eq
-      drop
-      i32.const 2
-      i32.const 2
-      i32.eq
+      i32.const 4
+      i32.le_u
       drop
       local.get $13
-      call $~lib/util/hash/hash16
+      call $~lib/util/hash/hash32
       br $~lib/util/hash/HASH<i16>|inlined.2
      end
      local.get $1
@@ -5879,19 +5888,15 @@
    i32.const 0
    drop
    i32.const 2
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 2
-   i32.const 2
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 16
    i32.shl
    i32.const 16
    i32.shr_s
-   call $~lib/util/hash/hash16
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<i16>|inlined.1
   end
   local.set $3
@@ -6238,19 +6243,15 @@
    i32.const 0
    drop
    i32.const 2
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 2
-   i32.const 2
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 16
    i32.shl
    i32.const 16
    i32.shr_s
-   call $~lib/util/hash/hash16
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<i16>|inlined.3
   end
   call $~lib/set/Set<i16>#find
@@ -6819,17 +6820,13 @@
    i32.const 0
    drop
    i32.const 2
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 2
-   i32.const 2
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 65535
    i32.and
-   call $~lib/util/hash/hash16
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<u16>|inlined.0
   end
   call $~lib/set/Set<u16>#find
@@ -6917,15 +6914,11 @@
       i32.const 0
       drop
       i32.const 2
-      i32.const 1
-      i32.eq
-      drop
-      i32.const 2
-      i32.const 2
-      i32.eq
+      i32.const 4
+      i32.le_u
       drop
       local.get $13
-      call $~lib/util/hash/hash16
+      call $~lib/util/hash/hash32
       br $~lib/util/hash/HASH<u16>|inlined.2
      end
      local.get $1
@@ -7019,17 +7012,13 @@
    i32.const 0
    drop
    i32.const 2
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 2
-   i32.const 2
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 65535
    i32.and
-   call $~lib/util/hash/hash16
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<u16>|inlined.1
   end
   local.set $3
@@ -7376,17 +7365,13 @@
    i32.const 0
    drop
    i32.const 2
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 2
-   i32.const 2
-   i32.eq
+   i32.const 4
+   i32.le_u
    drop
    local.get $2
    i32.const 65535
    i32.and
-   call $~lib/util/hash/hash16
+   call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<u16>|inlined.3
   end
   call $~lib/set/Set<u16>#find
@@ -7881,48 +7866,6 @@
   i32.store offset=20
   local.get $0
  )
- (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
-  (local $1 i32)
-  i32.const -2128831035
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.const 8
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.const 16
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $1
-  local.get $1
- )
  (func $~lib/set/Set<i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -7987,16 +7930,8 @@
    i32.const 0
    drop
    i32.const 4
-   i32.const 1
-   i32.eq
-   drop
    i32.const 4
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
+   i32.le_u
    drop
    local.get $2
    call $~lib/util/hash/hash32
@@ -8087,16 +8022,8 @@
       i32.const 0
       drop
       i32.const 4
-      i32.const 1
-      i32.eq
-      drop
       i32.const 4
-      i32.const 2
-      i32.eq
-      drop
-      i32.const 4
-      i32.const 4
-      i32.eq
+      i32.le_u
       drop
       local.get $13
       call $~lib/util/hash/hash32
@@ -8193,16 +8120,8 @@
    i32.const 0
    drop
    i32.const 4
-   i32.const 1
-   i32.eq
-   drop
    i32.const 4
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
+   i32.le_u
    drop
    local.get $2
    call $~lib/util/hash/hash32
@@ -8552,16 +8471,8 @@
    i32.const 0
    drop
    i32.const 4
-   i32.const 1
-   i32.eq
-   drop
    i32.const 4
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
+   i32.le_u
    drop
    local.get $2
    call $~lib/util/hash/hash32
@@ -9111,16 +9022,8 @@
    i32.const 0
    drop
    i32.const 4
-   i32.const 1
-   i32.eq
-   drop
    i32.const 4
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
+   i32.le_u
    drop
    local.get $2
    call $~lib/util/hash/hash32
@@ -9211,16 +9114,8 @@
       i32.const 0
       drop
       i32.const 4
-      i32.const 1
-      i32.eq
-      drop
       i32.const 4
-      i32.const 2
-      i32.eq
-      drop
-      i32.const 4
-      i32.const 4
-      i32.eq
+      i32.le_u
       drop
       local.get $13
       call $~lib/util/hash/hash32
@@ -9317,16 +9212,8 @@
    i32.const 0
    drop
    i32.const 4
-   i32.const 1
-   i32.eq
-   drop
    i32.const 4
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
+   i32.le_u
    drop
    local.get $2
    call $~lib/util/hash/hash32
@@ -9676,16 +9563,8 @@
    i32.const 0
    drop
    i32.const 4
-   i32.const 1
-   i32.eq
-   drop
    i32.const 4
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 4
-   i32.const 4
-   i32.eq
+   i32.le_u
    drop
    local.get $2
    call $~lib/util/hash/hash32
@@ -10173,91 +10052,65 @@
  )
  (func $~lib/util/hash/hash64 (param $0 i64) (result i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
+  i32.const 0
+  i32.const 374761393
+  i32.add
+  local.set $1
+  local.get $1
   local.get $0
   i32.wrap_i64
+  i32.const -1028477379
+  i32.mul
+  i32.add
   local.set $1
+  local.get $1
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.set $1
+  local.get $1
   local.get $0
   i64.const 32
   i64.shr_u
   i32.wrap_i64
-  local.set $2
-  i32.const -2128831035
-  local.set $3
-  local.get $3
-  local.get $1
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
+  i32.const -1028477379
   i32.mul
-  local.set $3
-  local.get $3
+  i32.add
+  local.set $1
   local.get $1
-  i32.const 8
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.set $1
+  local.get $1
+  local.get $1
+  i32.const 15
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
+  local.set $1
+  local.get $1
+  i32.const -2048144777
   i32.mul
-  local.set $3
-  local.get $3
+  local.set $1
+  local.get $1
+  local.get $1
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  local.set $1
+  local.get $1
+  i32.const -1028477379
+  i32.mul
+  local.set $1
+  local.get $1
   local.get $1
   i32.const 16
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $3
-  local.get $3
+  local.set $1
   local.get $1
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $3
-  local.get $3
-  local.get $2
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $3
-  local.get $3
-  local.get $2
-  i32.const 8
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $3
-  local.get $3
-  local.get $2
-  i32.const 16
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $3
-  local.get $3
-  local.get $2
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $3
-  local.get $3
  )
  (func $~lib/set/Set<i64>#find (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
@@ -10323,16 +10176,8 @@
    i32.const 0
    drop
    i32.const 8
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 8
    i32.const 4
-   i32.eq
+   i32.le_u
    drop
    i32.const 8
    i32.const 8
@@ -10428,16 +10273,8 @@
       i32.const 0
       drop
       i32.const 8
-      i32.const 1
-      i32.eq
-      drop
-      i32.const 8
-      i32.const 2
-      i32.eq
-      drop
-      i32.const 8
       i32.const 4
-      i32.eq
+      i32.le_u
       drop
       i32.const 8
       i32.const 8
@@ -10539,16 +10376,8 @@
    i32.const 0
    drop
    i32.const 8
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 8
    i32.const 4
-   i32.eq
+   i32.le_u
    drop
    i32.const 8
    i32.const 8
@@ -10903,16 +10732,8 @@
    i32.const 0
    drop
    i32.const 8
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 8
    i32.const 4
-   i32.eq
+   i32.le_u
    drop
    i32.const 8
    i32.const 8
@@ -11467,16 +11288,8 @@
    i32.const 0
    drop
    i32.const 8
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 8
    i32.const 4
-   i32.eq
+   i32.le_u
    drop
    i32.const 8
    i32.const 8
@@ -11572,16 +11385,8 @@
       i32.const 0
       drop
       i32.const 8
-      i32.const 1
-      i32.eq
-      drop
-      i32.const 8
-      i32.const 2
-      i32.eq
-      drop
-      i32.const 8
       i32.const 4
-      i32.eq
+      i32.le_u
       drop
       i32.const 8
       i32.const 8
@@ -11683,16 +11488,8 @@
    i32.const 0
    drop
    i32.const 8
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 8
    i32.const 4
-   i32.eq
+   i32.le_u
    drop
    i32.const 8
    i32.const 8
@@ -12047,16 +11844,8 @@
    i32.const 0
    drop
    i32.const 8
-   i32.const 1
-   i32.eq
-   drop
-   i32.const 8
-   i32.const 2
-   i32.eq
-   drop
-   i32.const 8
    i32.const 4
-   i32.eq
+   i32.le_u
    drop
    i32.const 8
    i32.const 8

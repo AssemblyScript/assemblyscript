@@ -347,42 +347,194 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const -2128831035
-  local.set $1
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   local.get $0
+  i32.eqz
   if
-   local.get $0
-   i32.const 20
+   i32.const 0
+   return
+  end
+  local.get $0
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1
+  i32.shr_u
+  i32.const 1
+  i32.shl
+  local.tee $3
+  i32.const 16
+  i32.ge_s
+  if (result i32)
+   i32.const 606290984
+   local.set $1
+   i32.const -2048144777
+   local.set $6
+   i32.const 1640531535
+   local.set $7
+   local.get $3
+   i32.const 16
    i32.sub
-   i32.load offset=16
-   i32.const 1
-   i32.shr_u
-   i32.const 1
-   i32.shl
    local.set $3
-   loop $for-loop|0
-    local.get $2
+   loop $while-continue|0
     local.get $3
-    i32.lt_u
+    local.get $5
+    i32.ge_s
     if
      local.get $1
      local.get $0
-     local.get $2
+     local.get $5
      i32.add
-     i32.load8_u
-     i32.xor
-     i32.const 16777619
+     local.tee $8
+     i32.load
+     i32.const -2048144777
+     i32.mul
+     i32.add
+     i32.const 13
+     i32.rotl
+     i32.const -1640531535
      i32.mul
      local.set $1
-     local.get $2
-     i32.const 1
+     local.get $6
+     local.get $8
+     i32.load offset=4
+     i32.const -2048144777
+     i32.mul
      i32.add
-     local.set $2
-     br $for-loop|0
+     i32.const 13
+     i32.rotl
+     i32.const -1640531535
+     i32.mul
+     local.set $6
+     local.get $4
+     local.get $8
+     i32.load offset=8
+     i32.const -2048144777
+     i32.mul
+     i32.add
+     i32.const 13
+     i32.rotl
+     i32.const -1640531535
+     i32.mul
+     local.set $4
+     local.get $7
+     local.get $8
+     i32.load offset=12
+     i32.const -2048144777
+     i32.mul
+     i32.add
+     i32.const 13
+     i32.rotl
+     i32.const -1640531535
+     i32.mul
+     local.set $7
+     local.get $5
+     i32.const 16
+     i32.add
+     local.set $5
+     br $while-continue|0
     end
+   end
+   local.get $3
+   local.get $5
+   i32.sub
+   local.set $3
+   local.get $1
+   i32.const 1
+   i32.rotl
+   local.get $6
+   i32.const 7
+   i32.rotl
+   i32.add
+   local.get $4
+   i32.const 12
+   i32.rotl
+   i32.add
+   local.get $7
+   i32.const 18
+   i32.rotl
+   i32.add
+  else
+   i32.const 374761393
+  end
+  local.set $1
+  local.get $3
+  i32.const 4
+  i32.sub
+  local.set $4
+  loop $while-continue|1
+   local.get $2
+   local.get $4
+   i32.le_s
+   if
+    local.get $1
+    local.get $0
+    local.get $2
+    i32.add
+    i32.load
+    i32.const -1028477379
+    i32.mul
+    i32.add
+    i32.const 17
+    i32.rotl
+    i32.const 668265263
+    i32.mul
+    local.set $1
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    br $while-continue|1
+   end
+  end
+  loop $while-continue|2
+   local.get $2
+   local.get $4
+   i32.lt_s
+   if
+    local.get $1
+    local.get $0
+    local.get $2
+    i32.add
+    i32.load8_u
+    i32.const 374761393
+    i32.mul
+    i32.add
+    i32.const 11
+    i32.rotl
+    i32.const -1640531535
+    i32.mul
+    local.set $1
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    br $while-continue|2
    end
   end
   local.get $1
+  local.get $1
+  i32.const 15
+  i32.shr_u
+  i32.xor
+  i32.const -2048144777
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 16
+  i32.shr_u
+  i32.xor
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -654,34 +806,33 @@
  )
  (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
   local.get $0
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
+  i32.const -1028477379
   i32.mul
+  i32.const 374761393
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.tee $0
   local.get $0
-  i32.const 8
+  i32.const 15
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
+  i32.const -2048144777
   i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $0
   local.get $0
   i32.const 16
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $0
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
  )
  (func $~lib/map/Map<usize,~lib/string/String>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0

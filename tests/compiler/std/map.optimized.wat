@@ -1290,6 +1290,36 @@
   local.get $1
   call $~lib/rt/pure/__retain
  )
+ (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
+  local.get $0
+  i32.const -1028477379
+  i32.mul
+  i32.const 374761393
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 15
+  i32.shr_u
+  i32.xor
+  i32.const -2048144777
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 16
+  i32.shr_u
+  i32.xor
+ )
  (func $~lib/map/Map<i8,i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
@@ -1341,10 +1371,7 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i8,i32>#find
   i32.const 0
   i32.ne
@@ -1408,12 +1435,9 @@
      i32.store offset=4
      local.get $2
      local.get $5
-     local.get $1
      local.get $6
-     i32.const -2128831035
-     i32.xor
-     i32.const 16777619
-     i32.mul
+     call $~lib/util/hash/hash32
+     local.get $1
      i32.and
      i32.const 2
      i32.shl
@@ -1487,20 +1511,15 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  local.get $0
+  local.get $1
   local.get $1
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.tee $3
-  local.set $5
-  local.get $0
-  local.get $1
-  local.get $3
+  call $~lib/util/hash/hash32
+  local.tee $5
   call $~lib/map/Map<i8,i32>#find
   local.tee $3
   if
@@ -1595,10 +1614,7 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i8,i32>#find
   local.tee $0
   i32.eqz
@@ -2475,12 +2491,9 @@
      i32.store8 offset=1
      local.get $2
      local.get $5
-     local.get $1
      local.get $6
-     i32.const -2128831035
-     i32.xor
-     i32.const 16777619
-     i32.mul
+     call $~lib/util/hash/hash32
+     local.get $1
      i32.and
      i32.const 2
      i32.shl
@@ -2554,19 +2567,17 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $0
-  i32.load
   local.get $1
   local.tee $3
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.tee $5
+  call $~lib/util/hash/hash32
+  local.set $5
+  local.get $0
+  i32.load
+  local.get $5
   local.get $0
   i32.load offset=4
   i32.and
@@ -2689,37 +2700,6 @@
   end
   local.get $0
   call $~lib/rt/pure/__retain
- )
- (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
-  local.get $0
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $0
-  i32.const 8
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $0
-  i32.const 16
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $0
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
  )
  (func $~lib/map/Map<i32,i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
@@ -2997,10 +2977,7 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i8,i32>#find
   local.tee $1
   i32.eqz
@@ -3616,10 +3593,7 @@
   local.get $1
   i32.const 255
   i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i8,i32>#find
   i32.const 0
   i32.ne
@@ -3683,12 +3657,9 @@
      i32.store offset=4
      local.get $2
      local.get $5
-     local.get $1
      local.get $6
-     i32.const -2128831035
-     i32.xor
-     i32.const 16777619
-     i32.mul
+     call $~lib/util/hash/hash32
+     local.get $1
      i32.and
      i32.const 2
      i32.shl
@@ -3762,18 +3733,13 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  local.get $0
+  local.get $1
   local.get $1
   i32.const 255
   i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.tee $3
-  local.set $5
-  local.get $0
-  local.get $1
-  local.get $3
+  call $~lib/util/hash/hash32
+  local.tee $5
   call $~lib/map/Map<i8,i32>#find
   local.tee $3
   if
@@ -3866,10 +3832,7 @@
   local.get $1
   i32.const 255
   i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i8,i32>#find
   local.tee $0
   i32.eqz
@@ -4056,12 +4019,9 @@
      i32.store8 offset=1
      local.get $2
      local.get $5
-     local.get $1
      local.get $6
-     i32.const -2128831035
-     i32.xor
-     i32.const 16777619
-     i32.mul
+     call $~lib/util/hash/hash32
+     local.get $1
      i32.and
      i32.const 2
      i32.shl
@@ -4135,17 +4095,15 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $0
-  i32.load
   local.get $1
   local.tee $3
   i32.const 255
   i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.tee $5
+  call $~lib/util/hash/hash32
+  local.set $5
+  local.get $0
+  i32.load
+  local.get $5
   local.get $0
   i32.load offset=4
   i32.and
@@ -4276,10 +4234,7 @@
   local.get $1
   i32.const 255
   i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i8,i32>#find
   local.tee $1
   i32.eqz
@@ -4834,21 +4789,6 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/util/hash/hash16 (param $0 i32) (result i32)
-  local.get $0
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $0
-  i32.const 8
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
- )
  (func $~lib/map/Map<i16,i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
@@ -4900,7 +4840,7 @@
   i32.shl
   i32.const 16
   i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i16,i32>#find
   i32.const 0
   i32.ne
@@ -4965,7 +4905,7 @@
      local.get $2
      local.get $5
      local.get $6
-     call $~lib/util/hash/hash16
+     call $~lib/util/hash/hash32
      local.get $1
      i32.and
      i32.const 2
@@ -5047,7 +4987,7 @@
   i32.shl
   i32.const 16
   i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/hash32
   local.tee $5
   call $~lib/map/Map<i16,i32>#find
   local.tee $3
@@ -5143,7 +5083,7 @@
   i32.shl
   i32.const 16
   i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i16,i32>#find
   local.tee $0
   i32.eqz
@@ -5385,7 +5325,7 @@
      local.get $2
      local.get $5
      local.get $6
-     call $~lib/util/hash/hash16
+     call $~lib/util/hash/hash32
      local.get $1
      i32.and
      i32.const 2
@@ -5466,7 +5406,7 @@
   i32.shl
   i32.const 16
   i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/hash32
   local.set $5
   local.get $0
   i32.load
@@ -5603,7 +5543,7 @@
   i32.shl
   i32.const 16
   i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i16,i32>#find
   local.tee $1
   i32.eqz
@@ -6188,7 +6128,7 @@
   local.get $1
   i32.const 65535
   i32.and
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i16,i32>#find
   i32.const 0
   i32.ne
@@ -6253,7 +6193,7 @@
      local.get $2
      local.get $5
      local.get $6
-     call $~lib/util/hash/hash16
+     call $~lib/util/hash/hash32
      local.get $1
      i32.and
      i32.const 2
@@ -6333,7 +6273,7 @@
   local.get $1
   i32.const 65535
   i32.and
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/hash32
   local.tee $5
   call $~lib/map/Map<i16,i32>#find
   local.tee $3
@@ -6427,7 +6367,7 @@
   local.get $1
   i32.const 65535
   i32.and
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i16,i32>#find
   local.tee $0
   i32.eqz
@@ -6619,7 +6559,7 @@
      local.get $2
      local.get $5
      local.get $6
-     call $~lib/util/hash/hash16
+     call $~lib/util/hash/hash32
      local.get $1
      i32.and
      i32.const 2
@@ -6698,7 +6638,7 @@
   local.tee $3
   i32.const 65535
   i32.and
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/hash32
   local.set $5
   local.get $0
   i32.load
@@ -6833,7 +6773,7 @@
   local.get $1
   i32.const 65535
   i32.and
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/hash32
   call $~lib/map/Map<i16,i32>#find
   local.tee $1
   i32.eqz
@@ -8525,67 +8465,44 @@
   (local $1 i32)
   local.get $0
   i32.wrap_i64
-  local.tee $1
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
+  i32.const -1028477379
   i32.mul
-  local.get $1
-  i32.const 8
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $1
-  i32.const 16
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $1
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
+  i32.const 374761393
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
   i32.mul
   local.get $0
   i64.const 32
   i64.shr_u
   i32.wrap_i64
+  i32.const -1028477379
+  i32.mul
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
   local.tee $1
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
   local.get $1
-  i32.const 8
+  i32.const 15
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
+  i32.const -2048144777
   i32.mul
+  local.tee $1
+  local.get $1
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $1
   local.get $1
   i32.const 16
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $1
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
  )
  (func $~lib/map/Map<i64,i32>#find (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   local.get $0
