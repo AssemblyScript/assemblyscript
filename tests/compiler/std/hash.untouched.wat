@@ -268,14 +268,6 @@
     local.set $6
     local.get $6
     local.set $3
-    local.get $5
-    i32.const 2
-    i32.add
-    local.set $5
-    local.get $4
-    i32.const 2
-    i32.sub
-    local.set $4
    end
   end
   local.get $3
@@ -531,14 +523,6 @@
     local.set $6
     local.get $6
     local.set $3
-    local.get $5
-    i32.const 2
-    i32.add
-    local.set $5
-    local.get $4
-    i32.const 2
-    i32.sub
-    local.set $4
    end
   end
   local.get $3
