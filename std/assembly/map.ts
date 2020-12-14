@@ -88,8 +88,9 @@ export class Map<K,V> {
       changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
     while (entry) {
-      if (!(entry.taggedNext & EMPTY) && entry.key == key) return entry;
-      entry = changetype<MapEntry<K,V>>(entry.taggedNext & ~EMPTY);
+      let taggedNext = entry.taggedNext;
+      if (!(taggedNext & EMPTY) && entry.key == key) return entry;
+      entry = changetype<MapEntry<K,V>>(taggedNext & ~EMPTY);
     }
     return null;
   }
@@ -172,9 +173,10 @@ export class Map<K,V> {
       let oldEntry = changetype<MapEntry<K,V>>(oldPtr);
       if (!(oldEntry.taggedNext & EMPTY)) {
         let newEntry = changetype<MapEntry<K,V>>(newPtr);
-        newEntry.key = oldEntry.key;
+        let oldEntryKey = oldEntry.key;
+        newEntry.key = oldEntryKey;
         newEntry.value = oldEntry.value;
-        let newBucketIndex = HASH<K>(oldEntry.key) & newBucketsMask;
+        let newBucketIndex = HASH<K>(oldEntryKey) & newBucketsMask;
         let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
         newEntry.taggedNext = load<usize>(newBucketPtrBase);
         store<usize>(newBucketPtrBase, newPtr);

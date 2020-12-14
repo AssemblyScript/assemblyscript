@@ -27,19 +27,19 @@
     "ts-node": "^6.2.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.9",
-    "@typescript-eslint/eslint-plugin": "^4.8.2",
-    "@typescript-eslint/parser": "^4.8.2",
-    "diff": "^4.0.2",
-    "eslint": "^7.14.0",
+    "@types/node": "^14.14.12",
+    "@typescript-eslint/eslint-plugin": "^4.9.1",
+    "@typescript-eslint/parser": "^4.9.1",
+    "diff": "^5.0.0",
+    "eslint": "^7.15.0",
     "glob": "^7.1.6",
     "physical-cpu-count": "^2.0.0",
     "source-map-support": "^0.5.19",
-    "ts-loader": "^8.0.11",
+    "ts-loader": "^8.0.12",
     "ts-node": "^6.2.0",
     "typescript": "^4.1.2",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
+    "webpack": "^5.10.0",
+    "webpack-cli": "^4.2.0"
   },
   "type": "commonjs",
   "main": "index.js",
@@ -67,7 +67,7 @@
   },
   "scripts": {
     "build": "npm run build:bundle && npm run build:dts && npm run build:sdk",
-    "build:bundle": "webpack --mode production --display-modules",
+    "build:bundle": "webpack --config webpack.config.js",
     "build:dts": "node scripts/build-dts && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index-release",
     "build:sdk": "node scripts/build-sdk",
     "clean": "node scripts/clean",

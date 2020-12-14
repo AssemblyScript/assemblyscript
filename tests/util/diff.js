@@ -1,8 +1,8 @@
-var JsDiff = require("diff");
+var Diff = require("diff");
 var colors = require("../../cli/util/colors");
 
 module.exports = function diff(filename, expected, actual) {
-  var diff = JsDiff.structuredPatch(filename, filename, expected, actual, "expected", "actual", { context: 5 });
+  var diff = Diff.structuredPatch(filename, filename, expected, actual, "expected", "actual", { context: 5 });
   if (!diff.hunks.length)
     return null;
 

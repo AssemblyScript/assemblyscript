@@ -2465,6 +2465,7 @@
  (func $~lib/map/Map<~lib/string/String,usize>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.load
   local.get $2
@@ -2483,6 +2484,8 @@
    if
     local.get $3
     i32.load offset=8
+    local.set $5
+    local.get $5
     i32.const 1
     i32.and
     i32.eqz
@@ -2498,8 +2501,7 @@
      local.get $3
      return
     end
-    local.get $3
-    i32.load offset=8
+    local.get $5
     i32.const 1
     i32.const -1
     i32.xor
@@ -2548,7 +2550,7 @@
   if
    i32.const 464
    i32.const 528
-   i32.const 104
+   i32.const 105
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -2584,6 +2586,7 @@
   (local $11 i32)
   (local $12 i32)
   (local $13 i32)
+  (local $14 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -2635,38 +2638,39 @@
     if
      local.get $8
      local.set $11
-     local.get $11
      local.get $10
      i32.load
+     local.set $12
+     local.get $11
+     local.get $12
      call $~lib/map/MapEntry<~lib/string/String,usize>#set:key
      local.get $11
      local.get $10
      i32.load offset=4
      call $~lib/map/MapEntry<~lib/string/String,usize>#set:value
      block $~lib/util/hash/HASH<~lib/string/String>|inlined.3 (result i32)
-      local.get $10
-      i32.load
-      local.set $12
+      local.get $12
+      local.set $13
       i32.const 1
       drop
-      local.get $12
+      local.get $13
       call $~lib/util/hash/hashStr
       br $~lib/util/hash/HASH<~lib/string/String>|inlined.3
      end
      local.get $1
      i32.and
-     local.set $12
+     local.set $13
      local.get $3
-     local.get $12
+     local.get $13
      i32.const 4
      i32.mul
      i32.add
-     local.set $13
+     local.set $14
      local.get $11
-     local.get $13
+     local.get $14
      i32.load
      call $~lib/map/MapEntry<~lib/string/String,usize>#set:taggedNext
-     local.get $13
+     local.get $14
      local.get $8
      i32.store
      local.get $8
@@ -2856,6 +2860,7 @@
  (func $~lib/map/Map<usize,~lib/string/String>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.load
   local.get $2
@@ -2874,6 +2879,8 @@
    if
     local.get $3
     i32.load offset=8
+    local.set $5
+    local.get $5
     i32.const 1
     i32.and
     i32.eqz
@@ -2889,8 +2896,7 @@
      local.get $3
      return
     end
-    local.get $3
-    i32.load offset=8
+    local.get $5
     i32.const 1
     i32.const -1
     i32.xor
@@ -2929,6 +2935,7 @@
   (local $11 i32)
   (local $12 i32)
   (local $13 i32)
+  (local $14 i32)
   local.get $1
   i32.const 1
   i32.add
@@ -2980,18 +2987,19 @@
     if
      local.get $8
      local.set $11
-     local.get $11
      local.get $10
      i32.load
+     local.set $12
+     local.get $11
+     local.get $12
      call $~lib/map/MapEntry<usize,~lib/string/String>#set:key
      local.get $11
      local.get $10
      i32.load offset=4
      call $~lib/map/MapEntry<usize,~lib/string/String>#set:value
      block $~lib/util/hash/HASH<usize>|inlined.1 (result i32)
-      local.get $10
-      i32.load
-      local.set $12
+      local.get $12
+      local.set $13
       i32.const 0
       drop
       i32.const 0
@@ -3010,24 +3018,24 @@
       i32.const 4
       i32.eq
       drop
-      local.get $12
+      local.get $13
       call $~lib/util/hash/hash32
       br $~lib/util/hash/HASH<usize>|inlined.1
      end
      local.get $1
      i32.and
-     local.set $12
+     local.set $13
      local.get $3
-     local.get $12
+     local.get $13
      i32.const 4
      i32.mul
      i32.add
-     local.set $13
+     local.set $14
      local.get $11
-     local.get $13
+     local.get $14
      i32.load
      call $~lib/map/MapEntry<usize,~lib/string/String>#set:taggedNext
-     local.get $13
+     local.get $14
      local.get $8
      i32.store
      local.get $8
@@ -3309,7 +3317,7 @@
   if
    i32.const 464
    i32.const 528
-   i32.const 104
+   i32.const 105
    i32.const 17
    call $~lib/builtins/abort
    unreachable
