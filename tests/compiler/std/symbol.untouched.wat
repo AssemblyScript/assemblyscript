@@ -634,12 +634,8 @@
      i32.const -2048144777
      i32.mul
      i32.add
-     local.set $10
-     local.get $10
      i32.const 13
      i32.rotl
-     local.set $10
-     local.get $10
      i32.const -1640531535
      i32.mul
      local.set $1
@@ -655,12 +651,8 @@
      i32.const -2048144777
      i32.mul
      i32.add
-     local.set $10
-     local.get $10
      i32.const 13
      i32.rotl
-     local.set $10
-     local.get $10
      i32.const -1640531535
      i32.mul
      local.set $4
@@ -676,12 +668,8 @@
      i32.const -2048144777
      i32.mul
      i32.add
-     local.set $10
-     local.get $10
      i32.const 13
      i32.rotl
-     local.set $10
-     local.get $10
      i32.const -1640531535
      i32.mul
      local.set $5
@@ -697,12 +685,8 @@
      i32.const -2048144777
      i32.mul
      i32.add
-     local.set $10
-     local.get $10
      i32.const 13
      i32.rotl
-     local.set $10
-     local.get $10
      i32.const -1640531535
      i32.mul
      local.set $6

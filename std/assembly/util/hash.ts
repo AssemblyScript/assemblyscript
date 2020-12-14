@@ -60,10 +60,8 @@ function hash64(key: u64): u32 {
 
 // @ts-ignore: decorator
 @inline
-function xxhMix(h: u32, c: u32): u32 {
-  h += c * XXH32_P2;
-  h = rotl(h, 13);
-  return h * XXH32_P1;
+function mix(h: u32, key: u32): u32 {
+  return rotl(h + key * XXH32_P2, 13) * XXH32_P1;
 }
 
 function hashStr(key: string): u32 {
@@ -84,10 +82,10 @@ function hashStr(key: string): u32 {
     len -= 16;
 
     while (i <= len) {
-      s1 = xxhMix(s1, load<u32>(changetype<usize>(key) + i));
-      s2 = xxhMix(s2, load<u32>(changetype<usize>(key) + i, 4));
-      s3 = xxhMix(s3, load<u32>(changetype<usize>(key) + i, 8));
-      s4 = xxhMix(s4, load<u32>(changetype<usize>(key) + i, 12));
+      s1 = mix(s1, load<u32>(changetype<usize>(key) + i));
+      s2 = mix(s2, load<u32>(changetype<usize>(key) + i, 4));
+      s3 = mix(s3, load<u32>(changetype<usize>(key) + i, 8));
+      s4 = mix(s4, load<u32>(changetype<usize>(key) + i, 12));
       i += 16;
     }
     h = rotl(s1, 1) + rotl(s2, 7) + rotl(s3, 12) + rotl(s4, 18);
