@@ -36,7 +36,7 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
       if (!alen) return -1;
       if (!blen) return  1;
       let res = compareImpl(changetype<string>(a), 0, changetype<string>(b), 0, <usize>min(alen, blen));
-      return res == 0 ? alen - blen : res;
+      return res ? res : alen - blen;
     };
   } else {
     return (a: T, b: T): i32 => (i32(a > b) - i32(a < b));
