@@ -7062,15 +7062,13 @@
   call $~lib/util/string/compareImpl
   local.set $6
   local.get $6
-  i32.const 0
-  i32.eq
   if (result i32)
-   local.get $3
-   local.get $4
-   i32.gt_s
-  else
    local.get $6
    i32.const 0
+   i32.gt_s
+  else
+   local.get $3
+   local.get $4
    i32.gt_s
   end
   local.set $2
@@ -7164,15 +7162,13 @@
   call $~lib/util/string/compareImpl
   local.set $6
   local.get $6
-  i32.const 0
-  i32.eq
   if (result i32)
-   local.get $4
-   local.get $3
-   i32.lt_s
-  else
    local.get $6
    i32.const 0
+   i32.lt_s
+  else
+   local.get $4
+   local.get $3
    i32.lt_s
   end
   local.set $2
