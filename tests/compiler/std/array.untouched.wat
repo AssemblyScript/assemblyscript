@@ -11780,8 +11780,7 @@
   local.get $3
   local.get $4
   i32.or
-  i32.const 0
-  i32.eq
+  i32.eqz
   if
    i32.const 0
    local.set $2
@@ -12840,8 +12839,7 @@
   local.get $3
   local.get $4
   i32.or
-  i32.const 0
-  i32.eq
+  i32.eqz
   if
    i32.const 0
    local.set $2
@@ -32606,8 +32604,7 @@
   local.get $3
   local.get $4
   i32.or
-  i32.const 0
-  i32.eq
+  i32.eqz
   if
    i32.const 0
    local.set $2
