@@ -6315,6 +6315,7 @@
  (func $~lib/util/sort/COMPARATOR<~lib/string/String|null>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -6333,7 +6334,6 @@
    select
    select
    br_if $folding-inner0
-   i32.const 0
    local.get $1
    i32.const 20
    i32.sub
@@ -6341,7 +6341,6 @@
    i32.const 1
    i32.shr_u
    local.tee $2
-   i32.eqz
    local.get $0
    i32.const 20
    i32.sub
@@ -6349,7 +6348,8 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   select
+   i32.or
+   i32.eqz
    br_if $folding-inner0
    local.get $3
    i32.eqz
@@ -6380,10 +6380,17 @@
    i32.gt_s
    select
    call $~lib/util/string/compareImpl
+   local.set $4
    local.get $0
    call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
+   local.get $4
+   local.get $3
+   local.get $2
+   i32.sub
+   local.get $4
+   select
    return
   end
   local.get $0
