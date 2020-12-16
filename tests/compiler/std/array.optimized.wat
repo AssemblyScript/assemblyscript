@@ -6042,7 +6042,6 @@
    i32.const 0
    return
   end
-  i32.const 0
   local.get $1
   i32.const 20
   i32.sub
@@ -6050,7 +6049,6 @@
   i32.const 1
   i32.shr_u
   local.tee $2
-  i32.eqz
   local.get $0
   i32.const 20
   i32.sub
@@ -6058,7 +6056,8 @@
   i32.const 1
   i32.shr_u
   local.tee $3
-  select
+  i32.or
+  i32.eqz
   if
    i32.const 0
    return
@@ -6084,6 +6083,12 @@
   i32.gt_s
   select
   call $~lib/util/string/compareImpl
+  local.tee $0
+  local.get $3
+  local.get $2
+  i32.sub
+  local.get $0
+  select
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

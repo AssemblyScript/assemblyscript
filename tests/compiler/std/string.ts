@@ -337,16 +337,24 @@ assert(parseFloat(" \t\n\r.1") == 0.1);
   assert(c != "a");
 }
 assert("" == "");
+// @ts-ignore
 assert("" != nullStr);
+// @ts-ignore
 assert(nullStr != "");
+// @ts-ignore
 assert("a" != "b");
 assert("a" == "a");
+// @ts-ignore
 assert("key1" != "key2");
 assert("key1" == "key1");
+// @ts-ignore
 assert("ke1" != "ke2");
+// @ts-ignore
 assert("key12" != "key11");
 assert("イロハニホヘト" == "イロハニホヘト");
+// @ts-ignore
 assert("イロハニホヘト" != "ウヰノオクヤマ");
+// @ts-ignore
 assert("D’fhuascail" != "D’ḟuascail");
 
 assert("b" > "a");
@@ -355,7 +363,9 @@ assert("ba" >= "aa");
 assert("ba" > "ab");
 assert(!("ba" < "ab"));
 
+// @ts-ignore
 assert(!("b" < nullStr));
+// @ts-ignore
 assert(!(nullStr < "b"));
 
 assert("abc" > "");
@@ -368,6 +378,28 @@ assert(!("" < ""));
 assert(!("" > ""));
 assert("" >= "");
 assert("" <= "");
+
+assert("1" < "10");
+assert("10" > "1");
+assert(!("11" < "10"));
+assert(!("10" > "11"));
+assert("11" > "10");
+assert("10" < "11");
+assert(!("11" < "11"));
+assert(!("11" > "11"));
+assert("11" <= "11");
+assert("11" >= "11");
+assert(!("10" >= "101"));
+assert("101" >= "10");
+assert("10" <= "101");
+assert("1" == "1");
+assert("11" == "11");
+assert("123" == "123");
+// @ts-ignore
+assert("123" != "122");
+assert("1234" == "1234");
+// @ts-ignore
+assert("1233" != "1234");
 
 {
   let a = String.fromCodePoint(0xFF61);

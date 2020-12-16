@@ -1065,6 +1065,7 @@ export class ArrayStr extends Array<string> {}
 // FIXME: Fails on 'sort' due to operators '>', '<'
 // export class ArrayArrayI32 extends Array<Array<i32>> {}
 
-// Unleak globals and the start function stack
+// Unleak globals
 arr = changetype<Array<i32>>(0);
+
 __collect();

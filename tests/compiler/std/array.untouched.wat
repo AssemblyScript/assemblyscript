@@ -10981,13 +10981,9 @@
   call $~lib/string/String#get:length
   local.set $3
   local.get $2
+  local.get $3
+  i32.or
   i32.eqz
-  if (result i32)
-   local.get $3
-   i32.eqz
-  else
-   i32.const 0
-  end
   if
    i32.const 0
    return
@@ -11017,6 +11013,15 @@
   i32.lt_s
   select
   call $~lib/util/string/compareImpl
+  local.set $4
+  local.get $4
+  if (result i32)
+   local.get $4
+  else
+   local.get $2
+   local.get $3
+   i32.sub
+  end
  )
  (func $std/array/assertSorted<~lib/string/String|null>@varargs (param $0 i32) (param $1 i32)
   block $1of1
@@ -11736,13 +11741,9 @@
   call $~lib/string/String#get:length
   local.set $3
   local.get $2
+  local.get $3
+  i32.or
   i32.eqz
-  if (result i32)
-   local.get $3
-   i32.eqz
-  else
-   i32.const 0
-  end
   if
    i32.const 0
    return
@@ -11772,6 +11773,15 @@
   i32.lt_s
   select
   call $~lib/util/string/compareImpl
+  local.set $4
+  local.get $4
+  if (result i32)
+   local.get $4
+  else
+   local.get $2
+   local.get $3
+   i32.sub
+  end
  )
  (func $std/array/assertSorted<~lib/string/String>@varargs (param $0 i32) (param $1 i32)
   block $1of1
@@ -29441,13 +29451,9 @@
   call $~lib/string/String#get:length
   local.set $3
   local.get $2
+  local.get $3
+  i32.or
   i32.eqz
-  if (result i32)
-   local.get $3
-   i32.eqz
-  else
-   i32.const 0
-  end
   if
    i32.const 0
    return
@@ -29477,6 +29483,15 @@
   i32.lt_s
   select
   call $~lib/util/string/compareImpl
+  local.set $4
+  local.get $4
+  if (result i32)
+   local.get $4
+  else
+   local.get $2
+   local.get $3
+   i32.sub
+  end
  )
  (func $~lib/array/Array<~lib/string/String>#sort@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
