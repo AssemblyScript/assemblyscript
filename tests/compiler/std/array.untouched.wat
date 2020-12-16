@@ -11778,13 +11778,9 @@
   call $~lib/string/String#get:length
   local.set $4
   local.get $3
+  local.get $4
+  i32.or
   i32.eqz
-  if (result i32)
-   local.get $4
-   i32.eqz
-  else
-   i32.const 0
-  end
   if
    i32.const 0
    local.set $2
@@ -11833,11 +11829,20 @@
   select
   call $~lib/util/string/compareImpl
   local.set $2
+  local.get $2
+  if (result i32)
+   local.get $2
+  else
+   local.get $3
+   local.get $4
+   i32.sub
+  end
+  local.set $5
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $5
  )
  (func $std/array/assertSorted<~lib/string/String|null>@varargs (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -12830,13 +12835,9 @@
   call $~lib/string/String#get:length
   local.set $4
   local.get $3
+  local.get $4
+  i32.or
   i32.eqz
-  if (result i32)
-   local.get $4
-   i32.eqz
-  else
-   i32.const 0
-  end
   if
    i32.const 0
    local.set $2
@@ -12885,11 +12886,20 @@
   select
   call $~lib/util/string/compareImpl
   local.set $2
+  local.get $2
+  if (result i32)
+   local.get $2
+  else
+   local.get $3
+   local.get $4
+   i32.sub
+  end
+  local.set $5
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $5
  )
  (func $std/array/assertSorted<~lib/string/String>@varargs (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -32588,13 +32598,9 @@
   call $~lib/string/String#get:length
   local.set $4
   local.get $3
+  local.get $4
+  i32.or
   i32.eqz
-  if (result i32)
-   local.get $4
-   i32.eqz
-  else
-   i32.const 0
-  end
   if
    i32.const 0
    local.set $2
@@ -32643,11 +32649,20 @@
   select
   call $~lib/util/string/compareImpl
   local.set $2
+  local.get $2
+  if (result i32)
+   local.get $2
+  else
+   local.get $3
+   local.get $4
+   i32.sub
+  end
+  local.set $5
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $5
  )
  (func $~lib/array/Array<~lib/string/String>#sort@varargs (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
