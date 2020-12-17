@@ -814,7 +814,14 @@ export class Program extends DiagnosticEmitter {
     // so that blocks are adjacent with the next payload aligned. hence, block
     // size is payloadSize rounded up to where the next block would start:
     var blockSize = this.computeBlockStart(payloadSize);
-    assert((blockSize & 3) == 0); // TLSF: not tagged FREE or LEFTFREE
+    // make sure that block size is valid according to TLSF requirements
+    var blockOverhead = this.blockOverhead;
+    var blockMinsize = ((3 * this.options.usizeType.byteSize + blockOverhead + AL_MASK) & ~AL_MASK) - blockOverhead;
+    const blockMaxsize = 1 << 30; // 1 << (FL_BITS + SB_BITS - 1), exclusive
+    const tagsMask = 3;
+    if (blockSize < blockMinsize || blockSize >= blockMaxsize || (blockSize & tagsMask) != 0) {
+      throw new Error("invalid block size");
+    }
     return blockSize;
   }
 
@@ -4333,7 +4340,6 @@ export class Class extends TypedElement {
     var program = this.program;
     var payloadSize = this.nextMemoryOffset + overhead;
     var blockSize = program.computeBlockSize(payloadSize, true); // excl. overhead
-    assert(blockSize < (1 << 28)); // PureRC: 1 bit BUFFERED + 3 bits color
     var totalSize = program.blockOverhead + blockSize;
     var buffer = new Uint8Array(totalSize);
     var OBJECT = program.OBJECTInstance;
