@@ -1,8 +1,6 @@
 // Phase: wasi_snapshot_preview1
 // See: https://github.com/WebAssembly/WASI/tree/master/phases/snapshot/witx
 
-/* tslint:disable:max-line-length */
-
 // helper types to be more explicit
 type char = u8;
 type ptr<T> = usize; // all pointers are usize'd

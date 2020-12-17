@@ -3,8 +3,6 @@
  * @license Apache-2.0
  */
 
-/* tslint:disable:max-line-length */
-
 /** Enum of available diagnostic codes. */
 export enum DiagnosticCode {
   Not_implemented_0 = 100,
