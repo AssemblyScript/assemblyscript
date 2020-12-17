@@ -7,7 +7,7 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
  (memory $0 1)
- (data (i32.const 1036) "\16\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
+ (data (i32.const 1036) ",\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
  (global $std/date/creationTime (mut i64) (i64.const 0))
  (global $std/date/date (mut i32) (i32.const 0))
  (export "memory" (memory $0))
