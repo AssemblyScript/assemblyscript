@@ -3,7 +3,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 12) "\16\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00o\00v\00e\00r\00f\00l\00o\00w\00.\00t\00s\00")
+ (data (i32.const 12) ",\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00o\00v\00e\00r\00f\00l\00o\00w\00.\00t\00s\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
