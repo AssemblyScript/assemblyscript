@@ -11,30 +11,30 @@
  (data (i32.const 1048) "\01\00\00\00\06\00\00\001\002\003")
  (data (i32.const 1068) "\1c")
  (data (i32.const 1080) "\01\00\00\00\06\00\00\002\003\004")
- (data (i32.const 1100) "(")
+ (data (i32.const 1100) ",")
  (data (i32.const 1112) "\01\00\00\00\12\00\00\00d\00o\00T\00h\00r\00o\00w\00I\00f")
- (data (i32.const 1148) "$")
+ (data (i32.const 1148) ",")
  (data (i32.const 1160) "\01\00\00\00\10\00\00\00t\00h\00r\00o\00w\00.\00t\00s")
  (data (i32.const 1196) "\1c")
  (data (i32.const 1208) "\01\00\00\00\06\00\00\003\004\005")
- (data (i32.const 1228) "0")
+ (data (i32.const 1228) ",")
  (data (i32.const 1240) "\01\00\00\00\1a\00\00\00d\00o\00T\00h\00r\00o\00w\00I\00f\00L\00o\00o\00p")
  (data (i32.const 1276) "\1c")
  (data (i32.const 1288) "\01\00\00\00\06\00\00\004\005\006")
  (data (i32.const 1308) "\1c")
  (data (i32.const 1320) "\01\00\00\00\06\00\00\005\006\007")
- (data (i32.const 1340) "4")
+ (data (i32.const 1340) "<")
  (data (i32.const 1352) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1452) "4")
- (data (i32.const 1464) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1516) "$")
- (data (i32.const 1528) "\01\00\00\00\0e\00\00\00d\00o\00T\00h\00r\00o\00w")
+ (data (i32.const 1468) "<")
+ (data (i32.const 1480) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1532) ",")
+ (data (i32.const 1544) "\01\00\00\00\0e\00\00\00d\00o\00T\00h\00r\00o\00w")
  (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/threshold (mut i32) (i32.const 100))
  (global $~lib/rt/tcms/debt (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 1392))
- (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 1424))
+ (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 1408))
+ (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 1440))
  (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
@@ -65,7 +65,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1472
+   i32.const 1488
    i32.const 272
    i32.const 14
    call $~lib/builtins/abort
@@ -85,7 +85,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1472
+   i32.const 1488
    i32.const 274
    i32.const 14
    call $~lib/builtins/abort
@@ -128,7 +128,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1472
+   i32.const 1488
    i32.const 287
    i32.const 14
    call $~lib/builtins/abort
@@ -220,7 +220,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1472
+   i32.const 1488
    i32.const 200
    i32.const 14
    call $~lib/builtins/abort
@@ -234,7 +234,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1472
+   i32.const 1488
    i32.const 202
    i32.const 14
    call $~lib/builtins/abort
@@ -307,7 +307,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1472
+    i32.const 1488
     i32.const 223
     i32.const 16
     call $~lib/builtins/abort
@@ -362,7 +362,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1472
+   i32.const 1488
    i32.const 238
    i32.const 14
    call $~lib/builtins/abort
@@ -377,7 +377,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1472
+   i32.const 1488
    i32.const 239
    i32.const 14
    call $~lib/builtins/abort
@@ -425,7 +425,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1472
+   i32.const 1488
    i32.const 255
    i32.const 14
    call $~lib/builtins/abort
@@ -491,11 +491,11 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 3124
+  i32.const 3156
   i32.lt_u
   if
    i32.const 0
-   i32.const 1472
+   i32.const 1488
    i32.const 380
    i32.const 14
    call $~lib/builtins/abort
@@ -504,36 +504,36 @@
   local.get $0
   i32.const -16
   i32.and
-  i32.const 3120
+  i32.const 3152
   i32.load
   local.tee $0
   if (result i32)
    local.get $0
    i32.const 4
    i32.add
-   i32.const 3132
+   i32.const 3164
    i32.gt_u
    if
     i32.const 0
-    i32.const 1472
+    i32.const 1488
     i32.const 387
     i32.const 16
     call $~lib/builtins/abort
     unreachable
    end
    local.get $0
-   i32.const 3116
+   i32.const 3148
    i32.eq
    if (result i32)
     local.get $0
     i32.load
     local.set $2
-    i32.const 3116
+    i32.const 3148
    else
-    i32.const 3132
+    i32.const 3164
    end
   else
-   i32.const 3132
+   i32.const 3164
   end
   local.tee $1
   i32.sub
@@ -569,10 +569,10 @@
   local.tee $0
   i32.const 2
   i32.store
-  i32.const 3120
+  i32.const 3152
   local.get $0
   i32.store
-  i32.const 1552
+  i32.const 1584
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
@@ -580,7 +580,7 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 1552
+  i32.const 1580
   i32.lt_u
   if
    return
@@ -605,10 +605,10 @@
    if
     unreachable
    end
-   i32.const 1552
+   i32.const 1584
    i32.const 0
    i32.store
-   i32.const 3120
+   i32.const 3152
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -619,7 +619,7 @@
      local.get $1
      i32.const 2
      i32.shl
-     i32.const 1552
+     i32.const 1584
      i32.add
      i32.const 0
      i32.store offset=4
@@ -637,7 +637,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 1552
+       i32.const 1584
        i32.add
        i32.const 0
        i32.store offset=96
@@ -659,7 +659,7 @@
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 1552
+   i32.const 1584
    global.set $~lib/rt/tlsf/ROOT
   end
   global.get $~lib/rt/tlsf/ROOT
@@ -686,7 +686,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1472
+   i32.const 1488
    i32.const 564
    i32.const 3
    call $~lib/builtins/abort
@@ -983,7 +983,7 @@
       unreachable
      end
      local.get $1
-     i32.const 1552
+     i32.const 1580
      i32.ge_u
      if
       global.get $~lib/rt/tcms/total
@@ -1033,7 +1033,7 @@
   unreachable
  )
  (func $throw/doThrow
-  i32.const 1536
+  i32.const 1552
   i32.const 1168
   i32.const 3
   i32.const 3

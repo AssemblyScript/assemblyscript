@@ -5,12 +5,12 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1052) "4")
+ (data (i32.const 1052) "<")
  (data (i32.const 1064) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1132) "4")
- (data (i32.const 1144) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1196) "<")
- (data (i32.const 1208) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1148) "<")
+ (data (i32.const 1160) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1212) "<")
+ (data (i32.const 1224) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
  (global $extends-recursive/Child i32 (i32.const 3))
@@ -94,7 +94,7 @@
   i32.ne
   i32.const 0
   local.get $0
-  i32.const 1104
+  i32.const 1120
   i32.ne
   select
   i32.eqz
@@ -106,11 +106,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1112
+  i32.const 1128
   i32.load
   local.set $1
   local.get $0
-  i32.const 1104
+  i32.const 1120
   call $~lib/rt/tcms/Object#set:next
   local.get $1
   i32.eqz
@@ -148,7 +148,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1112
+  i32.const 1128
   local.get $0
   i32.store
   local.get $0
@@ -175,13 +175,13 @@
     i32.const 1032
     i32.const 1024
     i32.store
-    i32.const 1108
-    i32.const 1104
+    i32.const 1124
+    i32.const 1120
     i32.store
-    i32.const 1112
-    i32.const 1104
+    i32.const 1128
+    i32.const 1120
     i32.store
-    i32.const 1104
+    i32.const 1120
     global.set $~lib/rt/tcms/iter
     i32.const 1
     global.set $~lib/rt/tcms/state

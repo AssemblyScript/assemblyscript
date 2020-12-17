@@ -16,24 +16,24 @@
  (data (i32.const 1080) "\03\00\00\00\08\00\00\00\02")
  (data (i32.const 1100) "\1c")
  (data (i32.const 1112) "\04\00\00\00\08\00\00\00\03")
- (data (i32.const 1132) "4")
+ (data (i32.const 1132) "<")
  (data (i32.const 1144) "\01\00\00\00 \00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00c\00a\00l\00l\00.\00t\00s")
  (data (i32.const 1196) "\1c")
  (data (i32.const 1208) "\04\00\00\00\08\00\00\00\04")
  (data (i32.const 1228) "\1c")
  (data (i32.const 1240) "\05\00\00\00\08\00\00\00\05")
- (data (i32.const 1292) "4")
+ (data (i32.const 1292) "<")
  (data (i32.const 1304) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1372) "4")
- (data (i32.const 1384) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1436) "<")
- (data (i32.const 1448) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1500) "\1c")
- (data (i32.const 1512) "\07\00\00\00\08\00\00\00\06")
- (data (i32.const 1532) "\1c")
- (data (i32.const 1544) "\05\00\00\00\08\00\00\00\07")
- (data (i32.const 1564) "\1c")
- (data (i32.const 1576) "\08\00\00\00\08\00\00\00\08")
+ (data (i32.const 1388) "<")
+ (data (i32.const 1400) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1452) "<")
+ (data (i32.const 1464) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1516) "\1c")
+ (data (i32.const 1528) "\07\00\00\00\08\00\00\00\06")
+ (data (i32.const 1548) "\1c")
+ (data (i32.const 1560) "\05\00\00\00\08\00\00\00\07")
+ (data (i32.const 1580) "\1c")
+ (data (i32.const 1592) "\08\00\00\00\08\00\00\00\08")
  (table $0 9 funcref)
  (elem (i32.const 1) $start:function-call~anonymous|0 $start:function-call~anonymous|0 $start:function-call~anonymous|2 $start:function-call~anonymous|2 $start:function-call~fn2 $function-call/Foo#fnVoid $start:function-call~fn2 $function-call/Foo#fnRet)
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
@@ -67,7 +67,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1392
+   i32.const 1408
    i32.const 272
    i32.const 14
    call $~lib/builtins/abort
@@ -87,7 +87,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1392
+   i32.const 1408
    i32.const 274
    i32.const 14
    call $~lib/builtins/abort
@@ -130,7 +130,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1392
+   i32.const 1408
    i32.const 287
    i32.const 14
    call $~lib/builtins/abort
@@ -222,7 +222,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1392
+   i32.const 1408
    i32.const 200
    i32.const 14
    call $~lib/builtins/abort
@@ -236,7 +236,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1392
+   i32.const 1408
    i32.const 202
    i32.const 14
    call $~lib/builtins/abort
@@ -309,7 +309,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1392
+    i32.const 1408
     i32.const 223
     i32.const 16
     call $~lib/builtins/abort
@@ -364,7 +364,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1392
+   i32.const 1408
    i32.const 238
    i32.const 14
    call $~lib/builtins/abort
@@ -379,7 +379,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1392
+   i32.const 1408
    i32.const 239
    i32.const 14
    call $~lib/builtins/abort
@@ -427,7 +427,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1392
+   i32.const 1408
    i32.const 255
    i32.const 14
    call $~lib/builtins/abort
@@ -497,7 +497,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 1392
+   i32.const 1408
    i32.const 380
    i32.const 14
    call $~lib/builtins/abort
@@ -525,7 +525,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 1392
+    i32.const 1408
     i32.const 387
     i32.const 16
     call $~lib/builtins/abort
@@ -553,7 +553,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 1392
+    i32.const 1408
     i32.const 400
     i32.const 5
     call $~lib/builtins/abort
@@ -636,7 +636,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1392
+     i32.const 1408
      i32.const 346
      i32.const 18
      call $~lib/builtins/abort
@@ -717,7 +717,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1392
+    i32.const 1408
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -732,7 +732,7 @@
   i32.lt_u
   if
    i32.const 0
-   i32.const 1392
+   i32.const 1408
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -823,11 +823,11 @@
    i32.const 1272
    i32.const 1264
    i32.store
-   i32.const 1348
-   i32.const 1344
+   i32.const 1364
+   i32.const 1360
    i32.store
-   i32.const 1352
-   i32.const 1344
+   i32.const 1368
+   i32.const 1360
    i32.store
    i32.const 1
    global.set $~lib/rt/tcms/state
@@ -852,10 +852,10 @@
    if
     unreachable
    end
-   i32.const 1600
+   i32.const 1616
    i32.const 0
    i32.store
-   i32.const 3168
+   i32.const 3184
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -866,7 +866,7 @@
      local.get $0
      i32.const 2
      i32.shl
-     i32.const 1600
+     i32.const 1616
      i32.add
      i32.const 0
      i32.store offset=4
@@ -884,7 +884,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 1600
+       i32.const 1616
        i32.add
        i32.const 0
        i32.store offset=96
@@ -902,13 +902,13 @@
      br $for-loop|0
     end
    end
-   i32.const 1600
-   i32.const 3172
+   i32.const 1616
+   i32.const 3188
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 1600
+   i32.const 1616
    global.set $~lib/rt/tlsf/ROOT
   end
   global.get $~lib/rt/tlsf/ROOT
@@ -920,7 +920,7 @@
   i32.ne
   i32.const 0
   local.get $0
-  i32.const 1344
+  i32.const 1360
   i32.ne
   select
   i32.eqz
@@ -1068,11 +1068,11 @@
   call $~lib/rt/tcms/__new
   global.set $function-call/foo
   global.get $function-call/foo
-  i32.const 1520
+  i32.const 1536
   i32.load
   call_indirect (type $i32_=>_none)
   i32.const 1
-  i32.const 1552
+  i32.const 1568
   i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 1
@@ -1088,7 +1088,7 @@
   global.get $function-call/foo
   i32.const 1
   i32.const 2
-  i32.const 1584
+  i32.const 1600
   i32.load
   call_indirect (type $i32_i32_i32_=>_i32)
   i32.const 3

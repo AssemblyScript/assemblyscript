@@ -9,7 +9,7 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1036) "4")
+ (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1100) "<")
  (data (i32.const 1112) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
@@ -1230,7 +1230,7 @@
   i32.and
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 1160
+  i32.const 1164
   i32.ge_u
   if
    local.get $0
@@ -1252,7 +1252,7 @@
    call $~lib/rt/tlsf/initialize
   end
   local.get $0
-  i32.const 1160
+  i32.const 1164
   i32.lt_u
   if
    global.get $~lib/rt/tlsf/ROOT
@@ -1337,7 +1337,7 @@
  )
  (func $~lib/memory/heap.free (param $0 i32)
   local.get $0
-  i32.const 1160
+  i32.const 1164
   i32.ge_u
   if
    global.get $~lib/rt/tlsf/ROOT

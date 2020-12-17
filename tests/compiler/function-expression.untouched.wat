@@ -10,29 +10,29 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
- (data (i32.const 44) "@\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00,\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
- (data (i32.const 108) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00")
- (data (i32.const 140) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00")
- (data (i32.const 172) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00")
- (data (i32.const 204) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00")
- (data (i32.const 236) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00")
- (data (i32.const 268) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00")
- (data (i32.const 300) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00")
- (data (i32.const 332) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\t\00\00\00\00\00\00\00")
- (data (i32.const 364) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\n\00\00\00\00\00\00\00")
- (data (i32.const 396) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\0b\00\00\00\00\00\00\00")
- (data (i32.const 428) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\0c\00\00\00\00\00\00\00")
- (data (i32.const 460) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\0d\00\00\00\00\00\00\00")
- (data (i32.const 492) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\0e\00\00\00\00\00\00\00")
- (data (i32.const 524) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\0f\00\00\00\00\00\00\00")
+ (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00,\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
+ (data (i32.const 108) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 140) "\1c\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 172) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 204) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\05\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 236) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 268) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\07\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 300) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 332) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\t\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 364) "\1c\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\08\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 396) "\1c\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\08\00\00\00\0b\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 428) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\0c\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 460) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\0d\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 492) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\0e\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 524) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\0f\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 560) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 588) "4\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00")
- (data (i32.const 640) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 668) "4\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00")
- (data (i32.const 732) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
- (data (i32.const 796) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\10\00\00\00\00\00\00\00")
- (data (i32.const 828) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\11\00\00\00\00\00\00\00")
+ (data (i32.const 588) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 656) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 684) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 748) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 812) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 844) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\11\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 18 funcref)
  (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0 $function-expression/testNullable~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testLocal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testField~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0)
  (global $function-expression/f1 (mut i32) (i32.const 32))
@@ -43,7 +43,7 @@
  (global $function-expression/globalFunc (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 560))
- (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 640))
+ (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 656))
  (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
@@ -51,7 +51,7 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 856))
+ (global $~lib/memory/__heap_base i32 (i32.const 876))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-expression~anonymous|0 (param $0 i32) (result i32)
@@ -303,7 +303,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 272
    i32.const 14
    call $~lib/builtins/abort
@@ -330,7 +330,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 274
    i32.const 14
    call $~lib/builtins/abort
@@ -384,7 +384,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 287
    i32.const 14
    call $~lib/builtins/abort
@@ -516,7 +516,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 200
    i32.const 14
    call $~lib/builtins/abort
@@ -533,7 +533,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 202
    i32.const 14
    call $~lib/builtins/abort
@@ -628,7 +628,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 688
+    i32.const 704
     i32.const 223
     i32.const 16
     call $~lib/builtins/abort
@@ -693,7 +693,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 238
    i32.const 14
    call $~lib/builtins/abort
@@ -711,7 +711,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 239
    i32.const 14
    call $~lib/builtins/abort
@@ -770,7 +770,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 255
    i32.const 14
    call $~lib/builtins/abort
@@ -875,7 +875,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 380
    i32.const 14
    call $~lib/builtins/abort
@@ -918,7 +918,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 688
+    i32.const 704
     i32.const 387
     i32.const 16
     call $~lib/builtins/abort
@@ -951,7 +951,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 688
+    i32.const 704
     i32.const 400
     i32.const 5
     call $~lib/builtins/abort
@@ -1190,8 +1190,8 @@
   i32.const 1073741820
   i32.ge_u
   if
-   i32.const 752
-   i32.const 688
+   i32.const 768
+   i32.const 704
    i32.const 461
    i32.const 30
    call $~lib/builtins/abort
@@ -1275,7 +1275,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 333
    i32.const 14
    call $~lib/builtins/abort
@@ -1340,7 +1340,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 688
+     i32.const 704
      i32.const 346
      i32.const 18
      call $~lib/builtins/abort
@@ -1491,7 +1491,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 360
    i32.const 14
    call $~lib/builtins/abort
@@ -1600,7 +1600,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 688
+    i32.const 704
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -1620,7 +1620,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 688
+   i32.const 704
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -2225,7 +2225,7 @@
  )
  (func $function-expression/testField~anonymous|0 (result i32)
   (local $0 i32)
-  i32.const 816
+  i32.const 832
   local.set $0
   local.get $0
  )
@@ -2233,7 +2233,7 @@
   (local $0 i32)
   (local $1 i32)
   i32.const 0
-  i32.const 848
+  i32.const 864
   call $function-expression/FieldClass#constructor
   local.set $0
   i32.const 1

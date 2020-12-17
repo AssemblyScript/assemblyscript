@@ -11,7 +11,7 @@
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\03\00\00\00\08\00\00\00\01")
- (data (i32.const 1068) "@")
+ (data (i32.const 1068) "<")
  (data (i32.const 1080) "\01\00\00\00,\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
  (data (i32.const 1132) "\1c")
  (data (i32.const 1144) "\03\00\00\00\08\00\00\00\02")
@@ -41,16 +41,16 @@
  (data (i32.const 1528) "\03\00\00\00\08\00\00\00\0e")
  (data (i32.const 1548) "\1c")
  (data (i32.const 1560) "\07\00\00\00\08\00\00\00\0f")
- (data (i32.const 1612) "4")
+ (data (i32.const 1612) "<")
  (data (i32.const 1624) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1692) "4")
- (data (i32.const 1704) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1756) "<")
- (data (i32.const 1768) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1820) "\1c")
- (data (i32.const 1832) "\03\00\00\00\08\00\00\00\10")
- (data (i32.const 1852) "\1c")
- (data (i32.const 1864) "\07\00\00\00\08\00\00\00\11")
+ (data (i32.const 1708) "<")
+ (data (i32.const 1720) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1772) "<")
+ (data (i32.const 1784) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1836) "\1c")
+ (data (i32.const 1848) "\03\00\00\00\08\00\00\00\10")
+ (data (i32.const 1868) "\1c")
+ (data (i32.const 1880) "\07\00\00\00\08\00\00\00\11")
  (table $0 18 funcref)
  (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|2 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0)
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
@@ -98,13 +98,13 @@
   i32.const 1592
   i32.const 1584
   i32.store
-  i32.const 1668
-  i32.const 1664
+  i32.const 1684
+  i32.const 1680
   i32.store
-  i32.const 1672
-  i32.const 1664
+  i32.const 1688
+  i32.const 1680
   i32.store
-  i32.const 1664
+  i32.const 1680
   global.set $~lib/rt/tcms/iter
   i32.const 1
   global.set $~lib/rt/tcms/state
@@ -122,7 +122,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1712
+   i32.const 1728
    i32.const 272
    i32.const 14
    call $~lib/builtins/abort
@@ -142,7 +142,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1712
+   i32.const 1728
    i32.const 274
    i32.const 14
    call $~lib/builtins/abort
@@ -185,7 +185,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1712
+   i32.const 1728
    i32.const 287
    i32.const 14
    call $~lib/builtins/abort
@@ -277,7 +277,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1712
+   i32.const 1728
    i32.const 200
    i32.const 14
    call $~lib/builtins/abort
@@ -291,7 +291,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1712
+   i32.const 1728
    i32.const 202
    i32.const 14
    call $~lib/builtins/abort
@@ -364,7 +364,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1712
+    i32.const 1728
     i32.const 223
     i32.const 16
     call $~lib/builtins/abort
@@ -419,7 +419,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1712
+   i32.const 1728
    i32.const 238
    i32.const 14
    call $~lib/builtins/abort
@@ -434,7 +434,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1712
+   i32.const 1728
    i32.const 239
    i32.const 14
    call $~lib/builtins/abort
@@ -482,7 +482,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1712
+   i32.const 1728
    i32.const 255
    i32.const 14
    call $~lib/builtins/abort
@@ -552,7 +552,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 1712
+   i32.const 1728
    i32.const 380
    i32.const 14
    call $~lib/builtins/abort
@@ -580,7 +580,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 1712
+    i32.const 1728
     i32.const 387
     i32.const 16
     call $~lib/builtins/abort
@@ -608,7 +608,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 1712
+    i32.const 1728
     i32.const 400
     i32.const 5
     call $~lib/builtins/abort
@@ -691,7 +691,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1712
+     i32.const 1728
      i32.const 346
      i32.const 18
      call $~lib/builtins/abort
@@ -772,7 +772,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1712
+    i32.const 1728
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -787,7 +787,7 @@
   i32.lt_u
   if
    i32.const 0
-   i32.const 1712
+   i32.const 1728
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -872,7 +872,7 @@
   i32.ne
   i32.const 0
   local.get $1
-  i32.const 1664
+  i32.const 1680
   i32.ne
   select
   i32.eqz
@@ -978,10 +978,10 @@
    if
     unreachable
    end
-   i32.const 1888
+   i32.const 1904
    i32.const 0
    i32.store
-   i32.const 3456
+   i32.const 3472
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -992,7 +992,7 @@
      local.get $0
      i32.const 2
      i32.shl
-     i32.const 1888
+     i32.const 1904
      i32.add
      i32.const 0
      i32.store offset=4
@@ -1010,7 +1010,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 1888
+       i32.const 1904
        i32.add
        i32.const 0
        i32.store offset=96
@@ -1028,13 +1028,13 @@
      br $for-loop|0
     end
    end
-   i32.const 1888
-   i32.const 3460
+   i32.const 1904
+   i32.const 3476
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 1888
+   i32.const 1904
    global.set $~lib/rt/tlsf/ROOT
   end
   i32.const 1584
@@ -1113,17 +1113,17 @@
   i32.const 1
   i32.eq
   if
-   i32.const 1856
+   i32.const 1872
    i32.load
    i32.const 3
    i32.and
    i32.eqz
    if
     global.get $~lib/rt/tcms/iter
-    i32.const 1852
+    i32.const 1868
     i32.eq
     if
-     i32.const 1860
+     i32.const 1876
      i32.load
      local.tee $0
      i32.eqz
@@ -1138,11 +1138,11 @@
      local.get $0
      global.set $~lib/rt/tcms/iter
     end
-    i32.const 1860
+    i32.const 1876
     i32.load
     local.set $0
     block $__inlined_func$~lib/rt/tcms/Object#unlink
-     i32.const 1856
+     i32.const 1872
      i32.load
      i32.const -4
      i32.and
@@ -1177,17 +1177,17 @@
      local.get $1
      call $~lib/rt/tcms/Object#set:next
     end
-    i32.const 1664
-    i32.const 1852
+    i32.const 1680
+    i32.const 1868
     call $~lib/rt/tcms/ObjectList#push
-    i32.const 1852
+    i32.const 1868
     i32.const 2
     call $~lib/rt/tcms/Object#set:color
    end
   end
  )
  (func $function-expression/testField~anonymous|0 (result i32)
-  i32.const 1840
+  i32.const 1856
  )
  (func $start:function-expression
   (local $0 i32)
@@ -1359,7 +1359,7 @@
   end
   call $~lib/rt/tcms/__new
   local.tee $0
-  i32.const 1872
+  i32.const 1888
   i32.store
   local.get $0
   call $~lib/rt/tcms/__link

@@ -148,6 +148,10 @@ import {
   BuiltinNames
 } from "./builtins";
 
+// Memory manager constants
+const AL_SIZE = 16;
+const AL_MASK = AL_SIZE - 1;
+
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
   constructor(
@@ -761,23 +765,58 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
-  /** Gets the size of a runtime header. */
-  get runtimeHeaderSize(): i32 {
-    var cached = this._runtimeHeaderSize;
-    if (!cached) {
-      // see: rt/common.ts
-      var blockOverhead = this.BLOCKInstance.nextMemoryOffset;
-      var totalOverhead = this.OBJECTInstance.nextMemoryOffset;
-      const AL_SIZE = 16;
-      const AL_MASK = AL_SIZE - 1;
-      var objectOverhead = (totalOverhead - blockOverhead + AL_MASK) & ~AL_MASK;
-      var headerSize = blockOverhead + objectOverhead;
-      assert(headerSize == 20);
-      this._runtimeHeaderSize = cached = headerSize;
-    }
-    return cached;
+  /** Gets the overhead of a memory manager block. */
+  get blockOverhead(): i32 {
+    // BLOCK | data...
+    //       ^ 16b alignment
+    return this.BLOCKInstance.nextMemoryOffset;
   }
-  private _runtimeHeaderSize: u32 = 0;
+
+  /** Gets the overhead of a managed object, excl. block overhead, incl. alignment. */
+  get objectOverhead(): i32 {
+    // OBJECT+align | data...
+    //        └ 0 ┘ ^ 16b alignment
+    return (this.OBJECTInstance.nextMemoryOffset - this.blockOverhead + AL_MASK) & ~AL_MASK;
+  }
+
+  /** Gets the total overhead of a managed object, incl. block overhead. */
+  get totalOverhead(): i32 {
+    // BLOCK | OBJECT+align | data...
+    // └     = TOTAL      ┘ ^ 16b alignment
+    return this.blockOverhead + this.objectOverhead;
+  }
+
+  /** Computes the next properly aligned offset of a memory manager block, given the current bump offset. */
+  computeBlockStart(currentOffset: i32): i32 {
+    var blockOverhead = this.blockOverhead;
+    return ((currentOffset + blockOverhead + AL_MASK) & ~AL_MASK) - blockOverhead;
+  }
+
+  /** Computes the next properly aligned offset of a memory manager block, given the current bump offset. */
+  computeBlockStart64(currentOffset: i64): i64 {
+    var blockOverhead = i64_new(this.blockOverhead);
+    return i64_sub(i64_align(i64_add(currentOffset, blockOverhead), AL_SIZE), blockOverhead);
+  }
+
+  /** Computes the size of a memory manager block, excl. block overhead. */
+  computeBlockSize(payloadSize: i32, isManaged: bool): i32 {
+    // see: std/rt/tlsf.ts, computeSize; becomes mmInfo
+    if (isManaged) payloadSize += this.objectOverhead;
+    // we know that payload must be aligned, and that block sizes must be chosen
+    // so that blocks are adjacent with the next payload aligned. hence, block
+    // size is payloadSize rounded up to where the next block would start:
+    var blockSize = this.computeBlockStart(payloadSize);
+    // make sure that block size is valid according to TLSF requirements
+    var blockOverhead = this.blockOverhead;
+    var blockMinsize = ((3 * this.options.usizeType.byteSize + blockOverhead + AL_MASK) & ~AL_MASK) - blockOverhead;
+    if (blockSize < blockMinsize) blockSize = blockMinsize;
+    const blockMaxsize = 1 << 30; // 1 << (FL_BITS + SB_BITS - 1), exclusive
+    const tagsMask = 3;
+    if (blockSize >= blockMaxsize || (blockSize & tagsMask) != 0) {
+      throw new Error("invalid block size");
+    }
+    return blockSize;
+  }
 
   /** Creates a native variable declaration. */
   makeNativeVariableDeclaration(
@@ -4270,24 +4309,21 @@ export class Class extends TypedElement {
 
   /** Creates a buffer suitable to hold a runtime instance of this class. */
   createBuffer(overhead: i32 = 0): Uint8Array {
-    var size = this.nextMemoryOffset + overhead;
-    // block size must be 4b aligned to not conflict with MM flags in low bits
-    var blockSize = (this.program.runtimeHeaderSize + size + 3) & ~3;
-    var buffer = new Uint8Array(blockSize);
-    assert(!this.program.options.isWasm64); // TODO: WASM64, mmInfo is usize
-    // see: std/assembly/rt/common.ts BLOCK_MAXSIZE
-    assert(blockSize < (1 << 30) - 4);
-    var OBJECT = this.program.OBJECTInstance;
+    var program = this.program;
+    var payloadSize = this.nextMemoryOffset + overhead;
+    var blockSize = program.computeBlockSize(payloadSize, true); // excl. overhead
+    var buffer = new Uint8Array(program.blockOverhead + blockSize);
+    var OBJECT = program.OBJECTInstance;
     OBJECT.writeField("mmInfo", blockSize, buffer, 0);
     OBJECT.writeField("gcInfo", 0, buffer, 0);
     OBJECT.writeField("gcInfo2", 0, buffer, 0);
     OBJECT.writeField("rtId", this.id, buffer, 0);
-    OBJECT.writeField("rtSize", size, buffer, 0);
+    OBJECT.writeField("rtSize", payloadSize, buffer, 0);
     return buffer;
   }
 
   /** Writes a field value to a buffer and returns the number of bytes written. */
-  writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.runtimeHeaderSize): i32 {
+  writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.totalOverhead): i32 {
     var element = this.lookupInSelf(name);
     if (element !== null && element.kind == ElementKind.FIELD) {
       let fieldInstance = <Field>element;

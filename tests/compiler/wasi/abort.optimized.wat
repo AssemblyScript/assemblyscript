@@ -9,7 +9,7 @@
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\16\00\00\00t\00h\00e\00 \00m\00e\00s\00s\00a\00g\00e")
- (data (i32.const 1084) "0")
+ (data (i32.const 1084) ",")
  (data (i32.const 1096) "\01\00\00\00\1a\00\00\00w\00a\00s\00i\00/\00a\00b\00o\00r\00t\00.\00t\00s")
  (export "_start" (func $~start))
  (export "memory" (memory $0))
