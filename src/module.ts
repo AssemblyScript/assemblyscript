@@ -1313,7 +1313,10 @@ export class Module {
       offs[i] = target == Target.WASM64
         ? this.i64(i64_low(offset), i64_high(offset))
         : this.i32(i64_low(offset));
-      sizs[i] = buffer.length;
+      // trim trailing zeroes
+      let length = buffer.length;
+      while (length > 0 && !buffer[length - 1]) --length;
+      sizs[i] = length;
     }
     var cArr1 = allocPtrArray(segs);
     var cArr2 = allocU8Array(psvs);

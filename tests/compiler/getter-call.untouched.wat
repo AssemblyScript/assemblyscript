@@ -5,7 +5,7 @@
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 1)
- (data (i32.const 12) "\1c\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 12) "\1c\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\08\00\00\00\01")
  (table $0 2 funcref)
  (elem (i32.const 1) $getter-call/C#get:x~anonymous|0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))

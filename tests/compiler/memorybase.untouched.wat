@@ -1,7 +1,7 @@
 (module
  (type $none_=>_none (func))
  (memory $0 1)
- (data (i32.const 1024) "\00")
+ (data (i32.const 1024) "")
  (table $0 1 funcref)
  (global $memorybase/staticData i32 (i32.const 1024))
  (global $~lib/ASC_MEMORY_BASE i32 (i32.const 1024))
