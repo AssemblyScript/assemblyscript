@@ -817,9 +817,10 @@ export class Program extends DiagnosticEmitter {
     // make sure that block size is valid according to TLSF requirements
     var blockOverhead = this.blockOverhead;
     var blockMinsize = ((3 * this.options.usizeType.byteSize + blockOverhead + AL_MASK) & ~AL_MASK) - blockOverhead;
+    if (blockSize < blockMinsize) blockSize = blockMinsize;
     const blockMaxsize = 1 << 30; // 1 << (FL_BITS + SB_BITS - 1), exclusive
     const tagsMask = 3;
-    if (blockSize < blockMinsize || blockSize >= blockMaxsize || (blockSize & tagsMask) != 0) {
+    if (blockSize >= blockMaxsize || (blockSize & tagsMask) != 0) {
       throw new Error("invalid block size");
     }
     return blockSize;
