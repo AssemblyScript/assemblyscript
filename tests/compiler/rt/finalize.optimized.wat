@@ -11,18 +11,26 @@
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "mark" (func $~lib/rt/tcms/__visit_externals (param i32)))
  (memory $0 1)
- (data (i32.const 1036) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
- (data (i32.const 1084) "&\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00s\00t\00a\00t\00i\00c\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 1180) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1260) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1324) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1388) "\1a\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 1436) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00r\00t\00/\00f\00i\00n\00a\00l\00i\00z\00e\00.\00t\00s")
- (data (i32.const 1484) "\n\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00a\00l\00l\00o\00c")
- (data (i32.const 1516) "$\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 1580) "\18\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00i\00n\00 \00f\00r\00o\00m\00S\00p\00a\00c\00e")
- (data (i32.const 1628) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00i\00n\00 \00t\00o\00S\00p\00a\00c\00e")
- (data (i32.const 1676) "\10\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00f\00i\00n\00a\00l\00i\00z\00e")
+ (data (i32.const 1036) "0")
+ (data (i32.const 1048) "\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
+ (data (i32.const 1084) "<")
+ (data (i32.const 1096) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00s\00t\00a\00t\00i\00c\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 1180) "4")
+ (data (i32.const 1192) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
+ (data (i32.const 1260) "4")
+ (data (i32.const 1272) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1324) "<")
+ (data (i32.const 1336) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1388) "0")
+ (data (i32.const 1400) "\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 1436) "0")
+ (data (i32.const 1448) "\01\00\00\00\1c\00\00\00r\00t\00/\00f\00i\00n\00a\00l\00i\00z\00e\00.\00t\00s")
+ (data (i32.const 1484) " ")
+ (data (i32.const 1496) "\01\00\00\00\n\00\00\00a\00l\00l\00o\00c")
+ (data (i32.const 1516) "8")
+ (data (i32.const 1528) "\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 1580) "$")
+ (data (i32.const 1592) "\01\00\00\00\10\00\00\00f\00i\00n\00a\00l\00i\00z\00e")
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 1152))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 1232))
@@ -642,10 +650,10 @@
   if
    unreachable
   end
-  i32.const 1712
+  i32.const 1616
   i32.const 0
   i32.store
-  i32.const 3280
+  i32.const 3184
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -656,7 +664,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 1712
+    i32.const 1616
     i32.add
     i32.const 0
     i32.store offset=4
@@ -674,7 +682,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 1712
+      i32.const 1616
       i32.add
       i32.const 0
       i32.store offset=96
@@ -692,13 +700,13 @@
     br $for-loop|0
    end
   end
-  i32.const 1712
-  i32.const 3284
+  i32.const 1616
+  i32.const 3188
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 1712
+  i32.const 1616
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
@@ -1419,7 +1427,7 @@
    if
     i32.const 0
     i32.const 1200
-    i32.const 294
+    i32.const 299
     i32.const 14
     call $~lib/builtins/abort
     unreachable
@@ -1513,7 +1521,7 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i32.const 1712
+  i32.const 1616
   i32.lt_u
   if
    return
@@ -1531,7 +1539,7 @@
   i32.add
   i32.sub
   global.set $~lib/rt/tcms/totalMem
-  i32.const 1696
+  i32.const 1600
   i32.const 1
   local.get $0
   i32.const 20
@@ -1588,7 +1596,7 @@
   i32.const 4
   i32.add
   local.tee $1
-  i32.const 1712
+  i32.const 1616
   i32.ge_u
   if
    global.get $~lib/rt/tlsf/ROOT
@@ -1727,113 +1735,31 @@
     br $break|0
    end
    global.get $~lib/rt/tcms/iter
-   local.tee $0
+   local.tee $1
    global.get $~lib/rt/tcms/toSpace
    i32.ne
    if
-    local.get $0
+    local.get $1
     i32.load offset=4
     i32.const -4
     i32.and
     global.set $~lib/rt/tcms/iter
     global.get $~lib/rt/tcms/white
     i32.eqz
-    local.get $0
+    local.get $1
     i32.load offset=4
     i32.const 3
     i32.and
     i32.ne
     if
-     global.get $~lib/rt/tcms/fromSpace
-     i32.load offset=4
-     i32.const -4
-     i32.and
-     local.set $1
-     loop $while-continue|1
-      local.get $1
-      global.get $~lib/rt/tcms/fromSpace
-      i32.ne
-      if
-       local.get $1
-       i32.eqz
-       if
-        i32.const 0
-        i32.const 1200
-        i32.const 206
-        i32.const 13
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $0
-       local.get $1
-       i32.eq
-       if
-        i32.const 1600
-        i32.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        call $~lib/builtins/trace
-       end
-       local.get $1
-       i32.load offset=4
-       i32.const -4
-       i32.and
-       local.set $1
-       br $while-continue|1
-      end
-     end
-     global.get $~lib/rt/tcms/toSpace
-     i32.load offset=4
-     i32.const -4
-     i32.and
-     local.set $1
-     loop $while-continue|2
-      local.get $1
-      global.get $~lib/rt/tcms/toSpace
-      i32.ne
-      if
-       local.get $1
-       i32.eqz
-       if
-        i32.const 0
-        i32.const 1200
-        i32.const 212
-        i32.const 13
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $0
-       local.get $1
-       i32.eq
-       if
-        i32.const 1648
-        i32.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        call $~lib/builtins/trace
-       end
-       local.get $1
-       i32.load offset=4
-       i32.const -4
-       i32.and
-       local.set $1
-       br $while-continue|2
-      end
-     end
      i32.const 0
      i32.const 1200
-     i32.const 216
-     i32.const 11
+     i32.const 201
+     i32.const 20
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $0
+    local.get $1
     call $~lib/rt/tcms/free
     i32.const 1
     return

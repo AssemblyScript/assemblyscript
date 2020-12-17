@@ -7,20 +7,16 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "mark" (func $~lib/rt/tcms/__visit_externals (param i32)))
- (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
  (data (i32.const 16) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 44) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00")
+ (data (i32.const 44) "4\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00")
  (data (i32.const 96) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 124) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
- (data (i32.const 188) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
- (data (i32.const 252) "\1c\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\001\002\002\005\00.\00t\00s\00")
- (data (i32.const 300) "\18\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00i\00n\00 \00f\00r\00o\00m\00S\00p\00a\00c\00e\00")
- (data (i32.const 348) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00i\00n\00 \00t\00o\00S\00p\00a\00c\00e\00")
+ (data (i32.const 124) "4\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00")
+ (data (i32.const 188) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
+ (data (i32.const 252) "0\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\001\002\002\005\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 16))
@@ -36,7 +32,7 @@
  (global $~lib/rt/tcms/depth (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/threshold (mut i32) (i32.const 100))
  (global $~lib/rt/tcms/debt (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 388))
+ (global $~lib/memory/__heap_base i32 (i32.const 300))
  (export "memory" (memory $0))
  (export "normal" (func $issues/1225/normal))
  (export "viaThis" (func $issues/1225/viaThis))
@@ -2134,104 +2130,21 @@
     local.get $0
     call $~lib/rt/tcms/Object#get:next
     global.set $~lib/rt/tcms/iter
+    i32.const 1
+    drop
     local.get $0
     call $~lib/rt/tcms/Object#get:color
     global.get $~lib/rt/tcms/white
     i32.eqz
-    i32.ne
+    i32.eq
+    i32.eqz
     if
-     global.get $~lib/rt/tcms/fromSpace
-     call $~lib/rt/tcms/Object#get:next
-     local.set $1
-     loop $while-continue|1
-      local.get $1
-      global.get $~lib/rt/tcms/fromSpace
-      i32.ne
-      local.set $2
-      local.get $2
-      if
-       local.get $1
-       i32.const 0
-       i32.ne
-       i32.eqz
-       if
-        i32.const 0
-        i32.const 64
-        i32.const 206
-        i32.const 13
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $1
-       local.get $0
-       i32.eq
-       if
-        i32.const 320
-        i32.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        call $~lib/builtins/trace
-       end
-       local.get $1
-       call $~lib/rt/tcms/Object#get:next
-       local.set $1
-       br $while-continue|1
-      end
-     end
-     global.get $~lib/rt/tcms/toSpace
-     call $~lib/rt/tcms/Object#get:next
-     local.set $1
-     loop $while-continue|2
-      local.get $1
-      global.get $~lib/rt/tcms/toSpace
-      i32.ne
-      local.set $2
-      local.get $2
-      if
-       local.get $1
-       i32.const 0
-       i32.ne
-       i32.eqz
-       if
-        i32.const 0
-        i32.const 64
-        i32.const 212
-        i32.const 13
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $1
-       local.get $0
-       i32.eq
-       if
-        i32.const 368
-        i32.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        call $~lib/builtins/trace
-       end
-       local.get $1
-       call $~lib/rt/tcms/Object#get:next
-       local.set $1
-       br $while-continue|2
-      end
-     end
      i32.const 0
-     i32.eqz
-     if
-      i32.const 0
-      i32.const 64
-      i32.const 216
-      i32.const 11
-      call $~lib/builtins/abort
-      unreachable
-     end
+     i32.const 64
+     i32.const 201
+     i32.const 20
+     call $~lib/builtins/abort
+     unreachable
     end
     local.get $0
     call $~lib/rt/tcms/free
@@ -2275,7 +2188,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 373
+   i32.const 372
    i32.const 3
    call $~lib/builtins/abort
    unreachable

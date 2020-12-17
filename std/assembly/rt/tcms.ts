@@ -190,7 +190,6 @@ function step(): usize {
           white = black;
           iter = from.next;
           state = STATE_SWEEP;
-          // trace("state->SWEEP");
         }
       }
       break;
@@ -199,29 +198,13 @@ function step(): usize {
       obj = iter;
       if (obj != toSpace) {
         iter = obj.next;
-        // trace("free", 3, changetype<usize>(obj), obj.rtId, obj.color);
-        if (obj.color != i32(!white)) {
-          let cur = fromSpace.next;
-          while (cur != fromSpace) {
-            assert(cur != null);
-            if (cur == obj) trace("in fromSpace");
-            cur = cur.next;
-          }
-          cur = toSpace.next;
-          while (cur != toSpace) {
-            assert(cur != null);
-            if (cur == obj) trace("in toSpace");
-            cur = cur.next;
-          }
-          assert(false);
-        }
+        if (DEBUG) assert(obj.color == i32(!white)); // old white
         free(obj);
         return 1;
       }
       toSpace.clear();
       state = STATE_IDLE;
       debt = 0;
-      // trace("state->IDLE");
       break;
     }
   }
@@ -276,13 +259,35 @@ export function __new(size: usize, id: i32): usize {
 export function __renew(oldPtr: usize, size: usize): usize {
   if (state == STATE_INIT) init();
   if (size > OBJECT_MAXSIZE) throw new Error("allocation too large");
-  if (oldPtr > __heap_base) totalMem -= ptrToObj(oldPtr).size;
+  var oldObj = ptrToObj(oldPtr);
+  if (oldPtr > __heap_base) {
+    total -= 1;
+    totalMem -= oldObj.size;
+  }
+  var oldNext = oldObj.next;
+  var oldPrev = oldObj.prev;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
-  var newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);
+  var newObj = ptrToObj(newPtr);
   newObj.rtSize = <u32>size;
-  newObj.next.prev = assert(newObj);
-  newObj.prev.next = assert(newObj);
-  totalMem += newObj.size;
+  if (oldNext) {
+    // The old object was tracked by GC -> substitute oldObj with newObj
+    if (DEBUG) assert(oldPrev && oldPrev == newObj.prev && oldNext == newObj.next);
+    oldNext.prev = newObj;
+    oldPrev.next = newObj;
+    if (iter == oldObj) iter = newObj;
+  } else {
+    if (DEBUG) assert(!oldPrev);
+    if (newPtr > __heap_base) {
+      // The new object must be tracked by GC (old object wasn't) -> register
+      if (DEBUG) assert(!newObj.next && !newObj.prev);
+      fromSpace.push(newObj);
+      newObj.color = white;
+    }
+  }
+  if (newPtr > __heap_base) {
+    total += 1;
+    totalMem += newObj.size;
+  }
   return newPtr;
 }
 
@@ -312,17 +317,11 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
 
 // @ts-ignore: decorator
 @global @unsafe
-function __visit(ptr: usize, cookie: i32): void { // eslint-disable-line @typescript-eslint/no-unused-vars
+export function __visit(ptr: usize, cookie: i32): void {
   if (!ptr) return;
   let obj = ptrToObj(ptr);
   if (isDefined(ASC_RTRACE)) if (!onvisit(obj)) return;
   if (obj.color == white) obj.makeGray();
-}
-
-// @ts-ignore: decorator
-@global @unsafe
-export function __mark(ptr: usize): void {
-  if (ptr) __visit(ptr, VISIT_SCAN);
 }
 
 // @ts-ignore: decorator

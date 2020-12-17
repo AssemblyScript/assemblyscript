@@ -1,42 +1,56 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i64_i32_i64_i32_i64_=>_i32 (func (param i64 i32 i64 i32 i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "mark" (func $~lib/rt/tcms/__visit_externals (param i32)))
- (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 1052) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1132) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1196) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1260) "\18\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00i\00n\00 \00f\00r\00o\00m\00S\00p\00a\00c\00e")
- (data (i32.const 1308) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00i\00n\00 \00t\00o\00S\00p\00a\00c\00e")
- (data (i32.const 1356) "d\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006")
- (data (i32.const 1484) "&\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s")
- (data (i32.const 1548) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\000")
- (data (i32.const 1580) "H\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z")
- (data (i32.const 1676) "\02\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\02\00\00\001")
- (data (i32.const 1708) "$\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00$\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00t\00e\00r\00n\00a\00r\00y\00.\00t\00s")
- (data (i32.const 1772) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\000\00.\000")
- (data (i32.const 1804) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00N\00a\00N")
- (data (i32.const 1836) "\12\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00-\00I\00n\00f\00i\00n\00i\00t\00y")
- (data (i32.const 1884) "\10\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00I\00n\00f\00i\00n\00i\00t\00y")
- (data (i32.const 1976) "\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\0dXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
- (data (i32.const 2672) "<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
- (data (i32.const 2848) "\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
- (data (i32.const 2892) "\06\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\06\00\00\001\00.\000")
- (data (i32.const 2924) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01")
- (data (i32.const 2956) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\02")
- (data (i32.const 2988) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\03")
- (data (i32.const 3020) "\08\00\00\00\01\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\04")
- (data (i32.const 3056) "\04")
+ (data (i32.const 1052) "4")
+ (data (i32.const 1064) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
+ (data (i32.const 1132) "4")
+ (data (i32.const 1144) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1196) "<")
+ (data (i32.const 1208) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1260) "x")
+ (data (i32.const 1272) "\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006")
+ (data (i32.const 1388) "<")
+ (data (i32.const 1400) "\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00u\00t\00i\00l\00/\00n\00u\00m\00b\00e\00r\00.\00t\00s")
+ (data (i32.const 1452) "\18")
+ (data (i32.const 1464) "\01\00\00\00\02\00\00\000")
+ (data (i32.const 1484) "\\")
+ (data (i32.const 1496) "\01\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z")
+ (data (i32.const 1580) "\18")
+ (data (i32.const 1592) "\01\00\00\00\02\00\00\001")
+ (data (i32.const 1612) "8")
+ (data (i32.const 1624) "\01\00\00\00$\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00t\00e\00r\00n\00a\00r\00y\00.\00t\00s")
+ (data (i32.const 1676) "\1c")
+ (data (i32.const 1688) "\01\00\00\00\06\00\00\000\00.\000")
+ (data (i32.const 1708) "\1c")
+ (data (i32.const 1720) "\01\00\00\00\06\00\00\00N\00a\00N")
+ (data (i32.const 1740) "(")
+ (data (i32.const 1752) "\01\00\00\00\12\00\00\00-\00I\00n\00f\00i\00n\00i\00t\00y")
+ (data (i32.const 1788) "$")
+ (data (i32.const 1800) "\01\00\00\00\10\00\00\00I\00n\00f\00i\00n\00i\00t\00y")
+ (data (i32.const 1880) "\88\02\1c\08\a0\d5\8f\fav\bf>\a2\7f\e1\ae\bav\acU0 \fb\16\8b\ea5\ce]J\89B\cf-;eU\aa\b0k\9a\dfE\1a=\03\cf\1a\e6\ca\c6\9a\c7\17\fep\abO\dc\bc\be\fc\b1w\ff\0c\d6kA\ef\91V\be<\fc\7f\90\ad\1f\d0\8d\83\9aU1(\\Q\d3\b5\c9\a6\ad\8f\acq\9d\cb\8b\ee#w\"\9c\eamSx@\91I\cc\aeW\ce\b6]y\12<\827V\fbM6\94\10\c2O\98H8o\ea\96\90\c7:\82%\cb\85t\d7\f4\97\bf\97\cd\cf\86\a0\e5\ac*\17\98\n4\ef\8e\b25*\fbg8\b2;?\c6\d2\df\d4\c8\84\ba\cd\d3\1a\'D\dd\c5\96\c9%\bb\ce\9fk\93\84\a5b}$l\ac\db\f6\da_\0dXf\ab\a3&\f1\c3\de\93\f8\e2\f3\b8\80\ff\aa\a8\ad\b5\b5\8bJ|l\05_b\87S0\c14`\ff\bc\c9U&\ba\91\8c\85N\96\bd~)p$w\f9\df\8f\b8\e5\b8\9f\bd\df\a6\94}t\88\cf_\a9\f8\cf\9b\a8\8f\93pD\b9k\15\0f\bf\f8\f0\08\8a\b611eU%\b0\cd\ac\7f{\d0\c6\e2?\99\06;+*\c4\10\\\e4\d3\92si\99$$\aa\0e\ca\00\83\f2\b5\87\fd\eb\1a\11\92d\08\e5\bc\cc\88Po\t\cc\bc\8c,e\19\e2X\17\b7\d1\00\00\00\00\00\00@\9c\00\00\00\00\10\a5\d4\e8\00\00b\ac\c5\ebx\ad\84\t\94\f8x9?\81\b3\15\07\c9{\ce\97\c0p\\\ea{\ce2~\8fh\80\e9\ab\a48\d2\d5E\"\9a\17&\'O\9f\'\fb\c4\d41\a2c\ed\a8\ad\c8\8c8e\de\b0\dbe\ab\1a\8e\08\c7\83\9a\1dqB\f9\1d]\c4X\e7\1b\a6,iM\92\ea\8dp\1ad\ee\01\daJw\ef\9a\99\a3m\a2\85k}\b4{x\t\f2w\18\ddy\a1\e4T\b4\c2\c5\9b[\92\86[\86=]\96\c8\c5S5\c8\b3\a0\97\fa\\\b4*\95\e3_\a0\99\bd\9fF\de%\8c9\db4\c2\9b\a5\\\9f\98\a3r\9a\c6\f6\ce\be\e9TS\bf\dc\b7\e2A\"\f2\17\f3\fc\88\a5x\\\d3\9b\ce \cc\dfS!{\f3Z\16\98:0\1f\97\dc\b5\a0\e2\96\b3\e3\\S\d1\d9\a8<D\a7\a4\d9|\9b\fb\10D\a4\a7LLv\bb\1a\9c@\b6\ef\8e\ab\8b,\84W\a6\10\ef\1f\d0)1\91\e9\e5\a4\10\9b\9d\0c\9c\a1\fb\9b\10\e7)\f4;b\d9 (\ac\85\cf\a7z^KD\80-\dd\ac\03@\e4!\bf\8f\ffD^/\9cg\8eA\b8\8c\9c\9d\173\d4\a9\1b\e3\b4\92\db\19\9e\d9w\df\ban\bf\96\ebk\ee\f0\9b;\02\87\af")
+ (data (i32.const 2576) "<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
+ (data (i32.const 2752) "\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
+ (data (i32.const 2796) "\1c")
+ (data (i32.const 2808) "\01\00\00\00\06\00\00\001\00.\000")
+ (data (i32.const 2828) "\1c")
+ (data (i32.const 2840) "\03\00\00\00\08\00\00\00\01")
+ (data (i32.const 2860) "\1c")
+ (data (i32.const 2872) "\03\00\00\00\08\00\00\00\02")
+ (data (i32.const 2892) "\1c")
+ (data (i32.const 2904) "\03\00\00\00\08\00\00\00\03")
+ (data (i32.const 2924) "\1c")
+ (data (i32.const 2936) "\03\00\00\00\08\00\00\00\04")
+ (data (i32.const 2960) "\04")
  (table $0 5 funcref)
  (elem (i32.const 1) $start:resolve-ternary~anonymous|0 $start:resolve-ternary~anonymous|1 $resolve-ternary/g1 $resolve-ternary/g2)
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
@@ -53,12 +67,12 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 3056))
+ (global $~lib/rt/__rtti_base i32 (i32.const 2960))
  (export "memory" (memory $0))
  (export "__new" (func $~lib/rt/tcms/__new))
  (export "__link" (func $~lib/rt/tcms/__link))
  (export "__collect" (func $~lib/rt/tcms/__collect@varargs))
- (export "__mark" (func $~lib/rt/tcms/__mark))
+ (export "__visit" (func $~lib/rt/tcms/__visit))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (start $~start)
@@ -665,10 +679,10 @@
   if
    unreachable
   end
-  i32.const 3104
+  i32.const 3008
   i32.const 0
   i32.store
-  i32.const 4672
+  i32.const 4576
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -679,7 +693,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 3104
+    i32.const 3008
     i32.add
     i32.const 0
     i32.store offset=4
@@ -697,7 +711,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 3104
+      i32.const 3008
       i32.add
       i32.const 0
       i32.store offset=96
@@ -715,13 +729,13 @@
     br $for-loop|0
    end
   end
-  i32.const 3104
-  i32.const 4676
+  i32.const 3008
+  i32.const 4580
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 3104
+  i32.const 3008
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
@@ -1442,7 +1456,7 @@
   if
    i32.const 0
    i32.const 1072
-   i32.const 294
+   i32.const 299
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1493,7 +1507,8 @@
       end
       call $~lib/rt/tcms/init
      end
-     i32.const 1600
+     i32.const 1504
+     i32.const 0
      call $~lib/rt/tcms/__visit
      i32.const 0
      call $~lib/rt/tcms/__visit_externals
@@ -1531,19 +1546,22 @@
         local.tee $0
         if
          local.get $0
+         i32.const 0
          call $~lib/rt/tcms/__visit
         end
         br $__inlined_func$~lib/rt/__visit_members
        end
        local.get $0
        i32.load offset=24
+       i32.const 0
        call $~lib/rt/tcms/__visit
        br $__inlined_func$~lib/rt/__visit_members
       end
       unreachable
      end
     else
-     i32.const 1600
+     i32.const 1504
+     i32.const 0
      call $~lib/rt/tcms/__visit
      i32.const 0
      call $~lib/rt/tcms/__visit_externals
@@ -1574,114 +1592,32 @@
     br $break|0
    end
    global.get $~lib/rt/tcms/iter
-   local.tee $2
+   local.tee $0
    global.get $~lib/rt/tcms/toSpace
    i32.ne
    if
-    local.get $2
+    local.get $0
     i32.load offset=4
     i32.const -4
     i32.and
     global.set $~lib/rt/tcms/iter
     global.get $~lib/rt/tcms/white
     i32.eqz
-    local.get $2
+    local.get $0
     i32.load offset=4
     i32.const 3
     i32.and
     i32.ne
     if
-     global.get $~lib/rt/tcms/fromSpace
-     i32.load offset=4
-     i32.const -4
-     i32.and
-     local.set $0
-     loop $while-continue|1
-      local.get $0
-      global.get $~lib/rt/tcms/fromSpace
-      i32.ne
-      if
-       local.get $0
-       i32.eqz
-       if
-        i32.const 0
-        i32.const 1072
-        i32.const 206
-        i32.const 13
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $0
-       local.get $2
-       i32.eq
-       if
-        i32.const 1280
-        i32.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        call $~lib/builtins/trace
-       end
-       local.get $0
-       i32.load offset=4
-       i32.const -4
-       i32.and
-       local.set $0
-       br $while-continue|1
-      end
-     end
-     global.get $~lib/rt/tcms/toSpace
-     i32.load offset=4
-     i32.const -4
-     i32.and
-     local.set $0
-     loop $while-continue|2
-      local.get $0
-      global.get $~lib/rt/tcms/toSpace
-      i32.ne
-      if
-       local.get $0
-       i32.eqz
-       if
-        i32.const 0
-        i32.const 1072
-        i32.const 212
-        i32.const 13
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $0
-       local.get $2
-       i32.eq
-       if
-        i32.const 1328
-        i32.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        call $~lib/builtins/trace
-       end
-       local.get $0
-       i32.load offset=4
-       i32.const -4
-       i32.and
-       local.set $0
-       br $while-continue|2
-      end
-     end
      i32.const 0
      i32.const 1072
-     i32.const 216
-     i32.const 11
+     i32.const 201
+     i32.const 20
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
-    i32.const 3092
+    local.get $0
+    i32.const 2996
     i32.ge_u
     if
      global.get $~lib/rt/tcms/total
@@ -1689,7 +1625,7 @@
      i32.sub
      global.set $~lib/rt/tcms/total
      global.get $~lib/rt/tcms/totalMem
-     local.get $2
+     local.get $0
      i32.load
      i32.const -4
      i32.and
@@ -1697,11 +1633,11 @@
      i32.add
      i32.sub
      global.set $~lib/rt/tcms/totalMem
-     local.get $2
+     local.get $0
      i32.const 4
      i32.add
      local.tee $2
-     i32.const 3092
+     i32.const 2996
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1776,7 +1712,7 @@
   end
   i32.const 0
  )
- (func $~lib/rt/tcms/__visit (param $0 i32)
+ (func $~lib/rt/tcms/__visit (param $0 i32) (param $1 i32)
   local.get $0
   i32.eqz
   if
@@ -1794,13 +1730,6 @@
   if
    local.get $0
    call $~lib/rt/tcms/Object#makeGray
-  end
- )
- (func $~lib/rt/tcms/__mark (param $0 i32)
-  local.get $0
-  if
-   local.get $0
-   call $~lib/rt/tcms/__visit
   end
  )
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
@@ -2146,7 +2075,7 @@
      local.get $5
      i32.const 1
      i32.shl
-     i32.const 1920
+     i32.const 1824
      i32.add
      local.get $3
      i32.const 65535
@@ -2181,7 +2110,7 @@
      local.get $7
      i32.const 2
      i32.shl
-     i32.const 2848
+     i32.const 2752
      i32.add
      i64.load32_u
      local.get $9
@@ -2191,7 +2120,7 @@
      local.get $5
      i32.const 1
      i32.shl
-     i32.const 1918
+     i32.const 1822
      i32.add
      local.tee $3
      i32.load16_u
@@ -2269,7 +2198,7 @@
     local.get $5
     i32.const 1
     i32.shl
-    i32.const 1920
+    i32.const 1824
     i32.add
     local.get $6
     i32.wrap_i64
@@ -2307,7 +2236,7 @@
   i32.sub
   i32.const 2
   i32.shl
-  i32.const 2848
+  i32.const 2752
   i32.add
   i64.load32_u
   i64.mul
@@ -2315,7 +2244,7 @@
   local.get $5
   i32.const 1
   i32.shl
-  i32.const 1918
+  i32.const 1822
   i32.add
   local.tee $3
   i32.load16_u
@@ -2547,7 +2476,7 @@
    local.get $0
    i32.const 1
    i32.shl
-   i32.const 1920
+   i32.const 1824
    i32.add
    i32.const 3145774
    i32.store
@@ -2576,7 +2505,7 @@
      local.get $0
      i32.const 1
      i32.shl
-     i32.const 1920
+     i32.const 1824
      i32.add
      i32.const 48
      i32.store16
@@ -2590,7 +2519,7 @@
    local.get $3
    i32.const 1
    i32.shl
-   i32.const 1920
+   i32.const 1824
    i32.add
    i32.const 3145774
    i32.store
@@ -2610,7 +2539,7 @@
     local.get $3
     i32.const 1
     i32.shl
-    i32.const 1920
+    i32.const 1824
     i32.add
     local.tee $3
     i32.const 2
@@ -2644,14 +2573,14 @@
      local.tee $3
      i32.const 1
      i32.shl
-     i32.const 1920
+     i32.const 1824
      i32.add
-     i32.const 1920
+     i32.const 1824
      local.get $0
      i32.const 1
      i32.shl
      call $~lib/memory/memory.copy
-     i32.const 1920
+     i32.const 1824
      i32.const 3014704
      i32.store
      i32.const 2
@@ -2664,7 +2593,7 @@
        local.get $1
        i32.const 1
        i32.shl
-       i32.const 1920
+       i32.const 1824
        i32.add
        i32.const 48
        i32.store16
@@ -2683,10 +2612,10 @@
      i32.const 1
      i32.eq
      if (result i32)
-      i32.const 1922
+      i32.const 1826
       i32.const 101
       i32.store16
-      i32.const 1924
+      i32.const 1828
       local.get $3
       i32.const 1
       i32.sub
@@ -2707,7 +2636,7 @@
       i32.add
       local.tee $1
       call $~lib/util/number/utoa_dec_simple<u32>
-      i32.const 1924
+      i32.const 1828
       i32.const 45
       i32.const 43
       local.get $0
@@ -2717,8 +2646,8 @@
       i32.const 2
       i32.add
      else
-      i32.const 1924
-      i32.const 1922
+      i32.const 1828
+      i32.const 1826
       local.get $0
       i32.const 1
       i32.shl
@@ -2726,11 +2655,11 @@
       i32.const 2
       i32.sub
       call $~lib/memory/memory.copy
-      i32.const 1922
+      i32.const 1826
       i32.const 46
       i32.store16
       local.get $1
-      i32.const 1920
+      i32.const 1824
       i32.add
       local.tee $1
       i32.const 101
@@ -2784,10 +2713,10 @@
   (local $5 f64)
   i32.const -4
   global.set $~lib/util/number/_K
-  i32.const 2328
+  i32.const 2232
   i64.load
   global.set $~lib/util/number/_frc_pow
-  i32.const 2760
+  i32.const 2664
   i32.load16_s
   global.set $~lib/util/number/_exp_pow
   global.get $~lib/util/number/_frc_pow
@@ -2926,12 +2855,12 @@
   local.get $0
   call $~lib/util/number/utoa_dec_simple<u32>
   local.get $1
-  i32.const 1696
+  i32.const 1600
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1728
+   i32.const 1632
    i32.const 5
    i32.const 1
    call $~lib/builtins/abort
@@ -2944,16 +2873,16 @@
   i32.const 1
   call $~lib/rt/tcms/__new
   local.tee $1
-  i32.const 1920
+  i32.const 1824
   local.get $0
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 2912
+  i32.const 2816
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 1728
+   i32.const 1632
    i32.const 13
    i32.const 1
    call $~lib/builtins/abort
@@ -2962,14 +2891,14 @@
   i32.const 1
   global.set $~argumentsLength
   i32.const 1
-  i32.const 2944
+  i32.const 2848
   i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 2
   i32.ne
   if
    i32.const 0
-   i32.const 1728
+   i32.const 1632
    i32.const 24
    i32.const 1
    call $~lib/builtins/abort
@@ -2978,14 +2907,14 @@
   i32.const 1
   global.set $~argumentsLength
   i32.const 1
-  i32.const 3008
+  i32.const 2912
   i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 4
   i32.ne
   if
    i32.const 0
-   i32.const 1728
+   i32.const 1632
    i32.const 35
    i32.const 1
    call $~lib/builtins/abort
@@ -2994,14 +2923,14 @@
   i32.const 1
   global.set $~argumentsLength
   i32.const 1
-  i32.const 2976
+  i32.const 2880
   i32.load
   call_indirect (type $i32_=>_i32)
   i32.const 3
   i32.ne
   if
    i32.const 0
-   i32.const 1728
+   i32.const 1632
    i32.const 43
    i32.const 1
    call $~lib/builtins/abort

@@ -7,21 +7,17 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "mark" (func $~lib/rt/tcms/__visit_externals (param i32)))
- (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
  (data (i32.const 16) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 44) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00")
+ (data (i32.const 44) "4\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00")
  (data (i32.const 96) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 124) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
- (data (i32.const 188) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
- (data (i32.const 252) "\18\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00i\00n\00 \00f\00r\00o\00m\00S\00p\00a\00c\00e\00")
- (data (i32.const 300) "\14\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00i\00n\00 \00t\00o\00S\00p\00a\00c\00e\00")
- (data (i32.const 348) "\n\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00o\00.\00t\00s\00")
- (data (i32.const 384) "\04\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 124) "4\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00")
+ (data (i32.const 188) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
+ (data (i32.const 252) " \00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00d\00o\00.\00t\00s\00\00\00")
+ (data (i32.const 288) "\04\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 16))
@@ -37,14 +33,14 @@
  (global $~lib/rt/tcms/threshold (mut i32) (i32.const 100))
  (global $~lib/rt/tcms/debt (mut i32) (i32.const 0))
  (global $do/ran (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 384))
- (global $~lib/memory/__heap_base i32 (i32.const 420))
+ (global $~lib/rt/__rtti_base i32 (i32.const 288))
+ (global $~lib/memory/__heap_base i32 (i32.const 324))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "__new" (func $~lib/rt/tcms/__new))
  (export "__link" (func $~lib/rt/tcms/__link))
  (export "__collect" (func $~lib/rt/tcms/__collect@varargs))
- (export "__mark" (func $~lib/rt/tcms/__mark))
+ (export "__visit" (func $~lib/rt/tcms/__visit))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (start $~start)
@@ -2003,7 +1999,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 294
+   i32.const 299
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -2232,104 +2228,21 @@
     local.get $0
     call $~lib/rt/tcms/Object#get:next
     global.set $~lib/rt/tcms/iter
+    i32.const 1
+    drop
     local.get $0
     call $~lib/rt/tcms/Object#get:color
     global.get $~lib/rt/tcms/white
     i32.eqz
-    i32.ne
+    i32.eq
+    i32.eqz
     if
-     global.get $~lib/rt/tcms/fromSpace
-     call $~lib/rt/tcms/Object#get:next
-     local.set $1
-     loop $while-continue|1
-      local.get $1
-      global.get $~lib/rt/tcms/fromSpace
-      i32.ne
-      local.set $2
-      local.get $2
-      if
-       local.get $1
-       i32.const 0
-       i32.ne
-       i32.eqz
-       if
-        i32.const 0
-        i32.const 64
-        i32.const 206
-        i32.const 13
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $1
-       local.get $0
-       i32.eq
-       if
-        i32.const 272
-        i32.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        call $~lib/builtins/trace
-       end
-       local.get $1
-       call $~lib/rt/tcms/Object#get:next
-       local.set $1
-       br $while-continue|1
-      end
-     end
-     global.get $~lib/rt/tcms/toSpace
-     call $~lib/rt/tcms/Object#get:next
-     local.set $1
-     loop $while-continue|2
-      local.get $1
-      global.get $~lib/rt/tcms/toSpace
-      i32.ne
-      local.set $2
-      local.get $2
-      if
-       local.get $1
-       i32.const 0
-       i32.ne
-       i32.eqz
-       if
-        i32.const 0
-        i32.const 64
-        i32.const 212
-        i32.const 13
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $1
-       local.get $0
-       i32.eq
-       if
-        i32.const 320
-        i32.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        f64.const 0
-        call $~lib/builtins/trace
-       end
-       local.get $1
-       call $~lib/rt/tcms/Object#get:next
-       local.set $1
-       br $while-continue|2
-      end
-     end
      i32.const 0
-     i32.eqz
-     if
-      i32.const 0
-      i32.const 64
-      i32.const 216
-      i32.const 11
-      call $~lib/builtins/abort
-      unreachable
-     end
+     i32.const 64
+     i32.const 201
+     i32.const 20
+     call $~lib/builtins/abort
+     unreachable
     end
     local.get $0
     call $~lib/rt/tcms/free
@@ -2373,7 +2286,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 373
+   i32.const 372
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -2513,14 +2426,6 @@
    call $~lib/rt/tcms/Object#makeGray
   end
  )
- (func $~lib/rt/tcms/__mark (param $0 i32)
-  local.get $0
-  if
-   local.get $0
-   i32.const 0
-   call $~lib/rt/tcms/__visit
-  end
- )
  (func $do/testSimple
   (local $0 i32)
   (local $1 i32)
@@ -2549,7 +2454,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 10
    i32.const 3
    call $~lib/builtins/abort
@@ -2561,7 +2466,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 11
    i32.const 3
    call $~lib/builtins/abort
@@ -2593,7 +2498,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 21
    i32.const 3
    call $~lib/builtins/abort
@@ -2642,7 +2547,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 368
+    i32.const 272
     i32.const 39
     i32.const 5
     call $~lib/builtins/abort
@@ -2654,7 +2559,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 368
+    i32.const 272
     i32.const 40
     i32.const 5
     call $~lib/builtins/abort
@@ -2671,7 +2576,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 42
    i32.const 3
    call $~lib/builtins/abort
@@ -2683,7 +2588,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 43
    i32.const 3
    call $~lib/builtins/abort
@@ -2695,7 +2600,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 44
    i32.const 3
    call $~lib/builtins/abort
@@ -2732,7 +2637,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 56
    i32.const 3
    call $~lib/builtins/abort
@@ -2780,7 +2685,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 77
    i32.const 3
    call $~lib/builtins/abort
@@ -2809,7 +2714,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 90
    i32.const 3
    call $~lib/builtins/abort
@@ -2858,7 +2763,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 116
    i32.const 3
    call $~lib/builtins/abort
@@ -2912,7 +2817,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 134
    i32.const 3
    call $~lib/builtins/abort
@@ -2924,7 +2829,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 135
    i32.const 3
    call $~lib/builtins/abort
@@ -2979,7 +2884,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 150
    i32.const 3
    call $~lib/builtins/abort
@@ -2990,7 +2895,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 151
    i32.const 3
    call $~lib/builtins/abort
@@ -3037,7 +2942,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 170
    i32.const 3
    call $~lib/builtins/abort
@@ -3048,7 +2953,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 171
    i32.const 3
    call $~lib/builtins/abort
@@ -3065,7 +2970,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 16
    i32.const 1
    call $~lib/builtins/abort
@@ -3078,7 +2983,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 26
    i32.const 1
    call $~lib/builtins/abort
@@ -3091,7 +2996,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 49
    i32.const 1
    call $~lib/builtins/abort
@@ -3104,7 +3009,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 61
    i32.const 1
    call $~lib/builtins/abort
@@ -3116,7 +3021,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 70
    i32.const 1
    call $~lib/builtins/abort
@@ -3129,7 +3034,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 82
    i32.const 1
    call $~lib/builtins/abort
@@ -3142,7 +3047,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 95
    i32.const 1
    call $~lib/builtins/abort
@@ -3155,7 +3060,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 108
    i32.const 1
    call $~lib/builtins/abort
@@ -3168,7 +3073,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 121
    i32.const 1
    call $~lib/builtins/abort
@@ -3181,7 +3086,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 140
    i32.const 1
    call $~lib/builtins/abort
@@ -3194,7 +3099,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 156
    i32.const 1
    call $~lib/builtins/abort
@@ -3207,7 +3112,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 368
+   i32.const 272
    i32.const 176
    i32.const 1
    call $~lib/builtins/abort

@@ -191,7 +191,8 @@ import {
   writeF64,
   uniqueMap,
   isPowerOf2,
-  v128_zero
+  v128_zero,
+  readI32
 } from "./util";
 
 /** Compiler options. */
@@ -1871,7 +1872,7 @@ export class Compiler extends DiagnosticEmitter {
     var arrayBufferInstance = program.arrayBufferInstance;
     var buf = arrayBufferInstance.createBuffer(values.length * elementType.byteSize);
     this.program.OBJECTInstance.writeField("rtId", id, buf, 0); // use specified rtId
-    assert(this.writeStaticBuffer(buf, program.runtimeHeaderSize, elementType, values) == buf.length);
+    this.writeStaticBuffer(buf, program.runtimeHeaderSize, elementType, values);
     return this.addRuntimeMemorySegment(buf);
   }
 
@@ -1881,10 +1882,9 @@ export class Compiler extends DiagnosticEmitter {
     var runtimeHeaderSize = program.runtimeHeaderSize;
     var arrayPrototype = assert(program.arrayPrototype);
     var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
-    var bufferLength = bufferSegment.buffer.length - runtimeHeaderSize;
+    var bufferLength = readI32(bufferSegment.buffer, program.OBJECTInstance.offsetof("rtSize"));
     var arrayLength = i32(bufferLength / elementType.byteSize);
     var bufferAddress = i64_add(bufferSegment.offset, i64_new(runtimeHeaderSize));
-
     var buf = arrayInstance.createBuffer();
     assert(arrayInstance.writeField("buffer", bufferAddress, buf));
     assert(arrayInstance.writeField("dataStart", bufferAddress, buf));

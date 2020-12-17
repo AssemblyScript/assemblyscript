@@ -4271,13 +4271,15 @@ export class Class extends TypedElement {
   /** Creates a buffer suitable to hold a runtime instance of this class. */
   createBuffer(overhead: i32 = 0): Uint8Array {
     var size = this.nextMemoryOffset + overhead;
-    var buffer = new Uint8Array(this.program.runtimeHeaderSize + size);
+    // block size must be 4b aligned to not conflict with MM flags in low bits
+    var blockSize = (this.program.runtimeHeaderSize + size + 3) & ~3;
+    var buffer = new Uint8Array(blockSize);
     assert(!this.program.options.isWasm64); // TODO: WASM64, mmInfo is usize
-    // see: std/assembly/rt/common.ts
-    assert(size < (1 << 28));      // 1 bit BUFFERED + 3 bits color
+    // see: std/assembly/rt/common.ts BLOCK_MAXSIZE
+    assert(blockSize < (1 << 30) - 4);
     var OBJECT = this.program.OBJECTInstance;
-    OBJECT.writeField("mmInfo", size, buffer, 0);
-    OBJECT.writeField("gcInfo", 1, buffer, 0); // RC = 1
+    OBJECT.writeField("mmInfo", blockSize, buffer, 0);
+    OBJECT.writeField("gcInfo", 0, buffer, 0);
     OBJECT.writeField("gcInfo2", 0, buffer, 0);
     OBJECT.writeField("rtId", this.id, buffer, 0);
     OBJECT.writeField("rtSize", size, buffer, 0);
