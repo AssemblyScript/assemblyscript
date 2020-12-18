@@ -21,6 +21,7 @@
  (export "A#constructor" (func $class-implements/A#constructor))
  (export "C" (global $class-implements/C))
  (export "C#foo" (func $class-implements/C#foo))
+ (export "C#constructor" (func $class-implements/C#constructor))
  (start $~start)
  (func $~lib/rt/stub/computeSize (param $0 i32) (result i32)
   local.get $0

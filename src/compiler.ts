@@ -9276,15 +9276,18 @@ export class Compiler extends DiagnosticEmitter {
           new Signature(this.program, null, classInstance.type, classInstance.type),
           contextualTypeArguments
         );
-        let members = classInstance.members;
-        if (!members) classInstance.members = members = new Map();
-        members.set("constructor", instance.prototype);
       }
 
-      instance.internalName = classInstance.internalName + INSTANCE_DELIMITER + "constructor";
       instance.set(CommonFlags.COMPILED);
       instance.prototype.setResolvedInstance("", instance);
+      if (classInstance.is(CommonFlags.MODULE_EXPORT)) {
+        instance.set(CommonFlags.MODULE_EXPORT);
+      }
       classInstance.constructorInstance = instance;
+      let members = classInstance.members;
+      if (!members) classInstance.members = members = new Map();
+      members.set("constructor", instance.prototype);
+
       let previousFlow = this.currentFlow;
       let flow = instance.flow;
       this.currentFlow = flow;

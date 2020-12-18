@@ -12,6 +12,7 @@
  (export "A#constructor" (func $class-implements/A#constructor))
  (export "C" (global $class-implements/C))
  (export "C#foo" (func $class-implements/C#foo))
+ (export "C#constructor" (func $class-implements/C#constructor))
  (start $~start)
  (func $~lib/rt/stub/__new (param $0 i32) (result i32)
   (local $1 i32)
@@ -101,6 +102,22 @@
  (func $class-implements/A#foo (param $0 i32) (result i32)
   i32.const 1
  )
+ (func $class-implements/C#constructor (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 5
+   call $~lib/rt/stub/__new
+   local.set $0
+  end
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 6
+   call $~lib/rt/stub/__new
+  end
+ )
  (func $class-implements/C#foo (param $0 i32) (result i32)
   i32.const 2
  )
@@ -110,13 +127,8 @@
   i32.const 3
   call $~lib/rt/stub/__new
   drop
-  i32.const 5
-  call $~lib/rt/stub/__new
-  i32.eqz
-  if
-   i32.const 6
-   call $~lib/rt/stub/__new
-   drop
-  end
+  i32.const 0
+  call $class-implements/C#constructor
+  drop
  )
 )
