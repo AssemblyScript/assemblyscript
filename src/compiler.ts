@@ -9242,7 +9242,8 @@ export class Compiler extends DiagnosticEmitter {
       // do not attempt to compile if inlined anyway
       if (!instance.hasDecorator(DecoratorFlags.INLINE)) this.compileFunction(instance);
     } else {
-      // clone base constructor if a derived class
+      // clone base constructor if a derived class. note that we cannot just
+      // call the base ctor since the derived class may have additional fields.
       let baseClass = classInstance.base;
       let contextualTypeArguments = uniqueMap(classInstance.contextualTypeArguments);
       if (baseClass) {
@@ -9276,15 +9277,18 @@ export class Compiler extends DiagnosticEmitter {
           new Signature(this.program, null, classInstance.type, classInstance.type),
           contextualTypeArguments
         );
-        let members = classInstance.members;
-        if (!members) classInstance.members = members = new Map();
-        members.set("constructor", instance.prototype);
       }
 
-      instance.internalName = classInstance.internalName + INSTANCE_DELIMITER + "constructor";
       instance.set(CommonFlags.COMPILED);
       instance.prototype.setResolvedInstance("", instance);
+      if (classInstance.is(CommonFlags.MODULE_EXPORT)) {
+        instance.set(CommonFlags.MODULE_EXPORT);
+      }
       classInstance.constructorInstance = instance;
+      let members = classInstance.members;
+      if (!members) classInstance.members = members = new Map();
+      members.set("constructor", instance.prototype);
+
       let previousFlow = this.currentFlow;
       let flow = instance.flow;
       this.currentFlow = flow;
