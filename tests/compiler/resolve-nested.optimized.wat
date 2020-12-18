@@ -17,6 +17,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
+ (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (global $resolve-nested/Outer.InnerClass i32 (i32.const 4))
  (global $resolve-nested/Outer.Inner.EvenInnerClass i32 (i32.const 5))
  (export "memory" (memory $0))
@@ -987,6 +988,8 @@
    i32.const 4
    call $~lib/rt/tcms/__new
   end
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $resolve-nested/Outer.Inner.EvenInnerClass#constructor (param $0 i32) (result i32)
   local.get $0
@@ -996,6 +999,8 @@
    i32.const 5
    call $~lib/rt/tcms/__new
   end
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $resolve-nested/Outer.Inner.evenInner (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   nop

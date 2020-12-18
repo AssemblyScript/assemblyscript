@@ -24,6 +24,7 @@
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
+ (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (global $class-implements/a (mut i32) (i32.const 0))
  (global $class-implements/c (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 332))
@@ -35,6 +36,7 @@
  (export "A#constructor" (func $class-implements/A#constructor))
  (export "C" (global $class-implements/C))
  (export "C#foo" (func $class-implements/C#foo))
+ (export "C#constructor" (func $class-implements/C#constructor))
  (start $~start)
  (func $~lib/rt/tcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
   local.get $0
@@ -1681,6 +1683,8 @@
    local.set $0
   end
   local.get $0
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $class-implements/A#foo (param $0 i32) (result i32)
   i32.const 1
@@ -1709,6 +1713,8 @@
   call $class-implements/B#constructor
   local.set $0
   local.get $0
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $class-implements/C#foo (param $0 i32) (result i32)
   i32.const 2

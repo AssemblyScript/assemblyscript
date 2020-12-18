@@ -551,6 +551,7 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/threshold (mut i32) (i32.const 100))
  (global $~lib/rt/tcms/debt (mut i32) (i32.const 0))
+ (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $std/array/ArrayU32 i32 (i32.const 40))
  (global $std/array/ArrayU8 i32 (i32.const 41))
@@ -558,7 +559,7 @@
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "ArrayU32" (global $std/array/ArrayU32))
- (export "ArrayU32#constructor" (func $~lib/array/Array<u32>#constructor@varargs))
+ (export "ArrayU32#constructor" (func $std/array/ArrayU32#constructor@varargs))
  (export "ArrayU32#get:length" (func $~lib/array/Array<u8>#get:length))
  (export "ArrayU32#set:length" (func $~lib/array/Array<std/array/Ref>#set:length))
  (export "ArrayU32#every" (func $~lib/array/Array<i32>#every))
@@ -584,7 +585,7 @@
  (export "ArrayU32#flat" (func $~lib/array/Array<u32>#flat))
  (export "ArrayU32#toString" (func $~lib/array/Array<u32>#toString))
  (export "ArrayU8" (global $std/array/ArrayU8))
- (export "ArrayU8#constructor" (func $~lib/array/Array<u8>#constructor@varargs))
+ (export "ArrayU8#constructor" (func $std/array/ArrayU8#constructor@varargs))
  (export "ArrayU8#get:length" (func $~lib/array/Array<u8>#get:length))
  (export "ArrayU8#set:length" (func $~lib/array/Array<u8>#set:length))
  (export "ArrayU8#every" (func $~lib/array/Array<u8>#every))
@@ -610,7 +611,7 @@
  (export "ArrayU8#flat" (func $~lib/array/Array<u32>#flat))
  (export "ArrayU8#toString" (func $~lib/array/Array<u8>#toString))
  (export "ArrayStr" (global $std/array/ArrayStr))
- (export "ArrayStr#constructor" (func $~lib/array/Array<~lib/string/String>#constructor@varargs))
+ (export "ArrayStr#constructor" (func $std/array/ArrayStr#constructor@varargs))
  (export "ArrayStr#get:length" (func $~lib/array/Array<u8>#get:length))
  (export "ArrayStr#set:length" (func $~lib/array/Array<std/array/Ref>#set:length))
  (export "ArrayStr#every" (func $~lib/array/Array<i32>#every))
@@ -10060,7 +10061,7 @@
      call $~lib/rt/__visit_globals
      i32.const 0
      call $~lib/rt/tcms/__visit_externals
-     i32.const 0
+     global.get $~lib/rt/__returnee
      call $~lib/rt/tcms/__visit
      global.get $~lib/rt/tcms/toSpace
      global.get $~lib/rt/tcms/iter
@@ -17614,7 +17615,7 @@
   i32.load
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/array/Array<u32>#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/ArrayU32#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $1of1
@@ -17627,6 +17628,14 @@
    end
    i32.const 0
    local.set $1
+  end
+  local.get $0
+  i32.eqz
+  if
+   i32.const 16
+   i32.const 40
+   call $~lib/rt/tcms/__new
+   local.set $0
   end
   local.get $0
   i32.eqz
@@ -17682,6 +17691,8 @@
   local.get $1
   i32.store offset=12
   local.get $0
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $~lib/array/Array<u32>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
@@ -17967,7 +17978,7 @@
   local.get $1
   call $~lib/util/string/joinIntegerArray<u32>
  )
- (func $~lib/array/Array<u8>#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/ArrayU8#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block $1of1
    block $0of1
@@ -17979,6 +17990,14 @@
    end
    i32.const 0
    local.set $1
+  end
+  local.get $0
+  i32.eqz
+  if
+   i32.const 16
+   i32.const 41
+   call $~lib/rt/tcms/__new
+   local.set $0
   end
   local.get $0
   i32.eqz
@@ -18031,6 +18050,8 @@
   local.get $1
   i32.store offset=12
   local.get $0
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $~lib/array/Array<u8>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
@@ -18403,7 +18424,7 @@
   local.get $1
   call $~lib/util/string/joinIntegerArray<u8>
  )
- (func $~lib/array/Array<~lib/string/String>#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/ArrayStr#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -18416,8 +18437,17 @@
    local.set $1
   end
   local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 42
+   call $~lib/rt/tcms/__new
+  end
   local.get $1
   call $~lib/array/Array<~lib/string/String>#constructor
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $~lib/array/Array<~lib/string/String>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)

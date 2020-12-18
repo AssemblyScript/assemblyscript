@@ -335,7 +335,7 @@
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "ArrayU32" (global $std/array/ArrayU32))
- (export "ArrayU32#constructor" (func $~lib/array/Array<u32>#constructor@varargs))
+ (export "ArrayU32#constructor" (func $std/array/ArrayU32#constructor@varargs))
  (export "ArrayU32#get:length" (func $~lib/array/Array<u32>#get:length))
  (export "ArrayU32#set:length" (func $~lib/array/Array<u32>#set:length))
  (export "ArrayU32#every" (func $~lib/array/Array<u32>#every))
@@ -361,7 +361,7 @@
  (export "ArrayU32#flat" (func $~lib/array/Array<u32>#flat))
  (export "ArrayU32#toString" (func $~lib/array/Array<u32>#toString))
  (export "ArrayU8" (global $std/array/ArrayU8))
- (export "ArrayU8#constructor" (func $~lib/array/Array<u8>#constructor@varargs))
+ (export "ArrayU8#constructor" (func $std/array/ArrayU8#constructor@varargs))
  (export "ArrayU8#get:length" (func $~lib/array/Array<u8>#get:length))
  (export "ArrayU8#set:length" (func $~lib/array/Array<u8>#set:length))
  (export "ArrayU8#every" (func $~lib/array/Array<u8>#every))
@@ -387,7 +387,7 @@
  (export "ArrayU8#flat" (func $~lib/array/Array<u8>#flat))
  (export "ArrayU8#toString" (func $~lib/array/Array<u8>#toString))
  (export "ArrayStr" (global $std/array/ArrayStr))
- (export "ArrayStr#constructor" (func $~lib/array/Array<~lib/string/String>#constructor@varargs))
+ (export "ArrayStr#constructor" (func $std/array/ArrayStr#constructor@varargs))
  (export "ArrayStr#get:length" (func $~lib/array/Array<~lib/string/String>#get:length))
  (export "ArrayStr#set:length" (func $~lib/array/Array<~lib/string/String>#set:length))
  (export "ArrayStr#every" (func $~lib/array/Array<~lib/string/String>#every))
@@ -23645,6 +23645,8 @@
   call $~lib/array/Array<u32>#constructor
   local.set $0
   local.get $0
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $~lib/array/Array<u32>#get:buffer (param $0 i32) (result i32)
   local.get $0
@@ -24847,6 +24849,8 @@
   call $~lib/array/Array<u8>#constructor
   local.set $0
   local.get $0
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $~lib/array/Array<u8>#get:buffer (param $0 i32) (result i32)
   local.get $0
@@ -26421,6 +26425,8 @@
   call $~lib/array/Array<~lib/string/String>#constructor
   local.set $0
   local.get $0
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $~lib/array/Array<~lib/string/String>#get:buffer (param $0 i32) (result i32)
   local.get $0
@@ -28821,7 +28827,7 @@
   end
   unreachable
  )
- (func $~lib/array/Array<u32>#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/ArrayU32#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -28835,7 +28841,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<u32>#constructor
+  call $std/array/ArrayU32#constructor
  )
  (func $~lib/array/Array<u32>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
@@ -28995,7 +29001,7 @@
   local.get $1
   call $~lib/array/Array<u32>#join
  )
- (func $~lib/array/Array<u8>#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/ArrayU8#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -29009,7 +29015,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<u8>#constructor
+  call $std/array/ArrayU8#constructor
  )
  (func $~lib/array/Array<u8>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
@@ -29216,7 +29222,7 @@
   local.get $1
   call $~lib/array/Array<u8>#join
  )
- (func $~lib/array/Array<~lib/string/String>#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
+ (func $std/array/ArrayStr#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -29230,7 +29236,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<~lib/string/String>#constructor
+  call $std/array/ArrayStr#constructor
  )
  (func $~lib/array/Array<~lib/string/String>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2

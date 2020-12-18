@@ -2279,6 +2279,8 @@
  (func $implicit-getter-setter/Managed#get:foo (param $0 i32) (result i32)
   local.get $0
   i32.load
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)

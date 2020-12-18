@@ -4,9 +4,9 @@
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "mark" (func $~lib/rt/tcms/__visit_externals (param i32)))
  (memory $0 1)
@@ -27,6 +27,7 @@
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/threshold (mut i32) (i32.const 100))
  (global $~lib/rt/tcms/debt (mut i32) (i32.const 0))
+ (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1296))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $implicit-getter-setter/Basic i32 (i32.const 3))
@@ -42,7 +43,7 @@
  (export "Basic#set:val" (func $~lib/rt/tlsf/Root#set:flMap))
  (export "Basic#constructor" (func $implicit-getter-setter/Basic#constructor))
  (export "Managed" (global $implicit-getter-setter/Managed))
- (export "Managed#get:foo" (func $implicit-getter-setter/Basic#get:val))
+ (export "Managed#get:foo" (func $implicit-getter-setter/Managed#get:foo))
  (export "Managed#set:foo" (func $implicit-getter-setter/Managed#set:foo))
  (export "Managed#constructor" (func $implicit-getter-setter/Managed#constructor))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
@@ -1395,7 +1396,7 @@
     else
      i32.const 0
      call $~lib/rt/tcms/__visit_externals
-     i32.const 0
+     global.get $~lib/rt/__returnee
      i32.const 0
      call $~lib/rt/tcms/__visit
      global.get $~lib/rt/tcms/toSpace
@@ -1585,6 +1586,12 @@
   local.get $1
   call $implicit-getter-setter/Managed#set:foo
   local.get $0
+ )
+ (func $implicit-getter-setter/Managed#get:foo (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $~lib/rt/tcms/__collect@varargs (param $0 i32)
   block $1of1

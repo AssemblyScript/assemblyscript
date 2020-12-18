@@ -24,12 +24,14 @@
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
+ (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 268))
  (global $extends-recursive/Child i32 (i32.const 3))
  (export "memory" (memory $0))
  (export "Child" (global $extends-recursive/Child))
  (export "Child#get:child" (func $extends-recursive/Parent#get:child))
  (export "Child#set:child" (func $extends-recursive/Parent#set:child))
+ (export "Child#constructor" (func $extends-recursive/Child#constructor))
  (func $~lib/rt/tcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -1856,6 +1858,8 @@
   call $extends-recursive/Parent#constructor
   local.set $0
   local.get $0
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $extends-recursive/Parent#get:child (param $0 i32) (result i32)
   local.get $0

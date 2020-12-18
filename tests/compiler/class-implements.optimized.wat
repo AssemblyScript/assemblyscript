@@ -18,6 +18,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
+ (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (global $class-implements/A i32 (i32.const 3))
  (global $class-implements/C i32 (i32.const 5))
  (export "memory" (memory $0))
@@ -26,6 +27,7 @@
  (export "A#constructor" (func $class-implements/A#constructor))
  (export "C" (global $class-implements/C))
  (export "C#foo" (func $class-implements/C#foo))
+ (export "C#constructor" (func $class-implements/C#constructor))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -987,24 +989,39 @@
    i32.const 3
    call $~lib/rt/tcms/__new
   end
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $class-implements/A#foo (param $0 i32) (result i32)
   i32.const 1
+ )
+ (func $class-implements/C#constructor (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 5
+   call $~lib/rt/tcms/__new
+   local.set $0
+  end
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 6
+   call $~lib/rt/tcms/__new
+  end
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $class-implements/C#foo (param $0 i32) (result i32)
   i32.const 2
  )
  (func $~start
-  i32.const 3
-  call $~lib/rt/tcms/__new
+  i32.const 0
+  call $class-implements/A#constructor
   drop
-  i32.const 5
-  call $~lib/rt/tcms/__new
-  i32.eqz
-  if
-   i32.const 6
-   call $~lib/rt/tcms/__new
-   drop
-  end
+  i32.const 0
+  call $class-implements/C#constructor
+  drop
  )
 )
