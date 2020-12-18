@@ -182,6 +182,7 @@ function step(): usize {
       } else {
         __visit_globals(VISIT_SCAN);
         __visit_externals(VISIT_SCAN);
+        __visit(__returnee, VISIT_SCAN);
         obj = iter.next;
         if (obj == toSpace) { // empty
           let from = fromSpace;
@@ -241,6 +242,7 @@ function objToPtr(obj: Object): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
+  if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
   if (state == STATE_INIT) init();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   fromSpace.push(obj); // sets next/prev
@@ -248,7 +250,6 @@ export function __new(size: usize, id: i32): usize {
   obj.rtId = id;
   obj.rtSize = <u32>size;
   var ptr = objToPtr(obj);
-  memory.fill(ptr, 0, size);
   total += 1;
   totalMem += obj.size;
   return ptr;
@@ -257,37 +258,23 @@ export function __new(size: usize, id: i32): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __renew(oldPtr: usize, size: usize): usize {
-  if (state == STATE_INIT) init();
-  if (size > OBJECT_MAXSIZE) throw new Error("allocation too large");
   var oldObj = ptrToObj(oldPtr);
-  if (oldPtr > __heap_base) {
-    total -= 1;
-    totalMem -= oldObj.size;
+  if (oldPtr < __heap_base) { // move to heap for simplicity
+    let newPtr = __new(size, oldObj.rtId);
+    memory.copy(newPtr, oldPtr, min(size, oldObj.rtSize));
+    return newPtr;
   }
-  var oldNext = oldObj.next;
-  var oldPrev = oldObj.prev;
+  if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
+  if (state == STATE_INIT) init();
+  totalMem -= oldObj.size;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
   var newObj = ptrToObj(newPtr);
   newObj.rtSize = <u32>size;
-  if (oldNext) {
-    // The old object was tracked by GC -> substitute oldObj with newObj
-    if (DEBUG) assert(oldPrev && oldPrev == newObj.prev && oldNext == newObj.next);
-    oldNext.prev = newObj;
-    oldPrev.next = newObj;
-    if (iter == oldObj) iter = newObj;
-  } else {
-    if (DEBUG) assert(!oldPrev);
-    if (newPtr > __heap_base) {
-      // The new object must be tracked by GC (old object wasn't) -> register
-      if (DEBUG) assert(!newObj.next && !newObj.prev);
-      fromSpace.push(newObj);
-      newObj.color = white;
-    }
-  }
-  if (newPtr > __heap_base) {
-    total += 1;
-    totalMem += newObj.size;
-  }
+  if (DEBUG) assert(newObj.next != null && newObj.prev != null);
+  newObj.next.prev = newObj;
+  newObj.prev.next = newObj;
+  if (iter == oldObj) iter = newObj;
+  totalMem += newObj.size;
   return newPtr;
 }
 

@@ -2,8 +2,8 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
@@ -18,11 +18,11 @@
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 48) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 76) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 144) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 172) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 236) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 108) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 176) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 208) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 236) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 300) "L\03\00\00\00\00\00\00\00\00\00\00\03\00\00\000\03\00\00\df\00S\00S\00\00\00I\01\bc\02N\00\00\00\f0\01J\00\0c\03\00\00\90\03\99\03\08\03\01\03\b0\03\a5\03\08\03\01\03\87\055\05R\05\00\00\96\1eH\001\03\00\00\97\1eT\00\08\03\00\00\98\1eW\00\n\03\00\00\99\1eY\00\n\03\00\00\9a\1eA\00\be\02\00\00P\1f\a5\03\13\03\00\00R\1f\a5\03\13\03\00\03T\1f\a5\03\13\03\01\03V\1f\a5\03\13\03B\03\80\1f\08\1f\99\03\00\00\81\1f\t\1f\99\03\00\00\82\1f\n\1f\99\03\00\00\83\1f\0b\1f\99\03\00\00\84\1f\0c\1f\99\03\00\00\85\1f\0d\1f\99\03\00\00\86\1f\0e\1f\99\03\00\00\87\1f\0f\1f\99\03\00\00\88\1f\08\1f\99\03\00\00\89\1f\t\1f\99\03\00\00\8a\1f\n\1f\99\03\00\00\8b\1f\0b\1f\99\03\00\00\8c\1f\0c\1f\99\03\00\00\8d\1f\0d\1f\99\03\00\00\8e\1f\0e\1f\99\03\00\00\8f\1f\0f\1f\99\03\00\00\90\1f(\1f\99\03\00\00\91\1f)\1f\99\03\00\00\92\1f*\1f\99\03\00\00\93\1f+\1f\99\03\00\00\94\1f,\1f\99\03\00\00\95\1f-\1f\99\03\00\00\96\1f.\1f\99\03\00\00\97\1f/\1f\99\03\00\00\98\1f(\1f\99\03\00\00\99\1f)\1f\99\03\00\00\9a\1f*\1f\99\03\00\00\9b\1f+\1f\99\03\00\00\9c\1f,\1f\99\03\00\00\9d\1f-\1f\99\03\00\00\9e\1f.\1f\99\03\00\00\9f\1f/\1f\99\03\00\00\a0\1fh\1f\99\03\00\00\a1\1fi\1f\99\03\00\00\a2\1fj\1f\99\03\00\00\a3\1fk\1f\99\03\00\00\a4\1fl\1f\99\03\00\00\a5\1fm\1f\99\03\00\00\a6\1fn\1f\99\03\00\00\a7\1fo\1f\99\03\00\00\a8\1fh\1f\99\03\00\00\a9\1fi\1f\99\03\00\00\aa\1fj\1f\99\03\00\00\ab\1fk\1f\99\03\00\00\ac\1fl\1f\99\03\00\00\ad\1fm\1f\99\03\00\00\ae\1fn\1f\99\03\00\00\af\1fo\1f\99\03\00\00\b2\1f\ba\1f\99\03\00\00\b3\1f\91\03\99\03\00\00\b4\1f\86\03\99\03\00\00\b6\1f\91\03B\03\00\00\b7\1f\91\03B\03\99\03\bc\1f\91\03\99\03\00\00\c2\1f\ca\1f\99\03\00\00\c3\1f\97\03\99\03\00\00\c4\1f\89\03\99\03\00\00\c6\1f\97\03B\03\00\00\c7\1f\97\03B\03\99\03\cc\1f\97\03\99\03\00\00\d2\1f\99\03\08\03\00\03\d3\1f\99\03\08\03\01\03\d6\1f\99\03B\03\00\00\d7\1f\99\03\08\03B\03\e2\1f\a5\03\08\03\00\03\e3\1f\a5\03\08\03\01\03\e4\1f\a1\03\13\03\00\00\e6\1f\a5\03B\03\00\00\e7\1f\a5\03\08\03B\03\f2\1f\fa\1f\99\03\00\00\f3\1f\a9\03\99\03\00\00\f4\1f\8f\03\99\03\00\00\f6\1f\a9\03B\03\00\00\f7\1f\a9\03B\03\99\03\fc\1f\a9\03\99\03\00\00\00\fbF\00F\00\00\00\01\fbF\00I\00\00\00\02\fbF\00L\00\00\00\03\fbF\00F\00I\00\04\fbF\00F\00L\00\05\fbS\00T\00\00\00\06\fbS\00T\00\00\00\13\fbD\05F\05\00\00\14\fbD\055\05\00\00\15\fbD\05;\05\00\00\16\fbN\05F\05\00\00\17\fbD\05=\05\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1148) "\00\01\02\03\04\05\06\07\08\t\n\0b\0c\0d\0e\0f\10\11\12\13\14\15\16\17\18\19\1a\1b\1c\1d\1e\1f !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`ABCDEFGHIJKLMNOPQRSTUVWXYZ{|}~\7f")
  (data (i32.const 1276) "\07\08\t\n\0b\0c\06\06\06\06\06\06\06\06\06\06\0d\06\06\0e\06\06\06\06\06\06\06\06\0f\10\11\12\06\13\06\06\06\06\06\06\06\06\06\06\14\15\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\16\17\06\06\06\18\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\19\06\06\06\06\1a\06\06\06\06\06\06\06\1b\06\06\06\06\06\06\06\06\06\06\06\1c\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\1d\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\1e\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\06\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00$++++++++\01\00TVVVVVVVV\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\18\00\00\00+++++++\07++[VVVVVVVJVV\051P1P1P1P1P1P1P1P$Py1P1P18P1P1P1P1P1P1P1PN1\02N\0d\0dN\03N\00$n\00N1&nQN$PN9\14\81\1b\1d\1dS1P1P\0d1P1P1P\1bS$P1\02\\{\\{\\{\\{\\{\14y\\{\\{\\-+I\03H\03x\\{\14\00\96\n\01+(\06\06\00*\06**+\07\bb\b5+\1e\00+\07+++\01++++++++++++++++++++++++++++++++\01+++++++++++++++++++++++*+++++++++++++\cdF\cd+\00%+\07\01\06\01UVVVVVUVV\02$\81\81\81\81\81\15\81\81\81\00\00+\00\b2\d1\b2\d1\b2\d1\b2\d1\00\00\cd\cc\01\00\d7\d7\d7\d7\d7\83\81\81\81\81\81\81\81\81\81\81\ac\ac\ac\ac\ac\ac\ac\ac\ac\ac\1c\00\00\00\00\001P1P1P1P1P1\02\00\001P1P1P1P1P1P1P1P1PN1P1PN1P1P1P1P1P1P1P1\02\87\a6\87\a6\87\a6\87\a6\87\a6\87\a6\87\a6\87\a6*++++++++++++\00\00\00TVVVVVVVVVVVV\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00TVVVVVVVVVVVV\0c\00\0c*+++++++++++++\07*\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00*++++++++++++++++++++++++++VVl\81\15\00++++++++++++++++++++++++++++++++++++++++++\07l\03A++VVVVVVVVVVVVVV,V+++++++++++++++++++++\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\0cl\00\00\00\00\00\06\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%Vz\9e&\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06%\06\01++OVV,+\7fVV9++UVV++OVV,+\7fVV\817u[{\\++OVV\02\ac\04\00\009++UVV++OVV,++VV2\13\81W\00o\81~\c9\d7~-\81\81\0e~9\7foW\00\81\81~\15\00~\03++++++++++++\07+$+\97+++++++++*+++++VVVVV\80\81\81\81\819\bb*++++++++++++++++++++++++++++++++++++++++\01\81\81\81\81\81\81\81\81\81\81\81\81\81\81\81\c9\ac\ac\ac\ac\ac\ac\ac\ac\ac\ac\ac\ac\ac\ac\ac\d0\0d\00N1\02\b4\c1\c1\d7\d7$P1P1P1P1P1P1P1P1P1P1P1P1P1P1P1P1P\d7\d7S\c1G\d4\d7\d7\d7\05++++++++++++\07\01\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00N1P1P1P1P1P1P1P\0d\00\00\00\00\00$P1P1P1P1P\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00+++++++++++y\\{\\{O{\\{\\{\\{\\{\\{\\{\\{\\{\\{\\-++y\14\\{\\-y*\\\'\\{\\{\\{\a4\00\n\b4\\{\\{O\03x8+++++++++++++O-++\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00H\00\00\00\00\00\00\00\00\00*++++++++++++++++++++++++++\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00++++++++\07\00HVVVVVVVV\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00+++++++++++++UVVVVVVVVVVVV\0e\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00$+++++++++++\07\00VVVVVVVVVVVV\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00$++++++++++++++++\07\00\00\00\00VVVVVVVVVVVVVVVVV\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00*++++++++++VVVVVVVVVV\0e\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00*++++++++++VVVVVVVVVV\0e\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00+++++++++++UVVVVVVVVVV\0e\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -195,16 +195,16 @@
  (data (i32.const 19852) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00=\00 \00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 48))
- (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 144))
+ (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 176))
+ (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 208))
  (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
- (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
  (global $~lib/util/casemap/SPECIALS_UPPER i32 (i32.const 320))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/memory/__heap_base i32 (i32.const 19916))
  (export "memory" (memory $0))
@@ -245,7 +245,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 96
+   i32.const 128
    i32.const 153
    i32.const 17
    call $~lib/builtins/abort
@@ -265,7 +265,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 96
+   i32.const 128
    i32.const 153
    i32.const 17
    call $~lib/builtins/abort
@@ -321,7 +321,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 272
    i32.const 14
    call $~lib/builtins/abort
@@ -348,7 +348,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 274
    i32.const 14
    call $~lib/builtins/abort
@@ -402,7 +402,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 287
    i32.const 14
    call $~lib/builtins/abort
@@ -534,7 +534,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 200
    i32.const 14
    call $~lib/builtins/abort
@@ -551,7 +551,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 202
    i32.const 14
    call $~lib/builtins/abort
@@ -646,7 +646,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 192
+    i32.const 256
     i32.const 223
     i32.const 16
     call $~lib/builtins/abort
@@ -711,7 +711,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 238
    i32.const 14
    call $~lib/builtins/abort
@@ -729,7 +729,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 239
    i32.const 14
    call $~lib/builtins/abort
@@ -788,7 +788,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 255
    i32.const 14
    call $~lib/builtins/abort
@@ -893,7 +893,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 380
    i32.const 14
    call $~lib/builtins/abort
@@ -936,7 +936,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 192
+    i32.const 256
     i32.const 387
     i32.const 16
     call $~lib/builtins/abort
@@ -969,7 +969,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 192
+    i32.const 256
     i32.const 400
     i32.const 5
     call $~lib/builtins/abort
@@ -1208,8 +1208,8 @@
   i32.const 1073741820
   i32.ge_u
   if
+   i32.const 64
    i32.const 256
-   i32.const 192
    i32.const 461
    i32.const 30
    call $~lib/builtins/abort
@@ -1293,7 +1293,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 333
    i32.const 14
    call $~lib/builtins/abort
@@ -1358,7 +1358,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 192
+     i32.const 256
      i32.const 346
      i32.const 18
      call $~lib/builtins/abort
@@ -1509,7 +1509,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 360
    i32.const 14
    call $~lib/builtins/abort
@@ -1618,7 +1618,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 192
+    i32.const 256
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -1638,7 +1638,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 192
+   i32.const 256
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -1693,7 +1693,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 96
+   i32.const 128
    i32.const 142
    i32.const 5
    call $~lib/builtins/abort
@@ -1708,7 +1708,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 96
+   i32.const 128
    i32.const 144
    i32.const 16
    call $~lib/builtins/abort
@@ -1723,7 +1723,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 96
+   i32.const 128
    i32.const 145
    i32.const 16
    call $~lib/builtins/abort
@@ -1738,7 +1738,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 96
+   i32.const 128
    i32.const 146
    i32.const 17
    call $~lib/builtins/abort
@@ -1753,7 +1753,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 96
+   i32.const 128
    i32.const 147
    i32.const 17
    call $~lib/builtins/abort
@@ -1785,219 +1785,6 @@
   local.get $1
   i32.store offset=16
  )
- (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i64)
-  (local $10 i32)
-  block $~lib/util/memory/memset|inlined.0
-   local.get $0
-   local.set $5
-   local.get $1
-   local.set $4
-   local.get $2
-   local.set $3
-   i32.const 0
-   i32.const 1
-   i32.gt_s
-   drop
-   local.get $3
-   i32.eqz
-   if
-    br $~lib/util/memory/memset|inlined.0
-   end
-   local.get $5
-   local.get $3
-   i32.add
-   i32.const 4
-   i32.sub
-   local.set $6
-   local.get $5
-   local.get $4
-   i32.store8
-   local.get $6
-   local.get $4
-   i32.store8 offset=3
-   local.get $3
-   i32.const 2
-   i32.le_u
-   if
-    br $~lib/util/memory/memset|inlined.0
-   end
-   local.get $5
-   local.get $4
-   i32.store8 offset=1
-   local.get $5
-   local.get $4
-   i32.store8 offset=2
-   local.get $6
-   local.get $4
-   i32.store8 offset=2
-   local.get $6
-   local.get $4
-   i32.store8 offset=1
-   local.get $3
-   i32.const 6
-   i32.le_u
-   if
-    br $~lib/util/memory/memset|inlined.0
-   end
-   local.get $5
-   local.get $4
-   i32.store8 offset=3
-   local.get $6
-   local.get $4
-   i32.store8
-   local.get $3
-   i32.const 8
-   i32.le_u
-   if
-    br $~lib/util/memory/memset|inlined.0
-   end
-   i32.const 0
-   local.get $5
-   i32.sub
-   i32.const 3
-   i32.and
-   local.set $7
-   local.get $5
-   local.get $7
-   i32.add
-   local.set $5
-   local.get $3
-   local.get $7
-   i32.sub
-   local.set $3
-   local.get $3
-   i32.const -4
-   i32.and
-   local.set $3
-   i32.const -1
-   i32.const 255
-   i32.div_u
-   local.get $4
-   i32.const 255
-   i32.and
-   i32.mul
-   local.set $8
-   local.get $5
-   local.get $3
-   i32.add
-   i32.const 28
-   i32.sub
-   local.set $6
-   local.get $5
-   local.get $8
-   i32.store
-   local.get $6
-   local.get $8
-   i32.store offset=24
-   local.get $3
-   i32.const 8
-   i32.le_u
-   if
-    br $~lib/util/memory/memset|inlined.0
-   end
-   local.get $5
-   local.get $8
-   i32.store offset=4
-   local.get $5
-   local.get $8
-   i32.store offset=8
-   local.get $6
-   local.get $8
-   i32.store offset=16
-   local.get $6
-   local.get $8
-   i32.store offset=20
-   local.get $3
-   i32.const 24
-   i32.le_u
-   if
-    br $~lib/util/memory/memset|inlined.0
-   end
-   local.get $5
-   local.get $8
-   i32.store offset=12
-   local.get $5
-   local.get $8
-   i32.store offset=16
-   local.get $5
-   local.get $8
-   i32.store offset=20
-   local.get $5
-   local.get $8
-   i32.store offset=24
-   local.get $6
-   local.get $8
-   i32.store
-   local.get $6
-   local.get $8
-   i32.store offset=4
-   local.get $6
-   local.get $8
-   i32.store offset=8
-   local.get $6
-   local.get $8
-   i32.store offset=12
-   i32.const 24
-   local.get $5
-   i32.const 4
-   i32.and
-   i32.add
-   local.set $7
-   local.get $5
-   local.get $7
-   i32.add
-   local.set $5
-   local.get $3
-   local.get $7
-   i32.sub
-   local.set $3
-   local.get $8
-   i64.extend_i32_u
-   local.get $8
-   i64.extend_i32_u
-   i64.const 32
-   i64.shl
-   i64.or
-   local.set $9
-   loop $while-continue|0
-    local.get $3
-    i32.const 32
-    i32.ge_u
-    local.set $10
-    local.get $10
-    if
-     local.get $5
-     local.get $9
-     i64.store
-     local.get $5
-     local.get $9
-     i64.store offset=8
-     local.get $5
-     local.get $9
-     i64.store offset=16
-     local.get $5
-     local.get $9
-     i64.store offset=24
-     local.get $3
-     i32.const 32
-     i32.sub
-     local.set $3
-     local.get $5
-     i32.const 32
-     i32.add
-     local.set $5
-     br $while-continue|0
-    end
-   end
-  end
- )
  (func $~lib/rt/tcms/Object#get:size (param $0 i32) (result i32)
   i32.const 4
   local.get $0
@@ -2012,6 +1799,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  local.get $0
+  i32.const 1073741804
+  i32.ge_u
+  if
+   i32.const 64
+   i32.const 128
+   i32.const 245
+   i32.const 31
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/rt/tcms/state
   i32.const 0
   i32.eq
@@ -2043,10 +1841,6 @@
   i32.const 20
   i32.add
   local.set $4
-  local.get $4
-  i32.const 0
-  local.get $0
-  call $~lib/memory/memory.fill
   global.get $~lib/rt/tcms/total
   i32.const 1
   i32.add
@@ -2255,51 +2049,6 @@
    end
   end
   local.get $2
- )
- (func $~lib/rt/tcms/Object#get:next (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
- )
- (func $~lib/rt/tlsf/checkUsedBlock (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 4
-  i32.sub
-  local.set $1
-  local.get $0
-  i32.const 0
-  i32.ne
-  if (result i32)
-   local.get $0
-   i32.const 15
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  if (result i32)
-   local.get $1
-   i32.load
-   i32.const 1
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 192
-   i32.const 564
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
  )
  (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -3554,6 +3303,43 @@
    end
   end
  )
+ (func $~lib/rt/tlsf/checkUsedBlock (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 4
+  i32.sub
+  local.set $1
+  local.get $0
+  i32.const 0
+  i32.ne
+  if (result i32)
+   local.get $0
+   i32.const 15
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  if (result i32)
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 256
+   i32.const 564
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+ )
  (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   i32.const 0
   drop
@@ -3714,6 +3500,14 @@
   i32.const 4
   i32.add
  )
+ (func $~lib/rt/tcms/Object#get:next (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  i32.const 3
+  i32.const -1
+  i32.xor
+  i32.and
+ )
  (func $~lib/rt/tcms/__renew (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -3721,23 +3515,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  global.get $~lib/rt/tcms/state
-  i32.const 0
-  i32.eq
-  if
-   call $~lib/rt/tcms/init
-  end
-  local.get $1
-  i32.const 1073741804
-  i32.gt_u
-  if
-   i32.const 256
-   i32.const 96
-   i32.const 261
-   i32.const 30
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $0
   local.set $2
   local.get $2
@@ -3746,24 +3523,50 @@
   local.set $3
   local.get $0
   global.get $~lib/memory/__heap_base
-  i32.gt_u
+  i32.lt_u
   if
-   global.get $~lib/rt/tcms/total
-   i32.const 1
-   i32.sub
-   global.set $~lib/rt/tcms/total
-   global.get $~lib/rt/tcms/totalMem
+   local.get $1
    local.get $3
-   call $~lib/rt/tcms/Object#get:size
-   i32.sub
-   global.set $~lib/rt/tcms/totalMem
+   i32.load offset=12
+   call $~lib/rt/tcms/__new
+   local.set $2
+   local.get $2
+   local.get $0
+   local.get $1
+   local.tee $4
+   local.get $3
+   i32.load offset=16
+   local.tee $5
+   local.get $4
+   local.get $5
+   i32.lt_u
+   select
+   call $~lib/memory/memory.copy
+   local.get $2
+   return
   end
+  local.get $1
+  i32.const 1073741804
+  i32.ge_u
+  if
+   i32.const 64
+   i32.const 128
+   i32.const 267
+   i32.const 31
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/rt/tcms/state
+  i32.const 0
+  i32.eq
+  if
+   call $~lib/rt/tcms/init
+  end
+  global.get $~lib/rt/tcms/totalMem
   local.get $3
-  call $~lib/rt/tcms/Object#get:next
-  local.set $4
-  local.get $3
-  i32.load offset=8
-  local.set $5
+  call $~lib/rt/tcms/Object#get:size
+  i32.sub
+  global.set $~lib/rt/tcms/totalMem
   local.get $0
   i32.const 16
   i32.sub
@@ -3775,118 +3578,57 @@
   i32.add
   local.set $6
   local.get $6
-  local.set $2
-  local.get $2
+  local.set $5
+  local.get $5
   i32.const 20
   i32.sub
   local.set $7
   local.get $7
   local.get $1
   call $~lib/rt/tcms/Object#set:rtSize
-  local.get $4
-  if
-   i32.const 1
-   drop
-   local.get $5
-   if (result i32)
-    local.get $5
-    local.get $7
-    i32.load offset=8
-    i32.eq
-   else
-    i32.const 0
-   end
-   if (result i32)
-    local.get $4
-    local.get $7
-    call $~lib/rt/tcms/Object#get:next
-    i32.eq
-   else
-    i32.const 0
-   end
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 96
-    i32.const 274
-    i32.const 16
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $4
+  i32.const 1
+  drop
+  local.get $7
+  call $~lib/rt/tcms/Object#get:next
+  i32.const 0
+  i32.ne
+  if (result i32)
    local.get $7
-   call $~lib/rt/tcms/Object#set:prev
-   local.get $5
-   local.get $7
-   call $~lib/rt/tcms/Object#set:next
-   global.get $~lib/rt/tcms/iter
-   local.get $3
-   i32.eq
-   if
-    local.get $7
-    global.set $~lib/rt/tcms/iter
-   end
+   i32.load offset=8
+   i32.const 0
+   i32.ne
   else
-   i32.const 1
-   drop
-   local.get $5
-   i32.eqz
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 96
-    i32.const 279
-    i32.const 16
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $6
-   global.get $~lib/memory/__heap_base
-   i32.gt_u
-   if
-    i32.const 1
-    drop
-    local.get $7
-    call $~lib/rt/tcms/Object#get:next
-    i32.eqz
-    if (result i32)
-     local.get $7
-     i32.load offset=8
-     i32.eqz
-    else
-     i32.const 0
-    end
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 96
-     i32.const 282
-     i32.const 18
-     call $~lib/builtins/abort
-     unreachable
-    end
-    global.get $~lib/rt/tcms/fromSpace
-    local.get $7
-    call $~lib/rt/tcms/ObjectList#push
-    local.get $7
-    global.get $~lib/rt/tcms/white
-    call $~lib/rt/tcms/Object#set:color
-   end
+   i32.const 0
   end
-  local.get $6
-  global.get $~lib/memory/__heap_base
-  i32.gt_u
+  i32.eqz
   if
-   global.get $~lib/rt/tcms/total
-   i32.const 1
-   i32.add
-   global.set $~lib/rt/tcms/total
-   global.get $~lib/rt/tcms/totalMem
-   local.get $7
-   call $~lib/rt/tcms/Object#get:size
-   i32.add
-   global.set $~lib/rt/tcms/totalMem
+   i32.const 0
+   i32.const 128
+   i32.const 273
+   i32.const 14
+   call $~lib/builtins/abort
+   unreachable
   end
+  local.get $7
+  call $~lib/rt/tcms/Object#get:next
+  local.get $7
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $7
+  i32.load offset=8
+  local.get $7
+  call $~lib/rt/tcms/Object#set:next
+  global.get $~lib/rt/tcms/iter
+  local.get $3
+  i32.eq
+  if
+   local.get $7
+   global.set $~lib/rt/tcms/iter
+  end
+  global.get $~lib/rt/tcms/totalMem
+  local.get $7
+  call $~lib/rt/tcms/Object#get:size
+  i32.add
+  global.set $~lib/rt/tcms/totalMem
   local.get $6
  )
  (func $~lib/string/String#toUpperCase (param $0 i32) (result i32)

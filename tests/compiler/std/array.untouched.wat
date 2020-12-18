@@ -35,11 +35,11 @@
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 60) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 112) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 140) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 208) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 236) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 300) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 108) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 172) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 240) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 272) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 300) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 364) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00\00\00")
  (data (i32.const 412) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
  (data (i32.const 476) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00\00\00\00\00\00\00")
@@ -295,15 +295,15 @@
  (table $0 57 funcref)
  (elem (i32.const 1) $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String|null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|0)
  (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 112))
- (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 208))
+ (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 240))
+ (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 272))
  (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
- (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $std/array/i (mut i32) (i32.const 0))
@@ -326,6 +326,7 @@
  (global $~lib/rt/tcms/depth (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/threshold (mut i32) (i32.const 100))
  (global $~lib/rt/tcms/debt (mut i32) (i32.const 0))
+ (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 13196))
  (global $std/array/ArrayU32 i32 (i32.const 40))
@@ -440,7 +441,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 160
+   i32.const 192
    i32.const 153
    i32.const 17
    call $~lib/builtins/abort
@@ -460,7 +461,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 160
+   i32.const 192
    i32.const 153
    i32.const 17
    call $~lib/builtins/abort
@@ -516,7 +517,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 272
    i32.const 14
    call $~lib/builtins/abort
@@ -543,7 +544,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 274
    i32.const 14
    call $~lib/builtins/abort
@@ -597,7 +598,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 287
    i32.const 14
    call $~lib/builtins/abort
@@ -729,7 +730,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 200
    i32.const 14
    call $~lib/builtins/abort
@@ -746,7 +747,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 202
    i32.const 14
    call $~lib/builtins/abort
@@ -841,7 +842,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 256
+    i32.const 320
     i32.const 223
     i32.const 16
     call $~lib/builtins/abort
@@ -906,7 +907,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 238
    i32.const 14
    call $~lib/builtins/abort
@@ -924,7 +925,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 239
    i32.const 14
    call $~lib/builtins/abort
@@ -983,7 +984,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 255
    i32.const 14
    call $~lib/builtins/abort
@@ -1088,7 +1089,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 380
    i32.const 14
    call $~lib/builtins/abort
@@ -1131,7 +1132,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 256
+    i32.const 320
     i32.const 387
     i32.const 16
     call $~lib/builtins/abort
@@ -1164,7 +1165,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 256
+    i32.const 320
     i32.const 400
     i32.const 5
     call $~lib/builtins/abort
@@ -1403,8 +1404,8 @@
   i32.const 1073741820
   i32.ge_u
   if
+   i32.const 128
    i32.const 320
-   i32.const 256
    i32.const 461
    i32.const 30
    call $~lib/builtins/abort
@@ -1488,7 +1489,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 333
    i32.const 14
    call $~lib/builtins/abort
@@ -1553,7 +1554,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 256
+     i32.const 320
      i32.const 346
      i32.const 18
      call $~lib/builtins/abort
@@ -1704,7 +1705,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 360
    i32.const 14
    call $~lib/builtins/abort
@@ -1813,7 +1814,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 256
+    i32.const 320
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -1833,7 +1834,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -1888,7 +1889,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
+   i32.const 192
    i32.const 142
    i32.const 5
    call $~lib/builtins/abort
@@ -1903,7 +1904,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 160
+   i32.const 192
    i32.const 144
    i32.const 16
    call $~lib/builtins/abort
@@ -1918,7 +1919,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 160
+   i32.const 192
    i32.const 145
    i32.const 16
    call $~lib/builtins/abort
@@ -1933,7 +1934,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 160
+   i32.const 192
    i32.const 146
    i32.const 17
    call $~lib/builtins/abort
@@ -1948,7 +1949,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 160
+   i32.const 192
    i32.const 147
    i32.const 17
    call $~lib/builtins/abort
@@ -1979,6 +1980,73 @@
   local.get $0
   local.get $1
   i32.store offset=16
+ )
+ (func $~lib/rt/tcms/Object#get:size (param $0 i32) (result i32)
+  i32.const 4
+  local.get $0
+  i32.load
+  i32.const 3
+  i32.const -1
+  i32.xor
+  i32.and
+  i32.add
+ )
+ (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  i32.const 1073741804
+  i32.ge_u
+  if
+   i32.const 128
+   i32.const 192
+   i32.const 245
+   i32.const 31
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/rt/tcms/state
+  i32.const 0
+  i32.eq
+  if
+   call $~lib/rt/tcms/init
+  end
+  i32.const 16
+  local.get $0
+  i32.add
+  call $~lib/rt/tlsf/__alloc
+  i32.const 4
+  i32.sub
+  local.set $2
+  global.get $~lib/rt/tcms/fromSpace
+  local.get $2
+  call $~lib/rt/tcms/ObjectList#push
+  local.get $2
+  global.get $~lib/rt/tcms/white
+  call $~lib/rt/tcms/Object#set:color
+  local.get $2
+  local.get $1
+  call $~lib/rt/tcms/Object#set:rtId
+  local.get $2
+  local.get $0
+  call $~lib/rt/tcms/Object#set:rtSize
+  local.get $2
+  local.set $3
+  local.get $3
+  i32.const 20
+  i32.add
+  local.set $4
+  global.get $~lib/rt/tcms/total
+  i32.const 1
+  i32.add
+  global.set $~lib/rt/tcms/total
+  global.get $~lib/rt/tcms/totalMem
+  local.get $2
+  call $~lib/rt/tcms/Object#get:size
+  i32.add
+  global.set $~lib/rt/tcms/totalMem
+  local.get $4
  )
  (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -2193,66 +2261,6 @@
    end
   end
  )
- (func $~lib/rt/tcms/Object#get:size (param $0 i32) (result i32)
-  i32.const 4
-  local.get $0
-  i32.load
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.add
- )
- (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  global.get $~lib/rt/tcms/state
-  i32.const 0
-  i32.eq
-  if
-   call $~lib/rt/tcms/init
-  end
-  i32.const 16
-  local.get $0
-  i32.add
-  call $~lib/rt/tlsf/__alloc
-  i32.const 4
-  i32.sub
-  local.set $2
-  global.get $~lib/rt/tcms/fromSpace
-  local.get $2
-  call $~lib/rt/tcms/ObjectList#push
-  local.get $2
-  global.get $~lib/rt/tcms/white
-  call $~lib/rt/tcms/Object#set:color
-  local.get $2
-  local.get $1
-  call $~lib/rt/tcms/Object#set:rtId
-  local.get $2
-  local.get $0
-  call $~lib/rt/tcms/Object#set:rtSize
-  local.get $2
-  local.set $3
-  local.get $3
-  i32.const 20
-  i32.add
-  local.set $4
-  local.get $4
-  i32.const 0
-  local.get $0
-  call $~lib/memory/memory.fill
-  global.get $~lib/rt/tcms/total
-  i32.const 1
-  i32.add
-  global.set $~lib/rt/tcms/total
-  global.get $~lib/rt/tcms/totalMem
-  local.get $2
-  call $~lib/rt/tcms/Object#get:size
-  i32.add
-  global.set $~lib/rt/tcms/totalMem
-  local.get $4
- )
  (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
@@ -2287,7 +2295,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 160
+    i32.const 192
     i32.const 120
     i32.const 7
     call $~lib/builtins/abort
@@ -2301,7 +2309,7 @@
   i32.eqz
   if (result i32)
    i32.const 0
-   i32.const 160
+   i32.const 192
    i32.const 123
    i32.const 17
    call $~lib/builtins/abort
@@ -2326,7 +2334,7 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 160
+    i32.const 192
     i32.const 130
     i32.const 30
     call $~lib/builtins/abort
@@ -2366,8 +2374,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
-   i32.const 299
+   i32.const 192
+   i32.const 286
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -4361,7 +4369,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 320
    i32.const 564
    i32.const 3
    call $~lib/builtins/abort
@@ -4536,23 +4544,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  global.get $~lib/rt/tcms/state
-  i32.const 0
-  i32.eq
-  if
-   call $~lib/rt/tcms/init
-  end
-  local.get $1
-  i32.const 1073741804
-  i32.gt_u
-  if
-   i32.const 320
-   i32.const 160
-   i32.const 261
-   i32.const 30
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $0
   local.set $2
   local.get $2
@@ -4561,24 +4552,50 @@
   local.set $3
   local.get $0
   global.get $~lib/memory/__heap_base
-  i32.gt_u
+  i32.lt_u
   if
-   global.get $~lib/rt/tcms/total
-   i32.const 1
-   i32.sub
-   global.set $~lib/rt/tcms/total
-   global.get $~lib/rt/tcms/totalMem
+   local.get $1
    local.get $3
-   call $~lib/rt/tcms/Object#get:size
-   i32.sub
-   global.set $~lib/rt/tcms/totalMem
+   i32.load offset=12
+   call $~lib/rt/tcms/__new
+   local.set $2
+   local.get $2
+   local.get $0
+   local.get $1
+   local.tee $4
+   local.get $3
+   i32.load offset=16
+   local.tee $5
+   local.get $4
+   local.get $5
+   i32.lt_u
+   select
+   call $~lib/memory/memory.copy
+   local.get $2
+   return
   end
+  local.get $1
+  i32.const 1073741804
+  i32.ge_u
+  if
+   i32.const 128
+   i32.const 192
+   i32.const 267
+   i32.const 31
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/rt/tcms/state
+  i32.const 0
+  i32.eq
+  if
+   call $~lib/rt/tcms/init
+  end
+  global.get $~lib/rt/tcms/totalMem
   local.get $3
-  call $~lib/rt/tcms/Object#get:next
-  local.set $4
-  local.get $3
-  i32.load offset=8
-  local.set $5
+  call $~lib/rt/tcms/Object#get:size
+  i32.sub
+  global.set $~lib/rt/tcms/totalMem
   local.get $0
   i32.const 16
   i32.sub
@@ -4590,118 +4607,57 @@
   i32.add
   local.set $6
   local.get $6
-  local.set $2
-  local.get $2
+  local.set $5
+  local.get $5
   i32.const 20
   i32.sub
   local.set $7
   local.get $7
   local.get $1
   call $~lib/rt/tcms/Object#set:rtSize
-  local.get $4
-  if
-   i32.const 1
-   drop
-   local.get $5
-   if (result i32)
-    local.get $5
-    local.get $7
-    i32.load offset=8
-    i32.eq
-   else
-    i32.const 0
-   end
-   if (result i32)
-    local.get $4
-    local.get $7
-    call $~lib/rt/tcms/Object#get:next
-    i32.eq
-   else
-    i32.const 0
-   end
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 160
-    i32.const 274
-    i32.const 16
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $4
+  i32.const 1
+  drop
+  local.get $7
+  call $~lib/rt/tcms/Object#get:next
+  i32.const 0
+  i32.ne
+  if (result i32)
    local.get $7
-   call $~lib/rt/tcms/Object#set:prev
-   local.get $5
-   local.get $7
-   call $~lib/rt/tcms/Object#set:next
-   global.get $~lib/rt/tcms/iter
-   local.get $3
-   i32.eq
-   if
-    local.get $7
-    global.set $~lib/rt/tcms/iter
-   end
+   i32.load offset=8
+   i32.const 0
+   i32.ne
   else
-   i32.const 1
-   drop
-   local.get $5
-   i32.eqz
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 160
-    i32.const 279
-    i32.const 16
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $6
-   global.get $~lib/memory/__heap_base
-   i32.gt_u
-   if
-    i32.const 1
-    drop
-    local.get $7
-    call $~lib/rt/tcms/Object#get:next
-    i32.eqz
-    if (result i32)
-     local.get $7
-     i32.load offset=8
-     i32.eqz
-    else
-     i32.const 0
-    end
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 160
-     i32.const 282
-     i32.const 18
-     call $~lib/builtins/abort
-     unreachable
-    end
-    global.get $~lib/rt/tcms/fromSpace
-    local.get $7
-    call $~lib/rt/tcms/ObjectList#push
-    local.get $7
-    global.get $~lib/rt/tcms/white
-    call $~lib/rt/tcms/Object#set:color
-   end
+   i32.const 0
   end
-  local.get $6
-  global.get $~lib/memory/__heap_base
-  i32.gt_u
+  i32.eqz
   if
-   global.get $~lib/rt/tcms/total
-   i32.const 1
-   i32.add
-   global.set $~lib/rt/tcms/total
-   global.get $~lib/rt/tcms/totalMem
-   local.get $7
-   call $~lib/rt/tcms/Object#get:size
-   i32.add
-   global.set $~lib/rt/tcms/totalMem
+   i32.const 0
+   i32.const 192
+   i32.const 273
+   i32.const 14
+   call $~lib/builtins/abort
+   unreachable
   end
+  local.get $7
+  call $~lib/rt/tcms/Object#get:next
+  local.get $7
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $7
+  i32.load offset=8
+  local.get $7
+  call $~lib/rt/tcms/Object#set:next
+  global.get $~lib/rt/tcms/iter
+  local.get $3
+  i32.eq
+  if
+   local.get $7
+   global.set $~lib/rt/tcms/iter
+  end
+  global.get $~lib/rt/tcms/totalMem
+  local.get $7
+  call $~lib/rt/tcms/Object#get:size
+  i32.add
+  global.set $~lib/rt/tcms/totalMem
   local.get $6
  )
  (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
@@ -17890,6 +17846,30 @@
   end
   local.get $9
  )
+ (func $~lib/rt/tcms/__visit (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.eqz
+  if
+   return
+  end
+  local.get $0
+  local.set $2
+  local.get $2
+  i32.const 20
+  i32.sub
+  local.set $2
+  i32.const 0
+  drop
+  local.get $2
+  call $~lib/rt/tcms/Object#get:color
+  global.get $~lib/rt/tcms/white
+  i32.eq
+  if
+   local.get $2
+   call $~lib/rt/tcms/Object#makeGray
+  end
+ )
  (func $~lib/rt/tcms/free (param $0 i32)
   local.get $0
   global.get $~lib/memory/__heap_base
@@ -17978,6 +17958,9 @@
      call $~lib/rt/__visit_globals
      i32.const 0
      call $~lib/rt/tcms/__visit_externals
+     global.get $~lib/rt/__returnee
+     i32.const 0
+     call $~lib/rt/tcms/__visit
      global.get $~lib/rt/tcms/iter
      call $~lib/rt/tcms/Object#get:next
      local.set $0
@@ -18021,8 +18004,8 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 160
-     i32.const 201
+     i32.const 192
+     i32.const 202
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -18043,7 +18026,7 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 160
+    i32.const 192
     i32.const 153
     i32.const 17
     call $~lib/builtins/abort
@@ -18068,8 +18051,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 160
-   i32.const 372
+   i32.const 192
+   i32.const 359
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -24755,30 +24738,6 @@
   i32.const 7
   call $~lib/builtins/abort
   unreachable
- )
- (func $~lib/rt/tcms/__visit (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.eqz
-  if
-   return
-  end
-  local.get $0
-  local.set $2
-  local.get $2
-  i32.const 20
-  i32.sub
-  local.set $2
-  i32.const 0
-  drop
-  local.get $2
-  call $~lib/rt/tcms/Object#get:color
-  global.get $~lib/rt/tcms/white
-  i32.eq
-  if
-   local.get $2
-   call $~lib/rt/tcms/Object#makeGray
-  end
  )
  (func $~lib/array/Array<u32>#__visit (param $0 i32) (param $1 i32)
   i32.const 0

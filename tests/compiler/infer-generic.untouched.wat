@@ -16,6 +16,7 @@
  (elem (i32.const 1) $start:infer-generic~anonymous|0)
  (global $infer-generic/arr i32 (i32.const 128))
  (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
  (export "test2" (func $infer-generic/test2))
@@ -124,6 +125,8 @@
  (func $infer-generic/test2 (param $0 i32) (result i32)
   local.get $0
   call $infer-generic/inferEncapsulatedClass<f32>
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $infer-generic/inferEncapsulatedFunction<f32,f64> (param $0 i32) (result i32)
   local.get $0
@@ -131,6 +134,8 @@
  (func $infer-generic/test3 (param $0 i32) (result i32)
   local.get $0
   call $infer-generic/inferEncapsulatedFunction<f32,f64>
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $infer-generic/inferEncapsulatedFunctionMixed<f32,f64> (param $0 i32) (result i32)
   local.get $0
@@ -138,6 +143,8 @@
  (func $infer-generic/test4 (param $0 i32) (result i32)
   local.get $0
   call $infer-generic/inferEncapsulatedFunctionMixed<f32,f64>
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $~start
   call $start:infer-generic

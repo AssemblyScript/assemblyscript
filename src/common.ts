@@ -236,6 +236,7 @@ export namespace CommonNames {
   export const typeinfo = "__typeinfo";
   export const instanceof_ = "__instanceof";
   export const visit = "__visit";
+  export const returnee = "__returnee";
   export const newBuffer = "__newBuffer";
   export const newArray = "__newArray";
   export const BLOCK = "~lib/rt/common/BLOCK";

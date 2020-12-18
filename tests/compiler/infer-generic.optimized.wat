@@ -14,6 +14,7 @@
  (data (i32.const 1192) "\04\00\00\00\08\00\00\00\01")
  (table $0 2 funcref)
  (elem (i32.const 1) $start:infer-generic~anonymous|0)
+ (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
  (export "test2" (func $infer-generic/test2))
@@ -33,6 +34,8 @@
  )
  (func $infer-generic/test2 (param $0 i32) (result i32)
   local.get $0
+  global.set $~lib/rt/__returnee
+  global.get $~lib/rt/__returnee
  )
  (func $~start
   (local $0 i32)

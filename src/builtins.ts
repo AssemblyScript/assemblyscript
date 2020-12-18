@@ -116,7 +116,6 @@ export namespace BuiltinNames {
   // compiler-generated
   export const start = "~start";
   export const started = "~started";
-  export const depth = "~depth";
   export const argumentsLength = "~argumentsLength";
   export const setArgumentsLength = "~setArgumentsLength";
 
