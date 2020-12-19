@@ -460,10 +460,12 @@ export class Compiler extends DiagnosticEmitter {
       if (!startIsEmpty && explicitStart) {
         module.addGlobal(BuiltinNames.started, NativeType.I32, true, module.i32(0));
         startFunctionBody.unshift(
+          module.global_set(BuiltinNames.started, module.i32(1))
+        );
+        startFunctionBody.unshift(
           module.if(
             module.global_get(BuiltinNames.started, NativeType.I32),
-            module.return(),
-            module.global_set(BuiltinNames.started, module.i32(1))
+            module.return()
           )
         );
       }
@@ -5354,7 +5356,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U32: {
         let instance = this.i32PowInstance;
         if (!instance) {
-          let prototype = this.program.lookupGlobal(CommonNames.ipow32);
+          let prototype = this.program.lookup(CommonNames.ipow32);
           if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5380,7 +5382,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: {
         let instance = this.i64PowInstance;
         if (!instance) {
-          let prototype = this.program.lookupGlobal(CommonNames.ipow64);
+          let prototype = this.program.lookup(CommonNames.ipow64);
           if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5401,7 +5403,7 @@ export class Compiler extends DiagnosticEmitter {
         let isWasm64 = this.options.isWasm64;
         let instance = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
         if (!instance) {
-          let prototype = this.program.lookupGlobal(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
+          let prototype = this.program.lookup(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
           if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5425,7 +5427,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: {
         let instance = this.f32PowInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Mathf);
+          let namespace = this.program.lookup(CommonNames.Mathf);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5454,7 +5456,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         let instance = this.f64PowInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Math);
+          let namespace = this.program.lookup(CommonNames.Math);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5592,7 +5594,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: {
         let instance = this.f32ModInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Mathf);
+          let namespace = this.program.lookup(CommonNames.Mathf);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5620,7 +5622,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         let instance = this.f64ModInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Math);
+          let namespace = this.program.lookup(CommonNames.Math);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,

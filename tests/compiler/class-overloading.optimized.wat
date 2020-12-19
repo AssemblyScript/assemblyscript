@@ -688,10 +688,9 @@
   global.get $~started
   if
    return
-  else
-   i32.const 1
-   global.set $~started
   end
+  i32.const 1
+  global.set $~started
   call $start:class-overloading
  )
  (func $class-overloading/A#a<i32>@virtual (param $0 i32)

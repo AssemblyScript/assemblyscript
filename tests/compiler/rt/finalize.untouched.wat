@@ -2109,10 +2109,9 @@
   global.get $~started
   if
    return
-  else
-   i32.const 1
-   global.set $~started
   end
+  i32.const 1
+  global.set $~started
   call $start:rt/finalize
  )
  (func $~lib/staticarray/StaticArray<usize>#__uget (param $0 i32) (param $1 i32) (result i32)

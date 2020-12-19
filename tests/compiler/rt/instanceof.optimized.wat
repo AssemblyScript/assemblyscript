@@ -408,10 +408,9 @@
   global.get $~started
   if
    return
-  else
-   i32.const 1
-   global.set $~started
   end
+  i32.const 1
+  global.set $~started
   call $start:rt/instanceof
  )
 )

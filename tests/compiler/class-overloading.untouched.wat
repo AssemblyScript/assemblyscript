@@ -1132,10 +1132,9 @@
   global.get $~started
   if
    return
-  else
-   i32.const 1
-   global.set $~started
   end
+  i32.const 1
+  global.set $~started
   call $start:class-overloading
  )
  (func $class-overloading/F#a<i32> (param $0 i32) (param $1 i32)
