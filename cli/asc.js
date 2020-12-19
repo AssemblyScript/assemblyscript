@@ -34,6 +34,11 @@ const fs = require("fs");
 const path = require("path");
 const process = require("process"); // ensure shim
 
+process.exit = ((exit) => function(code) {
+  if (code) console.log(new Error("exit " + code.toString()).stack);
+  exit(code);
+})(process.exit);
+
 const utf8 = require("./util/utf8");
 const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");

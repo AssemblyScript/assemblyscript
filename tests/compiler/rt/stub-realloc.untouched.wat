@@ -1736,10 +1736,9 @@
   global.get $~started
   if
    return
-  else
-   i32.const 1
-   global.set $~started
   end
+  i32.const 1
+  global.set $~started
   global.get $~lib/memory/__heap_base
   i32.const 4
   i32.add

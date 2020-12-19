@@ -595,10 +595,9 @@
   global.get $~started
   if
    return
-  else
-   i32.const 1
-   global.set $~started
   end
+  i32.const 1
+  global.set $~started
   i32.const 1196
   global.set $~lib/rt/stub/startOffset
   i32.const 1196

@@ -631,7 +631,9 @@ export class Program extends DiagnosticEmitter {
 
   /** Gets the standard `abort` instance, if not explicitly disabled. */
   get abortInstance(): Function | null {
-    return this.lookupFunction(CommonNames.abort);
+    var prototype = this.lookup(CommonNames.abort);
+    if (!prototype || prototype.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
+    return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
   }
 
   // Runtime interface
@@ -1207,7 +1209,7 @@ export class Program extends DiagnosticEmitter {
           if (element) {
             file.ensureExport(exportName, element);
           } else {
-            let globalElement = this.lookupGlobal(localName);
+            let globalElement = this.lookup(localName);
             if (globalElement !== null && isDeclaredElement(globalElement.kind)) { // export { memory }
               file.ensureExport(exportName, <DeclaredElement>globalElement);
             } else {
@@ -1508,12 +1510,24 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Looks up the element of the specified name in the global scope. */
+  lookup(name: string): Element | null {
+    var elements = this.elementsByName;
+    if (elements.has(name)) return assert(elements.get(name));
+    return null;
+  }
+
   /** Requires that a global library element of the specified kind is present and returns it. */
   private require(name: string, kind: ElementKind): Element {
-    var element = this.lookupGlobal(name);
+    var element = this.lookup(name);
     if (!element) throw new Error("Missing standard library component: " + name);
-    if (element.kind != kind) throw Error("Invalid standard library component: " + name);
+    if (element.kind != kind) throw Error("Invalid standard library component kind: " + name);
     return element;
+  }
+
+  /** Requires that a global variable is present and returns it. */
+  private requireGlobal(name: string): Global {
+    return <Global>this.require(name, ElementKind.GLOBAL);
   }
 
   /** Requires that a non-generic global class is present and returns it. */
@@ -1522,13 +1536,6 @@ export class Program extends DiagnosticEmitter {
     var resolved = this.resolver.resolveClass(<ClassPrototype>prototype, null);
     if (!resolved) throw new Error("Invalid standard library class: " + name);
     return resolved;
-  }
-
-  /** Obtains a non-generic global function and returns it. Returns `null` if it does not exist. */
-  private lookupFunction(name: string): Function | null {
-    var prototype = this.lookupGlobal(name);
-    if (!prototype || prototype.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
-    return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
   }
 
   /** Requires that a global function is present and returns it. */
@@ -1611,7 +1618,7 @@ export class Program extends DiagnosticEmitter {
   private registerWrapperClass(type: Type, className: string): void {
     var wrapperClasses = this.wrapperClasses;
     assert(!type.isInternalReference && !wrapperClasses.has(type));
-    var element = assert(this.lookupGlobal(className));
+    var element = assert(this.lookup(className));
     assert(element.kind == ElementKind.CLASS_PROTOTYPE);
     var classElement = assert(this.resolver.resolveClass(<ClassPrototype>element, null));
     classElement.wrappedType = type;
@@ -1677,20 +1684,6 @@ export class Program extends DiagnosticEmitter {
     }
     elementsByName.set(name, element);
     return element;
-  }
-
-  /** Looks up the element of the specified name in the global scope. */
-  lookupGlobal(name: string): Element | null {
-    var elements = this.elementsByName;
-    if (elements.has(name)) return assert(elements.get(name));
-    return null;
-  }
-
-  /** Looks up the element of the specified name in the global scope. Errors if not present. */
-  requireGlobal(name: string): Element {
-    var elements = this.elementsByName;
-    if (elements.has(name)) return assert(elements.get(name));
-    throw new Error("missing global");
   }
 
   /** Tries to locate a foreign file given its normalized path. */
@@ -2527,7 +2520,7 @@ export class Program extends DiagnosticEmitter {
         default: assert(false); // namespace member expected
       }
     }
-    if (original != element) copyMembers(original, element); // retain original parent
+    if (original != element) copyMembers(original, element); // keep original parent
     return element;
   }
 
@@ -3055,7 +3048,7 @@ export class File extends Element {
   lookup(name: string): Element | null {
     var element = this.lookupInSelf(name);
     if (element) return element;
-    return this.program.lookupGlobal(name);
+    return this.program.lookup(name);
   }
 
   /** Ensures that an element is an export of this file. */
@@ -4341,8 +4334,7 @@ export class Class extends TypedElement {
     var program = this.program;
     var payloadSize = this.nextMemoryOffset + overhead;
     var blockSize = program.computeBlockSize(payloadSize, true); // excl. overhead
-    var totalSize = program.blockOverhead + blockSize;
-    var buffer = new Uint8Array(totalSize);
+    var buffer = new Uint8Array(program.blockOverhead + blockSize);
     var OBJECT = program.OBJECTInstance;
     OBJECT.writeField("mmInfo", blockSize, buffer, 0);
     OBJECT.writeField("gcInfo", 1, buffer, 0); // RC = 1

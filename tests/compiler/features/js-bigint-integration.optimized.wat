@@ -20,10 +20,9 @@
   global.get $~started
   if
    return
-  else
-   i32.const 1
-   global.set $~started
   end
+  i32.const 1
+  global.set $~started
   global.get $features/js-bigint-integration/externalValue
   i64.const 9007199254740991
   i64.ne
