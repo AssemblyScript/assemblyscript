@@ -8346,7 +8346,8 @@ export class Compiler extends DiagnosticEmitter {
       // do not attempt to compile if inlined anyway
       if (!instance.hasDecorator(DecoratorFlags.INLINE)) this.compileFunction(instance);
     } else {
-      // clone base constructor if a derived class
+      // clone base constructor if a derived class. note that we cannot just
+      // call the base ctor since the derived class may have additional fields.
       let baseClass = classInstance.base;
       let contextualTypeArguments = uniqueMap(classInstance.contextualTypeArguments);
       if (baseClass) {
@@ -8382,7 +8383,6 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
-      instance.internalName = classInstance.internalName + INSTANCE_DELIMITER + "constructor";
       instance.set(CommonFlags.COMPILED);
       instance.prototype.setResolvedInstance("", instance);
       if (classInstance.is(CommonFlags.MODULE_EXPORT)) {
