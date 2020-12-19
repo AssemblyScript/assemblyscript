@@ -34,8 +34,6 @@ const fs = require("fs");
 const path = require("path");
 const process = require("process"); // ensure shim
 
-Error.stackTraceLimit = 20;
-
 process.exit = ((exit) => function(code) {
   if (code) console.log(new Error("exit " + code.toString()).stack);
   exit(code);
