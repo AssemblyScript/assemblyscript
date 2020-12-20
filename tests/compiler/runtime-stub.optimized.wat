@@ -7,11 +7,11 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1036) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s")
- (data (i32.const 1088) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1036) "<\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s")
+ (data (i32.const 1104) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 ")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 1088))
+ (global $~lib/rt/__rtti_base i32 (i32.const 1104))
  (export "memory" (memory $0))
  (export "__new" (func $~lib/rt/stub/__new))
  (export "__renew" (func $~lib/rt/stub/__renew))
@@ -425,9 +425,9 @@
   global.set $~lib/rt/stub/offset
  )
  (func $~start
-  i32.const 1116
+  i32.const 1132
   global.set $~lib/rt/stub/startOffset
-  i32.const 1116
+  i32.const 1132
   global.set $~lib/rt/stub/offset
  )
 )

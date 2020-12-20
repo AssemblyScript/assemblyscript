@@ -32,10 +32,11 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
       if (a === b || a === null || b === null) return 0;
       var alen = changetype<string>(a).length;
       var blen = changetype<string>(b).length;
-      if (!alen && !blen) return 0;
+      if (!(alen | blen)) return 0;
       if (!alen) return -1;
       if (!blen) return  1;
-      return compareImpl(changetype<string>(a), 0, changetype<string>(b), 0, <usize>min(alen, blen));
+      let res = compareImpl(changetype<string>(a), 0, changetype<string>(b), 0, <usize>min(alen, blen));
+      return res ? res : alen - blen;
     };
   } else {
     return (a: T, b: T): i32 => (i32(a > b) - i32(a < b));

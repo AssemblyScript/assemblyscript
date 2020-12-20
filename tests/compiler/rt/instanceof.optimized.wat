@@ -5,8 +5,8 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1036) " \00\00\00\01\00\00\00\00\00\00\00\01\00\00\00 \00\00\00r\00t\00/\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s")
- (data (i32.const 1088) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\03\00\00\00 \00\00\00\04")
+ (data (i32.const 1036) "<\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00 \00\00\00r\00t\00/\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s")
+ (data (i32.const 1104) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\03\00\00\00 \00\00\00\04")
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $rt/instanceof/animal (mut i32) (i32.const 0))
  (global $rt/instanceof/cat (mut i32) (i32.const 0))
@@ -115,7 +115,7 @@
   i32.sub
   i32.load offset=12
   local.tee $0
-  i32.const 1088
+  i32.const 1104
   i32.load
   i32.le_u
   if
@@ -130,7 +130,7 @@
     local.get $0
     i32.const 3
     i32.shl
-    i32.const 1092
+    i32.const 1108
     i32.add
     i32.load offset=4
     local.tee $0
@@ -141,7 +141,7 @@
  )
  (func $start:rt/instanceof
   (local $0 i32)
-  i32.const 1148
+  i32.const 1164
   global.set $~lib/rt/stub/offset
   i32.const 3
   call $~lib/rt/stub/__new
@@ -408,10 +408,9 @@
   global.get $~started
   if
    return
-  else
-   i32.const 1
-   global.set $~started
   end
+  i32.const 1
+  global.set $~started
   call $start:rt/instanceof
  )
 )

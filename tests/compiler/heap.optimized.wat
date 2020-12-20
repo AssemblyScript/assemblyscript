@@ -9,9 +9,9 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1036) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1100) "(\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1164) "\1e\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00n\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d")
+ (data (i32.const 1036) "<\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1100) "<\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1164) "<\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00n\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $heap/ptr (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -587,10 +587,10 @@
   if
    unreachable
   end
-  i32.const 1216
+  i32.const 1232
   i32.const 0
   i32.store
-  i32.const 2784
+  i32.const 2800
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -601,7 +601,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 1216
+    i32.const 1232
     i32.add
     i32.const 0
     i32.store offset=4
@@ -619,7 +619,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 1216
+      i32.const 1232
       i32.add
       i32.const 0
       i32.store offset=96
@@ -637,13 +637,13 @@
     br $for-loop|0
    end
   end
-  i32.const 1216
-  i32.const 2788
+  i32.const 1232
+  i32.const 2804
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 1216
+  i32.const 1232
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
@@ -1230,7 +1230,7 @@
   i32.and
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 1216
+  i32.const 1228
   i32.ge_u
   if
    local.get $0
@@ -1252,7 +1252,7 @@
    call $~lib/rt/tlsf/initialize
   end
   local.get $0
-  i32.const 1216
+  i32.const 1228
   i32.lt_u
   if
    global.get $~lib/rt/tlsf/ROOT
@@ -1337,7 +1337,7 @@
  )
  (func $~lib/memory/heap.free (param $0 i32)
   local.get $0
-  i32.const 1216
+  i32.const 1228
   i32.ge_u
   if
    global.get $~lib/rt/tlsf/ROOT

@@ -194,7 +194,8 @@ import {
   writeF64,
   uniqueMap,
   isPowerOf2,
-  v128_zero
+  v128_zero,
+  readI32
 } from "./util";
 
 /** Compiler options. */
@@ -459,10 +460,12 @@ export class Compiler extends DiagnosticEmitter {
       if (!startIsEmpty && explicitStart) {
         module.addGlobal(BuiltinNames.started, NativeType.I32, true, module.i32(0));
         startFunctionBody.unshift(
+          module.global_set(BuiltinNames.started, module.i32(1))
+        );
+        startFunctionBody.unshift(
           module.if(
             module.global_get(BuiltinNames.started, NativeType.I32),
-            module.return(),
-            module.global_set(BuiltinNames.started, module.i32(1))
+            module.return()
           )
         );
       }
@@ -1844,26 +1847,23 @@ export class Compiler extends DiagnosticEmitter {
     var memoryOffset = i64_align(this.memoryOffset, alignment);
     var segment = new MemorySegment(buffer, memoryOffset);
     this.memorySegments.push(segment);
-    this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length, 0));
+    this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length));
     return segment;
   }
 
   /** Adds a static memory segment representing a runtime object. */
   addRuntimeMemorySegment(buffer: Uint8Array): MemorySegment {
-    // Runtime objects imply a full BLOCK and OBJECT header, see rt/common.ts
-    // ((memoryOffset + sizeof_usize + AL_MASK) & ~AL_MASK) - sizeof_usize
-    var usizeSize = this.options.usizeType.byteSize;
-    var memoryOffset = i64_sub(i64_align(i64_add(this.memoryOffset, i64_new(usizeSize)), 16), i64_new(usizeSize));
+    var memoryOffset = this.program.computeBlockStart64(this.memoryOffset);
     var segment = new MemorySegment(buffer, memoryOffset);
     this.memorySegments.push(segment);
-    this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length, 0));
+    this.memoryOffset = i64_add(memoryOffset, i64_new(buffer.length));
     return segment;
   }
 
   /** Ensures that a string exists in static memory and returns a pointer to it. Deduplicates. */
   ensureStaticString(stringValue: string): ExpressionRef {
     var program = this.program;
-    var rtHeaderSize = program.runtimeHeaderSize;
+    var totalOverhead = program.totalOverhead;
     var stringInstance = assert(program.stringInstance);
     var stringSegment: MemorySegment;
     var segments = this.stringSegments;
@@ -1873,12 +1873,12 @@ export class Compiler extends DiagnosticEmitter {
       let len = stringValue.length;
       let buf = stringInstance.createBuffer(len << 1);
       for (let i = 0; i < len; ++i) {
-        writeI16(stringValue.charCodeAt(i), buf, rtHeaderSize + (i << 1));
+        writeI16(stringValue.charCodeAt(i), buf, totalOverhead + (i << 1));
       }
       stringSegment = this.addRuntimeMemorySegment(buf);
       segments.set(stringValue, stringSegment);
     }
-    var ptr = i64_add(stringSegment.offset, i64_new(rtHeaderSize));
+    var ptr = i64_add(stringSegment.offset, i64_new(totalOverhead));
     this.currentType = stringInstance.type;
     if (this.options.isWasm64) {
       return this.module.i64(i64_low(ptr), i64_high(ptr));
@@ -1971,19 +1971,18 @@ export class Compiler extends DiagnosticEmitter {
     var arrayBufferInstance = program.arrayBufferInstance;
     var buf = arrayBufferInstance.createBuffer(values.length * elementType.byteSize);
     this.program.OBJECTInstance.writeField("rtId", id, buf, 0); // use specified rtId
-    assert(this.writeStaticBuffer(buf, program.runtimeHeaderSize, elementType, values) == buf.length);
+    this.writeStaticBuffer(buf, program.totalOverhead, elementType, values);
     return this.addRuntimeMemorySegment(buf);
   }
 
   /** Adds an array header to static memory and returns the created segment. */
   private addStaticArrayHeader(elementType: Type, bufferSegment: MemorySegment): MemorySegment {
     var program = this.program;
-    var runtimeHeaderSize = program.runtimeHeaderSize;
     var arrayPrototype = assert(program.arrayPrototype);
     var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
-    var bufferLength = bufferSegment.buffer.length - runtimeHeaderSize;
+    var bufferLength = readI32(bufferSegment.buffer, program.OBJECTInstance.offsetof("rtSize"));
     var arrayLength = i32(bufferLength / elementType.byteSize);
-    var bufferAddress = i64_add(bufferSegment.offset, i64_new(runtimeHeaderSize));
+    var bufferAddress = i64_add(bufferSegment.offset, i64_new(program.totalOverhead));
 
     var buf = arrayInstance.createBuffer();
     assert(arrayInstance.writeField("buffer", bufferAddress, buf));
@@ -2016,7 +2015,7 @@ export class Compiler extends DiagnosticEmitter {
       assert(rtInstance.writeField("_env", 0, buf));
       instance.memorySegment = memorySegment = this.addRuntimeMemorySegment(buf);
     }
-    return i64_add(memorySegment.offset, i64_new(program.runtimeHeaderSize));
+    return i64_add(memorySegment.offset, i64_new(program.totalOverhead));
   }
 
   // === Statements ===============================================================================
@@ -5357,7 +5356,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U32: {
         let instance = this.i32PowInstance;
         if (!instance) {
-          let prototype = this.program.lookupGlobal(CommonNames.ipow32);
+          let prototype = this.program.lookup(CommonNames.ipow32);
           if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5383,7 +5382,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: {
         let instance = this.i64PowInstance;
         if (!instance) {
-          let prototype = this.program.lookupGlobal(CommonNames.ipow64);
+          let prototype = this.program.lookup(CommonNames.ipow64);
           if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5404,7 +5403,7 @@ export class Compiler extends DiagnosticEmitter {
         let isWasm64 = this.options.isWasm64;
         let instance = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
         if (!instance) {
-          let prototype = this.program.lookupGlobal(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
+          let prototype = this.program.lookup(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
           if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5428,7 +5427,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: {
         let instance = this.f32PowInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Mathf);
+          let namespace = this.program.lookup(CommonNames.Mathf);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5457,7 +5456,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         let instance = this.f64PowInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Math);
+          let namespace = this.program.lookup(CommonNames.Math);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5595,7 +5594,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: {
         let instance = this.f32ModInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Mathf);
+          let namespace = this.program.lookup(CommonNames.Mathf);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5623,7 +5622,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         let instance = this.f64ModInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Math);
+          let namespace = this.program.lookup(CommonNames.Math);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -8699,15 +8698,15 @@ export class Compiler extends DiagnosticEmitter {
       flow.freeTempLocal(tempThis);
       flow.freeTempLocal(tempDataStart);
 
-      let runtimeHeaderSize = program.runtimeHeaderSize;
+      let totalOverhead = program.totalOverhead;
       let bufferSegment = this.addStaticBuffer(elementType, values);
-      let bufferAddress = i64_add(bufferSegment.offset, i64_new(runtimeHeaderSize));
+      let bufferAddress = i64_add(bufferSegment.offset, i64_new(totalOverhead));
 
       // make both the buffer and array header static if assigned to a global. this can't be done
       // if inside of a function because each invocation must create a new array reference then.
       if (constraints & Constraints.PREFER_STATIC) {
         let arraySegment = this.addStaticArrayHeader(elementType, bufferSegment);
-        let arrayAddress = i64_add(arraySegment.offset, i64_new(runtimeHeaderSize));
+        let arrayAddress = i64_add(arraySegment.offset, i64_new(totalOverhead));
         this.currentType = arrayType;
         return program.options.isWasm64
           ? this.module.i64(i64_low(arrayAddress), i64_high(arrayAddress))
@@ -8872,7 +8871,7 @@ export class Compiler extends DiagnosticEmitter {
       flow.freeTempLocal(tempThis);
 
       let bufferSegment = this.addStaticBuffer(elementType, values, arrayInstance.id);
-      let bufferAddress = i64_add(bufferSegment.offset, i64_new(program.runtimeHeaderSize));
+      let bufferAddress = i64_add(bufferSegment.offset, i64_new(program.totalOverhead));
 
       // return the static buffer directly if assigned to a global
       if (constraints & Constraints.PREFER_STATIC) {
@@ -9245,7 +9244,8 @@ export class Compiler extends DiagnosticEmitter {
       // do not attempt to compile if inlined anyway
       if (!instance.hasDecorator(DecoratorFlags.INLINE)) this.compileFunction(instance);
     } else {
-      // clone base constructor if a derived class
+      // clone base constructor if a derived class. note that we cannot just
+      // call the base ctor since the derived class may have additional fields.
       let baseClass = classInstance.base;
       let contextualTypeArguments = uniqueMap(classInstance.contextualTypeArguments);
       if (baseClass) {
@@ -9279,15 +9279,18 @@ export class Compiler extends DiagnosticEmitter {
           new Signature(this.program, null, classInstance.type, classInstance.type),
           contextualTypeArguments
         );
-        let members = classInstance.members;
-        if (!members) classInstance.members = members = new Map();
-        members.set("constructor", instance.prototype);
       }
 
-      instance.internalName = classInstance.internalName + INSTANCE_DELIMITER + "constructor";
       instance.set(CommonFlags.COMPILED);
       instance.prototype.setResolvedInstance("", instance);
+      if (classInstance.is(CommonFlags.MODULE_EXPORT)) {
+        instance.set(CommonFlags.MODULE_EXPORT);
+      }
       classInstance.constructorInstance = instance;
+      let members = classInstance.members;
+      if (!members) classInstance.members = members = new Map();
+      members.set("constructor", instance.prototype);
+
       let previousFlow = this.currentFlow;
       let flow = instance.flow;
       this.currentFlow = flow;

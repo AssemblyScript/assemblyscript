@@ -14,6 +14,7 @@
  (export "Child" (global $extends-recursive/Child))
  (export "Child#get:child" (func $extends-recursive/Parent#get:child))
  (export "Child#set:child" (func $extends-recursive/Parent#set:child))
+ (export "Child#constructor" (func $extends-recursive/Child#constructor))
  (start $~start)
  (func $~lib/rt/stub/computeSize (param $0 i32) (result i32)
   local.get $0

@@ -148,6 +148,10 @@ import {
   BuiltinNames
 } from "./builtins";
 
+// Memory manager constants
+const AL_SIZE = 16;
+const AL_MASK = AL_SIZE - 1;
+
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
   constructor(
@@ -627,7 +631,9 @@ export class Program extends DiagnosticEmitter {
 
   /** Gets the standard `abort` instance, if not explicitly disabled. */
   get abortInstance(): Function | null {
-    return this.lookupFunction(CommonNames.abort);
+    var prototype = this.lookup(CommonNames.abort);
+    if (!prototype || prototype.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
+    return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
   }
 
   // Runtime interface
@@ -769,23 +775,58 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
-  /** Gets the size of a runtime header. */
-  get runtimeHeaderSize(): i32 {
-    var cached = this._runtimeHeaderSize;
-    if (!cached) {
-      // see: rt/common.ts
-      var blockOverhead = this.BLOCKInstance.nextMemoryOffset;
-      var totalOverhead = this.OBJECTInstance.nextMemoryOffset;
-      const AL_SIZE = 16;
-      const AL_MASK = AL_SIZE - 1;
-      var objectOverhead = (totalOverhead - blockOverhead + AL_MASK) & ~AL_MASK;
-      var headerSize = blockOverhead + objectOverhead;
-      assert(headerSize == 20);
-      this._runtimeHeaderSize = cached = headerSize;
-    }
-    return cached;
+  /** Gets the overhead of a memory manager block. */
+  get blockOverhead(): i32 {
+    // BLOCK | data...
+    //       ^ 16b alignment
+    return this.BLOCKInstance.nextMemoryOffset;
   }
-  private _runtimeHeaderSize: u32 = 0;
+
+  /** Gets the overhead of a managed object, excl. block overhead, incl. alignment. */
+  get objectOverhead(): i32 {
+    // OBJECT+align | data...
+    //        └ 0 ┘ ^ 16b alignment
+    return (this.OBJECTInstance.nextMemoryOffset - this.blockOverhead + AL_MASK) & ~AL_MASK;
+  }
+
+  /** Gets the total overhead of a managed object, incl. block overhead. */
+  get totalOverhead(): i32 {
+    // BLOCK | OBJECT+align | data...
+    // └     = TOTAL      ┘ ^ 16b alignment
+    return this.blockOverhead + this.objectOverhead;
+  }
+
+  /** Computes the next properly aligned offset of a memory manager block, given the current bump offset. */
+  computeBlockStart(currentOffset: i32): i32 {
+    var blockOverhead = this.blockOverhead;
+    return ((currentOffset + blockOverhead + AL_MASK) & ~AL_MASK) - blockOverhead;
+  }
+
+  /** Computes the next properly aligned offset of a memory manager block, given the current bump offset. */
+  computeBlockStart64(currentOffset: i64): i64 {
+    var blockOverhead = i64_new(this.blockOverhead);
+    return i64_sub(i64_align(i64_add(currentOffset, blockOverhead), AL_SIZE), blockOverhead);
+  }
+
+  /** Computes the size of a memory manager block, excl. block overhead. */
+  computeBlockSize(payloadSize: i32, isManaged: bool): i32 {
+    // see: std/rt/tlsf.ts, computeSize; becomes mmInfo
+    if (isManaged) payloadSize += this.objectOverhead;
+    // we know that payload must be aligned, and that block sizes must be chosen
+    // so that blocks are adjacent with the next payload aligned. hence, block
+    // size is payloadSize rounded up to where the next block would start:
+    var blockSize = this.computeBlockStart(payloadSize);
+    // make sure that block size is valid according to TLSF requirements
+    var blockOverhead = this.blockOverhead;
+    var blockMinsize = ((3 * this.options.usizeType.byteSize + blockOverhead + AL_MASK) & ~AL_MASK) - blockOverhead;
+    if (blockSize < blockMinsize) blockSize = blockMinsize;
+    const blockMaxsize = 1 << 30; // 1 << (FL_BITS + SB_BITS - 1), exclusive
+    const tagsMask = 3;
+    if (blockSize >= blockMaxsize || (blockSize & tagsMask) != 0) {
+      throw new Error("invalid block size");
+    }
+    return blockSize;
+  }
 
   /** Creates a native variable declaration. */
   makeNativeVariableDeclaration(
@@ -1168,7 +1209,7 @@ export class Program extends DiagnosticEmitter {
           if (element) {
             file.ensureExport(exportName, element);
           } else {
-            let globalElement = this.lookupGlobal(localName);
+            let globalElement = this.lookup(localName);
             if (globalElement !== null && isDeclaredElement(globalElement.kind)) { // export { memory }
               file.ensureExport(exportName, <DeclaredElement>globalElement);
             } else {
@@ -1469,12 +1510,24 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Looks up the element of the specified name in the global scope. */
+  lookup(name: string): Element | null {
+    var elements = this.elementsByName;
+    if (elements.has(name)) return assert(elements.get(name));
+    return null;
+  }
+
   /** Requires that a global library element of the specified kind is present and returns it. */
   private require(name: string, kind: ElementKind): Element {
-    var element = this.lookupGlobal(name);
+    var element = this.lookup(name);
     if (!element) throw new Error("Missing standard library component: " + name);
-    if (element.kind != kind) throw Error("Invalid standard library component: " + name);
+    if (element.kind != kind) throw Error("Invalid standard library component kind: " + name);
     return element;
+  }
+
+  /** Requires that a global variable is present and returns it. */
+  private requireGlobal(name: string): Global {
+    return <Global>this.require(name, ElementKind.GLOBAL);
   }
 
   /** Requires that a non-generic global class is present and returns it. */
@@ -1483,13 +1536,6 @@ export class Program extends DiagnosticEmitter {
     var resolved = this.resolver.resolveClass(<ClassPrototype>prototype, null);
     if (!resolved) throw new Error("Invalid standard library class: " + name);
     return resolved;
-  }
-
-  /** Obtains a non-generic global function and returns it. Returns `null` if it does not exist. */
-  private lookupFunction(name: string): Function | null {
-    var prototype = this.lookupGlobal(name);
-    if (!prototype || prototype.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
-    return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
   }
 
   /** Requires that a global function is present and returns it. */
@@ -1572,7 +1618,7 @@ export class Program extends DiagnosticEmitter {
   private registerWrapperClass(type: Type, className: string): void {
     var wrapperClasses = this.wrapperClasses;
     assert(!type.isInternalReference && !wrapperClasses.has(type));
-    var element = assert(this.lookupGlobal(className));
+    var element = assert(this.lookup(className));
     assert(element.kind == ElementKind.CLASS_PROTOTYPE);
     var classElement = assert(this.resolver.resolveClass(<ClassPrototype>element, null));
     classElement.wrappedType = type;
@@ -1638,20 +1684,6 @@ export class Program extends DiagnosticEmitter {
     }
     elementsByName.set(name, element);
     return element;
-  }
-
-  /** Looks up the element of the specified name in the global scope. */
-  lookupGlobal(name: string): Element | null {
-    var elements = this.elementsByName;
-    if (elements.has(name)) return assert(elements.get(name));
-    return null;
-  }
-
-  /** Looks up the element of the specified name in the global scope. Errors if not present. */
-  requireGlobal(name: string): Element {
-    var elements = this.elementsByName;
-    if (elements.has(name)) return assert(elements.get(name));
-    throw new Error("missing global");
   }
 
   /** Tries to locate a foreign file given its normalized path. */
@@ -2488,7 +2520,7 @@ export class Program extends DiagnosticEmitter {
         default: assert(false); // namespace member expected
       }
     }
-    if (original != element) copyMembers(original, element); // retain original parent
+    if (original != element) copyMembers(original, element); // keep original parent
     return element;
   }
 
@@ -3016,7 +3048,7 @@ export class File extends Element {
   lookup(name: string): Element | null {
     var element = this.lookupInSelf(name);
     if (element) return element;
-    return this.program.lookupGlobal(name);
+    return this.program.lookup(name);
   }
 
   /** Ensures that an element is an export of this file. */
@@ -4299,22 +4331,21 @@ export class Class extends TypedElement {
 
   /** Creates a buffer suitable to hold a runtime instance of this class. */
   createBuffer(overhead: i32 = 0): Uint8Array {
-    var size = this.nextMemoryOffset + overhead;
-    var buffer = new Uint8Array(this.program.runtimeHeaderSize + size);
-    assert(!this.program.options.isWasm64); // TODO: WASM64, mmInfo is usize
-    // see: std/assembly/rt/common.ts
-    assert(size < (1 << 28));      // 1 bit BUFFERED + 3 bits color
-    var OBJECT = this.program.OBJECTInstance;
-    OBJECT.writeField("mmInfo", size, buffer, 0);
+    var program = this.program;
+    var payloadSize = this.nextMemoryOffset + overhead;
+    var blockSize = program.computeBlockSize(payloadSize, true); // excl. overhead
+    var buffer = new Uint8Array(program.blockOverhead + blockSize);
+    var OBJECT = program.OBJECTInstance;
+    OBJECT.writeField("mmInfo", blockSize, buffer, 0);
     OBJECT.writeField("gcInfo", 1, buffer, 0); // RC = 1
     OBJECT.writeField("gcInfo2", 0, buffer, 0);
     OBJECT.writeField("rtId", this.id, buffer, 0);
-    OBJECT.writeField("rtSize", size, buffer, 0);
+    OBJECT.writeField("rtSize", payloadSize, buffer, 0);
     return buffer;
   }
 
   /** Writes a field value to a buffer and returns the number of bytes written. */
-  writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.runtimeHeaderSize): i32 {
+  writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.totalOverhead): i32 {
     var element = this.lookupInSelf(name);
     if (element !== null && element.kind == ElementKind.FIELD) {
       let fieldInstance = <Field>element;
