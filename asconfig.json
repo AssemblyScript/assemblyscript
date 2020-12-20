@@ -1,0 +1,46 @@
+{
+  "entries": [
+    "src/glue/wasm/index.ts",
+    "src/index.ts"
+  ],
+  "options": {
+    "explicitStart": true,
+    "measure": true
+  },
+  "targets": {
+    "untouched": {
+      "binaryFile": "out/assemblyscript.untouched.wasm",
+      "textFile": "out/assemblyscript.untouched.wat",
+      "tsdFile": "out/assemblyscript.d.ts",
+      "debug": true
+    },
+    "optimized": {
+      "binaryFile": "out/assemblyscript.optimized.wasm",
+      "textFile": "out/assemblyscript.optimized.wat",
+      "tsdFile": "out/assemblyscript.d.ts",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0
+    },
+    "rtraced": {
+      "binaryFile": "out/assemblyscript.rtraced.wasm",
+      "textFile": "out/assemblyscript.rtraced.wat",
+      "tsdFile": "out/assemblyscript.d.ts",
+      "debug": true,
+      "use": "ASC_RTRACE=1",
+      "runPasses": []
+    },
+    "untouched-bootstrap": {
+      "binaryFile": "out/assemblyscript.untouched-bootstrap.wasm",
+      "textFile": "out/assemblyscript.untouched-bootstrap.wat",
+      "tsdFile": "out/assemblyscript.d.ts",
+      "debug": true
+    },
+    "optimized-bootstrap": {
+      "binaryFile": "out/assemblyscript.optimized-bootstrap.wasm",
+      "textFile": "out/assemblyscript.optimized-bootstrap.wat",
+      "tsdFile": "out/assemblyscript.d.ts",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0
+    }
+  }
+}

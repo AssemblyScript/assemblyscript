@@ -109,16 +109,14 @@ function loadAssemblyScriptJS() {
   return exports;
 }
 
-// Highly experimental, do not use. `npm run asbuild`, `asc --wasm ...`.
-function loadAssemblyScriptWasm(build) {
-  if (!build) build = "untouched";
+// Loads the specified bootstrapped Wasm binary of the compiler.
+function loadAssemblyScriptWasm(binaryPath) {
   const loader = require("../lib/loader/umd/index");
   const rtrace = new (require("../lib/rtrace/umd/index").Rtrace)({
     onerror(err, info) { console.log(err, info); },
-    // oninfo(msg) { console.log(msg); },
     getMemory() { return assemblyscript.memory; }
   });
-  const { exports } = loader.instantiateSync(fs.readFileSync(`${__dirname}/../out/assemblyscript.${build}.wasm`), rtrace.install({ binaryen }));
+  const { exports } = loader.instantiateSync(fs.readFileSync(binaryPath), rtrace.install({ binaryen }));
   if (exports._start) exports._start();
   return exports;
 }
@@ -126,11 +124,11 @@ function loadAssemblyScriptWasm(build) {
 var assemblyscript, __newString, __getString, __retain, __release, __collect;
 
 function loadAssemblyScript() {
-  const wasmArg = process.argv.findIndex(arg => (arg == "--wasm" || arg.startsWith("--wasm:")));
+  const wasmArg = process.argv.findIndex(arg => arg == "--wasm");
   if (~wasmArg) {
-    let build = process.argv[wasmArg].slice(7);
-    process.argv.splice(wasmArg, 1);
-    assemblyscript = loadAssemblyScriptWasm(build);
+    let binaryPath = process.argv[wasmArg + 1];
+    process.argv.splice(wasmArg, 2);
+    assemblyscript = loadAssemblyScriptWasm(binaryPath);
     __newString = assemblyscript.__newString;
     __getString = assemblyscript.__getString;
     __retain = assemblyscript.__retain;
@@ -295,8 +293,13 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
+  // Default to asconfig.json in current directory if target is specified
+  if (opts.target && !opts.config) {
+    opts.config = "asconfig.json";
+  }
+
   // Print the help message if requested or no source files are provided
-  if (opts.help || !argv.length) {
+  if (opts.help || (!argv.length && !opts.config)) {
     var out = opts.help ? stdout : stderr;
     var color = opts.help ? colorsUtil.stdout : colorsUtil.stderr;
     out.write([
@@ -307,6 +310,7 @@ exports.main = function main(argv, options, callback) {
       "  " + color.cyan("asc") + " hello" + extension.ext,
       "  " + color.cyan("asc") + " hello" + extension.ext + " -b hello.wasm -t hello.wat",
       "  " + color.cyan("asc") + " hello1" + extension.ext + " hello2" + extension.ext + " -b -O > hello.wasm",
+      "  " + color.cyan("asc") + " --config asconfig.json --target release",
       "",
       color.white("OPTIONS"),
     ].concat(
@@ -1212,7 +1216,8 @@ function printStats(stats, output) {
     "Emit       : " + format(stats.emitTime, stats.emitCount),
     "Validate   : " + format(stats.validateTime, stats.validateCount),
     "Optimize   : " + format(stats.optimizeTime, stats.optimizeCount),
-    "Transform  : " + format(stats.transformTime, stats.transformCount)
+    "Transform  : " + format(stats.transformTime, stats.transformCount),
+    ""
   ].join(EOL) + EOL);
 }
 

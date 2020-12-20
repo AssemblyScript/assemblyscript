@@ -102,8 +102,8 @@ jobs:
       run: npm test
     - name: Test browser build
       run: node tests/browser-asc
-  test-wasm:
-    name: "Compiler (Wasm)"
+  test-bootstrap:
+    name: "Compiler (Bootstrap)"
     runs-on: ubuntu-latest
     needs: check
     steps:
@@ -115,12 +115,12 @@ jobs:
       run: npm ci --no-audit
     - name: Clean distribution files
       run: npm run clean
-    - name: Self-compile to Wasm from JS
-      run: npm run asbuild
-    - name: Run compiler tests (untouched)
-      run: npm run test:compiler -- --wasm:untouched
-    - name: Run compiler tests (optimized)
-      run: npm run test:compiler -- --wasm:optimized
+    - name: Bootstrap the compiler
+      run: npm run bootstrap
+    - name: Run compiler tests (untouched-bootstrap)
+      run: npm run test:compiler -- --wasm out/assemblyscript.untouched-bootstrap.wasm
+    - name: Run compiler tests (optimized-bootstrap)
+      run: npm run test:compiler -- --wasm out/assemblyscript.optimized-bootstrap.wasm
   test-features:
     name: "Features"
     runs-on: ubuntu-latest

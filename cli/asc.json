@@ -339,6 +339,10 @@
     "type": "b",
     "default": false
   },
+  "wasm": {
+    "description": "Uses the specified Wasm binary of the compiler.",
+    "type": "s"
+  },
   " ...": {
     "description": "Specifies node.js options (CLI only). See: node --help"
   },
