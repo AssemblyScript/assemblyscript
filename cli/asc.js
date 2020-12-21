@@ -293,24 +293,18 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  // I/O must be specified if not present in the environment
-  if (!fs.readFileSync) {
-    if (readFile === readFileNode) throw Error("'options.readFile' must be specified");
-    if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
-    if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
-  }
-
   // Set up base directory
   const baseDir = path.normalize(opts.baseDir || ".");
 
-  // Load additional options from asconfig.json
+  // Check if a config file is present
   let asconfigPath = optionsUtil.resolvePath(opts.config || "asconfig.json", baseDir);
   let asconfigFile = path.basename(asconfigPath);
   let asconfigDir = path.dirname(asconfigPath);
   let asconfig = getAsconfig(asconfigFile, asconfigDir, readFile);
+  let asconfigHasEntries = asconfig != null && Array.isArray(asconfig.entries) && asconfig.entries.length;
 
   // Print the help message if requested or no source files are provided
-  if (opts.help || (!argv.length && !asconfig)) {
+  if (opts.help || (!argv.length && !asconfigHasEntries)) {
     var out = opts.help ? stdout : stderr;
     var color = opts.help ? colorsUtil.stdout : colorsUtil.stderr;
     out.write([
@@ -330,6 +324,14 @@ exports.main = function main(argv, options, callback) {
     return callback(null);
   }
 
+  // I/O must be specified if not present in the environment
+  if (!fs.readFileSync) {
+    if (readFile === readFileNode) throw Error("'options.readFile' must be specified");
+    if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
+    if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
+  }
+
+  // Load additional options from asconfig.json
   const seenAsconfig = new Set();
   seenAsconfig.add(asconfigPath);
   const target = opts.target || "release";
