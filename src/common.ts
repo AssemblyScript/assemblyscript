@@ -162,6 +162,7 @@ export namespace CommonNames {
   export const ASC_OPTIMIZE_LEVEL = "ASC_OPTIMIZE_LEVEL";
   export const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
   export const ASC_LOW_MEMORY_LIMIT = "ASC_LOW_MEMORY_LIMIT";
+  export const ASC_NO_EXPORT_RUNTIME = "ASC_NO_EXPORT_RUNTIME";
   export const ASC_WASI = "ASC_WASI";
   export const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
   export const ASC_FEATURE_MUTABLE_GLOBALS = "ASC_FEATURE_MUTABLE_GLOBALS";
@@ -236,7 +237,6 @@ export namespace CommonNames {
   export const typeinfo = "__typeinfo";
   export const instanceof_ = "__instanceof";
   export const visit = "__visit";
-  export const returnee = "__returnee";
   export const newBuffer = "__newBuffer";
   export const newArray = "__newArray";
   export const BLOCK = "~lib/rt/common/BLOCK";

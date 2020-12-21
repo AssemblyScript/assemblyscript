@@ -57,9 +57,6 @@ export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize =
   return array;
 }
 
-// @ts-ignore: decorator
-@lazy export var __returnee: usize = 0;
-
 // These are provided by the respective implementation, included as another entry file by asc:
 
 // // @ts-ignore: decorator

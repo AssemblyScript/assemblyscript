@@ -403,7 +403,7 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
         seed: function() {
           return 0xA5534817; // make tests deterministic
         },
-        mark: function() {
+        visit: function() {
           // override in tests
         }
       },

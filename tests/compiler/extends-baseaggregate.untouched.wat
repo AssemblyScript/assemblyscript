@@ -5,7 +5,6 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_f64_=>_none (func (param i32 f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -66,7 +65,7 @@
   if (result i32)
    i32.const 0
    i32.const 256
-   i32.const 153
+   i32.const 156
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -86,7 +85,7 @@
   if (result i32)
    i32.const 0
    i32.const 256
-   i32.const 153
+   i32.const 156
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -1514,7 +1513,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 142
+   i32.const 145
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1529,7 +1528,7 @@
   if (result i32)
    i32.const 0
    i32.const 256
-   i32.const 144
+   i32.const 147
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -1544,7 +1543,7 @@
   if (result i32)
    i32.const 0
    i32.const 256
-   i32.const 145
+   i32.const 148
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -1559,7 +1558,7 @@
   if (result i32)
    i32.const 0
    i32.const 256
-   i32.const 146
+   i32.const 149
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -1574,7 +1573,7 @@
   if (result i32)
    i32.const 0
    i32.const 256
-   i32.const 147
+   i32.const 150
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -1625,7 +1624,7 @@
   if
    i32.const 192
    i32.const 256
-   i32.const 245
+   i32.const 251
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1682,160 +1681,11 @@
   local.get $1
   f64.store offset=8
  )
- (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
- )
- (func $~lib/rt/tcms/Object#get:next (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
- )
- (func $~lib/rt/tcms/Object#unlink (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  call $~lib/rt/tcms/Object#get:next
-  local.set $1
-  local.get $0
-  i32.load offset=8
-  local.set $2
-  local.get $1
-  i32.const 0
-  i32.eq
-  if
-   local.get $2
-   i32.const 0
-   i32.eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 256
-    i32.const 120
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
-   return
-  end
-  local.get $1
-  local.get $2
-  local.tee $3
-  i32.eqz
-  if (result i32)
-   i32.const 0
-   i32.const 256
-   i32.const 123
-   i32.const 17
-   call $~lib/builtins/abort
-   unreachable
-  else
-   local.get $3
-  end
-  call $~lib/rt/tcms/Object#set:prev
-  local.get $2
-  local.get $1
-  call $~lib/rt/tcms/Object#set:next
- )
- (func $~lib/rt/tcms/Object#makeGray (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  global.get $~lib/rt/tcms/iter
-  i32.eq
-  if
-   local.get $0
-   i32.load offset=8
-   local.tee $1
-   i32.eqz
-   if (result i32)
-    i32.const 0
-    i32.const 256
-    i32.const 130
-    i32.const 30
-    call $~lib/builtins/abort
-    unreachable
-   else
-    local.get $1
-   end
-   global.set $~lib/rt/tcms/iter
-  end
-  local.get $0
-  call $~lib/rt/tcms/Object#unlink
-  global.get $~lib/rt/tcms/toSpace
-  local.get $0
-  call $~lib/rt/tcms/ObjectList#push
-  local.get $0
-  i32.const 2
-  call $~lib/rt/tcms/Object#set:color
- )
  (func $~lib/rt/tcms/__link (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $1
-  i32.eqz
-  if
-   return
-  end
-  global.get $~lib/rt/tcms/state
   i32.const 0
-  i32.eq
-  if
-   call $~lib/rt/tcms/init
-  end
-  i32.const 1
+  i32.eqz
   drop
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 256
-   i32.const 286
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/rt/tcms/white
-  i32.eqz
-  local.set $3
-  local.get $0
-  local.set $4
-  local.get $4
-  i32.const 20
-  i32.sub
-  local.set $5
-  local.get $5
-  call $~lib/rt/tcms/Object#get:color
-  local.get $3
-  i32.eq
-  if
-   local.get $1
-   local.set $4
-   local.get $4
-   i32.const 20
-   i32.sub
-   local.set $4
-   local.get $4
-   call $~lib/rt/tcms/Object#get:color
-   global.get $~lib/rt/tcms/white
-   i32.eq
-   if
-    local.get $2
-    if
-     local.get $5
-     call $~lib/rt/tcms/Object#makeGray
-    else
-     local.get $4
-     call $~lib/rt/tcms/Object#makeGray
-    end
-   end
-  end
+  return
  )
  (func $extends-baseaggregate/A1#set:c1 (param $0 i32) (param $1 i32)
   local.get $0
@@ -3330,6 +3180,14 @@
   i32.const 4
   i32.add
  )
+ (func $~lib/rt/tcms/Object#get:next (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  i32.const 3
+  i32.const -1
+  i32.xor
+  i32.and
+ )
  (func $~lib/rt/tcms/__renew (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -3373,7 +3231,7 @@
   if
    i32.const 192
    i32.const 256
-   i32.const 267
+   i32.const 273
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -3426,7 +3284,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 273
+   i32.const 279
    i32.const 14
    call $~lib/builtins/abort
    unreachable

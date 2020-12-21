@@ -4,6 +4,9 @@ import { onvisit, oncollect } from "./rtrace";
 // === Tri-Color Mark & Sweep garbage collector ===
 // Largely based on Bach Le's μgc, see: https://github.com/bullno1/ugc
 
+// @ts-ignore: decorator
+@inline const INCREMENTAL = false; // TBD
+
 // Collector states
 
 /** Not yet initilized. */
@@ -156,7 +159,7 @@ function init(): void {
 
 /** Visits external objects. */
 // @ts-ignore: decorator
-@external("env", "mark")
+@external("env", "visit")
 declare function __visit_externals(cookie: u32): void;
 
 /** Performs a single step according to the current state. */
@@ -180,9 +183,10 @@ function step(): usize {
         obj.color = black;
         __visit_members(objToPtr(obj), VISIT_SCAN);
       } else {
-        __visit_globals(VISIT_SCAN);
-        __visit_externals(VISIT_SCAN);
-        __visit(__returnee, VISIT_SCAN);
+        if (INCREMENTAL) {
+          __visit_globals(VISIT_SCAN);
+          __visit_externals(VISIT_SCAN);
+        }
         obj = iter.next;
         if (obj == toSpace) { // empty
           let from = fromSpace;
@@ -205,7 +209,9 @@ function step(): usize {
       }
       toSpace.clear();
       state = STATE_IDLE;
-      debt = 0;
+      if (INCREMENTAL) {
+        debt = 0;
+      }
       break;
     }
   }
@@ -281,6 +287,8 @@ export function __renew(oldPtr: usize, size: usize): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void {
+  // Write barrier is unnecessary if non-incremental
+  if (!INCREMENTAL) return;
   if (!childPtr) return;
   if (state == STATE_INIT) init();
   if (DEBUG) assert(parentPtr);
@@ -314,11 +322,12 @@ export function __visit(ptr: usize, cookie: i32): void {
 // @ts-ignore: decorator
 @global @unsafe
 export function __collect(incremental: bool = false): void {
-  if (incremental) collectIncremental();
-  else collectFull();
-}
-
-function collectFull(): void {
+  if (INCREMENTAL) {
+    if (incremental) {
+      collectIncremental();
+      return;
+    }
+  }
   if (TRACE) trace("GC (full) at mem/objs", 2, totalMem, total);
   if (state > STATE_IDLE) {
     // finish current cycle
@@ -327,11 +336,12 @@ function collectFull(): void {
   // perform a full cycle
   step();
   while (state != STATE_IDLE) step();
-  threshold = 2 * total;
+  if (INCREMENTAL) {
+    threshold = 2 * total;
+  }
   if (TRACE) trace("GC (full) done at mem/objs", 2, totalMem, total);
   if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
 }
-
 
 // Garbage collector automation
 
@@ -350,13 +360,9 @@ function collectFull(): void {
 /** Number of objects the GC is behind schedule. */
 // @ts-ignore: decorator
 @lazy var debt: usize = 0;
-/** Current scope depth. Value > 0 indicates that it is not safe to automatically collect. */
-// @ts-ignore: decorator
-@lazy var depth = 0;
 
 /** Performs a reasonable amount of incremental GC steps. */
 function collectIncremental(): void {
-  assert(!depth);
   if (total < threshold) return;
   if (TRACE) trace("GC (incremental) at mem/objs", 2, totalMem, total);
   debt = total - threshold;

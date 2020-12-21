@@ -702,14 +702,6 @@ export class Program extends DiagnosticEmitter {
   }
   private _visitInstance: Function | null = null;
 
-  /** Gets the runtime `__returnee: usize` global. */
-  get returneeGlobal(): Global {
-    var cached = this._returneeGlobal;
-    if (!cached) this._returneeGlobal = cached = this.requireGlobal(CommonNames.returnee);
-    return cached;
-  }
-  private _returneeGlobal: Global | null = null;
-
   /** Gets the runtime `__typeinfo(id: u32): RTTIFlags` instance. */
   get typeinfoInstance(): Function {
     var cached = this._typeinfoInstance;
@@ -1007,6 +999,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.shrinkLevelHint, 0));
     this.registerConstantInteger(CommonNames.ASC_LOW_MEMORY_LIMIT, Type.i32,
       i64_new(options.lowMemoryLimit, 0));
+    this.registerConstantInteger(CommonNames.ASC_NO_EXPORT_RUNTIME, Type.bool,
+      i64_new(options.noExportRuntime ? 1 : 0, 0));
 
     // register feature hints
     this.registerConstantInteger(CommonNames.ASC_FEATURE_SIGN_EXTENSION, Type.bool,

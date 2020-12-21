@@ -60,6 +60,8 @@ declare const ASC_OPTIMIZE_LEVEL: i32;
 declare const ASC_SHRINK_LEVEL: i32;
 /** Provided lowMemoryLimit option. */
 declare const ASC_LOW_MEMORY_LIMIT: i32;
+/** Provided noExportRuntime option. */
+declare const ASC_NO_EXPORT_RUNTIME: i32;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
 /** Whether the mutable globals feature is enabled. */

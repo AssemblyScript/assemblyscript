@@ -78,37 +78,43 @@
     "category": "Output",
     "description": "Specifies the output file. File extension indicates format.",
     "type": "s",
-    "alias": "o"
+    "alias": "o",
+    "isPath": true
   },
   "binaryFile": {
     "category": "Output",
     "description": "Specifies the binary output file (.wasm).",
     "type": "s",
-    "alias": "b"
+    "alias": "b",
+    "isPath": true
   },
   "textFile": {
     "category": "Output",
     "description": "Specifies the text output file (.wat).",
     "type": "s",
-    "alias": "t"
+    "alias": "t",
+    "isPath": true
   },
   "jsFile": {
     "category": "Output",
     "description": "Specifies the JavaScript (via wasm2js) output file (.js).",
     "type": "s",
-    "alias": "j"
+    "alias": "j",
+    "isPath": true
   },
   "idlFile": {
     "category": "Output",
     "description": "Specifies the WebIDL output file (.webidl).",
     "type": "s",
-    "alias": "i"
+    "alias": "i",
+    "isPath": true
   },
   "tsdFile": {
     "category": "Output",
     "description": "Specifies the TypeScript definition output file (.d.ts).",
     "type": "s",
-    "alias": "d"
+    "alias": "d",
+    "isPath": true
   },
 
   "sourceMap": {

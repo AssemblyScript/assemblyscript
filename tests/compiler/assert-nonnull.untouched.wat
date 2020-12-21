@@ -11,7 +11,6 @@
  (data (i32.const 204) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
  (data (i32.const 252) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
- (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "testVar" (func $assert-nonnull/testVar))
@@ -40,8 +39,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $assert-nonnull/testObj (param $0 i32) (result i32)
   (local $1 i32)
@@ -58,8 +55,6 @@
    unreachable
   end
   i32.load
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $assert-nonnull/testProp (param $0 i32) (result i32)
   (local $1 i32)
@@ -76,8 +71,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $~lib/array/Array<assert-nonnull/Foo>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -139,8 +132,6 @@
   end
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo>#__get
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $~lib/array/Array<assert-nonnull/Foo|null>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -192,8 +183,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $assert-nonnull/testAll (param $0 i32) (result i32)
   (local $1 i32)
@@ -234,8 +223,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $assert-nonnull/testAll2 (param $0 i32) (result i32)
   (local $1 i32)
@@ -276,8 +263,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $assert-nonnull/testFn (param $0 i32) (result i32)
   i32.const 0
@@ -285,8 +270,6 @@
   local.get $0
   i32.load
   call_indirect (type $none_=>_i32)
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $assert-nonnull/testFn2 (param $0 i32) (result i32)
   (local $1 i32)
@@ -309,8 +292,6 @@
   local.get $2
   i32.load
   call_indirect (type $none_=>_i32)
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $assert-nonnull/testRet (param $0 i32) (result i32)
   (local $1 i32)
@@ -330,8 +311,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $assert-nonnull/testObjFn (param $0 i32) (result i32)
   i32.const 0
@@ -340,8 +319,6 @@
   i32.load offset=4
   i32.load
   call_indirect (type $none_=>_i32)
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $assert-nonnull/testObjRet (param $0 i32) (result i32)
   (local $1 i32)
@@ -362,7 +339,5 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
 )

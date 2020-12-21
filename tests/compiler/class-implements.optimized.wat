@@ -18,7 +18,6 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
- (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (global $class-implements/A i32 (i32.const 3))
  (global $class-implements/C i32 (i32.const 5))
  (export "memory" (memory $0))
@@ -902,7 +901,7 @@
   if
    i32.const 0
    i32.const 1120
-   i32.const 142
+   i32.const 145
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -918,7 +917,7 @@
   if
    i32.const 0
    i32.const 1120
-   i32.const 145
+   i32.const 148
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -931,7 +930,7 @@
   if
    i32.const 0
    i32.const 1120
-   i32.const 146
+   i32.const 149
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -944,7 +943,7 @@
   if
    i32.const 0
    i32.const 1120
-   i32.const 147
+   i32.const 150
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -989,8 +988,6 @@
    i32.const 3
    call $~lib/rt/tcms/__new
   end
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $class-implements/A#foo (param $0 i32) (result i32)
   i32.const 1
@@ -1010,15 +1007,13 @@
    i32.const 6
    call $~lib/rt/tcms/__new
   end
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $class-implements/C#foo (param $0 i32) (result i32)
   i32.const 2
  )
  (func $~start
-  i32.const 0
-  call $class-implements/A#constructor
+  i32.const 3
+  call $~lib/rt/tcms/__new
   drop
   i32.const 0
   call $class-implements/C#constructor

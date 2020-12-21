@@ -6,7 +6,6 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
@@ -43,7 +42,6 @@
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~lib/rt/__returnee (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 2188))
  (export "memory" (memory $0))
  (export "arrayAccess" (func $resolve-access/arrayAccess))
@@ -78,7 +76,7 @@
   if (result i32)
    i32.const 0
    i32.const 128
-   i32.const 153
+   i32.const 156
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -98,7 +96,7 @@
   if (result i32)
    i32.const 0
    i32.const 128
-   i32.const 153
+   i32.const 156
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -1526,7 +1524,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 142
+   i32.const 145
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1541,7 +1539,7 @@
   if (result i32)
    i32.const 0
    i32.const 128
-   i32.const 144
+   i32.const 147
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -1556,7 +1554,7 @@
   if (result i32)
    i32.const 0
    i32.const 128
-   i32.const 145
+   i32.const 148
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -1571,7 +1569,7 @@
   if (result i32)
    i32.const 0
    i32.const 128
-   i32.const 146
+   i32.const 149
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -1586,7 +1584,7 @@
   if (result i32)
    i32.const 0
    i32.const 128
-   i32.const 147
+   i32.const 150
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -1637,7 +1635,7 @@
   if
    i32.const 64
    i32.const 128
-   i32.const 245
+   i32.const 251
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -2952,160 +2950,11 @@
   end
   local.get $3
  )
- (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
- )
- (func $~lib/rt/tcms/Object#get:next (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
- )
- (func $~lib/rt/tcms/Object#unlink (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  call $~lib/rt/tcms/Object#get:next
-  local.set $1
-  local.get $0
-  i32.load offset=8
-  local.set $2
-  local.get $1
-  i32.const 0
-  i32.eq
-  if
-   local.get $2
-   i32.const 0
-   i32.eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 128
-    i32.const 120
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
-   return
-  end
-  local.get $1
-  local.get $2
-  local.tee $3
-  i32.eqz
-  if (result i32)
-   i32.const 0
-   i32.const 128
-   i32.const 123
-   i32.const 17
-   call $~lib/builtins/abort
-   unreachable
-  else
-   local.get $3
-  end
-  call $~lib/rt/tcms/Object#set:prev
-  local.get $2
-  local.get $1
-  call $~lib/rt/tcms/Object#set:next
- )
- (func $~lib/rt/tcms/Object#makeGray (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  global.get $~lib/rt/tcms/iter
-  i32.eq
-  if
-   local.get $0
-   i32.load offset=8
-   local.tee $1
-   i32.eqz
-   if (result i32)
-    i32.const 0
-    i32.const 128
-    i32.const 130
-    i32.const 30
-    call $~lib/builtins/abort
-    unreachable
-   else
-    local.get $1
-   end
-   global.set $~lib/rt/tcms/iter
-  end
-  local.get $0
-  call $~lib/rt/tcms/Object#unlink
-  global.get $~lib/rt/tcms/toSpace
-  local.get $0
-  call $~lib/rt/tcms/ObjectList#push
-  local.get $0
-  i32.const 2
-  call $~lib/rt/tcms/Object#set:color
- )
  (func $~lib/rt/tcms/__link (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $1
-  i32.eqz
-  if
-   return
-  end
-  global.get $~lib/rt/tcms/state
   i32.const 0
-  i32.eq
-  if
-   call $~lib/rt/tcms/init
-  end
-  i32.const 1
+  i32.eqz
   drop
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 128
-   i32.const 286
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/rt/tcms/white
-  i32.eqz
-  local.set $3
-  local.get $0
-  local.set $4
-  local.get $4
-  i32.const 20
-  i32.sub
-  local.set $5
-  local.get $5
-  call $~lib/rt/tcms/Object#get:color
-  local.get $3
-  i32.eq
-  if
-   local.get $1
-   local.set $4
-   local.get $4
-   i32.const 20
-   i32.sub
-   local.set $4
-   local.get $4
-   call $~lib/rt/tcms/Object#get:color
-   global.get $~lib/rt/tcms/white
-   i32.eq
-   if
-    local.get $2
-    if
-     local.get $5
-     call $~lib/rt/tcms/Object#makeGray
-    else
-     local.get $4
-     call $~lib/rt/tcms/Object#makeGray
-    end
-   end
-  end
+  return
  )
  (func $~lib/rt/__newArray (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -3940,8 +3789,6 @@
   call $~lib/array/Array<u64>#__get
   i32.const 10
   call $~lib/number/U64#toString
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $resolve-access/Container#set:foo (param $0 i32) (param $1 i64)
   local.get $0
@@ -3974,8 +3821,6 @@
   i64.load
   i32.const 10
   call $~lib/number/U64#toString
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
  (func $resolve-access/Container#toU32 (param $0 i32) (result i32)
   local.get $0
@@ -4113,7 +3958,5 @@
   call $resolve-access/Container#toU32
   i32.const 10
   call $~lib/number/U32#toString
-  global.set $~lib/rt/__returnee
-  global.get $~lib/rt/__returnee
  )
 )

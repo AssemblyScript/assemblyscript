@@ -293,13 +293,24 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  // Default to asconfig.json in current directory if target is specified
-  if (opts.target && !opts.config) {
-    opts.config = "asconfig.json";
+  // I/O must be specified if not present in the environment
+  if (!fs.readFileSync) {
+    if (readFile === readFileNode) throw Error("'options.readFile' must be specified");
+    if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
+    if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
   }
 
+  // Set up base directory
+  const baseDir = path.normalize(opts.baseDir || ".");
+
+  // Load additional options from asconfig.json
+  let asconfigPath = optionsUtil.resolvePath(opts.config || "asconfig.json", baseDir);
+  let asconfigFile = path.basename(asconfigPath);
+  let asconfigDir = path.dirname(asconfigPath);
+  let asconfig = getAsconfig(asconfigFile, asconfigDir, readFile);
+
   // Print the help message if requested or no source files are provided
-  if (opts.help || (!argv.length && !opts.config)) {
+  if (opts.help || (!argv.length && !asconfig)) {
     var out = opts.help ? stdout : stderr;
     var color = opts.help ? colorsUtil.stdout : colorsUtil.stderr;
     out.write([
@@ -319,25 +330,8 @@ exports.main = function main(argv, options, callback) {
     return callback(null);
   }
 
-  // I/O must be specified if not present in the environment
-  if (!fs.readFileSync) {
-    if (readFile === readFileNode) throw Error("'options.readFile' must be specified");
-    if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
-    if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
-  }
-
-  // Set up base directory
-  const baseDir = path.normalize(opts.baseDir || ".");
-
-  // Load additional options from asconfig.json
-  let asconfigPath = optionsUtil.resolvePath(opts.config || "asconfig.json", baseDir);
-  let asconfigFile = path.basename(asconfigPath);
-  let asconfigDir = path.dirname(asconfigPath);
-  let asconfig = getAsconfig(asconfigFile, asconfigDir, readFile);
-
   const seenAsconfig = new Set();
   seenAsconfig.add(asconfigPath);
-
   const target = opts.target || "release";
   while (asconfig) {
     // Merge target first

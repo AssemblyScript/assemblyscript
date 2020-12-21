@@ -1469,10 +1469,6 @@ export class Compiler extends DiagnosticEmitter {
       if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
       if (flow.isNonnull(expr, returnType)) flow.set(FlowFlags.RETURNS_NONNULL);
 
-      if (instance.is(CommonFlags.MODULE_EXPORT)) {
-        expr = this.makeModuleExportReturn(expr, returnType);
-      }
-
       if (!stmts) stmts = [ expr ];
       else stmts.push(expr);
 
@@ -1650,14 +1646,12 @@ export class Compiler extends DiagnosticEmitter {
     var nativeValueType = valueType.toNativeType();
     var nativeThisType = this.options.nativeSizeType;
     // return this.field
-    var expr = module.load(valueType.byteSize, valueType.isSignedIntegerValue,
-      module.local_get(0, nativeThisType),
-      nativeValueType, instance.memoryOffset
+    instance.getterRef = module.addFunction(instance.internalGetterName, nativeThisType, nativeValueType, null,
+      module.load(valueType.byteSize, valueType.isSignedIntegerValue,
+        module.local_get(0, nativeThisType),
+        nativeValueType, instance.memoryOffset
+      )
     );
-    if (instance.is(CommonFlags.MODULE_EXPORT)) {
-      expr = this.makeModuleExportReturn(expr, valueType);
-    }
-    instance.getterRef = module.addFunction(instance.internalGetterName, nativeThisType, nativeValueType, null, expr);
     if (instance.setterRef) {
       instance.set(CommonFlags.COMPILED);
     } else {
@@ -2689,11 +2683,6 @@ export class Compiler extends DiagnosticEmitter {
       return isLastInBody && expr != 0
         ? expr
         : module.br(assert(flow.inlineReturnLabel), 0, expr);
-    }
-
-    // Handle module export return
-    if (flow.actualFunction.is(CommonFlags.MODULE_EXPORT)) {
-      expr = this.makeModuleExportReturn(expr, returnType);
     }
 
     // Otherwise emit a normal return
@@ -5968,28 +5957,6 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  /** Tracks the last return value from a module export if it is of a manged type. */
-  private makeModuleExportReturn(
-    expr: ExpressionRef,
-    type: Type
-  ): ExpressionRef {
-    // Makes sure that the last managed return value from Wasm to the host is
-    // known, so the GC can mark the value in case a collection is triggered
-    // right after the export call, in turn preventing the last return value
-    // from becoming collected before there was a chance to retain it. Allows
-    // us to omit a shadow stack by moving incremental collection logic to the
-    // loader/host where the stack is known to be fully unwound otherwise.
-    if (!type.isManaged) return expr;
-    var module = this.module;
-    var nativeType = type.toNativeType();
-    let returneeGlobal = this.program.returneeGlobal;
-    this.compileGlobal(returneeGlobal);
-    return module.block(null, [
-      module.global_set(returneeGlobal.internalName, expr),
-      module.global_get(returneeGlobal.internalName, nativeType)
-    ], nativeType);
-  }
-
   /** Makes an assignment to a field. */
   private makeFieldAssignment(
     /** The field to assign to. */
@@ -8428,18 +8395,9 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       this.makeFieldInitializationInConstructor(classInstance, stmts);
-      if (instance.is(CommonFlags.MODULE_EXPORT)) {
-        stmts.push(
-          this.makeModuleExportReturn(
-            module.local_get(0, nativeSizeType),
-            instance.type
-          )
-        );
-      } else {
-        stmts.push(
-          module.local_get(0, nativeSizeType)
-        );
-      }
+      stmts.push(
+        module.local_get(0, nativeSizeType)
+      );
       flow.freeScopedLocals();
       this.currentFlow = previousFlow;
 

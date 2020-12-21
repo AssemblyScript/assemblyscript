@@ -1,6 +1,0 @@
-{
-  "asc_flags": [
-    "--noExportRuntime",
-    "--explicitStart"
-  ]
-}
