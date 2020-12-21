@@ -1,3 +1,5 @@
+// @ts-ignore: decorator
+@inline
 export function HASH<T>(key: T): u64 {
   if (isString<T>()) {
     return hashStr(changetype<string>(key));
@@ -8,7 +10,9 @@ export function HASH<T>(key: T): u64 {
     if (sizeof<T>() == 4) return hash32(reinterpret<u32>(f32(key)));
     if (sizeof<T>() == 8) return hash64(reinterpret<u64>(f64(key)));
   } else {
-    if (sizeof<T>() <= 4) return hash32(u32(key), sizeof<T>());
+    if (sizeof<T>() == 1) return hash8(u64(key));
+    if (sizeof<T>() == 2) return hash16(u64(key));
+    if (sizeof<T>() == 4) return hash32(u64(key));
     if (sizeof<T>() == 8) return hash64(u64(key));
   }
   return unreachable();
@@ -30,11 +34,9 @@ export function HASH<T>(key: T): u64 {
 // @ts-ignore: decorator
 @inline const XXH64_SEED: u64 = 0;
 
-// @ts-ignore: decorator
-@inline
-function hash32(key: u32, len: u64 = 4): u64 {
-  var h: u64 = XXH64_SEED + XXH64_P5 + len;
-  h ^= u64(key) * XXH64_P1;
+function hash8(key: u64): u64 {
+  var h: u64 = XXH64_SEED + XXH64_P5 + 1;
+  h ^= key * XXH64_P1;
   h  = rotl(h, 23) * XXH64_P2 + XXH64_P3;
   h ^= h >> 33;
   h *= XXH64_P2;
@@ -44,8 +46,30 @@ function hash32(key: u32, len: u64 = 4): u64 {
   return h;
 }
 
-// @ts-ignore: decorator
-@inline
+function hash16(key: u64): u64 {
+  var h: u64 = XXH64_SEED + XXH64_P5 + 2;
+  h ^= key * XXH64_P1;
+  h  = rotl(h, 23) * XXH64_P2 + XXH64_P3;
+  h ^= h >> 33;
+  h *= XXH64_P2;
+  h ^= h >> 29;
+  h *= XXH64_P3;
+  h ^= h >> 32;
+  return h;
+}
+
+function hash32(key: u64): u64 {
+  var h: u64 = XXH64_SEED + XXH64_P5 + 4;
+  h ^= key * XXH64_P1;
+  h  = rotl(h, 23) * XXH64_P2 + XXH64_P3;
+  h ^= h >> 33;
+  h *= XXH64_P2;
+  h ^= h >> 29;
+  h *= XXH64_P3;
+  h ^= h >> 32;
+  return h;
+}
+
 function hash64(key: u64): u64 {
   var h: u64 = XXH64_SEED + XXH64_P5 + 8;
   h ^= rotl(key * XXH64_P2, 31) * XXH64_P1;
@@ -70,8 +94,6 @@ function mix2(h: u64, s: u64): u64 {
   return (h ^ (rotl(s, 31) * XXH64_P1)) * XXH64_P1 + XXH64_P4;
 }
 
-// @ts-ignore: decorator
-@inline
 function hashStr(key: string): u64 {
   if (key === null) {
     return XXH64_SEED;
