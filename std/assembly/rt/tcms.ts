@@ -1,63 +1,34 @@
-import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE } from "./common";
+import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, TRACE } from "./common";
 import { onvisit, oncollect } from "./rtrace";
 
-// === Tri-Color Mark & Sweep garbage collector ===
-// Largely based on Bach Le's μgc, see: https://github.com/bullno1/ugc
+// === Two-Color Mark & Sweep garbage collector ===
 
-// @ts-ignore: decorator
-@inline const INCREMENTAL = false; // TBD
-
-// Collector states
-
-/** Not yet initilized. */
-// @ts-ignore: decorator
-@inline const STATE_INIT = 0;
-/** Currently transitioning from SWEEP to MARK state. */
-// @ts-ignore: decorator
-@inline const STATE_IDLE = 1;
-/** Currently marking reachable objects. */
-// @ts-ignore: decorator
-@inline const STATE_MARK = 2;
-/** Currently sweeping unreachable objects. */
-// @ts-ignore: decorator
-@inline const STATE_SWEEP = 3;
-
-/** Visit cookie indicating scanning of an object. */
 // @ts-ignore: decorator
 @inline const VISIT_SCAN = 0;
 
-/** Current collector state. */
 // @ts-ignore: decorator
-@lazy var state = STATE_INIT;
-/** Current white color. Flips between 0 and 1. */
+@lazy var initialized = false;
 // @ts-ignore: decorator
 @lazy var white = 0;
-
-// From and to spaces
 // @ts-ignore: decorator
-@lazy var fromSpace = changetype<ObjectList>(memory.data(offsetof<ObjectList>()));
+@lazy var fromSpace = changetype<Object>(memory.data(offsetof<Object>()));
 // @ts-ignore: decorator
-@lazy var toSpace = changetype<ObjectList>(memory.data(offsetof<ObjectList>()));
+@lazy var toSpace = changetype<Object>(memory.data(offsetof<Object>()));
 // @ts-ignore: decorator
-@lazy var iter: Object;
+@lazy var total: usize = 0;
+// @ts-ignore: decorator
+@lazy var totalMem: usize = 0;
 
 /** Initializes the GC. */
 function init(): void {
   // Common object headers are designed for 32-bit words currently
   assert(sizeof<usize>() == sizeof<u32>());
-  fromSpace.clear();
-  toSpace.clear();
-  iter = toSpace;
-  state = STATE_IDLE;
+  fromSpace.nextWithColor = changetype<usize>(fromSpace);
+  fromSpace.prev = fromSpace;
+  toSpace.nextWithColor = changetype<usize>(toSpace);
+  toSpace.prev = toSpace;
+  initialized = true;
 }
-
-// ╒════════╤═══════════════════ Colors ═══════════════════════════╕
-// │ Color  │ Meaning                                              │
-// ├────────┼──────────────────────────────────────────────────────┤
-// │ WHITE  │ Unprocessed                                          │
-// │ BLACK  │ Processed                                            │
-// │ GRAY   │ Processed with unprocessed children                  │
-// └────────┴──────────────────────────────────────────────────────┘
 
 // @ts-ignore: decorator
 @inline const COLOR_MASK = 3;
@@ -114,120 +85,12 @@ function init(): void {
   get size(): usize {
     return BLOCK_OVERHEAD + (this.mmInfo & ~3);
   }
-
-  /** Unlinks this object from its list. */
-  unlink(): void {
-    var next = this.next;
-    var prev = this.prev;
-    if (next == null) {
-      assert(prev == null);
-      return; // static data not yet linked
-    }
-    next.prev = assert(prev);
-    prev.next = next;
-  }
-
-  /** Marks this object as gray, that is reachable with unscanned children. */
-  makeGray(): void {
-    const gray = 2;
-    if (this == iter) iter = assert(this.prev);
-    this.unlink();
-    toSpace.push(this);
-    this.color = gray;
-  }
-}
-
-/** A list of managed objects. Used for the from and to spaces. */
-@unmanaged class ObjectList extends Object {
-
-  /** Inserts an object. */
-  push(obj: Object): void {
-    assert(obj != toSpace && obj != fromSpace);
-    var prev = this.prev;
-    obj.next = assert(this);
-    obj.prev = assert(prev);
-    prev.next = assert(obj);
-    this.prev = assert(obj);
-  }
-
-  /** Clears this list. */
-  @inline clear(): void {
-    this.nextWithColor = changetype<usize>(this);
-    this.prev = assert(this);
-  }
 }
 
 /** Visits external objects. */
 // @ts-ignore: decorator
 @external("env", "visit")
 declare function __visit_externals(cookie: u32): void;
-
-/** Performs a single step according to the current state. */
-function step(): usize {
-  var obj: Object;
-  switch (state) {
-    case STATE_INIT:
-      init();
-      // fall through
-    case STATE_IDLE: {
-      __visit_globals(VISIT_SCAN);
-      __visit_externals(VISIT_SCAN);
-      state = STATE_MARK;
-      // fall through
-    }
-    case STATE_MARK: {
-      let black = i32(!white);
-      obj = iter.next;
-      if (obj != toSpace) {
-        iter = obj;
-        obj.color = black;
-        __visit_members(objToPtr(obj), VISIT_SCAN);
-      } else {
-        if (INCREMENTAL) {
-          __visit_globals(VISIT_SCAN);
-          __visit_externals(VISIT_SCAN);
-        }
-        obj = iter.next;
-        if (obj == toSpace) { // empty
-          let from = fromSpace;
-          fromSpace = toSpace;
-          toSpace = from;
-          white = black;
-          iter = from.next;
-          state = STATE_SWEEP;
-        }
-      }
-      break;
-    }
-    case STATE_SWEEP: {
-      obj = iter;
-      if (obj != toSpace) {
-        iter = obj.next;
-        if (DEBUG) assert(obj.color == i32(!white)); // old white
-        free(obj);
-        return 1;
-      }
-      toSpace.clear();
-      state = STATE_IDLE;
-      if (INCREMENTAL) {
-        debt = 0;
-      }
-      break;
-    }
-  }
-  return 0;
-}
-
-/** Frees an object an returns the number of bytes freed. */
-function free(obj: Object): void {
-  if (changetype<usize>(obj) < __heap_base) return;
-  total -= 1;
-  totalMem -= obj.size;
-  if (isDefined(__finalize)) {
-    __finalize(changetype<usize>(obj) + TOTAL_OVERHEAD);
-  }
-  __free(changetype<usize>(obj) + BLOCK_OVERHEAD);
-}
 
 // Helpers
 
@@ -249,12 +112,22 @@ function objToPtr(obj: Object): usize {
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  if (state == STATE_INIT) init();
+  if (!initialized) init();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
-  fromSpace.push(obj); // sets next/prev
-  obj.color = white;
+
+  // Initialize header
   obj.rtId = id;
   obj.rtSize = <u32>size;
+
+  // Add to fromSpace
+  var from = fromSpace;
+  var prev = from.prev;
+  obj.nextWithColor = changetype<usize>(from) | white;
+  obj.prev = prev;
+  prev.next = obj;
+  from.prev = obj;
+
+  // Point at userdata
   var ptr = objToPtr(obj);
   total += 1;
   totalMem += obj.size;
@@ -271,15 +144,15 @@ export function __renew(oldPtr: usize, size: usize): usize {
     return newPtr;
   }
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  if (state == STATE_INIT) init();
+  if (!initialized) init();
   totalMem -= oldObj.size;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
+
+  // Replace with new object
   var newObj = ptrToObj(newPtr);
   newObj.rtSize = <u32>size;
-  if (DEBUG) assert(newObj.next != null && newObj.prev != null);
   newObj.next.prev = newObj;
   newObj.prev.next = newObj;
-  if (iter == oldObj) iter = newObj;
   totalMem += newObj.size;
   return newPtr;
 }
@@ -287,27 +160,7 @@ export function __renew(oldPtr: usize, size: usize): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void {
-  // Write barrier is unnecessary if non-incremental
-  if (!INCREMENTAL) return;
-  if (!childPtr) return;
-  if (state == STATE_INIT) init();
-  if (DEBUG) assert(parentPtr);
-  var black = i32(!white);
-  var parent = ptrToObj(parentPtr);
-  if (parent.color == black) {
-    let child = ptrToObj(childPtr);
-    if (child.color == white) {
-      if (expectMultiple) {
-        // Move the barrier "backward". Suitable for containers receiving multiple stores.
-        // Avoids a barrier for subsequent objects stored into the same container.
-        parent.makeGray();
-      } else {
-        // Move the barrier "forward". Suitable for objects receiving isolated stores.
-        // TODO: If the child has no pointers, make black immediately?
-        child.makeGray();
-      }
-    }
-  }
+  // nop
 }
 
 // @ts-ignore: decorator
@@ -316,70 +169,67 @@ export function __visit(ptr: usize, cookie: i32): void {
   if (!ptr) return;
   let obj = ptrToObj(ptr);
   if (isDefined(ASC_RTRACE)) if (!onvisit(obj)) return;
-  if (obj.color == white) obj.makeGray();
+  if (obj.color == white) {
+
+    // Unlink from fromSpace
+    let next = obj.next;
+    if (next) { // otherwise static data
+      let prev = obj.prev;
+      next.prev = prev;
+      prev.next = next;
+    }
+
+    // Link to toSpace
+    let to = toSpace;
+    let prev = to.prev;
+    obj.nextWithColor = changetype<usize>(to) | i32(!white);
+    obj.prev = prev;
+    prev.next = obj;
+    to.prev = obj;
+  }
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __collect(incremental: bool = false): void {
-  if (INCREMENTAL) {
-    if (incremental) {
-      collectIncremental();
-      return;
+export function __collect(): void {
+  if (!initialized) init();
+  if (TRACE) trace("GC at mem/objs", 2, totalMem, total);
+
+  // Add roots to toSpace
+  __visit_globals(VISIT_SCAN);
+  __visit_externals(VISIT_SCAN);
+
+  // Mark everything reachable, add to toSpace
+  var black = i32(!white);
+  var to = toSpace;
+  var iter = to.next;
+  while (iter != to) {
+    iter.color = black;
+    __visit_members(objToPtr(iter), VISIT_SCAN);
+    iter = iter.next;
+  }
+
+  // Sweep what's left in fromSpace
+  var from = fromSpace;
+  iter = from.next;
+  while (iter != from) {
+    let newNext = iter.next;
+    if (changetype<usize>(iter) > __heap_base) {
+      total -= 1;
+      totalMem -= iter.size;
+      if (isDefined(__finalize)) __finalize(changetype<usize>(iter) + TOTAL_OVERHEAD);
+      __free(changetype<usize>(iter) + BLOCK_OVERHEAD);
     }
+    iter = newNext;
   }
-  if (TRACE) trace("GC (full) at mem/objs", 2, totalMem, total);
-  if (state > STATE_IDLE) {
-    // finish current cycle
-    while (state != STATE_IDLE) step();
-  }
-  // perform a full cycle
-  step();
-  while (state != STATE_IDLE) step();
-  if (INCREMENTAL) {
-    threshold = 2 * total;
-  }
-  if (TRACE) trace("GC (full) done at mem/objs", 2, totalMem, total);
+  from.nextWithColor = changetype<usize>(from);
+  from.prev = from;
+
+  // Flip spaces and colors
+  fromSpace = to;
+  toSpace = from;
+  white = black;
+
+  if (TRACE) trace("GC done at mem/objs", 2, totalMem, total);
   if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
-}
-
-// Garbage collector automation
-
-/** Incremental GC granularity. */
-// @ts-ignore: decorator
-@inline const STEPSIZE: usize = 100;
-/** Number of objects currently managed by the GC. */
-// @ts-ignore: decorator
-@lazy var total: usize = 0;
-/** Size in memory of all objects currently managed by the GC. */
-// @ts-ignore: decorator
-@lazy var totalMem: usize = 0;
-/** Threshold of objects for the next scheduled GC step. */
-// @ts-ignore: decorator
-@lazy var threshold: usize = STEPSIZE;
-/** Number of objects the GC is behind schedule. */
-// @ts-ignore: decorator
-@lazy var debt: usize = 0;
-
-/** Performs a reasonable amount of incremental GC steps. */
-function collectIncremental(): void {
-  if (total < threshold) return;
-  if (TRACE) trace("GC (incremental) at mem/objs", 2, totalMem, total);
-  debt = total - threshold;
-  let limit: isize = 2 * STEPSIZE;
-  do {
-    limit -= step();
-    if (state == STATE_IDLE) {
-      threshold = 2 * total;
-      if (TRACE) trace("└ down to mem/objs (sweep complete)", 2, totalMem, total);
-      if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
-      return;
-    }
-  } while (limit > 0);
-  if (debt < STEPSIZE) {
-    threshold = total + STEPSIZE;
-  } else {
-    debt -= STEPSIZE;
-    threshold = total;
-  }
 }

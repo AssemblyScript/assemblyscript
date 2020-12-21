@@ -1,9 +1,9 @@
 (module
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_i64 (func (param i32) (result i64)))
@@ -42,8 +42,7 @@
  (data (i32.const 1688) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
  (data (i32.const 1804) "<")
  (data (i32.const 1816) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/initialized (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
@@ -83,10 +82,8 @@
   i32.const 1784
   i32.const 1776
   i32.store
-  i32.const 1776
-  global.set $~lib/rt/tcms/iter
   i32.const 1
-  global.set $~lib/rt/tcms/state
+  global.set $~lib/rt/tcms/initialized
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1063,130 +1060,6 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  local.get $0
-  i32.const 1073741804
-  i32.ge_u
-  if
-   i32.const 1632
-   i32.const 1696
-   i32.const 251
-   i32.const 31
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/rt/tcms/state
-  i32.eqz
-  if
-   call $~lib/rt/tcms/init
-  end
-  local.get $0
-  i32.const 16
-  i32.add
-  local.set $2
-  global.get $~lib/rt/tlsf/ROOT
-  i32.eqz
-  if
-   call $~lib/rt/tlsf/initialize
-  end
-  global.get $~lib/rt/tlsf/ROOT
-  local.get $2
-  call $~lib/rt/tlsf/allocateBlock
-  local.tee $3
-  local.tee $2
-  i32.const 1744
-  i32.ne
-  i32.const 0
-  local.get $2
-  i32.const 1776
-  i32.ne
-  select
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1696
-   i32.const 145
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1752
-  i32.load
-  local.set $4
-  local.get $2
-  i32.const 1744
-  call $~lib/rt/tcms/Object#set:next
-  local.get $4
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1696
-   i32.const 148
-   i32.const 16
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  local.get $4
-  i32.store offset=8
-  local.get $2
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1696
-   i32.const 149
-   i32.const 17
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $4
-  local.get $2
-  call $~lib/rt/tcms/Object#set:next
-  local.get $2
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1696
-   i32.const 150
-   i32.const 17
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1752
-  local.get $2
-  i32.store
-  local.get $3
-  local.get $3
-  i32.load offset=4
-  i32.const -4
-  i32.and
-  i32.store offset=4
-  local.get $3
-  local.get $1
-  i32.store offset=12
-  local.get $3
-  local.get $0
-  i32.store offset=16
-  global.get $~lib/rt/tcms/total
-  i32.const 1
-  i32.add
-  global.set $~lib/rt/tcms/total
-  global.get $~lib/rt/tcms/totalMem
-  local.get $3
-  i32.load
-  i32.const -4
-  i32.and
-  i32.const 4
-  i32.add
-  i32.add
-  global.set $~lib/rt/tcms/totalMem
-  local.get $3
-  i32.const 20
-  i32.add
- )
  (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1432,7 +1305,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   local.get $0
   i32.const 20
   i32.sub
@@ -1441,10 +1313,74 @@
   i32.const 1868
   i32.lt_u
   if
-   local.get $1
    local.get $3
    i32.load offset=12
-   call $~lib/rt/tcms/__new
+   local.set $4
+   local.get $1
+   i32.const 1073741804
+   i32.ge_u
+   if
+    i32.const 1632
+    i32.const 1696
+    i32.const 114
+    i32.const 31
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/rt/tcms/initialized
+   i32.eqz
+   if
+    call $~lib/rt/tcms/init
+   end
+   local.get $1
+   i32.const 16
+   i32.add
+   local.set $2
+   global.get $~lib/rt/tlsf/ROOT
+   i32.eqz
+   if
+    call $~lib/rt/tlsf/initialize
+   end
+   global.get $~lib/rt/tlsf/ROOT
+   local.get $2
+   call $~lib/rt/tlsf/allocateBlock
+   local.tee $2
+   local.get $4
+   i32.store offset=12
+   local.get $2
+   local.get $1
+   i32.store offset=16
+   i32.const 1752
+   i32.load
+   local.set $4
+   local.get $2
+   i32.const 1744
+   i32.store offset=4
+   local.get $2
+   local.get $4
+   i32.store offset=8
+   local.get $4
+   local.get $2
+   call $~lib/rt/tcms/Object#set:next
+   i32.const 1752
+   local.get $2
+   i32.store
+   global.get $~lib/rt/tcms/total
+   i32.const 1
+   i32.add
+   global.set $~lib/rt/tcms/total
+   global.get $~lib/rt/tcms/totalMem
+   local.get $2
+   i32.load
+   i32.const -4
+   i32.and
+   i32.const 4
+   i32.add
+   i32.add
+   global.set $~lib/rt/tcms/totalMem
+   local.get $2
+   i32.const 20
+   i32.add
    local.tee $2
    local.get $0
    local.get $1
@@ -1465,12 +1401,12 @@
   if
    i32.const 1632
    i32.const 1696
-   i32.const 273
+   i32.const 146
    i32.const 31
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/rt/tcms/state
+  global.get $~lib/rt/tcms/initialized
   i32.eqz
   if
    call $~lib/rt/tcms/init
@@ -1510,17 +1446,17 @@
   else
    block $__inlined_func$~lib/rt/tlsf/reallocateBlock
     global.get $~lib/rt/tlsf/ROOT
-    local.set $4
+    local.set $3
     local.get $0
     call $~lib/rt/tlsf/checkUsedBlock
     local.set $0
     block $folding-inner0
      local.get $2
      call $~lib/rt/tlsf/prepareSize
-     local.tee $6
+     local.tee $4
      local.get $0
      i32.load
-     local.tee $7
+     local.tee $6
      i32.const -4
      i32.and
      local.tee $5
@@ -1534,29 +1470,29 @@
      i32.const -4
      i32.and
      i32.add
-     local.tee $8
+     local.tee $7
      i32.load
-     local.tee $9
+     local.tee $8
      i32.const 1
      i32.and
      if
-      local.get $6
+      local.get $4
       local.get $5
       i32.const 4
       i32.add
-      local.get $9
+      local.get $8
       i32.const -4
       i32.and
       i32.add
       local.tee $5
       i32.le_u
       if
-       local.get $4
-       local.get $8
+       local.get $3
+       local.get $7
        call $~lib/rt/tlsf/removeBlock
        local.get $0
        local.get $5
-       local.get $7
+       local.get $6
        i32.const 3
        i32.and
        i32.or
@@ -1564,16 +1500,16 @@
        br $folding-inner0
       end
      end
-     local.get $4
+     local.get $3
      local.get $0
      local.get $2
      call $~lib/rt/tlsf/moveBlock
      local.set $0
      br $__inlined_func$~lib/rt/tlsf/reallocateBlock
     end
-    local.get $4
+    local.get $3
     local.get $0
-    local.get $6
+    local.get $4
     call $~lib/rt/tlsf/prepareBlock
    end
   end
@@ -1590,40 +1526,12 @@
   i32.load offset=4
   i32.const -4
   i32.and
-  if (result i32)
-   local.get $0
-   i32.load offset=8
-   i32.const 0
-   i32.ne
-  else
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1696
-   i32.const 279
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.load offset=4
-  i32.const -4
-  i32.and
   local.get $0
   i32.store offset=8
   local.get $0
   i32.load offset=8
   local.get $0
   call $~lib/rt/tcms/Object#set:next
-  local.get $3
-  global.get $~lib/rt/tcms/iter
-  i32.eq
-  if
-   local.get $0
-   global.set $~lib/rt/tcms/iter
-  end
   global.get $~lib/rt/tcms/totalMem
   local.get $0
   i32.load

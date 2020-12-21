@@ -3,11 +3,10 @@
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -33,10 +32,9 @@
  (data (i32.const 13804) "\cc\1c\00\00\00\00\00\00\00\00\00\00\01\00\00\00\ba\1c\00\00S\00e\00n\00t\00e\00n\00c\00e\00s\00 \00t\00h\00a\00t\00 \00c\00o\00n\00t\00a\00i\00n\00 \00a\00l\00l\00 \00l\00e\00t\00t\00e\00r\00s\00 \00c\00o\00m\00m\00o\00n\00l\00y\00 \00u\00s\00e\00d\00 \00i\00n\00 \00a\00 \00l\00a\00n\00g\00u\00a\00g\00e\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00M\00a\00r\00k\00u\00s\00 \00K\00u\00h\00n\00 \00<\00h\00t\00t\00p\00:\00/\00/\00w\00w\00w\00.\00c\00l\00.\00c\00a\00m\00.\00a\00c\00.\00u\00k\00/\00~\00m\00g\00k\002\005\00/\00>\00 \00-\00-\00 \002\000\001\002\00-\000\004\00-\001\001\00\n\00\n\00T\00h\00i\00s\00 \00i\00s\00 \00a\00n\00 \00e\00x\00a\00m\00p\00l\00e\00 \00o\00f\00 \00a\00 \00p\00l\00a\00i\00n\00-\00t\00e\00x\00t\00 \00f\00i\00l\00e\00 \00e\00n\00c\00o\00d\00e\00d\00 \00i\00n\00 \00U\00T\00F\00-\008\00.\00\n\00\n\00\n\00D\00a\00n\00i\00s\00h\00 \00(\00d\00a\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00Q\00u\00i\00z\00d\00e\00l\00t\00a\00g\00e\00r\00n\00e\00 \00s\00p\00i\00s\00t\00e\00 \00j\00o\00r\00d\00b\00\e6\00r\00 \00m\00e\00d\00 \00f\00l\00\f8\00d\00e\00,\00 \00m\00e\00n\00s\00 \00c\00i\00r\00k\00u\00s\00k\00l\00o\00v\00n\00e\00n\00\n\00 \00 \00W\00o\00l\00t\00h\00e\00r\00 \00s\00p\00i\00l\00l\00e\00d\00e\00 \00p\00\e5\00 \00x\00y\00l\00o\00f\00o\00n\00.\00\n\00 \00 \00(\00=\00 \00Q\00u\00i\00z\00 \00c\00o\00n\00t\00e\00s\00t\00a\00n\00t\00s\00 \00w\00e\00r\00e\00 \00e\00a\00t\00i\00n\00g\00 \00s\00t\00r\00a\00w\00b\00e\00r\00y\00 \00w\00i\00t\00h\00 \00c\00r\00e\00a\00m\00 \00w\00h\00i\00l\00e\00 \00W\00o\00l\00t\00h\00e\00r\00\n\00 \00 \00t\00h\00e\00 \00c\00i\00r\00c\00u\00s\00 \00c\00l\00o\00w\00n\00 \00p\00l\00a\00y\00e\00d\00 \00o\00n\00 \00x\00y\00l\00o\00p\00h\00o\00n\00e\00.\00)\00\n\00\n\00G\00e\00r\00m\00a\00n\00 \00(\00d\00e\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00F\00a\00l\00s\00c\00h\00e\00s\00 \00\dc\00b\00e\00n\00 \00v\00o\00n\00 \00X\00y\00l\00o\00p\00h\00o\00n\00m\00u\00s\00i\00k\00 \00q\00u\00\e4\00l\00t\00 \00j\00e\00d\00e\00n\00 \00g\00r\00\f6\00\df\00e\00r\00e\00n\00 \00Z\00w\00e\00r\00g\00\n\00 \00 \00(\00=\00 \00W\00r\00o\00n\00g\00f\00u\00l\00 \00p\00r\00a\00c\00t\00i\00c\00i\00n\00g\00 \00o\00f\00 \00x\00y\00l\00o\00p\00h\00o\00n\00e\00 \00m\00u\00s\00i\00c\00 \00t\00o\00r\00t\00u\00r\00e\00s\00 \00e\00v\00e\00r\00y\00 \00l\00a\00r\00g\00e\00r\00 \00d\00w\00a\00r\00f\00)\00\n\00\n\00 \00 \00Z\00w\00\f6\00l\00f\00 \00B\00o\00x\00k\00\e4\00m\00p\00f\00e\00r\00 \00j\00a\00g\00t\00e\00n\00 \00E\00v\00a\00 \00q\00u\00e\00r\00 \00\fc\00b\00e\00r\00 \00d\00e\00n\00 \00S\00y\00l\00t\00e\00r\00 \00D\00e\00i\00c\00h\00\n\00 \00 \00(\00=\00 \00T\00w\00e\00l\00v\00e\00 \00b\00o\00x\00i\00n\00g\00 \00f\00i\00g\00h\00t\00e\00r\00s\00 \00h\00u\00n\00t\00e\00d\00 \00E\00v\00a\00 \00a\00c\00r\00o\00s\00s\00 \00t\00h\00e\00 \00d\00i\00k\00e\00 \00o\00f\00 \00S\00y\00l\00t\00)\00\n\00\n\00 \00 \00H\00e\00i\00z\00\f6\00l\00r\00\fc\00c\00k\00s\00t\00o\00\df\00a\00b\00d\00\e4\00m\00p\00f\00u\00n\00g\00\n\00 \00 \00(\00=\00 \00f\00u\00e\00l\00 \00o\00i\00l\00 \00r\00e\00c\00o\00i\00l\00 \00a\00b\00s\00o\00r\00b\00e\00r\00)\00\n\00 \00 \00(\00j\00q\00v\00w\00x\00y\00 \00m\00i\00s\00s\00i\00n\00g\00,\00 \00b\00u\00t\00 \00a\00l\00l\00 \00n\00o\00n\00-\00A\00S\00C\00I\00I\00 \00l\00e\00t\00t\00e\00r\00s\00 \00i\00n\00 \00o\00n\00e\00 \00w\00o\00r\00d\00)\00\n\00\n\00G\00r\00e\00e\00k\00 \00(\00e\00l\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00\93\03\b1\03\b6\03\ad\03\b5\03\c2\03 \00\ba\03\b1\03v\1f \00\bc\03\c5\03\c1\03\c4\03\b9\03r\1f\c2\03 \00\b4\03r\1f\bd\03 \00\b8\03p\1f \00\b2\03\c1\03\f6\1f \00\c0\03\b9\03p\1f \00\c3\03\c4\03x\1f \00\c7\03\c1\03\c5\03\c3\03\b1\03\c6\03v\1f \00\be\03\ad\03\c6\03\c9\03\c4\03\bf\03\n\00 \00 \00(\00=\00 \00N\00o\00 \00m\00o\00r\00e\00 \00s\00h\00a\00l\00l\00 \00I\00 \00s\00e\00e\00 \00a\00c\00a\00c\00i\00a\00s\00 \00o\00r\00 \00m\00y\00r\00t\00l\00e\00s\00 \00i\00n\00 \00t\00h\00e\00 \00g\00o\00l\00d\00e\00n\00 \00c\00l\00e\00a\00r\00i\00n\00g\00)\00\n\00\n\00 \00 \00\9e\03\b5\03\c3\03\ba\03\b5\03\c0\03\ac\03\b6\03\c9\03 \00\c4\03t\1f\bd\03 \00\c8\03\c5\03\c7\03\bf\03\c6\03\b8\03\cc\03\c1\03\b1\03 \00\b2\03\b4\03\b5\03\bb\03\c5\03\b3\03\bc\03\af\03\b1\03\n\00 \00 \00(\00=\00 \00I\00 \00u\00n\00c\00o\00v\00e\00r\00 \00t\00h\00e\00 \00s\00o\00u\00l\00-\00d\00e\00s\00t\00r\00o\00y\00i\00n\00g\00 \00a\00b\00h\00o\00r\00r\00e\00n\00c\00e\00)\00\n\00\n\00E\00n\00g\00l\00i\00s\00h\00 \00(\00e\00n\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00T\00h\00e\00 \00q\00u\00i\00c\00k\00 \00b\00r\00o\00w\00n\00 \00f\00o\00x\00 \00j\00u\00m\00p\00s\00 \00o\00v\00e\00r\00 \00t\00h\00e\00 \00l\00a\00z\00y\00 \00d\00o\00g\00\n\00\n\00S\00p\00a\00n\00i\00s\00h\00 \00(\00e\00s\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00E\00l\00 \00p\00i\00n\00g\00\fc\00i\00n\00o\00 \00W\00e\00n\00c\00e\00s\00l\00a\00o\00 \00h\00i\00z\00o\00 \00k\00i\00l\00\f3\00m\00e\00t\00r\00o\00s\00 \00b\00a\00j\00o\00 \00e\00x\00h\00a\00u\00s\00t\00i\00v\00a\00 \00l\00l\00u\00v\00i\00a\00 \00y\00\n\00 \00 \00f\00r\00\ed\00o\00,\00 \00a\00\f1\00o\00r\00a\00b\00a\00 \00a\00 \00s\00u\00 \00q\00u\00e\00r\00i\00d\00o\00 \00c\00a\00c\00h\00o\00r\00r\00o\00.\00\n\00 \00 \00(\00C\00o\00n\00t\00a\00i\00n\00s\00 \00e\00v\00e\00r\00y\00 \00l\00e\00t\00t\00e\00r\00 \00a\00n\00d\00 \00e\00v\00e\00r\00y\00 \00a\00c\00c\00e\00n\00t\00,\00 \00b\00u\00t\00 \00n\00o\00t\00 \00e\00v\00e\00r\00y\00 \00c\00o\00m\00b\00i\00n\00a\00t\00i\00o\00n\00\n\00 \00 \00o\00f\00 \00v\00o\00w\00e\00l\00 \00+\00 \00a\00c\00u\00t\00e\00.\00)\00\n\00\n\00F\00r\00e\00n\00c\00h\00 \00(\00f\00r\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00P\00o\00r\00t\00e\00z\00 \00c\00e\00 \00v\00i\00e\00u\00x\00 \00w\00h\00i\00s\00k\00y\00 \00a\00u\00 \00j\00u\00g\00e\00 \00b\00l\00o\00n\00d\00 \00q\00u\00i\00 \00f\00u\00m\00e\00 \00s\00u\00r\00 \00s\00o\00n\00 \00\ee\00l\00e\00 \00i\00n\00t\00\e9\00r\00i\00e\00u\00r\00e\00,\00 \00\e0\00\n\00 \00 \00c\00\f4\00t\00\e9\00 \00d\00e\00 \00l\00\'\00a\00l\00c\00\f4\00v\00e\00 \00o\00v\00o\00\ef\00d\00e\00,\00 \00o\00\f9\00 \00l\00e\00s\00 \00b\00\fb\00c\00h\00e\00s\00 \00s\00e\00 \00c\00o\00n\00s\00u\00m\00e\00n\00t\00 \00d\00a\00n\00s\00 \00l\00\'\00\e2\00t\00r\00e\00,\00 \00c\00e\00\n\00 \00 \00q\00u\00i\00 \00l\00u\00i\00 \00p\00e\00r\00m\00e\00t\00 \00d\00e\00 \00p\00e\00n\00s\00e\00r\00 \00\e0\00 \00l\00a\00 \00c\00\e6\00n\00o\00g\00e\00n\00\e8\00s\00e\00 \00d\00e\00 \00l\00\'\00\ea\00t\00r\00e\00 \00d\00o\00n\00t\00 \00i\00l\00 \00e\00s\00t\00 \00q\00u\00e\00s\00t\00i\00o\00n\00\n\00 \00 \00d\00a\00n\00s\00 \00l\00a\00 \00c\00a\00u\00s\00e\00 \00a\00m\00b\00i\00g\00u\00\eb\00 \00e\00n\00t\00e\00n\00d\00u\00e\00 \00\e0\00 \00M\00o\00\ff\00,\00 \00d\00a\00n\00s\00 \00u\00n\00 \00c\00a\00p\00h\00a\00r\00n\00a\00\fc\00m\00 \00q\00u\00i\00,\00\n\00 \00 \00p\00e\00n\00s\00e\00-\00t\00-\00i\00l\00,\00 \00d\00i\00m\00i\00n\00u\00e\00 \00\e7\00\e0\00 \00e\00t\00 \00l\00\e0\00 \00l\00a\00 \00q\00u\00a\00l\00i\00t\00\e9\00 \00d\00e\00 \00s\00o\00n\00 \00S\01u\00v\00r\00e\00.\00\n\00\n\00 \00 \00l\00\'\00\ee\00l\00e\00 \00e\00x\00i\00g\00u\00\eb\00\n\00 \00 \00O\00\f9\00 \00l\00\'\00o\00b\00\e8\00s\00e\00 \00j\00u\00r\00y\00 \00m\00\fb\00r\00\n\00 \00 \00F\00\ea\00t\00e\00 \00l\00\'\00h\00a\00\ef\00 \00v\00o\00l\00a\00p\00\fc\00k\00,\00\n\00 \00 \00\c2\00n\00e\00 \00e\00x\00 \00a\00\e9\00q\00u\00o\00 \00a\00u\00 \00w\00h\00i\00s\00t\00,\00\n\00 \00 \00\d4\00t\00e\00z\00 \00c\00e\00 \00v\00S\01u\00 \00d\00\e9\00\e7\00u\00.\00\n\00\n\00 \00 \00L\00e\00 \00c\00S\01u\00r\00 \00d\00\e9\00\e7\00u\00 \00m\00a\00i\00s\00 \00l\00\'\00\e2\00m\00e\00 \00p\00l\00u\00t\00\f4\00t\00 \00n\00a\00\ef\00v\00e\00,\00 \00L\00o\00u\00\ff\00s\00 \00r\00\ea\00v\00a\00 \00d\00e\00 \00c\00r\00a\00p\00a\00\fc\00t\00e\00r\00 \00e\00n\00\n\00 \00 \00c\00a\00n\00o\00\eb\00 \00a\00u\00 \00d\00e\00l\00\e0\00 \00d\00e\00s\00 \00\ee\00l\00e\00s\00,\00 \00p\00r\00\e8\00s\00 \00d\00u\00 \00m\00\e4\00l\00s\00t\00r\00\f6\00m\00 \00o\00\f9\00 \00b\00r\00\fb\00l\00e\00n\00t\00 \00l\00e\00s\00 \00n\00o\00v\00\e6\00.\00\n\00\n\00I\00r\00i\00s\00h\00 \00G\00a\00e\00l\00i\00c\00 \00(\00g\00a\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00D\00\'\00f\00h\00u\00a\00s\00c\00a\00i\00l\00 \00\cd\00o\00s\00a\00,\00 \00\da\00r\00m\00h\00a\00c\00 \00n\00a\00 \00h\00\d3\00i\00g\00h\00e\00 \00B\00e\00a\00n\00n\00a\00i\00t\00h\00e\00,\00 \00p\00\f3\00r\00 \00\c9\00a\00v\00a\00 \00a\00g\00u\00s\00 \00\c1\00d\00h\00a\00i\00m\00h\00\n\00\n\00H\00u\00n\00g\00a\00r\00i\00a\00n\00 \00(\00h\00u\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00\c1\00r\00v\00\ed\00z\00t\00q\01r\00Q\01 \00t\00\fc\00k\00\f6\00r\00f\00\fa\00r\00\f3\00g\00\e9\00p\00\n\00 \00 \00(\00=\00 \00f\00l\00o\00o\00d\00-\00p\00r\00o\00o\00f\00 \00m\00i\00r\00r\00o\00r\00-\00d\00r\00i\00l\00l\00i\00n\00g\00 \00m\00a\00c\00h\00i\00n\00e\00,\00 \00o\00n\00l\00y\00 \00a\00l\00l\00 \00n\00o\00n\00-\00A\00S\00C\00I\00I\00 \00l\00e\00t\00t\00e\00r\00s\00)\00\n\00\n\00I\00c\00e\00l\00a\00n\00d\00i\00c\00 \00(\00i\00s\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00K\00\e6\00m\00i\00 \00n\00\fd\00 \00\f6\00x\00i\00 \00h\00\e9\00r\00 \00y\00k\00i\00s\00t\00 \00\fe\00j\00\f3\00f\00u\00m\00 \00n\00\fa\00 \00b\00\e6\00\f0\00i\00 \00v\00\ed\00l\00 \00o\00g\00 \00\e1\00d\00r\00e\00p\00a\00\n\00\n\00 \00 \00S\00\e6\00v\00\f6\00r\00 \00g\00r\00\e9\00t\00 \00\e1\00\f0\00a\00n\00 \00\fe\00v\00\ed\00 \00\fa\00l\00p\00a\00n\00 \00v\00a\00r\00 \00\f3\00n\00\fd\00t\00\n\00 \00 \00(\00s\00o\00m\00e\00 \00A\00S\00C\00I\00I\00 \00l\00e\00t\00t\00e\00r\00s\00 \00m\00i\00s\00s\00i\00n\00g\00)\00\n\00\n\00J\00a\00p\00a\00n\00e\00s\00e\00 \00(\00j\00p\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00H\00i\00r\00a\00g\00a\00n\00a\00:\00 \00(\00I\00r\00o\00h\00a\00)\00\n\00\n\00 \00 \00D0\8d0o0k0{0x0h0a0\8a0l0\8b0\920\n\00 \00 \00\8f0K0\880_0\8c0]0d0m0j0\890\800\n\00 \00 \00F0\900n0J0O0\840~0Q0u0S0H0f0\n\00 \00 \00B0U0M0\860\810\7f0W0\910r0\820[0Y0\n\00\n\00 \00 \00K\00a\00t\00a\00k\00a\00n\00a\00:\00\n\00\n\00 \00 \00\a40\ed0\cf0\cb0\db0\d80\c80 \00\c10\ea0\cc0\eb0\f20 \00\ef0\ab0\e80\bf0\ec0\bd0 \00\c40\cd0\ca0\e90\e00\n\00 \00 \00\a60\f00\ce0\aa0\af0\e40\de0 \00\b10\d50\b30\a80\c60 \00\a20\b50\ad0\e60\e10\df0\b70 \00\f10\d20\e20\bb0\b90\f30\n\00\n\00H\00e\00b\00r\00e\00w\00 \00(\00i\00w\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00?\00 \00\d3\05\d2\05 \00\e1\05\e7\05\e8\05\df\05 \00\e9\05\d8\05 \00\d1\05\d9\05\dd\05 \00\de\05\d0\05\d5\05\db\05\d6\05\d1\05 \00\d5\05\dc\05\e4\05\ea\05\e2\05 \00\de\05\e6\05\d0\05 \00\dc\05\d5\05 \00\d7\05\d1\05\e8\05\d4\05 \00\d0\05\d9\05\da\05 \00\d4\05\e7\05\dc\05\d9\05\d8\05\d4\05\n\00\n\00P\00o\00l\00i\00s\00h\00 \00(\00p\00l\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00P\00c\00h\00n\00\05\01\07\01 \00w\00 \00t\00\19\01 \00B\01\f3\00d\00z\01 \00j\00e\00|\01a\00 \00l\00u\00b\00 \00o\00[\01m\00 \00s\00k\00r\00z\00y\00D\01 \00f\00i\00g\00\n\00 \00 \00(\00=\00 \00T\00o\00 \00p\00u\00s\00h\00 \00a\00 \00h\00e\00d\00g\00e\00h\00o\00g\00 \00o\00r\00 \00e\00i\00g\00h\00t\00 \00b\00i\00n\00s\00 \00o\00f\00 \00f\00i\00g\00s\00 \00i\00n\00 \00t\00h\00i\00s\00 \00b\00o\00a\00t\00)\00\n\00\n\00R\00u\00s\00s\00i\00a\00n\00 \00(\00r\00u\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00\12\04 \00G\040\04I\040\04E\04 \00N\043\040\04 \006\048\04;\04 \001\04K\04 \00F\048\04B\04@\04C\04A\04?\00 \00\14\040\04,\00 \00=\04>\04 \00D\040\04;\04L\04H\048\042\04K\049\04 \00M\04:\047\045\04<\04?\04;\04O\04@\04!\00\n\00 \00 \00(\00=\00 \00W\00o\00u\00l\00d\00 \00a\00 \00c\00i\00t\00r\00u\00s\00 \00l\00i\00v\00e\00 \00i\00n\00 \00t\00h\00e\00 \00b\00u\00s\00h\00e\00s\00 \00o\00f\00 \00s\00o\00u\00t\00h\00?\00 \00Y\00e\00s\00,\00 \00b\00u\00t\00 \00o\00n\00l\00y\00 \00a\00 \00f\00a\00k\00e\00 \00o\00n\00e\00!\00)\00\n\00\n\00 \00 \00!\04J\045\04H\04L\04 \006\045\04 \005\04I\04Q\04 \00M\04B\048\04E\04 \00<\04O\043\04:\048\04E\04 \00D\04@\040\04=\04F\04C\047\04A\04:\048\04E\04 \001\04C\04;\04>\04:\04 \004\040\04 \002\04K\04?\045\049\04 \00G\040\04N\04\n\00 \00 \00(\00=\00 \00E\00a\00t\00 \00s\00o\00m\00e\00 \00m\00o\00r\00e\00 \00o\00f\00 \00t\00h\00e\00s\00e\00 \00f\00r\00e\00s\00h\00 \00F\00r\00e\00n\00c\00h\00 \00l\00o\00a\00f\00s\00 \00a\00n\00d\00 \00h\00a\00v\00e\00 \00s\00o\00m\00e\00 \00t\00e\00a\00)\00\n\00\n\00T\00h\00a\00i\00 \00(\00t\00h\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00[\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00|\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00]\00\n\00 \00 \00O\0e \00@\0e\1b\0eG\0e\19\0e!\0e\19\0e8\0e)\0e\"\0eL\0e*\0e8\0e\14\0e\1b\0e#\0e0\0e@\0e*\0e#\0e4\0e\10\0e@\0e%\0e4\0e(\0e\04\0e8\0e\13\0e\04\0eH\0e2\0e \00 \00\01\0e\'\0eH\0e2\0e\1a\0e#\0e#\0e\14\0e2\0e\1d\0e9\0e\07\0e*\0e1\0e\15\0e\'\0eL\0e@\0e\14\0e#\0e1\0e\08\0e\t\0e2\0e\19\0e\n\00 \00 \00\08\0e\07\0e\1d\0eH\0e2\0e\1f\0e1\0e\19\0e\1e\0e1\0e\12\0e\19\0e2\0e\'\0e4\0e\n\0e2\0e\01\0e2\0e#\0e \00 \00 \00 \00 \00 \00 \00 \00 \00 \00 \00-\0e\"\0eH\0e2\0e%\0eI\0e2\0e\07\0e\1c\0e%\0e2\0e\0d\0e$\0eE\0e@\0e\02\0eH\0e\19\0e\06\0eH\0e2\0e\1a\0e5\0e\11\0e2\0eC\0e\04\0e#\0e\n\00 \00 \00D\0e!\0eH\0e\16\0e7\0e-\0eB\0e\17\0e)\0eB\0e\01\0e#\0e\18\0eA\0e\n\0eH\0e\07\0e\0b\0e1\0e\14\0e.\0e6\0e\14\0e.\0e1\0e\14\0e\14\0eH\0e2\0e \00 \00 \00 \00 \00+\0e1\0e\14\0e-\0e \0e1\0e\"\0e@\0e+\0e!\0e7\0e-\0e\19\0e\01\0e5\0e,\0e2\0e-\0e1\0e\n\0e\0c\0e2\0e*\0e1\0e\"\0e\n\00 \00 \00\1b\0e\0f\0e4\0e\1a\0e1\0e\15\0e4\0e\1b\0e#\0e0\0e\1e\0e$\0e\15\0e4\0e\01\0e\0e\0e\01\0e3\0e+\0e\19\0e\14\0eC\0e\08\0e \00 \00 \00 \00 \00 \00 \00 \00\1e\0e9\0e\14\0e\08\0e2\0eC\0e+\0eI\0e\08\0eJ\0e0\0eF\0e \00\08\0eK\0e2\0eF\0e \00\19\0eH\0e2\0e\1f\0e1\0e\07\0e@\0e-\0e\"\0e \00/\0e\n\00\n\00 \00 \00[\00T\00h\00e\00 \00c\00o\00p\00y\00r\00i\00g\00h\00t\00 \00f\00o\00r\00 \00t\00h\00e\00 \00T\00h\00a\00i\00 \00e\00x\00a\00m\00p\00l\00e\00 \00i\00s\00 \00o\00w\00n\00e\00d\00 \00b\00y\00 \00T\00h\00e\00 \00C\00o\00m\00p\00u\00t\00e\00r\00\n\00 \00 \00A\00s\00s\00o\00c\00i\00a\00t\00i\00o\00n\00 \00o\00f\00 \00T\00h\00a\00i\00l\00a\00n\00d\00 \00u\00n\00d\00e\00r\00 \00t\00h\00e\00 \00R\00o\00y\00a\00l\00 \00P\00a\00t\00r\00o\00n\00a\00g\00e\00 \00o\00f\00 \00H\00i\00s\00 \00M\00a\00j\00e\00s\00t\00y\00 \00t\00h\00e\00\n\00 \00 \00K\00i\00n\00g\00.\00]\00\n\00\n\00T\00u\00r\00k\00i\00s\00h\00 \00(\00t\00r\00)\00\n\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00-\00\n\00\n\00 \00 \00P\00i\00j\00a\00m\00a\00l\001\01 \00h\00a\00s\00t\00a\00,\00 \00y\00a\00\1f\011\01z\00 \00_\01o\00f\00\f6\00r\00e\00 \00\e7\00a\00b\00u\00c\00a\00k\00 \00g\00\fc\00v\00e\00n\00d\00i\00.\00\n\00 \00 \00(\00=\00P\00a\00t\00i\00e\00n\00t\00 \00w\00i\00t\00h\00 \00p\00a\00j\00a\00m\00a\00s\00,\00 \00t\00r\00u\00s\00t\00e\00d\00 \00s\00w\00a\00r\00t\00h\00y\00 \00d\00r\00i\00v\00e\00r\00 \00q\00u\00i\00c\00k\00l\00y\00)\00\n\00\00\00")
  (table $0 1 funcref)
  (global $std/string-encoding/str (mut i32) (i32.const 32))
- (global $~lib/rt/tcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/initialized (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 240))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 272))
- (global $~lib/rt/tcms/iter (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
@@ -78,56 +76,24 @@
   i32.store offset=8
  )
  (func $~lib/rt/tcms/init
-  (local $0 i32)
-  (local $1 i32)
   i32.const 4
   i32.const 4
   i32.eq
   drop
   global.get $~lib/rt/tcms/fromSpace
-  local.set $0
-  local.get $0
-  local.get $0
+  global.get $~lib/rt/tcms/fromSpace
   call $~lib/rt/tcms/Object#set:nextWithColor
-  local.get $0
-  local.get $0
-  local.tee $1
-  i32.eqz
-  if (result i32)
-   i32.const 0
-   i32.const 192
-   i32.const 156
-   i32.const 17
-   call $~lib/builtins/abort
-   unreachable
-  else
-   local.get $1
-  end
+  global.get $~lib/rt/tcms/fromSpace
+  global.get $~lib/rt/tcms/fromSpace
   call $~lib/rt/tcms/Object#set:prev
   global.get $~lib/rt/tcms/toSpace
-  local.set $1
-  local.get $1
-  local.get $1
-  call $~lib/rt/tcms/Object#set:nextWithColor
-  local.get $1
-  local.get $1
-  local.tee $0
-  i32.eqz
-  if (result i32)
-   i32.const 0
-   i32.const 192
-   i32.const 156
-   i32.const 17
-   call $~lib/builtins/abort
-   unreachable
-  else
-   local.get $0
-  end
-  call $~lib/rt/tcms/Object#set:prev
   global.get $~lib/rt/tcms/toSpace
-  global.set $~lib/rt/tcms/iter
+  call $~lib/rt/tcms/Object#set:nextWithColor
+  global.get $~lib/rt/tcms/toSpace
+  global.get $~lib/rt/tcms/toSpace
+  call $~lib/rt/tcms/Object#set:prev
   i32.const 1
-  global.set $~lib/rt/tcms/state
+  global.set $~lib/rt/tcms/initialized
  )
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0
@@ -1517,114 +1483,6 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/tcms/Object#set:next (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  local.get $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.or
-  call $~lib/rt/tcms/Object#set:nextWithColor
- )
- (func $~lib/rt/tcms/ObjectList#push (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $1
-  global.get $~lib/rt/tcms/toSpace
-  i32.ne
-  if (result i32)
-   local.get $1
-   global.get $~lib/rt/tcms/fromSpace
-   i32.ne
-  else
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 192
-   i32.const 145
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.load offset=8
-  local.set $2
-  local.get $1
-  local.get $0
-  local.tee $3
-  i32.eqz
-  if (result i32)
-   i32.const 0
-   i32.const 192
-   i32.const 147
-   i32.const 16
-   call $~lib/builtins/abort
-   unreachable
-  else
-   local.get $3
-  end
-  call $~lib/rt/tcms/Object#set:next
-  local.get $1
-  local.get $2
-  local.tee $3
-  i32.eqz
-  if (result i32)
-   i32.const 0
-   i32.const 192
-   i32.const 148
-   i32.const 16
-   call $~lib/builtins/abort
-   unreachable
-  else
-   local.get $3
-  end
-  call $~lib/rt/tcms/Object#set:prev
-  local.get $2
-  local.get $1
-  local.tee $3
-  i32.eqz
-  if (result i32)
-   i32.const 0
-   i32.const 192
-   i32.const 149
-   i32.const 17
-   call $~lib/builtins/abort
-   unreachable
-  else
-   local.get $3
-  end
-  call $~lib/rt/tcms/Object#set:next
-  local.get $0
-  local.get $1
-  local.tee $3
-  i32.eqz
-  if (result i32)
-   i32.const 0
-   i32.const 192
-   i32.const 150
-   i32.const 17
-   call $~lib/builtins/abort
-   unreachable
-  else
-   local.get $3
-  end
-  call $~lib/rt/tcms/Object#set:prev
- )
- (func $~lib/rt/tcms/Object#set:color (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $0
-  i32.load offset=4
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  local.get $1
-  i32.or
-  call $~lib/rt/tcms/Object#set:nextWithColor
- )
  (func $~lib/rt/tcms/Object#set:rtId (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -1634,6 +1492,16 @@
   local.get $0
   local.get $1
   i32.store offset=16
+ )
+ (func $~lib/rt/tcms/Object#set:next (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  local.get $0
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  i32.or
+  call $~lib/rt/tcms/Object#set:nextWithColor
  )
  (func $~lib/rt/tcms/Object#get:size (param $0 i32) (result i32)
   i32.const 4
@@ -1649,20 +1517,21 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   i32.const 1073741804
   i32.ge_u
   if
    i32.const 128
    i32.const 192
-   i32.const 251
+   i32.const 114
    i32.const 31
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/rt/tcms/state
-  i32.const 0
-  i32.eq
+  global.get $~lib/rt/tcms/initialized
+  i32.eqz
   if
    call $~lib/rt/tcms/init
   end
@@ -1673,24 +1542,37 @@
   i32.const 4
   i32.sub
   local.set $2
-  global.get $~lib/rt/tcms/fromSpace
-  local.get $2
-  call $~lib/rt/tcms/ObjectList#push
-  local.get $2
-  global.get $~lib/rt/tcms/white
-  call $~lib/rt/tcms/Object#set:color
   local.get $2
   local.get $1
   call $~lib/rt/tcms/Object#set:rtId
   local.get $2
   local.get $0
   call $~lib/rt/tcms/Object#set:rtSize
-  local.get $2
+  global.get $~lib/rt/tcms/fromSpace
   local.set $3
   local.get $3
+  i32.load offset=8
+  local.set $4
+  local.get $2
+  local.get $3
+  global.get $~lib/rt/tcms/white
+  i32.or
+  call $~lib/rt/tcms/Object#set:nextWithColor
+  local.get $2
+  local.get $4
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $4
+  local.get $2
+  call $~lib/rt/tcms/Object#set:next
+  local.get $3
+  local.get $2
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $2
+  local.set $5
+  local.get $5
   i32.const 20
   i32.add
-  local.set $4
+  local.set $6
   global.get $~lib/rt/tcms/total
   i32.const 1
   i32.add
@@ -1700,7 +1582,7 @@
   call $~lib/rt/tcms/Object#get:size
   i32.add
   global.set $~lib/rt/tcms/totalMem
-  local.get $4
+  local.get $6
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
@@ -4418,14 +4300,13 @@
   if
    i32.const 128
    i32.const 192
-   i32.const 273
+   i32.const 146
    i32.const 31
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/rt/tcms/state
-  i32.const 0
-  i32.eq
+  global.get $~lib/rt/tcms/initialized
+  i32.eqz
   if
    call $~lib/rt/tcms/init
   end
@@ -4453,29 +4334,6 @@
   local.get $7
   local.get $1
   call $~lib/rt/tcms/Object#set:rtSize
-  i32.const 1
-  drop
-  local.get $7
-  call $~lib/rt/tcms/Object#get:next
-  i32.const 0
-  i32.ne
-  if (result i32)
-   local.get $7
-   i32.load offset=8
-   i32.const 0
-   i32.ne
-  else
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 192
-   i32.const 279
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $7
   call $~lib/rt/tcms/Object#get:next
   local.get $7
@@ -4484,13 +4342,6 @@
   i32.load offset=8
   local.get $7
   call $~lib/rt/tcms/Object#set:next
-  global.get $~lib/rt/tcms/iter
-  local.get $3
-  i32.eq
-  if
-   local.get $7
-   global.set $~lib/rt/tcms/iter
-  end
   global.get $~lib/rt/tcms/totalMem
   local.get $7
   call $~lib/rt/tcms/Object#get:size
@@ -5047,11 +4898,17 @@
    unreachable
   end
  )
- (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
+ (func $~lib/rt/tcms/Object#set:color (param $0 i32) (param $1 i32)
+  local.get $0
   local.get $0
   i32.load offset=4
   i32.const 3
+  i32.const -1
+  i32.xor
   i32.and
+  local.get $1
+  i32.or
+  call $~lib/rt/tcms/Object#set:nextWithColor
  )
  (func $~lib/rt/tlsf/__free (param $0 i32)
   local.get $0
@@ -5070,213 +4927,107 @@
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/tcms/free (param $0 i32)
-  local.get $0
-  global.get $~lib/memory/__heap_base
-  i32.lt_u
-  if
-   return
-  end
-  global.get $~lib/rt/tcms/total
-  i32.const 1
-  i32.sub
-  global.set $~lib/rt/tcms/total
-  global.get $~lib/rt/tcms/totalMem
-  local.get $0
-  call $~lib/rt/tcms/Object#get:size
-  i32.sub
-  global.set $~lib/rt/tcms/totalMem
-  i32.const 0
-  drop
-  local.get $0
-  i32.const 4
-  i32.add
-  call $~lib/rt/tlsf/__free
- )
- (func $~lib/rt/tcms/step (result i32)
+ (func $~lib/rt/tcms/__collect
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  block $break|0
-   block $case3|0
-    block $case2|0
-     block $case1|0
-      block $case0|0
-       global.get $~lib/rt/tcms/state
-       local.set $1
-       local.get $1
-       i32.const 0
-       i32.eq
-       br_if $case0|0
-       local.get $1
-       i32.const 1
-       i32.eq
-       br_if $case1|0
-       local.get $1
-       i32.const 2
-       i32.eq
-       br_if $case2|0
-       local.get $1
-       i32.const 3
-       i32.eq
-       br_if $case3|0
-       br $break|0
-      end
-      call $~lib/rt/tcms/init
-     end
-     i32.const 0
-     call $~lib/rt/__visit_globals
-     i32.const 0
-     call $~lib/rt/tcms/__visit_externals
-     i32.const 2
-     global.set $~lib/rt/tcms/state
-    end
-    global.get $~lib/rt/tcms/white
-    i32.eqz
-    local.set $1
-    global.get $~lib/rt/tcms/iter
-    call $~lib/rt/tcms/Object#get:next
-    local.set $0
-    local.get $0
-    global.get $~lib/rt/tcms/toSpace
-    i32.ne
-    if
-     local.get $0
-     global.set $~lib/rt/tcms/iter
-     local.get $0
-     local.get $1
-     call $~lib/rt/tcms/Object#set:color
-     local.get $0
-     local.set $2
-     local.get $2
-     i32.const 20
-     i32.add
-     i32.const 0
-     call $~lib/rt/__visit_members
-    else
-     i32.const 0
-     drop
-     global.get $~lib/rt/tcms/iter
-     call $~lib/rt/tcms/Object#get:next
-     local.set $0
-     local.get $0
-     global.get $~lib/rt/tcms/toSpace
-     i32.eq
-     if
-      global.get $~lib/rt/tcms/fromSpace
-      local.set $2
-      global.get $~lib/rt/tcms/toSpace
-      global.set $~lib/rt/tcms/fromSpace
-      local.get $2
-      global.set $~lib/rt/tcms/toSpace
-      local.get $1
-      global.set $~lib/rt/tcms/white
-      local.get $2
-      call $~lib/rt/tcms/Object#get:next
-      global.set $~lib/rt/tcms/iter
-      i32.const 3
-      global.set $~lib/rt/tcms/state
-     end
-    end
-    br $break|0
-   end
-   global.get $~lib/rt/tcms/iter
-   local.set $0
-   local.get $0
-   global.get $~lib/rt/tcms/toSpace
-   i32.ne
-   if
-    local.get $0
-    call $~lib/rt/tcms/Object#get:next
-    global.set $~lib/rt/tcms/iter
-    i32.const 1
-    drop
-    local.get $0
-    call $~lib/rt/tcms/Object#get:color
-    global.get $~lib/rt/tcms/white
-    i32.eqz
-    i32.eq
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 192
-     i32.const 206
-     i32.const 20
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    call $~lib/rt/tcms/free
-    i32.const 1
-    return
-   end
-   global.get $~lib/rt/tcms/toSpace
-   local.set $2
-   local.get $2
-   local.get $2
-   call $~lib/rt/tcms/Object#set:nextWithColor
-   local.get $2
-   local.get $2
-   local.tee $1
-   i32.eqz
-   if (result i32)
-    i32.const 0
-    i32.const 192
-    i32.const 156
-    i32.const 17
-    call $~lib/builtins/abort
-    unreachable
-   else
-    local.get $1
-   end
-   call $~lib/rt/tcms/Object#set:prev
-   i32.const 1
-   global.set $~lib/rt/tcms/state
-   i32.const 0
-   drop
-   br $break|0
-  end
-  i32.const 0
- )
- (func $~lib/rt/tcms/__collect (param $0 i32)
-  (local $1 i32)
-  i32.const 0
-  drop
-  i32.const 0
-  drop
-  global.get $~lib/rt/tcms/state
-  i32.const 1
-  i32.gt_s
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  global.get $~lib/rt/tcms/initialized
+  i32.eqz
   if
-   loop $while-continue|0
-    global.get $~lib/rt/tcms/state
-    i32.const 1
-    i32.ne
-    local.set $1
-    local.get $1
-    if
-     call $~lib/rt/tcms/step
-     drop
-     br $while-continue|0
-    end
+   call $~lib/rt/tcms/init
+  end
+  i32.const 0
+  drop
+  i32.const 0
+  call $~lib/rt/__visit_globals
+  i32.const 0
+  call $~lib/rt/tcms/__visit_externals
+  global.get $~lib/rt/tcms/white
+  i32.eqz
+  local.set $0
+  global.get $~lib/rt/tcms/toSpace
+  local.set $1
+  local.get $1
+  call $~lib/rt/tcms/Object#get:next
+  local.set $2
+  loop $while-continue|0
+   local.get $2
+   local.get $1
+   i32.ne
+   local.set $3
+   local.get $3
+   if
+    local.get $2
+    local.get $0
+    call $~lib/rt/tcms/Object#set:color
+    local.get $2
+    local.set $4
+    local.get $4
+    i32.const 20
+    i32.add
+    i32.const 0
+    call $~lib/rt/__visit_members
+    local.get $2
+    call $~lib/rt/tcms/Object#get:next
+    local.set $2
+    br $while-continue|0
    end
   end
-  call $~lib/rt/tcms/step
-  drop
+  global.get $~lib/rt/tcms/fromSpace
+  local.set $5
+  local.get $5
+  call $~lib/rt/tcms/Object#get:next
+  local.set $2
   loop $while-continue|1
-   global.get $~lib/rt/tcms/state
-   i32.const 1
+   local.get $2
+   local.get $5
    i32.ne
-   local.set $1
-   local.get $1
+   local.set $3
+   local.get $3
    if
-    call $~lib/rt/tcms/step
-    drop
+    local.get $2
+    call $~lib/rt/tcms/Object#get:next
+    local.set $4
+    local.get $2
+    global.get $~lib/memory/__heap_base
+    i32.gt_u
+    if
+     global.get $~lib/rt/tcms/total
+     i32.const 1
+     i32.sub
+     global.set $~lib/rt/tcms/total
+     global.get $~lib/rt/tcms/totalMem
+     local.get $2
+     call $~lib/rt/tcms/Object#get:size
+     i32.sub
+     global.set $~lib/rt/tcms/totalMem
+     i32.const 0
+     drop
+     local.get $2
+     i32.const 4
+     i32.add
+     call $~lib/rt/tlsf/__free
+    end
+    local.get $4
+    local.set $2
     br $while-continue|1
    end
   end
-  i32.const 0
-  drop
+  local.get $5
+  local.get $5
+  call $~lib/rt/tcms/Object#set:nextWithColor
+  local.get $5
+  local.get $5
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $1
+  global.set $~lib/rt/tcms/fromSpace
+  local.get $5
+  global.set $~lib/rt/tcms/toSpace
+  local.get $0
+  global.set $~lib/rt/tcms/white
   i32.const 0
   drop
   i32.const 0
@@ -5297,92 +5048,22 @@
   call $std/string-encoding/testLarge
   i32.const 13824
   call $std/string-encoding/testLarge
-  i32.const 0
   call $~lib/rt/tcms/__collect
  )
  (func $~start
   call $start:std/string-encoding
  )
- (func $~lib/rt/tcms/Object#unlink (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
+ (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
   local.get $0
-  call $~lib/rt/tcms/Object#get:next
-  local.set $1
-  local.get $0
-  i32.load offset=8
-  local.set $2
-  local.get $1
-  i32.const 0
-  i32.eq
-  if
-   local.get $2
-   i32.const 0
-   i32.eq
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 192
-    i32.const 123
-    i32.const 7
-    call $~lib/builtins/abort
-    unreachable
-   end
-   return
-  end
-  local.get $1
-  local.get $2
-  local.tee $3
-  i32.eqz
-  if (result i32)
-   i32.const 0
-   i32.const 192
-   i32.const 126
-   i32.const 17
-   call $~lib/builtins/abort
-   unreachable
-  else
-   local.get $3
-  end
-  call $~lib/rt/tcms/Object#set:prev
-  local.get $2
-  local.get $1
-  call $~lib/rt/tcms/Object#set:next
- )
- (func $~lib/rt/tcms/Object#makeGray (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  global.get $~lib/rt/tcms/iter
-  i32.eq
-  if
-   local.get $0
-   i32.load offset=8
-   local.tee $1
-   i32.eqz
-   if (result i32)
-    i32.const 0
-    i32.const 192
-    i32.const 133
-    i32.const 30
-    call $~lib/builtins/abort
-    unreachable
-   else
-    local.get $1
-   end
-   global.set $~lib/rt/tcms/iter
-  end
-  local.get $0
-  call $~lib/rt/tcms/Object#unlink
-  global.get $~lib/rt/tcms/toSpace
-  local.get $0
-  call $~lib/rt/tcms/ObjectList#push
-  local.get $0
-  i32.const 2
-  call $~lib/rt/tcms/Object#set:color
+  i32.load offset=4
+  i32.const 3
+  i32.and
  )
  (func $~lib/rt/tcms/__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.eqz
   if
@@ -5402,7 +5083,40 @@
   i32.eq
   if
    local.get $2
-   call $~lib/rt/tcms/Object#makeGray
+   call $~lib/rt/tcms/Object#get:next
+   local.set $3
+   local.get $3
+   if
+    local.get $2
+    i32.load offset=8
+    local.set $4
+    local.get $3
+    local.get $4
+    call $~lib/rt/tcms/Object#set:prev
+    local.get $4
+    local.get $3
+    call $~lib/rt/tcms/Object#set:next
+   end
+   global.get $~lib/rt/tcms/toSpace
+   local.set $4
+   local.get $4
+   i32.load offset=8
+   local.set $5
+   local.get $2
+   local.get $4
+   global.get $~lib/rt/tcms/white
+   i32.eqz
+   i32.or
+   call $~lib/rt/tcms/Object#set:nextWithColor
+   local.get $2
+   local.get $5
+   call $~lib/rt/tcms/Object#set:prev
+   local.get $5
+   local.get $2
+   call $~lib/rt/tcms/Object#set:next
+   local.get $4
+   local.get $2
+   call $~lib/rt/tcms/Object#set:prev
   end
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
