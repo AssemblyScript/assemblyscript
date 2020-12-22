@@ -1,7 +1,7 @@
 Compiler
 ========
 
-Portable compiler sources that compile to both JavaScript using `tsc` and, eventually, WebAssembly using `asc`.
+Portable compiler sources that compile to both JavaScript using `tsc` and WebAssembly using `asc`.
 
 Architecture
 ------------
