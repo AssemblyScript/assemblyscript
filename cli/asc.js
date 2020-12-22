@@ -387,6 +387,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Set up options
+  var program;
   const compilerOptions = __retain(assemblyscript.newOptions());
   assemblyscript.setTarget(compilerOptions, 0);
   assemblyscript.setNoAssert(compilerOptions, opts.noAssert);
@@ -405,6 +406,16 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setPedantic(compilerOptions, opts.pedantic);
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
   assemblyscript.setNoExportRuntime(compilerOptions, opts.noExportRuntime);
+
+  // Instrument callback to perform GC
+  callback = (function(callback) {
+    return function wrappedCallback(err) {
+      __release(compilerOptions);
+      if (program) __release(program);
+      __collect();
+      return callback(err);
+    };
+  })(callback);
 
   // Add or override aliases if specified
   if (opts.use) {
@@ -457,17 +468,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
 
   // Initialize the program
-  const program = __retain(assemblyscript.newProgram(compilerOptions));
-  __release(compilerOptions);
-
-  // Instrument callback to perform GC
-  callback = (function(callback) {
-    return function wrappedCallback(err) {
-      __release(program);
-      __collect();
-      return callback(err);
-    };
-  })(callback);
+  program = __retain(assemblyscript.newProgram(compilerOptions));
 
   // Set up transforms
   const transforms = [];
