@@ -4,30 +4,20 @@ import { onvisit, oncollect } from "./rtrace";
 // === Two-Color Mark & Sweep garbage collector ===
 
 // @ts-ignore: decorator
-@inline const VISIT_SCAN = 0;
-
-// @ts-ignore: decorator
-@lazy var initialized = false;
-// @ts-ignore: decorator
 @lazy var white = 0;
 // @ts-ignore: decorator
-@lazy var fromSpace = changetype<Object>(memory.data(offsetof<Object>()));
+@lazy var fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 // @ts-ignore: decorator
-@lazy var toSpace = changetype<Object>(memory.data(offsetof<Object>()));
+@lazy var toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 // @ts-ignore: decorator
 @lazy var total: usize = 0;
 // @ts-ignore: decorator
 @lazy var totalMem: usize = 0;
 
-/** Initializes the GC. */
-function init(): void {
-  // Common object headers are designed for 32-bit words currently
-  assert(sizeof<usize>() == sizeof<u32>());
-  fromSpace.nextWithColor = changetype<usize>(fromSpace);
-  fromSpace.prev = fromSpace;
-  toSpace.nextWithColor = changetype<usize>(toSpace);
-  toSpace.prev = toSpace;
-  initialized = true;
+function initLazy(space: Object): Object {
+  space.nextWithColor = changetype<usize>(space);
+  space.prev = space;
+  return space;
 }
 
 // @ts-ignore: decorator
@@ -92,27 +82,12 @@ function init(): void {
 @external("env", "visit")
 declare function __visit_externals(cookie: u32): void;
 
-// Helpers
-
-// @ts-ignore: decorator
-@inline
-function ptrToObj(ptr: usize): Object {
-  return changetype<Object>(ptr - TOTAL_OVERHEAD);
-}
-
-// @ts-ignore: decorator
-@inline
-function objToPtr(obj: Object): usize {
-  return changetype<usize>(obj) + TOTAL_OVERHEAD;
-}
-
 // Garbage collector interface
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  if (!initialized) init();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
 
   // Initialize header
@@ -127,33 +102,33 @@ export function __new(size: usize, id: i32): usize {
   prev.next = obj;
   from.prev = obj;
 
-  // Point at userdata
-  var ptr = objToPtr(obj);
-  total += 1;
-  totalMem += obj.size;
-  return ptr;
+  if (TRACE) {
+    total += 1;
+    totalMem += obj.size;
+  }
+  return changetype<usize>(obj) + TOTAL_OVERHEAD;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __renew(oldPtr: usize, size: usize): usize {
-  var oldObj = ptrToObj(oldPtr);
+  var oldObj = changetype<Object>(oldPtr - TOTAL_OVERHEAD);
   if (oldPtr < __heap_base) { // move to heap for simplicity
     let newPtr = __new(size, oldObj.rtId);
     memory.copy(newPtr, oldPtr, min(size, oldObj.rtSize));
     return newPtr;
   }
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  if (!initialized) init();
-  totalMem -= oldObj.size;
+  if (TRACE) totalMem -= oldObj.size;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
+  var newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);
+  newObj.rtSize = <u32>size;
 
   // Replace with new object
-  var newObj = ptrToObj(newPtr);
-  newObj.rtSize = <u32>size;
   newObj.next.prev = newObj;
   newObj.prev.next = newObj;
-  totalMem += newObj.size;
+
+  if (TRACE) totalMem += newObj.size;
   return newPtr;
 }
 
@@ -167,7 +142,7 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
 @global @unsafe
 export function __visit(ptr: usize, cookie: i32): void {
   if (!ptr) return;
-  let obj = ptrToObj(ptr);
+  let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
   if (isDefined(ASC_RTRACE)) if (!onvisit(obj)) return;
   if (obj.color == white) {
 
@@ -192,12 +167,11 @@ export function __visit(ptr: usize, cookie: i32): void {
 // @ts-ignore: decorator
 @global @unsafe
 export function __collect(): void {
-  if (!initialized) init();
   if (TRACE) trace("GC at mem/objs", 2, totalMem, total);
 
   // Add roots to toSpace
-  __visit_globals(VISIT_SCAN);
-  __visit_externals(VISIT_SCAN);
+  __visit_globals(0);
+  __visit_externals(0);
 
   // Mark everything reachable, add to toSpace
   var black = i32(!white);
@@ -205,7 +179,7 @@ export function __collect(): void {
   var iter = to.next;
   while (iter != to) {
     iter.color = black;
-    __visit_members(objToPtr(iter), VISIT_SCAN);
+    __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, 0);
     iter = iter.next;
   }
 
@@ -215,8 +189,10 @@ export function __collect(): void {
   while (iter != from) {
     let newNext = iter.next;
     if (changetype<usize>(iter) > __heap_base) {
-      total -= 1;
-      totalMem -= iter.size;
+      if (TRACE) {
+        total -= 1;
+        totalMem -= iter.size;
+      }
       if (isDefined(__finalize)) __finalize(changetype<usize>(iter) + TOTAL_OVERHEAD);
       __free(changetype<usize>(iter) + BLOCK_OVERHEAD);
     }

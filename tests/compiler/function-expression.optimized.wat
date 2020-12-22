@@ -44,18 +44,16 @@
  (data (i32.const 1592) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 1644) "<")
  (data (i32.const 1656) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1772) "<")
- (data (i32.const 1784) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1708) "<")
+ (data (i32.const 1720) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1804) "\1c")
+ (data (i32.const 1816) "\03\00\00\00\08\00\00\00\10")
  (data (i32.const 1836) "\1c")
- (data (i32.const 1848) "\03\00\00\00\08\00\00\00\10")
- (data (i32.const 1868) "\1c")
- (data (i32.const 1880) "\07\00\00\00\08\00\00\00\11")
+ (data (i32.const 1848) "\07\00\00\00\08\00\00\00\11")
  (table $0 18 funcref)
  (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|2 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0)
- (global $~lib/rt/tcms/initialized (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-expression~anonymous|0 (param $0 i32) (result i32)
@@ -102,7 +100,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1792
+   i32.const 1728
    i32.const 272
    i32.const 14
    call $~lib/builtins/abort
@@ -122,7 +120,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1792
+   i32.const 1728
    i32.const 274
    i32.const 14
    call $~lib/builtins/abort
@@ -165,7 +163,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1792
+   i32.const 1728
    i32.const 287
    i32.const 14
    call $~lib/builtins/abort
@@ -257,7 +255,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1792
+   i32.const 1728
    i32.const 200
    i32.const 14
    call $~lib/builtins/abort
@@ -271,7 +269,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1792
+   i32.const 1728
    i32.const 202
    i32.const 14
    call $~lib/builtins/abort
@@ -344,7 +342,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1792
+    i32.const 1728
     i32.const 223
     i32.const 16
     call $~lib/builtins/abort
@@ -399,7 +397,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1792
+   i32.const 1728
    i32.const 238
    i32.const 14
    call $~lib/builtins/abort
@@ -414,7 +412,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1792
+   i32.const 1728
    i32.const 239
    i32.const 14
    call $~lib/builtins/abort
@@ -462,7 +460,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1792
+   i32.const 1728
    i32.const 255
    i32.const 14
    call $~lib/builtins/abort
@@ -532,7 +530,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 1792
+   i32.const 1728
    i32.const 380
    i32.const 14
    call $~lib/builtins/abort
@@ -560,7 +558,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 1792
+    i32.const 1728
     i32.const 387
     i32.const 16
     call $~lib/builtins/abort
@@ -588,7 +586,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 1792
+    i32.const 1728
     i32.const 400
     i32.const 5
     call $~lib/builtins/abort
@@ -671,7 +669,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1792
+     i32.const 1728
      i32.const 346
      i32.const 18
      call $~lib/builtins/abort
@@ -752,7 +750,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1792
+    i32.const 1728
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -767,7 +765,7 @@
   i32.lt_u
   if
    i32.const 0
-   i32.const 1792
+   i32.const 1728
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -838,24 +836,7 @@
  (func $~lib/rt/tcms/__new (result i32)
   (local $0 i32)
   (local $1 i32)
-  global.get $~lib/rt/tcms/initialized
-  i32.eqz
-  if
-   i32.const 1716
-   i32.const 1712
-   i32.store
-   i32.const 1720
-   i32.const 1712
-   i32.store
-   i32.const 1748
-   i32.const 1744
-   i32.store
-   i32.const 1752
-   i32.const 1744
-   i32.store
-   i32.const 1
-   global.set $~lib/rt/tcms/initialized
-  end
+  (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -876,10 +857,10 @@
    if
     unreachable
    end
-   i32.const 1904
+   i32.const 1872
    i32.const 0
    i32.store
-   i32.const 3472
+   i32.const 3440
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -890,7 +871,7 @@
      local.get $0
      i32.const 2
      i32.shl
-     i32.const 1904
+     i32.const 1872
      i32.add
      i32.const 0
      i32.store offset=4
@@ -908,7 +889,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 1904
+       i32.const 1872
        i32.add
        i32.const 0
        i32.store offset=96
@@ -926,13 +907,13 @@
      br $for-loop|0
     end
    end
-   i32.const 1904
-   i32.const 3476
+   i32.const 1872
+   i32.const 3444
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 1904
+   i32.const 1872
    global.set $~lib/rt/tlsf/ROOT
   end
   global.get $~lib/rt/tlsf/ROOT
@@ -943,11 +924,12 @@
   local.get $0
   i32.const 4
   i32.store offset=16
-  i32.const 1720
-  i32.load
+  global.get $~lib/rt/tcms/fromSpace
+  local.tee $2
+  i32.load offset=8
   local.set $1
   local.get $0
-  i32.const 1712
+  local.get $2
   i32.store offset=4
   local.get $0
   local.get $1
@@ -960,28 +942,15 @@
   i32.and
   i32.or
   i32.store offset=4
-  i32.const 1720
+  local.get $2
   local.get $0
-  i32.store
-  global.get $~lib/rt/tcms/total
-  i32.const 1
-  i32.add
-  global.set $~lib/rt/tcms/total
-  global.get $~lib/rt/tcms/totalMem
-  local.get $0
-  i32.load
-  i32.const -4
-  i32.and
-  i32.const 4
-  i32.add
-  i32.add
-  global.set $~lib/rt/tcms/totalMem
+  i32.store offset=8
   local.get $0
   i32.const 20
   i32.add
  )
  (func $function-expression/testField~anonymous|0 (result i32)
-  i32.const 1856
+  i32.const 1824
  )
  (func $start:function-expression
   (local $0 i32)
@@ -1151,9 +1120,17 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1780
+  i32.const 1776
+  i32.store
+  i32.const 1784
+  i32.const 1776
+  i32.store
+  i32.const 1776
+  global.set $~lib/rt/tcms/fromSpace
   call $~lib/rt/tcms/__new
   local.tee $0
-  i32.const 1888
+  i32.const 1856
   i32.store
   i32.const 1
   local.get $0

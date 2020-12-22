@@ -1,9 +1,9 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
@@ -13,27 +13,22 @@
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
  (data (i32.const 108) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 176) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 208) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 236) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 300) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00A\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 332) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00B\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 364) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00c\00l\00a\00s\00s\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00\00\00\00\00")
- (data (i32.const 428) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00C\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 460) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00F\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 492) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00I\00B\00\00\00\00\00\00\00\00\00")
- (data (i32.const 524) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00I\00C\00\00\00\00\00\00\00\00\00")
- (data (i32.const 556) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00n\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 172) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 240) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 268) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00A\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 300) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00B\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 332) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00c\00l\00a\00s\00s\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00\00\00\00\00")
+ (data (i32.const 396) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00C\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 428) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00F\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 460) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00I\00B\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 492) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00I\00C\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 524) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00n\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $class-overloading/which (mut i32) (i32.const 32))
- (global $~lib/rt/tcms/initialized (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 176))
- (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 208))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
+ (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
  (global $class-overloading/a (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $class-overloading/c (mut i32) (i32.const 0))
@@ -41,39 +36,9 @@
  (global $class-overloading/ic (mut i32) (i32.const 0))
  (global $class-overloading/b2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 620))
+ (global $~lib/memory/__heap_base i32 (i32.const 588))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/tcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store offset=4
- )
- (func $~lib/rt/tcms/Object#set:prev (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store offset=8
- )
- (func $~lib/rt/tcms/init
-  i32.const 4
-  i32.const 4
-  i32.eq
-  drop
-  global.get $~lib/rt/tcms/fromSpace
-  global.get $~lib/rt/tcms/fromSpace
-  call $~lib/rt/tcms/Object#set:nextWithColor
-  global.get $~lib/rt/tcms/fromSpace
-  global.get $~lib/rt/tcms/fromSpace
-  call $~lib/rt/tcms/Object#set:prev
-  global.get $~lib/rt/tcms/toSpace
-  global.get $~lib/rt/tcms/toSpace
-  call $~lib/rt/tcms/Object#set:nextWithColor
-  global.get $~lib/rt/tcms/toSpace
-  global.get $~lib/rt/tcms/toSpace
-  call $~lib/rt/tcms/Object#set:prev
-  i32.const 1
-  global.set $~lib/rt/tcms/initialized
- )
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -116,7 +81,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 272
    i32.const 14
    call $~lib/builtins/abort
@@ -143,7 +108,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 274
    i32.const 14
    call $~lib/builtins/abort
@@ -197,7 +162,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 287
    i32.const 14
    call $~lib/builtins/abort
@@ -329,7 +294,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 200
    i32.const 14
    call $~lib/builtins/abort
@@ -346,7 +311,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 202
    i32.const 14
    call $~lib/builtins/abort
@@ -441,7 +406,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 256
+    i32.const 192
     i32.const 223
     i32.const 16
     call $~lib/builtins/abort
@@ -506,7 +471,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 238
    i32.const 14
    call $~lib/builtins/abort
@@ -524,7 +489,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 239
    i32.const 14
    call $~lib/builtins/abort
@@ -583,7 +548,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 255
    i32.const 14
    call $~lib/builtins/abort
@@ -688,7 +653,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 380
    i32.const 14
    call $~lib/builtins/abort
@@ -731,7 +696,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 256
+    i32.const 192
     i32.const 387
     i32.const 16
     call $~lib/builtins/abort
@@ -764,7 +729,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 256
+    i32.const 192
     i32.const 400
     i32.const 5
     call $~lib/builtins/abort
@@ -1004,7 +969,7 @@
   i32.ge_u
   if
    i32.const 64
-   i32.const 256
+   i32.const 192
    i32.const 461
    i32.const 30
    call $~lib/builtins/abort
@@ -1088,7 +1053,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 333
    i32.const 14
    call $~lib/builtins/abort
@@ -1153,7 +1118,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 256
+     i32.const 192
      i32.const 346
      i32.const 18
      call $~lib/builtins/abort
@@ -1304,7 +1269,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 360
    i32.const 14
    call $~lib/builtins/abort
@@ -1413,7 +1378,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 256
+    i32.const 192
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -1433,7 +1398,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 256
+   i32.const 192
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -1472,6 +1437,25 @@
   local.get $1
   i32.store offset=16
  )
+ (func $~lib/rt/tcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=4
+ )
+ (func $~lib/rt/tcms/Object#set:prev (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=8
+ )
+ (func $~lib/rt/tcms/initLazy (param $0 i32) (result i32)
+  local.get $0
+  local.get $0
+  call $~lib/rt/tcms/Object#set:nextWithColor
+  local.get $0
+  local.get $0
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $0
+ )
  (func $~lib/rt/tcms/Object#set:next (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -1482,37 +1466,20 @@
   i32.or
   call $~lib/rt/tcms/Object#set:nextWithColor
  )
- (func $~lib/rt/tcms/Object#get:size (param $0 i32) (result i32)
-  i32.const 4
-  local.get $0
-  i32.load
-  i32.const 3
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.add
- )
  (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   local.get $0
   i32.const 1073741804
   i32.ge_u
   if
    i32.const 64
    i32.const 128
-   i32.const 114
+   i32.const 90
    i32.const 31
    call $~lib/builtins/abort
    unreachable
-  end
-  global.get $~lib/rt/tcms/initialized
-  i32.eqz
-  if
-   call $~lib/rt/tcms/init
   end
   i32.const 16
   local.get $0
@@ -1546,22 +1513,11 @@
   local.get $3
   local.get $2
   call $~lib/rt/tcms/Object#set:prev
+  i32.const 0
+  drop
   local.get $2
-  local.set $5
-  local.get $5
   i32.const 20
   i32.add
-  local.set $6
-  global.get $~lib/rt/tcms/total
-  i32.const 1
-  i32.add
-  global.set $~lib/rt/tcms/total
-  global.get $~lib/rt/tcms/totalMem
-  local.get $2
-  call $~lib/rt/tcms/Object#get:size
-  i32.add
-  global.set $~lib/rt/tcms/totalMem
-  local.get $6
  )
  (func $class-overloading/A#constructor (param $0 i32) (result i32)
   local.get $0
@@ -1589,7 +1545,7 @@
   local.get $0
  )
  (func $class-overloading/A#a<i32> (param $0 i32) (param $1 i32)
-  i32.const 320
+  i32.const 288
   global.set $class-overloading/which
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
@@ -1750,16 +1706,16 @@
   i32.eqz
  )
  (func $class-overloading/A#b (param $0 i32) (param $1 i32)
-  i32.const 320
+  i32.const 288
   global.set $class-overloading/which
  )
  (func $class-overloading/A#get:c (param $0 i32) (result i32)
-  i32.const 320
+  i32.const 288
   global.set $class-overloading/which
   i32.const 0
  )
  (func $class-overloading/A#set:c (param $0 i32) (param $1 i32)
-  i32.const 320
+  i32.const 288
   global.set $class-overloading/which
  )
  (func $class-overloading/C#constructor (param $0 i32) (result i32)
@@ -1777,7 +1733,7 @@
   local.get $0
  )
  (func $class-overloading/B#a<i32> (param $0 i32) (param $1 i32)
-  i32.const 352
+  i32.const 320
   global.set $class-overloading/which
  )
  (func $class-overloading/C#a<i32> (param $0 i32) (param $1 i32)
@@ -1785,31 +1741,31 @@
   local.get $1
   call $class-overloading/B#a<i32>
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 52
    i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 448
+  i32.const 416
   global.set $class-overloading/which
  )
  (func $class-overloading/C#b (param $0 i32) (param $1 i32)
-  i32.const 448
+  i32.const 416
   global.set $class-overloading/which
  )
  (func $class-overloading/C#get:c (param $0 i32) (result i32)
-  i32.const 448
+  i32.const 416
   global.set $class-overloading/which
   i32.const 0
  )
  (func $class-overloading/C#set:c (param $0 i32) (param $1 i32)
-  i32.const 448
+  i32.const 416
   global.set $class-overloading/which
  )
  (func $class-overloading/D#constructor (param $0 i32) (result i32)
@@ -1905,14 +1861,17 @@
   local.get $0
  )
  (func $class-overloading/A2#foo (param $0 i32) (result i32)
-  i32.const 576
-  i32.const 384
+  i32.const 544
+  i32.const 352
   i32.const 198
   i32.const 5
   call $~lib/builtins/abort
   unreachable
  )
  (func $start:class-overloading
+  i32.const 240
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/fromSpace
   i32.const 0
   call $class-overloading/B#constructor
   global.set $class-overloading/a
@@ -1920,12 +1879,12 @@
   i32.const 1
   call $class-overloading/A#a<i32>@virtual
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 38
    i32.const 1
    call $~lib/builtins/abort
@@ -1937,12 +1896,12 @@
   i32.const 1
   call $class-overloading/A#b@virtual
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 41
    i32.const 1
    call $~lib/builtins/abort
@@ -1954,12 +1913,12 @@
   call $class-overloading/A#get:c@virtual
   drop
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 44
    i32.const 1
    call $~lib/builtins/abort
@@ -1971,12 +1930,12 @@
   i32.const 1
   call $class-overloading/A#set:c@virtual
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 47
    i32.const 1
    call $~lib/builtins/abort
@@ -1991,12 +1950,12 @@
   i32.const 1
   call $class-overloading/C#a<i32>
   global.get $class-overloading/which
-  i32.const 448
+  i32.const 416
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 71
    i32.const 1
    call $~lib/builtins/abort
@@ -2008,12 +1967,12 @@
   i32.const 1
   call $class-overloading/C#b
   global.get $class-overloading/which
-  i32.const 448
+  i32.const 416
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 74
    i32.const 1
    call $~lib/builtins/abort
@@ -2025,12 +1984,12 @@
   call $class-overloading/C#get:c
   drop
   global.get $class-overloading/which
-  i32.const 448
+  i32.const 416
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 77
    i32.const 1
    call $~lib/builtins/abort
@@ -2040,12 +1999,12 @@
   i32.const 1
   call $class-overloading/C#set:c
   global.get $class-overloading/which
-  i32.const 448
+  i32.const 416
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 79
    i32.const 1
    call $~lib/builtins/abort
@@ -2060,12 +2019,12 @@
   i32.const 1
   call $class-overloading/A#a<i32>@virtual
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 89
    i32.const 1
    call $~lib/builtins/abort
@@ -2077,12 +2036,12 @@
   i32.const 1
   call $class-overloading/A#b@virtual
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 92
    i32.const 1
    call $~lib/builtins/abort
@@ -2094,12 +2053,12 @@
   call $class-overloading/A#get:c@virtual
   drop
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 95
    i32.const 1
    call $~lib/builtins/abort
@@ -2109,12 +2068,12 @@
   i32.const 1
   call $class-overloading/A#set:c@virtual
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 97
    i32.const 1
    call $~lib/builtins/abort
@@ -2129,12 +2088,12 @@
   i32.const 1
   call $class-overloading/A#a<i32>@virtual
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 107
    i32.const 1
    call $~lib/builtins/abort
@@ -2146,12 +2105,12 @@
   i32.const 1
   call $class-overloading/A#b@virtual
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 110
    i32.const 1
    call $~lib/builtins/abort
@@ -2163,12 +2122,12 @@
   call $class-overloading/A#get:c@virtual
   drop
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 113
    i32.const 1
    call $~lib/builtins/abort
@@ -2178,12 +2137,12 @@
   i32.const 1
   call $class-overloading/A#set:c@virtual
   global.get $class-overloading/which
-  i32.const 352
+  i32.const 320
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 115
    i32.const 1
    call $~lib/builtins/abort
@@ -2198,12 +2157,12 @@
   i32.const 1
   call $class-overloading/A#a<i32>@virtual
   global.get $class-overloading/which
-  i32.const 480
+  i32.const 448
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 137
    i32.const 1
    call $~lib/builtins/abort
@@ -2215,12 +2174,12 @@
   i32.const 1
   call $class-overloading/A#b@virtual
   global.get $class-overloading/which
-  i32.const 480
+  i32.const 448
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 140
    i32.const 1
    call $~lib/builtins/abort
@@ -2232,12 +2191,12 @@
   call $class-overloading/A#get:c@virtual
   drop
   global.get $class-overloading/which
-  i32.const 480
+  i32.const 448
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 143
    i32.const 1
    call $~lib/builtins/abort
@@ -2249,12 +2208,12 @@
   i32.const 1
   call $class-overloading/A#set:c@virtual
   global.get $class-overloading/which
-  i32.const 480
+  i32.const 448
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 146
    i32.const 1
    call $~lib/builtins/abort
@@ -2268,12 +2227,12 @@
   global.get $class-overloading/ia
   call $class-overloading/IA#foo@virtual
   global.get $class-overloading/which
-  i32.const 512
+  i32.const 480
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 162
    i32.const 1
    call $~lib/builtins/abort
@@ -2287,12 +2246,12 @@
   global.get $class-overloading/ic
   call $class-overloading/IA#foo@virtual
   global.get $class-overloading/which
-  i32.const 544
+  i32.const 512
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 177
    i32.const 1
    call $~lib/builtins/abort
@@ -2308,7 +2267,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 384
+   i32.const 352
    i32.const 209
    i32.const 1
    call $~lib/builtins/abort
@@ -2325,7 +2284,7 @@
   call $start:class-overloading
  )
  (func $class-overloading/F#a<i32> (param $0 i32) (param $1 i32)
-  i32.const 480
+  i32.const 448
   global.set $class-overloading/which
  )
  (func $class-overloading/A#a<i32>@virtual (param $0 i32) (param $1 i32)
@@ -2381,11 +2340,11 @@
   call $class-overloading/A#a<i32>
  )
  (func $class-overloading/B#b (param $0 i32) (param $1 i32)
-  i32.const 352
+  i32.const 320
   global.set $class-overloading/which
  )
  (func $class-overloading/F#b (param $0 i32) (param $1 i32)
-  i32.const 480
+  i32.const 448
   global.set $class-overloading/which
  )
  (func $class-overloading/A#b@virtual (param $0 i32) (param $1 i32)
@@ -2441,12 +2400,12 @@
   call $class-overloading/A#b
  )
  (func $class-overloading/B#get:c (param $0 i32) (result i32)
-  i32.const 352
+  i32.const 320
   global.set $class-overloading/which
   i32.const 0
  )
  (func $class-overloading/F#get:c (param $0 i32) (result i32)
-  i32.const 480
+  i32.const 448
   global.set $class-overloading/which
   i32.const 0
  )
@@ -2499,11 +2458,11 @@
   call $class-overloading/A#get:c
  )
  (func $class-overloading/B#set:c (param $0 i32) (param $1 i32)
-  i32.const 352
+  i32.const 320
   global.set $class-overloading/which
  )
  (func $class-overloading/F#set:c (param $0 i32) (param $1 i32)
-  i32.const 480
+  i32.const 448
   global.set $class-overloading/which
  )
  (func $class-overloading/A#set:c@virtual (param $0 i32) (param $1 i32)
@@ -2559,11 +2518,11 @@
   call $class-overloading/A#set:c
  )
  (func $class-overloading/CA#foo (param $0 i32)
-  i32.const 512
+  i32.const 480
   global.set $class-overloading/which
  )
  (func $class-overloading/CC#foo (param $0 i32)
-  i32.const 544
+  i32.const 512
   global.set $class-overloading/which
  )
  (func $class-overloading/IA#foo@virtual (param $0 i32)
@@ -2622,8 +2581,8 @@
   local.get $0
  )
  (func $class-overloading/A1#baz (param $0 i32) (result i32)
-  i32.const 576
-  i32.const 384
+  i32.const 544
+  i32.const 352
   i32.const 186
   i32.const 5
   call $~lib/builtins/abort

@@ -10,12 +10,10 @@
  (data (i32.const 1048) "\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 1100) "<")
  (data (i32.const 1112) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s")
- (data (i32.const 1228) "<")
- (data (i32.const 1240) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (global $~lib/rt/tcms/initialized (mut i32) (i32.const 0))
+ (data (i32.const 1164) "<")
+ (data (i32.const 1176) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -31,7 +29,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 272
    i32.const 14
    call $~lib/builtins/abort
@@ -51,7 +49,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 274
    i32.const 14
    call $~lib/builtins/abort
@@ -94,7 +92,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 287
    i32.const 14
    call $~lib/builtins/abort
@@ -186,7 +184,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 200
    i32.const 14
    call $~lib/builtins/abort
@@ -200,7 +198,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 202
    i32.const 14
    call $~lib/builtins/abort
@@ -273,7 +271,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1248
+    i32.const 1184
     i32.const 223
     i32.const 16
     call $~lib/builtins/abort
@@ -328,7 +326,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 238
    i32.const 14
    call $~lib/builtins/abort
@@ -343,7 +341,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 239
    i32.const 14
    call $~lib/builtins/abort
@@ -391,7 +389,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 255
    i32.const 14
    call $~lib/builtins/abort
@@ -461,7 +459,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 380
    i32.const 14
    call $~lib/builtins/abort
@@ -489,7 +487,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 1248
+    i32.const 1184
     i32.const 387
     i32.const 16
     call $~lib/builtins/abort
@@ -517,7 +515,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 1248
+    i32.const 1184
     i32.const 400
     i32.const 5
     call $~lib/builtins/abort
@@ -620,7 +618,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 333
    i32.const 14
    call $~lib/builtins/abort
@@ -672,7 +670,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1248
+     i32.const 1184
      i32.const 346
      i32.const 18
      call $~lib/builtins/abort
@@ -703,7 +701,7 @@
   i32.ge_u
   if
    i32.const 1056
-   i32.const 1248
+   i32.const 1184
    i32.const 461
    i32.const 30
    call $~lib/builtins/abort
@@ -794,7 +792,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1248
+    i32.const 1184
     i32.const 499
     i32.const 16
     call $~lib/builtins/abort
@@ -809,7 +807,7 @@
   i32.gt_u
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 501
    i32.const 14
    call $~lib/builtins/abort
@@ -828,7 +826,7 @@
   i32.and
   if
    i32.const 0
-   i32.const 1248
+   i32.const 1184
    i32.const 360
    i32.const 14
    call $~lib/builtins/abort
@@ -902,28 +900,10 @@
   if
    i32.const 1056
    i32.const 1120
-   i32.const 114
+   i32.const 90
    i32.const 31
    call $~lib/builtins/abort
    unreachable
-  end
-  global.get $~lib/rt/tcms/initialized
-  i32.eqz
-  if
-   i32.const 1172
-   i32.const 1168
-   i32.store
-   i32.const 1176
-   i32.const 1168
-   i32.store
-   i32.const 1204
-   i32.const 1200
-   i32.store
-   i32.const 1208
-   i32.const 1200
-   i32.store
-   i32.const 1
-   global.set $~lib/rt/tcms/initialized
   end
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
@@ -945,10 +925,10 @@
    if
     unreachable
    end
-   i32.const 1296
+   i32.const 1264
    i32.const 0
    i32.store
-   i32.const 2864
+   i32.const 2832
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -959,7 +939,7 @@
      local.get $2
      i32.const 2
      i32.shl
-     i32.const 1296
+     i32.const 1264
      i32.add
      i32.const 0
      i32.store offset=4
@@ -977,7 +957,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 1296
+       i32.const 1264
        i32.add
        i32.const 0
        i32.store offset=96
@@ -995,13 +975,13 @@
      br $for-loop|0
     end
    end
-   i32.const 1296
-   i32.const 2868
+   i32.const 1264
+   i32.const 2836
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 1296
+   i32.const 1264
    global.set $~lib/rt/tlsf/ROOT
   end
   global.get $~lib/rt/tlsf/ROOT
@@ -1015,11 +995,12 @@
   local.get $2
   local.get $0
   i32.store offset=16
-  i32.const 1176
-  i32.load
+  global.get $~lib/rt/tcms/fromSpace
+  local.tee $1
+  i32.load offset=8
   local.set $0
   local.get $2
-  i32.const 1168
+  local.get $1
   i32.store offset=4
   local.get $2
   local.get $0
@@ -1032,28 +1013,23 @@
   i32.and
   i32.or
   i32.store offset=4
-  i32.const 1176
+  local.get $1
   local.get $2
-  i32.store
-  global.get $~lib/rt/tcms/total
-  i32.const 1
-  i32.add
-  global.set $~lib/rt/tcms/total
-  global.get $~lib/rt/tcms/totalMem
-  local.get $2
-  i32.load
-  i32.const -4
-  i32.and
-  i32.const 4
-  i32.add
-  i32.add
-  global.set $~lib/rt/tcms/totalMem
+  i32.store offset=8
   local.get $2
   i32.const 20
   i32.add
  )
  (func $~start
   (local $0 i32)
+  i32.const 1236
+  i32.const 1232
+  i32.store
+  i32.const 1240
+  i32.const 1232
+  i32.store
+  i32.const 1232
+  global.set $~lib/rt/tcms/fromSpace
   i32.const 0
   i32.const 3
   call $~lib/rt/tcms/__new

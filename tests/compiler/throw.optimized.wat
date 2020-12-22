@@ -3,6 +3,7 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "visit" (func $~lib/rt/tcms/__visit_externals (param i32)))
  (memory $0 1)
@@ -26,16 +27,22 @@
  (data (i32.const 1416) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1468) ",")
  (data (i32.const 1480) "\01\00\00\00\0e\00\00\00d\00o\00T\00h\00r\00o\00w")
- (global $~lib/rt/tcms/initialized (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 1344))
- (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 1376))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/totalMem (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "doThrow" (func $throw/doThrow))
  (start $~start)
+ (func $~lib/rt/tcms/initLazy (param $0 i32) (result i32)
+  local.get $0
+  local.get $0
+  i32.store offset=4
+  local.get $0
+  local.get $0
+  i32.store offset=8
+  local.get $0
+ )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -692,24 +699,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  global.get $~lib/rt/tcms/initialized
-  i32.eqz
-  if
-   global.get $~lib/rt/tcms/fromSpace
-   global.get $~lib/rt/tcms/fromSpace
-   i32.store offset=4
-   global.get $~lib/rt/tcms/fromSpace
-   global.get $~lib/rt/tcms/fromSpace
-   i32.store offset=8
-   global.get $~lib/rt/tcms/toSpace
-   global.get $~lib/rt/tcms/toSpace
-   i32.store offset=4
-   global.get $~lib/rt/tcms/toSpace
-   global.get $~lib/rt/tcms/toSpace
-   i32.store offset=8
-   i32.const 1
-   global.set $~lib/rt/tcms/initialized
-  end
   i32.const 0
   call $~lib/rt/tcms/__visit_externals
   global.get $~lib/rt/tcms/white
@@ -827,19 +816,6 @@
     i32.const 1516
     i32.gt_u
     if
-     global.get $~lib/rt/tcms/total
-     i32.const 1
-     i32.sub
-     global.set $~lib/rt/tcms/total
-     global.get $~lib/rt/tcms/totalMem
-     local.get $1
-     i32.load
-     i32.const -4
-     i32.and
-     i32.const 4
-     i32.add
-     i32.sub
-     global.set $~lib/rt/tcms/totalMem
      local.get $1
      i32.const 4
      i32.add
@@ -894,6 +870,12 @@
     br $while-continue|0
    end
   end
+  i32.const 1344
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/toSpace
+  i32.const 1376
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/fromSpace
   call $~lib/rt/tcms/__collect
  )
  (func $~lib/rt/tcms/Object#set:next (param $0 i32) (param $1 i32)
