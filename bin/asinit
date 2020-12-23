@@ -307,7 +307,8 @@ function ensureGitignore() {
     fs.writeFileSync(gitignoreFile, [
       "*.wasm",
       "*.wasm.map",
-      "*.asm.js"
+      "*.asm.js",
+      "*.wat"
     ].join("\n") + "\n");
     console.log(colors.green("  Created: ") + gitignoreFile);
   } else {
