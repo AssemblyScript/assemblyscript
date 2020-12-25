@@ -7,6 +7,7 @@ import {
   BinaryenFunctionRef,
   BinaryenIndex,
   BinaryenType,
+  _BinaryenAddFunction,
   _BinaryenCallGetNumOperands,
   _BinaryenCallGetOperandAt,
   _BinaryenCallGetTarget,
@@ -14,10 +15,17 @@ import {
   _BinaryenExpressionGetId,
   _BinaryenExpressionGetType,
   _BinaryenFunctionGetBody,
+  _BinaryenFunctionGetName,
+  _BinaryenFunctionGetNumLocals,
+  _BinaryenFunctionGetNumVars,
+  _BinaryenFunctionGetParams,
+  _BinaryenFunctionGetResults,
+  _BinaryenFunctionGetVar,
   _BinaryenFunctionSetBody,
   _BinaryenLocalSetGetIndex,
   _BinaryenLocalSetGetValue,
   _BinaryenLocalSetIsTee,
+  _BinaryenRemoveFunction,
   _BinaryenReturnGetValue,
   _BinaryenReturnSetValue
 } from "../glue/binaryen";
@@ -27,8 +35,17 @@ import {
   ExpressionId,
   Module,
   NativeType,
-  readString
+  readString,
+  allocPtrArray
 } from "../module";
+
+import {
+  Options
+} from "../compiler";
+
+import {
+  Feature
+} from "../common";
 
 type LocalIndex = BinaryenIndex;
 type SlotIndex = BinaryenIndex;
@@ -44,14 +61,16 @@ export class ShadowStackPass extends BinaryenPass {
   slotMaps: Map<BinaryenFunctionRef, SlotMap> = new Map();
   /** Temporary locals, per function. */
   tempMaps: Map<BinaryenFunctionRef, TempMap> = new Map();
-  /** Target pointer type. */
-  ptrType: NativeType;
+  /** Compiler options. */
+  options: Options;
 
-  constructor(module: Module, sizeType: NativeType) {
+  constructor(module: Module, options: Options) {
     super(module);
-    this.ptrType = sizeType;
+    this.options = options;
   }
 
+  /** Target pointer type. */
+  get ptrType(): NativeType { return this.options.nativeSizeType; }
   /** Target pointer size. */
   get ptrSize(): i32 { return this.ptrType == NativeType.I64 ? 8 : 4; }
   /** Target pointer addition operation. */
@@ -106,8 +125,8 @@ export class ShadowStackPass extends BinaryenPass {
       tempMap = new Map();
       this.tempMaps.set(func, tempMap);
     }
-    // FIXME: C-API
-    let localIndex = 0; // _BinaryenFunctionAddVar(func, type);
+    let numLocals = _BinaryenFunctionGetNumLocals(func);
+    let localIndex = numLocals + tempMap.size;
     tempMap.set(type, localIndex);
     return localIndex;
   }
@@ -218,12 +237,38 @@ export class ShadowStackPass extends BinaryenPass {
     }
   }
 
+  /** Updates a function with additional locals etc. */
+  updateFunction(func: BinaryenFunctionRef): void {
+    let name = _BinaryenFunctionGetName(func);
+    let params = _BinaryenFunctionGetParams(func);
+    let results = _BinaryenFunctionGetResults(func);
+    let body = assert(_BinaryenFunctionGetBody(func));
+    let numVars = _BinaryenFunctionGetNumVars(func);
+    let vars = new Array<NativeType>();
+    for (let i: BinaryenIndex = 0; i < numVars; ++i) {
+      vars[i] = _BinaryenFunctionGetVar(func, i);
+    }
+    let tempMaps = this.tempMaps;
+    if (tempMaps.has(func)) {
+      let tempMap = changetype<TempMap>(tempMaps.get(func));
+      for (let _keys = Map_keys(tempMap), i = 0, k = _keys.length; i < k; ++i) {
+        vars.push(_keys[i]);
+      }
+    }
+    let moduleRef = this.module.ref;
+    _BinaryenRemoveFunction(moduleRef, name);
+    _BinaryenAddFunction(moduleRef, name, params, results, allocPtrArray(vars), vars.length, body);
+  }
+
   /** @override */
   walkModule(): void {
+    // Run the pass normally
     super.walkModule();
+
+    // Instrument returns in functions utilizing stack slots
     var module = this.module;
     var instrumentReturns = new InstrumentReturns(this);
-    for (let _keys = Map_keys(this.slotMaps), i = 0; i < _keys.length; ++i) {
+    for (let _keys = Map_keys(this.slotMaps), i = 0, k = _keys.length; i < k; ++i) {
       let func = _keys[i];
       let slotMap = changetype<SlotMap>(this.slotMaps.get(func));
       let frameSize = slotMap.size * this.ptrSize;
@@ -239,30 +284,40 @@ export class ShadowStackPass extends BinaryenPass {
         this.makeModifyStackptr(-frameSize)
       );
       // memory.fill(__stackptr, 0, frameSize)
-      // TODO: detect bulk-memory feature
-      let remain = frameSize;
-      while (remain >= 8) {
-        // store<i64>(__stackptr, 0, frameSize - remain)
+      if (this.options.hasFeature(Feature.BULK_MEMORY)) {
         stmts.push(
-          module.store(8,
+          module.memory_fill(
             module.global_get(STACKPTR, this.ptrType),
-            module.i64(0),
-            NativeType.I64,
-            frameSize - remain
+            module.i32(0), // TODO: Wasm64 also i32?
+            this.ptrConst(frameSize)
           )
         );
-      }
-      if (remain) {
-        assert(remain == 4);
-        // store<i32>(__stackptr, 0, frameSize - remain)
-        stmts.push(
-          module.store(4,
-            module.global_get(STACKPTR, this.ptrType),
-            module.i32(0),
-            NativeType.I32,
-            frameSize - remain
-          )
-        );
+      } else {
+        let remain = frameSize;
+        while (remain >= 8) {
+          // store<i64>(__stackptr, 0, frameSize - remain)
+          stmts.push(
+            module.store(8,
+              module.global_get(STACKPTR, this.ptrType),
+              module.i64(0),
+              NativeType.I64,
+              frameSize - remain
+            )
+          );
+          remain -= 8;
+        }
+        if (remain) {
+          assert(remain == 4);
+          // store<i32>(__stackptr, 0, frameSize - remain)
+          stmts.push(
+            module.store(4,
+              module.global_get(STACKPTR, this.ptrType),
+              module.i32(0),
+              NativeType.I32,
+              frameSize - remain
+            )
+          );
+        }
       }
       
       // Handle implicit return
@@ -295,6 +350,12 @@ export class ShadowStackPass extends BinaryenPass {
         }
       }
       _BinaryenFunctionSetBody(func, module.flatten(stmts, bodyType));
+    }
+
+    // Update functions we added more locals to
+    // TODO: _BinaryenFunctionAddVar ?
+    for (let _keys = Map_keys(this.tempMaps), i = 0, k = _keys.length; i < k; ++i) {
+      this.updateFunction(_keys[i]);
     }
   }
 }

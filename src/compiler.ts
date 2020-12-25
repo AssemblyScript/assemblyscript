@@ -664,7 +664,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // instrument with a shadow stack
-    new ShadowStackPass(this.module, this.options.nativeSizeType).walkModule();
+    new ShadowStackPass(this.module, this.options).walkModule();
 
     return module;
   }
