@@ -166,7 +166,8 @@ import {
   _BinaryenRefEqGetLeft,
   _BinaryenRefEqGetRight,
   _BinaryenRefEqSetLeft,
-  _BinaryenRefEqSetRight
+  _BinaryenRefEqSetRight,
+  _BinaryenFunctionSetBody
 } from "../glue/binaryen";
 
 /** Base class of custom Binaryen passes. */
@@ -177,26 +178,34 @@ export abstract class BinaryenPass {
 
   /** Gets the current function being walked. */
   get currentFunction(): BinaryenFunctionRef {
-    return assert(this._currentFunction);
+    var currentFunction = this._currentFunction;
+    if (!currentFunction) throw new Error("not walking a function");
+    return currentFunction;
   }
   private _currentFunction: BinaryenFunctionRef = 0;
 
   /** Gets the current global being walked. */
   get currentGlobal(): BinaryenGlobalRef {
-    return assert(this._currentGlobal);
+    var currentGlobal = this._currentGlobal;
+    if (!currentGlobal) throw new Error("not walking a global");
+    return currentGlobal;
   }
   private _currentGlobal: BinaryenGlobalRef = 0;
 
   /** Gets the current expression being walked. */
   get currentExpression(): BinaryenExpressionRef {
-    return assert(this._currentExpression);
+    var currentExpression = this._currentExpression;
+    if (!currentExpression) throw new Error("not walking expressions");
+    return currentExpression;
   }
   private _currentExpression: BinaryenExpressionRef = 0;
 
   /** Gets the parent expression of the current expression being walked. Traps if the top-most parent. */
   get parentExpression(): BinaryenExpressionRef {
     var stack = this.stack;
-    return stack[assert(stack.length) - 1];
+    var length = stack.length;
+    if (!length) throw new Error("stack is empty");
+    return stack[length - 1];
   }
 
   /** Constructs a new Binaryen pass. */
@@ -808,7 +817,7 @@ export abstract class BinaryenPass {
         this.visitTupleExtract(expr);
         break;
       }
-      default: assert(false);
+      default: throw new Error("unexpected expression kind");
     }
     this._currentExpression = previousExpression;
   }
@@ -859,8 +868,16 @@ export abstract class BinaryenPass {
 
   /** Replaces the current expression with the specified replacement. */
   replaceCurrent(replacement: BinaryenExpressionRef): void {
-    assert(replaceChild(this.parentExpression, this.currentExpression, replacement));
-    _BinaryenExpressionFinalize(this.parentExpression);
+    var current = this.currentExpression;
+    var func = this.currentFunction;
+    var body = _BinaryenFunctionGetBody(func);
+    if (body == current) {
+      _BinaryenFunctionSetBody(func, replacement);
+    } else {
+      var replaced = replaceChild(this.parentExpression, current, replacement);
+      if (!replaced) throw Error("failed to replace expression");
+      _BinaryenExpressionFinalize(replacement);
+    }
   }
 }
 
@@ -1367,7 +1384,7 @@ export function replaceChild(
       }
       break;
     }
-    default: assert(false);
+    default: throw new Error("unexpected expression id");
   }
   return 0;
 }
