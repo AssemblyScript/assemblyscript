@@ -195,6 +195,10 @@ import {
   readI32
 } from "./util";
 
+import {
+  ShadowStackPass
+} from "./passes/shadowstack";
+
 /** Compiler options. */
 export class Options {
 
@@ -658,6 +662,10 @@ export class Compiler extends DiagnosticEmitter {
       );
       module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
     }
+
+    // instrument with a shadow stack
+    new ShadowStackPass(this.module, this.options.nativeSizeType).walkModule();
+
     return module;
   }
 

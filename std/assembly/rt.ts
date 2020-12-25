@@ -57,6 +57,13 @@ export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize =
   return array;
 }
 
+// @ts-ignore: decorator
+@lazy export var __stackptr = 0;
+
+export function __managed(ptr: usize): usize {
+  return ptr;
+}
+
 // These are provided by the respective implementation, included as another entry file by asc:
 
 // // @ts-ignore: decorator
