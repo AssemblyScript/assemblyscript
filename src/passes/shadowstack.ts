@@ -27,7 +27,8 @@ import {
   _BinaryenLocalSetIsTee,
   _BinaryenRemoveFunction,
   _BinaryenReturnGetValue,
-  _BinaryenReturnSetValue
+  _BinaryenReturnSetValue,
+  _free
 } from "../glue/binaryen";
 
 import {
@@ -257,7 +258,9 @@ export class ShadowStackPass extends BinaryenPass {
     }
     let moduleRef = this.module.ref;
     _BinaryenRemoveFunction(moduleRef, name);
-    _BinaryenAddFunction(moduleRef, name, params, results, allocPtrArray(vars), vars.length, body);
+    let cArr = allocPtrArray(vars);
+    _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
+    _free(cArr);
   }
 
   /** @override */
