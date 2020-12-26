@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Infrastructure for custom Binaryen passes.
+ * @license Apache-2.0
+ */
+
 import {
   ExpressionId,
   Module

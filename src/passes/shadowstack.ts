@@ -1,3 +1,71 @@
+/**
+ * @fileoverview Shadow stack instrumentation for a precise GC / TriCMS.
+ * 
+ * Instruments function arguments and local sets marked as being 'managed' by
+ * the generator to also do stores to a respective emulated shadow stack slot
+ * while maintaining two halves of a stack frame pre- and post-call.
+ * 
+ * Consider a simple call to a function looking like the following, taking
+ * managed values as arguments, with the function assigning managed values to
+ * locals in its body:
+ * 
+ *   function foo(a: Obj, b: Obj): Obj {
+ *     var c = __managed(a) // slot 2
+ *     __collect()
+ *     return b
+ *   }
+ *   
+ *   foo(__managed(a), __managed(b)) // slot 0, 1
+ * 
+ * The two halves of the GC-relevant stack frame for `foo` look like:
+ * 
+ *   Offset | Value stored
+ *   -------|---------------------------
+ *      0   | First managed argument 'a'
+ *      4   | Second managed argument 'b'
+ *   -------|----------------------------
+ *      8   | First managed local 'c'
+ * 
+ * We are maintaining two halves here because the first half is simpler plus we
+ * need to do it anyway for indirect calls, where both halves are only known
+ * separately. Note that the first half is necessary due to execution order of
+ * function arguments, where each argument may be arbitrarily complex and
+ * trigger GC while evaluating. In the example above, we must place 'a' on the
+ * stack before evaluating 'b', which may trigger GC while executing.
+ * 
+ * Instrumentation done below looks like this:
+ * 
+ *   function foo(a: usize, b: usize): usize { // frameSize = 4
+ *     memory.fill(__stackptr -= 4, 0, 4)
+       store<usize>(__stackptr, c = a, 0)
+ *     __collect()
+ *     var t = b
+ *     __stackptr += 4
+ *     return t
+ *   }
+ * 
+ *   (
+ *     t = foo(
+ *       (
+ *         t = a,
+ *         __stackptr -= 4,
+ *         store<usize>(__stackptr, t, 0),
+ *         t
+ *       ),
+ *       (
+ *         t = b,
+ *         __stackptr -= 4,
+ *         store<usize>(__stackptr, b, 4),
+ *         t
+ *       )
+ *     ),
+ *     __stackptr += 8,
+ *     t
+ *   )
+ * 
+ * @license Apache-2.0
+ */
+
 import {
   BinaryenPass
 } from "./pass";
