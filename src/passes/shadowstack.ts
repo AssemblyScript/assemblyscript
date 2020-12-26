@@ -33,35 +33,35 @@
  * trigger GC while evaluating. In the example above, we must place 'a' on the
  * stack before evaluating 'b', which may trigger GC while executing.
  * 
- * Instrumentation done below looks like this:
+ * Instrumentation done below looks about like the following, with 't' and 'r'
+ * being temporary locals and the stack growing downwards:
  * 
- *   function foo(a: usize, b: usize): usize { // frameSize = 4
- *     memory.fill(__stackptr -= 4, 0, 4)
-       store<usize>(__stackptr, c = a, 0)
+ *   __stackptr = __stack_base // live pointers in [__stackptr, __stack_base[
+ * 
+ *   function foo(a: usize, b: usize): usize { // frameSize = 1 * sizeof<usize>()
+ *     memory.fill(__stackptr -= frameSize, 0, frameSize)
+ *     store<usize>(__stackptr, c = a, 0 * sizeof<usize>())
  *     __collect()
- *     var t = b
- *     __stackptr += 4
- *     return t
+ *     var r = b
+ *     __stackptr += frameSize
+ *     return r
  *   }
  * 
  *   (
- *     t = foo(
- *       (
- *         t = a,
- *         __stackptr -= 4,
- *         store<usize>(__stackptr, t, 0),
- *         t
- *       ),
- *       (
- *         t = b,
- *         __stackptr -= 4,
- *         store<usize>(__stackptr, b, 4),
- *         t
- *       )
+ *     r = foo(
+ *       ( t = a,
+ *         store<usize>(__stackptr -= sizeof<usize>(), t, 0 * sizeof<usize>()),
+ *         t ),
+ *       ( t = b,
+ *         store<usize>(__stackptr -= sizeof<usize>(), t, 1 * sizeof<usize>()),
+ *         t )
  *     ),
- *     __stackptr += 8,
- *     t
+ *     __stackptr += 2 * sizeof<usize>(),
+ *     r
  *   )
+ * 
+ * Also note that we have to `memory.fill` the second half of the frame so the
+ * GC does not see invalid pointers that may have been on the stack earlier.
  * 
  * @license Apache-2.0
  */
