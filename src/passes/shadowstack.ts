@@ -355,7 +355,7 @@ export class ShadowStackPass extends BinaryenPass {
         this.makeModifyStackptr(-frameSize)
       );
       // memory.fill(__stackptr, 0, frameSize)
-      if (this.options.hasFeature(Feature.BULK_MEMORY)) {
+      if (this.options.hasFeature(Feature.BULK_MEMORY) && frameSize > 16) {
         stmts.push(
           module.memory_fill(
             module.global_get(STACKPTR, this.ptrType),

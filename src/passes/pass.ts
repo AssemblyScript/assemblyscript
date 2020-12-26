@@ -873,15 +873,16 @@ export abstract class BinaryenPass {
 
   /** Replaces the current expression with the specified replacement. */
   replaceCurrent(replacement: BinaryenExpressionRef): void {
-    var current = this.currentExpression;
+    var search = this.currentExpression;
     var func = this.currentFunction;
     var body = _BinaryenFunctionGetBody(func);
-    if (body == current) {
+    if (body == search) {
       _BinaryenFunctionSetBody(func, replacement);
     } else {
-      var replaced = replaceChild(this.parentExpression, current, replacement);
+      var parent = this.parentExpression;
+      var replaced = replaceChild(parent, search, replacement);
       if (!replaced) throw Error("failed to replace expression");
-      _BinaryenExpressionFinalize(replacement);
+      _BinaryenExpressionFinalize(parent);
     }
   }
 }
