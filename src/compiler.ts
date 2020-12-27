@@ -838,6 +838,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // just traverse members below
       case ElementKind.ENUM:
+      case ElementKind.INTERFACE_PROTOTYPE:
       case ElementKind.NAMESPACE:
       case ElementKind.TYPEDEFINITION:
       case ElementKind.INDEXSIGNATURE: break;
@@ -907,6 +908,7 @@ export class Compiler extends DiagnosticEmitter {
         if (propertyInstance) this.compileProperty(propertyInstance);
         break;
       }
+      case ElementKind.INTERFACE_PROTOTYPE:
       case ElementKind.NAMESPACE:
       case ElementKind.TYPEDEFINITION:
       case ElementKind.ENUMVALUE:
