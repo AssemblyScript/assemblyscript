@@ -1,6 +1,6 @@
 {
   "options": {
-    "noExportRuntime": true,
+    "exportRuntime": false,
     "noAssert": true
   }
 }

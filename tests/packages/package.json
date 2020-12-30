@@ -1,15 +1,15 @@
 {
   "scripts": {
     "test": "npm run a && npm run b && npm run c && npm run d && npm run e && npm run f && npm run g && npm run as && npm run h",
-    "a": "cd ./packages/a && node ../../../../bin/asc assembly/index.ts --noEmit --noExportRuntime",
-    "as": "cd ./packages/as && node ../../../../bin/asc as/index.ts --noEmit --noExportRuntime",
-    "b": "cd ./packages/b && node ../../../../bin/asc assembly/index.ts --noEmit --noExportRuntime && node ../../../../bin/asc assembly/index.ts --noEmit --noExportRuntime --listFiles",
-    "c": "cd ./packages/c && node ../../../../bin/asc assembly/index.ts --noEmit --noExportRuntime",
-    "d": "cd ./packages/d && node ../../../../bin/asc assembly/index.ts --path packages --noEmit --noExportRuntime --traceResolution",
-    "e": "cd ./packages/d/packages/e && node ../../../../../../bin/asc assembly/index.ts --noEmit --noExportRuntime",
-    "f": "cd ./packages/d/packages/e/packages/f && node ../../../../../../../../bin/asc assembly/index.ts --noEmit --noExportRuntime",
+    "a": "cd ./packages/a && node ../../../../bin/asc assembly/index.ts --noEmit",
+    "as": "cd ./packages/as && node ../../../../bin/asc as/index.ts --noEmit",
+    "b": "cd ./packages/b && node ../../../../bin/asc assembly/index.ts --noEmit && node ../../../../bin/asc assembly/index.ts --noEmit --listFiles",
+    "c": "cd ./packages/c && node ../../../../bin/asc assembly/index.ts --noEmit",
+    "d": "cd ./packages/d && node ../../../../bin/asc assembly/index.ts --path packages --noEmit --traceResolution",
+    "e": "cd ./packages/d/packages/e && node ../../../../../../bin/asc assembly/index.ts --noEmit",
+    "f": "cd ./packages/d/packages/e/packages/f && node ../../../../../../../../bin/asc assembly/index.ts --noEmit",
     "g": "cd ./packages/g && node test.js",
-    "h": "cd ./packages/h && node ../../../../bin/asc assembly/index.ts --noEmit --noExportRuntime --traceResolution"
+    "h": "cd ./packages/h && node ../../../../bin/asc assembly/index.ts --noEmit --traceResolution"
   },
   "author": "Willem Wyndham",
   "license": "Apache-2.0"

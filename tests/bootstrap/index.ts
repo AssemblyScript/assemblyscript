@@ -53,7 +53,7 @@ async function test(build: string): Promise<void> {
 
   console.log("\nInitializing program ...");
   const optionsPtr = asc.newOptions();
-  asc.setNoExportRuntime(optionsPtr, true);
+  asc.setExportRuntime(optionsPtr, false);
   const programPtr = asc.__pin(asc.newProgram(optionsPtr));
   if (incremental) asc.__collect(true);
 

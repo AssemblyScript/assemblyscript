@@ -2,7 +2,7 @@
   "targets": {
     "release": {
       "noAssert": true,
-      "noExportRuntime": true
+      "exportRuntime": false
     },
     "debug": {
       "optimizeLevel": 3,
@@ -12,6 +12,6 @@
     }
   },
   "options": {
-    "noExportRuntime": false
+    "exportRuntime": true
   }
 }

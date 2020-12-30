@@ -5,7 +5,6 @@ const stderr = asc.createMemoryStream();
 asc.main([
   "assembly/index.ts",
   "--noEmit",
-  "--noExportRuntime",
   "--traceResolution"
 ], { stderr }, err => {
   if (stderr.toString().includes("File '~lib/a.ts' not found.")) {

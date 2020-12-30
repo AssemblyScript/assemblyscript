@@ -1,6 +1,6 @@
 {
   "options": {
-    "noExportRuntime": false,
+    "exportRuntime": true,
     "noEmit": false,
     "noAssert": true,
     "enable": ["simd"]
