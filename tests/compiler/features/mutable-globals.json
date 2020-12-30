@@ -3,7 +3,6 @@
     "mutable-globals"
   ],
   "asc_flags": [
-    "--noExportRuntime",
     "--explicitStart"
   ]
 }

@@ -885,6 +885,8 @@ export declare function _BinaryenAddEventExport(module: BinaryenModuleRef, inter
 export declare function _BinaryenRemoveExport(module: BinaryenModuleRef, externalName: BinaryenString): void;
 export declare function _BinaryenGetNumExports(module: BinaryenModuleRef): BinaryenIndex;
 export declare function _BinaryenGetExportByIndex(module: BinaryenModuleRef, index: BinaryenIndex): BinaryenExportRef;
+export declare function _BinaryenExportGetName(ref: BinaryenExportRef): BinaryenString;
+export declare function _BinaryenExportGetValue(ref: BinaryenExportRef): BinaryenString;
 
 type BinaryenGlobalRef = usize;
 

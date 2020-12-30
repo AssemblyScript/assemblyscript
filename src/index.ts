@@ -129,9 +129,9 @@ export function setLowMemoryLimit(options: Options, lowMemoryLimit: i32): void {
   options.lowMemoryLimit = lowMemoryLimit;
 }
 
-/** Sets the `noExportRuntime` option. */
-export function setNoExportRuntime(options: Options, noExportRuntime: bool): void {
-  options.noExportRuntime = noExportRuntime;
+/** Sets the `exportRuntime` option. */
+export function setExportRuntime(options: Options, exportRuntime: bool): void {
+  options.exportRuntime = exportRuntime;
 }
 
 /** Sign extension operations. */

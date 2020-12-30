@@ -405,7 +405,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setNoUnsafe(compilerOptions, opts.noUnsafe);
   assemblyscript.setPedantic(compilerOptions, opts.pedantic);
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
-  assemblyscript.setNoExportRuntime(compilerOptions, opts.noExportRuntime);
+  assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
 
   // Instrument callback to perform GC
   callback = (function(callback) {
@@ -698,7 +698,7 @@ exports.main = function main(argv, options, callback) {
 
   // Include runtime before entry files so its setup runs first
   {
-    let runtimePath = opts.noExportRuntime ? "rt/index-noexport" : "rt/index";
+    let runtimePath = opts.exportRuntime ? "rt/index-exported" : "rt/index";
     let runtimeText = exports.libraryFiles[runtimePath];
     if (runtimeText == null) return callback(Error("Runtime entry not found."));
     stats.parseCount++;

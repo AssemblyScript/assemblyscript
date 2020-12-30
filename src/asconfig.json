@@ -5,8 +5,9 @@
   ],
   "options": {
     "explicitStart": true,
-    "measure": true,
-    "initialMemory": 256
+    "exportRuntime": true,
+    "initialMemory": 256,
+    "measure": true
   },
   "targets": {
     "untouched": {

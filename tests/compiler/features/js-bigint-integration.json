@@ -3,7 +3,6 @@
     "bigint-integration"
   ],
   "asc_flags": [
-    "--noExportRuntime",
     "--explicitStart"
   ]
 }

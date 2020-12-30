@@ -999,8 +999,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.shrinkLevelHint, 0));
     this.registerConstantInteger(CommonNames.ASC_LOW_MEMORY_LIMIT, Type.i32,
       i64_new(options.lowMemoryLimit, 0));
-    this.registerConstantInteger(CommonNames.ASC_NO_EXPORT_RUNTIME, Type.bool,
-      i64_new(options.noExportRuntime ? 1 : 0, 0));
+    this.registerConstantInteger(CommonNames.ASC_EXPORT_RUNTIME, Type.bool,
+      i64_new(options.exportRuntime ? 1 : 0, 0));
 
     // register feature hints
     this.registerConstantInteger(CommonNames.ASC_FEATURE_SIGN_EXTENSION, Type.bool,

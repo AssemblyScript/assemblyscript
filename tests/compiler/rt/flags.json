@@ -3,6 +3,5 @@
     "simd"
   ],
   "asc_flags": [
-    "--noExportRuntime"
   ]
 }

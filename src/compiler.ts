@@ -234,8 +234,8 @@ export class Options {
   pedantic: bool = false;
   /** Indicates a very low (<64k) memory limit. */
   lowMemoryLimit: u32 = 0;
-  /** If true, does not export the runtime helpers. */
-  noExportRuntime: bool = false;
+  /** If true, exports the runtime helpers. */
+  exportRuntime: bool = false;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;

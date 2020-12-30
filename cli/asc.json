@@ -67,12 +67,6 @@
     "type": "b",
     "default": false
   },
-  "noExportRuntime": {
-    "category": "Optimization",
-    "description": "Does not export the runtime helpers (e.g. __new).",
-    "type": "b",
-    "default": false
-  },
 
   "outFile": {
     "category": "Output",
@@ -171,6 +165,12 @@
   "exportTable": {
     "category": "Features",
     "description": "Exports the function table as 'table'.",
+    "type": "b",
+    "default": false
+  },
+  "exportRuntime": {
+    "category": "Features",
+    "description": "Exports the runtime helpers (__new, __collect etc.).",
     "type": "b",
     "default": false
   },

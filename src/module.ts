@@ -1355,6 +1355,17 @@ export class Module {
     binaryen._free(cArr);
   }
 
+  // exports
+
+  hasExport(name: string): bool {
+    var numExports = binaryen._BinaryenGetNumExports(this.ref);
+    for (let i: Index = 0; i < numExports; ++i) {
+      let exportRef = binaryen._BinaryenGetExportByIndex(this.ref, i);
+      if (readString(binaryen._BinaryenExportGetName(exportRef)) == name) return true;
+    }
+    return false;
+  }
+
   // sections
 
   addCustomSection(name: string, contents: Uint8Array): void {
