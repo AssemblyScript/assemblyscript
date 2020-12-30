@@ -21,6 +21,7 @@ export type ExportRef = usize;
 export type RelooperRef = usize;
 export type RelooperBlockRef = usize;
 export type Index = u32;
+export type CString = usize;
 
 // The following constants must be updated by running scripts/update-constants.
 // This is necessary because the functions are not yet callable with Binaryen

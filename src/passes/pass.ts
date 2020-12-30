@@ -4,16 +4,16 @@
  */
 
 import {
+  Module,
   ExpressionId,
-  Module
+  ExpressionRef,
+  FunctionRef,
+  GlobalRef,
+  Index,
+  CString
 } from "../module";
 
 import {
-  BinaryenExpressionRef,
-  BinaryenFunctionRef,
-  BinaryenGlobalRef,
-  BinaryenIndex,
-  BinaryenString,
   _BinaryenExpressionGetId,
   _BinaryenBlockGetNumChildren,
   _BinaryenBlockGetChildAt,
@@ -176,248 +176,248 @@ import {
 } from "../glue/binaryen";
 
 /** Base class of custom Binaryen visitors. */
-export abstract class BinaryenVisitor {
+export abstract class Visitor {
   /** Expression stack. */
-  private stack: BinaryenExpressionRef[] = new Array<BinaryenExpressionRef>();
+  private stack: ExpressionRef[] = new Array<ExpressionRef>();
 
   /** Gets the current expression being walked. */
-  get currentExpression(): BinaryenExpressionRef {
+  get currentExpression(): ExpressionRef {
     var currentExpression = this._currentExpression;
     if (!currentExpression) throw new Error("not walking expressions");
     return currentExpression;
   }
-  _currentExpression: BinaryenExpressionRef = 0;
+  _currentExpression: ExpressionRef = 0;
 
   /** Gets the parent expression of the current expression being walked. Traps if the top-most parent. */
-  get parentExpression(): BinaryenExpressionRef {
+  get parentExpression(): ExpressionRef {
     var stack = this.stack;
     var length = stack.length;
     if (!length) throw new Error("stack is empty");
     return stack[length - 1];
   }
 
-  visitBlock(expr: BinaryenExpressionRef): void {
+  visitBlock(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitIf(expr: BinaryenExpressionRef): void {
+  visitIf(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitLoop(expr: BinaryenExpressionRef): void {
+  visitLoop(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitBreak(expr: BinaryenExpressionRef): void {
+  visitBreak(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitSwitch(expr: BinaryenExpressionRef): void {
+  visitSwitch(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitCallPre(expr: BinaryenExpressionRef): void {
+  visitCallPre(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitCall(expr: BinaryenExpressionRef): void {
+  visitCall(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitCallIndirectPre(expr: BinaryenExpressionRef): void {
+  visitCallIndirectPre(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitCallIndirect(expr: BinaryenExpressionRef): void {
+  visitCallIndirect(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitLocalGet(expr: BinaryenExpressionRef): void {
+  visitLocalGet(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitLocalSet(expr: BinaryenExpressionRef): void {
+  visitLocalSet(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitGlobalGet(expr: BinaryenExpressionRef): void {
+  visitGlobalGet(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitGlobalSet(expr: BinaryenExpressionRef): void {
+  visitGlobalSet(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitLoad(expr: BinaryenExpressionRef): void {
+  visitLoad(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitStore(expr: BinaryenExpressionRef): void {
+  visitStore(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitConst(expr: BinaryenExpressionRef): void {
+  visitConst(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitUnary(expr: BinaryenExpressionRef): void {
+  visitUnary(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitBinary(expr: BinaryenExpressionRef): void {
+  visitBinary(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitSelect(expr: BinaryenExpressionRef): void {
+  visitSelect(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitDrop(expr: BinaryenExpressionRef): void {
+  visitDrop(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitReturn(expr: BinaryenExpressionRef): void {
+  visitReturn(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitMemorySize(expr: BinaryenExpressionRef): void {
+  visitMemorySize(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitMemoryGrow(expr: BinaryenExpressionRef): void {
+  visitMemoryGrow(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitNop(expr: BinaryenExpressionRef): void {
+  visitNop(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitUnreachable(expr: BinaryenExpressionRef): void {
+  visitUnreachable(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitAtomicRMW(expr: BinaryenExpressionRef): void {
+  visitAtomicRMW(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitAtomicCmpxchg(expr: BinaryenExpressionRef): void {
+  visitAtomicCmpxchg(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitAtomicWait(expr: BinaryenExpressionRef): void {
+  visitAtomicWait(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitAtomicNotify(expr: BinaryenExpressionRef): void {
+  visitAtomicNotify(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitAtomicFence(expr: BinaryenExpressionRef): void {
+  visitAtomicFence(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitSIMDExtract(expr: BinaryenExpressionRef): void {
+  visitSIMDExtract(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitSIMDReplace(expr: BinaryenExpressionRef): void {
+  visitSIMDReplace(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitSIMDShuffle(expr: BinaryenExpressionRef): void {
+  visitSIMDShuffle(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitSIMDTernary(expr: BinaryenExpressionRef): void {
+  visitSIMDTernary(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitSIMDShift(expr: BinaryenExpressionRef): void {
+  visitSIMDShift(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitSIMDLoad(expr: BinaryenExpressionRef): void {
+  visitSIMDLoad(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitMemoryInit(expr: BinaryenExpressionRef): void {
+  visitMemoryInit(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitDataDrop(expr: BinaryenExpressionRef): void {
+  visitDataDrop(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitMemoryCopy(expr: BinaryenExpressionRef): void {
+  visitMemoryCopy(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitMemoryFill(expr: BinaryenExpressionRef): void {
+  visitMemoryFill(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitPop(expr: BinaryenExpressionRef): void {
+  visitPop(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitRefNull(expr: BinaryenExpressionRef): void {
+  visitRefNull(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitRefIsNull(expr: BinaryenExpressionRef): void {
+  visitRefIsNull(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitRefFunc(expr: BinaryenExpressionRef): void {
+  visitRefFunc(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitRefEq(expr: BinaryenExpressionRef): void {
+  visitRefEq(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitTry(expr: BinaryenExpressionRef): void {
+  visitTry(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitThrow(expr: BinaryenExpressionRef): void {
+  visitThrow(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitRethrow(expr: BinaryenExpressionRef): void {
+  visitRethrow(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitBrOnExn(expr: BinaryenExpressionRef): void {
+  visitBrOnExn(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitTupleMake(expr: BinaryenExpressionRef): void {
+  visitTupleMake(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitTupleExtract(expr: BinaryenExpressionRef): void {
+  visitTupleExtract(expr: ExpressionRef): void {
     // unimp
   }
 
-  visitName(name: BinaryenString): void {
+  visitName(name: CString): void {
     // unimp
   }
 
-  visitLabel(name: BinaryenString): void {
+  visitLabel(name: CString): void {
     // unimp
   }
 
-  visitIndex(index: BinaryenIndex): void {
+  visitIndex(index: Index): void {
     // unimp
   }
 
-  visitEvent(name: BinaryenString): void {
+  visitEvent(name: CString): void {
     // unimp
   }
 
   /** Visits any expression, delegating to the respective visitor methods. */
-  visit(expr: BinaryenExpressionRef): void {
+  visit(expr: ExpressionRef): void {
     let previousExpression = this._currentExpression;
     this._currentExpression = expr;
     switch (_BinaryenExpressionGetId(expr)) {
@@ -425,7 +425,7 @@ export abstract class BinaryenVisitor {
         this.stack.push(expr);
         let name = _BinaryenBlockGetName(expr);
         if (name) this.visitLabel(name);
-        for (let i: BinaryenIndex = 0, n = _BinaryenBlockGetNumChildren(expr); i < n; ++i) {
+        for (let i: Index = 0, n = _BinaryenBlockGetNumChildren(expr); i < n; ++i) {
           this.visit(_BinaryenBlockGetChildAt(expr, i));
         }
         assert(this.stack.pop() == expr);
@@ -467,7 +467,7 @@ export abstract class BinaryenVisitor {
         let defaultName = _BinaryenSwitchGetDefaultName(expr);
         if (defaultName) this.visitLabel(defaultName);
         let numNames = _BinaryenSwitchGetNumNames(expr);
-        for (let i: BinaryenIndex = 0; i < numNames; ++i) {
+        for (let i: Index = 0; i < numNames; ++i) {
           this.visitLabel(_BinaryenSwitchGetNameAt(expr, i));
         }
         this.visit(_BinaryenSwitchGetCondition(expr));
@@ -482,7 +482,7 @@ export abstract class BinaryenVisitor {
         this.stack.push(expr);
         this.visitName(_BinaryenCallGetTarget(expr));
         let numOperands = _BinaryenCallGetNumOperands(expr);
-        for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+        for (let i: Index = 0; i < numOperands; ++i) {
           this.visit(_BinaryenCallGetOperandAt(expr, i));
         }
         assert(this.stack.pop() == expr);
@@ -493,7 +493,7 @@ export abstract class BinaryenVisitor {
         this.visitCallIndirectPre(expr);
         this.stack.push(expr);
         this.visit(_BinaryenCallIndirectGetTarget(expr));
-        for (let i: BinaryenIndex = 0, k = _BinaryenCallIndirectGetNumOperands(expr); i < k; ++i) {
+        for (let i: Index = 0, k = _BinaryenCallIndirectGetNumOperands(expr); i < k; ++i) {
           this.visit(_BinaryenCallIndirectGetOperandAt(expr, i));
         }
         assert(this.stack.pop() == expr);
@@ -768,7 +768,7 @@ export abstract class BinaryenVisitor {
         this.stack.push(expr);
         this.visitEvent(_BinaryenThrowGetEvent(expr));
         let numOperands = _BinaryenThrowGetNumOperands(expr);
-        for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+        for (let i: Index = 0; i < numOperands; ++i) {
           this.visit(_BinaryenThrowGetOperandAt(expr, i));
         }
         assert(this.stack.pop() == expr);
@@ -795,7 +795,7 @@ export abstract class BinaryenVisitor {
         let numOperands = _BinaryenTupleMakeGetNumOperands(expr);
         if (numOperands) {
           this.stack.push(expr);
-          for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+          for (let i: Index = 0; i < numOperands; ++i) {
             this.visit(_BinaryenTupleMakeGetOperandAt(expr, i));
           }
           assert(this.stack.pop() == expr);
@@ -817,23 +817,23 @@ export abstract class BinaryenVisitor {
 }
 
 /** Base class of custom Binaryen passes. */
-export abstract class BinaryenPass extends BinaryenVisitor {
+export abstract class Pass extends Visitor {
 
   /** Gets the current function being walked. */
-  get currentFunction(): BinaryenFunctionRef {
+  get currentFunction(): FunctionRef {
     var currentFunction = this._currentFunction;
     if (!currentFunction) throw new Error("not walking a function");
     return currentFunction;
   }
-  private _currentFunction: BinaryenFunctionRef = 0;
+  private _currentFunction: FunctionRef = 0;
 
   /** Gets the current global being walked. */
-  get currentGlobal(): BinaryenGlobalRef {
+  get currentGlobal(): GlobalRef {
     var currentGlobal = this._currentGlobal;
     if (!currentGlobal) throw new Error("not walking a global");
     return currentGlobal;
   }
-  private _currentGlobal: BinaryenGlobalRef = 0;
+  private _currentGlobal: GlobalRef = 0;
 
   /** Constructs a new Binaryen pass. */
   constructor(readonly module: Module) {
@@ -851,13 +851,13 @@ export abstract class BinaryenPass extends BinaryenVisitor {
   /** Walks all functions. */
   walkFunctions(): void {
     var moduleRef = this.module.ref;
-    for (let i: BinaryenIndex = 0, k = _BinaryenGetNumFunctions(moduleRef); i < k; ++i) {
+    for (let i: Index = 0, k = _BinaryenGetNumFunctions(moduleRef); i < k; ++i) {
       this.walkFunction(_BinaryenGetFunctionByIndex(moduleRef, i));
     }
   }
 
   /** Walks a specific function. */
-  walkFunction(func: BinaryenFunctionRef): void {
+  walkFunction(func: FunctionRef): void {
     var body = _BinaryenFunctionGetBody(func);
     if (body) {
       this._currentFunction = func;
@@ -875,7 +875,7 @@ export abstract class BinaryenPass extends BinaryenVisitor {
   }
 
   /** Walks a specific global variable. */
-  walkGlobal(global: BinaryenGlobalRef): void {
+  walkGlobal(global: GlobalRef): void {
     this._currentGlobal = global;
     var init = _BinaryenGlobalGetInitExpr(global);
     this.visit(init);
@@ -885,7 +885,7 @@ export abstract class BinaryenPass extends BinaryenVisitor {
   // Utility
 
   /** Replaces the current expression with the specified replacement. */
-  replaceCurrent(replacement: BinaryenExpressionRef): void {
+  replaceCurrent(replacement: ExpressionRef): void {
     var search = this.currentExpression;
     var func = this.currentFunction;
     var body = _BinaryenFunctionGetBody(func);
@@ -903,16 +903,16 @@ export abstract class BinaryenPass extends BinaryenVisitor {
 /** Replaces an expression within a parent expression. Returns the replaced expression on success, otherwise `0`. */
 export function replaceChild(
   /** Parent expression containing `search`. */
-  parent: BinaryenExpressionRef,
+  parent: ExpressionRef,
   /** Expression to replace. */
-  search: BinaryenExpressionRef,
+  search: ExpressionRef,
   /** Expression to replace `search` with. */
-  replacement: BinaryenExpressionRef
-): BinaryenExpressionRef {
+  replacement: ExpressionRef
+): ExpressionRef {
   switch (_BinaryenExpressionGetId(parent)) {
     case ExpressionId.Block: {
       let numChildren = _BinaryenBlockGetNumChildren(parent);
-      for (let i: BinaryenIndex = 0; i < numChildren; ++i) {
+      for (let i: Index = 0; i < numChildren; ++i) {
         let child = _BinaryenBlockGetChildAt(parent, i);
         if (child == search) {
           _BinaryenBlockSetChildAt(parent, i, replacement);
@@ -975,7 +975,7 @@ export function replaceChild(
     }
     case ExpressionId.Call: {
       let numOperands = _BinaryenCallGetNumOperands(parent);
-      for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+      for (let i: Index = 0; i < numOperands; ++i) {
         let operand = _BinaryenCallGetOperandAt(parent, i);
         if (operand == search) {
           _BinaryenCallSetOperandAt(parent, i, replacement);
@@ -991,7 +991,7 @@ export function replaceChild(
         return target;
       }
       let numOperands = _BinaryenCallIndirectGetNumOperands(parent);
-      for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+      for (let i: Index = 0; i < numOperands; ++i) {
         let operand = _BinaryenCallIndirectGetOperandAt(parent, i);
         if (operand == search) {
           _BinaryenCallIndirectSetOperandAt(parent, i, replacement);
@@ -1359,7 +1359,7 @@ export function replaceChild(
     }
     case ExpressionId.Throw: {
       let numOperands = _BinaryenThrowGetNumOperands(parent);
-      for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+      for (let i: Index = 0; i < numOperands; ++i) {
         let operand = _BinaryenThrowGetOperandAt(parent, i);
         if (operand == search) {
           _BinaryenThrowSetOperandAt(parent, i, replacement);
@@ -1386,7 +1386,7 @@ export function replaceChild(
     }
     case ExpressionId.TupleMake: {
       let numOperands = _BinaryenTupleMakeGetNumOperands(parent);
-      for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+      for (let i: Index = 0; i < numOperands; ++i) {
         let operand = _BinaryenTupleMakeGetOperandAt(parent, i);
         if (operand == search) {
           _BinaryenTupleMakeSetOperandAt(parent, i, replacement);

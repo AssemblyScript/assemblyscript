@@ -4,16 +4,19 @@
  */
 
 import {
-  BinaryenVisitor
+  Visitor
 } from "./pass";
 
 import {
-  BinaryenExpressionRef,
+  ExpressionRef
+} from "../module";
+
+import {
   _BinaryenLocalGetGetIndex,
   _BinaryenLocalSetGetIndex
 } from "../glue/binaryen";
 
-class FindUsedLocalsVisitor extends BinaryenVisitor {
+class FindUsedLocalsVisitor extends Visitor {
   used: Set<i32>;
 
   constructor(used: Set<i32> = new Set()) {
@@ -22,12 +25,12 @@ class FindUsedLocalsVisitor extends BinaryenVisitor {
   }
   
   /** @override */
-  visitLocalGet(localGet: BinaryenExpressionRef): void {
+  visitLocalGet(localGet: ExpressionRef): void {
     this.used.add(<i32>_BinaryenLocalGetGetIndex(localGet));
   }
 
   /** @override */
-  visitLocalSet(localSet: BinaryenExpressionRef): void {
+  visitLocalSet(localSet: ExpressionRef): void {
     this.used.add(<i32>_BinaryenLocalSetGetIndex(localSet));
   }
 }
@@ -36,7 +39,7 @@ var singleton: FindUsedLocalsVisitor | null = null;
 
 /** Finds the indexes of all locals used in the specified expression. */
 export function findUsedLocals(
-  expr: BinaryenExpressionRef,
+  expr: ExpressionRef,
   used: Set<i32> = new Set()
 ): Set<i32> {
   var visitor = singleton;

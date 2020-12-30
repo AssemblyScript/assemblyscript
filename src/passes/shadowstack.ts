@@ -81,14 +81,10 @@
  */
 
 import {
-  BinaryenPass
+  Pass
 } from "./pass";
 
 import {
-  BinaryenExpressionRef,
-  BinaryenFunctionRef,
-  BinaryenIndex,
-  BinaryenType,
   _BinaryenAddFunction,
   _BinaryenCallGetNumOperands,
   _BinaryenCallGetOperandAt,
@@ -117,8 +113,11 @@ import {
 } from "../glue/binaryen";
 
 import {
-  BinaryOp,
   ExpressionId,
+  ExpressionRef,
+  FunctionRef,
+  Index,
+  BinaryOp,
   NativeType,
   readString,
   allocPtrArray
@@ -133,17 +132,17 @@ import {
   Feature
 } from "../common";
 
-type LocalIndex = BinaryenIndex;
-type SlotIndex = BinaryenIndex;
+type LocalIndex = Index;
+type SlotIndex = Index;
 type SlotMap = Map<LocalIndex,SlotIndex>;
-type TempMap = Map<BinaryenType,LocalIndex>;
+type TempMap = Map<NativeType,LocalIndex>;
 
 const STACK = "__stack";
 const STACK_PTR = "__stack_ptr";
 const STACK_BASE = "__stack_base";
 
 /** Attempts to match the `__stack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
-function matchStack(expr: BinaryenExpressionRef): BinaryenExpressionRef {
+function matchStack(expr: ExpressionRef): ExpressionRef {
   if (_BinaryenExpressionGetId(expr) == ExpressionId.Call && readString(_BinaryenCallGetTarget(expr)) == STACK) {
     assert(_BinaryenCallGetNumOperands(expr) == 1);
     return _BinaryenCallGetOperandAt(expr, 0);
@@ -152,11 +151,11 @@ function matchStack(expr: BinaryenExpressionRef): BinaryenExpressionRef {
 }
 
 /** Instruments a module with a shadow stack for precise GC. */
-export class ShadowStackPass extends BinaryenPass {
+export class ShadowStackPass extends Pass {
   /** Stack frame slots, per function. */
-  slotMaps: Map<BinaryenFunctionRef, SlotMap> = new Map();
+  slotMaps: Map<FunctionRef, SlotMap> = new Map();
   /** Temporary locals, per function. */
-  tempMaps: Map<BinaryenFunctionRef, TempMap> = new Map();
+  tempMaps: Map<FunctionRef, TempMap> = new Map();
   /** Compiler reference. */
   compiler: Compiler;
 
@@ -176,14 +175,14 @@ export class ShadowStackPass extends BinaryenPass {
   get ptrBinarySub(): BinaryOp { return this.ptrType == NativeType.I64 ? BinaryOp.SubI64 : BinaryOp.SubI32; }
 
   /** Gets a constant with the specified value of the target pointer type. */
-  ptrConst(value: i32): BinaryenExpressionRef {
+  ptrConst(value: i32): ExpressionRef {
     return this.ptrType == NativeType.I64
       ? this.module.i64(value)
       : this.module.i32(value);
   }
 
   /** Notes the presence of a slot for the specified (imaginary) local, returning the slot index. */
-  noteSlot(func: BinaryenFunctionRef, localIndex: BinaryenIndex): i32 {
+  noteSlot(func: FunctionRef, localIndex: Index): i32 {
     let slotMap: SlotMap;
     if (this.slotMaps.has(func)) {
       slotMap = changetype<SlotMap>(this.slotMaps.get(func));
@@ -200,12 +199,12 @@ export class ShadowStackPass extends BinaryenPass {
   }
 
   /** Gets a shared temporary local of the given type in the specified functions. */
-  getSharedTemp(func: BinaryenFunctionRef, type: NativeType): BinaryenIndex {
+  getSharedTemp(func: FunctionRef, type: NativeType): Index {
     let tempMap: TempMap;
     if (this.tempMaps.has(func)) {
       tempMap = changetype<TempMap>(this.tempMaps.get(func));
       if (tempMap.has(type)) {
-        return changetype<BinaryenIndex>(tempMap.get(type));
+        return changetype<Index>(tempMap.get(type));
       }
     } else {
       tempMap = new Map();
@@ -218,7 +217,7 @@ export class ShadowStackPass extends BinaryenPass {
   }
 
   /** Makes an expression modifying the stack pointer by the given offset. */
-  makeStackOffset(offset: i32): BinaryenExpressionRef {
+  makeStackOffset(offset: i32): ExpressionRef {
     var module = this.module;
     var expr = module.block(null, [
       module.global_set(STACK_PTR,
@@ -235,7 +234,7 @@ export class ShadowStackPass extends BinaryenPass {
   private hasStackCheckFunction: bool = false;
 
   /** Makes a check that the current stack pointer is valid. */
-  makeStackCheck(): BinaryenExpressionRef {
+  makeStackCheck(): ExpressionRef {
     var module = this.module;
     if (!this.hasStackCheckFunction) {
       this.hasStackCheckFunction = true;
@@ -252,7 +251,7 @@ export class ShadowStackPass extends BinaryenPass {
     return module.call("~stack_check", null, NativeType.None);
   }
 
-  private updateCallOperands(operands: BinaryenExpressionRef[]): i32 {
+  private updateCallOperands(operands: ExpressionRef[]): i32 {
     var module = this.module;
     var numSlots = 0;
     for (let i = 0, k = operands.length; i < k; ++i) {
@@ -263,7 +262,7 @@ export class ShadowStackPass extends BinaryenPass {
       let numLocals = _BinaryenFunctionGetNumLocals(currentFunction);
       let slotIndex = this.noteSlot(currentFunction, numLocals + this.callSlotOffset + i);
       let temp = this.getSharedTemp(currentFunction, this.ptrType);
-      let stmts = new Array<BinaryenExpressionRef>();
+      let stmts = new Array<ExpressionRef>();
       // t = value
       stmts.push(
         module.local_set(temp, match)
@@ -292,10 +291,10 @@ export class ShadowStackPass extends BinaryenPass {
   private callSlotStack: i32[] = new Array();
 
   /** @override */
-  visitCallPre(call: BinaryenExpressionRef): void {
+  visitCallPre(call: ExpressionRef): void {
     var numOperands = _BinaryenCallGetNumOperands(call);
-    var operands = new Array<BinaryenExpressionRef>(numOperands);
-    for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+    var operands = new Array<ExpressionRef>(numOperands);
+    for (let i: Index = 0; i < numOperands; ++i) {
       operands[i] = _BinaryenCallGetOperandAt(call, i);
     }
     let numSlots = this.updateCallOperands(operands);
@@ -310,16 +309,16 @@ export class ShadowStackPass extends BinaryenPass {
   }
 
   /** @override */
-  visitCall(call: BinaryenExpressionRef): void {
+  visitCall(call: ExpressionRef): void {
     let numSlots = this.callSlotStack.pop();
     if (numSlots) this.callSlotOffset -= numSlots;
   }
 
   /** @override */
-  visitCallIndirectPre(callIndirect: BinaryenExpressionRef): void {
+  visitCallIndirectPre(callIndirect: ExpressionRef): void {
     let numOperands = _BinaryenCallIndirectGetNumOperands(callIndirect);
-    let operands = new Array<BinaryenExpressionRef>(numOperands);
-    for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+    let operands = new Array<ExpressionRef>(numOperands);
+    for (let i: Index = 0; i < numOperands; ++i) {
       operands[i] = _BinaryenCallIndirectGetOperandAt(callIndirect, i);
     }
     let numSlots = this.updateCallOperands(operands);
@@ -334,20 +333,20 @@ export class ShadowStackPass extends BinaryenPass {
   }
 
   /** @override */
-  visitCallIndirect(callIndirect: BinaryenExpressionRef): void {
+  visitCallIndirect(callIndirect: ExpressionRef): void {
     let numSlots = this.callSlotStack.pop();
     if (numSlots) this.callSlotOffset -= numSlots;
   }
 
   /** @override */
-  visitLocalSet(localSet: BinaryenExpressionRef): void {
+  visitLocalSet(localSet: ExpressionRef): void {
     let value = _BinaryenLocalSetGetValue(localSet);
     let match = matchStack(value);
     if (!match) return;
     var module = this.module;
     let index = _BinaryenLocalSetGetIndex(localSet);
     let slotIndex = this.noteSlot(this.currentFunction, index);
-    let stmts = new Array<BinaryenExpressionRef>();
+    let stmts = new Array<ExpressionRef>();
     // store<usize>(__stackptr, local = match, slotIndex * ptrSize)
     stmts.push(
       module.store(this.ptrSize,
@@ -368,14 +367,14 @@ export class ShadowStackPass extends BinaryenPass {
   }
 
   /** Updates a function with additional locals etc. */
-  updateFunction(func: BinaryenFunctionRef): void {
+  updateFunction(func: FunctionRef): void {
     let name = _BinaryenFunctionGetName(func);
     let params = _BinaryenFunctionGetParams(func);
     let results = _BinaryenFunctionGetResults(func);
     let body = assert(_BinaryenFunctionGetBody(func));
     let numVars = _BinaryenFunctionGetNumVars(func);
     let vars = new Array<NativeType>();
-    for (let i: BinaryenIndex = 0; i < numVars; ++i) {
+    for (let i: Index = 0; i < numVars; ++i) {
       vars[i] = _BinaryenFunctionGetVar(func, i);
     }
     let tempMaps = this.tempMaps;
@@ -410,7 +409,7 @@ export class ShadowStackPass extends BinaryenPass {
       instrumentReturns.walkFunction(func);
 
       // Instrument function entry
-      let stmts = new Array<BinaryenExpressionRef>();
+      let stmts = new Array<ExpressionRef>();
       // __stackptr -= frameSize
       stmts.push(
         this.makeStackOffset(-frameSize)
@@ -496,7 +495,7 @@ export class ShadowStackPass extends BinaryenPass {
 }
 
 /** Companion pass instrumenting `return` statements to restore the stack frame. */
-class InstrumentReturns extends BinaryenPass {
+class InstrumentReturns extends Pass {
   /** Parent pass. */
   parentPass: ShadowStackPass;
   /** Frame size of the current function being processed. */
@@ -508,11 +507,11 @@ class InstrumentReturns extends BinaryenPass {
   }
 
   /** @override */
-  visitReturn(ret: BinaryenExpressionRef): void {
+  visitReturn(ret: ExpressionRef): void {
     assert(this.frameSize);
     var module = this.module;
     var value = _BinaryenReturnGetValue(ret);
-    var stmts = new Array<BinaryenExpressionRef>();
+    var stmts = new Array<ExpressionRef>();
     if (value) {
       let returnType = _BinaryenExpressionGetType(value);
       let temp = this.parentPass.getSharedTemp(this.currentFunction, returnType);
