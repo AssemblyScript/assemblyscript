@@ -5,7 +5,8 @@
   ],
   "options": {
     "explicitStart": true,
-    "measure": true
+    "measure": true,
+    "initialMemory": 256
   },
   "targets": {
     "untouched": {
