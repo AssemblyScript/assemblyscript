@@ -121,7 +121,7 @@ function loadAssemblyScriptWasm(binaryPath) {
   return exports;
 }
 
-var assemblyscript, __newString, __getString, __retain, __release, __collect;
+var assemblyscript, __newString, __getString, __pin, __unpin, __collect;
 
 function loadAssemblyScript() {
   const wasmArg = process.argv.findIndex(arg => arg == "--wasm");
@@ -131,15 +131,15 @@ function loadAssemblyScript() {
     assemblyscript = loadAssemblyScriptWasm(binaryPath);
     __newString = assemblyscript.__newString;
     __getString = assemblyscript.__getString;
-    __retain = assemblyscript.__retain;
-    __release = assemblyscript.__release;
+    __pin = assemblyscript.__pin;
+    __unpin = assemblyscript.__unpin;
     __collect = assemblyscript.__collect;
   } else {
     assemblyscript = loadAssemblyScriptJS();
     __newString = str => str;
     __getString = ptr => ptr;
-    __retain = ptr => ptr;
-    __release = ptr => undefined;
+    __pin = ptr => ptr;
+    __unpin = ptr => undefined;
     __collect = incremental => undefined;
   }
 }
@@ -388,7 +388,7 @@ exports.main = function main(argv, options, callback) {
 
   // Set up options
   var program;
-  const compilerOptions = __retain(assemblyscript.newOptions());
+  const compilerOptions = __pin(assemblyscript.newOptions());
   assemblyscript.setTarget(compilerOptions, 0);
   assemblyscript.setNoAssert(compilerOptions, opts.noAssert);
   assemblyscript.setExportMemory(compilerOptions, !opts.noExportMemory);
@@ -410,8 +410,8 @@ exports.main = function main(argv, options, callback) {
   // Instrument callback to perform GC
   callback = (function(callback) {
     return function wrappedCallback(err) {
-      __release(compilerOptions);
-      if (program) __release(program);
+      __unpin(compilerOptions);
+      if (program) __unpin(program);
       __collect();
       return callback(err);
     };
@@ -468,7 +468,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
 
   // Initialize the program
-  program = __retain(assemblyscript.newProgram(compilerOptions));
+  program = __pin(assemblyscript.newProgram(compilerOptions));
 
   // Set up transforms
   const transforms = [];

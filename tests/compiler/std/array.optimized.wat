@@ -24,7 +24,6 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
- (import "env" "visit" (func $~lib/rt/tcms/__visit_externals (param i32)))
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
@@ -522,8 +521,8 @@
  (data (i32.const 12556) " \00\00\00\b0/\00\00\f0/\00\00\00\00\00\00\100\00\00P0\00\00p0\00\00\900\00\00\d00")
  (data (i32.const 12604) "\1c")
  (data (i32.const 12636) "\1c")
- (data (i32.const 12700) "<")
- (data (i32.const 12712) "\01\00\00\00(\00\00\00I\00l\00l\00e\00g\00a\00l\00 \00g\00e\00n\00e\00r\00i\00c\00 \00t\00y\00p\00e")
+ (data (i32.const 12732) "<")
+ (data (i32.const 12744) "\01\00\00\00(\00\00\00I\00l\00l\00e\00g\00a\00l\00 \00g\00e\00n\00e\00r\00i\00c\00 \00t\00y\00p\00e")
  (table $0 57 funcref)
  (elem (i32.const 1) $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|2 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|16 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String|null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String|null>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -544,6 +543,7 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $std/array/ArrayU32 i32 (i32.const 40))
  (global $std/array/ArrayU8 i32 (i32.const 41))
@@ -1196,10 +1196,10 @@
   if
    unreachable
   end
-  i32.const 12768
+  i32.const 12800
   i32.const 0
   i32.store
-  i32.const 14336
+  i32.const 14368
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -1210,7 +1210,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 12768
+    i32.const 12800
     i32.add
     i32.const 0
     i32.store offset=4
@@ -1228,7 +1228,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 12768
+      i32.const 12800
       i32.add
       i32.const 0
       i32.store offset=96
@@ -1246,13 +1246,13 @@
     br $for-loop|0
    end
   end
-  i32.const 12768
-  i32.const 14340
+  i32.const 12800
+  i32.const 14372
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 12768
+  i32.const 12800
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
@@ -1625,6 +1625,26 @@
   i32.or
   i32.store offset=4
  )
+ (func $~lib/rt/tcms/Object#linkTo (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  local.get $1
+  i32.load offset=8
+  local.set $3
+  local.get $0
+  local.get $1
+  local.get $2
+  i32.or
+  i32.store offset=4
+  local.get $0
+  local.get $3
+  i32.store offset=8
+  local.get $3
+  local.get $0
+  call $~lib/rt/tcms/Object#set:next
+  local.get $1
+  local.get $0
+  i32.store offset=8
+ )
  (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
@@ -1633,7 +1653,7 @@
   if
    i32.const 1152
    i32.const 1216
-   i32.const 90
+   i32.const 117
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1650,24 +1670,10 @@
   local.get $2
   local.get $0
   i32.store offset=16
+  local.get $2
   global.get $~lib/rt/tcms/fromSpace
-  local.tee $0
-  i32.load offset=8
-  local.set $1
-  local.get $2
-  local.get $0
   global.get $~lib/rt/tcms/white
-  i32.or
-  i32.store offset=4
-  local.get $2
-  local.get $1
-  i32.store offset=8
-  local.get $1
-  local.get $2
-  call $~lib/rt/tcms/Object#set:next
-  local.get $0
-  local.get $2
-  i32.store offset=8
+  call $~lib/rt/tcms/Object#linkTo
   local.get $2
   i32.const 20
   i32.add
@@ -2470,7 +2476,7 @@
   i32.and
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 12764
+  i32.const 12796
   i32.ge_u
   if
    local.get $0
@@ -2492,7 +2498,7 @@
   i32.sub
   local.set $2
   local.get $0
-  i32.const 12764
+  i32.const 12796
   i32.lt_u
   if
    local.get $1
@@ -2519,7 +2525,7 @@
   if
    i32.const 1152
    i32.const 1216
-   i32.const 121
+   i32.const 138
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -2538,7 +2544,7 @@
    call $~lib/rt/tlsf/initialize
   end
   local.get $0
-  i32.const 12764
+  i32.const 12796
   i32.lt_u
   if
    global.get $~lib/rt/tlsf/ROOT
@@ -4172,7 +4178,7 @@
  )
  (func $~lib/rt/tlsf/__free (param $0 i32)
   local.get $0
-  i32.const 12764
+  i32.const 12796
   i32.lt_u
   if
    return
@@ -9622,9 +9628,9 @@
   (local $3 i32)
   (local $4 i32)
   global.get $std/array/arr
-  local.tee $0
+  local.tee $1
   if
-   local.get $0
+   local.get $1
    call $~lib/rt/tcms/__visit
   end
   i32.const 6848
@@ -9633,7 +9639,7 @@
   call $~lib/rt/tcms/__visit
   i32.const 1056
   call $~lib/rt/tcms/__visit
-  i32.const 12720
+  i32.const 12752
   call $~lib/rt/tcms/__visit
   i32.const 2064
   call $~lib/rt/tcms/__visit
@@ -9641,8 +9647,6 @@
   call $~lib/rt/tcms/__visit
   i32.const 8944
   call $~lib/rt/tcms/__visit
-  i32.const 0
-  call $~lib/rt/tcms/__visit_externals
   global.get $~lib/rt/tcms/white
   i32.eqz
   local.set $3
@@ -9651,86 +9655,73 @@
   i32.load offset=4
   i32.const -4
   i32.and
-  local.set $1
+  local.set $0
   loop $while-continue|0
-   local.get $1
+   local.get $0
    local.get $4
    i32.ne
    if
-    local.get $1
     local.get $3
-    local.get $1
+    local.get $0
     i32.load offset=4
-    i32.const -4
+    i32.const 3
     i32.and
-    i32.or
-    i32.store offset=4
-    block $__inlined_func$~lib/rt/__visit_members
-     block $folding-inner4
-      block $folding-inner3
-       block $folding-inner2
-        block $folding-inner1
-         block $invalid
-          block $std/array/ArrayStr
-           block $~lib/typedarray/Uint8Array
-            block $~lib/arraybuffer/ArrayBufferView
-             local.get $1
-             i32.const 20
-             i32.add
-             local.tee $0
-             i32.const 8
-             i32.sub
-             i32.load
-             br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/arraybuffer/ArrayBufferView $folding-inner1 $__inlined_func$~lib/rt/__visit_members $~lib/typedarray/Uint8Array $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner2 $folding-inner3 $__inlined_func$~lib/rt/__visit_members $folding-inner2 $folding-inner3 $folding-inner2 $folding-inner3 $folding-inner2 $folding-inner3 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner4 $folding-inner4 $std/array/ArrayStr $invalid
-            end
-            local.get $0
-            i32.load
-            local.tee $0
-            if
-             local.get $0
-             call $~lib/rt/tcms/__visit
-            end
-            br $__inlined_func$~lib/rt/__visit_members
-           end
-           local.get $0
-           i32.load
-           local.tee $0
-           if
-            local.get $0
-            call $~lib/rt/tcms/__visit
-           end
-           br $__inlined_func$~lib/rt/__visit_members
-          end
-          local.get $0
-          call $~lib/array/Array<std/array/Ref>~visit
-          br $__inlined_func$~lib/rt/__visit_members
-         end
-         unreachable
-        end
-        local.get $0
-        i32.load
-        call $~lib/rt/tcms/__visit
-        br $__inlined_func$~lib/rt/__visit_members
-       end
-       local.get $0
-       call $~lib/array/Array<std/array/Ref>~visit
-       br $__inlined_func$~lib/rt/__visit_members
-      end
-      local.get $0
-      i32.load offset=4
-      call $~lib/rt/tcms/__visit
-      br $__inlined_func$~lib/rt/__visit_members
-     end
-     local.get $0
-     i32.load
-     call $~lib/rt/tcms/__visit
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1216
+     i32.const 209
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
     end
-    local.get $1
+    local.get $0
+    i32.const 20
+    i32.add
+    call $~lib/rt/__visit_members
+    local.get $0
     i32.load offset=4
     i32.const -4
     i32.and
-    local.set $1
+    local.set $0
     br $while-continue|0
+   end
+  end
+  global.get $~lib/rt/tcms/pinSpace
+  local.tee $1
+  i32.load offset=4
+  i32.const -4
+  i32.and
+  local.set $0
+  loop $while-continue|1
+   local.get $0
+   local.get $1
+   i32.ne
+   if
+    local.get $0
+    i32.load offset=4
+    i32.const 3
+    i32.and
+    i32.const 3
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1216
+     i32.const 218
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    i32.const 20
+    i32.add
+    call $~lib/rt/__visit_members
+    local.get $0
+    i32.load offset=4
+    i32.const -4
+    i32.and
+    local.set $0
+    br $while-continue|1
    end
   end
   global.get $~lib/rt/tcms/fromSpace
@@ -9738,27 +9729,41 @@
   i32.load offset=4
   i32.const -4
   i32.and
-  local.set $1
-  loop $while-continue|1
-   local.get $1
+  local.set $0
+  loop $while-continue|2
+   local.get $0
    local.get $2
    i32.ne
    if
-    local.get $1
+    global.get $~lib/rt/tcms/white
+    local.get $0
+    i32.load offset=4
+    i32.const 3
+    i32.and
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1216
+     i32.const 227
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
     i32.load offset=4
     i32.const -4
     i32.and
-    local.get $1
-    i32.const 12764
+    local.get $0
+    i32.const 12796
     i32.gt_u
     if
-     local.get $1
+     local.get $0
      i32.const 4
      i32.add
      call $~lib/rt/tlsf/__free
     end
-    local.set $1
-    br $while-continue|1
+    local.set $0
+    br $while-continue|2
    end
   end
   local.get $2
@@ -15471,6 +15476,9 @@
   i32.const 12672
   call $~lib/rt/tcms/initLazy
   global.set $~lib/rt/tcms/toSpace
+  i32.const 12704
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/pinSpace
   call $~lib/rt/tcms/__collect
  )
  (func $~lib/array/Array<u32>#concat (param $0 i32) (param $1 i32) (result i32)
@@ -15672,7 +15680,7 @@
   local.get $4
  )
  (func $~lib/array/Array<u32>#flat (param $0 i32) (result i32)
-  i32.const 12720
+  i32.const 12752
   i32.const 1104
   i32.const 457
   i32.const 7
@@ -15712,25 +15720,11 @@
     local.get $1
     call $~lib/rt/tcms/Object#set:next
    end
-   global.get $~lib/rt/tcms/toSpace
-   local.tee $1
-   i32.load offset=8
-   local.set $2
    local.get $0
-   local.get $1
+   global.get $~lib/rt/tcms/toSpace
    global.get $~lib/rt/tcms/white
    i32.eqz
-   i32.or
-   i32.store offset=4
-   local.get $0
-   local.get $2
-   i32.store offset=8
-   local.get $2
-   local.get $0
-   call $~lib/rt/tcms/Object#set:next
-   local.get $1
-   local.get $0
-   i32.store offset=8
+   call $~lib/rt/tcms/Object#linkTo
   end
  )
  (func $~lib/array/Array<u8>#set:length (param $0 i32) (param $1 i32)
@@ -17152,6 +17146,56 @@
   i32.load
   call $~lib/rt/tcms/__visit
  )
+ (func $~lib/rt/__visit_members (param $0 i32)
+  block $folding-inner5
+   block $folding-inner4
+    block $folding-inner3
+     block $folding-inner2
+      block $folding-inner1
+       block $folding-inner0
+        block $invalid
+         block $std/array/ArrayStr
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $folding-inner0 $folding-inner0 $folding-inner5 $folding-inner1 $folding-inner0 $folding-inner5 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner2 $folding-inner3 $folding-inner0 $folding-inner2 $folding-inner3 $folding-inner2 $folding-inner3 $folding-inner2 $folding-inner3 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner4 $folding-inner4 $std/array/ArrayStr $invalid
+         end
+         local.get $0
+         call $~lib/array/Array<std/array/Ref>~visit
+         return
+        end
+        unreachable
+       end
+       return
+      end
+      local.get $0
+      i32.load
+      call $~lib/rt/tcms/__visit
+      return
+     end
+     local.get $0
+     call $~lib/array/Array<std/array/Ref>~visit
+     return
+    end
+    local.get $0
+    i32.load offset=4
+    call $~lib/rt/tcms/__visit
+    return
+   end
+   local.get $0
+   i32.load
+   call $~lib/rt/tcms/__visit
+   return
+  end
+  local.get $0
+  i32.load
+  local.tee $0
+  if
+   local.get $0
+   call $~lib/rt/tcms/__visit
+  end
+ )
  (func $std/array/ArrayU32#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -17931,7 +17975,7 @@
     end
     unreachable
    end
-   i32.const 12784
+   i32.const 12816
    local.set $1
   end
   local.get $0
@@ -18236,7 +18280,7 @@
     end
     unreachable
    end
-   i32.const 12816
+   i32.const 12848
    local.set $1
   end
   local.get $0

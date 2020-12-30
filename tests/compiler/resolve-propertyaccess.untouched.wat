@@ -1536,17 +1536,35 @@
   i32.or
   call $~lib/rt/tcms/Object#set:nextWithColor
  )
+ (func $~lib/rt/tcms/Object#linkTo (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  local.get $1
+  i32.load offset=8
+  local.set $3
+  local.get $0
+  local.get $1
+  local.get $2
+  i32.or
+  call $~lib/rt/tcms/Object#set:nextWithColor
+  local.get $0
+  local.get $3
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $3
+  local.get $0
+  call $~lib/rt/tcms/Object#set:next
+  local.get $1
+  local.get $0
+  call $~lib/rt/tcms/Object#set:prev
+ )
  (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.const 1073741804
   i32.ge_u
   if
    i32.const 256
    i32.const 320
-   i32.const 90
+   i32.const 117
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1564,25 +1582,10 @@
   local.get $2
   local.get $0
   call $~lib/rt/tcms/Object#set:rtSize
+  local.get $2
   global.get $~lib/rt/tcms/fromSpace
-  local.set $3
-  local.get $3
-  i32.load offset=8
-  local.set $4
-  local.get $2
-  local.get $3
   global.get $~lib/rt/tcms/white
-  i32.or
-  call $~lib/rt/tcms/Object#set:nextWithColor
-  local.get $2
-  local.get $4
-  call $~lib/rt/tcms/Object#set:prev
-  local.get $4
-  local.get $2
-  call $~lib/rt/tcms/Object#set:next
-  local.get $3
-  local.get $2
-  call $~lib/rt/tcms/Object#set:prev
+  call $~lib/rt/tcms/Object#linkTo
   i32.const 0
   drop
   local.get $2

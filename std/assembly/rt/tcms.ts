@@ -1,14 +1,18 @@
-import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, TRACE } from "./common";
+import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, TRACE, DEBUG } from "./common";
 import { onvisit, oncollect } from "./rtrace";
 
-// === Two-Color Mark & Sweep garbage collector ===
+// === TwoCMS: A Two-Color Mark & Sweep garbage collector ===
 
 // @ts-ignore: decorator
 @lazy var white = 0;
 // @ts-ignore: decorator
+@inline const transparent = 3;
+// @ts-ignore: decorator
 @lazy var fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 // @ts-ignore: decorator
 @lazy var toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+// @ts-ignore: decorator
+@lazy var pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
 // @ts-ignore: decorator
 @lazy var total: usize = 0;
 // @ts-ignore: decorator
@@ -19,6 +23,15 @@ function initLazy(space: Object): Object {
   space.prev = space;
   return space;
 }
+
+// ╒═════════════╤══════════════ Colors ═══════════════════════════╕
+// │ Color       │ Meaning                                         │
+// ├─────────────┼─────────────────────────────────────────────────┤
+// │ WHITE*      │ Unreachable                                     │
+// │ BLACK*      │ Reachable                                       │
+// │ TRANSPARENT │ Manually pinned (reachable)                     │
+// └─────────────┴─────────────────────────────────────────────────┘
+// * flipped between cycles
 
 // @ts-ignore: decorator
 @inline const COLOR_MASK = 3;
@@ -75,12 +88,26 @@ function initLazy(space: Object): Object {
   get size(): usize {
     return BLOCK_OVERHEAD + (this.mmInfo & ~3);
   }
-}
 
-/** Visits external objects. */
-// @ts-ignore: decorator
-@external("env", "visit")
-declare function __visit_externals(cookie: u32): void;
+  /** Unlinks this object from its list. */
+  unlink(): void {
+    let next = this.next;
+    if (next) { // otherwise not yet linked (static data)
+      let prev = this.prev;
+      next.prev = prev;
+      prev.next = next;
+    }
+  }
+
+  /** Links this object to the specified list, with the given color. */
+  linkTo(list: Object, withColor: i32): void {
+    let prev = list.prev;
+    this.nextWithColor = changetype<usize>(list) | withColor;
+    this.prev = prev;
+    prev.next = this;
+    list.prev = this;
+  }
+}
 
 // Garbage collector interface
 
@@ -89,19 +116,9 @@ declare function __visit_externals(cookie: u32): void;
 export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
-
-  // Initialize header
   obj.rtId = id;
   obj.rtSize = <u32>size;
-
-  // Add to fromSpace
-  var from = fromSpace;
-  var prev = from.prev;
-  obj.nextWithColor = changetype<usize>(from) | white;
-  obj.prev = prev;
-  prev.next = obj;
-  from.prev = obj;
-
+  obj.linkTo(fromSpace, white);
   if (TRACE) {
     total += 1;
     totalMem += obj.size;
@@ -135,7 +152,7 @@ export function __renew(oldPtr: usize, size: usize): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void {
-  // nop
+  // Shared with a potential future incremental collector. A nop in TwoCMS.
 }
 
 // @ts-ignore: decorator
@@ -145,23 +162,35 @@ export function __visit(ptr: usize, cookie: i32): void {
   let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
   if (isDefined(ASC_RTRACE)) if (!onvisit(obj)) return;
   if (obj.color == white) {
-
-    // Unlink from fromSpace
-    let next = obj.next;
-    if (next) { // otherwise static data
-      let prev = obj.prev;
-      next.prev = prev;
-      prev.next = next;
-    }
-
-    // Link to toSpace
-    let to = toSpace;
-    let prev = to.prev;
-    obj.nextWithColor = changetype<usize>(to) | i32(!white);
-    obj.prev = prev;
-    prev.next = obj;
-    to.prev = obj;
+    obj.unlink(); // from fromSpace
+    obj.linkTo(toSpace, i32(!white));
   }
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __pin(ptr: usize): usize {
+  if (ptr) {
+    let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
+    if (obj.color == transparent) {
+      throw new Error("already pinned");
+    }
+    obj.unlink(); // from fromSpace
+    obj.linkTo(pinSpace, transparent);
+  }
+  return ptr;
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __unpin(ptr: usize): void {
+  if (!ptr) return;
+  var obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
+  if (obj.color != transparent) {
+    throw new Error("not pinned");
+  }
+  obj.unlink(); // from pinSpace
+  obj.linkTo(fromSpace, white);
 }
 
 // @ts-ignore: decorator
@@ -169,16 +198,24 @@ export function __visit(ptr: usize, cookie: i32): void {
 export function __collect(): void {
   if (TRACE) trace("GC at mem/objs", 2, totalMem, total);
 
-  // Add roots to toSpace
+  // Mark roots and add to toSpace
   __visit_globals(0);
-  __visit_externals(0);
 
-  // Mark everything reachable, add to toSpace
+  // Mark what's reachable from roots
   var black = i32(!white);
   var to = toSpace;
   var iter = to.next;
   while (iter != to) {
-    iter.color = black;
+    if (DEBUG) assert(iter.color == black);
+    __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, 0);
+    iter = iter.next;
+  }
+
+  // Mark what's reachable from pinned objects
+  var pn = pinSpace;
+  iter = pn.next;
+  while (iter != pn) {
+    if (DEBUG) assert(iter.color == transparent);
     __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, 0);
     iter = iter.next;
   }
@@ -187,6 +224,7 @@ export function __collect(): void {
   var from = fromSpace;
   iter = from.next;
   while (iter != from) {
+    if (DEBUG) assert(iter.color == white);
     let newNext = iter.next;
     if (changetype<usize>(iter) > __heap_base) {
       if (TRACE) {

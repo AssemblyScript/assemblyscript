@@ -1,7 +1,9 @@
+// This file exists for reference only and is non-functional currently.
+
 import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE } from "./common";
 import { onvisit, oncollect } from "./rtrace";
 
-// === Tri-Color Mark & Sweep garbage collector ===
+// === TriCMS: A Tri-Color Mark & Sweep garbage collector ===
 // Largely based on Bach Le's μgc, see: https://github.com/bullno1/ugc
 
 // Collector states

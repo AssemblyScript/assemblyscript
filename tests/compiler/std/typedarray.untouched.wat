@@ -47,7 +47,6 @@
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
- (import "env" "visit" (func $~lib/rt/tcms/__visit_externals (param i32)))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 60) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
@@ -308,6 +307,7 @@
  (data (i32.const 13420) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\00\ff\00\00\00d\n\ff\ff\00\00\00")
  (data (i32.const 13452) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\n\00\00\00\01\ffd\ff\00\00d\n\ff\00\00\00")
  (data (i32.const 13488) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 13520) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 123 funcref)
  (elem (i32.const 1) $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduceRight<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint32Array,u32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8ClampedArray,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0)
  (global $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT i32 (i32.const 1))
@@ -346,7 +346,8 @@
  (global $std/typedarray/setSource3 (mut i32) (i32.const 9344))
  (global $std/typedarray/setSource7 (mut i32) (i32.const 9424))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 13508))
+ (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/memory/__heap_base i32 (i32.const 13540))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
@@ -1776,17 +1777,35 @@
   i32.or
   call $~lib/rt/tcms/Object#set:nextWithColor
  )
+ (func $~lib/rt/tcms/Object#linkTo (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  local.get $1
+  i32.load offset=8
+  local.set $3
+  local.get $0
+  local.get $1
+  local.get $2
+  i32.or
+  call $~lib/rt/tcms/Object#set:nextWithColor
+  local.get $0
+  local.get $3
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $3
+  local.get $0
+  call $~lib/rt/tcms/Object#set:next
+  local.get $1
+  local.get $0
+  call $~lib/rt/tcms/Object#set:prev
+ )
  (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.const 1073741804
   i32.ge_u
   if
    i32.const 144
    i32.const 208
-   i32.const 90
+   i32.const 117
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1804,25 +1823,10 @@
   local.get $2
   local.get $0
   call $~lib/rt/tcms/Object#set:rtSize
+  local.get $2
   global.get $~lib/rt/tcms/fromSpace
-  local.set $3
-  local.get $3
-  i32.load offset=8
-  local.set $4
-  local.get $2
-  local.get $3
   global.get $~lib/rt/tcms/white
-  i32.or
-  call $~lib/rt/tcms/Object#set:nextWithColor
-  local.get $2
-  local.get $4
-  call $~lib/rt/tcms/Object#set:prev
-  local.get $4
-  local.get $2
-  call $~lib/rt/tcms/Object#set:next
-  local.get $3
-  local.get $2
-  call $~lib/rt/tcms/Object#set:prev
+  call $~lib/rt/tcms/Object#linkTo
   i32.const 0
   drop
   local.get $2
@@ -10167,7 +10171,7 @@
   if
    i32.const 144
    i32.const 208
-   i32.const 121
+   i32.const 138
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -49012,17 +49016,11 @@
    end
   end
  )
- (func $~lib/rt/tcms/Object#set:color (param $0 i32) (param $1 i32)
-  local.get $0
+ (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   i32.const 3
-  i32.const -1
-  i32.xor
   i32.and
-  local.get $1
-  i32.or
-  call $~lib/rt/tcms/Object#set:nextWithColor
  )
  (func $~lib/rt/tcms/__collect
   (local $0 i32)
@@ -49031,12 +49029,11 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   i32.const 0
   drop
   i32.const 0
   call $~lib/rt/__visit_globals
-  i32.const 0
-  call $~lib/rt/tcms/__visit_externals
   global.get $~lib/rt/tcms/white
   i32.eqz
   local.set $0
@@ -49052,9 +49049,21 @@
    local.set $3
    local.get $3
    if
+    i32.const 1
+    drop
     local.get $2
+    call $~lib/rt/tcms/Object#get:color
     local.get $0
-    call $~lib/rt/tcms/Object#set:color
+    i32.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 208
+     i32.const 209
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
     local.get $2
     i32.const 20
     i32.add
@@ -49066,7 +49075,7 @@
     br $while-continue|0
    end
   end
-  global.get $~lib/rt/tcms/fromSpace
+  global.get $~lib/rt/tcms/pinSpace
   local.set $4
   local.get $4
   call $~lib/rt/tcms/Object#get:next
@@ -49078,9 +49087,62 @@
    local.set $3
    local.get $3
    if
+    i32.const 1
+    drop
+    local.get $2
+    call $~lib/rt/tcms/Object#get:color
+    i32.const 3
+    i32.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 208
+     i32.const 218
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $2
+    i32.const 20
+    i32.add
+    i32.const 0
+    call $~lib/rt/__visit_members
     local.get $2
     call $~lib/rt/tcms/Object#get:next
-    local.set $5
+    local.set $2
+    br $while-continue|1
+   end
+  end
+  global.get $~lib/rt/tcms/fromSpace
+  local.set $5
+  local.get $5
+  call $~lib/rt/tcms/Object#get:next
+  local.set $2
+  loop $while-continue|2
+   local.get $2
+   local.get $5
+   i32.ne
+   local.set $3
+   local.get $3
+   if
+    i32.const 1
+    drop
+    local.get $2
+    call $~lib/rt/tcms/Object#get:color
+    global.get $~lib/rt/tcms/white
+    i32.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 208
+     i32.const 227
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $2
+    call $~lib/rt/tcms/Object#get:next
+    local.set $6
     local.get $2
     global.get $~lib/memory/__heap_base
     i32.gt_u
@@ -49094,20 +49156,20 @@
      i32.add
      call $~lib/rt/tlsf/__free
     end
-    local.get $5
+    local.get $6
     local.set $2
-    br $while-continue|1
+    br $while-continue|2
    end
   end
-  local.get $4
-  local.get $4
+  local.get $5
+  local.get $5
   call $~lib/rt/tcms/Object#set:nextWithColor
-  local.get $4
-  local.get $4
+  local.get $5
+  local.get $5
   call $~lib/rt/tcms/Object#set:prev
   local.get $1
   global.set $~lib/rt/tcms/fromSpace
-  local.get $4
+  local.get $5
   global.set $~lib/rt/tcms/toSpace
   local.get $0
   global.set $~lib/rt/tcms/white
@@ -51145,22 +51207,35 @@
   i32.const 13488
   call $~lib/rt/tcms/initLazy
   global.set $~lib/rt/tcms/toSpace
+  i32.const 13520
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/pinSpace
   call $~lib/rt/tcms/__collect
  )
  (func $~start
   call $start:std/typedarray
  )
- (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
+ (func $~lib/rt/tcms/Object#unlink (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
   local.get $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
+  call $~lib/rt/tcms/Object#get:next
+  local.set $1
+  local.get $1
+  if
+   local.get $0
+   i32.load offset=8
+   local.set $2
+   local.get $1
+   local.get $2
+   call $~lib/rt/tcms/Object#set:prev
+   local.get $2
+   local.get $1
+   call $~lib/rt/tcms/Object#set:next
+  end
  )
  (func $~lib/rt/tcms/__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
   local.get $0
   i32.eqz
   if
@@ -51178,40 +51253,12 @@
   i32.eq
   if
    local.get $2
-   call $~lib/rt/tcms/Object#get:next
-   local.set $3
-   local.get $3
-   if
-    local.get $2
-    i32.load offset=8
-    local.set $4
-    local.get $3
-    local.get $4
-    call $~lib/rt/tcms/Object#set:prev
-    local.get $4
-    local.get $3
-    call $~lib/rt/tcms/Object#set:next
-   end
-   global.get $~lib/rt/tcms/toSpace
-   local.set $4
-   local.get $4
-   i32.load offset=8
-   local.set $5
+   call $~lib/rt/tcms/Object#unlink
    local.get $2
-   local.get $4
+   global.get $~lib/rt/tcms/toSpace
    global.get $~lib/rt/tcms/white
    i32.eqz
-   i32.or
-   call $~lib/rt/tcms/Object#set:nextWithColor
-   local.get $2
-   local.get $5
-   call $~lib/rt/tcms/Object#set:prev
-   local.get $5
-   local.get $2
-   call $~lib/rt/tcms/Object#set:next
-   local.get $4
-   local.get $2
-   call $~lib/rt/tcms/Object#set:prev
+   call $~lib/rt/tcms/Object#linkTo
   end
  )
  (func $~lib/rt/__visit_globals (param $0 i32)

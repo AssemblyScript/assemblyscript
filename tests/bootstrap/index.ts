@@ -46,7 +46,7 @@ async function test(build: string): Promise<void> {
   const cachedStrings = new Map<string,number>();
   function cachedString(text: string): number {
     if (cachedStrings.has(text)) return cachedStrings.get(text);
-    var ptr = asc.__retain(asc.__newString(text));
+    var ptr = asc.__pin(asc.__newString(text));
     cachedStrings.set(text, ptr);
     return ptr;
   }
@@ -54,7 +54,7 @@ async function test(build: string): Promise<void> {
   console.log("\nInitializing program ...");
   const optionsPtr = asc.newOptions();
   asc.setNoExportRuntime(optionsPtr, true);
-  const programPtr = asc.__retain(asc.newProgram(optionsPtr));
+  const programPtr = asc.__pin(asc.newProgram(optionsPtr));
   if (incremental) asc.__collect(true);
 
   console.log("\nParsing standard library ...");
@@ -116,10 +116,10 @@ async function test(build: string): Promise<void> {
   {
     asc.initializeProgram(programPtr);
     console.log("\nCompiling program ...");
-    const modulePtr = asc.__retain(asc.compile(programPtr));
+    const modulePtr = asc.__pin(asc.compile(programPtr));
     const moduleRef = new Uint32Array(asc.memory.buffer, modulePtr)[0];
     console.log(binaryen.wrapModule(moduleRef).emitText());
-    asc.__release(modulePtr);
+    asc.__unpin(modulePtr);
     if (incremental) asc.__collect(true);
   }
 
@@ -137,9 +137,9 @@ async function test(build: string): Promise<void> {
   }
   console.log();
 
-  cachedStrings.forEach(ptr => asc.__release(ptr));
+  cachedStrings.forEach(ptr => asc.__unpin(ptr));
   cachedStrings.clear();
-  asc.__release(programPtr);
+  asc.__unpin(programPtr);
 
   let collectStart = Date.now();
   asc.__collect(); // full

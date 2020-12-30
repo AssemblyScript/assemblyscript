@@ -30,7 +30,6 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
- (import "env" "visit" (func $~lib/rt/tcms/__visit_externals (param i32)))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 60) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
@@ -290,7 +289,8 @@
  (data (i32.const 13036) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 13068) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 13104) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 13132) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00I\00l\00l\00e\00g\00a\00l\00 \00g\00e\00n\00e\00r\00i\00c\00 \00t\00y\00p\00e\00\00\00\00\00")
+ (data (i32.const 13136) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 13164) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00I\00l\00l\00e\00g\00a\00l\00 \00g\00e\00n\00e\00r\00i\00c\00 \00t\00y\00p\00e\00\00\00\00\00")
  (table $0 57 funcref)
  (elem (i32.const 1) $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String|null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -318,8 +318,9 @@
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 13196))
+ (global $~lib/memory/__heap_base i32 (i32.const 13228))
  (global $std/array/ArrayU32 i32 (i32.const 40))
  (global $std/array/ArrayU8 i32 (i32.const 41))
  (global $std/array/ArrayStr i32 (i32.const 42))
@@ -1831,17 +1832,35 @@
   i32.or
   call $~lib/rt/tcms/Object#set:nextWithColor
  )
+ (func $~lib/rt/tcms/Object#linkTo (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  local.get $1
+  i32.load offset=8
+  local.set $3
+  local.get $0
+  local.get $1
+  local.get $2
+  i32.or
+  call $~lib/rt/tcms/Object#set:nextWithColor
+  local.get $0
+  local.get $3
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $3
+  local.get $0
+  call $~lib/rt/tcms/Object#set:next
+  local.get $1
+  local.get $0
+  call $~lib/rt/tcms/Object#set:prev
+ )
  (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.const 1073741804
   i32.ge_u
   if
    i32.const 128
    i32.const 192
-   i32.const 90
+   i32.const 117
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1859,25 +1878,10 @@
   local.get $2
   local.get $0
   call $~lib/rt/tcms/Object#set:rtSize
+  local.get $2
   global.get $~lib/rt/tcms/fromSpace
-  local.set $3
-  local.get $3
-  i32.load offset=8
-  local.set $4
-  local.get $2
-  local.get $3
   global.get $~lib/rt/tcms/white
-  i32.or
-  call $~lib/rt/tcms/Object#set:nextWithColor
-  local.get $2
-  local.get $4
-  call $~lib/rt/tcms/Object#set:prev
-  local.get $4
-  local.get $2
-  call $~lib/rt/tcms/Object#set:next
-  local.get $3
-  local.get $2
-  call $~lib/rt/tcms/Object#set:prev
+  call $~lib/rt/tcms/Object#linkTo
   i32.const 0
   drop
   local.get $2
@@ -4270,7 +4274,7 @@
   if
    i32.const 128
    i32.const 192
-   i32.const 121
+   i32.const 138
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -17492,17 +17496,11 @@
   end
   local.get $9
  )
- (func $~lib/rt/tcms/Object#set:color (param $0 i32) (param $1 i32)
-  local.get $0
+ (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   i32.const 3
-  i32.const -1
-  i32.xor
   i32.and
-  local.get $1
-  i32.or
-  call $~lib/rt/tcms/Object#set:nextWithColor
  )
  (func $~lib/rt/tcms/__collect
   (local $0 i32)
@@ -17511,12 +17509,11 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   i32.const 0
   drop
   i32.const 0
   call $~lib/rt/__visit_globals
-  i32.const 0
-  call $~lib/rt/tcms/__visit_externals
   global.get $~lib/rt/tcms/white
   i32.eqz
   local.set $0
@@ -17532,9 +17529,21 @@
    local.set $3
    local.get $3
    if
+    i32.const 1
+    drop
     local.get $2
+    call $~lib/rt/tcms/Object#get:color
     local.get $0
-    call $~lib/rt/tcms/Object#set:color
+    i32.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 192
+     i32.const 209
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
     local.get $2
     i32.const 20
     i32.add
@@ -17546,7 +17555,7 @@
     br $while-continue|0
    end
   end
-  global.get $~lib/rt/tcms/fromSpace
+  global.get $~lib/rt/tcms/pinSpace
   local.set $4
   local.get $4
   call $~lib/rt/tcms/Object#get:next
@@ -17558,9 +17567,62 @@
    local.set $3
    local.get $3
    if
+    i32.const 1
+    drop
+    local.get $2
+    call $~lib/rt/tcms/Object#get:color
+    i32.const 3
+    i32.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 192
+     i32.const 218
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $2
+    i32.const 20
+    i32.add
+    i32.const 0
+    call $~lib/rt/__visit_members
     local.get $2
     call $~lib/rt/tcms/Object#get:next
-    local.set $5
+    local.set $2
+    br $while-continue|1
+   end
+  end
+  global.get $~lib/rt/tcms/fromSpace
+  local.set $5
+  local.get $5
+  call $~lib/rt/tcms/Object#get:next
+  local.set $2
+  loop $while-continue|2
+   local.get $2
+   local.get $5
+   i32.ne
+   local.set $3
+   local.get $3
+   if
+    i32.const 1
+    drop
+    local.get $2
+    call $~lib/rt/tcms/Object#get:color
+    global.get $~lib/rt/tcms/white
+    i32.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 192
+     i32.const 227
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $2
+    call $~lib/rt/tcms/Object#get:next
+    local.set $6
     local.get $2
     global.get $~lib/memory/__heap_base
     i32.gt_u
@@ -17574,20 +17636,20 @@
      i32.add
      call $~lib/rt/tlsf/__free
     end
-    local.get $5
+    local.get $6
     local.set $2
-    br $while-continue|1
+    br $while-continue|2
    end
   end
-  local.get $4
-  local.get $4
+  local.get $5
+  local.get $5
   call $~lib/rt/tcms/Object#set:nextWithColor
-  local.get $4
-  local.get $4
+  local.get $5
+  local.get $5
   call $~lib/rt/tcms/Object#set:prev
   local.get $1
   global.set $~lib/rt/tcms/fromSpace
-  local.get $4
+  local.get $5
   global.set $~lib/rt/tcms/toSpace
   local.get $0
   global.set $~lib/rt/tcms/white
@@ -22976,6 +23038,9 @@
   i32.const 13104
   call $~lib/rt/tcms/initLazy
   global.set $~lib/rt/tcms/toSpace
+  i32.const 13136
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/pinSpace
   call $~lib/rt/tcms/__collect
  )
  (func $~lib/array/Array<u32>#set:buffer (param $0 i32) (param $1 i32)
@@ -24165,24 +24230,34 @@
   i32.const 0
   i32.eqz
   drop
-  i32.const 13152
+  i32.const 13184
   i32.const 80
   i32.const 457
   i32.const 7
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/rt/tcms/Object#get:color (param $0 i32) (result i32)
+ (func $~lib/rt/tcms/Object#unlink (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
   local.get $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
+  call $~lib/rt/tcms/Object#get:next
+  local.set $1
+  local.get $1
+  if
+   local.get $0
+   i32.load offset=8
+   local.set $2
+   local.get $1
+   local.get $2
+   call $~lib/rt/tcms/Object#set:prev
+   local.get $2
+   local.get $1
+   call $~lib/rt/tcms/Object#set:next
+  end
  )
  (func $~lib/rt/tcms/__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
   local.get $0
   i32.eqz
   if
@@ -24200,40 +24275,12 @@
   i32.eq
   if
    local.get $2
-   call $~lib/rt/tcms/Object#get:next
-   local.set $3
-   local.get $3
-   if
-    local.get $2
-    i32.load offset=8
-    local.set $4
-    local.get $3
-    local.get $4
-    call $~lib/rt/tcms/Object#set:prev
-    local.get $4
-    local.get $3
-    call $~lib/rt/tcms/Object#set:next
-   end
-   global.get $~lib/rt/tcms/toSpace
-   local.set $4
-   local.get $4
-   i32.load offset=8
-   local.set $5
+   call $~lib/rt/tcms/Object#unlink
    local.get $2
-   local.get $4
+   global.get $~lib/rt/tcms/toSpace
    global.get $~lib/rt/tcms/white
    i32.eqz
-   i32.or
-   call $~lib/rt/tcms/Object#set:nextWithColor
-   local.get $2
-   local.get $5
-   call $~lib/rt/tcms/Object#set:prev
-   local.get $5
-   local.get $2
-   call $~lib/rt/tcms/Object#set:next
-   local.get $4
-   local.get $2
-   call $~lib/rt/tcms/Object#set:prev
+   call $~lib/rt/tcms/Object#linkTo
   end
  )
  (func $~lib/array/Array<u32>#__visit (param $0 i32) (param $1 i32)
@@ -25889,7 +25936,7 @@
   i32.const 0
   i32.eqz
   drop
-  i32.const 13152
+  i32.const 13184
   i32.const 80
   i32.const 457
   i32.const 7
@@ -27180,7 +27227,7 @@
   i32.const 0
   i32.eqz
   drop
-  i32.const 13152
+  i32.const 13184
   i32.const 80
   i32.const 457
   i32.const 7
@@ -27268,7 +27315,7 @@
   i32.const 32
   local.get $0
   call $~lib/rt/tcms/__visit
-  i32.const 13152
+  i32.const 13184
   local.get $0
   call $~lib/rt/tcms/__visit
   i32.const 1040
@@ -28688,7 +28735,7 @@
      i32.const 0
     end
     drop
-    i32.const 13216
+    i32.const 13248
     br $~lib/util/sort/COMPARATOR<u8>|inlined.0
    end
    local.set $1
@@ -28962,7 +29009,7 @@
     drop
     i32.const 1
     drop
-    i32.const 13248
+    i32.const 13280
     br $~lib/util/sort/COMPARATOR<~lib/string/String>|inlined.1
    end
    local.set $1

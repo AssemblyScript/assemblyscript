@@ -2,12 +2,11 @@
  (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "env" "visit" (func $~lib/rt/tcms/__visit_externals (param i32)))
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\14\00\00\00l\00o\00g\00i\00c\00a\00l\00.\00t\00s")
@@ -21,6 +20,7 @@
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -590,10 +590,10 @@
   if
    unreachable
   end
-  i32.const 1344
+  i32.const 1376
   i32.const 0
   i32.store
-  i32.const 2912
+  i32.const 2944
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -604,7 +604,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 1344
+    i32.const 1376
     i32.add
     i32.const 0
     i32.store offset=4
@@ -622,7 +622,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 1344
+      i32.const 1376
       i32.add
       i32.const 0
       i32.store offset=96
@@ -640,13 +640,13 @@
     br $for-loop|0
    end
   end
-  i32.const 1344
-  i32.const 2916
+  i32.const 1376
+  i32.const 2948
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 1344
+  i32.const 1376
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
@@ -867,10 +867,28 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tcms/__new (result i32)
+ (func $~lib/rt/tcms/Object#linkTo (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  local.get $1
+  i32.load offset=8
+  local.set $3
+  local.get $0
+  local.get $1
+  local.get $2
+  i32.or
+  i32.store offset=4
+  local.get $0
+  local.get $3
+  i32.store offset=8
+  local.get $3
+  local.get $0
+  call $~lib/rt/tcms/Object#set:next
+  local.get $1
+  local.get $0
+  i32.store offset=8
+ )
+ (func $logical/Obj#constructor (result i32)
   (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -884,24 +902,10 @@
   local.get $0
   i32.const 0
   i32.store offset=16
+  local.get $0
   global.get $~lib/rt/tcms/fromSpace
-  local.tee $1
-  i32.load offset=8
-  local.set $2
-  local.get $0
-  local.get $1
   global.get $~lib/rt/tcms/white
-  i32.or
-  i32.store offset=4
-  local.get $0
-  local.get $2
-  i32.store offset=8
-  local.get $2
-  local.get $0
-  call $~lib/rt/tcms/Object#set:next
-  local.get $1
-  local.get $0
-  i32.store offset=8
+  call $~lib/rt/tcms/Object#linkTo
   local.get $0
   i32.const 20
   i32.add
@@ -914,128 +918,121 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 0
-  call $~lib/rt/tcms/__visit_externals
   global.get $~lib/rt/tcms/white
   i32.eqz
-  local.set $3
+  local.set $5
   global.get $~lib/rt/tcms/toSpace
+  local.tee $6
+  i32.load offset=4
+  i32.const -4
+  i32.and
+  local.set $0
+  loop $while-continue|0
+   local.get $0
+   local.get $6
+   i32.ne
+   if
+    local.get $5
+    local.get $0
+    i32.load offset=4
+    i32.const 3
+    i32.and
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1168
+     i32.const 209
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    i32.const 20
+    i32.add
+    call $~lib/rt/__visit_members
+    local.get $0
+    i32.load offset=4
+    i32.const -4
+    i32.and
+    local.set $0
+    br $while-continue|0
+   end
+  end
+  global.get $~lib/rt/tcms/pinSpace
+  local.tee $1
+  i32.load offset=4
+  i32.const -4
+  i32.and
+  local.set $0
+  loop $while-continue|1
+   local.get $0
+   local.get $1
+   i32.ne
+   if
+    local.get $0
+    i32.load offset=4
+    i32.const 3
+    i32.and
+    i32.const 3
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1168
+     i32.const 218
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    i32.const 20
+    i32.add
+    call $~lib/rt/__visit_members
+    local.get $0
+    i32.load offset=4
+    i32.const -4
+    i32.and
+    local.set $0
+    br $while-continue|1
+   end
+  end
+  global.get $~lib/rt/tcms/fromSpace
   local.tee $2
   i32.load offset=4
   i32.const -4
   i32.and
-  local.set $1
-  loop $while-continue|0
-   local.get $1
+  local.set $0
+  loop $while-continue|2
+   local.get $0
    local.get $2
    i32.ne
    if
-    local.get $1
-    local.get $3
-    local.get $1
+    global.get $~lib/rt/tcms/white
+    local.get $0
     i32.load offset=4
-    i32.const -4
+    i32.const 3
     i32.and
-    i32.or
-    i32.store offset=4
-    block $__inlined_func$~lib/rt/__visit_members
-     block $invalid
-      block $~lib/arraybuffer/ArrayBufferView
-       local.get $1
-       i32.const 12
-       i32.add
-       i32.load
-       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/arraybuffer/ArrayBufferView $__inlined_func$~lib/rt/__visit_members $invalid
-      end
-      local.get $1
-      i32.load offset=20
-      local.tee $0
-      if
-       local.get $0
-       if
-        global.get $~lib/rt/tcms/white
-        local.get $0
-        i32.const 20
-        i32.sub
-        local.tee $6
-        i32.load offset=4
-        i32.const 3
-        i32.and
-        i32.eq
-        if
-         local.get $6
-         i32.load offset=4
-         i32.const -4
-         i32.and
-         local.tee $5
-         if
-          local.get $5
-          local.get $6
-          i32.load offset=8
-          local.tee $0
-          i32.store offset=8
-          local.get $0
-          local.get $5
-          call $~lib/rt/tcms/Object#set:next
-         end
-         global.get $~lib/rt/tcms/toSpace
-         local.tee $5
-         i32.load offset=8
-         local.set $0
-         local.get $6
-         local.get $5
-         global.get $~lib/rt/tcms/white
-         i32.eqz
-         i32.or
-         i32.store offset=4
-         local.get $6
-         local.get $0
-         i32.store offset=8
-         local.get $0
-         local.get $6
-         call $~lib/rt/tcms/Object#set:next
-         local.get $5
-         local.get $6
-         i32.store offset=8
-        end
-       end
-      end
-      br $__inlined_func$~lib/rt/__visit_members
-     end
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1168
+     i32.const 227
+     i32.const 16
+     call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $0
     i32.load offset=4
     i32.const -4
     i32.and
-    local.set $1
-    br $while-continue|0
-   end
-  end
-  global.get $~lib/rt/tcms/fromSpace
-  local.tee $4
-  i32.load offset=4
-  i32.const -4
-  i32.and
-  local.set $1
-  loop $while-continue|1
-   local.get $1
-   local.get $4
-   i32.ne
-   if
-    local.get $1
-    i32.load offset=4
-    i32.const -4
-    i32.and
-    local.get $1
-    i32.const 1332
+    local.get $0
+    i32.const 1364
     i32.gt_u
     if
-     local.get $1
+     local.get $0
      i32.const 4
      i32.add
-     local.tee $5
-     i32.const 1332
+     local.tee $4
+     i32.const 1364
      i32.ge_u
      if
       global.get $~lib/rt/tlsf/ROOT
@@ -1044,19 +1041,19 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.get $5
+      local.get $4
       i32.const 4
       i32.sub
-      local.set $6
-      local.get $5
+      local.set $3
+      local.get $4
       i32.const 15
       i32.and
       i32.eqz
       i32.const 0
-      local.get $5
+      local.get $4
       select
       if (result i32)
-       local.get $6
+       local.get $3
        i32.load
        i32.const 1
        i32.and
@@ -1073,38 +1070,38 @@
        call $~lib/builtins/abort
        unreachable
       end
-      local.get $6
-      local.get $6
+      local.get $3
+      local.get $3
       i32.load
       i32.const 1
       i32.or
       i32.store
-      local.get $6
+      local.get $3
       call $~lib/rt/tlsf/insertBlock
      end
     end
-    local.set $1
-    br $while-continue|1
+    local.set $0
+    br $while-continue|2
    end
   end
-  local.get $4
-  local.get $4
-  i32.store offset=4
-  local.get $4
-  local.get $4
-  i32.store offset=8
   local.get $2
+  local.get $2
+  i32.store offset=4
+  local.get $2
+  local.get $2
+  i32.store offset=8
+  local.get $6
   global.set $~lib/rt/tcms/fromSpace
-  local.get $4
+  local.get $2
   global.set $~lib/rt/tcms/toSpace
-  local.get $3
+  local.get $5
   global.set $~lib/rt/tcms/white
  )
  (func $~start
   i32.const 1280
   call $~lib/rt/tcms/initLazy
   global.set $~lib/rt/tcms/fromSpace
-  call $~lib/rt/tcms/__new
+  call $logical/Obj#constructor
   i32.eqz
   if
    i32.const 0
@@ -1114,7 +1111,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/rt/tcms/__new
+  call $logical/Obj#constructor
   i32.eqz
   if
    i32.const 0
@@ -1127,6 +1124,65 @@
   i32.const 1312
   call $~lib/rt/tcms/initLazy
   global.set $~lib/rt/tcms/toSpace
+  i32.const 1344
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/pinSpace
   call $~lib/rt/tcms/__collect
+ )
+ (func $~lib/rt/__visit_members (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  block $folding-inner0
+   block $invalid
+    block $~lib/arraybuffer/ArrayBufferView
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $folding-inner0 $folding-inner0 $~lib/arraybuffer/ArrayBufferView $folding-inner0 $invalid
+    end
+    local.get $0
+    i32.load
+    local.tee $0
+    if
+     local.get $0
+     if
+      global.get $~lib/rt/tcms/white
+      local.get $0
+      i32.const 20
+      i32.sub
+      local.tee $0
+      i32.load offset=4
+      i32.const 3
+      i32.and
+      i32.eq
+      if
+       local.get $0
+       i32.load offset=4
+       i32.const -4
+       i32.and
+       local.tee $1
+       if
+        local.get $1
+        local.get $0
+        i32.load offset=8
+        local.tee $2
+        i32.store offset=8
+        local.get $2
+        local.get $1
+        call $~lib/rt/tcms/Object#set:next
+       end
+       local.get $0
+       global.get $~lib/rt/tcms/toSpace
+       global.get $~lib/rt/tcms/white
+       i32.eqz
+       call $~lib/rt/tcms/Object#linkTo
+      end
+     end
+    end
+    return
+   end
+   unreachable
+  end
  )
 )
