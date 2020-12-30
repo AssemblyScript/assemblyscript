@@ -10,20 +10,20 @@
   "targets": {
     "untouched": {
       "binaryFile": "../out/assemblyscript.untouched.wasm",
-      "textFile": "../out/assemblyscript.untouched.wat",
+      "textFile": "../out/assemblyscript.untouched.wast",
       "tsdFile": "../out/assemblyscript.d.ts",
       "debug": true
     },
     "optimized": {
       "binaryFile": "../out/assemblyscript.optimized.wasm",
-      "textFile": "../out/assemblyscript.optimized.wat",
+      "textFile": "../out/assemblyscript.optimized.wast",
       "tsdFile": "../out/assemblyscript.d.ts",
       "optimizeLevel": 3,
       "shrinkLevel": 0
     },
     "rtraced": {
       "binaryFile": "../out/assemblyscript.rtraced.wasm",
-      "textFile": "../out/assemblyscript.rtraced.wat",
+      "textFile": "../out/assemblyscript.rtraced.wast",
       "tsdFile": "../out/assemblyscript.d.ts",
       "debug": true,
       "use": "ASC_RTRACE=1",
@@ -31,13 +31,13 @@
     },
     "untouched-bootstrap": {
       "binaryFile": "../out/assemblyscript.untouched-bootstrap.wasm",
-      "textFile": "../out/assemblyscript.untouched-bootstrap.wat",
+      "textFile": "../out/assemblyscript.untouched-bootstrap.wast",
       "tsdFile": "../out/assemblyscript.d.ts",
       "debug": true
     },
     "optimized-bootstrap": {
       "binaryFile": "../out/assemblyscript.optimized-bootstrap.wasm",
-      "textFile": "../out/assemblyscript.optimized-bootstrap.wat",
+      "textFile": "../out/assemblyscript.optimized-bootstrap.wast",
       "tsdFile": "../out/assemblyscript.d.ts",
       "optimizeLevel": 3,
       "shrinkLevel": 0

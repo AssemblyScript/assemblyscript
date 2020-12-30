@@ -114,9 +114,9 @@ function loadAssemblyScriptWasm(binaryPath) {
   const loader = require("../lib/loader/umd/index");
   const rtrace = new (require("../lib/rtrace/umd/index").Rtrace)({
     onerror(err, info) { console.log(err, info); },
-    getMemory() { return assemblyscript.memory; }
+    getMemory() { return exports.memory; }
   });
-  const { exports } = loader.instantiateSync(fs.readFileSync(binaryPath), rtrace.install({ binaryen }));
+  var { exports } = loader.instantiateSync(fs.readFileSync(binaryPath), rtrace.install({ binaryen }));
   if (exports._start) exports._start();
   return exports;
 }

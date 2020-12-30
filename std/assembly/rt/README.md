@@ -31,8 +31,8 @@ Interface
 * **__link**(parentPtr: `usize`, childPtr: `usize`, expectMultiple: `bool`): `void`<br />
   Introduces a link from a parent object to a child object, i.e. upon `parent.field = child`.
 
-* **__mark**(ptr: `usize`): `void`<br />
-  Marks an externally retained value as reachable during the collection phase.
+* **__visit**(ptr: `usize`): `void`<br />
+  Visits an external root during the collection phase, marking it as reachable.
 
 * **__collect**(): `void`<br />
   Performs a garbage collection cycle.

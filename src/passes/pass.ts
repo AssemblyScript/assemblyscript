@@ -175,27 +175,10 @@ import {
   _BinaryenFunctionSetBody
 } from "../glue/binaryen";
 
-/** Base class of custom Binaryen passes. */
-export abstract class BinaryenPass {
-
+/** Base class of custom Binaryen visitors. */
+export abstract class BinaryenVisitor {
   /** Expression stack. */
   private stack: BinaryenExpressionRef[] = new Array<BinaryenExpressionRef>();
-
-  /** Gets the current function being walked. */
-  get currentFunction(): BinaryenFunctionRef {
-    var currentFunction = this._currentFunction;
-    if (!currentFunction) throw new Error("not walking a function");
-    return currentFunction;
-  }
-  private _currentFunction: BinaryenFunctionRef = 0;
-
-  /** Gets the current global being walked. */
-  get currentGlobal(): BinaryenGlobalRef {
-    var currentGlobal = this._currentGlobal;
-    if (!currentGlobal) throw new Error("not walking a global");
-    return currentGlobal;
-  }
-  private _currentGlobal: BinaryenGlobalRef = 0;
 
   /** Gets the current expression being walked. */
   get currentExpression(): BinaryenExpressionRef {
@@ -203,7 +186,7 @@ export abstract class BinaryenPass {
     if (!currentExpression) throw new Error("not walking expressions");
     return currentExpression;
   }
-  private _currentExpression: BinaryenExpressionRef = 0;
+  _currentExpression: BinaryenExpressionRef = 0;
 
   /** Gets the parent expression of the current expression being walked. Traps if the top-most parent. */
   get parentExpression(): BinaryenExpressionRef {
@@ -212,11 +195,6 @@ export abstract class BinaryenPass {
     if (!length) throw new Error("stack is empty");
     return stack[length - 1];
   }
-
-  /** Constructs a new Binaryen pass. */
-  constructor(readonly module: Module) {}
-
-  // Visitors
 
   visitBlock(expr: BinaryenExpressionRef): void {
     // unimp
@@ -238,7 +216,15 @@ export abstract class BinaryenPass {
     // unimp
   }
 
+  visitCallPre(expr: BinaryenExpressionRef): void {
+    // unimp
+  }
+
   visitCall(expr: BinaryenExpressionRef): void {
+    // unimp
+  }
+
+  visitCallIndirectPre(expr: BinaryenExpressionRef): void {
     // unimp
   }
 
@@ -492,6 +478,7 @@ export abstract class BinaryenPass {
         break;
       }
       case ExpressionId.Call: {
+        this.visitCallPre(expr);
         this.stack.push(expr);
         this.visitName(_BinaryenCallGetTarget(expr));
         let numOperands = _BinaryenCallGetNumOperands(expr);
@@ -503,6 +490,7 @@ export abstract class BinaryenPass {
         break;
       }
       case ExpressionId.CallIndirect: {
+        this.visitCallIndirectPre(expr);
         this.stack.push(expr);
         this.visit(_BinaryenCallIndirectGetTarget(expr));
         for (let i: BinaryenIndex = 0, k = _BinaryenCallIndirectGetNumOperands(expr); i < k; ++i) {
@@ -825,6 +813,31 @@ export abstract class BinaryenPass {
       default: throw new Error("unexpected expression kind");
     }
     this._currentExpression = previousExpression;
+  }
+}
+
+/** Base class of custom Binaryen passes. */
+export abstract class BinaryenPass extends BinaryenVisitor {
+
+  /** Gets the current function being walked. */
+  get currentFunction(): BinaryenFunctionRef {
+    var currentFunction = this._currentFunction;
+    if (!currentFunction) throw new Error("not walking a function");
+    return currentFunction;
+  }
+  private _currentFunction: BinaryenFunctionRef = 0;
+
+  /** Gets the current global being walked. */
+  get currentGlobal(): BinaryenGlobalRef {
+    var currentGlobal = this._currentGlobal;
+    if (!currentGlobal) throw new Error("not walking a global");
+    return currentGlobal;
+  }
+  private _currentGlobal: BinaryenGlobalRef = 0;
+
+  /** Constructs a new Binaryen pass. */
+  constructor(readonly module: Module) {
+    super();
   }
 
   // Walking

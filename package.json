@@ -91,8 +91,8 @@
     "asbuild:optimized": "node bin/asc --config src/asconfig.json --target optimized",
     "asbuild:rtraced": "node bin/asc --config src/asconfig.json --target rtraced",
     "bootstrap": "npm run bootstrap:untouched && npm run bootstrap:optimized",
-    "bootstrap:untouched": "node bin/asc --config src/asconfig.json --target untouched && node bin/asc --config src/asconfig.json --target untouched-bootstrap --wasm out/assemblyscript.untouched.wasm && node bin/asc --config src/asconfig.json --target untouched-bootstrap --wasm out/assemblyscript.untouched-bootstrap.wasm && git diff --no-index out/assemblyscript.untouched.wat out/assemblyscript.untouched-bootstrap.wat",
-    "bootstrap:optimized": "node bin/asc --config src/asconfig.json --target optimized && node bin/asc --config src/asconfig.json --target optimized-bootstrap --wasm out/assemblyscript.optimized.wasm && node bin/asc --config src/asconfig.json --target optimized-bootstrap --wasm out/assemblyscript.optimized-bootstrap.wasm && git diff --no-index out/assemblyscript.optimized.wat out/assemblyscript.optimized-bootstrap.wat",
+    "bootstrap:untouched": "node bin/asc --config src/asconfig.json --target untouched && node bin/asc --config src/asconfig.json --target untouched-bootstrap --wasm out/assemblyscript.untouched.wasm && node bin/asc --config src/asconfig.json --target untouched-bootstrap --wasm out/assemblyscript.untouched-bootstrap.wasm && git --no-pager diff --no-index out/assemblyscript.untouched.wast out/assemblyscript.untouched-bootstrap.wast",
+    "bootstrap:optimized": "node bin/asc --config src/asconfig.json --target optimized && node bin/asc --config src/asconfig.json --target optimized-bootstrap --wasm out/assemblyscript.optimized.wasm && node bin/asc --config src/asconfig.json --target optimized-bootstrap --wasm out/assemblyscript.optimized-bootstrap.wasm && git --no-pager diff --no-index out/assemblyscript.optimized.wast out/assemblyscript.optimized-bootstrap.wast",
     "astest": "ts-node tests/bootstrap"
   },
   "releaseFiles": [

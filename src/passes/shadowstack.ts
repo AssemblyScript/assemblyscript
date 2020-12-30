@@ -1,67 +1,81 @@
 /**
- * @fileoverview Shadow stack instrumentation for a precise GC / TriCMS.
+ * @fileoverview Potential shadow stack instrumentation for a precise GC.
  * 
- * Instruments function arguments and local sets marked as being 'managed' by
- * the generator to also do stores to a respective emulated shadow stack slot
- * while maintaining two halves of a stack frame pre- and post-call.
+ * Instruments function arguments and local assignments marked as 'managed' to
+ * also do stores to a shadow stack.
  * 
  * Consider a simple call to a function looking like the following, taking
- * managed values as arguments, with the function assigning managed values to
- * locals in its body:
+ * managed arguments, plus assigning managed values to locals:
  * 
  *   function foo(a: Obj, b: Obj): Obj {
- *     var c = __managed(a) // slot 2
+ *     var c = __stack(a) // slot 2
  *     __collect()
  *     return b
  *   }
  *   
- *   foo(__managed(a), __managed(b)) // slot 0, 1
+ *   foo(__stack(a), __stack(b)) // slot 0, 1
  * 
- * The two halves of the GC-relevant stack frame for `foo` look like:
+ * At the call to `__collect()` the 32-bit stack frame of the function is:
  * 
  *   Offset | Value stored
- *   -------|---------------------------
+ *   -------|----------------------------
  *      0   | First managed argument 'a'
  *      4   | Second managed argument 'b'
  *   -------|----------------------------
  *      8   | First managed local 'c'
  * 
- * We are maintaining two halves here because the first half is simpler plus we
- * need to do it anyway for indirect calls, where both halves are only known
- * separately. Note that the first half is necessary due to execution order of
- * function arguments, where each argument may be arbitrarily complex and
- * trigger GC while evaluating. In the example above, we must place 'a' on the
- * stack before evaluating 'b', which may trigger GC while executing.
+ * We are splitting the frame in two halves as annotated since both halves are
+ * only known separately for indirect calls, with the first half becoming an
+ * extension of the calling function's stack frame by means of treating the
+ * arguments as if these were locals beyond the caller's `numLocals`. Function
+ * arguments stay a bit longer on the stack than usually, but we also don't have
+ * to modify the stack pointer pre-call at all this way. The caller's amended
+ * stack frame when assuming one managed local may look like this:
  * 
- * Instrumentation done below looks about like the following, with 't' and 'r'
- * being temporary locals and the stack growing downwards:
+ *   Offset | Value stored
+ *   -------|----------------------------
+ *      0   | First managed local '?'
+ *      4   | Extended with first managed argument 'a'
+ *      8   | Extended with second managed argument 'b'
  * 
- *   __stackptr = __stack_base // live pointers in [__stackptr, __stack_base[
+ * with the callee's stack frame becoming just:
  * 
- *   function foo(a: usize, b: usize): usize { // frameSize = 1 * sizeof<usize>()
- *     memory.fill(__stackptr -= frameSize, 0, frameSize)
- *     store<usize>(__stackptr, c = a, 0 * sizeof<usize>())
+ *   Offset | Value stored
+ *   -------|----------------------------
+ *      0   | First managed local 'c'
+ * 
+ * Instrumentation added below looks about like the following, with the stack
+ * growing downwards and 't' and 'r' being new temporary locals:
+ * 
+ *   // callee frameSize = 1 * sizeof<usize>()
+ *   function foo(a: usize, b: usize): usize {
+ *     memory.fill(__stack_ptr -= frameSize, 0, frameSize)
+ *     store<usize>(__stack_ptr, c = a, 0 * sizeof<usize>())
  *     __collect()
  *     var r = b
- *     __stackptr += frameSize
+ *     __stack_ptr += frameSize
  *     return r
  *   }
  * 
+ *   // caller frameSize = (numLocalSlots + 2 [by extension]) * sizeof<usize>()
  *   (
  *     r = foo(
  *       ( t = a,
- *         store<usize>(__stackptr -= sizeof<usize>(), t, 0 * sizeof<usize>()),
+ *         store<usize>(__stack_ptr, t, (numLocalSlots + 0) * sizeof<usize>()),
  *         t ),
  *       ( t = b,
- *         store<usize>(__stackptr -= sizeof<usize>(), t, 1 * sizeof<usize>()),
+ *         store<usize>(__stack_ptr, t, (numLocalSlots + 1) * sizeof<usize>()),
  *         t )
  *     ),
- *     __stackptr += 2 * sizeof<usize>(),
  *     r
  *   )
  * 
- * Also note that we have to `memory.fill` the second half of the frame so the
- * GC does not see invalid pointers that may have been on the stack earlier.
+ * Also note that we have to `memory.fill` the second half because the first
+ * assignment to a local may happen at a later point within the function. The
+ * invariant we need to maintain for a precise GC is that it only sees zeroes
+ * or valid pointers, but never an invalid pointer left on the stack earlier.
+ * Since most frames are small, we unroll a sequence of `store`s up to a frame
+ * size of 16 bytes, and `memory.fill`, if available, beyond.
  * 
  * @license Apache-2.0
  */
@@ -79,6 +93,9 @@ import {
   _BinaryenCallGetNumOperands,
   _BinaryenCallGetOperandAt,
   _BinaryenCallGetTarget,
+  _BinaryenCallIndirectGetNumOperands,
+  _BinaryenCallIndirectGetOperandAt,
+  _BinaryenCallIndirectSetOperandAt,
   _BinaryenCallSetOperandAt,
   _BinaryenExpressionGetId,
   _BinaryenExpressionGetType,
@@ -102,13 +119,13 @@ import {
 import {
   BinaryOp,
   ExpressionId,
-  Module,
   NativeType,
   readString,
   allocPtrArray
 } from "../module";
 
 import {
+  Compiler,
   Options
 } from "../compiler";
 
@@ -121,8 +138,18 @@ type SlotIndex = BinaryenIndex;
 type SlotMap = Map<LocalIndex,SlotIndex>;
 type TempMap = Map<BinaryenType,LocalIndex>;
 
-const MANAGED = "~lib/rt/__managed";
-const STACKPTR = "~lib/rt/__stackptr";
+const STACK = "__stack";
+const STACK_PTR = "__stack_ptr";
+const STACK_BASE = "__stack_base";
+
+/** Attempts to match the `__stack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
+function matchStack(expr: BinaryenExpressionRef): BinaryenExpressionRef {
+  if (_BinaryenExpressionGetId(expr) == ExpressionId.Call && readString(_BinaryenCallGetTarget(expr)) == STACK) {
+    assert(_BinaryenCallGetNumOperands(expr) == 1);
+    return _BinaryenCallGetOperandAt(expr, 0);
+  }
+  return 0;
+}
 
 /** Instruments a module with a shadow stack for precise GC. */
 export class ShadowStackPass extends BinaryenPass {
@@ -130,14 +157,15 @@ export class ShadowStackPass extends BinaryenPass {
   slotMaps: Map<BinaryenFunctionRef, SlotMap> = new Map();
   /** Temporary locals, per function. */
   tempMaps: Map<BinaryenFunctionRef, TempMap> = new Map();
-  /** Compiler options. */
-  options: Options;
+  /** Compiler reference. */
+  compiler: Compiler;
 
-  constructor(module: Module, options: Options) {
-    super(module);
-    this.options = options;
+  constructor(compiler: Compiler) {
+    super(compiler.module);
+    this.compiler = compiler;
   }
-
+  /** Compiler options. */
+  get options(): Options { return this.compiler.options; }
   /** Target pointer type. */
   get ptrType(): NativeType { return this.options.nativeSizeType; }
   /** Target pointer size. */
@@ -154,18 +182,7 @@ export class ShadowStackPass extends BinaryenPass {
       : this.module.i32(value);
   }
 
-  /** Attempts to match the `__managed(value)` pattern. Returns `value` if a match, otherwise `0`.  */
-  match(expr: BinaryenExpressionRef): BinaryenExpressionRef {
-    if (_BinaryenExpressionGetId(expr) == ExpressionId.Call && readString(_BinaryenCallGetTarget(expr)) == MANAGED) {
-      assert(_BinaryenCallGetNumOperands(expr) == 1);
-      let value = _BinaryenCallGetOperandAt(expr, 0);
-      assert(_BinaryenExpressionGetType(value) == this.ptrType);
-      return value;
-    }
-    return 0;
-  }
-
-  /** Notes the presence of a slot for the specified local, returning the slot index. */
+  /** Notes the presence of a slot for the specified (imaginary) local, returning the slot index. */
   noteSlot(func: BinaryenFunctionRef, localIndex: BinaryenIndex): i32 {
     let slotMap: SlotMap;
     if (this.slotMaps.has(func)) {
@@ -201,87 +218,131 @@ export class ShadowStackPass extends BinaryenPass {
   }
 
   /** Makes an expression modifying the stack pointer by the given offset. */
-  makeModifyStackptr(offset: i32): BinaryenExpressionRef {
+  makeStackOffset(offset: i32): BinaryenExpressionRef {
     var module = this.module;
-    return module.global_set(STACKPTR,
-      module.binary(offset >= 0 ? this.ptrBinaryAdd : this.ptrBinarySub,
-        module.global_get(STACKPTR, this.ptrType),
-        this.ptrConst(abs(offset))
-      )
-    );
+    var expr = module.block(null, [
+      module.global_set(STACK_PTR,
+        module.binary(offset >= 0 ? this.ptrBinaryAdd : this.ptrBinarySub,
+          module.global_get(STACK_PTR, this.ptrType),
+          this.ptrConst(abs(offset))
+        )
+      ),
+      this.makeStackCheck()
+    ], NativeType.None);
+    return expr;
   }
 
-  /** @override */
-  visitCall(call: BinaryenExpressionRef): void {
-    let module = this.module;
-    let numOperands = _BinaryenCallGetNumOperands(call);
-    let numSlots = 0;
-    for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
-      let operand = _BinaryenCallGetOperandAt(call, i);
-      let match = this.match(operand);
+  private hasStackCheckFunction: bool = false;
+
+  /** Makes a check that the current stack pointer is valid. */
+  makeStackCheck(): BinaryenExpressionRef {
+    var module = this.module;
+    if (!this.hasStackCheckFunction) {
+      this.hasStackCheckFunction = true;
+      module.addFunction("~stack_check", NativeType.None, NativeType.None, null,
+        module.if(
+          module.binary(BinaryOp.LtI32,
+            module.global_get(STACK_PTR, this.ptrType),
+            module.global_get(STACK_BASE, this.ptrType)
+          ),
+          this.compiler.makeStaticAbort(this.compiler.ensureStaticString("stack overflow"), this.compiler.program.nativeSource)
+        )
+      );
+    }
+    return module.call("~stack_check", null, NativeType.None);
+  }
+
+  private updateCallOperands(operands: BinaryenExpressionRef[]): i32 {
+    var module = this.module;
+    var numSlots = 0;
+    for (let i = 0, k = operands.length; i < k; ++i) {
+      let operand = operands[i];
+      let match = matchStack(operand);
       if (!match) continue;
-      let temp = this.getSharedTemp(this.currentFunction, this.ptrType);
+      let currentFunction = this.currentFunction;
+      let numLocals = _BinaryenFunctionGetNumLocals(currentFunction);
+      let slotIndex = this.noteSlot(currentFunction, numLocals + this.callSlotOffset + i);
+      let temp = this.getSharedTemp(currentFunction, this.ptrType);
       let stmts = new Array<BinaryenExpressionRef>();
       // t = value
       stmts.push(
         module.local_set(temp, match)
       );
-      // __stackptr -= sizeof<usize>()
-      stmts.push(
-        this.makeModifyStackptr(-this.ptrSize)
-      );
-      // store<usize>(__stackptr, t)
+      // store<usize>(__stackptr, t, slotIndex * ptrSize)
       stmts.push(
         module.store(this.ptrSize,
-          module.global_get(STACKPTR, this.ptrType),
+          module.global_get(STACK_PTR, this.ptrType),
           module.local_get(temp, this.ptrType),
-          this.ptrType
+          this.ptrType, slotIndex * this.ptrSize
         )
       );
       // -> t
       stmts.push(
         module.local_get(temp, this.ptrType)
       );
-      _BinaryenCallSetOperandAt(call, i, module.block(null, stmts, this.ptrType));
+      operands[i] = module.block(null, stmts, this.ptrType);
       ++numSlots;
     }
-    if (numSlots) {
-      let returnType = _BinaryenExpressionGetType(call);
-      let stmts = new Array<BinaryenExpressionRef>();
-      if (returnType == NativeType.None || returnType == NativeType.Unreachable) {
-        // call(...)
-        stmts.push(
-          call
-        );
-        // __stackptr += numSlots * sizeof<usize>()
-        stmts.push(
-          this.makeModifyStackptr(numSlots * this.ptrSize)
-        );
-      } else {
-        let temp = this.getSharedTemp(this.currentFunction, returnType);
-        // t = call(...)
-        stmts.push(
-          module.local_set(temp,
-            call
-          )
-        );
-        // __stackptr += numSlots * sizeof<usize>()
-        stmts.push(
-          this.makeModifyStackptr(numSlots * this.ptrSize)
-        );
-        // -> t
-        stmts.push(
-          module.local_get(temp, returnType)
-        );
-      }
-      this.replaceCurrent(module.flatten(stmts, returnType));
+    return numSlots;
+  }
+
+  /** Slot offset accounting for nested calls. */
+  private callSlotOffset: i32 = 0;
+  /** Slot offset stack in nested calls. */
+  private callSlotStack: i32[] = new Array();
+
+  /** @override */
+  visitCallPre(call: BinaryenExpressionRef): void {
+    var numOperands = _BinaryenCallGetNumOperands(call);
+    var operands = new Array<BinaryenExpressionRef>(numOperands);
+    for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+      operands[i] = _BinaryenCallGetOperandAt(call, i);
     }
+    let numSlots = this.updateCallOperands(operands);
+    if (numSlots) {
+      for (let i = 0, k = operands.length; i < k; ++i) {
+        _BinaryenCallSetOperandAt(call, i, operands[i]);
+      }
+      // Reserve these slots for us so nested calls use their own
+      this.callSlotOffset += numSlots;
+    }
+    this.callSlotStack.push(numSlots);
+  }
+
+  /** @override */
+  visitCall(call: BinaryenExpressionRef): void {
+    let numSlots = this.callSlotStack.pop();
+    if (numSlots) this.callSlotOffset -= numSlots;
+  }
+
+  /** @override */
+  visitCallIndirectPre(callIndirect: BinaryenExpressionRef): void {
+    let numOperands = _BinaryenCallIndirectGetNumOperands(callIndirect);
+    let operands = new Array<BinaryenExpressionRef>(numOperands);
+    for (let i: BinaryenIndex = 0; i < numOperands; ++i) {
+      operands[i] = _BinaryenCallIndirectGetOperandAt(callIndirect, i);
+    }
+    let numSlots = this.updateCallOperands(operands);
+    if (numSlots) {
+      for (let i = 0, k = operands.length; i < k; ++i) {
+        _BinaryenCallIndirectSetOperandAt(callIndirect, i, operands[i]);
+      }
+      // Reserve these slots for us so nested calls use their own
+      this.callSlotOffset += numSlots;
+    }
+    this.callSlotStack.push(numSlots);
+  }
+
+  /** @override */
+  visitCallIndirect(callIndirect: BinaryenExpressionRef): void {
+    let numSlots = this.callSlotStack.pop();
+    if (numSlots) this.callSlotOffset -= numSlots;
   }
 
   /** @override */
   visitLocalSet(localSet: BinaryenExpressionRef): void {
     let value = _BinaryenLocalSetGetValue(localSet);
-    let match = this.match(value);
+    let match = matchStack(value);
     if (!match) return;
     var module = this.module;
     let index = _BinaryenLocalSetGetIndex(localSet);
@@ -290,7 +351,7 @@ export class ShadowStackPass extends BinaryenPass {
     // store<usize>(__stackptr, local = match, slotIndex * ptrSize)
     stmts.push(
       module.store(this.ptrSize,
-        module.global_get(STACKPTR, this.ptrType),
+        module.global_get(STACK_PTR, this.ptrType),
         module.local_tee(index, match),
         this.ptrType, slotIndex * this.ptrSize
       )
@@ -352,13 +413,13 @@ export class ShadowStackPass extends BinaryenPass {
       let stmts = new Array<BinaryenExpressionRef>();
       // __stackptr -= frameSize
       stmts.push(
-        this.makeModifyStackptr(-frameSize)
+        this.makeStackOffset(-frameSize)
       );
       // memory.fill(__stackptr, 0, frameSize)
       if (this.options.hasFeature(Feature.BULK_MEMORY) && frameSize > 16) {
         stmts.push(
           module.memory_fill(
-            module.global_get(STACKPTR, this.ptrType),
+            module.global_get(STACK_PTR, this.ptrType),
             module.i32(0), // TODO: Wasm64 also i32?
             this.ptrConst(frameSize)
           )
@@ -369,7 +430,7 @@ export class ShadowStackPass extends BinaryenPass {
           // store<i64>(__stackptr, 0, frameSize - remain)
           stmts.push(
             module.store(8,
-              module.global_get(STACKPTR, this.ptrType),
+              module.global_get(STACK_PTR, this.ptrType),
               module.i64(0),
               NativeType.I64,
               frameSize - remain
@@ -382,7 +443,7 @@ export class ShadowStackPass extends BinaryenPass {
           // store<i32>(__stackptr, 0, frameSize - remain)
           stmts.push(
             module.store(4,
-              module.global_get(STACKPTR, this.ptrType),
+              module.global_get(STACK_PTR, this.ptrType),
               module.i32(0),
               NativeType.I32,
               frameSize - remain
@@ -394,31 +455,34 @@ export class ShadowStackPass extends BinaryenPass {
       // Handle implicit return
       let body = _BinaryenFunctionGetBody(func);
       let bodyType = _BinaryenExpressionGetType(body);
-      if (bodyType != NativeType.Unreachable) {
-        if (bodyType == NativeType.None) {
-          // body
-          stmts.push(
-            body
-          );
-          // __stackptr += frameSize
-          stmts.push(
-            this.makeModifyStackptr(frameSize)
-          );
-        } else {
-          let temp = this.getSharedTemp(func, bodyType);
-          // t = body
-          stmts.push(
-            module.local_set(temp, body)
-          );
-          // __stackptr += frameSize
-          stmts.push(
-            this.makeModifyStackptr(frameSize)
-          );
-          // -> t
-          stmts.push(
-            module.local_get(temp, bodyType)
-          );
-        }
+      if (bodyType == NativeType.Unreachable) {
+        // body
+        stmts.push(
+          body
+        );
+      } else if (bodyType == NativeType.None) {
+        // body
+        stmts.push(
+          body
+        );
+        // __stackptr += frameSize
+        stmts.push(
+          this.makeStackOffset(+frameSize)
+        );
+      } else {
+        let temp = this.getSharedTemp(func, bodyType);
+        // t = body
+        stmts.push(
+          module.local_set(temp, body)
+        );
+        // __stackptr += frameSize
+        stmts.push(
+          this.makeStackOffset(+frameSize)
+        );
+        // -> t
+        stmts.push(
+          module.local_get(temp, bodyType)
+        );
       }
       _BinaryenFunctionSetBody(func, module.flatten(stmts, bodyType));
     }
@@ -458,14 +522,14 @@ class InstrumentReturns extends BinaryenPass {
       );
       // __stackptr += frameSize
       stmts.push(
-        this.parentPass.makeModifyStackptr(this.frameSize)
+        this.parentPass.makeStackOffset(+this.frameSize)
       );
       // return t
       _BinaryenReturnSetValue(ret, module.local_get(temp, returnType));
     } else {
       // __stackptr += frameSize
       stmts.push(
-        this.parentPass.makeModifyStackptr(this.frameSize)
+        this.parentPass.makeStackOffset(+this.frameSize)
       );
       // return
     }

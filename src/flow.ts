@@ -65,8 +65,7 @@ import {
   getLocalSetIndex,
   getIfCondition,
   getConstValueI64High,
-  getUnaryValue,
-  traverse
+  getUnaryValue
 } from "./module";
 
 import {
@@ -1453,23 +1452,4 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
   );
 }
 
-/** Finds all indexes of locals used in the specified expression. */
-export function findUsedLocals(expr: ExpressionRef, used: Set<i32> = new Set<i32>()): Set<i32> {
-  traverse(expr, used, findUsedLocalsVisit);
-  return used;
-}
-
-/** A visitor function for use with `traverse` that finds all indexes of used locals. */
-function findUsedLocalsVisit(expr: ExpressionRef, used: Set<i32>): void {
-  switch (getExpressionId(expr)) {
-    case ExpressionId.LocalGet: {
-      used.add(getLocalGetIndex(expr));
-      break;
-    }
-    case ExpressionId.LocalSet: {
-      used.add(getLocalSetIndex(expr));
-      // fall-through for value
-    }
-    default: traverse(expr, used, findUsedLocalsVisit);
-  }
-}
+export { findUsedLocals } from "./passes/findusedlocals";

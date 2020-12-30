@@ -7,7 +7,7 @@ declare function __free(ptr: usize): void;
 declare function __new(size: usize, id: u32): usize;
 declare function __renew(ptr: usize, size: usize): usize;
 declare function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void;
-declare function __collect(incremental?: bool): void;
+declare function __collect(): void;
 
 // Runtime type info
 declare function __typeinfo(id: u32): u32;
