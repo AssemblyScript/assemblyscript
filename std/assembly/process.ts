@@ -9,7 +9,8 @@ import {
   fd_read,
   clock_time_get,
   clockid,
-  errnoToString
+  errnoToString,
+  fd
 } from "bindings/wasi_snapshot_preview1";
 
 import {
@@ -64,19 +65,19 @@ function lazyArgv(): string[] {
   var err = args_sizes_get(iobuf, iobuf + sizeof<usize>());
   if (err) throw new Error(errnoToString(err));
   var count = load<usize>(iobuf);
-  var ptrs = heap.alloc(count * sizeof<usize>());
-  var data = heap.alloc(load<usize>(iobuf, sizeof<usize>()));
-  err = args_get(ptrs, data);
+  var ptrsSize = count * sizeof<usize>();
+  var dataSize = load<usize>(iobuf, sizeof<usize>());
+  var buf = __alloc(ptrsSize + dataSize);
+  err = args_get(buf, buf + ptrsSize);
   if (err) throw new Error(errnoToString(err));
   var count32 = <i32>count;
   var argv = new Array<string>(count32);
   for (let i = 0; i < count32; ++i) {
-    let ptr = load<usize>(ptrs + i * sizeof<usize>());
-    let str = String.UTF8.decodeUnsafe(ptr, ptr - ptrs, true);
+    let ptr = load<usize>(buf + i * sizeof<usize>());
+    let str = String.UTF8.decodeUnsafe(ptr, ptr - buf, true);
     argv[i] = str;
   }
-  heap.free(ptrs);
-  heap.free(data);
+  __free(buf);
   return argv;
 }
 
@@ -84,14 +85,15 @@ function lazyEnv(): Map<string,string> {
   var err = environ_sizes_get(iobuf, iobuf + 4);
   if (err) throw new Error(errnoToString(err));
   var count = load<usize>(iobuf);
-  var ptrs = heap.alloc(count * sizeof<usize>());
-  var data = heap.alloc(load<usize>(iobuf, sizeof<usize>()));
-  err = environ_get(ptrs, data);
+  var ptrsSize = count * sizeof<usize>();
+  var dataSize = load<usize>(iobuf, sizeof<usize>());
+  var buf = __alloc(ptrsSize + dataSize);
+  err = environ_get(buf, buf + ptrsSize);
   if (err) throw new Error(errnoToString(err));
   var env = new Map<string,string>();
   for (let i: usize = 0; i < count; ++i) {
-    let ptr = load<usize>(ptrs + i * sizeof<usize>());
-    let str = String.UTF8.decodeUnsafe(ptr, ptr - ptrs, true);
+    let ptr = load<usize>(buf + i * sizeof<usize>());
+    let str = String.UTF8.decodeUnsafe(ptr, ptr - buf, true);
     let pos = str.indexOf("=");
     if (~pos) {
       env.set(str.substring(0, pos), str.substring(pos + 1));
@@ -100,6 +102,7 @@ function lazyEnv(): Map<string,string> {
       env.set(str, "");
     }
   }
+  __free(buf);
   return env;
 }
 
@@ -115,9 +118,9 @@ abstract class Stream {
 abstract class WritableStream extends Stream {
   write<T>(data: T): void {
     if (isString<T>()) {
-      writeString(changetype<usize>(this), changetype<string>(data));
+      writeString(<u32>changetype<usize>(this), changetype<string>(data));
     } else if (data instanceof ArrayBuffer) {
-      writeBuffer(changetype<usize>(this), data);
+      writeBuffer(<u32>changetype<usize>(this), data);
     } else {
       ERROR("String or ArrayBuffer expected");
     }
@@ -139,14 +142,14 @@ abstract class ReadableStream extends Stream {
   }
 }
 
-function writeBuffer(fd: usize, data: ArrayBuffer): void {
+function writeBuffer(fd: fd, data: ArrayBuffer): void {
   store<usize>(iobuf, changetype<usize>(data));
   store<usize>(iobuf, data.byteLength, sizeof<usize>());
   var err = fd_write(<u32>fd, iobuf, 1, iobuf + 2 * sizeof<usize>());
   if (err) throw new Error(errnoToString(err));
 }
 
-function writeStringFast(fd: usize, char1: i32, char2: i32 = -1): void {
+function writeStringFast(fd: fd, char1: i32, char2: i32 = -1): void {
   store<usize>(iobuf, iobuf + 2 * sizeof<usize>());
   store<usize>(iobuf, 1 + i32(char2 != -1), sizeof<usize>());
   store<u16>(iobuf, char1 | ((char2 & 0xff) << 8), 2 * sizeof<usize>());
@@ -154,7 +157,7 @@ function writeStringFast(fd: usize, char1: i32, char2: i32 = -1): void {
   if (err) throw new Error(errnoToString(err));
 }
 
-function writeString(fd: usize, data: string): void {
+function writeString(fd: fd, data: string): void {
   switch (data.length) {
     case 0: return;
     case 1: { // "\r", "\n"

@@ -954,7 +954,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4112
-   i32.const 154
+   i32.const 157
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -2156,7 +2156,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4112
-   i32.const 146
+   i32.const 149
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -3052,21 +3052,22 @@
   local.get $2
   i32.store
  )
- (func $~lib/memory/heap.free (param $0 i32)
+ (func $~lib/rt/tlsf/__free (param $0 i32)
   local.get $0
   i32.const 5724
-  i32.ge_u
+  i32.lt_u
   if
-   global.get $~lib/rt/tlsf/ROOT
-   i32.eqz
-   if
-    call $~lib/rt/tlsf/initialize
-   end
-   global.get $~lib/rt/tlsf/ROOT
-   local.get $0
-   call $~lib/rt/tlsf/checkUsedBlock
-   call $~lib/rt/tlsf/freeBlock
+   return
   end
+  global.get $~lib/rt/tlsf/ROOT
+  i32.eqz
+  if
+   call $~lib/rt/tlsf/initialize
+  end
+  global.get $~lib/rt/tlsf/ROOT
+  local.get $0
+  call $~lib/rt/tlsf/checkUsedBlock
+  call $~lib/rt/tlsf/freeBlock
  )
  (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
@@ -3613,7 +3614,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4112
-   i32.const 85
+   i32.const 86
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -3623,11 +3624,15 @@
   local.tee $8
   i32.const 2
   i32.shl
-  call $~lib/rt/tlsf/__alloc
-  local.tee $5
+  local.tee $0
   i32.const 1092
   i32.load
+  i32.add
   call $~lib/rt/tlsf/__alloc
+  local.tee $3
+  local.get $0
+  local.get $3
+  i32.add
   call $~lib/bindings/wasi_snapshot_preview1/environ_get
   local.tee $0
   i32.const 65535
@@ -3636,7 +3641,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4112
-   i32.const 90
+   i32.const 92
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -3665,22 +3670,22 @@
   i32.const 0
   i32.store offset=20
   loop $for-loop|0
-   local.get $3
+   local.get $4
    local.get $8
    i32.lt_u
    if
-    local.get $5
     local.get $3
+    local.get $4
     i32.const 2
     i32.shl
     i32.add
     i32.load
     local.tee $0
     local.get $0
-    local.get $5
+    local.get $3
     i32.sub
     call $~lib/string/String.UTF8.decodeUnsafe
-    local.tee $4
+    local.tee $5
     local.set $6
     block $__inlined_func$~lib/string/String#indexOf
      i32.const 4988
@@ -3745,11 +3750,11 @@
     i32.xor
     if (result i32)
      local.get $1
-     local.get $4
+     local.get $5
      i32.const 0
      local.get $0
      call $~lib/string/String#substring
-     local.get $4
+     local.get $5
      local.get $0
      i32.const 1
      i32.add
@@ -3758,18 +3763,20 @@
      call $~lib/map/Map<~lib/string/String,~lib/string/String>#set
     else
      local.get $1
-     local.get $4
+     local.get $5
      i32.const 5024
      call $~lib/map/Map<~lib/string/String,~lib/string/String>#set
     end
     drop
-    local.get $3
+    local.get $4
     i32.const 1
     i32.add
-    local.set $3
+    local.set $4
     br $for-loop|0
    end
   end
+  local.get $3
+  call $~lib/rt/tlsf/__free
   local.get $1
  )
  (func $~lib/util/number/utoa_dec_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
@@ -3875,7 +3882,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   i32.const 4356
   i32.const 4352
   i32.store
@@ -3903,14 +3909,14 @@
   i32.const 1088
   i32.const 1092
   call $~lib/bindings/wasi_snapshot_preview1/args_sizes_get
-  local.tee $2
+  local.tee $1
   i32.const 65535
   i32.and
   if
-   local.get $2
+   local.get $1
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4112
-   i32.const 65
+   i32.const 66
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -3920,14 +3926,15 @@
   local.tee $5
   i32.const 2
   i32.shl
-  call $~lib/rt/tlsf/__alloc
-  local.set $2
+  local.tee $4
   i32.const 1092
   i32.load
+  i32.add
   call $~lib/rt/tlsf/__alloc
-  local.tee $4
-  local.get $2
+  local.tee $1
+  local.get $1
   local.get $4
+  i32.add
   call $~lib/bindings/wasi_snapshot_preview1/args_get
   local.tee $4
   i32.const 65535
@@ -3936,7 +3943,7 @@
    local.get $4
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4112
-   i32.const 70
+   i32.const 72
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -3945,34 +3952,33 @@
   call $~lib/array/Array<~lib/string/String>#constructor
   local.set $4
   loop $for-loop|0
-   local.get $1
+   local.get $2
    local.get $5
    i32.lt_s
    if
     local.get $4
-    local.get $1
     local.get $2
     local.get $1
+    local.get $2
     i32.const 2
     i32.shl
     i32.add
     i32.load
-    local.tee $7
-    local.get $7
-    local.get $2
+    local.tee $6
+    local.get $6
+    local.get $1
     i32.sub
     call $~lib/string/String.UTF8.decodeUnsafe
     call $~lib/array/Array<~lib/string/String>#__set
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $for-loop|0
    end
   end
-  local.get $2
-  call $~lib/memory/heap.free
-  call $~lib/memory/heap.free
+  local.get $1
+  call $~lib/rt/tlsf/__free
   local.get $4
   global.set $~lib/process/process.argv
   global.get $~lib/process/process.argv
@@ -3984,7 +3990,7 @@
   global.get $wasi/process/argv
   i32.load offset=12
   local.set $1
-  loop $for-loop|04
+  loop $for-loop|00
    local.get $0
    local.get $1
    i32.lt_s
@@ -3999,7 +4005,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|04
+    br $for-loop|00
    end
   end
   call $~lib/process/lazyEnv
@@ -4019,7 +4025,7 @@
   local.tee $4
   call $~lib/array/Array<~lib/string/String>#constructor
   local.set $2
-  loop $for-loop|06
+  loop $for-loop|05
    local.get $1
    local.get $4
    i32.lt_s
@@ -4049,7 +4055,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $for-loop|06
+    br $for-loop|05
    end
   end
   local.get $2
@@ -4128,7 +4134,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4112
-   i32.const 52
+   i32.const 53
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable
@@ -4215,7 +4221,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4112
-   i32.const 58
+   i32.const 59
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable

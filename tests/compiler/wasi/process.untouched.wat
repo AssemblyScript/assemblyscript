@@ -4,8 +4,8 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $none_=>_i32 (func (result i32)))
@@ -1288,7 +1288,7 @@
    local.get $3
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3088
-   i32.const 154
+   i32.const 157
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -2949,7 +2949,7 @@
    local.get $2
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3088
-   i32.const 146
+   i32.const 149
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -3047,10 +3047,6 @@
   local.get $1
   i32.const 3376
   call $~lib/process/WritableStream#write<~lib/string/String>
- )
- (func $~lib/memory/heap.alloc (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/rt/tlsf/__alloc
  )
  (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -5233,10 +5229,6 @@
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/memory/heap.free (param $0 i32)
-  local.get $0
-  call $~lib/rt/tlsf/__free
- )
  (func $~lib/process/lazyArgv (result i32)
   (local $0 i32)
   (local $1 i32)
@@ -5248,6 +5240,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
   global.get $~lib/process/iobuf
   global.get $~lib/process/iobuf
   i32.const 4
@@ -5261,7 +5254,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3088
-   i32.const 65
+   i32.const 66
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -5272,14 +5265,19 @@
   local.get $1
   i32.const 4
   i32.mul
-  call $~lib/memory/heap.alloc
   local.set $2
   global.get $~lib/process/iobuf
   i32.load offset=4
-  call $~lib/memory/heap.alloc
   local.set $3
   local.get $2
   local.get $3
+  i32.add
+  call $~lib/rt/tlsf/__alloc
+  local.set $4
+  local.get $4
+  local.get $4
+  local.get $2
+  i32.add
   call $~lib/bindings/wasi_snapshot_preview1/args_get
   local.set $0
   local.get $0
@@ -5289,56 +5287,54 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3088
-   i32.const 70
+   i32.const 72
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
   end
   local.get $1
-  local.set $4
-  i32.const 0
-  local.get $4
-  call $~lib/array/Array<~lib/string/String>#constructor
   local.set $5
   i32.const 0
+  local.get $5
+  call $~lib/array/Array<~lib/string/String>#constructor
   local.set $6
+  i32.const 0
+  local.set $7
   loop $for-loop|0
-   local.get $6
-   local.get $4
-   i32.lt_s
-   local.set $7
    local.get $7
+   local.get $5
+   i32.lt_s
+   local.set $8
+   local.get $8
    if
-    local.get $2
-    local.get $6
+    local.get $4
+    local.get $7
     i32.const 4
     i32.mul
     i32.add
     i32.load
-    local.set $8
-    local.get $8
-    local.get $8
-    local.get $2
+    local.set $9
+    local.get $9
+    local.get $9
+    local.get $4
     i32.sub
     i32.const 1
     call $~lib/string/String.UTF8.decodeUnsafe
-    local.set $9
-    local.get $5
+    local.set $10
     local.get $6
-    local.get $9
+    local.get $7
+    local.get $10
     call $~lib/array/Array<~lib/string/String>#__set
-    local.get $6
+    local.get $7
     i32.const 1
     i32.add
-    local.set $6
+    local.set $7
     br $for-loop|0
    end
   end
-  local.get $2
-  call $~lib/memory/heap.free
-  local.get $3
-  call $~lib/memory/heap.free
-  local.get $5
+  local.get $4
+  call $~lib/rt/tlsf/__free
+  local.get $6
  )
  (func $~lib/array/Array<~lib/string/String>#get:length (param $0 i32) (result i32)
   local.get $0
@@ -6182,6 +6178,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
   global.get $~lib/process/iobuf
   global.get $~lib/process/iobuf
   i32.const 4
@@ -6195,7 +6192,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3088
-   i32.const 85
+   i32.const 86
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -6206,14 +6203,19 @@
   local.get $1
   i32.const 4
   i32.mul
-  call $~lib/memory/heap.alloc
   local.set $2
   global.get $~lib/process/iobuf
   i32.load offset=4
-  call $~lib/memory/heap.alloc
   local.set $3
   local.get $2
   local.get $3
+  i32.add
+  call $~lib/rt/tlsf/__alloc
+  local.set $4
+  local.get $4
+  local.get $4
+  local.get $2
+  i32.add
   call $~lib/bindings/wasi_snapshot_preview1/environ_get
   local.set $0
   local.get $0
@@ -6223,53 +6225,53 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3088
-   i32.const 90
+   i32.const 92
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
   end
   i32.const 0
   call $~lib/map/Map<~lib/string/String,~lib/string/String>#constructor
-  local.set $4
-  i32.const 0
   local.set $5
+  i32.const 0
+  local.set $6
   loop $for-loop|0
-   local.get $5
+   local.get $6
    local.get $1
    i32.lt_u
-   local.set $6
-   local.get $6
+   local.set $7
+   local.get $7
    if
-    local.get $2
-    local.get $5
+    local.get $4
+    local.get $6
     i32.const 4
     i32.mul
     i32.add
     i32.load
-    local.set $7
-    local.get $7
-    local.get $7
-    local.get $2
+    local.set $8
+    local.get $8
+    local.get $8
+    local.get $4
     i32.sub
     i32.const 1
     call $~lib/string/String.UTF8.decodeUnsafe
-    local.set $8
-    local.get $8
+    local.set $9
+    local.get $9
     i32.const 3968
     i32.const 0
     call $~lib/string/String#indexOf
-    local.set $9
-    local.get $9
+    local.set $10
+    local.get $10
     i32.const -1
     i32.xor
     if
-     local.get $4
-     local.get $8
+     local.get $5
+     local.get $9
      i32.const 0
-     local.get $9
+     local.get $10
      call $~lib/string/String#substring
-     local.get $8
      local.get $9
+     local.get $10
      i32.const 1
      i32.add
      global.get $~lib/builtins/i32.MAX_VALUE
@@ -6277,20 +6279,22 @@
      call $~lib/map/Map<~lib/string/String,~lib/string/String>#set
      drop
     else
-     local.get $4
-     local.get $8
+     local.get $5
+     local.get $9
      i32.const 4000
      call $~lib/map/Map<~lib/string/String,~lib/string/String>#set
      drop
     end
-    local.get $5
+    local.get $6
     i32.const 1
     i32.add
-    local.set $5
+    local.set $6
     br $for-loop|0
    end
   end
   local.get $4
+  call $~lib/rt/tlsf/__free
+  local.get $5
  )
  (func $~lib/array/Array<~lib/string/String>#set:length (param $0 i32) (param $1 i32)
   local.get $0
@@ -6409,7 +6413,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3088
-   i32.const 52
+   i32.const 53
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable
@@ -7158,7 +7162,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3088
-   i32.const 58
+   i32.const 59
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable
