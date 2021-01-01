@@ -243,7 +243,8 @@ if (!String.prototype.at) {
   Object.defineProperty(String.prototype, "at", {
     value: function at(index) {
       return this.charAt(index >= 0 ? index : index + this.length);
-    }
+    },
+    configurable: true
   });
 }
 
@@ -253,7 +254,8 @@ if (!String.prototype.replaceAll) {
       var res = this.split(search).join(replacment);
       if (!search.length) res = replacment + res + replacment;
       return res;
-    }
+    },
+    configurable: true
   });
 }
 
@@ -286,7 +288,8 @@ Array.prototype.sort = function sort(comparator) {
     Object.defineProperty(Ctr.prototype, "at", {
       value: function at(index) {
         return this[index >= 0 ? index : index + this.length];
-      }
+      },
+      configurable: true
     });
   }
 });
