@@ -77,7 +77,7 @@
     "check:lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
     "test": "npm run test:parser && npm run test:compiler && npm run test:packages && npm run test:extension && npm run test:asconfig",
     "test:parser": "node tests/parser",
-    "test:compiler": "node tests/compiler",
+    "test:compiler": "node --experimental-wasi-unstable-preview1 tests/compiler",
     "test:packages": "cd tests/packages && npm run test",
     "test:extension": "cd tests/extension && npm run test",
     "test:asconfig": "cd tests/asconfig && npm run test",
