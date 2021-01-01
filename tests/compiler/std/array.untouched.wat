@@ -16,9 +16,7 @@
  (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
- (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i32_i32_i32_=>_f32 (func (param i32 i32 i32) (result f32)))
- (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (type $i64_=>_none (func (param i64)))
@@ -27,6 +25,8 @@
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $i64_=>_i64 (func (param i64) (result i64)))
+ (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
+ (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
@@ -3756,15 +3756,6 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<u8>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 0
-  i32.shl
-  i32.add
-  i32.load8_u
- )
  (func $~lib/array/Array<u8>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -3780,8 +3771,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<u8>#__uget
+  i32.const 0
+  i32.shl
+  i32.add
+  i32.load8_u
   local.set $2
   i32.const 0
   drop
@@ -3969,15 +3964,6 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<u32>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
- )
  (func $~lib/array/Array<u32>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -3993,8 +3979,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<u32>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
   local.set $2
   i32.const 0
   drop
@@ -4436,15 +4426,6 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/array/Array<i32>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
- )
  (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -4460,8 +4441,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<i32>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
   local.set $2
   i32.const 0
   drop
@@ -5596,16 +5581,6 @@
   i32.store offset=12
   local.get $6
  )
- (func $~lib/array/Array<std/array/Ref>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/array/Array<std/array/Ref>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -5621,8 +5596,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<std/array/Ref>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
   local.set $2
   i32.const 1
   drop
@@ -5753,16 +5733,6 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<std/array/Ref|null>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/array/Array<std/array/Ref|null>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -5778,8 +5748,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<std/array/Ref|null>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
   local.set $2
   i32.const 1
   drop
@@ -6563,15 +6538,6 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<f32>#__uget (param $0 i32) (param $1 i32) (result f32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  f32.load
- )
  (func $~lib/array/Array<f32>#__get (param $0 i32) (param $1 i32) (result f32)
   (local $2 f32)
   local.get $1
@@ -6587,8 +6553,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<f32>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  f32.load
   local.set $2
   i32.const 0
   drop
@@ -8657,15 +8627,6 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<f64>#__uget (param $0 i32) (param $1 i32) (result f64)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 3
-  i32.shl
-  i32.add
-  f64.load
- )
  (func $~lib/array/Array<f64>#__get (param $0 i32) (param $1 i32) (result f64)
   (local $2 f64)
   local.get $1
@@ -8681,8 +8642,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<f64>#__uget
+  i32.const 3
+  i32.shl
+  i32.add
+  f64.load
   local.set $2
   i32.const 0
   drop
@@ -10540,16 +10505,6 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/array/Array<~lib/array/Array<i32>>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -10565,8 +10520,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<~lib/array/Array<i32>>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
   local.set $2
   i32.const 1
   drop
@@ -11114,16 +11074,6 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<std/array/Proxy<i32>>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/array/Array<std/array/Proxy<i32>>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -11139,8 +11089,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<std/array/Proxy<i32>>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
   local.set $2
   i32.const 1
   drop
@@ -11462,16 +11417,6 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<~lib/string/String|null>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/array/Array<~lib/string/String|null>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -11487,8 +11432,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<~lib/string/String|null>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
   local.set $2
   i32.const 1
   drop
@@ -12643,16 +12593,6 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<~lib/string/String>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -12668,8 +12608,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<~lib/string/String>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
   local.set $2
   i32.const 1
   drop
@@ -26378,6 +26323,15 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
+ (func $~lib/array/Array<u32>#__uget (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
  (func $~lib/array/Array<u32>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 0
   drop
@@ -26451,8 +26405,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<u32>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
   local.set $3
   i32.const 0
   drop
@@ -27710,6 +27668,15 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
+ (func $~lib/array/Array<u8>#__uget (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 0
+  i32.shl
+  i32.add
+  i32.load8_u
+ )
  (func $~lib/array/Array<u8>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 0
   drop
@@ -27783,8 +27750,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<u8>#__uget
+  i32.const 0
+  i32.shl
+  i32.add
+  i32.load8_u
   local.set $3
   i32.const 0
   drop
@@ -29490,6 +29461,16 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
+ (func $~lib/array/Array<~lib/string/String>#__uget (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
+ )
  (func $~lib/array/Array<~lib/string/String>#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -29517,8 +29498,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<~lib/string/String>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
   local.set $3
   i32.const 1
   drop

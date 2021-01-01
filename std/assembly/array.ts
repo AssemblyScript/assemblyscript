@@ -102,7 +102,7 @@ export class Array<T> {
 
   @operator("[]") private __get(index: i32): T {
     if (<u32>index >= <u32>this.length_) throw new RangeError(E_INDEXOUTOFRANGE);
-    var value = this.__uget(index);
+    var value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);
@@ -141,7 +141,7 @@ export class Array<T> {
     var len = this.length_;
     index += select(0, len, index >= 0);
     if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
-    var value = this.__uget(index);
+    var value = load<T>(this.dataStart + (<usize>index << alignof<T>()));
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);

@@ -6,13 +6,13 @@
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
- (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
@@ -1473,15 +1473,6 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/array/Array<u64>#__uget (param $0 i32) (param $1 i32) (result i64)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 3
-  i32.shl
-  i32.add
-  i64.load
- )
  (func $~lib/array/Array<u64>#__get (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   local.get $1
@@ -1497,8 +1488,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<u64>#__uget
+  i32.const 3
+  i32.shl
+  i32.add
+  i64.load
   local.set $2
   i32.const 0
   drop

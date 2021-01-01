@@ -5319,15 +5319,6 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/array/Array<i8>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 0
-  i32.shl
-  i32.add
-  i32.load8_s
- )
  (func $~lib/array/Array<i8>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -5343,8 +5334,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<i8>#__uget
+  i32.const 0
+  i32.shl
+  i32.add
+  i32.load8_s
   local.set $2
   i32.const 0
   drop
@@ -5632,15 +5627,6 @@
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<i32>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
- )
  (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -5656,8 +5642,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<i32>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
   local.set $2
   i32.const 0
   drop
@@ -42250,6 +42240,15 @@
   i32.add
   i32.load8_s
  )
+ (func $~lib/array/Array<i8>#__uget (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 0
+  i32.shl
+  i32.add
+  i32.load8_s
+ )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int8Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -47998,6 +47997,15 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/typedarray/Int32Array#__uget (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
+ (func $~lib/array/Array<i32>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1

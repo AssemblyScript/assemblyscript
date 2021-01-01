@@ -2143,9 +2143,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   i32.load8_u
  )
@@ -2281,15 +2281,6 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/array/Array<u32>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
- )
  (func $~lib/array/Array<u32>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
@@ -2304,8 +2295,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<u32>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
  )
  (func $std/array/isArraysEqual<u32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3261,16 +3256,6 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/array/Array<std/array/Ref>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-  call $~lib/rt/pure/__retain
- )
  (func $~lib/array/Array<std/array/Ref>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
@@ -3285,8 +3270,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<std/array/Ref>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
   local.tee $0
   i32.eqz
   if
@@ -3313,8 +3303,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<std/array/Ref>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
  )
  (func $~lib/array/Array<i32>#__set (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -17489,8 +17484,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<u32>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
  )
  (func $~lib/array/Array<u32>#concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -17849,9 +17848,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   i32.load8_u
  )
@@ -18804,8 +18803,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<std/array/Ref>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/pure/__retain
   local.tee $0
   i32.eqz
   if

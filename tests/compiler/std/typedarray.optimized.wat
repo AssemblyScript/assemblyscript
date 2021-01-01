@@ -3696,15 +3696,6 @@
   end
   local.get $5
  )
- (func $~lib/array/Array<i32>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
- )
  (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
@@ -3719,8 +3710,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<i32>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
  )
  (func $std/typedarray/isInt32ArrayEqual (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -22849,7 +22844,7 @@
   local.set $1
   local.get $0
   i32.load offset=8
-  local.tee $4
+  local.tee $3
   local.get $1
   i32.load offset=12
   i32.ne
@@ -22863,30 +22858,28 @@
   end
   loop $for-loop|0
    local.get $2
-   local.get $4
+   local.get $3
    i32.lt_s
    if
-    local.get $2
-    local.get $1
-    i32.load offset=4
-    i32.add
-    i32.load8_s
-    local.tee $3
-    local.set $5
-    local.get $3
     local.get $2
     local.get $0
     i32.load offset=4
     i32.add
     i32.load8_s
-    local.tee $3
+    local.tee $4
+    local.get $2
+    local.get $1
+    i32.load offset=4
+    i32.add
+    i32.load8_s
+    local.tee $5
     i32.ne
     if
      i32.const 9040
      i32.const 3
      local.get $2
      f64.convert_i32_s
-     local.get $3
+     local.get $4
      f64.convert_i32_s
      local.get $5
      f64.convert_i32_s
@@ -25596,6 +25589,15 @@
   i32.const 8704
   call $~lib/rt/pure/__release
  )
+ (func $~lib/typedarray/Int32Array#__uget (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int32Array> (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -25630,11 +25632,11 @@
    if
     local.get $0
     local.get $2
-    call $~lib/array/Array<i32>#__uget
+    call $~lib/typedarray/Int32Array#__uget
     local.tee $4
     local.get $1
     local.get $2
-    call $~lib/array/Array<i32>#__uget
+    call $~lib/typedarray/Int32Array#__uget
     local.tee $5
     i32.ne
     if
@@ -26281,11 +26283,11 @@
    if
     local.get $0
     local.get $2
-    call $~lib/array/Array<i32>#__uget
+    call $~lib/typedarray/Int32Array#__uget
     local.tee $4
     local.get $1
     local.get $2
-    call $~lib/array/Array<i32>#__uget
+    call $~lib/typedarray/Int32Array#__uget
     local.tee $5
     i32.ne
     if

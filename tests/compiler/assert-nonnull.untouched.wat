@@ -103,16 +103,6 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $~lib/array/Array<assert-nonnull/Foo>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-  call $~lib/rt/stub/__retain
- )
  (func $~lib/array/Array<assert-nonnull/Foo>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -128,8 +118,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<assert-nonnull/Foo>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/stub/__retain
   local.set $2
   i32.const 1
   drop
@@ -172,16 +167,6 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $~lib/array/Array<assert-nonnull/Foo|null>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-  call $~lib/rt/stub/__retain
- )
  (func $~lib/array/Array<assert-nonnull/Foo|null>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
@@ -197,8 +182,13 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<assert-nonnull/Foo|null>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  call $~lib/rt/stub/__retain
   local.set $2
   i32.const 1
   drop
