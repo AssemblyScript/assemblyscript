@@ -239,6 +239,14 @@ String["fromCodePoints"] = function fromCodePoints(arr) {
   return parts;
 };
 
+if (!String.prototype.at) {
+  Object.defineProperty(String.prototype, "at", {
+    value: function at(index) {
+      return this.charAt(index >= 0 ? index : index + this.length);
+    }
+  });
+}
+
 if (!String.prototype.replaceAll) {
   Object.defineProperty(String.prototype, "replaceAll", {
     value: function replaceAll(search, replacment) {
@@ -266,6 +274,22 @@ const arraySort = Array.prototype.sort;
 Array.prototype.sort = function sort(comparator) {
   return arraySort.call(this, comparator || defaultComparator);
 };
+
+[ Array,
+  Uint8ClampedArray,
+  Uint8Array, Int8Array,
+  Uint16Array, Int16Array,
+  Uint32Array, Int32Array,
+  Float32Array, Float64Array
+].forEach(Ctr => {
+  if (!Ctr.prototype.at) {
+    Object.defineProperty(Ctr.prototype, "at", {
+      value: function at(index) {
+        return this[index >= 0 ? index : index + this.length];
+      }
+    });
+  }
+});
 
 globalScope["isInteger"] = Number.isInteger;
 
