@@ -137,6 +137,19 @@ export class Array<T> {
     }
   }
 
+  at(index: i32): T {
+    var len = this.length_;
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    var value = this.__uget(index);
+    if (isReference<T>()) {
+      if (!isNullable<T>()) {
+        if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);
+      }
+    }
+    return value;
+  }
+
   fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
     var dataStart = this.dataStart;
     var length = this.length_;

@@ -433,6 +433,7 @@
  (export "ArrayU32#set:length" (func $~lib/array/Array<u32>#set:length))
  (export "ArrayU32#every" (func $~lib/array/Array<i32>#every))
  (export "ArrayU32#findIndex" (func $~lib/array/Array<i32>#findIndex))
+ (export "ArrayU32#at" (func $~lib/array/Array<u32>#at))
  (export "ArrayU32#fill" (func $~lib/array/Array<u32>#fill@varargs))
  (export "ArrayU32#includes" (func $~lib/array/Array<u32>#includes@varargs))
  (export "ArrayU32#indexOf" (func $~lib/array/Array<u32>#indexOf@varargs))
@@ -459,6 +460,7 @@
  (export "ArrayU8#set:length" (func $~lib/array/Array<u8>#set:length))
  (export "ArrayU8#every" (func $~lib/array/Array<u8>#every))
  (export "ArrayU8#findIndex" (func $~lib/array/Array<u8>#findIndex))
+ (export "ArrayU8#at" (func $~lib/array/Array<u8>#at))
  (export "ArrayU8#fill" (func $~lib/array/Array<u8>#fill@varargs))
  (export "ArrayU8#includes" (func $~lib/array/Array<u8>#includes@varargs))
  (export "ArrayU8#indexOf" (func $~lib/array/Array<u8>#indexOf@varargs))
@@ -485,6 +487,7 @@
  (export "ArrayStr#set:length" (func $~lib/array/Array<std/array/Ref>#set:length))
  (export "ArrayStr#every" (func $~lib/array/Array<i32>#every))
  (export "ArrayStr#findIndex" (func $~lib/array/Array<i32>#findIndex))
+ (export "ArrayStr#at" (func $~lib/array/Array<~lib/string/String>#at))
  (export "ArrayStr#fill" (func $~lib/array/Array<~lib/string/String>#fill@varargs))
  (export "ArrayStr#includes" (func $~lib/array/Array<~lib/string/String>#includes@varargs))
  (export "ArrayStr#indexOf" (func $~lib/array/Array<~lib/string/String>#indexOf@varargs))
@@ -2140,9 +2143,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $1
   local.get $0
   i32.load offset=4
-  local.get $1
   i32.add
   i32.load8_u
  )
@@ -2278,6 +2281,15 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
+ (func $~lib/array/Array<u32>#__uget (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
  (func $~lib/array/Array<u32>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
@@ -2292,12 +2304,8 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
   local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
+  call $~lib/array/Array<u32>#__uget
  )
  (func $std/array/isArraysEqual<u32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -2663,7 +2671,7 @@
   if
    i32.const 2032
    i32.const 1104
-   i32.const 300
+   i32.const 313
    i32.const 21
    call $~lib/builtins/abort
    unreachable
@@ -2752,7 +2760,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 229
+   i32.const 242
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -2934,7 +2942,7 @@
   if
    i32.const 2032
    i32.const 1104
-   i32.const 361
+   i32.const 374
    i32.const 21
    call $~lib/builtins/abort
    unreachable
@@ -17457,6 +17465,33 @@
   local.get $1
   i32.store offset=12
  )
+ (func $~lib/array/Array<u32>#at (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  i32.const 0
+  local.get $0
+  i32.load offset=12
+  local.tee $2
+  local.get $1
+  i32.const 0
+  i32.ge_s
+  select
+  i32.add
+  local.tee $1
+  local.get $2
+  i32.ge_u
+  if
+   i32.const 1552
+   i32.const 1104
+   i32.const 143
+   i32.const 33
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u32>#__uget
+ )
  (func $~lib/array/Array<u32>#concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -17481,7 +17516,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 229
+   i32.const 242
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -17671,7 +17706,7 @@
  (func $~lib/array/Array<u32>#flat (param $0 i32) (result i32)
   i32.const 12656
   i32.const 1104
-  i32.const 504
+  i32.const 517
   i32.const 7
   call $~lib/builtins/abort
   unreachable
@@ -17791,6 +17826,35 @@
   call $~lib/rt/pure/__release
   i32.const -1
  )
+ (func $~lib/array/Array<u8>#at (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  i32.const 0
+  local.get $0
+  i32.load offset=12
+  local.tee $2
+  local.get $1
+  i32.const 0
+  i32.ge_s
+  select
+  i32.add
+  local.tee $1
+  local.get $2
+  i32.ge_u
+  if
+   i32.const 1552
+   i32.const 1104
+   i32.const 143
+   i32.const 33
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  local.get $0
+  i32.load offset=4
+  i32.add
+  i32.load8_u
+ )
  (func $~lib/array/Array<u8>#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
@@ -17896,7 +17960,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 229
+   i32.const 242
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -18034,7 +18098,7 @@
   if
    i32.const 2032
    i32.const 1104
-   i32.const 300
+   i32.const 313
    i32.const 21
    call $~lib/builtins/abort
    unreachable
@@ -18168,7 +18232,7 @@
   if
    i32.const 2032
    i32.const 1104
-   i32.const 361
+   i32.const 374
    i32.const 21
    call $~lib/builtins/abort
    unreachable
@@ -18716,6 +18780,44 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
+ (func $~lib/array/Array<~lib/string/String>#at (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  i32.const 0
+  local.get $0
+  i32.load offset=12
+  local.tee $2
+  local.get $1
+  i32.const 0
+  i32.ge_s
+  select
+  i32.add
+  local.tee $1
+  local.get $2
+  i32.ge_u
+  if
+   i32.const 1552
+   i32.const 1104
+   i32.const 143
+   i32.const 33
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<std/array/Ref>#__uget
+  local.tee $0
+  i32.eqz
+  if
+   i32.const 5200
+   i32.const 1104
+   i32.const 147
+   i32.const 40
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+ )
  (func $~lib/array/Array<~lib/string/String>#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
@@ -18933,7 +19035,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 229
+   i32.const 242
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -19231,7 +19333,7 @@
   if
    i32.const 2032
    i32.const 1104
-   i32.const 300
+   i32.const 313
    i32.const 21
    call $~lib/builtins/abort
    unreachable
@@ -19330,7 +19432,7 @@
   if
    i32.const 2032
    i32.const 1104
-   i32.const 361
+   i32.const 374
    i32.const 21
    call $~lib/builtins/abort
    unreachable

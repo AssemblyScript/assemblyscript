@@ -48,6 +48,15 @@ import { Array } from "./array";
     return changetype<OBJECT>(changetype<usize>(this) - TOTAL_OVERHEAD).rtSize >> 1;
   }
 
+  at(pos: i32): String {
+    var len = this.length;
+    pos += select(0, len, pos >= 0);
+    if (<u32>pos >= <u32>len) return changetype<String>("");
+    var out = __new(2, idof<String>());
+    store<u16>(out, load<u16>(changetype<usize>(this) + (<usize>pos << 1)));
+    return changetype<String>(out); // retains
+  }
+
   @operator("[]") charAt(pos: i32): String {
     if (<u32>pos >= <u32>this.length) return changetype<String>("");
     var out = __new(2, idof<String>());
