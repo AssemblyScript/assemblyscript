@@ -27,12 +27,12 @@
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 400))
  (global $~lib/memory/__heap_base i32 (i32.const 428))
- (export "memory" (memory $0))
  (export "__new" (func $~lib/rt/tcms/__new))
  (export "__pin" (func $~lib/rt/tcms/__pin))
  (export "__unpin" (func $~lib/rt/tcms/__unpin))
  (export "__collect" (func $~lib/rt/tcms/__collect))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
+ (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0

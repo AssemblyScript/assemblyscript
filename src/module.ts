@@ -113,7 +113,22 @@ export enum ExpressionId {
   Rethrow = 47 /* _BinaryenRethrowId */,
   BrOnExn = 48 /* _BinaryenBrOnExnId */,
   TupleMake = 49 /* _BinaryenTupleMakeId */,
-  TupleExtract = 50 /* _BinaryenTupleExtractId */
+  TupleExtract = 50, /* _BinaryenTupleExtractId */
+  I31New = 51, /* _BinaryenI32NewId */
+  I31Get = 52, /* _BinaryenI31GetId */
+  CallRef = 53, /* _BinaryenCallRefId */
+  RefTest = 54, /* _BinaryenRefTestId */
+  RefCast = 55, /* _BinaryenRefCastId */
+  BrOnCast = 56, /* _BinaryenBrOnCastId */
+  RttCanon = 57, /* _BinaryenRttCanonId */
+  RttSub = 58, /* _BinaryenRttSubId */
+  StructNew = 59, /* _BinaryenStructNewId */
+  StructGet = 60, /* _BinaryenStructGetId */
+  StructSet = 61, /* _BinaryenStructSetId */
+  ArrayNew = 62, /* _BinaryenArrayNewId */
+  ArrayGet = 63, /* _BinaryenArrayGetId */
+  ArraySet = 64, /* _BinaryenArraySetId */
+  ArrayLen = 64 /* _BinaryenArrayLenId */
 }
 
 export enum UnaryOp {
@@ -1042,10 +1057,11 @@ export class Module {
   }
 
   ref_func(
-    name: string
+    name: string,
+    type: NativeType
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
-    return binaryen._BinaryenRefFunc(this.ref, cStr);
+    return binaryen._BinaryenRefFunc(this.ref, cStr, type);
   }
 
   // globals
@@ -1219,6 +1235,11 @@ export class Module {
     binaryen._BinaryenRemoveExport(this.ref, cStr);
   }
 
+  hasExport(externalName: string): bool {
+    var cStr = this.allocStringCached(externalName);
+    return binaryen._BinaryenGetExport(this.ref, cStr) != 0;
+  }
+
   // imports
 
   addFunctionImport(
@@ -1353,17 +1374,6 @@ export class Module {
       this.ref, initial, maximum, cArr, numNames, offset
     );
     binaryen._free(cArr);
-  }
-
-  // exports
-
-  hasExport(name: string): bool {
-    var numExports = binaryen._BinaryenGetNumExports(this.ref);
-    for (let i: Index = 0; i < numExports; ++i) {
-      let exportRef = binaryen._BinaryenGetExportByIndex(this.ref, i);
-      if (readString(binaryen._BinaryenExportGetName(exportRef)) == name) return true;
-    }
-    return false;
   }
 
   // sections
@@ -1725,25 +1735,38 @@ export class Module {
     throw new Error("not implemented"); // JS glue overrides this
   }
 
-  private cachedStrings: Map<string,usize> = new Map();
+  private cachedStringsToPointers: Map<string,usize> = new Map();
+  private cachedPointersToStrings: Map<usize,string | null> = new Map();
 
-  private allocStringCached(str: string | null): usize {
+  allocStringCached(str: string | null): usize {
     if (str === null) return 0;
-    var cachedStrings = this.cachedStrings;
-    if (cachedStrings.has(str)) return <usize>cachedStrings.get(str);
+    var cached = this.cachedStringsToPointers;
+    if (cached.has(str)) return changetype<usize>(cached.get(str));
     var ptr = allocString(str);
-    cachedStrings.set(str, ptr);
+    cached.set(str, ptr);
     return ptr;
+  }
+
+  readStringCached(ptr: usize): string | null {
+    // Binaryen internalizes names, so using this method where it's safe can
+    // avoid quite a bit of unnecessary garbage.
+    if (ptr == 0) return null;
+    var cached = this.cachedPointersToStrings;
+    if (cached.has(ptr)) return changetype<string>(this.cachedPointersToStrings.get(ptr));
+    var str = readString(ptr);
+    cached.set(ptr, str);
+    return str;
   }
 
   dispose(): void {
     assert(this.ref);
     // TODO: for (let ptr of this.cachedStrings.values()) {
-    for (let _values = Map_values(this.cachedStrings), i = 0, k = _values.length; i < k; ++i) {
+    for (let _values = Map_values(this.cachedStringsToPointers), i = 0, k = _values.length; i < k; ++i) {
       let ptr = unchecked(_values[i]);
       binaryen._free(ptr);
     }
-    this.cachedStrings = new Map();
+    this.cachedStringsToPointers.clear();
+    this.cachedPointersToStrings.clear();
     binaryen._free(this.lit);
     binaryen._BinaryenModuleDispose(this.ref);
     this.ref = 0;

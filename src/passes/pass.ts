@@ -25,6 +25,8 @@ import {
   _BinaryenBreakGetValue,
   _BinaryenGetNumFunctions,
   _BinaryenGetFunctionByIndex,
+  _BinaryenGetNumGlobals,
+  _BinaryenGetGlobalByIndex,
   _BinaryenFunctionGetBody,
   _BinaryenSwitchGetCondition,
   _BinaryenSwitchGetValue,
@@ -188,13 +190,14 @@ export abstract class Visitor {
   }
   _currentExpression: ExpressionRef = 0;
 
-  /** Gets the parent expression of the current expression being walked. Traps if the top-most parent. */
-  get parentExpression(): ExpressionRef {
+  /** Gets the parent expression of the current expression being walked. Returns zero if already the top-most expression. */
+  get parentExpressionOrNull(): ExpressionRef {
     var stack = this.stack;
     var length = stack.length;
-    if (!length) throw new Error("stack is empty");
-    return stack[length - 1];
+    return length ? stack[length - 1] : 0;
   }
+
+  // Expressions
 
   visitBlock(expr: ExpressionRef): void {
     // unimp
@@ -400,6 +403,68 @@ export abstract class Visitor {
     // unimp
   }
 
+  visitI31New(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitI31Get(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitCallRef(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitRefTest(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitRefCast(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitBrOnCast(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitRttCanon(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitRttSub(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStructNew(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStructGet(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitStructSet(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitArrayNew(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitArrayGet(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitArraySet(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitArrayLen(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  // Immediates
+
   visitName(name: CString): void {
     // unimp
   }
@@ -415,6 +480,8 @@ export abstract class Visitor {
   visitEvent(name: CString): void {
     // unimp
   }
+
+  // Delegate
 
   /** Visits any expression, delegating to the respective visitor methods. */
   visit(expr: ExpressionRef): void {
@@ -810,6 +877,111 @@ export abstract class Visitor {
         this.visitTupleExtract(expr);
         break;
       }
+      case ExpressionId.I31New: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitI31New(expr);
+        break;
+      }
+      case ExpressionId.I31Get: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitI31Get(expr);
+        break;
+      }
+      case ExpressionId.CallRef: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitCallRef(expr);
+        break;
+      }
+      case ExpressionId.RefTest: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitRefTest(expr);
+        break;
+      }
+      case ExpressionId.RefCast: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitRefCast(expr);
+        break;
+      }
+      case ExpressionId.BrOnCast: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitBrOnCast(expr);
+        break;
+      }
+      case ExpressionId.RttCanon: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitRttCanon(expr);
+        break;
+      }
+      case ExpressionId.RttSub: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitRttSub(expr);
+        break;
+      }
+      case ExpressionId.StructNew: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStructNew(expr);
+        break;
+      }
+      case ExpressionId.StructGet: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStructGet(expr);
+        break;
+      }
+      case ExpressionId.StructSet: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitStructSet(expr);
+        break;
+      }
+      case ExpressionId.ArrayNew: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitArrayNew(expr);
+        break;
+      }
+      case ExpressionId.ArrayGet: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitArrayGet(expr);
+        break;
+      }
+      case ExpressionId.ArraySet: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitArraySet(expr);
+        break;
+      }
+      case ExpressionId.ArrayLen: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitArrayLen(expr);
+        break;
+      }
       default: throw new Error("unexpected expression kind");
     }
     this._currentExpression = previousExpression;
@@ -868,10 +1040,10 @@ export abstract class Pass extends Visitor {
 
   /** Walks all global variables. */
   walkGlobals(): void {
-    // TODO: C-API
-    // for (let i: BinaryenIndex = 0, k = _BinaryenGetNumGlobals(moduleRef); i < k; ++i) {
-    //   this.walkGlobal(_BinaryenGetGlobalByIndex(moduleRef, i));
-    // }
+    var moduleRef = this.module.ref;
+    for (let i: Index = 0, k = _BinaryenGetNumGlobals(moduleRef); i < k; ++i) {
+      this.walkGlobal(_BinaryenGetGlobalByIndex(moduleRef, i));
+    }
   }
 
   /** Walks a specific global variable. */
@@ -892,7 +1064,7 @@ export abstract class Pass extends Visitor {
     if (body == search) {
       _BinaryenFunctionSetBody(func, replacement);
     } else {
-      var parent = this.parentExpression;
+      var parent = assert(this.parentExpressionOrNull);
       var replaced = replaceChild(parent, search, replacement);
       if (!replaced) throw Error("failed to replace expression");
       _BinaryenExpressionFinalize(parent);
@@ -1401,6 +1573,66 @@ export function replaceChild(
         _BinaryenTupleExtractSetTuple(parent, replacement);
         return tuple;
       }
+      break;
+    }
+    case ExpressionId.I31New: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.I31Get: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.CallRef: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.RefTest: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.RefCast: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.BrOnCast: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.RttCanon: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.RttSub: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.StructNew: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.StructGet: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.StructSet: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.ArrayNew: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.ArrayGet: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.ArraySet: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.ArrayLen: {
+      assert(false); // TODO
       break;
     }
     default: throw new Error("unexpected expression id");

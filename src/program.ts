@@ -1520,12 +1520,12 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Requires that a global variable is present and returns it. */
-  private requireGlobal(name: string): Global {
+  requireGlobal(name: string): Global {
     return <Global>this.require(name, ElementKind.GLOBAL);
   }
 
   /** Requires that a non-generic global class is present and returns it. */
-  private requireClass(name: string): Class {
+  requireClass(name: string): Class {
     var prototype = this.require(name, ElementKind.CLASS_PROTOTYPE);
     var resolved = this.resolver.resolveClass(<ClassPrototype>prototype, null);
     if (!resolved) throw new Error("Invalid standard library class: " + name);
@@ -1533,7 +1533,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Requires that a global function is present and returns it. */
-  private requireFunction(name: string, typeArguments: Type[] | null = null): Function {
+  requireFunction(name: string, typeArguments: Type[] | null = null): Function {
     var prototype = <FunctionPrototype>this.require(name, ElementKind.FUNCTION_PROTOTYPE);
     var resolved = this.resolver.resolveFunction(prototype, typeArguments);
     if (!resolved) throw new Error("Invalid standard library function: " + name);

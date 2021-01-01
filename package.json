@@ -86,13 +86,14 @@
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
     "prepublishOnly": "node scripts/prepublish",
     "postpublish": "node scripts/postpublish",
-    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized && npm run asbuild:rtraced",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
     "asbuild:untouched": "node bin/asc --config src/asconfig.json --target untouched",
     "asbuild:optimized": "node bin/asc --config src/asconfig.json --target optimized",
     "asbuild:rtraced": "node bin/asc --config src/asconfig.json --target rtraced",
     "bootstrap": "npm run bootstrap:untouched && npm run bootstrap:optimized",
     "bootstrap:untouched": "node bin/asc --config src/asconfig.json --target untouched && node bin/asc --config src/asconfig.json --target untouched-bootstrap --wasm out/assemblyscript.untouched.wasm && node bin/asc --config src/asconfig.json --target untouched-bootstrap --wasm out/assemblyscript.untouched-bootstrap.wasm && git --no-pager diff --no-index out/assemblyscript.untouched.wast out/assemblyscript.untouched-bootstrap.wast",
     "bootstrap:optimized": "node bin/asc --config src/asconfig.json --target optimized && node bin/asc --config src/asconfig.json --target optimized-bootstrap --wasm out/assemblyscript.optimized.wasm && node bin/asc --config src/asconfig.json --target optimized-bootstrap --wasm out/assemblyscript.optimized-bootstrap.wasm && git --no-pager diff --no-index out/assemblyscript.optimized.wast out/assemblyscript.optimized-bootstrap.wast",
+    "bootstrap:rtraced": "node bin/asc --config src/asconfig.json --target rtraced && node bin/asc --config src/asconfig.json --target rtraced --wasm out/assemblyscript.rtraced.wasm",
     "astest": "ts-node tests/bootstrap"
   },
   "releaseFiles": [

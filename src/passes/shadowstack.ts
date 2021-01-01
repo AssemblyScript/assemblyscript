@@ -163,6 +163,7 @@ export class ShadowStackPass extends Pass {
     super(compiler.module);
     this.compiler = compiler;
   }
+
   /** Compiler options. */
   get options(): Options { return this.compiler.options; }
   /** Target pointer type. */

@@ -195,6 +195,10 @@ import {
   readI32
 } from "./util";
 
+import {
+  RtraceMemory
+} from "./passes/rtrace";
+
 /** Compiler options. */
 export class Options {
 
@@ -320,6 +324,11 @@ export namespace ExportNames {
   /** Name of the table instance, if exported. */
   export const table = "table";
 }
+
+/** Functions to export if `--exportRuntime` is set. */
+const runtimeFunctions = [ "__new", "__pin", "__unpin", "__collect" ];
+/** Globals to export if `--exportRuntime` is set. */
+const runtimeGlobals = [ "__rtti_base" ];
 
 /** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {
@@ -447,6 +456,48 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    // compile and export runtime if requested
+    if (this.options.exportRuntime) {
+      for (let i = 0, k = runtimeFunctions.length; i < k; ++i) {
+        let name = runtimeFunctions[i];
+        let instance = program.requireFunction(name);
+        if (this.compileFunction(instance) && !module.hasExport(name)) {
+          module.addFunctionExport(instance.internalName, name);
+        }
+      }
+      for (let i = 0, k = runtimeGlobals.length; i < k; ++i) {
+        let name = runtimeGlobals[i];
+        let instance = program.requireGlobal(name);
+        if (this.compileGlobal(instance) && !module.hasExport(name)) {
+          module.addGlobalExport(instance.internalName, name);
+        }
+      }
+    }
+
+    // compile lazy functions
+    var lazyFunctions = this.lazyFunctions;
+    do {
+      let functionsToCompile = new Array<Function>();
+      // TODO: for (let instance of lazyLibraryFunctions) {
+      for (let _values = Set_values(lazyFunctions), i = 0, k = _values.length; i < k; ++i) {
+        let instance = unchecked(_values[i]);
+        functionsToCompile.push(instance);
+      }
+      lazyFunctions.clear();
+      for (let i = 0, k = functionsToCompile.length; i < k; ++i) {
+        this.compileFunction(unchecked(functionsToCompile[i]), true);
+      }
+    } while (lazyFunctions.size);
+
+    // compile pending class-specific instanceof helpers
+    // TODO: for (let prototype of this.pendingClassInstanceOf.values()) {
+    for (let _values = Set_values(this.pendingClassInstanceOf), i = 0, k = _values.length; i < k; ++i) {
+      let prototype = unchecked(_values[i]);
+      compileClassInstanceOf(this, prototype);
+    }
+
+    // NOTE: no more element compiles from here. may go to the start function!
+
     // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
     var explicitStart = program.isWasi || options.explicitStart;
@@ -474,28 +525,6 @@ export class Compiler extends DiagnosticEmitter {
       startFunctionInstance.finalize(module, funcRef);
       if (!explicitStart) module.setStart(funcRef);
       else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
-    }
-
-    // compile lazy functions
-    var lazyFunctions = this.lazyFunctions;
-    do {
-      let functionsToCompile = new Array<Function>();
-      // TODO: for (let instance of lazyLibraryFunctions) {
-      for (let _values = Set_values(lazyFunctions), i = 0, k = _values.length; i < k; ++i) {
-        let instance = unchecked(_values[i]);
-        functionsToCompile.push(instance);
-      }
-      lazyFunctions.clear();
-      for (let i = 0, k = functionsToCompile.length; i < k; ++i) {
-        this.compileFunction(unchecked(functionsToCompile[i]), true);
-      }
-    } while (lazyFunctions.size);
-
-    // compile pending class-specific instanceof helpers
-    // TODO: for (let prototype of this.pendingClassInstanceOf.values()) {
-    for (let _values = Set_values(this.pendingClassInstanceOf), i = 0, k = _values.length; i < k; ++i) {
-      let prototype = unchecked(_values[i]);
-      compileClassInstanceOf(this, prototype);
     }
 
     // set up virtual lookup tables
@@ -659,6 +688,11 @@ export class Compiler extends DiagnosticEmitter {
       module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
     }
 
+    // Run custom passes
+    if (program.lookup("ASC_RTRACE") != null) {
+      new RtraceMemory(this).walkModule();
+    }
+
     return module;
   }
 
@@ -685,6 +719,7 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Applies the respective module export(s) for the specified element. */
   private ensureModuleExport(name: string, element: Element, prefix: string = ""): void {
+    var module = this.module;
     switch (element.kind) {
 
       // traverse instances
@@ -747,8 +782,11 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Cannot_export_a_mutable_global,
             global.identifierNode.range
           );
-        } else {
-          if (element.is(CommonFlags.COMPILED)) this.module.addGlobalExport(element.internalName, prefix + name);
+        } else if (global.is(CommonFlags.COMPILED)) {
+          let exportName = prefix + name;
+          if (!module.hasExport(exportName)) {
+            module.addGlobalExport(element.internalName, exportName);
+          }
         }
         break;
       }
@@ -759,8 +797,11 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Cannot_export_a_mutable_global,
             enumValue.identifierNode.range
           );
-        } else {
-          this.module.addGlobalExport(element.internalName, prefix + name);
+        } else if (enumValue.is(CommonFlags.COMPILED)) {
+          let exportName = prefix + name;
+          if (!module.hasExport(exportName)) {
+            module.addGlobalExport(element.internalName, exportName);
+          }
         }
         break;
       }
@@ -774,7 +815,12 @@ export class Compiler extends DiagnosticEmitter {
             this.ensureArgumentsLength();
             this.runtimeFeatures |= RuntimeFeatures.setArgumentsLength;
           }
-          if (functionInstance.is(CommonFlags.COMPILED)) this.module.addFunctionExport(functionInstance.internalName, prefix + name);
+          if (functionInstance.is(CommonFlags.COMPILED)) {
+            let exportName = prefix + name;
+            if (!module.hasExport(exportName)) {
+              module.addFunctionExport(functionInstance.internalName, exportName);
+            }
+          }
         }
         break;
       }
@@ -789,10 +835,15 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FIELD: {
         let fieldInstance = <Field>element;
         if (element.is(CommonFlags.COMPILED)) {
-          let module = this.module;
-          module.addFunctionExport(fieldInstance.internalGetterName, prefix + GETTER_PREFIX + name);
+          let getterExportName = prefix + GETTER_PREFIX + name;
+          if (!module.hasExport(getterExportName)) {
+            module.addFunctionExport(fieldInstance.internalGetterName, getterExportName);
+          }
           if (!element.is(CommonFlags.READONLY)) {
-            module.addFunctionExport(fieldInstance.internalSetterName, prefix + SETTER_PREFIX + name);
+            let setterExportName = prefix + SETTER_PREFIX + name;
+            if (!module.hasExport(setterExportName)) {
+              module.addFunctionExport(fieldInstance.internalSetterName, setterExportName);
+            }
           }
         }
         break;
@@ -1208,6 +1259,7 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       module.addGlobal(internalName, nativeType, true, this.makeZero(type, global.declaration));
+      // FIXME: can break with @lazy globals
       this.currentBody.push(
         module.global_set(internalName, initExpr)
       );
@@ -7510,7 +7562,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
         if (contextualType.isExternalReference) {
           this.currentType = Type.funcref;
-          return module.ref_func(functionInstance.internalName);
+          return module.ref_func(functionInstance.internalName, NativeType.Funcref); // TODO
         }
         let offset = this.ensureRuntimeFunction(functionInstance);
         this.currentType = functionInstance.signature.type;

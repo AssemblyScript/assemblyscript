@@ -44,7 +44,7 @@ const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
 const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
-const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
+const binaryen = global.binaryen || (global.binaryen = require("../lib/binaryen"));
 
 const dynrequire = typeof __webpack_require__ === "function"
   ? __non_webpack_require__
@@ -698,7 +698,7 @@ exports.main = function main(argv, options, callback) {
 
   // Include runtime before entry files so its setup runs first
   {
-    let runtimePath = opts.exportRuntime ? "rt/index-exported" : "rt/index";
+    let runtimePath = "rt/index";
     let runtimeText = exports.libraryFiles[runtimePath];
     if (runtimeText == null) return callback(Error("Runtime entry not found."));
     stats.parseCount++;

@@ -884,6 +884,36 @@
   i32.const 20
   i32.add
  )
+ (func $~lib/rt/__instanceof (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.const 20
+  i32.sub
+  i32.load offset=12
+  local.tee $0
+  i32.const 1328
+  i32.load
+  i32.le_u
+  if
+   loop $do-continue|0
+    local.get $0
+    local.get $1
+    i32.eq
+    if
+     i32.const 1
+     return
+    end
+    local.get $0
+    i32.const 3
+    i32.shl
+    i32.const 1332
+    i32.add
+    i32.load offset=4
+    local.tee $0
+    br_if $do-continue|0
+   end
+  end
+  i32.const 0
+ )
  (func $~start
   (local $0 i32)
   i32.const 1236
@@ -942,35 +972,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~lib/rt/__instanceof (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=12
-  local.tee $0
-  i32.const 1328
-  i32.load
-  i32.le_u
-  if
-   loop $do-continue|0
-    local.get $0
-    local.get $1
-    i32.eq
-    if
-     i32.const 1
-     return
-    end
-    local.get $0
-    i32.const 3
-    i32.shl
-    i32.const 1332
-    i32.add
-    i32.load offset=4
-    local.tee $0
-    br_if $do-continue|0
-   end
-  end
-  i32.const 0
  )
 )
