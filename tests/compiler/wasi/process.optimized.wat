@@ -1,7 +1,7 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
@@ -246,26 +246,6 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/string/String#charCodeAt (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 1
-  i32.shr_u
-  i32.ge_u
-  if
-   i32.const -1
-   return
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.load16_u
- )
  (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -921,42 +901,6 @@
    return
   end
   i32.const 4064
- )
- (func $~lib/process/writeStringFast (param $0 i32) (param $1 i32)
-  i32.const 1088
-  i32.const 1096
-  i32.store
-  i32.const 1092
-  local.get $1
-  i32.const -1
-  i32.ne
-  i32.const 1
-  i32.add
-  i32.store
-  i32.const 1096
-  local.get $0
-  local.get $1
-  i32.const 8
-  i32.shl
-  i32.or
-  i32.store16
-  i32.const 1
-  i32.const 1088
-  i32.const 1
-  i32.const 1100
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
-  local.tee $0
-  i32.const 65535
-  i32.and
-  if
-   local.get $0
-   call $~lib/bindings/wasi_snapshot_preview1/errnoToString
-   i32.const 4112
-   i32.const 159
-   i32.const 12
-   call $~lib/wasi/index/abort
-   unreachable
-  end
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1995,51 +1939,105 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  i32.const -1
+  local.set $2
+  i32.const -1
+  local.set $1
+  i32.const -1
+  local.set $3
   block $break|0
-   block $case2|0
-    block $case1|0
-     block $case0|0
+   block $case4|0
+    block $case3|0
+     block $case2|0
+      block $case1|0
+       block $case0|0
+        local.get $0
+        i32.const 20
+        i32.sub
+        i32.load offset=16
+        i32.const 1
+        i32.shr_u
+        br_table $case4|0 $case3|0 $case2|0 $case1|0 $case0|0 $break|0
+       end
+       local.get $0
+       i32.load16_u offset=6
+       local.tee $3
+       i32.const 128
+       i32.ge_u
+       br_if $break|0
+      end
       local.get $0
-      i32.const 20
-      i32.sub
-      i32.load offset=16
-      i32.const 1
-      i32.shr_u
-      br_table $case0|0 $case1|0 $case2|0 $break|0
+      i32.load16_u offset=4
+      local.tee $1
+      i32.const 128
+      i32.ge_u
+      br_if $break|0
      end
-     return
+     local.get $0
+     i32.load16_u offset=2
+     local.tee $2
+     i32.const 128
+     i32.ge_u
+     br_if $break|0
     end
     local.get $0
-    i32.const 0
-    call $~lib/string/String#charCodeAt
-    local.tee $2
+    i32.load16_u
+    local.tee $4
     i32.const 128
-    i32.lt_s
-    if
-     local.get $2
-     i32.const -1
-     call $~lib/process/writeStringFast
-     return
-    end
-    br $break|0
-   end
-   local.get $0
-   i32.const 0
-   call $~lib/string/String#charCodeAt
-   local.tee $2
-   local.get $0
-   i32.const 1
-   call $~lib/string/String#charCodeAt
-   local.tee $1
-   i32.or
-   i32.const 128
-   i32.lt_s
-   if
+    i32.ge_u
+    br_if $break|0
+    i32.const 1088
+    i32.const 1096
+    i32.store
+    i32.const 1092
     local.get $2
+    i32.const -1
+    i32.ne
+    i32.const 1
+    i32.add
     local.get $1
-    call $~lib/process/writeStringFast
-    return
+    i32.const -1
+    i32.ne
+    i32.add
+    local.get $3
+    i32.const -1
+    i32.ne
+    i32.add
+    i32.store
+    i32.const 1096
+    local.get $4
+    local.get $2
+    i32.const 8
+    i32.shl
+    i32.or
+    local.get $1
+    i32.const 16
+    i32.shl
+    i32.or
+    local.get $3
+    i32.const 24
+    i32.shl
+    i32.or
+    i32.store
+    i32.const 1
+    i32.const 1088
+    i32.const 1
+    i32.const 1100
+    call $~lib/bindings/wasi_snapshot_preview1/fd_write
+    local.tee $0
+    i32.const 65535
+    i32.and
+    if
+     local.get $0
+     call $~lib/bindings/wasi_snapshot_preview1/errnoToString
+     i32.const 4112
+     i32.const 178
+     i32.const 16
+     call $~lib/wasi/index/abort
+     unreachable
+    end
    end
+   return
   end
   local.get $0
   local.set $1

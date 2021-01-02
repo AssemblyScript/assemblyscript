@@ -53,9 +53,9 @@ export namespace console {
   export function time(label: string): void {
     var stdout = process.stdout;
     if (timers.has(label)) {
-      stdout.write("Duplicate label '");
+      stdout.write("Warning: Label '");
       stdout.write(label);
-      stdout.write("' for console.time()\n");
+      stdout.write("' already exists for console.time()\n");
       return;
     }
     timers.set(label, process.hrtime());
@@ -64,7 +64,7 @@ export namespace console {
   export function timeLog(label: string): void {
     var stdout = process.stdout;
     if (!timers.has(label)) {
-      stdout.write("No such label '");
+      stdout.write("Warning: No such label '");
       stdout.write(label);
       stdout.write("' for console.timeLog()\n");
       return;
@@ -75,7 +75,7 @@ export namespace console {
   export function timeEnd(label: string): void {
     var stdout = process.stdout;
     if (!timers.has(label)) {
-      stdout.write("No such label '");
+      stdout.write("Warning: No such label '");
       stdout.write(label);
       stdout.write("' for console.timeEnd()\n");
       return;
@@ -95,7 +95,6 @@ function timeLogImpl(label: string): void {
   stdout.write(label);
   stdout.write(": ");
   stdout.write(millisStr);
-  stdout.write("ms");
-  stdout.write("\n");
+  stdout.write("ms\n");
   // __dispose(changetype<usize>(millisStr));
 }

@@ -139,7 +139,6 @@
  (table $0 1 funcref)
  (global $~lib/process/process.stdout i32 (i32.const 1))
  (global $~lib/process/iobuf i32 (i32.const 64))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
@@ -165,22 +164,6 @@
   i32.load offset=16
   i32.const 1
   i32.shr_u
- )
- (func $~lib/string/String#charCodeAt (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  local.get $0
-  call $~lib/string/String#get:length
-  i32.ge_u
-  if
-   i32.const -1
-   return
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  i32.load16_u
  )
  (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
@@ -1245,71 +1228,6 @@
    return
   end
   i32.const 3040
- )
- (func $~lib/process/writeStringFast (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  global.get $~lib/process/iobuf
-  global.get $~lib/process/iobuf
-  i32.const 2
-  i32.const 4
-  i32.mul
-  i32.add
-  i32.store
-  global.get $~lib/process/iobuf
-  i32.const 1
-  local.get $2
-  i32.const -1
-  i32.ne
-  i32.add
-  i32.store offset=4
-  global.get $~lib/process/iobuf
-  local.get $1
-  local.get $2
-  i32.const 8
-  i32.shl
-  i32.or
-  i32.store16 offset=8
-  local.get $0
-  global.get $~lib/process/iobuf
-  i32.const 1
-  global.get $~lib/process/iobuf
-  i32.const 3
-  i32.const 4
-  i32.mul
-  i32.add
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
-  local.set $3
-  local.get $3
-  i32.const 65535
-  i32.and
-  if
-   local.get $3
-   call $~lib/bindings/wasi_snapshot_preview1/errnoToString
-   i32.const 3088
-   i32.const 159
-   i32.const 12
-   call $~lib/wasi/index/abort
-   unreachable
-  end
- )
- (func $~lib/process/writeStringFast@varargs (param $0 i32) (param $1 i32) (param $2 i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 2
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const -1
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/process/writeStringFast
  )
  (func $~lib/string/String.UTF8.byteLength (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2957,75 +2875,153 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  i32.const -1
+  local.set $2
+  i32.const -1
+  local.set $3
+  i32.const -1
+  local.set $4
   block $break|0
-   block $case2|0
-    block $case1|0
-     block $case0|0
+   block $case4|0
+    block $case3|0
+     block $case2|0
+      block $case1|0
+       block $case0|0
+        local.get $1
+        call $~lib/string/String#get:length
+        local.set $5
+        local.get $5
+        i32.const 4
+        i32.eq
+        br_if $case0|0
+        local.get $5
+        i32.const 3
+        i32.eq
+        br_if $case1|0
+        local.get $5
+        i32.const 2
+        i32.eq
+        br_if $case2|0
+        local.get $5
+        i32.const 1
+        i32.eq
+        br_if $case3|0
+        local.get $5
+        i32.const 0
+        i32.eq
+        br_if $case4|0
+        br $break|0
+       end
+       local.get $1
+       i32.load16_u offset=6
+       local.set $4
+       local.get $4
+       i32.const 128
+       i32.ge_s
+       if
+        br $break|0
+       end
+      end
       local.get $1
-      call $~lib/string/String#get:length
-      local.set $2
-      local.get $2
-      i32.const 0
-      i32.eq
-      br_if $case0|0
-      local.get $2
-      i32.const 1
-      i32.eq
-      br_if $case1|0
-      local.get $2
-      i32.const 2
-      i32.eq
-      br_if $case2|0
+      i32.load16_u offset=4
+      local.set $3
+      local.get $3
+      i32.const 128
+      i32.ge_s
+      if
+       br $break|0
+      end
+     end
+     local.get $1
+     i32.load16_u offset=2
+     local.set $2
+     local.get $2
+     i32.const 128
+     i32.ge_s
+     if
       br $break|0
      end
-     return
     end
     local.get $1
-    i32.const 0
-    call $~lib/string/String#charCodeAt
-    local.set $2
-    local.get $2
+    i32.load16_u
+    local.set $5
+    local.get $5
     i32.const 128
-    i32.lt_s
+    i32.ge_s
     if
-     local.get $0
-     local.get $2
-     i32.const 2
-     global.set $~argumentsLength
-     i32.const 0
-     call $~lib/process/writeStringFast@varargs
-     return
+     br $break|0
     end
-    br $break|0
-   end
-   local.get $1
-   i32.const 0
-   call $~lib/string/String#charCodeAt
-   local.set $2
-   local.get $1
-   i32.const 1
-   call $~lib/string/String#charCodeAt
-   local.set $3
-   local.get $2
-   local.get $3
-   i32.or
-   i32.const 128
-   i32.lt_s
-   if
-    local.get $0
+    global.get $~lib/process/iobuf
+    global.get $~lib/process/iobuf
+    i32.const 2
+    i32.const 4
+    i32.mul
+    i32.add
+    i32.store
+    global.get $~lib/process/iobuf
+    i32.const 1
     local.get $2
+    i32.const -1
+    i32.ne
+    i32.add
     local.get $3
-    call $~lib/process/writeStringFast
-    return
+    i32.const -1
+    i32.ne
+    i32.add
+    local.get $4
+    i32.const -1
+    i32.ne
+    i32.add
+    i32.store offset=4
+    global.get $~lib/process/iobuf
+    local.get $5
+    local.get $2
+    i32.const 8
+    i32.shl
+    i32.or
+    local.get $3
+    i32.const 16
+    i32.shl
+    i32.or
+    local.get $4
+    i32.const 24
+    i32.shl
+    i32.or
+    i32.store offset=8
+    local.get $0
+    global.get $~lib/process/iobuf
+    i32.const 1
+    global.get $~lib/process/iobuf
+    i32.const 3
+    i32.const 4
+    i32.mul
+    i32.add
+    call $~lib/bindings/wasi_snapshot_preview1/fd_write
+    local.set $6
+    local.get $6
+    i32.const 65535
+    i32.and
+    if
+     local.get $6
+     call $~lib/bindings/wasi_snapshot_preview1/errnoToString
+     i32.const 3088
+     i32.const 178
+     i32.const 16
+     call $~lib/wasi/index/abort
+     unreachable
+    end
    end
-   br $break|0
+   return
   end
   local.get $1
   i32.const 0
   call $~lib/string/String.UTF8.encode
-  local.set $4
+  local.set $7
   local.get $0
-  local.get $4
+  local.get $7
   call $~lib/process/writeBuffer
  )
  (func $~lib/process/WritableStream#write<~lib/string/String> (param $0 i32) (param $1 i32)

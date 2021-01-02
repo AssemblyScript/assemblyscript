@@ -151,34 +151,33 @@ function writeBuffer(fd: fd, data: ArrayBuffer): void {
   if (err) throw new Error(errnoToString(err));
 }
 
-function writeStringFast(fd: fd, char1: i32, char2: i32 = -1): void {
-  store<usize>(iobuf, iobuf + 2 * sizeof<usize>());
-  store<usize>(iobuf, 1 + usize(char2 != -1), sizeof<usize>());
-  store<u16>(iobuf, char1 | char2 << 8, 2 * sizeof<usize>());
-  var err = fd_write(<u32>fd, iobuf, 1, iobuf + 3 * sizeof<usize>());
-  if (err) throw new Error(errnoToString(err));
-}
-
 function writeString(fd: fd, data: string): void {
+  var char2 = -1;
+  var char3 = -1;
+  var char4 = -1;
   switch (data.length) {
-    case 0: return;
-    case 1: { // "\r", "\n"
-      let charCode = data.charCodeAt(0);
-      if (charCode < 0x80) {
-        writeStringFast(fd, charCode);
-        return;
-      }
-      break;
+    case 4: { // "null"
+      char4 = <i32>load<u16>(changetype<usize>(data), 6);
+      if (char4 >= 0x80) break;
+    }
+    case 3: { // "ms\n"
+      char3 = <i32>load<u16>(changetype<usize>(data), 4);
+      if (char3 >= 0x80) break;
     }
     case 2: { // "\r\n"
-      let charCode1 = data.charCodeAt(0);
-      let charCode2 = data.charCodeAt(1);
-      if ((charCode1 | charCode2) < 0x80) {
-        writeStringFast(fd, charCode1, charCode2);
-        return;
-      }
-      break;
+      char2 = <i32>load<u16>(changetype<usize>(data), 2);
+      if (char2 >= 0x80) break;
     }
+    case 1: { // "\n"
+      let char1 = <i32>load<u16>(changetype<usize>(data));
+      if (char1 >= 0x80) break;
+      store<usize>(iobuf, iobuf + 2 * sizeof<usize>());
+      store<usize>(iobuf, <i32>1 + i32(char2 != -1) + i32(char3 != -1) + i32(char4 != -1), sizeof<usize>());
+      store<u32>(iobuf, char1 | char2 << 8 | char3 << 16 | char4 << 24, 2 * sizeof<usize>());
+      var err = fd_write(<u32>fd, iobuf, 1, iobuf + 3 * sizeof<usize>());
+      if (err) throw new Error(errnoToString(err));
+    }
+    case 0: return;
   }
   var buf = String.UTF8.encode(data);
   writeBuffer(fd, buf);
