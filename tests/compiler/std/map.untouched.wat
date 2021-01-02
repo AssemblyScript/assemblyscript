@@ -20944,9 +20944,6 @@
   call $std/map/testNumeric<f32,i32>
   call $std/map/testNumeric<f64,i32>
  )
- (func $~start
-  call $start:std/map
- )
  (func $~lib/rt/pure/finalize (param $0 i32)
   i32.const 0
   drop
@@ -21039,6 +21036,9 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $start:std/map
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0

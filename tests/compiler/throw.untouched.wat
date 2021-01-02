@@ -126,9 +126,6 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~start
-  call $start:throw
- )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -812,6 +809,9 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $start:throw
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0

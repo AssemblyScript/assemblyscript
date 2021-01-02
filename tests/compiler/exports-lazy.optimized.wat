@@ -7,8 +7,8 @@
  (global $exports-lazy/lazyGlobalUsed i32 (i32.const 1088))
  (export "memory" (memory $0))
  (export "lazyGlobalUsed" (global $exports-lazy/lazyGlobalUsed))
- (export "lazyFuncUsed" (func $~start))
- (func $~start
+ (export "lazyFuncUsed" (func $exports-lazy/lazyFuncUsed))
+ (func $exports-lazy/lazyFuncUsed
   nop
  )
 )

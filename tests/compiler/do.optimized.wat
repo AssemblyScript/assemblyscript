@@ -1347,9 +1347,6 @@
    unreachable
   end
  )
- (func $~start
-  call $start:do
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1443,5 +1440,8 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $start:do
  )
 )

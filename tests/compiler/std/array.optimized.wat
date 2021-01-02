@@ -19643,9 +19643,6 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~start
-  call $start:std/array
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -19778,6 +19775,9 @@
   i32.const 20
   i32.sub
   call $~lib/rt/pure/decrement
+ )
+ (func $~start
+  call $start:std/array
  )
  (func $~lib/array/Array<std/array/Ref>~visit (param $0 i32)
   (local $1 i32)

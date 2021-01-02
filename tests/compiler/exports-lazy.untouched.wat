@@ -16,10 +16,10 @@
   drop
   call $exports-lazy/lazyFuncUsed
  )
- (func $~start
-  call $start:exports-lazy
- )
  (func $exports-lazy/lazyFuncUsed
   nop
+ )
+ (func $~start
+  call $start:exports-lazy
  )
 )

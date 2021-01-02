@@ -1584,9 +1584,6 @@
   local.get $0
   global.set $issues/1225/x
  )
- (func $~start
-  call $start:issues/1225
- )
  (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   local.get $1
   local.get $1
@@ -1692,6 +1689,9 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $start:issues/1225
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0

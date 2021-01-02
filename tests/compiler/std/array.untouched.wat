@@ -30834,9 +30834,6 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~start
-  call $start:std/array
- )
  (func $~lib/rt/pure/finalize (param $0 i32)
   i32.const 0
   drop
@@ -30957,6 +30954,9 @@
   i32.const 20
   i32.sub
   call $~lib/rt/pure/decrement
+ )
+ (func $~start
+  call $start:std/array
  )
  (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
   nop

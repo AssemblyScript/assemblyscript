@@ -3354,9 +3354,6 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~start
-  call $start:extends-baseaggregate
- )
  (func $~lib/rt/pure/finalize (param $0 i32)
   i32.const 0
   drop
@@ -3585,6 +3582,9 @@
     i32.store offset=4
    end
   end
+ )
+ (func $~start
+  call $start:extends-baseaggregate
  )
  (func $~lib/rt/pure/markGray (param $0 i32)
   (local $1 i32)
