@@ -452,35 +452,6 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // compile the start function if not empty or if explicitly requested
-    var startIsEmpty = !startFunctionBody.length;
-    var explicitStart = program.isWasi || options.explicitStart;
-    if (!startIsEmpty || explicitStart) {
-      let signature = startFunctionInstance.signature;
-      if (!startIsEmpty && explicitStart) {
-        module.addGlobal(BuiltinNames.started, NativeType.I32, true, module.i32(0));
-        startFunctionBody.unshift(
-          module.global_set(BuiltinNames.started, module.i32(1))
-        );
-        startFunctionBody.unshift(
-          module.if(
-            module.global_get(BuiltinNames.started, NativeType.I32),
-            module.return()
-          )
-        );
-      }
-      let funcRef = module.addFunction(
-        startFunctionInstance.internalName,
-        signature.nativeParams,
-        signature.nativeResults,
-        typesToNativeTypes(startFunctionInstance.additionalLocals),
-        module.flatten(startFunctionBody)
-      );
-      startFunctionInstance.finalize(module, funcRef);
-      if (!explicitStart) module.setStart(funcRef);
-      else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
-    }
-
     // check if the entire program is acyclic
     var cyclicClasses = program.findCyclicClasses();
     if (cyclicClasses.size) {
@@ -518,6 +489,37 @@ export class Compiler extends DiagnosticEmitter {
     for (let _values = Set_values(this.pendingClassInstanceOf), i = 0, k = _values.length; i < k; ++i) {
       let prototype = unchecked(_values[i]);
       compileClassInstanceOf(this, prototype);
+    }
+
+    // NOTE: no more element compiles from here. may go to the start function!
+
+    // compile the start function if not empty or if explicitly requested
+    var startIsEmpty = !startFunctionBody.length;
+    var explicitStart = program.isWasi || options.explicitStart;
+    if (!startIsEmpty || explicitStart) {
+      let signature = startFunctionInstance.signature;
+      if (!startIsEmpty && explicitStart) {
+        module.addGlobal(BuiltinNames.started, NativeType.I32, true, module.i32(0));
+        startFunctionBody.unshift(
+          module.global_set(BuiltinNames.started, module.i32(1))
+        );
+        startFunctionBody.unshift(
+          module.if(
+            module.global_get(BuiltinNames.started, NativeType.I32),
+            module.return()
+          )
+        );
+      }
+      let funcRef = module.addFunction(
+        startFunctionInstance.internalName,
+        signature.nativeParams,
+        signature.nativeResults,
+        typesToNativeTypes(startFunctionInstance.additionalLocals),
+        module.flatten(startFunctionBody)
+      );
+      startFunctionInstance.finalize(module, funcRef);
+      if (!explicitStart) module.setStart(funcRef);
+      else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
     }
 
     // set up virtual lookup tables

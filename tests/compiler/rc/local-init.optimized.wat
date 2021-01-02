@@ -866,65 +866,6 @@
   i32.const 16
   i32.add
  )
- (func $~start
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  call $~lib/rt/pure/__new
-  local.tee $0
-  i32.const 1260
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 20
-   i32.sub
-   local.tee $1
-   i32.load offset=4
-   local.tee $2
-   i32.const -268435456
-   i32.and
-   local.get $2
-   i32.const 1
-   i32.add
-   i32.const -268435456
-   i32.and
-   i32.ne
-   if
-    i32.const 0
-    i32.const 1152
-    i32.const 109
-    i32.const 3
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
-   local.get $2
-   i32.const 1
-   i32.add
-   i32.store offset=4
-   local.get $1
-   i32.load
-   i32.const 1
-   i32.and
-   if
-    i32.const 0
-    i32.const 1152
-    i32.const 112
-    i32.const 14
-    call $~lib/builtins/abort
-    unreachable
-   end
-  end
-  local.get $0
-  i32.const 1260
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 20
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1017,6 +958,65 @@
    i32.and
    i32.or
    i32.store offset=4
+  end
+ )
+ (func $~start
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  call $~lib/rt/pure/__new
+  local.tee $0
+  i32.const 1260
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 20
+   i32.sub
+   local.tee $1
+   i32.load offset=4
+   local.tee $2
+   i32.const -268435456
+   i32.and
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.const -268435456
+   i32.and
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1152
+    i32.const 109
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.store offset=4
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   if
+    i32.const 0
+    i32.const 1152
+    i32.const 112
+    i32.const 14
+    call $~lib/builtins/abort
+    unreachable
+   end
+  end
+  local.get $0
+  i32.const 1260
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 20
+   i32.sub
+   call $~lib/rt/pure/decrement
   end
  )
 )

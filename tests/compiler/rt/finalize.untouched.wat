@@ -29,10 +29,10 @@
  (global $rt/finalize/expected (mut i32) (i32.const 0))
  (global $rt/finalize/expectedWriteIndex (mut i32) (i32.const 0))
  (global $rt/finalize/expectedReadIndex (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 576))
  (global $~lib/memory/__heap_base i32 (i32.const 636))
  (export "_start" (func $~start))
@@ -2105,15 +2105,6 @@
    unreachable
   end
  )
- (func $~start
-  global.get $~started
-  if
-   return
-  end
-  i32.const 1
-  global.set $~started
-  call $start:rt/finalize
- )
  (func $~lib/staticarray/StaticArray<usize>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -3948,6 +3939,15 @@
   end
   local.get $0
   global.set $~lib/rt/pure/CUR
+ )
+ (func $~start
+  global.get $~started
+  if
+   return
+  end
+  i32.const 1
+  global.set $~started
+  call $start:rt/finalize
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   (local $2 i32)

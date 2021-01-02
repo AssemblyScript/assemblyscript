@@ -926,49 +926,6 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~start
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  call $~lib/rt/pure/__new
-  call $~lib/rt/pure/__retain
-  local.tee $0
-  local.get $0
-  call $~lib/rt/pure/__retain
-  local.tee $0
-  call $~lib/rt/pure/__release
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 87
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  call $~lib/rt/pure/__new
-  call $~lib/rt/pure/__retain
-  local.tee $0
-  local.set $2
-  local.get $0
-  call $~lib/rt/pure/__retain
-  local.tee $0
-  call $~lib/rt/pure/__release
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 92
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  call $~lib/rt/pure/__release
-  local.get $2
-  call $~lib/rt/pure/__release
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1062,5 +1019,48 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  call $~lib/rt/pure/__new
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  call $~lib/rt/pure/__release
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 87
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  call $~lib/rt/pure/__new
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  local.set $2
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  call $~lib/rt/pure/__release
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 92
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
  )
 )

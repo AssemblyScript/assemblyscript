@@ -3239,9 +3239,6 @@
   i32.const 14784
   call $std/string-encoding/testLarge
  )
- (func $~start
-  call $start:std/string-encoding
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3329,5 +3326,8 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $start:std/string-encoding
  )
 )

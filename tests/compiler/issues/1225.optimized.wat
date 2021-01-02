@@ -877,6 +877,100 @@
   global.get $issues/1225/x
   i32.load offset=4
  )
+ (func $~lib/rt/pure/decrement (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.tee $2
+  i32.const 268435455
+  i32.and
+  local.set $1
+  local.get $0
+  i32.load
+  i32.const 1
+  i32.and
+  if
+   i32.const 0
+   i32.const 1120
+   i32.const 122
+   i32.const 14
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 1
+  i32.eq
+  if
+   block $__inlined_func$~lib/rt/__visit_members
+    block $invalid
+     block $~lib/arraybuffer/ArrayBufferView
+      local.get $0
+      i32.const 12
+      i32.add
+      i32.load
+      br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/arraybuffer/ArrayBufferView $__inlined_func$~lib/rt/__visit_members $invalid
+     end
+     local.get $0
+     i32.load offset=20
+     local.tee $1
+     if
+      local.get $1
+      i32.const 1276
+      i32.ge_u
+      if
+       local.get $1
+       i32.const 20
+       i32.sub
+       call $~lib/rt/pure/decrement
+      end
+     end
+     br $__inlined_func$~lib/rt/__visit_members
+    end
+    unreachable
+   end
+   local.get $2
+   i32.const -2147483648
+   i32.and
+   if
+    i32.const 0
+    i32.const 1120
+    i32.const 126
+    i32.const 18
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $0
+   i32.load
+   i32.const 1
+   i32.or
+   i32.store
+   global.get $~lib/rt/tlsf/ROOT
+   local.get $0
+   call $~lib/rt/tlsf/insertBlock
+  else
+   local.get $1
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1120
+    i32.const 136
+    i32.const 16
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.sub
+   local.get $2
+   i32.const -268435456
+   i32.and
+   i32.or
+   i32.store offset=4
+  end
+ )
  (func $~start
   (local $0 i32)
   (local $1 i32)
@@ -983,99 +1077,5 @@
   end
   i32.const 0
   global.set $issues/1225/x
- )
- (func $~lib/rt/pure/decrement (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $2
-  i32.const 268435455
-  i32.and
-  local.set $1
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  if
-   i32.const 0
-   i32.const 1120
-   i32.const 122
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  i32.const 1
-  i32.eq
-  if
-   block $__inlined_func$~lib/rt/__visit_members
-    block $invalid
-     block $~lib/arraybuffer/ArrayBufferView
-      local.get $0
-      i32.const 12
-      i32.add
-      i32.load
-      br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $~lib/arraybuffer/ArrayBufferView $__inlined_func$~lib/rt/__visit_members $invalid
-     end
-     local.get $0
-     i32.load offset=20
-     local.tee $1
-     if
-      local.get $1
-      i32.const 1276
-      i32.ge_u
-      if
-       local.get $1
-       i32.const 20
-       i32.sub
-       call $~lib/rt/pure/decrement
-      end
-     end
-     br $__inlined_func$~lib/rt/__visit_members
-    end
-    unreachable
-   end
-   local.get $2
-   i32.const -2147483648
-   i32.and
-   if
-    i32.const 0
-    i32.const 1120
-    i32.const 126
-    i32.const 18
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $0
-   i32.load
-   i32.const 1
-   i32.or
-   i32.store
-   global.get $~lib/rt/tlsf/ROOT
-   local.get $0
-   call $~lib/rt/tlsf/insertBlock
-  else
-   local.get $1
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1120
-    i32.const 136
-    i32.const 16
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.sub
-   local.get $2
-   i32.const -268435456
-   i32.and
-   i32.or
-   i32.store offset=4
-  end
  )
 )

@@ -2121,9 +2121,6 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~start
-  call $start:object-literal
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2272,6 +2269,9 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $start:object-literal
  )
  (func $~lib/rt/pure/__visit (param $0 i32)
   local.get $0

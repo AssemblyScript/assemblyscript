@@ -1460,12 +1460,6 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~start
-  i32.const 0
-  i32.const 3
-  call $~lib/rt/pure/__new
-  drop
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1553,5 +1547,11 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  i32.const 0
+  i32.const 3
+  call $~lib/rt/pure/__new
+  drop
  )
 )
