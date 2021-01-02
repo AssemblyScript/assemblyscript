@@ -55,8 +55,7 @@ export namespace console {
     if (timers.has(label)) {
       stdout.write("Duplicate label '");
       stdout.write(label);
-      stdout.write("' for console.time()");
-      stdout.write("\n");
+      stdout.write("' for console.time()\n");
       return;
     }
     timers.set(label, process.hrtime());
