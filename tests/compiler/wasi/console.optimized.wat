@@ -938,8 +938,6 @@
   i32.const 1144
   local.get $1
   local.get $2
-  i32.const 255
-  i32.and
   i32.const 8
   i32.shl
   i32.or
@@ -956,7 +954,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4160
-   i32.const 157
+   i32.const 159
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -2132,7 +2130,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4160
-   i32.const 149
+   i32.const 151
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable

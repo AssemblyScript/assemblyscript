@@ -67,14 +67,15 @@ function lazyArgv(): string[] {
   var count = load<usize>(iobuf);
   var ptrsSize = count * sizeof<usize>();
   var dataSize = load<usize>(iobuf, sizeof<usize>());
-  var buf = __alloc(ptrsSize + dataSize);
+  var bufSize = ptrsSize + dataSize;
+  var buf = __alloc(bufSize);
   err = args_get(buf, buf + ptrsSize);
   if (err) throw new Error(errnoToString(err));
   var count32 = <i32>count;
   var argv = new Array<string>(count32);
   for (let i = 0; i < count32; ++i) {
     let ptr = load<usize>(buf + i * sizeof<usize>());
-    let str = String.UTF8.decodeUnsafe(ptr, ptr - buf, true);
+    let str = String.UTF8.decodeUnsafe(ptr, ptr + bufSize - buf, true);
     argv[i] = str;
   }
   __free(buf);
@@ -87,13 +88,14 @@ function lazyEnv(): Map<string,string> {
   var count = load<usize>(iobuf);
   var ptrsSize = count * sizeof<usize>();
   var dataSize = load<usize>(iobuf, sizeof<usize>());
-  var buf = __alloc(ptrsSize + dataSize);
+  var bufSize = ptrsSize + dataSize;
+  var buf = __alloc(bufSize);
   err = environ_get(buf, buf + ptrsSize);
   if (err) throw new Error(errnoToString(err));
   var env = new Map<string,string>();
   for (let i: usize = 0; i < count; ++i) {
     let ptr = load<usize>(buf + i * sizeof<usize>());
-    let str = String.UTF8.decodeUnsafe(ptr, ptr - buf, true);
+    let str = String.UTF8.decodeUnsafe(ptr, ptr + bufSize - buf, true);
     let pos = str.indexOf("=");
     if (~pos) {
       env.set(str.substring(0, pos), str.substring(pos + 1));
@@ -151,8 +153,8 @@ function writeBuffer(fd: fd, data: ArrayBuffer): void {
 
 function writeStringFast(fd: fd, char1: i32, char2: i32 = -1): void {
   store<usize>(iobuf, iobuf + 2 * sizeof<usize>());
-  store<usize>(iobuf, 1 + i32(char2 != -1), sizeof<usize>());
-  store<u16>(iobuf, char1 | ((char2 & 0xff) << 8), 2 * sizeof<usize>());
+  store<usize>(iobuf, 1 + usize(char2 != -1), sizeof<usize>());
+  store<u16>(iobuf, char1 | char2 << 8, 2 * sizeof<usize>());
   var err = fd_write(<u32>fd, iobuf, 1, iobuf + 3 * sizeof<usize>());
   if (err) throw new Error(errnoToString(err));
 }
