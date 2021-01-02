@@ -66,8 +66,7 @@ export namespace console {
     if (!timers.has(label)) {
       stdout.write("No such label '");
       stdout.write(label);
-      stdout.write("' for console.timeLog()");
-      stdout.write("\n");
+      stdout.write("' for console.timeLog()\n");
       return;
     }
     timeLogImpl(label);
