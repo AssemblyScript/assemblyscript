@@ -8,10 +8,10 @@
  (table $0 1 funcref)
  (global $features/mutable-globals/internal (mut i32) (i32.const 124))
  (global $~started (mut i32) (i32.const 0))
- (export "_start" (func $~start))
- (export "memory" (memory $0))
  (export "external" (global $features/mutable-globals/external))
  (export "internal" (global $features/mutable-globals/internal))
+ (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $start:features/mutable-globals
   global.get $features/mutable-globals/external
   i32.const 123

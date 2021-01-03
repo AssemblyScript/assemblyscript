@@ -17,9 +17,9 @@
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
- (export "_start" (func $~start))
- (export "memory" (memory $0))
  (export "test" (func $wasi/seed/test))
+ (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/math/murmurHash3 (param $0 i64) (result i64)
   local.get $0
   local.get $0
@@ -382,8 +382,8 @@
   i32.store16
   i32.const 4
   local.get $0
-  i32.const -10
-  i32.add
+  i32.const 10
+  i32.sub
   i32.store
   i32.const 2
   i32.const 0

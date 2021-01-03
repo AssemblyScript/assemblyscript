@@ -125,7 +125,7 @@ function init(): void {
     var next = this.next;
     var prev = this.prev;
     if (next == null) {
-      assert(prev == null);
+      if (DEBUG) assert(prev == null && changetype<usize>(this) < __heap_base);
       return; // static data not yet linked
     }
     next.prev = assert(prev);
@@ -219,15 +219,19 @@ function step(): usize {
   return 0;
 }
 
-/** Frees an object an returns the number of bytes freed. */
+/** Frees an object. */
 function free(obj: Object): void {
-  if (changetype<usize>(obj) < __heap_base) return;
-  total -= 1;
-  totalMem -= obj.size;
-  if (isDefined(__finalize)) {
-    __finalize(changetype<usize>(obj) + TOTAL_OVERHEAD);
+  if (changetype<usize>(obj) < __heap_base) {
+    obj.nextWithColor = 0; // may become linked again
+    obj.prev = changetype<Object>(0);
+  } else {
+    total -= 1;
+    totalMem -= obj.size;
+    if (isDefined(__finalize)) {
+      __finalize(changetype<usize>(obj) + TOTAL_OVERHEAD);
+    }
+    __free(changetype<usize>(obj) + BLOCK_OVERHEAD);
   }
-  __free(changetype<usize>(obj) + BLOCK_OVERHEAD);
 }
 
 // Garbage collector interface
@@ -381,7 +385,7 @@ export function __autocollect(): void {
   if (total < threshold) return;
   if (TRACE) trace("GC (auto) at mem/objs", 2, totalMem, total);
   debt = total - threshold;
-  let limit: isize = 2 * STEPSIZE;
+  let limit: isize = max<isize>(2 * STEPSIZE, debt / 2);
   do {
     limit -= step();
     if (state == STATE_IDLE) {

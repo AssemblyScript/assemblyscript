@@ -8,10 +8,10 @@
  (table $0 1 funcref)
  (global $abi/condition (mut i32) (i32.const 0))
  (global $abi/y (mut i32) (i32.const 0))
- (export "memory" (memory $0))
  (export "exported" (func $abi/exported))
  (export "exportedExported" (func $abi/exportedExported))
  (export "exportedInternal" (func $abi/exportedInternal))
+ (export "memory" (memory $0))
  (start $~start)
  (func $abi/internal (result i32)
   i32.const 128

@@ -37,10 +37,10 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/memory/__heap_base i32 (i32.const 2156))
- (export "memory" (memory $0))
  (export "arrayAccess" (func $resolve-access/arrayAccess))
  (export "fieldAccess" (func $resolve-access/fieldAccess))
  (export "propertyAccess" (func $resolve-access/propertyAccess))
+ (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0

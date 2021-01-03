@@ -498,8 +498,8 @@
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 24340))
- (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
+ (export "memory" (memory $0))
  (start $~start)
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
@@ -11072,8 +11072,15 @@
     local.set $6
     local.get $2
     global.get $~lib/memory/__heap_base
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $2
+     i32.const 0
+     call $~lib/rt/tcms/Object#set:nextWithColor
+     local.get $2
+     i32.const 0
+     call $~lib/rt/tcms/Object#set:prev
+    else
      i32.const 0
      drop
      i32.const 0
@@ -19701,9 +19708,6 @@
  (func $std/string/getString (result i32)
   global.get $std/string/str
  )
- (func $~start
-  call $start:std/string
- )
  (func $~lib/rt/tcms/Object#unlink (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -19901,5 +19905,8 @@
    return
   end
   unreachable
+ )
+ (func $~start
+  call $start:std/string
  )
 )

@@ -28,11 +28,11 @@
  (global $rt/instanceof/nullAnimal (mut i32) (i32.const 0))
  (global $rt/instanceof/nullCat (mut i32) (i32.const 0))
  (global $rt/instanceof/nullBlackcat (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 304))
  (global $~lib/memory/__heap_base i32 (i32.const 356))
- (export "_start" (func $~start))
+ (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1

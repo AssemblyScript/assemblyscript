@@ -24,8 +24,8 @@
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 308))
- (export "memory" (memory $0))
  (export "test" (func $inlining/test))
+ (export "memory" (memory $0))
  (start $~start)
  (func $inlining/test (result i32)
   global.get $inlining/constantGlobal

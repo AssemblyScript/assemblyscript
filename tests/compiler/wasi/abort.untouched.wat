@@ -11,9 +11,9 @@
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00t\00h\00e\00 \00m\00e\00s\00s\00a\00g\00e\00\00\00\00\00\00\00")
  (data (i32.const 60) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00w\00a\00s\00i\00/\00a\00b\00o\00r\00t\00.\00t\00s\00\00\00")
  (table $0 1 funcref)
- (export "_start" (func $~start))
- (export "memory" (memory $0))
  (export "test" (func $wasi/abort/test))
+ (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1

@@ -30,8 +30,8 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 588))
- (export "memory" (memory $0))
  (export "doThrow" (func $throw/doThrow))
+ (export "memory" (memory $0))
  (start $~start)
  (func $throw/doThrowIf (param $0 i32)
   (local $1 i32)
@@ -1224,8 +1224,15 @@
     local.set $6
     local.get $2
     global.get $~lib/memory/__heap_base
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $2
+     i32.const 0
+     call $~lib/rt/tcms/Object#set:nextWithColor
+     local.get $2
+     i32.const 0
+     call $~lib/rt/tcms/Object#set:prev
+    else
      i32.const 0
      drop
      i32.const 0
@@ -1283,9 +1290,6 @@
   i32.const 3
   call $~lib/builtins/abort
   unreachable
- )
- (func $~start
-  call $start:throw
  )
  (func $~lib/rt/tcms/Object#set:next (param $0 i32) (param $1 i32)
   local.get $0
@@ -1411,5 +1415,8 @@
    return
   end
   unreachable
+ )
+ (func $~start
+  call $start:throw
  )
 )

@@ -82,8 +82,8 @@
  (global $std/symbol/key4 (mut i32) (i32.const 0))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "_start" (func $~start))
  (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/symbol/Symbol (result i32)
   (local $0 i32)
   global.get $~lib/symbol/nextId

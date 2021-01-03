@@ -35,10 +35,10 @@
  (global $class-overloading/ia (mut i32) (i32.const 0))
  (global $class-overloading/ic (mut i32) (i32.const 0))
  (global $class-overloading/b2 (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 588))
- (export "_start" (func $~start))
+ (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -2277,15 +2277,6 @@
    unreachable
   end
  )
- (func $~start
-  global.get $~started
-  if
-   return
-  end
-  i32.const 1
-  global.set $~started
-  call $start:class-overloading
- )
  (func $class-overloading/F#a<i32> (param $0 i32) (param $1 i32)
   i32.const 448
   global.set $class-overloading/which
@@ -2646,5 +2637,14 @@
   end
   local.get $0
   call $class-overloading/A1#baz
+ )
+ (func $~start
+  global.get $~started
+  if
+   return
+  end
+  i32.const 1
+  global.set $~started
+  call $start:class-overloading
  )
 )

@@ -903,8 +903,8 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
- (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
+ (export "memory" (memory $0))
  (start $~start)
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -7985,8 +7985,15 @@
     i32.and
     local.get $0
     i32.const 23908
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $0
+     i32.const 0
+     i32.store offset=4
+     local.get $0
+     i32.const 0
+     i32.store offset=8
+    else
      local.get $0
      i32.const 4
      i32.add
@@ -16379,9 +16386,6 @@
  (func $std/string/getString (result i32)
   global.get $std/string/str
  )
- (func $~start
-  call $start:std/string
- )
  (func $~lib/rt/tcms/__visit (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -16486,5 +16490,8 @@
    end
    unreachable
   end
+ )
+ (func $~start
+  call $start:std/string
  )
 )

@@ -291,8 +291,10 @@
  (data (i32.const 13104) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 13136) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 13164) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00I\00l\00l\00e\00g\00a\00l\00 \00g\00e\00n\00e\00r\00i\00c\00 \00t\00y\00p\00e\00\00\00\00\00")
- (table $0 57 funcref)
- (elem (i32.const 1) $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String|null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|0)
+ (data (i32.const 13228) "\1c\00\00\00\00\00\00\00\00\00\00\00+\00\00\00\08\00\00\009\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 13260) "\1c\00\00\00\00\00\00\00\00\00\00\00\1e\00\00\00\08\00\00\00:\00\00\00\00\00\00\00\00\00\00\00")
+ (table $0 59 funcref)
+ (elem (i32.const 1) $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String|null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|0 $~lib/util/sort/COMPARATOR<u8>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|1)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
@@ -319,13 +321,11 @@
  (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 13228))
  (global $std/array/ArrayU32 i32 (i32.const 40))
  (global $std/array/ArrayU8 i32 (i32.const 41))
  (global $std/array/ArrayStr i32 (i32.const 42))
- (export "_start" (func $~start))
- (export "memory" (memory $0))
+ (global $~lib/memory/__heap_base i32 (i32.const 13292))
+ (global $~started (mut i32) (i32.const 0))
  (export "ArrayU32" (global $std/array/ArrayU32))
  (export "ArrayU32#constructor" (func $std/array/ArrayU32#constructor@varargs))
  (export "ArrayU32#get:length" (func $~lib/array/Array<u32>#get:length))
@@ -404,7 +404,9 @@
  (export "ArrayStr#join" (func $~lib/array/Array<~lib/string/String>#join@varargs))
  (export "ArrayStr#flat" (func $~lib/array/Array<~lib/string/String>#flat))
  (export "ArrayStr#toString" (func $~lib/array/Array<~lib/string/String>#toString))
+ (export "memory" (memory $0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
+ (export "_start" (func $~start))
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -17625,8 +17627,15 @@
     local.set $6
     local.get $2
     global.get $~lib/memory/__heap_base
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $2
+     i32.const 0
+     call $~lib/rt/tcms/Object#set:nextWithColor
+     local.get $2
+     i32.const 0
+     call $~lib/rt/tcms/Object#set:prev
+    else
      i32.const 0
      drop
      i32.const 0
@@ -27284,14 +27293,674 @@
   local.get $1
   call $~lib/rt/tcms/__visit
  )
- (func $~start
-  global.get $~started
+ (func $std/array/ArrayU32#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $std/array/ArrayU32#constructor
+ )
+ (func $~lib/array/Array<u32>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $2
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $3
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/array/Array<u32>#fill
+ )
+ (func $~lib/array/Array<u32>#includes@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u32>#includes
+ )
+ (func $~lib/array/Array<u32>#indexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u32>#indexOf
+ )
+ (func $~lib/array/Array<u32>#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   i32.load offset=12
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u32>#lastIndexOf
+ )
+ (func $~lib/array/Array<u32>#copyWithin@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 2
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $3
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/array/Array<u32>#copyWithin
+ )
+ (func $~lib/array/Array<u32>#slice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $1
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u32>#slice
+ )
+ (func $~lib/array/Array<u32>#splice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u32>#splice
+ )
+ (func $~lib/array/Array<u32>#join@varargs (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 7584
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u32>#join
+ )
+ (func $std/array/ArrayU8#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $std/array/ArrayU8#constructor
+ )
+ (func $~lib/array/Array<u8>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $2
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $3
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/array/Array<u8>#fill
+ )
+ (func $~lib/array/Array<u8>#includes@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u8>#includes
+ )
+ (func $~lib/array/Array<u8>#indexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u8>#indexOf
+ )
+ (func $~lib/array/Array<u8>#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   i32.load offset=12
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u8>#lastIndexOf
+ )
+ (func $~lib/array/Array<u8>#copyWithin@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 2
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $3
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/array/Array<u8>#copyWithin
+ )
+ (func $~lib/array/Array<u8>#slice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $1
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u8>#slice
+ )
+ (func $~lib/array/Array<u8>#splice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u8>#splice
+ )
+ (func $~lib/util/sort/COMPARATOR<u8>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.const 255
+  i32.and
+  local.get $1
+  i32.const 255
+  i32.and
+  i32.gt_u
+  local.get $0
+  i32.const 255
+  i32.and
+  local.get $1
+  i32.const 255
+  i32.and
+  i32.lt_u
+  i32.sub
+ )
+ (func $~lib/array/Array<u8>#sort@varargs (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   block $~lib/util/sort/COMPARATOR<u8>|inlined.0 (result i32)
+    i32.const 1
+    drop
+    i32.const 0
+    if (result i32)
+     i32.const 1
+     i32.const 4
+     i32.le_u
+    else
+     i32.const 0
+    end
+    drop
+    i32.const 13248
+    br $~lib/util/sort/COMPARATOR<u8>|inlined.0
+   end
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u8>#sort
+ )
+ (func $~lib/array/Array<u8>#join@varargs (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 7584
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u8>#join
+ )
+ (func $std/array/ArrayStr#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $std/array/ArrayStr#constructor
+ )
+ (func $~lib/array/Array<~lib/string/String>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      i32.const 1
+      i32.sub
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $2
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $3
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/array/Array<~lib/string/String>#fill
+ )
+ (func $~lib/array/Array<~lib/string/String>#includes@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<~lib/string/String>#includes
+ )
+ (func $~lib/array/Array<~lib/string/String>#indexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 0
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<~lib/string/String>#indexOf
+ )
+ (func $~lib/array/Array<~lib/string/String>#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   i32.load offset=12
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<~lib/string/String>#lastIndexOf
+ )
+ (func $~lib/array/Array<~lib/string/String>#copyWithin@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 2
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $3
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  call $~lib/array/Array<~lib/string/String>#copyWithin
+ )
+ (func $~lib/array/Array<~lib/string/String>#slice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $2of2
+   block $1of2
+    block $0of2
+     block $outOfRange
+      global.get $~argumentsLength
+      br_table $0of2 $1of2 $2of2 $outOfRange
+     end
+     unreachable
+    end
+    i32.const 0
+    local.set $1
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<~lib/string/String>#slice
+ )
+ (func $~lib/array/Array<~lib/string/String>#splice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   global.get $~lib/builtins/i32.MAX_VALUE
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<~lib/string/String>#splice
+ )
+ (func $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|1 (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  local.get $1
+  i32.eq
+  if (result i32)
+   i32.const 1
+  else
+   local.get $0
+   i32.const 0
+   i32.eq
+  end
+  if (result i32)
+   i32.const 1
+  else
+   local.get $1
+   i32.const 0
+   i32.eq
+  end
   if
+   i32.const 0
    return
   end
-  i32.const 1
-  global.set $~started
-  call $start:std/array
+  local.get $0
+  call $~lib/string/String#get:length
+  local.set $2
+  local.get $1
+  call $~lib/string/String#get:length
+  local.set $3
+  local.get $2
+  local.get $3
+  i32.or
+  i32.eqz
+  if
+   i32.const 0
+   return
+  end
+  local.get $2
+  i32.eqz
+  if
+   i32.const -1
+   return
+  end
+  local.get $3
+  i32.eqz
+  if
+   i32.const 1
+   return
+  end
+  local.get $0
+  i32.const 0
+  local.get $1
+  i32.const 0
+  local.get $2
+  local.tee $4
+  local.get $3
+  local.tee $5
+  local.get $4
+  local.get $5
+  i32.lt_s
+  select
+  call $~lib/util/string/compareImpl
+  local.set $4
+  local.get $4
+  if (result i32)
+   local.get $4
+  else
+   local.get $2
+   local.get $3
+   i32.sub
+  end
+ )
+ (func $~lib/array/Array<~lib/string/String>#sort@varargs (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   block $~lib/util/sort/COMPARATOR<~lib/string/String>|inlined.1 (result i32)
+    i32.const 0
+    drop
+    i32.const 0
+    drop
+    i32.const 1
+    drop
+    i32.const 13280
+    br $~lib/util/sort/COMPARATOR<~lib/string/String>|inlined.1
+   end
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/string/String>#sort
+ )
+ (func $~lib/array/Array<~lib/string/String>#join@varargs (param $0 i32) (param $1 i32) (result i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   i32.const 7584
+   local.set $1
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<~lib/string/String>#join
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
@@ -28097,945 +28766,302 @@
   local.get $1
   call $~lib/array/Array<~lib/string/String>~visit
  )
+ (func $~lib/function/Function<%28u8%2Cu8%29=>i32>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/tcms/__visit
+ )
+ (func $~lib/function/Function<%28u8%2Cu8%29=>i32>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28u8%2Cu8%29=>i32>#__visit
+ )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $std/array/ArrayStr
-    block $std/array/ArrayU8
-     block $std/array/ArrayU32
-      block $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>
-       block $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>
-        block $~lib/array/Array<~lib/array/Array<u32>>
-         block $~lib/array/Array<~lib/array/Array<u8>>
-          block $~lib/array/Array<i64>
-           block $~lib/array/Array<u64>
-            block $~lib/array/Array<u16>
-             block $~lib/array/Array<i8>
-              block $~lib/array/Array<bool>
-               block $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>
-                block $~lib/array/Array<~lib/string/String>
-                 block $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>
-                  block $~lib/array/Array<~lib/string/String|null>
-                   block $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>
-                    block $~lib/array/Array<std/array/Proxy<i32>>
-                     block $std/array/Proxy<i32>
-                      block $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>
-                       block $~lib/array/Array<~lib/array/Array<i32>>
-                        block $~lib/function/Function<%28u32%2Cu32%29=>i32>
-                         block $~lib/function/Function<%28i32%2Ci32%29=>i32>
-                          block $~lib/function/Function<%28f64%2Cf64%29=>i32>
-                           block $~lib/function/Function<%28f32%2Cf32%29=>i32>
-                            block $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>
-                             block $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>
-                              block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>
-                               block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>
-                                block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>
-                                 block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>
-                                  block $~lib/array/Array<std/array/Ref|null>
-                                   block $~lib/array/Array<f64>
-                                    block $~lib/array/Array<f32>
-                                     block $~lib/array/Array<std/array/Ref>
-                                      block $~lib/array/Array<u32>
-                                       block $~lib/array/Array<u8>
-                                        block $~lib/typedarray/Uint8Array
-                                         block $std/array/Ref
-                                          block $~lib/array/Array<i32>
-                                           block $~lib/arraybuffer/ArrayBufferView
-                                            block $~lib/string/String
-                                             block $~lib/arraybuffer/ArrayBuffer
+   block $~lib/function/Function<%28u8%2Cu8%29=>i32>
+    block $std/array/ArrayStr
+     block $std/array/ArrayU8
+      block $std/array/ArrayU32
+       block $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>
+        block $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>
+         block $~lib/array/Array<~lib/array/Array<u32>>
+          block $~lib/array/Array<~lib/array/Array<u8>>
+           block $~lib/array/Array<i64>
+            block $~lib/array/Array<u64>
+             block $~lib/array/Array<u16>
+              block $~lib/array/Array<i8>
+               block $~lib/array/Array<bool>
+                block $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>
+                 block $~lib/array/Array<~lib/string/String>
+                  block $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>
+                   block $~lib/array/Array<~lib/string/String|null>
+                    block $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>
+                     block $~lib/array/Array<std/array/Proxy<i32>>
+                      block $std/array/Proxy<i32>
+                       block $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>
+                        block $~lib/array/Array<~lib/array/Array<i32>>
+                         block $~lib/function/Function<%28u32%2Cu32%29=>i32>
+                          block $~lib/function/Function<%28i32%2Ci32%29=>i32>
+                           block $~lib/function/Function<%28f64%2Cf64%29=>i32>
+                            block $~lib/function/Function<%28f32%2Cf32%29=>i32>
+                             block $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>
+                              block $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>
+                               block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>
+                                block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>
+                                 block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>
+                                  block $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>
+                                   block $~lib/array/Array<std/array/Ref|null>
+                                    block $~lib/array/Array<f64>
+                                     block $~lib/array/Array<f32>
+                                      block $~lib/array/Array<std/array/Ref>
+                                       block $~lib/array/Array<u32>
+                                        block $~lib/array/Array<u8>
+                                         block $~lib/typedarray/Uint8Array
+                                          block $std/array/Ref
+                                           block $~lib/array/Array<i32>
+                                            block $~lib/arraybuffer/ArrayBufferView
+                                             block $~lib/string/String
+                                              block $~lib/arraybuffer/ArrayBuffer
+                                               local.get $0
+                                               i32.const 8
+                                               i32.sub
+                                               i32.load
+                                               br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $std/array/Ref $~lib/typedarray/Uint8Array $~lib/array/Array<u8> $~lib/array/Array<u32> $~lib/array/Array<std/array/Ref> $~lib/array/Array<f32> $~lib/array/Array<f64> $~lib/array/Array<std/array/Ref|null> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32> $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool> $~lib/function/Function<%28f32%2Cf32%29=>i32> $~lib/function/Function<%28f64%2Cf64%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28u32%2Cu32%29=>i32> $~lib/array/Array<~lib/array/Array<i32>> $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32> $std/array/Proxy<i32> $~lib/array/Array<std/array/Proxy<i32>> $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32> $~lib/array/Array<~lib/string/String|null> $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32> $~lib/array/Array<~lib/string/String> $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32> $~lib/array/Array<bool> $~lib/array/Array<i8> $~lib/array/Array<u16> $~lib/array/Array<u64> $~lib/array/Array<i64> $~lib/array/Array<~lib/array/Array<u8>> $~lib/array/Array<~lib/array/Array<u32>> $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>> $~lib/array/Array<~lib/array/Array<~lib/string/String|null>> $std/array/ArrayU32 $std/array/ArrayU8 $std/array/ArrayStr $~lib/function/Function<%28u8%2Cu8%29=>i32> $invalid
+                                              end
                                               local.get $0
-                                              i32.const 8
-                                              i32.sub
-                                              i32.load
-                                              br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $std/array/Ref $~lib/typedarray/Uint8Array $~lib/array/Array<u8> $~lib/array/Array<u32> $~lib/array/Array<std/array/Ref> $~lib/array/Array<f32> $~lib/array/Array<f64> $~lib/array/Array<std/array/Ref|null> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32> $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool> $~lib/function/Function<%28f32%2Cf32%29=>i32> $~lib/function/Function<%28f64%2Cf64%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28u32%2Cu32%29=>i32> $~lib/array/Array<~lib/array/Array<i32>> $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32> $std/array/Proxy<i32> $~lib/array/Array<std/array/Proxy<i32>> $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32> $~lib/array/Array<~lib/string/String|null> $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32> $~lib/array/Array<~lib/string/String> $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32> $~lib/array/Array<bool> $~lib/array/Array<i8> $~lib/array/Array<u16> $~lib/array/Array<u64> $~lib/array/Array<i64> $~lib/array/Array<~lib/array/Array<u8>> $~lib/array/Array<~lib/array/Array<u32>> $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>> $~lib/array/Array<~lib/array/Array<~lib/string/String|null>> $std/array/ArrayU32 $std/array/ArrayU8 $std/array/ArrayStr $invalid
+                                              local.get $1
+                                              call $~lib/arraybuffer/ArrayBuffer~visit
+                                              return
                                              end
                                              local.get $0
                                              local.get $1
-                                             call $~lib/arraybuffer/ArrayBuffer~visit
+                                             call $~lib/string/String~visit
                                              return
                                             end
                                             local.get $0
                                             local.get $1
-                                            call $~lib/string/String~visit
+                                            call $~lib/arraybuffer/ArrayBufferView~visit
                                             return
                                            end
                                            local.get $0
                                            local.get $1
-                                           call $~lib/arraybuffer/ArrayBufferView~visit
+                                           call $~lib/array/Array<i32>~visit
                                            return
                                           end
                                           local.get $0
                                           local.get $1
-                                          call $~lib/array/Array<i32>~visit
+                                          call $std/array/Ref~visit
                                           return
                                          end
                                          local.get $0
                                          local.get $1
-                                         call $std/array/Ref~visit
+                                         call $~lib/typedarray/Uint8Array~visit
                                          return
                                         end
                                         local.get $0
                                         local.get $1
-                                        call $~lib/typedarray/Uint8Array~visit
+                                        call $~lib/array/Array<u8>~visit
                                         return
                                        end
                                        local.get $0
                                        local.get $1
-                                       call $~lib/array/Array<u8>~visit
+                                       call $~lib/array/Array<u32>~visit
                                        return
                                       end
                                       local.get $0
                                       local.get $1
-                                      call $~lib/array/Array<u32>~visit
+                                      call $~lib/array/Array<std/array/Ref>~visit
                                       return
                                      end
                                      local.get $0
                                      local.get $1
-                                     call $~lib/array/Array<std/array/Ref>~visit
+                                     call $~lib/array/Array<f32>~visit
                                      return
                                     end
                                     local.get $0
                                     local.get $1
-                                    call $~lib/array/Array<f32>~visit
+                                    call $~lib/array/Array<f64>~visit
                                     return
                                    end
                                    local.get $0
                                    local.get $1
-                                   call $~lib/array/Array<f64>~visit
+                                   call $~lib/array/Array<std/array/Ref|null>~visit
                                    return
                                   end
                                   local.get $0
                                   local.get $1
-                                  call $~lib/array/Array<std/array/Ref|null>~visit
+                                  call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit
                                   return
                                  end
                                  local.get $0
                                  local.get $1
-                                 call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit
+                                 call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>~visit
                                  return
                                 end
                                 local.get $0
                                 local.get $1
-                                call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void>~visit
+                                call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>~visit
                                 return
                                end
                                local.get $0
                                local.get $1
-                               call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32>~visit
+                               call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit
                                return
                               end
                               local.get $0
                               local.get $1
-                              call $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit
+                              call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit
                               return
                              end
                              local.get $0
                              local.get $1
-                             call $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32>~visit
+                             call $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit
                              return
                             end
                             local.get $0
                             local.get $1
-                            call $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool>~visit
+                            call $~lib/function/Function<%28f32%2Cf32%29=>i32>~visit
                             return
                            end
                            local.get $0
                            local.get $1
-                           call $~lib/function/Function<%28f32%2Cf32%29=>i32>~visit
+                           call $~lib/function/Function<%28f64%2Cf64%29=>i32>~visit
                            return
                           end
                           local.get $0
                           local.get $1
-                          call $~lib/function/Function<%28f64%2Cf64%29=>i32>~visit
+                          call $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit
                           return
                          end
                          local.get $0
                          local.get $1
-                         call $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit
+                         call $~lib/function/Function<%28u32%2Cu32%29=>i32>~visit
                          return
                         end
                         local.get $0
                         local.get $1
-                        call $~lib/function/Function<%28u32%2Cu32%29=>i32>~visit
+                        call $~lib/array/Array<~lib/array/Array<i32>>~visit
                         return
                        end
                        local.get $0
                        local.get $1
-                       call $~lib/array/Array<~lib/array/Array<i32>>~visit
+                       call $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>~visit
                        return
                       end
                       local.get $0
                       local.get $1
-                      call $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>~visit
+                      call $std/array/Proxy<i32>~visit
                       return
                      end
                      local.get $0
                      local.get $1
-                     call $std/array/Proxy<i32>~visit
+                     call $~lib/array/Array<std/array/Proxy<i32>>~visit
                      return
                     end
                     local.get $0
                     local.get $1
-                    call $~lib/array/Array<std/array/Proxy<i32>>~visit
+                    call $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>~visit
                     return
                    end
                    local.get $0
                    local.get $1
-                   call $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32>~visit
+                   call $~lib/array/Array<~lib/string/String|null>~visit
                    return
                   end
                   local.get $0
                   local.get $1
-                  call $~lib/array/Array<~lib/string/String|null>~visit
+                  call $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>~visit
                   return
                  end
                  local.get $0
                  local.get $1
-                 call $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32>~visit
+                 call $~lib/array/Array<~lib/string/String>~visit
                  return
                 end
                 local.get $0
                 local.get $1
-                call $~lib/array/Array<~lib/string/String>~visit
+                call $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>~visit
                 return
                end
                local.get $0
                local.get $1
-               call $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32>~visit
+               call $~lib/array/Array<bool>~visit
                return
               end
               local.get $0
               local.get $1
-              call $~lib/array/Array<bool>~visit
+              call $~lib/array/Array<i8>~visit
               return
              end
              local.get $0
              local.get $1
-             call $~lib/array/Array<i8>~visit
+             call $~lib/array/Array<u16>~visit
              return
             end
             local.get $0
             local.get $1
-            call $~lib/array/Array<u16>~visit
+            call $~lib/array/Array<u64>~visit
             return
            end
            local.get $0
            local.get $1
-           call $~lib/array/Array<u64>~visit
+           call $~lib/array/Array<i64>~visit
            return
           end
           local.get $0
           local.get $1
-          call $~lib/array/Array<i64>~visit
+          call $~lib/array/Array<~lib/array/Array<u8>>~visit
           return
          end
          local.get $0
          local.get $1
-         call $~lib/array/Array<~lib/array/Array<u8>>~visit
+         call $~lib/array/Array<~lib/array/Array<u32>>~visit
          return
         end
         local.get $0
         local.get $1
-        call $~lib/array/Array<~lib/array/Array<u32>>~visit
+        call $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>~visit
         return
        end
        local.get $0
        local.get $1
-       call $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>~visit
+       call $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>~visit
        return
       end
       local.get $0
       local.get $1
-      call $~lib/array/Array<~lib/array/Array<~lib/string/String|null>>~visit
+      call $std/array/ArrayU32~visit
       return
      end
      local.get $0
      local.get $1
-     call $std/array/ArrayU32~visit
+     call $std/array/ArrayU8~visit
      return
     end
     local.get $0
     local.get $1
-    call $std/array/ArrayU8~visit
+    call $std/array/ArrayStr~visit
     return
    end
    local.get $0
    local.get $1
-   call $std/array/ArrayStr~visit
+   call $~lib/function/Function<%28u8%2Cu8%29=>i32>~visit
    return
   end
   unreachable
  )
- (func $std/array/ArrayU32#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $std/array/ArrayU32#constructor
- )
- (func $~lib/array/Array<u32>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $2
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $3
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $3
-  call $~lib/array/Array<u32>#fill
- )
- (func $~lib/array/Array<u32>#includes@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u32>#includes
- )
- (func $~lib/array/Array<u32>#indexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u32>#indexOf
- )
- (func $~lib/array/Array<u32>#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   local.get $0
-   i32.load offset=12
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u32>#lastIndexOf
- )
- (func $~lib/array/Array<u32>#copyWithin@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 2
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $3
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $3
-  call $~lib/array/Array<u32>#copyWithin
- )
- (func $~lib/array/Array<u32>#slice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $1
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u32>#slice
- )
- (func $~lib/array/Array<u32>#splice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u32>#splice
- )
- (func $~lib/array/Array<u32>#join@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 7584
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<u32>#join
- )
- (func $std/array/ArrayU8#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $std/array/ArrayU8#constructor
- )
- (func $~lib/array/Array<u8>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $2
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $3
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $3
-  call $~lib/array/Array<u8>#fill
- )
- (func $~lib/array/Array<u8>#includes@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u8>#includes
- )
- (func $~lib/array/Array<u8>#indexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u8>#indexOf
- )
- (func $~lib/array/Array<u8>#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   local.get $0
-   i32.load offset=12
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u8>#lastIndexOf
- )
- (func $~lib/array/Array<u8>#copyWithin@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 2
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $3
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $3
-  call $~lib/array/Array<u8>#copyWithin
- )
- (func $~lib/array/Array<u8>#slice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $1
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u8>#slice
- )
- (func $~lib/array/Array<u8>#splice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<u8>#splice
- )
- (func $~lib/util/sort/COMPARATOR<u8>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.const 255
-  i32.and
-  local.get $1
-  i32.const 255
-  i32.and
-  i32.gt_u
-  local.get $0
-  i32.const 255
-  i32.and
-  local.get $1
-  i32.const 255
-  i32.and
-  i32.lt_u
-  i32.sub
- )
- (func $~lib/array/Array<u8>#sort@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   block $~lib/util/sort/COMPARATOR<u8>|inlined.0 (result i32)
-    i32.const 1
-    drop
-    i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
-    drop
-    i32.const 13248
-    br $~lib/util/sort/COMPARATOR<u8>|inlined.0
-   end
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<u8>#sort
- )
- (func $~lib/array/Array<u8>#join@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 7584
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<u8>#join
- )
- (func $std/array/ArrayStr#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $std/array/ArrayStr#constructor
- )
- (func $~lib/array/Array<~lib/string/String>#fill@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      i32.const 1
-      i32.sub
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $2
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $3
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $3
-  call $~lib/array/Array<~lib/string/String>#fill
- )
- (func $~lib/array/Array<~lib/string/String>#includes@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<~lib/string/String>#includes
- )
- (func $~lib/array/Array<~lib/string/String>#indexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 0
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<~lib/string/String>#indexOf
- )
- (func $~lib/array/Array<~lib/string/String>#lastIndexOf@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   local.get $0
-   i32.load offset=12
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<~lib/string/String>#lastIndexOf
- )
- (func $~lib/array/Array<~lib/string/String>#copyWithin@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 2
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $3
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $3
-  call $~lib/array/Array<~lib/string/String>#copyWithin
- )
- (func $~lib/array/Array<~lib/string/String>#slice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $2of2
-   block $1of2
-    block $0of2
-     block $outOfRange
-      global.get $~argumentsLength
-      br_table $0of2 $1of2 $2of2 $outOfRange
-     end
-     unreachable
-    end
-    i32.const 0
-    local.set $1
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<~lib/string/String>#slice
- )
- (func $~lib/array/Array<~lib/string/String>#splice@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     i32.const 1
-     i32.sub
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   global.get $~lib/builtins/i32.MAX_VALUE
-   local.set $2
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<~lib/string/String>#splice
- )
- (func $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|1 (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $0
-  local.get $1
-  i32.eq
-  if (result i32)
-   i32.const 1
-  else
-   local.get $0
-   i32.const 0
-   i32.eq
-  end
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.const 0
-   i32.eq
-  end
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.set $2
-  local.get $1
-  call $~lib/string/String#get:length
-  local.set $3
-  local.get $2
-  local.get $3
-  i32.or
-  i32.eqz
-  if
-   i32.const 0
-   return
-  end
-  local.get $2
-  i32.eqz
-  if
-   i32.const -1
-   return
-  end
-  local.get $3
-  i32.eqz
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
-  i32.const 0
-  local.get $1
-  i32.const 0
-  local.get $2
-  local.tee $4
-  local.get $3
-  local.tee $5
-  local.get $4
-  local.get $5
-  i32.lt_s
-  select
-  call $~lib/util/string/compareImpl
-  local.set $4
-  local.get $4
-  if (result i32)
-   local.get $4
-  else
-   local.get $2
-   local.get $3
-   i32.sub
-  end
- )
- (func $~lib/array/Array<~lib/string/String>#sort@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   block $~lib/util/sort/COMPARATOR<~lib/string/String>|inlined.1 (result i32)
-    i32.const 0
-    drop
-    i32.const 0
-    drop
-    i32.const 1
-    drop
-    i32.const 13280
-    br $~lib/util/sort/COMPARATOR<~lib/string/String>|inlined.1
-   end
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<~lib/string/String>#sort
- )
- (func $~lib/array/Array<~lib/string/String>#join@varargs (param $0 i32) (param $1 i32) (result i32)
-  block $1of1
-   block $0of1
-    block $outOfRange
-     global.get $~argumentsLength
-     br_table $0of1 $1of1 $outOfRange
-    end
-    unreachable
-   end
-   i32.const 7584
-   local.set $1
-  end
-  local.get $0
-  local.get $1
-  call $~lib/array/Array<~lib/string/String>#join
- )
  (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
+ )
+ (func $~start
+  global.get $~started
+  if
+   return
+  end
+  i32.const 1
+  global.set $~started
+  call $start:std/array
  )
 )

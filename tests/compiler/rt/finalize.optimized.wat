@@ -39,8 +39,8 @@
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "_start" (func $~start))
  (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1416,8 +1416,15 @@
     i32.and
     local.get $0
     i32.const 1676
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $0
+     i32.const 0
+     i32.store offset=4
+     local.get $0
+     i32.const 0
+     i32.store offset=8
+    else
      i32.const 1648
      i32.const 1
      local.get $0
@@ -1694,15 +1701,6 @@
    unreachable
   end
  )
- (func $~start
-  global.get $~started
-  if
-   return
-  end
-  i32.const 1
-  global.set $~started
-  call $start:rt/finalize
- )
  (func $~lib/rt/tcms/__visit (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1773,5 +1771,14 @@
    local.get $0
    call $~lib/rt/tcms/__visit
   end
+ )
+ (func $~start
+  global.get $~started
+  if
+   return
+  end
+  i32.const 1
+  global.set $~started
+  call $start:rt/finalize
  )
 )

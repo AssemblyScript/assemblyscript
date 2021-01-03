@@ -1443,8 +1443,15 @@
     i32.and
     local.get $0
     i32.const 1604
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $0
+     i32.const 0
+     i32.store offset=4
+     local.get $0
+     i32.const 0
+     i32.store offset=8
+    else
      local.get $0
      i32.const 4
      i32.add
@@ -1741,9 +1748,6 @@
   global.set $~lib/rt/tcms/pinSpace
   call $~lib/rt/tcms/__collect
  )
- (func $~start
-  call $start:std/staticarray
- )
  (func $~lib/rt/tcms/__visit (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1839,5 +1843,8 @@
    end
    unreachable
   end
+ )
+ (func $~start
+  call $start:std/staticarray
  )
 )

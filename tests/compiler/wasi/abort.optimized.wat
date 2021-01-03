@@ -11,9 +11,9 @@
  (data (i32.const 1048) "\01\00\00\00\16\00\00\00t\00h\00e\00 \00m\00e\00s\00s\00a\00g\00e")
  (data (i32.const 1084) ",")
  (data (i32.const 1096) "\01\00\00\00\1a\00\00\00w\00a\00s\00i\00/\00a\00b\00o\00r\00t\00.\00t\00s")
- (export "_start" (func $~start))
- (export "memory" (memory $0))
  (export "test" (func $wasi/abort/test))
+ (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -334,8 +334,8 @@
   i32.store16
   i32.const 4
   local.get $0
-  i32.const -10
-  i32.add
+  i32.const 10
+  i32.sub
   i32.store
   i32.const 2
   i32.const 0

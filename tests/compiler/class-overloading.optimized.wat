@@ -40,8 +40,8 @@
  (global $class-overloading/ic (mut i32) (i32.const 0))
  (global $class-overloading/b2 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "_start" (func $~start))
  (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1495,15 +1495,6 @@
    unreachable
   end
  )
- (func $~start
-  global.get $~started
-  if
-   return
-  end
-  i32.const 1
-  global.set $~started
-  call $start:class-overloading
- )
  (func $class-overloading/A#a<i32>@virtual (param $0 i32)
   block $default
    block $case2
@@ -1609,5 +1600,14 @@
    return
   end
   unreachable
+ )
+ (func $~start
+  global.get $~started
+  if
+   return
+  end
+  i32.const 1
+  global.set $~started
+  call $start:class-overloading
  )
 )

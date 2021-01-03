@@ -31,11 +31,10 @@
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $reexport/car (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 276))
  (global $exports/Car i32 (i32.const 3))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $exports/vehicles.Car i32 (i32.const 4))
- (export "memory" (memory $0))
+ (global $~lib/memory/__heap_base i32 (i32.const 276))
  (export "add" (func $export/add))
  (export "renamed_sub" (func $export/sub))
  (export "renamed_mul" (func $export/mul))
@@ -93,6 +92,7 @@
  (export "ExportsNamespace.renamed_mul" (func $export/mul))
  (export "default" (func $export-default/theDefault))
  (export "renamed_default" (func $export-default/theDefault))
+ (export "memory" (memory $0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (start $~start)
  (func $export/add (param $0 i32) (param $1 i32) (result i32)
@@ -1757,9 +1757,6 @@
  (func $export-default/theDefault
   nop
  )
- (func $~start
-  call $start:reexport
- )
  (func $exports/Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
@@ -1813,5 +1810,8 @@
  (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
+ )
+ (func $~start
+  call $start:reexport
  )
 )

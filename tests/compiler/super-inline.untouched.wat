@@ -1556,9 +1556,6 @@
   call $super-inline/Bar#a
   drop
  )
- (func $~start
-  call $start:super-inline
- )
  (func $super-inline/Foo#a@virtual (param $0 i32) (result i32)
   (local $1 i32)
   block $default
@@ -1580,5 +1577,8 @@
   end
   local.get $0
   call $super-inline/Foo#a
+ )
+ (func $~start
+  call $start:super-inline
  )
 )

@@ -17,10 +17,10 @@
  (global $heap/ptr (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 140))
- (export "memory" (memory $0))
  (export "heap.alloc" (func $~lib/memory/heap.alloc))
  (export "heap.realloc" (func $~lib/memory/heap.realloc))
  (export "heap.free" (func $~lib/memory/heap.free))
+ (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0

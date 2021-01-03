@@ -22,8 +22,8 @@
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 268))
- (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
+ (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0

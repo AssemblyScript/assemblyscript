@@ -1,8 +1,8 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (memory $0 0)
- (export "memory" (memory $0))
  (export "test" (func $class-extends/test))
+ (export "memory" (memory $0))
  (func $class-extends/test (param $0 i32)
   local.get $0
   i32.load

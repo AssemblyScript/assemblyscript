@@ -16,11 +16,11 @@
  (elem (i32.const 1) $start:infer-generic~anonymous|0)
  (global $infer-generic/arr i32 (i32.const 128))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
  (export "test2" (func $infer-generic/test2))
  (export "test3" (func $infer-generic/test3))
  (export "test4" (func $infer-generic/test4))
+ (export "memory" (memory $0))
  (start $~start)
  (func $infer-generic/inferCompatible<f64> (param $0 f64) (param $1 f64) (result i32)
   local.get $0

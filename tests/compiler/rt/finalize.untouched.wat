@@ -35,10 +35,10 @@
  (global $rt/finalize/expectedReadIndex (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 652))
- (export "_start" (func $~start))
+ (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -2203,8 +2203,15 @@
     local.set $6
     local.get $2
     global.get $~lib/memory/__heap_base
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $2
+     i32.const 0
+     call $~lib/rt/tcms/Object#set:nextWithColor
+     local.get $2
+     i32.const 0
+     call $~lib/rt/tcms/Object#set:prev
+    else
      i32.const 0
      drop
      i32.const 1
@@ -2402,15 +2409,6 @@
    unreachable
   end
  )
- (func $~start
-  global.get $~started
-  if
-   return
-  end
-  i32.const 1
-  global.set $~started
-  call $start:rt/finalize
- )
  (func $~lib/rt/tcms/Object#unlink (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2585,5 +2583,14 @@
    return
   end
   unreachable
+ )
+ (func $~start
+  global.get $~started
+  if
+   return
+  end
+  i32.const 1
+  global.set $~started
+  call $start:rt/finalize
  )
 )

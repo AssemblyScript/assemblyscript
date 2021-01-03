@@ -1258,8 +1258,15 @@
     i32.and
     local.get $0
     i32.const 1452
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $0
+     i32.const 0
+     i32.store offset=4
+     local.get $0
+     i32.const 0
+     i32.store offset=8
+    else
      local.get $0
      i32.const 4
      i32.add
@@ -1329,17 +1336,6 @@
   local.get $5
   global.set $~lib/rt/tcms/white
  )
- (func $~start
-  i32.const 1232
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/fromSpace
-  i32.const 1312
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/pinSpace
-  i32.const 1392
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/toSpace
- )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $folding-inner0
    block $invalid
@@ -1380,5 +1376,16 @@
    end
    unreachable
   end
+ )
+ (func $~start
+  i32.const 1232
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/fromSpace
+  i32.const 1312
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/pinSpace
+  i32.const 1392
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/toSpace
  )
 )

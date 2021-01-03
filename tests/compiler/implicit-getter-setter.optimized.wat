@@ -17,15 +17,15 @@
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $implicit-getter-setter/Basic i32 (i32.const 3))
  (global $implicit-getter-setter/Managed i32 (i32.const 4))
- (export "memory" (memory $0))
  (export "Basic" (global $implicit-getter-setter/Basic))
  (export "Basic#get:val" (func $implicit-getter-setter/Basic#get:val))
  (export "Basic#set:val" (func $~lib/rt/tlsf/Root#set:flMap))
  (export "Basic#constructor" (func $implicit-getter-setter/Basic#constructor))
  (export "Managed" (global $implicit-getter-setter/Managed))
- (export "Managed#get:foo" (func $implicit-getter-setter/Basic#get:val))
+ (export "Managed#get:foo" (func $implicit-getter-setter/Managed#get:foo))
  (export "Managed#set:foo" (func $~lib/rt/tlsf/Root#set:flMap))
  (export "Managed#constructor" (func $implicit-getter-setter/Managed#constructor))
+ (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/Root#set:flMap (param $0 i32) (param $1 i32)
   local.get $0
@@ -922,6 +922,10 @@
   local.get $1
   i32.store
   local.get $0
+ )
+ (func $implicit-getter-setter/Managed#get:foo (param $0 i32) (result i32)
+  local.get $0
+  i32.load
  )
  (func $~start
   i32.const 1236

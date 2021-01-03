@@ -67,8 +67,8 @@
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
  (global $builtins/F (mut f64) (f64.const 0))
- (export "memory" (memory $0))
  (export "test" (func $start:builtins~anonymous|1))
+ (export "memory" (memory $0))
  (start $~start)
  (func $start:builtins~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0

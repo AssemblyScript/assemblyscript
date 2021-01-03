@@ -3,10 +3,10 @@
  (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (export "memory" (memory $0))
  (export "testAlwaysWrapped" (func $loop-wrap/testAlwaysWrapped))
  (export "testFirstWrapped" (func $loop-wrap/testFirstWrapped))
  (export "testSubsequentWrapped" (func $loop-wrap/testSubsequentWrapped))
+ (export "memory" (memory $0))
  (func $loop-wrap/testAlwaysWrapped
   (local $0 i32)
   (local $1 i32)

@@ -4,7 +4,6 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (export "memory" (memory $0))
  (export "testTrue" (func $possibly-null/testTrue))
  (export "testFalseElse" (func $possibly-null/testFalseElse))
  (export "testFalseContinuation" (func $possibly-null/testFalseContinuation))
@@ -23,6 +22,7 @@
  (export "testLogicalOrMulti" (func $possibly-null/testLogicalOrMulti))
  (export "testAssign" (func $possibly-null/testAssign))
  (export "testNeverNull" (func $possibly-null/testNeverNull))
+ (export "memory" (memory $0))
  (func $possibly-null/testTrue (param $0 i32)
   local.get $0
   if

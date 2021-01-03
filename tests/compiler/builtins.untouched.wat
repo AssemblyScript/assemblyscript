@@ -82,8 +82,8 @@
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
- (export "memory" (memory $0))
  (export "test" (func $builtins/test))
+ (export "memory" (memory $0))
  (start $~start)
  (func $start:builtins~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0

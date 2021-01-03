@@ -153,10 +153,10 @@
  (global $wasi/process/env (mut i32) (i32.const 0))
  (global $wasi/process/envKeys (mut i32) (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~started (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 6156))
- (export "_start" (func $~start))
+ (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 20

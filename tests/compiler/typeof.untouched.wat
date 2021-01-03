@@ -38,10 +38,10 @@
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $typeof/c (mut i32) (i32.const 0))
- (global $~started (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 588))
- (export "_start" (func $~start))
+ (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 20

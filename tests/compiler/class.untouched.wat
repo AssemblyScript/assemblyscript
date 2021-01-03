@@ -24,9 +24,9 @@
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 332))
- (export "memory" (memory $0))
  (export "test" (func $class/test))
  (export "testGenericInitializer" (func $class/testGenericInitializer))
+ (export "memory" (memory $0))
  (start $~start)
  (func $class/Animal.add (param $0 i32) (param $1 i32) (result i32)
   local.get $0

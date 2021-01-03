@@ -22,8 +22,8 @@
  (elem (i32.const 1) $inlining/func_fe~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
- (export "memory" (memory $0))
  (export "test" (func $inlining/test))
+ (export "memory" (memory $0))
  (start $~start)
  (func $inlining/test (result i32)
   i32.const 3

@@ -7628,8 +7628,8 @@
        i32.const 0
        local.get $5
        local.get $12
-       i32.const -1064252416
-       i32.sub
+       i32.const 1064252416
+       i32.add
        i32.or
        local.get $1
        local.get $0

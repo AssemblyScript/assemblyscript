@@ -1,7 +1,7 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1036) "<")
@@ -14,21 +14,12 @@
  (data (i32.const 1288) "\01")
  (data (i32.const 1308) "\1c")
  (data (i32.const 1320) "\01\00\00\00\08\00\00\00n\00u\00l\00l")
- (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $std/array-access/stringArrayPropertyAccess))
  (export "stringArrayMethodCall" (func $std/array-access/stringArrayMethodCall))
  (export "stringArrayArrayPropertyAccess" (func $std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
- (func $~lib/array/Array<~lib/array/Array<i32>>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
- )
+ (export "memory" (memory $0))
  (func $~lib/array/Array<~lib/array/Array<i32>>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
@@ -43,8 +34,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<~lib/array/Array<i32>>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
   local.tee $0
   i32.eqz
   if
@@ -74,8 +69,8 @@
    unreachable
   end
   local.get $0
-  i32.const 1
-  call $~lib/array/Array<~lib/array/Array<i32>>#__uget
+  i32.load offset=4
+  i32.load offset=4
  )
  (func $std/array-access/stringArrayPropertyAccess (param $0 i32) (result i32)
   local.get $0

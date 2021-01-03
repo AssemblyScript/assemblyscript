@@ -33,8 +33,8 @@
  (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (export "memory" (memory $0))
  (export "doThrow" (func $throw/doThrow))
+ (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tcms/initLazy (param $0 i32) (result i32)
   local.get $0
@@ -808,8 +808,15 @@
     i32.and
     local.get $0
     i32.const 1612
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $0
+     i32.const 0
+     i32.store offset=4
+     local.get $0
+     i32.const 0
+     i32.store offset=8
+    else
      local.get $0
      i32.const 4
      i32.add
@@ -839,41 +846,6 @@
   i32.const 3
   call $~lib/builtins/abort
   unreachable
- )
- (func $~start
-  (local $0 i32)
-  loop $while-continue|0
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $0
-   i32.const 10
-   i32.lt_s
-   if
-    local.get $0
-    i32.const 10
-    i32.gt_s
-    if
-     i32.const 1248
-     i32.const 1168
-     i32.const 23
-     i32.const 7
-     call $~lib/builtins/abort
-     unreachable
-    end
-    br $while-continue|0
-   end
-  end
-  i32.const 1344
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/toSpace
-  i32.const 1440
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/pinSpace
-  i32.const 1472
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/fromSpace
-  call $~lib/rt/tcms/__collect
  )
  (func $~lib/rt/tcms/Object#set:next (param $0 i32) (param $1 i32)
   local.get $0
@@ -954,5 +926,40 @@
    end
    unreachable
   end
+ )
+ (func $~start
+  (local $0 i32)
+  loop $while-continue|0
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   i32.const 10
+   i32.lt_s
+   if
+    local.get $0
+    i32.const 10
+    i32.gt_s
+    if
+     i32.const 1248
+     i32.const 1168
+     i32.const 23
+     i32.const 7
+     call $~lib/builtins/abort
+     unreachable
+    end
+    br $while-continue|0
+   end
+  end
+  i32.const 1344
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/toSpace
+  i32.const 1440
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/pinSpace
+  i32.const 1472
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/fromSpace
+  call $~lib/rt/tcms/__collect
  )
 )

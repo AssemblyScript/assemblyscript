@@ -20,8 +20,8 @@
  (data (i32.const 1372) ",")
  (data (i32.const 1384) "\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
  (global $~started (mut i32) (i32.const 0))
- (export "_start" (func $~start))
  (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~start
   global.get $~started
   if

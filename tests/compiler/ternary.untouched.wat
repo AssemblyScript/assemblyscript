@@ -4,8 +4,8 @@
  (memory $0 0)
  (table $0 1 funcref)
  (global $ternary/a (mut i32) (i32.const 0))
- (export "memory" (memory $0))
  (export "test" (func $ternary/test))
+ (export "memory" (memory $0))
  (start $~start)
  (func $start:ternary
   i32.const 1

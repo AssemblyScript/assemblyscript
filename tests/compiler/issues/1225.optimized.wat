@@ -22,9 +22,9 @@
  (global $issues/1225/x (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
- (export "memory" (memory $0))
  (export "normal" (func $issues/1225/normal))
  (export "viaThis" (func $issues/1225/viaThis))
+ (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1020,8 +1020,15 @@
     i32.and
     local.get $0
     i32.const 1364
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $0
+     i32.const 0
+     i32.store offset=4
+     local.get $0
+     i32.const 0
+     i32.store offset=8
+    else
      local.get $0
      i32.const 4
      i32.add
@@ -1090,6 +1097,68 @@
   global.set $~lib/rt/tcms/toSpace
   local.get $5
   global.set $~lib/rt/tcms/white
+ )
+ (func $~lib/rt/tcms/__visit (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.eqz
+  if
+   return
+  end
+  global.get $~lib/rt/tcms/white
+  local.get $0
+  i32.const 20
+  i32.sub
+  local.tee $0
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  i32.eq
+  if
+   local.get $0
+   i32.load offset=4
+   i32.const -4
+   i32.and
+   local.tee $1
+   if
+    local.get $1
+    local.get $0
+    i32.load offset=8
+    local.tee $2
+    i32.store offset=8
+    local.get $2
+    local.get $1
+    call $~lib/rt/tcms/Object#set:next
+   end
+   local.get $0
+   global.get $~lib/rt/tcms/toSpace
+   global.get $~lib/rt/tcms/white
+   i32.eqz
+   call $~lib/rt/tcms/Object#linkTo
+  end
+ )
+ (func $~lib/rt/__visit_members (param $0 i32)
+  block $folding-inner0
+   block $invalid
+    block $~lib/arraybuffer/ArrayBufferView
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $folding-inner0 $folding-inner0 $~lib/arraybuffer/ArrayBufferView $folding-inner0 $invalid
+    end
+    local.get $0
+    i32.load
+    local.tee $0
+    if
+     local.get $0
+     call $~lib/rt/tcms/__visit
+    end
+    return
+   end
+   unreachable
+  end
  )
  (func $~start
   (local $0 i32)
@@ -1167,67 +1236,5 @@
   call $~lib/rt/tcms/initLazy
   global.set $~lib/rt/tcms/pinSpace
   call $~lib/rt/tcms/__collect
- )
- (func $~lib/rt/tcms/__visit (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.eqz
-  if
-   return
-  end
-  global.get $~lib/rt/tcms/white
-  local.get $0
-  i32.const 20
-  i32.sub
-  local.tee $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   local.get $0
-   i32.load offset=4
-   i32.const -4
-   i32.and
-   local.tee $1
-   if
-    local.get $1
-    local.get $0
-    i32.load offset=8
-    local.tee $2
-    i32.store offset=8
-    local.get $2
-    local.get $1
-    call $~lib/rt/tcms/Object#set:next
-   end
-   local.get $0
-   global.get $~lib/rt/tcms/toSpace
-   global.get $~lib/rt/tcms/white
-   i32.eqz
-   call $~lib/rt/tcms/Object#linkTo
-  end
- )
- (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner0
-   block $invalid
-    block $~lib/arraybuffer/ArrayBufferView
-     local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $folding-inner0 $folding-inner0 $~lib/arraybuffer/ArrayBufferView $folding-inner0 $invalid
-    end
-    local.get $0
-    i32.load
-    local.tee $0
-    if
-     local.get $0
-     call $~lib/rt/tcms/__visit
-    end
-    return
-   end
-   unreachable
-  end
  )
 )

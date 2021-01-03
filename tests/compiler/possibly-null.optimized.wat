@@ -2,7 +2,6 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (memory $0 0)
- (export "memory" (memory $0))
  (export "testTrue" (func $possibly-null/testTrue))
  (export "testFalseElse" (func $possibly-null/testTrue))
  (export "testFalseContinuation" (func $possibly-null/testTrue))
@@ -21,6 +20,7 @@
  (export "testLogicalOrMulti" (func $possibly-null/testLogicalAndMulti))
  (export "testAssign" (func $possibly-null/testLogicalAndMulti))
  (export "testNeverNull" (func $possibly-null/testTrue))
+ (export "memory" (memory $0))
  (func $possibly-null/testTrue (param $0 i32)
   nop
  )

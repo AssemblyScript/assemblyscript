@@ -5,9 +5,8 @@
  (data (i32.const 44) ",\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\10\00\00\00 \00\00\00 \00\00\00\0c\00\00\00\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $exports-lazy/lazyGlobalUsed i32 (i32.const 64))
- (export "memory" (memory $0))
  (export "lazyGlobalUsed" (global $exports-lazy/lazyGlobalUsed))
- (export "lazyFuncUsed" (func $exports-lazy/lazyFuncUsed))
+ (export "memory" (memory $0))
  (start $~start)
  (func $start:exports-lazy
   (local $0 i32)

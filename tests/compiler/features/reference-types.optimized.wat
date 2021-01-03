@@ -16,9 +16,9 @@
  (data (i32.const 1036) "L")
  (data (i32.const 1048) "\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s")
  (global $features/reference-types/funcGlobal (mut funcref) (ref.null func))
- (export "memory" (memory $0))
  (export "external" (func $features/reference-types/external))
  (export "internal" (func $features/reference-types/internal))
+ (export "memory" (memory $0))
  (start $~start)
  (func $features/reference-types/internal (param $0 externref) (result externref)
   local.get $0

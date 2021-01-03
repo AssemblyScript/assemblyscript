@@ -9,7 +9,6 @@
  (data (i32.const 1048) "\01\00\00\00\18\00\00\00l\00o\00o\00p\00-\00f\00l\00o\00w\00.\00t\00s")
  (data (i32.const 1084) "\1c")
  (data (i32.const 1096) "\01\00\00\00\08\00\00\00t\00e\00r\00m")
- (export "memory" (memory $0))
  (export "whileReturn" (func $loop-flow/whileReturn))
  (export "whileThrow" (func $loop-flow/whileThrow))
  (export "whileContinue" (func $loop-flow/whileContinue))
@@ -21,6 +20,7 @@
  (export "doReturn" (func $loop-flow/whileReturn))
  (export "doThrow" (func $loop-flow/doThrow))
  (export "doAny" (func $loop-flow/doAny))
+ (export "memory" (memory $0))
  (start $~start)
  (func $loop-flow/whileReturn (result i32)
   i32.const 1

@@ -14,11 +14,11 @@
  (data (i32.const 1192) "\04\00\00\00\08\00\00\00\01")
  (table $0 2 funcref)
  (elem (i32.const 1) $start:infer-generic~anonymous|0)
- (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
  (export "test2" (func $infer-generic/test2))
  (export "test3" (func $infer-generic/test2))
  (export "test4" (func $infer-generic/test2))
+ (export "memory" (memory $0))
  (start $~start)
  (func $start:infer-generic~anonymous|0 (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
   local.get $1

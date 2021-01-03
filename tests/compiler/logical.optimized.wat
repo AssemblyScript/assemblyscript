@@ -1026,8 +1026,15 @@
     i32.and
     local.get $0
     i32.const 1364
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $0
+     i32.const 0
+     i32.store offset=4
+     local.get $0
+     i32.const 0
+     i32.store offset=8
+    else
      local.get $0
      i32.const 4
      i32.add
@@ -1097,38 +1104,6 @@
   local.get $5
   global.set $~lib/rt/tcms/white
  )
- (func $~start
-  i32.const 1280
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/fromSpace
-  call $logical/Obj#constructor
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 87
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  call $logical/Obj#constructor
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 92
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1312
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/toSpace
-  i32.const 1344
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/pinSpace
-  call $~lib/rt/tcms/__collect
- )
  (func $~lib/rt/__visit_members (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1184,5 +1159,37 @@
    end
    unreachable
   end
+ )
+ (func $~start
+  i32.const 1280
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/fromSpace
+  call $logical/Obj#constructor
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 87
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  call $logical/Obj#constructor
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 92
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1312
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/toSpace
+  i32.const 1344
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/pinSpace
+  call $~lib/rt/tcms/__collect
  )
 )

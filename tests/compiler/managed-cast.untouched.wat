@@ -1923,8 +1923,15 @@
     local.set $6
     local.get $2
     global.get $~lib/memory/__heap_base
-    i32.gt_u
+    i32.lt_u
     if
+     local.get $2
+     i32.const 0
+     call $~lib/rt/tcms/Object#set:nextWithColor
+     local.get $2
+     i32.const 0
+     call $~lib/rt/tcms/Object#set:prev
+    else
      i32.const 0
      drop
      i32.const 0
@@ -1991,9 +1998,6 @@
   call $~lib/rt/tcms/initLazy
   global.set $~lib/rt/tcms/pinSpace
   call $~lib/rt/tcms/__collect
- )
- (func $~start
-  call $start:managed-cast
  )
  (func $~lib/rt/tcms/Object#unlink (param $0 i32)
   (local $1 i32)
@@ -2109,5 +2113,8 @@
    return
   end
   unreachable
+ )
+ (func $~start
+  call $start:managed-cast
  )
 )

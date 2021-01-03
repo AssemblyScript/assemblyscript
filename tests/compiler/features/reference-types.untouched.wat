@@ -24,9 +24,9 @@
  (global $features/reference-types/anyGlobal (mut anyref) (ref.null any))
  (global $features/reference-types/anyGlobalInit (mut anyref) (ref.null any))
  (global $features/reference-types/otherFuncGlobal (mut funcref) (ref.null func))
- (export "memory" (memory $0))
  (export "external" (func $features/reference-types/external))
  (export "internal" (func $features/reference-types/internal))
+ (export "memory" (memory $0))
  (start $~start)
  (func $features/reference-types/testLocal<funcref>
   (local $0 funcref)

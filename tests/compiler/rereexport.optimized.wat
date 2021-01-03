@@ -26,7 +26,6 @@
  (global $reexport/car (mut i32) (i32.const 0))
  (global $rereexport/car (mut i32) (i32.const 0))
  (global $rereexport/exportsNamespaceCar (mut i32) (i32.const 0))
- (export "memory" (memory $0))
  (export "a" (global $export/a))
  (export "renamed_a" (global $export/a))
  (export "renamed_b" (global $export/b))
@@ -41,6 +40,7 @@
  (export "exportstar.renamed_c" (global $export/c))
  (export "exportstar.ns.two" (func $export-default/theDefault))
  (export "exportstar.default.two" (func $export-default/theDefault))
+ (export "memory" (memory $0))
  (start $~start)
  (func $export/add (param $0 i32) (param $1 i32) (result i32)
   local.get $0

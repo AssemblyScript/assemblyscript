@@ -33,7 +33,6 @@
  (global $exports/Car i32 (i32.const 3))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $exports/vehicles.Car i32 (i32.const 4))
- (export "memory" (memory $0))
  (export "add" (func $export/add))
  (export "renamed_sub" (func $export/sub))
  (export "renamed_mul" (func $export/mul))
@@ -91,6 +90,7 @@
  (export "ExportsNamespace.renamed_mul" (func $export/mul))
  (export "default" (func $export/ns.one))
  (export "renamed_default" (func $export/ns.one))
+ (export "memory" (memory $0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (start $~start)
  (func $export/add (param $0 i32) (param $1 i32) (result i32)
@@ -1003,32 +1003,6 @@
  (func $export/ns.one
   nop
  )
- (func $~start
-  i32.const 1284
-  i32.const 1280
-  i32.store
-  i32.const 1288
-  i32.const 1280
-  i32.store
-  i32.const 1280
-  global.set $~lib/rt/tcms/fromSpace
-  i32.const 0
-  i32.const 2
-  call $exports/Car#constructor
-  global.set $reexport/car
-  global.get $reexport/car
-  i32.load
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 40
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
  (func $exports/Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
@@ -1093,5 +1067,31 @@
  (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
+ )
+ (func $~start
+  i32.const 1284
+  i32.const 1280
+  i32.store
+  i32.const 1288
+  i32.const 1280
+  i32.store
+  i32.const 1280
+  global.set $~lib/rt/tcms/fromSpace
+  i32.const 0
+  i32.const 2
+  call $exports/Car#constructor
+  global.set $reexport/car
+  global.get $reexport/car
+  i32.load
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 40
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
 )

@@ -29,11 +29,10 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
- (global $~lib/memory/__heap_base i32 (i32.const 228))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $exports/Car i32 (i32.const 3))
  (global $exports/vehicles.Car i32 (i32.const 4))
- (export "memory" (memory $0))
+ (global $~lib/memory/__heap_base i32 (i32.const 228))
  (export "add" (func $exports/add))
  (export "subOpt" (func $exports/subOpt@varargs))
  (export "math.sub" (func $exports/math.sub))
@@ -61,6 +60,7 @@
  (export "vehicles.Car.getNumTires" (func $exports/vehicles.Car.getNumTires))
  (export "outer.inner.a" (global $exports/outer.inner.a))
  (export "renamed_mul" (func $export/mul))
+ (export "memory" (memory $0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (start $~start)
  (func $exports/add (param $0 i32) (param $1 i32) (result i32)
@@ -1648,11 +1648,6 @@
   local.get $1
   i32.mul
  )
- (func $~start
-  i32.const 208
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/fromSpace
- )
  (func $exports/subOpt@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
@@ -1706,5 +1701,10 @@
  (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
+ )
+ (func $~start
+  i32.const 208
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/fromSpace
  )
 )

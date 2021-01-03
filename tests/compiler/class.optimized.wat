@@ -19,9 +19,9 @@
  (data (i32.const 1320) "\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
- (export "memory" (memory $0))
  (export "test" (func $class/test))
  (export "testGenericInitializer" (func $class/testGenericInitializer))
+ (export "memory" (memory $0))
  (start $~start)
  (func $class/test (param $0 i32) (result i32)
   local.get $0

@@ -226,7 +226,10 @@ export function __collect(): void {
   while (iter != from) {
     if (DEBUG) assert(iter.color == white);
     let newNext = iter.next;
-    if (changetype<usize>(iter) > __heap_base) {
+    if (changetype<usize>(iter) < __heap_base) {
+      iter.nextWithColor = 0; // may become linked again
+      iter.prev = changetype<Object>(0);
+    } else {
       if (TRACE) {
         total -= 1;
         totalMem -= iter.size;
