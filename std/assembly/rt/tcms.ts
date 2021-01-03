@@ -1,7 +1,7 @@
 import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, TRACE, DEBUG } from "./common";
 import { onvisit, oncollect } from "./rtrace";
 
-// === TwoCMS: A Two-Color Mark & Sweep garbage collector ===
+// === TCMS: A Two-Color Mark & Sweep garbage collector ===
 
 // @ts-ignore: decorator
 @lazy var white = 0;
@@ -29,7 +29,7 @@ function initLazy(space: Object): Object {
 // ├─────────────┼─────────────────────────────────────────────────┤
 // │ WHITE*      │ Unreachable                                     │
 // │ BLACK*      │ Reachable                                       │
-// │ TRANSPARENT │ Manually pinned (reachable)                     │
+// │ TRANSPARENT │ Manually pinned (always reachable)              │
 // └─────────────┴─────────────────────────────────────────────────┘
 // * flipped between cycles
 

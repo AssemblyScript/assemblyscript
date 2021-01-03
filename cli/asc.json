@@ -230,6 +230,12 @@
     "default": 0,
     "type": "i"
   },
+  "incrementalgc": {
+    "category": "Features",
+    "description": "Enable incremental GC. Experimental.",
+    "default": false,
+    "type": "b"
+  },
 
   "memoryBase": {
     "category": "Linking",

@@ -25,5 +25,9 @@ declare function __newArray(length: i32, alignLog2: usize, id: u32, data?: usize
 // Finalization
 declare function __finalize(ptr: usize): void;
 
+// Incremental GC (otherwise not present)
+declare function __autocollect(): void;
+declare var __ministack: usize;
+
 // Debugging
 declare const ASC_RTRACE: bool;

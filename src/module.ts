@@ -131,6 +131,14 @@ export enum ExpressionId {
   ArrayLen = 64 /* _BinaryenArrayLenId */
 }
 
+export enum ExternalKind {
+  Function = 0, /* _BinaryenExternalFunction */
+  Table = 1, /* _BinaryenExternalTable */
+  Memory = 2, /* _BinaryenExternalMemory */
+  Global = 3, /* _BinaryenExternalGlobal */
+  Event = 4 /* _BinaryenExternalEvent */
+}
+
 export enum UnaryOp {
   ClzI32 = 0 /* _BinaryenClzInt32 */,
   ClzI64 = 1 /* _BinaryenClzInt64 */,
@@ -1150,6 +1158,11 @@ export class Module {
   removeFunction(name: string): void {
     var cStr = this.allocStringCached(name);
     binaryen._BinaryenRemoveFunction(this.ref, cStr);
+  }
+
+  hasFunction(name: string): bool {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenGetFunction(this.ref, cStr) != 0;
   }
 
   private hasTemporaryFunction: bool = false;

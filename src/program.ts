@@ -694,6 +694,22 @@ export class Program extends DiagnosticEmitter {
   }
   private _collectInstance: Function | null = null;
 
+  /** Gets the runtime `__autocollect(): void` instance. */
+  get autocollectInstance(): Function {
+    var cached = this._autocollectInstance;
+    if (!cached) this._autocollectInstance = cached = this.requireFunction(CommonNames.autocollect);
+    return cached;
+  }
+  private _autocollectInstance: Function | null = null;
+
+  /** Gets the runtime `__ministack: usize` global. */
+  get ministackGlobal(): Global {
+    var cached = this._ministackGlobal;
+    if (!cached) this._ministackGlobal = cached = this.requireGlobal(CommonNames.ministack);
+    return cached;
+  }
+  private _ministackGlobal: Global | null = null;
+
   /** Gets the runtime `__visit(ptr: usize, cookie: u32): void` instance. */
   get visitInstance(): Function {
     var cached = this._visitInstance;

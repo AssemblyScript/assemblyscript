@@ -199,6 +199,10 @@ import {
   RtraceMemory
 } from "./passes/rtrace";
 
+import {
+  MiniStack
+} from "./passes/ministack";
+
 /** Compiler options. */
 export class Options {
 
@@ -374,6 +378,8 @@ export class Compiler extends DiagnosticEmitter {
   pendingElements: Set<Element> = new Set();
   /** Elements, that are module exports, already processed */
   doneModuleExports: Set<Element> = new Set();
+  /** Mini stack pass. */
+  miniStack: MiniStack;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -387,6 +393,7 @@ export class Compiler extends DiagnosticEmitter {
     var options = program.options;
     var module = Module.create();
     this.module = module;
+    this.miniStack = new MiniStack(module, program);
     if (options.memoryBase) {
       this.memoryOffset = i64_new(options.memoryBase);
       module.setLowMemoryUnused(false);
@@ -456,6 +463,22 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    // set up module exports
+    // TODO: for (let file of this.program.filesByName.values()) {
+    for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
+      let file = unchecked(_values[i]);
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
+    }
+
+    // set up the mini stack for incremental GC, if requested
+    if (this.program.lookup(CommonNames.autocollect)) {
+      let addedMinistack = this.miniStack.run();
+      if (addedMinistack) {
+        this.compileFunction(program.autocollectInstance);
+        this.compileGlobal(program.ministackGlobal);
+      }
+    }
+
     // compile and export runtime if requested
     if (this.options.exportRuntime) {
       for (let i = 0, k = runtimeFunctions.length; i < k; ++i) {
@@ -494,37 +517,6 @@ export class Compiler extends DiagnosticEmitter {
     for (let _values = Set_values(this.pendingClassInstanceOf), i = 0, k = _values.length; i < k; ++i) {
       let prototype = unchecked(_values[i]);
       compileClassInstanceOf(this, prototype);
-    }
-
-    // NOTE: no more element compiles from here. may go to the start function!
-
-    // compile the start function if not empty or if explicitly requested
-    var startIsEmpty = !startFunctionBody.length;
-    var explicitStart = program.isWasi || options.explicitStart;
-    if (!startIsEmpty || explicitStart) {
-      let signature = startFunctionInstance.signature;
-      if (!startIsEmpty && explicitStart) {
-        module.addGlobal(BuiltinNames.started, NativeType.I32, true, module.i32(0));
-        startFunctionBody.unshift(
-          module.global_set(BuiltinNames.started, module.i32(1))
-        );
-        startFunctionBody.unshift(
-          module.if(
-            module.global_get(BuiltinNames.started, NativeType.I32),
-            module.return()
-          )
-        );
-      }
-      let funcRef = module.addFunction(
-        startFunctionInstance.internalName,
-        signature.nativeParams,
-        signature.nativeResults,
-        typesToNativeTypes(startFunctionInstance.additionalLocals),
-        module.flatten(startFunctionBody)
-      );
-      startFunctionInstance.finalize(module, funcRef);
-      if (!explicitStart) module.setStart(funcRef);
-      else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
     }
 
     // set up virtual lookup tables
@@ -673,19 +665,43 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // set up module exports
-    // TODO: for (let file of this.program.filesByName.values()) {
-    for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
-      let file = unchecked(_values[i]);
-      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
-    }
-
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
       module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
         module.global_set(BuiltinNames.argumentsLength, module.local_get(0, NativeType.I32))
       );
       module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
+    }
+
+    // NOTE: no more element compiles from here. may go to the start function!
+
+    // compile the start function if not empty or if explicitly requested
+    var startIsEmpty = !startFunctionBody.length;
+    var explicitStart = program.isWasi || options.explicitStart;
+    if (!startIsEmpty || explicitStart) {
+      let signature = startFunctionInstance.signature;
+      if (!startIsEmpty && explicitStart) {
+        module.addGlobal(BuiltinNames.started, NativeType.I32, true, module.i32(0));
+        startFunctionBody.unshift(
+          module.global_set(BuiltinNames.started, module.i32(1))
+        );
+        startFunctionBody.unshift(
+          module.if(
+            module.global_get(BuiltinNames.started, NativeType.I32),
+            module.return()
+          )
+        );
+      }
+      let funcRef = module.addFunction(
+        startFunctionInstance.internalName,
+        signature.nativeParams,
+        signature.nativeResults,
+        typesToNativeTypes(startFunctionInstance.additionalLocals),
+        module.flatten(startFunctionBody)
+      );
+      startFunctionInstance.finalize(module, funcRef);
+      if (!explicitStart) module.setStart(funcRef);
+      else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
     }
 
     // Run custom passes
@@ -819,6 +835,9 @@ export class Compiler extends DiagnosticEmitter {
             let exportName = prefix + name;
             if (!module.hasExport(exportName)) {
               module.addFunctionExport(functionInstance.internalName, exportName);
+              if (functionInstance.signature.returnType.isManaged) {
+                this.miniStack.noteManagedReturn(exportName);
+              }
             }
           }
         }
@@ -838,6 +857,9 @@ export class Compiler extends DiagnosticEmitter {
           let getterExportName = prefix + GETTER_PREFIX + name;
           if (!module.hasExport(getterExportName)) {
             module.addFunctionExport(fieldInstance.internalGetterName, getterExportName);
+            if (fieldInstance.type.isManaged) {
+              this.miniStack.noteManagedReturn(getterExportName);
+            }
           }
           if (!element.is(CommonFlags.READONLY)) {
             let setterExportName = prefix + SETTER_PREFIX + name;

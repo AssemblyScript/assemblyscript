@@ -1,10 +1,8 @@
-// This file exists for reference only and is non-functional currently.
-
 import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE } from "./common";
 import { onvisit, oncollect } from "./rtrace";
 
-// === TriCMS: A Tri-Color Mark & Sweep garbage collector ===
-// Largely based on Bach Le's μgc, see: https://github.com/bullno1/ugc
+// === ITCMS: An incremental Tri-Color Mark & Sweep garbage collector ===
+// Adapted from Bach Le's μgc, see: https://github.com/bullno1/ugc
 
 // Collector states
 
@@ -31,12 +29,18 @@ import { onvisit, oncollect } from "./rtrace";
 /** Current white color. Flips between 0 and 1. */
 // @ts-ignore: decorator
 @lazy var white = 0;
+// @ts-ignore: decorator
+@inline const gray = 2;
+// @ts-ignore: decorator
+@inline const transparent = 3;
 
 // From and to spaces
 // @ts-ignore: decorator
 @lazy var fromSpace = changetype<ObjectList>(memory.data(offsetof<ObjectList>()));
 // @ts-ignore: decorator
 @lazy var toSpace = changetype<ObjectList>(memory.data(offsetof<ObjectList>()));
+// @ts-ignore: decorator
+@lazy var pinSpace = changetype<ObjectList>(memory.data(offsetof<ObjectList>()));
 // @ts-ignore: decorator
 @lazy var iter: Object;
 
@@ -46,17 +50,19 @@ function init(): void {
   assert(sizeof<usize>() == sizeof<u32>());
   fromSpace.clear();
   toSpace.clear();
+  pinSpace.clear();
   iter = toSpace;
   state = STATE_IDLE;
 }
 
-// ╒════════╤═══════════════════ Colors ═══════════════════════════╕
-// │ Color  │ Meaning                                              │
-// ├────────┼──────────────────────────────────────────────────────┤
-// │ WHITE  │ Unprocessed                                          │
-// │ BLACK  │ Processed                                            │
-// │ GRAY   │ Processed with unprocessed children                  │
-// └────────┴──────────────────────────────────────────────────────┘
+// ╒═════════════╤══════════════ Colors ═══════════════════════════╕
+// │ Color       │ Meaning                                         │
+// ├─────────────┼─────────────────────────────────────────────────┤
+// │ WHITE       │ Unprocessed                                     │
+// │ BLACK       │ Processed                                       │
+// │ GRAY        │ Processed with unprocessed children             │
+// │ TRANSPARENT │ Manually pinned (always reachable)              │
+// └─────────────┴─────────────────────────────────────────────────┘
 
 // @ts-ignore: decorator
 @inline const COLOR_MASK = 3;
@@ -128,38 +134,40 @@ function init(): void {
 
   /** Marks this object as gray, that is reachable with unscanned children. */
   makeGray(): void {
-    const gray = 2;
     if (this == iter) iter = assert(this.prev);
     this.unlink();
-    toSpace.push(this);
-    this.color = gray;
+    this.linkTo(toSpace, gray);
+  }
+
+  /** Links this object to the specified list, with the given color. */
+  linkTo(list: ObjectList, withColor: i32): void {
+    let prev = list.prev;
+    this.nextWithColor = changetype<usize>(list) | withColor;
+    this.prev = prev;
+    prev.next = this;
+    list.prev = this;
   }
 }
 
 /** A list of managed objects. Used for the from and to spaces. */
 @unmanaged class ObjectList extends Object {
-
-  /** Inserts an object. */
-  push(obj: Object): void {
-    assert(obj != toSpace && obj != fromSpace);
-    var prev = this.prev;
-    obj.next = assert(this);
-    obj.prev = assert(prev);
-    prev.next = assert(obj);
-    this.prev = assert(obj);
-  }
-
   /** Clears this list. */
-  @inline clear(): void {
+  clear(): void {
     this.nextWithColor = changetype<usize>(this);
     this.prev = assert(this);
   }
 }
 
-/** Visits external objects. */
-// @ts-ignore: decorator
-@external("env", "visit")
-declare function __visit_externals(cookie: u32): void;
+/** Visits all objects considered to be program roots. */
+function visitRoots(cookie: u32): void {
+  __visit_globals(cookie);
+  let iter = pinSpace.next;
+  while (iter != pinSpace) {
+    __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, cookie);
+    iter = iter.next;
+  }
+  __visit(__ministack, VISIT_SCAN);
+}
 
 /** Performs a single step according to the current state. */
 function step(): usize {
@@ -169,9 +177,8 @@ function step(): usize {
       init();
       // fall through
     case STATE_IDLE: {
-      __visit_globals(VISIT_SCAN);
-      __visit_externals(VISIT_SCAN);
       state = STATE_MARK;
+      visitRoots(VISIT_SCAN);
       // fall through
     }
     case STATE_MARK: {
@@ -180,12 +187,11 @@ function step(): usize {
       if (obj != toSpace) {
         iter = obj;
         obj.color = black;
-        __visit_members(objToPtr(obj), VISIT_SCAN);
+        __visit_members(changetype<usize>(obj) + TOTAL_OVERHEAD, VISIT_SCAN);
       } else {
-        __visit_globals(VISIT_SCAN);
-        __visit_externals(VISIT_SCAN);
+        visitRoots(VISIT_SCAN);
         obj = iter.next;
-        if (obj == toSpace) { // empty
+        if (obj == toSpace) { // done
           let from = fromSpace;
           fromSpace = toSpace;
           toSpace = from;
@@ -224,20 +230,6 @@ function free(obj: Object): void {
   __free(changetype<usize>(obj) + BLOCK_OVERHEAD);
 }
 
-// Helpers
-
-// @ts-ignore: decorator
-@inline
-function ptrToObj(ptr: usize): Object {
-  return changetype<Object>(ptr - TOTAL_OVERHEAD);
-}
-
-// @ts-ignore: decorator
-@inline
-function objToPtr(obj: Object): usize {
-  return changetype<usize>(obj) + TOTAL_OVERHEAD;
-}
-
 // Garbage collector interface
 
 // @ts-ignore: decorator
@@ -246,11 +238,10 @@ export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
   if (state == STATE_INIT) init();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
-  fromSpace.push(obj); // sets next/prev
-  obj.color = white;
+  obj.linkTo(fromSpace, white); // inits next/prev
   obj.rtId = id;
   obj.rtSize = <u32>size;
-  var ptr = objToPtr(obj);
+  var ptr = changetype<usize>(obj) + TOTAL_OVERHEAD;
   total += 1;
   totalMem += obj.size;
   return ptr;
@@ -259,7 +250,7 @@ export function __new(size: usize, id: i32): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __renew(oldPtr: usize, size: usize): usize {
-  var oldObj = ptrToObj(oldPtr);
+  var oldObj = changetype<Object>(oldPtr - TOTAL_OVERHEAD);
   if (oldPtr < __heap_base) { // move to heap for simplicity
     let newPtr = __new(size, oldObj.rtId);
     memory.copy(newPtr, oldPtr, min(size, oldObj.rtSize));
@@ -269,7 +260,7 @@ export function __renew(oldPtr: usize, size: usize): usize {
   if (state == STATE_INIT) init();
   totalMem -= oldObj.size;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
-  var newObj = ptrToObj(newPtr);
+  var newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);
   newObj.rtSize = <u32>size;
   if (DEBUG) assert(newObj.next != null && newObj.prev != null);
   newObj.next.prev = newObj;
@@ -284,22 +275,25 @@ export function __renew(oldPtr: usize, size: usize): usize {
 export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void {
   // Write barrier is unnecessary if non-incremental
   if (!childPtr) return;
-  if (state == STATE_INIT) init();
   if (DEBUG) assert(parentPtr);
-  var black = i32(!white);
-  var parent = ptrToObj(parentPtr);
-  if (parent.color == black) {
-    let child = ptrToObj(childPtr);
-    if (child.color == white) {
+  if (state == STATE_INIT) init();
+  var child = changetype<Object>(childPtr - TOTAL_OVERHEAD);
+  if (child.color == white) {
+    let parent = changetype<Object>(parentPtr - TOTAL_OVERHEAD);
+    let parentColor = parent.color;
+    if (parentColor == i32(!white)) {
+      // Maintain the invariant that no black object may point to a white object.
       if (expectMultiple) {
         // Move the barrier "backward". Suitable for containers receiving multiple stores.
         // Avoids a barrier for subsequent objects stored into the same container.
         parent.makeGray();
       } else {
         // Move the barrier "forward". Suitable for objects receiving isolated stores.
-        // TODO: If the child has no pointers, make black immediately?
         child.makeGray();
       }
+    } else if (parentColor == transparent && state == STATE_MARK) {
+      // Pinned objects are considered 'black' during the mark phase.
+      child.makeGray();
     }
   }
 }
@@ -308,36 +302,65 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
 @global @unsafe
 export function __visit(ptr: usize, cookie: i32): void {
   if (!ptr) return;
-  let obj = ptrToObj(ptr);
+  let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
   if (isDefined(ASC_RTRACE)) if (!onvisit(obj)) return;
   if (obj.color == white) obj.makeGray();
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __collect(incremental: bool = false): void {
-  if (incremental) {
-    collectIncremental();
-  } else {
-    if (TRACE) trace("GC (full) at mem/objs", 2, totalMem, total);
-    if (state > STATE_IDLE) {
-      // finish current cycle
-      while (state != STATE_IDLE) step();
+export function __pin(ptr: usize): usize {
+  if (ptr) {
+    let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
+    if (obj.color == transparent) {
+      throw new Error("already pinned");
     }
-    // perform a full cycle
-    step();
-    while (state != STATE_IDLE) step();
-    threshold = 2 * total;
-    if (TRACE) trace("GC (full) done at mem/objs", 2, totalMem, total);
-    if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
+    obj.unlink(); // from fromSpace
+    obj.linkTo(pinSpace, transparent);
   }
+  return ptr;
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __unpin(ptr: usize): void {
+  if (!ptr) return;
+  var obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
+  if (obj.color != transparent) {
+    throw new Error("not pinned");
+  }
+  if (state == STATE_MARK) {
+    // We may be right at the point after marking roots for the second time and
+    // entering the sweep phase, in which case the object would be missed if it
+    // is not only pinned but also a root. Make sure it isn't missed.
+    obj.makeGray();
+  } else {
+    obj.unlink();
+    obj.linkTo(fromSpace, white);
+  }
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __collect(): void {
+  if (TRACE) trace("GC (full) at mem/objs", 2, totalMem, total);
+  if (state > STATE_IDLE) {
+    // finish current cycle
+    while (state != STATE_IDLE) step();
+  }
+  // perform a full cycle
+  step();
+  while (state != STATE_IDLE) step();
+  threshold = 2 * total;
+  if (TRACE) trace("GC (full) done at mem/objs", 2, totalMem, total);
+  if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
 }
 
 // Garbage collector automation
 
 /** Incremental GC granularity. */
 // @ts-ignore: decorator
-@inline const STEPSIZE: usize = 100;
+@inline const STEPSIZE: usize = 200;
 /** Number of objects currently managed by the GC. */
 // @ts-ignore: decorator
 @lazy var total: usize = 0;
@@ -352,20 +375,23 @@ export function __collect(incremental: bool = false): void {
 @lazy var debt: usize = 0;
 
 /** Performs a reasonable amount of incremental GC steps. */
-function collectIncremental(): void {
+// @ts-ignore: decorator
+@global @unsafe
+export function __autocollect(): void {
   if (total < threshold) return;
-  if (TRACE) trace("GC (incremental) at mem/objs", 2, totalMem, total);
+  if (TRACE) trace("GC (auto) at mem/objs", 2, totalMem, total);
   debt = total - threshold;
   let limit: isize = 2 * STEPSIZE;
   do {
     limit -= step();
     if (state == STATE_IDLE) {
       threshold = 2 * total;
-      if (TRACE) trace("└ down to mem/objs (sweep complete)", 2, totalMem, total);
+      if (TRACE) trace("└ down to mem/objs (complete)", 2, totalMem, total);
       if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
       return;
     }
   } while (limit > 0);
+  if (TRACE) trace("└ down to mem/objs (ongoing)", 2, totalMem, total);
   if (debt < STEPSIZE) {
     threshold = total + STEPSIZE;
   } else {

@@ -58,11 +58,7 @@ export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize =
 }
 
 // @ts-ignore: decorator
-@lazy export var __stackptr = 0;
-
-export function __managed(ptr: usize): usize {
-  return ptr;
-}
+@lazy @global var __ministack: usize = 0; // eslint-disable-line
 
 // These are provided by the respective implementation, included as another entry file by asc:
 

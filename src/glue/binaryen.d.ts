@@ -876,6 +876,7 @@ export declare function _BinaryenAddGlobalImport(module: BinaryenModuleRef, inte
 export declare function _BinaryenAddEventImport(module: BinaryenModuleRef, internalName: BinaryenString, externalModuleName: BinaryenString, externalBaseName: BinaryenString, attribute: u32, params: BinaryenType, results: BinaryenType): void;
 
 type BinaryenExportRef = usize;
+type BinaryenExternalKind = u32;
 
 export declare function _BinaryenAddFunctionExport(module: BinaryenModuleRef, internalName: BinaryenString, externalName: BinaryenString): BinaryenExportRef;
 export declare function _BinaryenAddTableExport(module: BinaryenModuleRef, internalName: BinaryenString, externalName: BinaryenString): BinaryenExportRef;
@@ -886,6 +887,7 @@ export declare function _BinaryenGetExport(module: BinaryenModuleRef, externalNa
 export declare function _BinaryenRemoveExport(module: BinaryenModuleRef, externalName: BinaryenString): void;
 export declare function _BinaryenGetNumExports(module: BinaryenModuleRef): BinaryenIndex;
 export declare function _BinaryenGetExportByIndex(module: BinaryenModuleRef, index: BinaryenIndex): BinaryenExportRef;
+export declare function _BinaryenExportGetKind(ref: BinaryenExportRef): BinaryenExternalKind;
 export declare function _BinaryenExportGetName(ref: BinaryenExportRef): BinaryenString;
 export declare function _BinaryenExportGetValue(ref: BinaryenExportRef): BinaryenString;
 

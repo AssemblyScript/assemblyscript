@@ -7,6 +7,7 @@
     "explicitStart": true,
     "exportRuntime": true,
     "initialMemory": 256,
+    "incrementalgc": true,
     "measure": true
   },
   "targets": {

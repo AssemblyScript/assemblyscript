@@ -698,7 +698,7 @@ exports.main = function main(argv, options, callback) {
 
   // Include runtime before entry files so its setup runs first
   {
-    let runtimePath = "rt/index";
+    let runtimePath = opts.incrementalgc ? "rt/index-incrementalgc" : "rt/index";
     let runtimeText = exports.libraryFiles[runtimePath];
     if (runtimeText == null) return callback(Error("Runtime entry not found."));
     stats.parseCount++;
