@@ -8,15 +8,13 @@
  * while `__autocollect` is executing.
  * 
  * Pros:
- * - Does not need a full-blown and potentially costly shadow stack.
- * - Does not require tracking emulated stack slots during compilation.
- * - Means: Still yields relatively lean & mean binaries.
+ * - Does not need a full-blown, potentially largish and costly shadow stack.
+ * - Simple: Does not require tracking emulated stack slots during compilation.
  * 
  * Cons:
  * - Only steps the GC at the boundary, buffering garbage in between.
- * - Unlike a manually invoked GC, GC may step at any time (at the boundary),
- *   so external objects must be properly pinned not only when `__collect` is
- *   being invoked, but also whenever an export is being invoked.
+ * - Objects exclusively referenced externally that are expected to live longer
+ *   than any export call, not only `__collect`, must be properly pinned.
  * 
  * @license Apache-2.0
  */
@@ -27,11 +25,10 @@ import {
 
 import {
   BinaryOp,
-  CString,
   expandType,
+  ExportRef,
   ExpressionRef,
   ExternalKind,
-  FunctionRef,
   Index,
   Module,
   NativeType,
@@ -77,16 +74,19 @@ export class MiniStack extends Pass {
   }
 
   /** Instruments a function export to also maintain stack depth. */
-  instrumentFunctionExport(func: FunctionRef, exportNamePtr: CString): void {
+  instrumentFunctionExport(ref: ExportRef): void {
+    assert(_BinaryenExportGetKind(ref) == ExternalKind.Function);
     var module = this.module;
-    var namePtr = _BinaryenFunctionGetName(func);
-    var name = module.readStringCached(namePtr)!;
+    var internalNameRef = _BinaryenExportGetValue(ref);
+    var externalNameRef = _BinaryenExportGetName(ref);
+    var functionRef = _BinaryenGetFunction(module.ref, internalNameRef);
+    var originalName = module.readStringCached(_BinaryenFunctionGetName(functionRef))!;
 
-    var wrapperName = "export:" + name;
+    var wrapperName = "export:" + originalName;
     if (!module.hasFunction(wrapperName)) {
-      var params = _BinaryenFunctionGetParams(func);
-      var results = _BinaryenFunctionGetResults(func);
-      let numLocals = _BinaryenFunctionGetNumLocals(func);
+      var params = _BinaryenFunctionGetParams(functionRef);
+      var results = _BinaryenFunctionGetResults(functionRef);
+      let numLocals = _BinaryenFunctionGetNumLocals(functionRef);
       var vars = new Array<NativeType>();
 
       // Prepare a call to the original function
@@ -96,7 +96,7 @@ export class MiniStack extends Pass {
       for (let i = 0; i < numParams; ++i) {
         operands[i] = module.local_get(i, paramTypes[i]);
       }
-      var call = module.call(name, operands, results);
+      var call = module.call(originalName, operands, results);
 
       // Create a wrapper function also maintaining stack depth
       var stmts = new Array<ExpressionRef>();
@@ -133,7 +133,7 @@ export class MiniStack extends Pass {
         );
       }
       let ministackGlobal = this.program.ministackGlobal;
-      let exportName = module.readStringCached(exportNamePtr)!;
+      let exportName = module.readStringCached(externalNameRef)!;
       stmts.push(
         module.global_set(ministackGlobal.internalName,
           this.managedReturns.has(exportName)
@@ -161,8 +161,8 @@ export class MiniStack extends Pass {
     }
 
     // Replace the original export with the wrapped one
-    _BinaryenRemoveExport(module.ref, exportNamePtr);
-    _BinaryenAddFunctionExport(module.ref, module.allocStringCached(wrapperName), exportNamePtr);
+    _BinaryenRemoveExport(module.ref, externalNameRef);
+    _BinaryenAddFunctionExport(module.ref, module.allocStringCached(wrapperName), externalNameRef);
   }
 
   /** Runs the pass. Returns `true` if the mini stack has been added. */
@@ -171,22 +171,22 @@ export class MiniStack extends Pass {
     var moduleRef = module.ref;
     var numExports = _BinaryenGetNumExports(moduleRef);
     if (numExports) {
-      let functions = new Array<FunctionRef>();
-      let externalNames = new Array<CString>();
+      let functionExportRefs = new Array<ExportRef>();
+      // We are going to modify the list of exports, so do this in two steps
       for (let i: Index = 0; i < numExports; ++i) {
         let exportRef = _BinaryenGetExportByIndex(moduleRef, i);
         if (_BinaryenExportGetKind(exportRef) == ExternalKind.Function) {
-          let internalName = _BinaryenExportGetValue(exportRef);
-          let externalName = _BinaryenExportGetName(exportRef);
-          functions.push(_BinaryenGetFunction(moduleRef, internalName));
-          externalNames.push(externalName);
+          functionExportRefs.push(exportRef);
         }
       }
-      for (let i = 0, k = functions.length; i < k; ++i) {
-        this.instrumentFunctionExport(functions[i], externalNames[i]);
+      let numFunctionExports = functionExportRefs.length;
+      if (numFunctionExports) {
+        for (let i = 0; i < numFunctionExports; ++i) {
+          this.instrumentFunctionExport(functionExportRefs[i]);
+        }
+        module.addGlobal(STACK_DEPTH, NativeType.I32, true, module.i32(0));
+        return true;
       }
-      module.addGlobal(STACK_DEPTH, NativeType.I32, true, module.i32(0));
-      return true;
     }
     return false;
   }

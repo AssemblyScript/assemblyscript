@@ -212,7 +212,6 @@ function step(): usize {
       }
       toSpace.clear();
       state = STATE_IDLE;
-      debt = 0;
       break;
     }
   }
@@ -365,6 +364,9 @@ export function __collect(): void {
 /** Incremental GC granularity. */
 // @ts-ignore: decorator
 @inline const STEPSIZE: usize = 200;
+/** Incremental GC eagerness. */
+// @ts-ignore: decorator
+@inline const STEPMUL: usize = 2;
 /** Number of objects currently managed by the GC. */
 // @ts-ignore: decorator
 @lazy var total: usize = 0;
@@ -374,9 +376,6 @@ export function __collect(): void {
 /** Threshold of objects for the next scheduled GC step. */
 // @ts-ignore: decorator
 @lazy var threshold: usize = STEPSIZE;
-/** Number of objects the GC is behind schedule. */
-// @ts-ignore: decorator
-@lazy var debt: usize = 0;
 
 /** Performs a reasonable amount of incremental GC steps. */
 // @ts-ignore: decorator
@@ -384,8 +383,13 @@ export function __collect(): void {
 export function __autocollect(): void {
   if (total < threshold) return;
   if (TRACE) trace("GC (auto) at mem/objs", 2, totalMem, total);
-  debt = total - threshold;
-  let limit: isize = max<isize>(2 * STEPSIZE, debt / 2);
+  // Do at least minSteps but also try to deleverage half the debt since we are
+  // only invoking the GC at the boundary with very different amounts of debt.
+  // TODO: The drastic overshoot is probably not ideal (for every use case), but
+  // works OKish for the compiler itself. Feel free to propose improvements.
+  const minSteps = STEPMUL * STEPSIZE;
+  let debt = total - threshold;
+  let limit: isize = max(minSteps, debt / 2);
   do {
     limit -= step();
     if (state == STATE_IDLE) {
@@ -396,10 +400,6 @@ export function __autocollect(): void {
     }
   } while (limit > 0);
   if (TRACE) trace("└ down to mem/objs (ongoing)", 2, totalMem, total);
-  if (debt < STEPSIZE) {
-    threshold = total + STEPSIZE;
-  } else {
-    debt -= STEPSIZE;
-    threshold = total;
-  }
+  // Schedule immediately unless there was little debt anyhow, then delay
+  threshold = total + usize(debt < STEPSIZE) * STEPSIZE;
 }
