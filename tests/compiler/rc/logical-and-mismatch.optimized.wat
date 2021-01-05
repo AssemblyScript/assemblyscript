@@ -926,48 +926,6 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~start
-  (local $0 i32)
-  call $~lib/rt/pure/__new
-  call $~lib/rt/pure/__retain
-  global.set $rc/logical-and-mismatch/gloRef
-  call $~lib/rt/pure/__new
-  call $~lib/rt/pure/__retain
-  local.tee $0
-  if (result i32)
-   local.get $0
-   call $~lib/rt/pure/__release
-   global.get $rc/logical-and-mismatch/gloRef
-   call $~lib/rt/pure/__retain
-  else
-   local.get $0
-  end
-  call $~lib/rt/pure/__release
-  global.get $rc/logical-and-mismatch/gloRef
-  local.tee $0
-  if (result i32)
-   call $~lib/rt/pure/__new
-   call $~lib/rt/pure/__retain
-  else
-   local.get $0
-   call $~lib/rt/pure/__retain
-  end
-  call $~lib/rt/pure/__release
-  call $~lib/rt/pure/__new
-  call $~lib/rt/pure/__retain
-  local.tee $0
-  if (result i32)
-   local.get $0
-   call $~lib/rt/pure/__release
-   call $~lib/rt/pure/__new
-   call $~lib/rt/pure/__retain
-  else
-   local.get $0
-  end
-  call $~lib/rt/pure/__release
-  global.get $rc/logical-and-mismatch/gloRef
-  call $~lib/rt/pure/__release
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1061,5 +1019,47 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  (local $0 i32)
+  call $~lib/rt/pure/__new
+  call $~lib/rt/pure/__retain
+  global.set $rc/logical-and-mismatch/gloRef
+  call $~lib/rt/pure/__new
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  if (result i32)
+   local.get $0
+   call $~lib/rt/pure/__release
+   global.get $rc/logical-and-mismatch/gloRef
+   call $~lib/rt/pure/__retain
+  else
+   local.get $0
+  end
+  call $~lib/rt/pure/__release
+  global.get $rc/logical-and-mismatch/gloRef
+  local.tee $0
+  if (result i32)
+   call $~lib/rt/pure/__new
+   call $~lib/rt/pure/__retain
+  else
+   local.get $0
+   call $~lib/rt/pure/__retain
+  end
+  call $~lib/rt/pure/__release
+  call $~lib/rt/pure/__new
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  if (result i32)
+   local.get $0
+   call $~lib/rt/pure/__release
+   call $~lib/rt/pure/__new
+   call $~lib/rt/pure/__retain
+  else
+   local.get $0
+  end
+  call $~lib/rt/pure/__release
+  global.get $rc/logical-and-mismatch/gloRef
+  call $~lib/rt/pure/__release
  )
 )

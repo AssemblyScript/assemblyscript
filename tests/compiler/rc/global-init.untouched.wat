@@ -130,9 +130,6 @@
   local.get $1
   global.set $rc/global-init/b
  )
- (func $~start
-  call $start:rc/global-init
- )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -816,6 +813,9 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $start:rc/global-init
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0
