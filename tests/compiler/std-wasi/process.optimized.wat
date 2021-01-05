@@ -239,10 +239,10 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/process/process.argv (mut i32) (i32.const 0))
- (global $wasi/process/argv (mut i32) (i32.const 0))
+ (global $std-wasi/process/argv (mut i32) (i32.const 0))
  (global $~lib/process/process.env (mut i32) (i32.const 0))
- (global $wasi/process/env (mut i32) (i32.const 0))
- (global $wasi/process/envKeys (mut i32) (i32.const 0))
+ (global $std-wasi/process/env (mut i32) (i32.const 0))
+ (global $std-wasi/process/envKeys (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
@@ -3874,7 +3874,7 @@
    br_if $do-continue|0
   end
  )
- (func $start:wasi/process
+ (func $start:std-wasi/process
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3986,12 +3986,12 @@
   local.get $4
   global.set $~lib/process/process.argv
   global.get $~lib/process/process.argv
-  global.set $wasi/process/argv
+  global.set $std-wasi/process/argv
   i32.const 4752
   call $~lib/process/writeString
   i32.const 4400
   call $~lib/process/writeString
-  global.get $wasi/process/argv
+  global.get $std-wasi/process/argv
   i32.load offset=12
   local.set $1
   loop $for-loop|00
@@ -3999,7 +3999,7 @@
    local.get $1
    i32.lt_s
    if
-    global.get $wasi/process/argv
+    global.get $std-wasi/process/argv
     local.get $0
     call $~lib/array/Array<~lib/string/String>#__get
     call $~lib/process/writeString
@@ -4015,12 +4015,12 @@
   call $~lib/process/lazyEnv
   global.set $~lib/process/process.env
   global.get $~lib/process/process.env
-  global.set $wasi/process/env
+  global.set $std-wasi/process/env
   i32.const 0
   local.set $0
   i32.const 0
   local.set $1
-  global.get $wasi/process/env
+  global.get $std-wasi/process/env
   local.tee $2
   i32.load offset=8
   local.set $5
@@ -4069,14 +4069,14 @@
   local.get $0
   i32.store offset=12
   local.get $2
-  global.set $wasi/process/envKeys
+  global.set $std-wasi/process/envKeys
   i32.const 5056
   call $~lib/process/writeString
   i32.const 4400
   call $~lib/process/writeString
   i32.const 0
   local.set $0
-  global.get $wasi/process/envKeys
+  global.get $std-wasi/process/envKeys
   i32.load offset=12
   local.set $2
   loop $for-loop|1
@@ -4084,7 +4084,7 @@
    local.get $2
    i32.lt_s
    if
-    global.get $wasi/process/envKeys
+    global.get $std-wasi/process/envKeys
     local.get $0
     call $~lib/array/Array<~lib/string/String>#__get
     local.set $1
@@ -4096,7 +4096,7 @@
     call $~lib/process/writeString
     i32.const 5136
     call $~lib/process/writeString
-    global.get $wasi/process/env
+    global.get $std-wasi/process/env
     local.get $1
     local.get $1
     call $~lib/util/hash/hashStr
@@ -4289,6 +4289,6 @@
   end
   i32.const 1
   global.set $~started
-  call $start:wasi/process
+  call $start:std-wasi/process
  )
 )

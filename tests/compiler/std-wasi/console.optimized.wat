@@ -3042,7 +3042,7 @@
    end
   end
  )
- (func $start:wasi/console
+ (func $start:std-wasi/console
   (local $0 i32)
   i32.const 4404
   i32.const 4400
@@ -3151,6 +3151,6 @@
   end
   i32.const 1
   global.set $~started
-  call $start:wasi/console
+  call $start:std-wasi/console
  )
 )
