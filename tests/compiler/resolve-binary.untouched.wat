@@ -4543,6 +4543,20 @@
   i32.const 1
   i32.lt_s
   drop
+  local.get $0
+  i32.const 2
+  i32.eq
+  if
+   i32.const 1
+   local.get $1
+   i32.shl
+   i32.const 0
+   local.get $1
+   i32.const 32
+   i32.lt_u
+   select
+   return
+  end
   local.get $1
   i32.const 0
   i32.le_s
