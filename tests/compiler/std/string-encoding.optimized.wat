@@ -1060,7 +1060,7 @@
   if
    i32.const 1152
    i32.const 1216
-   i32.const 117
+   i32.const 127
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -2374,7 +2374,7 @@
   if
    i32.const 1152
    i32.const 1216
-   i32.const 138
+   i32.const 148
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -3011,7 +3011,7 @@
     if
      i32.const 0
      i32.const 1216
-     i32.const 209
+     i32.const 219
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -3048,7 +3048,7 @@
     if
      i32.const 0
      i32.const 1216
-     i32.const 218
+     i32.const 228
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -3085,7 +3085,7 @@
     if
      i32.const 0
      i32.const 1216
-     i32.const 227
+     i32.const 237
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -3254,16 +3254,46 @@
   i32.and
   i32.eq
   if
-   local.get $0
-   i32.load offset=4
-   i32.const -4
-   i32.and
-   local.tee $1
-   if
-    local.get $1
+   block $__inlined_func$~lib/rt/tcms/Object#unlink
+    local.get $0
+    i32.load offset=4
+    i32.const -4
+    i32.and
+    local.tee $1
+    i32.eqz
+    if
+     i32.const 0
+     local.get $0
+     i32.const 22228
+     i32.lt_u
+     local.get $0
+     i32.load offset=8
+     select
+     i32.eqz
+     if
+      i32.const 0
+      i32.const 1216
+      i32.const 103
+      i32.const 18
+      call $~lib/builtins/abort
+      unreachable
+     end
+     br $__inlined_func$~lib/rt/tcms/Object#unlink
+    end
     local.get $0
     i32.load offset=8
     local.tee $2
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 1216
+     i32.const 107
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $1
+    local.get $2
     i32.store offset=8
     local.get $2
     local.get $1

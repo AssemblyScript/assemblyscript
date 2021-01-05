@@ -4,68 +4,63 @@ import { onvisit, oncollect } from "./rtrace";
 // === ITCMS: An incremental Tri-Color Mark & Sweep garbage collector ===
 // Adapted from Bach Le's μgc, see: https://github.com/bullno1/ugc
 
-// Collector states
+// ╒═════════════╤══════════════ Colors ═══════════════════════════╕
+// │ Color       │ Meaning                                         │
+// ├─────────────┼─────────────────────────────────────────────────┤
+// │ WHITE*      │ Unprocessed                                     │
+// │ BLACK*      │ Processed                                       │
+// │ GRAY        │ Processed with unprocessed children             │
+// │ TRANSPARENT │ Manually pinned (always reachable)              │
+// └─────────────┴─────────────────────────────────────────────────┘
+// * flipped between cycles
 
-/** Not yet initilized. */
-// @ts-ignore: decorator
-@inline const STATE_INIT = 0;
-/** Currently transitioning from SWEEP to MARK state. */
-// @ts-ignore: decorator
-@inline const STATE_IDLE = 1;
-/** Currently marking reachable objects. */
-// @ts-ignore: decorator
-@inline const STATE_MARK = 2;
-/** Currently sweeping unreachable objects. */
-// @ts-ignore: decorator
-@inline const STATE_SWEEP = 3;
-
-/** Visit cookie indicating scanning of an object. */
-// @ts-ignore: decorator
-@inline const VISIT_SCAN = 0;
-
-/** Current collector state. */
-// @ts-ignore: decorator
-@lazy var state = STATE_INIT;
-/** Current white color. Flips between 0 and 1. */
 // @ts-ignore: decorator
 @lazy var white = 0;
 // @ts-ignore: decorator
 @inline const gray = 2;
 // @ts-ignore: decorator
 @inline const transparent = 3;
-
-// From and to spaces
-// @ts-ignore: decorator
-@lazy var fromSpace = changetype<ObjectList>(memory.data(offsetof<ObjectList>()));
-// @ts-ignore: decorator
-@lazy var toSpace = changetype<ObjectList>(memory.data(offsetof<ObjectList>()));
-// @ts-ignore: decorator
-@lazy var pinSpace = changetype<ObjectList>(memory.data(offsetof<ObjectList>()));
-// @ts-ignore: decorator
-@lazy var iter: Object;
-
-/** Initializes the GC. */
-function init(): void {
-  // Common object headers are designed for 32-bit words currently
-  assert(sizeof<usize>() == sizeof<u32>());
-  fromSpace.clear();
-  toSpace.clear();
-  pinSpace.clear();
-  iter = toSpace;
-  state = STATE_IDLE;
-}
-
-// ╒═════════════╤══════════════ Colors ═══════════════════════════╕
-// │ Color       │ Meaning                                         │
-// ├─────────────┼─────────────────────────────────────────────────┤
-// │ WHITE       │ Unprocessed                                     │
-// │ BLACK       │ Processed                                       │
-// │ GRAY        │ Processed with unprocessed children             │
-// │ TRANSPARENT │ Manually pinned (always reachable)              │
-// └─────────────┴─────────────────────────────────────────────────┘
-
 // @ts-ignore: decorator
 @inline const COLOR_MASK = 3;
+
+/** Number of objects currently managed by the GC. */
+// @ts-ignore: decorator
+@lazy var total: usize = 0;
+/** Size in memory of all objects currently managed by the GC. */
+// @ts-ignore: decorator
+@lazy var totalMem: usize = 0;
+
+/** Currently transitioning from SWEEP to MARK state. */
+// @ts-ignore: decorator
+@inline const STATE_IDLE = 0;
+/** Currently marking reachable objects. */
+// @ts-ignore: decorator
+@inline const STATE_MARK = 1;
+/** Currently sweeping unreachable objects. */
+// @ts-ignore: decorator
+@inline const STATE_SWEEP = 2;
+/** Current collector state. */
+// @ts-ignore: decorator
+@lazy var state = STATE_IDLE;
+
+// @ts-ignore: decorator
+@lazy var fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+// @ts-ignore: decorator
+@lazy var toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+// @ts-ignore: decorator
+@lazy var pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+// @ts-ignore: decorator
+@lazy var iter: Object; // null
+
+function initLazy(space: Object): Object {
+  space.nextWithColor = changetype<usize>(space);
+  space.prev = space;
+  return space;
+}
+
+/** Visit cookie indicating scanning of an object. */
+// @ts-ignore: decorator
+@inline const VISIT_SCAN = 0;
 
 // ╒═══════════════ Managed object layout (32-bit) ════════════════╕
 //    3                   2                   1
@@ -123,13 +118,23 @@ function init(): void {
   /** Unlinks this object from its list. */
   unlink(): void {
     var next = this.next;
-    var prev = this.prev;
     if (next == null) {
-      if (DEBUG) assert(prev == null && changetype<usize>(this) < __heap_base);
+      if (DEBUG) assert(this.prev == null && changetype<usize>(this) < __heap_base);
       return; // static data not yet linked
     }
-    next.prev = assert(prev);
+    var prev = this.prev;
+    if (DEBUG) assert(prev);
+    next.prev = prev;
     prev.next = next;
+  }
+
+  /** Links this object to the specified list, with the given color. */
+  linkTo(list: Object, withColor: i32): void {
+    let prev = list.prev;
+    this.nextWithColor = changetype<usize>(list) | withColor;
+    this.prev = prev;
+    prev.next = this;
+    list.prev = this;
   }
 
   /** Marks this object as gray, that is reachable with unscanned children. */
@@ -137,24 +142,6 @@ function init(): void {
     if (this == iter) iter = assert(this.prev);
     this.unlink();
     this.linkTo(toSpace, gray);
-  }
-
-  /** Links this object to the specified list, with the given color. */
-  linkTo(list: ObjectList, withColor: i32): void {
-    let prev = list.prev;
-    this.nextWithColor = changetype<usize>(list) | withColor;
-    this.prev = prev;
-    prev.next = this;
-    list.prev = this;
-  }
-}
-
-/** A list of managed objects. Used for the from and to spaces. */
-@unmanaged class ObjectList extends Object {
-  /** Clears this list. */
-  clear(): void {
-    this.nextWithColor = changetype<usize>(this);
-    this.prev = assert(this);
   }
 }
 
@@ -173,12 +160,10 @@ function visitRoots(cookie: u32): void {
 function step(): usize {
   var obj: Object;
   switch (state) {
-    case STATE_INIT:
-      init();
-      // fall through
     case STATE_IDLE: {
       state = STATE_MARK;
       visitRoots(VISIT_SCAN);
+      iter = toSpace;
       // fall through
     }
     case STATE_MARK: {
@@ -210,7 +195,8 @@ function step(): usize {
         free(obj);
         return 1;
       }
-      toSpace.clear();
+      toSpace.nextWithColor = changetype<usize>(toSpace);
+      toSpace.prev = toSpace;
       state = STATE_IDLE;
       break;
     }
@@ -239,15 +225,13 @@ function free(obj: Object): void {
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  if (state == STATE_INIT) init();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
-  obj.linkTo(fromSpace, white); // inits next/prev
   obj.rtId = id;
   obj.rtSize = <u32>size;
-  var ptr = changetype<usize>(obj) + TOTAL_OVERHEAD;
+  obj.linkTo(fromSpace, white); // inits next/prev
   total += 1;
   totalMem += obj.size;
-  return ptr;
+  return changetype<usize>(obj) + TOTAL_OVERHEAD;
 }
 
 // @ts-ignore: decorator
@@ -260,15 +244,16 @@ export function __renew(oldPtr: usize, size: usize): usize {
     return newPtr;
   }
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  if (state == STATE_INIT) init();
   totalMem -= oldObj.size;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
   var newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);
   newObj.rtSize = <u32>size;
-  if (DEBUG) assert(newObj.next != null && newObj.prev != null);
+
+  // Replace with new object
   newObj.next.prev = newObj;
   newObj.prev.next = newObj;
   if (iter == oldObj) iter = newObj;
+
   totalMem += newObj.size;
   return newPtr;
 }
@@ -279,7 +264,6 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
   // Write barrier is unnecessary if non-incremental
   if (!childPtr) return;
   if (DEBUG) assert(parentPtr);
-  if (state == STATE_INIT) init();
   var child = changetype<Object>(childPtr - TOTAL_OVERHEAD);
   if (child.color == white) {
     let parent = changetype<Object>(parentPtr - TOTAL_OVERHEAD);
@@ -361,21 +345,15 @@ export function __collect(): void {
 
 // Garbage collector automation
 
-/** Incremental GC granularity. */
+/** How often to interrupt. Smaller means more often with less pauses but less efficient. */
 // @ts-ignore: decorator
-@inline const STEPSIZE: usize = 200;
-/** Incremental GC eagerness. */
+@inline const GRANULARITY: usize = isDefined(ASC_GC_GRANULARITY) ? ASC_GC_GRANULARITY : 200;
+/** How hard to sweep relative to new allocations, in percent. */
 // @ts-ignore: decorator
-@inline const STEPMUL: usize = 2;
-/** Number of objects currently managed by the GC. */
-// @ts-ignore: decorator
-@lazy var total: usize = 0;
-/** Size in memory of all objects currently managed by the GC. */
-// @ts-ignore: decorator
-@lazy var totalMem: usize = 0;
+@inline const EAGERNESS: usize = isDefined(ASC_GC_EAGERNESS) ? ASC_GC_EAGERNESS : 200;
 /** Threshold of objects for the next scheduled GC step. */
 // @ts-ignore: decorator
-@lazy var threshold: usize = STEPSIZE;
+@lazy var threshold: usize = GRANULARITY;
 
 /** Performs a reasonable amount of incremental GC steps. */
 // @ts-ignore: decorator
@@ -387,7 +365,7 @@ export function __autocollect(): void {
   // only invoking the GC at the boundary with very different amounts of debt.
   // TODO: The drastic overshoot is probably not ideal (for every use case), but
   // works OKish for the compiler itself. Feel free to propose improvements.
-  const minSteps = STEPMUL * STEPSIZE;
+  const minSteps = EAGERNESS * GRANULARITY / 100;
   let debt = total - threshold;
   let limit: isize = max(minSteps, debt / 2);
   do {
@@ -401,5 +379,5 @@ export function __autocollect(): void {
   } while (limit > 0);
   if (TRACE) trace("└ down to mem/objs (ongoing)", 2, totalMem, total);
   // Schedule immediately unless there was little debt anyhow, then delay
-  threshold = total + usize(debt < STEPSIZE) * STEPSIZE;
+  threshold = total + usize(debt < GRANULARITY) * GRANULARITY;
 }

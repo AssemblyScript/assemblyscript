@@ -1908,7 +1908,7 @@
   if
    i32.const 64
    i32.const 128
-   i32.const 117
+   i32.const 127
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -2186,7 +2186,7 @@
     if
      i32.const 0
      i32.const 128
-     i32.const 209
+     i32.const 219
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -2224,7 +2224,7 @@
     if
      i32.const 0
      i32.const 128
-     i32.const 218
+     i32.const 228
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -2262,7 +2262,7 @@
     if
      i32.const 0
      i32.const 128
-     i32.const 227
+     i32.const 237
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -2500,17 +2500,54 @@
   call $~lib/rt/tcms/Object#get:next
   local.set $1
   local.get $1
+  i32.const 0
+  i32.eq
   if
+   i32.const 1
+   drop
    local.get $0
    i32.load offset=8
-   local.set $2
-   local.get $1
-   local.get $2
-   call $~lib/rt/tcms/Object#set:prev
-   local.get $2
-   local.get $1
-   call $~lib/rt/tcms/Object#set:next
+   i32.const 0
+   i32.eq
+   if (result i32)
+    local.get $0
+    global.get $~lib/memory/__heap_base
+    i32.lt_u
+   else
+    i32.const 0
+   end
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 128
+    i32.const 103
+    i32.const 18
+    call $~lib/builtins/abort
+    unreachable
+   end
+   return
   end
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  i32.const 1
+  drop
+  local.get $2
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 128
+   i32.const 107
+   i32.const 16
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  local.get $2
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $2
+  local.get $1
+  call $~lib/rt/tcms/Object#set:next
  )
  (func $~lib/rt/tcms/__visit (param $0 i32) (param $1 i32)
   (local $2 i32)

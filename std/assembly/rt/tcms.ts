@@ -1,28 +1,7 @@
-import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, TRACE, DEBUG } from "./common";
+import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE } from "./common";
 import { onvisit, oncollect } from "./rtrace";
 
 // === TCMS: A Two-Color Mark & Sweep garbage collector ===
-
-// @ts-ignore: decorator
-@lazy var white = 0;
-// @ts-ignore: decorator
-@inline const transparent = 3;
-// @ts-ignore: decorator
-@lazy var fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
-// @ts-ignore: decorator
-@lazy var toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
-// @ts-ignore: decorator
-@lazy var pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
-// @ts-ignore: decorator
-@lazy var total: usize = 0;
-// @ts-ignore: decorator
-@lazy var totalMem: usize = 0;
-
-function initLazy(space: Object): Object {
-  space.nextWithColor = changetype<usize>(space);
-  space.prev = space;
-  return space;
-}
 
 // ╒═════════════╤══════════════ Colors ═══════════════════════════╕
 // │ Color       │ Meaning                                         │
@@ -34,7 +13,35 @@ function initLazy(space: Object): Object {
 // * flipped between cycles
 
 // @ts-ignore: decorator
+@lazy var white = 0;
+// @ts-ignore: decorator
+@inline const transparent = 3;
+// @ts-ignore: decorator
 @inline const COLOR_MASK = 3;
+
+/** Number of objects currently managed by the GC. */
+// @ts-ignore: decorator
+@lazy var total: usize = 0;
+/** Size in memory of all objects currently managed by the GC. */
+// @ts-ignore: decorator
+@lazy var totalMem: usize = 0;
+
+// @ts-ignore: decorator
+@lazy var fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+// @ts-ignore: decorator
+@lazy var toSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+// @ts-ignore: decorator
+@lazy var pinSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
+
+function initLazy(space: Object): Object {
+  space.nextWithColor = changetype<usize>(space);
+  space.prev = space;
+  return space;
+}
+
+/** Visit cookie indicating scanning of an object. */
+// @ts-ignore: decorator
+@inline const VISIT_SCAN = 0;
 
 // ╒═══════════════ Managed object layout (32-bit) ════════════════╕
 //    3                   2                   1
@@ -92,11 +99,14 @@ function initLazy(space: Object): Object {
   /** Unlinks this object from its list. */
   unlink(): void {
     let next = this.next;
-    if (next) { // otherwise not yet linked (static data)
-      let prev = this.prev;
-      next.prev = prev;
-      prev.next = next;
+    if (next == null) {
+      if (DEBUG) assert(this.prev == null && changetype<usize>(this) < __heap_base);
+      return; // static data not yet linked
     }
+    let prev = this.prev;
+    if (DEBUG) assert(prev);
+    next.prev = prev;
+    prev.next = next;
   }
 
   /** Links this object to the specified list, with the given color. */
@@ -152,7 +162,7 @@ export function __renew(oldPtr: usize, size: usize): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void {
-  // Shared with a potential future incremental collector. A nop in TwoCMS.
+  // nop
 }
 
 // @ts-ignore: decorator
@@ -199,7 +209,7 @@ export function __collect(): void {
   if (TRACE) trace("GC at mem/objs", 2, totalMem, total);
 
   // Mark roots and add to toSpace
-  __visit_globals(0);
+  __visit_globals(VISIT_SCAN);
 
   // Mark what's reachable from roots
   var black = i32(!white);
@@ -207,7 +217,7 @@ export function __collect(): void {
   var iter = to.next;
   while (iter != to) {
     if (DEBUG) assert(iter.color == black);
-    __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, 0);
+    __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, VISIT_SCAN);
     iter = iter.next;
   }
 
@@ -216,7 +226,7 @@ export function __collect(): void {
   iter = pn.next;
   while (iter != pn) {
     if (DEBUG) assert(iter.color == transparent);
-    __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, 0);
+    __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, VISIT_SCAN);
     iter = iter.next;
   }
 
