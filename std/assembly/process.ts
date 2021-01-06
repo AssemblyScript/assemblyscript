@@ -174,12 +174,17 @@ function writeString(fd: fd, data: string): void {
       store<usize>(iobuf, iobuf + 2 * sizeof<usize>());
       store<usize>(iobuf, <i32>1 + i32(char2 != -1) + i32(char3 != -1) + i32(char4 != -1), sizeof<usize>());
       store<u32>(iobuf, char1 | char2 << 8 | char3 << 16 | char4 << 24, 2 * sizeof<usize>());
-      var err = fd_write(<u32>fd, iobuf, 1, iobuf + 3 * sizeof<usize>());
+      let err = fd_write(<u32>fd, iobuf, 1, iobuf + 3 * sizeof<usize>());
       if (err) throw new Error(errnoToString(err));
     }
     case 0: return;
   }
-  var buf = String.UTF8.encode(data);
-  writeBuffer(fd, buf);
-  // __dispose(changetype<usize>(buf));
+  var utf8len = <usize>String.UTF8.byteLength(data);
+  var utf8buf = __alloc(utf8len);
+  assert(String.UTF8.encodeUnsafe(changetype<usize>(data), data.length, utf8buf) == utf8len);
+  store<usize>(iobuf, utf8buf);
+  store<usize>(iobuf, utf8len, sizeof<usize>());
+  var err = fd_write(<u32>fd, iobuf, 1, iobuf + 2 * sizeof<usize>());
+  __free(utf8buf);
+  if (err) throw new Error(errnoToString(err));
 }

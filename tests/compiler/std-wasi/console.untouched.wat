@@ -104,22 +104,22 @@
  (data (i32.const 3020) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00N\00O\00T\00C\00A\00P\00A\00B\00L\00E\00\00\00\00\00\00\00\00\00")
  (data (i32.const 3068) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00U\00N\00K\00N\00O\00W\00N\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 3116) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00p\00r\00o\00c\00e\00s\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3180) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data (i32.const 3244) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3308) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3376) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3404) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3436) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00p\00h\00e\00w\00\00\00\00\00")
- (data (i32.const 3468) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00h\00e\00l\00l\00o\00 \00l\00o\00g\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3516) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00d\00e\00b\00u\00g\00\00\00\00\00\00\00")
- (data (i32.const 3564) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00D\00e\00b\00u\00g\00:\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3612) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00h\00e\00l\00l\00o\00 \00i\00n\00f\00o\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3660) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00I\00n\00f\00o\00:\00 \00")
- (data (i32.const 3692) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00h\00e\00l\00l\00o\00 \00w\00a\00r\00n\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3740) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00W\00a\00r\00n\00i\00n\00g\00:\00 \00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3788) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00e\00r\00r\00o\00r\00\00\00\00\00\00\00")
- (data (i32.const 3836) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00E\00r\00r\00o\00r\00:\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 3884) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00s\00o\00m\00e\00L\00a\00b\00e\00l\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3180) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3244) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 3308) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\n\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3340) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00p\00h\00e\00w\00\00\00\00\00")
+ (data (i32.const 3372) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00h\00e\00l\00l\00o\00 \00l\00o\00g\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3420) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00d\00e\00b\00u\00g\00\00\00\00\00\00\00")
+ (data (i32.const 3468) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00D\00e\00b\00u\00g\00:\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3516) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00h\00e\00l\00l\00o\00 \00i\00n\00f\00o\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3564) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00I\00n\00f\00o\00:\00 \00")
+ (data (i32.const 3596) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00h\00e\00l\00l\00o\00 \00w\00a\00r\00n\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3644) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00W\00a\00r\00n\00i\00n\00g\00:\00 \00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3692) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00e\00r\00r\00o\00r\00\00\00\00\00\00\00")
+ (data (i32.const 3740) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00E\00r\00r\00o\00r\00:\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3788) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\12\00\00\00s\00o\00m\00e\00L\00a\00b\00e\00l\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3836) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 3904) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 3932) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 3980) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
  (data (i32.const 4044) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00W\00a\00r\00n\00i\00n\00g\00:\00 \00L\00a\00b\00e\00l\00 \00\'\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -148,9 +148,9 @@
  (global $~lib/process/iobuf i32 (i32.const 112))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
+ (global $~lib/process/process.stdout i32 (i32.const 1))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
- (global $~lib/process/process.stdout i32 (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/console/timers (mut i32) (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
@@ -1376,7 +1376,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 272
    i32.const 14
    call $~lib/wasi/index/abort
@@ -1403,7 +1403,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 274
    i32.const 14
    call $~lib/wasi/index/abort
@@ -1457,7 +1457,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 287
    i32.const 14
    call $~lib/wasi/index/abort
@@ -1589,7 +1589,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 200
    i32.const 14
    call $~lib/wasi/index/abort
@@ -1606,7 +1606,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 202
    i32.const 14
    call $~lib/wasi/index/abort
@@ -1701,7 +1701,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 3328
+    i32.const 3200
     i32.const 223
     i32.const 16
     call $~lib/wasi/index/abort
@@ -1766,7 +1766,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 238
    i32.const 14
    call $~lib/wasi/index/abort
@@ -1784,7 +1784,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 239
    i32.const 14
    call $~lib/wasi/index/abort
@@ -1843,7 +1843,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 255
    i32.const 14
    call $~lib/wasi/index/abort
@@ -1948,7 +1948,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 380
    i32.const 14
    call $~lib/wasi/index/abort
@@ -1991,7 +1991,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 3328
+    i32.const 3200
     i32.const 387
     i32.const 16
     call $~lib/wasi/index/abort
@@ -2024,7 +2024,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 3328
+    i32.const 3200
     i32.const 400
     i32.const 5
     call $~lib/wasi/index/abort
@@ -2263,8 +2263,8 @@
   i32.const 1073741820
   i32.ge_u
   if
+   i32.const 3264
    i32.const 3200
-   i32.const 3328
    i32.const 461
    i32.const 30
    call $~lib/wasi/index/abort
@@ -2348,7 +2348,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 333
    i32.const 14
    call $~lib/wasi/index/abort
@@ -2413,7 +2413,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 3328
+     i32.const 3200
      i32.const 346
      i32.const 18
      call $~lib/wasi/index/abort
@@ -2564,7 +2564,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 360
    i32.const 14
    call $~lib/wasi/index/abort
@@ -2673,7 +2673,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 3328
+    i32.const 3200
     i32.const 499
     i32.const 16
     call $~lib/wasi/index/abort
@@ -2693,7 +2693,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3328
+   i32.const 3200
    i32.const 501
    i32.const 14
    call $~lib/wasi/index/abort
@@ -2722,155 +2722,72 @@
   i32.const 4
   i32.add
  )
- (func $~lib/rt/tcms/Object#set:rtId (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/checkUsedBlock (param $0 i32) (result i32)
+  (local $1 i32)
   local.get $0
-  local.get $1
-  i32.store offset=12
- )
- (func $~lib/rt/tcms/Object#set:rtSize (param $0 i32) (param $1 i32)
+  i32.const 4
+  i32.sub
+  local.set $1
   local.get $0
-  local.get $1
-  i32.store offset=16
- )
- (func $~lib/rt/tcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store offset=4
- )
- (func $~lib/rt/tcms/Object#set:prev (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store offset=8
- )
- (func $~lib/rt/tcms/initLazy (param $0 i32) (result i32)
-  local.get $0
-  local.get $0
-  call $~lib/rt/tcms/Object#set:nextWithColor
-  local.get $0
-  local.get $0
-  call $~lib/rt/tcms/Object#set:prev
-  local.get $0
- )
- (func $~lib/rt/tcms/Object#set:next (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  local.get $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.or
-  call $~lib/rt/tcms/Object#set:nextWithColor
- )
- (func $~lib/rt/tcms/Object#linkTo (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  local.get $1
-  i32.load offset=8
-  local.set $3
-  local.get $0
-  local.get $1
-  local.get $2
-  i32.or
-  call $~lib/rt/tcms/Object#set:nextWithColor
-  local.get $0
-  local.get $3
-  call $~lib/rt/tcms/Object#set:prev
-  local.get $3
-  local.get $0
-  call $~lib/rt/tcms/Object#set:next
-  local.get $1
-  local.get $0
-  call $~lib/rt/tcms/Object#set:prev
- )
- (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  local.get $0
-  i32.const 1073741804
-  i32.ge_u
+  i32.const 0
+  i32.ne
+  if (result i32)
+   local.get $0
+   i32.const 15
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  if (result i32)
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  i32.eqz
   if
+   i32.const 0
    i32.const 3200
-   i32.const 3264
-   i32.const 127
-   i32.const 31
+   i32.const 564
+   i32.const 3
    call $~lib/wasi/index/abort
    unreachable
   end
-  i32.const 16
-  local.get $0
-  i32.add
-  call $~lib/rt/tlsf/__alloc
-  i32.const 4
-  i32.sub
-  local.set $2
-  local.get $2
   local.get $1
-  call $~lib/rt/tcms/Object#set:rtId
-  local.get $2
-  local.get $0
-  call $~lib/rt/tcms/Object#set:rtSize
-  local.get $2
-  global.get $~lib/rt/tcms/fromSpace
-  global.get $~lib/rt/tcms/white
-  call $~lib/rt/tcms/Object#linkTo
+ )
+ (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   i32.const 0
   drop
-  local.get $2
-  i32.const 20
-  i32.add
- )
- (func $~lib/string/String.UTF8.encode (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  local.get $0
   local.get $1
-  call $~lib/string/String.UTF8.byteLength
-  i32.const 0
-  call $~lib/rt/tcms/__new
-  local.set $2
-  local.get $0
-  local.get $0
-  call $~lib/string/String#get:length
-  local.get $2
   local.get $1
-  call $~lib/string/String.UTF8.encodeUnsafe
-  drop
-  local.get $2
- )
- (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (param $0 i32) (result i32)
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
- )
- (func $~lib/process/writeBuffer (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  global.get $~lib/process/iobuf
-  local.get $1
-  i32.store
-  global.get $~lib/process/iobuf
-  local.get $1
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.store offset=4
-  local.get $0
-  global.get $~lib/process/iobuf
+  i32.load
   i32.const 1
-  global.get $~lib/process/iobuf
-  i32.const 2
-  i32.const 4
-  i32.mul
-  i32.add
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
-  local.set $2
-  local.get $2
-  i32.const 65535
-  i32.and
+  i32.or
+  call $~lib/rt/common/BLOCK#set:mmInfo
+  local.get $0
+  local.get $1
+  call $~lib/rt/tlsf/insertBlock
+ )
+ (func $~lib/rt/tlsf/__free (param $0 i32)
+  local.get $0
+  global.get $~lib/memory/__heap_base
+  i32.lt_u
   if
-   local.get $2
-   call $~lib/bindings/wasi_snapshot_preview1/errnoToString
-   i32.const 3136
-   i32.const 151
-   i32.const 12
-   call $~lib/wasi/index/abort
-   unreachable
+   return
   end
+  global.get $~lib/rt/tlsf/ROOT
+  i32.eqz
+  if
+   call $~lib/rt/tlsf/initialize
+  end
+  global.get $~lib/rt/tlsf/ROOT
+  local.get $0
+  call $~lib/rt/tlsf/checkUsedBlock
+  call $~lib/rt/tlsf/freeBlock
  )
  (func $~lib/process/writeString (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2879,6 +2796,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
   i32.const -1
   local.set $2
   i32.const -1
@@ -3019,11 +2938,58 @@
   end
   local.get $1
   i32.const 0
-  call $~lib/string/String.UTF8.encode
+  call $~lib/string/String.UTF8.byteLength
   local.set $7
-  local.get $0
   local.get $7
-  call $~lib/process/writeBuffer
+  call $~lib/rt/tlsf/__alloc
+  local.set $8
+  local.get $1
+  local.get $1
+  call $~lib/string/String#get:length
+  local.get $8
+  i32.const 0
+  call $~lib/string/String.UTF8.encodeUnsafe
+  local.get $7
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 3136
+   i32.const 184
+   i32.const 3
+   call $~lib/wasi/index/abort
+   unreachable
+  end
+  global.get $~lib/process/iobuf
+  local.get $8
+  i32.store
+  global.get $~lib/process/iobuf
+  local.get $7
+  i32.store offset=4
+  local.get $0
+  global.get $~lib/process/iobuf
+  i32.const 1
+  global.get $~lib/process/iobuf
+  i32.const 2
+  i32.const 4
+  i32.mul
+  i32.add
+  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  local.set $9
+  local.get $8
+  call $~lib/rt/tlsf/__free
+  local.get $9
+  i32.const 65535
+  i32.and
+  if
+   local.get $9
+   call $~lib/bindings/wasi_snapshot_preview1/errnoToString
+   i32.const 3136
+   i32.const 189
+   i32.const 12
+   call $~lib/wasi/index/abort
+   unreachable
+  end
  )
  (func $~lib/process/WritableStream#write<~lib/string/String> (param $0 i32) (param $1 i32)
   i32.const 1
@@ -3046,7 +3012,7 @@
    local.get $1
    call $~lib/process/WritableStream#write<~lib/string/String>
    local.get $2
-   i32.const 3424
+   i32.const 3328
    call $~lib/process/WritableStream#write<~lib/string/String>
   end
  )
@@ -3058,10 +3024,24 @@
   local.get $0
   call $~lib/process/WritableStream#write<~lib/string/String>
   local.get $1
-  i32.const 3424
+  i32.const 3328
   call $~lib/process/WritableStream#write<~lib/string/String>
  )
  (func $~lib/console/console.debug (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/process/process.stdout
+  local.set $1
+  local.get $1
+  i32.const 3488
+  call $~lib/process/WritableStream#write<~lib/string/String>
+  local.get $1
+  local.get $0
+  call $~lib/process/WritableStream#write<~lib/string/String>
+  local.get $1
+  i32.const 3328
+  call $~lib/process/WritableStream#write<~lib/string/String>
+ )
+ (func $~lib/console/console.info (param $0 i32)
   (local $1 i32)
   global.get $~lib/process/process.stdout
   local.set $1
@@ -3072,24 +3052,24 @@
   local.get $0
   call $~lib/process/WritableStream#write<~lib/string/String>
   local.get $1
-  i32.const 3424
+  i32.const 3328
   call $~lib/process/WritableStream#write<~lib/string/String>
  )
- (func $~lib/console/console.info (param $0 i32)
+ (func $~lib/console/console.warn (param $0 i32)
   (local $1 i32)
   global.get $~lib/process/process.stdout
   local.set $1
   local.get $1
-  i32.const 3680
+  i32.const 3664
   call $~lib/process/WritableStream#write<~lib/string/String>
   local.get $1
   local.get $0
   call $~lib/process/WritableStream#write<~lib/string/String>
   local.get $1
-  i32.const 3424
+  i32.const 3328
   call $~lib/process/WritableStream#write<~lib/string/String>
  )
- (func $~lib/console/console.warn (param $0 i32)
+ (func $~lib/console/console.error (param $0 i32)
   (local $1 i32)
   global.get $~lib/process/process.stdout
   local.set $1
@@ -3100,22 +3080,103 @@
   local.get $0
   call $~lib/process/WritableStream#write<~lib/string/String>
   local.get $1
-  i32.const 3424
+  i32.const 3328
   call $~lib/process/WritableStream#write<~lib/string/String>
  )
- (func $~lib/console/console.error (param $0 i32)
-  (local $1 i32)
-  global.get $~lib/process/process.stdout
-  local.set $1
+ (func $~lib/rt/tcms/Object#set:rtId (param $0 i32) (param $1 i32)
+  local.get $0
   local.get $1
-  i32.const 3856
-  call $~lib/process/WritableStream#write<~lib/string/String>
+  i32.store offset=12
+ )
+ (func $~lib/rt/tcms/Object#set:rtSize (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=16
+ )
+ (func $~lib/rt/tcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=4
+ )
+ (func $~lib/rt/tcms/Object#set:prev (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=8
+ )
+ (func $~lib/rt/tcms/initLazy (param $0 i32) (result i32)
+  local.get $0
+  local.get $0
+  call $~lib/rt/tcms/Object#set:nextWithColor
+  local.get $0
+  local.get $0
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $0
+ )
+ (func $~lib/rt/tcms/Object#set:next (param $0 i32) (param $1 i32)
+  local.get $0
   local.get $1
   local.get $0
-  call $~lib/process/WritableStream#write<~lib/string/String>
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  i32.or
+  call $~lib/rt/tcms/Object#set:nextWithColor
+ )
+ (func $~lib/rt/tcms/Object#linkTo (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
   local.get $1
-  i32.const 3424
-  call $~lib/process/WritableStream#write<~lib/string/String>
+  i32.load offset=8
+  local.set $3
+  local.get $0
+  local.get $1
+  local.get $2
+  i32.or
+  call $~lib/rt/tcms/Object#set:nextWithColor
+  local.get $0
+  local.get $3
+  call $~lib/rt/tcms/Object#set:prev
+  local.get $3
+  local.get $0
+  call $~lib/rt/tcms/Object#set:next
+  local.get $1
+  local.get $0
+  call $~lib/rt/tcms/Object#set:prev
+ )
+ (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $0
+  i32.const 1073741804
+  i32.ge_u
+  if
+   i32.const 3264
+   i32.const 3856
+   i32.const 127
+   i32.const 31
+   call $~lib/wasi/index/abort
+   unreachable
+  end
+  i32.const 16
+  local.get $0
+  i32.add
+  call $~lib/rt/tlsf/__alloc
+  i32.const 4
+  i32.sub
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/rt/tcms/Object#set:rtId
+  local.get $2
+  local.get $0
+  call $~lib/rt/tcms/Object#set:rtSize
+  local.get $2
+  global.get $~lib/rt/tcms/fromSpace
+  global.get $~lib/rt/tcms/white
+  call $~lib/rt/tcms/Object#linkTo
+  i32.const 0
+  drop
+  local.get $2
+  i32.const 20
+  i32.add
  )
  (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -4889,33 +4950,33 @@
   drop
  )
  (func $start:std-wasi/console
-  i32.const 3376
-  call $~lib/rt/tcms/initLazy
-  global.set $~lib/rt/tcms/fromSpace
   i32.const 0
   i32.const 32
   call $~lib/console/console.assert<bool>
   i32.const 1
-  i32.const 3456
+  i32.const 3360
   call $~lib/console/console.assert<bool>
-  i32.const 3488
+  i32.const 3392
   call $~lib/console/console.log
-  i32.const 3536
+  i32.const 3440
   call $~lib/console/console.debug
-  i32.const 3632
+  i32.const 3536
   call $~lib/console/console.info
-  i32.const 3712
+  i32.const 3616
   call $~lib/console/console.warn
-  i32.const 3808
+  i32.const 3712
   call $~lib/console/console.error
+  i32.const 3904
+  call $~lib/rt/tcms/initLazy
+  global.set $~lib/rt/tcms/fromSpace
   i32.const 0
   call $~lib/map/Map<~lib/string/String,u64>#constructor
   global.set $~lib/console/timers
-  i32.const 3904
+  i32.const 3808
   call $~lib/console/console.time
-  i32.const 3904
+  i32.const 3808
   call $~lib/console/console.timeLog
-  i32.const 3904
+  i32.const 3808
   call $~lib/console/console.timeEnd
   i32.const 6416
   call $~lib/console/console.timeLog
