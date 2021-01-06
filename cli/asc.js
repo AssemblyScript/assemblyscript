@@ -44,7 +44,7 @@ const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
 const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
-const binaryen = global.binaryen || (global.binaryen = require("../lib/binaryen"));
+const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
 
 const dynrequire = typeof __webpack_require__ === "function"
   ? __non_webpack_require__
