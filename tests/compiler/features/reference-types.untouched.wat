@@ -1,8 +1,8 @@
 (module
  (type $none_=>_none (func))
  (type $externref_=>_externref (func (param externref) (result externref)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $externref_=>_none (func (param externref)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $externref_externref_=>_i32 (func (param externref externref) (result i32)))
  (type $externref_externref_=>_externref (func (param externref externref) (result externref)))
  (import "reference-types" "someObject" (global $features/reference-types/someObject externref))
