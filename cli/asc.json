@@ -128,7 +128,7 @@
 
   "importMemory": {
     "category": "Features",
-    "description": "Imports the memory provided as 'env.memory'.",
+    "description": "Imports the memory from 'env.memory'.",
     "type": "b",
     "default": false
   },
@@ -158,7 +158,7 @@
   },
   "importTable": {
     "category": "Features",
-    "description": "Imports the function table provided as 'env.table'.",
+    "description": "Imports the function table from 'env.table'.",
     "type": "b",
     "default": false
   },
@@ -168,25 +168,25 @@
     "type": "b",
     "default": false
   },
-  "exportRuntime": {
-    "category": "Features",
-    "description": "Exports the runtime helpers (__new, __collect etc.).",
-    "type": "b",
-    "default": false
-  },
   "runtime": {
     "category": "Features",
     "description": [
       "Specifies the runtime variant to include in the program.",
       "",
-      " minimal      Minimal runtime stub (never frees)",
       " default      TLSF + lightweight GC invoked externally",
       " incremental  TLSF + incremental GC (experimental)",
+      " stub         Minimal runtime stub (never frees)",
       " ...          Path to a custom runtime implementation",
       ""
     ],
     "type": "s",
     "default": "default"
+  },
+  "exportRuntime": {
+    "category": "Features",
+    "description": "Exports the runtime helpers (__new, __collect etc.).",
+    "type": "b",
+    "default": false
   },
   "explicitStart": {
     "category": "Features",

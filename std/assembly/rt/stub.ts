@@ -75,6 +75,12 @@ export function __free(ptr: usize): void {
 
 // @ts-ignore: decorator
 @unsafe @global
+export function __reset(): void { // special
+  offset = startOffset;
+}
+
+// @ts-ignore: decorator
+@unsafe @global
 export function __new(size: usize, id: u32): usize {
   if (size > OBJECT_MAXSIZE) unreachable();
   var ptr = __alloc(OBJECT_OVERHEAD + size);

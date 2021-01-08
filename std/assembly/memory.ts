@@ -86,9 +86,19 @@ export namespace heap {
     return __realloc(ptr, size);
   }
 
-  /** Frees a chunk of memory. Does hardly anything (most recent block only) with the stub/none runtime. */
+  /** Frees a chunk of memory. Does hardly anything (most recent block only) with the stub runtime. */
   // @ts-ignore: decorator
   @unsafe export function free(ptr: usize): void {
     __free(ptr);
+  }
+
+  /** Dangerously resets the entire heap. Specific to the stub runtime. */
+  // @ts-ignore: decorator
+  @unsafe export function reset(): void {
+    if (isDefined(__reset)) {
+      __reset();
+    } else {
+      throw new Error(E_NOTIMPLEMENTED);
+    }
   }
 }

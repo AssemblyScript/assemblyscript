@@ -2,6 +2,7 @@
 declare function __alloc(size: usize): usize;
 declare function __realloc(ptr: usize, size: usize): usize;
 declare function __free(ptr: usize): void;
+declare function __reset(): void;
 
 // Garbage collector
 declare function __new(size: usize, id: u32): usize;
