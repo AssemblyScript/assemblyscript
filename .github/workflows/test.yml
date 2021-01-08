@@ -153,18 +153,18 @@ jobs:
       run: npm ci --no-audit
     - name: Clean distribution files
       run: npm run clean
-    - name: Test full runtime
+    - name: Test default allocator
       run: |
-        cd tests/allocators/rt-full
+        cd tests/allocators/default
         npm run build
         cd ..
-        npm test rt-full
-    - name: Test stub runtime
+        npm test default
+    - name: Test stub allocator
       run: |
-        cd tests/allocators/rt-stub
+        cd tests/allocators/stub
         npm run build
         cd ..
-        npm test rt-stub
+        npm test stub
   test-loader:
     name: "Loader"
     runs-on: ubuntu-latest

@@ -306,13 +306,13 @@ export const enum RuntimeFeatures {
   /** Requires heap setup. */
   HEAP = 1 << 0,
   /** Requires runtime type information setup. */
-  RTTI = 1 << 2,
+  RTTI = 1 << 1,
   /** Requires the built-in globals visitor. */
-  visitGlobals = 1 << 3,
+  visitGlobals = 1 << 2,
   /** Requires the built-in members visitor. */
-  visitMembers = 1 << 4,
+  visitMembers = 1 << 3,
   /** Requires the setArgumentsLength export. */
-  setArgumentsLength = 1 << 5
+  setArgumentsLength = 1 << 4
 }
 
 /** Exported names of compiler-generated elements. */
@@ -443,7 +443,7 @@ export class Compiler extends DiagnosticEmitter {
     var startFunctionBody = this.currentBody;
     assert(startFunctionBody.length == 0);
 
-    // add mutable heap, rtti and stack dummies
+    // add mutable heap and rtti base dummies
     if (options.isWasm64) {
       module.addGlobal(BuiltinNames.heap_base, NativeType.I64, true, module.i64(0));
       module.addGlobal(BuiltinNames.rtti_base, NativeType.I64, true, module.i64(0));
@@ -1281,7 +1281,6 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       module.addGlobal(internalName, nativeType, true, this.makeZero(type, global.declaration));
-      // FIXME: can break with @lazy globals
       this.currentBody.push(
         module.global_set(internalName, initExpr)
       );

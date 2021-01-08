@@ -49,11 +49,11 @@ Uses the AssemblyScript compiler compiled to JavaScript to compile itself to Web
 Running `asc` with the WebAssembly variant:
 
 ```ts
-asc [options...] --wasm out/assemblyscript.optimized.wasm
+asc [options...] --wasm out/assemblyscript.optimized-bootstrap.wasm
 ```
 
 Running the compiler tests with the WebAssembly variant:
 
 ```ts
-npm run test:compiler -- --wasm out/assemblyscript.optimized.wasm
+npm run test:compiler -- --wasm out/assemblyscript.optimized-bootstrap.wasm
 ```

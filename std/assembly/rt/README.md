@@ -1,7 +1,7 @@
 The AssemblyScript Runtime
 ==========================
 
-The runtime provides the functionality necessary to dynamically allocate and deallocate memory of objects, arrays and buffers, as well as collect garbage that is no longer used. The current implementation is a Tri-Color Mark & Sweep (TCMS) garbage collector that must be called manually, implemented on top of a Two-Level Segregate Fit (TLSF) memory manager. It's not designed to be the fastest of its kind, but intentionally focuses on simplicity and ease of integration until we can replace it with the real deal, i.e. Wasm GC.
+The runtime provides the functionality necessary to dynamically allocate and deallocate memory of objects, arrays and buffers, as well as collect garbage that is no longer used. The current implementation is either a Two-Color Mark & Sweep (TCMS) garbage collector that must be called manually or a Tri-Color Mark & Sweep (ITCMS) garbage collector automated at a module's exports, implemented on top of a Two-Level Segregate Fit (TLSF) memory manager. It's not designed to be the fastest of its kind, but intentionally focuses on simplicity and ease of integration until we can replace it with the real deal, i.e. Wasm GC.
 
 Interface
 ---------

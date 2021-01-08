@@ -88,7 +88,7 @@ export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize =
 
 // // @ts-ignore: decorator
 // @builtin @unsafe
-// export declare function __collect(incremental: bool = false): void;
+// export declare function __collect(): void;
 
 // // @ts-ignore: decorator
 // @builtin @unsafe

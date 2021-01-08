@@ -4048,8 +4048,7 @@ export class Parser extends DiagnosticEmitter {
         // PropertyAccessExpression
         case Token.DOT: {
           if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) { // expr '.' Identifier
-            let name = tn.readIdentifier(); // FIXME: GC
-            let next = Node.createIdentifierExpression(name, tn.range());
+            let next = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
             expr = Node.createPropertyAccessExpression(
               expr,
               next,
