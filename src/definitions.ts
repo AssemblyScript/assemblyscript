@@ -497,7 +497,7 @@ export class TSDBuilder extends ExportsWalker {
     }
     sb.push(" {\n");
     indent(sb, this.indentLevel);
-    sb.push("static wrap(pointer: usize): ");
+    sb.push("static wrap(ptr: usize): ");
     sb.push(name);
     sb.push("\n");
     var staticMembers = element.prototype.members;
