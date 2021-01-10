@@ -214,6 +214,8 @@ export class Flow {
 
   /** Parent flow. */
   parent: Flow | null = null;
+  /** Outer flow. Only relevant for first-class functions. */
+  outer: Flow | null = null;
   /** Flow flags indicating specific conditions. */
   flags: FlowFlags = FlowFlags.NONE;
   /** The label we break to when encountering a continue statement. */
@@ -266,6 +268,7 @@ export class Flow {
   fork(resetBreakContext: bool = false): Flow {
     var branch = new Flow(this.parentFunction);
     branch.parent = this;
+    branch.outer = this.outer;
     if (resetBreakContext) {
       branch.flags = this.flags & ~(
         FlowFlags.BREAKS |

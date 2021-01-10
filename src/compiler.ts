@@ -7339,15 +7339,19 @@ export class Compiler extends DiagnosticEmitter {
         signature,
         contextualTypeArguments
       );
-      if (!this.compileFunction(instance)) return this.module.unreachable();
+      instance.flow.outer = flow;
+      let worked = this.compileFunction(instance);
       this.currentType = contextualSignature.type;
+      if (!worked) return this.module.unreachable();
 
     // otherwise compile like a normal function
     } else {
       instance = this.resolver.resolveFunction(prototype, null, contextualTypeArguments);
       if (!instance) return this.module.unreachable();
-      this.compileFunction(instance);
+      instance.flow.outer = flow;
+      let worked = this.compileFunction(instance);
       this.currentType = instance.signature.type;
+      if (!worked) return this.module.unreachable();
     }
 
     var offset = this.ensureRuntimeFunction(instance); // reports
