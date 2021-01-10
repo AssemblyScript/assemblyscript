@@ -496,7 +496,7 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(extendsNode.name.identifier.text); // TODO: fqn?
     }
     sb.push(" {\n");
-    sb.push("  static wrap(pinter: usize): ");
+    sb.push("  static wrap(pointer: usize): ");
     sb.push(name);
     sb.push("\n");
     var staticMembers = element.prototype.members;
