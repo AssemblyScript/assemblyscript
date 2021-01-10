@@ -1927,7 +1927,7 @@ declare function seed(): f64;
 declare namespace process {
   /** String representing the CPU architecture for which the binary was compiled. Either `wasm32` or `wasm64`. */
   export const arch: string;
-  /** String representing the operating system platform for with the binary was compiled. Always `wasm`. */
+  /** String representing the operating system platform for which the binary was compiled. Always `wasm`. */
   export const platform: string;
   /** Array of command line arguments passed to the binary upon instantiation. */
   export const argv: string[];
