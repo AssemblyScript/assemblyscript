@@ -1,20 +1,11 @@
 /**
- * @fileoverview A minimalistic shadow stack.
+ * @fileoverview A potential minimalistic shadow stack. Currently not used.
  * 
  * Instruments a module's exports to track when the execution stack is fully
  * unwound, and injects a call to `__autocollect` to be invoked when it is.
  * Accounts for the currently in-flight managed return value from Wasm to the
  * host by pushing it to a mini stack, essentially a stack of only one value,
  * while `__autocollect` is executing.
- * 
- * Pros:
- * - Does not need a full-blown, potentially largish and costly shadow stack.
- * - Simple: Does not require tracking emulated stack slots during compilation.
- * 
- * Cons:
- * - Only steps the GC at the boundary, buffering garbage in between.
- * - Objects exclusively referenced externally that are expected to live longer
- *   than any export call, not only `__collect`, must be properly pinned.
  * 
  * @license Apache-2.0
  */
@@ -54,6 +45,7 @@ import {
   Program
 } from "../program";
 
+const MINISTACK = "~lib/rt/__ministack";
 const STACK_DEPTH = "~stack_depth";
 
 /** Instruments a module with a minimalistic shadow stack for precise GC. */
@@ -117,9 +109,7 @@ export class MiniStack extends Pass {
       } else {
         vars.push(results);
         stmts.push(
-          module.local_set(numParams,
-            call
-          )
+          module.local_set(numParams, call, false) // no shadow stack here
         );
       }
       if (numLocals) {
@@ -132,10 +122,9 @@ export class MiniStack extends Pass {
           )
         );
       }
-      let ministackGlobal = this.program.ministackGlobal;
       let exportName = module.readStringCached(externalNameRef)!;
       stmts.push(
-        module.global_set(ministackGlobal.internalName,
+        module.global_set(MINISTACK,
           this.managedReturns.has(exportName)
             ? module.local_get(numParams, results)
             : module.i32(0)

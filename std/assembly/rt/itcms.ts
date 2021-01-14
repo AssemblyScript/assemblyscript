@@ -153,7 +153,11 @@ function visitRoots(cookie: u32): void {
     __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, cookie);
     iter = iter.next;
   }
-  __visit(__ministack, VISIT_SCAN);
+  let ptr = __stack_pointer;
+  while (ptr < __heap_base) {
+    __visit(load<usize>(ptr), VISIT_SCAN);
+    ptr += sizeof<usize>();
+  }
 }
 
 /** Performs a single step according to the current state. */
@@ -225,13 +229,17 @@ function free(obj: Object): void {
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
+  __autocollect();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   obj.rtId = id;
   obj.rtSize = <u32>size;
   obj.linkTo(fromSpace, white); // inits next/prev
   total += 1;
   totalMem += obj.size;
-  return changetype<usize>(obj) + TOTAL_OVERHEAD;
+  var ptr = changetype<usize>(obj) + TOTAL_OVERHEAD;
+  // may be visited before being fully initialized, so must fill
+  memory.fill(ptr, 0, size);
+  return ptr;
 }
 
 // @ts-ignore: decorator

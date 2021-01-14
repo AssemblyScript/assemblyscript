@@ -49,7 +49,8 @@ import {
   getSideEffects,
   SideEffects,
   SwitchBuilder,
-  ExpressionRunnerFlags
+  ExpressionRunnerFlags,
+  isConstZero
 } from "./module";
 
 import {
@@ -200,8 +201,8 @@ import {
 } from "./passes/rtrace";
 
 import {
-  MiniStack
-} from "./passes/ministack";
+  ShadowStackPass
+} from "./passes/shadowstack";
 
 /** Compiler options. */
 export class Options {
@@ -244,6 +245,8 @@ export class Options {
   lowMemoryLimit: u32 = 0;
   /** If true, exports the runtime helpers. */
   exportRuntime: bool = false;
+  /** Stack size in bytes, if using a stack. */
+  stackSize: i32 = 0;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -303,16 +306,20 @@ export const enum Constraints {
 /** Runtime features to be activated by the compiler. */
 export const enum RuntimeFeatures {
   NONE = 0,
+  /** Requires data setup. */
+  DATA = 1 << 0,
+  /** Requires a stack. */
+  STACK = 1 << 1,
   /** Requires heap setup. */
-  HEAP = 1 << 0,
+  HEAP = 1 << 2,
   /** Requires runtime type information setup. */
-  RTTI = 1 << 1,
+  RTTI = 1 << 3,
   /** Requires the built-in globals visitor. */
-  visitGlobals = 1 << 2,
+  visitGlobals = 1 << 4,
   /** Requires the built-in members visitor. */
-  visitMembers = 1 << 3,
+  visitMembers = 1 << 5,
   /** Requires the setArgumentsLength export. */
-  setArgumentsLength = 1 << 4
+  setArgumentsLength = 1 << 6
 }
 
 /** Exported names of compiler-generated elements. */
@@ -378,8 +385,6 @@ export class Compiler extends DiagnosticEmitter {
   pendingElements: Set<Element> = new Set();
   /** Elements, that are module exports, already processed */
   doneModuleExports: Set<Element> = new Set();
-  /** Mini stack pass. */
-  miniStack: MiniStack;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -391,9 +396,8 @@ export class Compiler extends DiagnosticEmitter {
     super(program.diagnostics);
     this.program = program;
     var options = program.options;
-    var module = Module.create();
+    var module = Module.create(options.stackSize > 0);
     this.module = module;
-    this.miniStack = new MiniStack(module, program);
     if (options.memoryBase) {
       this.memoryOffset = i64_new(options.memoryBase);
       module.setLowMemoryUnused(false);
@@ -433,6 +437,7 @@ export class Compiler extends DiagnosticEmitter {
     var options = this.options;
     var module = this.module;
     var program = this.program;
+    var hasStack = options.stackSize > 0;
 
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize();
@@ -443,11 +448,13 @@ export class Compiler extends DiagnosticEmitter {
     var startFunctionBody = this.currentBody;
     assert(startFunctionBody.length == 0);
 
-    // add mutable heap and rtti base dummies
+    // add mutable data, heap and rtti offset dummies
     if (options.isWasm64) {
+      module.addGlobal(BuiltinNames.data_end, NativeType.I64, true, module.i64(0));
       module.addGlobal(BuiltinNames.heap_base, NativeType.I64, true, module.i64(0));
       module.addGlobal(BuiltinNames.rtti_base, NativeType.I64, true, module.i64(0));
     } else {
+      module.addGlobal(BuiltinNames.data_end, NativeType.I32, true, module.i32(0));
       module.addGlobal(BuiltinNames.heap_base, NativeType.I32, true, module.i32(0));
       module.addGlobal(BuiltinNames.rtti_base, NativeType.I32, true, module.i32(0));
     }
@@ -468,15 +475,6 @@ export class Compiler extends DiagnosticEmitter {
     for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
-    }
-
-    // set up the mini stack for incremental GC, if requested
-    if (this.program.lookup(CommonNames.autocollect)) {
-      let addedMinistack = this.miniStack.run();
-      if (addedMinistack) {
-        this.compileFunction(program.autocollectInstance);
-        this.compileGlobal(program.ministackGlobal);
-      }
     }
 
     // compile and export runtime if requested
@@ -547,13 +545,43 @@ export class Compiler extends DiagnosticEmitter {
     if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
     if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
 
-    // update the heap base pointer
-    var memoryOffset = this.memoryOffset;
+    var memoryOffset = i64_align(this.memoryOffset, options.usizeType.byteSize);
+
+    // finalize data
+    module.removeGlobal(BuiltinNames.data_end);
+    if ((this.runtimeFeatures & RuntimeFeatures.DATA) != 0 || hasStack) {
+      if (options.isWasm64) {
+        module.addGlobal(BuiltinNames.data_end, NativeType.I64, false,
+          module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
+        );
+      } else {
+        module.addGlobal(BuiltinNames.data_end, NativeType.I32, false,
+          module.i32(i64_low(memoryOffset))
+        );
+      }
+    }
+
+    // finalize stack (grows down from __heap_base to __data_end)
+    module.removeGlobal(BuiltinNames.stack_pointer);
+    if ((this.runtimeFeatures & RuntimeFeatures.STACK) != 0 || hasStack) {
+      memoryOffset = i64_align(
+        i64_add(memoryOffset, i64_new(options.stackSize)),
+        options.usizeType.byteSize
+      );
+      if (options.isWasm64) {
+        module.addGlobal(BuiltinNames.stack_pointer, NativeType.I64, true,
+          module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
+        );
+      } else {
+        module.addGlobal(BuiltinNames.stack_pointer, NativeType.I32, true,
+          module.i32(i64_low(memoryOffset))
+        );
+      }
+    }
 
     // finalize heap
     module.removeGlobal(BuiltinNames.heap_base);
-    if (this.runtimeFeatures & RuntimeFeatures.HEAP) {
-      memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
+    if ((this.runtimeFeatures & RuntimeFeatures.HEAP) != 0 || hasStack) {
       if (options.isWasm64) {
         module.addGlobal(BuiltinNames.heap_base, NativeType.I64, false,
           module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
@@ -564,6 +592,7 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
     }
+
     this.memoryOffset = memoryOffset;
 
     // check that we didn't exceed lowMemoryLimit already
@@ -705,6 +734,9 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Run custom passes
+    if (hasStack) {
+      new ShadowStackPass(this).walkModule();
+    }
     if (program.lookup("ASC_RTRACE") != null) {
       new RtraceMemory(this).walkModule();
     }
@@ -835,9 +867,6 @@ export class Compiler extends DiagnosticEmitter {
             let exportName = prefix + name;
             if (!module.hasExport(exportName)) {
               module.addFunctionExport(functionInstance.internalName, exportName);
-              if (functionInstance.signature.returnType.isManaged) {
-                this.miniStack.noteManagedReturn(exportName);
-              }
             }
           }
         }
@@ -857,9 +886,6 @@ export class Compiler extends DiagnosticEmitter {
           let getterExportName = prefix + GETTER_PREFIX + name;
           if (!module.hasExport(getterExportName)) {
             module.addFunctionExport(fieldInstance.internalGetterName, getterExportName);
-            if (fieldInstance.type.isManaged) {
-              this.miniStack.noteManagedReturn(getterExportName);
-            }
           }
           if (!element.is(CommonFlags.READONLY)) {
             let setterExportName = prefix + SETTER_PREFIX + name;
@@ -1133,8 +1159,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // Handle ambient builtins like '__heap_base' that need to be resolved but are added explicitly
     if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
-      if (global.internalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
-      else if (global.internalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
+      let internalName = global.internalName;
+      if (internalName == BuiltinNames.data_end) this.runtimeFeatures |= RuntimeFeatures.DATA;
+      else if (internalName == BuiltinNames.stack_pointer) this.runtimeFeatures |= RuntimeFeatures.STACK;
+      else if (internalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
+      else if (internalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
       pendingElements.delete(global);
       return true;
     }
@@ -2365,7 +2394,7 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         let tcond = condFlow.getTempLocal(Type.bool);
         bodyStmts.push(
-          module.local_set(tcond.index, condExpr)
+          module.local_set(tcond.index, condExpr, false) // bool
         );
         bodyStmts.push(
           module.br(continueLabel,
@@ -2511,7 +2540,7 @@ export class Compiler extends DiagnosticEmitter {
     var tcond = flow.getTempLocal(Type.bool);
     var loopStmts = new Array<ExpressionRef>();
     loopStmts.push(
-      module.local_set(tcond.index, condExpr)
+      module.local_set(tcond.index, condExpr, false) // bool
     );
     condFlow.freeScopedLocals();
 
@@ -2794,7 +2823,8 @@ export class Compiler extends DiagnosticEmitter {
       tempLocalIndex,
       this.compileExpression(statement.condition, Type.u32,
         Constraints.CONV_IMPLICIT
-      )
+      ),
+      false // u32
     );
 
     // make one br_if per (possibly dynamic) labeled case (binaryen optimizes to br_table where possible)
@@ -3186,7 +3216,7 @@ export class Compiler extends DiagnosticEmitter {
     // Store condition result in a temp
     var tcond = flow.getTempLocal(Type.bool);
     stmts.push(
-      module.local_set(tcond.index, condExpr)
+      module.local_set(tcond.index, condExpr, false) // bool
     );
     condFlow.freeScopedLocals();
 
@@ -4519,7 +4549,7 @@ export class Compiler extends DiagnosticEmitter {
             if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.WRAPPED);
             if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.NONNULL);
             expr = module.if(
-              this.makeIsTrueish(module.local_tee(tempLocal.index, leftExpr), leftType, left),
+              this.makeIsTrueish(module.local_tee(tempLocal.index, leftExpr, leftType.isManaged), leftType, left),
               rightExpr,
               module.local_get(tempLocal.index, leftType.toNativeType())
             );
@@ -4572,7 +4602,7 @@ export class Compiler extends DiagnosticEmitter {
             if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
             if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
             expr = module.if(
-              this.makeIsTrueish(module.local_tee(temp.index, leftExpr), leftType, left),
+              this.makeIsTrueish(module.local_tee(temp.index, leftExpr, leftType.isManaged), leftType, left),
               module.local_get(temp.index, leftType.toNativeType()),
               rightExpr
             );
@@ -5886,7 +5916,7 @@ export class Compiler extends DiagnosticEmitter {
           let tempThis = flow.getTempLocal(returnType);
           let ret = module.block(null, [
             this.makeCallDirect(setterInstance, [
-              module.local_tee(tempThis.index, thisExpr),
+              module.local_tee(tempThis.index, thisExpr, returnType.isManaged),
               valueExpr
             ], valueExpression),
             this.makeCallDirect(getterInstance, [
@@ -5929,21 +5959,23 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         assert(setterInstance.signature.parameterTypes.length == 2);
+        let thisType = classInstance.type;
         let thisExpr = this.compileExpression(
           assert(thisExpression),
-          classInstance.type,
+          thisType,
           Constraints.CONV_IMPLICIT | Constraints.IS_THIS
         );
         let elementExpr = this.compileExpression(assert(indexExpression), Type.i32, Constraints.CONV_IMPLICIT);
+        let elementType = this.currentType;
         if (tee) {
-          let tempTarget = flow.getTempLocal(classInstance.type);
-          let tempElement = flow.getTempLocal(this.currentType);
+          let tempTarget = flow.getTempLocal(thisType);
+          let tempElement = flow.getTempLocal(elementType);
           let returnType = getterInstance.signature.returnType;
           flow.freeTempLocal(tempTarget);
           let ret = module.block(null, [
             this.makeCallDirect(setterInstance, [
-              module.local_tee(tempTarget.index, thisExpr),
-              module.local_tee(tempElement.index, elementExpr),
+              module.local_tee(tempTarget.index, thisExpr, thisType.isManaged),
+              module.local_tee(tempElement.index, elementExpr, elementType.isManaged),
               valueExpr
             ], valueExpression),
             this.makeCallDirect(getterInstance, [
@@ -5995,10 +6027,10 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (tee) { // local = value
       this.currentType = type;
-      return module.local_tee(localIndex, valueExpr);
+      return module.local_tee(localIndex, valueExpr, type.isManaged);
     } else { // void(local = value)
       this.currentType = Type.void;
-      return module.local_set(localIndex, valueExpr);
+      return module.local_set(localIndex, valueExpr, type.isManaged);
     }
   }
 
@@ -6063,7 +6095,7 @@ export class Compiler extends DiagnosticEmitter {
       this.compileField(field);
       let tempThis = flow.getTempLocal(thisType);
       let expr = module.block(null, [
-        module.call(field.internalSetterName, [ module.local_tee(tempThis.index, thisExpr), valueExpr ], NativeType.None),
+        module.call(field.internalSetterName, [ module.local_tee(tempThis.index, thisExpr, thisType.isManaged), valueExpr ], NativeType.None),
         module.call(field.internalGetterName, [ module.local_get(tempThis.index, thisType.toNativeType()) ], nativeFieldType)
       ], nativeFieldType);
       flow.freeTempLocal(tempThis);
@@ -6131,7 +6163,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       flow.set(FlowFlags.ACCESSES_THIS | FlowFlags.CALLS_SUPER);
       this.currentType = Type.void;
-      return module.local_set(thisLocal.index, superCall);
+      return module.local_set(thisLocal.index, superCall, classInstance.type.isManaged);
     }
 
     // otherwise resolve normally
@@ -6541,7 +6573,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!previousFlow.canOverflow(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
       if (flow.isNonnull(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
       body.unshift(
-        module.local_set(argumentLocal.index, paramExpr)
+        module.local_set(argumentLocal.index, paramExpr, paramType.isManaged)
       );
     }
     if (thisArg) {
@@ -6551,7 +6583,7 @@ export class Compiler extends DiagnosticEmitter {
       let thisType = assert(instance.signature.thisType);
       let thisLocal = flow.addScopedLocal(CommonNames.this_, thisType, usedLocals);
       body.unshift(
-        module.local_set(thisLocal.index, thisArg)
+        module.local_set(thisLocal.index, thisArg, thisType.isManaged)
       );
       let base = classInstance.base;
       if (base) flow.addScopedAlias(CommonNames.super_, base.type, thisLocal.index);
@@ -6694,7 +6726,7 @@ export class Compiler extends DiagnosticEmitter {
           type,
           Constraints.CONV_IMPLICIT
         );
-        initExpr = module.local_set(operandIndex, initExpr);
+        initExpr = module.local_set(operandIndex, initExpr, type.isManaged);
       } else {
         this.error(
           DiagnosticCode.Optional_parameter_must_have_an_initializer,
@@ -6922,6 +6954,39 @@ export class Compiler extends DiagnosticEmitter {
     stub.set(CommonFlags.COMPILED);
   }
 
+  /** Marks managed call operands for the shadow stack. */
+  private operandsTostack(signature: Signature, operands: ExpressionRef[]): void {
+    if (!this.options.stackSize) return;
+    var module = this.module;
+    var operandIndex = 0;
+    var thisType = signature.thisType;
+    if (thisType) {
+      if (thisType.isManaged) {
+        let operand = operands[0];
+        let precomp = module.runExpression(operand, ExpressionRunnerFlags.Default);
+        if (!isConstZero(precomp)) { // otherwise unnecessary
+          operands[operandIndex] = module.tostack(operand);
+        }
+      }
+      ++operandIndex;
+    }
+    var parameterIndex = 0;
+    var parameterTypes = signature.parameterTypes;
+    assert(parameterTypes.length >= operands.length - operandIndex);
+    while (operandIndex < operands.length) {
+      let paramType = parameterTypes[parameterIndex];
+      if (paramType.isManaged) {
+        let operand = operands[operandIndex];
+        let precomp = module.runExpression(operand, ExpressionRunnerFlags.Default);
+        if (!isConstZero(precomp)) { // otherwise unnecessary
+          operands[operandIndex] = module.tostack(operand);
+        }
+      }
+      ++operandIndex;
+      ++parameterIndex;
+    }
+  }
+
   /** Creates a direct call to the specified function. */
   makeCallDirect(
     instance: Function,
@@ -7036,6 +7101,7 @@ export class Compiler extends DiagnosticEmitter {
           module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
           lastOperand
         ], lastOperandType.toNativeType());
+        this.operandsTostack(instance.signature, operands);
         let expr = module.call(instance.internalName, operands, nativeReturnType);
         if (returnType != Type.void && immediatelyDropped) {
           expr = module.drop(expr);
@@ -7053,6 +7119,7 @@ export class Compiler extends DiagnosticEmitter {
       instance = this.ensureVirtualStub(instance);
     }
 
+    if (operands) this.operandsTostack(instance.signature, operands);
     var expr = module.call(instance.internalName, operands, returnType.toNativeType());
     this.currentType = returnType;
     return expr;
@@ -7144,7 +7211,7 @@ export class Compiler extends DiagnosticEmitter {
       let flow = this.currentFlow;
       let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(indexArg));
       indexArg = module.block(null, [
-        module.local_set(temp.index, indexArg),
+        module.local_set(temp.index, indexArg, true), // Function
         module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
         module.local_get(temp.index, nativeSizeType)
       ], nativeSizeType);
@@ -7155,6 +7222,7 @@ export class Compiler extends DiagnosticEmitter {
         indexArg
       ], nativeSizeType);
     }
+    if (operands) this.operandsTostack(signature, operands);
     var expr = module.call_indirect(
       nativeSizeType == NativeType.I64
         ? module.unary(UnaryOp.WrapI64,
@@ -7681,7 +7749,7 @@ export class Compiler extends DiagnosticEmitter {
               nativeSizeType == NativeType.I64
                 ? UnaryOp.EqzI64
                 : UnaryOp.EqzI32,
-              module.local_tee(temp.index, expr),
+              module.local_tee(temp.index, expr, actualType.isManaged),
             ),
             module.i32(0),
             this.makeCallDirect(instanceofInstance, [
@@ -7727,7 +7795,7 @@ export class Compiler extends DiagnosticEmitter {
               nativeSizeType == NativeType.I64
                 ? UnaryOp.EqzI64
                 : UnaryOp.EqzI32,
-              module.local_tee(temp.index, expr),
+              module.local_tee(temp.index, expr, actualType.isManaged),
             ),
             module.i32(0),
             this.makeCallDirect(instanceofInstance, [
@@ -7980,7 +8048,8 @@ export class Compiler extends DiagnosticEmitter {
           program.options.isWasm64
             ? module.i64(0)
             : module.i32(0)
-        ], expression)
+        ], expression),
+        arrayType.isManaged
       )
     );
     // tempData = tempThis.dataStart
@@ -7992,7 +8061,8 @@ export class Compiler extends DiagnosticEmitter {
           module.local_get(tempThis.index, nativeArrayType),
           nativeArrayType,
           (<Field>dataStartMember).memoryOffset
-        )
+        ),
+        true // ArrayBuffer
       )
     );
     for (let i = 0; i < length; ++i) {
@@ -8113,7 +8183,8 @@ export class Compiler extends DiagnosticEmitter {
             ? module.i64(bufferSize)
             : module.i32(bufferSize),
           module.i32(arrayInstance.id)
-        ], expression)
+        ], expression),
+        arrayType.isManaged
       )
     );
     for (let i = 0; i < length; ++i) {
@@ -8306,7 +8377,8 @@ export class Compiler extends DiagnosticEmitter {
     // allocate a new instance first and assign 'this' to the temp. local
     exprs.unshift(
       module.local_set(tempLocal.index,
-        this.compileInstantiate(ctor, [], Constraints.NONE, expression)
+        this.compileInstantiate(ctor, [], Constraints.NONE, expression),
+        classType.isManaged
       )
     );
 
@@ -8470,7 +8542,8 @@ export class Compiler extends DiagnosticEmitter {
         }
         stmts.push(
           module.local_set(0,
-            this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode, false)
+            this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode, false),
+            baseClass.type.isManaged
           )
         );
       }
@@ -8810,7 +8883,8 @@ export class Compiler extends DiagnosticEmitter {
       tempLocal = flow.getTempLocal(this.currentType);
       getValue = module.local_tee(
         tempLocal.index,
-        getValue
+        getValue,
+        this.currentType.isManaged
       );
     }
 
@@ -9845,7 +9919,8 @@ export class Compiler extends DiagnosticEmitter {
         module.local_get(thisIndex, nativeClassType)
       ),
       module.local_set(thisIndex,
-        this.makeAllocation(classInstance)
+        this.makeAllocation(classInstance),
+        classInstance.type.isManaged
       )
     );
   }
@@ -9982,7 +10057,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
     flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
     expr = module.if(
-      module.local_tee(temp.index, expr),
+      module.local_tee(temp.index, expr, type.isManaged),
       module.local_get(temp.index, type.toNativeType()),
       this.makeStaticAbort(this.ensureStaticString("unexpected null"), reportNode) // TODO: throw
     );
@@ -10010,7 +10085,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(this.compileFunction(instanceofInstance));
     expr = module.if(
       module.call(instanceofInstance.internalName, [
-        module.local_tee(temp.index, expr),
+        module.local_tee(temp.index, expr, type.isManaged),
         module.i32(toType.classReference!.id)
       ], NativeType.I32),
       module.local_get(temp.index, type.toNativeType()),

@@ -235,7 +235,6 @@ export namespace CommonNames {
   export const link = "__link";
   export const collect = "__collect";
   export const autocollect = "__autocollect";
-  export const ministack = "__ministack";
   export const typeinfo = "__typeinfo";
   export const instanceof_ = "__instanceof";
   export const visit = "__visit";

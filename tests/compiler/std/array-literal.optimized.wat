@@ -1119,17 +1119,18 @@
  )
  (func $~lib/rt/__newArray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  i32.const 16
-  local.get $2
-  call $~lib/rt/tcms/__new
-  local.tee $2
   local.get $0
   local.get $1
   i32.shl
   local.tee $1
   i32.const 0
   call $~lib/rt/tcms/__new
-  local.tee $3
+  local.set $3
+  i32.const 16
+  local.get $2
+  call $~lib/rt/tcms/__new
+  local.tee $2
+  local.get $3
   i32.store
   local.get $2
   local.get $3

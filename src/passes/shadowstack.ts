@@ -1,19 +1,19 @@
 /**
- * @fileoverview Potential shadow stack instrumentation for a precise GC.
+ * @fileoverview Shadow stack instrumentation for a precise GC.
  * 
- * Instruments function arguments and local assignments marked as 'managed' to
- * also do stores to a shadow stack.
+ * Instruments function arguments and local assignments marked with a 'tostack'
+ * call to also do stores to a shadow stack of managed values only.
  * 
  * Consider a simple call to a function looking like the following, taking
  * managed arguments, plus assigning managed values to locals:
  * 
  *   function foo(a: Obj, b: Obj): Obj {
- *     var c = __stack(a) // slot 2
+ *     var c = __tostack(a) // slot 2
  *     __collect()
  *     return b
  *   }
  *   
- *   foo(__stack(a), __stack(b)) // slot 0, 1
+ *   foo(__tostack(a), __tostack(b)) // slot 0, 1
  * 
  * At the call to `__collect()` the 32-bit stack frame of the function is:
  * 
@@ -49,11 +49,11 @@
  * 
  *   // callee frameSize = 1 * sizeof<usize>()
  *   function foo(a: usize, b: usize): usize {
- *     memory.fill(__stack_ptr -= frameSize, 0, frameSize)
- *     store<usize>(__stack_ptr, c = a, 0 * sizeof<usize>())
+ *     memory.fill(__stack_pointer -= frameSize, 0, frameSize)
+ *     store<usize>(__stack_pointer, c = a, 0 * sizeof<usize>())
  *     __collect()
  *     var r = b
- *     __stack_ptr += frameSize
+ *     __stack_pointer += frameSize
  *     return r
  *   }
  * 
@@ -61,10 +61,10 @@
  *   (
  *     r = foo(
  *       ( t = a,
- *         store<usize>(__stack_ptr, t, (numLocalSlots + 0) * sizeof<usize>()),
+ *         store<usize>(__stack_pointer, t, (numLocalSlots + 0) * sizeof<usize>()),
  *         t ),
  *       ( t = b,
- *         store<usize>(__stack_ptr, t, (numLocalSlots + 1) * sizeof<usize>()),
+ *         store<usize>(__stack_pointer, t, (numLocalSlots + 1) * sizeof<usize>()),
  *         t )
  *     ),
  *     r
@@ -119,8 +119,8 @@ import {
   Index,
   BinaryOp,
   NativeType,
-  readString,
-  allocPtrArray
+  allocPtrArray,
+  Module
 } from "../module";
 
 import {
@@ -132,18 +132,18 @@ import {
   Feature
 } from "../common";
 
+import {
+  BuiltinNames
+} from "../builtins";
+
 type LocalIndex = Index;
 type SlotIndex = Index;
 type SlotMap = Map<LocalIndex,SlotIndex>;
 type TempMap = Map<NativeType,LocalIndex>;
 
-const STACK = "__stack";
-const STACK_PTR = "__stack_ptr";
-const STACK_BASE = "__stack_base";
-
-/** Attempts to match the `__stack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
-function matchStack(expr: ExpressionRef): ExpressionRef {
-  if (_BinaryenExpressionGetId(expr) == ExpressionId.Call && readString(_BinaryenCallGetTarget(expr)) == STACK) {
+/** Attempts to match the `__tostack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
+function matchTostack(module: Module, expr: ExpressionRef): ExpressionRef {
+  if (_BinaryenExpressionGetId(expr) == ExpressionId.Call && module.readStringCached(_BinaryenCallGetTarget(expr)) == BuiltinNames.tostack) {
     assert(_BinaryenCallGetNumOperands(expr) == 1);
     return _BinaryenCallGetOperandAt(expr, 0);
   }
@@ -221,9 +221,9 @@ export class ShadowStackPass extends Pass {
   makeStackOffset(offset: i32): ExpressionRef {
     var module = this.module;
     var expr = module.block(null, [
-      module.global_set(STACK_PTR,
+      module.global_set(BuiltinNames.stack_pointer,
         module.binary(offset >= 0 ? this.ptrBinaryAdd : this.ptrBinarySub,
-          module.global_get(STACK_PTR, this.ptrType),
+          module.global_get(BuiltinNames.stack_pointer, this.ptrType),
           this.ptrConst(abs(offset))
         )
       ),
@@ -242,8 +242,8 @@ export class ShadowStackPass extends Pass {
       module.addFunction("~stack_check", NativeType.None, NativeType.None, null,
         module.if(
           module.binary(BinaryOp.LtI32,
-            module.global_get(STACK_PTR, this.ptrType),
-            module.global_get(STACK_BASE, this.ptrType)
+            module.global_get(BuiltinNames.stack_pointer, this.ptrType),
+            module.global_get(BuiltinNames.data_end, this.ptrType)
           ),
           this.compiler.makeStaticAbort(this.compiler.ensureStaticString("stack overflow"), this.compiler.program.nativeSource)
         )
@@ -257,7 +257,7 @@ export class ShadowStackPass extends Pass {
     var numSlots = 0;
     for (let i = 0, k = operands.length; i < k; ++i) {
       let operand = operands[i];
-      let match = matchStack(operand);
+      let match = matchTostack(module, operand);
       if (!match) continue;
       let currentFunction = this.currentFunction;
       let numLocals = _BinaryenFunctionGetNumLocals(currentFunction);
@@ -266,12 +266,12 @@ export class ShadowStackPass extends Pass {
       let stmts = new Array<ExpressionRef>();
       // t = value
       stmts.push(
-        module.local_set(temp, match)
+        module.local_set(temp, match, false)
       );
-      // store<usize>(__stackptr, t, slotIndex * ptrSize)
+      // store<usize>(__stack_pointer, t, slotIndex * ptrSize)
       stmts.push(
         module.store(this.ptrSize,
-          module.global_get(STACK_PTR, this.ptrType),
+          module.global_get(BuiltinNames.stack_pointer, this.ptrType),
           module.local_get(temp, this.ptrType),
           this.ptrType, slotIndex * this.ptrSize
         )
@@ -342,17 +342,17 @@ export class ShadowStackPass extends Pass {
   /** @override */
   visitLocalSet(localSet: ExpressionRef): void {
     let value = _BinaryenLocalSetGetValue(localSet);
-    let match = matchStack(value);
+    let match = matchTostack(this.module, value);
     if (!match) return;
     var module = this.module;
     let index = _BinaryenLocalSetGetIndex(localSet);
     let slotIndex = this.noteSlot(this.currentFunction, index);
     let stmts = new Array<ExpressionRef>();
-    // store<usize>(__stackptr, local = match, slotIndex * ptrSize)
+    // store<usize>(__stack_pointer, local = match, slotIndex * ptrSize)
     stmts.push(
       module.store(this.ptrSize,
-        module.global_get(STACK_PTR, this.ptrType),
-        module.local_tee(index, match),
+        module.global_get(BuiltinNames.stack_pointer, this.ptrType),
+        module.local_tee(index, match, false),
         this.ptrType, slotIndex * this.ptrSize
       )
     );
@@ -411,15 +411,15 @@ export class ShadowStackPass extends Pass {
 
       // Instrument function entry
       let stmts = new Array<ExpressionRef>();
-      // __stackptr -= frameSize
+      // __stack_pointer -= frameSize
       stmts.push(
         this.makeStackOffset(-frameSize)
       );
-      // memory.fill(__stackptr, 0, frameSize)
+      // memory.fill(__stack_pointer, 0, frameSize)
       if (this.options.hasFeature(Feature.BULK_MEMORY) && frameSize > 16) {
         stmts.push(
           module.memory_fill(
-            module.global_get(STACK_PTR, this.ptrType),
+            module.global_get(BuiltinNames.stack_pointer, this.ptrType),
             module.i32(0), // TODO: Wasm64 also i32?
             this.ptrConst(frameSize)
           )
@@ -427,10 +427,10 @@ export class ShadowStackPass extends Pass {
       } else {
         let remain = frameSize;
         while (remain >= 8) {
-          // store<i64>(__stackptr, 0, frameSize - remain)
+          // store<i64>(__stack_pointer, 0, frameSize - remain)
           stmts.push(
             module.store(8,
-              module.global_get(STACK_PTR, this.ptrType),
+              module.global_get(BuiltinNames.stack_pointer, this.ptrType),
               module.i64(0),
               NativeType.I64,
               frameSize - remain
@@ -440,10 +440,10 @@ export class ShadowStackPass extends Pass {
         }
         if (remain) {
           assert(remain == 4);
-          // store<i32>(__stackptr, 0, frameSize - remain)
+          // store<i32>(__stack_pointer, 0, frameSize - remain)
           stmts.push(
             module.store(4,
-              module.global_get(STACK_PTR, this.ptrType),
+              module.global_get(BuiltinNames.stack_pointer, this.ptrType),
               module.i32(0),
               NativeType.I32,
               frameSize - remain
@@ -465,7 +465,7 @@ export class ShadowStackPass extends Pass {
         stmts.push(
           body
         );
-        // __stackptr += frameSize
+        // __stack_pointer += frameSize
         stmts.push(
           this.makeStackOffset(+frameSize)
         );
@@ -473,9 +473,9 @@ export class ShadowStackPass extends Pass {
         let temp = this.getSharedTemp(func, bodyType);
         // t = body
         stmts.push(
-          module.local_set(temp, body)
+          module.local_set(temp, body, false)
         );
-        // __stackptr += frameSize
+        // __stack_pointer += frameSize
         stmts.push(
           this.makeStackOffset(+frameSize)
         );
@@ -518,16 +518,16 @@ class InstrumentReturns extends Pass {
       let temp = this.parentPass.getSharedTemp(this.currentFunction, returnType);
       // t = value
       stmts.push(
-        module.local_set(temp, value)
+        module.local_set(temp, value, false)
       );
-      // __stackptr += frameSize
+      // __stack_pointer += frameSize
       stmts.push(
         this.parentPass.makeStackOffset(+this.frameSize)
       );
       // return t
       _BinaryenReturnSetValue(ret, module.local_get(temp, returnType));
     } else {
-      // __stackptr += frameSize
+      // __stack_pointer += frameSize
       stmts.push(
         this.parentPass.makeStackOffset(+this.frameSize)
       );

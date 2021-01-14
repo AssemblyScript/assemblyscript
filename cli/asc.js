@@ -406,6 +406,10 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setPedantic(compilerOptions, opts.pedantic);
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
   assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
+  if (!opts.stackSize && opts.runtime == "incremental") {
+    opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
+  }
+  assemblyscript.setStackSize(compilerOptions, opts.stackSize);
 
   // Instrument callback to perform GC
   callback = (function(callback) {

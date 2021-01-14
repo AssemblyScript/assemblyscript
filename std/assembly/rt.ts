@@ -46,19 +46,24 @@ export function __newBuffer(size: usize, id: u32, data: usize = 0): usize {
 // @ts-ignore: decorator
 @unsafe
 export function __newArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
-  var array = __new(offsetof<i32[]>(), id);
   var bufferSize = <usize>length << alignLog2;
-  var buffer = __newBuffer(bufferSize, idof<ArrayBuffer>(), data);
-  store<usize>(array, buffer, offsetof<ArrayBufferView>("buffer"));
-  __link(array, buffer, false);
-  store<usize>(array, buffer, offsetof<ArrayBufferView>("dataStart"));
+  // make sure `buffer` is tracked by the shadow stack
+  var buffer = changetype<ArrayBuffer>(__newBuffer(bufferSize, idof<ArrayBuffer>(), data));
+  // ...since allocating the array may trigger GC steps
+  var array = __new(offsetof<i32[]>(), id);
+  store<usize>(array, changetype<usize>(buffer), offsetof<ArrayBufferView>("buffer"));
+  __link(array, changetype<usize>(buffer), false);
+  store<usize>(array, changetype<usize>(buffer), offsetof<ArrayBufferView>("dataStart"));
   store<i32>(array, bufferSize, offsetof<ArrayBufferView>("byteLength"));
   store<i32>(array, length, offsetof<i32[]>("length_"));
   return array;
 }
 
 // @ts-ignore: decorator
-@lazy @global var __ministack: usize = 0; // eslint-disable-line
+@global @unsafe
+function __tostack(ptr: usize): usize { // eslint-disable-line
+  return ptr;
+}
 
 // These are provided by the respective implementation, included as another entry file by asc:
 

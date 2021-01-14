@@ -8,6 +8,7 @@
  * @license Apache-2.0
  */
 
+import { BuiltinNames } from "./builtins";
 import { Target } from "./common";
 import * as binaryen from "./glue/binaryen";
 
@@ -538,20 +539,22 @@ export class MemorySegment {
 export class Module {
   constructor(
     /** Binaryen module reference. */
-    public ref: ModuleRef
+    public ref: ModuleRef,
+    /** Whether a shadow stack is used. */
+    public useShadowStack: bool
   ) {
     this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
   }
 
   private lit: usize;
 
-  static create(): Module {
-    return new Module(binaryen._BinaryenModuleCreate());
+  static create(useShadowStack: bool): Module {
+    return new Module(binaryen._BinaryenModuleCreate(), useShadowStack);
   }
 
-  static createFrom(buffer: Uint8Array): Module {
+  static createFrom(buffer: Uint8Array, useShadowStack: bool): Module {
     var cArr = allocU8Array(buffer);
-    var module = new Module(binaryen._BinaryenModuleRead(cArr, buffer.length));
+    var module = new Module(binaryen._BinaryenModuleRead(cArr, buffer.length), useShadowStack);
     binaryen._free(changetype<usize>(cArr));
     return module;
   }
@@ -628,12 +631,25 @@ export class Module {
     return binaryen._BinaryenLocalGet(this.ref, index, type);
   }
 
+  tostack(value: ExpressionRef): ExpressionRef {
+    if (this.useShadowStack) {
+      let type = binaryen._BinaryenExpressionGetType(value);
+      assert(type == NativeType.I32);
+      return this.call(BuiltinNames.tostack, [ value ], type);
+    }
+    return value;
+  }
+
   local_tee(
     index: i32,
     value: ExpressionRef,
-    type: NativeType = NativeType.Auto
+    isManaged: bool,
+    type: NativeType = NativeType.Auto,
   ): ExpressionRef {
     if (type == NativeType.Auto) type = binaryen._BinaryenExpressionGetType(value);
+    if (isManaged && this.useShadowStack) {
+      value = this.tostack(value);
+    }
     return binaryen._BinaryenLocalTee(this.ref, index, value, type);
   }
 
@@ -732,8 +748,12 @@ export class Module {
 
   local_set(
     index: Index,
-    value: ExpressionRef
+    value: ExpressionRef,
+    isManaged: bool
   ): ExpressionRef {
+    if (isManaged && this.useShadowStack) {
+      value = this.tostack(value);
+    }
     return binaryen._BinaryenLocalSet(this.ref, index, value);
   }
 
@@ -1996,6 +2016,16 @@ export function getConstValueF64(expr: ExpressionRef): f64 {
   return binaryen._BinaryenConstGetValueF64(expr);
 }
 
+export function isConstZero(expr: ExpressionRef): bool {
+  if (getExpressionId(expr) != ExpressionId.Const) return false;
+  var type = getExpressionType(expr);
+  if (type == NativeType.I32) return getConstValueI32(expr) == 0;
+  if (type == NativeType.I64) return getConstValueI64Low(expr) == 0 && getConstValueI64High(expr) == 0;
+  if (type == NativeType.F32) return getConstValueF32(expr) == 0;
+  if (type == NativeType.F64) return getConstValueF64(expr) == 0;
+  return false;
+}
+
 export function getLocalGetIndex(expr: ExpressionRef): Index {
   return binaryen._BinaryenLocalGetGetIndex(expr);
 }
@@ -2308,7 +2338,7 @@ export class SwitchBuilder {
     for (let i = 0; i < numCases; ++i) {
       labels[i] = "case" + i.toString() + labelPostfix;
     }
-    entry[0] = module.local_set(localIndex, this.condition);
+    entry[0] = module.local_set(localIndex, this.condition, false); // u32
     for (let i = 0; i < numValues; ++i) {
       let index = indexes[i];
       entry[1 + i] = module.br(labels[index],

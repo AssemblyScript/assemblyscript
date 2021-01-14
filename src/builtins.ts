@@ -605,10 +605,13 @@ export namespace BuiltinNames {
   export const v64x2_load_splat = "~lib/builtins/v64x2.load_splat";
 
   // internals
+  export const data_end = "~lib/memory/__data_end";
+  export const stack_pointer = "~lib/memory/__stack_pointer";
   export const heap_base = "~lib/memory/__heap_base";
   export const rtti_base = "~lib/rt/__rtti_base";
   export const visit_globals = "~lib/rt/__visit_globals";
   export const visit_members = "~lib/rt/__visit_members";
+  export const tostack = "~lib/rt/__tostack";
 
   // std/number.ts
   export const isNaN = "~lib/number/isNaN";
@@ -1191,10 +1194,10 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
         let ret = module.binary(BinaryOp.OrI32,
           module.binary(
             BinaryOp.ShlI32,
-            module.local_tee(temp1.index, arg0),
+            module.local_tee(temp1.index, arg0, false), // i32
             module.binary(
               BinaryOp.AndI32,
-              module.local_tee(temp2.index, arg1),
+              module.local_tee(temp2.index, arg1, false), // i32
               module.i32(type.size - 1)
             )
           ),
@@ -1272,10 +1275,10 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
         let ret = module.binary(BinaryOp.OrI32,
           module.binary(
             BinaryOp.ShrU32,
-            module.local_tee(temp1.index, arg0),
+            module.local_tee(temp1.index, arg0, false), // i32
             module.binary(
               BinaryOp.AndI32,
-              module.local_tee(temp2.index, arg1),
+              module.local_tee(temp2.index, arg1, false), // i32
               module.i32(type.size - 1)
             )
           ),
@@ -1351,9 +1354,10 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
             module.local_tee(
               temp2.index,
               module.binary(BinaryOp.ShrI32,
-                module.local_tee(temp1.index, arg0),
+                module.local_tee(temp1.index, arg0, false), // i32
                 module.i32(31)
-              )
+              ),
+              false // i32
             ),
             module.local_get(temp1.index, NativeType.I32)
           ),
@@ -1375,9 +1379,10 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
             module.local_tee(
               temp2.index,
               module.binary(isWasm64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32,
-                module.local_tee(temp1.index, arg0),
+                module.local_tee(temp1.index, arg0, false), // i32/i64
                 isWasm64 ? module.i64(63) : module.i32(31)
-              )
+              ),
+              false // i32/i64
             ),
             module.local_get(temp1.index, options.nativeSizeType)
           ),
@@ -1398,9 +1403,10 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
             module.local_tee(
               temp2.index,
               module.binary(BinaryOp.ShrI64,
-                module.local_tee(temp1.index, arg0),
+                module.local_tee(temp1.index, arg0, false), // i64
                 module.i64(63)
-              )
+              ),
+              false // i64
             ),
             module.local_get(temp1.index, NativeType.I64)
           ),
@@ -1487,8 +1493,8 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
       let temp2 = flow.getTempLocal(type);
       flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
       let ret = module.select(
-        module.local_tee(temp1.index, arg0),
-        module.local_tee(temp2.index, arg1),
+        module.local_tee(temp1.index, arg0, false), // numeric
+        module.local_tee(temp2.index, arg1, false), // numeric
         module.binary(op,
           module.local_get(temp1.index, nativeType),
           module.local_get(temp2.index, nativeType)
@@ -1566,8 +1572,8 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
       let temp2 = flow.getTempLocal(type);
       flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
       let ret = module.select(
-        module.local_tee(temp1.index, arg0),
-        module.local_tee(temp2.index, arg1),
+        module.local_tee(temp1.index, arg0, false), // numeric
+        module.local_tee(temp2.index, arg1, false), // numeric
         module.binary(op,
           module.local_get(temp1.index, nativeType),
           module.local_get(temp2.index, nativeType)
@@ -1906,7 +1912,7 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
         let flow = compiler.currentFlow;
         let temp = flow.getTempLocal(Type.f32);
         let ret = module.binary(BinaryOp.NeF32,
-          module.local_tee(temp.index, arg0),
+          module.local_tee(temp.index, arg0, false), // f32
           module.local_get(temp.index, NativeType.F32)
         );
         flow.freeTempLocal(temp);
@@ -1922,7 +1928,7 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
         let flow = compiler.currentFlow;
         let temp = flow.getTempLocal(Type.f64);
         let ret = module.binary(BinaryOp.NeF64,
-          module.local_tee(temp.index, arg0),
+          module.local_tee(temp.index, arg0, false), // f64
           module.local_get(temp.index, NativeType.F64)
         );
         flow.freeTempLocal(temp);
@@ -1986,7 +1992,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
         let temp = flow.getTempLocal(Type.f32);
         let ret = module.binary(BinaryOp.EqF32,
           module.binary(BinaryOp.SubF32,
-            module.local_tee(temp.index, arg0),
+            module.local_tee(temp.index, arg0, false), // f32
             module.local_get(temp.index, NativeType.F32)
           ),
           module.f32(0)
@@ -2008,7 +2014,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
         let temp = flow.getTempLocal(Type.f64);
         let ret = module.binary(BinaryOp.EqF64,
           module.binary(BinaryOp.SubF64,
-            module.local_tee(temp.index, arg0),
+            module.local_tee(temp.index, arg0, false), // f64
             module.local_get(temp.index, NativeType.F64)
           ),
           module.f64(0)
@@ -3049,7 +3055,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         let temp = flow.getTempLocal(type);
         flow.setLocalFlag(temp.index, LocalFlags.WRAPPED); // arg0 is wrapped
         let ret = module.if(
-          module.local_tee(temp.index, arg0),
+          module.local_tee(temp.index, arg0, false), // numeric
           module.local_get(temp.index, NativeType.I32),
           abort
         );
@@ -3061,7 +3067,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         let temp = flow.getTempLocal(Type.i64);
         let ret = module.if(
           module.unary(UnaryOp.EqzI64,
-            module.local_tee(temp.index, arg0)
+            module.local_tee(temp.index, arg0, false) // i64
           ),
           abort,
           module.local_get(temp.index, NativeType.I64)
@@ -3077,7 +3083,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             compiler.options.isWasm64
               ? UnaryOp.EqzI64
               : UnaryOp.EqzI32,
-            module.local_tee(temp.index, arg0)
+            module.local_tee(temp.index, arg0, type.isManaged)
           ),
           abort,
           module.local_get(temp.index, compiler.options.nativeSizeType)
@@ -3089,7 +3095,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         let temp = flow.getTempLocal(Type.f32);
         let ret = module.if(
           module.binary(BinaryOp.EqF32,
-            module.local_tee(temp.index, arg0),
+            module.local_tee(temp.index, arg0, false), // f32
             module.f32(0)
           ),
           abort,
@@ -3102,7 +3108,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         let temp = flow.getTempLocal(Type.f64);
         let ret = module.if(
           module.binary(BinaryOp.EqF64,
-            module.local_tee(temp.index, arg0),
+            module.local_tee(temp.index, arg0, false), // f64
             module.f64(0)
           ),
           abort,
@@ -3118,7 +3124,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         let temp = flow.getTempLocal(type);
         let ret = module.if(
           module.ref_is_null(
-            module.local_tee(temp.index, arg0)
+            module.local_tee(temp.index, arg0, false) // ref
           ),
           abort,
           module.local_get(temp.index, NativeType.F64)
@@ -8666,7 +8672,8 @@ export function compileVisitGlobals(compiler: Compiler): void {
         exprs.push(
           module.if(
             module.local_tee(1,
-              module.global_get(global.internalName, nativeSizeType)
+              module.global_get(global.internalName, nativeSizeType),
+              false // internal
             ),
             module.call(visitInstance.internalName, [
               module.local_get(1, nativeSizeType), // tempRef != null
@@ -8766,7 +8773,8 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
                     module.load(nativeSizeSize, false,
                       module.local_get(0, nativeSizeType),
                       nativeSizeType, fieldOffset
-                    )
+                    ),
+                    false // internal
                   ),
                   module.call(visitInstance.internalName, [
                     module.local_get(2, nativeSizeType), // value

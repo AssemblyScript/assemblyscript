@@ -188,6 +188,16 @@
     "type": "b",
     "default": false
   },
+  "stackSize": {
+    "category": "Features",
+    "description": [
+      "Overrides the stack size. Only relevant for incremental GC",
+      "or when using a custom runtime that requires stack space.",
+      "Defaults to 0 without and to 16384 with incremental GC."
+    ],
+    "default": 0,
+    "type": "i"
+  },
   "explicitStart": {
     "category": "Features",
     "description": "Exports an explicit '_start' function to call.",

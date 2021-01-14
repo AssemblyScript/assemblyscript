@@ -69,6 +69,14 @@ export namespace memory {
 
 // @ts-ignore: decorator
 @builtin
+export declare const __data_end: usize;
+
+// @ts-ignore: decorator
+@builtin
+export declare var __stack_pointer: usize;
+
+// @ts-ignore: decorator
+@builtin
 export declare const __heap_base: usize;
 
 /** Heap memory interface. */

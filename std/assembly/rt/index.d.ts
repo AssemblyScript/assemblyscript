@@ -28,7 +28,6 @@ declare function __finalize(ptr: usize): void;
 
 // Incremental GC (otherwise not present)
 declare function __autocollect(): void;
-declare var __ministack: usize;
 
 // Debugging
 declare const ASC_RTRACE: bool;

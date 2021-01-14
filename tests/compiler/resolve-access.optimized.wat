@@ -1386,16 +1386,15 @@
  (func $resolve-access/arrayAccess (result i32)
   (local $0 i32)
   (local $1 i32)
-  i32.const 16
-  i32.const 3
-  call $~lib/rt/tcms/__new
-  local.set $0
   i32.const 8
   i32.const 0
   call $~lib/rt/tcms/__new
   local.tee $1
   call $~lib/memory/memory.copy
-  local.get $0
+  i32.const 16
+  i32.const 3
+  call $~lib/rt/tcms/__new
+  local.tee $0
   local.get $1
   i32.store
   local.get $0

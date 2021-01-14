@@ -134,6 +134,14 @@ export function setExportRuntime(options: Options, exportRuntime: bool): void {
   options.exportRuntime = exportRuntime;
 }
 
+/** Default stack size. */
+export const DEFAULT_STACK_SIZE = 16384;
+
+/** Sets the `stackSize` option. */
+export function setStackSize(options: Options, stackSize: i32): void {
+  options.stackSize = stackSize;
+}
+
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */

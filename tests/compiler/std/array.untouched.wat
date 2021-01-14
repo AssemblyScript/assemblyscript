@@ -3625,36 +3625,36 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 16
-  local.get $2
-  call $~lib/rt/tcms/__new
-  local.set $4
   local.get $0
   local.get $1
   i32.shl
-  local.set $5
-  local.get $5
+  local.set $4
+  local.get $4
   i32.const 0
   local.get $3
   call $~lib/rt/__newBuffer
+  local.set $5
+  i32.const 16
+  local.get $2
+  call $~lib/rt/tcms/__new
   local.set $6
-  local.get $4
   local.get $6
+  local.get $5
   i32.store
-  local.get $4
   local.get $6
+  local.get $5
   i32.const 0
   call $~lib/rt/tcms/__link
-  local.get $4
   local.get $6
-  i32.store offset=4
-  local.get $4
   local.get $5
-  i32.store offset=8
+  i32.store offset=4
+  local.get $6
   local.get $4
+  i32.store offset=8
+  local.get $6
   local.get $0
   i32.store offset=12
-  local.get $4
+  local.get $6
  )
  (func $~lib/array/Array<u8>#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)

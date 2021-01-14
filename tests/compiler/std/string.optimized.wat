@@ -5641,23 +5641,24 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  local.get $0
+  i32.const 2
+  i32.shl
+  local.tee $3
+  i32.const 0
+  call $~lib/rt/tcms/__new
+  local.set $2
   i32.const 16
   i32.const 3
   call $~lib/rt/tcms/__new
   local.tee $1
-  local.get $0
-  i32.const 2
-  i32.shl
-  local.tee $2
-  i32.const 0
-  call $~lib/rt/tcms/__new
-  local.tee $3
+  local.get $2
   i32.store
   local.get $1
-  local.get $3
+  local.get $2
   i32.store offset=4
   local.get $1
-  local.get $2
+  local.get $3
   i32.store offset=8
   local.get $1
   local.get $0

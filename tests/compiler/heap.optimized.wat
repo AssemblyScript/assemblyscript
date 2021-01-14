@@ -1359,7 +1359,7 @@
  (func $~lib/memory/heap.reset
   i32.const 1184
   i32.const 1248
-  i32.const 101
+  i32.const 109
   i32.const 7
   call $~lib/builtins/abort
   unreachable
