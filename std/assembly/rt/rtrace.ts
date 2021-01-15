@@ -10,4 +10,4 @@ export declare function onfree(block: BLOCK): void;
 
 // Garbage collector
 export declare function onvisit(block: BLOCK): bool;
-export declare function oncollect(totalObjects: usize, totalMemory: usize): void;
+export declare function oncollect(total: usize): void;

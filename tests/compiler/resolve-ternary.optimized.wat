@@ -52,6 +52,7 @@
  (elem (i32.const 1) $start:resolve-ternary~anonymous|0 $start:resolve-ternary~anonymous|1 $resolve-ternary/g1 $resolve-ternary/g2)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
@@ -983,7 +984,7 @@
   if
    i32.const 1280
    i32.const 1344
-   i32.const 127
+   i32.const 124
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1099,6 +1100,15 @@
   local.get $2
   local.get $1
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $1
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $1
   i32.const 20
   i32.add

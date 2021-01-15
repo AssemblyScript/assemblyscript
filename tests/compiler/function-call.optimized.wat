@@ -38,6 +38,7 @@
  (elem (i32.const 1) $start:function-call~anonymous|0 $start:function-call~anonymous|0 $start:function-call~anonymous|2 $start:function-call~anonymous|2 $start:function-call~fn2 $function-call/Foo#fnVoid $start:function-call~fn2 $function-call/Foo#fnRet)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $function-call/foo (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
@@ -910,6 +911,15 @@
   local.get $2
   local.get $0
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $0
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $0
   i32.const 20
   i32.add

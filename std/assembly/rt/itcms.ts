@@ -23,12 +23,9 @@ import { onvisit, oncollect } from "./rtrace";
 // @ts-ignore: decorator
 @inline const COLOR_MASK = 3;
 
-/** Number of objects currently managed by the GC. */
-// @ts-ignore: decorator
-@lazy var total: usize = 0;
 /** Size in memory of all objects currently managed by the GC. */
 // @ts-ignore: decorator
-@lazy var totalMem: usize = 0;
+@lazy var total: usize = 0;
 
 /** Currently transitioning from SWEEP to MARK state. */
 // @ts-ignore: decorator
@@ -214,8 +211,7 @@ function free(obj: Object): void {
     obj.nextWithColor = 0; // may become linked again
     obj.prev = changetype<Object>(0);
   } else {
-    total -= 1;
-    totalMem -= obj.size;
+    total -= obj.size;
     if (isDefined(__finalize)) {
       __finalize(changetype<usize>(obj) + TOTAL_OVERHEAD);
     }
@@ -234,8 +230,7 @@ export function __new(size: usize, id: i32): usize {
   obj.rtId = id;
   obj.rtSize = <u32>size;
   obj.linkTo(fromSpace, white); // inits next/prev
-  total += 1;
-  totalMem += obj.size;
+  total += obj.size;
   var ptr = changetype<usize>(obj) + TOTAL_OVERHEAD;
   // may be visited before being fully initialized, so must fill
   memory.fill(ptr, 0, size);
@@ -330,7 +325,7 @@ export function __unpin(ptr: usize): void {
 // @ts-ignore: decorator
 @global @unsafe
 export function __collect(): void {
-  if (TRACE) trace("GC (full) at mem/objs", 2, totalMem, total);
+  if (TRACE) trace("GC (full) at", 1, total);
   if (state > STATE_IDLE) {
     // finish current cycle
     while (state != STATE_IDLE) step();
@@ -338,9 +333,9 @@ export function __collect(): void {
   // perform a full cycle
   step();
   while (state != STATE_IDLE) step();
-  threshold = 2 * total;
-  if (TRACE) trace("GC (full) done at mem/objs", 2, totalMem, total);
-  if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
+  threshold = <i32>(<i64>total * SLEEPINESS / 100);
+  if (TRACE) trace("GC (full) done at", 1, total);
+  if (isDefined(ASC_RTRACE)) oncollect(total);
 }
 
 // Garbage collector automation
@@ -361,17 +356,17 @@ export function __collect(): void {
 /** Performs a reasonable amount of incremental GC steps. */
 function maybeStep(): void {
   if (total < threshold) return;
-  if (TRACE) trace("GC (auto) at mem/objs", 2, totalMem, total);
+  if (TRACE) trace("GC (auto) at", 1, total);
   let limit: isize = GRANULARITY * EAGERNESS / 100;
   do {
     limit -= step();
     if (state == STATE_IDLE) {
-      if (TRACE) trace("└ down to mem/objs (complete)", 2, totalMem, total);
-      if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
-      threshold = total * SLEEPINESS / 100;
+      if (TRACE) trace("└ GC (auto) done at", 1, total);
+      if (isDefined(ASC_RTRACE)) oncollect(total);
+      threshold = <i32>(<i64>total * SLEEPINESS / 100);
       return;
     }
   } while (limit > 0);
-  if (TRACE) trace("└ down to mem/objs (ongoing)", 2, totalMem, total);
+  if (TRACE) trace("└ GC (auto) ongoing at", 1, total);
   threshold = total + GRANULARITY;
 }

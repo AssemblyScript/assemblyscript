@@ -21,6 +21,7 @@
  (data (i32.const 1368) "\01\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\001\000\009\005\00.\00t\00s")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -881,6 +882,15 @@
   local.get $2
   local.get $0
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $0
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $0
   i32.const 20
   i32.add

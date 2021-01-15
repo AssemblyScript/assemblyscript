@@ -79,7 +79,7 @@ export declare class Rtrace  {
   onvisit(ptr: number): boolean;
 
   /** A function that is called after a collection phase. */
-  oncollect(totalObjects: number, totalMemory: number): void;
+  oncollect(total: number): void;
 
   /** Obtains information about a block. */
   getBlockInfo(ptr: number): BlockInfo;

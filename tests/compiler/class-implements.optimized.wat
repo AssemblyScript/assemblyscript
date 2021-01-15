@@ -16,6 +16,7 @@
  (data (i32.const 1272) "\01\00\00\00&\00\00\00c\00l\00a\00s\00s\00-\00i\00m\00p\00l\00e\00m\00e\00n\00t\00s\00.\00t\00s")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $class-implements/A i32 (i32.const 3))
  (global $class-implements/C i32 (i32.const 5))
  (export "A" (global $class-implements/A))
@@ -883,6 +884,15 @@
   local.get $2
   local.get $1
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $1
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $1
   i32.const 20
   i32.add

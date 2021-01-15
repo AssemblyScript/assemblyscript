@@ -24,6 +24,7 @@
  (global $exports/outer.inner.a i32 (i32.const 42))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $exports/Car i32 (i32.const 3))
  (global $exports/vehicles.Car i32 (i32.const 4))
@@ -932,6 +933,15 @@
   local.get $2
   local.get $1
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $1
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $1
   i32.const 20
   i32.add

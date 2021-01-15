@@ -31,6 +31,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -1048,7 +1049,7 @@
   if
    i32.const 1104
    i32.const 1168
-   i32.const 127
+   i32.const 124
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1069,6 +1070,15 @@
   global.get $~lib/rt/tcms/fromSpace
   global.get $~lib/rt/tcms/white
   call $~lib/rt/tcms/Object#linkTo
+  global.get $~lib/rt/tcms/total
+  local.get $2
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   i32.const 20
   i32.add
@@ -1724,7 +1734,7 @@
     if
      i32.const 0
      i32.const 1168
-     i32.const 219
+     i32.const 213
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -1761,7 +1771,7 @@
     if
      i32.const 0
      i32.const 1168
-     i32.const 228
+     i32.const 222
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -1798,7 +1808,7 @@
     if
      i32.const 0
      i32.const 1168
-     i32.const 237
+     i32.const 231
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -1818,6 +1828,15 @@
      i32.const 0
      i32.store offset=8
     else
+     global.get $~lib/rt/tcms/total
+     local.get $0
+     i32.load
+     i32.const -4
+     i32.and
+     i32.const 4
+     i32.add
+     i32.sub
+     global.set $~lib/rt/tcms/total
      local.get $0
      i32.const 4
      i32.add
@@ -2240,7 +2259,7 @@
      if
       i32.const 0
       i32.const 1168
-      i32.const 103
+      i32.const 100
       i32.const 18
       call $~lib/builtins/abort
       unreachable
@@ -2254,7 +2273,7 @@
     if
      i32.const 0
      i32.const 1168
-     i32.const 107
+     i32.const 104
      i32.const 16
      call $~lib/builtins/abort
      unreachable

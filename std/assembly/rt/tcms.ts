@@ -19,12 +19,9 @@ import { onvisit, oncollect } from "./rtrace";
 // @ts-ignore: decorator
 @inline const COLOR_MASK = 3;
 
-/** Number of objects currently managed by the GC. */
-// @ts-ignore: decorator
-@lazy var total: usize = 0;
 /** Size in memory of all objects currently managed by the GC. */
 // @ts-ignore: decorator
-@lazy var totalMem: usize = 0;
+@lazy var total: usize = 0;
 
 // @ts-ignore: decorator
 @lazy var fromSpace = initLazy(changetype<Object>(memory.data(offsetof<Object>())));
@@ -129,10 +126,7 @@ export function __new(size: usize, id: i32): usize {
   obj.rtId = id;
   obj.rtSize = <u32>size;
   obj.linkTo(fromSpace, white);
-  if (TRACE) {
-    total += 1;
-    totalMem += obj.size;
-  }
+  total += obj.size;
   return changetype<usize>(obj) + TOTAL_OVERHEAD;
 }
 
@@ -146,7 +140,7 @@ export function __renew(oldPtr: usize, size: usize): usize {
     return newPtr;
   }
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  if (TRACE) totalMem -= oldObj.size;
+  total -= oldObj.size;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
   var newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);
   newObj.rtSize = <u32>size;
@@ -155,7 +149,7 @@ export function __renew(oldPtr: usize, size: usize): usize {
   newObj.next.prev = newObj;
   newObj.prev.next = newObj;
 
-  if (TRACE) totalMem += newObj.size;
+  total += newObj.size;
   return newPtr;
 }
 
@@ -206,7 +200,7 @@ export function __unpin(ptr: usize): void {
 // @ts-ignore: decorator
 @global @unsafe
 export function __collect(): void {
-  if (TRACE) trace("GC at mem/objs", 2, totalMem, total);
+  if (TRACE) trace("GC at", 1, total);
 
   // Mark roots and add to toSpace
   __visit_globals(VISIT_SCAN);
@@ -240,10 +234,7 @@ export function __collect(): void {
       iter.nextWithColor = 0; // may become linked again
       iter.prev = changetype<Object>(0);
     } else {
-      if (TRACE) {
-        total -= 1;
-        totalMem -= iter.size;
-      }
+      total -= iter.size;
       if (isDefined(__finalize)) __finalize(changetype<usize>(iter) + TOTAL_OVERHEAD);
       __free(changetype<usize>(iter) + BLOCK_OVERHEAD);
     }
@@ -257,6 +248,6 @@ export function __collect(): void {
   toSpace = from;
   white = black;
 
-  if (TRACE) trace("GC done at mem/objs", 2, totalMem, total);
-  if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
+  if (TRACE) trace("GC done at", 1, total);
+  if (isDefined(ASC_RTRACE)) oncollect(total);
 }

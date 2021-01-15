@@ -238,6 +238,7 @@
  (data (i32.const 5688) "\01\00\00\00\14\00\00\00=\00=\00 \00e\00x\00i\00t\00 \00=\00=")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/process/process.argv (mut i32) (i32.const 0))
  (global $std-wasi/process/argv (mut i32) (i32.const 0))
  (global $~lib/process/process.env (mut i32) (i32.const 0))
@@ -2190,7 +2191,7 @@
   if
    i32.const 4240
    i32.const 4544
-   i32.const 127
+   i32.const 124
    i32.const 31
    call $~lib/wasi/index/abort
    unreachable
@@ -2223,6 +2224,15 @@
   local.get $0
   local.get $2
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $2
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   i32.const 20
   i32.add
@@ -2676,11 +2686,20 @@
   if
    i32.const 4240
    i32.const 4544
-   i32.const 148
+   i32.const 142
    i32.const 31
    call $~lib/wasi/index/abort
    unreachable
   end
+  global.get $~lib/rt/tcms/total
+  local.get $2
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.sub
+  global.set $~lib/rt/tcms/total
   local.get $0
   i32.const 16
   i32.sub
@@ -2793,6 +2812,15 @@
   i32.load offset=8
   local.get $0
   call $~lib/rt/tcms/Object#set:next
+  global.get $~lib/rt/tcms/total
+  local.get $0
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
  )
  (func $~lib/string/String.UTF8.decodeUnsafe (param $0 i32) (param $1 i32) (result i32)

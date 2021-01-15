@@ -16,6 +16,7 @@
  (data (i32.const 1176) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $resolve-nested/Outer.InnerClass i32 (i32.const 4))
  (global $resolve-nested/Outer.Inner.EvenInnerClass i32 (i32.const 5))
  (export "Outer.InnerClass" (global $resolve-nested/Outer.InnerClass))
@@ -884,6 +885,15 @@
   local.get $2
   local.get $1
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $1
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $1
   i32.const 20
   i32.add

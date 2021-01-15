@@ -33,6 +33,7 @@
  (data (i32.const 1576) "\01\00\00\00\12\00\00\00u\00n\00d\00e\00f\00i\00n\00e\00d")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
@@ -1010,6 +1011,15 @@
   local.get $2
   local.get $0
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $0
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
  )
  (func $start:typeof
   i32.const 1088

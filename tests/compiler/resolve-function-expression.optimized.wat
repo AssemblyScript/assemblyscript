@@ -35,6 +35,7 @@
  (elem (i32.const 1) $start:resolve-function-expression~anonymous|0 $start:resolve-function-expression~anonymous|1 $start:resolve-function-expression~anonymous|2)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:resolve-function-expression~anonymous|0 (param $0 i32) (result i32)
@@ -936,7 +937,7 @@
   if
    i32.const 1456
    i32.const 1520
-   i32.const 127
+   i32.const 124
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1052,6 +1053,15 @@
   local.get $2
   local.get $1
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $1
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $1
   i32.const 20
   i32.add

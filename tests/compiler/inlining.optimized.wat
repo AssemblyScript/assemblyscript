@@ -22,6 +22,7 @@
  (elem (i32.const 1) $inlining/func_fe~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (export "test" (func $inlining/test))
  (export "memory" (memory $0))
  (start $~start)
@@ -915,7 +916,7 @@
   if
    i32.const 1136
    i32.const 1200
-   i32.const 127
+   i32.const 124
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1031,6 +1032,15 @@
   local.get $1
   local.get $2
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $2
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   i32.const 20
   i32.add

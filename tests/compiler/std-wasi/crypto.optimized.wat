@@ -202,6 +202,7 @@
  (data (i32.const 5000) "\01\00\00\00\02\00\00\00\n")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $std-wasi/crypto/buf (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -1519,7 +1520,7 @@
   if
    i32.const 1168
    i32.const 1232
-   i32.const 127
+   i32.const 124
    i32.const 31
    call $~lib/wasi/index/abort
    unreachable
@@ -1557,6 +1558,15 @@
   local.get $1
   local.get $2
   i32.store offset=8
+  global.get $~lib/rt/tcms/total
+  local.get $2
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   i32.const 20
   i32.add

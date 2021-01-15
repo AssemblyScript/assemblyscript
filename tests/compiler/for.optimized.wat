@@ -19,6 +19,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -887,7 +888,7 @@
   local.get $0
   i32.store offset=8
  )
- (func $for/Ref#constructor (result i32)
+ (func $~lib/rt/tcms/__new (result i32)
   (local $0 i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
@@ -906,6 +907,15 @@
   global.get $~lib/rt/tcms/fromSpace
   global.get $~lib/rt/tcms/white
   call $~lib/rt/tcms/Object#linkTo
+  global.get $~lib/rt/tcms/total
+  local.get $0
+  i32.load
+  i32.const -4
+  i32.and
+  i32.const 4
+  i32.add
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $0
   i32.const 20
   i32.add
@@ -941,7 +951,7 @@
     if
      i32.const 0
      i32.const 1152
-     i32.const 219
+     i32.const 213
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -978,7 +988,7 @@
     if
      i32.const 0
      i32.const 1152
-     i32.const 228
+     i32.const 222
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -1015,7 +1025,7 @@
     if
      i32.const 0
      i32.const 1152
-     i32.const 237
+     i32.const 231
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -1035,6 +1045,15 @@
      i32.const 0
      i32.store offset=8
     else
+     global.get $~lib/rt/tcms/total
+     local.get $0
+     i32.load
+     i32.const -4
+     i32.and
+     i32.const 4
+     i32.add
+     i32.sub
+     global.set $~lib/rt/tcms/total
      local.get $0
      i32.const 4
      i32.add
@@ -1348,7 +1367,7 @@
   i32.const 1264
   call $~lib/rt/tcms/initLazy
   global.set $~lib/rt/tcms/fromSpace
-  call $for/Ref#constructor
+  call $~lib/rt/tcms/__new
   local.set $0
   loop $for-loop|067
    local.get $0
@@ -1362,7 +1381,7 @@
     if (result i32)
      i32.const 0
     else
-     call $for/Ref#constructor
+     call $~lib/rt/tcms/__new
     end
     local.set $0
     br $for-loop|067
@@ -1390,12 +1409,12 @@
   end
   i32.const 0
   local.set $1
-  call $for/Ref#constructor
+  call $~lib/rt/tcms/__new
   drop
-  call $for/Ref#constructor
+  call $~lib/rt/tcms/__new
   local.set $0
-  loop $for-loop|08
-   call $for/Ref#constructor
+  loop $for-loop|07
+   call $~lib/rt/tcms/__new
    if
     block $for-break0
      local.get $1
@@ -1409,9 +1428,9 @@
       local.set $0
       br $for-break0
      end
-     call $for/Ref#constructor
+     call $~lib/rt/tcms/__new
      local.set $0
-     br $for-loop|08
+     br $for-loop|07
     end
    end
   end
@@ -1490,7 +1509,7 @@
          if
           i32.const 0
           i32.const 1152
-          i32.const 103
+          i32.const 100
           i32.const 18
           call $~lib/builtins/abort
           unreachable
@@ -1504,7 +1523,7 @@
         if
          i32.const 0
          i32.const 1152
-         i32.const 107
+         i32.const 104
          i32.const 16
          call $~lib/builtins/abort
          unreachable

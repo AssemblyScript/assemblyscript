@@ -23,6 +23,7 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
  (global $~lib/memory/__heap_base i32 (i32.const 308))
  (export "test" (func $inlining/test))
  (export "memory" (memory $0))
@@ -1664,6 +1665,16 @@
   local.get $0
   call $~lib/rt/tcms/Object#set:prev
  )
+ (func $~lib/rt/tcms/Object#get:size (param $0 i32) (result i32)
+  i32.const 4
+  local.get $0
+  i32.load
+  i32.const 3
+  i32.const -1
+  i32.xor
+  i32.and
+  i32.add
+ )
  (func $~lib/rt/tcms/__new (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
@@ -1672,7 +1683,7 @@
   if
    i32.const 112
    i32.const 176
-   i32.const 127
+   i32.const 124
    i32.const 31
    call $~lib/builtins/abort
    unreachable
@@ -1694,8 +1705,11 @@
   global.get $~lib/rt/tcms/fromSpace
   global.get $~lib/rt/tcms/white
   call $~lib/rt/tcms/Object#linkTo
-  i32.const 0
-  drop
+  global.get $~lib/rt/tcms/total
+  local.get $2
+  call $~lib/rt/tcms/Object#get:size
+  i32.add
+  global.set $~lib/rt/tcms/total
   local.get $2
   i32.const 20
   i32.add
