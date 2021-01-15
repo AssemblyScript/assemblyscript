@@ -694,14 +694,6 @@ export class Program extends DiagnosticEmitter {
   }
   private _collectInstance: Function | null = null;
 
-  /** Gets the runtime `__autocollect(): void` instance. */
-  get autocollectInstance(): Function {
-    var cached = this._autocollectInstance;
-    if (!cached) this._autocollectInstance = cached = this.requireFunction(CommonNames.autocollect);
-    return cached;
-  }
-  private _autocollectInstance: Function | null = null;
-
   /** Gets the runtime `__visit(ptr: usize, cookie: u32): void` instance. */
   get visitInstance(): Function {
     var cached = this._visitInstance;
@@ -3803,15 +3795,44 @@ export class Field extends VariableLikeElement {
     registerConcreteElement(this.program, this);
   }
 
+  /** Gets the field's `this` type. */
+  get thisType(): Type {
+    var parent = this.parent;
+    assert(parent.kind == ElementKind.CLASS);
+    return (<Class>parent).type;
+  }
+
   /** Gets the internal name of the respective getter function. */
   get internalGetterName(): string {
-    return this.parent.internalName + INSTANCE_DELIMITER + GETTER_PREFIX + this.name;
+    var cached = this._internalGetterName;
+    if (cached === null) this._internalGetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + GETTER_PREFIX + this.name;
+    return cached;
   }
+  private _internalGetterName: string | null = null;
 
   /** Gets the internal name of the respective setter function. */
   get internalSetterName(): string {
-    return this.parent.internalName + INSTANCE_DELIMITER + SETTER_PREFIX + this.name;
+    var cached = this._internalSetterName;
+    if (cached === null) this._internalSetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + SETTER_PREFIX + this.name;
+    return cached;
   }
+  private _internalSetterName: string | null = null;
+
+  /** Gets the signature of the respective getter function. */
+  get internalGetterSignature(): Signature {
+    var cached = this._internalGetterSignature;
+    if (!cached) this._internalGetterSignature = cached = new Signature(this.program, null, this.type, this.thisType);
+    return cached;
+  }
+  private _internalGetterSignature: Signature | null = null;
+
+  /** Gets the signature of the respective setter function. */
+  get internalSetterSignature(): Signature {
+    var cached = this._internalSetterSignature;
+    if (!cached) this._internalGetterSignature = cached = new Signature(this.program, [ this.type ], Type.void, this.thisType);
+    return cached;
+  }
+  private _internalSetterSignature: Signature | null = null;
 }
 
 /** A property comprised of a getter and a setter function. */

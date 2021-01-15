@@ -385,6 +385,8 @@ export class Compiler extends DiagnosticEmitter {
   pendingElements: Set<Element> = new Set();
   /** Elements, that are module exports, already processed */
   doneModuleExports: Set<Element> = new Set();
+  /** Shadow stack reference. */
+  shadowStack!: ShadowStackPass;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -430,6 +432,7 @@ export class Compiler extends DiagnosticEmitter {
     startFunctionInstance.internalName = BuiltinNames.start;
     this.currentFlow = startFunctionInstance.flow;
     this.currentBody = new Array<ExpressionRef>();
+    this.shadowStack = new ShadowStackPass(this);
   }
 
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
@@ -437,7 +440,7 @@ export class Compiler extends DiagnosticEmitter {
     var options = this.options;
     var module = this.module;
     var program = this.program;
-    var hasStack = options.stackSize > 0;
+    var hasShadowStack = options.stackSize > 0; // implies runtime=incremental
 
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize();
@@ -549,7 +552,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // finalize data
     module.removeGlobal(BuiltinNames.data_end);
-    if ((this.runtimeFeatures & RuntimeFeatures.DATA) != 0 || hasStack) {
+    if ((this.runtimeFeatures & RuntimeFeatures.DATA) != 0 || hasShadowStack) {
       if (options.isWasm64) {
         module.addGlobal(BuiltinNames.data_end, NativeType.I64, false,
           module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
@@ -563,7 +566,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // finalize stack (grows down from __heap_base to __data_end)
     module.removeGlobal(BuiltinNames.stack_pointer);
-    if ((this.runtimeFeatures & RuntimeFeatures.STACK) != 0 || hasStack) {
+    if ((this.runtimeFeatures & RuntimeFeatures.STACK) != 0 || hasShadowStack) {
       memoryOffset = i64_align(
         i64_add(memoryOffset, i64_new(options.stackSize)),
         options.usizeType.byteSize
@@ -581,7 +584,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // finalize heap
     module.removeGlobal(BuiltinNames.heap_base);
-    if ((this.runtimeFeatures & RuntimeFeatures.HEAP) != 0 || hasStack) {
+    if ((this.runtimeFeatures & RuntimeFeatures.HEAP) != 0 || hasShadowStack) {
       if (options.isWasm64) {
         module.addGlobal(BuiltinNames.heap_base, NativeType.I64, false,
           module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
@@ -734,8 +737,8 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Run custom passes
-    if (hasStack) {
-      new ShadowStackPass(this).walkModule();
+    if (hasShadowStack) {
+      this.shadowStack.walkModule();
     }
     if (program.lookup("ASC_RTRACE") != null) {
       new RtraceMemory(this).walkModule();
@@ -867,6 +870,9 @@ export class Compiler extends DiagnosticEmitter {
             let exportName = prefix + name;
             if (!module.hasExport(exportName)) {
               module.addFunctionExport(functionInstance.internalName, exportName);
+              if (signature.hasManagedOperands) {
+                this.shadowStack.noteExport(exportName, signature.getManagedOperandIndices());
+              }
             }
           }
         }
@@ -886,11 +892,19 @@ export class Compiler extends DiagnosticEmitter {
           let getterExportName = prefix + GETTER_PREFIX + name;
           if (!module.hasExport(getterExportName)) {
             module.addFunctionExport(fieldInstance.internalGetterName, getterExportName);
+            let signature = fieldInstance.internalGetterSignature;
+            if (signature.hasManagedOperands) {
+              this.shadowStack.noteExport(getterExportName, signature.getManagedOperandIndices());
+            }
           }
           if (!element.is(CommonFlags.READONLY)) {
             let setterExportName = prefix + SETTER_PREFIX + name;
             if (!module.hasExport(setterExportName)) {
               module.addFunctionExport(fieldInstance.internalSetterName, setterExportName);
+              let signature = fieldInstance.internalSetterSignature;
+              if (signature.hasManagedOperands) {
+                this.shadowStack.noteExport(setterExportName, signature.getManagedOperandIndices());
+              }
             }
           }
         }

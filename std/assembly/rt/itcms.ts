@@ -229,7 +229,7 @@ function free(obj: Object): void {
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  __autocollect();
+  maybeStep();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   obj.rtId = id;
   obj.rtSize = <u32>size;
@@ -246,23 +246,15 @@ export function __new(size: usize, id: i32): usize {
 @global @unsafe
 export function __renew(oldPtr: usize, size: usize): usize {
   var oldObj = changetype<Object>(oldPtr - TOTAL_OVERHEAD);
-  if (oldPtr < __heap_base) { // move to heap for simplicity
-    let newPtr = __new(size, oldObj.rtId);
-    memory.copy(newPtr, oldPtr, min(size, oldObj.rtSize));
-    return newPtr;
+  // Update object size if its block is large enough
+  if (size <= (oldObj.mmInfo & ~3) - OBJECT_OVERHEAD) {
+    oldObj.rtSize = <u32>size;
+    return oldPtr;
   }
-  if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  totalMem -= oldObj.size;
-  var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
-  var newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);
-  newObj.rtSize = <u32>size;
-
-  // Replace with new object
-  newObj.next.prev = newObj;
-  newObj.prev.next = newObj;
-  if (iter == oldObj) iter = newObj;
-
-  totalMem += newObj.size;
+  // If not the same object anymore, we have to move it move it due to the
+  // shadow stack potentially still referencing the old object
+  var newPtr = __new(size, oldObj.rtId);
+  memory.copy(newPtr, oldPtr, min(size, oldObj.rtSize));
   return newPtr;
 }
 
@@ -359,33 +351,27 @@ export function __collect(): void {
 /** How hard to sweep relative to new allocations, in percent. */
 // @ts-ignore: decorator
 @inline const EAGERNESS: usize = isDefined(ASC_GC_EAGERNESS) ? ASC_GC_EAGERNESS : 200;
+/** How hard to sleep in between cycles, in percent. */
+// @ts-ignore: decorator
+@inline const SLEEPINESS: usize = isDefined(ASC_GC_SLEEPINESS) ? ASC_GC_SLEEPINESS : 200;
 /** Threshold of objects for the next scheduled GC step. */
 // @ts-ignore: decorator
 @lazy var threshold: usize = GRANULARITY;
 
 /** Performs a reasonable amount of incremental GC steps. */
-// @ts-ignore: decorator
-@global @unsafe
-export function __autocollect(): void {
+function maybeStep(): void {
   if (total < threshold) return;
   if (TRACE) trace("GC (auto) at mem/objs", 2, totalMem, total);
-  // Do at least minSteps but also try to deleverage half the debt since we are
-  // only invoking the GC at the boundary with very different amounts of debt.
-  // TODO: The drastic overshoot is probably not ideal (for every use case), but
-  // works OKish for the compiler itself. Feel free to propose improvements.
-  const minSteps = EAGERNESS * GRANULARITY / 100;
-  let debt = total - threshold;
-  let limit: isize = max(minSteps, debt / 2);
+  let limit: isize = GRANULARITY * EAGERNESS / 100;
   do {
     limit -= step();
     if (state == STATE_IDLE) {
-      threshold = 2 * total;
       if (TRACE) trace("└ down to mem/objs (complete)", 2, totalMem, total);
       if (isDefined(ASC_RTRACE)) oncollect(total, totalMem);
+      threshold = total * SLEEPINESS / 100;
       return;
     }
   } while (limit > 0);
   if (TRACE) trace("└ down to mem/objs (ongoing)", 2, totalMem, total);
-  // Schedule immediately unless there was little debt anyhow, then delay
-  threshold = total + usize(debt < GRANULARITY) * GRANULARITY;
+  threshold = total + GRANULARITY;
 }

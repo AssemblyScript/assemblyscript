@@ -431,7 +431,12 @@ exports.main = function main(argv, options, callback) {
       let alias = part.substring(0, p).trim();
       let name = part.substring(p + 1).trim();
       if (!alias.length) return callback(Error("Global alias '" + part + "' is invalid."));
-      assemblyscript.setGlobalAlias(compilerOptions, __newString(alias), __newString(name));
+      {
+        let aliasPtr = __pin(__newString(alias));
+        let namePtr = __newString(name);
+        assemblyscript.setGlobalAlias(compilerOptions, aliasPtr, namePtr);
+        __unpin(aliasPtr);
+      }
     }
   }
 
@@ -529,11 +534,10 @@ exports.main = function main(argv, options, callback) {
     if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(program,
-        __newString(exports.libraryFiles[libPath]),
-        __newString(exports.libraryPrefix + libPath + extension.ext),
-        false // entry
-      );
+      let textPtr = __pin(__newString(exports.libraryFiles[libPath]));
+      let pathPtr = __newString(exports.libraryPrefix + libPath + extension.ext);
+      assemblyscript.parse(program, textPtr, pathPtr, false);
+      __unpin(textPtr);
     });
   });
   let customLibDirs = [];
@@ -558,11 +562,10 @@ exports.main = function main(argv, options, callback) {
         stats.parseCount++;
         exports.libraryFiles[libPath.replace(extension.re, "")] = libText;
         stats.parseTime += measure(() => {
-          assemblyscript.parse(program,
-            __newString(libText),
-            __newString(exports.libraryPrefix + libPath),
-            false // entry
-          );
+          let textPtr = __pin(__newString(libText));
+          let pathPtr = __newString(exports.libraryPrefix + libPath);
+          assemblyscript.parse(program, textPtr, pathPtr, false);
+          __unpin(textPtr);
         });
       }
     }
@@ -678,18 +681,17 @@ exports.main = function main(argv, options, callback) {
       if (file) {
         stats.parseCount++;
         stats.parseTime += measure(() => {
-          assemblyscript.parse(program,
-            __newString(file.sourceText),
-            __newString(file.sourcePath),
-            false // entry
-          );
+          let textPtr = __pin(__newString(file.sourceText));
+          let pathPtr = __newString(file.sourcePath);
+          assemblyscript.parse(program, textPtr, pathPtr, false);
+          __unpin(textPtr);
         });
       } else {
-        assemblyscript.parse(program,
-          __newString(null),
-          __newString(internalPath + extension.ext),
-          false // entry
-        );
+        stats.parseTime += measure(() => {
+          let textPtr = __newString(null); // no need to pin
+          let pathPtr = __newString(internalPath + extension.ext);
+          assemblyscript.parse(program, textPtr, pathPtr, false);
+        });
       }
     }
     var numErrors = checkDiagnostics(program, stderr);
@@ -714,11 +716,10 @@ exports.main = function main(argv, options, callback) {
     }
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(program,
-        __newString(runtimeText),
-        __newString(runtimePath + extension.ext),
-        true // entry
-      );
+      let textPtr = __pin(__newString(runtimeText));
+      let pathPtr = __newString(runtimePath + extension.ext);
+      assemblyscript.parse(program, textPtr, pathPtr, true);
+      __unpin(textPtr);
     });
   }
 
@@ -743,11 +744,10 @@ exports.main = function main(argv, options, callback) {
 
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(program,
-        __newString(sourceText),
-        __newString(sourcePath),
-        true
-      );
+      let textPtr = __pin(__newString(sourceText));
+      let pathPtr = __newString(sourcePath);
+      assemblyscript.parse(program, textPtr, pathPtr, true);
+      __unpin(textPtr);
     });
   }
 

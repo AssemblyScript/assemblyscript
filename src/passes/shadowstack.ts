@@ -86,6 +86,7 @@ import {
 
 import {
   _BinaryenAddFunction,
+  _BinaryenAddFunctionExport,
   _BinaryenCallGetNumOperands,
   _BinaryenCallGetOperandAt,
   _BinaryenCallGetTarget,
@@ -93,6 +94,9 @@ import {
   _BinaryenCallIndirectGetOperandAt,
   _BinaryenCallIndirectSetOperandAt,
   _BinaryenCallSetOperandAt,
+  _BinaryenExportGetKind,
+  _BinaryenExportGetName,
+  _BinaryenExportGetValue,
   _BinaryenExpressionGetId,
   _BinaryenExpressionGetType,
   _BinaryenFunctionGetBody,
@@ -103,9 +107,13 @@ import {
   _BinaryenFunctionGetResults,
   _BinaryenFunctionGetVar,
   _BinaryenFunctionSetBody,
+  _BinaryenGetExport,
+  _BinaryenGetFunction,
   _BinaryenLocalSetGetIndex,
   _BinaryenLocalSetGetValue,
   _BinaryenLocalSetIsTee,
+  _BinaryenLocalSetSetValue,
+  _BinaryenRemoveExport,
   _BinaryenRemoveFunction,
   _BinaryenReturnGetValue,
   _BinaryenReturnSetValue,
@@ -120,7 +128,11 @@ import {
   BinaryOp,
   NativeType,
   allocPtrArray,
-  Module
+  Module,
+  ExternalKind,
+  ExportRef,
+  expandType,
+  isConstZero
 } from "../module";
 
 import {
@@ -156,6 +168,8 @@ export class ShadowStackPass extends Pass {
   slotMaps: Map<FunctionRef, SlotMap> = new Map();
   /** Temporary locals, per function. */
   tempMaps: Map<FunctionRef, TempMap> = new Map();
+  /** Exports (with managed operands) map. */
+  exportMap: Map<string,i32[]> = new Map();
   /** Compiler reference. */
   compiler: Compiler;
 
@@ -199,6 +213,12 @@ export class ShadowStackPass extends Pass {
     return slotIndex;
   }
 
+  /** Notes the presence of an exported function taking managed operands. */
+  noteExport(name: string, managedOperandIndices: i32[]): void {
+    if (!managedOperandIndices.length) return;
+    this.exportMap.set(name, managedOperandIndices);
+  }
+
   /** Gets a shared temporary local of the given type in the specified functions. */
   getSharedTemp(func: FunctionRef, type: NativeType): Index {
     let tempMap: TempMap;
@@ -232,6 +252,46 @@ export class ShadowStackPass extends Pass {
     return expr;
   }
 
+  /** Makes a sequence of expressions zeroing the stack frame. */
+  makeStackFill(frameSize: i32, stmts: ExpressionRef[]): void {
+    var module = this.module;
+    if (this.options.hasFeature(Feature.BULK_MEMORY) && frameSize > 16) {
+      stmts.push(
+        module.memory_fill(
+          module.global_get(BuiltinNames.stack_pointer, this.ptrType),
+          module.i32(0), // TODO: Wasm64 also i32?
+          this.ptrConst(frameSize)
+        )
+      );
+    } else {
+      let remain = frameSize;
+      while (remain >= 8) {
+        // store<i64>(__stack_pointer, 0, frameSize - remain)
+        stmts.push(
+          module.store(8,
+            module.global_get(BuiltinNames.stack_pointer, this.ptrType),
+            module.i64(0),
+            NativeType.I64,
+            frameSize - remain
+          )
+        );
+        remain -= 8;
+      }
+      if (remain) {
+        assert(remain == 4);
+        // store<i32>(__stack_pointer, 0, frameSize - remain)
+        stmts.push(
+          module.store(4,
+            module.global_get(BuiltinNames.stack_pointer, this.ptrType),
+            module.i32(0),
+            NativeType.I32,
+            frameSize - remain
+          )
+        );
+      }
+    }
+  }
+
   private hasStackCheckFunction: bool = false;
 
   /** Makes a check that the current stack pointer is valid. */
@@ -259,6 +319,10 @@ export class ShadowStackPass extends Pass {
       let operand = operands[i];
       let match = matchTostack(module, operand);
       if (!match) continue;
+      if (isConstZero(match)) {
+        operands[i] = match;
+        continue;
+      }
       let currentFunction = this.currentFunction;
       let numLocals = _BinaryenFunctionGetNumLocals(currentFunction);
       let slotIndex = this.noteSlot(currentFunction, numLocals + this.callSlotOffset + i);
@@ -344,6 +408,10 @@ export class ShadowStackPass extends Pass {
     let value = _BinaryenLocalSetGetValue(localSet);
     let match = matchTostack(this.module, value);
     if (!match) return;
+    if (isConstZero(match)) {
+      _BinaryenLocalSetSetValue(localSet, match);
+      return;
+    }
     var module = this.module;
     let index = _BinaryenLocalSetGetIndex(localSet);
     let slotIndex = this.noteSlot(this.currentFunction, index);
@@ -368,19 +436,19 @@ export class ShadowStackPass extends Pass {
   }
 
   /** Updates a function with additional locals etc. */
-  updateFunction(func: FunctionRef): void {
-    let name = _BinaryenFunctionGetName(func);
-    let params = _BinaryenFunctionGetParams(func);
-    let results = _BinaryenFunctionGetResults(func);
-    let body = assert(_BinaryenFunctionGetBody(func));
-    let numVars = _BinaryenFunctionGetNumVars(func);
+  updateFunction(funcRef: FunctionRef): void {
+    let name = _BinaryenFunctionGetName(funcRef);
+    let params = _BinaryenFunctionGetParams(funcRef);
+    let results = _BinaryenFunctionGetResults(funcRef);
+    let body = assert(_BinaryenFunctionGetBody(funcRef));
+    let numVars = _BinaryenFunctionGetNumVars(funcRef);
     let vars = new Array<NativeType>();
     for (let i: Index = 0; i < numVars; ++i) {
-      vars[i] = _BinaryenFunctionGetVar(func, i);
+      vars[i] = _BinaryenFunctionGetVar(funcRef, i);
     }
     let tempMaps = this.tempMaps;
-    if (tempMaps.has(func)) {
-      let tempMap = changetype<TempMap>(tempMaps.get(func));
+    if (tempMaps.has(funcRef)) {
+      let tempMap = changetype<TempMap>(tempMaps.get(funcRef));
       for (let _keys = Map_keys(tempMap), i = 0, k = _keys.length; i < k; ++i) {
         vars.push(_keys[i]);
       }
@@ -390,6 +458,85 @@ export class ShadowStackPass extends Pass {
     let cArr = allocPtrArray(vars);
     _BinaryenAddFunction(moduleRef, name, params, results, cArr, vars.length, body);
     _free(cArr);
+  }
+
+  /** Updates a function export taking managed arguments. */
+  updateExport(exportRef: ExportRef, managedOperandIndices: i32[]): void {
+    var module = this.module;
+    var moduleRef = module.ref;
+    assert(_BinaryenExportGetKind(exportRef) == ExternalKind.Function);
+
+    var internalNameRef = _BinaryenExportGetValue(exportRef);
+    var internalName = module.readStringCached(internalNameRef)!;
+    var externalNameRef = _BinaryenExportGetName(exportRef);
+    var funcRef = _BinaryenGetFunction(moduleRef, internalNameRef);
+    var params = _BinaryenFunctionGetParams(funcRef);
+    var paramTypes = expandType(params);
+    var numParams = paramTypes.length;
+    var results = _BinaryenFunctionGetResults(funcRef);
+    var numLocals = numParams;
+    var vars = new Array<NativeType>();
+    var numSlots = assert(managedOperandIndices.length);
+    var frameSize = numSlots * this.ptrSize;
+    var wrapperName = "export:" + internalName;
+    var wrapperNameRef = module.allocStringCached(wrapperName);
+
+    if (_BinaryenGetFunction(moduleRef, wrapperNameRef) == 0) {
+      let stmts = new Array<ExpressionRef>();
+      // __stack_pointer -= frameSize
+      stmts.push(
+        this.makeStackOffset(-frameSize)
+      );
+      for (let slotIndex = 0; slotIndex < numSlots; ++slotIndex) {
+        // store<usize>(__stack_pointer, $local, slotIndex * ptrSize)
+        stmts.push(
+          module.store(this.ptrSize,
+            module.global_get(BuiltinNames.stack_pointer, this.ptrType),
+            module.local_get(managedOperandIndices[slotIndex], this.ptrType),
+            this.ptrType, slotIndex * this.ptrSize
+          )
+        );
+      }
+      let forwardedOperands = new Array<ExpressionRef>(numParams);
+      for (let i = 0; i < numParams; ++i) {
+        forwardedOperands[i] = module.local_get(i, paramTypes[i]);
+      }
+      if (results != NativeType.None) {
+        let tempIndex = numLocals++;
+        vars.push(results);
+        // t = original(...)
+        stmts.push(
+          module.local_set(tempIndex,
+            module.call(internalName, forwardedOperands, results),
+            false // internal
+          )
+        );
+        // __stack_pointer += frameSize
+        stmts.push(
+          this.makeStackOffset(+frameSize)
+        );
+        // -> t
+        stmts.push(
+          module.local_get(tempIndex, results)
+        );
+      } else {
+        // original(...)
+        stmts.push(
+          module.call(internalName, forwardedOperands, results)
+        );
+        // __stack_pointer += frameSize
+        stmts.push(
+          this.makeStackOffset(+frameSize)
+        );
+      }
+      let cArr = allocPtrArray(vars);
+      _BinaryenAddFunction(moduleRef, wrapperNameRef, params, results, cArr, vars.length,
+        module.block(null, stmts, results)
+      );
+      _free(cArr);
+    }
+    _BinaryenRemoveExport(moduleRef, externalNameRef);
+    _BinaryenAddFunctionExport(moduleRef, wrapperNameRef, externalNameRef);
   }
 
   /** @override */
@@ -416,41 +563,7 @@ export class ShadowStackPass extends Pass {
         this.makeStackOffset(-frameSize)
       );
       // memory.fill(__stack_pointer, 0, frameSize)
-      if (this.options.hasFeature(Feature.BULK_MEMORY) && frameSize > 16) {
-        stmts.push(
-          module.memory_fill(
-            module.global_get(BuiltinNames.stack_pointer, this.ptrType),
-            module.i32(0), // TODO: Wasm64 also i32?
-            this.ptrConst(frameSize)
-          )
-        );
-      } else {
-        let remain = frameSize;
-        while (remain >= 8) {
-          // store<i64>(__stack_pointer, 0, frameSize - remain)
-          stmts.push(
-            module.store(8,
-              module.global_get(BuiltinNames.stack_pointer, this.ptrType),
-              module.i64(0),
-              NativeType.I64,
-              frameSize - remain
-            )
-          );
-          remain -= 8;
-        }
-        if (remain) {
-          assert(remain == 4);
-          // store<i32>(__stack_pointer, 0, frameSize - remain)
-          stmts.push(
-            module.store(4,
-              module.global_get(BuiltinNames.stack_pointer, this.ptrType),
-              module.i32(0),
-              NativeType.I32,
-              frameSize - remain
-            )
-          );
-        }
-      }
+      this.makeStackFill(frameSize, stmts);
       
       // Handle implicit return
       let body = _BinaryenFunctionGetBody(func);
@@ -491,6 +604,15 @@ export class ShadowStackPass extends Pass {
     // TODO: _BinaryenFunctionAddVar ?
     for (let _keys = Map_keys(this.tempMaps), i = 0, k = _keys.length; i < k; ++i) {
       this.updateFunction(_keys[i]);
+    }
+
+    // Update exports taking managed arguments
+    var exportMap = this.exportMap;
+    for (let _keys = Map_keys(exportMap), i = 0, k = _keys.length; i < k; ++i) {
+      let exportName = _keys[i];
+      let exportRef = _BinaryenGetExport(module.ref, module.allocStringCached(exportName));
+      let managedOperandIndices = changetype<i32[]>(exportMap.get(exportName));
+      this.updateExport(exportRef, managedOperandIndices);
     }
   }
 }

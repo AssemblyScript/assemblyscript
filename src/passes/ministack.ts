@@ -47,6 +47,7 @@ import {
 
 const MINISTACK = "~lib/rt/__ministack";
 const STACK_DEPTH = "~stack_depth";
+const AUTOCOLLECT = "__autocollect";
 
 /** Instruments a module with a minimalistic shadow stack for precise GC. */
 export class MiniStack extends Pass {
@@ -130,13 +131,12 @@ export class MiniStack extends Pass {
             : module.i32(0)
         )
       );
-      let autocollectInstance = this.program.autocollectInstance;
       stmts.push(
         module.if(
           module.unary(UnaryOp.EqzI32,
             module.global_get(STACK_DEPTH, NativeType.I32)
           ),
-          module.call(autocollectInstance.internalName, null, NativeType.None)
+          module.call(AUTOCOLLECT, null, NativeType.None)
         )
       );
       if (results != NativeType.None) {
