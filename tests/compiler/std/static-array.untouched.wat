@@ -3329,6 +3329,9 @@
    end
   end
  )
+ (func $~lib/rt/tcms/__link (param $0 i32) (param $1 i32) (param $2 i32)
+  nop
+ )
  (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3385,6 +3388,10 @@
     local.get $0
     local.get $6
     i32.store offset=4
+    local.get $0
+    local.get $6
+    i32.const 0
+    call $~lib/rt/tcms/__link
    end
    local.get $0
    local.get $5

@@ -145,14 +145,18 @@ function initLazy(space: Object): Object {
 /** Visits all objects considered to be program roots. */
 function visitRoots(cookie: u32): void {
   __visit_globals(cookie);
-  let iter = pinSpace.next;
+  var iter = pinSpace.next;
   while (iter != pinSpace) {
     __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, cookie);
     iter = iter.next;
   }
-  let ptr = __stack_pointer;
+}
+
+/** Visits all objects on the stack. */
+function visitStack(cookie: u32): void {
+  var ptr = __stack_pointer;
   while (ptr < __heap_base) {
-    __visit(load<usize>(ptr), VISIT_SCAN);
+    __visit(load<usize>(ptr), cookie);
     ptr += sizeof<usize>();
   }
 }
@@ -176,6 +180,7 @@ function step(): usize {
         __visit_members(changetype<usize>(obj) + TOTAL_OVERHEAD, VISIT_SCAN);
       } else {
         visitRoots(VISIT_SCAN);
+        visitStack(VISIT_SCAN);
         obj = iter.next;
         if (obj == toSpace) { // done
           let from = fromSpace;
@@ -194,7 +199,7 @@ function step(): usize {
         iter = obj.next;
         if (DEBUG) assert(obj.color == i32(!white)); // old white
         free(obj);
-        return 1;
+        return 10;
       }
       toSpace.nextWithColor = changetype<usize>(toSpace);
       toSpace.prev = toSpace;
@@ -225,7 +230,8 @@ function free(obj: Object): void {
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  maybeStep();
+  if (total >= threshold) run();
+  else step();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   obj.rtId = id;
   obj.rtSize = <u32>size;
@@ -354,10 +360,9 @@ export function __collect(): void {
 @lazy var threshold: usize = GRANULARITY;
 
 /** Performs a reasonable amount of incremental GC steps. */
-function maybeStep(): void {
-  if (total < threshold) return;
+function run(): void {
   if (TRACE) trace("GC (auto) at", 1, total);
-  let limit: isize = GRANULARITY * EAGERNESS / 100;
+  var limit: isize = GRANULARITY * EAGERNESS / 100;
   do {
     limit -= step();
     if (state == STATE_IDLE) {

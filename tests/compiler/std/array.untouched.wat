@@ -4388,6 +4388,10 @@
     local.get $0
     local.get $6
     i32.store offset=4
+    local.get $0
+    local.get $6
+    i32.const 0
+    call $~lib/rt/tcms/__link
    end
    local.get $0
    local.get $5

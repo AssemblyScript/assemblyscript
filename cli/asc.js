@@ -1148,17 +1148,20 @@ exports.getAsconfig = getAsconfig;
 
 /** Checks diagnostics emitted so far for errors. */
 function checkDiagnostics(program, stderr) {
-  var diagnostic;
   var numErrors = 0;
-  while ((diagnostic = assemblyscript.nextDiagnostic(program))) {
+  do {
+    let diagnosticPtr = assemblyscript.nextDiagnostic(program);
+    if (!diagnosticPtr) break;
+    __pin(diagnosticPtr);
     if (stderr) {
       stderr.write(
-        __getString(assemblyscript.formatDiagnostic(diagnostic, stderr.isTTY, true)) +
+        __getString(assemblyscript.formatDiagnostic(diagnosticPtr, stderr.isTTY, true)) +
         EOL + EOL
       );
     }
-    if (assemblyscript.isError(diagnostic)) ++numErrors;
-  }
+    if (assemblyscript.isError(diagnosticPtr)) ++numErrors;
+    __unpin(diagnosticPtr);
+  } while (true);
   return numErrors;
 }
 

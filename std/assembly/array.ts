@@ -19,7 +19,7 @@ function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
     if (newData !== oldData) { // oldData has been free'd
       store<usize>(array, newData, offsetof<ArrayBufferView>("buffer"));
       store<usize>(array, newData, offsetof<ArrayBufferView>("dataStart"));
-      // new buffer inherits old buffer's state, so no need to link
+      __link(array, changetype<usize>(newData), false);
     }
     store<u32>(array, newCapacity, offsetof<ArrayBufferView>("byteLength"));
   }
