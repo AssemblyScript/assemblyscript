@@ -239,21 +239,24 @@ export class ShadowStackPass extends Pass {
 
   /** Makes an expression modifying the stack pointer by the given offset. */
   makeStackOffset(offset: i32): ExpressionRef {
+    assert(offset != 0);
     var module = this.module;
-    var expr = module.block(null, [
-      module.global_set(BuiltinNames.stack_pointer,
-        module.binary(offset >= 0 ? this.ptrBinaryAdd : this.ptrBinarySub,
-          module.global_get(BuiltinNames.stack_pointer, this.ptrType),
-          this.ptrConst(abs(offset))
-        )
-      ),
+    var expr = module.global_set(BuiltinNames.stack_pointer,
+      module.binary(offset >= 0 ? this.ptrBinaryAdd : this.ptrBinarySub,
+        module.global_get(BuiltinNames.stack_pointer, this.ptrType),
+        this.ptrConst(abs(offset))
+      )
+    );
+    if (offset > 0) return expr;
+    return module.block(null, [
+      expr,
       this.makeStackCheck()
     ], NativeType.None);
-    return expr;
   }
 
   /** Makes a sequence of expressions zeroing the stack frame. */
   makeStackFill(frameSize: i32, stmts: ExpressionRef[]): void {
+    assert(frameSize > 0);
     var module = this.module;
     if (this.options.hasFeature(Feature.BULK_MEMORY) && frameSize > 16) {
       stmts.push(
