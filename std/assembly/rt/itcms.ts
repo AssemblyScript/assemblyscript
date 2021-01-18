@@ -1,8 +1,11 @@
 import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE } from "./common";
-import { onvisit, oncollect } from "./rtrace";
+import { onvisit, oncollect, oninterrupt, onyield } from "./rtrace";
 
 // === ITCMS: An incremental Tri-Color Mark & Sweep garbage collector ===
 // Adapted from Bach Le's μgc, see: https://github.com/bullno1/ugc
+
+// @ts-ignore: decorator
+@inline const PROFILE = false;
 
 // ╒═════════════╤══════════════ Colors ═══════════════════════════╕
 // │ Color       │ Meaning                                         │
@@ -163,13 +166,18 @@ function visitStack(cookie: u32): void {
 
 /** Performs a single step according to the current state. */
 function step(): usize {
+  // Magic constants responsible for pause times. Obtained experimentally
+  // using the compiler compiling itself. 20480 budget pro run by default.
+  const MARKCOST  = 1;
+  const SWEEPCOST = 10;
   var obj: Object;
   switch (state) {
     case STATE_IDLE: {
       state = STATE_MARK;
+      visitCount = 0;
       visitRoots(VISIT_SCAN);
       iter = toSpace;
-      // fall through
+      return visitCount * MARKCOST;
     }
     case STATE_MARK: {
       let black = i32(!white);
@@ -177,21 +185,29 @@ function step(): usize {
       if (obj != toSpace) {
         iter = obj;
         obj.color = black;
+        visitCount = 0;
         __visit_members(changetype<usize>(obj) + TOTAL_OVERHEAD, VISIT_SCAN);
-      } else {
-        visitRoots(VISIT_SCAN);
+        return visitCount * MARKCOST;
+      }
+      visitCount = 0;
+      visitRoots(VISIT_SCAN);
+      obj = iter.next;
+      if (obj == toSpace) {
         visitStack(VISIT_SCAN);
         obj = iter.next;
-        if (obj == toSpace) { // done
-          let from = fromSpace;
-          fromSpace = toSpace;
-          toSpace = from;
-          white = black;
-          iter = from.next;
-          state = STATE_SWEEP;
+        while (obj != toSpace) {
+          obj.color = black;
+          __visit_members(changetype<usize>(obj) + TOTAL_OVERHEAD, VISIT_SCAN);
+          obj = obj.next;
         }
+        let from = fromSpace;
+        fromSpace = toSpace;
+        toSpace = from;
+        white = black;
+        iter = from.next;
+        state = STATE_SWEEP;
       }
-      break;
+      return visitCount * MARKCOST;
     }
     case STATE_SWEEP: {
       obj = iter;
@@ -199,7 +215,7 @@ function step(): usize {
         iter = obj.next;
         if (DEBUG) assert(obj.color == i32(!white)); // old white
         free(obj);
-        return 10;
+        return SWEEPCOST;
       }
       toSpace.nextWithColor = changetype<usize>(toSpace);
       toSpace.prev = toSpace;
@@ -230,8 +246,7 @@ function free(obj: Object): void {
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
   if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
-  if (total >= threshold) run();
-  else step();
+  if (total >= threshold) interrupt();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   obj.rtId = id;
   obj.rtSize = <u32>size;
@@ -287,12 +302,18 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
 }
 
 // @ts-ignore: decorator
+@lazy var visitCount = 0;
+
+// @ts-ignore: decorator
 @global @unsafe
 export function __visit(ptr: usize, cookie: i32): void {
   if (!ptr) return;
   let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
   if (isDefined(ASC_RTRACE)) if (!onvisit(obj)) return;
-  if (obj.color == white) obj.makeGray();
+  if (obj.color == white) {
+    obj.makeGray();
+    ++visitCount;
+  }
 }
 
 // @ts-ignore: decorator
@@ -339,39 +360,43 @@ export function __collect(): void {
   // perform a full cycle
   step();
   while (state != STATE_IDLE) step();
-  threshold = <i32>(<i64>total * SLEEPINESS / 100);
-  if (TRACE) trace("GC (full) done at", 1, total);
+  threshold = <usize>(<u64>total * IDLEFACTOR / 100) + GRANULARITY;
+  if (TRACE) trace("GC (full) done at cur/max", 2, total, memory.size() << 16);
   if (isDefined(ASC_RTRACE)) oncollect(total);
 }
 
 // Garbage collector automation
 
-/** How often to interrupt. Smaller means more often with less pauses but less efficient. */
+/** How often to interrupt, in bytes allocated. */
 // @ts-ignore: decorator
-@inline const GRANULARITY: usize = isDefined(ASC_GC_GRANULARITY) ? ASC_GC_GRANULARITY : 200;
-/** How hard to sweep relative to new allocations, in percent. */
+@inline const GRANULARITY: usize = isDefined(ASC_GC_GRANULARITY) ? ASC_GC_GRANULARITY : 1024;
+/** How eager to sweep, in percent relative to allocations. */
 // @ts-ignore: decorator
-@inline const EAGERNESS: usize = isDefined(ASC_GC_EAGERNESS) ? ASC_GC_EAGERNESS : 200;
-/** How hard to sleep in between cycles, in percent. */
+@inline const SWEEPFACTOR: usize = isDefined(ASC_GC_SWEEPFACTOR) ? ASC_GC_SWEEPFACTOR : 200;
+/** How long to sleep in between cycles, in percent memory since last cycle. */
 // @ts-ignore: decorator
-@inline const SLEEPINESS: usize = isDefined(ASC_GC_SLEEPINESS) ? ASC_GC_SLEEPINESS : 200;
+@inline const IDLEFACTOR: usize = isDefined(ASC_GC_IDLEFACTOR) ? ASC_GC_IDLEFACTOR : 200;
+
 /** Threshold of objects for the next scheduled GC step. */
 // @ts-ignore: decorator
 @lazy var threshold: usize = GRANULARITY;
 
 /** Performs a reasonable amount of incremental GC steps. */
-function run(): void {
+function interrupt(): void {
+  if (PROFILE) oninterrupt();
   if (TRACE) trace("GC (auto) at", 1, total);
-  var limit: isize = GRANULARITY * EAGERNESS / 100;
+  var budget: isize = GRANULARITY * SWEEPFACTOR / 100;
   do {
-    limit -= step();
+    budget -= step();
     if (state == STATE_IDLE) {
-      if (TRACE) trace("└ GC (auto) done at", 1, total);
+      if (TRACE) trace("└ GC (auto) done at cur/max", 2, total, memory.size() << 16);
       if (isDefined(ASC_RTRACE)) oncollect(total);
-      threshold = <i32>(<i64>total * SLEEPINESS / 100);
+      threshold = <usize>(<u64>total * IDLEFACTOR / 100) + GRANULARITY;
+      if (PROFILE) onyield();
       return;
     }
-  } while (limit > 0);
+  } while (budget > 0);
   if (TRACE) trace("└ GC (auto) ongoing at", 1, total);
-  threshold = total + GRANULARITY;
+  threshold = total + GRANULARITY * usize(total - threshold < GRANULARITY);
+  if (PROFILE) onyield();
 }
