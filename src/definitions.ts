@@ -500,6 +500,7 @@ export class TSDBuilder extends ExportsWalker {
       indent(sb, this.indentLevel);
       sb.push("static wrap(ptr: usize): ");
       sb.push(name);
+      sb.push(";");
       sb.push("\n");
     }
     var staticMembers = element.prototype.members;
