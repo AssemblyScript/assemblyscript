@@ -167,7 +167,7 @@ function visitStack(cookie: u32): void {
 /** Performs a single step according to the current state. */
 function step(): usize {
   // Magic constants responsible for pause times. Obtained experimentally
-  // using the compiler compiling itself. 20480 budget pro run by default.
+  // using the compiler compiling itself. 2048 budget pro run by default.
   const MARKCOST  = 1;
   const SWEEPCOST = 10;
   var obj: Object;
