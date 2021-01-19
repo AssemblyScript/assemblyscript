@@ -370,10 +370,10 @@ export function __collect(): void {
 /** How often to interrupt, in bytes allocated. */
 // @ts-ignore: decorator
 @inline const GRANULARITY: usize = isDefined(ASC_GC_GRANULARITY) ? ASC_GC_GRANULARITY : 1024;
-/** How eager to sweep, in percent relative to allocations. */
+/** How eager to step, in percent relative to allocations. */
 // @ts-ignore: decorator
-@inline const SWEEPFACTOR: usize = isDefined(ASC_GC_SWEEPFACTOR) ? ASC_GC_SWEEPFACTOR : 200;
-/** How long to sleep in between cycles, in percent memory since last cycle. */
+@inline const STEPFACTOR: usize = isDefined(ASC_GC_SWEEPFACTOR) ? ASC_GC_SWEEPFACTOR : 200;
+/** How long to idle in between cycles, in percent memory since last cycle. */
 // @ts-ignore: decorator
 @inline const IDLEFACTOR: usize = isDefined(ASC_GC_IDLEFACTOR) ? ASC_GC_IDLEFACTOR : 200;
 
@@ -385,7 +385,7 @@ export function __collect(): void {
 function interrupt(): void {
   if (PROFILE) oninterrupt();
   if (TRACE) trace("GC (auto) at", 1, total);
-  var budget: isize = GRANULARITY * SWEEPFACTOR / 100;
+  var budget: isize = GRANULARITY * STEPFACTOR / 100;
   do {
     budget -= step();
     if (state == STATE_IDLE) {
