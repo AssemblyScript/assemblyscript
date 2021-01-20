@@ -20,8 +20,8 @@
  (data (i32.const 1336) "\01\00\00\00\1e\00\00\00m\00a\00n\00a\00g\00e\00d\00-\00c\00a\00s\00t\00.\00t\00s")
  (data (i32.const 1388) "<")
  (data (i32.const 1400) "\01\00\00\00\"\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00u\00p\00c\00a\00s\00t")
- (data (i32.const 1520) "\05")
- (data (i32.const 1552) "\04")
+ (data (i32.const 1520) "\05\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1548) " \00\00\00\04\00\00\00 ")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
@@ -1174,15 +1174,21 @@
  (func $~lib/rt/__visit_members (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  block $folding-inner0
-   block $invalid
+  block $invalid
+   block $managed-cast/Animal
     block $managed-cast/Cat
      block $~lib/arraybuffer/ArrayBufferView
-      local.get $0
-      i32.const 8
-      i32.sub
-      i32.load
-      br_table $folding-inner0 $folding-inner0 $~lib/arraybuffer/ArrayBufferView $managed-cast/Cat $folding-inner0 $invalid
+      block $~lib/string/String
+       block $~lib/arraybuffer/ArrayBuffer
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $managed-cast/Cat $managed-cast/Animal $invalid
+       end
+       return
+      end
+      return
      end
      local.get $0
      i32.load
@@ -1257,8 +1263,9 @@
     end
     return
    end
-   unreachable
+   return
   end
+  unreachable
  )
  (func $~start
   (local $0 i32)

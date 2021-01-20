@@ -18,7 +18,7 @@
  (data (i32.const 1272) "\01\00\00\00\1c\00\00\00a\00l\00r\00e\00a\00d\00y\00 \00p\00i\00n\00n\00e\00d")
  (data (i32.const 1340) ",")
  (data (i32.const 1352) "\01\00\00\00\14\00\00\00n\00o\00t\00 \00p\00i\00n\00n\00e\00d")
- (data (i32.const 1424) "\03")
+ (data (i32.const 1424) "\03\00\00\00 \00\00\00\00\00\00\00 ")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
@@ -1384,45 +1384,49 @@
   global.set $~lib/rt/tcms/white
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner0
-   block $invalid
-    block $~lib/arraybuffer/ArrayBufferView
-     local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $folding-inner0 $folding-inner0 $~lib/arraybuffer/ArrayBufferView $invalid
-    end
-    local.get $0
-    i32.load
-    local.tee $0
-    if
-     local.get $0
-     if
-      global.get $~lib/rt/tcms/white
+  block $invalid
+   block $~lib/arraybuffer/ArrayBufferView
+    block $~lib/string/String
+     block $~lib/arraybuffer/ArrayBuffer
       local.get $0
-      i32.const 20
+      i32.const 8
       i32.sub
-      local.tee $0
-      i32.load offset=4
-      i32.const 3
-      i32.and
-      i32.eq
-      if
-       local.get $0
-       call $~lib/rt/tcms/Object#unlink
-       local.get $0
-       global.get $~lib/rt/tcms/toSpace
-       global.get $~lib/rt/tcms/white
-       i32.eqz
-       call $~lib/rt/tcms/Object#linkTo
-      end
+      i32.load
+      br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
      end
+     return
     end
     return
    end
-   unreachable
+   local.get $0
+   i32.load
+   local.tee $0
+   if
+    local.get $0
+    if
+     global.get $~lib/rt/tcms/white
+     local.get $0
+     i32.const 20
+     i32.sub
+     local.tee $0
+     i32.load offset=4
+     i32.const 3
+     i32.and
+     i32.eq
+     if
+      local.get $0
+      call $~lib/rt/tcms/Object#unlink
+      local.get $0
+      global.get $~lib/rt/tcms/toSpace
+      global.get $~lib/rt/tcms/white
+      i32.eqz
+      call $~lib/rt/tcms/Object#linkTo
+     end
+    end
+   end
+   return
   end
+  unreachable
  )
  (func $~start
   i32.const 1232

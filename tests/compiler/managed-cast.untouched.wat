@@ -18,7 +18,7 @@
  (data (i32.const 364) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\"\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00u\00p\00c\00a\00s\00t\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 432) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 464) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 496) "\05\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 496) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\04\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
@@ -2103,12 +2103,6 @@
   (local $1 i32)
   nop
  )
- (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
-  nop
- )
- (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
-  nop
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -2119,14 +2113,6 @@
    local.get $1
    call $~lib/rt/tcms/__visit
   end
- )
- (func $managed-cast/Cat~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $managed-cast/Animal~visit
- )
- (func $managed-cast/Animal~visit (param $0 i32) (param $1 i32)
-  nop
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
@@ -2141,14 +2127,8 @@
         i32.load
         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $managed-cast/Cat $managed-cast/Animal $invalid
        end
-       local.get $0
-       local.get $1
-       call $~lib/arraybuffer/ArrayBuffer~visit
        return
       end
-      local.get $0
-      local.get $1
-      call $~lib/string/String~visit
       return
      end
      local.get $0
@@ -2156,14 +2136,8 @@
      call $~lib/arraybuffer/ArrayBufferView~visit
      return
     end
-    local.get $0
-    local.get $1
-    call $managed-cast/Cat~visit
     return
    end
-   local.get $0
-   local.get $1
-   call $managed-cast/Animal~visit
    return
   end
   unreachable

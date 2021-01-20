@@ -1265,14 +1265,20 @@
   end
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner0
-   block $invalid
+  block $invalid
+   block $issues/1225/X
     block $~lib/arraybuffer/ArrayBufferView
-     local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $folding-inner0 $folding-inner0 $~lib/arraybuffer/ArrayBufferView $folding-inner0 $invalid
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $issues/1225/X $invalid
+      end
+      return
+     end
+     return
     end
     local.get $0
     i32.load
@@ -1283,8 +1289,9 @@
     end
     return
    end
-   unreachable
+   return
   end
+  unreachable
  )
  (func $~start
   call $start:issues/1225

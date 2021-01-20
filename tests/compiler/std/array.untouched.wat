@@ -28064,12 +28064,6 @@
   local.get $0
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
-  nop
- )
- (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
-  nop
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -28093,9 +28087,6 @@
   local.get $0
   local.get $1
   call $~lib/array/Array<i32>#__visit
- )
- (func $std/array/Ref~visit (param $0 i32) (param $1 i32)
-  nop
  )
  (func $~lib/typedarray/Uint8Array~visit (param $0 i32) (param $1 i32)
   local.get $0
@@ -28408,9 +28399,6 @@
   local.get $0
   local.get $1
   call $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>#__visit
- )
- (func $std/array/Proxy<i32>~visit (param $0 i32) (param $1 i32)
-  nop
  )
  (func $~lib/array/Array<std/array/Proxy<i32>>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -28893,14 +28881,8 @@
                                                i32.load
                                                br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $std/array/Ref $~lib/typedarray/Uint8Array $~lib/array/Array<u8> $~lib/array/Array<u32> $~lib/array/Array<std/array/Ref> $~lib/array/Array<f32> $~lib/array/Array<f64> $~lib/array/Array<std/array/Ref|null> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>bool> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>void> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>f32> $~lib/function/Function<%28i32%2Ci32%2C~lib/array/Array<i32>%29=>i32> $~lib/function/Function<%28i32%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>i32> $~lib/function/Function<%28bool%2Ci32%2Ci32%2C~lib/array/Array<i32>%29=>bool> $~lib/function/Function<%28f32%2Cf32%29=>i32> $~lib/function/Function<%28f64%2Cf64%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28u32%2Cu32%29=>i32> $~lib/array/Array<~lib/array/Array<i32>> $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32> $std/array/Proxy<i32> $~lib/array/Array<std/array/Proxy<i32>> $~lib/function/Function<%28std/array/Proxy<i32>%2Cstd/array/Proxy<i32>%29=>i32> $~lib/array/Array<~lib/string/String|null> $~lib/function/Function<%28~lib/string/String|null%2C~lib/string/String|null%29=>i32> $~lib/array/Array<~lib/string/String> $~lib/function/Function<%28~lib/string/String%2C~lib/string/String%29=>i32> $~lib/array/Array<bool> $~lib/array/Array<i8> $~lib/array/Array<u16> $~lib/array/Array<u64> $~lib/array/Array<i64> $~lib/array/Array<~lib/array/Array<u8>> $~lib/array/Array<~lib/array/Array<u32>> $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>> $~lib/array/Array<~lib/array/Array<~lib/string/String|null>> $std/array/ArrayU32 $std/array/ArrayU8 $std/array/ArrayStr $~lib/function/Function<%28u8%2Cu8%29=>i32> $invalid
                                               end
-                                              local.get $0
-                                              local.get $1
-                                              call $~lib/arraybuffer/ArrayBuffer~visit
                                               return
                                              end
-                                             local.get $0
-                                             local.get $1
-                                             call $~lib/string/String~visit
                                              return
                                             end
                                             local.get $0
@@ -28913,9 +28895,6 @@
                                            call $~lib/array/Array<i32>~visit
                                            return
                                           end
-                                          local.get $0
-                                          local.get $1
-                                          call $std/array/Ref~visit
                                           return
                                          end
                                          local.get $0
@@ -29013,9 +28992,6 @@
                        call $~lib/function/Function<%28~lib/array/Array<i32>%2C~lib/array/Array<i32>%29=>i32>~visit
                        return
                       end
-                      local.get $0
-                      local.get $1
-                      call $std/array/Proxy<i32>~visit
                       return
                      end
                      local.get $0

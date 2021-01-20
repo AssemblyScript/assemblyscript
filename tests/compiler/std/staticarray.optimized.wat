@@ -1840,16 +1840,22 @@
  (func $~lib/rt/__visit_members (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  block $folding-inner0
-   block $invalid
-    block $~lib/staticarray/StaticArray<std/staticarray/Ref>
+  block $invalid
+   block $~lib/staticarray/StaticArray<std/staticarray/Ref>
+    block $std/staticarray/Ref
      block $~lib/staticarray/StaticArray<i32>
       block $~lib/arraybuffer/ArrayBufferView
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $folding-inner0 $folding-inner0 $~lib/arraybuffer/ArrayBufferView $~lib/staticarray/StaticArray<i32> $folding-inner0 $~lib/staticarray/StaticArray<std/staticarray/Ref> $invalid
+       block $~lib/string/String
+        block $~lib/arraybuffer/ArrayBuffer
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load
+         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/staticarray/StaticArray<i32> $std/staticarray/Ref $~lib/staticarray/StaticArray<std/staticarray/Ref> $invalid
+        end
+        return
+       end
+       return
       end
       local.get $0
       i32.load
@@ -1862,36 +1868,37 @@
      end
      return
     end
-    local.get $0
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load offset=16
-    i32.add
-    local.set $1
-    loop $while-continue|0
-     local.get $0
-     local.get $1
-     i32.lt_u
-     if
-      local.get $0
-      i32.load
-      local.tee $2
-      if
-       local.get $2
-       call $~lib/rt/tcms/__visit
-      end
-      local.get $0
-      i32.const 4
-      i32.add
-      local.set $0
-      br $while-continue|0
-     end
-    end
     return
    end
-   unreachable
+   local.get $0
+   local.get $0
+   i32.const 20
+   i32.sub
+   i32.load offset=16
+   i32.add
+   local.set $1
+   loop $while-continue|0
+    local.get $0
+    local.get $1
+    i32.lt_u
+    if
+     local.get $0
+     i32.load
+     local.tee $2
+     if
+      local.get $2
+      call $~lib/rt/tcms/__visit
+     end
+     local.get $0
+     i32.const 4
+     i32.add
+     local.set $0
+     br $while-continue|0
+    end
+   end
+   return
   end
+  unreachable
  )
  (func $~start
   call $start:std/staticarray

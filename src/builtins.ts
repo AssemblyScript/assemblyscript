@@ -8821,14 +8821,18 @@ export function compileVisitMembers(compiler: Compiler): void {
     assert(instanceId == nextId++);
     let instance = assert(managedClasses.get(instanceId));
     names[i] = instance.internalName;
-    cases[i] = module.block(null, [
-      module.call(instance.internalName + "~visit", [
-        module.local_get(0, nativeSizeType), // this
-        module.local_get(1, NativeType.I32)  // cookie
-      ], NativeType.None),
-      module.return()
-    ], NativeType.None);
-    ensureVisitMembersOf(compiler, instance);
+    if (instance.isPointerfree) {
+      cases[i] = module.return();
+    } else {
+      cases[i] = module.block(null, [
+        module.call(instance.internalName + "~visit", [
+          module.local_get(0, nativeSizeType), // this
+          module.local_get(1, NativeType.I32)  // cookie
+        ], NativeType.None),
+        module.return()
+      ], NativeType.None);
+      ensureVisitMembersOf(compiler, instance);
+    }
   }
 
   // Make a br_table of the mapping, calling visitor functions by unique class id
@@ -8908,6 +8912,7 @@ export function compileRTTI(compiler: Compiler): void {
     let instance = assert(managedClasses.get(instanceId));
     assert(instanceId == lastId++);
     let flags: TypeinfoFlags = 0;
+    if (instance.isPointerfree) flags |= TypeinfoFlags.POINTERFREE;
     if (instance !== abvInstance && instance.extends(abvPrototype)) {
       let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.ARRAYBUFFERVIEW;

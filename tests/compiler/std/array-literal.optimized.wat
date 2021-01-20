@@ -1856,29 +1856,38 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  block $folding-inner2
-   block $folding-inner1
-    block $folding-inner0
-     block $invalid
-      block $~lib/arraybuffer/ArrayBufferView
+  block $folding-inner1
+   block $folding-inner0
+    block $invalid
+     block $std/array-literal/RefWithCtor
+      block $std/array-literal/Ref
+       block $~lib/arraybuffer/ArrayBufferView
+        block $~lib/string/String
+         block $~lib/arraybuffer/ArrayBuffer
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $folding-inner0 $folding-inner0 $std/array-literal/Ref $folding-inner1 $std/array-literal/RefWithCtor $folding-inner1 $invalid
+         end
+         return
+        end
+        return
+       end
        local.get $0
-       i32.const 8
-       i32.sub
        i32.load
-       br_table $folding-inner0 $folding-inner0 $~lib/arraybuffer/ArrayBufferView $folding-inner1 $folding-inner1 $folding-inner0 $folding-inner2 $folding-inner0 $folding-inner2 $invalid
-      end
-      local.get $0
-      i32.load
-      local.tee $0
-      if
-       local.get $0
-       call $~lib/rt/tcms/__visit
+       local.tee $0
+       if
+        local.get $0
+        call $~lib/rt/tcms/__visit
+       end
+       return
       end
       return
      end
-     unreachable
+     return
     end
-    return
+    unreachable
    end
    local.get $0
    i32.load

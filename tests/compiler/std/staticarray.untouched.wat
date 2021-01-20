@@ -3499,12 +3499,6 @@
   local.get $0
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
-  nop
- )
- (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
-  nop
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -3515,18 +3509,6 @@
    local.get $1
    call $~lib/rt/tcms/__visit
   end
- )
- (func $~lib/staticarray/StaticArray<i32>#__visit (param $0 i32) (param $1 i32)
-  i32.const 0
-  drop
- )
- (func $~lib/staticarray/StaticArray<i32>~visit (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  call $~lib/staticarray/StaticArray<i32>#__visit
- )
- (func $std/staticarray/Ref~visit (param $0 i32) (param $1 i32)
-  nop
  )
  (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -3587,14 +3569,8 @@
          i32.load
          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/staticarray/StaticArray<i32> $std/staticarray/Ref $~lib/staticarray/StaticArray<std/staticarray/Ref> $invalid
         end
-        local.get $0
-        local.get $1
-        call $~lib/arraybuffer/ArrayBuffer~visit
         return
        end
-       local.get $0
-       local.get $1
-       call $~lib/string/String~visit
        return
       end
       local.get $0
@@ -3602,14 +3578,8 @@
       call $~lib/arraybuffer/ArrayBufferView~visit
       return
      end
-     local.get $0
-     local.get $1
-     call $~lib/staticarray/StaticArray<i32>~visit
      return
     end
-    local.get $0
-    local.get $1
-    call $std/staticarray/Ref~visit
     return
    end
    local.get $0

@@ -9635,29 +9635,32 @@
   end
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner2
-   block $folding-inner1
-    block $folding-inner0
-     block $invalid
-      block $~lib/arraybuffer/ArrayBufferView
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $folding-inner0 $folding-inner0 $~lib/arraybuffer/ArrayBufferView $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $invalid
-      end
-      local.get $0
-      i32.load
-      local.tee $0
-      if
-       local.get $0
-       call $~lib/rt/tcms/__visit
+  block $folding-inner1
+   block $folding-inner0
+    block $invalid
+     block $~lib/arraybuffer/ArrayBufferView
+      block $~lib/string/String
+       block $~lib/arraybuffer/ArrayBuffer
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $invalid
+       end
+       return
       end
       return
      end
-     unreachable
+     local.get $0
+     i32.load
+     local.tee $0
+     if
+      local.get $0
+      call $~lib/rt/tcms/__visit
+     end
+     return
     end
-    return
+    unreachable
    end
    local.get $0
    i32.load

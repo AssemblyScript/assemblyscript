@@ -11,5 +11,5 @@ export declare function onfree(block: BLOCK): void;
 // Garbage collector
 export declare function onvisit(block: BLOCK): bool;
 export declare function oncollect(total: usize): void;
-export declare function oninterrupt(): void;
-export declare function onyield(): void;
+export declare function oninterrupt(total: usize): void;
+export declare function onyield(total: usize): void;

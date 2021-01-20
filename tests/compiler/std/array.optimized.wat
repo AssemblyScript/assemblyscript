@@ -19130,27 +19130,36 @@
   call $~lib/rt/tcms/__visit
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner5
-   block $folding-inner4
-    block $folding-inner3
-     block $folding-inner2
-      block $folding-inner1
-       block $folding-inner0
-        block $invalid
-         block $std/array/ArrayStr
-          local.get $0
-          i32.const 8
-          i32.sub
-          i32.load
-          br_table $folding-inner0 $folding-inner0 $folding-inner5 $folding-inner1 $folding-inner0 $folding-inner5 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner2 $folding-inner3 $folding-inner0 $folding-inner2 $folding-inner3 $folding-inner2 $folding-inner3 $folding-inner2 $folding-inner3 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner4 $folding-inner4 $std/array/ArrayStr $folding-inner3 $invalid
+  block $folding-inner4
+   block $folding-inner3
+    block $folding-inner2
+     block $folding-inner1
+      block $folding-inner0
+       block $invalid
+        block $std/array/ArrayStr
+         block $std/array/Proxy<i32>
+          block $std/array/Ref
+           block $~lib/string/String
+            block $~lib/arraybuffer/ArrayBuffer
+             local.get $0
+             i32.const 8
+             i32.sub
+             i32.load
+             br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner4 $folding-inner0 $std/array/Ref $folding-inner4 $folding-inner0 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner0 $folding-inner1 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner1 $folding-inner2 $std/array/Proxy<i32> $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner3 $folding-inner3 $std/array/ArrayStr $folding-inner2 $invalid
+            end
+            return
+           end
+           return
+          end
+          return
          end
-         local.get $0
-         call $~lib/array/Array<std/array/Ref>~visit
          return
         end
-        unreachable
+        local.get $0
+        call $~lib/array/Array<std/array/Ref>~visit
+        return
        end
-       return
+       unreachable
       end
       local.get $0
       i32.load

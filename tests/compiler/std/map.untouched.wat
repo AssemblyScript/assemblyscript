@@ -21428,12 +21428,6 @@
   local.get $0
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
-  nop
- )
- (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
-  nop
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -22090,14 +22084,8 @@
                                    i32.load
                                    br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/map/Map<i8,i32> $~lib/array/Array<i8> $~lib/array/Array<i32> $~lib/map/Map<i8,i8> $~lib/map/Map<i32,i32> $~lib/map/Map<u8,i32> $~lib/array/Array<u8> $~lib/map/Map<u8,u8> $~lib/map/Map<i16,i32> $~lib/array/Array<i16> $~lib/map/Map<i16,i16> $~lib/map/Map<u16,i32> $~lib/array/Array<u16> $~lib/map/Map<u16,u16> $~lib/map/Map<u32,i32> $~lib/array/Array<u32> $~lib/map/Map<u32,u32> $~lib/map/Map<i64,i32> $~lib/array/Array<i64> $~lib/map/Map<i64,i64> $~lib/map/Map<u64,i32> $~lib/array/Array<u64> $~lib/map/Map<u64,u64> $~lib/map/Map<f32,i32> $~lib/array/Array<f32> $~lib/map/Map<f32,f32> $~lib/map/Map<f64,i32> $~lib/array/Array<f64> $~lib/map/Map<f64,f64> $invalid
                                   end
-                                  local.get $0
-                                  local.get $1
-                                  call $~lib/arraybuffer/ArrayBuffer~visit
                                   return
                                  end
-                                 local.get $0
-                                 local.get $1
-                                 call $~lib/string/String~visit
                                  return
                                 end
                                 local.get $0

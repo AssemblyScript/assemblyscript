@@ -1,4 +1,4 @@
-import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE } from "./common";
+import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE, RTRACE } from "./common";
 import { onvisit, oncollect } from "./rtrace";
 
 // === TCMS: A Two-Color Mark & Sweep garbage collector ===
@@ -164,7 +164,7 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
 export function __visit(ptr: usize, cookie: i32): void {
   if (!ptr) return;
   let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
-  if (isDefined(ASC_RTRACE)) if (!onvisit(obj)) return;
+  if (RTRACE) if (!onvisit(obj)) return;
   if (obj.color == white) {
     obj.unlink(); // from fromSpace
     obj.linkTo(toSpace, i32(!white));
@@ -249,5 +249,5 @@ export function __collect(): void {
   white = black;
 
   if (TRACE) trace("GC done at", 1, total);
-  if (isDefined(ASC_RTRACE)) oncollect(total);
+  if (RTRACE) oncollect(total);
 }

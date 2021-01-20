@@ -2294,16 +2294,22 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   (local $1 i32)
-  block $folding-inner1
-   block $folding-inner0
-    block $invalid
-     block $object-literal/OmittedFoo
+  block $folding-inner0
+   block $invalid
+    block $object-literal/OmittedFoo
+     block $object-literal/OmittedTypes
       block $~lib/arraybuffer/ArrayBufferView
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $folding-inner0 $folding-inner0 $~lib/arraybuffer/ArrayBufferView $folding-inner1 $folding-inner0 $folding-inner1 $object-literal/OmittedFoo $invalid
+       block $~lib/string/String
+        block $~lib/arraybuffer/ArrayBuffer
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load
+         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $folding-inner0 $object-literal/OmittedTypes $folding-inner0 $object-literal/OmittedFoo $invalid
+        end
+        return
+       end
+       return
       end
       local.get $0
       i32.load
@@ -2314,67 +2320,67 @@
       end
       return
      end
-     local.get $0
-     i32.load
-     local.tee $1
-     if
-      local.get $1
-      call $~lib/rt/tcms/__visit
-     end
-     local.get $0
-     i32.load offset=4
-     local.tee $1
-     if
-      local.get $1
-      call $~lib/rt/tcms/__visit
-     end
-     local.get $0
-     i32.load offset=8
-     local.tee $1
-     if
-      local.get $1
-      call $~lib/rt/tcms/__visit
-     end
-     local.get $0
-     i32.load offset=12
-     local.tee $1
-     if
-      local.get $1
-      call $~lib/rt/tcms/__visit
-     end
-     local.get $0
-     i32.load offset=16
-     local.tee $1
-     if
-      local.get $1
-      call $~lib/rt/tcms/__visit
-     end
-     local.get $0
-     i32.load offset=20
-     local.tee $1
-     if
-      local.get $1
-      call $~lib/rt/tcms/__visit
-     end
-     local.get $0
-     i32.load offset=24
-     local.tee $1
-     if
-      local.get $1
-      call $~lib/rt/tcms/__visit
-     end
-     local.get $0
-     i32.load offset=28
-     local.tee $0
-     if
-      local.get $0
-      call $~lib/rt/tcms/__visit
-     end
      return
     end
-    unreachable
+    local.get $0
+    i32.load
+    local.tee $1
+    if
+     local.get $1
+     call $~lib/rt/tcms/__visit
+    end
+    local.get $0
+    i32.load offset=4
+    local.tee $1
+    if
+     local.get $1
+     call $~lib/rt/tcms/__visit
+    end
+    local.get $0
+    i32.load offset=8
+    local.tee $1
+    if
+     local.get $1
+     call $~lib/rt/tcms/__visit
+    end
+    local.get $0
+    i32.load offset=12
+    local.tee $1
+    if
+     local.get $1
+     call $~lib/rt/tcms/__visit
+    end
+    local.get $0
+    i32.load offset=16
+    local.tee $1
+    if
+     local.get $1
+     call $~lib/rt/tcms/__visit
+    end
+    local.get $0
+    i32.load offset=20
+    local.tee $1
+    if
+     local.get $1
+     call $~lib/rt/tcms/__visit
+    end
+    local.get $0
+    i32.load offset=24
+    local.tee $1
+    if
+     local.get $1
+     call $~lib/rt/tcms/__visit
+    end
+    local.get $0
+    i32.load offset=28
+    local.tee $0
+    if
+     local.get $0
+     call $~lib/rt/tcms/__visit
+    end
+    return
    end
-   return
+   unreachable
   end
   local.get $0
   i32.load offset=4

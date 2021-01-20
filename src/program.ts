@@ -4473,6 +4473,45 @@ export class Class extends TypedElement {
     return Type.void;
   }
 
+  /** Tests if this class is pointerfree. Useful to know for the GC. */
+  get isPointerfree(): bool {
+    var program = this.program;
+
+    var instanceMembers = this.members;
+    if (instanceMembers) {
+
+      // Check that there are no managed instance fields
+      for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
+        if (member.kind == ElementKind.FIELD) {
+          let fieldType = (<Field>member).type;
+          if (fieldType.isManaged) return false;
+        }
+      }
+
+      // Check that this isn't a managed collection
+      if (instanceMembers.has(CommonNames.visit)) {
+        let prototype = this.prototype;
+        if (
+          prototype == program.arrayPrototype ||
+          prototype == program.staticArrayPrototype ||
+          prototype == program.setPrototype ||
+          prototype == program.mapPrototype
+        ) {
+          // Note that we cannot know for sure anymore as soon as the collection
+          // is extended, because user code may implement a custom visitor.
+          let typeArguments = assert(this.getTypeArgumentsTo(prototype));
+          for (let i = 0, k = typeArguments.length; i < k; ++i) {
+            if (typeArguments[i].isManaged) return false;
+          }
+          return true;
+        }
+        return false; // has a custom __visit
+      }
+    }
+    return true;
+  }
+
   /** Gets all extendees of this class (that do not have the specified instance member). */
   getAllExtendees(exceptIfMember: string | null = null, out: Set<Class> = new Set()): Set<Class> {
     var extendees = this.extendees;

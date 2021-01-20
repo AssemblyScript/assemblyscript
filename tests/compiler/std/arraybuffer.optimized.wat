@@ -2072,25 +2072,28 @@
   end
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner2
-   block $folding-inner1
-    block $folding-inner0
-     block $invalid
-      block $~lib/array/Array<i32>
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $folding-inner0 $folding-inner0 $folding-inner1 $~lib/array/Array<i32> $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner1 $invalid
+  block $folding-inner1
+   block $folding-inner0
+    block $invalid
+     block $~lib/array/Array<i32>
+      block $~lib/string/String
+       block $~lib/arraybuffer/ArrayBuffer
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $~lib/array/Array<i32> $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner0 $invalid
+       end
+       return
       end
-      local.get $0
-      i32.load
-      call $~lib/rt/tcms/__visit
       return
      end
-     unreachable
+     local.get $0
+     i32.load
+     call $~lib/rt/tcms/__visit
+     return
     end
-    return
+    unreachable
    end
    local.get $0
    i32.load

@@ -5173,12 +5173,6 @@
    call $~lib/rt/tcms/__visit
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
-  nop
- )
- (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
-  nop
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -5201,14 +5195,8 @@
       i32.load
       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
      end
-     local.get $0
-     local.get $1
-     call $~lib/arraybuffer/ArrayBuffer~visit
      return
     end
-    local.get $0
-    local.get $1
-    call $~lib/string/String~visit
     return
    end
    local.get $0

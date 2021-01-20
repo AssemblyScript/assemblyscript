@@ -3625,28 +3625,31 @@
   end
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner1
-   block $folding-inner0
-    block $invalid
-     block $~lib/typedarray/Uint8Array
-      local.get $0
-      i32.const 8
-      i32.sub
-      i32.load
-      br_table $folding-inner0 $folding-inner0 $folding-inner1 $~lib/typedarray/Uint8Array $folding-inner1 $invalid
-     end
-     local.get $0
-     i32.load
-     local.tee $0
-     if
-      local.get $0
-      call $~lib/rt/tcms/__visit
+  block $folding-inner0
+   block $invalid
+    block $~lib/typedarray/Uint8Array
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $~lib/typedarray/Uint8Array $folding-inner0 $invalid
+      end
+      return
      end
      return
     end
-    unreachable
+    local.get $0
+    i32.load
+    local.tee $0
+    if
+     local.get $0
+     call $~lib/rt/tcms/__visit
+    end
+    return
    end
-   return
+   unreachable
   end
   local.get $0
   i32.load

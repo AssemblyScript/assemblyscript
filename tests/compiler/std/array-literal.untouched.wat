@@ -3806,12 +3806,6 @@
   local.get $0
   call $~lib/rt/tcms/__visit
  )
- (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
-  nop
- )
- (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
-  nop
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -3848,9 +3842,6 @@
   local.get $0
   local.get $1
   call $~lib/array/Array<i32>#__visit
- )
- (func $std/array-literal/Ref~visit (param $0 i32) (param $1 i32)
-  nop
  )
  (func $~lib/array/Array<std/array-literal/Ref>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -3901,9 +3892,6 @@
   local.get $0
   local.get $1
   call $~lib/array/Array<std/array-literal/Ref>#__visit
- )
- (func $std/array-literal/RefWithCtor~visit (param $0 i32) (param $1 i32)
-  nop
  )
  (func $~lib/array/Array<std/array-literal/RefWithCtor>#__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -3972,14 +3960,8 @@
             i32.load
             br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i8> $~lib/array/Array<i32> $std/array-literal/Ref $~lib/array/Array<std/array-literal/Ref> $std/array-literal/RefWithCtor $~lib/array/Array<std/array-literal/RefWithCtor> $invalid
            end
-           local.get $0
-           local.get $1
-           call $~lib/arraybuffer/ArrayBuffer~visit
            return
           end
-          local.get $0
-          local.get $1
-          call $~lib/string/String~visit
           return
          end
          local.get $0
@@ -3997,9 +3979,6 @@
        call $~lib/array/Array<i32>~visit
        return
       end
-      local.get $0
-      local.get $1
-      call $std/array-literal/Ref~visit
       return
      end
      local.get $0
@@ -4007,9 +3986,6 @@
      call $~lib/array/Array<std/array-literal/Ref>~visit
      return
     end
-    local.get $0
-    local.get $1
-    call $std/array-literal/RefWithCtor~visit
     return
    end
    local.get $0

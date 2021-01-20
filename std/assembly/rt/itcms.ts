@@ -1,11 +1,9 @@
-import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE } from "./common";
+import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE, RTRACE, PROFILE } from "./common";
 import { onvisit, oncollect, oninterrupt, onyield } from "./rtrace";
+import { TypeinfoFlags } from "../shared/typeinfo";
 
 // === ITCMS: An incremental Tri-Color Mark & Sweep garbage collector ===
 // Adapted from Bach Le's μgc, see: https://github.com/bullno1/ugc
-
-// @ts-ignore: decorator
-@inline const PROFILE = false;
 
 // ╒═════════════╤══════════════ Colors ═══════════════════════════╕
 // │ Color       │ Meaning                                         │
@@ -115,6 +113,12 @@ function initLazy(space: Object): Object {
     return BLOCK_OVERHEAD + (this.mmInfo & ~3);
   }
 
+  /** Tests if this object is pointerfree. */
+  get isPointerfree(): bool {
+    var rtId = this.rtId;
+    return rtId <= idof<string>() || (__typeinfo(rtId) & TypeinfoFlags.POINTERFREE) != 0;
+  }
+
   /** Unlinks this object from its list. */
   unlink(): void {
     var next = this.next;
@@ -141,7 +145,7 @@ function initLazy(space: Object): Object {
   makeGray(): void {
     if (this == iter) iter = assert(this.prev);
     this.unlink();
-    this.linkTo(toSpace, gray);
+    this.linkTo(toSpace, this.isPointerfree ? i32(!white) : gray);
   }
 }
 
@@ -168,8 +172,8 @@ function visitStack(cookie: u32): void {
 function step(): usize {
   // Magic constants responsible for pause times. Obtained experimentally
   // using the compiler compiling itself. 2048 budget pro run by default.
-  const MARKCOST  = 1;
-  const SWEEPCOST = 10;
+  const MARKCOST = isDefined(ASC_GC_MARKCOST) ? ASC_GC_MARKCOST : 1;
+  const SWEEPCOST = isDefined(ASC_GC_SWEEPCOST) ? ASC_GC_SWEEPCOST : 10;
   var obj: Object;
   switch (state) {
     case STATE_IDLE: {
@@ -182,6 +186,10 @@ function step(): usize {
     case STATE_MARK: {
       let black = i32(!white);
       obj = iter.next;
+      while (obj != toSpace && obj.color == black) { // skip already-blacks
+        iter = obj;
+        obj = obj.next;
+      }
       if (obj != toSpace) {
         iter = obj;
         obj.color = black;
@@ -309,7 +317,7 @@ export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool):
 export function __visit(ptr: usize, cookie: i32): void {
   if (!ptr) return;
   let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
-  if (isDefined(ASC_RTRACE)) if (!onvisit(obj)) return;
+  if (RTRACE) if (!onvisit(obj)) return;
   if (obj.color == white) {
     obj.makeGray();
     ++visitCount;
@@ -362,7 +370,7 @@ export function __collect(): void {
   while (state != STATE_IDLE) step();
   threshold = <usize>(<u64>total * IDLEFACTOR / 100) + GRANULARITY;
   if (TRACE) trace("GC (full) done at cur/max", 2, total, memory.size() << 16);
-  if (isDefined(ASC_RTRACE)) oncollect(total);
+  if (RTRACE) oncollect(total);
 }
 
 // Garbage collector automation
@@ -383,20 +391,19 @@ export function __collect(): void {
 
 /** Performs a reasonable amount of incremental GC steps. */
 function interrupt(): void {
-  if (PROFILE) oninterrupt();
+  if (PROFILE) oninterrupt(total);
   if (TRACE) trace("GC (auto) at", 1, total);
   var budget: isize = GRANULARITY * STEPFACTOR / 100;
   do {
     budget -= step();
     if (state == STATE_IDLE) {
       if (TRACE) trace("└ GC (auto) done at cur/max", 2, total, memory.size() << 16);
-      if (isDefined(ASC_RTRACE)) oncollect(total);
       threshold = <usize>(<u64>total * IDLEFACTOR / 100) + GRANULARITY;
-      if (PROFILE) onyield();
+      if (PROFILE) onyield(total);
       return;
     }
   } while (budget > 0);
   if (TRACE) trace("└ GC (auto) ongoing at", 1, total);
   threshold = total + GRANULARITY * usize(total - threshold < GRANULARITY);
-  if (PROFILE) onyield();
+  if (PROFILE) onyield(total);
 }

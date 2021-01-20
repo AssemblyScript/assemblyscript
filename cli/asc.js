@@ -114,7 +114,13 @@ function loadAssemblyScriptWasm(binaryPath) {
   const loader = require("../lib/loader/umd/index");
   const rtrace = new (require("../lib/rtrace/umd/index").Rtrace)({
     onerror(err, info) { console.log(err, info); },
-    getMemory() { return exports.memory; }
+    getMemory() { return exports.memory; },
+    oncollect() {
+      var gcData = rtrace.gcData;
+      if (gcData.length && fs.writeFileSync) {
+        fs.writeFileSync("gc.csv", `time,memory,pause\n${gcData.join("\n")}`);
+      }
+    }
   });
   var { exports } = loader.instantiateSync(fs.readFileSync(binaryPath), rtrace.install({ binaryen }));
   if (exports._start) exports._start();

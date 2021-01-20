@@ -17,7 +17,7 @@
  (data (i32.const 288) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 316) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00n\00o\00t\00 \00p\00i\00n\00n\00e\00d\00\00\00\00\00\00\00\00\00")
  (data (i32.const 368) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 400) "\03\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 400) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
@@ -1924,12 +1924,6 @@
   (local $1 i32)
   nop
  )
- (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
-  nop
- )
- (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
-  nop
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -1952,14 +1946,8 @@
       i32.load
       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
      end
-     local.get $0
-     local.get $1
-     call $~lib/arraybuffer/ArrayBuffer~visit
      return
     end
-    local.get $0
-    local.get $1
-    call $~lib/string/String~visit
     return
    end
    local.get $0

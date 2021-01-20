@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -2597,12 +2597,6 @@
   (local $1 i32)
   nop
  )
- (func $~lib/arraybuffer/ArrayBuffer~visit (param $0 i32) (param $1 i32)
-  nop
- )
- (func $~lib/string/String~visit (param $0 i32) (param $1 i32)
-  nop
- )
  (func $~lib/arraybuffer/ArrayBufferView~visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
@@ -2613,9 +2607,6 @@
    local.get $1
    call $~lib/rt/tcms/__visit
   end
- )
- (func $for/Ref~visit (param $0 i32) (param $1 i32)
-  nop
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
@@ -2629,14 +2620,8 @@
        i32.load
        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $for/Ref $invalid
       end
-      local.get $0
-      local.get $1
-      call $~lib/arraybuffer/ArrayBuffer~visit
       return
      end
-     local.get $0
-     local.get $1
-     call $~lib/string/String~visit
      return
     end
     local.get $0
@@ -2644,9 +2629,6 @@
     call $~lib/arraybuffer/ArrayBufferView~visit
     return
    end
-   local.get $0
-   local.get $1
-   call $for/Ref~visit
    return
   end
   unreachable
