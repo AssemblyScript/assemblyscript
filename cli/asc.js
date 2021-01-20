@@ -127,7 +127,7 @@ function loadAssemblyScriptWasm(binaryPath) {
   return exports;
 }
 
-var assemblyscript, __newString, __getString, __pin, __unpin, __collect;
+var assemblyscript, __newString, __getString, __pin, __unpin, __collect, __wrapDiagnosticMessage, __wrapRange, __wrapSource;
 
 function loadAssemblyScript() {
   const wasmArg = process.argv.findIndex(arg => arg == "--wasm");
@@ -140,6 +140,9 @@ function loadAssemblyScript() {
     __pin = assemblyscript.__pin;
     __unpin = assemblyscript.__unpin;
     __collect = assemblyscript.__collect;
+    __wrapDiagnosticMessage = assemblyscript.DiagnosticMessage.wrap;
+    __wrapRange = assemblyscript.Range.wrap;
+    __wrapSource = assemblyscript.Source.wrap;
   } else {
     assemblyscript = loadAssemblyScriptJS();
     __newString = str => str;
@@ -147,6 +150,9 @@ function loadAssemblyScript() {
     __pin = ptr => ptr;
     __unpin = ptr => undefined;
     __collect = incremental => undefined;
+    __wrapDiagnosticMessage = ptr => ptr;
+    __wrapRange = ptr => ptr;
+    __wrapSource = ptr => ptr;
   }
 }
 loadAssemblyScript();
@@ -700,7 +706,7 @@ exports.main = function main(argv, options, callback) {
         });
       }
     }
-    var numErrors = checkDiagnostics(program, stderr);
+    var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
     if (numErrors) {
       const err = Error(numErrors + " parse error(s)");
       err.stack = err.message; // omit stack
@@ -814,7 +820,7 @@ exports.main = function main(argv, options, callback) {
       };
     }
   });
-  var numErrors = checkDiagnostics(program, stderr);
+  var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
   if (numErrors) {
     if (module) module.dispose();
     const err = Error(numErrors + " compile error(s)");
@@ -1153,7 +1159,7 @@ function getAsconfig(file, baseDir, readFile) {
 exports.getAsconfig = getAsconfig;
 
 /** Checks diagnostics emitted so far for errors. */
-function checkDiagnostics(program, stderr) {
+function checkDiagnostics(program, stderr, reportDiagnostic) {
   var numErrors = 0;
   do {
     let diagnosticPtr = assemblyscript.nextDiagnostic(program);
@@ -1164,6 +1170,64 @@ function checkDiagnostics(program, stderr) {
         __getString(assemblyscript.formatDiagnostic(diagnosticPtr, stderr.isTTY, true)) +
         EOL + EOL
       );
+    }
+    if (reportDiagnostic) {
+      const diagnostic = __wrapDiagnosticMessage(diagnosticPtr);
+      __pin(diagnostic.message);
+      __pin(diagnostic.range);
+      __pin(diagnostic.relatedRange);
+      const range = diagnostic.range ? __wrapRange(diagnostic.range) : null;
+      const relatedRange = diagnostic.relatedRange ? __wrapRange(diagnostic.relatedRange) : null;
+      if (range) {
+        __pin(range.source);
+      }
+      if (relatedRange) {
+        __pin(relatedRange.source);
+      }
+      const rangeSource = range ? __wrapSource(range.source) : null;
+      const relatedRangeSource = relatedRange ? __wrapSource(relatedRange.source) : null;
+      if (rangeSource) {
+        __pin(rangeSource.normalizedPath);
+      }
+      if (relatedRangeSource) {
+        __pin(relatedRangeSource.normalizedPath);
+      }
+
+      reportDiagnostic({
+        message: __getString(diagnostic.message),
+        code: diagnostic.code,
+        category: diagnostic.category,
+        range: range ? {
+          start: range.start,
+          end: range.end,
+          source: rangeSource ? {
+            normalizedPath: __getString(rangeSource.normalizedPath)
+          } : null,
+        } : null,
+        relatedRange: relatedRange ? {
+          start: relatedRange.start,
+          end: relatedRange.end,
+          source: relatedRangeSource ? {
+            normalizedPath: __getString(relatedRangeSource.normalizedPath)
+          } : null
+        } : null
+      });
+
+      if (relatedRangeSource) {
+        __unpin(relatedRangeSource.normalizedPath);
+      }
+      if (rangeSource) {
+        __unpin(rangeSource.normalizedPath);
+      }
+      if (relatedRange) {
+        __unpin(relatedRange.source);
+      }
+      if (range) {
+        __unpin(range.source);
+      }
+      __unpin(diagnostic.message);
+      __unpin(diagnostic.range);
+      __unpin(diagnostic.relatedRange);
     }
     if (assemblyscript.isError(diagnosticPtr)) ++numErrors;
     __unpin(diagnosticPtr);

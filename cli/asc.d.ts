@@ -55,6 +55,38 @@ export interface MemoryStream extends OutputStream {
   toString(): string;
 }
 
+/** A subset of Source interface from assemblyscript package */
+export interface Source {
+  /** Normalized path with file extension. */
+  normalizedPath: string;
+}
+
+/** A subset of Range interface from assemblyscript package */
+export interface Range {
+  /** Range start char index in a source */
+  start: number;
+  /** Range end char index in a source */
+  end: number;
+  source: Source;
+}
+
+/** A subset of DiagnosticMessage interface from assemblyscript package */
+export interface DiagnosticMessage {
+  /** Message code. */
+  code: number;
+  /** Message category. */
+  category: number;
+  /** Message text. */
+  message: string;
+  /** Respective source range, if any. */
+  range: Range | null;
+  /** Related range, if any. */
+  relatedRange: Range | null;
+}
+
+/** A function that handles diagnostic */
+type DiagnosticReporter = (diagnostic: DiagnosticMessage) => void;
+
 /** Compiler options. */
 export interface CompilerOptions {
   /** Prints just the compiler's version and exits. */
@@ -157,6 +189,8 @@ export interface APIOptions {
   writeFile?: (filename: string, contents: Uint8Array, baseDir: string) => void;
   /** Lists all files within a directory. */
   listFiles?: (dirname: string, baseDir: string) => string[] | null;
+  /** Handles diagnostic messages. */
+  reportDiagnostic?: DiagnosticReporter;
 }
 
 /** Convenience function that parses and compiles source strings directly. */
@@ -176,7 +210,7 @@ export function main(argv: string[], options: APIOptions, callback?: (err: Error
 export function main(argv: string[], callback?: (err: Error | null) => number): number;
 
 /** Checks diagnostics emitted so far for errors. */
-export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream): boolean;
+export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream, reportDiagnostic?: DiagnosticReporter): boolean;
 
 /** An object of stats for the current task. */
 export interface Stats {
