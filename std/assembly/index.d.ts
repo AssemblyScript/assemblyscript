@@ -1611,6 +1611,7 @@ declare class StaticArray<T> {
   static slice<T>(source: StaticArray<T>, start?: i32, end?: i32): StaticArray<T>;
   readonly length: i32;
   constructor(length?: i32);
+  at(index: i32): T;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
