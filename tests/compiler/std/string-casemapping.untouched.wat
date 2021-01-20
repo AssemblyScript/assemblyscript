@@ -7212,9 +7212,6 @@
   local.get $85
   call $~lib/rt/pure/__release
  )
- (func $~start
-  call $start:std/string-casemapping
- )
  (func $~lib/rt/pure/finalize (param $0 i32)
   i32.const 0
   drop
@@ -7307,6 +7304,9 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $start:std/string-casemapping
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0

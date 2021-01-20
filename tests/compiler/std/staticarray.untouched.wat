@@ -3112,9 +3112,6 @@
   local.get $1
   global.set $std/staticarray/arr4
  )
- (func $~start
-  call $start:std/staticarray
- )
  (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   local.get $1
   local.get $1
@@ -3220,6 +3217,9 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $start:std/staticarray
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0

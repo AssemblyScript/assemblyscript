@@ -9378,18 +9378,6 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~start
-  call $std/set/testNumeric<i8>
-  call $std/set/testNumeric<u8>
-  call $std/set/testNumeric<i16>
-  call $std/set/testNumeric<u16>
-  call $std/set/testNumeric<i32>
-  call $std/set/testNumeric<u32>
-  call $std/set/testNumeric<i64>
-  call $std/set/testNumeric<u64>
-  call $std/set/testNumeric<f32>
-  call $std/set/testNumeric<f64>
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -9484,6 +9472,18 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $std/set/testNumeric<i8>
+  call $std/set/testNumeric<u8>
+  call $std/set/testNumeric<i16>
+  call $std/set/testNumeric<u16>
+  call $std/set/testNumeric<i32>
+  call $std/set/testNumeric<u32>
+  call $std/set/testNumeric<i64>
+  call $std/set/testNumeric<u64>
+  call $std/set/testNumeric<f32>
+  call $std/set/testNumeric<f64>
  )
  (func $~lib/rt/pure/__visit (param $0 i32)
   local.get $0

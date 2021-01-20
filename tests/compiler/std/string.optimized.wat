@@ -17795,9 +17795,6 @@
   global.get $std/string/str
   call $~lib/rt/pure/__retain
  )
- (func $~start
-  call $start:std/string
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -17920,6 +17917,9 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  call $start:std/string
  )
  (func $~lib/rt/pure/__visit (param $0 i32)
   local.get $0

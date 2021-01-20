@@ -3952,9 +3952,6 @@
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__collect
  )
- (func $~start
-  call $start:retain-release-sanity
- )
  (func $~lib/rt/pure/finalize (param $0 i32)
   i32.const 0
   drop
@@ -4443,6 +4440,9 @@
   end
   local.get $0
   global.set $~lib/rt/pure/CUR
+ )
+ (func $~start
+  call $start:retain-release-sanity
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   (local $2 i32)

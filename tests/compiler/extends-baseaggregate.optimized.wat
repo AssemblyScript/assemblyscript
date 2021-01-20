@@ -1718,9 +1718,6 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~start
-  call $start:extends-baseaggregate
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1885,6 +1882,9 @@
     end
    end
   end
+ )
+ (func $~start
+  call $start:extends-baseaggregate
  )
  (func $~lib/rt/pure/scanBlack (param $0 i32)
   local.get $0
