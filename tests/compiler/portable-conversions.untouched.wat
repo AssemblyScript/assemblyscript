@@ -9,6 +9,9 @@
  (global $portable-conversions/I (mut i64) (i64.const 1))
  (global $portable-conversions/f (mut f32) (f32.const 1))
  (global $portable-conversions/F (mut f64) (f64.const 1))
+ (global $~lib/memory/__data_end i32 (i32.const 92))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
+ (global $~lib/memory/__heap_base i32 (i32.const 16476))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:portable-conversions

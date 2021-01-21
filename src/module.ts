@@ -634,7 +634,7 @@ export class Module {
   tostack(value: ExpressionRef): ExpressionRef {
     if (this.useShadowStack) {
       let type = binaryen._BinaryenExpressionGetType(value);
-      assert(type == NativeType.I32);
+      assert(type == NativeType.I32 || type == NativeType.Unreachable);
       return this.call(BuiltinNames.tostack, [ value ], type);
     }
     return value;

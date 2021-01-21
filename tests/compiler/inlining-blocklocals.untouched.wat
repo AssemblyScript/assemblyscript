@@ -9,6 +9,9 @@
  (global $inlining-blocklocals/theCall_a (mut i32) (i32.const 0))
  (global $inlining-blocklocals/theCall_b (mut i32) (i32.const 0))
  (global $inlining-blocklocals/theCall_c (mut i32) (i32.const 0))
+ (global $~lib/memory/__data_end i32 (i32.const 92))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
+ (global $~lib/memory/__heap_base i32 (i32.const 16476))
  (export "memory" (memory $0))
  (start $~start)
  (func $inlining-blocklocals/test

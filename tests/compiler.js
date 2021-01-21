@@ -433,6 +433,7 @@ function testInstantiate(basename, binaryBuffer, glue, stderr, wasiOptions) {
       console.log("  [wasi exit] code=" + code);
     } else if (exports._start) {
       console.log("  [call start]");
+      exports._start();
     }
     if (glue.postStart) {
       console.log("  [call postStart]");

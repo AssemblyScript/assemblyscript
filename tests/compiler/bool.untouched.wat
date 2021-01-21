@@ -44,6 +44,9 @@
  (global $bool/F12 (mut f64) (f64.const 0))
  (global $bool/F13 (mut f64) (f64.const 0))
  (global $bool/uu (mut i32) (i32.const 2))
+ (global $~lib/memory/__data_end i32 (i32.const 60))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
+ (global $~lib/memory/__heap_base i32 (i32.const 16444))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:bool

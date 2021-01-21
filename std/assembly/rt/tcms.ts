@@ -1,5 +1,6 @@
 import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE, RTRACE } from "./common";
 import { onvisit, oncollect } from "./rtrace";
+import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/error";
 
 // === TCMS: A Two-Color Mark & Sweep garbage collector ===
 
@@ -121,7 +122,7 @@ function initLazy(space: Object): Object {
 // @ts-ignore: decorator
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
-  if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
+  if (size >= OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   obj.rtId = id;
   obj.rtSize = <u32>size;
@@ -139,7 +140,7 @@ export function __renew(oldPtr: usize, size: usize): usize {
     memory.copy(newPtr, oldPtr, min(size, oldObj.rtSize));
     return newPtr;
   }
-  if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
+  if (size >= OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   total -= oldObj.size;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
   var newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);
@@ -177,7 +178,7 @@ export function __pin(ptr: usize): usize {
   if (ptr) {
     let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
     if (obj.color == transparent) {
-      throw new Error("already pinned");
+      throw new Error(E_ALREADY_PINNED);
     }
     obj.unlink(); // from fromSpace
     obj.linkTo(pinSpace, transparent);
@@ -191,7 +192,7 @@ export function __unpin(ptr: usize): void {
   if (!ptr) return;
   var obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
   if (obj.color != transparent) {
-    throw new Error("not pinned");
+    throw new Error(E_NOT_PINNED);
   }
   obj.unlink(); // from pinSpace
   obj.linkTo(fromSpace, white);

@@ -118,4 +118,5 @@ function testOmittedFoo(foo: OmittedFoo): void {
 
 testOmittedFoo({});
 
+__stack_pointer = __heap_base;
 __collect();

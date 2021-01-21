@@ -173,14 +173,14 @@
     "description": [
       "Specifies the runtime variant to include in the program.",
       "",
-      " default      TLSF + lightweight GC invoked externally",
-      " incremental  TLSF + incremental GC (experimental)",
+      " incremental  TLSF + incremental GC (default)",
+      " minimal      TLSF + lightweight GC invoked externally",
       " stub         Minimal runtime stub (never frees)",
       " ...          Path to a custom runtime implementation",
       ""
     ],
     "type": "s",
-    "default": "default"
+    "default": "incremental"
   },
   "exportRuntime": {
     "category": "Features",

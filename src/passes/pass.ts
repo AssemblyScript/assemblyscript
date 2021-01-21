@@ -486,7 +486,7 @@ export abstract class Visitor {
   /** Visits any expression, delegating to the respective visitor methods. */
   visit(expr: ExpressionRef): void {
     let previousExpression = this._currentExpression;
-    this._currentExpression = expr;
+    this._currentExpression = assert(expr);
     switch (_BinaryenExpressionGetId(expr)) {
       case ExpressionId.Block: {
         this.stack.push(expr);
@@ -1050,7 +1050,7 @@ export abstract class Pass extends Visitor {
   walkGlobal(global: GlobalRef): void {
     this._currentGlobal = global;
     var init = _BinaryenGlobalGetInitExpr(global);
-    this.visit(init);
+    if (init) this.visit(init);
     this._currentGlobal = 0;
   }
 

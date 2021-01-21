@@ -143,7 +143,7 @@ declare const Infinity: f32 | f64;
 /** Data end offset. */
 declare const __data_end: usize;
 /** Stack pointer offset. */
-declare const __stack_pointer: usize;
+declare var __stack_pointer: usize;
 /** Heap base offset. */
 declare const __heap_base: usize;
 /** Determines the byte size of the specified underlying core type. Compiles to a constant. */
