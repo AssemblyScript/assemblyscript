@@ -7,6 +7,9 @@
  (table $0 1 funcref)
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
+ (global $~lib/memory/__data_end i32 (i32.const 60))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
+ (global $~lib/memory/__heap_base i32 (i32.const 16444))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:comma

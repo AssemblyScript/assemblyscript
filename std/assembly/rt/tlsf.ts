@@ -1,5 +1,6 @@
-import { AL_BITS, AL_SIZE, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
+import { AL_BITS, AL_SIZE, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./common";
 import { oninit, onalloc, onresize, onmove, onfree } from "./rtrace";
+import { E_ALLOCATION_TOO_LARGE } from "../util/error";
 
 // === The TLSF (Two-Level Segregate Fit) memory allocator ===
 // see: http://www.gii.upv.es/tlsf/
@@ -458,7 +459,7 @@ function computeSize(size: usize): usize {
 
 /** Prepares and checks an allocation size. */
 function prepareSize(size: usize): usize {
-  if (size >= BLOCK_MAXSIZE) throw new Error("allocation too large");
+  if (size >= BLOCK_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   return computeSize(size);
 }
 

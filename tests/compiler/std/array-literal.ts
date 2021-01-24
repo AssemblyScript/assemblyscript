@@ -44,10 +44,11 @@ dynamicArrayI32 = changetype<i32[]>(0);
 dynamicArrayRef = changetype<Ref[]>(0);
 dynamicArrayRefWithCtor = changetype<RefWithCtor[]>(0);
 
-// Make sure unassigned literals don't
+// Make sure unassigned literals don't leak
 function doesntLeak(refs: Ref[]): void {}
 {
   doesntLeak([ new Ref() ]);
 }
 
+__stack_pointer = __heap_base;
 __collect();

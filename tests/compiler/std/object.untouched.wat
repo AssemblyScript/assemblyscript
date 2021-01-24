@@ -15,6 +15,9 @@
  (data (i32.const 156) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/memory/__data_end i32 (i32.const 188))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16572))
+ (global $~lib/memory/__heap_base i32 (i32.const 16572))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/object/Object.is<f64> (param $0 f64) (param $1 f64) (result i32)
@@ -204,13 +207,44 @@
   end
   i32.const 0
  )
+ (func $~start
+  call $start:std/object
+ )
+ (func $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__data_end
+  i32.lt_s
+  if
+   i32.const 16592
+   i32.const 16640
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   local.get $0
   local.get $1
   i32.eq
   if
    i32.const 1
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
    return
   end
   local.get $0
@@ -225,42 +259,139 @@
   end
   if
    i32.const 0
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
    return
   end
   local.get $0
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store
+  local.get $3
   call $~lib/string/String#get:length
   local.set $2
   local.get $2
   local.get $1
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store
+  local.get $3
   call $~lib/string/String#get:length
   i32.ne
   if
    i32.const 0
+   local.set $3
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $3
    return
   end
   local.get $0
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store
+  local.get $3
   i32.const 0
   local.get $1
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  local.get $3
+  i32.store offset=4
+  local.get $3
   i32.const 0
   local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
  )
  (func $~lib/object/Object.is<~lib/string/String> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   i32.const 0
   drop
   local.get $0
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
   local.get $1
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
   call $~lib/string/String.__eq
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
  )
  (func $~lib/object/Object.is<~lib/string/String|null> (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   i32.const 0
   drop
   local.get $0
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store
+  local.get $2
   local.get $1
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=4
+  local.get $2
   call $~lib/string/String.__eq
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
  )
  (func $start:std/object
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
@@ -750,7 +881,17 @@
    unreachable
   end
   i32.const 80
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
   i32.const 80
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
   call $~lib/object/Object.is<~lib/string/String>
   i32.const 1
   i32.eq
@@ -764,7 +905,17 @@
    unreachable
   end
   i32.const 80
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
   i32.const 112
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
   call $~lib/object/Object.is<~lib/string/String>
   i32.const 0
   i32.eq
@@ -778,7 +929,17 @@
    unreachable
   end
   i32.const 80
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
   i32.const 144
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
   call $~lib/object/Object.is<~lib/string/String>
   i32.const 0
   i32.eq
@@ -806,6 +967,11 @@
    unreachable
   end
   i32.const 176
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
   i32.const 0
   call $~lib/object/Object.is<~lib/string/String|null>
   i32.const 0
@@ -821,6 +987,11 @@
   end
   i32.const 0
   i32.const 176
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
   call $~lib/object/Object.is<~lib/string/String|null>
   i32.const 0
   i32.eq
@@ -833,8 +1004,9 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  call $start:std/object
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )

@@ -91,4 +91,5 @@ function testContextualBoolOr(someObj: Obj, someInt: i32): bool {
 }
 assert(testContextualBoolOr(new Obj(), 0));
 
+__stack_pointer = __heap_base;
 __collect();

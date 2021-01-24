@@ -116,9 +116,11 @@ function loadAssemblyScriptWasm(binaryPath) {
     onerror(err, info) { console.log(err, info); },
     getMemory() { return exports.memory; },
     oncollect() {
-      var gcData = rtrace.gcData;
-      if (gcData.length && fs.writeFileSync) {
-        fs.writeFileSync("gc.csv", `time,memory,pause\n${gcData.join("\n")}`);
+      var gcProfile = rtrace.gcProfile;
+      if (gcProfile && gcProfile.length && fs.writeFileSync) {
+        let timestamp = Date.now();
+        fs.writeFileSync(`rtrace-gc-profile-${timestamp}.json`, JSON.stringify(gcProfile));
+        fs.writeFileSync(`rtrace-gc-profile-${timestamp}.csv`, `time,memory,pause\n${gcProfile.join("\n")}`);
       }
     }
   });

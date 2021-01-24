@@ -1,6 +1,7 @@
 import { BLOCK, BLOCK_OVERHEAD, OBJECT_OVERHEAD, OBJECT_MAXSIZE, TOTAL_OVERHEAD, DEBUG, TRACE, RTRACE, PROFILE } from "./common";
 import { onvisit, oncollect, oninterrupt, onyield } from "./rtrace";
 import { TypeinfoFlags } from "../shared/typeinfo";
+import { E_ALLOCATION_TOO_LARGE, E_ALREADY_PINNED, E_NOT_PINNED } from "../util/error";
 
 // === ITCMS: An incremental Tri-Color Mark & Sweep garbage collector ===
 // Adapted from Bach Le's μgc, see: https://github.com/bullno1/ugc
@@ -186,16 +187,15 @@ function step(): usize {
     case STATE_MARK: {
       let black = i32(!white);
       obj = iter.next;
-      while (obj != toSpace && obj.color == black) { // skip already-blacks
+      while (obj != toSpace) {
         iter = obj;
+        if (obj.color != black) { // skip already-blacks (pointerfree)
+          obj.color = black;
+          visitCount = 0;
+          __visit_members(changetype<usize>(obj) + TOTAL_OVERHEAD, VISIT_SCAN);
+          return visitCount * MARKCOST;
+        }
         obj = obj.next;
-      }
-      if (obj != toSpace) {
-        iter = obj;
-        obj.color = black;
-        visitCount = 0;
-        __visit_members(changetype<usize>(obj) + TOTAL_OVERHEAD, VISIT_SCAN);
-        return visitCount * MARKCOST;
       }
       visitCount = 0;
       visitRoots(VISIT_SCAN);
@@ -253,7 +253,7 @@ function free(obj: Object): void {
 // @ts-ignore: decorator
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
-  if (size >= OBJECT_MAXSIZE) throw new Error("allocation too large");
+  if (size >= OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   if (total >= threshold) interrupt();
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   obj.rtId = id;
@@ -330,7 +330,7 @@ export function __pin(ptr: usize): usize {
   if (ptr) {
     let obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
     if (obj.color == transparent) {
-      throw new Error("already pinned");
+      throw new Error(E_ALREADY_PINNED);
     }
     obj.unlink(); // from fromSpace
     obj.linkTo(pinSpace, transparent);
@@ -344,7 +344,7 @@ export function __unpin(ptr: usize): void {
   if (!ptr) return;
   var obj = changetype<Object>(ptr - TOTAL_OVERHEAD);
   if (obj.color != transparent) {
-    throw new Error("not pinned");
+    throw new Error(E_NOT_PINNED);
   }
   if (state == STATE_MARK) {
     // We may be right at the point after marking roots for the second time and
@@ -370,18 +370,18 @@ export function __collect(): void {
   while (state != STATE_IDLE) step();
   threshold = <usize>(<u64>total * IDLEFACTOR / 100) + GRANULARITY;
   if (TRACE) trace("GC (full) done at cur/max", 2, total, memory.size() << 16);
-  if (RTRACE) oncollect(total);
+  if (RTRACE || PROFILE) oncollect(total);
 }
 
 // Garbage collector automation
 
-/** How often to interrupt, in bytes allocated. */
+/** How often to interrupt. The default of 1024 means "interrupt each 1024 bytes allocated". */
 // @ts-ignore: decorator
 @inline const GRANULARITY: usize = isDefined(ASC_GC_GRANULARITY) ? ASC_GC_GRANULARITY : 1024;
-/** How eager to step, in percent relative to allocations. */
+/** How long to interrupt. The default of 200% means "run at double the speed of allocations". */
 // @ts-ignore: decorator
 @inline const STEPFACTOR: usize = isDefined(ASC_GC_SWEEPFACTOR) ? ASC_GC_SWEEPFACTOR : 200;
-/** How long to idle in between cycles, in percent memory since last cycle. */
+/** How long to idle. The default of 200% means "wait for memory to double before kicking in again". */
 // @ts-ignore: decorator
 @inline const IDLEFACTOR: usize = isDefined(ASC_GC_IDLEFACTOR) ? ASC_GC_IDLEFACTOR : 200;
 

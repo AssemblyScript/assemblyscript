@@ -49,4 +49,5 @@ function testUpcastFromToNullable(animal: Animal | null): void {
 }
 testUpcastFromToNullable(new Cat());
 
+__stack_pointer = __heap_base;
 __collect();

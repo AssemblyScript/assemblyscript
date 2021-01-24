@@ -1,4 +1,5 @@
-import { AL_MASK, OBJECT, OBJECT_OVERHEAD, BLOCK_MAXSIZE, BLOCK_OVERHEAD, BLOCK, OBJECT_MAXSIZE } from "rt/common";
+import { AL_MASK, OBJECT, OBJECT_OVERHEAD, BLOCK_MAXSIZE, BLOCK_OVERHEAD, BLOCK, OBJECT_MAXSIZE } from "./common";
+import { E_ALLOCATION_TOO_LARGE } from "../util/error";
 
 // === A minimal runtime stub ===
 
@@ -29,7 +30,7 @@ function maybeGrowMemory(newOffset: usize): void {
 // @ts-ignore: decorator
 @unsafe @global
 export function __alloc(size: usize): usize {
-  if (size > BLOCK_MAXSIZE) unreachable();
+  if (size > BLOCK_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   var block = changetype<BLOCK>(offset);
   var ptr = offset + BLOCK_OVERHEAD;
   var payloadSize = computeSize(size);
@@ -48,7 +49,7 @@ export function __realloc(ptr: usize, size: usize): usize {
   var payloadSize = computeSize(size);
   if (size > actualSize) {
     if (isLast) { // last block: grow
-      if (size > BLOCK_MAXSIZE) unreachable();
+      if (size > BLOCK_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
       maybeGrowMemory(ptr + payloadSize);
       block.mmInfo = payloadSize;
     } else { // copy to new block at least double the size
@@ -82,7 +83,7 @@ export function __reset(): void { // special
 // @ts-ignore: decorator
 @unsafe @global
 export function __new(size: usize, id: u32): usize {
-  if (size > OBJECT_MAXSIZE) unreachable();
+  if (size > OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   var ptr = __alloc(OBJECT_OVERHEAD + size);
   var object = changetype<OBJECT>(ptr - BLOCK_OVERHEAD);
   object.gcInfo = 0;
@@ -95,7 +96,7 @@ export function __new(size: usize, id: u32): usize {
 // @ts-ignore: decorator
 @unsafe @global
 export function __renew(oldPtr: usize, size: usize): usize {
-  if (size > OBJECT_MAXSIZE) unreachable();
+  if (size > OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size);
   changetype<OBJECT>(newPtr - BLOCK_OVERHEAD).rtSize = <u32>size;
   return newPtr + OBJECT_OVERHEAD;

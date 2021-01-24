@@ -209,9 +209,9 @@
   end
  )
  (func $start:memset
-  i32.const 1084
+  i32.const 17468
   global.set $memset/dest
-  i32.const 1084
+  i32.const 17468
   i32.const 1
   i32.const 16
   call $memset/memset

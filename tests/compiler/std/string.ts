@@ -778,4 +778,5 @@ export function getString(): string {
 
 str = changetype<string>(0);
 
+__stack_pointer = __heap_base;
 __collect();
