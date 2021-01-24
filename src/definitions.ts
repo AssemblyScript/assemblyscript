@@ -501,6 +501,8 @@ export class TSDBuilder extends ExportsWalker {
       sb.push("static wrap(ptr: usize): ");
       sb.push(name);
       sb.push(";\n");
+      indent(sb, this.indentLevel);
+      sb.push("valueOf(): usize;\n");
     }
     var staticMembers = element.prototype.members;
     if (staticMembers) {
