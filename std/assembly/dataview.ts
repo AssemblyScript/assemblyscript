@@ -143,9 +143,7 @@ export class DataView {
     store<u32>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u32>(value));
   }
 
-  // Non-standard additions that make sense in WebAssembly, but won't work in JS:
-
-  getInt64(byteOffset: i32, littleEndian: boolean = false): i64 {
+  getBigInt64(byteOffset: i32, littleEndian: boolean = false): i64 {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
@@ -153,7 +151,7 @@ export class DataView {
     return littleEndian ? result : bswap<i64>(result);
   }
 
-  getUint64(byteOffset: i32, littleEndian: boolean = false): u64 {
+  getBigUint64(byteOffset: i32, littleEndian: boolean = false): u64 {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
@@ -161,18 +159,39 @@ export class DataView {
     return littleEndian ? result : bswap<u64>(result);
   }
 
-  setInt64(byteOffset: i32, value: i64, littleEndian: boolean = false): void {
+  setBigInt64(byteOffset: i32, value: i64, littleEndian: boolean = false): void {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i64>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i64>(value));
   }
 
-  setUint64(byteOffset: i32, value: u64, littleEndian: boolean = false): void {
+  setBigUint64(byteOffset: i32, value: u64, littleEndian: boolean = false): void {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u64>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u64>(value));
+  }
+
+  // Non-standard aliases, deprecate these
+  @inline
+  getInt64(byteOffset: i32, littleEndian: boolean = false): i64 {
+    return this.getBigInt64(byteOffset, littleEndian);
+  }
+
+  @inline
+  getUint64(byteOffset: i32, littleEndian: boolean = false): u64 {
+    return this.getBigUint64(byteOffset, littleEndian);
+  }
+
+  @inline
+  setInt64(byteOffset: i32, value: i64, littleEndian: boolean = false): void {
+    this.setBigInt64(byteOffset, value, littleEndian);
+  }
+
+  @inline
+  setUint64(byteOffset: i32, value: u64, littleEndian: boolean = false): void {
+    this.setBigUint64(byteOffset, value, littleEndian);
   }
 
   toString(): string {
