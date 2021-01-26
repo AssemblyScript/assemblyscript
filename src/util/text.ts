@@ -192,6 +192,10 @@ export function isEndOfLiteral(c: i32): bool {
     c == CharCode.CARET ||
     c == CharCode.BAR ||
     c == CharCode.AMPERSAND ||
+    c == CharCode.EQUALS ||
+    c == CharCode.EXCLAMATION ||
+    c == CharCode.GREATERTHAN ||
+    c == CharCode.LESSTHAN ||
     isLineBreak(c) ||
     isWhiteSpace(c)
   );
