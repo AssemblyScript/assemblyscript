@@ -176,29 +176,32 @@ export function isWhiteSpace(c: i32): bool {
 }
 
 export function isEndOfLiteral(c: i32): bool {
-  return (
-    c == CharCode.COMMA ||
-    c == CharCode.SEMICOLON ||
-    c == CharCode.CLOSEBRACKET ||
-    c == CharCode.CLOSEPAREN ||
-    c == CharCode.CLOSEBRACE ||
-    c == CharCode.COLON ||
-    c == CharCode.DOT ||
-    c == CharCode.PLUS ||
-    c == CharCode.MINUS ||
-    c == CharCode.ASTERISK ||
-    c == CharCode.SLASH ||
-    c == CharCode.PERCENT ||
-    c == CharCode.CARET ||
-    c == CharCode.BAR ||
-    c == CharCode.AMPERSAND ||
-    c == CharCode.EQUALS ||
-    c == CharCode.EXCLAMATION ||
-    c == CharCode.GREATERTHAN ||
-    c == CharCode.LESSTHAN ||
-    isLineBreak(c) ||
-    isWhiteSpace(c)
-  );
+  switch (c) {
+    case CharCode.COMMA:
+    case CharCode.SEMICOLON:
+    case CharCode.CLOSEBRACKET:
+    case CharCode.CLOSEPAREN:
+    case CharCode.CLOSEBRACE:
+    case CharCode.COLON:
+    case CharCode.DOT:
+    case CharCode.PLUS:
+    case CharCode.MINUS:
+    case CharCode.ASTERISK:
+    case CharCode.SLASH:
+    case CharCode.PERCENT:
+    case CharCode.CARET:
+    case CharCode.BAR:
+    case CharCode.AMPERSAND:
+    case CharCode.EQUALS:
+    case CharCode.EXCLAMATION:
+    case CharCode.GREATERTHAN:
+    case CharCode.LESSTHAN: {
+      return true;
+    }
+    default: {
+      return isLineBreak(c) || isWhiteSpace(c);
+    }
+  }
 }
 
 /** Tests if the specified character code is a valid decimal digit. */
