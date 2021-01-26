@@ -1324,7 +1324,7 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         if (!isEndOfLiteral(c)) {
           this.error(
-            DiagnosticCode.Invalid_character,
+            DiagnosticCode.Unexpected_token,
             this.range(pos)
           );
         }
@@ -1381,7 +1381,7 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         if (!isEndOfLiteral(c)) {
           this.error(
-            DiagnosticCode.Invalid_character,
+            DiagnosticCode.Unexpected_token,
             this.range(pos)
           );
         }
@@ -1433,7 +1433,7 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         if (!isEndOfLiteral(c)) {
           this.error(
-            DiagnosticCode.Invalid_character,
+            DiagnosticCode.Unexpected_token,
             this.range(pos)
           );
         }
@@ -1488,7 +1488,7 @@ export class Tokenizer extends DiagnosticEmitter {
       } else {
         if (!isEndOfLiteral(c)) {
           this.error(
-            DiagnosticCode.Invalid_character,
+            DiagnosticCode.Unexpected_token,
             this.range(pos)
           );
         }
@@ -1550,7 +1550,7 @@ export class Tokenizer extends DiagnosticEmitter {
     let c = text.charCodeAt(this.pos);
     if (!isEndOfLiteral(c)) {
       this.error(
-        DiagnosticCode.Invalid_character,
+        DiagnosticCode.Unexpected_token,
         this.range(this.pos)
       );
     }

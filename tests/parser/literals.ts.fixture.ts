@@ -79,9 +79,9 @@ a;
 2;
 b;
 // ERROR 1109: "Expression expected." in literals.ts(77,4+1)
-// ERROR 1127: "Invalid character." in literals.ts(78,2+0)
-// ERROR 1127: "Invalid character." in literals.ts(79,2+0)
+// ERROR 1012: "Unexpected token." in literals.ts(78,2+0)
+// ERROR 1012: "Unexpected token." in literals.ts(79,2+0)
 // ERROR 1109: "Expression expected." in literals.ts(80,3+1)
 // ERROR 6188: "Numeric separators are not allowed here." in literals.ts(82,2+0)
-// ERROR 1127: "Invalid character." in literals.ts(83,3+0)
-// ERROR 1127: "Invalid character." in literals.ts(84,4+0)
+// ERROR 1012: "Unexpected token." in literals.ts(83,3+0)
+// ERROR 1012: "Unexpected token." in literals.ts(84,4+0)
