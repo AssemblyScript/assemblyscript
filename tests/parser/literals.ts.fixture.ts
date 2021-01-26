@@ -60,3 +60,24 @@
 "1\"23";
 "1\"2\\3";
 "\0\n\\n\r";
+0 + 0;
+1 - 1;
+2 / 2;
+3 % 3;
+4 ^ 4;
+5 | 5;
+6 & 6;
+7 == 7;
+8 <= 8;
+9 >= 9;
+10 != 10;
+3;
+u8;
+4;
+b;
+7;
+// ERROR 1109: "Expression expected." in literals.ts(77,4+1)
+// ERROR 1127: "Invalid character." in literals.ts(79,2+0)
+// ERROR 1127: "Invalid character." in literals.ts(80,2+0)
+// ERROR 1109: "Expression expected." in literals.ts(81,3+1)
+// ERROR 6188: "Numeric separators are not allowed here." in literals.ts(83,2+0)
