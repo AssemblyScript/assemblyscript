@@ -1322,6 +1322,8 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
       } else {
+        // skip white spaces
+        while (isWhiteSpace((c = text.charCodeAt(pos)))) ++pos;
         if (!isEndOfLiteral(c)) {
           this.error(
             DiagnosticCode.Unexpected_token,
@@ -1379,6 +1381,8 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
       } else {
+        // skip white spaces
+        while (isWhiteSpace((c = text.charCodeAt(pos)))) ++pos;
         if (!isEndOfLiteral(c)) {
           this.error(
             DiagnosticCode.Unexpected_token,
@@ -1431,6 +1435,8 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
       } else {
+        // skip white spaces
+        while (isWhiteSpace((c = text.charCodeAt(pos)))) ++pos;
         if (!isEndOfLiteral(c)) {
           this.error(
             DiagnosticCode.Unexpected_token,
@@ -1486,6 +1492,8 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
       } else {
+        // skip white spaces
+        while (isWhiteSpace((c = text.charCodeAt(pos)))) ++pos;
         if (!isEndOfLiteral(c)) {
           this.error(
             DiagnosticCode.Unexpected_token,
@@ -1547,6 +1555,8 @@ export class Tokenizer extends DiagnosticEmitter {
         sepCount += this.readDecimalFloatPartial();
       }
     }
+    // skip white spaces
+    while (isWhiteSpace(text.charCodeAt(this.pos))) ++this.pos;
     let c = text.charCodeAt(this.pos);
     if (!isEndOfLiteral(c)) {
       this.error(

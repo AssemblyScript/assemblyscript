@@ -78,6 +78,10 @@ b;
 a;
 2;
 b;
+3;
+4;
+5;
+c;
 // ERROR 1109: "Expression expected." in literals.ts(77,4+1)
 // ERROR 1012: "Unexpected token." in literals.ts(78,2+0)
 // ERROR 1012: "Unexpected token." in literals.ts(79,2+0)
@@ -85,3 +89,5 @@ b;
 // ERROR 6188: "Numeric separators are not allowed here." in literals.ts(82,2+0)
 // ERROR 1012: "Unexpected token." in literals.ts(83,3+0)
 // ERROR 1012: "Unexpected token." in literals.ts(84,4+0)
+// ERROR 1012: "Unexpected token." in literals.ts(85,3+0)
+// ERROR 1012: "Unexpected token." in literals.ts(86,3+0)
