@@ -187,6 +187,8 @@ export function isEndOfLiteral(c: i32): bool {
     c == CharCode.PLUS ||
     c == CharCode.MINUS ||
     c == CharCode.ASTERISK ||
+    c == CharCode.SLASH ||
+    c == CharCode.PERCENT ||
     c == CharCode.CARET ||
     c == CharCode.BAR ||
     c == CharCode.AMPERSAND ||
