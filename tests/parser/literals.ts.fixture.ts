@@ -76,8 +76,14 @@ u8;
 4;
 b;
 7;
+1;
+a;
+2;
+b;
 // ERROR 1109: "Expression expected." in literals.ts(77,4+1)
 // ERROR 1127: "Invalid character." in literals.ts(79,2+0)
 // ERROR 1127: "Invalid character." in literals.ts(80,2+0)
 // ERROR 1109: "Expression expected." in literals.ts(81,3+1)
 // ERROR 6188: "Numeric separators are not allowed here." in literals.ts(83,2+0)
+// ERROR 1127: "Invalid character." in literals.ts(84,3+0)
+// ERROR 1127: "Invalid character." in literals.ts(85,4+0)
