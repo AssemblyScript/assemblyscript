@@ -184,6 +184,12 @@ export function isEndOfLiteral(c: i32): bool {
     c == CharCode.CLOSEBRACE ||
     c == CharCode.COLON ||
     c == CharCode.DOT ||
+    c == CharCode.PLUS ||
+    c == CharCode.MINUS ||
+    c == CharCode.ASTERISK ||
+    c == CharCode.CARET ||
+    c == CharCode.BAR ||
+    c == CharCode.AMPERSAND ||
     isLineBreak(c) ||
     isWhiteSpace(c)
   );
