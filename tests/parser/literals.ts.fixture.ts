@@ -82,6 +82,8 @@ b;
 4;
 5;
 c;
+6.7;
+d;
 // ERROR 1109: "Expression expected." in literals.ts(77,4+1)
 // ERROR 1012: "Unexpected token." in literals.ts(78,2+0)
 // ERROR 1012: "Unexpected token." in literals.ts(79,2+0)
@@ -91,3 +93,4 @@ c;
 // ERROR 1012: "Unexpected token." in literals.ts(84,4+0)
 // ERROR 1012: "Unexpected token." in literals.ts(85,3+0)
 // ERROR 1012: "Unexpected token." in literals.ts(86,3+0)
+// ERROR 1012: "Unexpected token." in literals.ts(87,5+0)
