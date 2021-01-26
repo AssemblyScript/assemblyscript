@@ -200,7 +200,7 @@ export function isEndOfLiteral(c: i32): bool {
       return true;
     }
     default: {
-      return isLineBreak(c) || isWhiteSpace(c);
+      return isLineBreak(c);
     }
   }
 }

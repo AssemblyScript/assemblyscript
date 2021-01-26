@@ -1557,8 +1557,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     // skip white spaces
     while (isWhiteSpace(text.charCodeAt(this.pos))) ++this.pos;
-    let c = text.charCodeAt(this.pos);
-    if (!isEndOfLiteral(c)) {
+    if (!isEndOfLiteral(text.charCodeAt(this.pos))) {
       this.error(
         DiagnosticCode.Unexpected_token,
         this.range(this.pos)
