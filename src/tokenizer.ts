@@ -26,6 +26,7 @@ import {
   CharCode,
   isLineBreak,
   isWhiteSpace,
+  isEndOfLiteral,
   isIdentifierStart,
   isIdentifierPart,
   isDecimalDigit,
@@ -1321,6 +1322,12 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
       } else {
+        if (!isEndOfLiteral(c)) {
+          this.error(
+            DiagnosticCode.Invalid_character,
+            this.range(pos)
+          );
+        }
         break;
       }
       ++pos;
@@ -1372,6 +1379,12 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
       } else {
+        if (!isEndOfLiteral(c)) {
+          this.error(
+            DiagnosticCode.Invalid_character,
+            this.range(pos)
+          );
+        }
         break;
       }
       ++pos;
@@ -1418,6 +1431,12 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
       } else {
+        if (!isEndOfLiteral(c)) {
+          this.error(
+            DiagnosticCode.Invalid_character,
+            this.range(pos)
+          );
+        }
         break;
       }
       ++pos;
@@ -1467,6 +1486,12 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepEnd = pos + 1;
       } else {
+        if (!isEndOfLiteral(c)) {
+          this.error(
+            DiagnosticCode.Invalid_character,
+            this.range(pos)
+          );
+        }
         break;
       }
       ++pos;
@@ -1521,6 +1546,13 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         sepCount += this.readDecimalFloatPartial();
       }
+    }
+    let c = text.charCodeAt(this.pos);
+    if (!isEndOfLiteral(c)) {
+      this.error(
+        DiagnosticCode.Invalid_character,
+        this.range(this.pos)
+      );
     }
     let result = text.substring(start, this.pos);
     if (sepCount) result = result.replaceAll("_", "");

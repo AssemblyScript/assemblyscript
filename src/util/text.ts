@@ -175,6 +175,19 @@ export function isWhiteSpace(c: i32): bool {
   }
 }
 
+export function isEndOfLiteral(c: i32): bool {
+  return (
+    c == CharCode.COMMA ||
+    c == CharCode.SEMICOLON ||
+    c == CharCode.CLOSEBRACKET ||
+    c == CharCode.CLOSEPAREN ||
+    c == CharCode.CLOSEBRACE ||
+    c == CharCode.COLON ||
+    isLineBreak(c) ||
+    isWhiteSpace(c)
+  );
+}
+
 /** Tests if the specified character code is a valid decimal digit. */
 export function isDecimalDigit(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._9;
