@@ -194,6 +194,7 @@ export function isEndOfLiteral(c: i32): bool {
     case CharCode.AMPERSAND:
     case CharCode.EQUALS:
     case CharCode.EXCLAMATION:
+    case CharCode.QUESTION:
     case CharCode.GREATERTHAN:
     case CharCode.LESSTHAN: {
       return true;
