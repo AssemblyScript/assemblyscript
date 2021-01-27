@@ -25,11 +25,11 @@ export function __typeinfo(id: u32): TypeinfoFlags {
 
 // @ts-ignore: decorator
 @unsafe
-export function __instanceof(ref: usize, superId: u32): bool { // keyword
-  var id = changetype<OBJECT>(ref - TOTAL_OVERHEAD).rtId;
+export function __instanceof(ptr: usize, classId: u32): bool { // keyword
+  var id = changetype<OBJECT>(ptr - TOTAL_OVERHEAD).rtId;
   var ptr = __rtti_base;
   if (id <= load<u32>(ptr)) {
-    do if (id == superId) return true;
+    do if (id == classId) return true;
     while (id = changetype<Typeinfo>(ptr + sizeof<u32>() + id * offsetof<Typeinfo>()).base);
   }
   return false;
