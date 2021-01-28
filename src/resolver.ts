@@ -1151,6 +1151,14 @@ export class Resolver extends DiagnosticEmitter {
       this.currentElementExpression = null;
       return element;
     }
+    var outerFlow = ctxFlow.outer;
+    if (outerFlow) {
+      if (element = outerFlow.lookup(name)) {
+        this.currentThisExpression = null;
+        this.currentElementExpression = null;
+        return element;
+      }
+    }
     if (element = ctxElement.lookup(name)) {
       this.currentThisExpression = null;
       this.currentElementExpression = null;

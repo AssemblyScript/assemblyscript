@@ -28,6 +28,9 @@
  (global $~lib/builtins/f32.MAX_SAFE_INTEGER f32 (f32.const 16777215))
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
+ (global $~lib/memory/__data_end i32 (i32.const 8))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
+ (global $~lib/memory/__heap_base i32 (i32.const 16392))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:limits
