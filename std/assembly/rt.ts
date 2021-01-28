@@ -27,10 +27,10 @@ export function __typeinfo(id: u32): TypeinfoFlags {
 @unsafe
 export function __instanceof(ptr: usize, classId: u32): bool { // keyword
   var id = changetype<OBJECT>(ptr - TOTAL_OVERHEAD).rtId;
-  var ptr = __rtti_base;
-  if (id <= load<u32>(ptr)) {
+  var rttiBase = __rtti_base;
+  if (id <= load<u32>(rttiBase)) {
     do if (id == classId) return true;
-    while (id = changetype<Typeinfo>(ptr + sizeof<u32>() + id * offsetof<Typeinfo>()).base);
+    while (id = changetype<Typeinfo>(rttiBase + sizeof<u32>() + id * offsetof<Typeinfo>()).base);
   }
   return false;
 }
