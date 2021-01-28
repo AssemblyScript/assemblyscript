@@ -55,22 +55,23 @@ export interface MemoryStream extends OutputStream {
   toString(): string;
 }
 
-/** A subset of Source interface from assemblyscript package */
+/** Relevant subset of the Source class for diagnostic reporting. */
 export interface Source {
   /** Normalized path with file extension. */
   normalizedPath: string;
 }
 
-/** A subset of Range interface from assemblyscript package */
+/** Relevant subset of the Range class for diagnostic reporting. */
 export interface Range {
-  /** Range start char index in a source */
+  /** Start offset within the source file. */
   start: number;
-  /** Range end char index in a source */
+  /** End offset within the source file. */
   end: number;
+  /** Respective source file. */
   source: Source;
 }
 
-/** A subset of DiagnosticMessage interface from assemblyscript package */
+/** Relevant subset of the DiagnosticMessage class for diagnostic reporting. */
 export interface DiagnosticMessage {
   /** Message code. */
   code: number;
@@ -84,7 +85,7 @@ export interface DiagnosticMessage {
   relatedRange: Range | null;
 }
 
-/** A function that handles diagnostic */
+/** A function handling diagnostic messages. */
 type DiagnosticReporter = (diagnostic: DiagnosticMessage) => void;
 
 /** Compiler options. */
@@ -189,7 +190,7 @@ export interface APIOptions {
   writeFile?: (filename: string, contents: Uint8Array, baseDir: string) => void;
   /** Lists all files within a directory. */
   listFiles?: (dirname: string, baseDir: string) => string[] | null;
-  /** Handles diagnostic messages. */
+  /** Handler for diagnostic messages. */
   reportDiagnostic?: DiagnosticReporter;
 }
 

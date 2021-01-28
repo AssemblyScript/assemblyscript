@@ -129,16 +129,10 @@ function loadAssemblyScriptWasm(binaryPath) {
   return exports;
 }
 
-/**
- * Wraps object in WASM environment, returns untouched otherwise.
- * @template T
- * @param {number | T} ptrOrObj Pointer in WASM environment, object otherwise
- * @param {typeof T} type Object type that provides wrap method in WASM environment
- * @returns {T | null}
- */
-function __wrap(ptrOrObj, type) {
+/** Ensures that an object is a wrapper class instead of just a pointer. */
+function __wrap(ptrOrObj, wrapperClass) {
   if (typeof ptrOrObj === "number") {
-    return ptrOrObj === 0 ? null : type.wrap(ptrOrObj);
+    return ptrOrObj === 0 ? null : wrapperClass.wrap(ptrOrObj);
   }
   return ptrOrObj;
 }
