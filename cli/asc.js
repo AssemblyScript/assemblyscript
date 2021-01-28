@@ -129,6 +129,20 @@ function loadAssemblyScriptWasm(binaryPath) {
   return exports;
 }
 
+/**
+ * Wraps object in WASM environment, returns untouched otherwise.
+ * @template T
+ * @param {number | T} ptrOrObj Pointer in WASM environment, object otherwise
+ * @param {typeof T} type Object type that provides wrap method in WASM environment
+ * @returns {T | null}
+ */
+function __wrap(ptrOrObj, type) {
+  if (typeof ptrOrObj === "number") {
+    return ptrOrObj === 0 ? null : type.wrap(ptrOrObj);
+  }
+  return ptrOrObj;
+}
+
 var assemblyscript, __newString, __getString, __pin, __unpin, __collect;
 
 function loadAssemblyScript() {
@@ -702,7 +716,7 @@ exports.main = function main(argv, options, callback) {
         });
       }
     }
-    var numErrors = checkDiagnostics(program, stderr);
+    var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
     if (numErrors) {
       const err = Error(numErrors + " parse error(s)");
       err.stack = err.message; // omit stack
@@ -816,7 +830,7 @@ exports.main = function main(argv, options, callback) {
       };
     }
   });
-  var numErrors = checkDiagnostics(program, stderr);
+  var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
   if (numErrors) {
     if (module) module.dispose();
     const err = Error(numErrors + " compile error(s)");
@@ -1155,7 +1169,7 @@ function getAsconfig(file, baseDir, readFile) {
 exports.getAsconfig = getAsconfig;
 
 /** Checks diagnostics emitted so far for errors. */
-function checkDiagnostics(program, stderr) {
+function checkDiagnostics(program, stderr, reportDiagnostic) {
   var numErrors = 0;
   do {
     let diagnosticPtr = assemblyscript.nextDiagnostic(program);
@@ -1166,6 +1180,33 @@ function checkDiagnostics(program, stderr) {
         __getString(assemblyscript.formatDiagnostic(diagnosticPtr, stderr.isTTY, true)) +
         EOL + EOL
       );
+    }
+    if (reportDiagnostic) {
+      const diagnostic = __wrap(diagnosticPtr, assemblyscript.DiagnosticMessage);
+      const range = __wrap(diagnostic.range, assemblyscript.Range);
+      const relatedRange = __wrap(diagnostic.relatedRange, assemblyscript.Range);
+      const rangeSource = range ? __wrap(range.source, assemblyscript.Source) : null;
+      const relatedRangeSource = relatedRange ? __wrap(relatedRange.source, assemblyscript.Source) : null;
+
+      reportDiagnostic({
+        message: __getString(diagnostic.message),
+        code: diagnostic.code,
+        category: diagnostic.category,
+        range: range ? {
+          start: range.start,
+          end: range.end,
+          source: rangeSource ? {
+            normalizedPath: __getString(rangeSource.normalizedPath)
+          } : null,
+        } : null,
+        relatedRange: relatedRange ? {
+          start: relatedRange.start,
+          end: relatedRange.end,
+          source: relatedRangeSource ? {
+            normalizedPath: __getString(relatedRangeSource.normalizedPath)
+          } : null
+        } : null
+      });
     }
     if (assemblyscript.isError(diagnosticPtr)) ++numErrors;
     __unpin(diagnosticPtr);
