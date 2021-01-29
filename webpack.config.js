@@ -71,9 +71,7 @@ const bin = {
   entry: [ "./asc.js" ],
   externals: [
     "binaryen",
-    "assemblyscript",
-    "../lib/loader/umd/index",
-    "../lib/rtrace/umd/index"
+    "assemblyscript"
   ],
   node: {
     global: true
