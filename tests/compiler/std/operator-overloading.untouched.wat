@@ -460,25 +460,6 @@
   local.set $3
   i32.const 1
   drop
-<<<<<<< HEAD
-  local.get $0
-  i32.const 2
-  i32.eq
-  if
-   i32.const 1
-   local.get $1
-   i32.shl
-   i32.const 0
-   local.get $1
-   i32.const 32
-   i32.lt_u
-   select
-   return
-  end
-  local.get $1
-  i32.const 0
-  i32.le_s
-=======
   local.get $3
   i32.const 12
   i32.ge_u
@@ -490,7 +471,6 @@
    i32.const 0
   end
   i32.eqz
->>>>>>> master
   if
    i32.const 0
    i32.const 368
@@ -2505,6 +2485,20 @@
   i32.const 1
   i32.lt_s
   drop
+  local.get $0
+  i32.const 2
+  i32.eq
+  if
+   i32.const 1
+   local.get $1
+   i32.shl
+   i32.const 0
+   local.get $1
+   i32.const 32
+   i32.lt_u
+   select
+   return
+  end
   local.get $1
   i32.const 0
   i32.le_s

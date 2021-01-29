@@ -4310,6 +4310,20 @@
   i32.const 1
   i32.lt_s
   drop
+  local.get $0
+  i32.const 2
+  i32.eq
+  if
+   i32.const 1
+   local.get $1
+   i32.shl
+   i32.const 0
+   local.get $1
+   i32.const 32
+   i32.lt_u
+   select
+   return
+  end
   local.get $1
   i32.const 0
   i32.le_s
@@ -5959,31 +5973,6 @@
  (func $~lib/util/number/prettify (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-<<<<<<< HEAD
-  i32.const 1
-  local.set $2
-  i32.const 0
-  i32.const 1
-  i32.lt_s
-  drop
-  local.get $0
-  i32.const 2
-  i32.eq
-  if
-   i32.const 1
-   local.get $1
-   i32.shl
-   i32.const 0
-   local.get $1
-   i32.const 32
-   i32.lt_u
-   select
-   return
-  end
-  local.get $1
-  i32.const 0
-  i32.le_s
-=======
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -5993,7 +5982,6 @@
   (local $11 i32)
   local.get $2
   i32.eqz
->>>>>>> master
   if
    local.get $0
    local.get $1
