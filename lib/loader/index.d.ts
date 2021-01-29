@@ -15,6 +15,7 @@ export type Imports = {
     seed?(): number;
     abort?(msg: number, file: number, line: number, column: number): void;
     trace?(msg: number, numArgs?: number, ...args: number[]): void;
+    mark?(): void;
   };
 };
 
@@ -81,22 +82,21 @@ export interface ASUtil {
   /** Gets a live view on a Float64Array's values in the module's memory. */
   __getFloat64ArrayView(ptr: number): Float64Array;
 
-  /** Allocates an instance of the class represented by the specified id. */
-  __new(size: number, id: number): number;
+  /** Tests whether a managed object is an instance of the class represented by the specified base id. */
+  __instanceof(ptr: number, baseId: number): boolean;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
   __newString(str: string): number;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
   __newArray(id: number, values: ArrayLike<number>): number;
-  /** Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer. */
-  __retain(ptr: number): number;
-  /** Releases a previously retained reference to a managed object, allowing the runtime to collect it once its reference count reaches zero. */
-  __release(ptr: number): void;
-  /** Forcefully resets the heap to its initial offset, effectively clearing dynamic memory. Stub runtime only. */
-  __reset?(): void;
-  /** Tests whether a managed object is an instance of the class represented by the specified base id. */
-  __instanceof(ptr: number, baseId: number): boolean;
-  /** Forces a cycle collection. Only relevant if objects potentially forming reference cycles are used. */
-  __collect(): void;
+
+  /** Allocates an instance of the class represented by the specified id. */
+  __new(size: number, id: number): number;
+  /** Pins a managed object externally, preventing it from becoming garbage collected. */
+  __pin(ptr: number): number;
+  /** Unpins a managed object externally, allowing it to become garbage collected. */
+  __unpin(ptr: number): void;
+  /** Performs a full garbage collection cycle. */
+  __collect(incremental?: boolean): void;
 }
 
 /** Asynchronously instantiates an AssemblyScript module from anything that can be instantiated. */

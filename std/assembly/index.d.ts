@@ -60,6 +60,8 @@ declare const ASC_OPTIMIZE_LEVEL: i32;
 declare const ASC_SHRINK_LEVEL: i32;
 /** Provided lowMemoryLimit option. */
 declare const ASC_LOW_MEMORY_LIMIT: i32;
+/** Provided noExportRuntime option. */
+declare const ASC_NO_EXPORT_RUNTIME: i32;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
 /** Whether the mutable globals feature is enabled. */
@@ -138,6 +140,10 @@ declare function unreachable(): never;
 declare const NaN: f32 | f64;
 /** Positive infinity as a 32-bit or 64-bit float depending on context. */
 declare const Infinity: f32 | f64;
+/** Data end offset. */
+declare const __data_end: usize;
+/** Stack pointer offset. */
+declare var __stack_pointer: usize;
 /** Heap base offset. */
 declare const __heap_base: usize;
 /** Determines the byte size of the specified underlying core type. Compiles to a constant. */
@@ -1328,14 +1334,6 @@ declare namespace heap {
   export function realloc(ptr: usize, size: usize): usize;
   /** Frees a chunk of memory. Does hardly anything (most recent block only) with the stub/none runtime. */
   export function free(ptr: usize): void;
-  /** Dangerously resets the entire heap. Specific to the stub/none runtime. */
-  export function reset(): void;
-}
-
-/** Garbage collector interface. */
-declare namespace gc {
-  /** Performs a full garbage collection cycle. */
-  export function collect(): void;
 }
 
 /** Table operations. */
@@ -1934,6 +1932,73 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 /** Environmental seeding function. */
 declare function seed(): f64;
 
+/** Node-like process on top of WASI. */
+declare namespace process {
+  /** String representing the CPU architecture for which the binary was compiled. Either `wasm32` or `wasm64`. */
+  export const arch: string;
+  /** String representing the operating system platform for which the binary was compiled. Always `wasm`. */
+  export const platform: string;
+  /** Array of command line arguments passed to the binary upon instantiation. */
+  export const argv: string[];
+  /** Map of variables in the binary's user environment. */
+  export const env: Map<string,string>;
+  /** Process exit code to use when the process exits gracefully. Defaults to `0`. */
+  export var exitCode: i32;
+  /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
+  export function exit(code?: i32): void;
+  /** Stream connected to `stdin` (fd `0`). */
+  export const stdin: ReadableStream;
+  /** Stream connected to `stdout` (fd `1`). */
+  export const stdout: WritableStream;
+  /** Stream connected to `stderr` (fd `2`). */
+  export const stderr: WritableStream;
+  /** Obtains the system's current time of day, in milliseconds since Unix epoch. */
+  export function time(): i64;
+  /** Obtains the system's monotonic high resolution time, in nanoseconds since an arbitrary time in the past. */
+  export function hrtime(): u64;
+
+  interface Stream {
+    /** Closes the stream. Throws if already closed or if the stream cannot be closed. */
+    close(): void;
+  }
+  interface ReadableStream extends Stream {
+    /** Reads available data from the stream, into `buffer` at offset `offset`, returning the number of bytes read. */
+    read(buffer: ArrayBuffer, offset?: isize): i32;
+  }
+  interface WritableStream extends Stream {
+    /** Writes string or buffer to the stream. */
+    write<T extends string | ArrayBuffer>(data: T): void;
+  }
+}
+
+/** Browser-like console on top of WASI. */
+declare namespace console {
+  /** Logs `message` to console if `assertion` is false-ish. */
+  export function assert<T>(assertion: T, message: string): void;
+  /** Outputs `message` to the console. */
+  export function log(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Debug:". */
+  export function debug(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Info:". */
+  export function info(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Warning:". */
+  export function warn(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Error:". */
+  export function error(message: string): void;
+  /** Starts a new timer using the specified `label`. */
+  export function time(label: string): void;
+  /** Logs the current value of a timer previously started with `console.time`. */
+  export function timeLog(label: string): void;
+  /** Logs the current value of a timer previously started with `console.time` and discards the timer. */
+  export function timeEnd(label: string): void;
+}
+
+/** Browser-like crypto utilities on top of WASI. */
+declare namespace crypto {
+  /** Fills `array` with cryptographically strong random values. */
+  export function getRandomValues(array: Uint8Array): void;
+}
+
 // Decorators
 
 interface TypedPropertyDescriptor<T> {
@@ -1999,6 +2064,3 @@ declare function external(...args: any[]): any;
 
 /** Annotates a global for lazy compilation. */
 declare function lazy(...args: any[]): any;
-
-/** Annotates a function as the explicit start function. */
-declare function start(...args: any[]): any;

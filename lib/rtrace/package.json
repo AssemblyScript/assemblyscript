@@ -26,9 +26,16 @@
     "import": "./index.js",
     "require": "./umd/index.js"
   },
+  "bin": {
+    "rtplot": "bin/rtplot.js"
+  },
   "scripts": {
     "build": "npx esm2umd rtrace index.js > umd/index.js",
     "test": "node tests"
+  },
+  "dependencies": {
+    "d3": "^6.3.1",
+    "jsdom": "^16.4.0"
   },
   "files": [
     "index.d.ts",
@@ -37,6 +44,7 @@
     "umd/index.d.ts",
     "umd/index.js",
     "umd/package.json",
+    "bin/rtplot.js",
     "README.md"
   ]
 }

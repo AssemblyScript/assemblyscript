@@ -162,6 +162,7 @@ export namespace CommonNames {
   export const ASC_OPTIMIZE_LEVEL = "ASC_OPTIMIZE_LEVEL";
   export const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
   export const ASC_LOW_MEMORY_LIMIT = "ASC_LOW_MEMORY_LIMIT";
+  export const ASC_EXPORT_RUNTIME = "ASC_EXPORT_RUNTIME";
   export const ASC_WASI = "ASC_WASI";
   export const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
   export const ASC_FEATURE_MUTABLE_GLOBALS = "ASC_FEATURE_MUTABLE_GLOBALS";
@@ -231,8 +232,7 @@ export namespace CommonNames {
   export const free = "__free";
   export const new_ = "__new";
   export const renew = "__renew";
-  export const retain = "__retain";
-  export const release = "__release";
+  export const link = "__link";
   export const collect = "__collect";
   export const typeinfo = "__typeinfo";
   export const instanceof_ = "__instanceof";

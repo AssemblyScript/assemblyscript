@@ -1,6 +1,6 @@
 # AssemblyScript Rtrace
 
-A tiny utility to sanitize the AssemblyScript runtime. Records allocations, retains, releases and frees performed by the runtime and emits an error if something is off. Also checks for leaks.
+A tiny utility to sanitize the AssemblyScript runtime. Records allocations and frees performed by the runtime and emits an error if something is off. Also checks for leaks.
 
 Instructions
 ------------
@@ -8,7 +8,7 @@ Instructions
 Compile your module that uses the full or half runtime with `-use ASC_RTRACE=1 --explicitStart` and include an instance of this module as the import named `rtrace`.
 
 ```js
-var rtrace = new Rtrace({
+const rtrace = new Rtrace({
   onerror(err, info) {
     // handle error
   },
@@ -22,13 +22,11 @@ var rtrace = new Rtrace({
   }
 });
 
-var { module, instance } = await WebAssembly.instantiate(..., {
-  rtrace,
-  env: Object.assign({ //
-    ...                // only required when instrumenting memory
-  }, rtrace.env),      //
-  ...
-});
+const { module, instance } = await WebAssembly.instantiate(...,
+  rtrace.install({
+    ...imports...
+  })
+);
 instance.exports._start();
 ...
 
@@ -40,4 +38,4 @@ if (rtrace.active) {
 }
 ```
 
-Note that references retained in globals which are not cleared before execution concludes appear as leaks, including their inner members. A TypedArray would leak itself and its backing ArrayBuffer in this case for example. This is perfectly normal and clearing all globals avoids this.
+Note that references in globals which are not cleared before collection is performed appear as leaks, including their inner members. A TypedArray would leak itself and its backing ArrayBuffer in this case for example. This is perfectly normal and clearing all globals avoids this.

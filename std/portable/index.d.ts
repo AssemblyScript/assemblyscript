@@ -362,3 +362,7 @@ declare interface Float64ArrayConstructor {
   /** Equivalent to calling `new Float64Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float64Array;
 }
+
+// FIXME: remove
+declare function offsetof<T>(fieldName?: string): usize;
+declare function idof<T>(): u32;

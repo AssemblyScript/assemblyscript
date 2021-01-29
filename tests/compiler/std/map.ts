@@ -70,3 +70,5 @@ testNumeric<i64,i32>();
 testNumeric<u64,i32>();
 testNumeric<f32,i32>();
 testNumeric<f64,i32>();
+
+__collect();

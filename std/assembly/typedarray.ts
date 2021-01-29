@@ -1565,11 +1565,13 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   end   = end   < 0 ? max(len + end,   0) : min(end,   len);
   end   = max(end, begin);
 
-  var out = __new(offsetof<TArray>(), idof<TArray>());
-  store<usize>(out, __retain(changetype<usize>(array.buffer)), offsetof<TArray>("buffer"));
-  store<usize>(out, array.dataStart + (<usize>begin << alignof<T>()), offsetof<TArray>("dataStart"));
-  store<u32>(out, (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
-  return changetype<TArray>(out); // retains
+  var out = changetype<TArray>(__new(offsetof<TArray>(), idof<TArray>()));
+  var buf = changetype<usize>(array.buffer);
+  store<usize>(changetype<usize>(out), buf, offsetof<TArray>("buffer"));
+  __link(changetype<usize>(out), buf, false);
+  store<usize>(changetype<usize>(out), array.dataStart + (<usize>begin << alignof<T>()), offsetof<TArray>("dataStart"));
+  store<u32>(changetype<usize>(out), (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
+  return out;
 }
 
 // @ts-ignore: decorator
@@ -1635,18 +1637,19 @@ function MAP<TArray extends ArrayBufferView, T>(
   var dataStart = array.dataStart;
 
   var byteLength = len << alignof<T>();
-  var out = __new(offsetof<TArray>(), idof<TArray>());
-  var buffer = __new(byteLength, idof<ArrayBuffer>());
+  var out = changetype<TArray>(__new(offsetof<TArray>(), idof<TArray>()));
+  var buf = changetype<ArrayBuffer>(__new(byteLength, idof<ArrayBuffer>()));
   for (let i = 0; i < len; i++) {
     store<T>(
-      buffer + (<usize>i << alignof<T>()),
+      changetype<usize>(buf) + (<usize>i << alignof<T>()),
       fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)
     );
   }
-  store<usize>(out, __retain(buffer), offsetof<TArray>("buffer"));
-  store<usize>(out, buffer, offsetof<TArray>("dataStart"));
-  store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
-  return changetype<TArray>(out); // retains
+  store<usize>(changetype<usize>(out), changetype<usize>(buf), offsetof<TArray>("buffer"));
+  __link(changetype<usize>(out), changetype<usize>(buf), false);
+  store<usize>(changetype<usize>(out), changetype<usize>(buf), offsetof<TArray>("dataStart"));
+  store<u32>(changetype<usize>(out), byteLength, offsetof<TArray>("byteLength"));
+  return out;
 }
 
 // @ts-ignore: decorator
@@ -1656,26 +1659,27 @@ function FILTER<TArray extends ArrayBufferView, T>(
   fn: (value: T, index: i32, self: TArray) => bool,
 ): TArray {
   var len = array.length;
-  var out = __new(offsetof<TArray>(), idof<TArray>());
-  var buffer = __new(len << alignof<T>(), idof<ArrayBuffer>());
+  var out = changetype<TArray>(__new(offsetof<TArray>(), idof<TArray>()));
+  var buf = changetype<ArrayBuffer>(__new(len << alignof<T>(), idof<ArrayBuffer>()));
   var dataStart  = array.dataStart;
   var j: usize = 0;
   for (let i = 0; i < len; i++) {
     let value = load<T>(dataStart + (<usize>i << alignof<T>()));
     if (fn(value, i, array)) {
       store<T>(
-        buffer + (j++ << alignof<T>()),
+        changetype<usize>(buf) + (j++ << alignof<T>()),
         value
       );
     }
   }
   // shrink output buffer
   var byteLength = j << alignof<T>();
-  var data = __renew(buffer, byteLength);
-  store<usize>(out, __retain(data), offsetof<TArray>("buffer"));
-  store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
-  store<usize>(out, data, offsetof<TArray>("dataStart"));
-  return changetype<TArray>(out); // retains
+  var data = __renew(changetype<usize>(buf), byteLength);
+  store<usize>(changetype<usize>(out), data, offsetof<TArray>("buffer"));
+  __link(changetype<usize>(out), data, false);
+  store<u32>(changetype<usize>(out), byteLength, offsetof<TArray>("byteLength"));
+  store<usize>(changetype<usize>(out), data, offsetof<TArray>("dataStart"));
+  return out;
 }
 
 // @ts-ignore: decorator
@@ -1836,11 +1840,12 @@ function WRAP<TArray extends ArrayBufferView, T>(
       throw new RangeError(E_INVALIDLENGTH);
     }
   }
-  var out = __new(offsetof<TArray>(), idof<TArray>());
-  store<usize>(out, __retain(changetype<usize>(buffer)), offsetof<TArray>("buffer"));
-  store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
-  store<usize>(out, changetype<usize>(buffer) + <usize>byteOffset, offsetof<TArray>("dataStart"));
-  return changetype<TArray>(out); // retains
+  var out = changetype<TArray>(__new(offsetof<TArray>(), idof<TArray>()));
+  store<usize>(changetype<usize>(out), changetype<usize>(buffer), offsetof<TArray>("buffer"));
+  __link(changetype<usize>(out), changetype<usize>(buffer), false);
+  store<u32>(changetype<usize>(out), byteLength, offsetof<TArray>("byteLength"));
+  store<usize>(changetype<usize>(out), changetype<usize>(buffer) + <usize>byteOffset, offsetof<TArray>("dataStart"));
+  return out;
 }
 
 // @ts-ignore: decorator

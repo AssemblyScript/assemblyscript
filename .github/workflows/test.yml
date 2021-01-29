@@ -102,6 +102,25 @@ jobs:
       run: npm test
     - name: Test browser build
       run: node tests/browser-asc
+  test-bootstrap:
+    name: "Compiler (Bootstrap)"
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+    - uses: actions/checkout@v1.0.0
+    - uses: dcodeIO/setup-node-nvm@master
+      with:
+        node-version: current
+    - name: Install dependencies
+      run: npm ci --no-audit
+    - name: Clean distribution files
+      run: npm run clean
+    - name: Bootstrap the compiler
+      run: npm run bootstrap
+    - name: Run compiler tests (untouched-bootstrap)
+      run: npm run test:compiler -- --wasm out/assemblyscript.untouched-bootstrap.wasm
+    - name: Run compiler tests (optimized-bootstrap)
+      run: npm run test:compiler -- --wasm out/assemblyscript.optimized-bootstrap.wasm
   test-features:
     name: "Features"
     runs-on: ubuntu-latest
@@ -134,18 +153,18 @@ jobs:
       run: npm ci --no-audit
     - name: Clean distribution files
       run: npm run clean
-    - name: Test full runtime
+    - name: Test default allocator
       run: |
-        cd tests/allocators/rt-full
+        cd tests/allocators/default
         npm run build
         cd ..
-        npm test rt-full
-    - name: Test stub runtime
+        npm test default
+    - name: Test stub allocator
       run: |
-        cd tests/allocators/rt-stub
+        cd tests/allocators/stub
         npm run build
         cd ..
-        npm test rt-stub
+        npm test stub
   test-loader:
     name: "Loader"
     runs-on: ubuntu-latest
@@ -164,20 +183,3 @@ jobs:
         cd lib/loader
         npm run asbuild
         npm run test
-  test-bootstrap:
-    name: "Bootstrap"
-    runs-on: ubuntu-latest
-    needs: check
-    steps:
-    - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@master
-      with:
-        node-version: current
-    - name: Install dependencies
-      run: npm ci --no-audit
-    - name: Clean distribution files
-      run: npm run clean
-    - name: Test self-compilation
-      run: |
-        npm run asbuild
-        npm run astest

@@ -73,7 +73,7 @@ process.stdout.write(stderr.toString());
 
 console.log("\n# asc.compileString");
 
-const output = asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, runtime: "none", exportTable: true, measure: true });
+const output = asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, exportTable: true, measure: true });
 console.log(">>> .stdout >>>");
 process.stdout.write(output.stdout.toString());
 console.log(">>> .stderr >>>");
