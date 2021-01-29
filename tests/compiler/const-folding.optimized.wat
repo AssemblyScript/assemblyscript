@@ -1,8 +1,8 @@
 (module
  (type $i64_=>_i64 (func (param i64) (result i64)))
  (memory $0 0)
- (export "memory" (memory $0))
  (export "test" (func $const-folding/test))
+ (export "memory" (memory $0))
  (func $const-folding/test (param $0 i64) (result i64)
   local.get $0
   i64.const 1

@@ -67,56 +67,48 @@
     "type": "b",
     "default": false
   },
-  "runtime": {
-    "category": "Optimization",
-    "description": [
-      "Specifies the runtime variant to include in the program.",
-      "",
-      " full  Default runtime based on TLSF and reference counting.",
-      " half  Same as 'full', but not exported to the host.",
-      " stub  Minimal stub implementation without free/GC support.",
-      " none  Same as 'stub', but not exported to the host.",
-      ""
-    ],
-    "type": "s",
-    "default": "full"
-  },
 
   "outFile": {
     "category": "Output",
     "description": "Specifies the output file. File extension indicates format.",
     "type": "s",
-    "alias": "o"
+    "alias": "o",
+    "isPath": true
   },
   "binaryFile": {
     "category": "Output",
     "description": "Specifies the binary output file (.wasm).",
     "type": "s",
-    "alias": "b"
+    "alias": "b",
+    "isPath": true
   },
   "textFile": {
     "category": "Output",
     "description": "Specifies the text output file (.wat).",
     "type": "s",
-    "alias": "t"
+    "alias": "t",
+    "isPath": true
   },
   "jsFile": {
     "category": "Output",
     "description": "Specifies the JavaScript (via wasm2js) output file (.js).",
     "type": "s",
-    "alias": "j"
+    "alias": "j",
+    "isPath": true
   },
   "idlFile": {
     "category": "Output",
     "description": "Specifies the WebIDL output file (.webidl).",
     "type": "s",
-    "alias": "i"
+    "alias": "i",
+    "isPath": true
   },
   "tsdFile": {
     "category": "Output",
     "description": "Specifies the TypeScript definition output file (.d.ts).",
     "type": "s",
-    "alias": "d"
+    "alias": "d",
+    "isPath": true
   },
 
   "sourceMap": {
@@ -136,7 +128,7 @@
 
   "importMemory": {
     "category": "Features",
-    "description": "Imports the memory provided as 'env.memory'.",
+    "description": "Imports the memory from 'env.memory'.",
     "type": "b",
     "default": false
   },
@@ -166,7 +158,7 @@
   },
   "importTable": {
     "category": "Features",
-    "description": "Imports the function table provided as 'env.table'.",
+    "description": "Imports the function table from 'env.table'.",
     "type": "b",
     "default": false
   },
@@ -175,6 +167,36 @@
     "description": "Exports the function table as 'table'.",
     "type": "b",
     "default": false
+  },
+  "runtime": {
+    "category": "Features",
+    "description": [
+      "Specifies the runtime variant to include in the program.",
+      "",
+      " incremental  TLSF + incremental GC (default)",
+      " minimal      TLSF + lightweight GC invoked externally",
+      " stub         Minimal runtime stub (never frees)",
+      " ...          Path to a custom runtime implementation",
+      ""
+    ],
+    "type": "s",
+    "default": "incremental"
+  },
+  "exportRuntime": {
+    "category": "Features",
+    "description": "Exports the runtime helpers (__new, __collect etc.).",
+    "type": "b",
+    "default": false
+  },
+  "stackSize": {
+    "category": "Features",
+    "description": [
+      "Overrides the stack size. Only relevant for incremental GC",
+      "or when using a custom runtime that requires stack space.",
+      "Defaults to 0 without and to 16384 with incremental GC."
+    ],
+    "default": 0,
+    "type": "i"
   },
   "explicitStart": {
     "category": "Features",
@@ -346,6 +368,10 @@
     "description": "Lists files to be compiled and exits.",
     "type": "b",
     "default": false
+  },
+  "wasm": {
+    "description": "Uses the specified Wasm binary of the compiler.",
+    "type": "s"
   },
   " ...": {
     "description": "Specifies node.js options (CLI only). See: node --help"

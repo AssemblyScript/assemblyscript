@@ -1,6 +1,0 @@
-{
-  "asc_flags": [
-    "--runtime half"
-  ],
-  "asc_rtrace": true
-}

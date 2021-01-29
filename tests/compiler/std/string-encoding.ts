@@ -474,3 +474,5 @@ Turkish (tr)
   Pijamalı hasta, yağız şoföre çabucak güvendi.
   (=Patient with pajamas, trusted swarthy driver quickly)
 `);
+
+__collect();

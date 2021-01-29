@@ -496,6 +496,14 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(extendsNode.name.identifier.text); // TODO: fqn?
     }
     sb.push(" {\n");
+    if (!isInterface) {
+      indent(sb, this.indentLevel);
+      sb.push("static wrap(ptr: usize): ");
+      sb.push(name);
+      sb.push(";\n");
+      indent(sb, this.indentLevel);
+      sb.push("valueOf(): usize;\n");
+    }
     var staticMembers = element.prototype.members;
     if (staticMembers) {
       // TODO: for (let member of staticMembers.values()) {

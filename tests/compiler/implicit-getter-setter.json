@@ -1,6 +1,2 @@
 {
-  "asc_flags": [
-    "--runtime full"
-  ],
-  "asc_rtrace": true
 }

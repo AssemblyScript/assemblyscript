@@ -23,7 +23,7 @@ export class DataView {
       i32(<u32>byteLength > <u32>BLOCK_MAXSIZE) |
       i32(<u32>byteOffset + byteLength > <u32>buffer.byteLength)
     ) throw new RangeError(E_INVALIDLENGTH);
-    this.buffer = buffer; // retains
+    this.buffer = buffer; // links
     var dataStart = changetype<usize>(buffer) + <usize>byteOffset;
     this.dataStart = dataStart;
     this.byteLength = byteLength;

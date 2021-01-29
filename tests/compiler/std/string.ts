@@ -776,4 +776,7 @@ export function getString(): string {
 
 // Unleak globals
 
-__release(changetype<usize>(str));
+str = changetype<string>(0);
+
+__stack_pointer = __heap_base;
+__collect();
