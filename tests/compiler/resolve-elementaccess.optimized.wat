@@ -1832,15 +1832,9 @@
   i32.shr_u
   i32.ge_u
   if
-<<<<<<< HEAD
-   i32.const 1168
-   i32.const 1232
-   i32.const 1250
-=======
    i32.const 1360
    i32.const 1568
-   i32.const 1187
->>>>>>> master
+   i32.const 1250
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -1862,15 +1856,9 @@
   i32.shr_u
   i32.ge_u
   if
-<<<<<<< HEAD
-   i32.const 1168
-   i32.const 1232
-   i32.const 1239
-=======
    i32.const 1360
    i32.const 1568
-   i32.const 1176
->>>>>>> master
+   i32.const 1239
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -3114,7 +3102,7 @@
   if
    i32.const 1360
    i32.const 1568
-   i32.const 163
+   i32.const 170
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -3134,7 +3122,7 @@
   if
    i32.const 1360
    i32.const 1568
-   i32.const 152
+   i32.const 159
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -3334,9 +3322,6 @@
        i32.add
        local.set $1
        local.get $2
-<<<<<<< HEAD
-       local.get $4
-=======
        i32.const 4
        i32.sub
        local.tee $2
@@ -3364,7 +3349,6 @@
       if
        local.get $4
        local.get $0
->>>>>>> master
        i32.sub
        br $__inlined_func$~lib/util/string/compareImpl
       end
@@ -3380,67 +3364,6 @@
      end
     end
     i32.const 0
-<<<<<<< HEAD
-   end
-   i32.eqz
-   return
-  end
-  i32.const 0
- )
- (func $~lib/typedarray/Uint8Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $1
-  local.get $0
-  i32.load offset=8
-  i32.ge_u
-  if
-   i32.const 1168
-   i32.const 1232
-   i32.const 170
-   i32.const 45
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.get $0
-  i32.load offset=4
-  i32.add
-  local.get $2
-  i32.store8
- )
- (func $~lib/typedarray/Uint8Array#__get (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  local.get $0
-  i32.load offset=8
-  i32.ge_u
-  if
-   i32.const 1168
-   i32.const 1232
-   i32.const 159
-   i32.const 45
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.get $0
-  i32.load offset=4
-  i32.add
-  i32.load8_u
- )
- (func $~lib/number/U8#toString (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  block $__inlined_func$~lib/util/number/utoa32
-   local.get $0
-   i32.const 255
-   i32.and
-   local.tee $1
-   i32.eqz
-   if
-    i32.const 2800
-    local.set $0
-    br $__inlined_func$~lib/util/number/utoa32
-=======
->>>>>>> master
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 8

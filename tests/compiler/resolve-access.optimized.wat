@@ -2015,7 +2015,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i64)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -2118,14 +2117,6 @@
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   local.get $0
   i32.load offset=12
   i32.eqz
@@ -2137,16 +2128,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
   local.get $0
   i32.load offset=4
   i64.load
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
   call $~lib/util/number/utoa64
   global.get $~lib/memory/__stack_pointer
   i32.const 8

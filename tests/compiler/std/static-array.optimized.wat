@@ -60,6 +60,27 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18396))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/array/Array<i32>#__get (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1100
+  i32.load
+  i32.ge_u
+  if
+   i32.const 1472
+   i32.const 1536
+   i32.const 92
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1092
+  i32.load
+  local.get $0
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
  (func $~lib/rt/itcms/initLazy (param $0 i32) (result i32)
   local.get $0
   local.get $0
@@ -2053,6 +2074,69 @@
    i32.store offset=8
   end
  )
+ (func $~lib/array/Array<i64>#__get (param $0 i32) (result i64)
+  local.get $0
+  i32.const 1196
+  i32.load
+  i32.ge_u
+  if
+   i32.const 1472
+   i32.const 1536
+   i32.const 92
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1188
+  i32.load
+  local.get $0
+  i32.const 3
+  i32.shl
+  i32.add
+  i64.load
+ )
+ (func $~lib/array/Array<f32>#__get (param $0 i32) (result f32)
+  local.get $0
+  i32.const 1276
+  i32.load
+  i32.ge_u
+  if
+   i32.const 1472
+   i32.const 1536
+   i32.const 92
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1268
+  i32.load
+  local.get $0
+  i32.const 2
+  i32.shl
+  i32.add
+  f32.load
+ )
+ (func $~lib/array/Array<f64>#__get (param $0 i32) (result f64)
+  local.get $0
+  i32.const 1372
+  i32.load
+  i32.ge_u
+  if
+   i32.const 1472
+   i32.const 1536
+   i32.const 92
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1364
+  i32.load
+  local.get $0
+  i32.const 3
+  i32.shl
+  i32.add
+  f64.load
+ )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $folding-inner0
    block $invalid
@@ -2099,153 +2183,6 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~lib/array/Array<i32>#__get (param $0 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 1100
-  i32.load
-  i32.ge_u
-  if
-   i32.const 1472
-   i32.const 1536
-   i32.const 92
-   i32.const 42
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1088
-  i32.store
-  i32.const 1092
-  i32.load
-  local.get $0
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<i64>#__get (param $0 i32) (result i64)
-  (local $1 i64)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 1196
-  i32.load
-  i32.ge_u
-  if
-   i32.const 1472
-   i32.const 1536
-   i32.const 92
-   i32.const 42
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1184
-  i32.store
-  i32.const 1188
-  i32.load
-  local.get $0
-  i32.const 3
-  i32.shl
-  i32.add
-  i64.load
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<f32>#__get (param $0 i32) (result f32)
-  (local $1 f32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 1276
-  i32.load
-  i32.ge_u
-  if
-   i32.const 1472
-   i32.const 1536
-   i32.const 92
-   i32.const 42
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1264
-  i32.store
-  i32.const 1268
-  i32.load
-  local.get $0
-  i32.const 2
-  i32.shl
-  i32.add
-  f32.load
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~lib/array/Array<f64>#__get (param $0 i32) (result f64)
-  (local $1 f64)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 1372
-  i32.load
-  i32.ge_u
-  if
-   i32.const 1472
-   i32.const 1536
-   i32.const 92
-   i32.const 42
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1360
-  i32.store
-  i32.const 1364
-  i32.load
-  local.get $0
-  i32.const 3
-  i32.shl
-  i32.add
-  f64.load
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $start:std/static-array
   global.get $~lib/memory/__stack_pointer

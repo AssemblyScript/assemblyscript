@@ -3379,15 +3379,9 @@
   i32.ne
   if
    i32.const 0
-<<<<<<< HEAD
-   i32.const 1504
-   i32.const 751
-   i32.const 7
-=======
    i32.const 1088
    i32.const 90
    i32.const 3
->>>>>>> master
    call $~lib/builtins/abort
    unreachable
   end
@@ -4007,7 +4001,7 @@
   if
    i32.const 0
    i32.const 1712
-   i32.const 740
+   i32.const 749
    i32.const 7
    call $~lib/builtins/abort
    unreachable

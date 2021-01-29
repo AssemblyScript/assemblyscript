@@ -45,13 +45,13 @@
  )
  (func $~lib/array/Array<assert-nonnull/Foo|null>#__get (param $0 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   local.get $0
   i32.load offset=12
   i32.eqz
@@ -65,15 +65,12 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
   i32.load offset=4
   i32.load
   local.tee $0
-  i32.store offset=4
+  i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $0
@@ -235,13 +232,13 @@
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   local.get $0
   i32.load offset=12
   i32.eqz
@@ -255,13 +252,10 @@
   end
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
   i32.load offset=4
   i32.load
   local.tee $0
-  i32.store offset=4
+  i32.store
   local.get $0
   i32.eqz
   if
@@ -273,7 +267,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer

@@ -65,14 +65,6 @@
   global.get $std/staticarray/arr3
   local.tee $0
   if
-<<<<<<< HEAD
-   i32.const 1088
-   i32.const 1152
-   i32.const 108
-   i32.const 41
-   call $~lib/builtins/abort
-   unreachable
-=======
    local.get $0
    call $~lib/rt/itcms/__visit
   end
@@ -107,7 +99,6 @@
     local.set $0
     br $while-continue|0
    end
->>>>>>> master
   end
  )
  (func $~lib/rt/itcms/Object#set:color (param $0 i32) (param $1 i32)
@@ -260,16 +251,7 @@
   local.get $0
   i32.eqz
   if
-<<<<<<< HEAD
-   i32.const 1088
-   i32.const 1152
-   i32.const 123
-   i32.const 41
-   call $~lib/builtins/abort
-   unreachable
-=======
    return
->>>>>>> master
   end
   global.get $~lib/rt/itcms/white
   local.get $0
@@ -2096,14 +2078,11 @@
   if
    i32.const 1088
    i32.const 1152
-   i32.const 100
+   i32.const 113
    i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
   local.get $0
   local.get $1
   i32.const 2
@@ -2138,7 +2117,7 @@
   if
    i32.const 1088
    i32.const 1152
-   i32.const 115
+   i32.const 128
    i32.const 41
    call $~lib/builtins/abort
    unreachable

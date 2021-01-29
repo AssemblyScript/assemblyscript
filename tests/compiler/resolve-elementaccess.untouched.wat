@@ -500,17 +500,10 @@
   end
   i32.eqz
   if
-<<<<<<< HEAD
-   i32.const 144
-   i32.const 208
-   i32.const 1250
-   i32.const 64
-=======
    i32.const 0
    i32.const 480
    i32.const 288
    i32.const 14
->>>>>>> master
    call $~lib/builtins/abort
    unreachable
   end
@@ -522,14 +515,6 @@
   local.set $7
   local.get $6
   if
-<<<<<<< HEAD
-   i32.const 144
-   i32.const 208
-   i32.const 1239
-   i32.const 64
-   call $~lib/builtins/abort
-   unreachable
-=======
    local.get $6
    local.get $7
    call $~lib/rt/tlsf/Block#set:next
@@ -539,7 +524,6 @@
    local.get $7
    local.get $6
    call $~lib/rt/tlsf/Block#set:prev
->>>>>>> master
   end
   local.get $1
   local.get $0
@@ -2482,7 +2466,7 @@
   if
    i32.const 336
    i32.const 544
-   i32.const 1187
+   i32.const 1250
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -2506,7 +2490,7 @@
   if
    i32.const 336
    i32.const 544
-   i32.const 1176
+   i32.const 1239
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5346,7 +5330,7 @@
   if
    i32.const 336
    i32.const 544
-   i32.const 163
+   i32.const 170
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -5366,7 +5350,7 @@
   if
    i32.const 336
    i32.const 544
-   i32.const 152
+   i32.const 159
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -6213,17 +6197,10 @@
   call $~lib/string/String.__eq
   i32.eqz
   if
-<<<<<<< HEAD
-   i32.const 144
-   i32.const 208
-   i32.const 170
-   i32.const 45
-=======
    i32.const 0
    i32.const 2176
    i32.const 33
    i32.const 1
->>>>>>> master
    call $~lib/builtins/abort
    unreachable
   end
@@ -6274,17 +6251,10 @@
   call $~lib/string/String.__eq
   i32.eqz
   if
-<<<<<<< HEAD
-   i32.const 144
-   i32.const 208
-   i32.const 159
-   i32.const 45
-=======
    i32.const 0
    i32.const 2176
    i32.const 38
    i32.const 1
->>>>>>> master
    call $~lib/builtins/abort
    unreachable
   end

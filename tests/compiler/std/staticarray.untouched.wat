@@ -3,7 +3,6 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
@@ -56,38 +55,6 @@
   i32.const 2
   i32.shr_u
  )
-<<<<<<< HEAD
- (func $~lib/staticarray/StaticArray<i32>#__get (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  local.get $1
-  local.get $0
-  call $~lib/staticarray/StaticArray<i32>#get:length
-  i32.ge_u
-  if
-   i32.const 64
-   i32.const 128
-   i32.const 108
-   i32.const 41
-   call $~lib/builtins/abort
-   unreachable
-  end
-=======
- (func $~lib/staticarray/StaticArray<i32>#__uget (param $0 i32) (param $1 i32) (result i32)
->>>>>>> master
-  local.get $0
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
-<<<<<<< HEAD
-  local.set $2
-  i32.const 0
-  drop
-  local.get $2
-=======
->>>>>>> master
- )
  (func $~lib/staticarray/StaticArray<i32>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
@@ -111,17 +78,6 @@
  )
  (func $~lib/rt/itcms/initLazy (param $0 i32) (result i32)
   local.get $0
-<<<<<<< HEAD
-  call $~lib/staticarray/StaticArray<i32>#get:length
-  i32.ge_u
-  if
-   i32.const 64
-   i32.const 128
-   i32.const 123
-   i32.const 41
-   call $~lib/builtins/abort
-   unreachable
-=======
   local.get $0
   call $~lib/rt/itcms/Object#set:nextWithColor
   local.get $0
@@ -162,7 +118,6 @@
     local.set $1
     br $while-continue|0
    end
->>>>>>> master
   end
  )
  (func $~lib/rt/itcms/Object#get:color (param $0 i32) (result i32)
@@ -3979,19 +3934,17 @@
   if
    i32.const 64
    i32.const 128
-   i32.const 100
+   i32.const 113
    i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store
-  local.get $3
   local.get $1
-  call $~lib/staticarray/StaticArray<i32>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
   local.set $2
   i32.const 0
   drop
@@ -4025,7 +3978,7 @@
   if
    i32.const 64
    i32.const 128
-   i32.const 115
+   i32.const 128
    i32.const 41
    call $~lib/builtins/abort
    unreachable

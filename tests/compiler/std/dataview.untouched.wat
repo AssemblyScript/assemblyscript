@@ -2435,13 +2435,8 @@
   i32.ge_u
   if
    i32.const 336
-<<<<<<< HEAD
-   i32.const 400
-   i32.const 170
-=======
    i32.const 544
-   i32.const 163
->>>>>>> master
+   i32.const 170
    i32.const 45
    call $~lib/builtins/abort
    unreachable
