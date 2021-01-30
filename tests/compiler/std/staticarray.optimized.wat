@@ -2078,14 +2078,11 @@
   if
    i32.const 1088
    i32.const 1152
-   i32.const 100
+   i32.const 113
    i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
   local.get $0
   local.get $1
   i32.const 2
@@ -2120,7 +2117,7 @@
   if
    i32.const 1088
    i32.const 1152
-   i32.const 115
+   i32.const 128
    i32.const 41
    call $~lib/builtins/abort
    unreachable

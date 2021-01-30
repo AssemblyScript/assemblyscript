@@ -1460,6 +1460,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   readonly byteLength: i32;
   /** The length (in elements). */
   readonly length: i32;
+  /** Returns value using relative indexing. Index may be negative */
+  at(index: i32): T;
   /** The includes() method determines whether a typed array includes a certain element, returning true or false as appropriate. */
   includes(searchElement: T, fromIndex?: i32): bool;
   /** The indexOf() method returns the first index at which a given element can be found in the typed array, or -1 if it is not present. */
@@ -1570,6 +1572,7 @@ declare class Array<T> {
   /** Constructs a new array. */
   constructor(capacity?: i32);
 
+  at(index: i32): T;
   fill(value: T, start?: i32, end?: i32): this;
   every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   findIndex(predicate: (element: T, index: i32, array?: Array<T>) => bool): i32;
@@ -1606,6 +1609,7 @@ declare class StaticArray<T> {
   static slice<T>(source: StaticArray<T>, start?: i32, end?: i32): StaticArray<T>;
   readonly length: i32;
   constructor(length?: i32);
+  at(index: i32): T;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
@@ -1622,6 +1626,7 @@ declare class String {
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
   readonly length: i32;
+  at(index: i32): string;
   charAt(index: i32): string;
   charCodeAt(index: i32): i32;
   codePointAt(index: i32): i32;

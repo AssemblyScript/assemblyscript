@@ -55,14 +55,6 @@
   i32.const 2
   i32.shr_u
  )
- (func $~lib/staticarray/StaticArray<i32>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
- )
  (func $~lib/staticarray/StaticArray<i32>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
@@ -3942,19 +3934,17 @@
   if
    i32.const 64
    i32.const 128
-   i32.const 100
+   i32.const 113
    i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store
-  local.get $3
   local.get $1
-  call $~lib/staticarray/StaticArray<i32>#__uget
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
   local.set $2
   i32.const 0
   drop
@@ -3988,7 +3978,7 @@
   if
    i32.const 64
    i32.const 128
-   i32.const 115
+   i32.const 128
    i32.const 41
    call $~lib/builtins/abort
    unreachable

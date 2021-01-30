@@ -41,6 +41,13 @@ export class Int8Array extends ArrayBufferView {
     store<i8>(this.dataStart + <usize>index, value);
   }
 
+  at(index: i32): i8 {
+    var len = this.byteLength;
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<i8>(this.dataStart + <usize>index);
+  }
+
   includes(searchElement: i8, fromIndex: i32 = 0): bool {
     return INCLUDES<Int8Array, i8>(this, searchElement, fromIndex);
   }
@@ -167,6 +174,13 @@ export class Uint8Array extends ArrayBufferView {
   @unsafe @operator("{}=")
   private __uset(index: i32, value: native<u8>): void {
     store<u8>(this.dataStart + <usize>index, value);
+  }
+
+  at(index: i32): u8 {
+    var len = this.byteLength;
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<u8>(this.dataStart + <usize>index);
   }
 
   includes(searchElement: u8, fromIndex: i32 = 0): bool {
@@ -297,6 +311,13 @@ export class Uint8ClampedArray extends ArrayBufferView {
     store<u8>(this.dataStart + <usize>index, ~(<i32>value >> 31) & (((255 - value) >> 31) | value));
   }
 
+  at(index: i32): u8 {
+    var len = this.byteLength;
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<u8>(this.dataStart + <usize>index);
+  }
+
   includes(searchElement: u8, fromIndex: i32 = 0): bool {
     return INCLUDES<Uint8ClampedArray, u8>(this, searchElement, fromIndex);
   }
@@ -423,6 +444,13 @@ export class Int16Array extends ArrayBufferView {
   @unsafe @operator("{}=")
   private __uset(index: i32, value: native<i16>): void {
     store<i16>(this.dataStart + (<usize>index << alignof<i16>()), value);
+  }
+
+  at(index: i32): i16 {
+    var len = this.byteLength >>> alignof<i16>();
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<i16>(this.dataStart + (<usize>index << alignof<i16>()));
   }
 
   includes(searchElement: i16, fromIndex: i32 = 0): bool {
@@ -553,6 +581,13 @@ export class Uint16Array extends ArrayBufferView {
     store<u16>(this.dataStart + (<usize>index << alignof<u16>()), value);
   }
 
+  at(index: i32): u16 {
+    var len = this.byteLength >>> alignof<u16>();
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<u16>(this.dataStart + (<usize>index << alignof<u16>()));
+  }
+
   includes(searchElement: u16, fromIndex: i32 = 0): bool {
     return INCLUDES<Uint16Array, u16>(this, searchElement, fromIndex);
   }
@@ -679,6 +714,13 @@ export class Int32Array extends ArrayBufferView {
   @unsafe @operator("{}=")
   private __uset(index: i32, value: i32): void {
     store<i32>(this.dataStart + (<usize>index << alignof<i32>()), value);
+  }
+
+  at(index: i32): i32 {
+    var len = this.byteLength >>> alignof<i32>();
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<i32>(this.dataStart + (<usize>index << alignof<i32>()));
   }
 
   includes(searchElement: i32, fromIndex: i32 = 0): bool {
@@ -809,6 +851,13 @@ export class Uint32Array extends ArrayBufferView {
     store<u32>(this.dataStart + (<usize>index << alignof<u32>()), value);
   }
 
+  at(index: i32): u32 {
+    var len = this.byteLength >>> alignof<u32>();
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<u32>(this.dataStart + (<usize>index << alignof<u32>()));
+  }
+
   includes(searchElement: u32, fromIndex: i32 = 0): bool {
     return INCLUDES<Uint32Array, u32>(this, searchElement, fromIndex);
   }
@@ -935,6 +984,13 @@ export class Int64Array extends ArrayBufferView {
   @unsafe @operator("{}=")
   private __uset(index: i32, value: i64): void {
     store<i64>(this.dataStart + (<usize>index << alignof<i64>()), value);
+  }
+
+  at(index: i32): i64 {
+    var len = this.byteLength >>> alignof<i64>();
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<i64>(this.dataStart + (<usize>index << alignof<i64>()));
   }
 
   includes(searchElement: i64, fromIndex: i32 = 0): bool {
@@ -1065,6 +1121,13 @@ export class Uint64Array extends ArrayBufferView {
     store<u64>(this.dataStart + (<usize>index << alignof<u64>()), value);
   }
 
+  at(index: i32): u64 {
+    var len = this.byteLength >>> alignof<u64>();
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<u64>(this.dataStart + (<usize>index << alignof<u64>()));
+  }
+
   includes(searchElement: u64, fromIndex: i32 = 0): bool {
     return INCLUDES<Uint64Array, u64>(this, searchElement, fromIndex);
   }
@@ -1193,6 +1256,13 @@ export class Float32Array extends ArrayBufferView {
     store<f32>(this.dataStart + (<usize>index << alignof<f32>()), value);
   }
 
+  at(index: i32): f32 {
+    var len = this.byteLength >>> alignof<f32>();
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<f32>(this.dataStart + (<usize>index << alignof<f32>()));
+  }
+
   includes(searchElement: f32, fromIndex: i32 = 0): bool {
     return INCLUDES<Float32Array, f32>(this, searchElement, fromIndex);
   }
@@ -1319,6 +1389,13 @@ export class Float64Array extends ArrayBufferView {
   @unsafe @operator("{}=")
   private __uset(index: i32, value: f64): void {
     store<f64>(this.dataStart + (<usize>index << alignof<f64>()), value);
+  }
+
+  at(index: i32): f64 {
+    var len = this.byteLength >>> alignof<f64>();
+    index += select(0, len, index >= 0);
+    if (<u32>index >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
+    return load<f64>(this.dataStart + (<usize>index << alignof<f64>()));
   }
 
   includes(searchElement: f64, fromIndex: i32 = 0): bool {
@@ -1737,7 +1814,11 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 
 // @ts-ignore: decorator
 @inline
-function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
+function WRAP<TArray extends ArrayBufferView, T>(
+  buffer: ArrayBuffer,
+  byteOffset: i32 = 0,
+  length: i32 = -1
+): TArray {
   var byteLength: i32;
   var bufferByteLength = buffer.byteLength;
   const mask: u32 = sizeof<T>() - 1;
@@ -1769,7 +1850,11 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
 
 // @ts-ignore: decorator
 @inline
-function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, U>(target: TArray, source: UArray, offset: i32 = 0): void {
+function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, U>(
+  target: TArray,
+  source: UArray,
+  offset: i32 = 0
+): void {
   // need to assert at compile time that U is not a reference or a function
   if (isReference<U>()) {
     ERROR(E_NOTIMPLEMENTED);
@@ -1798,7 +1883,7 @@ function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, 
           let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
           store<T>(
             targetDataStart + (<usize>i << alignof<T>()),
-            isFinite<U>(value) ? <T>max<U>(0, min<U>(255, value)) : 0
+            isFinite<U>(value) ? <T>max<U>(0, min<U>(255, value)) : <T>0
           );
         } else {
           let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));

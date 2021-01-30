@@ -13,6 +13,9 @@ assert("\xDFab" == "ßab");
 
 assert(str.length == 16);
 assert(str.charCodeAt(0) == 0x68);
+assert(str.at(15) == str.charAt(15));
+assert(str.at(-1) == str.charAt(str.length - 1));
+assert(str.at(-str.length) == "h");
 
 assert(!!"" == false);
 assert(!!"\0" == true);
