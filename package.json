@@ -46,6 +46,7 @@
   "types": "index.d.ts",
   "exports": {
     ".": "./index.js",
+    "./std/portable": "./std/portable/index.js",
     "./lib/loader": {
       "import": "./lib/loader/index.js",
       "require": "./lib/loader/umd/index.js"
