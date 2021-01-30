@@ -3,7 +3,7 @@
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { compareImpl, strtol, strtod, isSpace, isAscii, isFinalSigma, toLower8, toUpper8 } from "./util/string";
 import { SPECIALS_UPPER, casemap, bsearch } from "./util/casemap";
-import { E_INVALIDLENGTH } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 import { idof } from "./builtins";
 import { Array } from "./array";
 
@@ -51,7 +51,7 @@ import { Array } from "./array";
   at(pos: i32): String {
     var len = this.length;
     pos += select(0, len, pos >= 0);
-    if (<u32>pos >= <u32>len) return changetype<String>("");
+    if (<u32>pos >= <u32>len) throw new RangeError(E_INDEXOUTOFRANGE);
     var out = __new(2, idof<String>());
     store<u16>(out, load<u16>(changetype<usize>(this) + (<usize>pos << 1)));
     return changetype<String>(out); // retains
