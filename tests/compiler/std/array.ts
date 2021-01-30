@@ -324,6 +324,19 @@ var i: i32;
   assert(([NaN] as f64[]).indexOf(NaN) == -1);
 }
 
+// Array#lastIndexOf
+
+{
+  const numbers: i32[] = [2, 5, 9, 2];
+  assert(numbers.lastIndexOf(2) == 3);
+  assert(numbers.lastIndexOf(7) == -1);
+  assert(numbers.lastIndexOf(2, 3) == 3);
+  assert(numbers.lastIndexOf(2, 2) == 0);
+  assert(numbers.lastIndexOf(2, -2) == 0);
+  assert(numbers.lastIndexOf(2, -1) == 3);
+
+}
+
 // Array#includes //////////////////////////////////////////////////////////////////////////////////
 
 {

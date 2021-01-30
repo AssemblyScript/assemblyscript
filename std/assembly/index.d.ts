@@ -1387,45 +1387,45 @@ declare class DataView {
   /** Constructs a new `DataView` with the given properties */
   constructor(buffer: ArrayBuffer, byteOffset?: i32, byteLength?: i32);
   /** The `getFloat32()` method gets a signed 32-bit float (float) at the specified byte offset from the start of the `DataView`. */
-  getFloat32(byteOffset: i32, littleEndian?: boolean): f32;
+  getFloat32(byteOffset: i32, littleEndian?: bool): f32;
   /** The `getFloat64()` method gets a signed 64-bit float (double) at the specified byte offset from the start of the `DataView`. */
-  getFloat64(byteOffset: i32, littleEndian?: boolean): f64;
+  getFloat64(byteOffset: i32, littleEndian?: bool): f64;
   /** The `getInt8()` method gets a signed 8-bit integer (byte) at the specified byte offset from the start of the `DataView`. */
   getInt8(byteOffset: i32): i8;
   /** The `getInt16()` method gets a signed 16-bit integer (short) at the specified byte offset from the start of the `DataView`. */
-  getInt16(byteOffset: i32, littleEndian?: boolean): i16;
+  getInt16(byteOffset: i32, littleEndian?: bool): i16;
   /** The `getInt32()` method gets a signed 32-bit integer (long) at the specified byte offset from the start of the `DataView`. */
-  getInt32(byteOffset: i32, littleEndian?: boolean): i32;
+  getInt32(byteOffset: i32, littleEndian?: bool): i32;
   /** The `getInt64()` method gets a signed 64-bit integer (long long) at the specified byte offset from the start of the `DataView`. */
-  getInt64(byteOffset: i32, littleEndian?: boolean): i64;
+  getInt64(byteOffset: i32, littleEndian?: bool): i64;
   /** The `getUint8()` method gets an unsigned 8-bit integer (unsigned byte) at the specified byte offset from the start of the `DataView`. */
   getUint8(byteOffset: i32): u8;
   /** The `getUint16()` method gets an unsigned 16-bit integer (unsigned short) at the specified byte offset from the start of the `DataView`. */
-  getUint16(byteOffset: i32, littleEndian?: boolean): u16;
+  getUint16(byteOffset: i32, littleEndian?: bool): u16;
   /** The `getUint32()` method gets an unsigned 32-bit integer (unsigned long) at the specified byte offset from the start of the `DataView`. */
-  getUint32(byteOffset: i32, littleEndian?: boolean): u32;
+  getUint32(byteOffset: i32, littleEndian?: bool): u32;
   /** The `getUint64()` method gets an unsigned 64-bit integer (unsigned long long) at the specified byte offset from the start of the `DataView`. */
-  getUint64(byteOffset: i32, littleEndian?: boolean): u64;
+  getUint64(byteOffset: i32, littleEndian?: bool): u64;
   /** The `setFloat32()` method stores a signed 32-bit float (float) value at the specified byte offset from the start of the `DataView`. */
-  setFloat32(byteOffset: i32, value: f32, littleEndian?: boolean): void;
+  setFloat32(byteOffset: i32, value: f32, littleEndian?: bool): void;
   /** The `setFloat64()` method stores a signed 64-bit float (double) value at the specified byte offset from the start of the `DataView`. */
-  setFloat64(byteOffset: i32, value: f64, littleEndian?: boolean): void;
+  setFloat64(byteOffset: i32, value: f64, littleEndian?: bool): void;
   /** The `setInt8()` method stores a signed 8-bit integer (byte) value at the specified byte offset from the start of the `DataView`. */
   setInt8(byteOffset: i32, value: i8): void;
   /** The `setInt16()` method stores a signed 16-bit integer (short) value at the specified byte offset from the start of the `DataView`. */
-  setInt16(byteOffset: i32, value: i16, littleEndian?: boolean): void;
+  setInt16(byteOffset: i32, value: i16, littleEndian?: bool): void;
   /** The `setInt32()` method stores a signed 32-bit integer (long) value at the specified byte offset from the start of the `DataView`. */
-  setInt32(byteOffset: i32, value: i32, littleEndian?: boolean): void;
+  setInt32(byteOffset: i32, value: i32, littleEndian?: bool): void;
   /** The `setInt64()` method stores a signed 64-bit integer (long long) value at the specified byte offset from the start of the `DataView`. */
-  setInt64(byteOffset: i32, value: i64, littleEndian?: boolean): void;
+  setInt64(byteOffset: i32, value: i64, littleEndian?: bool): void;
   /** The `setUint8()` method stores an unsigned 8-bit integer (byte) value at the specified byte offset from the start of the `DataView`. */
   setUint8(byteOffset: i32, value: u8): void;
   /** The `setUint16()` method stores an unsigned 16-bit integer (unsigned short) value at the specified byte offset from the start of the `DataView`. */
-  setUint16(byteOffset: i32, value: u16, littleEndian?: boolean): void;
+  setUint16(byteOffset: i32, value: u16, littleEndian?: bool): void;
   /** The `setUint32()` method stores an unsigned 32-bit integer (unsigned long) value at the specified byte offset from the start of the `DataView`. */
-  setUint32(byteOffset: i32, value: u32, littleEndian?: boolean): void;
+  setUint32(byteOffset: i32, value: u32, littleEndian?: bool): void;
   /** The `setUint64()` method stores an unsigned 64-bit integer (unsigned long long) value at the specified byte offset from the start of the `DataView`. */
-  setUint64(byteOffset: i32, value: u64, littleEndian?: boolean): void;
+  setUint64(byteOffset: i32, value: u64, littleEndian?: bool): void;
   /** Returns a string representation of DataView. */
   toString(): string;
 }
