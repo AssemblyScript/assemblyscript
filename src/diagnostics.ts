@@ -17,7 +17,14 @@ import {
 } from "./diagnosticMessages.generated";
 
 import {
-  isLineBreak
+  isLineBreak,
+  COLOR_CYAN,
+  COLOR_YELLOW,
+  COLOR_RED,
+  COLOR_MAGENTA,
+  COLOR_RESET,
+  isColorsEnabled,
+  setColorsEnabled
 } from "./util";
 
 export {
@@ -51,22 +58,11 @@ export function diagnosticCategoryToString(category: DiagnosticCategory): string
   }
 }
 
-/** ANSI escape sequence for blue foreground. */
-export const COLOR_BLUE: string = "\u001b[96m";
-/** ANSI escape sequence for yellow foreground. */
-export const COLOR_YELLOW: string = "\u001b[93m";
-/** ANSI escape sequence for red foreground. */
-export const COLOR_RED: string = "\u001b[91m";
-/** ANSI escape sequence for magenta foreground. */
-export const COLOR_MAGENTA: string = "\u001b[95m";
-/** ANSI escape sequence to reset the foreground color. */
-export const COLOR_RESET: string = "\u001b[0m";
-
 /** Returns the ANSI escape sequence for the specified category. */
 export function diagnosticCategoryToColor(category: DiagnosticCategory): string {
   switch (category) {
     case DiagnosticCategory.PEDANTIC: return COLOR_MAGENTA;
-    case DiagnosticCategory.INFO: return COLOR_BLUE;
+    case DiagnosticCategory.INFO: return COLOR_CYAN;
     case DiagnosticCategory.WARNING: return COLOR_YELLOW;
     case DiagnosticCategory.ERROR: return COLOR_RED;
     default: {
@@ -182,12 +178,13 @@ export function formatDiagnosticMessage(
   useColors: bool = false,
   showContext: bool = false
 ): string {
+  var wasColorsEnabled = setColorsEnabled(useColors);
 
   // general information
   var sb: string[] = [];
-  if (useColors) sb.push(diagnosticCategoryToColor(message.category));
+  if (isColorsEnabled()) sb.push(diagnosticCategoryToColor(message.category));
   sb.push(diagnosticCategoryToString(message.category));
-  if (useColors) sb.push(COLOR_RESET);
+  if (isColorsEnabled()) sb.push(COLOR_RESET);
   sb.push(message.code < 1000 ? " AS" : " TS");
   sb.push(message.code.toString());
   sb.push(": ");
@@ -201,7 +198,7 @@ export function formatDiagnosticMessage(
     // include context information if requested
     if (showContext) {
       sb.push("\n");
-      sb.push(formatDiagnosticContext(range, useColors));
+      sb.push(formatDiagnosticContext(range));
     }
     sb.push("\n");
     sb.push(" in ");
@@ -217,7 +214,7 @@ export function formatDiagnosticMessage(
       let relatedSource = relatedRange.source;
       if (showContext) {
         sb.push("\n");
-        sb.push(formatDiagnosticContext(relatedRange, useColors));
+        sb.push(formatDiagnosticContext(relatedRange));
       }
       sb.push("\n");
       sb.push(" in ");
@@ -229,11 +226,12 @@ export function formatDiagnosticMessage(
       sb.push(")");
     }
   }
+  setColorsEnabled(wasColorsEnabled);
   return sb.join("");
 }
 
 /** Formats the diagnostic context for the specified range, optionally with terminal colors. */
-export function formatDiagnosticContext(range: Range, useColors: bool = false): string {
+function formatDiagnosticContext(range: Range): string {
   var text = range.source.text;
   var len = text.length;
   var start = range.start;
@@ -249,7 +247,7 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
     sb.push(" ");
     start++;
   }
-  if (useColors) sb.push(COLOR_RED);
+  if (isColorsEnabled()) sb.push(COLOR_RED);
   if (range.start == range.end) {
     sb.push("^");
   } else {
@@ -261,7 +259,7 @@ export function formatDiagnosticContext(range: Range, useColors: bool = false): 
       sb.push("~");
     }
   }
-  if (useColors) sb.push(COLOR_RESET);
+  if (isColorsEnabled()) sb.push(COLOR_RESET);
   return sb.join("");
 }
 

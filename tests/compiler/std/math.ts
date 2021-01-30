@@ -4074,6 +4074,8 @@ assert(ipow64(3, 128) == -9204772141784466943); // should overflow
 
 assert(ipow64(1, -1) == 1);
 assert(ipow64(2, -1) == 0);
+assert(ipow64(2, 64) == 0);
+assert(ipow64(2, 128) == 0);
 
 // integer pow operators
 

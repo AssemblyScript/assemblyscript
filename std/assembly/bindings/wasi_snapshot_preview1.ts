@@ -959,6 +959,90 @@ export namespace errno {
 }
 export type errno = u16;
 
+/** Translates an error code to a string. */
+export function errnoToString(err: errno): string {
+  switch (err) {
+    case errno.SUCCESS: return "SUCCESS";
+    case errno.TOOBIG: return "TOOBIG";
+    case errno.ACCES: return "ACCES";
+    case errno.ADDRINUSE: return "ADDRINUSE";
+    case errno.ADDRNOTAVAIL: return "ADDRNOTAVAIL";
+    case errno.AFNOSUPPORT: return "AFNOSUPPORT";
+    case errno.AGAIN: return "AGAIN";
+    case errno.ALREADY: return "ALREADY";
+    case errno.BADF: return "BADF";
+    case errno.BADMSG: return "BADMSG";
+    case errno.BUSY: return "BUSY";
+    case errno.CANCELED: return "CANCELED";
+    case errno.CHILD: return "CHILD";
+    case errno.CONNABORTED: return "CONNABORTED";
+    case errno.CONNREFUSED: return "CONNREFUSED";
+    case errno.CONNRESET: return "CONNRESET";
+    case errno.DEADLK: return "DEADLK";
+    case errno.DESTADDRREQ: return "DESTADDRREQ";
+    case errno.DOM: return "DOM";
+    case errno.DQUOT: return "DQUOT";
+    case errno.EXIST: return "EXIST";
+    case errno.FAULT: return "FAULT";
+    case errno.FBIG: return "FBIG";
+    case errno.HOSTUNREACH: return "HOSTUNREACH";
+    case errno.IDRM: return "IDRM";
+    case errno.ILSEQ: return "ILSEQ";
+    case errno.INPROGRESS: return "INPROGRESS";
+    case errno.INTR: return "INTR";
+    case errno.INVAL: return "INVAL";
+    case errno.IO: return "IO";
+    case errno.ISCONN: return "ISCONN";
+    case errno.ISDIR: return "ISDIR";
+    case errno.LOOP: return "LOOP";
+    case errno.MFILE: return "MFILE";
+    case errno.MLINK: return "MLINK";
+    case errno.MSGSIZE: return "MSGSIZE";
+    case errno.MULTIHOP: return "MULTIHOP";
+    case errno.NAMETOOLONG: return "NAMETOOLONG";
+    case errno.NETDOWN: return "NETDOWN";
+    case errno.NETRESET: return "NETRESET";
+    case errno.NETUNREACH: return "NETUNREACH";
+    case errno.NFILE: return "NFILE";
+    case errno.NOBUFS: return "NOBUFS";
+    case errno.NODEV: return "NODEV";
+    case errno.NOENT: return "NOENT";
+    case errno.NOEXEC: return "NOEXEC";
+    case errno.NOLCK: return "NOLCK";
+    case errno.NOLINK: return "NOLINK";
+    case errno.NOMEM: return "NOMEM";
+    case errno.NOMSG: return "NOMSG";
+    case errno.NOPROTOOPT: return "NOPROTOOPT";
+    case errno.NOSPC: return "NOSPC";
+    case errno.NOSYS: return "NOSYS";
+    case errno.NOTCONN: return "NOTCONN";
+    case errno.NOTDIR: return "NOTDIR";
+    case errno.NOTEMPTY: return "NOTEMPTY";
+    case errno.NOTRECOVERABLE: return "NOTRECOVERABLE";
+    case errno.NOTSOCK: return "NOTSOCK";
+    case errno.NOTSUP: return "NOTSUP";
+    case errno.NOTTY: return "NOTTY";
+    case errno.NXIO: return "NXIO";
+    case errno.OVERFLOW: return "OVERFLOW";
+    case errno.OWNERDEAD: return "OWNERDEAD";
+    case errno.PERM: return "PERM";
+    case errno.PIPE: return "PIPE";
+    case errno.PROTO: return "PROTO";
+    case errno.PROTONOSUPPORT: return "PROTONOSUPPORT";
+    case errno.PROTOTYPE: return "PROTOTYPE";
+    case errno.RANGE: return "RANGE";
+    case errno.ROFS: return "ROFS";
+    case errno.SPIPE: return "SPIPE";
+    case errno.SRCH: return "SRCH";
+    case errno.STALE: return "STALE";
+    case errno.TIMEDOUT: return "TIMEDOUT";
+    case errno.TXTBSY: return "TXTBSY";
+    case errno.XDEV: return "XDEV";
+    case errno.NOTCAPABLE: return "NOTCAPABLE";
+  }
+  return "UNKNOWN";
+}
+
 @unmanaged abstract class $event { // size=16/32
   /** User-provided value that got attached to `subscription#userdata`. */
   userdata: userdata;

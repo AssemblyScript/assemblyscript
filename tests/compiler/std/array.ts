@@ -313,6 +313,19 @@ var i: i32;
   assert(([NaN] as f64[]).indexOf(NaN) == -1);
 }
 
+// Array#lastIndexOf
+
+{
+  const numbers: i32[] = [2, 5, 9, 2];
+  assert(numbers.lastIndexOf(2) == 3);
+  assert(numbers.lastIndexOf(7) == -1);
+  assert(numbers.lastIndexOf(2, 3) == 3);
+  assert(numbers.lastIndexOf(2, 2) == 0);
+  assert(numbers.lastIndexOf(2, -2) == 0);
+  assert(numbers.lastIndexOf(2, -1) == 3);
+
+}
+
 // Array#includes //////////////////////////////////////////////////////////////////////////////////
 
 {
@@ -416,8 +429,8 @@ var i: i32;
   assert(isArraysEqual<i32>(sarr.splice(7, 5), []));
   assert(isArraysEqual<i32>(sarr, [1, 2, 3, 4, 5]));
 
-  var refArr: Ref[] = [];
-  var spliced = refArr.splice(1, 2);
+  let refArr: Ref[] = [];
+  let spliced = refArr.splice(1, 2);
   assert(spliced.length == 0);
   assert(refArr.length == 0);
 
@@ -433,8 +446,8 @@ var i: i32;
   assert(refArr[1].v == 2);
   assert(refArr[2].v == 5);
 
-  var refArr2: (Ref | null)[] = [new Ref(1), null, new Ref(2)];
-  var spliced2 = refArr2.splice(0, 1);
+  let refArr2: (Ref | null)[] = [new Ref(1), null, new Ref(2)];
+  let spliced2 = refArr2.splice(0, 1);
 
   assert(spliced2.length == 1);
   assert(spliced2[0]!.v == 1);
@@ -1026,32 +1039,28 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assert(arrStr.toString() == ",a,a,ab,b,ba,");
   assert((<Array<string | null>>["1", "2", null, "4"]).toString() == "1,2,,4");
 
-  var subarr32: i32[][] = [[1,2], [3,4]];
+  let subarr32: i32[][] = [[1,2], [3,4]];
   assert(subarr32.toString() == "1,2,3,4");
 
-  var subarr8: u8[][] = [[1,2], [3,4]];
+  let subarr8: u8[][] = [[1,2], [3,4]];
   assert(subarr8.toString() == "1,2,3,4");
 
-  var subarrU32: u32[][][] = [[[1]]];
+  let subarrU32: u32[][][] = [[[1]]];
   assert(subarrU32.toString() == "1");
 }
 
-// Unleak globals
-__release(changetype<usize>(arr));
-
-
 // Array#flat //////////////////////////////////////////////////////////////////////////////////
 {
-  var flatTarget: i32[][] = [[0], [1, 2, 3], [4, 5, 6], [7, 8, 9]];
-  var result = flatTarget.flat();
+  let flatTarget: i32[][] = [[0], [1, 2, 3], [4, 5, 6], [7, 8, 9]];
+  let result = flatTarget.flat();
   assert(result.length == 10);
   for (let i = 0; i < 10; i++) {
     assert(result[i] == i);
   }
 
-  var flatStringTarget: Array<Array<string | null>> = [["one"], ["two", null, "three"], ["four", "five", "six"], ["seven"]];
-  var stringResult = flatStringTarget.flat();
-  var expected = ["one", "two", null, "three", "four", "five", "six", "seven"];
+  let flatStringTarget: Array<Array<string | null>> = [["one"], ["two", null, "three"], ["four", "five", "six"], ["seven"]];
+  let stringResult = flatStringTarget.flat();
+  let expected = ["one", "two", null, "three", "four", "five", "six", "seven"];
   assert(stringResult.length == 8);
   for (let i = 0; i < expected.length; i++) {
     assert(stringResult[i] == expected[i]);
@@ -1066,5 +1075,11 @@ __release(changetype<usize>(arr));
 export class ArrayU32 extends Array<u32> {}
 export class ArrayU8 extends Array<u8> {}
 export class ArrayStr extends Array<string> {}
-// TODO:
+// FIXME: Fails on 'sort' due to operators '>', '<'
 // export class ArrayArrayI32 extends Array<Array<i32>> {}
+
+// Unleak globals
+arr = changetype<Array<i32>>(0);
+
+__stack_pointer = __heap_base;
+__collect();

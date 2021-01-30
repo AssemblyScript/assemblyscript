@@ -1,11 +1,13 @@
 {
   "asc_flags": [
-    "--runtime none"
   ],
   "stderr": [
     "AS100: Not implemented: Closures",
+    "$local1; // closure 1",
     "AS100: Not implemented: Closures",
-    "Cannot find name '$local0'.",
+    "$local0; // closure 2",
+    "AS100: Not implemented: Closures",
+    "$local0; // closure 3",
     "EOF"
   ]
 }
