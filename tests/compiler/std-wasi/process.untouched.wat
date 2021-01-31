@@ -2673,38 +2673,56 @@
   i32.xor
   i32.and
  )
- (func $~lib/rt/itcms/visitRoots (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/__visit_globals
-  global.get $~lib/rt/itcms/pinSpace
-  call $~lib/rt/itcms/Object#get:next
-  local.set $1
-  loop $while-continue|0
-   local.get $1
-   global.get $~lib/rt/itcms/pinSpace
-   i32.ne
-   local.set $2
-   local.get $2
-   if
-    local.get $1
-    i32.const 20
-    i32.add
-    local.get $0
-    call $~lib/rt/__visit_members
-    local.get $1
-    call $~lib/rt/itcms/Object#get:next
-    local.set $1
-    br $while-continue|0
-   end
-  end
- )
  (func $~lib/rt/itcms/Object#get:color (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   i32.const 3
   i32.and
+ )
+ (func $~lib/rt/itcms/visitRoots (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  call $~lib/rt/__visit_globals
+  global.get $~lib/rt/itcms/pinSpace
+  local.set $1
+  local.get $1
+  call $~lib/rt/itcms/Object#get:next
+  local.set $2
+  loop $while-continue|0
+   local.get $2
+   local.get $1
+   i32.ne
+   local.set $3
+   local.get $3
+   if
+    i32.const 1
+    drop
+    local.get $2
+    call $~lib/rt/itcms/Object#get:color
+    i32.const 3
+    i32.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 3520
+     i32.const 159
+     i32.const 16
+     call $~lib/wasi/index/abort
+     unreachable
+    end
+    local.get $2
+    i32.const 20
+    i32.add
+    local.get $0
+    call $~lib/rt/__visit_members
+    local.get $2
+    call $~lib/rt/itcms/Object#get:next
+    local.set $2
+    br $while-continue|0
+   end
+  end
  )
  (func $~lib/rt/itcms/Object#set:color (param $0 i32) (param $1 i32)
   local.get $0
@@ -3071,13 +3089,19 @@
       local.get $2
       if
        local.get $0
+       call $~lib/rt/itcms/Object#get:color
        local.get $1
-       call $~lib/rt/itcms/Object#set:color
-       local.get $0
-       i32.const 20
-       i32.add
-       i32.const 0
-       call $~lib/rt/__visit_members
+       i32.ne
+       if
+        local.get $0
+        local.get $1
+        call $~lib/rt/itcms/Object#set:color
+        local.get $0
+        i32.const 20
+        i32.add
+        i32.const 0
+        call $~lib/rt/__visit_members
+       end
        local.get $0
        call $~lib/rt/itcms/Object#get:next
        local.set $0
@@ -3123,7 +3147,7 @@
     if
      i32.const 0
      i32.const 3520
-     i32.const 224
+     i32.const 228
      i32.const 20
      call $~lib/wasi/index/abort
      unreachable
@@ -3437,7 +3461,7 @@
   if
    i32.const 3216
    i32.const 3520
-   i32.const 256
+   i32.const 260
    i32.const 31
    call $~lib/wasi/index/abort
    unreachable
@@ -3496,7 +3520,7 @@
   if
    i32.const 0
    i32.const 3520
-   i32.const 290
+   i32.const 294
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable
@@ -4955,15 +4979,6 @@
  (func $~lib/array/Array<~lib/string/String>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
- )
- (func $~lib/array/Array<~lib/string/String>#__uget (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
  )
  (func $~lib/map/Map<~lib/string/String,~lib/string/String>#set:buckets (param $0 i32) (param $1 i32)
   local.get $0
@@ -6683,63 +6698,6 @@
   global.set $~lib/memory/__stack_pointer
   local.get $12
  )
- (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   i32.const 3648
-   i32.const 3472
-   i32.const 92
-   i32.const 42
-   call $~lib/wasi/index/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store
-  local.get $3
-  local.get $1
-  call $~lib/array/Array<~lib/string/String>#__uget
-  local.tee $2
-  i32.store offset=4
-  i32.const 1
-  drop
-  i32.const 0
-  i32.eqz
-  drop
-  local.get $2
-  i32.eqz
-  if
-   i32.const 3888
-   i32.const 3472
-   i32.const 96
-   i32.const 40
-   call $~lib/wasi/index/abort
-   unreachable
-  end
-  local.get $2
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
- )
  (func $~lib/string/String#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -8298,7 +8256,7 @@
   if
    i32.const 0
    i32.const 3792
-   i32.const 740
+   i32.const 749
    i32.const 7
    call $~lib/wasi/index/abort
    unreachable
@@ -8496,6 +8454,62 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $13
+ )
+ (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 3648
+   i32.const 3472
+   i32.const 92
+   i32.const 42
+   call $~lib/wasi/index/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  local.tee $2
+  i32.store
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  local.get $2
+  i32.eqz
+  if
+   i32.const 3888
+   i32.const 3472
+   i32.const 96
+   i32.const 40
+   call $~lib/wasi/index/abort
+   unreachable
+  end
+  local.get $2
+  local.set $3
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $3
  )
  (func $~lib/arraybuffer/ArrayBuffer#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

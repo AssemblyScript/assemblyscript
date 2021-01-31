@@ -203,24 +203,24 @@ export function __unpin(ptr: usize): void {
 export function __collect(): void {
   if (TRACE) trace("GC at", 1, total);
 
-  // Mark roots and add to toSpace
+  // Mark roots (add to toSpace)
   __visit_globals(VISIT_SCAN);
 
-  // Mark what's reachable from roots
-  var black = i32(!white);
-  var to = toSpace;
-  var iter = to.next;
-  while (iter != to) {
-    if (DEBUG) assert(iter.color == black);
+  // Mark direct members of pinned objects (add to toSpace)
+  var pn = pinSpace;
+  var iter = pn.next;
+  while (iter != pn) {
+    if (DEBUG) assert(iter.color == transparent);
     __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, VISIT_SCAN);
     iter = iter.next;
   }
 
-  // Mark what's reachable from pinned objects
-  var pn = pinSpace;
-  iter = pn.next;
-  while (iter != pn) {
-    if (DEBUG) assert(iter.color == transparent);
+  // Mark what's reachable from toSpace
+  var black = i32(!white);
+  var to = toSpace;
+  iter = to.next;
+  while (iter != to) {
+    if (DEBUG) assert(iter.color == black);
     __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, VISIT_SCAN);
     iter = iter.next;
   }

@@ -1739,64 +1739,64 @@
   drop
   i32.const 0
   call $~lib/rt/__visit_globals
-  global.get $~lib/rt/tcms/white
-  i32.eqz
+  global.get $~lib/rt/tcms/pinSpace
   local.set $0
-  global.get $~lib/rt/tcms/toSpace
-  local.set $1
-  local.get $1
+  local.get $0
   call $~lib/rt/tcms/Object#get:next
-  local.set $2
+  local.set $1
   loop $while-continue|0
-   local.get $2
    local.get $1
+   local.get $0
    i32.ne
-   local.set $3
-   local.get $3
+   local.set $2
+   local.get $2
    if
     i32.const 1
     drop
-    local.get $2
+    local.get $1
     call $~lib/rt/tcms/Object#get:color
-    local.get $0
+    i32.const 3
     i32.eq
     i32.eqz
     if
      i32.const 0
      i32.const 96
-     i32.const 214
+     i32.const 213
      i32.const 16
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
+    local.get $1
     i32.const 20
     i32.add
     i32.const 0
     call $~lib/rt/__visit_members
-    local.get $2
+    local.get $1
     call $~lib/rt/tcms/Object#get:next
-    local.set $2
+    local.set $1
     br $while-continue|0
    end
   end
-  global.get $~lib/rt/tcms/pinSpace
+  global.get $~lib/rt/tcms/white
+  i32.eqz
+  local.set $3
+  global.get $~lib/rt/tcms/toSpace
   local.set $4
   local.get $4
   call $~lib/rt/tcms/Object#get:next
-  local.set $2
+  local.set $1
   loop $while-continue|1
-   local.get $2
+   local.get $1
    local.get $4
    i32.ne
-   local.set $3
-   local.get $3
+   local.set $2
+   local.get $2
    if
     i32.const 1
     drop
-    local.get $2
+    local.get $1
     call $~lib/rt/tcms/Object#get:color
-    i32.const 3
+    local.get $3
     i32.eq
     i32.eqz
     if
@@ -1807,14 +1807,14 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
+    local.get $1
     i32.const 20
     i32.add
     i32.const 0
     call $~lib/rt/__visit_members
-    local.get $2
+    local.get $1
     call $~lib/rt/tcms/Object#get:next
-    local.set $2
+    local.set $1
     br $while-continue|1
    end
   end
@@ -1822,17 +1822,17 @@
   local.set $5
   local.get $5
   call $~lib/rt/tcms/Object#get:next
-  local.set $2
+  local.set $1
   loop $while-continue|2
-   local.get $2
+   local.get $1
    local.get $5
    i32.ne
-   local.set $3
-   local.get $3
+   local.set $2
+   local.get $2
    if
     i32.const 1
     drop
-    local.get $2
+    local.get $1
     call $~lib/rt/tcms/Object#get:color
     global.get $~lib/rt/tcms/white
     i32.eq
@@ -1845,34 +1845,34 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
+    local.get $1
     call $~lib/rt/tcms/Object#get:next
     local.set $6
-    local.get $2
+    local.get $1
     global.get $~lib/memory/__heap_base
     i32.lt_u
     if
-     local.get $2
+     local.get $1
      i32.const 0
      call $~lib/rt/tcms/Object#set:nextWithColor
-     local.get $2
+     local.get $1
      i32.const 0
      call $~lib/rt/tcms/Object#set:prev
     else
      global.get $~lib/rt/tcms/total
-     local.get $2
+     local.get $1
      call $~lib/rt/tcms/Object#get:size
      i32.sub
      global.set $~lib/rt/tcms/total
      i32.const 0
      drop
-     local.get $2
+     local.get $1
      i32.const 4
      i32.add
      call $~lib/rt/tlsf/__free
     end
     local.get $6
-    local.set $2
+    local.set $1
     br $while-continue|2
    end
   end
@@ -1882,11 +1882,11 @@
   local.get $5
   local.get $5
   call $~lib/rt/tcms/Object#set:prev
-  local.get $1
+  local.get $4
   global.set $~lib/rt/tcms/fromSpace
   local.get $5
   global.set $~lib/rt/tcms/toSpace
-  local.get $0
+  local.get $3
   global.set $~lib/rt/tcms/white
   i32.const 0
   drop

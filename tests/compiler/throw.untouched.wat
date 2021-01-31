@@ -18,8 +18,8 @@
  (data (i32.const 252) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\004\005\006\00\00\00\00\00\00\00")
  (data (i32.const 284) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\005\006\007\00\00\00\00\00\00\00")
  (data (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 352) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 380) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 416) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 444) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
  (data (i32.const 508) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 560) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
@@ -182,38 +182,56 @@
   i32.xor
   i32.and
  )
- (func $~lib/rt/itcms/visitRoots (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/__visit_globals
-  global.get $~lib/rt/itcms/pinSpace
-  call $~lib/rt/itcms/Object#get:next
-  local.set $1
-  loop $while-continue|0
-   local.get $1
-   global.get $~lib/rt/itcms/pinSpace
-   i32.ne
-   local.set $2
-   local.get $2
-   if
-    local.get $1
-    i32.const 20
-    i32.add
-    local.get $0
-    call $~lib/rt/__visit_members
-    local.get $1
-    call $~lib/rt/itcms/Object#get:next
-    local.set $1
-    br $while-continue|0
-   end
-  end
- )
  (func $~lib/rt/itcms/Object#get:color (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   i32.const 3
   i32.and
+ )
+ (func $~lib/rt/itcms/visitRoots (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  call $~lib/rt/__visit_globals
+  global.get $~lib/rt/itcms/pinSpace
+  local.set $1
+  local.get $1
+  call $~lib/rt/itcms/Object#get:next
+  local.set $2
+  loop $while-continue|0
+   local.get $2
+   local.get $1
+   i32.ne
+   local.set $3
+   local.get $3
+   if
+    i32.const 1
+    drop
+    local.get $2
+    call $~lib/rt/itcms/Object#get:color
+    i32.const 3
+    i32.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 368
+     i32.const 159
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $2
+    i32.const 20
+    i32.add
+    local.get $0
+    call $~lib/rt/__visit_members
+    local.get $2
+    call $~lib/rt/itcms/Object#get:next
+    local.set $2
+    br $while-continue|0
+   end
+  end
  )
  (func $~lib/rt/itcms/Object#set:color (param $0 i32) (param $1 i32)
   local.get $0
@@ -263,7 +281,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 400
+    i32.const 368
     i32.const 127
     i32.const 18
     call $~lib/builtins/abort
@@ -280,7 +298,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 400
+   i32.const 368
    i32.const 131
    i32.const 16
    call $~lib/builtins/abort
@@ -369,7 +387,7 @@
    i32.eqz
    if (result i32)
     i32.const 0
-    i32.const 400
+    i32.const 368
     i32.const 147
     i32.const 30
     call $~lib/builtins/abort
@@ -1551,13 +1569,19 @@
       local.get $2
       if
        local.get $0
+       call $~lib/rt/itcms/Object#get:color
        local.get $1
-       call $~lib/rt/itcms/Object#set:color
-       local.get $0
-       i32.const 20
-       i32.add
-       i32.const 0
-       call $~lib/rt/__visit_members
+       i32.ne
+       if
+        local.get $0
+        local.get $1
+        call $~lib/rt/itcms/Object#set:color
+        local.get $0
+        i32.const 20
+        i32.add
+        i32.const 0
+        call $~lib/rt/__visit_members
+       end
        local.get $0
        call $~lib/rt/itcms/Object#get:next
        local.set $0
@@ -1602,8 +1626,8 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 400
-     i32.const 224
+     i32.const 368
+     i32.const 228
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -1688,7 +1712,7 @@
   i32.const 320
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
-  i32.const 352
+  i32.const 416
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/toSpace
   i32.const 560

@@ -153,8 +153,10 @@ function initLazy(space: Object): Object {
 /** Visits all objects considered to be program roots. */
 function visitRoots(cookie: u32): void {
   __visit_globals(cookie);
-  var iter = pinSpace.next;
-  while (iter != pinSpace) {
+  var pn = pinSpace;
+  var iter = pn.next;
+  while (iter != pn) {
+    if (DEBUG) assert(iter.color == transparent);
     __visit_members(changetype<usize>(iter) + TOTAL_OVERHEAD, cookie);
     iter = iter.next;
   }
@@ -204,8 +206,10 @@ function step(): usize {
         visitStack(VISIT_SCAN);
         obj = iter.next;
         while (obj != toSpace) {
-          obj.color = black;
-          __visit_members(changetype<usize>(obj) + TOTAL_OVERHEAD, VISIT_SCAN);
+          if (obj.color != black) {
+            obj.color = black;
+            __visit_members(changetype<usize>(obj) + TOTAL_OVERHEAD, VISIT_SCAN);
+          }
           obj = obj.next;
         }
         let from = fromSpace;

@@ -66,38 +66,56 @@
   i32.xor
   i32.and
  )
- (func $~lib/rt/itcms/visitRoots (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/__visit_globals
-  global.get $~lib/rt/itcms/pinSpace
-  call $~lib/rt/itcms/Object#get:next
-  local.set $1
-  loop $while-continue|0
-   local.get $1
-   global.get $~lib/rt/itcms/pinSpace
-   i32.ne
-   local.set $2
-   local.get $2
-   if
-    local.get $1
-    i32.const 20
-    i32.add
-    local.get $0
-    call $~lib/rt/__visit_members
-    local.get $1
-    call $~lib/rt/itcms/Object#get:next
-    local.set $1
-    br $while-continue|0
-   end
-  end
- )
  (func $~lib/rt/itcms/Object#get:color (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   i32.const 3
   i32.and
+ )
+ (func $~lib/rt/itcms/visitRoots (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  call $~lib/rt/__visit_globals
+  global.get $~lib/rt/itcms/pinSpace
+  local.set $1
+  local.get $1
+  call $~lib/rt/itcms/Object#get:next
+  local.set $2
+  loop $while-continue|0
+   local.get $2
+   local.get $1
+   i32.ne
+   local.set $3
+   local.get $3
+   if
+    i32.const 1
+    drop
+    local.get $2
+    call $~lib/rt/itcms/Object#get:color
+    i32.const 3
+    i32.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 96
+     i32.const 159
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $2
+    i32.const 20
+    i32.add
+    local.get $0
+    call $~lib/rt/__visit_members
+    local.get $2
+    call $~lib/rt/itcms/Object#get:next
+    local.set $2
+    br $while-continue|0
+   end
+  end
  )
  (func $~lib/rt/itcms/Object#set:color (param $0 i32) (param $1 i32)
   local.get $0
@@ -1435,13 +1453,19 @@
       local.get $2
       if
        local.get $0
+       call $~lib/rt/itcms/Object#get:color
        local.get $1
-       call $~lib/rt/itcms/Object#set:color
-       local.get $0
-       i32.const 20
-       i32.add
-       i32.const 0
-       call $~lib/rt/__visit_members
+       i32.ne
+       if
+        local.get $0
+        local.get $1
+        call $~lib/rt/itcms/Object#set:color
+        local.get $0
+        i32.const 20
+        i32.add
+        i32.const 0
+        call $~lib/rt/__visit_members
+       end
        local.get $0
        call $~lib/rt/itcms/Object#get:next
        local.set $0
@@ -1487,7 +1511,7 @@
     if
      i32.const 0
      i32.const 96
-     i32.const 224
+     i32.const 228
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -2285,7 +2309,7 @@
   if
    i32.const 32
    i32.const 96
-   i32.const 256
+   i32.const 260
    i32.const 31
    call $~lib/builtins/abort
    unreachable
