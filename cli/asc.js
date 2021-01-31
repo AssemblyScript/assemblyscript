@@ -1037,13 +1037,13 @@ exports.main = function main(argv, options, callback) {
       if (opts.jsFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          js = module.toAsmjs();
+          js = module.emitAsmjs();
         });
         writeFile(opts.jsFile, js, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          js = module.toAsmjs();
+          js = module.emitAsmjs();
         });
         writeStdout(js);
       }
