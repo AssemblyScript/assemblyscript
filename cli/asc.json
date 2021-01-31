@@ -210,6 +210,7 @@
       "Enables WebAssembly features being disabled by default.",
       "",
       " sign-extension      Sign-extension operations",
+      " nontrapping-f2i     Non-trapping float to integer ops.",
       " bulk-memory         Bulk memory operations.",
       " simd                SIMD types and operations.",
       " threads             Threading and atomic operations.",
@@ -218,7 +219,6 @@
       ""
     ],
     "TODO_doesNothingYet": [
-      " nontrapping-f2i     Non-trapping float to integer ops.",
       " exception-handling  Exception handling.",
       " tail-calls          Tail call operations.",
       " multi-value         Multi value types.",
