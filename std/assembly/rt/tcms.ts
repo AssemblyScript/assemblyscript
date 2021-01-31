@@ -206,7 +206,7 @@ export function __collect(): void {
   // Mark roots (add to toSpace)
   __visit_globals(VISIT_SCAN);
 
-  // Mark what's reachable from pinned objects (add to toSpace)
+  // Mark direct members of pinned objects (add to toSpace)
   var pn = pinSpace;
   var iter = pn.next;
   while (iter != pn) {
