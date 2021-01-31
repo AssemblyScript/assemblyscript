@@ -3603,16 +3603,18 @@ export class Compiler extends DiagnosticEmitter {
           if (toType.isBooleanValue) {
             expr = this.makeIsTrueish(expr, Type.f32, reportNode);
           } else if (toType.isSignedIntegerValue) {
+            let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(UnaryOp.TruncF32ToI64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF32ToI64Sat : UnaryOp.TruncF32ToI64, expr);
             } else {
-              expr = module.unary(UnaryOp.TruncF32ToI32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF32ToI32Sat : UnaryOp.TruncF32ToI32, expr);
             }
           } else {
+            let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(UnaryOp.TruncF32ToU64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF32ToU64Sat : UnaryOp.TruncF32ToU64, expr);
             } else {
-              expr = module.unary(UnaryOp.TruncF32ToU32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF32ToU32Sat : UnaryOp.TruncF32ToU32, expr);
             }
           }
 
@@ -3621,16 +3623,18 @@ export class Compiler extends DiagnosticEmitter {
           if (toType.isBooleanValue) {
             expr = this.makeIsTrueish(expr, Type.f64, reportNode);
           } else if (toType.isSignedIntegerValue) {
+            let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(UnaryOp.TruncF64ToI64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF64ToI64Sat : UnaryOp.TruncF64ToI64, expr);
             } else {
-              expr = module.unary(UnaryOp.TruncF64ToI32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF64ToI32Sat : UnaryOp.TruncF64ToI32, expr);
             }
           } else {
+            let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(UnaryOp.TruncF64ToU64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF64ToU64Sat : UnaryOp.TruncF64ToU64, expr);
             } else {
-              expr = module.unary(UnaryOp.TruncF64ToU32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF64ToU32Sat : UnaryOp.TruncF64ToU32, expr);
             }
           }
         }
