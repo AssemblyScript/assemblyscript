@@ -1194,30 +1194,27 @@
   call $~lib/rt/tcms/__visit
   i32.const 1376
   call $~lib/rt/tcms/__visit
-  global.get $~lib/rt/tcms/white
-  i32.eqz
-  local.set $5
-  global.get $~lib/rt/tcms/toSpace
-  local.tee $6
+  global.get $~lib/rt/tcms/pinSpace
+  local.tee $1
   i32.load offset=4
   i32.const -4
   i32.and
   local.set $0
   loop $while-continue|0
    local.get $0
-   local.get $6
+   local.get $1
    i32.ne
    if
-    local.get $5
     local.get $0
     i32.load offset=4
     i32.const 3
     i32.and
+    i32.const 3
     i32.ne
     if
      i32.const 0
      i32.const 1120
-     i32.const 214
+     i32.const 213
      i32.const 16
      call $~lib/builtins/abort
      unreachable
@@ -1234,22 +1231,25 @@
     br $while-continue|0
    end
   end
-  global.get $~lib/rt/tcms/pinSpace
-  local.tee $1
+  global.get $~lib/rt/tcms/white
+  i32.eqz
+  local.set $5
+  global.get $~lib/rt/tcms/toSpace
+  local.tee $6
   i32.load offset=4
   i32.const -4
   i32.and
   local.set $0
   loop $while-continue|1
    local.get $0
-   local.get $1
+   local.get $6
    i32.ne
    if
+    local.get $5
     local.get $0
     i32.load offset=4
     i32.const 3
     i32.and
-    i32.const 3
     i32.ne
     if
      i32.const 0

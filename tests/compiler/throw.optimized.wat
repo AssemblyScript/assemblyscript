@@ -22,8 +22,8 @@
  (data (i32.const 1288) "\01\00\00\00\06\00\00\004\005\006")
  (data (i32.const 1308) "\1c")
  (data (i32.const 1320) "\01\00\00\00\06\00\00\005\006\007")
- (data (i32.const 1404) "<")
- (data (i32.const 1416) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
+ (data (i32.const 1372) "<")
+ (data (i32.const 1384) "\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s")
  (data (i32.const 1468) "<")
  (data (i32.const 1480) "\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (data (i32.const 1532) ",")
@@ -57,18 +57,34 @@
  )
  (func $~lib/rt/itcms/visitRoots
   (local $0 i32)
+  (local $1 i32)
   i32.const 1488
   call $~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
+  local.tee $1
   i32.load offset=4
   i32.const -4
   i32.and
   local.set $0
   loop $while-continue|0
    local.get $0
-   global.get $~lib/rt/itcms/pinSpace
+   local.get $1
    i32.ne
    if
+    local.get $0
+    i32.load offset=4
+    i32.const 3
+    i32.and
+    i32.const 3
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1392
+     i32.const 159
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
     local.get $0
     i32.const 20
     i32.add
@@ -116,7 +132,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1424
+    i32.const 1392
     i32.const 147
     i32.const 30
     call $~lib/builtins/abort
@@ -143,7 +159,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 1424
+     i32.const 1392
      i32.const 127
      i32.const 18
      call $~lib/builtins/abort
@@ -157,7 +173,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 1424
+    i32.const 1392
     i32.const 131
     i32.const 16
     call $~lib/builtins/abort
@@ -996,13 +1012,21 @@
       global.get $~lib/rt/itcms/toSpace
       i32.ne
       if
-       local.get $0
        local.get $1
-       call $~lib/rt/itcms/Object#set:color
        local.get $0
-       i32.const 20
-       i32.add
-       call $~lib/rt/__visit_members
+       i32.load offset=4
+       i32.const 3
+       i32.and
+       i32.ne
+       if
+        local.get $0
+        local.get $1
+        call $~lib/rt/itcms/Object#set:color
+        local.get $0
+        i32.const 20
+        i32.add
+        call $~lib/rt/__visit_members
+       end
        local.get $0
        i32.load offset=4
        i32.const -4
@@ -1048,8 +1072,8 @@
     i32.ne
     if
      i32.const 0
-     i32.const 1424
-     i32.const 224
+     i32.const 1392
+     i32.const 228
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -1169,7 +1193,7 @@
   i32.const 1344
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
-  i32.const 1376
+  i32.const 1440
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/toSpace
   i32.const 1584
