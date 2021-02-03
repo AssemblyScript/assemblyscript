@@ -7452,11 +7452,21 @@ export class Compiler extends DiagnosticEmitter {
     // add a constant local referring to the function if applicable
     if (!isSemanticallyAnonymous) {
       let fname = instance.name;
-      if (flow.lookupLocal(fname)) {
-        this.error(
-          DiagnosticCode.Duplicate_identifier_0,
-          declaration.name.range, fname
-        );
+      let existingLocal = flow.getScopedLocal(fname);
+      if (existingLocal) {
+        if (!existingLocal.declaration.range.source.isNative) {
+          this.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range,
+            existingLocal.declaration.name.range,
+            fname
+          );
+        } else { // scoped locals are shared temps that don't track declarations
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range, fname
+          );
+        }
       } else {
         let ftype = instance.type;
         let local = flow.addScopedLocal(instance.name, ftype);
