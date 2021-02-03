@@ -1,8 +1,8 @@
 (module
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -18,8 +18,8 @@
  (data (i32.const 1304) "\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 1372) "<")
  (data (i32.const 1384) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1440) "\06\00\00\00 \00\00\00\00\00\00\00 ")
- (data (i32.const 1468) " \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1440) "\07\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1468) " \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\04")
  (global $new/ref (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
@@ -33,7 +33,10 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $new/gen (mut i32) (i32.const 0))
  (global $new/ref2 (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17876))
+ (global $new/genext (mut i32) (i32.const 0))
+ (global $new/genext2 (mut i32) (i32.const 0))
+ (global $new/genext3 (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17884))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/initLazy (param $0 i32) (result i32)
@@ -61,6 +64,24 @@
    call $~lib/rt/itcms/__visit
   end
   global.get $new/ref2
+  local.tee $0
+  if
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $new/genext
+  local.tee $0
+  if
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $new/genext2
+  local.tee $0
+  if
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $new/genext3
   local.tee $0
   if
    local.get $0
@@ -180,7 +201,7 @@
    if
     i32.const 0
     local.get $0
-    i32.const 17876
+    i32.const 17884
     i32.lt_u
     local.get $0
     i32.load offset=8
@@ -980,7 +1001,7 @@
       local.set $0
       loop $while-continue|0
        local.get $0
-       i32.const 17876
+       i32.const 17884
        i32.lt_u
        if
         local.get $0
@@ -1070,7 +1091,7 @@
       unreachable
      end
      local.get $0
-     i32.const 17876
+     i32.const 17884
      i32.lt_u
      if
       local.get $0
@@ -1093,7 +1114,7 @@
       i32.const 4
       i32.add
       local.tee $1
-      i32.const 17876
+      i32.const 17884
       i32.ge_u
       if
        global.get $~lib/rt/tlsf/ROOT
@@ -1435,28 +1456,31 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid
-   block $new/ns.Ref
-    block $new/Gen<i32>
-     block $new/Ref
-      block $~lib/arraybuffer/ArrayBufferView
-       block $~lib/string/String
-        block $~lib/arraybuffer/ArrayBuffer
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $new/Ref $new/Gen<i32> $new/ns.Ref $invalid
+   block $new/GenExt
+    block $new/ns.Ref
+     block $new/Gen<i32>
+      block $new/Ref
+       block $~lib/arraybuffer/ArrayBufferView
+        block $~lib/string/String
+         block $~lib/arraybuffer/ArrayBuffer
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $new/Ref $new/Gen<i32> $new/ns.Ref $new/GenExt $invalid
+         end
+         return
         end
         return
        end
-       return
-      end
-      local.get $0
-      i32.load
-      local.tee $0
-      if
        local.get $0
-       call $~lib/rt/itcms/__visit
+       i32.load
+       local.tee $0
+       if
+        local.get $0
+        call $~lib/rt/itcms/__visit
+       end
+       return
       end
       return
      end
@@ -1498,8 +1522,13 @@
   i32.store
   local.get $0
   global.set $new/ref
+  i32.const 0
   call $new/Gen<i32>#constructor
   global.set $new/gen
+  i32.const 0
+  call $new/Gen<i32>#constructor
+  global.set $new/gen
+  i32.const 0
   call $new/Gen<i32>#constructor
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -1518,6 +1547,12 @@
   i32.store
   local.get $0
   global.set $new/ref2
+  call $new/GenExt#constructor
+  global.set $new/genext
+  call $new/GenExt#constructor
+  global.set $new/genext2
+  call $new/GenExt#constructor
+  global.set $new/genext3
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
@@ -1525,7 +1560,7 @@
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 1492
+  i32.const 1500
   i32.lt_s
   if
    i32.const 17904
@@ -1535,6 +1570,35 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $new/GenExt#constructor (result i32)
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 6
+  call $~lib/rt/itcms/__new
+  local.tee $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  call $new/Gen<i32>#constructor
+  local.tee $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
  (func $new/Ref#constructor (result i32)
   (local $0 i32)
@@ -1557,8 +1621,7 @@
   global.set $~lib/memory/__stack_pointer
   local.get $0
  )
- (func $new/Gen<i32>#constructor (result i32)
-  (local $0 i32)
+ (func $new/Gen<i32>#constructor (param $0 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -1567,11 +1630,15 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  call $~lib/rt/itcms/__new
-  local.tee $0
-  i32.store
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
