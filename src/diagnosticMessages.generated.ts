@@ -116,6 +116,7 @@ export enum DiagnosticCode {
   A_definite_assignment_assertion_is_not_permitted_in_this_context = 1255,
   A_class_may_only_extend_another_class = 1311,
   A_parameter_property_cannot_be_declared_using_a_rest_parameter = 1317,
+  An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal = 1351,
   Duplicate_identifier_0 = 2300,
   Cannot_find_name_0 = 2304,
   Module_0_has_no_exported_member_1 = 2305,
@@ -295,6 +296,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1255: return "A definite assignment assertion '!' is not permitted in this context.";
     case 1311: return "A class may only extend another class.";
     case 1317: return "A parameter property cannot be declared using a rest parameter.";
+    case 1351: return "An identifier or keyword cannot immediately follow a numeric literal.";
     case 2300: return "Duplicate identifier '{0}'.";
     case 2304: return "Cannot find name '{0}'.";
     case 2305: return "Module '{0}' has no exported member '{1}'.";
