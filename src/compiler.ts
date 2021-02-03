@@ -8442,8 +8442,10 @@ export class Compiler extends DiagnosticEmitter {
     if (
       !typeArguments &&
       (classReference = contextualType.classReference) !== null &&
+      classReference.prototype == classPrototype &&
       classReference.is(CommonFlags.GENERIC)
     ) {
+      // e.g. `arr: Array<T> = new Array()`
       classInstance = this.resolver.resolveClass(
         classPrototype,
         classReference.typeArguments,

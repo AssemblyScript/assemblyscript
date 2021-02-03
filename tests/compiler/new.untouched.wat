@@ -18,7 +18,7 @@
  (data (i32.const 268) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 320) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 348) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 416) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 416) "\07\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\04\00\00\00")
  (table $0 1 funcref)
  (global $new/ref (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
@@ -35,10 +35,13 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $new/gen (mut i32) (i32.const 0))
  (global $new/ref2 (mut i32) (i32.const 0))
+ (global $new/genext (mut i32) (i32.const 0))
+ (global $new/genext2 (mut i32) (i32.const 0))
+ (global $new/genext3 (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 416))
- (global $~lib/memory/__data_end i32 (i32.const 468))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16852))
- (global $~lib/memory/__heap_base i32 (i32.const 16852))
+ (global $~lib/memory/__data_end i32 (i32.const 476))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16860))
+ (global $~lib/memory/__heap_base i32 (i32.const 16860))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
@@ -2386,6 +2389,27 @@
    local.get $0
    call $~lib/rt/itcms/__visit
   end
+  global.get $new/genext
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $new/genext2
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
+  global.get $new/genext3
+  local.tee $1
+  if
+   local.get $1
+   local.get $0
+   call $~lib/rt/itcms/__visit
+  end
   i32.const 224
   local.get $0
   call $~lib/rt/itcms/__visit
@@ -2406,25 +2430,28 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $new/ns.Ref
-    block $new/Gen<i32>
-     block $new/Ref
-      block $~lib/arraybuffer/ArrayBufferView
-       block $~lib/string/String
-        block $~lib/arraybuffer/ArrayBuffer
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $new/Ref $new/Gen<i32> $new/ns.Ref $invalid
+   block $new/GenExt
+    block $new/ns.Ref
+     block $new/Gen<i32>
+      block $new/Ref
+       block $~lib/arraybuffer/ArrayBufferView
+        block $~lib/string/String
+         block $~lib/arraybuffer/ArrayBuffer
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $new/Ref $new/Gen<i32> $new/ns.Ref $new/GenExt $invalid
+         end
+         return
         end
         return
        end
+       local.get $0
+       local.get $1
+       call $~lib/arraybuffer/ArrayBufferView~visit
        return
       end
-      local.get $0
-      local.get $1
-      call $~lib/arraybuffer/ArrayBufferView~visit
       return
      end
      return
@@ -2450,6 +2477,44 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $new/GenExt#constructor (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 6
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store offset=4
+  local.get $1
+  call $new/Gen<i32>#constructor
+  local.tee $0
+  i32.store
+  local.get $0
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
  )
  (func $start:new
   (local $0 i32)
@@ -2490,6 +2555,9 @@
   global.set $new/gen
   i32.const 0
   call $new/Gen<i32>#constructor
+  global.set $new/gen
+  i32.const 0
+  call $new/Gen<i32>#constructor
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -2512,6 +2580,15 @@
   local.get $0
   call $new/ns.Ref#get:ref
   global.set $new/ref2
+  i32.const 0
+  call $new/GenExt#constructor
+  global.set $new/genext
+  i32.const 0
+  call $new/GenExt#constructor
+  global.set $new/genext2
+  i32.const 0
+  call $new/GenExt#constructor
+  global.set $new/genext3
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
