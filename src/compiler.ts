@@ -7449,7 +7449,7 @@ export class Compiler extends DiagnosticEmitter {
       ? module.i64(i64_low(offset), i64_high(offset))
       : module.i32(i64_low(offset));
 
-    // add a local referring to the function if applicable
+    // add a constant local referring to the function if applicable
     if (!isSemanticallyAnonymous) {
       let fname = instance.name;
       if (flow.lookupLocal(fname)) {
@@ -7460,6 +7460,7 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         let ftype = instance.type;
         let local = flow.addScopedLocal(instance.name, ftype);
+        flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
         expr = module.local_tee(local.index, expr, ftype.isManaged);
       }
     }
