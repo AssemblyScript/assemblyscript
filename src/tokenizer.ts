@@ -1611,6 +1611,17 @@ export class Tokenizer extends DiagnosticEmitter {
     return String.fromCharCode(value);
   }
 
+  checkForIdentifierStartAfterNumericLiteral(): void {
+    // TODO: BigInt n
+    var pos = this.pos;
+    if (pos < this.end && isIdentifierStart(this.source.text.charCodeAt(pos))) {
+      this.error(
+        DiagnosticCode.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal,
+        this.range(pos)
+      );
+    }
+  }
+
   readUnicodeEscape(): string {
     return this.readHexadecimalEscape(4);
   }

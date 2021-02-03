@@ -3800,10 +3800,14 @@ export class Parser extends DiagnosticEmitter {
         return Node.createStringLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
       }
       case Token.INTEGERLITERAL: {
-        return Node.createIntegerLiteralExpression(tn.readInteger(), tn.range(startPos, tn.pos));
+        let value = tn.readInteger();
+        tn.checkForIdentifierStartAfterNumericLiteral();
+        return Node.createIntegerLiteralExpression(value, tn.range(startPos, tn.pos));
       }
       case Token.FLOATLITERAL: {
-        return Node.createFloatLiteralExpression(tn.readFloat(), tn.range(startPos, tn.pos));
+        let value = tn.readFloat();
+        tn.checkForIdentifierStartAfterNumericLiteral();
+        return Node.createFloatLiteralExpression(value, tn.range(startPos, tn.pos));
       }
       // RegexpLiteralExpression
       // note that this also continues on invalid ones so the surrounding AST remains intact
@@ -4207,10 +4211,12 @@ export class Parser extends DiagnosticEmitter {
         }
         case Token.INTEGERLITERAL: {
           tn.readInteger();
+          tn.checkForIdentifierStartAfterNumericLiteral();
           break;
         }
         case Token.FLOATLITERAL: {
           tn.readFloat();
+          tn.checkForIdentifierStartAfterNumericLiteral();
           break;
         }
         case Token.OPENBRACE: {
@@ -4255,10 +4261,12 @@ export class Parser extends DiagnosticEmitter {
         }
         case Token.INTEGERLITERAL: {
           tn.readInteger();
+          tn.checkForIdentifierStartAfterNumericLiteral();
           break;
         }
         case Token.FLOATLITERAL: {
           tn.readFloat();
+          tn.checkForIdentifierStartAfterNumericLiteral();
           break;
         }
       }
