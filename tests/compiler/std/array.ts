@@ -272,6 +272,37 @@ var i: i32;
   assert(arr[2] == 44);
 }
 
+// Array#slice
+
+{
+  let result: i32[];
+  const elements: i32[] = [3, 5, 7, 9, 11];
+
+  result = elements.slice(2);
+  assert(isArraysEqual(result, [7, 9, 11]));
+
+  result = elements.slice(2, 4);
+  assert(isArraysEqual(result, [7, 9]));
+
+  result = elements.slice(1, 5);
+  assert(isArraysEqual(result, [5, 7, 9, 11]));
+
+  result = elements.slice();
+  assert(isArraysEqual(result, elements));
+
+  result = elements.slice(-2);
+  assert(isArraysEqual(result, [9, 11]));
+
+  result = elements.slice(2, -1);
+  assert(isArraysEqual(result, [7, 9]));
+
+  result = elements.slice(-3, -1);
+  assert(isArraysEqual(result, [7, 9]));
+
+  assert(elements.slice(-1, -3).length == 0);
+  assert(elements.slice(10).length == 0);
+}
+
 // Array#reverse ///////////////////////////////////////////////////////////////////////////////////
 
 {
