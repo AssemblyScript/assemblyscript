@@ -41,7 +41,7 @@
  (data (i32.const 1760) "\t\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 1812) " ")
  (table $0 9 funcref)
- (elem (i32.const 1) $start:function-call~anonymous|0 $start:function-call~anonymous|0 $start:function-call~anonymous|2 $start:function-call~anonymous|2 $start:function-call~fn2 $function-call/Foo#fnVoid $start:function-call~fn2 $function-call/Foo#fnRet)
+ (elem (i32.const 1) $start:function-call~anonymous|0 $start:function-call~anonymous|0 $start:function-call~anonymous|2 $start:function-call~anonymous|2 $start:function-call~fn2|4 $function-call/Foo#fnVoid $start:function-call~fn2|4 $function-call/Foo#fnRet)
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -64,7 +64,7 @@
   local.get $1
   i32.add
  )
- (func $start:function-call~fn2 (param $0 i32) (result i32)
+ (func $start:function-call~fn2|4 (param $0 i32) (result i32)
   local.get $0
  )
  (func $~lib/rt/itcms/initLazy (param $0 i32) (result i32)

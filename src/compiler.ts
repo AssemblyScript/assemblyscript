@@ -3429,7 +3429,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.FUNCTION: {
-        expr = this.compileFunctionExpression(<FunctionExpression>expression, contextualType.signatureReference, constraints);
+        expr = this.compileFunctionExpression(<FunctionExpression>expression, contextualType, constraints);
         break;
       }
       case NodeKind.IDENTIFIER:
@@ -7311,26 +7311,30 @@ export class Compiler extends DiagnosticEmitter {
 
   private compileFunctionExpression(
     expression: FunctionExpression,
-    contextualSignature: Signature | null,
+    contextualType: Type,
     constraints: Constraints
   ): ExpressionRef {
     var declaration = expression.declaration.clone(); // generic contexts can have multiple
     assert(!declaration.typeParameters); // function expression cannot be generic
     var flow = this.currentFlow;
     var actualFunction = flow.actualFunction;
+    var isNamed = declaration.name.text.length > 0;
+    var isSemanticallyAnonymous = !isNamed || contextualType != Type.void;
     var prototype = new FunctionPrototype(
-      declaration.name.text.length
-        ? declaration.name.text
-        : "anonymous|" + (actualFunction.nextAnonymousId++).toString(),
+      isSemanticallyAnonymous
+        ? (isNamed ? declaration.name.text + "|" : "anonymous|") + (actualFunction.nextAnonymousId++).toString()
+        : declaration.name.text,
       actualFunction,
       declaration,
       DecoratorFlags.NONE
     );
     var instance: Function | null;
     var contextualTypeArguments = uniqueMap(flow.contextualTypeArguments);
+    var module = this.module;
 
     // compile according to context. this differs from a normal function in that omitted parameter
     // and return types can be inferred and omitted arguments can be replaced with dummies.
+    var contextualSignature = contextualType.signatureReference;
     if (contextualSignature) {
       let signatureNode = prototype.functionTypeNode;
       let parameterNodes = signatureNode.parameters;
@@ -7344,7 +7348,7 @@ export class Compiler extends DiagnosticEmitter {
           DiagnosticCode.Expected_0_arguments_but_got_1,
           expression.range, numParameters.toString(), numPresentParameters.toString()
         );
-        return this.module.unreachable();
+        return module.unreachable();
       }
 
       // check non-omitted parameter types
@@ -7356,13 +7360,13 @@ export class Compiler extends DiagnosticEmitter {
             actualFunction.parent,
             contextualTypeArguments
           );
-          if (!resolvedType) return this.module.unreachable();
+          if (!resolvedType) return module.unreachable();
           if (!parameterTypes[i].isStrictlyAssignableTo(resolvedType)) {
             this.error(
               DiagnosticCode.Type_0_is_not_assignable_to_type_1,
               parameterNode.range, parameterTypes[i].toString(), resolvedType.toString()
             );
-            return this.module.unreachable();
+            return module.unreachable();
           }
         }
         // any unused parameters are inherited but ignored
@@ -7376,7 +7380,7 @@ export class Compiler extends DiagnosticEmitter {
           actualFunction.parent,
           contextualTypeArguments
         );
-        if (!resolvedType) return this.module.unreachable();
+        if (!resolvedType) return module.unreachable();
         if (
           returnType == Type.void
             ? resolvedType != Type.void
@@ -7386,7 +7390,7 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             signatureNode.returnType.range, resolvedType.toString(), returnType.toString()
           );
-          return this.module.unreachable();
+          return module.unreachable();
         }
       }
 
@@ -7399,20 +7403,20 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode._this_cannot_be_referenced_in_current_location,
             thisTypeNode.range
           );
-          return this.module.unreachable();
+          return module.unreachable();
         }
         let resolvedType = this.resolver.resolveType(
           thisTypeNode,
           actualFunction.parent,
           contextualTypeArguments
         );
-        if (!resolvedType) return this.module.unreachable();
+        if (!resolvedType) return module.unreachable();
         if (!thisType.isStrictlyAssignableTo(resolvedType)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             thisTypeNode.range, thisType.toString(), resolvedType.toString()
           );
-          return this.module.unreachable();
+          return module.unreachable();
         }
       }
 
@@ -7428,7 +7432,7 @@ export class Compiler extends DiagnosticEmitter {
       instance.flow.outer = flow;
       let worked = this.compileFunction(instance);
       this.currentType = contextualSignature.type;
-      if (!worked) return this.module.unreachable();
+      if (!worked) return module.unreachable();
 
     // otherwise compile like a normal function
     } else {
@@ -7437,13 +7441,41 @@ export class Compiler extends DiagnosticEmitter {
       instance.flow.outer = flow;
       let worked = this.compileFunction(instance);
       this.currentType = instance.signature.type;
-      if (!worked) return this.module.unreachable();
+      if (!worked) return module.unreachable();
     }
 
     var offset = this.ensureRuntimeFunction(instance); // reports
-    return this.options.isWasm64
-      ? this.module.i64(i64_low(offset), i64_high(offset))
-      : this.module.i32(i64_low(offset));
+    var expr = this.options.isWasm64
+      ? module.i64(i64_low(offset), i64_high(offset))
+      : module.i32(i64_low(offset));
+
+    // add a constant local referring to the function if applicable
+    if (!isSemanticallyAnonymous) {
+      let fname = instance.name;
+      let existingLocal = flow.getScopedLocal(fname);
+      if (existingLocal) {
+        if (!existingLocal.declaration.range.source.isNative) {
+          this.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range,
+            existingLocal.declaration.name.range,
+            fname
+          );
+        } else { // scoped locals are shared temps that don't track declarations
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range, fname
+          );
+        }
+      } else {
+        let ftype = instance.type;
+        let local = flow.addScopedLocal(instance.name, ftype);
+        flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
+        expr = module.local_tee(local.index, expr, ftype.isManaged);
+      }
+    }
+    
+    return expr;
   }
 
   /** Makes sure the enclosing source file of the specified expression has been compiled. */
