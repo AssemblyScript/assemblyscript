@@ -29,7 +29,7 @@
  (data (i32.const 700) "\1c\00\00\00\00\00\00\00\00\00\00\00\08\00\00\00\08\00\00\00\08\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 736) "\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 9 funcref)
- (elem (i32.const 1) $start:function-call~anonymous|0 $start:function-call~anonymous|1 $start:function-call~anonymous|2 $start:function-call~anonymous|3 $start:function-call~fn2 $function-call/Foo#fnVoid $function-call/Foo#fnThis $function-call/Foo#fnRet)
+ (elem (i32.const 1) $start:function-call~anonymous|0 $start:function-call~anonymous|1 $start:function-call~anonymous|2 $start:function-call~anonymous|3 $start:function-call~fn2|4 $function-call/Foo#fnVoid $function-call/Foo#fnThis $function-call/Foo#fnRet)
  (global $function-call/fnVoid (mut i32) (i32.const 32))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $function-call/faVoid (mut i32) (i32.const 64))
@@ -71,7 +71,7 @@
   local.get $1
   i32.add
  )
- (func $start:function-call~fn2 (param $0 i32) (result i32)
+ (func $start:function-call~fn2|4 (param $0 i32) (result i32)
   local.get $0
  )
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)

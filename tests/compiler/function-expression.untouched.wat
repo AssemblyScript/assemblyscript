@@ -8,6 +8,7 @@
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i64_=>_i64 (func (param i64) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
@@ -36,9 +37,11 @@
  (data (i32.const 892) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 956) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 988) "\1c\00\00\00\00\00\00\00\00\00\00\00\07\00\00\00\08\00\00\00\11\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1024) "\t\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (table $0 18 funcref)
- (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0 $function-expression/testNullable~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testLocal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testField~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0)
+ (data (i32.const 1020) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\12\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1052) "\1c\00\00\00\00\00\00\00\00\00\00\00\t\00\00\00\08\00\00\00\13\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1088) "\n\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (table $0 20 funcref)
+ (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0 $function-expression/testNullable~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testLocal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testField~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0 $function-expression/semanticallyAnonymous~fnDecl $function-expression/semanticallyAnonymous~fnDecl|0)
  (global $function-expression/f1 (mut i32) (i32.const 32))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $function-expression/f2 (mut i32) (i32.const 128))
@@ -57,10 +60,11 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 1024))
- (global $~lib/memory/__data_end i32 (i32.const 1100))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17484))
- (global $~lib/memory/__heap_base i32 (i32.const 17484))
+ (global $~lib/rt/__rtti_base i32 (i32.const 1088))
+ (global $~lib/memory/__data_end i32 (i32.const 1172))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17556))
+ (global $~lib/memory/__heap_base i32 (i32.const 17556))
+ (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-expression~anonymous|0 (param $0 i32) (result i32)
@@ -69,13 +73,13 @@
  (func $start:function-expression~anonymous|1 (param $0 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~someName
+ (func $start:function-expression~someName|2
   nop
  )
- (func $start:function-expression~anonymous|2 (result i32)
+ (func $start:function-expression~anonymous|3 (result i32)
   i32.const 1
  )
- (func $start:function-expression~anonymous|3 (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|4 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
@@ -89,10 +93,10 @@
   i32.load
   call_indirect (type $i32_i32_=>_i32)
  )
- (func $start:function-expression~anonymous|4 (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|5 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~anonymous|5 (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|6 (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
  (func $function-expression/testOmittedReturn1~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
@@ -2621,6 +2625,45 @@
   local.get $0
   i32.add
  )
+ (func $function-expression/semanticallyAnonymous~fnDecl (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $function-expression/semanticallyAnonymous~fnDecl|0 (param $0 i64) (result i64)
+  local.get $0
+ )
+ (func $function-expression/semanticallyAnonymous
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1040
+  local.tee $0
+  i32.store
+  local.get $0
+  drop
+  local.get $0
+  i32.const 1072
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 93
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
   i32.const 768
@@ -2707,60 +2750,77 @@
    call $~lib/rt/itcms/__visit
   end
  )
+ (func $~lib/function/Function<%28i64%29=>i64>#__visit (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  call $~lib/rt/itcms/__visit
+ )
+ (func $~lib/function/Function<%28i64%29=>i64>~visit (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  call $~lib/function/Function<%28i64%29=>i64>#__visit
+ )
  (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   block $invalid
-   block $function-expression/FieldClass
-    block $~lib/function/Function<%28%29=>%28i32%29=>i32>
-     block $~lib/function/Function<%28i32%2Ci32%29=>i32>
-      block $~lib/function/Function<%28%29=>i32>
-       block $~lib/function/Function<%28%29=>void>
-        block $~lib/function/Function<%28i32%29=>i32>
-         block $~lib/arraybuffer/ArrayBufferView
-          block $~lib/string/String
-           block $~lib/arraybuffer/ArrayBuffer
-            local.get $0
-            i32.const 8
-            i32.sub
-            i32.load
-            br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28i32%29=>i32> $~lib/function/Function<%28%29=>void> $~lib/function/Function<%28%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28%29=>%28i32%29=>i32> $function-expression/FieldClass $invalid
+   block $~lib/function/Function<%28i64%29=>i64>
+    block $function-expression/FieldClass
+     block $~lib/function/Function<%28%29=>%28i32%29=>i32>
+      block $~lib/function/Function<%28i32%2Ci32%29=>i32>
+       block $~lib/function/Function<%28%29=>i32>
+        block $~lib/function/Function<%28%29=>void>
+         block $~lib/function/Function<%28i32%29=>i32>
+          block $~lib/arraybuffer/ArrayBufferView
+           block $~lib/string/String
+            block $~lib/arraybuffer/ArrayBuffer
+             local.get $0
+             i32.const 8
+             i32.sub
+             i32.load
+             br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/function/Function<%28i32%29=>i32> $~lib/function/Function<%28%29=>void> $~lib/function/Function<%28%29=>i32> $~lib/function/Function<%28i32%2Ci32%29=>i32> $~lib/function/Function<%28%29=>%28i32%29=>i32> $function-expression/FieldClass $~lib/function/Function<%28i64%29=>i64> $invalid
+            end
+            return
            end
            return
           end
+          local.get $0
+          local.get $1
+          call $~lib/arraybuffer/ArrayBufferView~visit
           return
          end
          local.get $0
          local.get $1
-         call $~lib/arraybuffer/ArrayBufferView~visit
+         call $~lib/function/Function<%28i32%29=>i32>~visit
          return
         end
         local.get $0
         local.get $1
-        call $~lib/function/Function<%28i32%29=>i32>~visit
+        call $~lib/function/Function<%28%29=>void>~visit
         return
        end
        local.get $0
        local.get $1
-       call $~lib/function/Function<%28%29=>void>~visit
+       call $~lib/function/Function<%28%29=>i32>~visit
        return
       end
       local.get $0
       local.get $1
-      call $~lib/function/Function<%28%29=>i32>~visit
+      call $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit
       return
      end
      local.get $0
      local.get $1
-     call $~lib/function/Function<%28i32%2Ci32%29=>i32>~visit
+     call $~lib/function/Function<%28%29=>%28i32%29=>i32>~visit
      return
     end
     local.get $0
     local.get $1
-    call $~lib/function/Function<%28%29=>%28i32%29=>i32>~visit
+    call $function-expression/FieldClass~visit
     return
    end
    local.get $0
    local.get $1
-   call $function-expression/FieldClass~visit
+   call $~lib/function/Function<%28i64%29=>i64>~visit
    return
   end
   unreachable
@@ -2773,8 +2833,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 17504
-   i32.const 17552
+   i32.const 17584
+   i32.const 17632
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3036,6 +3096,7 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   call $function-expression/testField
+  call $function-expression/semanticallyAnonymous
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add

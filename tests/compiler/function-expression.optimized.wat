@@ -7,6 +7,7 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i64_=>_i64 (func (param i64) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
@@ -55,9 +56,13 @@
  (data (i32.const 1992) "\03\00\00\00\08\00\00\00\10")
  (data (i32.const 2012) "\1c")
  (data (i32.const 2024) "\07\00\00\00\08\00\00\00\11")
- (data (i32.const 2048) "\t\00\00\00 \00\00\00\00\00\00\00 ")
- (table $0 18 funcref)
- (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|2 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0)
+ (data (i32.const 2044) "\1c")
+ (data (i32.const 2056) "\03\00\00\00\08\00\00\00\12")
+ (data (i32.const 2076) "\1c")
+ (data (i32.const 2088) "\t\00\00\00\08\00\00\00\13")
+ (data (i32.const 2112) "\n\00\00\00 \00\00\00\00\00\00\00 ")
+ (table $0 20 funcref)
+ (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|3 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0 $start:function-expression~anonymous|0 $function-expression/semanticallyAnonymous~fnDecl|0)
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -68,27 +73,28 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18508))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18580))
+ (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-expression~anonymous|0 (param $0 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~someName
+ (func $start:function-expression~someName|2
   nop
  )
- (func $start:function-expression~anonymous|2 (result i32)
+ (func $start:function-expression~anonymous|3 (result i32)
   i32.const 1
  )
- (func $start:function-expression~anonymous|3 (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|4 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $start:function-expression~anonymous|4 (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|5 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~anonymous|5 (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|6 (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
  (func $function-expression/testGlobal~anonymous|0~anonymous|0 (param $0 i32) (result i32)
@@ -222,7 +228,7 @@
    if
     i32.const 0
     local.get $0
-    i32.const 18508
+    i32.const 18580
     i32.lt_u
     local.get $0
     i32.load offset=8
@@ -268,7 +274,7 @@
    i32.const 1
   else
    local.get $1
-   i32.const 2048
+   i32.const 2112
    i32.load
    i32.gt_u
    if
@@ -282,7 +288,7 @@
    local.get $1
    i32.const 3
    i32.shl
-   i32.const 2052
+   i32.const 2116
    i32.add
    i32.load
    i32.const 32
@@ -887,10 +893,10 @@
   if
    unreachable
   end
-  i32.const 18512
+  i32.const 18592
   i32.const 0
   i32.store
-  i32.const 20080
+  i32.const 20160
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -901,7 +907,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 18512
+    i32.const 18592
     i32.add
     i32.const 0
     i32.store offset=4
@@ -919,7 +925,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 18512
+      i32.const 18592
       i32.add
       i32.const 0
       i32.store offset=96
@@ -937,13 +943,13 @@
     br $for-loop|0
    end
   end
-  i32.const 18512
-  i32.const 20084
+  i32.const 18592
+  i32.const 20164
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 18512
+  i32.const 18592
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (result i32)
@@ -1022,7 +1028,7 @@
       local.set $0
       loop $while-continue|0
        local.get $0
-       i32.const 18508
+       i32.const 18580
        i32.lt_u
        if
         local.get $0
@@ -1112,7 +1118,7 @@
       unreachable
      end
      local.get $0
-     i32.const 18508
+     i32.const 18580
      i32.lt_u
      if
       local.get $0
@@ -1135,7 +1141,7 @@
       i32.const 4
       i32.add
       local.tee $1
-      i32.const 18508
+      i32.const 18580
       i32.ge_u
       if
        global.get $~lib/rt/tlsf/ROOT
@@ -1494,6 +1500,26 @@
   i32.store8 offset=1
   local.get $0
  )
+ (func $function-expression/semanticallyAnonymous~fnDecl|0 (param $0 i64) (result i64)
+  local.get $0
+ )
+ (func $function-expression/semanticallyAnonymous
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 2064
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $folding-inner1
    block $folding-inner0
@@ -1504,7 +1530,7 @@
        i32.const 8
        i32.sub
        i32.load
-       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner0 $invalid
+       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner0 $folding-inner1 $invalid
       end
       return
      end
@@ -1530,11 +1556,11 @@
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 2124
+  i32.const 2196
   i32.lt_s
   if
-   i32.const 18528
-   i32.const 18576
+   i32.const 18608
+   i32.const 18656
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -1881,6 +1907,7 @@
   i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
+  call $function-expression/semanticallyAnonymous
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
