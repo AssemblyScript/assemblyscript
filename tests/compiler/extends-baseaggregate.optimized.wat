@@ -2079,22 +2079,19 @@
   i32.const 1168
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.const 6
   call $~lib/rt/itcms/__new
-  local.tee $9
+  local.tee $2
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $9
-  i32.store offset=4
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2104,26 +2101,26 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  local.get $9
+  local.get $2
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 20
    i32.const 4
    call $~lib/rt/itcms/__new
-   local.tee $9
+   local.tee $2
    i32.store
   end
-  local.get $9
+  local.get $2
   f64.const 0
   f64.store
-  local.get $9
+  local.get $2
   f64.const 0
   f64.store offset=8
-  local.get $9
+  local.get $2
   i32.const 0
   i32.store offset=16
-  local.get $9
+  local.get $2
   i32.const 0
   i32.const 0
   call $~lib/rt/itcms/__link
@@ -2131,31 +2128,31 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $2
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $2
   i32.store offset=4
   i32.const 1180
   i32.load
-  local.tee $2
+  local.tee $9
   i32.const 1
   i32.add
-  local.tee $6
-  local.set $0
-  local.get $6
+  local.tee $5
+  local.set $1
+  local.get $5
   i32.const 1176
   i32.load
-  local.tee $5
+  local.tee $6
   i32.const 2
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
+   local.get $1
    i32.const 268435455
    i32.gt_u
    if
@@ -2168,18 +2165,18 @@
    end
    i32.const 1168
    i32.load
-   local.tee $4
-   local.set $1
+   local.tee $7
+   local.set $0
    block $__inlined_func$~lib/rt/itcms/__renew
-    local.get $0
+    local.get $1
     i32.const 2
     i32.shl
-    local.tee $3
     local.tee $8
-    local.get $4
+    local.tee $3
+    local.get $7
     i32.const 20
     i32.sub
-    local.tee $7
+    local.tee $4
     i32.load
     i32.const -4
     i32.and
@@ -2187,69 +2184,69 @@
     i32.sub
     i32.le_u
     if
-     local.get $7
-     local.get $8
+     local.get $4
+     local.get $3
      i32.store offset=16
      br $__inlined_func$~lib/rt/itcms/__renew
     end
-    local.get $8
-    local.get $7
+    local.get $3
+    local.get $4
     i32.load offset=12
     call $~lib/rt/itcms/__new
-    local.tee $0
-    local.get $1
-    local.get $8
-    local.get $7
-    i32.load offset=16
     local.tee $1
-    local.get $1
-    local.get $8
+    local.get $0
+    local.get $3
+    local.get $4
+    i32.load offset=16
+    local.tee $0
+    local.get $0
+    local.get $3
     i32.gt_u
     select
     call $~lib/memory/memory.copy
-    local.get $0
-    local.set $1
+    local.get $1
+    local.set $0
    end
-   local.get $1
-   local.get $5
+   local.get $0
+   local.get $6
    i32.add
-   local.get $3
-   local.get $5
+   local.get $8
+   local.get $6
    i32.sub
    call $~lib/memory/memory.fill
-   local.get $1
-   local.get $4
+   local.get $0
+   local.get $7
    i32.ne
    if
     i32.const 1168
-    local.get $1
+    local.get $0
     i32.store
     i32.const 1172
-    local.get $1
+    local.get $0
     i32.store
     i32.const 1168
-    local.get $1
+    local.get $0
     i32.const 0
     call $~lib/rt/itcms/__link
    end
    i32.const 1176
-   local.get $3
+   local.get $8
    i32.store
   end
   i32.const 1172
   i32.load
-  local.get $2
+  local.get $9
   i32.const 2
   i32.shl
   i32.add
-  local.get $9
+  local.get $2
   i32.store
   i32.const 1168
-  local.get $9
+  local.get $2
   i32.const 1
   call $~lib/rt/itcms/__link
   i32.const 1180
-  local.get $6
+  local.get $5
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 8

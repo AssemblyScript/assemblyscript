@@ -171,7 +171,7 @@ function needsSlot(module: Module, value: ExpressionRef): bool {
     case ExpressionId.LocalGet:
     case ExpressionId.LocalSet: return false; // tee
   }
-  return !matchTostack(module, value);
+  return true;
 }
 
 /** Instruments a module with a shadow stack for precise GC. */

@@ -3091,9 +3091,6 @@
   global.get $std/operator-overloading/incdec
   local.tee $0
   i32.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
   local.get $0
   i32.load
   i32.const 1
@@ -3150,9 +3147,6 @@
   global.get $std/operator-overloading/incdec
   local.tee $0
   i32.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
   local.get $0
   i32.load
   i32.const 1

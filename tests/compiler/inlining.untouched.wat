@@ -62,13 +62,13 @@
   (local $6 i32)
   (local $7 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   f32.const -1
   local.set $0
   f64.const -2
@@ -220,10 +220,8 @@
   i32.const 123
   local.tee $7
   i32.store
-  global.get $~lib/memory/__stack_pointer
   local.get $7
-  local.tee $4
-  i32.store offset=4
+  local.set $4
   i32.const 43
   local.set $5
   i32.const 3
@@ -241,7 +239,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -2617,10 +2615,8 @@
   i32.const 0
   call $inlining/Bar#set:e
   global.get $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
   local.get $1
-  local.tee $3
-  i32.store offset=4
+  local.set $3
   i32.const 2
   local.set $2
   local.get $3

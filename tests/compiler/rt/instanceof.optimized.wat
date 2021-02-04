@@ -1879,67 +1879,6 @@
    unreachable
   end
  )
- (func $rt/instanceof/Cat#constructor (param $0 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  call $rt/instanceof/Animal#constructor
-  local.tee $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
- (func $rt/instanceof/BlackCat#constructor (result i32)
-  (local $0 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 5
-  call $~lib/rt/itcms/__new
-  local.tee $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  call $rt/instanceof/Cat#constructor
-  local.tee $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
  (func $rt/instanceof/Animal#constructor (param $0 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1958,6 +1897,61 @@
    local.tee $0
    i32.store
   end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
+ )
+ (func $rt/instanceof/Cat#constructor (param $0 i32) (result i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  call $rt/instanceof/Animal#constructor
+  local.tee $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
+ )
+ (func $rt/instanceof/BlackCat#constructor (result i32)
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 5
+  call $~lib/rt/itcms/__new
+  local.tee $0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  call $rt/instanceof/Cat#constructor
+  local.tee $0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add

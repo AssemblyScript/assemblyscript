@@ -4098,44 +4098,6 @@
    unreachable
   end
  )
- (func $extends-baseaggregate/A2#constructor (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 20
-   i32.const 6
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $extends-baseaggregate/A1#constructor
-  local.tee $0
-  i32.store
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
  (func $start:extends-baseaggregate
   (local $0 i32)
   (local $1 i32)
@@ -4206,6 +4168,39 @@
   local.get $0
   i32.const 0
   call $extends-baseaggregate/A1#set:c1
+  local.get $0
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $extends-baseaggregate/A2#constructor (param $0 i32) (result i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 20
+   i32.const 6
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  call $extends-baseaggregate/A1#constructor
+  local.tee $0
+  i32.store
   local.get $0
   local.set $1
   global.get $~lib/memory/__stack_pointer

@@ -2356,6 +2356,12 @@
  (func $super-inline/Foo#a (param $0 i32) (result i32)
   i32.const 1
  )
+ (func $super-inline/Bar#a (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  local.set $1
+  i32.const 1
+ )
  (func $super-inline/Foo#a@virtual (param $0 i32) (result i32)
   (local $1 i32)
   block $default
@@ -2456,44 +2462,6 @@
    unreachable
   end
  )
- (func $super-inline/Bar#constructor (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  i32.eqz
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 0
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
-  end
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $super-inline/Foo#constructor
-  local.tee $0
-  i32.store
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
  (func $start:super-inline
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2568,9 +2536,8 @@
   global.set $~lib/memory/__stack_pointer
   local.get $1
  )
- (func $super-inline/Bar#a (param $0 i32) (result i32)
+ (func $super-inline/Bar#constructor (param $0 i32) (result i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2579,16 +2546,27 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  local.get $0
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  local.tee $1
+  call $super-inline/Foo#constructor
+  local.tee $0
   i32.store
-  i32.const 1
-  local.set $2
+  local.get $0
+  local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $1
  )
 )

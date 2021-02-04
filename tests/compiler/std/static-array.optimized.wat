@@ -2195,7 +2195,11 @@
  (func $~start
   call $start:std/static-array
  )
- (func $~stack_check
+ (func $start:std/static-array
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 2012
   i32.lt_s
@@ -2207,13 +2211,6 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $start:std/static-array
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
@@ -2274,14 +2271,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1088
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   i32.const 1100
   i32.load
   i32.eqz
@@ -2293,17 +2282,10 @@
    i32.const 1
    i32.store
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1088
-  i32.store
   i32.const 1092
   i32.load
   i32.const 2
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 1088
   i32.store
@@ -2367,14 +2349,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1184
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   i32.const 1196
   i32.load
   i32.eqz
@@ -2386,17 +2360,10 @@
    i32.const 1
    i32.store
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1184
-  i32.store
   i32.const 1188
   i32.load
   i64.const 4
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 1184
   i32.store
@@ -2460,14 +2427,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1264
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   i32.const 1276
   i32.load
   i32.eqz
@@ -2479,17 +2438,10 @@
    i32.const 1
    i32.store
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1264
-  i32.store
   i32.const 1268
   i32.load
   f32.const 2.5
   f32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 1264
   i32.store
@@ -2553,14 +2505,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1360
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   i32.const 1372
   i32.load
   i32.eqz
@@ -2572,17 +2516,10 @@
    i32.const 1
    i32.store
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1360
-  i32.store
   i32.const 1364
   i32.load
   f64.const 2.25
   f64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 1360
   i32.store

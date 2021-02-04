@@ -306,49 +306,12 @@
   local.get $1
   i32.store offset=4
  )
- (func $wasi/abort/test
-  i32.const 0
-  i32.eqz
-  if
-   i32.const 32
-   i32.const 80
-   i32.const 4
-   i32.const 3
-   call $~lib/wasi/index/abort
-   unreachable
-  end
- )
- (func $~start
-  nop
- )
- (func $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__data_end
-  i32.lt_s
-  if
-   i32.const 16512
-   i32.const 16560
-   i32.const 1
-   i32.const 1
-   call $~lib/wasi/index/abort
-   unreachable
-  end
- )
  (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   i32.const 0
   i32.const 12
   call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
@@ -368,11 +331,6 @@
    local.get $4
    local.get $0
    local.get $0
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store
-   local.get $9
    call $~lib/string/String#get:length
    local.get $4
    i32.const 0
@@ -394,11 +352,6 @@
    local.get $4
    local.get $1
    local.get $1
-   local.set $9
-   global.get $~lib/memory/__stack_pointer
-   local.get $9
-   i32.store
-   local.get $9
    call $~lib/string/String#get:length
    local.get $4
    i32.const 0
@@ -508,9 +461,20 @@
   drop
   i32.const 255
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
+ )
+ (func $wasi/abort/test
+  i32.const 0
+  i32.eqz
+  if
+   i32.const 32
+   i32.const 80
+   i32.const 4
+   i32.const 3
+   call $~lib/wasi/index/abort
+   unreachable
+  end
+ )
+ (func $~start
+  nop
  )
 )

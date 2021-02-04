@@ -2447,40 +2447,6 @@
    unreachable
   end
  )
- (func $getter-call/test (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $getter-call/C#constructor
-  local.tee $0
-  i32.store
-  i32.const 0
-  global.set $~argumentsLength
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $getter-call/C#get:x
-  i32.load
-  call_indirect (type $none_=>_i32)
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
  (func $getter-call/C#constructor (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2502,6 +2468,35 @@
    i32.store
   end
   local.get $0
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
+ )
+ (func $getter-call/test (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $getter-call/C#constructor
+  local.tee $0
+  i32.store
+  i32.const 0
+  global.set $~argumentsLength
+  local.get $0
+  call $getter-call/C#get:x
+  i32.load
+  call_indirect (type $none_=>_i32)
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4

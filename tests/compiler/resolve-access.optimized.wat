@@ -2032,207 +2032,6 @@
    unreachable
   end
  )
- (func $resolve-access/arrayAccess (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.const 0
-  call $~lib/rt/itcms/__new
-  local.tee $1
-  call $~lib/memory/memory.copy
-  local.get $1
-  i32.store
-  i32.const 16
-  i32.const 3
-  call $~lib/rt/itcms/__new
-  local.tee $0
-  local.get $1
-  i32.store
-  local.get $1
-  if
-   local.get $0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 1152
-    i32.const 294
-    i32.const 14
-    call $~lib/builtins/abort
-    unreachable
-   end
-   global.get $~lib/rt/itcms/white
-   local.get $1
-   i32.const 20
-   i32.sub
-   local.tee $2
-   i32.load offset=4
-   i32.const 3
-   i32.and
-   i32.eq
-   if
-    local.get $0
-    i32.const 20
-    i32.sub
-    i32.load offset=4
-    i32.const 3
-    i32.and
-    local.tee $4
-    local.set $5
-    local.get $4
-    global.get $~lib/rt/itcms/white
-    i32.eqz
-    i32.eq
-    if
-     local.get $2
-     call $~lib/rt/itcms/Object#makeGray
-    else
-     global.get $~lib/rt/itcms/state
-     i32.const 1
-     i32.eq
-     i32.const 0
-     local.get $5
-     i32.const 3
-     i32.eq
-     select
-     if
-      local.get $2
-      call $~lib/rt/itcms/Object#makeGray
-     end
-    end
-   end
-  end
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  i32.const 8
-  i32.store offset=8
-  local.get $0
-  i32.const 1
-  i32.store offset=12
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  i32.load offset=12
-  i32.eqz
-  if
-   i32.const 1280
-   i32.const 1488
-   i32.const 92
-   i32.const 42
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.load offset=4
-  i64.load
-  call $~lib/util/number/utoa64
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $resolve-access/propertyAccess (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  call $resolve-access/Container#constructor
-  local.tee $0
-  i32.store
-  local.get $0
-  i64.const 1
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store offset=4
-  local.get $0
-  i64.load
-  i32.wrap_i64
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  block $__inlined_func$~lib/util/number/utoa32
-   local.get $1
-   i32.eqz
-   if
-    global.get $~lib/memory/__stack_pointer
-    i32.const 4
-    i32.add
-    global.set $~lib/memory/__stack_pointer
-    i32.const 1728
-    local.set $0
-    br $__inlined_func$~lib/util/number/utoa32
-   end
-   local.get $1
-   call $~lib/util/number/decimalCount32
-   local.set $2
-   global.get $~lib/memory/__stack_pointer
-   local.get $2
-   i32.const 1
-   i32.shl
-   i32.const 1
-   call $~lib/rt/itcms/__new
-   local.tee $0
-   i32.store
-   local.get $0
-   local.get $1
-   local.get $2
-   call $~lib/util/number/utoa_dec_simple<u32>
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $0
- )
  (func $~lib/util/number/utoa64 (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -2360,6 +2159,132 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
+ (func $resolve-access/arrayAccess (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.const 0
+  call $~lib/rt/itcms/__new
+  local.tee $1
+  call $~lib/memory/memory.copy
+  local.get $1
+  i32.store
+  i32.const 16
+  i32.const 3
+  call $~lib/rt/itcms/__new
+  local.tee $0
+  local.get $1
+  i32.store
+  local.get $1
+  if
+   local.get $0
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1152
+    i32.const 294
+    i32.const 14
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/rt/itcms/white
+   local.get $1
+   i32.const 20
+   i32.sub
+   local.tee $2
+   i32.load offset=4
+   i32.const 3
+   i32.and
+   i32.eq
+   if
+    local.get $0
+    i32.const 20
+    i32.sub
+    i32.load offset=4
+    i32.const 3
+    i32.and
+    local.tee $4
+    local.set $5
+    local.get $4
+    global.get $~lib/rt/itcms/white
+    i32.eqz
+    i32.eq
+    if
+     local.get $2
+     call $~lib/rt/itcms/Object#makeGray
+    else
+     global.get $~lib/rt/itcms/state
+     i32.const 1
+     i32.eq
+     i32.const 0
+     local.get $5
+     i32.const 3
+     i32.eq
+     select
+     if
+      local.get $2
+      call $~lib/rt/itcms/Object#makeGray
+     end
+    end
+   end
+  end
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  i32.const 8
+  i32.store offset=8
+  local.get $0
+  i32.const 1
+  i32.store offset=12
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.load offset=12
+  i32.eqz
+  if
+   i32.const 1280
+   i32.const 1488
+   i32.const 92
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load offset=4
+  i64.load
+  call $~lib/util/number/utoa64
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $resolve-access/Container#constructor (result i32)
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
@@ -2409,5 +2334,74 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $resolve-access/propertyAccess (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  call $resolve-access/Container#constructor
+  local.tee $0
+  i32.store
+  local.get $0
+  i64.const 1
+  i64.store
+  local.get $0
+  i64.load
+  i32.wrap_i64
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  block $__inlined_func$~lib/util/number/utoa32
+   local.get $1
+   i32.eqz
+   if
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    i32.const 1728
+    local.set $0
+    br $__inlined_func$~lib/util/number/utoa32
+   end
+   local.get $1
+   call $~lib/util/number/decimalCount32
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.const 1
+   i32.shl
+   i32.const 1
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/util/number/utoa_dec_simple<u32>
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $0
  )
 )
