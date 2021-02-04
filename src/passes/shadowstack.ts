@@ -162,6 +162,18 @@ function matchTostack(module: Module, expr: ExpressionRef): ExpressionRef {
   return 0;
 }
 
+/** Tests whether a `value` matched by `matchTostack` needs a slot. */
+function needsSlot(module: Module, value: ExpressionRef): bool {
+  switch (_BinaryenExpressionGetId(value)) {
+    // no need to stack null pointers
+    case ExpressionId.Const: return !isConstZero(value);
+    // already kept in another slot
+    case ExpressionId.LocalGet:
+    case ExpressionId.LocalSet: return false; // tee
+  }
+  return !matchTostack(module, value);
+}
+
 /** Instruments a module with a shadow stack for precise GC. */
 export class ShadowStackPass extends Pass {
   /** Stack frame slots, per function. */
@@ -322,7 +334,7 @@ export class ShadowStackPass extends Pass {
       let operand = operands[i];
       let match = matchTostack(module, operand);
       if (!match) continue;
-      if (isConstZero(match)) {
+      if (!needsSlot(module, match)) {
         operands[i] = match;
         continue;
       }
@@ -366,10 +378,10 @@ export class ShadowStackPass extends Pass {
       operands[i] = _BinaryenCallGetOperandAt(call, i);
     }
     let numSlots = this.updateCallOperands(operands);
+    for (let i = 0, k = operands.length; i < k; ++i) {
+      _BinaryenCallSetOperandAt(call, i, operands[i]);
+    }
     if (numSlots) {
-      for (let i = 0, k = operands.length; i < k; ++i) {
-        _BinaryenCallSetOperandAt(call, i, operands[i]);
-      }
       // Reserve these slots for us so nested calls use their own
       this.callSlotOffset += numSlots;
     }
@@ -390,10 +402,10 @@ export class ShadowStackPass extends Pass {
       operands[i] = _BinaryenCallIndirectGetOperandAt(callIndirect, i);
     }
     let numSlots = this.updateCallOperands(operands);
+    for (let i = 0, k = operands.length; i < k; ++i) {
+      _BinaryenCallIndirectSetOperandAt(callIndirect, i, operands[i]);
+    }
     if (numSlots) {
-      for (let i = 0, k = operands.length; i < k; ++i) {
-        _BinaryenCallIndirectSetOperandAt(callIndirect, i, operands[i]);
-      }
       // Reserve these slots for us so nested calls use their own
       this.callSlotOffset += numSlots;
     }
@@ -408,14 +420,14 @@ export class ShadowStackPass extends Pass {
 
   /** @override */
   visitLocalSet(localSet: ExpressionRef): void {
+    let module = this.module;
     let value = _BinaryenLocalSetGetValue(localSet);
-    let match = matchTostack(this.module, value);
+    let match = matchTostack(module, value);
     if (!match) return;
-    if (isConstZero(match)) {
+    if (!needsSlot(module, match)) {
       _BinaryenLocalSetSetValue(localSet, match);
       return;
     }
-    var module = this.module;
     let index = _BinaryenLocalSetGetIndex(localSet);
     let slotIndex = this.noteSlot(this.currentFunction, index);
     let stmts = new Array<ExpressionRef>();
