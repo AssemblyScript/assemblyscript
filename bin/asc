@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-/* tslint:disable */
-
 const tailArgs = process.argv.indexOf("--");
 if (~tailArgs) {
   require("child_process").spawnSync(
