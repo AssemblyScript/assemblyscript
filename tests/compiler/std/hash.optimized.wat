@@ -12,10 +12,46 @@
  (data (i32.const 1112) "\01\00\00\00\04\00\00\00a\00b")
  (data (i32.const 1132) "\1c")
  (data (i32.const 1144) "\01\00\00\00\06\00\00\00a\00b\00c")
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17548))
+ (data (i32.const 1164) "\1c")
+ (data (i32.const 1176) "\01\00\00\00\08\00\00\00a\00b\00c\00d")
+ (data (i32.const 1196) "\1c")
+ (data (i32.const 1208) "\01\00\00\00\n\00\00\00a\00b\00c\00d\00e")
+ (data (i32.const 1228) "\1c")
+ (data (i32.const 1240) "\01\00\00\00\0c\00\00\00a\00b\00c\00d\00e\00f")
+ (data (i32.const 1260) ",")
+ (data (i32.const 1272) "\01\00\00\00\0e\00\00\00a\00b\00c\00d\00e\00f\00g")
+ (data (i32.const 1308) ",")
+ (data (i32.const 1320) "\01\00\00\00\10\00\00\00a\00b\00c\00d\00e\00f\00g\00h")
+ (data (i32.const 1356) ",")
+ (data (i32.const 1368) "\01\00\00\00\12\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00i")
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17788))
  (export "memory" (memory $0))
  (start $~start)
  (func $~start
+  call $start:std/hash
+ )
+ (func $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1404
+  i32.lt_s
+  if
+   i32.const 17808
+   i32.const 17856
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $~lib/util/hash/HASH<~lib/string/String|null> (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i64)
+  (local $5 i64)
+  (local $6 i64)
+  (local $7 i64)
+  (local $8 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -25,79 +61,13 @@
   i64.const 0
   i64.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 0
+  local.get $0
   i32.store
-  i32.const 0
-  call $~lib/util/hash/hashStr
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1056
-  i32.store
-  i32.const 1056
-  call $~lib/util/hash/hashStr
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1088
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1088
-  i32.store
-  i32.const 1088
-  call $~lib/util/hash/hashStr
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1120
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1120
-  i32.store
-  i32.const 1120
-  call $~lib/util/hash/hashStr
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1152
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1152
-  i32.store
-  i32.const 1152
-  call $~lib/util/hash/hashStr
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1164
-  i32.lt_s
-  if
-   i32.const 17568
-   i32.const 17616
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/util/hash/hashStr (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const -2128831035
-  local.set $2
   local.get $0
   if
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i32.const 20
    i32.sub
@@ -211,8 +181,8 @@
     i64.xor
     i64.const -7046029288634856825
     i64.mul
-    i64.const -8796714831421723037
-    i64.add
+    i64.const 8796714831421723037
+    i64.sub
     local.get $5
     i64.const -4417276706812531889
     i64.mul
@@ -223,8 +193,8 @@
     i64.xor
     i64.const -7046029288634856825
     i64.mul
-    i64.const -8796714831421723037
-    i64.add
+    i64.const 8796714831421723037
+    i64.sub
     local.get $7
     i64.const -4417276706812531889
     i64.mul
@@ -235,8 +205,8 @@
     i64.xor
     i64.const -7046029288634856825
     i64.mul
-    i64.const -8796714831421723037
-    i64.add
+    i64.const 8796714831421723037
+    i64.sub
     local.get $6
     i64.const -4417276706812531889
     i64.mul
@@ -247,8 +217,8 @@
     i64.xor
     i64.const -7046029288634856825
     i64.mul
-    i64.const -8796714831421723037
-    i64.add
+    i64.const 8796714831421723037
+    i64.sub
     i64.add
    else
     local.get $2
@@ -284,8 +254,8 @@
      i64.rotl
      i64.const -7046029288634856825
      i64.mul
-     i64.const -8796714831421723037
-     i64.add
+     i64.const 8796714831421723037
+     i64.sub
      local.set $4
      local.get $1
      i32.const 8
@@ -346,6 +316,75 @@
     end
    end
   end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $start:std/hash
+  (local $0 f32)
+  (local $1 i64)
+  (local $2 f64)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 0
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1056
+  i32.store
+  i32.const 1056
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1088
+  i32.store
+  i32.const 1088
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1120
+  i32.store
+  i32.const 1120
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1152
+  i32.store
+  i32.const 1152
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1184
+  i32.store
+  i32.const 1184
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1216
+  i32.store
+  i32.const 1216
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1248
+  i32.store
+  i32.const 1248
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1280
+  i32.store
+  i32.const 1280
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1328
+  i32.store
+  i32.const 1328
+  call $~lib/util/hash/HASH<~lib/string/String|null>
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1376
+  i32.store
+  i32.const 1376
+  call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
