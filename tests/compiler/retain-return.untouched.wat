@@ -1677,15 +1677,6 @@
   local.get $0
   global.set $retain-return/ref
  )
- (func $~start
-  global.get $~started
-  if
-   return
-  end
-  i32.const 1
-  global.set $~started
-  call $start:retain-return
- )
  (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   local.get $1
   local.get $1
@@ -1791,6 +1782,15 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~start
+  global.get $~started
+  if
+   return
+  end
+  i32.const 1
+  global.set $~started
+  call $start:retain-return
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0

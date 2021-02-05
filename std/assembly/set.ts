@@ -111,9 +111,10 @@ export class Set<T> {
       }
       // append new entry
       entry = changetype<SetEntry<T>>(changetype<usize>(this.entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<T>());
-      entry.key = isManaged<T>()
-        ? changetype<T>(__retain(changetype<usize>(key)))
-        : key;
+      entry.key = key;
+      if (isManaged<T>()) {
+        __link(changetype<usize>(this), changetype<usize>(key), true);
+      }
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
@@ -132,7 +133,6 @@ export class Set<T> {
   delete(key: T): bool {
     var entry = this.find(key, HASH<T>(key)); // unmanaged!
     if (!entry) return false;
-    if (isManaged<T>()) __release(changetype<usize>(entry.key)); // exact 'key'
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate

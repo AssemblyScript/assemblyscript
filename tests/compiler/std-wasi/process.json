@@ -1,0 +1,21 @@
+{
+  "asc_flags": [
+    "--explicitStart"
+  ],
+  "asc_wasi": {
+    "args": [
+      "firstArg",
+      "secondArg",
+      "thirdArg"
+    ],
+    "env": {
+      "FIRSTENV": "firstEnv",
+      "SECONDENV": "secondEnv",
+      "THIRDENV": "thirdEnv"
+    },
+    "returnOnExit": true
+  },
+  "features": [
+    "bigint-integration"
+  ]
+}

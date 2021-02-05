@@ -7,5 +7,6 @@ export * from "./binary";
 export * from "./collections";
 export * from "./math";
 export * from "./path";
+export * from "./terminal";
 export * from "./text";
 export * from "./vector";

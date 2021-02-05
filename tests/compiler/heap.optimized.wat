@@ -9,16 +9,21 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1036) "<\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1100) "<\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1164) "<\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00n\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d")
+ (data (i32.const 1036) "<")
+ (data (i32.const 1048) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1100) "<")
+ (data (i32.const 1112) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1164) "<")
+ (data (i32.const 1176) "\01\00\00\00\1e\00\00\00N\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d")
+ (data (i32.const 1228) ",")
+ (data (i32.const 1240) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $heap/ptr (mut i32) (i32.const 0))
- (export "memory" (memory $0))
  (export "heap.alloc" (func $~lib/memory/heap.alloc))
  (export "heap.realloc" (func $~lib/memory/heap.realloc))
  (export "heap.free" (func $~lib/memory/heap.free))
  (export "heap.reset" (func $~lib/memory/heap.reset))
+ (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -34,7 +39,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 272
+   i32.const 273
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -54,7 +59,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 274
+   i32.const 275
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -97,7 +102,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 287
+   i32.const 288
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -189,7 +194,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 200
+   i32.const 201
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -203,7 +208,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 202
+   i32.const 203
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -276,7 +281,7 @@
    if
     i32.const 0
     i32.const 1056
-    i32.const 223
+    i32.const 224
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -331,22 +336,22 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 238
+   i32.const 239
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $5
   local.get $3
   local.get $1
   i32.const 4
   i32.add
   i32.add
-  local.get $5
   i32.ne
   if
    i32.const 0
    i32.const 1056
-   i32.const 239
+   i32.const 240
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -394,7 +399,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 255
+   i32.const 256
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -464,7 +469,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 380
+   i32.const 381
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -492,7 +497,7 @@
    if
     i32.const 0
     i32.const 1056
-    i32.const 387
+    i32.const 388
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -520,7 +525,7 @@
    if
     i32.const 0
     i32.const 1056
-    i32.const 400
+    i32.const 401
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -587,10 +592,10 @@
   if
    unreachable
   end
-  i32.const 1232
+  i32.const 17664
   i32.const 0
   i32.store
-  i32.const 2800
+  i32.const 19232
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -601,7 +606,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 1232
+    i32.const 17664
     i32.add
     i32.const 0
     i32.store offset=4
@@ -619,7 +624,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 1232
+      i32.const 17664
       i32.add
       i32.const 0
       i32.store offset=96
@@ -637,13 +642,13 @@
     br $for-loop|0
    end
   end
-  i32.const 1232
-  i32.const 2804
+  i32.const 17664
+  i32.const 19236
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 1232
+  i32.const 17664
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
@@ -653,7 +658,7 @@
   if
    i32.const 1120
    i32.const 1056
-   i32.const 461
+   i32.const 462
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -727,7 +732,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 333
+   i32.const 334
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -779,7 +784,7 @@
     if
      i32.const 0
      i32.const 1056
-     i32.const 346
+     i32.const 347
      i32.const 18
      call $~lib/builtins/abort
      unreachable
@@ -814,7 +819,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 360
+   i32.const 361
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -956,7 +961,7 @@
    if
     i32.const 0
     i32.const 1056
-    i32.const 498
+    i32.const 500
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -971,7 +976,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 500
+   i32.const 502
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1023,7 +1028,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 563
+   i32.const 565
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1230,7 +1235,7 @@
   i32.and
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 1228
+  i32.const 17660
   i32.ge_u
   if
    local.get $0
@@ -1252,7 +1257,7 @@
    call $~lib/rt/tlsf/initialize
   end
   local.get $0
-  i32.const 1228
+  i32.const 17660
   i32.lt_u
   if
    global.get $~lib/rt/tlsf/ROOT
@@ -1337,7 +1342,7 @@
  )
  (func $~lib/memory/heap.free (param $0 i32)
   local.get $0
-  i32.const 1228
+  i32.const 17660
   i32.ge_u
   if
    global.get $~lib/rt/tlsf/ROOT
@@ -1353,9 +1358,9 @@
  )
  (func $~lib/memory/heap.reset
   i32.const 1184
-  i32.const 1056
-  i32.const 598
-  i32.const 3
+  i32.const 1248
+  i32.const 109
+  i32.const 7
   call $~lib/builtins/abort
   unreachable
  )

@@ -3,6 +3,7 @@ const fs  = require("fs");
 const path = require("path");
 const os = require("os");
 const v8 = require("v8");
+const WASI = require("wasi").WASI;
 const glob = require("glob");
 const colorsUtil = require("../cli/util/colors");
 const optionsUtil = require("../cli/util/options");
@@ -285,14 +286,14 @@ function runTest(basename) {
 
       const instantiateUntouched = section("instantiate untouched");
       if (!config.skipInstantiate) {
-        if (!testInstantiate(basename, untouchedBuffer, glue, stderr)) {
+        if (!testInstantiate(basename, untouchedBuffer, glue, stderr, config.asc_wasi)) {
           failed = true;
           failedTests.add(basename);
           instantiateUntouched.end(FAILURE);
         } else {
           instantiateUntouched.end(SUCCESS);
           const instantiateOptimized = section("instantiate optimized");
-          if (!testInstantiate(basename, optimizedBuffer, glue, stderr)) {
+          if (!testInstantiate(basename, optimizedBuffer, glue, stderr, config.asc_wasi)) {
             failed = true;
             failedTests.add(basename);
             instantiateOptimized.end(FAILURE);
@@ -342,7 +343,7 @@ function runTest(basename) {
         let rtracedBuffer = stdout.toBuffer();
         const instantiateRtrace = section("instantiate rtrace");
         v8.setFlagsFromString("--experimental-wasm-bigint");
-        if (!testInstantiate(basename, rtracedBuffer, glue, stderr)) {
+        if (!testInstantiate(basename, rtracedBuffer, glue, stderr, config.asc_wasi)) {
           failed = true;
           failedTests.add(basename);
           instantiateRtrace.end(FAILURE);
@@ -360,7 +361,7 @@ function runTest(basename) {
 }
 
 // Tests if instantiation of a module succeeds
-function testInstantiate(basename, binaryBuffer, glue, stderr) {
+function testInstantiate(basename, binaryBuffer, glue, stderr, wasiOptions) {
   var failed = false;
   try {
     let memory = new WebAssembly.Memory({ initial: 10 });
@@ -391,8 +392,8 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       }
     });
 
-    var imports = {
-      env: Object.assign({
+    var imports = rtrace.install({
+      env: {
         memory,
         abort: function(msg, file, line, column) {
           console.log(colorsUtil.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
@@ -402,16 +403,23 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
         },
         seed: function() {
           return 0xA5534817; // make tests deterministic
+        },
+        visit: function() {
+          // override in tests
         }
-      }, rtrace.env),
+      },
       Math,
       Date,
-      Reflect,
-      rtrace
-    };
+      Reflect
+    });
     if (glue.preInstantiate) {
       console.log("  [call preInstantiate]");
       glue.preInstantiate(imports, exports);
+    }
+    var wasi = null;
+    if (wasiOptions) {
+      wasi = new WASI(wasiOptions);
+      imports.wasi_snapshot_preview1 = wasi.wasiImport;
     }
     var instance = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), imports);
     Object.setPrototypeOf(exports, instance.exports);
@@ -419,7 +427,11 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       console.log("  [call postInstantiate]");
       glue.postInstantiate(instance);
     }
-    if (exports._start) {
+    if (wasi) {
+      console.log("  [wasi start]");
+      let code = wasi.start(instance);
+      console.log("  [wasi exit] code=" + code);
+    } else if (exports._start) {
       console.log("  [call start]");
       exports._start();
     }
@@ -438,11 +450,9 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       if (rtrace.active) {
         console.log("  " +
           rtrace.allocCount + " allocs, " +
-          rtrace.resizeCount + " resizes, " +
-          rtrace.moveCount + " moves, " +
           rtrace.freeCount + " frees, " +
-          rtrace.incrementCount + " increments, " +
-          rtrace.decrementCount + " decrements"
+          rtrace.resizeCount + " resizes, " +
+          rtrace.moveCount + " moves"
         );
       }
       return true;

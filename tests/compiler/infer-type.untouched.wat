@@ -15,6 +15,9 @@
  (global $infer-type/rF (mut f64) (f64.const 0))
  (global $infer-type/inferi (mut i32) (i32.const -2147483648))
  (global $infer-type/inferu (mut i32) (i32.const 2147483647))
+ (global $~lib/memory/__data_end i32 (i32.const 8))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
+ (global $~lib/memory/__heap_base i32 (i32.const 16392))
  (export "memory" (memory $0))
  (start $~start)
  (func $infer-type/locals

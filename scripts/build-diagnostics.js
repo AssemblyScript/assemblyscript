@@ -7,8 +7,6 @@ var header = `/**
  * @license Apache-2.0
  */
 
-/* tslint:disable:max-line-length */
-
 `.replace(/\r\n/g, "\n");
 
 var sb = [ header ];

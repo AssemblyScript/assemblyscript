@@ -1,6 +1,11 @@
 {
   "mutable-globals": {
   },
+  "nontrapping-f2i": {
+    "asc_flags": [
+      "--enable nontrapping-f2i"
+    ]
+  },
   "simd": {
     "asc_flags": [
       "--enable simd"

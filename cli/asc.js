@@ -79,15 +79,15 @@ Object.defineProperty(exports, "ready", {
 if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
 
 // Use distribution files if present, otherwise run the sources directly.
-var assemblyscript;
-(function loadAssemblyScript() {
+function loadAssemblyScriptJS() {
+  var exports;
   try {
     // note that this case will always trigger in recent node.js versions for typical installs
     // see: https://nodejs.org/api/packages.html#packages_self_referencing_a_package_using_its_name
-    assemblyscript = require("assemblyscript");
+    exports = require("assemblyscript");
   } catch (e) {
     try { // `asc` on the command line (unnecessary in recent node)
-      assemblyscript = dynrequire("../dist/assemblyscript.js");
+      exports = dynrequire("../dist/assemblyscript.js");
     } catch (e) {
       try { // `asc` on the command line without dist files (unnecessary in recent node)
         dynrequire("ts-node").register({
@@ -96,17 +96,70 @@ var assemblyscript;
           compilerOptions: { target: "ES2016" }
         });
         dynrequire("../src/glue/js");
-        assemblyscript = dynrequire("../src");
+        exports = dynrequire("../src");
       } catch (e_ts) {
         try { // `require("dist/asc.js")` in explicit browser tests
-          assemblyscript = dynrequire("./assemblyscript");
+          exports = dynrequire("./assemblyscript");
         } catch (e) {
           throw Error(e_ts.stack + "\n---\n" + e.stack);
         }
       }
     }
   }
-})();
+  return exports;
+}
+
+// Loads the specified bootstrapped Wasm binary of the compiler.
+function loadAssemblyScriptWasm(binaryPath) {
+  const loader = require("../lib/loader/umd/index");
+  const rtrace = new (require("../lib/rtrace/umd/index").Rtrace)({
+    onerror(err, info) { console.log(err, info); },
+    getMemory() { return exports.memory; },
+    oncollect() {
+      var gcProfile = rtrace.gcProfile;
+      if (gcProfile && gcProfile.length && fs.writeFileSync) {
+        let timestamp = Date.now();
+        fs.writeFileSync(`rtrace-gc-profile-${timestamp}.json`, JSON.stringify(gcProfile));
+        fs.writeFileSync(`rtrace-gc-profile-${timestamp}.csv`, `time,memory,pause\n${gcProfile.join("\n")}`);
+      }
+    }
+  });
+  var { exports } = loader.instantiateSync(fs.readFileSync(binaryPath), rtrace.install({ binaryen }));
+  if (exports._start) exports._start();
+  return exports;
+}
+
+/** Ensures that an object is a wrapper class instead of just a pointer. */
+function __wrap(ptrOrObj, wrapperClass) {
+  if (typeof ptrOrObj === "number") {
+    return ptrOrObj === 0 ? null : wrapperClass.wrap(ptrOrObj);
+  }
+  return ptrOrObj;
+}
+
+var assemblyscript, __newString, __getString, __pin, __unpin, __collect;
+
+function loadAssemblyScript() {
+  const wasmArg = process.argv.findIndex(arg => arg == "--wasm");
+  if (~wasmArg) {
+    let binaryPath = process.argv[wasmArg + 1];
+    process.argv.splice(wasmArg, 2);
+    assemblyscript = loadAssemblyScriptWasm(binaryPath);
+    __newString = assemblyscript.__newString;
+    __getString = assemblyscript.__getString;
+    __pin = assemblyscript.__pin;
+    __unpin = assemblyscript.__unpin;
+    __collect = assemblyscript.__collect;
+  } else {
+    assemblyscript = loadAssemblyScriptJS();
+    __newString = str => str;
+    __getString = ptr => ptr;
+    __pin = ptr => ptr;
+    __unpin = ptr => undefined;
+    __collect = incremental => undefined;
+  }
+}
+loadAssemblyScript();
 
 /** Whether this is a webpack bundle or not. */
 exports.isBundle = typeof BUNDLE_VERSION === "string";
@@ -118,7 +171,7 @@ exports.version = exports.isBundle ? BUNDLE_VERSION : dynrequire("../package.jso
 exports.options = require("./asc.json");
 
 /** Prefix used for library files. */
-exports.libraryPrefix = assemblyscript.LIBRARY_PREFIX;
+exports.libraryPrefix = __getString(assemblyscript.LIBRARY_PREFIX.valueOf());
 
 /** Default Binaryen optimization level. */
 exports.defaultOptimizeLevel = 3;
@@ -256,8 +309,18 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
+  // Set up base directory
+  const baseDir = path.normalize(opts.baseDir || ".");
+
+  // Check if a config file is present
+  let asconfigPath = optionsUtil.resolvePath(opts.config || "asconfig.json", baseDir);
+  let asconfigFile = path.basename(asconfigPath);
+  let asconfigDir = path.dirname(asconfigPath);
+  let asconfig = getAsconfig(asconfigFile, asconfigDir, readFile);
+  let asconfigHasEntries = asconfig != null && Array.isArray(asconfig.entries) && asconfig.entries.length;
+
   // Print the help message if requested or no source files are provided
-  if (opts.help || !argv.length) {
+  if (opts.help || (!argv.length && !asconfigHasEntries)) {
     var out = opts.help ? stdout : stderr;
     var color = opts.help ? colorsUtil.stdout : colorsUtil.stderr;
     out.write([
@@ -268,6 +331,7 @@ exports.main = function main(argv, options, callback) {
       "  " + color.cyan("asc") + " hello" + extension.ext,
       "  " + color.cyan("asc") + " hello" + extension.ext + " -b hello.wasm -t hello.wat",
       "  " + color.cyan("asc") + " hello1" + extension.ext + " hello2" + extension.ext + " -b -O > hello.wasm",
+      "  " + color.cyan("asc") + " --config asconfig.json --target release",
       "",
       color.white("OPTIONS"),
     ].concat(
@@ -283,18 +347,9 @@ exports.main = function main(argv, options, callback) {
     if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
   }
 
-  // Set up base directory
-  const baseDir = path.normalize(opts.baseDir || ".");
-
   // Load additional options from asconfig.json
-  let asconfigPath = optionsUtil.resolvePath(opts.config || "asconfig.json", baseDir);
-  let asconfigFile = path.basename(asconfigPath);
-  let asconfigDir = path.dirname(asconfigPath);
-  let asconfig = getAsconfig(asconfigFile, asconfigDir, readFile);
-
   const seenAsconfig = new Set();
   seenAsconfig.add(asconfigPath);
-
   const target = opts.target || "release";
   while (asconfig) {
     // Merge target first
@@ -348,7 +403,8 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Set up options
-  const compilerOptions = assemblyscript.newOptions();
+  var program;
+  const compilerOptions = __pin(assemblyscript.newOptions());
   assemblyscript.setTarget(compilerOptions, 0);
   assemblyscript.setNoAssert(compilerOptions, opts.noAssert);
   assemblyscript.setExportMemory(compilerOptions, !opts.noExportMemory);
@@ -365,6 +421,21 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setNoUnsafe(compilerOptions, opts.noUnsafe);
   assemblyscript.setPedantic(compilerOptions, opts.pedantic);
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
+  assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
+  if (!opts.stackSize && opts.runtime == "incremental") {
+    opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
+  }
+  assemblyscript.setStackSize(compilerOptions, opts.stackSize);
+
+  // Instrument callback to perform GC
+  callback = (function(callback) {
+    return function wrappedCallback(err) {
+      __unpin(compilerOptions);
+      if (program) __unpin(program);
+      __collect();
+      return callback(err);
+    };
+  })(callback);
 
   // Add or override aliases if specified
   if (opts.use) {
@@ -376,7 +447,12 @@ exports.main = function main(argv, options, callback) {
       let alias = part.substring(0, p).trim();
       let name = part.substring(p + 1).trim();
       if (!alias.length) return callback(Error("Global alias '" + part + "' is invalid."));
-      assemblyscript.setGlobalAlias(compilerOptions, alias, name);
+      {
+        let aliasPtr = __pin(__newString(alias));
+        let namePtr = __newString(name);
+        assemblyscript.setGlobalAlias(compilerOptions, aliasPtr, namePtr);
+        __unpin(aliasPtr);
+      }
     }
   }
 
@@ -417,7 +493,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
 
   // Initialize the program
-  const program = assemblyscript.newProgram(compilerOptions);
+  program = __pin(assemblyscript.newProgram(compilerOptions));
 
   // Set up transforms
   const transforms = [];
@@ -474,7 +550,10 @@ exports.main = function main(argv, options, callback) {
     if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(program, exports.libraryFiles[libPath], exports.libraryPrefix + libPath + extension.ext, false);
+      let textPtr = __pin(__newString(exports.libraryFiles[libPath]));
+      let pathPtr = __newString(exports.libraryPrefix + libPath + extension.ext);
+      assemblyscript.parse(program, textPtr, pathPtr, false);
+      __unpin(textPtr);
     });
   });
   let customLibDirs = [];
@@ -499,7 +578,10 @@ exports.main = function main(argv, options, callback) {
         stats.parseCount++;
         exports.libraryFiles[libPath.replace(extension.re, "")] = libText;
         stats.parseTime += measure(() => {
-          assemblyscript.parse(program, libText, exports.libraryPrefix + libPath, false);
+          let textPtr = __pin(__newString(libText));
+          let pathPtr = __newString(exports.libraryPrefix + libPath);
+          assemblyscript.parse(program, textPtr, pathPtr, false);
+          __unpin(textPtr);
         });
       }
     }
@@ -610,18 +692,25 @@ exports.main = function main(argv, options, callback) {
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
     var internalPath;
-    while ((internalPath = assemblyscript.nextFile(program)) != null) {
+    while ((internalPath = __getString(assemblyscript.nextFile(program)))) {
       let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
       if (file) {
         stats.parseCount++;
         stats.parseTime += measure(() => {
-          assemblyscript.parse(program, file.sourceText, file.sourcePath, false);
+          let textPtr = __pin(__newString(file.sourceText));
+          let pathPtr = __newString(file.sourcePath);
+          assemblyscript.parse(program, textPtr, pathPtr, false);
+          __unpin(textPtr);
         });
       } else {
-        assemblyscript.parse(program, null, internalPath + extension.ext, false);
+        stats.parseTime += measure(() => {
+          let textPtr = __newString(null); // no need to pin
+          let pathPtr = __newString(internalPath + extension.ext);
+          assemblyscript.parse(program, textPtr, pathPtr, false);
+        });
       }
     }
-    var numErrors = checkDiagnostics(program, stderr);
+    var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
     if (numErrors) {
       const err = Error(numErrors + " parse error(s)");
       err.stack = err.message; // omit stack
@@ -629,7 +718,7 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  // Include runtime template before entry files so its setup runs first
+  // Include runtime before entry files so its setup runs first
   {
     let runtimeName = String(opts.runtime);
     let runtimePath = "rt/index-" + runtimeName;
@@ -637,13 +726,16 @@ exports.main = function main(argv, options, callback) {
     if (runtimeText == null) {
       runtimePath = runtimeName;
       runtimeText = readFile(runtimePath + extension.ext, baseDir);
-      if (runtimeText == null) return callback(Error("Runtime '" + runtimeName + "' not found."));
+      if (runtimeText == null) return callback(Error(`Runtime '${runtimeName}' not found.`));
     } else {
       runtimePath = "~lib/" + runtimePath;
     }
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(program, runtimeText, runtimePath + extension.ext, true);
+      let textPtr = __pin(__newString(runtimeText));
+      let pathPtr = __newString(runtimePath + extension.ext);
+      assemblyscript.parse(program, textPtr, pathPtr, true);
+      __unpin(textPtr);
     });
   }
 
@@ -668,7 +760,10 @@ exports.main = function main(argv, options, callback) {
 
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(program, sourceText, sourcePath, true);
+      let textPtr = __pin(__newString(sourceText));
+      let pathPtr = __newString(sourcePath);
+      assemblyscript.parse(program, textPtr, pathPtr, true);
+      __unpin(textPtr);
     });
   }
 
@@ -713,8 +808,23 @@ exports.main = function main(argv, options, callback) {
   stats.compileCount++;
   stats.compileTime += measure(() => {
     module = assemblyscript.compile(program);
+    // From here on we are going to use Binaryen.js, except that we keep pass
+    // order as defined in the compiler.
+    if (typeof module === "number") { // Wasm
+      const original = assemblyscript.Module.wrap(module);
+      module = binaryen.wrapModule(original.ref);
+      module.optimize = function(...args) {
+        original.optimize(...args);
+      };
+    } else { // JS
+      const original = module;
+      module = binaryen.wrapModule(module.ref);
+      module.optimize = function(...args) {
+        original.optimize(...args);
+      };
+    }
   });
-  var numErrors = checkDiagnostics(program, stderr);
+  var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
   if (numErrors) {
     if (module) module.dispose();
     const err = Error(numErrors + " compile error(s)");
@@ -759,7 +869,6 @@ exports.main = function main(argv, options, callback) {
 
   // Optimize the module
   const debugInfo = opts.debug;
-  const usesARC = opts.runtime == "half" || opts.runtime == "full";
   const converge = opts.converge;
   const runPasses = [];
   if (opts.runPasses) {
@@ -776,17 +885,17 @@ exports.main = function main(argv, options, callback) {
 
   stats.optimizeTime += measure(() => {
     stats.optimizeCount++;
-    module.optimize(optimizeLevel, shrinkLevel, debugInfo, usesARC);
+    module.optimize(optimizeLevel, shrinkLevel, debugInfo);
     module.runPasses(runPasses);
     if (converge) {
-      let last = module.toBinary();
+      let last = module.emitBinary();
       do {
         stats.optimizeCount++;
-        module.optimize(optimizeLevel, shrinkLevel, debugInfo, usesARC);
+        module.optimize(optimizeLevel, shrinkLevel, debugInfo);
         module.runPasses(runPasses);
-        let next = module.toBinary();
-        if (next.output.length >= last.output.length) {
-          if (next.output.length > last.output.length) {
+        let next = module.emitBinary();
+        if (next.length >= last.length) {
+          if (next.length > last.length) {
             stderr.write("Last converge was suboptimial." + EOL);
           }
           break;
@@ -827,24 +936,24 @@ exports.main = function main(argv, options, callback) {
       let wasm;
       stats.emitCount++;
       stats.emitTime += measure(() => {
-        wasm = module.toBinary(sourceMapURL);
+        wasm = module.emitBinary(sourceMapURL);
       });
 
       if (opts.binaryFile.length) {
-        writeFile(opts.binaryFile, wasm.output, baseDir);
+        writeFile(opts.binaryFile, wasm.binary, baseDir);
       } else {
-        writeStdout(wasm.output);
+        writeStdout(wasm.binary);
         hasStdout = true;
       }
 
       // Post-process source map
-      if (wasm.sourceMap != null) {
+      if (wasm.sourceMap != "") {
         if (opts.binaryFile.length) {
           let map = JSON.parse(wasm.sourceMap);
           map.sourceRoot = "./" + basename;
           let contents = [];
           map.sources.forEach((name, index) => {
-            let text = assemblyscript.getSource(program, name.replace(extension.re, ""));
+            let text = assemblyscript.getSource(program, __newString(name.replace(extension.re, "")));
             if (text == null) return callback(Error("Source of file '" + name + "' not found."));
             contents[index] = text;
           });
@@ -865,16 +974,20 @@ exports.main = function main(argv, options, callback) {
       if (opts.textFile != null && opts.textFile.length) {
         // use superset text format when extension is `.wast`.
         // Otherwise use official stack IR format (wat).
-        let watFormat = !opts.textFile.endsWith('.wast');
+        let wastFormat = opts.textFile.endsWith('.wast');
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          out = module.toText(watFormat);
+          if (wastFormat) {
+            out = module.emitText();
+          } else {
+            out = module.emitStackIR(true);
+          }
         });
         writeFile(opts.textFile, out, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          out = module.toText();
+          out = module.emitStackIR(true);
         });
         writeStdout(out);
       }
@@ -888,13 +1001,13 @@ exports.main = function main(argv, options, callback) {
         stats.emitTime += measure(() => {
           idl = assemblyscript.buildIDL(program);
         });
-        writeFile(opts.idlFile, idl, baseDir);
+        writeFile(opts.idlFile, __getString(idl), baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
           idl = assemblyscript.buildIDL(program);
         });
-        writeStdout(idl);
+        writeStdout(__getString(idl));
         hasStdout = true;
       }
     }
@@ -907,13 +1020,13 @@ exports.main = function main(argv, options, callback) {
         stats.emitTime += measure(() => {
           tsd = assemblyscript.buildTSD(program);
         });
-        writeFile(opts.tsdFile, tsd, baseDir);
+        writeFile(opts.tsdFile, __getString(tsd), baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
           tsd = assemblyscript.buildTSD(program);
         });
-        writeStdout(tsd);
+        writeStdout(__getString(tsd));
         hasStdout = true;
       }
     }
@@ -924,13 +1037,13 @@ exports.main = function main(argv, options, callback) {
       if (opts.jsFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          js = module.toAsmjs();
+          js = module.emitAsmjs();
         });
         writeFile(opts.jsFile, js, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          js = module.toAsmjs();
+          js = module.emitAsmjs();
         });
         writeStdout(js);
       }
@@ -1050,18 +1163,48 @@ function getAsconfig(file, baseDir, readFile) {
 exports.getAsconfig = getAsconfig;
 
 /** Checks diagnostics emitted so far for errors. */
-function checkDiagnostics(program, stderr) {
-  var diagnostic;
+function checkDiagnostics(program, stderr, reportDiagnostic) {
   var numErrors = 0;
-  while ((diagnostic = assemblyscript.nextDiagnostic(program)) != null) {
+  do {
+    let diagnosticPtr = assemblyscript.nextDiagnostic(program);
+    if (!diagnosticPtr) break;
+    __pin(diagnosticPtr);
     if (stderr) {
       stderr.write(
-        assemblyscript.formatDiagnostic(diagnostic, stderr.isTTY, true) +
+        __getString(assemblyscript.formatDiagnostic(diagnosticPtr, stderr.isTTY, true)) +
         EOL + EOL
       );
     }
-    if (assemblyscript.isError(diagnostic)) ++numErrors;
-  }
+    if (reportDiagnostic) {
+      const diagnostic = __wrap(diagnosticPtr, assemblyscript.DiagnosticMessage);
+      const range = __wrap(diagnostic.range, assemblyscript.Range);
+      const relatedRange = __wrap(diagnostic.relatedRange, assemblyscript.Range);
+      const rangeSource = range ? __wrap(range.source, assemblyscript.Source) : null;
+      const relatedRangeSource = relatedRange ? __wrap(relatedRange.source, assemblyscript.Source) : null;
+
+      reportDiagnostic({
+        message: __getString(diagnostic.message),
+        code: diagnostic.code,
+        category: diagnostic.category,
+        range: range ? {
+          start: range.start,
+          end: range.end,
+          source: rangeSource ? {
+            normalizedPath: __getString(rangeSource.normalizedPath)
+          } : null,
+        } : null,
+        relatedRange: relatedRange ? {
+          start: relatedRange.start,
+          end: relatedRange.end,
+          source: relatedRangeSource ? {
+            normalizedPath: __getString(relatedRangeSource.normalizedPath)
+          } : null
+        } : null
+      });
+    }
+    if (assemblyscript.isError(diagnosticPtr)) ++numErrors;
+    __unpin(diagnosticPtr);
+  } while (true);
   return numErrors;
 }
 
@@ -1127,7 +1270,8 @@ function printStats(stats, output) {
     "Emit       : " + format(stats.emitTime, stats.emitCount),
     "Validate   : " + format(stats.validateTime, stats.validateCount),
     "Optimize   : " + format(stats.optimizeTime, stats.optimizeCount),
-    "Transform  : " + format(stats.transformTime, stats.transformCount)
+    "Transform  : " + format(stats.transformTime, stats.transformCount),
+    ""
   ].join(EOL) + EOL);
 }
 

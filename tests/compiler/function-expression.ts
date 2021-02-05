@@ -82,3 +82,14 @@ function testField(): void {
   assert(fieldInst.fieldFunc()(1) == 25);
 }
 testField();
+
+export function semanticallyAnonymous(): void {
+  function fnDecl(val: i32): i32 {
+    return val;
+  }
+  const exprDecl = function fnDecl(val: i64): i64 { // must not shadow
+    return val;
+  };
+  assert(fnDecl != exprDecl);
+}
+semanticallyAnonymous();

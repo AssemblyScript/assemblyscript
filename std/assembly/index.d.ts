@@ -60,6 +60,8 @@ declare const ASC_OPTIMIZE_LEVEL: i32;
 declare const ASC_SHRINK_LEVEL: i32;
 /** Provided lowMemoryLimit option. */
 declare const ASC_LOW_MEMORY_LIMIT: i32;
+/** Provided noExportRuntime option. */
+declare const ASC_NO_EXPORT_RUNTIME: i32;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
 /** Whether the mutable globals feature is enabled. */
@@ -138,6 +140,10 @@ declare function unreachable(): never;
 declare const NaN: f32 | f64;
 /** Positive infinity as a 32-bit or 64-bit float depending on context. */
 declare const Infinity: f32 | f64;
+/** Data end offset. */
+declare const __data_end: usize;
+/** Stack pointer offset. */
+declare var __stack_pointer: usize;
 /** Heap base offset. */
 declare const __heap_base: usize;
 /** Determines the byte size of the specified underlying core type. Compiles to a constant. */
@@ -1328,14 +1334,6 @@ declare namespace heap {
   export function realloc(ptr: usize, size: usize): usize;
   /** Frees a chunk of memory. Does hardly anything (most recent block only) with the stub/none runtime. */
   export function free(ptr: usize): void;
-  /** Dangerously resets the entire heap. Specific to the stub/none runtime. */
-  export function reset(): void;
-}
-
-/** Garbage collector interface. */
-declare namespace gc {
-  /** Performs a full garbage collection cycle. */
-  export function collect(): void;
 }
 
 /** Table operations. */
@@ -1389,52 +1387,52 @@ declare class DataView {
   /** Constructs a new `DataView` with the given properties */
   constructor(buffer: ArrayBuffer, byteOffset?: i32, byteLength?: i32);
   /** The `getFloat32()` method gets a signed 32-bit float (float) at the specified byte offset from the start of the `DataView`. */
-  getFloat32(byteOffset: i32, littleEndian?: boolean): f32;
+  getFloat32(byteOffset: i32, littleEndian?: bool): f32;
   /** The `getFloat64()` method gets a signed 64-bit float (double) at the specified byte offset from the start of the `DataView`. */
-  getFloat64(byteOffset: i32, littleEndian?: boolean): f64;
+  getFloat64(byteOffset: i32, littleEndian?: bool): f64;
   /** The `getInt8()` method gets a signed 8-bit integer (byte) at the specified byte offset from the start of the `DataView`. */
   getInt8(byteOffset: i32): i8;
   /** The `getInt16()` method gets a signed 16-bit integer (short) at the specified byte offset from the start of the `DataView`. */
-  getInt16(byteOffset: i32, littleEndian?: boolean): i16;
+  getInt16(byteOffset: i32, littleEndian?: bool): i16;
   /** The `getInt32()` method gets a signed 32-bit integer (long) at the specified byte offset from the start of the `DataView`. */
-  getInt32(byteOffset: i32, littleEndian?: boolean): i32;
+  getInt32(byteOffset: i32, littleEndian?: bool): i32;
   /** The `getInt64()` method gets a signed 64-bit integer (long long) at the specified byte offset from the start of the `DataView`. */
-  getInt64(byteOffset: i32, littleEndian?: boolean): i64;
+  getInt64(byteOffset: i32, littleEndian?: bool): i64;
   /** The `getUint8()` method gets an unsigned 8-bit integer (unsigned byte) at the specified byte offset from the start of the `DataView`. */
   getUint8(byteOffset: i32): u8;
   /** The `getUint16()` method gets an unsigned 16-bit integer (unsigned short) at the specified byte offset from the start of the `DataView`. */
-  getUint16(byteOffset: i32, littleEndian?: boolean): u16;
+  getUint16(byteOffset: i32, littleEndian?: bool): u16;
   /** The `getUint32()` method gets an unsigned 32-bit integer (unsigned long) at the specified byte offset from the start of the `DataView`. */
-  getUint32(byteOffset: i32, littleEndian?: boolean): u32;
+  getUint32(byteOffset: i32, littleEndian?: bool): u32;
   /** The `getUint64()` method gets an unsigned 64-bit integer (unsigned long long) at the specified byte offset from the start of the `DataView`. */
-  getUint64(byteOffset: i32, littleEndian?: boolean): u64;
+  getUint64(byteOffset: i32, littleEndian?: bool): u64;
   /** The `setFloat32()` method stores a signed 32-bit float (float) value at the specified byte offset from the start of the `DataView`. */
-  setFloat32(byteOffset: i32, value: f32, littleEndian?: boolean): void;
+  setFloat32(byteOffset: i32, value: f32, littleEndian?: bool): void;
   /** The `setFloat64()` method stores a signed 64-bit float (double) value at the specified byte offset from the start of the `DataView`. */
-  setFloat64(byteOffset: i32, value: f64, littleEndian?: boolean): void;
+  setFloat64(byteOffset: i32, value: f64, littleEndian?: bool): void;
   /** The `setInt8()` method stores a signed 8-bit integer (byte) value at the specified byte offset from the start of the `DataView`. */
   setInt8(byteOffset: i32, value: i8): void;
   /** The `setInt16()` method stores a signed 16-bit integer (short) value at the specified byte offset from the start of the `DataView`. */
-  setInt16(byteOffset: i32, value: i16, littleEndian?: boolean): void;
+  setInt16(byteOffset: i32, value: i16, littleEndian?: bool): void;
   /** The `setInt32()` method stores a signed 32-bit integer (long) value at the specified byte offset from the start of the `DataView`. */
-  setInt32(byteOffset: i32, value: i32, littleEndian?: boolean): void;
+  setInt32(byteOffset: i32, value: i32, littleEndian?: bool): void;
   /** The `setInt64()` method stores a signed 64-bit integer (long long) value at the specified byte offset from the start of the `DataView`. */
-  setInt64(byteOffset: i32, value: i64, littleEndian?: boolean): void;
+  setInt64(byteOffset: i32, value: i64, littleEndian?: bool): void;
   /** The `setUint8()` method stores an unsigned 8-bit integer (byte) value at the specified byte offset from the start of the `DataView`. */
   setUint8(byteOffset: i32, value: u8): void;
   /** The `setUint16()` method stores an unsigned 16-bit integer (unsigned short) value at the specified byte offset from the start of the `DataView`. */
-  setUint16(byteOffset: i32, value: u16, littleEndian?: boolean): void;
+  setUint16(byteOffset: i32, value: u16, littleEndian?: bool): void;
   /** The `setUint32()` method stores an unsigned 32-bit integer (unsigned long) value at the specified byte offset from the start of the `DataView`. */
-  setUint32(byteOffset: i32, value: u32, littleEndian?: boolean): void;
+  setUint32(byteOffset: i32, value: u32, littleEndian?: bool): void;
   /** The `setUint64()` method stores an unsigned 64-bit integer (unsigned long long) value at the specified byte offset from the start of the `DataView`. */
-  setUint64(byteOffset: i32, value: u64, littleEndian?: boolean): void;
+  setUint64(byteOffset: i32, value: u64, littleEndian?: bool): void;
   /** Returns a string representation of DataView. */
   toString(): string;
 }
 
 interface ArrayLike<T> {
+  [key: number]: T;
   length: i32;
-  // [key: number]: T;
 }
 
 /** Interface for a typed view on an array buffer. */
@@ -1462,6 +1460,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   readonly byteLength: i32;
   /** The length (in elements). */
   readonly length: i32;
+  /** Returns value using relative indexing. Index may be negative */
+  at(index: i32): T;
   /** The includes() method determines whether a typed array includes a certain element, returning true or false as appropriate. */
   includes(searchElement: T, fromIndex?: i32): bool;
   /** The indexOf() method returns the first index at which a given element can be found in the typed array, or -1 if it is not present. */
@@ -1572,6 +1572,7 @@ declare class Array<T> {
   /** Constructs a new array. */
   constructor(capacity?: i32);
 
+  at(index: i32): T;
   fill(value: T, start?: i32, end?: i32): this;
   every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   findIndex(predicate: (element: T, index: i32, array?: Array<T>) => bool): i32;
@@ -1608,6 +1609,7 @@ declare class StaticArray<T> {
   static slice<T>(source: StaticArray<T>, start?: i32, end?: i32): StaticArray<T>;
   readonly length: i32;
   constructor(length?: i32);
+  at(index: i32): T;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
@@ -1624,6 +1626,7 @@ declare class String {
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
   readonly length: i32;
+  at(index: i32): string;
   charAt(index: i32): string;
   charCodeAt(index: i32): i32;
   codePointAt(index: i32): i32;
@@ -1929,6 +1932,73 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 /** Environmental seeding function. */
 declare function seed(): f64;
 
+/** Node-like process on top of WASI. */
+declare namespace process {
+  /** String representing the CPU architecture for which the binary was compiled. Either `wasm32` or `wasm64`. */
+  export const arch: string;
+  /** String representing the operating system platform for which the binary was compiled. Always `wasm`. */
+  export const platform: string;
+  /** Array of command line arguments passed to the binary upon instantiation. */
+  export const argv: string[];
+  /** Map of variables in the binary's user environment. */
+  export const env: Map<string,string>;
+  /** Process exit code to use when the process exits gracefully. Defaults to `0`. */
+  export var exitCode: i32;
+  /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
+  export function exit(code?: i32): void;
+  /** Stream connected to `stdin` (fd `0`). */
+  export const stdin: ReadableStream;
+  /** Stream connected to `stdout` (fd `1`). */
+  export const stdout: WritableStream;
+  /** Stream connected to `stderr` (fd `2`). */
+  export const stderr: WritableStream;
+  /** Obtains the system's current time of day, in milliseconds since Unix epoch. */
+  export function time(): i64;
+  /** Obtains the system's monotonic high resolution time, in nanoseconds since an arbitrary time in the past. */
+  export function hrtime(): u64;
+
+  interface Stream {
+    /** Closes the stream. Throws if already closed or if the stream cannot be closed. */
+    close(): void;
+  }
+  interface ReadableStream extends Stream {
+    /** Reads available data from the stream, into `buffer` at offset `offset`, returning the number of bytes read. */
+    read(buffer: ArrayBuffer, offset?: isize): i32;
+  }
+  interface WritableStream extends Stream {
+    /** Writes string or buffer to the stream. */
+    write<T extends string | ArrayBuffer>(data: T): void;
+  }
+}
+
+/** Browser-like console on top of WASI. */
+declare namespace console {
+  /** Logs `message` to console if `assertion` is false-ish. */
+  export function assert<T>(assertion: T, message: string): void;
+  /** Outputs `message` to the console. */
+  export function log(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Debug:". */
+  export function debug(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Info:". */
+  export function info(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Warning:". */
+  export function warn(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Error:". */
+  export function error(message: string): void;
+  /** Starts a new timer using the specified `label`. */
+  export function time(label: string): void;
+  /** Logs the current value of a timer previously started with `console.time`. */
+  export function timeLog(label: string): void;
+  /** Logs the current value of a timer previously started with `console.time` and discards the timer. */
+  export function timeEnd(label: string): void;
+}
+
+/** Browser-like crypto utilities on top of WASI. */
+declare namespace crypto {
+  /** Fills `array` with cryptographically strong random values. */
+  export function getRandomValues(array: Uint8Array): void;
+}
+
 // Decorators
 
 interface TypedPropertyDescriptor<T> {
@@ -1994,6 +2064,3 @@ declare function external(...args: any[]): any;
 
 /** Annotates a global for lazy compilation. */
 declare function lazy(...args: any[]): any;
-
-/** Annotates a function as the explicit start function. */
-declare function start(...args: any[]): any;
