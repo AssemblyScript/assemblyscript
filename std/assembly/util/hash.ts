@@ -97,7 +97,7 @@ function hashStr(key: string): u32 {
   var end = len + pos - 4;
   while (pos <= end) {
     h += load<u32>(pos) * XXH32_P3;
-    h  = rotl(h, 17) * XXH32_P4;
+    h = rotl(h, 17) * XXH32_P4;
     pos += 4;
   }
 
