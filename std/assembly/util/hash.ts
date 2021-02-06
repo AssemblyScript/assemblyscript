@@ -14,7 +14,7 @@ export function HASH<T>(key: T): u64 {
   return unreachable();
 }
 
-// XXHash 32-bit as a starting point, see: https://cyan4973.github.io/xxHash
+// XXHash 64-bit, see: https://cyan4973.github.io/xxHash
 
 // primes
 // @ts-ignore: decorator
