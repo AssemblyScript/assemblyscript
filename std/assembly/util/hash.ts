@@ -76,8 +76,10 @@ function hashStr(key: string): u64 {
   if (key === null) {
     return XXH64_SEED;
   }
+
   var len = key.length << 1;
   var h: u64 = 0;
+  let i = 0;
 
   if (len >= 32) {
     let s1 = XXH64_SEED + XXH64_P1 + XXH64_P2;
@@ -86,9 +88,7 @@ function hashStr(key: string): u64 {
     let s4 = XXH64_SEED - XXH64_P1;
     let ln = len;
 
-    let i = 0;
     let n = len - 32;
-
     while (i <= n) {
       s1 = mix1(s1, load<u64>(changetype<usize>(key) + i    ));
       s2 = mix1(s2, load<u64>(changetype<usize>(key) + i,  8));
@@ -108,15 +108,11 @@ function hashStr(key: string): u64 {
     h = mix2(h, s3);
     h = mix2(h, s4);
     h += <u64>ln;
-
-    len -= i;
   } else {
     h = <u64>len + XXH64_SEED + XXH64_P5;
   }
 
-  var i = 0;
   var n = len - 8;
-
   while (i <= n) {
     h ^= rotl(load<u64>(changetype<usize>(key) + i) * XXH64_P2, 31) * XXH64_P1;
     h  = rotl(h, 27) * XXH64_P1 + XXH64_P4;

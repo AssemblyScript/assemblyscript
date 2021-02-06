@@ -4492,11 +4492,11 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i64)
-  (local $4 i64)
+  (local $4 i32)
   (local $5 i64)
   (local $6 i64)
   (local $7 i64)
-  (local $8 i32)
+  (local $8 i64)
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
@@ -4538,6 +4538,8 @@
    local.set $2
    i64.const 0
    local.set $3
+   i32.const 0
+   local.set $4
    local.get $2
    i32.const 32
    i32.ge_s
@@ -4547,55 +4549,36 @@
     i64.add
     i64.const -4417276706812531889
     i64.add
-    local.set $4
+    local.set $5
     i64.const 0
     i64.const -4417276706812531889
     i64.add
-    local.set $5
-    i64.const 0
     local.set $6
+    i64.const 0
+    local.set $7
     i64.const 0
     i64.const -7046029288634856825
     i64.sub
-    local.set $7
-    local.get $2
     local.set $8
-    i32.const 0
+    local.get $2
     local.set $9
     local.get $2
     i32.const 32
     i32.sub
     local.set $10
     loop $while-continue|0
-     local.get $9
+     local.get $4
      local.get $10
      i32.le_s
      local.set $11
      local.get $11
      if
-      local.get $4
-      local.set $13
-      local.get $1
-      local.get $9
-      i32.add
-      i64.load
-      local.set $12
-      local.get $13
-      local.get $12
-      i64.const -4417276706812531889
-      i64.mul
-      i64.add
-      i64.const 31
-      i64.rotl
-      i64.const -7046029288634856825
-      i64.mul
-      local.set $4
       local.get $5
       local.set $13
       local.get $1
-      local.get $9
+      local.get $4
       i32.add
-      i64.load offset=8
+      i64.load
       local.set $12
       local.get $13
       local.get $12
@@ -4610,9 +4593,9 @@
       local.get $6
       local.set $13
       local.get $1
-      local.get $9
+      local.get $4
       i32.add
-      i64.load offset=16
+      i64.load offset=8
       local.set $12
       local.get $13
       local.get $12
@@ -4627,7 +4610,24 @@
       local.get $7
       local.set $13
       local.get $1
-      local.get $9
+      local.get $4
+      i32.add
+      i64.load offset=16
+      local.set $12
+      local.get $13
+      local.get $12
+      i64.const -4417276706812531889
+      i64.mul
+      i64.add
+      i64.const 31
+      i64.rotl
+      i64.const -7046029288634856825
+      i64.mul
+      local.set $7
+      local.get $8
+      local.set $13
+      local.get $1
+      local.get $4
       i32.add
       i64.load offset=24
       local.set $12
@@ -4640,34 +4640,30 @@
       i64.rotl
       i64.const -7046029288634856825
       i64.mul
-      local.set $7
-      local.get $9
+      local.set $8
+      local.get $4
       i32.const 32
       i32.add
-      local.set $9
+      local.set $4
       br $while-continue|0
      end
     end
-    local.get $4
+    local.get $5
     i64.const 1
     i64.rotl
-    local.get $5
+    local.get $6
     i64.const 7
     i64.rotl
     i64.add
-    local.get $6
+    local.get $7
     i64.const 12
     i64.rotl
     i64.add
-    local.get $7
+    local.get $8
     i64.const 18
     i64.rotl
     i64.add
     local.set $3
-    local.get $4
-    i64.const -4417276706812531889
-    i64.mul
-    local.set $4
     local.get $5
     i64.const -4417276706812531889
     i64.mul
@@ -4680,22 +4676,10 @@
     i64.const -4417276706812531889
     i64.mul
     local.set $7
-    local.get $3
-    local.set $13
-    local.get $4
-    local.set $12
-    local.get $13
-    local.get $12
-    i64.const 31
-    i64.rotl
-    i64.const -7046029288634856825
+    local.get $8
+    i64.const -4417276706812531889
     i64.mul
-    i64.xor
-    i64.const -7046029288634856825
-    i64.mul
-    i64.const -8796714831421723037
-    i64.add
-    local.set $3
+    local.set $8
     local.get $3
     local.set $13
     local.get $5
@@ -4745,14 +4729,26 @@
     i64.add
     local.set $3
     local.get $3
+    local.set $13
     local.get $8
+    local.set $12
+    local.get $13
+    local.get $12
+    i64.const 31
+    i64.rotl
+    i64.const -7046029288634856825
+    i64.mul
+    i64.xor
+    i64.const -7046029288634856825
+    i64.mul
+    i64.const -8796714831421723037
+    i64.add
+    local.set $3
+    local.get $3
+    local.get $9
     i64.extend_i32_s
     i64.add
     local.set $3
-    local.get $2
-    local.get $9
-    i32.sub
-    local.set $2
    else
     local.get $2
     i64.extend_i32_s
@@ -4762,22 +4758,20 @@
     i64.add
     local.set $3
    end
-   i32.const 0
-   local.set $10
    local.get $2
    i32.const 8
    i32.sub
-   local.set $9
+   local.set $10
    loop $while-continue|1
+    local.get $4
     local.get $10
-    local.get $9
     i32.le_s
-    local.set $8
-    local.get $8
+    local.set $9
+    local.get $9
     if
      local.get $3
      local.get $1
-     local.get $10
+     local.get $4
      i32.add
      i64.load
      i64.const -4417276706812531889
@@ -4796,14 +4790,14 @@
      i64.const -8796714831421723037
      i64.add
      local.set $3
-     local.get $10
+     local.get $4
      i32.const 8
      i32.add
-     local.set $10
+     local.set $4
      br $while-continue|1
     end
    end
-   local.get $10
+   local.get $4
    i32.const 4
    i32.add
    local.get $2
@@ -4811,7 +4805,7 @@
    if
     local.get $3
     local.get $1
-    local.get $10
+    local.get $4
     i32.add
     i64.load32_u
     i64.const -7046029288634856825
@@ -4826,21 +4820,21 @@
     i64.const 1609587929392839161
     i64.add
     local.set $3
-    local.get $10
+    local.get $4
     i32.const 4
     i32.add
-    local.set $10
+    local.set $4
    end
    loop $while-continue|2
-    local.get $10
+    local.get $4
     local.get $2
     i32.lt_s
-    local.set $8
-    local.get $8
+    local.set $9
+    local.get $9
     if
      local.get $3
      local.get $1
-     local.get $10
+     local.get $4
      i32.add
      i64.load8_u
      i64.const 2870177450012600261
@@ -4853,10 +4847,10 @@
      i64.const -7046029288634856825
      i64.mul
      local.set $3
-     local.get $10
+     local.get $4
      i32.const 1
      i32.add
-     local.set $10
+     local.set $4
      br $while-continue|2
     end
    end
