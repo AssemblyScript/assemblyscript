@@ -553,213 +553,6 @@
    unreachable
   end
   local.get $1
-<<<<<<< HEAD
- )
- (func $~lib/util/hash/HASH<~lib/string/String> (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  local.get $0
-  if (result i32)
-   local.get $0
-   i32.const 20
-   i32.sub
-   i32.load offset=16
-   i32.const 1
-   i32.shr_u
-   i32.const 1
-   i32.shl
-   local.tee $3
-   i32.const 16
-   i32.ge_s
-   if
-    i32.const 606290984
-    local.set $2
-    i32.const -2048144777
-    local.set $4
-    i32.const 1640531535
-    local.set $5
-    local.get $3
-    i32.const 16
-    i32.sub
-    local.set $7
-    loop $while-continue|0
-     local.get $1
-     local.get $7
-     i32.le_s
-     if
-      local.get $2
-      local.get $0
-      local.get $1
-      i32.add
-      local.tee $6
-      i32.load
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
-      local.set $2
-      local.get $4
-      local.get $6
-      i32.load offset=4
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
-      local.set $4
-      local.get $8
-      local.get $6
-      i32.load offset=8
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
-      local.set $8
-      local.get $5
-      local.get $6
-      i32.load offset=12
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
-      local.set $5
-      local.get $1
-      i32.const 16
-      i32.add
-      local.set $1
-      br $while-continue|0
-     end
-    end
-    local.get $3
-    local.get $2
-    i32.const 1
-    i32.rotl
-    local.get $4
-    i32.const 7
-    i32.rotl
-    i32.add
-    local.get $8
-    i32.const 12
-    i32.rotl
-    i32.add
-    local.get $5
-    i32.const 18
-    i32.rotl
-    i32.add
-    i32.add
-    local.set $2
-    local.get $7
-    local.get $1
-    i32.sub
-    local.set $3
-   else
-    local.get $3
-    i32.const 374761393
-    i32.add
-    local.set $2
-   end
-   i32.const 0
-   local.set $1
-   local.get $3
-   i32.const 4
-   i32.sub
-   local.set $3
-   loop $while-continue|1
-    local.get $1
-    local.get $3
-    i32.le_s
-    if
-     local.get $2
-     local.get $0
-     local.get $1
-     i32.add
-     i32.load
-     i32.const -1028477379
-     i32.mul
-     i32.add
-     i32.const 17
-     i32.rotl
-     i32.const 668265263
-     i32.mul
-     local.set $2
-     local.get $1
-     i32.const 4
-     i32.add
-     local.set $1
-     br $while-continue|1
-    end
-   end
-   loop $while-continue|2
-    local.get $1
-    local.get $3
-    i32.lt_s
-    if
-     local.get $2
-     local.get $0
-     local.get $1
-     i32.add
-     i32.load8_u
-     i32.const 374761393
-     i32.mul
-     i32.add
-     i32.const 11
-     i32.rotl
-     i32.const -1640531535
-     i32.mul
-     local.set $2
-     local.get $1
-     i32.const 1
-     i32.add
-     local.set $1
-     br $while-continue|2
-    end
-   end
-   local.get $2
-   local.get $2
-   i32.const 15
-   i32.shr_u
-   i32.xor
-   i32.const -2048144777
-   i32.mul
-   local.tee $0
-   local.get $0
-   i32.const 13
-   i32.shr_u
-   i32.xor
-   i32.const -1028477379
-   i32.mul
-   local.tee $0
-   local.get $0
-   i32.const 16
-   i32.shr_u
-   i32.xor
-  else
-   i32.const 0
-  end
- )
- (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  local.get $0
-=======
   i32.load
   local.tee $4
   i32.const 1
@@ -776,7 +569,6 @@
   local.get $1
   i32.const 4
   i32.add
->>>>>>> master
   local.get $1
   i32.load
   i32.const -4
@@ -890,55 +682,6 @@
   i32.lt_u
   i32.const 0
   local.get $3
-<<<<<<< HEAD
-  local.set $2
-  loop $while-continue|0
-   local.get $5
-   local.get $8
-   i32.ne
-   if
-    local.get $8
-    i32.load offset=8
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $2
-     local.get $8
-     i32.load
-     local.tee $7
-     i32.store
-     local.get $2
-     local.get $8
-     i32.load offset=4
-     i32.store offset=4
-     local.get $2
-     local.get $4
-     local.get $7
-     call $~lib/util/hash/HASH<~lib/string/String>
-     local.get $1
-     i32.and
-     i32.const 2
-     i32.shl
-     i32.add
-     local.tee $7
-     i32.load
-     i32.store offset=8
-     local.get $7
-     local.get $2
-     i32.store
-     local.get $2
-     i32.const 12
-     i32.add
-     local.set $2
-    end
-    local.get $8
-    i32.const 12
-    i32.add
-    local.set $8
-    br $while-continue|0
-   end
-=======
   i32.const 12
   i32.ge_u
   select
@@ -950,7 +693,6 @@
    i32.const 14
    call $~lib/builtins/abort
    unreachable
->>>>>>> master
   end
   local.get $5
   local.get $3
@@ -1041,45 +783,6 @@
   local.get $0
   local.get $3
   local.get $6
-<<<<<<< HEAD
-  i32.store offset=12
-  local.get $0
-  local.get $0
-  i32.load offset=20
-  i32.store offset=16
- )
- (func $~lib/util/hash/HASH<usize> (param $0 i32) (result i32)
-  local.get $0
-  i32.const -1028477379
-  i32.mul
-  i32.const 374761397
-  i32.add
-  i32.const 17
-  i32.rotl
-  i32.const 668265263
-  i32.mul
-  local.tee $0
-  local.get $0
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  i32.const -2048144777
-  i32.mul
-  local.tee $0
-  local.get $0
-  i32.const 13
-  i32.shr_u
-  i32.xor
-  i32.const -1028477379
-  i32.mul
-  local.tee $0
-  local.get $0
-  i32.const 16
-  i32.shr_u
-  i32.xor
- )
- (func $~lib/map/Map<usize,~lib/string/String>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-=======
   i32.const 4
   i32.shl
   i32.add
@@ -1089,7 +792,6 @@
   local.get $1
   i32.store offset=96
   local.get $0
->>>>>>> master
   local.get $0
   i32.load
   i32.const 1
@@ -1146,48 +848,6 @@
    i32.add
    i32.lt_u
    if
-<<<<<<< HEAD
-    local.get $8
-    i32.load offset=8
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $2
-     local.get $8
-     i32.load
-     local.tee $7
-     i32.store
-     local.get $2
-     local.get $8
-     i32.load offset=4
-     i32.store offset=4
-     local.get $2
-     local.get $4
-     local.get $7
-     call $~lib/util/hash/HASH<usize>
-     local.get $1
-     i32.and
-     i32.const 2
-     i32.shl
-     i32.add
-     local.tee $7
-     i32.load
-     i32.store offset=8
-     local.get $7
-     local.get $2
-     i32.store
-     local.get $2
-     i32.const 12
-     i32.add
-     local.set $2
-    end
-    local.get $8
-    i32.const 12
-    i32.add
-    local.set $8
-    br $while-continue|0
-=======
     i32.const 0
     i32.const 1472
     i32.const 388
@@ -1222,7 +882,6 @@
     i32.const 5
     call $~lib/builtins/abort
     unreachable
->>>>>>> master
    end
   end
   local.get $1
@@ -1264,13 +923,6 @@
   i32.store offset=1568
   local.get $0
   local.get $1
-<<<<<<< HEAD
-  local.get $1
-  call $~lib/util/hash/HASH<usize>
-  local.tee $3
-  call $~lib/map/Map<usize,~lib/string/String>#find
-  local.tee $2
-=======
   call $~lib/rt/tlsf/insertBlock
  )
  (func $~lib/rt/tlsf/initialize
@@ -1290,7 +942,6 @@
   else
    i32.const 0
   end
->>>>>>> master
   if
    unreachable
   end
@@ -1357,21 +1008,6 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-<<<<<<< HEAD
-  (local $3 i32)
-  (local $4 i32)
-  global.get $~lib/symbol/stringToId
-  if
-   global.get $~lib/symbol/stringToId
-   i32.const 1056
-   call $~lib/util/hash/HASH<~lib/string/String>
-   call $~lib/map/Map<~lib/string/String,usize>#find
-   if
-    global.get $~lib/symbol/stringToId
-    i32.const 1056
-    call $~lib/util/hash/HASH<~lib/string/String>
-    call $~lib/map/Map<~lib/string/String,usize>#find
-=======
   block $folding-inner0
    block $break|0
     block $case2|0
@@ -1509,7 +1145,6 @@
      br $folding-inner0
     end
     global.get $~lib/rt/itcms/iter
->>>>>>> master
     local.tee $0
     global.get $~lib/rt/itcms/toSpace
     i32.ne
@@ -1621,15 +1256,6 @@
    i32.const 0
    return
   end
-<<<<<<< HEAD
-  global.get $~lib/symbol/stringToId
-  local.tee $1
-  i32.const 1056
-  call $~lib/util/hash/HASH<~lib/string/String>
-  local.tee $3
-  call $~lib/map/Map<~lib/string/String,usize>#find
-  local.tee $2
-=======
   global.get $~lib/rt/itcms/visitCount
  )
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
@@ -1637,7 +1263,6 @@
   local.get $1
   i32.const 256
   i32.lt_u
->>>>>>> master
   if
    local.get $1
    i32.const 4
@@ -1767,14 +1392,6 @@
   (local $3 i32)
   (local $4 i32)
   local.get $1
-<<<<<<< HEAD
-  call $~lib/util/hash/HASH<usize>
-  call $~lib/map/Map<usize,~lib/string/String>#find
-  i32.const 0
-  i32.ne
- )
- (func $~lib/map/Map<usize,~lib/string/String>#get (param $0 i32) (param $1 i32) (result i32)
-=======
   i32.const 1073741820
   i32.ge_u
   if
@@ -1785,7 +1402,6 @@
    call $~lib/builtins/abort
    unreachable
   end
->>>>>>> master
   local.get $0
   i32.const 12
   local.get $1
@@ -1796,18 +1412,12 @@
   i32.const 4
   i32.sub
   local.get $1
-<<<<<<< HEAD
-  call $~lib/util/hash/HASH<usize>
-  call $~lib/map/Map<usize,~lib/string/String>#find
-  local.tee $0
-=======
   i32.const 12
   i32.le_u
   select
   local.tee $2
   call $~lib/rt/tlsf/searchBlock
   local.tee $1
->>>>>>> master
   i32.eqz
   if
    i32.const 4
@@ -2314,36 +1924,35 @@
   i32.const 0
   call $~lib/rt/itcms/__link
  )
- (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
+ (func $~lib/util/hash/HASH<usize> (param $0 i32) (result i32)
   local.get $0
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
+  i32.const -1028477379
   i32.mul
+  i32.const 374761397
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.tee $0
   local.get $0
-  i32.const 8
+  i32.const 15
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
+  i32.const -2048144777
   i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $0
   local.get $0
   i32.const 16
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $0
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
  )
  (func $~lib/map/Map<usize,~lib/string/String>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
@@ -2458,7 +2067,7 @@
      local.get $2
      local.get $6
      local.get $7
-     call $~lib/util/hash/hash32
+     call $~lib/util/hash/HASH<usize>
      local.get $1
      i32.and
      i32.const 2
@@ -2806,25 +2415,35 @@
    unreachable
   end
  )
- (func $~lib/util/hash/hashStr (param $0 i32) (result i32)
+ (func $~lib/util/hash/HASH<~lib/string/String> (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  i32.const -2128831035
-  local.set $1
-  local.get $0
-  if
+  i64.const 0
+  i64.store
+  block $~lib/util/hash/hashStr|inlined.0 (result i32)
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
+   i32.const 0
+   local.get $0
+   i32.eqz
+   br_if $~lib/util/hash/hashStr|inlined.0
+   drop
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=4
    local.get $0
    i32.const 20
    i32.sub
@@ -2833,34 +2452,187 @@
    i32.shr_u
    i32.const 1
    i32.shl
+   local.tee $3
+   i32.const 16
+   i32.ge_s
+   if
+    i32.const 606290984
+    local.set $1
+    i32.const -2048144777
+    local.set $4
+    i32.const 1640531535
+    local.set $5
+    local.get $3
+    i32.const 16
+    i32.sub
+    local.set $7
+    loop $while-continue|0
+     local.get $2
+     local.get $7
+     i32.le_s
+     if
+      local.get $1
+      local.get $0
+      local.get $2
+      i32.add
+      local.tee $6
+      i32.load
+      i32.const -2048144777
+      i32.mul
+      i32.add
+      i32.const 13
+      i32.rotl
+      i32.const -1640531535
+      i32.mul
+      local.set $1
+      local.get $4
+      local.get $6
+      i32.load offset=4
+      i32.const -2048144777
+      i32.mul
+      i32.add
+      i32.const 13
+      i32.rotl
+      i32.const -1640531535
+      i32.mul
+      local.set $4
+      local.get $8
+      local.get $6
+      i32.load offset=8
+      i32.const -2048144777
+      i32.mul
+      i32.add
+      i32.const 13
+      i32.rotl
+      i32.const -1640531535
+      i32.mul
+      local.set $8
+      local.get $5
+      local.get $6
+      i32.load offset=12
+      i32.const -2048144777
+      i32.mul
+      i32.add
+      i32.const 13
+      i32.rotl
+      i32.const -1640531535
+      i32.mul
+      local.set $5
+      local.get $2
+      i32.const 16
+      i32.add
+      local.set $2
+      br $while-continue|0
+     end
+    end
+    local.get $3
+    local.get $1
+    i32.const 1
+    i32.rotl
+    local.get $4
+    i32.const 7
+    i32.rotl
+    i32.add
+    local.get $8
+    i32.const 12
+    i32.rotl
+    i32.add
+    local.get $5
+    i32.const 18
+    i32.rotl
+    i32.add
+    i32.add
+    local.set $1
+    local.get $7
+    local.get $2
+    i32.sub
+    local.set $3
+   else
+    local.get $3
+    i32.const 374761393
+    i32.add
+    local.set $1
+   end
+   i32.const 0
+   local.set $2
+   local.get $3
+   i32.const 4
+   i32.sub
    local.set $3
-   loop $for-loop|0
+   loop $while-continue|1
     local.get $2
     local.get $3
-    i32.lt_u
+    i32.le_s
+    if
+     local.get $1
+     local.get $0
+     local.get $2
+     i32.add
+     i32.load
+     i32.const -1028477379
+     i32.mul
+     i32.add
+     i32.const 17
+     i32.rotl
+     i32.const 668265263
+     i32.mul
+     local.set $1
+     local.get $2
+     i32.const 4
+     i32.add
+     local.set $2
+     br $while-continue|1
+    end
+   end
+   loop $while-continue|2
+    local.get $2
+    local.get $3
+    i32.lt_s
     if
      local.get $1
      local.get $0
      local.get $2
      i32.add
      i32.load8_u
-     i32.xor
-     i32.const 16777619
+     i32.const 374761393
+     i32.mul
+     i32.add
+     i32.const 11
+     i32.rotl
+     i32.const -1640531535
      i32.mul
      local.set $1
      local.get $2
      i32.const 1
      i32.add
      local.set $2
-     br $for-loop|0
+     br $while-continue|2
     end
    end
+   local.get $1
+   local.get $1
+   i32.const 15
+   i32.shr_u
+   i32.xor
+   i32.const -2048144777
+   i32.mul
+   local.tee $0
+   local.get $0
+   i32.const 13
+   i32.shr_u
+   i32.xor
+   i32.const -1028477379
+   i32.mul
+   local.tee $0
+   local.get $0
+   i32.const 16
+   i32.shr_u
+   i32.xor
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3082,7 +2854,7 @@
   (local $7 i32)
   (local $8 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 20
+  i32.const 16
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
@@ -3092,9 +2864,6 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=16
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.const 1
@@ -3154,13 +2923,10 @@
      global.get $~lib/memory/__stack_pointer
      local.get $7
      i32.store offset=12
-     global.get $~lib/memory/__stack_pointer
-     local.get $7
-     i32.store offset=16
      local.get $2
      local.get $6
      local.get $7
-     call $~lib/util/hash/hashStr
+     call $~lib/util/hash/HASH<~lib/string/String>
      local.get $1
      i32.and
      i32.const 2
@@ -3201,7 +2967,7 @@
   i32.load offset=20
   i32.store offset=16
   global.get $~lib/memory/__stack_pointer
-  i32.const 20
+  i32.const 16
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -3223,18 +2989,15 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1056
   i32.store
-  global.get $~lib/memory/__stack_pointer
   i32.const 1056
-  i32.store offset=4
-  i32.const 1056
-  call $~lib/util/hash/hashStr
+  call $~lib/util/hash/HASH<~lib/string/String>
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=4
+  i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 1056
-  i32.store offset=8
+  i32.store offset=4
   local.get $0
   local.get $3
   call $~lib/map/Map<~lib/string/String,usize>#find
@@ -3252,7 +3015,7 @@
    if
     global.get $~lib/memory/__stack_pointer
     local.get $0
-    i32.store offset=4
+    i32.store
     local.get $0
     local.get $0
     i32.load offset=20
@@ -3280,7 +3043,7 @@
    local.get $0
    i32.load offset=8
    local.tee $2
-   i32.store
+   i32.store offset=8
    local.get $0
    local.get $0
    i32.load offset=16
@@ -3344,7 +3107,7 @@
   i64.const 0
   i64.store
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<usize>
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -3474,7 +3237,7 @@
    i32.const 1056
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
-   i32.const 16
+   i32.const 12
    i32.sub
    global.set $~lib/memory/__stack_pointer
    call $~stack_check
@@ -3482,8 +3245,8 @@
    i64.const 0
    i64.store
    global.get $~lib/memory/__stack_pointer
-   i64.const 0
-   i64.store offset=8
+   i32.const 0
+   i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.store
@@ -3493,17 +3256,14 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1056
    i32.store offset=8
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1056
-   i32.store offset=12
    local.get $0
    i32.const 1056
-   call $~lib/util/hash/hashStr
+   call $~lib/util/hash/HASH<~lib/string/String>
    call $~lib/map/Map<~lib/string/String,usize>#find
    i32.const 0
    i32.ne
    global.get $~lib/memory/__stack_pointer
-   i32.const 16
+   i32.const 12
    i32.add
    global.set $~lib/memory/__stack_pointer
    if
@@ -3515,7 +3275,7 @@
     i32.const 1056
     i32.store offset=4
     global.get $~lib/memory/__stack_pointer
-    i32.const 16
+    i32.const 12
     i32.sub
     global.set $~lib/memory/__stack_pointer
     call $~stack_check
@@ -3523,8 +3283,8 @@
     i64.const 0
     i64.store
     global.get $~lib/memory/__stack_pointer
-    i64.const 0
-    i64.store offset=8
+    i32.const 0
+    i32.store offset=8
     global.get $~lib/memory/__stack_pointer
     local.get $0
     i32.store
@@ -3534,12 +3294,9 @@
     global.get $~lib/memory/__stack_pointer
     i32.const 1056
     i32.store offset=8
-    global.get $~lib/memory/__stack_pointer
-    i32.const 1056
-    i32.store offset=12
     local.get $0
     i32.const 1056
-    call $~lib/util/hash/hashStr
+    call $~lib/util/hash/HASH<~lib/string/String>
     call $~lib/map/Map<~lib/string/String,usize>#find
     local.tee $0
     i32.eqz
@@ -3554,7 +3311,7 @@
     local.get $0
     i32.load offset=4
     global.get $~lib/memory/__stack_pointer
-    i32.const 16
+    i32.const 12
     i32.add
     global.set $~lib/memory/__stack_pointer
     global.get $~lib/memory/__stack_pointer
@@ -3696,7 +3453,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<usize>
   call $~lib/map/Map<usize,~lib/string/String>#find
   i32.const 0
   i32.ne
@@ -3720,7 +3477,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<usize>
   call $~lib/map/Map<usize,~lib/string/String>#find
   local.tee $0
   i32.eqz
