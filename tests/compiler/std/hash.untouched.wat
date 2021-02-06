@@ -212,6 +212,7 @@
   (local $11 i32)
   (local $12 i32)
   (local $13 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -235,11 +236,11 @@
     br $~lib/util/hash/hashStr|inlined.0
    end
    local.get $1
-   local.set $13
+   local.set $14
    global.get $~lib/memory/__stack_pointer
-   local.get $13
+   local.get $14
    i32.store offset=4
-   local.get $13
+   local.get $14
    call $~lib/string/String#get:length
    i32.const 1
    i32.shl
@@ -279,15 +280,17 @@
      local.set $10
      local.get $10
      if
-      local.get $5
-      local.set $12
       local.get $1
       local.get $4
       i32.add
-      i32.load
       local.set $11
-      local.get $12
+      local.get $5
+      local.set $13
       local.get $11
+      i32.load
+      local.set $12
+      local.get $13
+      local.get $12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -297,14 +300,12 @@
       i32.mul
       local.set $5
       local.get $6
-      local.set $12
-      local.get $1
-      local.get $4
-      i32.add
-      i32.load offset=4
-      local.set $11
-      local.get $12
+      local.set $13
       local.get $11
+      i32.load offset=4
+      local.set $12
+      local.get $13
+      local.get $12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -314,14 +315,12 @@
       i32.mul
       local.set $6
       local.get $7
-      local.set $12
-      local.get $1
-      local.get $4
-      i32.add
-      i32.load offset=8
-      local.set $11
-      local.get $12
+      local.set $13
       local.get $11
+      i32.load offset=8
+      local.set $12
+      local.get $13
+      local.get $12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -331,14 +330,12 @@
       i32.mul
       local.set $7
       local.get $8
-      local.set $12
-      local.get $1
-      local.get $4
-      i32.add
-      i32.load offset=12
-      local.set $11
-      local.get $12
+      local.set $13
       local.get $11
+      i32.load offset=12
+      local.set $12
+      local.get $13
+      local.get $12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -470,12 +467,12 @@
    local.set $3
    local.get $3
   end
-  local.set $13
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $13
+  local.get $14
   return
  )
  (func $~lib/util/hash/HASH<~lib/string/String> (param $0 i32) (result i32)
@@ -492,6 +489,7 @@
   (local $11 i32)
   (local $12 i32)
   (local $13 i32)
+  (local $14 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -515,11 +513,11 @@
     br $~lib/util/hash/hashStr|inlined.1
    end
    local.get $1
-   local.set $13
+   local.set $14
    global.get $~lib/memory/__stack_pointer
-   local.get $13
+   local.get $14
    i32.store offset=4
-   local.get $13
+   local.get $14
    call $~lib/string/String#get:length
    i32.const 1
    i32.shl
@@ -559,15 +557,17 @@
      local.set $10
      local.get $10
      if
-      local.get $5
-      local.set $12
       local.get $1
       local.get $4
       i32.add
-      i32.load
       local.set $11
-      local.get $12
+      local.get $5
+      local.set $13
       local.get $11
+      i32.load
+      local.set $12
+      local.get $13
+      local.get $12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -577,14 +577,12 @@
       i32.mul
       local.set $5
       local.get $6
-      local.set $12
-      local.get $1
-      local.get $4
-      i32.add
-      i32.load offset=4
-      local.set $11
-      local.get $12
+      local.set $13
       local.get $11
+      i32.load offset=4
+      local.set $12
+      local.get $13
+      local.get $12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -594,14 +592,12 @@
       i32.mul
       local.set $6
       local.get $7
-      local.set $12
-      local.get $1
-      local.get $4
-      i32.add
-      i32.load offset=8
-      local.set $11
-      local.get $12
+      local.set $13
       local.get $11
+      i32.load offset=8
+      local.set $12
+      local.get $13
+      local.get $12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -611,14 +607,12 @@
       i32.mul
       local.set $7
       local.get $8
-      local.set $12
-      local.get $1
-      local.get $4
-      i32.add
-      i32.load offset=12
-      local.set $11
-      local.get $12
+      local.set $13
       local.get $11
+      i32.load offset=12
+      local.set $12
+      local.get $13
+      local.get $12
       i32.const -2048144777
       i32.mul
       i32.add
@@ -750,12 +744,12 @@
    local.set $3
    local.get $3
   end
-  local.set $13
+  local.set $14
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $13
+  local.get $14
   return
  )
  (func $start:std/hash

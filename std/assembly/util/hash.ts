@@ -69,9 +69,7 @@ function mix(h: u32, key: u32): u32 {
 // @ts-ignore: decorator
 @inline
 function hashStr(key: string): u32 {
-  if (key === null) {
-    return XXH32_SEED;
-  }
+  if (key === null) return XXH32_SEED;
 
   var len = key.length << 1;
   var h: u32 = len;
@@ -85,10 +83,11 @@ function hashStr(key: string): u32 {
 
     let n = len - 16;
     while (i <= n) {
-      s1 = mix(s1, load<u32>(changetype<usize>(key) + i));
-      s2 = mix(s2, load<u32>(changetype<usize>(key) + i, 4));
-      s3 = mix(s3, load<u32>(changetype<usize>(key) + i, 8));
-      s4 = mix(s4, load<u32>(changetype<usize>(key) + i, 12));
+      let ptr = changetype<usize>(key) + i;
+      s1 = mix(s1, load<u32>(ptr    ));
+      s2 = mix(s2, load<u32>(ptr,  4));
+      s3 = mix(s3, load<u32>(ptr,  8));
+      s4 = mix(s4, load<u32>(ptr, 12));
       i += 16;
     }
     h += rotl(s1, 1) + rotl(s2, 7) + rotl(s3, 12) + rotl(s4, 18);
