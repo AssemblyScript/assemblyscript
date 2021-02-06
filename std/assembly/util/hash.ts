@@ -71,9 +71,9 @@ function mix(h: u32, key: u32): u32 {
 function hashStr(key: string): u32 {
   if (key === null) return XXH32_SEED;
 
-  var len = key.length << 1;
-  var h: u32 = len;
-  let i = 0;
+  var len: usize = key.length << 1;
+  var pos = changetype<usize>(key);
+  var h = <u32>len;
 
   if (len >= 16) {
     let s1 = XXH32_SEED + XXH32_P1 + XXH32_P2;
@@ -81,31 +81,31 @@ function hashStr(key: string): u32 {
     let s3 = XXH32_SEED;
     let s4 = XXH32_SEED - XXH32_P1;
 
-    let n = len - 16;
-    while (i <= n) {
-      let ptr = changetype<usize>(key) + i;
-      s1 = mix(s1, load<u32>(ptr    ));
-      s2 = mix(s2, load<u32>(ptr,  4));
-      s3 = mix(s3, load<u32>(ptr,  8));
-      s4 = mix(s4, load<u32>(ptr, 12));
-      i += 16;
+    let end = len + pos - 16;
+    while (pos <= end) {
+      s1 = mix(s1, load<u32>(pos    ));
+      s2 = mix(s2, load<u32>(pos,  4));
+      s3 = mix(s3, load<u32>(pos,  8));
+      s4 = mix(s4, load<u32>(pos, 12));
+      pos += 16;
     }
     h += rotl(s1, 1) + rotl(s2, 7) + rotl(s3, 12) + rotl(s4, 18);
   } else {
     h += XXH32_SEED + XXH32_P5;
   }
 
-  var n = len - 4;
-  while (i <= n) {
-    h += load<u32>(changetype<usize>(key) + i) * XXH32_P3;
+  var end = len + pos - 4;
+  while (pos <= end) {
+    h += load<u32>(pos) * XXH32_P3;
     h  = rotl(h, 17) * XXH32_P4;
-    i += 4;
+    pos += 4;
   }
 
-  while (i < len) {
-    h += <u32>load<u8>(changetype<usize>(key) + i) * XXH32_P5;
+  end = len + pos;
+  while (pos < end) {
+    h += <u32>load<u8>(pos) * XXH32_P5;
     h = rotl(h, 11) * XXH32_P1;
-    i++;
+    pos++;
   }
 
   h ^= h >> 15;
