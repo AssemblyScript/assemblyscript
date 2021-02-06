@@ -2455,7 +2455,7 @@
    local.tee $3
    i32.const 16
    i32.ge_s
-   if
+   if (result i32)
     i32.const 606290984
     local.set $1
     i32.const -2048144777
@@ -2542,19 +2542,12 @@
     i32.rotl
     i32.add
     i32.add
-    local.set $1
-    local.get $3
-    local.get $2
-    i32.sub
-    local.set $3
    else
     local.get $3
     i32.const 374761393
     i32.add
-    local.set $1
    end
-   i32.const 0
-   local.set $2
+   local.set $1
    local.get $3
    i32.const 4
    i32.sub

@@ -75,6 +75,7 @@ function hashStr(key: string): u32 {
 
   var len = key.length << 1;
   var h: u32 = len;
+  let i = 0;
 
   if (len >= 16) {
     let s1 = XXH32_SEED + XXH32_P1 + XXH32_P2;
@@ -82,9 +83,7 @@ function hashStr(key: string): u32 {
     let s3 = XXH32_SEED;
     let s4 = XXH32_SEED - XXH32_P1;
 
-    let i = 0;
     let n = len - 16;
-
     while (i <= n) {
       s1 = mix(s1, load<u32>(changetype<usize>(key) + i));
       s2 = mix(s2, load<u32>(changetype<usize>(key) + i, 4));
@@ -93,14 +92,11 @@ function hashStr(key: string): u32 {
       i += 16;
     }
     h += rotl(s1, 1) + rotl(s2, 7) + rotl(s3, 12) + rotl(s4, 18);
-    len -= i;
   } else {
     h += XXH32_SEED + XXH32_P5;
   }
 
-  var i = 0;
   var n = len - 4;
-
   while (i <= n) {
     h += load<u32>(changetype<usize>(key) + i) * XXH32_P3;
     h  = rotl(h, 17) * XXH32_P4;

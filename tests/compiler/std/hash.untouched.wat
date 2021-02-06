@@ -246,6 +246,8 @@
    local.set $2
    local.get $2
    local.set $3
+   i32.const 0
+   local.set $4
    local.get $2
    i32.const 16
    i32.ge_s
@@ -255,53 +257,34 @@
     i32.add
     i32.const -2048144777
     i32.add
-    local.set $4
+    local.set $5
     i32.const 0
     i32.const -2048144777
     i32.add
-    local.set $5
-    i32.const 0
     local.set $6
+    i32.const 0
+    local.set $7
     i32.const 0
     i32.const -1640531535
     i32.sub
-    local.set $7
-    i32.const 0
     local.set $8
     local.get $2
     i32.const 16
     i32.sub
     local.set $9
     loop $while-continue|0
-     local.get $8
+     local.get $4
      local.get $9
      i32.le_s
      local.set $10
      local.get $10
      if
-      local.get $4
-      local.set $12
-      local.get $1
-      local.get $8
-      i32.add
-      i32.load
-      local.set $11
-      local.get $12
-      local.get $11
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
-      local.set $4
       local.get $5
       local.set $12
       local.get $1
-      local.get $8
+      local.get $4
       i32.add
-      i32.load offset=4
+      i32.load
       local.set $11
       local.get $12
       local.get $11
@@ -316,9 +299,9 @@
       local.get $6
       local.set $12
       local.get $1
-      local.get $8
+      local.get $4
       i32.add
-      i32.load offset=8
+      i32.load offset=4
       local.set $11
       local.get $12
       local.get $11
@@ -333,9 +316,9 @@
       local.get $7
       local.set $12
       local.get $1
-      local.get $8
+      local.get $4
       i32.add
-      i32.load offset=12
+      i32.load offset=8
       local.set $11
       local.get $12
       local.get $11
@@ -348,34 +331,47 @@
       i32.mul
       local.set $7
       local.get $8
+      local.set $12
+      local.get $1
+      local.get $4
+      i32.add
+      i32.load offset=12
+      local.set $11
+      local.get $12
+      local.get $11
+      i32.const -2048144777
+      i32.mul
+      i32.add
+      i32.const 13
+      i32.rotl
+      i32.const -1640531535
+      i32.mul
+      local.set $8
+      local.get $4
       i32.const 16
       i32.add
-      local.set $8
+      local.set $4
       br $while-continue|0
      end
     end
     local.get $3
-    local.get $4
+    local.get $5
     i32.const 1
     i32.rotl
-    local.get $5
+    local.get $6
     i32.const 7
     i32.rotl
     i32.add
-    local.get $6
+    local.get $7
     i32.const 12
     i32.rotl
     i32.add
-    local.get $7
+    local.get $8
     i32.const 18
     i32.rotl
     i32.add
     i32.add
     local.set $3
-    local.get $2
-    local.get $8
-    i32.sub
-    local.set $2
    else
     local.get $3
     i32.const 0
@@ -384,22 +380,20 @@
     i32.add
     local.set $3
    end
-   i32.const 0
-   local.set $9
    local.get $2
    i32.const 4
    i32.sub
-   local.set $8
+   local.set $9
    loop $while-continue|1
+    local.get $4
     local.get $9
-    local.get $8
     i32.le_s
-    local.set $7
-    local.get $7
+    local.set $8
+    local.get $8
     if
      local.get $3
      local.get $1
-     local.get $9
+     local.get $4
      i32.add
      i32.load
      i32.const -1028477379
@@ -412,23 +406,23 @@
      i32.const 668265263
      i32.mul
      local.set $3
-     local.get $9
+     local.get $4
      i32.const 4
      i32.add
-     local.set $9
+     local.set $4
      br $while-continue|1
     end
    end
    loop $while-continue|2
-    local.get $9
+    local.get $4
     local.get $2
     i32.lt_s
-    local.set $7
-    local.get $7
+    local.set $8
+    local.get $8
     if
      local.get $3
      local.get $1
-     local.get $9
+     local.get $4
      i32.add
      i32.load8_u
      i32.const 374761393
@@ -441,10 +435,10 @@
      i32.const -1640531535
      i32.mul
      local.set $3
-     local.get $9
+     local.get $4
      i32.const 1
      i32.add
-     local.set $9
+     local.set $4
      br $while-continue|2
     end
    end
@@ -532,6 +526,8 @@
    local.set $2
    local.get $2
    local.set $3
+   i32.const 0
+   local.set $4
    local.get $2
    i32.const 16
    i32.ge_s
@@ -541,53 +537,34 @@
     i32.add
     i32.const -2048144777
     i32.add
-    local.set $4
+    local.set $5
     i32.const 0
     i32.const -2048144777
     i32.add
-    local.set $5
-    i32.const 0
     local.set $6
+    i32.const 0
+    local.set $7
     i32.const 0
     i32.const -1640531535
     i32.sub
-    local.set $7
-    i32.const 0
     local.set $8
     local.get $2
     i32.const 16
     i32.sub
     local.set $9
     loop $while-continue|0
-     local.get $8
+     local.get $4
      local.get $9
      i32.le_s
      local.set $10
      local.get $10
      if
-      local.get $4
-      local.set $12
-      local.get $1
-      local.get $8
-      i32.add
-      i32.load
-      local.set $11
-      local.get $12
-      local.get $11
-      i32.const -2048144777
-      i32.mul
-      i32.add
-      i32.const 13
-      i32.rotl
-      i32.const -1640531535
-      i32.mul
-      local.set $4
       local.get $5
       local.set $12
       local.get $1
-      local.get $8
+      local.get $4
       i32.add
-      i32.load offset=4
+      i32.load
       local.set $11
       local.get $12
       local.get $11
@@ -602,9 +579,9 @@
       local.get $6
       local.set $12
       local.get $1
-      local.get $8
+      local.get $4
       i32.add
-      i32.load offset=8
+      i32.load offset=4
       local.set $11
       local.get $12
       local.get $11
@@ -619,9 +596,9 @@
       local.get $7
       local.set $12
       local.get $1
-      local.get $8
+      local.get $4
       i32.add
-      i32.load offset=12
+      i32.load offset=8
       local.set $11
       local.get $12
       local.get $11
@@ -634,34 +611,47 @@
       i32.mul
       local.set $7
       local.get $8
+      local.set $12
+      local.get $1
+      local.get $4
+      i32.add
+      i32.load offset=12
+      local.set $11
+      local.get $12
+      local.get $11
+      i32.const -2048144777
+      i32.mul
+      i32.add
+      i32.const 13
+      i32.rotl
+      i32.const -1640531535
+      i32.mul
+      local.set $8
+      local.get $4
       i32.const 16
       i32.add
-      local.set $8
+      local.set $4
       br $while-continue|0
      end
     end
     local.get $3
-    local.get $4
+    local.get $5
     i32.const 1
     i32.rotl
-    local.get $5
+    local.get $6
     i32.const 7
     i32.rotl
     i32.add
-    local.get $6
+    local.get $7
     i32.const 12
     i32.rotl
     i32.add
-    local.get $7
+    local.get $8
     i32.const 18
     i32.rotl
     i32.add
     i32.add
     local.set $3
-    local.get $2
-    local.get $8
-    i32.sub
-    local.set $2
    else
     local.get $3
     i32.const 0
@@ -670,22 +660,20 @@
     i32.add
     local.set $3
    end
-   i32.const 0
-   local.set $9
    local.get $2
    i32.const 4
    i32.sub
-   local.set $8
+   local.set $9
    loop $while-continue|1
+    local.get $4
     local.get $9
-    local.get $8
     i32.le_s
-    local.set $7
-    local.get $7
+    local.set $8
+    local.get $8
     if
      local.get $3
      local.get $1
-     local.get $9
+     local.get $4
      i32.add
      i32.load
      i32.const -1028477379
@@ -698,23 +686,23 @@
      i32.const 668265263
      i32.mul
      local.set $3
-     local.get $9
+     local.get $4
      i32.const 4
      i32.add
-     local.set $9
+     local.set $4
      br $while-continue|1
     end
    end
    loop $while-continue|2
-    local.get $9
+    local.get $4
     local.get $2
     i32.lt_s
-    local.set $7
-    local.get $7
+    local.set $8
+    local.get $8
     if
      local.get $3
      local.get $1
-     local.get $9
+     local.get $4
      i32.add
      i32.load8_u
      i32.const 374761393
@@ -727,10 +715,10 @@
      i32.const -1640531535
      i32.mul
      local.set $3
-     local.get $9
+     local.get $4
      i32.const 1
      i32.add
-     local.set $9
+     local.set $4
      br $while-continue|2
     end
    end
