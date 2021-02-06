@@ -69,6 +69,14 @@ export namespace memory {
 
 // @ts-ignore: decorator
 @builtin
+export declare const __data_end: usize;
+
+// @ts-ignore: decorator
+@builtin
+export declare var __stack_pointer: usize;
+
+// @ts-ignore: decorator
+@builtin
 export declare const __heap_base: usize;
 
 /** Heap memory interface. */
@@ -86,15 +94,19 @@ export namespace heap {
     return __realloc(ptr, size);
   }
 
-  /** Frees a chunk of memory. Does hardly anything (most recent block only) with the stub/none runtime. */
+  /** Frees a chunk of memory. Does hardly anything (most recent block only) with the stub runtime. */
   // @ts-ignore: decorator
   @unsafe export function free(ptr: usize): void {
     __free(ptr);
   }
 
-  /** Dangerously resets the entire heap. Specific to the stub/none runtime. */
+  /** Dangerously resets the entire heap. Specific to the stub runtime. */
   // @ts-ignore: decorator
   @unsafe export function reset(): void {
-    __reset();
+    if (isDefined(__reset)) {
+      __reset();
+    } else {
+      throw new Error(E_NOTIMPLEMENTED);
+    }
   }
 }

@@ -335,6 +335,29 @@ testReduce<Uint64Array, u64>();
 testReduce<Float32Array, f32>();
 testReduce<Float64Array, f64>();
 
+function testAt<ArrayType extends TypedArray<T>, T extends number>(): void {
+  var array: ArrayType = instantiate<ArrayType>(3);
+  array[0] = <T>1;
+  array[1] = <T>2;
+  array[2] = <T>3;
+
+  assert(array.at( 0) == <T>1);
+  assert(array.at(-1) == <T>3);
+  assert(array.at(-3) == <T>1);
+}
+
+testAt<Int8Array, i8>();
+testAt<Uint8Array, u8>();
+testAt<Uint8ClampedArray, u8>();
+testAt<Int16Array, i16>();
+testAt<Uint16Array, u16>();
+testAt<Int32Array, i32>();
+testAt<Uint32Array, u32>();
+testAt<Int64Array, i64>();
+testAt<Uint64Array, u64>();
+testAt<Float32Array, f32>();
+testAt<Float64Array, f64>();
+
 function testReduceRight<ArrayType extends TypedArray<T>, T extends number>(): void {
   var array: ArrayType = instantiate<ArrayType>(3);
   array[0] = <T>1;
@@ -821,3 +844,6 @@ testTypedArraySet<Float64Array>();
   targetClampedArray.set(e, 5);
   valuesEqual<Uint8ClampedArray>(targetClampedArray, [1, 255, 100, 255, 0, 0, 100, 10, 255, 0]);
 }
+
+__stack_pointer = __heap_base;
+__collect();

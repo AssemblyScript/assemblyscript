@@ -4,14 +4,17 @@
  (import "mutable-globals" "external" (global $features/mutable-globals/external (mut i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 12) "L\00\00\00\01\00\00\00\00\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00m\00u\00t\00a\00b\00l\00e\00-\00g\00l\00o\00b\00a\00l\00s\00.\00t\00s\00\00\00\00\00\00\00")
+ (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00m\00u\00t\00a\00b\00l\00e\00-\00g\00l\00o\00b\00a\00l\00s\00.\00t\00s\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $features/mutable-globals/internal (mut i32) (i32.const 124))
+ (global $~lib/memory/__data_end i32 (i32.const 92))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
+ (global $~lib/memory/__heap_base i32 (i32.const 16476))
  (global $~started (mut i32) (i32.const 0))
- (export "_start" (func $~start))
- (export "memory" (memory $0))
  (export "external" (global $features/mutable-globals/external))
  (export "internal" (global $features/mutable-globals/internal))
+ (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $start:features/mutable-globals
   global.get $features/mutable-globals/external
   i32.const 123
@@ -74,10 +77,9 @@
   global.get $~started
   if
    return
-  else
-   i32.const 1
-   global.set $~started
   end
+  i32.const 1
+  global.set $~started
   call $start:features/mutable-globals
  )
 )

@@ -1,8 +1,10 @@
-import { AL_MASK, OBJECT, OBJECT_OVERHEAD, BLOCK_MAXSIZE, BLOCK_OVERHEAD, BLOCK, OBJECT_MAXSIZE } from "rt/common";
+import { AL_MASK, OBJECT, OBJECT_OVERHEAD, BLOCK_MAXSIZE, BLOCK_OVERHEAD, BLOCK, OBJECT_MAXSIZE } from "./common";
+import { E_ALLOCATION_TOO_LARGE } from "../util/error";
+
+// === A minimal runtime stub ===
 
 // @ts-ignore: decorator
 @lazy var startOffset: usize = ((__heap_base + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
-
 // @ts-ignore: decorator
 @lazy var offset: usize = startOffset;
 
@@ -20,33 +22,21 @@ function maybeGrowMemory(newOffset: usize): void {
   offset = newOffset;
 }
 
-function computeSize(size: usize): usize {
+// @ts-ignore: decorator
+@inline function computeSize(size: usize): usize {
   return ((size + BLOCK_OVERHEAD + AL_MASK) & ~AL_MASK) - BLOCK_OVERHEAD;
 }
 
 // @ts-ignore: decorator
 @unsafe @global
 export function __alloc(size: usize): usize {
-  if (size > BLOCK_MAXSIZE) unreachable();
+  if (size > BLOCK_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   var block = changetype<BLOCK>(offset);
   var ptr = offset + BLOCK_OVERHEAD;
   var payloadSize = computeSize(size);
   maybeGrowMemory(ptr + payloadSize);
   block.mmInfo = payloadSize;
   return ptr;
-}
-
-// @ts-ignore: decorator
-@unsafe @global
-export function __new(size: usize, id: u32): usize {
-  if (size > OBJECT_MAXSIZE) unreachable();
-  var ptr = __alloc(OBJECT_OVERHEAD + size);
-  var object = changetype<OBJECT>(ptr - BLOCK_OVERHEAD);
-  object.gcInfo = 0;
-  object.gcInfo2 = 0;
-  object.rtId = id;
-  object.rtSize = <u32>size;
-  return ptr + OBJECT_OVERHEAD;
 }
 
 // @ts-ignore: decorator
@@ -59,7 +49,7 @@ export function __realloc(ptr: usize, size: usize): usize {
   var payloadSize = computeSize(size);
   if (size > actualSize) {
     if (isLast) { // last block: grow
-      if (size > BLOCK_MAXSIZE) unreachable();
+      if (size > BLOCK_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
       maybeGrowMemory(ptr + payloadSize);
       block.mmInfo = payloadSize;
     } else { // copy to new block at least double the size
@@ -72,15 +62,6 @@ export function __realloc(ptr: usize, size: usize): usize {
     block.mmInfo = payloadSize;
   }
   return ptr;
-}
-
-// @ts-ignore: decorator
-@unsafe @global
-export function __renew(oldPtr: usize, size: usize): usize {
-  if (size > OBJECT_MAXSIZE) unreachable();
-  var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size);
-  changetype<OBJECT>(newPtr - BLOCK_OVERHEAD).rtSize = <u32>size;
-  return newPtr + OBJECT_OVERHEAD;
 }
 
 // @ts-ignore: decorator
@@ -100,25 +81,53 @@ export function __reset(): void { // special
 }
 
 // @ts-ignore: decorator
-@global @unsafe
-export function __retain(ref: usize): usize {
-  return ref;
+@unsafe @global
+export function __new(size: usize, id: u32): usize {
+  if (size > OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
+  var ptr = __alloc(OBJECT_OVERHEAD + size);
+  var object = changetype<OBJECT>(ptr - BLOCK_OVERHEAD);
+  object.gcInfo = 0;
+  object.gcInfo2 = 0;
+  object.rtId = id;
+  object.rtSize = <u32>size;
+  return ptr + OBJECT_OVERHEAD;
+}
+
+// @ts-ignore: decorator
+@unsafe @global
+export function __renew(oldPtr: usize, size: usize): usize {
+  if (size > OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
+  var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size);
+  changetype<OBJECT>(newPtr - BLOCK_OVERHEAD).rtSize = <u32>size;
+  return newPtr + OBJECT_OVERHEAD;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __release(ref: usize): void {
-  /* nop */
+export function __link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void {
+  // nop
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-function __visit(ref: usize, cookie: u32): void { // eslint-disable-line @typescript-eslint/no-unused-vars
-  /* nop */
+export function __pin(ptr: usize): usize {
+  return ptr;
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __unpin(ptr: usize): void {
+  // nop
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+function __visit(ptr: usize, cookie: u32): void { // eslint-disable-line @typescript-eslint/no-unused-vars
+  // nop
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __collect(): void {
-  /* nop */
+  // nop
 }

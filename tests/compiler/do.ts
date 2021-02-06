@@ -174,3 +174,5 @@ function testRefAutorelease(): void {
 ran = false;
 testRefAutorelease();
 assert(ran);
+
+__collect();

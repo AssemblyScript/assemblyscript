@@ -790,9 +790,15 @@ export declare function _BinaryenRefIsNull(module: BinaryenModuleRef, valueExpr:
 export declare function _BinaryenRefIsNullGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenRefIsNullSetValue(expr: BinaryenExpressionRef, valueExpr: BinaryenExpressionRef): void;
 
-export declare function _BinaryenRefFunc(module: BinaryenModuleRef, funcName: BinaryenString): BinaryenExpressionRef;
+export declare function _BinaryenRefFunc(module: BinaryenModuleRef, funcName: BinaryenString, type: BinaryenType): BinaryenExpressionRef;
 export declare function _BinaryenRefFuncGetFunc(expr: BinaryenExpressionRef): BinaryenString;
 export declare function _BinaryenRefFuncSetFunc(expr: BinaryenExpressionRef, funcName: BinaryenString): void;
+
+export declare function _BinaryenRefEq(module: BinaryenModuleRef, leftExpr: BinaryenExpressionRef, rightExpr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenRefEqGetLeft(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenRefEqSetLeft(expr: BinaryenExpressionRef, leftExpr: BinaryenExpressionRef): void;
+export declare function _BinaryenRefEqGetRight(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenRefEqSetRight(expr: BinaryenExpressionRef, rightExpr: BinaryenExpressionRef): void;
 
 export declare function _BinaryenTry(module: BinaryenModuleRef, bodyExpr: BinaryenExpressionRef, catchBodyExpr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenTryGetBody(expr: BinaryenExpressionRef): BinaryenExpressionRef;
@@ -851,6 +857,10 @@ export declare function _BinaryenFunctionGetParams(func: BinaryenFunctionRef): B
 export declare function _BinaryenFunctionGetResults(func: BinaryenFunctionRef): BinaryenType;
 export declare function _BinaryenFunctionGetNumVars(func: BinaryenFunctionRef): BinaryenIndex;
 export declare function _BinaryenFunctionGetVar(func: BinaryenFunctionRef, index: BinaryenIndex): BinaryenType;
+export declare function _BinaryenFunctionGetNumLocals(func: BinaryenFunctionRef): BinaryenIndex;
+export declare function _BinaryenFunctionHasLocalName(func: BinaryenFunctionRef, index: BinaryenIndex): bool;
+export declare function _BinaryenFunctionGetLocalName(func: BinaryenFunctionRef, index: BinaryenIndex): BinaryenString;
+export declare function _BinaryenFunctionSetLocalName(func: BinaryenFunctionRef, index: BinaryenIndex, name: BinaryenString): void;
 export declare function _BinaryenFunctionGetBody(func: BinaryenFunctionRef): BinaryenExpressionRef;
 export declare function _BinaryenFunctionSetBody(func: BinaryenFunctionRef, bodyExpr: BinaryenExpressionRef): void;
 export declare function _BinaryenFunctionOptimize(func: BinaryenFunctionRef, module: BinaryenModuleRef): void;
@@ -866,21 +876,28 @@ export declare function _BinaryenAddGlobalImport(module: BinaryenModuleRef, inte
 export declare function _BinaryenAddEventImport(module: BinaryenModuleRef, internalName: BinaryenString, externalModuleName: BinaryenString, externalBaseName: BinaryenString, attribute: u32, params: BinaryenType, results: BinaryenType): void;
 
 type BinaryenExportRef = usize;
+type BinaryenExternalKind = u32;
 
 export declare function _BinaryenAddFunctionExport(module: BinaryenModuleRef, internalName: BinaryenString, externalName: BinaryenString): BinaryenExportRef;
 export declare function _BinaryenAddTableExport(module: BinaryenModuleRef, internalName: BinaryenString, externalName: BinaryenString): BinaryenExportRef;
 export declare function _BinaryenAddMemoryExport(module: BinaryenModuleRef, internalName: BinaryenString, externalName: BinaryenString): BinaryenExportRef;
 export declare function _BinaryenAddGlobalExport(module: BinaryenModuleRef, internalName: BinaryenString, externalName: BinaryenString): BinaryenExportRef;
 export declare function _BinaryenAddEventExport(module: BinaryenModuleRef, internalName: BinaryenString, externalName: BinaryenString): BinaryenExportRef;
+export declare function _BinaryenGetExport(module: BinaryenModuleRef, externalName: BinaryenString): BinaryenExportRef;
 export declare function _BinaryenRemoveExport(module: BinaryenModuleRef, externalName: BinaryenString): void;
 export declare function _BinaryenGetNumExports(module: BinaryenModuleRef): BinaryenIndex;
 export declare function _BinaryenGetExportByIndex(module: BinaryenModuleRef, index: BinaryenIndex): BinaryenExportRef;
+export declare function _BinaryenExportGetKind(ref: BinaryenExportRef): BinaryenExternalKind;
+export declare function _BinaryenExportGetName(ref: BinaryenExportRef): BinaryenString;
+export declare function _BinaryenExportGetValue(ref: BinaryenExportRef): BinaryenString;
 
 type BinaryenGlobalRef = usize;
 
 export declare function _BinaryenAddGlobal(module: BinaryenModuleRef, name: BinaryenString, type: BinaryenType, mutable: bool, init: BinaryenExpressionRef): BinaryenGlobalRef;
 export declare function _BinaryenGetGlobal(module: BinaryenModuleRef, name: BinaryenString): BinaryenGlobalRef;
 export declare function _BinaryenRemoveGlobal(module: BinaryenModuleRef, name: BinaryenString): void;
+export declare function _BinaryenGetNumGlobals(module: BinaryenModuleRef): BinaryenIndex;
+export declare function _BinaryenGetGlobalByIndex(module: BinaryenModuleRef, index: BinaryenIndex): BinaryenGlobalRef;
 
 export declare function _BinaryenGlobalGetName(global: BinaryenGlobalRef): BinaryenString;
 export declare function _BinaryenGlobalGetType(global: BinaryenGlobalRef): BinaryenType;

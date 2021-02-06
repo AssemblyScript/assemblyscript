@@ -937,26 +937,6 @@
    call $~lib/rt/pure/__retain
   end
  )
- (func $~start
-  (local $0 i32)
-  call $~lib/rt/pure/__new
-  call $~lib/rt/pure/__retain
-  global.set $rc/ternary-mismatch/gloRef
-  call $~lib/rt/pure/__new
-  drop
-  call $~lib/rt/pure/__new
-  drop
-  global.get $rc/ternary-mismatch/gloRef
-  local.tee $0
-  i32.const 1228
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 20
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1049,6 +1029,26 @@
    i32.and
    i32.or
    i32.store offset=4
+  end
+ )
+ (func $~start
+  (local $0 i32)
+  call $~lib/rt/pure/__new
+  call $~lib/rt/pure/__retain
+  global.set $rc/ternary-mismatch/gloRef
+  call $~lib/rt/pure/__new
+  drop
+  call $~lib/rt/pure/__new
+  drop
+  global.get $rc/ternary-mismatch/gloRef
+  local.tee $0
+  i32.const 1228
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 20
+   i32.sub
+   call $~lib/rt/pure/decrement
   end
  )
 )

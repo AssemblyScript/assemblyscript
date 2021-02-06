@@ -35,8 +35,8 @@ export const enum TypeinfoFlags {
   SET = 1 << 3,
   /** Type is a `Map`. */
   MAP = 1 << 4,
-  /** Type is inherently acyclic. */
-  ACYCLIC = 1 << 5,
+  /** Type has no outgoing pointers. */
+  POINTERFREE = 1 << 5,
   /** Value alignment of 1 byte. */
   VALUE_ALIGN_0 = 1 << 6,
   /** Value alignment of 2 bytes. */

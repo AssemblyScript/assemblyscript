@@ -844,6 +844,40 @@ export class Signature {
     return thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType);
   }
 
+  /** Tests if this signature has at least one managed operand. */
+  get hasManagedOperands(): bool {
+    var thisType = this.thisType;
+    if (thisType) {
+      if (thisType.isManaged) return true;
+    }
+    var parameterTypes = this.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      if (parameterTypes[i].isManaged) return true;
+    }
+    return false;
+  }
+
+  /** Gets the indices of all managed operands. */
+  getManagedOperandIndices(): i32[] {
+    var indices = new Array<i32>();
+    var index = 0;
+    var thisType = this.thisType;
+    if (thisType) {
+      if (thisType.isManaged) {
+        indices.push(index);
+      }
+      ++index;
+    }
+    var parameterTypes = this.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      if (parameterTypes[i].isManaged) {
+        indices.push(index);
+      }
+      ++index;
+    }
+    return indices;
+  }
+
   /** Converts this signature to a string. */
   toString(validWat: bool = false): string {
     var sb = new Array<string>();

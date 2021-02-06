@@ -41,9 +41,6 @@ import {
   getBlockChildCount,
   getBlockChildAt,
   getBlockName,
-  getLocalGetIndex,
-  isLocalTee,
-  getLocalSetIndex,
   needsExplicitUnreachable,
   getLocalSetValue,
   getGlobalGetName,
@@ -52,7 +49,8 @@ import {
   getSideEffects,
   SideEffects,
   SwitchBuilder,
-  ExpressionRunnerFlags
+  ExpressionRunnerFlags,
+  isConstZero
 } from "./module";
 
 import {
@@ -198,6 +196,14 @@ import {
   readI32
 } from "./util";
 
+import {
+  RtraceMemory
+} from "./passes/rtrace";
+
+import {
+  ShadowStackPass
+} from "./passes/shadowstack";
+
 /** Compiler options. */
 export class Options {
 
@@ -237,6 +243,10 @@ export class Options {
   pedantic: bool = false;
   /** Indicates a very low (<64k) memory limit. */
   lowMemoryLimit: u32 = 0;
+  /** If true, exports the runtime helpers. */
+  exportRuntime: bool = false;
+  /** Stack size in bytes, if using a stack. */
+  stackSize: i32 = 0;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -287,27 +297,29 @@ export const enum Constraints {
 
   /** Indicates that the value will be dropped immediately. */
   WILL_DROP = 1 << 3,
-  /** Indicates that the value will be retained immediately. */
-  WILL_RETAIN = 1 << 4,
   /** Indicates that static data is preferred. */
-  PREFER_STATIC = 1 << 5,
+  PREFER_STATIC = 1 << 4,
   /** Indicates that the value will become `this` of a property access or instance call. */
-  IS_THIS = 1 << 6
+  IS_THIS = 1 << 5
 }
 
 /** Runtime features to be activated by the compiler. */
 export const enum RuntimeFeatures {
   NONE = 0,
+  /** Requires data setup. */
+  DATA = 1 << 0,
+  /** Requires a stack. */
+  STACK = 1 << 1,
   /** Requires heap setup. */
-  HEAP = 1 << 0,
+  HEAP = 1 << 2,
   /** Requires runtime type information setup. */
-  RTTI = 1 << 1,
+  RTTI = 1 << 3,
   /** Requires the built-in globals visitor. */
-  visitGlobals = 1 << 2,
+  visitGlobals = 1 << 4,
   /** Requires the built-in members visitor. */
-  visitMembers = 1 << 3,
+  visitMembers = 1 << 5,
   /** Requires the setArgumentsLength export. */
-  setArgumentsLength = 1 << 4
+  setArgumentsLength = 1 << 6
 }
 
 /** Exported names of compiler-generated elements. */
@@ -323,6 +335,11 @@ export namespace ExportNames {
   /** Name of the table instance, if exported. */
   export const table = "table";
 }
+
+/** Functions to export if `--exportRuntime` is set. */
+const runtimeFunctions = [ "__new", "__pin", "__unpin", "__collect" ];
+/** Globals to export if `--exportRuntime` is set. */
+const runtimeGlobals = [ "__rtti_base" ];
 
 /** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {
@@ -356,8 +373,6 @@ export class Compiler extends DiagnosticEmitter {
   builtinArgumentsLength: GlobalRef = 0;
   /** Requires runtime features. */
   runtimeFeatures: RuntimeFeatures = RuntimeFeatures.NONE;
-  /** Expressions known to have skipped an autorelease. Usually function returns. */
-  skippedAutoreleases: Set<ExpressionRef> = new Set();
   /** Current inline functions stack. */
   inlineStack: Function[] = [];
   /** Lazily compiled functions. */
@@ -370,6 +385,8 @@ export class Compiler extends DiagnosticEmitter {
   pendingElements: Set<Element> = new Set();
   /** Elements, that are module exports, already processed */
   doneModuleExports: Set<Element> = new Set();
+  /** Shadow stack reference. */
+  shadowStack!: ShadowStackPass;
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -381,7 +398,7 @@ export class Compiler extends DiagnosticEmitter {
     super(program.diagnostics);
     this.program = program;
     var options = program.options;
-    var module = Module.create();
+    var module = Module.create(options.stackSize > 0);
     this.module = module;
     if (options.memoryBase) {
       this.memoryOffset = i64_new(options.memoryBase);
@@ -415,6 +432,7 @@ export class Compiler extends DiagnosticEmitter {
     startFunctionInstance.internalName = BuiltinNames.start;
     this.currentFlow = startFunctionInstance.flow;
     this.currentBody = new Array<ExpressionRef>();
+    this.shadowStack = new ShadowStackPass(this);
   }
 
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
@@ -422,6 +440,7 @@ export class Compiler extends DiagnosticEmitter {
     var options = this.options;
     var module = this.module;
     var program = this.program;
+    var hasShadowStack = options.stackSize > 0; // implies runtime=incremental
 
     // initialize lookup maps, built-ins, imports, exports, etc.
     this.program.initialize();
@@ -432,11 +451,13 @@ export class Compiler extends DiagnosticEmitter {
     var startFunctionBody = this.currentBody;
     assert(startFunctionBody.length == 0);
 
-    // add mutable heap and rtti base dummies
+    // add mutable data, heap and rtti offset dummies
     if (options.isWasm64) {
+      module.addGlobal(BuiltinNames.data_end, NativeType.I64, true, module.i64(0));
       module.addGlobal(BuiltinNames.heap_base, NativeType.I64, true, module.i64(0));
       module.addGlobal(BuiltinNames.rtti_base, NativeType.I64, true, module.i64(0));
     } else {
+      module.addGlobal(BuiltinNames.data_end, NativeType.I32, true, module.i32(0));
       module.addGlobal(BuiltinNames.heap_base, NativeType.I32, true, module.i32(0));
       module.addGlobal(BuiltinNames.rtti_base, NativeType.I32, true, module.i32(0));
     }
@@ -452,48 +473,29 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // compile the start function if not empty or if explicitly requested
-    var startIsEmpty = !startFunctionBody.length;
-    var explicitStart = program.isWasi || options.explicitStart;
-    if (!startIsEmpty || explicitStart) {
-      let signature = startFunctionInstance.signature;
-      if (!startIsEmpty && explicitStart) {
-        module.addGlobal(BuiltinNames.started, NativeType.I32, true, module.i32(0));
-        startFunctionBody.unshift(
-          module.if(
-            module.global_get(BuiltinNames.started, NativeType.I32),
-            module.return(),
-            module.global_set(BuiltinNames.started, module.i32(1))
-          )
-        );
-      }
-      let funcRef = module.addFunction(
-        startFunctionInstance.internalName,
-        signature.nativeParams,
-        signature.nativeResults,
-        typesToNativeTypes(startFunctionInstance.additionalLocals),
-        module.flatten(startFunctionBody)
-      );
-      startFunctionInstance.finalize(module, funcRef);
-      if (!explicitStart) module.setStart(funcRef);
-      else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
+    // set up module exports
+    // TODO: for (let file of this.program.filesByName.values()) {
+    for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
+      let file = unchecked(_values[i]);
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
 
-    // check if the entire program is acyclic
-    var cyclicClasses = program.findCyclicClasses();
-    if (cyclicClasses.size) {
-      if (options.pedantic) {
-        // TODO: for (let classInstance of cyclicClasses) {
-        for (let _values = Set_values(cyclicClasses), i = 0, k = _values.length; i < k; ++i) {
-          let classInstance = unchecked(_values[i]);
-          this.pedantic(
-            DiagnosticCode.Type_0_is_cyclic_Module_will_include_deferred_garbage_collection,
-            classInstance.identifierNode.range, classInstance.internalName
-          );
+    // compile and export runtime if requested
+    if (this.options.exportRuntime) {
+      for (let i = 0, k = runtimeFunctions.length; i < k; ++i) {
+        let name = runtimeFunctions[i];
+        let instance = program.requireFunction(name);
+        if (this.compileFunction(instance) && !module.hasExport(name)) {
+          module.addFunctionExport(instance.internalName, name);
         }
       }
-    } else {
-      program.registerConstantInteger("__GC_ALL_ACYCLIC", Type.bool, i64_new(1, 0));
+      for (let i = 0, k = runtimeGlobals.length; i < k; ++i) {
+        let name = runtimeGlobals[i];
+        let instance = program.requireGlobal(name);
+        if (this.compileGlobal(instance) && !module.hasExport(name)) {
+          module.addGlobalExport(instance.internalName, name);
+        }
+      }
     }
 
     // compile lazy functions
@@ -546,9 +548,57 @@ export class Compiler extends DiagnosticEmitter {
     if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
     if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
 
-    // update the heap base pointer
-    var memoryOffset = this.memoryOffset;
-    memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
+    var memoryOffset = i64_align(this.memoryOffset, options.usizeType.byteSize);
+
+    // finalize data
+    module.removeGlobal(BuiltinNames.data_end);
+    if ((this.runtimeFeatures & RuntimeFeatures.DATA) != 0 || hasShadowStack) {
+      if (options.isWasm64) {
+        module.addGlobal(BuiltinNames.data_end, NativeType.I64, false,
+          module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
+        );
+      } else {
+        module.addGlobal(BuiltinNames.data_end, NativeType.I32, false,
+          module.i32(i64_low(memoryOffset))
+        );
+      }
+    }
+
+    // finalize stack (grows down from __heap_base to __data_end)
+    module.removeGlobal(BuiltinNames.stack_pointer);
+    if ((this.runtimeFeatures & RuntimeFeatures.STACK) != 0 || hasShadowStack) {
+      memoryOffset = i64_align(
+        i64_add(memoryOffset, i64_new(options.stackSize)),
+        options.usizeType.byteSize
+      );
+      if (options.isWasm64) {
+        module.addGlobal(BuiltinNames.stack_pointer, NativeType.I64, true,
+          module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
+        );
+      } else {
+        module.addGlobal(BuiltinNames.stack_pointer, NativeType.I32, true,
+          module.i32(i64_low(memoryOffset))
+        );
+      }
+    }
+
+    // finalize heap
+    module.removeGlobal(BuiltinNames.heap_base);
+    if ((this.runtimeFeatures & RuntimeFeatures.HEAP) != 0 || hasShadowStack) {
+      if (options.isWasm64) {
+        module.addGlobal(BuiltinNames.heap_base, NativeType.I64, false,
+          module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
+        );
+      } else {
+        module.addGlobal(BuiltinNames.heap_base, NativeType.I32, false,
+          module.i32(i64_low(memoryOffset))
+        );
+      }
+    }
+
+    this.memoryOffset = memoryOffset;
+
+    // check that we didn't exceed lowMemoryLimit already
     var lowMemoryLimit32 = this.options.lowMemoryLimit;
     if (lowMemoryLimit32) {
       let lowMemoryLimit = i64_new(lowMemoryLimit32 & ~15);
@@ -556,25 +606,6 @@ export class Compiler extends DiagnosticEmitter {
         this.error(
           DiagnosticCode.Low_memory_limit_exceeded_by_static_data_0_1,
           null, i64_to_string(memoryOffset), i64_to_string(lowMemoryLimit)
-        );
-      }
-    }
-    this.memoryOffset = memoryOffset;
-    module.removeGlobal(BuiltinNames.heap_base);
-    if (this.runtimeFeatures & RuntimeFeatures.HEAP) {
-      if (options.isWasm64) {
-        module.addGlobal(
-          BuiltinNames.heap_base,
-          NativeType.I64,
-          false,
-          module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
-        );
-      } else {
-        module.addGlobal(
-          BuiltinNames.heap_base,
-          NativeType.I32,
-          false,
-          module.i32(i64_low(memoryOffset))
         );
       }
     }
@@ -666,13 +697,6 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // set up module exports
-    // TODO: for (let file of this.program.filesByName.values()) {
-    for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
-      let file = unchecked(_values[i]);
-      if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
-    }
-
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
       module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
@@ -680,6 +704,46 @@ export class Compiler extends DiagnosticEmitter {
       );
       module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
     }
+
+    // NOTE: no more element compiles from here. may go to the start function!
+
+    // compile the start function if not empty or if explicitly requested
+    var startIsEmpty = !startFunctionBody.length;
+    var explicitStart = program.isWasi || options.explicitStart;
+    if (!startIsEmpty || explicitStart) {
+      let signature = startFunctionInstance.signature;
+      if (!startIsEmpty && explicitStart) {
+        module.addGlobal(BuiltinNames.started, NativeType.I32, true, module.i32(0));
+        startFunctionBody.unshift(
+          module.global_set(BuiltinNames.started, module.i32(1))
+        );
+        startFunctionBody.unshift(
+          module.if(
+            module.global_get(BuiltinNames.started, NativeType.I32),
+            module.return()
+          )
+        );
+      }
+      let funcRef = module.addFunction(
+        startFunctionInstance.internalName,
+        signature.nativeParams,
+        signature.nativeResults,
+        typesToNativeTypes(startFunctionInstance.additionalLocals),
+        module.flatten(startFunctionBody)
+      );
+      startFunctionInstance.finalize(module, funcRef);
+      if (!explicitStart) module.setStart(funcRef);
+      else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
+    }
+
+    // Run custom passes
+    if (hasShadowStack) {
+      this.shadowStack.walkModule();
+    }
+    if (program.lookup("ASC_RTRACE") != null) {
+      new RtraceMemory(this).walkModule();
+    }
+
     return module;
   }
 
@@ -706,6 +770,7 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Applies the respective module export(s) for the specified element. */
   private ensureModuleExport(name: string, element: Element, prefix: string = ""): void {
+    var module = this.module;
     switch (element.kind) {
 
       // traverse instances
@@ -768,8 +833,11 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Cannot_export_a_mutable_global,
             global.identifierNode.range
           );
-        } else {
-          if (element.is(CommonFlags.COMPILED)) this.module.addGlobalExport(element.internalName, prefix + name);
+        } else if (global.is(CommonFlags.COMPILED)) {
+          let exportName = prefix + name;
+          if (!module.hasExport(exportName)) {
+            module.addGlobalExport(element.internalName, exportName);
+          }
         }
         break;
       }
@@ -780,8 +848,11 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Cannot_export_a_mutable_global,
             enumValue.identifierNode.range
           );
-        } else {
-          this.module.addGlobalExport(element.internalName, prefix + name);
+        } else if (enumValue.is(CommonFlags.COMPILED)) {
+          let exportName = prefix + name;
+          if (!module.hasExport(exportName)) {
+            module.addGlobalExport(element.internalName, exportName);
+          }
         }
         break;
       }
@@ -795,7 +866,15 @@ export class Compiler extends DiagnosticEmitter {
             this.ensureArgumentsLength();
             this.runtimeFeatures |= RuntimeFeatures.setArgumentsLength;
           }
-          if (functionInstance.is(CommonFlags.COMPILED)) this.module.addFunctionExport(functionInstance.internalName, prefix + name);
+          if (functionInstance.is(CommonFlags.COMPILED)) {
+            let exportName = prefix + name;
+            if (!module.hasExport(exportName)) {
+              module.addFunctionExport(functionInstance.internalName, exportName);
+              if (signature.hasManagedOperands) {
+                this.shadowStack.noteExport(exportName, signature.getManagedOperandIndices());
+              }
+            }
+          }
         }
         break;
       }
@@ -810,10 +889,23 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FIELD: {
         let fieldInstance = <Field>element;
         if (element.is(CommonFlags.COMPILED)) {
-          let module = this.module;
-          module.addFunctionExport(fieldInstance.internalGetterName, prefix + GETTER_PREFIX + name);
+          let getterExportName = prefix + GETTER_PREFIX + name;
+          if (!module.hasExport(getterExportName)) {
+            module.addFunctionExport(fieldInstance.internalGetterName, getterExportName);
+            let signature = fieldInstance.internalGetterSignature;
+            if (signature.hasManagedOperands) {
+              this.shadowStack.noteExport(getterExportName, signature.getManagedOperandIndices());
+            }
+          }
           if (!element.is(CommonFlags.READONLY)) {
-            module.addFunctionExport(fieldInstance.internalSetterName, prefix + SETTER_PREFIX + name);
+            let setterExportName = prefix + SETTER_PREFIX + name;
+            if (!module.hasExport(setterExportName)) {
+              module.addFunctionExport(fieldInstance.internalSetterName, setterExportName);
+              let signature = fieldInstance.internalSetterSignature;
+              if (signature.hasManagedOperands) {
+                this.shadowStack.noteExport(setterExportName, signature.getManagedOperandIndices());
+              }
+            }
           }
         }
         break;
@@ -836,6 +928,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // just traverse members below
       case ElementKind.ENUM:
+      case ElementKind.INTERFACE_PROTOTYPE:
       case ElementKind.NAMESPACE:
       case ElementKind.TYPEDEFINITION:
       case ElementKind.INDEXSIGNATURE: break;
@@ -905,6 +998,7 @@ export class Compiler extends DiagnosticEmitter {
         if (propertyInstance) this.compileProperty(propertyInstance);
         break;
       }
+      case ElementKind.INTERFACE_PROTOTYPE:
       case ElementKind.NAMESPACE:
       case ElementKind.TYPEDEFINITION:
       case ElementKind.ENUMVALUE:
@@ -983,7 +1077,6 @@ export class Compiler extends DiagnosticEmitter {
     for (let statements = file.source.statements, i = 0, k = statements.length; i < k; ++i) {
       this.compileTopLevelStatement(statements[i], startFunctionBody);
     }
-    this.finishAutoreleases(flow, startFunctionBody);
     // no need to insert unreachable since last statement should have done that
     this.currentFlow = previousFlow;
     this.currentBody = previousBody;
@@ -1052,7 +1145,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentFlow = global.file.startFunction.flow;
         }
         initExpr = this.compileExpression(initializerNode, Type.auto, // reports
-          Constraints.MUST_WRAP | Constraints.WILL_RETAIN | Constraints.PREFER_STATIC
+          Constraints.MUST_WRAP | Constraints.PREFER_STATIC
         );
         this.currentFlow = previousFlow;
         if (this.currentType == Type.void) {
@@ -1080,8 +1173,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // Handle ambient builtins like '__heap_base' that need to be resolved but are added explicitly
     if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
-      if (global.internalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
-      else if (global.internalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
+      let internalName = global.internalName;
+      if (internalName == BuiltinNames.data_end) this.runtimeFeatures |= RuntimeFeatures.DATA;
+      else if (internalName == BuiltinNames.stack_pointer) this.runtimeFeatures |= RuntimeFeatures.STACK;
+      else if (internalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
+      else if (internalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
       pendingElements.delete(global);
       return true;
     }
@@ -1131,7 +1227,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentFlow = global.file.startFunction.flow;
         }
         initExpr = this.compileExpression(initializerNode, type,
-          Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP | Constraints.WILL_RETAIN | Constraints.PREFER_STATIC
+          Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP | Constraints.PREFER_STATIC
         );
         this.currentFlow = previousFlow;
       }
@@ -1147,7 +1243,6 @@ export class Compiler extends DiagnosticEmitter {
               initializeInStart = true;
             }
           }
-          if (this.skippedAutoreleases.has(initExpr)) this.skippedAutoreleases.add(initExpr);
         } else {
           initializeInStart = true;
         }
@@ -1213,7 +1308,7 @@ export class Compiler extends DiagnosticEmitter {
     // Initialize to zero if there's no initializer
     } else {
       if (global.is(CommonFlags.INLINED)) {
-        initExpr = this.compileInlineConstant(global, global.type, Constraints.PREFER_STATIC | Constraints.WILL_RETAIN);
+        initExpr = this.compileInlineConstant(global, global.type, Constraints.PREFER_STATIC);
       } else {
         initExpr = this.makeZero(type, global.declaration);
       }
@@ -1229,7 +1324,6 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       module.addGlobal(internalName, nativeType, true, this.makeZero(type, global.declaration));
-      if (type.isManaged && !this.skippedAutoreleases.has(initExpr)) initExpr = this.makeRetain(initExpr, type);
       this.currentBody.push(
         module.global_set(internalName, initExpr)
       );
@@ -1274,7 +1368,7 @@ export class Compiler extends DiagnosticEmitter {
         let initExpr: ExpressionRef;
         if (valueNode) {
           initExpr = this.compileExpression(valueNode, Type.i32,
-            Constraints.CONV_IMPLICIT // autorelease is not applicable in i32 context
+            Constraints.CONV_IMPLICIT
           );
           if (getExpressionId(initExpr) != ExpressionId.Const) {
             let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
@@ -1409,45 +1503,10 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFlow = flow;
       let stmts = new Array<ExpressionRef>();
 
-      // retain each argument for as long as the function lives
-      let index = 0;
-      let thisType = signature.thisType;
-      if (thisType) {
-        // In normal instance functions, `this` is effectively a constant
-        // retained elsewhere so does not need to be retained.
-        if (instance.is(CommonFlags.CONSTRUCTOR)) {
-          // Constructors, however, can allocate their own memory, and as such
-          // must refcount the allocation in case something else is `return`ed.
-          flow.setLocalFlag(index, LocalFlags.RETAINED);
-        }
-        ++index;
+      if (!this.compileFunctionBody(instance, stmts)) {
+        stmts.push(module.unreachable());
       }
-      let parameterTypes = signature.parameterTypes;
-      for (let i = 0, k = parameterTypes.length; i < k; ++i, ++index) {
-        let type = parameterTypes[i];
-        if (type.isManaged) {
-          stmts.push(
-            module.local_set(index,
-              this.makeRetain(
-                module.local_get(index, type.toNativeType()),
-                type
-              )
-            )
-          );
-          flow.setLocalFlag(index, LocalFlags.RETAINED);
-        }
-      }
-
-      let body: ExpressionRef;
-      if (this.compileFunctionBody(instance, stmts)) {
-        if (!flow.is(FlowFlags.TERMINATES)) {
-          this.performAutoreleases(flow, stmts);
-          this.finishAutoreleases(flow, stmts);
-        }
-        body = module.flatten(stmts, instance.signature.returnType.toNativeType());
-      } else {
-        body = module.unreachable();
-      }
+     
       this.currentFlow = previousFlow;
 
       // create the function
@@ -1456,7 +1515,7 @@ export class Compiler extends DiagnosticEmitter {
         signature.nativeParams,
         signature.nativeResults,
         typesToNativeTypes(instance.additionalLocals),
-        body
+        module.flatten(stmts, instance.signature.returnType.toNativeType())
       );
 
     // imported function
@@ -1510,6 +1569,7 @@ export class Compiler extends DiagnosticEmitter {
     var thisLocal = instance.signature.thisType
       ? assert(flow.lookupLocal(CommonNames.this_))
       : null;
+    var bodyStartIndex = stmts.length;
 
     // compile statements
     if (bodyNode.kind == NodeKind.BLOCK) {
@@ -1524,28 +1584,16 @@ export class Compiler extends DiagnosticEmitter {
       // none of the following can be an arrow function
       assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET));
 
-      // take special care of properly retaining the returned value
-      let expr = this.compileReturnedExpression((<ExpressionStatement>bodyNode).expression, returnType, Constraints.CONV_IMPLICIT);
+      let expr = this.compileExpression((<ExpressionStatement>bodyNode).expression, returnType, Constraints.CONV_IMPLICIT);
+      if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
+      if (flow.isNonnull(expr, returnType)) flow.set(FlowFlags.RETURNS_NONNULL);
 
       if (!stmts) stmts = [ expr ];
       else stmts.push(expr);
 
       if (!flow.is(FlowFlags.TERMINATES)) {
-        let indexBefore = stmts.length;
-        this.performAutoreleases(flow, stmts);
-        this.finishAutoreleases(flow, stmts);
-        let canOverflow = flow.canOverflow(expr, returnType);
-        let nonNull = flow.isNonnull(expr, returnType);
-        if (stmts.length > indexBefore) {
-          let temp = flow.getTempLocal(returnType);
-          if (!canOverflow) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
-          if (nonNull) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-          stmts[indexBefore - 1] = module.local_set(temp.index, expr);
-          stmts.push(module.local_get(temp.index, returnType.toNativeType()));
-          flow.freeTempLocal(temp);
-        }
-        if (!canOverflow) flow.set(FlowFlags.RETURNS_WRAPPED);
-        if (nonNull) flow.set(FlowFlags.RETURNS_NONNULL);
+        if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
+        if (flow.isNonnull(expr, returnType)) flow.set(FlowFlags.RETURNS_NONNULL);
         flow.set(FlowFlags.RETURNS | FlowFlags.TERMINATES);
       }
     }
@@ -1553,7 +1601,6 @@ export class Compiler extends DiagnosticEmitter {
     // Make constructors return their instance pointer, and prepend a conditional
     // allocation if any code path accesses `this`.
     if (instance.is(CommonFlags.CONSTRUCTOR)) {
-      let nativeSizeType = this.options.nativeSizeType;
       assert(instance.is(CommonFlags.INSTANCE));
       thisLocal = assert(thisLocal);
       let parent = assert(instance.parent);
@@ -1561,33 +1608,19 @@ export class Compiler extends DiagnosticEmitter {
       let classInstance = <Class>parent;
 
       if (flow.isAny(FlowFlags.ACCESSES_THIS | FlowFlags.CONDITIONALLY_ACCESSES_THIS) || !flow.is(FlowFlags.TERMINATES)) {
+
         // Allocate `this` if not a super call, and initialize fields
         let allocStmts = new Array<ExpressionRef>();
         allocStmts.push(
-          module.if(
-            module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
-              module.local_get(thisLocal.index, nativeSizeType)
-            ),
-            module.local_set(thisLocal.index,
-              this.makeRetain(
-                this.makeAllocation(classInstance),
-                classInstance.type
-              )
-            )
-          )
+          this.makeConditionalAllocation(classInstance, thisLocal.index)
         );
         this.makeFieldInitializationInConstructor(classInstance, allocStmts);
-        if (flow.isInline) {
-          let firstStmt = stmts[0]; // `this` alias assignment
-          assert(getExpressionId(firstStmt) == ExpressionId.LocalSet);
-          assert(getLocalSetIndex(firstStmt) == thisLocal.index);
-          allocStmts.unshift(firstStmt);
-          stmts[0] = module.flatten(allocStmts, NativeType.None);
-        } else {
-          stmts.unshift(
-            module.flatten(allocStmts, NativeType.None)
-          );
+
+        // Insert right before the body
+        for (let i = stmts.length - 1; i >= bodyStartIndex; --i) {
+          stmts[i + 1] = stmts[i];
         }
+        stmts[bodyStartIndex] = module.flatten(allocStmts, NativeType.None);
 
         // Just prepended allocation is dropped when returning non-'this'
         if (flow.is(FlowFlags.MAY_RETURN_NONTHIS)) {
@@ -1610,11 +1643,9 @@ export class Compiler extends DiagnosticEmitter {
 
       // Implicitly return `this` if the flow falls through
       if (!flow.is(FlowFlags.TERMINATES)) {
-        assert(flow.isAnyLocalFlag(thisLocal.index, LocalFlags.ANY_RETAINED));
-        flow.unsetLocalFlag(thisLocal.index, LocalFlags.ANY_RETAINED); // undo
-        this.performAutoreleases(flow, stmts);
-        this.finishAutoreleases(flow, stmts);
-        stmts.push(module.local_get(thisLocal.index, this.options.nativeSizeType));
+        stmts.push(
+          module.local_get(thisLocal.index, this.options.nativeSizeType)
+        );
         flow.set(FlowFlags.RETURNS | FlowFlags.RETURNS_NONNULL | FlowFlags.TERMINATES);
       }
 
@@ -1728,18 +1759,18 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Compiles the getter of the specified instance field. */
   compileFieldGetter(instance: Field): bool {
-    // A getter retains, while a load, as of a field access, does not.
     if (instance.getterRef) return true;
-    var type = instance.type;
-    var nativeThisType = this.options.nativeSizeType;
-    var nativeValueType = type.toNativeType();
     var module = this.module;
-    var valueExpr = module.load(type.byteSize, type.isSignedIntegerValue,
-      module.local_get(0, nativeThisType),
-      nativeValueType, instance.memoryOffset
+    var valueType = instance.type;
+    var nativeValueType = valueType.toNativeType();
+    var nativeThisType = this.options.nativeSizeType;
+    // return this.field
+    instance.getterRef = module.addFunction(instance.internalGetterName, nativeThisType, nativeValueType, null,
+      module.load(valueType.byteSize, valueType.isSignedIntegerValue,
+        module.local_get(0, nativeThisType),
+        nativeValueType, instance.memoryOffset
+      )
     );
-    if (type.isManaged) valueExpr = this.makeRetain(valueExpr, type);
-    instance.getterRef = module.addFunction(instance.internalGetterName, nativeThisType, nativeValueType, null, valueExpr);
     if (instance.setterRef) {
       instance.set(CommonFlags.COMPILED);
     } else {
@@ -1756,42 +1787,30 @@ export class Compiler extends DiagnosticEmitter {
     var nativeThisType = this.options.nativeSizeType;
     var nativeValueType = type.toNativeType();
     var module = this.module;
-    var valueExpr: ExpressionRef;
-    var varTypes: NativeType[] | null = null;
+    // void(this.field = value)
+    var bodyExpr = module.store(type.byteSize,
+      module.local_get(0, nativeThisType),
+      module.local_get(1, nativeValueType),
+      nativeValueType, instance.memoryOffset
+    );
     if (type.isManaged) {
-      // Can't use makeReplace here since there's no corresponding flow, so
-      // 0: this, 1: value, 2: oldValue (temp)
-      valueExpr = module.block(null, [
-        module.if(
-          module.binary(nativeValueType == NativeType.I64 ? BinaryOp.NeI64 : BinaryOp.NeI32,
-            // value != (oldValue = this.field)
+      let parent = instance.parent;
+      assert(parent.kind == ElementKind.CLASS);
+      if ((<Class>parent).type.isManaged) {
+        let linkInstance = this.program.linkInstance;
+        this.compileFunction(linkInstance);
+        bodyExpr = module.block(null, [
+          bodyExpr,
+          module.call(linkInstance.internalName, [
+            module.local_get(0, nativeThisType),
             module.local_get(1, nativeValueType),
-            module.local_tee(2,
-              module.load(type.byteSize, false,
-                module.local_get(0, nativeThisType),
-                nativeValueType, instance.memoryOffset
-              )
-            )
-          ),
-          module.block(null, [
-            module.drop(
-              this.makeRetain(module.local_get(1, nativeValueType), type)
-            ),
-            this.makeRelease(module.local_get(2, nativeValueType), type)
-          ])
-        ),
-        module.local_get(1, nativeValueType)
-      ], nativeValueType);
-      varTypes = [ nativeValueType ];
-    } else {
-      valueExpr = module.local_get(1, nativeValueType);
+            module.i32(0)
+          ], NativeType.None)
+        ], NativeType.None);
+      }
     }
-    instance.setterRef = module.addFunction(instance.internalSetterName, createType([ nativeThisType, nativeValueType ]), NativeType.None, varTypes,
-      module.store(type.byteSize,
-        module.local_get(0, nativeThisType),
-        valueExpr,
-        nativeValueType, instance.memoryOffset
-      )
+    instance.setterRef = module.addFunction(instance.internalSetterName, createType([ nativeThisType, nativeValueType ]), NativeType.None, null,
+      bodyExpr
     );
     if (instance.getterRef) {
       instance.set(CommonFlags.COMPILED);
@@ -1981,7 +2000,6 @@ export class Compiler extends DiagnosticEmitter {
     var bufferLength = readI32(bufferSegment.buffer, program.OBJECTInstance.offsetof("rtSize"));
     var arrayLength = i32(bufferLength / elementType.byteSize);
     var bufferAddress = i64_add(bufferSegment.offset, i64_new(program.totalOverhead));
-
     var buf = arrayInstance.createBuffer();
     assert(arrayInstance.writeField("buffer", bufferAddress, buf));
     assert(arrayInstance.writeField("dataStart", bufferAddress, buf));
@@ -2242,7 +2260,6 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = innerFlow;
 
     var stmts = this.compileStatements(statements);
-    if (!innerFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) this.performAutoreleases(innerFlow, stmts);
     innerFlow.freeScopedLocals();
     outerFlow.inherit(innerFlow);
     this.currentFlow = outerFlow;
@@ -2271,17 +2288,9 @@ export class Compiler extends DiagnosticEmitter {
       );
       return module.unreachable();
     }
-    var stmts = new Array<ExpressionRef>();
-    this.performAutoreleases(flow, stmts);
-    var parent = flow.parent;
-    while (parent !== null && parent.breakLabel == breakLabel) {
-      this.performAutoreleases(parent, stmts, /* finalize */ false);
-      parent = parent.parent;
-    }
     flow.freeScopedLocals();
-    stmts.push(module.br(breakLabel));
     flow.set(FlowFlags.BREAKS);
-    return module.flatten(stmts);
+    return module.br(breakLabel);
   }
 
   private compileContinueStatement(
@@ -2308,16 +2317,8 @@ export class Compiler extends DiagnosticEmitter {
       return module.unreachable();
     }
     flow.set(FlowFlags.CONTINUES | FlowFlags.TERMINATES);
-    var stmts = new Array<ExpressionRef>();
-    this.performAutoreleases(flow, stmts);
-    var current: Flow | null = flow.parent;
-    while (current !== null && current.continueLabel === continueLabel) {
-      this.performAutoreleases(current, stmts, /* finalize */ false);
-      current = current.parent;
-    }
     flow.freeScopedLocals();
-    stmts.push(module.br(continueLabel));
-    return module.flatten(stmts);
+    return module.br(continueLabel);
   }
 
   private compileDoStatement(
@@ -2339,10 +2340,10 @@ export class Compiler extends DiagnosticEmitter {
     // (block $break                          └►┐ flow
     //  (loop $continue                         ├◄───────────┐ recompile?
     //   (body)                                 └─┐ bodyFlow │
-    //   [autorelease]                          ┌─┘          │
+    //                                          ┌─┘          │
     //                                        ┌◄┼►╢          │ breaks or terminates?
     //   (local.set $tcond (condition))       │ └─┐ condFlow │
-    //   [autorelease]                        │ ┌─┘          │
+    //                                        │ ┌─┘          │
     //   (br_if (local.get $tcond) $continue) ├◄┴────────────┘ condition?
     //  )                                     └─┐
     // )                                      ┌─┘
@@ -2378,8 +2379,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // Otherwise evaluate the condition
     } else {
-      this.performAutoreleases(bodyFlow, bodyStmts);
-
       let condFlow = flow.fork();
       this.currentFlow = condFlow;
       let condExpr = this.makeIsTrueish(
@@ -2394,7 +2393,6 @@ export class Compiler extends DiagnosticEmitter {
         bodyStmts.push(
           module.drop(condExpr)
         );
-        this.performAutoreleases(condFlow, bodyStmts);
         flow.inherit(bodyFlow);
 
       // Terminate if condition is always true and body never breaks
@@ -2402,7 +2400,6 @@ export class Compiler extends DiagnosticEmitter {
         bodyStmts.push(
           module.drop(condExpr)
         );
-        this.performAutoreleases(condFlow, bodyStmts);
         bodyStmts.push(
           module.br(continueLabel)
         );
@@ -2411,9 +2408,8 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         let tcond = condFlow.getTempLocal(Type.bool);
         bodyStmts.push(
-          module.local_set(tcond.index, condExpr)
+          module.local_set(tcond.index, condExpr, false) // bool
         );
-        this.performAutoreleases(condFlow, bodyStmts);
         bodyStmts.push(
           module.br(continueLabel,
             module.local_get(tcond.index, NativeType.I32)
@@ -2481,20 +2477,20 @@ export class Compiler extends DiagnosticEmitter {
     // (block $break                    │
     //  (loop $loop                     ├◄───────────┐ recompile?
     //   (local.set $tcond (condition)) └─┐ condFlow │
-    //   [autorelease]                  ┌─┘          │
+    //                                  ┌─┘          │
     //   (if (local.get $tcond)       ┌◄┤            │ condition?
     //    (block $continue            │ │            │
     //     (body)                     │ └─┐ bodyFlow │
-    //     [autorelease]              │ ┌─┘          │
+    //                                │ ┌─┘          │
     //    )                           ├◄┼►╢          │ breaks or terminates?
     //    (incrementor)               │ └─┐ incrFlow │
-    //    [autorelease]               │ ┌─┘          │
+    //                                │ ┌─┘          │
     //                                │ └────────────┘
     //    (br $loop)                  └─┐
     //   )                              │
     //  )                               │
     // )                                │
-    // [autorelease]                  ┌─┘
+    //                                ┌─┘
 
     var label = outerFlow.pushBreakLabel();
     var stmts = new Array<ExpressionRef>();
@@ -2507,7 +2503,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.continueLabel = continueLabel;
     var loopLabel = "for-loop|" + label;
 
-    // Compile initializer if present (but wait with autoreleases)
+    // Compile initializer if present
     var initializer = statement.initializer;
     if (initializer) {
       assert(
@@ -2539,10 +2535,8 @@ export class Compiler extends DiagnosticEmitter {
         stmts.push(
           module.drop(condExpr)
         );
-        this.performAutoreleases(condFlow, stmts);
         condFlow.freeScopedLocals();
         flow.inherit(condFlow);
-        this.performAutoreleases(flow, stmts);
         flow.freeScopedLocals();
         outerFlow.inherit(flow);
         outerFlow.popBreakLabel();
@@ -2556,13 +2550,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // From here on condition is either always true or unknown
 
-    // Store condition result in a temp while we autorelease
+    // Store condition result in a temp
     var tcond = flow.getTempLocal(Type.bool);
     var loopStmts = new Array<ExpressionRef>();
     loopStmts.push(
-      module.local_set(tcond.index, condExpr)
+      module.local_set(tcond.index, condExpr, false) // bool
     );
-    this.performAutoreleases(condFlow, loopStmts);
     condFlow.freeScopedLocals();
 
     flow.inherit(condFlow); // always executes
@@ -2583,8 +2576,6 @@ export class Compiler extends DiagnosticEmitter {
     // Check if body terminates
     if (bodyFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
       bodyStmts.push(module.unreachable());
-    } else {
-      this.performAutoreleases(bodyFlow, bodyStmts);
     }
     if (condKind == ConditionKind.TRUE) flow.inherit(bodyFlow);
     else flow.inheritBranch(bodyFlow);
@@ -2605,7 +2596,6 @@ export class Compiler extends DiagnosticEmitter {
         ifStmts.push(
           this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP)
         );
-        this.performAutoreleases(incrFlow, ifStmts);
         incrFlow.freeScopedLocals();
         flow.inherit(incrFlow); // mostly local flags, also covers late termination by throwing
         this.currentFlow = flow;
@@ -2648,8 +2638,6 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.popBreakLabel();
     if (outerFlow.is(FlowFlags.TERMINATES)) {
       stmts.push(module.unreachable());
-    } else {
-      this.performAutoreleases(flow, stmts);
     }
     this.currentFlow = outerFlow;
     return module.flatten(stmts);
@@ -2677,15 +2665,14 @@ export class Compiler extends DiagnosticEmitter {
     //  (condition)      ┌┴───────────┐ condition?
     //  (block           │            │
     //   (ifTrue)        └►┐ thenFlow │
-    //   [autorelease]   ┌─┘          │
+    //                   ┌─┘          │
     //  )                ├─╢          │
     //  (block           │          ┌◄┤ present?
     //   (ifFalse)       │          │ └►┐ elseFlow
-    //   [autorelease]   │          │ ┌─┘
+    //                   │          │ ┌─┘
     //  )                │          │ ├─╢
     // )                 └┬─────────┴─┘
     // ...              ┌◄┘
-    // [autorelease]               incl. condition
 
     // Precompute the condition (always executes)
     var condExpr = this.makeIsTrueish(
@@ -2730,8 +2717,6 @@ export class Compiler extends DiagnosticEmitter {
     var thenTerminates = thenFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS);
     if (thenTerminates) {
       thenStmts.push(module.unreachable());
-    } else {
-      this.performAutoreleases(thenFlow, thenStmts);
     }
     thenFlow.freeScopedLocals();
     this.currentFlow = flow;
@@ -2750,8 +2735,6 @@ export class Compiler extends DiagnosticEmitter {
       let elseTerminates = elseFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS);
       if (elseTerminates) {
         elseStmts.push(module.unreachable());
-      } else {
-        this.performAutoreleases(elseFlow, elseStmts);
       }
       elseFlow.freeScopedLocals();
       this.currentFlow = flow;
@@ -2795,8 +2778,9 @@ export class Compiler extends DiagnosticEmitter {
       let constraints = Constraints.CONV_IMPLICIT;
       if (flow.actualFunction.is(CommonFlags.MODULE_EXPORT)) constraints |= Constraints.MUST_WRAP;
 
-      // take special care of properly retaining the returned value
-      expr = this.compileReturnedExpression(valueExpression, returnType, constraints);
+      expr = this.compileExpression(valueExpression, returnType, constraints);
+      if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
+      if (flow.isNonnull(expr, returnType)) flow.set(FlowFlags.RETURNS_NONNULL);
       if (flow.actualFunction.is(CommonFlags.CONSTRUCTOR) && valueExpression.kind != NodeKind.THIS) {
         flow.set(FlowFlags.MAY_RETURN_NONTHIS);
       }
@@ -2805,46 +2789,25 @@ export class Compiler extends DiagnosticEmitter {
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         statement.range, "void", returnType.toString()
       );
-      expr = module.unreachable();
-    }
-
-    var stmts = new Array<ExpressionRef>();
-    this.performAutoreleases(flow, stmts);
-    this.finishAutoreleases(flow, stmts);
-
-    if (returnType != Type.void && stmts.length > 0) {
-      let temp = flow.getTempLocal(returnType);
-      if (flow.isNonnull(expr, returnType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-      stmts.unshift(
-        module.local_set(temp.index, expr)
-      );
-      expr = module.local_get(temp.index, returnType.toNativeType());
-      flow.freeTempLocal(temp);
+      this.currentType = returnType;
+      return module.unreachable();
     }
     flow.freeScopedLocals();
 
     // Remember that this flow returns
     flow.set(FlowFlags.RETURNS | FlowFlags.TERMINATES);
 
-    // If the last statement anyway, make it the block's return value
-    if (isLastInBody && expr != 0 && returnType != Type.void) {
-      if (!stmts.length) return expr;
-      stmts.push(expr);
-      return module.flatten(stmts, returnType.toNativeType());
-    }
-
-    // When inlining, break to the end of the inlined function's block (no need to wrap)
+    // Handle inline return
     if (flow.isInline) {
-      if (!stmts.length) return module.br(assert(flow.inlineReturnLabel), 0, expr);
-      stmts.push(module.br(assert(flow.inlineReturnLabel), 0, expr));
-      // stmts.push(module.createUnreachable());
-      return module.flatten(stmts);
+      return isLastInBody && expr != 0
+        ? expr
+        : module.br(assert(flow.inlineReturnLabel), 0, expr);
     }
 
     // Otherwise emit a normal return
-    if (!stmts.length) return module.return(expr);
-    stmts.push(module.return(expr));
-    return module.flatten(stmts);
+    return isLastInBody && expr != 0
+      ? expr
+      : module.return(expr);
   }
 
   private compileSwitchStatement(
@@ -2874,7 +2837,8 @@ export class Compiler extends DiagnosticEmitter {
       tempLocalIndex,
       this.compileExpression(statement.condition, Type.u32,
         Constraints.CONV_IMPLICIT
-      )
+      ),
+      false // u32
     );
 
     // make one br_if per (possibly dynamic) labeled case (binaryen optimizes to br_table where possible)
@@ -2943,7 +2907,6 @@ export class Compiler extends DiagnosticEmitter {
       commonConditional |= innerFlow.flags & FlowFlags.ANY_CONDITIONAL;
 
       // Switch back to the parent flow
-      if (!terminates) this.performAutoreleases(innerFlow, stmts);
       innerFlow.unset(
         FlowFlags.BREAKS |
         FlowFlags.CONDITIONALLY_BREAKS
@@ -2980,12 +2943,7 @@ export class Compiler extends DiagnosticEmitter {
     stmts.push(
       this.makeAbort(message, statement)
     );
-    // generates dead code (after unreachable) but still updates state
-    var dropped = new Array<ExpressionRef>();
-    this.performAutoreleases(flow, dropped);
-    this.finishAutoreleases(flow, dropped);
     flow.freeScopedLocals();
-
     return this.module.flatten(stmts);
   }
 
@@ -3018,7 +2976,6 @@ export class Compiler extends DiagnosticEmitter {
       let name = declaration.name.text;
       let type: Type | null = null;
       let initExpr: ExpressionRef = 0;
-      let initAutoreleaseSkipped = false;
 
       // Resolve type if annotated
       let typeNode = declaration.type;
@@ -3037,9 +2994,8 @@ export class Compiler extends DiagnosticEmitter {
           let dummy = flow.addScopedDummyLocal(name, type); // pending dummy
           pendingElements.add(dummy);
           initExpr = this.compileExpression(initializerNode, type, // reports
-            Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
+            Constraints.CONV_IMPLICIT
           );
-          initAutoreleaseSkipped = this.skippedAutoreleases.has(initExpr);
           pendingElements.delete(dummy);
           flow.freeScopedDummyLocal(name);
         }
@@ -3049,10 +3005,7 @@ export class Compiler extends DiagnosticEmitter {
         let pendingElements = this.pendingElements;
         let temp = flow.addScopedDummyLocal(name, Type.auto); // pending dummy
         pendingElements.add(temp);
-        initExpr = this.compileExpression(initializerNode, Type.auto,
-          Constraints.WILL_RETAIN
-        ); // reports
-        initAutoreleaseSkipped = this.skippedAutoreleases.has(initExpr);
+        initExpr = this.compileExpression(initializerNode, Type.auto); // reports
         pendingElements.delete(temp);
         flow.freeScopedDummyLocal(name);
 
@@ -3184,46 +3137,19 @@ export class Compiler extends DiagnosticEmitter {
           local = flow.parentFunction.addLocal(type, name, declaration);
           if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
         }
-        let isManaged = type.isManaged;
         if (initExpr) {
-          if (flow.isNonnull(initExpr, type)) flow.setLocalFlag(local.index, LocalFlags.NONNULL);
-          if (isManaged) {
-            flow.setLocalFlag(local.index, LocalFlags.RETAINED);
-            initializers.push(
-              module.local_set(local.index,
-                initAutoreleaseSkipped
-                  ? initExpr
-                  : this.makeRetain(initExpr, type)
-              )
-            );
-          } else {
-            initializers.push(
-              module.local_set(local.index, initExpr)
-            );
-            if (local.type.isShortIntegerValue) {
-              if (!flow.canOverflow(initExpr, type)) flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
-              else flow.unsetLocalFlag(local.index, LocalFlags.WRAPPED);
-            }
-          }
+          initializers.push(
+            this.makeLocalAssignment(local, initExpr, type, false)
+          );
         } else {
-          if (isManaged) {
-            // This is necessary because the first use (and assign) of the local could be taking place
-            // in a loop, subsequently marking it retained, but the second iteration of the loop
-            // still wouldn't release whatever is assigned in the first. Likewise, if the variable wasn't
-            // initialized but becomes released later on, whatever was stored before would be released.
-            // TODO: Detect this condition inside of a loop instead?
-            initializers.push(
-              module.local_set(local.index,
-                this.makeZero(type, declaration)
-              )
-            );
-            flow.setLocalFlag(local.index, LocalFlags.CONDITIONALLY_RETAINED);
-          } else if (local.type.isShortIntegerValue) {
+          // no need to assign zero
+          if (local.type.isShortIntegerValue) {
             flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
           }
         }
       }
     }
+    this.currentType = Type.void;
     return initializers.length == 0
       ? 0
       : module.flatten(initializers);
@@ -3256,10 +3182,10 @@ export class Compiler extends DiagnosticEmitter {
     // (block $break                  └►┐ flow
     //  (loop $continue                 ├◄───────────┐ recompile?
     //   (local.set $tcond (condition)) └─┐ condFlow │
-    //   [autorelease]                  ┌─┘          │
+    //                                  ┌─┘          │
     //   (if (local.get $tcond)       ┌◄┤            │ condition?
     //    (body)                      │ └─┐ bodyFlow │
-    //    [autorelease]               │ ┌─┘          │
+    //                                │ ┌─┘          │
     //                                ├◄┼►╢          │ breaks or terminates?
     //    (br $continue)              │ └────────────┘
     //   )                            └─┐
@@ -3293,7 +3219,6 @@ export class Compiler extends DiagnosticEmitter {
       stmts.push(
         module.drop(condExpr)
       );
-      this.performAutoreleases(condFlow, stmts);
       assert(!flow.hasScopedLocals);
       outerFlow.popBreakLabel();
       this.currentFlow = outerFlow;
@@ -3302,12 +3227,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // From here on condition is either always true or unknown
 
-    // Store condition result in a temp while we autorelease
+    // Store condition result in a temp
     var tcond = flow.getTempLocal(Type.bool);
     stmts.push(
-      module.local_set(tcond.index, condExpr)
+      module.local_set(tcond.index, condExpr, false) // bool
     );
-    this.performAutoreleases(condFlow, stmts);
     condFlow.freeScopedLocals();
 
     flow.inherit(condFlow); // always executes
@@ -3335,7 +3259,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // Terminate if condition is always true and body never breaks
     } else if (condKind == ConditionKind.TRUE && !bodyFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
-      this.performAutoreleases(bodyFlow, bodyStmts);
       bodyStmts.push(
         module.br(continueLabel)
       );
@@ -3348,7 +3271,6 @@ export class Compiler extends DiagnosticEmitter {
           module.unreachable()
         );
       } else {
-        this.performAutoreleases(bodyFlow, bodyStmts);
         bodyStmts.push(
           module.br(continueLabel)
         );
@@ -3507,7 +3429,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.FUNCTION: {
-        expr = this.compileFunctionExpression(<FunctionExpression>expression, contextualType.signatureReference, constraints);
+        expr = this.compileFunctionExpression(<FunctionExpression>expression, contextualType, constraints);
         break;
       }
       case NodeKind.IDENTIFIER:
@@ -3568,32 +3490,6 @@ export class Compiler extends DiagnosticEmitter {
     // debug location is added here so the caller doesn't have to. means: compilation of an expression
     // must go through this function, with the respective per-kind functions not being used directly.
     if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
-    return expr;
-  }
-
-  /** Compiles an expression that is about to be returned, taking special care of retaining and setting flow states. */
-  private compileReturnedExpression(
-    /** Expression to compile. */
-    expression: Expression,
-    /** Return type of the function. */
-    returnType: Type,
-    /** Constraints indicating contextual conditions. */
-    constraints: Constraints = Constraints.NONE
-  ): ExpressionRef {
-    // pretend to retain the expression immediately so the autorelease, if any, is skipped
-    var expr = this.compileExpression(expression, returnType, constraints | Constraints.WILL_RETAIN);
-    var flow = this.currentFlow;
-    if (returnType.isManaged) {
-      // check if that worked, and if it didn't, keep the reference alive
-      if (!this.skippedAutoreleases.has(expr)) {
-        let index = this.tryUndoAutorelease(expr, flow);
-        if (index == -1) expr = this.makeRetain(expr, returnType);
-        this.skippedAutoreleases.add(expr);
-      }
-    }
-    // remember return states
-    if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
-    if (flow.isNonnull(expr, returnType)) flow.set(FlowFlags.RETURNS_NONNULL);
     return expr;
   }
 
@@ -3707,16 +3603,18 @@ export class Compiler extends DiagnosticEmitter {
           if (toType.isBooleanValue) {
             expr = this.makeIsTrueish(expr, Type.f32, reportNode);
           } else if (toType.isSignedIntegerValue) {
+            let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(UnaryOp.TruncF32ToI64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF32ToI64Sat : UnaryOp.TruncF32ToI64, expr);
             } else {
-              expr = module.unary(UnaryOp.TruncF32ToI32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF32ToI32Sat : UnaryOp.TruncF32ToI32, expr);
             }
           } else {
+            let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(UnaryOp.TruncF32ToU64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF32ToU64Sat : UnaryOp.TruncF32ToU64, expr);
             } else {
-              expr = module.unary(UnaryOp.TruncF32ToU32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF32ToU32Sat : UnaryOp.TruncF32ToU32, expr);
             }
           }
 
@@ -3725,16 +3623,18 @@ export class Compiler extends DiagnosticEmitter {
           if (toType.isBooleanValue) {
             expr = this.makeIsTrueish(expr, Type.f64, reportNode);
           } else if (toType.isSignedIntegerValue) {
+            let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(UnaryOp.TruncF64ToI64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF64ToI64Sat : UnaryOp.TruncF64ToI64, expr);
             } else {
-              expr = module.unary(UnaryOp.TruncF64ToI32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF64ToI32Sat : UnaryOp.TruncF64ToI32, expr);
             }
           } else {
+            let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(UnaryOp.TruncF64ToU64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF64ToU64Sat : UnaryOp.TruncF64ToU64, expr);
             } else {
-              expr = module.unary(UnaryOp.TruncF64ToU32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncF64ToU32Sat : UnaryOp.TruncF64ToU32, expr);
             }
           }
         }
@@ -4626,7 +4526,7 @@ export class Compiler extends DiagnosticEmitter {
 
       case Token.AMPERSAND_AMPERSAND: { // left && right -> (t = left) ? right : t
         let flow = this.currentFlow;
-        let inheritedConstraints = constraints & (Constraints.WILL_RETAIN | Constraints.MUST_WRAP);
+        let inheritedConstraints = constraints & Constraints.MUST_WRAP;
         leftExpr = this.compileExpression(left, contextualType.exceptVoid, inheritedConstraints);
         leftType = this.currentType;
 
@@ -4638,7 +4538,6 @@ export class Compiler extends DiagnosticEmitter {
         if (contextualType == Type.bool || contextualType == Type.void) {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
           rightType = this.currentType;
-          rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType);
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
           expr = module.if(
@@ -4651,80 +4550,28 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
+          rightFlow.freeScopedLocals();
+          this.currentFlow = flow;
 
-          // references must properly retain and release, with the same outcome independent of the branch taken
-          if (leftType.isManaged) {
-            let leftAutoreleaseSkipped = this.skippedAutoreleases.has(leftExpr);
-            let rightAutoreleaseSkipped = this.skippedAutoreleases.has(rightExpr);
-            let temp = flow.getTempLocal(leftType);
-            leftExpr = module.local_tee(temp.index, leftExpr);
-
-            // instead of retaining left and releasing it again in right when right
-            // is taken, we can also just retain left if right is not taken
-            let retainLeftInElse = false;
-            if (leftAutoreleaseSkipped != rightAutoreleaseSkipped) { // xor
-              if (!leftAutoreleaseSkipped) {
-                retainLeftInElse = true;
-              } else {
-                rightExpr = this.makeRetain(rightExpr, rightType);
-                rightAutoreleaseSkipped = true;
-              }
-            } else if (!(constraints & Constraints.WILL_RETAIN)) { // otherwise keep right alive a little longer
-              rightExpr = this.delayAutorelease(rightExpr, rightType, rightFlow, flow);
-            }
-
-            let rightStmts = new Array<ExpressionRef>();
-            if (leftAutoreleaseSkipped) { // left turned out to be true'ish and is dropped
-              rightStmts.unshift(
-                this.makeRelease(
-                  module.local_get(temp.index, leftType.toNativeType()),
-                  leftType
-                )
-              );
-            }
-            rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType, rightStmts);
-            rightFlow.freeScopedLocals();
-            this.currentFlow = flow;
-
+          // simplify if cloning left without side effects is possible
+          if (expr = module.cloneExpression(leftExpr, true, 0)) {
             expr = module.if(
-              this.makeIsTrueish(leftExpr, leftType, left),
+              this.makeIsTrueish(leftExpr, this.currentType, left),
               rightExpr,
-              retainLeftInElse
-                ? this.makeRetain(
-                    module.local_get(temp.index, leftType.toNativeType()),
-                    leftType
-                  )
-                : module.local_get(temp.index, leftType.toNativeType())
+              expr
             );
-            if (leftAutoreleaseSkipped || rightAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
-            if (temp) flow.freeTempLocal(temp);
 
-          // basic values can use more aggressive optimizations
+          // if not possible, tee left to a temp
           } else {
-            rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType);
-            rightFlow.freeScopedLocals();
-            this.currentFlow = flow;
-
-            // simplify if cloning left without side effects is possible
-            if (expr = module.cloneExpression(leftExpr, true, 0)) {
-              expr = module.if(
-                this.makeIsTrueish(leftExpr, this.currentType, left),
-                rightExpr,
-                expr
-              );
-
-            // if not possible, tee left to a temp
-            } else {
-              let tempLocal = flow.getTempLocal(leftType);
-              if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.WRAPPED);
-              if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.NONNULL);
-              expr = module.if(
-                this.makeIsTrueish(module.local_tee(tempLocal.index, leftExpr), leftType, left),
-                rightExpr,
-                module.local_get(tempLocal.index, leftType.toNativeType())
-              );
-              flow.freeTempLocal(tempLocal);
-            }
+            let tempLocal = flow.getTempLocal(leftType);
+            if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.WRAPPED);
+            if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.NONNULL);
+            expr = module.if(
+              this.makeIsTrueish(module.local_tee(tempLocal.index, leftExpr, leftType.isManaged), leftType, left),
+              rightExpr,
+              module.local_get(tempLocal.index, leftType.toNativeType())
+            );
+            flow.freeTempLocal(tempLocal);
           }
           this.currentType = leftType;
         }
@@ -4732,7 +4579,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.BAR_BAR: { // left || right -> ((t = left) ? t : right)
         let flow = this.currentFlow;
-        let inheritedConstraints = constraints & (Constraints.WILL_RETAIN | Constraints.MUST_WRAP);
+        let inheritedConstraints = constraints & Constraints.MUST_WRAP;
         leftExpr = this.compileExpression(left, contextualType.exceptVoid, inheritedConstraints);
         leftType = this.currentType;
 
@@ -4744,7 +4591,6 @@ export class Compiler extends DiagnosticEmitter {
         if (contextualType == Type.bool || contextualType == Type.void) {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
           rightType = this.currentType;
-          rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, leftType);
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
           expr = module.if(
@@ -4757,82 +4603,28 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
+          rightFlow.freeScopedLocals();
+          this.currentFlow = flow;
 
-          // references must properly retain and release, with the same outcome independent of the branch taken
-          if (leftType.isManaged) {
-            let leftAutoreleaseSkipped = this.skippedAutoreleases.has(leftExpr);
-            let rightAutoreleaseSkipped = this.skippedAutoreleases.has(rightExpr);
-            let temp = flow.getTempLocal(leftType);
-            leftExpr = module.local_tee(temp.index, leftExpr);
-
-            // instead of retaining left and releasing it again in right when right
-            // is taken, we can also just retain left if right is not taken
-            let retainLeftInThen = false;
-            if (leftAutoreleaseSkipped != rightAutoreleaseSkipped) { // xor
-              if (!leftAutoreleaseSkipped) {
-                retainLeftInThen = true;
-              } else {
-                rightExpr = this.makeRetain(rightExpr, rightType);
-                rightAutoreleaseSkipped = true;
-              }
-            } else if (!(constraints & Constraints.WILL_RETAIN)) { // otherwise keep right alive a little longer
-              rightExpr = this.delayAutorelease(rightExpr, rightType, rightFlow, flow);
-            }
-
-            let rightStmts = new Array<ExpressionRef>();
-            if (leftAutoreleaseSkipped) { // left turned out to be false'ish and is dropped
-              // TODO: usually, false'ish means left is null, but this might not hold
-              // once implicit conversion with strings is performed and left is "", so:
-              rightStmts.unshift(
-                this.makeRelease(
-                  module.local_get(temp.index, leftType.toNativeType()),
-                  leftType
-                )
-              );
-            }
-            rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType, rightStmts);
-            rightFlow.freeScopedLocals();
-            this.currentFlow = flow;
-
+          // simplify if cloning left without side effects is possible
+          if (expr = module.cloneExpression(leftExpr, true, 0)) {
             expr = module.if(
               this.makeIsTrueish(leftExpr, leftType, left),
-              retainLeftInThen
-                ? this.makeRetain(
-                    module.local_get(temp.index, leftType.toNativeType()),
-                    leftType
-                  )
-                : module.local_get(temp.index, leftType.toNativeType()),
+              expr,
               rightExpr
             );
-            if (leftAutoreleaseSkipped || rightAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
-            if (temp) flow.freeTempLocal(temp);
 
-          // basic values can use more aggressive optimizations
+          // if not possible, tee left to a temp. local
           } else {
-            rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType);
-            rightFlow.freeScopedLocals();
-            this.currentFlow = flow;
-
-            // simplify if cloning left without side effects is possible
-            if (expr = module.cloneExpression(leftExpr, true, 0)) {
-              expr = module.if(
-                this.makeIsTrueish(leftExpr, leftType, left),
-                expr,
-                rightExpr
-              );
-
-            // if not possible, tee left to a temp. local
-            } else {
-              let temp = flow.getTempLocal(leftType);
-              if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
-              if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-              expr = module.if(
-                this.makeIsTrueish(module.local_tee(temp.index, leftExpr), leftType, left),
-                module.local_get(temp.index, leftType.toNativeType()),
-                rightExpr
-              );
-              flow.freeTempLocal(temp);
-            }
+            let temp = flow.getTempLocal(leftType);
+            if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+            if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
+            expr = module.if(
+              this.makeIsTrueish(module.local_tee(temp.index, leftExpr, leftType.isManaged), leftType, left),
+              module.local_get(temp.index, leftType.toNativeType()),
+              rightExpr
+            );
+            flow.freeTempLocal(temp);
           }
           this.currentType = leftType;
         }
@@ -4858,7 +4650,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     return this.makeAssignment(
       target,
-      expr, // TODO: delay release above if possible?
+      expr,
       this.currentType,
       right,
       resolver.currentThisExpression,
@@ -5354,7 +5146,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U32: {
         let instance = this.i32PowInstance;
         if (!instance) {
-          let prototype = this.program.lookupGlobal(CommonNames.ipow32);
+          let prototype = this.program.lookup(CommonNames.ipow32);
           if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5380,7 +5172,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: {
         let instance = this.i64PowInstance;
         if (!instance) {
-          let prototype = this.program.lookupGlobal(CommonNames.ipow64);
+          let prototype = this.program.lookup(CommonNames.ipow64);
           if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5401,7 +5193,7 @@ export class Compiler extends DiagnosticEmitter {
         let isWasm64 = this.options.isWasm64;
         let instance = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
         if (!instance) {
-          let prototype = this.program.lookupGlobal(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
+          let prototype = this.program.lookup(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
           if (!prototype) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5425,7 +5217,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: {
         let instance = this.f32PowInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Mathf);
+          let namespace = this.program.lookup(CommonNames.Mathf);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5454,7 +5246,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         let instance = this.f64PowInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Math);
+          let namespace = this.program.lookup(CommonNames.Math);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5592,7 +5384,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: {
         let instance = this.f32ModInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Mathf);
+          let namespace = this.program.lookup(CommonNames.Mathf);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5620,7 +5412,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         let instance = this.f64ModInstance;
         if (!instance) {
-          let namespace = this.program.lookupGlobal(CommonNames.Math);
+          let namespace = this.program.lookup(CommonNames.Math);
           if (!namespace) {
             this.error(
               DiagnosticCode.Cannot_find_name_0,
@@ -5911,7 +5703,7 @@ export class Compiler extends DiagnosticEmitter {
       rightType = operatorInstance.signature.parameterTypes[0];
     } else {
       // FIXME: if LHS type differs we can't recompile left because that'd completely confuse
-      // local states, like having retained locals that actually do not even exist, possibly
+      // local states, like having local flags that actually do not even exist, possibly
       // releasing something random in that local before and evil things like that. Hence this
       // assumes that LHS type matches, which in turn means that static overloads must be
       // guaranteed to never mismatch LHS type, which in turn means that we can't have shiny
@@ -6021,7 +5813,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile the value and do the assignment
     assert(targetType != Type.void);
-    var valueExpr = this.compileExpression(valueExpression, targetType, Constraints.WILL_RETAIN);
+    var valueExpr = this.compileExpression(valueExpression, targetType);
     var valueType = this.currentType;
     return this.makeAssignment(
       target,
@@ -6053,9 +5845,6 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
     var flow = this.currentFlow;
-
-    // NOTE: Only locals, globals and fields can make use of skipped autoreleases while
-    // everything else must insert the skipped autorelease now. See (*)
 
     switch (target.kind) {
       case ElementKind.LOCAL: {
@@ -6130,8 +5919,6 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         assert(setterInstance.signature.parameterTypes.length == 1);
-        let valueType = setterInstance.signature.parameterTypes[0];
-        if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, valueType, flow); // (*)
         if (propertyInstance.is(CommonFlags.INSTANCE)) {
           let thisType = assert(setterInstance.signature.thisType);
           let thisExpr = this.compileExpression(
@@ -6147,7 +5934,7 @@ export class Compiler extends DiagnosticEmitter {
           let tempThis = flow.getTempLocal(returnType);
           let ret = module.block(null, [
             this.makeCallDirect(setterInstance, [
-              module.local_tee(tempThis.index, thisExpr),
+              module.local_tee(tempThis.index, thisExpr, returnType.isManaged),
               valueExpr
             ], valueExpression),
             this.makeCallDirect(getterInstance, [
@@ -6190,23 +5977,23 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         assert(setterInstance.signature.parameterTypes.length == 2);
-        let valueType = setterInstance.signature.parameterTypes[1];
-        if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, valueType, flow); // (*)
+        let thisType = classInstance.type;
         let thisExpr = this.compileExpression(
           assert(thisExpression),
-          classInstance.type,
+          thisType,
           Constraints.CONV_IMPLICIT | Constraints.IS_THIS
         );
         let elementExpr = this.compileExpression(assert(indexExpression), Type.i32, Constraints.CONV_IMPLICIT);
+        let elementType = this.currentType;
         if (tee) {
-          let tempTarget = flow.getTempLocal(classInstance.type);
-          let tempElement = flow.getTempLocal(this.currentType);
+          let tempTarget = flow.getTempLocal(thisType);
+          let tempElement = flow.getTempLocal(elementType);
           let returnType = getterInstance.signature.returnType;
           flow.freeTempLocal(tempTarget);
           let ret = module.block(null, [
             this.makeCallDirect(setterInstance, [
-              module.local_tee(tempTarget.index, thisExpr),
-              module.local_tee(tempElement.index, elementExpr),
+              module.local_tee(tempTarget.index, thisExpr, thisType.isManaged),
+              module.local_tee(tempElement.index, elementExpr, elementType.isManaged),
               valueExpr
             ], valueExpression),
             this.makeCallDirect(getterInstance, [
@@ -6230,7 +6017,7 @@ export class Compiler extends DiagnosticEmitter {
     return module.unreachable();
   }
 
-  /** Makes an assignment to a local, possibly retaining and releasing affected references and keeping track of wrap and null states. */
+  /** Makes an assignment to a local, keeping track of wrap and null states. */
   private makeLocalAssignment(
     /** Local to assign to. */
     local: Local,
@@ -6252,52 +6039,20 @@ export class Compiler extends DiagnosticEmitter {
       else flow.unsetLocalFlag(localIndex, LocalFlags.NONNULL);
     }
     flow.setLocalFlag(localIndex, LocalFlags.INITIALIZED);
-
-    if (type.isManaged) {
-      let alreadyRetained = this.skippedAutoreleases.has(valueExpr);
-      if (flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
-        valueExpr = this.makeReplace(
-          valueExpr,
-          valueType,
-          module.local_get(localIndex, type.toNativeType()),
-          type,
-          alreadyRetained
-        );
-        if (tee) { // local = REPLACE(local, value)
-          this.currentType = type;
-          return module.local_tee(localIndex, valueExpr);
-        } else { // void(local = REPLACE(local, value))
-          this.currentType = Type.void;
-          return module.local_set(localIndex, valueExpr);
-        }
-      } else {
-        flow.unsetLocalFlag(localIndex, LocalFlags.CONDITIONALLY_RETAINED);
-        flow.setLocalFlag(localIndex, LocalFlags.RETAINED);
-        if (!alreadyRetained) valueExpr = this.makeRetain(valueExpr, valueType);
-        if (tee) { // local = __retain(value, local)
-          this.currentType = type;
-          return module.local_tee(localIndex, valueExpr);
-        } else { // void(local = __retain(value, local))
-          this.currentType = Type.void;
-          return module.local_set(localIndex, valueExpr);
-        }
-      }
-    } else {
-      if (type.isShortIntegerValue) {
-        if (!flow.canOverflow(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.WRAPPED);
-        else flow.unsetLocalFlag(localIndex, LocalFlags.WRAPPED);
-      }
-      if (tee) { // local = value
-        this.currentType = type;
-        return module.local_tee(localIndex, valueExpr);
-      } else { // void(local = value)
-        this.currentType = Type.void;
-        return module.local_set(localIndex, valueExpr);
-      }
+    if (type.isShortIntegerValue) {
+      if (!flow.canOverflow(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.WRAPPED);
+      else flow.unsetLocalFlag(localIndex, LocalFlags.WRAPPED);
+    }
+    if (tee) { // local = value
+      this.currentType = type;
+      return module.local_tee(localIndex, valueExpr, type.isManaged);
+    } else { // void(local = value)
+      this.currentType = Type.void;
+      return module.local_set(localIndex, valueExpr, type.isManaged);
     }
   }
 
-  /** Makes an assignment to a global, possibly retaining and releasing affected references. */
+  /** Makes an assignment to a global. */
   private makeGlobalAssignment(
     /** The global variable to assign to. */
     global: VariableLikeElement,
@@ -6313,45 +6068,22 @@ export class Compiler extends DiagnosticEmitter {
     assert(type != Type.void);
     var nativeType = type.toNativeType();
 
-    if (type.isManaged) {
-      let alreadyRetained = this.skippedAutoreleases.has(valueExpr);
-      valueExpr = module.global_set(global.internalName,
-        this.makeReplace(
-          valueExpr,
-          valueType,
-          module.global_get(global.internalName, nativeType),
-          type,
-          alreadyRetained
-        )
+    valueExpr = this.ensureSmallIntegerWrap(valueExpr, type); // globals must be wrapped
+    if (tee) { // (global = value), global
+      this.currentType = type;
+      return module.block(null, [
+        module.global_set(global.internalName, valueExpr),
+        module.global_get(global.internalName, nativeType)
+      ], nativeType);
+    } else { // global = value
+      this.currentType = Type.void;
+      return module.global_set(global.internalName,
+        valueExpr
       );
-      if (tee) { // (global = REPLACE(global, value))), global
-        this.currentType = type;
-        return module.block(null, [
-          valueExpr,
-          module.global_get(global.internalName, nativeType)
-        ], nativeType);
-      } else { // global = REPLACE(global, value)
-        this.currentType = Type.void;
-        return valueExpr;
-      }
-    } else {
-      valueExpr = this.ensureSmallIntegerWrap(valueExpr, type); // globals must be wrapped
-      if (tee) { // (global = value), global
-        this.currentType = type;
-        return module.block(null, [
-          module.global_set(global.internalName, valueExpr),
-          module.global_get(global.internalName, nativeType)
-        ], nativeType);
-      } else { // global = value
-        this.currentType = Type.void;
-        return module.global_set(global.internalName,
-          valueExpr
-        );
-      }
     }
   }
 
-  /** Makes an assignment to a field, possibly retaining and releasing affected references. */
+  /** Makes an assignment to a field. */
   private makeFieldAssignment(
     /** The field to assign to. */
     field: Field,
@@ -6370,7 +6102,6 @@ export class Compiler extends DiagnosticEmitter {
     var nativeFieldType = fieldType.toNativeType();
     assert(field.parent.kind == ElementKind.CLASS);
     var thisType = (<Class>field.parent).type;
-    var nativeThisType = thisType.toNativeType();
 
     if (!field.is(CommonFlags.COMPILED)) {
       field.set(CommonFlags.COMPILED);
@@ -6378,77 +6109,21 @@ export class Compiler extends DiagnosticEmitter {
       if (typeNode) this.checkTypeSupported(field.type, typeNode);
     }
 
-    if (fieldType.isManaged && thisType.isManaged) {
-      let tempThis = flow.getTempLocal(thisType, findUsedLocals(valueExpr));
-      // set before and read after valueExpr executes below ^
-      let alreadyRetained = this.skippedAutoreleases.has(valueExpr);
-      let ret: ExpressionRef;
-      if (tee) { // ((t1 = this).field = REPLACE(t1.field, t2 = value)), t2
-        let tempValue = flow.getTempLocal(fieldType);
-        if (!flow.canOverflow(valueExpr, fieldType)) flow.setLocalFlag(tempValue.index, LocalFlags.WRAPPED);
-        if (flow.isNonnull(valueExpr, fieldType)) flow.setLocalFlag(tempValue.index, LocalFlags.NONNULL);
-        ret = module.block(null, [
-          module.store(fieldType.byteSize,
-            module.local_tee(tempThis.index, thisExpr),
-            this.makeReplace(
-              module.local_tee(tempValue.index, valueExpr),
-              valueType,
-              module.load(fieldType.byteSize, fieldType.isSignedIntegerValue,
-                module.local_get(tempThis.index, nativeThisType),
-                nativeFieldType, field.memoryOffset
-              ),
-              fieldType,
-              alreadyRetained
-            ),
-            nativeFieldType, field.memoryOffset
-          ),
-          module.local_get(tempValue.index, nativeFieldType)
-        ], nativeFieldType);
-        flow.freeTempLocal(tempValue);
-        this.currentType = fieldType;
-      } else { // (t1 = this).field = REPLACE(t1.field, value)
-        ret = module.store(fieldType.byteSize,
-          module.local_tee(tempThis.index, thisExpr),
-          this.makeReplace(
-            valueExpr,
-            valueType,
-            module.load(fieldType.byteSize, fieldType.isSignedIntegerValue,
-              module.local_get(tempThis.index, nativeThisType),
-              nativeFieldType, field.memoryOffset
-            ),
-            fieldType,
-            alreadyRetained
-          ),
-          nativeFieldType, field.memoryOffset
-        );
-        this.currentType = Type.void;
-      }
+    if (tee) {
+      this.compileField(field);
+      let tempThis = flow.getTempLocal(thisType);
+      let expr = module.block(null, [
+        module.call(field.internalSetterName, [ module.local_tee(tempThis.index, thisExpr, thisType.isManaged), valueExpr ], NativeType.None),
+        module.call(field.internalGetterName, [ module.local_get(tempThis.index, thisType.toNativeType()) ], nativeFieldType)
+      ], nativeFieldType);
       flow.freeTempLocal(tempThis);
-      return ret;
+      this.currentType = fieldType;
+      return expr;
     } else {
-      if (tee) { // (this.field = (t1 = value)), t1
-        let temp = flow.getTempLocal(fieldType);
-        if (!flow.canOverflow(valueExpr, fieldType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
-        if (flow.isNonnull(valueExpr, fieldType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-        let ret = module.block(null, [
-          module.store(fieldType.byteSize,
-            thisExpr,
-            module.local_tee(temp.index, valueExpr),
-            nativeFieldType, field.memoryOffset
-          ),
-          module.local_get(temp.index, nativeFieldType)
-        ], nativeFieldType);
-        flow.freeTempLocal(temp);
-        this.currentType = fieldType;
-        return ret;
-      } else { // this.field = value
-        this.currentType = Type.void;
-        return module.store(fieldType.byteSize,
-          thisExpr,
-          valueExpr,
-          nativeFieldType, field.memoryOffset
-        );
-      }
+      this.compileFieldSetter(field);
+      let expr = module.call(field.internalSetterName, [ thisExpr, valueExpr ], NativeType.None);
+      this.currentType = Type.void;
+      return expr;
     }
   }
 
@@ -6490,10 +6165,8 @@ export class Compiler extends DiagnosticEmitter {
         baseCtorInstance,
         expression.args,
         expression,
-        module.local_get(thisLocal.index, nativeSizeType),
-        Constraints.WILL_RETAIN
+        module.local_get(thisLocal.index, nativeSizeType)
       );
-      assert(baseClassInstance.type.isUnmanaged || this.skippedAutoreleases.has(superCall)); // guaranteed
 
       // check that super had been called before accessing `this`
       if (flow.isAny(
@@ -6508,7 +6181,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       flow.set(FlowFlags.ACCESSES_THIS | FlowFlags.CALLS_SUPER);
       this.currentType = Type.void;
-      return module.local_set(thisLocal.index, superCall);
+      return module.local_set(thisLocal.index, superCall, classInstance.type.isManaged);
     }
 
     // otherwise resolve normally
@@ -6517,7 +6190,7 @@ export class Compiler extends DiagnosticEmitter {
     var thisExpression = this.resolver.currentThisExpression;
 
     var signature: Signature | null;
-    var indexArg: ExpressionRef;
+    var functionArg: ExpressionRef;
     switch (target.kind) {
 
       // direct call: concrete function
@@ -6551,15 +6224,21 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
 
-      // indirect call: index argument with signature (non-generic, can't be inlined)
+      // indirect call: first-class function (non-generic, can't be inlined)
       case ElementKind.LOCAL: {
         let local = <Local>target;
         signature = local.type.signatureReference;
         if (signature) {
           if (local.is(CommonFlags.INLINED)) {
-            indexArg = module.i32(i64_low(local.constantIntegerValue));
+            let inlinedValue = local.constantIntegerValue;
+            if (this.options.isWasm64) {
+              functionArg = module.i64(i64_low(inlinedValue), i64_high(inlinedValue));
+            } else {
+              assert(!i64_high(inlinedValue));
+              functionArg = module.i32(i64_low(inlinedValue));
+            }
           } else {
-            indexArg = module.local_get(local.index, NativeType.I32);
+            functionArg = module.local_get(local.index, this.options.nativeSizeType);
           }
           break;
         }
@@ -6573,7 +6252,7 @@ export class Compiler extends DiagnosticEmitter {
         let global = <Global>target;
         signature = global.type.signatureReference;
         if (signature) {
-          indexArg = module.global_get(global.internalName, global.type.toNativeType());
+          functionArg = module.global_get(global.internalName, global.type.toNativeType());
           break;
         }
         this.error(
@@ -6589,13 +6268,14 @@ export class Compiler extends DiagnosticEmitter {
         if (signature) {
           let fieldParent = fieldInstance.parent;
           assert(fieldParent.kind == ElementKind.CLASS);
-          indexArg = module.load(4, false,
+          let usizeType = this.options.usizeType;
+          functionArg = module.load(usizeType.byteSize, false,
             this.compileExpression(
               assert(thisExpression),
               (<Class>fieldParent).type,
               Constraints.CONV_IMPLICIT | Constraints.IS_THIS
             ),
-            NativeType.I32,
+            usizeType.toNativeType(),
             fieldInstance.memoryOffset
           );
           break;
@@ -6624,7 +6304,7 @@ export class Compiler extends DiagnosticEmitter {
             Constraints.CONV_IMPLICIT | Constraints.IS_THIS
           );
         }
-        indexArg = this.compileCallDirect(getterInstance, [], expression.expression, thisArg);
+        functionArg = this.compileCallDirect(getterInstance, [], expression.expression, thisArg);
         signature = this.currentType.signatureReference;
         if (!signature) {
           this.error(
@@ -6641,7 +6321,7 @@ export class Compiler extends DiagnosticEmitter {
         if (typeArguments !== null && typeArguments.length > 0) {
           let ftype = typeArguments[0];
           signature = ftype.getSignature();
-          indexArg = this.compileExpression(expression.expression, ftype, Constraints.CONV_IMPLICIT);
+          functionArg = this.compileExpression(expression.expression, ftype, Constraints.CONV_IMPLICIT);
           break;
         }
         // fall-through
@@ -6666,7 +6346,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     return this.compileCallIndirect(
       assert(signature), // FIXME: bootstrap can't see this yet
-      indexArg,
+      functionArg,
       expression.args,
       expression,
       0,
@@ -6858,19 +6538,10 @@ export class Compiler extends DiagnosticEmitter {
         // compile argument expressions
         let args = new Array<ExpressionRef>(numArguments);
         for (let i = 0; i < numArguments; ++i) {
-          args[i] = this.compileExpression(argumentExpressions[i], parameterTypes[i],
-            Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-          );
+          args[i] = this.compileExpression(argumentExpressions[i], parameterTypes[i], Constraints.CONV_IMPLICIT);
         }
-        // make the inlined call (is aware of autoreleases)
+        // make the inlined call
         let expr = this.makeCallInline(instance, args, thisArg, (constraints & Constraints.WILL_DROP) != 0);
-        if (this.currentType.isManaged) {
-          if (!(constraints & Constraints.WILL_RETAIN)) {
-            expr = this.makeAutorelease(expr, instance.signature.returnType, this.currentFlow);
-          } else {
-            this.skippedAutoreleases.add(expr);
-          }
-        }
         inlineStack.pop();
         return expr;
       }
@@ -6886,27 +6557,12 @@ export class Compiler extends DiagnosticEmitter {
     }
     var parameterTypes = signature.parameterTypes;
     for (let i = 0; i < numArguments; ++i, ++index) {
-      operands[index] = this.compileExpression(argumentExpressions[i], parameterTypes[i],
-        Constraints.CONV_IMPLICIT
-      );
+      let paramType = parameterTypes[i];
+      let paramExpr = this.compileExpression(argumentExpressions[i], paramType, Constraints.CONV_IMPLICIT);
+      operands[index] = paramExpr;
     }
     assert(index == numArgumentsInclThis);
-    if (signature.returnType.isManaged) {
-      if (constraints & Constraints.WILL_DROP) {
-        // Skip autorelease and simply release
-        return this.makeCallDirect(instance, operands, reportNode, true);
-      } else if (constraints & Constraints.WILL_RETAIN) {
-        // Skip autorelease and remember
-        let expr = this.makeCallDirect(instance, operands, reportNode, false, true);
-        this.skippedAutoreleases.add(expr);
-        return expr;
-      } else {
-        return this.makeCallDirect(instance, operands, reportNode, false, false);
-      }
-    }
-    return this.makeCallDirect(instance, operands, reportNode,
-      (constraints & Constraints.WILL_DROP) != 0
-    );
+    return this.makeCallDirect(instance, operands, reportNode, (constraints & Constraints.WILL_DROP) != 0);
   }
 
   makeCallInline(
@@ -6941,13 +6597,8 @@ export class Compiler extends DiagnosticEmitter {
       // inlining is aware of wrap/nonnull states:
       if (!previousFlow.canOverflow(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
       if (flow.isNonnull(paramExpr, paramType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
-      // inlining is aware of skipped autoreleases:
-      if (paramType.isManaged) {
-        if (!this.skippedAutoreleases.has(paramExpr)) paramExpr = this.makeRetain(paramExpr, paramType);
-        flow.setLocalFlag(argumentLocal.index, LocalFlags.RETAINED);
-      }
       body.unshift(
-        module.local_set(argumentLocal.index, paramExpr)
+        module.local_set(argumentLocal.index, paramExpr, paramType.isManaged)
       );
     }
     if (thisArg) {
@@ -6956,15 +6607,8 @@ export class Compiler extends DiagnosticEmitter {
       let classInstance = <Class>parent;
       let thisType = assert(instance.signature.thisType);
       let thisLocal = flow.addScopedLocal(CommonNames.this_, thisType, usedLocals);
-      // In normal instance functions, `this` is effectively a constant
-      // retained elsewhere so does not need to be retained.
-      if (instance.is(CommonFlags.CONSTRUCTOR)) {
-        // Constructors, however, can allocate their own memory, and as such
-        // must refcount the allocation in case something else is `return`ed.
-        flow.setLocalFlag(thisLocal.index, LocalFlags.RETAINED);
-      }
       body.unshift(
-        module.local_set(thisLocal.index, thisArg)
+        module.local_set(thisLocal.index, thisArg, thisType.isManaged)
       );
       let base = classInstance.base;
       if (base) flow.addScopedAlias(CommonNames.super_, base.type, thisLocal.index);
@@ -6980,17 +6624,11 @@ export class Compiler extends DiagnosticEmitter {
       let initExpr = this.compileExpression(
         assert(instance.prototype.functionTypeNode.parameters[i].initializer),
         initType,
-        Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
+        Constraints.CONV_IMPLICIT
       );
       let argumentLocal = flow.addScopedLocal(instance.getParameterName(i), initType);
-      if (!flow.canOverflow(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
-      if (flow.isNonnull(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
-      if (initType.isManaged) {
-        flow.setLocalFlag(argumentLocal.index, LocalFlags.RETAINED);
-        if (!this.skippedAutoreleases.has(initExpr)) initExpr = this.makeRetain(initExpr, initType);
-      }
       body.push(
-        module.local_set(argumentLocal.index, initExpr)
+        this.makeLocalAssignment(argumentLocal, initExpr, initType, false)
       );
     }
 
@@ -7005,24 +6643,13 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Free any new scoped locals and reset to the original flow
-    if (!flow.is(FlowFlags.TERMINATES)) {
-      this.performAutoreleases(flow, body);
-      this.finishAutoreleases(flow, body);
-    }
     flow.freeScopedLocals();
     var returnType = flow.returnType;
     this.currentFlow = previousFlow;
 
     // Create an outer block that we can break to when returning a value out of order
-    var expr = module.block(flow.inlineReturnLabel, body, returnType.toNativeType());
     this.currentType = returnType;
-    if (returnType.isManaged) {
-      if (immediatelyDropped) {
-        expr = this.makeRelease(expr, returnType);
-        this.currentType = Type.void;
-      }
-    }
-    return expr;
+    return module.block(flow.inlineReturnLabel, body, returnType.toNativeType());
   }
 
   /** Makes sure that the arguments length helper global is present. */
@@ -7062,17 +6689,20 @@ export class Compiler extends DiagnosticEmitter {
 
     var forwardedOperands = new Array<ExpressionRef>(minOperands);
     var operandIndex = 0;
+    var stmts = new Array<ExpressionRef>();
 
     // forward `this` if applicable
     var module = this.module;
-    if (isInstance) {
-      forwardedOperands[0] = module.local_get(0, this.options.nativeSizeType);
+    var thisType = originalSignature.thisType;
+    if (thisType) {
+      forwardedOperands[0] = module.local_get(0, thisType.toNativeType());
       operandIndex = 1;
     }
 
     // forward required arguments
     for (let i = 0; i < minArguments; ++i, ++operandIndex) {
-      forwardedOperands[operandIndex] = module.local_get(operandIndex, originalParameterTypes[i].toNativeType());
+      let paramType = originalParameterTypes[i];
+      forwardedOperands[operandIndex] = module.local_get(operandIndex, paramType.toNativeType());
     }
     assert(operandIndex == minOperands);
 
@@ -7095,7 +6725,7 @@ export class Compiler extends DiagnosticEmitter {
       let label = i.toString() + ofN;
       names[i] = label;
     }
-    var body = module.block(names[0], [
+    var table = module.block(names[0], [
       module.block("outOfRange", [
         module.switch(names, "outOfRange",
           // condition is number of provided optional arguments, so subtract required arguments
@@ -7116,13 +6746,12 @@ export class Compiler extends DiagnosticEmitter {
       let initializer = declaration.initializer;
       let initExpr: ExpressionRef;
       if (initializer) {
-        initExpr = module.local_set(operandIndex,
-          this.compileExpression(
-            initializer,
-            type,
-            Constraints.CONV_IMPLICIT
-          )
+        initExpr = this.compileExpression(
+          initializer,
+          type,
+          Constraints.CONV_IMPLICIT
         );
+        initExpr = module.local_set(operandIndex, initExpr, type.isManaged);
       } else {
         this.error(
           DiagnosticCode.Optional_parameter_must_have_an_initializer,
@@ -7130,22 +6759,20 @@ export class Compiler extends DiagnosticEmitter {
         );
         initExpr = module.unreachable();
       }
-      body = module.block(names[i + 1], [
-        body,
+      table = module.block(names[i + 1], [
+        table,
         initExpr,
       ]);
       forwardedOperands[operandIndex] = module.local_get(operandIndex, type.toNativeType());
     }
     assert(operandIndex == maxOperands);
 
-    var stmts: ExpressionRef[] = [ body ];
-    var theCall = module.call(original.internalName, forwardedOperands, returnType.toNativeType());
-    if (returnType != Type.void) {
-      this.performAutoreleasesWithValue(flow, theCall, returnType, stmts);
-    } else {
-      stmts.push(theCall);
-      this.performAutoreleases(flow, stmts);
-    }
+    stmts.push(
+      table
+    );
+    stmts.push(
+      module.call(original.internalName, forwardedOperands, returnType.toNativeType())
+    );
     flow.freeScopedLocals();
     this.currentFlow = previousFlow;
 
@@ -7352,317 +6979,45 @@ export class Compiler extends DiagnosticEmitter {
     stub.set(CommonFlags.COMPILED);
   }
 
-  // <reference-counting>
-
-  /** Makes a retain call, retaining the expression's value. */
-  makeRetain(expr: ExpressionRef, type: Type): ExpressionRef {
-    var retainInstance = this.program.retainInstance;
-    this.compileFunction(retainInstance);
-    return this.module.call(retainInstance.internalName, [ expr ], this.options.nativeSizeType);
-  }
-
-  /** Makes a release call, releasing the expression's value. Changes the current type to void.*/
-  makeRelease(expr: ExpressionRef, type: Type): ExpressionRef {
-    var releaseInstance = this.program.releaseInstance;
-    this.compileFunction(releaseInstance);
-    return this.module.call(releaseInstance.internalName, [ expr ], NativeType.None);
-  }
-
-  /** Makes a replace, retaining the new expression's value and releasing the old expression's value, in this order. */
-  makeReplace(
-    /** New value being assigned. */
-    newExpr: ExpressionRef,
-    /** The type of the new expression. */
-    newType: Type,
-    /** Old value being replaced. */
-    oldExpr: ExpressionRef,
-    /** The type of the old expression. */
-    oldType: Type,
-    /** Whether the new value is already retained. */
-    alreadyRetained: bool = false,
-  ): ExpressionRef {
+  /** Marks managed call operands for the shadow stack. */
+  private operandsTostack(signature: Signature, operands: ExpressionRef[]): void {
+    if (!this.options.stackSize) return;
     var module = this.module;
-    var flow = this.currentFlow;
-    var nativeSizeType = this.options.nativeSizeType;
-    if (alreadyRetained) {
-      // (t1=newExpr), __release(oldExpr), t1
-      // it is important that `newExpr` evaluates before `oldExpr` is released, hence the local
-      let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(oldExpr));
-      let ret = module.block(null, [
-        module.local_set(temp.index, newExpr),
-        this.makeRelease(oldExpr, oldType),
-        module.local_get(temp.index, nativeSizeType)
-      ], nativeSizeType);
-      flow.freeTempLocal(temp);
-      return ret;
-    } else {
-      // if ((t1=newExpr) != (t2=oldExpr)) {
-      //   t1 = __retain(t1);
-      //   __release(t2);
-      // }, t1
-      let usizeType = this.options.usizeType;
-      let temp1 = flow.getTempLocal(usizeType, findUsedLocals(oldExpr));
-      let temp2 = flow.getTempLocal(usizeType);
-      let ret = module.block(null, [
-        module.if(
-          module.binary(nativeSizeType == NativeType.I64 ? BinaryOp.NeI64 : BinaryOp.NeI32,
-            module.local_tee(temp1.index, newExpr),
-            module.local_tee(temp2.index, oldExpr)
-          ),
-          module.block(null, [
-            module.local_set(temp1.index,
-              this.makeRetain(module.local_get(temp1.index, nativeSizeType), newType)
-            ),
-            this.makeRelease(module.local_get(temp2.index, nativeSizeType), oldType)
-          ])
-        ),
-        module.local_get(temp1.index, nativeSizeType)
-      ], nativeSizeType);
-      flow.freeTempLocal(temp2);
-      flow.freeTempLocal(temp1);
-      return ret;
-    }
-  }
-
-  /** Makes an autorelease call at the end of the specified `flow`. */
-  makeAutorelease(
-    /** Expression to autorelease. */
-    expr: ExpressionRef,
-    /** Type of the expression. */
-    type: Type,
-    /** Flow that should autorelease. Defaults to the current flow. */
-    flow: Flow = this.currentFlow
-  ): ExpressionRef {
-    // An 'autorelease' is the assignment of a managed reference to a temporary local,
-    // keeping the reference alive until the surrounding flow concludes. This is useful
-    // if a reference is not being immediately assigned to something that would keep it
-    // alive, like a local or a global, yet it'll remain alive in other code. Example:
-    //
-    //   callReceivingAReference(callReturningAReference())
-    //
-    // will be transformed into an autorelease like
-    //
-    //   callReceivingAReference(t = callReturningAReference())
-    //   ...
-    //   __release(t)
-    //
-    // since releasing immediately would free the value before the call:
-    //
-    //   callReceivingAReference((__release(t = callReturningAReference()), t))
-    //
-    var local = flow.getAutoreleaseLocal(type);
-    if (flow.isNonnull(expr, type)) flow.setLocalFlag(local.index, LocalFlags.NONNULL);
-    return this.module.local_tee(local.index, expr);
-  }
-
-  /**
-   * Attempts to undo an autorelease in the specified `flow`.
-   * Returns the index of the previously retaining variable or -1 if not possible.
-   */
-  tryUndoAutorelease(
-    /** Expression being autoreleased. */
-    expr: ExpressionRef,
-    /** Flow that would autorelease. */
-    flow: Flow
-  ): i32 {
-    // The following assumes that the expression actually belongs to the flow and that
-    // top-level autoreleases are never undone. While that's true, it's not necessary
-    // to check presence in scopedLocals.
-    switch (getExpressionId(expr)) {
-      case ExpressionId.LocalGet: { // local.get(idx)
-        let index = getLocalGetIndex(expr);
-        if (flow.isAnyLocalFlag(index, LocalFlags.ANY_RETAINED)) {
-          flow.unsetLocalFlag(index, LocalFlags.ANY_RETAINED);
-          return index;
-        }
-        break;
-      }
-      case ExpressionId.LocalSet: { // local.tee(idx, expr)
-        if (isLocalTee(expr)) {
-          // NOTE: Can't remove the local.tee completely because it's already compiled
-          // and a child of something else. Preventing the final release however makes
-          // it optimize away.
-          let index = getLocalSetIndex(expr);
-          if (flow.isAnyLocalFlag(index, LocalFlags.ANY_RETAINED)) {
-            flow.unsetLocalFlag(index, LocalFlags.ANY_RETAINED);
-            return index;
-          }
-        }
-        break;
-      }
-      case ExpressionId.Block: { // { ..., local.get|tee(...) }
-        if (getBlockName(expr) === null) { // must not be a break target
-          let count = getBlockChildCount(expr);
-          if (count) {
-            return this.tryUndoAutorelease(getBlockChildAt(expr, count - 1), flow);
-          }
-        }
-        break;
-      }
-    }
-    return -1;
-  }
-
-  /** Delays an autorelease in `innerFlow` until `outerFlow` concludes. */
-  delayAutorelease(
-    /** Expression being autoreleased in `innerFlow`. */
-    expr: ExpressionRef,
-    /** Type of the expression. */
-    type: Type,
-    /** Inner flow that would autorelease. Must not have processed autoreleases yet. */
-    innerFlow: Flow,
-    /** Outer flow that should autorelease instead. */
-    outerFlow: Flow
-  ): ExpressionRef {
-    // Attempt to undo the autorelease in `innerFlow`
-    var index = this.tryUndoAutorelease(expr, innerFlow);
-    return ~index
-      // If it worked, autorelease in `outerFlow` instead
-      ? this.makeAutorelease(expr, type, outerFlow)
-      // If it didn't work, extend the lifetime into `outerFlow`
-      : this.makeAutorelease(this.makeRetain(expr, type), type, outerFlow);
-  }
-
-  /** Performs any queued autoreleases in the specified flow. */
-  performAutoreleases(
-    /** Flow releasing its queued autoreleases. */
-    flow: Flow,
-    /** Array of statements to append the releases to. */
-    stmts: ExpressionRef[],
-    /**
-     * Whether to finalize affected locals. Defaults to `true`, which
-     * is almost always correct, except when bubbling up parent flows
-     * in break-like scenarios.
-     */
-    finalize: bool = true
-  ): void {
-    // Autoreleases must be performed whenever a flow concludes, decrementing
-    // the RC of all the references in that flow scheduled for an autorelease.
-    var scopedLocals = flow.scopedLocals;
-    if (scopedLocals) {
-      let module = this.module;
-      // TODO: for (let local of scopedLocals.values()) {
-      for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
-        let local = unchecked(_values[i]);
-        if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
-          let localIndex = local.index;
-          if (flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
-            if (finalize) flow.unsetLocalFlag(localIndex, LocalFlags.ANY_RETAINED);
-            stmts.push(
-              this.makeRelease(
-                module.local_get(localIndex, local.type.toNativeType()),
-                local.type
-              )
-            );
-          }
+    var operandIndex = 0;
+    var thisType = signature.thisType;
+    if (thisType) {
+      if (thisType.isManaged) {
+        let operand = operands[0];
+        let precomp = module.runExpression(operand, ExpressionRunnerFlags.Default);
+        if (!isConstZero(precomp)) { // otherwise unnecessary
+          operands[operandIndex] = module.tostack(operand);
         }
       }
+      ++operandIndex;
     }
-  }
-
-  /** Performs any queued autoreleases in the specified flow and returns the given value. */
-  performAutoreleasesWithValue(
-    /** Flow releasing its queued autoreleases. */
-    flow: Flow,
-    /** Value to return. */
-    valueExpr: ExpressionRef,
-    /** Type of the returned value. */
-    valueType: Type,
-    /** Array of statements to append the releases to. */
-    stmts: ExpressionRef[] | null = null,
-    /** Whether to finalize affected locals. */
-    finalize: bool = true
-  ): ExpressionRef {
-    if (!stmts) stmts = new Array<ExpressionRef>();
-    stmts.push(
-      this.module.nop()
-    );
-    var lengthBefore = stmts.length;
-    this.performAutoreleases(flow, stmts, finalize);
-    var module = this.module;
-    if (stmts.length > lengthBefore) {
-      let nativeType = valueType.toNativeType();
-      let temp = flow.getTempLocal(valueType);
-      if (!flow.canOverflow(valueExpr, valueType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
-      if (flow.isNonnull(valueExpr, valueType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-      stmts[lengthBefore - 1] = module.local_set(temp.index, valueExpr); // nop -> set
-      stmts.push(
-        module.local_get(temp.index, nativeType) // append get
-      );
-      let ret = module.flatten(stmts, nativeType);
-      flow.freeTempLocal(temp);
-      return ret;
-    } else if (stmts.length > 1) {
-      stmts[lengthBefore - 1] = valueExpr; // nop -> value
-      return module.flatten(stmts, valueType.toNativeType());
-    }
-    return valueExpr;
-  }
-
-  /** Finishes any queued autoreleases in the actual function of the specified flow. */
-  finishAutoreleases(
-    /** Flow releasing its queued autoreleases. */
-    flow: Flow,
-    /** Array of statements to append the releases to. */
-    stmts: ExpressionRef[]
-  ): void {
-    // Differs from `performAutoreleases` in that concluding this flow also
-    // concludes all its parent flows, for example on a `return`.
-    if (flow.isInline) {
-      // Traverse to the top-most flow containing the inlined function's
-      // locals as scoped locals and release these instead of all the locals.
-      let current = flow;
-      let parent: Flow | null;
-      while (parent = current.parent) current = parent;
-      let scopedLocals = current.scopedLocals;
-      if (scopedLocals) {
-        // TODO: for (let local of scopedLocals.values()) {
-        for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
-          let local = unchecked(_values[i]);
-          this.maybeFinishAutorelease(local, flow, stmts);
+    var parameterIndex = 0;
+    var parameterTypes = signature.parameterTypes;
+    assert(parameterTypes.length >= operands.length - operandIndex);
+    while (operandIndex < operands.length) {
+      let paramType = parameterTypes[parameterIndex];
+      if (paramType.isManaged) {
+        let operand = operands[operandIndex];
+        let precomp = module.runExpression(operand, ExpressionRunnerFlags.Default);
+        if (!isConstZero(precomp)) { // otherwise unnecessary
+          operands[operandIndex] = module.tostack(operand);
         }
       }
-    } else {
-      let localsByIndex = flow.parentFunction.localsByIndex;
-      for (let i = 0, k = localsByIndex.length; i < k; ++i) {
-        let local = unchecked(localsByIndex[i]);
-        this.maybeFinishAutorelease(local, flow, stmts);
-      }
+      ++operandIndex;
+      ++parameterIndex;
     }
   }
-
-  /** Finishes a single autorelease of the specified local. */
-  private maybeFinishAutorelease(
-    /** Local to finish autoreleasing. */
-    local: Local,
-    /** Flow releasing its queued autoreleases. */
-    flow: Flow,
-    /** Array of statements to append the releases to. */
-    stmts: ExpressionRef[]
-  ): void {
-    var localIndex = local.index;
-    var module = this.module;
-    if (~localIndex && flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
-      flow.unsetLocalFlag(localIndex, LocalFlags.ANY_RETAINED);
-      stmts.push(
-        this.makeRelease(
-          module.local_get(localIndex, local.type.toNativeType()),
-          local.type
-        )
-      );
-    }
-  }
-
-  // </reference-counting>
 
   /** Creates a direct call to the specified function. */
   makeCallDirect(
     instance: Function,
     operands: ExpressionRef[] | null,
     reportNode: Node,
-    immediatelyDropped: bool = false,
-    /** Skip the usual autorelease and manage this at the callsite instead. */
-    skipAutorelease: bool = false
+    immediatelyDropped: bool = false
   ): ExpressionRef {
     if (instance.hasDecorator(DecoratorFlags.INLINE)) {
       if (!instance.is(CommonFlags.VIRTUAL)) {
@@ -7682,14 +7037,6 @@ export class Compiler extends DiagnosticEmitter {
             expr = this.makeCallInline(instance, theOperands.slice(1), theOperands[0], immediatelyDropped);
           } else {
             expr = this.makeCallInline(instance, operands, 0, immediatelyDropped);
-          }
-          let returnType = this.currentType;
-          if (returnType.isManaged) {
-            if (!skipAutorelease) {
-              expr = this.makeAutorelease(expr, returnType);
-            } else {
-              this.skippedAutoreleases.add(expr);
-            }
           }
           inlineStack.pop();
           return expr;
@@ -7764,37 +7111,31 @@ export class Compiler extends DiagnosticEmitter {
         operands.push(this.makeZero(parameterTypes[i], instance.declaration));
         allOptionalsAreConstant = false;
       }
-      if (!allOptionalsAreConstant) {
-        if (!instance.is(CommonFlags.MODULE_IMPORT)) {
-          let original = instance;
-          instance = this.ensureVarargsStub(instance);
-          if (!this.compileFunction(instance)) return module.unreachable();
-          instance.flow.flags = original.flow.flags;
-          let nativeReturnType = returnType.toNativeType();
-          // We know the last operand is optional and omitted, so inject setting
-          // ~argumentsLength into that operand, which is always safe.
-          let lastOperand = operands[maxOperands - 1];
-          assert(!(getSideEffects(lastOperand) & SideEffects.WritesGlobal));
-          let lastOperandType = parameterTypes[maxArguments - 1];
-          operands[maxOperands - 1] = module.block(null, [
-            module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
-            lastOperand
-          ], lastOperandType.toNativeType());
-          let expr = module.call(instance.internalName, operands, nativeReturnType);
+      if (!allOptionalsAreConstant && !instance.is(CommonFlags.MODULE_IMPORT)) {
+        let original = instance;
+        instance = this.ensureVarargsStub(instance);
+        if (!this.compileFunction(instance)) return module.unreachable();
+        instance.flow.flags = original.flow.flags;
+        let nativeReturnType = returnType.toNativeType();
+        // We know the last operand is optional and omitted, so inject setting
+        // ~argumentsLength into that operand, which is always safe.
+        let lastOperand = operands[maxOperands - 1];
+        assert(!(getSideEffects(lastOperand) & SideEffects.WritesGlobal));
+        let lastOperandType = parameterTypes[maxArguments - 1];
+        operands[maxOperands - 1] = module.block(null, [
+          module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
+          lastOperand
+        ], lastOperandType.toNativeType());
+        this.operandsTostack(instance.signature, operands);
+        let expr = module.call(instance.internalName, operands, nativeReturnType);
+        if (returnType != Type.void && immediatelyDropped) {
+          expr = module.drop(expr);
+          this.currentType = Type.void;
+        } else {
           this.currentType = returnType;
-          if (returnType.isManaged) {
-            if (immediatelyDropped) {
-              expr = this.makeRelease(expr, returnType);
-              this.currentType = Type.void;
-            } else if (!skipAutorelease) {
-              expr = this.makeAutorelease(expr, returnType);
-            } else {
-              this.skippedAutoreleases.add(expr);
-            }
-          }
-          this.ensureArgumentsLength();
-          return expr;
         }
+        this.ensureArgumentsLength();
+        return expr;
       }
     }
 
@@ -7803,26 +7144,16 @@ export class Compiler extends DiagnosticEmitter {
       instance = this.ensureVirtualStub(instance);
     }
 
-    // If the return value is of a reference type it has not yet been released but is in flight
-    // which is equivalent to a skipped autorelease. Hence, insert either a release if it is
-    // dropped anyway, preserve the skipped autorelease if explicitly requested or autorelease now.
+    if (operands) this.operandsTostack(instance.signature, operands);
     var expr = module.call(instance.internalName, operands, returnType.toNativeType());
     this.currentType = returnType;
-    if (returnType.isManaged) {
-      if (immediatelyDropped) {
-        expr = this.makeRelease(expr, returnType);
-        this.currentType = Type.void;
-      } else if (!skipAutorelease) {
-        expr = this.makeAutorelease(expr, returnType);
-      }
-    }
     return expr;
   }
 
-  /** Compiles an indirect call using an index argument and a signature. */
+  /** Compiles an indirect call to a first-class function. */
   compileCallIndirect(
     signature: Signature,
-    indexArg: ExpressionRef,
+    functionArg: ExpressionRef,
     argumentExpressions: Expression[],
     reportNode: Node,
     thisArg: ExpressionRef = 0,
@@ -7853,13 +7184,13 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     assert(index == numArgumentsInclThis);
-    return this.makeCallIndirect(signature, indexArg, reportNode, operands, immediatelyDropped);
+    return this.makeCallIndirect(signature, functionArg, reportNode, operands, immediatelyDropped);
   }
 
-  /** Creates an indirect call to the function at `indexArg` in the function table. */
+  /** Creates an indirect call to a first-class function. */
   makeCallIndirect(
     signature: Signature,
-    indexArg: ExpressionRef,
+    functionArg: ExpressionRef,
     reportNode: Node,
     operands: ExpressionRef[] | null = null,
     immediatelyDropped: bool = false,
@@ -7892,49 +7223,34 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    if (this.options.isWasm64) {
-      indexArg = module.unary(UnaryOp.WrapI64, indexArg);
-    }
-
     // We might be calling a varargs stub here, even if all operands have been
     // provided, so we must set `argumentsLength` in any case. Inject setting it
     // into the index argument, which becomes executed last after any operands.
     this.ensureArgumentsLength();
     var nativeSizeType = this.options.nativeSizeType;
-    if (getSideEffects(indexArg) & SideEffects.WritesGlobal) {
+    if (getSideEffects(functionArg) & SideEffects.WritesGlobal) {
       let flow = this.currentFlow;
-      let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(indexArg));
-      indexArg = module.block(null, [
-        module.local_set(temp.index, indexArg),
+      let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(functionArg));
+      functionArg = module.block(null, [
+        module.local_set(temp.index, functionArg, true), // Function
         module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
         module.local_get(temp.index, nativeSizeType)
       ], nativeSizeType);
       flow.freeTempLocal(temp);
     } else { // simplify
-      indexArg = module.block(null, [
+      functionArg = module.block(null, [
         module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
-        indexArg
+        functionArg
       ], nativeSizeType);
     }
+    if (operands) this.operandsTostack(signature, operands);
     var expr = module.call_indirect(
-      nativeSizeType == NativeType.I64
-        ? module.unary(UnaryOp.WrapI64,
-            module.load(8, false, indexArg, NativeType.I64)
-          )
-        : module.load(4, false, indexArg, NativeType.I32),
+      module.load(4, false, functionArg, NativeType.I32), // ._index
       operands,
       signature.nativeParams,
       signature.nativeResults
     );
     this.currentType = returnType;
-    if (returnType.isManaged) {
-      if (immediatelyDropped) {
-        expr = this.makeRelease(expr, returnType);
-        this.currentType = Type.void;
-      } else {
-        expr = this.makeAutorelease(expr, returnType);
-      }
-    }
     return expr;
   }
 
@@ -7994,26 +7310,30 @@ export class Compiler extends DiagnosticEmitter {
 
   private compileFunctionExpression(
     expression: FunctionExpression,
-    contextualSignature: Signature | null,
+    contextualType: Type,
     constraints: Constraints
   ): ExpressionRef {
     var declaration = expression.declaration.clone(); // generic contexts can have multiple
     assert(!declaration.typeParameters); // function expression cannot be generic
     var flow = this.currentFlow;
     var actualFunction = flow.actualFunction;
+    var isNamed = declaration.name.text.length > 0;
+    var isSemanticallyAnonymous = !isNamed || contextualType != Type.void;
     var prototype = new FunctionPrototype(
-      declaration.name.text.length
-        ? declaration.name.text
-        : "anonymous|" + (actualFunction.nextAnonymousId++).toString(),
+      isSemanticallyAnonymous
+        ? (isNamed ? declaration.name.text + "|" : "anonymous|") + (actualFunction.nextAnonymousId++).toString()
+        : declaration.name.text,
       actualFunction,
       declaration,
       DecoratorFlags.NONE
     );
     var instance: Function | null;
     var contextualTypeArguments = uniqueMap(flow.contextualTypeArguments);
+    var module = this.module;
 
     // compile according to context. this differs from a normal function in that omitted parameter
     // and return types can be inferred and omitted arguments can be replaced with dummies.
+    var contextualSignature = contextualType.signatureReference;
     if (contextualSignature) {
       let signatureNode = prototype.functionTypeNode;
       let parameterNodes = signatureNode.parameters;
@@ -8027,7 +7347,7 @@ export class Compiler extends DiagnosticEmitter {
           DiagnosticCode.Expected_0_arguments_but_got_1,
           expression.range, numParameters.toString(), numPresentParameters.toString()
         );
-        return this.module.unreachable();
+        return module.unreachable();
       }
 
       // check non-omitted parameter types
@@ -8039,13 +7359,13 @@ export class Compiler extends DiagnosticEmitter {
             actualFunction.parent,
             contextualTypeArguments
           );
-          if (!resolvedType) return this.module.unreachable();
+          if (!resolvedType) return module.unreachable();
           if (!parameterTypes[i].isStrictlyAssignableTo(resolvedType)) {
             this.error(
               DiagnosticCode.Type_0_is_not_assignable_to_type_1,
               parameterNode.range, parameterTypes[i].toString(), resolvedType.toString()
             );
-            return this.module.unreachable();
+            return module.unreachable();
           }
         }
         // any unused parameters are inherited but ignored
@@ -8059,7 +7379,7 @@ export class Compiler extends DiagnosticEmitter {
           actualFunction.parent,
           contextualTypeArguments
         );
-        if (!resolvedType) return this.module.unreachable();
+        if (!resolvedType) return module.unreachable();
         if (
           returnType == Type.void
             ? resolvedType != Type.void
@@ -8069,7 +7389,7 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             signatureNode.returnType.range, resolvedType.toString(), returnType.toString()
           );
-          return this.module.unreachable();
+          return module.unreachable();
         }
       }
 
@@ -8082,20 +7402,20 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode._this_cannot_be_referenced_in_current_location,
             thisTypeNode.range
           );
-          return this.module.unreachable();
+          return module.unreachable();
         }
         let resolvedType = this.resolver.resolveType(
           thisTypeNode,
           actualFunction.parent,
           contextualTypeArguments
         );
-        if (!resolvedType) return this.module.unreachable();
+        if (!resolvedType) return module.unreachable();
         if (!thisType.isStrictlyAssignableTo(resolvedType)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             thisTypeNode.range, thisType.toString(), resolvedType.toString()
           );
-          return this.module.unreachable();
+          return module.unreachable();
         }
       }
 
@@ -8108,21 +7428,53 @@ export class Compiler extends DiagnosticEmitter {
         signature,
         contextualTypeArguments
       );
-      if (!this.compileFunction(instance)) return this.module.unreachable();
+      instance.flow.outer = flow;
+      let worked = this.compileFunction(instance);
       this.currentType = contextualSignature.type;
+      if (!worked) return module.unreachable();
 
     // otherwise compile like a normal function
     } else {
       instance = this.resolver.resolveFunction(prototype, null, contextualTypeArguments);
       if (!instance) return this.module.unreachable();
-      this.compileFunction(instance);
+      instance.flow.outer = flow;
+      let worked = this.compileFunction(instance);
       this.currentType = instance.signature.type;
+      if (!worked) return module.unreachable();
     }
 
     var offset = this.ensureRuntimeFunction(instance); // reports
-    return this.options.isWasm64
-      ? this.module.i64(i64_low(offset), i64_high(offset))
-      : this.module.i32(i64_low(offset));
+    var expr = this.options.isWasm64
+      ? module.i64(i64_low(offset), i64_high(offset))
+      : module.i32(i64_low(offset));
+
+    // add a constant local referring to the function if applicable
+    if (!isSemanticallyAnonymous) {
+      let fname = instance.name;
+      let existingLocal = flow.getScopedLocal(fname);
+      if (existingLocal) {
+        if (!existingLocal.declaration.range.source.isNative) {
+          this.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range,
+            existingLocal.declaration.name.range,
+            fname
+          );
+        } else { // scoped locals are shared temps that don't track declarations
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range, fname
+          );
+        }
+      } else {
+        let ftype = instance.type;
+        let local = flow.addScopedLocal(instance.name, ftype);
+        flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
+        expr = module.local_tee(local.index, expr, ftype.isManaged);
+      }
+    }
+    
+    return expr;
   }
 
   /** Makes sure the enclosing source file of the specified expression has been compiled. */
@@ -8352,7 +7704,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!functionInstance || !this.compileFunction(functionInstance)) return module.unreachable();
         if (contextualType.isExternalReference) {
           this.currentType = Type.funcref;
-          return module.ref_func(functionInstance.internalName);
+          return module.ref_func(functionInstance.internalName, NativeType.Funcref); // TODO
         }
         let offset = this.ensureRuntimeFunction(functionInstance);
         this.currentType = functionInstance.signature.type;
@@ -8361,7 +7713,10 @@ export class Compiler extends DiagnosticEmitter {
           : module.i32(i64_low(offset));
       }
     }
-    assert(false);
+    this.error(
+      DiagnosticCode.Expression_refers_to_a_static_element_that_does_not_compile_to_a_value_at_runtime,
+      expression.range
+    );
     return this.module.unreachable();
   }
 
@@ -8446,7 +7801,7 @@ export class Compiler extends DiagnosticEmitter {
               nativeSizeType == NativeType.I64
                 ? UnaryOp.EqzI64
                 : UnaryOp.EqzI32,
-              module.local_tee(temp.index, expr),
+              module.local_tee(temp.index, expr, actualType.isManaged),
             ),
             module.i32(0),
             this.makeCallDirect(instanceofInstance, [
@@ -8492,7 +7847,7 @@ export class Compiler extends DiagnosticEmitter {
               nativeSizeType == NativeType.I64
                 ? UnaryOp.EqzI64
                 : UnaryOp.EqzI32,
-              module.local_tee(temp.index, expr),
+              module.local_tee(temp.index, expr, actualType.isManaged),
             ),
             module.i32(0),
             this.makeCallDirect(instanceofInstance, [
@@ -8629,14 +7984,7 @@ export class Compiler extends DiagnosticEmitter {
     expression: StringLiteralExpression,
     constraints: Constraints
   ): ExpressionRef {
-    var expr = this.ensureStaticString(expression.value);
-    if (constraints & Constraints.WILL_RETAIN) {
-      this.skippedAutoreleases.add(expr);
-    } else {
-      // not necessary since this is static data anyway
-      // expr = this.makeAutorelease(expr, this.currentType);
-    }
-    return expr;
+    return this.ensureStaticString(expression.value);
   }
 
   private compileArrayLiteral(
@@ -8672,13 +8020,10 @@ export class Compiler extends DiagnosticEmitter {
     var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
     var isStatic = !elementType.isExternalReference;
-    var nativeElementType = elementType.toNativeType();
     for (let i = 0; i < length; ++i) {
       let elementExpression = expressions[i];
       if (elementExpression.kind != NodeKind.OMITTED) {
-        let expr = this.compileExpression(<Expression>elementExpression, elementType,
-          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-        );
+        let expr = this.compileExpression(<Expression>elementExpression, elementType, Constraints.CONV_IMPLICIT);
         let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
         if (precomp) {
           expr = precomp;
@@ -8724,21 +8069,13 @@ export class Compiler extends DiagnosticEmitter {
             : module.i32(i64_low(bufferAddress))
         ], expression);
         this.currentType = arrayType;
-        expr = this.makeRetain(expr, arrayType);
-        if (arrayType.isManaged) {
-          if (!(constraints & Constraints.WILL_RETAIN)) {
-            expr = this.makeAutorelease(expr, arrayType);
-          } else {
-            this.skippedAutoreleases.add(expr);
-          }
-        }
         return expr;
       }
     }
 
     // otherwise compile an explicit instantiation with indexed sets
-    var setter = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
-    if (!setter) {
+    var indexedSet = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
+    if (!indexedSet) {
       flow.freeTempLocal(tempThis);
       flow.freeTempLocal(tempDataStart);
       this.error(
@@ -8754,19 +8091,17 @@ export class Compiler extends DiagnosticEmitter {
     // tempThis = __newArray(length, alignLog2, classId, source = 0)
     stmts.push(
       module.local_set(tempThis.index,
-        this.makeRetain(
-          this.makeCallDirect(program.newArrayInstance, [
-            module.i32(length),
-            program.options.isWasm64
-              ? module.i64(elementType.alignLog2)
-              : module.i32(elementType.alignLog2),
-            module.i32(arrayInstance.id),
-            program.options.isWasm64
-              ? module.i64(0)
-              : module.i32(0)
-          ], expression),
-          arrayType
-        )
+        this.makeCallDirect(program.newArrayInstance, [
+          module.i32(length),
+          program.options.isWasm64
+            ? module.i64(elementType.alignLog2)
+            : module.i32(elementType.alignLog2),
+          module.i32(arrayInstance.id),
+          program.options.isWasm64
+            ? module.i64(0)
+            : module.i32(0)
+        ], expression),
+        arrayType.isManaged
       )
     );
     // tempData = tempThis.dataStart
@@ -8778,26 +8113,18 @@ export class Compiler extends DiagnosticEmitter {
           module.local_get(tempThis.index, nativeArrayType),
           nativeArrayType,
           (<Field>dataStartMember).memoryOffset
-        )
+        ),
+        true // ArrayBuffer
       )
     );
-    var isManaged = elementType.isManaged;
-    for (let i = 0, alignLog2 = elementType.alignLog2; i < length; ++i) {
-      let valueExpr = values[i];
-      if (isManaged) {
-        // value = __retain(value)
-        if (!this.skippedAutoreleases.has(valueExpr)) {
-          valueExpr = this.makeRetain(valueExpr, elementType);
-        }
-      }
-      // store<T>(tempData, value, immOffset)
+    for (let i = 0; i < length; ++i) {
+      // this[i] = value
       stmts.push(
-        module.store(elementType.byteSize,
-          module.local_get(tempDataStart.index, nativeArrayType),
-          valueExpr,
-          nativeElementType,
-          i << alignLog2
-        )
+        module.call(indexedSet.internalName, [
+          module.local_get(tempThis.index, nativeArrayType),
+          module.i32(i),
+          values[i]
+        ], NativeType.None)
       );
     }
     // -> tempThis
@@ -8806,16 +8133,9 @@ export class Compiler extends DiagnosticEmitter {
     );
     flow.freeTempLocal(tempThis);
     flow.freeTempLocal(tempDataStart);
+    if (length) this.compileFunction(indexedSet);
     this.currentType = arrayType;
-    var expr = module.flatten(stmts, nativeArrayType);
-    if (arrayType.isManaged) {
-      if (constraints & Constraints.WILL_RETAIN) {
-        this.skippedAutoreleases.add(expr);
-      } else {
-        expr = this.makeAutorelease(expr, arrayType, this.currentFlow);
-      }
-    }
-    return expr;
+    return module.flatten(stmts, nativeArrayType);
   }
 
   /** Compiles a special `fixed` array literal. */
@@ -8841,14 +8161,11 @@ export class Compiler extends DiagnosticEmitter {
     var expressions = expression.elementExpressions;
     var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
-    var nativeElementType = elementType.toNativeType();
     var isStatic = !elementType.isExternalReference;
     for (let i = 0; i < length; ++i) {
       let elementExpression = expressions[i];
       if (elementExpression.kind != NodeKind.OMITTED) {
-        let expr = this.compileExpression(elementExpression, elementType,
-          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-        );
+        let expr = this.compileExpression(elementExpression, elementType, Constraints.CONV_IMPLICIT);
         let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
         if (precomp) {
           expr = precomp;
@@ -8876,45 +8193,29 @@ export class Compiler extends DiagnosticEmitter {
         let expr = this.options.isWasm64
           ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
           : module.i32(i64_low(bufferAddress));
-        if (constraints & Constraints.WILL_RETAIN) {
-          this.skippedAutoreleases.add(expr);
-        } else {
-          // not necessary since this is static data anyway
-          // expr = this.makeAutorelease(expr, arrayType, flow);
-        }
         this.currentType = arrayType;
         return expr;
 
       // otherwise allocate a new chunk of memory and return a copy of the buffer
       } else {
         // __newBuffer(bufferSize, id, buffer)
-        let expr = this.makeRetain(
-          this.makeCallDirect(program.newBufferInstance, [
-            isWasm64
-              ? module.i64(bufferSize)
-              : module.i32(bufferSize),
-            module.i32(arrayInstance.id),
-            isWasm64
-              ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
-              : module.i32(i64_low(bufferAddress))
-          ], expression),
-          program.arrayBufferInstance.type
-        );
-        if (arrayType.isManaged) {
-          if (constraints & Constraints.WILL_RETAIN) {
-            this.skippedAutoreleases.add(expr);
-          } else {
-            expr = this.makeAutorelease(expr, arrayType);
-          }
-        }
+        let expr = this.makeCallDirect(program.newBufferInstance, [
+          isWasm64
+            ? module.i64(bufferSize)
+            : module.i32(bufferSize),
+          module.i32(arrayInstance.id),
+          isWasm64
+            ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
+            : module.i32(i64_low(bufferAddress))
+        ], expression);
         this.currentType = arrayType;
         return expr;
       }
     }
 
     // otherwise compile an explicit instantiation with indexed sets
-    var setter = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
-    if (!setter) {
+    var indexedSet = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
+    if (!indexedSet) {
       flow.freeTempLocal(tempThis);
       this.error(
         DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
@@ -8929,34 +8230,23 @@ export class Compiler extends DiagnosticEmitter {
     // tempThis = __newBuffer(bufferSize, classId)
     stmts.push(
       module.local_set(tempThis.index,
-        this.makeRetain(
-          this.makeCallDirect(program.newBufferInstance, [
-            isWasm64
-              ? module.i64(bufferSize)
-              : module.i32(bufferSize),
-            module.i32(arrayInstance.id)
-          ], expression),
-          program.arrayBufferInstance.type
-        )
+        this.makeCallDirect(program.newBufferInstance, [
+          isWasm64
+            ? module.i64(bufferSize)
+            : module.i32(bufferSize),
+          module.i32(arrayInstance.id)
+        ], expression),
+        arrayType.isManaged
       )
     );
-    var isManaged = elementType.isManaged;
-    for (let i = 0, alignLog2 = elementType.alignLog2; i < length; ++i) {
-      let valueExpr = values[i];
-      if (isManaged) {
-        // value = __retain(value)
-        if (!this.skippedAutoreleases.has(valueExpr)) {
-          valueExpr = this.makeRetain(valueExpr, elementType);
-        }
-      }
-      // store<T>(tempThis, value, immOffset)
+    for (let i = 0; i < length; ++i) {
+      // array[i] = value
       stmts.push(
-        module.store(elementType.byteSize,
+        module.call(indexedSet.internalName, [
           module.local_get(tempThis.index, nativeArrayType),
-          valueExpr,
-          nativeElementType,
-          i << alignLog2
-        )
+          module.i32(i),
+          values[i]
+        ], NativeType.None)
       );
     }
     // -> tempThis
@@ -8964,16 +8254,9 @@ export class Compiler extends DiagnosticEmitter {
       module.local_get(tempThis.index, nativeArrayType)
     );
     flow.freeTempLocal(tempThis);
+    if (length) this.compileFunction(indexedSet);
     this.currentType = arrayType;
-    var expr = module.flatten(stmts, nativeArrayType);
-    if (arrayType.isManaged) {
-      if (constraints & Constraints.WILL_RETAIN) {
-        this.skippedAutoreleases.add(expr);
-      } else {
-        expr = this.makeAutorelease(expr, arrayType, this.currentFlow);
-      }
-    }
-    return expr;
+    return module.flatten(stmts, nativeArrayType);
   }
 
   private compileObjectLiteral(expression: ObjectLiteralExpression, contextualType: Type): ExpressionRef {
@@ -9021,9 +8304,7 @@ export class Compiler extends DiagnosticEmitter {
     var hasErrors = false;
     var exprs = new Array<ExpressionRef>();
     var flow = this.currentFlow;
-    var tempLocal = isManaged
-      ? flow.getAutoreleaseLocal(classType)
-      : flow.getTempLocal(classType);
+    var tempLocal = flow.getTempLocal(classType);
     var nativeClassType = classType.toNativeType();
     assert(numNames == values.length);
 
@@ -9070,19 +8351,14 @@ export class Compiler extends DiagnosticEmitter {
       let fieldInstance = <Field>member;
       let fieldType = fieldInstance.type;
 
-      let expr = this.compileExpression(values[i], fieldType, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
-      if (fieldType.isManaged && !this.skippedAutoreleases.has(expr)) {
-        expr = this.makeRetain(expr, fieldType);
-      }
+      let expr = this.compileExpression(values[i], fieldType, Constraints.CONV_IMPLICIT);
       exprs.push(
-        module.store( // TODO: handle setters as well
-          fieldType.byteSize,
+        module.call(fieldInstance.internalSetterName, [
           module.local_get(tempLocal.index, nativeClassType),
-          expr,
-          fieldType.toNativeType(),
-          fieldInstance.memoryOffset
-        )
+          expr
+        ], NativeType.None)
       );
+      this.compileFieldSetter(fieldInstance);
 
       // This member is no longer omitted, so delete from our omitted fields
       omittedFields.delete(fieldInstance);
@@ -9126,14 +8402,12 @@ export class Compiler extends DiagnosticEmitter {
         case TypeKind.F32:
         case TypeKind.F64: {
           exprs.push(
-            module.store( // TODO: handle setters as well
-              fieldType.byteSize,
+            module.call(fieldInstance.internalSetterName, [
               module.local_get(tempLocal.index, nativeClassType),
-              this.makeZero(fieldType, expression),
-              fieldType.toNativeType(),
-              fieldInstance.memoryOffset
-            )
+              this.makeZero(fieldType, expression)
+            ], NativeType.None)
           );
+          this.compileFieldSetter(fieldInstance);
           continue;
         }
       }
@@ -9155,7 +8429,8 @@ export class Compiler extends DiagnosticEmitter {
     // allocate a new instance first and assign 'this' to the temp. local
     exprs.unshift(
       module.local_set(tempLocal.index,
-        this.compileInstantiate(ctor, [], Constraints.WILL_RETAIN, expression)
+        this.compileInstantiate(ctor, [], Constraints.NONE, expression),
+        classType.isManaged
       )
     );
 
@@ -9201,8 +8476,10 @@ export class Compiler extends DiagnosticEmitter {
     if (
       !typeArguments &&
       (classReference = contextualType.classReference) !== null &&
+      classReference.prototype == classPrototype &&
       classReference.is(CommonFlags.GENERIC)
     ) {
+      // e.g. `arr: Array<T> = new Array()`
       classInstance = this.resolver.resolveClass(
         classPrototype,
         classReference.typeArguments,
@@ -9242,7 +8519,8 @@ export class Compiler extends DiagnosticEmitter {
       // do not attempt to compile if inlined anyway
       if (!instance.hasDecorator(DecoratorFlags.INLINE)) this.compileFunction(instance);
     } else {
-      // clone base constructor if a derived class
+      // clone base constructor if a derived class. note that we cannot just
+      // call the base ctor since the derived class may have additional fields.
       let baseClass = classInstance.base;
       let contextualTypeArguments = uniqueMap(classInstance.contextualTypeArguments);
       if (baseClass) {
@@ -9276,15 +8554,18 @@ export class Compiler extends DiagnosticEmitter {
           new Signature(this.program, null, classInstance.type, classInstance.type),
           contextualTypeArguments
         );
-        let members = classInstance.members;
-        if (!members) classInstance.members = members = new Map();
-        members.set("constructor", instance.prototype);
       }
 
-      instance.internalName = classInstance.internalName + INSTANCE_DELIMITER + "constructor";
       instance.set(CommonFlags.COMPILED);
       instance.prototype.setResolvedInstance("", instance);
+      if (classInstance.is(CommonFlags.MODULE_EXPORT)) {
+        instance.set(CommonFlags.MODULE_EXPORT);
+      }
       classInstance.constructorInstance = instance;
+      let members = classInstance.members;
+      if (!members) classInstance.members = members = new Map();
+      members.set("constructor", instance.prototype);
+
       let previousFlow = this.currentFlow;
       let flow = instance.flow;
       this.currentFlow = flow;
@@ -9296,22 +8577,14 @@ export class Compiler extends DiagnosticEmitter {
       let stmts = new Array<ExpressionRef>();
 
       // {
-      //   if (!this) this = <ALLOC>
+      //   this = <COND_ALLOC>
       //   IF_DERIVED: this = super(this, ...args)
       //   this.a = X
       //   this.b = Y
       //   return this
       // }
-      let allocExpr = this.makeAllocation(classInstance);
-      let classType = classInstance.type;
-      if (classType.isManaged) allocExpr = this.makeRetain(allocExpr, classType);
       stmts.push(
-        module.if(
-          module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
-            module.local_get(0, nativeSizeType)
-          ),
-          module.local_set(0, allocExpr)
-        )
+        this.makeConditionalAllocation(classInstance, 0)
       );
       if (baseClass) {
         let parameterTypes = signature.parameterTypes;
@@ -9323,12 +8596,15 @@ export class Compiler extends DiagnosticEmitter {
         }
         stmts.push(
           module.local_set(0,
-            this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode, false, true)
+            this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode, false),
+            baseClass.type.isManaged
           )
         );
       }
       this.makeFieldInitializationInConstructor(classInstance, stmts);
-      let body = this.performAutoreleasesWithValue(flow, module.local_get(0, nativeSizeType), classInstance.type, stmts);
+      stmts.push(
+        module.local_get(0, nativeSizeType)
+      );
       flow.freeScopedLocals();
       this.currentFlow = previousFlow;
 
@@ -9340,7 +8616,13 @@ export class Compiler extends DiagnosticEmitter {
       if (numLocals > numOperands) {
         for (let i = numOperands; i < numLocals; ++i) varTypes.push(locals[i].type.toNativeType());
       }
-      let funcRef = module.addFunction(instance.internalName, signature.nativeParams, signature.nativeResults, varTypes, body);
+      let funcRef = module.addFunction(
+        instance.internalName,
+        signature.nativeParams,
+        signature.nativeResults,
+        varTypes,
+        module.flatten(stmts, nativeSizeType)
+      );
       instance.finalize(module, funcRef);
     }
 
@@ -9414,7 +8696,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(parent.kind == ElementKind.CLASS);
     var classInstance = <Class>parent;
     if (classInstance.type.isUnmanaged || ctorInstance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
-    var expr = this.compileCallDirect( // no need for another autoreleased local
+    var expr = this.compileCallDirect(
       ctorInstance,
       argumentExpressions,
       reportNode,
@@ -9593,22 +8875,18 @@ export class Compiler extends DiagnosticEmitter {
       return module.maybeDropCondition(condExpr, this.compileExpression(ifElse, ctxType));
     }
 
-    var inheritedConstraints = constraints & Constraints.WILL_RETAIN;
-
     var outerFlow = this.currentFlow;
     var ifThenFlow = outerFlow.fork();
     ifThenFlow.inheritNonnullIfTrue(condExpr);
     this.currentFlow = ifThenFlow;
-    var ifThenExpr = this.compileExpression(ifThen, ctxType, inheritedConstraints);
+    var ifThenExpr = this.compileExpression(ifThen, ctxType);
     var ifThenType = this.currentType;
-    var ifThenAutoreleaseSkipped = this.skippedAutoreleases.has(ifThenExpr);
 
     var ifElseFlow = outerFlow.fork();
     ifElseFlow.inheritNonnullIfFalse(condExpr);
     this.currentFlow = ifElseFlow;
-    var ifElseExpr = this.compileExpression(ifElse, ctxType == Type.auto ? ifThenType : ctxType, inheritedConstraints);
+    var ifElseExpr = this.compileExpression(ifElse, ctxType == Type.auto ? ifThenType : ctxType);
     var ifElseType = this.currentType;
-    var ifElseAutoreleaseSkipped = this.skippedAutoreleases.has(ifElseExpr);
 
     var commonType = Type.commonDenominator(ifThenType, ifElseType, false);
     if (!commonType) {
@@ -9625,41 +8903,13 @@ export class Compiler extends DiagnosticEmitter {
     ifElseType = commonType;
     this.currentType = commonType;
 
-    if (ifThenAutoreleaseSkipped != ifElseAutoreleaseSkipped) { // unify to both skipped
-      if (!ifThenAutoreleaseSkipped) {
-        ifThenExpr = this.makeRetain(ifThenExpr, ifThenType);
-        ifThenAutoreleaseSkipped = true;
-      } else {
-        ifElseExpr = this.makeRetain(ifElseExpr, ifElseType);
-        ifElseAutoreleaseSkipped = true;
-      }
-    } else if (!ifThenAutoreleaseSkipped && commonType.isManaged) { // keep alive a little longer
-      if (constraints & Constraints.WILL_RETAIN) { // try to undo both
-        let ifThenIndex = this.tryUndoAutorelease(ifThenExpr, ifThenFlow);
-        if (ifThenIndex == -1) ifThenExpr = this.makeRetain(ifThenExpr, ifThenType);
-        let ifElseIndex = this.tryUndoAutorelease(ifElseExpr, ifElseFlow);
-        if (ifElseIndex == -1) ifElseExpr = this.makeRetain(ifElseExpr, ifElseType);
-        ifThenAutoreleaseSkipped = true;
-        ifElseAutoreleaseSkipped = true;
-      } else {
-        ifThenExpr = this.delayAutorelease(ifThenExpr, ifThenType, ifThenFlow, outerFlow);
-        ifElseExpr = this.delayAutorelease(ifElseExpr, ifElseType, ifElseFlow, outerFlow);
-      }
-    }
-
-    ifThenExpr = this.performAutoreleasesWithValue(ifThenFlow, ifThenExpr, commonType);
     ifThenFlow.freeScopedLocals();
-
-    ifElseExpr = this.performAutoreleasesWithValue(ifElseFlow, ifElseExpr, commonType);
     ifElseFlow.freeScopedLocals();
 
     this.currentFlow = outerFlow;
     outerFlow.inheritMutual(ifThenFlow, ifElseFlow);
 
-    var expr = module.if(condExpr, ifThenExpr, ifElseExpr);
-    assert(ifThenAutoreleaseSkipped == ifElseAutoreleaseSkipped);
-    if (ifThenAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
-    return expr;
+    return module.if(condExpr, ifThenExpr, ifElseExpr);
   }
 
   private compileUnaryPostfixExpression(
@@ -9687,7 +8937,8 @@ export class Compiler extends DiagnosticEmitter {
       tempLocal = flow.getTempLocal(this.currentType);
       getValue = module.local_tee(
         tempLocal.index,
-        getValue
+        getValue,
+        this.currentType.isManaged
       );
     }
 
@@ -10626,7 +9877,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: {
         return module.binary(BinaryOp.NeI64, expr, module.i64(0));
       }
-      case TypeKind.USIZE: if (type.isManaged && this.skippedAutoreleases.has(expr)) expr = this.makeAutorelease(expr, type);
+      case TypeKind.USIZE:
       case TypeKind.ISIZE: {
         return type.size == 64
           ? module.binary(BinaryOp.NeI64, expr, module.i64(0))
@@ -10708,6 +9959,26 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
+  /** Makes a conditional allocation where `this` might not have been initialized yet. */
+  makeConditionalAllocation(
+    classInstance: Class,
+    thisIndex: i32
+  ): ExpressionRef {
+    var module = this.module;
+    var classType = classInstance.type;
+    var nativeClassType = classType.toNativeType();
+    assert(nativeClassType == this.options.nativeSizeType);
+    return module.if(
+      module.unary(nativeClassType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
+        module.local_get(thisIndex, nativeClassType)
+      ),
+      module.local_set(thisIndex,
+        this.makeAllocation(classInstance),
+        classInstance.type.isManaged
+      )
+    );
+  }
+
   /** Makes the initializers for a class's fields within the constructor. */
   makeFieldInitializationInConstructor(
     /** Class being initialized. */
@@ -10753,29 +10024,22 @@ export class Compiler extends DiagnosticEmitter {
             : 1 + parameterIndex, // this is local 0
           nativeFieldType
         );
-        if (fieldType.isManaged) initExpr = this.makeRetain(initExpr, fieldType);
 
       // fall back to use initializer if present
       } else if (initializerNode) {
-        initExpr = this.compileExpression(initializerNode, fieldType,
-          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-        );
-        if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
-          initExpr = this.makeRetain(initExpr, fieldType);
-        }
+        initExpr = this.compileExpression(initializerNode, fieldType, Constraints.CONV_IMPLICIT);
 
       // otherwise initialize with zero
       } else {
         initExpr = this.makeZero(fieldType, fieldPrototype.declaration);
       }
 
+      this.compileFieldSetter(field);
       stmts.push(
-        module.store(fieldType.byteSize,
+        module.call(field.internalSetterName, [
           module.local_get(thisLocalIndex, nativeSizeType),
-          initExpr,
-          nativeFieldType,
-          field.memoryOffset
-        )
+          initExpr
+        ], NativeType.None)
       );
     }
     return stmts;
@@ -10795,11 +10059,7 @@ export class Compiler extends DiagnosticEmitter {
     var stringInstance = program.stringInstance;
     var messageArg: ExpressionRef;
     if (message !== null) {
-      // The message argument works much like an arm of an IF that does not become executed if the
-      // assertion succeeds respectively is only being computed if the program actually crashes.
-      // Hence, let's make it so that the autorelease is skipped at the end of the current block,
-      // essentially ignoring the message GC-wise. Doesn't matter anyway on a crash.
-      messageArg = this.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
+      messageArg = this.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT);
     } else {
       messageArg = this.makeZero(stringInstance.type, codeLocation);
     }
@@ -10851,7 +10111,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
     flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
     expr = module.if(
-      module.local_tee(temp.index, expr),
+      module.local_tee(temp.index, expr, type.isManaged),
       module.local_get(temp.index, type.toNativeType()),
       this.makeStaticAbort(this.ensureStaticString("unexpected null"), reportNode) // TODO: throw
     );
@@ -10879,7 +10139,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(this.compileFunction(instanceofInstance));
     expr = module.if(
       module.call(instanceofInstance.internalName, [
-        module.local_tee(temp.index, expr),
+        module.local_tee(temp.index, expr, type.isManaged),
         module.i32(toType.classReference!.id)
       ], NativeType.I32),
       module.local_get(temp.index, type.toNativeType()),

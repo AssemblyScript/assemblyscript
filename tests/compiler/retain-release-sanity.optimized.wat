@@ -1851,7 +1851,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 300
+   i32.const 313
    i32.const 21
    call $~lib/builtins/abort
    unreachable
@@ -2154,9 +2154,6 @@
   local.get $1
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__collect
- )
- (func $~start
-  call $start:retain-release-sanity
  )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
@@ -2539,6 +2536,9 @@
   end
   local.get $1
   global.set $~lib/rt/pure/CUR
+ )
+ (func $~start
+  call $start:retain-release-sanity
  )
  (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0

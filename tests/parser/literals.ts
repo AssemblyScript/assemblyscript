@@ -60,3 +60,19 @@
 "1\"23";
 "1\"2\\3";
 "\0\n\\n\r";
+
+// invalid
+1..;
+3u8;
+4b;
+5-;
+6=;
+7_;
+1.a;
+2.0b;
+
+// technically invalid, but not handled by AS yet, TS1005: ';' expected
+3 4;
+5 c;
+6.7 d;
+a b;

@@ -459,11 +459,11 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("(");
     var parameters = signature.parameterTypes;
     var numParameters = parameters.length;
-    // var requiredParameters = signature.requiredParameters;
+    var requiredParameters = signature.requiredParameters;
     for (let i = 0; i < numParameters; ++i) {
       if (i) sb.push(", ");
-      // if (i >= requiredParameters) sb.push("optional ");
       sb.push(element.getParameterName(i));
+      if (i >= requiredParameters) sb.push("?");
       sb.push(": ");
       sb.push(this.typeToString(parameters[i]));
     }
@@ -496,6 +496,14 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(extendsNode.name.identifier.text); // TODO: fqn?
     }
     sb.push(" {\n");
+    if (!isInterface) {
+      indent(sb, this.indentLevel);
+      sb.push("static wrap(ptr: usize): ");
+      sb.push(name);
+      sb.push(";\n");
+      indent(sb, this.indentLevel);
+      sb.push("valueOf(): usize;\n");
+    }
     var staticMembers = element.prototype.members;
     if (staticMembers) {
       // TODO: for (let member of staticMembers.values()) {

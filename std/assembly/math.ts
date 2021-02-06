@@ -3080,6 +3080,9 @@ export namespace NativeMathf {
 export function ipow32(x: i32, e: i32): i32 {
   var out = 1;
   if (ASC_SHRINK_LEVEL < 1) {
+    if (x == 2) {
+      return select<i32>(1 << e, 0, <u32>e < 32);
+    }
     if (e <= 0) {
       if (x == -1) return select<i32>(-1, 1, e & 1);
       return i32(e == 0) | i32(x == 1);
@@ -3129,6 +3132,9 @@ export function ipow32(x: i32, e: i32): i32 {
 export function ipow64(x: i64, e: i64): i64 {
   var out: i64 = 1;
   if (ASC_SHRINK_LEVEL < 1) {
+    if (x == 2) {
+      return select<i64>(1 << e, 0, <u64>e < 64);
+    }
     if (e <= 0) {
       if (x == -1) return select<i64>(-1, 1, e & 1);
       return i64(e == 0) | i64(x == 1);

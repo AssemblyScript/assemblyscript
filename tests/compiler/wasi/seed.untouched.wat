@@ -1,27 +1,31 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_f64 (func (result f64)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i64_=>_none (func (param i64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i64_=>_i64 (func (param i64) (result i64)))
  (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (memory $0 1)
- (data (i32.const 12) ",\00\00\00\01\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00\00\00\00\00")
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
- (export "_start" (func $~start))
- (export "memory" (memory $0))
+ (global $~lib/memory/__data_end i32 (i32.const 60))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
+ (global $~lib/memory/__heap_base i32 (i32.const 16444))
  (export "test" (func $wasi/seed/test))
+ (export "memory" (memory $0))
+ (export "_start" (func $~start))
  (func $~lib/wasi/index/seed (result f64)
   (local $0 i64)
   (local $1 i64)
@@ -115,8 +119,10 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
+ (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
+  local.get $1
+  i32.store
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
@@ -397,174 +403,10 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/__release (param $0 i32)
-  nop
- )
- (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
+ (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
   local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
-  i32.const 0
-  i32.const 12
-  i32.store
-  i32.const 12
-  local.set $4
-  local.get $4
-  i64.const 9071471065260641
-  i64.store
-  local.get $4
-  i32.const 7
-  i32.add
-  local.set $4
-  local.get $0
-  i32.const 0
-  i32.ne
-  if
-   local.get $4
-   local.get $0
-   local.get $0
-   call $~lib/string/String#get:length
-   local.get $4
-   i32.const 0
-   call $~lib/string/String.UTF8.encodeUnsafe
-   i32.add
-   local.set $4
-  end
-  local.get $4
-  i32.const 544106784
-  i32.store
-  local.get $4
-  i32.const 4
-  i32.add
-  local.set $4
-  local.get $1
-  i32.const 0
-  i32.ne
-  if
-   local.get $4
-   local.get $1
-   local.get $1
-   call $~lib/string/String#get:length
-   local.get $4
-   i32.const 0
-   call $~lib/string/String.UTF8.encodeUnsafe
-   i32.add
-   local.set $4
-  end
-  local.get $4
-  local.tee $5
-  i32.const 1
-  i32.add
-  local.set $4
-  local.get $5
-  i32.const 40
-  i32.store8
-  local.get $2
-  call $~lib/util/number/decimalCount32
-  local.set $6
-  local.get $4
-  local.get $6
-  i32.add
-  local.set $4
-  loop $do-continue|0
-   local.get $2
-   i32.const 10
-   i32.div_u
-   local.set $5
-   local.get $4
-   i32.const 1
-   i32.sub
-   local.tee $4
-   i32.const 48
-   local.get $2
-   i32.const 10
-   i32.rem_u
-   i32.add
-   i32.store8
-   local.get $5
-   local.set $2
-   local.get $2
-   local.set $7
-   local.get $7
-   br_if $do-continue|0
-  end
-  local.get $4
-  local.get $6
-  i32.add
-  local.set $4
-  local.get $4
-  local.tee $7
-  i32.const 1
-  i32.add
-  local.set $4
-  local.get $7
-  i32.const 58
-  i32.store8
-  local.get $3
-  call $~lib/util/number/decimalCount32
-  local.set $6
-  local.get $4
-  local.get $6
-  i32.add
-  local.set $4
-  loop $do-continue|1
-   local.get $3
-   i32.const 10
-   i32.div_u
-   local.set $7
-   local.get $4
-   i32.const 1
-   i32.sub
-   local.tee $4
-   i32.const 48
-   local.get $3
-   i32.const 10
-   i32.rem_u
-   i32.add
-   i32.store8
-   local.get $7
-   local.set $3
-   local.get $3
-   local.set $8
-   local.get $8
-   br_if $do-continue|1
-  end
-  local.get $4
-  local.get $6
-  i32.add
-  local.set $4
-  local.get $4
-  i32.const 2601
-  i32.store16
-  local.get $4
-  i32.const 2
-  i32.add
-  local.set $4
-  i32.const 0
-  local.get $4
-  i32.const 12
-  i32.sub
   i32.store offset=4
-  i32.const 2
-  i32.const 0
-  i32.const 1
-  i32.const 8
-  call $~lib/bindings/wasi_snapshot_preview1/fd_write
-  drop
-  i32.const 255
-  call $~lib/bindings/wasi_snapshot_preview1/proc_exit
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
  )
  (func $~lib/math/NativeMath.seedRandom (param $0 i64)
   i32.const 1
@@ -675,5 +517,197 @@
  )
  (func $~start
   nop
+ )
+ (func $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__data_end
+  i32.lt_s
+  if
+   i32.const 16464
+   i32.const 16512
+   i32.const 1
+   i32.const 1
+   call $~lib/wasi/index/abort
+   unreachable
+  end
+ )
+ (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  i32.const 0
+  i32.const 12
+  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
+  i32.const 12
+  local.set $4
+  local.get $4
+  i64.const 9071471065260641
+  i64.store
+  local.get $4
+  i32.const 7
+  i32.add
+  local.set $4
+  local.get $0
+  i32.const 0
+  i32.ne
+  if
+   local.get $4
+   local.get $0
+   local.get $0
+   local.set $9
+   global.get $~lib/memory/__stack_pointer
+   local.get $9
+   i32.store
+   local.get $9
+   call $~lib/string/String#get:length
+   local.get $4
+   i32.const 0
+   call $~lib/string/String.UTF8.encodeUnsafe
+   i32.add
+   local.set $4
+  end
+  local.get $4
+  i32.const 544106784
+  i32.store
+  local.get $4
+  i32.const 4
+  i32.add
+  local.set $4
+  local.get $1
+  i32.const 0
+  i32.ne
+  if
+   local.get $4
+   local.get $1
+   local.get $1
+   local.set $9
+   global.get $~lib/memory/__stack_pointer
+   local.get $9
+   i32.store
+   local.get $9
+   call $~lib/string/String#get:length
+   local.get $4
+   i32.const 0
+   call $~lib/string/String.UTF8.encodeUnsafe
+   i32.add
+   local.set $4
+  end
+  local.get $4
+  local.tee $5
+  i32.const 1
+  i32.add
+  local.set $4
+  local.get $5
+  i32.const 40
+  i32.store8
+  local.get $2
+  call $~lib/util/number/decimalCount32
+  local.set $6
+  local.get $4
+  local.get $6
+  i32.add
+  local.set $4
+  loop $do-continue|0
+   local.get $2
+   i32.const 10
+   i32.div_u
+   local.set $5
+   local.get $4
+   i32.const 1
+   i32.sub
+   local.tee $4
+   i32.const 48
+   local.get $2
+   i32.const 10
+   i32.rem_u
+   i32.add
+   i32.store8
+   local.get $5
+   local.set $2
+   local.get $2
+   local.set $7
+   local.get $7
+   br_if $do-continue|0
+  end
+  local.get $4
+  local.get $6
+  i32.add
+  local.set $4
+  local.get $4
+  local.tee $7
+  i32.const 1
+  i32.add
+  local.set $4
+  local.get $7
+  i32.const 58
+  i32.store8
+  local.get $3
+  call $~lib/util/number/decimalCount32
+  local.set $6
+  local.get $4
+  local.get $6
+  i32.add
+  local.set $4
+  loop $do-continue|1
+   local.get $3
+   i32.const 10
+   i32.div_u
+   local.set $7
+   local.get $4
+   i32.const 1
+   i32.sub
+   local.tee $4
+   i32.const 48
+   local.get $3
+   i32.const 10
+   i32.rem_u
+   i32.add
+   i32.store8
+   local.get $7
+   local.set $3
+   local.get $3
+   local.set $8
+   local.get $8
+   br_if $do-continue|1
+  end
+  local.get $4
+  local.get $6
+  i32.add
+  local.set $4
+  local.get $4
+  i32.const 2601
+  i32.store16
+  local.get $4
+  i32.const 2
+  i32.add
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 12
+  i32.sub
+  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
+  i32.const 2
+  i32.const 0
+  i32.const 1
+  i32.const 8
+  call $~lib/bindings/wasi_snapshot_preview1/fd_write
+  drop
+  i32.const 255
+  call $~lib/bindings/wasi_snapshot_preview1/proc_exit
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )

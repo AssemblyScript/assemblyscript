@@ -26,7 +26,6 @@ class Unmanaged {
 function testUnmanaged(unmanaged: Unmanaged): void {
   assert(unmanaged.bar == 123);
   assert(unmanaged.baz == "hello");
-  __release(changetype<usize>(unmanaged.baz));
   __free(changetype<usize>(unmanaged));
 }
 
@@ -118,3 +117,6 @@ function testOmittedFoo(foo: OmittedFoo): void {
 }
 
 testOmittedFoo({});
+
+__stack_pointer = __heap_base;
+__collect();

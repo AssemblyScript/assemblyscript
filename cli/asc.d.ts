@@ -55,6 +55,39 @@ export interface MemoryStream extends OutputStream {
   toString(): string;
 }
 
+/** Relevant subset of the Source class for diagnostic reporting. */
+export interface Source {
+  /** Normalized path with file extension. */
+  normalizedPath: string;
+}
+
+/** Relevant subset of the Range class for diagnostic reporting. */
+export interface Range {
+  /** Start offset within the source file. */
+  start: number;
+  /** End offset within the source file. */
+  end: number;
+  /** Respective source file. */
+  source: Source;
+}
+
+/** Relevant subset of the DiagnosticMessage class for diagnostic reporting. */
+export interface DiagnosticMessage {
+  /** Message code. */
+  code: number;
+  /** Message category. */
+  category: number;
+  /** Message text. */
+  message: string;
+  /** Respective source range, if any. */
+  range: Range | null;
+  /** Related range, if any. */
+  relatedRange: Range | null;
+}
+
+/** A function handling diagnostic messages. */
+type DiagnosticReporter = (diagnostic: DiagnosticMessage) => void;
+
 /** Compiler options. */
 export interface CompilerOptions {
   /** Prints just the compiler's version and exits. */
@@ -157,6 +190,8 @@ export interface APIOptions {
   writeFile?: (filename: string, contents: Uint8Array, baseDir: string) => void;
   /** Lists all files within a directory. */
   listFiles?: (dirname: string, baseDir: string) => string[] | null;
+  /** Handler for diagnostic messages. */
+  reportDiagnostic?: DiagnosticReporter;
 }
 
 /** Convenience function that parses and compiles source strings directly. */
@@ -176,7 +211,7 @@ export function main(argv: string[], options: APIOptions, callback?: (err: Error
 export function main(argv: string[], callback?: (err: Error | null) => number): number;
 
 /** Checks diagnostics emitted so far for errors. */
-export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream): boolean;
+export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream, reportDiagnostic?: DiagnosticReporter): boolean;
 
 /** An object of stats for the current task. */
 export interface Stats {

@@ -19,3 +19,5 @@ assert(normal() === 4);
 assert(viaThis() === 4);
 
 x = changetype<X>(0); // unleak
+
+__collect();
