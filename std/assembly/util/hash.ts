@@ -94,14 +94,14 @@ function hashStr(key: string): u32 {
     h += XXH32_SEED + XXH32_P5;
   }
 
-  var end = len + pos - 4;
+  var end = changetype<usize>(key) + len - 4;
   while (pos <= end) {
     h += load<u32>(pos) * XXH32_P3;
     h = rotl(h, 17) * XXH32_P4;
     pos += 4;
   }
 
-  end = len + pos;
+  end = changetype<usize>(key) + len;
   while (pos < end) {
     h += <u32>load<u8>(pos) * XXH32_P5;
     h = rotl(h, 11) * XXH32_P1;

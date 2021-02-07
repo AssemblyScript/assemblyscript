@@ -374,8 +374,8 @@
     i32.add
     local.set $4
    end
+   local.get $1
    local.get $2
-   local.get $3
    i32.add
    i32.const 4
    i32.sub
@@ -407,8 +407,8 @@
      br $while-continue|1
     end
    end
+   local.get $1
    local.get $2
-   local.get $3
    i32.add
    local.set $9
    loop $while-continue|2
@@ -650,8 +650,8 @@
     i32.add
     local.set $4
    end
+   local.get $1
    local.get $2
-   local.get $3
    i32.add
    i32.const 4
    i32.sub
@@ -683,8 +683,8 @@
      br $while-continue|1
     end
    end
+   local.get $1
    local.get $2
-   local.get $3
    i32.add
    local.set $9
    loop $while-continue|2
