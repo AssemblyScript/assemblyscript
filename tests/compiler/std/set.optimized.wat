@@ -1,8 +1,8 @@
 (module
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
@@ -16,6 +16,8 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $f32_=>_i32 (func (param f32) (result i32)))
+ (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
  (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
@@ -1819,6 +1821,40 @@
   local.get $1
   call $~lib/rt/itcms/__link
  )
+ (func $~lib/util/hash/HASH<i8> (param $0 i32) (result i32)
+  local.get $0
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  i32.const -1028477379
+  i32.mul
+  i32.const 374761394
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 15
+  i32.shr_u
+  i32.xor
+  i32.const -2048144777
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 16
+  i32.shr_u
+  i32.xor
+ )
  (func $~lib/set/Set<i8>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
@@ -1929,12 +1965,9 @@
      i32.store8
      local.get $2
      local.get $6
-     local.get $1
      local.get $7
-     i32.const -2128831035
-     i32.xor
-     i32.const 16777619
-     i32.mul
+     call $~lib/util/hash/HASH<i8>
+     local.get $1
      i32.and
      i32.const 2
      i32.shl
@@ -2298,6 +2331,38 @@
   i32.const 0
   i32.store offset=20
  )
+ (func $~lib/util/hash/HASH<u8> (param $0 i32) (result i32)
+  local.get $0
+  i32.const 255
+  i32.and
+  i32.const -1028477379
+  i32.mul
+  i32.const 374761394
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 15
+  i32.shr_u
+  i32.xor
+  i32.const -2048144777
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 16
+  i32.shr_u
+  i32.xor
+ )
  (func $~lib/set/Set<u8>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2365,12 +2430,9 @@
      i32.store8
      local.get $2
      local.get $6
-     local.get $1
      local.get $7
-     i32.const -2128831035
-     i32.xor
-     i32.const 16777619
-     i32.mul
+     call $~lib/util/hash/HASH<u8>
+     local.get $1
      i32.and
      i32.const 2
      i32.shl
@@ -2433,20 +2495,39 @@
   i32.add
   i32.load8_u
  )
- (func $~lib/util/hash/hash16 (param $0 i32) (result i32)
+ (func $~lib/util/hash/HASH<i16> (param $0 i32) (result i32)
   local.get $0
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_s
+  i32.const -1028477379
   i32.mul
+  i32.const 374761395
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.tee $0
   local.get $0
-  i32.const 8
+  i32.const 15
   i32.shr_u
   i32.xor
-  i32.const 16777619
+  i32.const -2048144777
   i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 16
+  i32.shr_u
+  i32.xor
  )
  (func $~lib/set/Set<i16>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
@@ -2559,7 +2640,7 @@
      local.get $2
      local.get $6
      local.get $7
-     call $~lib/util/hash/hash16
+     call $~lib/util/hash/HASH<i16>
      local.get $1
      i32.and
      i32.const 2
@@ -2634,6 +2715,38 @@
   i32.add
   i32.load16_s
  )
+ (func $~lib/util/hash/HASH<u16> (param $0 i32) (result i32)
+  local.get $0
+  i32.const 65535
+  i32.and
+  i32.const -1028477379
+  i32.mul
+  i32.const 374761395
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 15
+  i32.shr_u
+  i32.xor
+  i32.const -2048144777
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 16
+  i32.shr_u
+  i32.xor
+ )
  (func $~lib/set/Set<u16>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2702,7 +2815,7 @@
      local.get $2
      local.get $6
      local.get $7
-     call $~lib/util/hash/hash16
+     call $~lib/util/hash/HASH<u16>
      local.get $1
      i32.and
      i32.const 2
@@ -2768,36 +2881,35 @@
   i32.add
   i32.load16_u
  )
- (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
+ (func $~lib/util/hash/HASH<i32> (param $0 i32) (result i32)
   local.get $0
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
+  i32.const -1028477379
   i32.mul
+  i32.const 374761397
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.tee $0
   local.get $0
-  i32.const 8
+  i32.const 15
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
+  i32.const -2048144777
   i32.mul
+  local.tee $0
+  local.get $0
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $0
   local.get $0
   i32.const 16
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $0
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
  )
  (func $~lib/set/Set<i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
@@ -2908,7 +3020,7 @@
      local.get $2
      local.get $6
      local.get $7
-     call $~lib/util/hash/hash32
+     call $~lib/util/hash/HASH<i32>
      local.get $1
      i32.and
      i32.const 2
@@ -3092,7 +3204,7 @@
      local.get $2
      local.get $6
      local.get $7
-     call $~lib/util/hash/hash32
+     call $~lib/util/hash/HASH<i32>
      local.get $1
      i32.and
      i32.const 2
@@ -3158,71 +3270,48 @@
   i32.add
   i32.load
  )
- (func $~lib/util/hash/hash64 (param $0 i64) (result i32)
+ (func $~lib/util/hash/HASH<i64> (param $0 i64) (result i32)
   (local $1 i32)
   local.get $0
   i32.wrap_i64
-  local.tee $1
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
+  i32.const -1028477379
   i32.mul
-  local.get $1
-  i32.const 8
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $1
-  i32.const 16
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $1
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
+  i32.const 374761401
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
   i32.mul
   local.get $0
   i64.const 32
   i64.shr_u
   i32.wrap_i64
+  i32.const -1028477379
+  i32.mul
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
   local.tee $1
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
   local.get $1
-  i32.const 8
+  i32.const 15
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
+  i32.const -2048144777
   i32.mul
+  local.tee $1
+  local.get $1
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $1
   local.get $1
   i32.const 16
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.xor
-  i32.const 16777619
-  i32.mul
-  local.get $1
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
  )
  (func $~lib/set/Set<i64>#find (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   local.get $0
@@ -3334,7 +3423,7 @@
      local.get $2
      local.get $8
      local.get $5
-     call $~lib/util/hash/hash64
+     call $~lib/util/hash/HASH<i64>
      local.get $1
      i32.and
      i32.const 2
@@ -3541,7 +3630,7 @@
      local.get $2
      local.get $8
      local.get $5
-     call $~lib/util/hash/hash64
+     call $~lib/util/hash/HASH<i64>
      local.get $1
      i32.and
      i32.const 2
@@ -3606,6 +3695,38 @@
   i32.shl
   i32.add
   i64.load
+ )
+ (func $~lib/util/hash/HASH<f32> (param $0 f32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.reinterpret_f32
+  i32.const -1028477379
+  i32.mul
+  i32.const 374761397
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.tee $1
+  local.get $1
+  i32.const 15
+  i32.shr_u
+  i32.xor
+  i32.const -2048144777
+  i32.mul
+  local.tee $1
+  local.get $1
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $1
+  local.get $1
+  i32.const 16
+  i32.shr_u
+  i32.xor
  )
  (func $~lib/set/Set<f32>#find (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   local.get $0
@@ -3717,8 +3838,7 @@
      local.get $2
      local.get $8
      local.get $5
-     i32.reinterpret_f32
-     call $~lib/util/hash/hash32
+     call $~lib/util/hash/HASH<f32>
      local.get $1
      i32.and
      i32.const 2
@@ -3783,6 +3903,52 @@
   i32.shl
   i32.add
   f32.load
+ )
+ (func $~lib/util/hash/HASH<f64> (param $0 f64) (result i32)
+  (local $1 i32)
+  (local $2 i64)
+  local.get $0
+  i64.reinterpret_f64
+  local.tee $2
+  i32.wrap_i64
+  i32.const -1028477379
+  i32.mul
+  i32.const 374761401
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.get $2
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const -1028477379
+  i32.mul
+  i32.add
+  i32.const 17
+  i32.rotl
+  i32.const 668265263
+  i32.mul
+  local.tee $1
+  local.get $1
+  i32.const 15
+  i32.shr_u
+  i32.xor
+  i32.const -2048144777
+  i32.mul
+  local.tee $1
+  local.get $1
+  i32.const 13
+  i32.shr_u
+  i32.xor
+  i32.const -1028477379
+  i32.mul
+  local.tee $1
+  local.get $1
+  i32.const 16
+  i32.shr_u
+  i32.xor
  )
  (func $~lib/set/Set<f64>#find (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   local.get $0
@@ -3894,8 +4060,7 @@
      local.get $2
      local.get $8
      local.get $5
-     i64.reinterpret_f64
-     call $~lib/util/hash/hash64
+     call $~lib/util/hash/HASH<f64>
      local.get $1
      i32.and
      i32.const 2
@@ -4083,14 +4248,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
+  call $~lib/util/hash/HASH<i8>
   call $~lib/set/Set<i8>#find
   i32.const 0
   i32.ne
@@ -4111,23 +4269,15 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  local.get $1
+  call $~lib/util/hash/HASH<i8>
+  local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.tee $2
-  local.set $3
   local.get $0
   local.get $1
-  local.get $2
+  local.get $3
   call $~lib/set/Set<i8>#find
   i32.eqz
   if
@@ -4408,14 +4558,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
+  call $~lib/util/hash/HASH<i8>
   call $~lib/set/Set<i8>#find
   local.tee $1
   i32.eqz
@@ -4910,12 +5053,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
+  call $~lib/util/hash/HASH<u8>
   call $~lib/set/Set<i8>#find
   i32.const 0
   i32.ne
@@ -4936,21 +5074,15 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  local.get $1
+  call $~lib/util/hash/HASH<u8>
+  local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  local.get $1
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.tee $2
-  local.set $3
   local.get $0
   local.get $1
-  local.get $2
+  local.get $3
   call $~lib/set/Set<i8>#find
   i32.eqz
   if
@@ -5180,12 +5312,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
+  call $~lib/util/hash/HASH<u8>
   call $~lib/set/Set<i8>#find
   local.tee $1
   i32.eqz
@@ -5672,11 +5799,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<i16>
   call $~lib/set/Set<i16>#find
   i32.const 0
   i32.ne
@@ -5698,11 +5821,7 @@
   i32.const 0
   i32.store
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<i16>
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -5998,11 +6117,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<i16>
   call $~lib/set/Set<i16>#find
   local.tee $1
   i32.eqz
@@ -6497,9 +6612,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 65535
-  i32.and
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<u16>
   call $~lib/set/Set<i16>#find
   i32.const 0
   i32.ne
@@ -6521,9 +6634,7 @@
   i32.const 0
   i32.store
   local.get $1
-  i32.const 65535
-  i32.and
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<u16>
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -6766,9 +6877,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 65535
-  i32.and
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<u16>
   call $~lib/set/Set<i16>#find
   local.tee $1
   i32.eqz
@@ -7255,7 +7364,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<i32>
   call $~lib/set/Set<i32>#find
   i32.const 0
   i32.ne
@@ -7277,7 +7386,7 @@
   i32.const 0
   i32.store
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<i32>
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -7573,7 +7682,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<i32>
   call $~lib/set/Set<i32>#find
   local.tee $1
   i32.eqz
@@ -8052,7 +8161,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<i32>
   call $~lib/set/Set<u32>#find
   i32.const 0
   i32.ne
@@ -8074,7 +8183,7 @@
   i32.const 0
   i32.store
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<i32>
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -8317,7 +8426,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<i32>
   call $~lib/set/Set<u32>#find
   local.tee $1
   i32.eqz
@@ -8796,7 +8905,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash64
+  call $~lib/util/hash/HASH<i64>
   call $~lib/set/Set<i64>#find
   i32.const 0
   i32.ne
@@ -8818,7 +8927,7 @@
   i32.const 0
   i32.store
   local.get $1
-  call $~lib/util/hash/hash64
+  call $~lib/util/hash/HASH<i64>
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -9115,7 +9224,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash64
+  call $~lib/util/hash/HASH<i64>
   call $~lib/set/Set<i64>#find
   local.tee $2
   i32.eqz
@@ -9595,7 +9704,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash64
+  call $~lib/util/hash/HASH<i64>
   call $~lib/set/Set<u64>#find
   i32.const 0
   i32.ne
@@ -9617,7 +9726,7 @@
   i32.const 0
   i32.store
   local.get $1
-  call $~lib/util/hash/hash64
+  call $~lib/util/hash/HASH<i64>
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -9861,7 +9970,7 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/hash64
+  call $~lib/util/hash/HASH<i64>
   call $~lib/set/Set<u64>#find
   local.tee $2
   i32.eqz
@@ -10341,8 +10450,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.reinterpret_f32
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<f32>
   call $~lib/set/Set<f32>#find
   i32.const 0
   i32.ne
@@ -10364,8 +10472,7 @@
   i32.const 0
   i32.store
   local.get $1
-  i32.reinterpret_f32
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<f32>
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -10658,8 +10765,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.reinterpret_f32
-  call $~lib/util/hash/hash32
+  call $~lib/util/hash/HASH<f32>
   call $~lib/set/Set<f32>#find
   local.tee $2
   i32.eqz
@@ -11139,8 +11245,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i64.reinterpret_f64
-  call $~lib/util/hash/hash64
+  call $~lib/util/hash/HASH<f64>
   call $~lib/set/Set<f64>#find
   i32.const 0
   i32.ne
@@ -11162,8 +11267,7 @@
   i32.const 0
   i32.store
   local.get $1
-  i64.reinterpret_f64
-  call $~lib/util/hash/hash64
+  call $~lib/util/hash/HASH<f64>
   local.set $3
   global.get $~lib/memory/__stack_pointer
   local.get $0
@@ -11456,8 +11560,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i64.reinterpret_f64
-  call $~lib/util/hash/hash64
+  call $~lib/util/hash/HASH<f64>
   call $~lib/set/Set<f64>#find
   local.tee $2
   i32.eqz
