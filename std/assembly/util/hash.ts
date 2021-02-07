@@ -71,9 +71,9 @@ function mix(h: u32, key: u32): u32 {
 function hashStr(key: string): u32 {
   if (key === null) return XXH32_SEED;
 
-  var len: usize = key.length << 1;
+  var h: u32 = key.length << 1;
+  var len: usize = h;
   var pos = changetype<usize>(key);
-  var h = <u32>len;
 
   if (len >= 16) {
     let s1 = XXH32_SEED + XXH32_P1 + XXH32_P2;
