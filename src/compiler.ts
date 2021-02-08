@@ -700,7 +700,7 @@ export class Compiler extends DiagnosticEmitter {
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
       module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
-        module.global_set(BuiltinNames.argumentsLength, module.local_get(0, NativeType.I32))
+        module.global_set(this.ensureArgumentsLength(), module.local_get(0, NativeType.I32))
       );
       module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
     }
@@ -863,7 +863,6 @@ export class Compiler extends DiagnosticEmitter {
           if (signature.requiredParameters < signature.parameterTypes.length) {
             // utilize varargs stub to fill in omitted arguments
             functionInstance = this.ensureVarargsStub(functionInstance);
-            this.ensureArgumentsLength();
             this.runtimeFeatures |= RuntimeFeatures.setArgumentsLength;
           }
           if (functionInstance.is(CommonFlags.COMPILED)) {
@@ -6653,11 +6652,13 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Makes sure that the arguments length helper global is present. */
-  ensureArgumentsLength(): void {
+  ensureArgumentsLength(): string {
+    var name = BuiltinNames.argumentsLength;
     if (!this.builtinArgumentsLength) {
       let module = this.module;
-      this.builtinArgumentsLength = module.addGlobal(BuiltinNames.argumentsLength, NativeType.I32, true, module.i32(0));
+      this.builtinArgumentsLength = module.addGlobal(name, NativeType.I32, true, module.i32(0));
     }
+    return name;
   }
 
   /** Ensures compilation of the varargs stub for the specified function. */
@@ -6725,6 +6726,7 @@ export class Compiler extends DiagnosticEmitter {
       let label = i.toString() + ofN;
       names[i] = label;
     }
+    var argumentsLength = this.ensureArgumentsLength();
     var table = module.block(names[0], [
       module.block("outOfRange", [
         module.switch(names, "outOfRange",
@@ -6732,10 +6734,10 @@ export class Compiler extends DiagnosticEmitter {
           minArguments
             ? module.binary(
                 BinaryOp.SubI32,
-                module.global_get(BuiltinNames.argumentsLength, NativeType.I32),
+                module.global_get(argumentsLength, NativeType.I32),
                 module.i32(minArguments)
               )
-            : module.global_get(BuiltinNames.argumentsLength, NativeType.I32)
+            : module.global_get(argumentsLength, NativeType.I32)
         )
       ]),
       module.unreachable()
@@ -6912,9 +6914,8 @@ export class Compiler extends DiagnosticEmitter {
           let nativeReturnType = overloadSignature.returnType.toNativeType();
           let stmts = new Array<ExpressionRef>();
           if (needsVarargsStub) {
-            this.ensureArgumentsLength();
             // Safe to prepend since paramExprs are local.get's
-            stmts.push(module.global_set(BuiltinNames.argumentsLength, module.i32(numParameters)));
+            stmts.push(module.global_set(this.ensureArgumentsLength(), module.i32(numParameters)));
           }
           if (returnType == Type.void) {
             stmts.push(
@@ -7123,7 +7124,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(!(getSideEffects(lastOperand) & SideEffects.WritesGlobal));
         let lastOperandType = parameterTypes[maxArguments - 1];
         operands[maxOperands - 1] = module.block(null, [
-          module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
+          module.global_set(this.ensureArgumentsLength(), module.i32(numArguments)),
           lastOperand
         ], lastOperandType.toNativeType());
         this.operandsTostack(instance.signature, operands);
@@ -7134,7 +7135,6 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           this.currentType = returnType;
         }
-        this.ensureArgumentsLength();
         return expr;
       }
     }
@@ -7226,20 +7226,20 @@ export class Compiler extends DiagnosticEmitter {
     // We might be calling a varargs stub here, even if all operands have been
     // provided, so we must set `argumentsLength` in any case. Inject setting it
     // into the index argument, which becomes executed last after any operands.
-    this.ensureArgumentsLength();
+    var argumentsLength = this.ensureArgumentsLength();
     var nativeSizeType = this.options.nativeSizeType;
     if (getSideEffects(functionArg) & SideEffects.WritesGlobal) {
       let flow = this.currentFlow;
       let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(functionArg));
       functionArg = module.block(null, [
         module.local_set(temp.index, functionArg, true), // Function
-        module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
+        module.global_set(argumentsLength, module.i32(numArguments)),
         module.local_get(temp.index, nativeSizeType)
       ], nativeSizeType);
       flow.freeTempLocal(temp);
     } else { // simplify
       functionArg = module.block(null, [
-        module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
+        module.global_set(argumentsLength, module.i32(numArguments)),
         functionArg
       ], nativeSizeType);
     }
