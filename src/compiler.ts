@@ -6155,7 +6155,14 @@ export class Compiler extends DiagnosticEmitter {
       let parent = assert(actualFunction.parent);
       assert(parent.kind == ElementKind.CLASS);
       let classInstance = <Class>parent;
-      let baseClassInstance = assert(classInstance.base);
+      let baseClassInstance = classInstance.base;
+      if (!baseClassInstance) {
+        this.error(
+          DiagnosticCode._super_can_only_be_referenced_in_a_derived_class,
+          expression.expression.range
+        );
+        return module.unreachable();
+      }
       let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
       let nativeSizeType = this.options.nativeSizeType;
 
