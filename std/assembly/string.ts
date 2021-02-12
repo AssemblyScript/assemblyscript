@@ -80,11 +80,11 @@ import { Array } from "./array";
   }
 
   @operator("+") private static __concat(left: String, right: String): String {
-    return select<String>(left, changetype<String>("null"), left !== null).concat(right);
+    return left !== null ? left.concat(right) : right;
   }
 
   concat(other: String): String {
-    if (other === null) other = changetype<String>("null");
+    if (other === null) return this;
     var thisSize: isize = this.length << 1;
     var otherSize: isize = other.length << 1;
     var outSize: usize = thisSize + otherSize;
@@ -196,7 +196,7 @@ import { Array } from "./array";
   }
 
   startsWith(search: String, start: i32 = 0): bool {
-    if (search === null) search = changetype<String>("null");
+    if (search === null) return false;
     var len = <isize>this.length;
     var searchStart = min(max(<isize>start, 0), len);
     var searchLength = <isize>search.length;

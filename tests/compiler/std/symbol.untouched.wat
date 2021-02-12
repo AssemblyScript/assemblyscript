@@ -39,13 +39,12 @@
  (data (i32.const 1212) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00T\00a\00g\00\00\00\00\00\00\00")
  (data (i32.const 1260) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00u\00n\00s\00c\00o\00p\00a\00b\00l\00e\00s\00\00\00\00\00\00\00")
  (data (i32.const 1308) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0e\00\00\00S\00y\00m\00b\00o\00l\00(\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1356) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00\00\00\00\00")
- (data (i32.const 1388) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00)\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1420) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1468) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00\00\00\00\00\00\00")
- (data (i32.const 1516) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00\00\00\00\00\00\00")
- (data (i32.const 1580) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00\00\00\00\00\00\00\00\00")
- (data (i32.const 1664) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\01\82\00\00\00\00\00\10A\02\00\00\00\00\00")
+ (data (i32.const 1356) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00)\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1388) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00S\00y\00m\00b\00o\00l\00(\00)\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1436) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00S\00y\00m\00b\00o\00l\00(\001\002\003\00)\00\00\00\00\00\00\00")
+ (data (i32.const 1484) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00S\00y\00m\00b\00o\00l\00(\00h\00a\00s\00I\00n\00s\00t\00a\00n\00c\00e\00)\00\00\00\00\00\00\00")
+ (data (i32.const 1548) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\004\00\00\00S\00y\00m\00b\00o\00l\00(\00i\00s\00C\00o\00n\00c\00a\00t\00S\00p\00r\00e\00a\00d\00a\00b\00l\00e\00)\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1632) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\01\82\00\00\00\00\00\10A\02\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/symbol/nextId (mut i32) (i32.const 12))
  (global $std/symbol/sym1 (mut i32) (i32.const 0))
@@ -74,10 +73,10 @@
  (global $std/symbol/hasInstance (mut i32) (i32.const 0))
  (global $~lib/symbol/_Symbol.isConcatSpreadable i32 (i32.const 2))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 1664))
- (global $~lib/memory/__data_end i32 (i32.const 1708))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18092))
- (global $~lib/memory/__heap_base i32 (i32.const 18092))
+ (global $~lib/rt/__rtti_base i32 (i32.const 1632))
+ (global $~lib/memory/__data_end i32 (i32.const 1676))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18060))
+ (global $~lib/memory/__heap_base i32 (i32.const 18060))
  (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
@@ -4470,8 +4469,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 18112
-   i32.const 18160
+   i32.const 18080
+   i32.const 18128
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -5690,30 +5689,31 @@
   (local $5 i32)
   (local $6 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store offset=8
   local.get $1
   i32.const 0
   i32.eq
   if
+   local.get $0
+   local.set $6
    global.get $~lib/memory/__stack_pointer
-   i32.const 1376
-   local.tee $1
-   i32.store
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $6
+   return
   end
   local.get $0
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store
   local.get $6
   call $~lib/string/String#get:length
   i32.const 1
@@ -5723,7 +5723,7 @@
   local.set $6
   global.get $~lib/memory/__stack_pointer
   local.get $6
-  i32.store offset=4
+  i32.store
   local.get $6
   call $~lib/string/String#get:length
   i32.const 1
@@ -5740,7 +5740,7 @@
    i32.const 800
    local.set $6
    global.get $~lib/memory/__stack_pointer
-   i32.const 12
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    local.get $6
@@ -5751,7 +5751,7 @@
   i32.const 1
   call $~lib/rt/itcms/__new
   local.tee $5
-  i32.store offset=8
+  i32.store offset=4
   local.get $5
   local.get $0
   local.get $2
@@ -5765,7 +5765,7 @@
   local.get $5
   local.set $6
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $6
@@ -5781,23 +5781,25 @@
   i64.const 0
   i64.store
   local.get $0
-  i32.const 1376
-  local.get $0
   i32.const 0
   i32.ne
-  select
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
-  local.get $1
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  call $~lib/string/String#concat
+  if (result i32)
+   local.get $0
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.store
+   local.get $2
+   local.get $1
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.store offset=4
+   local.get $2
+   call $~lib/string/String#concat
+  else
+   local.get $1
+  end
   local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 8
@@ -6005,7 +6007,7 @@
   local.get $4
   i32.store offset=4
   local.get $4
-  i32.const 1408
+  i32.const 1376
   local.set $4
   global.get $~lib/memory/__stack_pointer
   local.get $4
@@ -6214,7 +6216,7 @@
   local.get $1
   i32.store
   local.get $1
-  i32.const 1440
+  i32.const 1408
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -6237,7 +6239,7 @@
   local.get $1
   i32.store
   local.get $1
-  i32.const 1488
+  i32.const 1456
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -6264,7 +6266,7 @@
   local.get $1
   i32.store
   local.get $1
-  i32.const 1536
+  i32.const 1504
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
@@ -6287,7 +6289,7 @@
   local.get $1
   i32.store
   local.get $1
-  i32.const 1600
+  i32.const 1568
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
