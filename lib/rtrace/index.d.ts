@@ -63,26 +63,45 @@ export declare class Rtrace  {
   /** Checks if there are any leaks and emits them via `oninfo`. Returns the number of live blocks. */
   check(): number;
 
-  /** A function that is called when an allocation occurs. */
-  onalloc(ptr: number): void;
-
-  /** A function that is called when a heap allocation resize occurs. */
-  onresize(ptr: number, oldSize: number): void;
-
-  /** A function that is called when an object is moved on the heap. */
-  onmove(oldPtr: number, newPtr: number): void;
-
-  /** A function that is called when a heap allocation is freed. */
-  onfree(ptr: number): void;
-
-  /** A function that is called when an object is visited by the GC. Should return `true`, unless there's an error. */
-  onvisit(ptr: number): boolean;
-
-  /** A function that is called after a collection phase. */
-  oncollect(total: number): void;
-
   /** Obtains information about a block. */
   getBlockInfo(ptr: number): BlockInfo;
+
+  // Instrumentation
+
+  /** Called upon runtime initialization. */
+  oninit(heapBase: number): void;
+
+  /** Called when a new block is allocated. */
+  onalloc(ptr: number): void;
+
+  /** Called when an existing block is resized. */
+  onresize(ptr: number, oldSize: number): void;
+
+  /** Called when an existing block is moved to a new allocation. */
+  onmove(oldPtr: number, newPtr: number): void;
+
+  /** Called when an object is visited by the GC. Returns `true` unless there is an error and the block should be skipped. */
+  onvisit(ptr: number): boolean;
+
+  /** Called when an existing block is freed.*/
+  onfree(ptr: number): void;
+
+  /** Called when a collection phase concludes. */
+  oncollect(total: number): void;
+
+  /** Called when a collection phase interrupts the program. */
+  oninterrupt(total: number): void;
+
+  /** Called when a collection phase yields from an interrupt. */
+  onyield(total: number): void;
+
+  /** Called when a value is stored to memory. */
+  onstore(ptr: number, offset: number, bytes: number, isRT: boolean): void;
+
+  /** Called when a value is loaded from memory. */
+  onload(ptr: number, offset: number, bytes: number, isRT: boolean): void;
+
+  // Reporting
 
   /** Error message callback. */
   onerror: ErrorCallback;
