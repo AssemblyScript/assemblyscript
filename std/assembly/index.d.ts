@@ -1700,15 +1700,77 @@ declare class Date {
     minute: i32,
     second: i32,
     millisecond: i32
-  ): i64;
+  ): number;
   /** Returns the current UTC timestamp in milliseconds. */
-  static now(): i64;
+  static now(): number;
   /** Constructs a new date object from an UTC timestamp in milliseconds. */
-  constructor(value: i64);
+  constructor(value: number);
+  /** Returns the time zone difference, in minutes, from current locale(host system settings) to UTC. */
+  getTimezoneOffset(): i32;
   /** Returns the UTC timestamp of this date in milliseconds. */
-  getTime(): i64;
+  getTime(): number;
   /** Sets the UTC timestamp of this date in milliseconds. */
   setTime(value: i64): i64;
+  /** Returns the year of the specified date according to local time. */
+  getFullYear(): i32;
+  /** Sets the full year for a specified date according to local time. Returns new timestamp. */
+  setFullYear(year: i32): i64;
+  /** Returns the month in the specified date according to local time. As a zero-based value (where zero indicates the first month of the year) */
+  getMonth(): i32;
+  /** Sets the month for a specified date according to the currently set year. Return UTC milliseconds timestamp. */
+  setMonth(month: i32): i32;
+  /** Return the day of the month of this date in milliseconds, 1-based. */
+  getDate(): i32;
+  /** Sets the day of the Date object relative to the beginning of the currently set month. */
+  setDate(date: i32): i64;
+  /** Returns the day of the week for the specified date according to local time, where 0 represents Sunday */
+  getDay(): i32;
+  /** Returns the hours of the specified date according to local time. */
+  getHours(): i32;
+  /** sets the hours for a specified date according to local time, and returns the UTC milliseconds timestamps. */
+  setHours(hours: i32): i64;
+  /** Returns the minutes of the specified date according to local time. */
+  getMinutes(): i32;
+  /** Sets the minutes for a specified date according to local time. */
+  setMinutes(minutes: i32): i64;
+  /** Returns the seconds of the specified date according to local time. */
+  getSeconds(): i32;
+  /** Sets the seconds for a specified date according to local time. */
+  setSeconds(seconds: i32): i64;
+  /** Returns the milliseconds in the specified date according to local time. */
+  getMilliseconds(): i32;
+  /** Sets the milliseconds for a specified date according to local time. */
+  setMilliseconds(milliseconds: i32): i64;
+  /** Returns the year of the specified date according to UTC timestamp. */
+  getUTCFullYear(): i32;
+  /** Sets the full year for a specified date according to UTC timestamp. Returns new timestamp. */
+  setUTCFullYear(year: i32): i64;
+  /** Returns the month in the specified date according to UTC timestamp. As a zero-based value (where zero indicates the first month of the year) */
+  getUTCMonth(): i32;
+  /** Sets the month for a specified date according to the currently set year. Return UTC milliseconds timestamp. */
+  setUTCMonth(month: i32): i32;
+  /** Return the day of the month of this date in milliseconds, 1-based. */
+  getUTCDate(): i32;
+  /** Sets the day of the Date object relative to the beginning of the currently set month. */
+  setUTCDate(date: i32): i64;
+  /** Returns the day of the week for the specified date according to UTC timestamp, where 0 represents Sunday */
+  getUTCDay(): i32;
+  /** Returns the hours of the specified date according to UTC timestamp. */
+  getUTCHours(): i32;
+  /** sets the hours for a specified date according to UTC time, and returns the UTC milliseconds timestamps. */
+  setUTCHours(hours: i32): i64;
+  /** Returns the minutes of the specified date according to UTC timestamp. */
+  getUTCMinutes(): i32;
+  /** Sets the minutes for a specified date according to UTC time. */
+  setUTCMinutes(minutes: i32): i64;
+  /** Returns the seconds of the specified date according to UTC timestamp. */
+  getUTCSeconds(): i32;
+  /** Sets the seconds for a specified date according to UTC time. */
+  setUTCSeconds(seconds: i32): i64;
+  /** Returns the milliseconds in the specified date according to the UTC timestamp. */
+  getUTCMilliseconds(): i32;
+  /** Sets the milliseconds for a specified date according to UTC time. */
+  setUTCMilliseconds(milliseconds: i32): i64;
 }
 
 /** Class for representing a runtime error. Base class of all errors. */

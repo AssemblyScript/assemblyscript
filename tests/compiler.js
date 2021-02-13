@@ -392,6 +392,12 @@ function testInstantiate(basename, binaryBuffer, glue, stderr, wasiOptions) {
       }
     });
 
+    function getTimezoneOffset() {
+      return 0;
+    }
+
+    Date.getTimezoneOffset = getTimezoneOffset;
+
     var imports = rtrace.install({
       env: {
         memory,
