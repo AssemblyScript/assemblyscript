@@ -822,9 +822,9 @@
   i32.const 5
   f64.const 0
   f64.const 0
+  f64.const 22
   f64.const 23
-  f64.const 24
-  f64.const 24
+  f64.const 23
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
   i32.const 1376
