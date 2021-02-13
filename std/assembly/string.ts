@@ -79,12 +79,13 @@ import { Array } from "./array";
     return (first - 0xD800 << 10) + (second - 0xDC00) + 0x10000;
   }
 
-  @operator("+") private static __concat(left: String, right: String): String {
-    return left !== null ? left.concat(right) : right;
+  @operator("+") private static __concat(left: String | null, right: String | null): String {
+    if (right === null) return select<String>(left!, changetype<String>(""), left !== null);
+    if (left === null) return right;
+    return left.concat(right);
   }
 
   concat(other: String): String {
-    if (other === null) return this;
     var thisSize: isize = this.length << 1;
     var otherSize: isize = other.length << 1;
     var outSize: usize = thisSize + otherSize;
@@ -96,7 +97,6 @@ import { Array } from "./array";
   }
 
   endsWith(search: String, end: i32 = String.MAX_LENGTH): bool {
-    if (search === null) return false;
     end = min(max(end, 0), this.length);
     var searchLength = <isize>search.length;
     var searchStart = <isize>end - searchLength;
@@ -135,11 +135,11 @@ import { Array } from "./array";
     return res ? res > 0 : leftLength > rightLength;
   }
 
-  @operator(">=") private static __gte(left: String, right: String): bool {
+  @operator(">=") private static __gte(left: String | null, right: String | null): bool {
     return !this.__lt(left, right);
   }
 
-  @operator("<") private static __lt(left: String, right: String): bool {
+  @operator("<") private static __lt(left: String | null, right: String | null): bool {
     if (left === right || left === null || right === null) return false;
     var rightLength = right.length;
     if (!rightLength) return false;
@@ -150,7 +150,7 @@ import { Array } from "./array";
     return res ? res < 0 : leftLength < rightLength;
   }
 
-  @operator("<=") private static __lte(left: String, right: String): bool {
+  @operator("<=") private static __lte(left: String | null, right: String | null): bool {
     return !this.__gt(left, right);
   }
 
@@ -196,7 +196,6 @@ import { Array } from "./array";
   }
 
   startsWith(search: String, start: i32 = 0): bool {
-    if (search === null) return false;
     var len = <isize>this.length;
     var searchStart = min(max(<isize>start, 0), len);
     var searchLength = <isize>search.length;
