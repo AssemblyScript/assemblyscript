@@ -378,8 +378,10 @@ function ensureIndexJs() {
   console.log("- Making sure that 'index.js' exists...");
   if (!fs.existsSync(indexFile)) {
     // since node.js v13.2.0 or v12.17.0 we can use ESM without flags
-    const nodeVersion = parseFloat(process.versions.node);
-    const supportESM = nodeVersion >= 12.17 && nodeVersion < 13 || nodeVersion >= 13.2;
+    const ver = process.versions.node.split('.');
+    const maj = parseInt(ver[0]);
+    const min = parseInt(ver[1]);
+    const supportESM = (maj >= 12 && min >= 7 && maj < 13) || (maj >= 13 && min >= 2);
     fs.writeFileSync(indexFile, [
       "const fs = require(\"fs\");",
       "const loader = require(\"@assemblyscript/loader" + (supportESM ? "" : "/umd") + "\");",
