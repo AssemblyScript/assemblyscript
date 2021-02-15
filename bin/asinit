@@ -377,7 +377,7 @@ function ensurePackageJson() {
 function ensureIndexJs() {
   console.log("- Making sure that 'index.js' exists...");
   if (!fs.existsSync(indexFile)) {
-    // since nide.js v13.2.0 or v12.17.0 we can use ESM without flags
+    // since node.js v13.2.0 or v12.17.0 we can use ESM without flags
     const nodeVersion = parseFloat(process.versions.node);
     const supportESM = nodeVersion >= 12.17 && nodeVersion < 13 || nodeVersion >= 13.2;
     fs.writeFileSync(indexFile, [
