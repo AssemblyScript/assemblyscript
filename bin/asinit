@@ -377,9 +377,12 @@ function ensurePackageJson() {
 function ensureIndexJs() {
   console.log("- Making sure that 'index.js' exists...");
   if (!fs.existsSync(indexFile)) {
+    // since nide.js v13.2.0 or v12.17.0 we can use ESM without flags
+    const nodeVersion = parseFloat(process.versions.node);
+    const supportESM = nodeVersion >= 12.17 && nodeVersion < 13 || nodeVersion >= 13.2;
     fs.writeFileSync(indexFile, [
       "const fs = require(\"fs\");",
-      "const loader = require(\"@assemblyscript/loader\");",
+      "const loader = require(\"@assemblyscript/loader" + (supportESM ? "" : "/umd") + "\");",
       "const imports = { /* imports go here */ };",
       "const wasmModule = loader.instantiateSync(fs.readFileSync(__dirname + \"/build/optimized.wasm\"), imports);",
       "module.exports = wasmModule.exports;"
