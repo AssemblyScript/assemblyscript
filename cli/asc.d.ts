@@ -8,6 +8,15 @@ import { Source, Range, DiagnosticMessage } from "..";
 
 export { OptionDescription };
 
+/** Relevant subset of the Source class for diagnostic reporting. */
+export { Source };
+
+/** Relevant subset of the Range class for diagnostic reporting. */
+export { Range };
+
+/** Relevant subset of the DiagnosticMessage class for diagnostic reporting. */
+export  { DiagnosticMessage };
+
 /** Ready promise resolved once/if the compiler is ready. */
 export const ready: Promise<void>;
 
@@ -56,15 +65,6 @@ export interface MemoryStream extends OutputStream {
   /** Converts the output to a string. */
   toString(): string;
 }
-
-/** Relevant subset of the Source class for diagnostic reporting. */
-export { Source }
-
-/** Relevant subset of the Range class for diagnostic reporting. */
-export { Range }
-
-/** Relevant subset of the DiagnosticMessage class for diagnostic reporting. */
-export  { DiagnosticMessage }
 
 /** A function handling diagnostic messages. */
 type DiagnosticReporter = (diagnostic: DiagnosticMessage) => void;
