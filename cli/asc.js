@@ -47,7 +47,7 @@ const find = require("./util/find");
 const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
 
 const dynrequire = typeof __webpack_require__ === "function"
-  ? __non_webpack_require__
+  ? () => module[`require`] // backticks required
   : require;
 
 const WIN = process.platform === "win32";
