@@ -238,7 +238,7 @@ function merge(config, currentOptions, parentOptions, parentBaseDir) {
 exports.merge = merge;
 
 const dynrequire = typeof __webpack_require__ === "function"
-  ? eval('require')
+  ? __non_webpack_require__
   : require;
 
 /** Resolves a single possibly relative path. Keeps absolute paths, otherwise prepends baseDir. */
