@@ -6,7 +6,7 @@
   "options": {
     "explicitStart": true,
     "exportRuntime": true,
-    "initialMemory": 256,
+    "initialMemory": 768,
     "runtime": "incremental",
     "measure": true
   },

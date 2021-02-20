@@ -26,7 +26,7 @@
  (data (i32.const 1544) "\01\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\001\000\009\005\00.\00t\00s")
  (data (i32.const 1584) "\04\00\00\00 \00\00\00\00\00\00\00 ")
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
@@ -1531,6 +1531,14 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
+  memory.size
+  i32.const 16
+  i32.shl
+  i32.const 18004
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
   i32.const 1168
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace

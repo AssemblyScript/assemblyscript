@@ -28,7 +28,7 @@
  (table $0 2 funcref)
  (elem (i32.const 1) $inlining/func_fe~anonymous|0)
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
@@ -1918,6 +1918,14 @@
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
+  memory.size
+  i32.const 16
+  i32.shl
+  i32.const 17964
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
   i32.const 1248
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace

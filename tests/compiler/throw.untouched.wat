@@ -37,7 +37,7 @@
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 704))
  (global $~lib/memory/__data_end i32 (i32.const 732))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17116))
@@ -1718,6 +1718,14 @@
   i32.const 560
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
+  memory.size
+  i32.const 16
+  i32.shl
+  global.get $~lib/memory/__heap_base
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
   call $~lib/rt/itcms/__collect
  )
  (func $throw/doThrow

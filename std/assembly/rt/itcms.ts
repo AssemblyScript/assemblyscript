@@ -389,9 +389,9 @@ export function __collect(): void {
 // @ts-ignore: decorator
 @inline const IDLEFACTOR: usize = isDefined(ASC_GC_IDLEFACTOR) ? ASC_GC_IDLEFACTOR : 200;
 
-/** Threshold of objects for the next scheduled GC step. */
+/** Threshold of memory used by objects to exceed before interrupting again. */
 // @ts-ignore: decorator
-@lazy var threshold: usize = GRANULARITY;
+@lazy var threshold: usize = ((<usize>memory.size() << 16) - __heap_base) >> 1;
 
 /** Performs a reasonable amount of incremental GC steps. */
 function interrupt(): void {

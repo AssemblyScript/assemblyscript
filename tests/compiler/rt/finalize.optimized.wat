@@ -1,7 +1,7 @@
 (module
+ (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -25,7 +25,7 @@
  (global $rt/finalize/expect (mut i32) (i32.const 0))
  (global $rt/finalize/ran (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
@@ -1361,44 +1361,17 @@
   end
   local.get $1
  )
- (func $~lib/rt/__visit_members (param $0 i32)
-  block $invalid
-   block $rt/finalize/Ref
-    block $~lib/arraybuffer/ArrayBufferView
-     block $~lib/string/String
-      block $~lib/arraybuffer/ArrayBuffer
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $rt/finalize/Ref $invalid
-      end
-      return
-     end
-     return
-    end
-    local.get $0
-    i32.load
-    local.tee $0
-    if
-     local.get $0
-     call $~lib/rt/itcms/__visit
-    end
-    return
-   end
-   return
-  end
-  unreachable
- )
- (func $~start
+ (func $start:rt/finalize
   (local $0 i32)
   (local $1 i32)
-  global.get $~started
-  if
-   return
-  end
+  memory.size
+  i32.const 16
+  i32.shl
+  i32.const 17908
+  i32.sub
   i32.const 1
-  global.set $~started
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
   i32.const 1168
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
@@ -1551,5 +1524,43 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $~lib/rt/__visit_members (param $0 i32)
+  block $invalid
+   block $rt/finalize/Ref
+    block $~lib/arraybuffer/ArrayBufferView
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $rt/finalize/Ref $invalid
+      end
+      return
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.tee $0
+    if
+     local.get $0
+     call $~lib/rt/itcms/__visit
+    end
+    return
+   end
+   return
+  end
+  unreachable
+ )
+ (func $~start
+  global.get $~started
+  if
+   return
+  end
+  i32.const 1
+  global.set $~started
+  call $start:rt/finalize
  )
 )

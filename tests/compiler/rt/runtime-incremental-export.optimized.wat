@@ -25,7 +25,7 @@
  (data (i32.const 1512) "\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d")
  (data (i32.const 1568) "\03\00\00\00 \00\00\00\00\00\00\00 ")
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
@@ -1870,6 +1870,14 @@
   unreachable
  )
  (func $~start
+  memory.size
+  i32.const 16
+  i32.shl
+  i32.const 17980
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
   i32.const 1168
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
