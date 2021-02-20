@@ -47,7 +47,7 @@
  (data (i32.const 1648) "\17\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 1676) "H\08\00\00\00\00\00\00B\08\00\00\00\00\00\00H\00\00\00\00\00\00\00B\00\00\00\00\00\00\00\88\08\00\00\00\00\00\00\82\08\00\00\00\00\00\00\88\00\00\00\00\00\00\00\82\00\00\00\00\00\00\00\08\t\00\00\00\00\00\00\02\t\00\00\00\00\00\00\08\01\00\00\00\00\00\00\02\01\00\00\00\00\00\00\08\n\00\00\00\00\00\00\02\n\00\00\00\00\00\00\08\02\00\00\00\00\00\00\02\02\00\00\00\00\00\00\08\19\00\00\00\00\00\00\02\19\00\00\00\00\00\00\08\1a\00\00\00\00\00\00\02\1a")
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
@@ -4167,6 +4167,14 @@
   call $~lib/rt/itcms/__visit
  )
  (func $~start
+  memory.size
+  i32.const 16
+  i32.shl
+  i32.const 18220
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
   i32.const 1168
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
