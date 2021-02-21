@@ -3,7 +3,7 @@
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { compareImpl, strtol, strtod, isSpace, isAscii, isFinalSigma, toLower8, toUpper8 } from "./util/string";
 import { SPECIALS_UPPER, casemap, bsearch } from "./util/casemap";
-import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_NULLREFERENCE } from "./util/error";
 import { idof } from "./builtins";
 import { Array } from "./array";
 
@@ -80,8 +80,7 @@ import { Array } from "./array";
   }
 
   @operator("+") private static __concat(left: String | null, right: String | null): String {
-    if (right === null) return select<String>(left!, changetype<String>(""), left !== null);
-    if (left === null) return right;
+    if (right === null || left === null) throw new Error(E_NULLREFERENCE);
     return left.concat(right);
   }
 
