@@ -3277,7 +3277,7 @@ function builtin_function_call(ctx: BuiltinContext): ExpressionRef {
     compiler.currentType = returnType;
     return compiler.module.unreachable();
   }
-  var indexArg = compiler.compileExpression(assert(ctx.thisOperand), ftype, Constraints.CONV_IMPLICIT);
+  var functionArg = compiler.compileExpression(assert(ctx.thisOperand), ftype, Constraints.CONV_IMPLICIT);
   var thisOperand = assert(ctx.operands.shift());
   var thisType = signature.thisType;
   var thisArg: usize = 0;
@@ -3290,7 +3290,7 @@ function builtin_function_call(ctx: BuiltinContext): ExpressionRef {
     );
     return compiler.module.unreachable();
   }
-  return compiler.compileCallIndirect(signature, indexArg, ctx.operands, ctx.reportNode, thisArg, ctx.contextualType == Type.void);
+  return compiler.compileCallIndirect(signature, functionArg, ctx.operands, ctx.reportNode, thisArg, ctx.contextualType == Type.void);
 }
 function_builtins.set("call", builtin_function_call);
 

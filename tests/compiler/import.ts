@@ -1,5 +1,3 @@
-/* tslint:disable:no-duplicate-imports */
-
 import {
   add,
   sub as sub,

@@ -67,7 +67,7 @@
  (data (i32.const 3344) "\06\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 3372) "\01\19\00\00\02\00\00\00A\00\00\00\05\00\00\00A\00\00\00\02")
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
@@ -3386,6 +3386,14 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store offset=8
+  memory.size
+  i32.const 16
+  i32.shl
+  i32.const 19780
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
   i32.const 1280
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
@@ -3534,13 +3542,13 @@
   global.get $resolve-elementaccess/arr
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   global.get $resolve-elementaccess/arr
-  local.tee $1
+  local.tee $0
   i32.store offset=4
-  local.get $0
   i32.const 0
-  local.get $1
+  local.get $0
   i32.const 0
   call $~lib/typedarray/Float32Array#__get
   f32.const 10
@@ -3727,13 +3735,13 @@
   global.get $resolve-elementaccess/buf
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   global.get $resolve-elementaccess/buf
-  local.tee $1
+  local.tee $0
   i32.store offset=4
-  local.get $0
   i32.const 0
-  local.get $1
+  local.get $0
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
   i32.const 10

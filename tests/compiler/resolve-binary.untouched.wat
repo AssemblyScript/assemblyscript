@@ -71,7 +71,7 @@
  (global $resolve-binary/a (mut i32) (i32.const 0))
  (global $resolve-binary/f (mut f64) (f64.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 1024))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
@@ -7064,6 +7064,14 @@
    call $~lib/builtins/abort
    unreachable
   end
+  memory.size
+  i32.const 16
+  i32.shl
+  global.get $~lib/memory/__heap_base
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
   i32.const 528
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/pinSpace
