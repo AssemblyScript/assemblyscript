@@ -889,7 +889,7 @@ export class Compiler extends DiagnosticEmitter {
         let fieldInstance = <Field>element;
         if (element.is(CommonFlags.COMPILED)) {
           let getterExportName = prefix + GETTER_PREFIX + name;
-          if (!module.hasExport(getterExportName)) {
+          if (this.compileFieldGetter(fieldInstance) && !module.hasExport(getterExportName)) {
             module.addFunctionExport(fieldInstance.internalGetterName, getterExportName);
             let signature = fieldInstance.internalGetterSignature;
             if (signature.hasManagedOperands) {
@@ -898,7 +898,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           if (!element.is(CommonFlags.READONLY)) {
             let setterExportName = prefix + SETTER_PREFIX + name;
-            if (!module.hasExport(setterExportName)) {
+            if (this.compileFieldSetter(fieldInstance) && !module.hasExport(setterExportName)) {
               module.addFunctionExport(fieldInstance.internalSetterName, setterExportName);
               let signature = fieldInstance.internalSetterSignature;
               if (signature.hasManagedOperands) {
