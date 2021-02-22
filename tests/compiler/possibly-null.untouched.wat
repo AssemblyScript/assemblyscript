@@ -138,14 +138,6 @@
  )
  (func $possibly-null/testWhile2 (param $0 i32) (param $1 i32)
   (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   loop $while-continue|0
    local.get $0
    local.set $2
@@ -153,31 +145,17 @@
    if
     i32.const 0
     drop
-    global.get $~lib/memory/__stack_pointer
     local.get $1
-    local.tee $0
-    i32.store
+    local.set $0
     i32.const 1
     i32.eqz
     drop
     br $while-continue|0
    end
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $possibly-null/testWhile3 (param $0 i32) (param $1 i32)
   (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   loop $while-continue|0
    local.get $0
    local.set $2
@@ -187,23 +165,40 @@
     drop
     local.get $1
     if
-     global.get $~lib/memory/__stack_pointer
      local.get $1
-     local.tee $0
-     i32.store
+     local.set $0
      i32.const 0
      drop
     end
     br $while-continue|0
    end
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $possibly-null/requireNonNull (param $0 i32) (result i32)
   local.get $0
+ )
+ (func $possibly-null/testLogicalAnd (param $0 i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+   call $possibly-null/requireNonNull
+  else
+   i32.const 0
+  end
+  drop
+ )
+ (func $possibly-null/testLogicalOr (param $0 i32)
+  local.get $0
+  i32.eqz
+  if (result i32)
+   i32.const 1
+  else
+   local.get $0
+   call $possibly-null/requireNonNull
+   i32.const 0
+   i32.ne
+  end
+  drop
  )
  (func $possibly-null/testLogicalAndMulti (param $0 i32) (param $1 i32)
   local.get $0
@@ -250,24 +245,10 @@
   end
  )
  (func $possibly-null/testAssign (param $0 i32) (param $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
   local.get $1
-  local.tee $0
-  i32.store
+  local.set $0
   i32.const 0
   drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $possibly-null/testNeverNull (param $0 i32)
   local.get $0
@@ -288,65 +269,6 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $possibly-null/testLogicalAnd (param $0 i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  if (result i32)
-   local.get $0
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store
-   local.get $1
-   call $possibly-null/requireNonNull
-  else
-   i32.const 0
-  end
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
- )
- (func $possibly-null/testLogicalOr (param $0 i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 1
-  else
-   local.get $0
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   local.get $1
-   i32.store
-   local.get $1
-   call $possibly-null/requireNonNull
-   i32.const 0
-   i32.ne
-  end
-  drop
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
  )
  (func $export:possibly-null/testTrue (param $0 i32)
   global.get $~lib/memory/__stack_pointer

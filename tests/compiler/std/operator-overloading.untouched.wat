@@ -4549,11 +4549,6 @@
   local.tee $0
   i32.store offset=8
   local.get $0
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
   call $std/operator-overloading/Tester#postInc
   global.set $std/operator-overloading/incdec
   local.get $0
@@ -4605,11 +4600,6 @@
   local.tee $0
   i32.store offset=8
   local.get $0
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store
-  local.get $2
   call $std/operator-overloading/Tester#postDec
   global.set $std/operator-overloading/incdec
   local.get $0

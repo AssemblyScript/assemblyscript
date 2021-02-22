@@ -39,7 +39,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 f32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -54,14 +53,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1200
   i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   i32.const 1164
   i32.load
   local.set $2
@@ -77,6 +68,7 @@
    select
    i32.lt_s
    if
+    local.get $1
     i32.const 1156
     i32.load
     local.get $0
@@ -84,12 +76,6 @@
     i32.shl
     i32.add
     f32.load
-    local.set $4
-    global.get $~lib/memory/__stack_pointer
-    i32.const 1152
-    i32.store
-    local.get $1
-    local.get $4
     local.get $0
     i32.const 1152
     i32.const 1200
@@ -103,10 +89,6 @@
     br $for-loop|0
    end
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
@@ -134,21 +116,6 @@
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add

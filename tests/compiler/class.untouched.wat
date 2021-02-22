@@ -106,6 +106,51 @@
   local.get $1
   i32.store8 offset=6
  )
+ (func $class/test (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.const 1
+  i32.const 2
+  call $class/Animal<f64>#instanceAdd
+  drop
+  local.get $0
+  f32.const 1
+  f32.const 2
+  call $class/Animal<f64>#instanceSub<f32>
+  drop
+  local.get $0
+  i32.load
+  drop
+  local.get $0
+  i32.load16_s offset=4
+  drop
+  local.get $0
+  i32.load8_s offset=6
+  drop
+  local.get $0
+  i32.const 0
+  i32.const 1
+  i32.add
+  call $class/Animal<f64>#set:one
+  local.get $0
+  i32.const 1
+  i32.const 1
+  i32.add
+  call $class/Animal<f64>#set:two
+  local.get $0
+  i32.const 1
+  i32.const 1
+  i32.add
+  i32.const 1
+  i32.add
+  call $class/Animal<f64>#set:three
+  local.get $0
+  local.set $1
+  local.get $1
+  local.set $2
+  local.get $2
+ )
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -2641,78 +2686,6 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $class/test (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store
-  local.get $3
-  i32.const 1
-  i32.const 2
-  call $class/Animal<f64>#instanceAdd
-  drop
-  local.get $0
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  local.get $3
-  i32.store
-  local.get $3
-  f32.const 1
-  f32.const 2
-  call $class/Animal<f64>#instanceSub<f32>
-  drop
-  local.get $0
-  i32.load
-  drop
-  local.get $0
-  i32.load16_s offset=4
-  drop
-  local.get $0
-  i32.load8_s offset=6
-  drop
-  local.get $0
-  i32.const 0
-  i32.const 1
-  i32.add
-  call $class/Animal<f64>#set:one
-  local.get $0
-  i32.const 1
-  i32.const 1
-  i32.add
-  call $class/Animal<f64>#set:two
-  local.get $0
-  i32.const 1
-  i32.const 1
-  i32.add
-  i32.const 1
-  i32.add
-  call $class/Animal<f64>#set:three
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  local.tee $2
-  i32.store offset=4
-  local.get $2
-  local.set $3
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $3
  )
  (func $~lib/array/Array<i32>#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

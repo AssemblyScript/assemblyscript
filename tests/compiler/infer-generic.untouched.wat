@@ -40,53 +40,12 @@
    i32.const 0
   end
  )
- (func $infer-generic/inferPlain<f32> (param $0 f32) (result f32)
-  local.get $0
- )
- (func $infer-generic/test1 (param $0 f32) (result f32)
-  local.get $0
-  call $infer-generic/inferPlain<f32>
- )
- (func $infer-generic/inferEncapsulatedClass<f32> (param $0 i32) (result i32)
-  local.get $0
- )
- (func $infer-generic/inferEncapsulatedFunction<f32,f64> (param $0 i32) (result i32)
-  local.get $0
- )
- (func $infer-generic/inferEncapsulatedFunctionMixed<f32,f64> (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~start
-  call $start:infer-generic
- )
- (func $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__data_end
-  i32.lt_s
-  if
-   i32.const 16592
-   i32.const 16640
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
  (func $~lib/array/Array<f32>#reduce<bool> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
   local.get $2
   local.set $3
   i32.const 0
@@ -119,11 +78,6 @@
     f32.load
     local.get $4
     local.get $0
-    local.set $8
-    global.get $~lib/memory/__stack_pointer
-    local.get $8
-    i32.store
-    local.get $8
     i32.const 4
     global.set $~argumentsLength
     local.get $1
@@ -138,12 +92,50 @@
    end
   end
   local.get $3
-  local.set $8
+ )
+ (func $infer-generic/inferPlain<f32> (param $0 f32) (result f32)
+  local.get $0
+ )
+ (func $infer-generic/test1 (param $0 f32) (result f32)
+  local.get $0
+  call $infer-generic/inferPlain<f32>
+ )
+ (func $infer-generic/inferEncapsulatedClass<f32> (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $infer-generic/test2 (param $0 i32) (result i32)
+  local.get $0
+  call $infer-generic/inferEncapsulatedClass<f32>
+ )
+ (func $infer-generic/inferEncapsulatedFunction<f32,f64> (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $infer-generic/test3 (param $0 i32) (result i32)
+  local.get $0
+  call $infer-generic/inferEncapsulatedFunction<f32,f64>
+ )
+ (func $infer-generic/inferEncapsulatedFunctionMixed<f32,f64> (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $infer-generic/test4 (param $0 i32) (result i32)
+  local.get $0
+  call $infer-generic/inferEncapsulatedFunctionMixed<f32,f64>
+ )
+ (func $~start
+  call $start:infer-generic
+ )
+ (func $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $8
+  global.get $~lib/memory/__data_end
+  i32.lt_s
+  if
+   i32.const 16592
+   i32.const 16640
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $start:infer-generic
   (local $0 i32)
@@ -188,78 +180,6 @@
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
- )
- (func $infer-generic/test2 (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
-  call $infer-generic/inferEncapsulatedClass<f32>
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $infer-generic/test3 (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
-  call $infer-generic/inferEncapsulatedFunction<f32,f64>
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
- (func $infer-generic/test4 (param $0 i32) (result i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
-  call $infer-generic/inferEncapsulatedFunctionMixed<f32,f64>
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
  )
  (func $export:infer-generic/test2 (param $0 i32) (result i32)
   (local $1 i32)
