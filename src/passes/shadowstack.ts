@@ -154,7 +154,7 @@ type SlotMap = Map<LocalIndex,SlotIndex>;
 type TempMap = Map<NativeType,LocalIndex>;
 
 /** Attempts to match the `__tostack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
-function matchTostack(module: Module, expr: ExpressionRef): ExpressionRef {
+function matchPattern(module: Module, expr: ExpressionRef): ExpressionRef {
   if (_BinaryenExpressionGetId(expr) == ExpressionId.Call && module.readStringCached(_BinaryenCallGetTarget(expr)) == BuiltinNames.tostack) {
     assert(_BinaryenCallGetNumOperands(expr) == 1);
     return _BinaryenCallGetOperandAt(expr, 0);
@@ -332,7 +332,7 @@ export class ShadowStackPass extends Pass {
     var numSlots = 0;
     for (let i = 0, k = operands.length; i < k; ++i) {
       let operand = operands[i];
-      let match = matchTostack(module, operand);
+      let match = matchPattern(module, operand);
       if (!match) continue;
       if (!needsSlot(module, match)) {
         operands[i] = match;
@@ -422,7 +422,7 @@ export class ShadowStackPass extends Pass {
   visitLocalSet(localSet: ExpressionRef): void {
     let module = this.module;
     let value = _BinaryenLocalSetGetValue(localSet);
-    let match = matchTostack(module, value);
+    let match = matchPattern(module, value);
     if (!match) return;
     if (!needsSlot(module, match)) {
       _BinaryenLocalSetSetValue(localSet, match);
