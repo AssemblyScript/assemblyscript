@@ -29,7 +29,7 @@
       "import": "./index.js",
       "require": "./umd/index.js"
     },
-    "./index.js": "./index.js",
+    "./index.js": "./index.js"
   },
   "scripts": {
     "asbuild": "npm run asbuild:default && npm run asbuild:legacy",
