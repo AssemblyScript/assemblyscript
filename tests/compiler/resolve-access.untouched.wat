@@ -4472,78 +4472,6 @@
    unreachable
   end
  )
- (func $resolve-access/arrayAccess (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1
-  i32.const 3
-  i32.const 3
-  i32.const 32
-  call $~lib/rt/__newArray
-  local.tee $1
-  i32.store
-  local.get $1
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  local.get $2
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  call $~lib/array/Array<u64>#__get
-  i32.const 10
-  call $~lib/number/U64#toString
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $2
- )
- (func $resolve-access/propertyAccess (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  call $resolve-access/Container#constructor
-  local.tee $0
-  i32.store
-  local.get $0
-  i64.const 1
-  call $resolve-access/Container#set:foo
-  local.get $0
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store offset=4
-  local.get $1
-  call $resolve-access/Container#toU32
-  i32.const 10
-  call $~lib/number/U32#toString
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $1
- )
  (func $~lib/rt/__newArray (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
@@ -4774,6 +4702,38 @@
   global.set $~lib/memory/__stack_pointer
   local.get $9
  )
+ (func $resolve-access/arrayAccess (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1
+  i32.const 3
+  i32.const 3
+  i32.const 32
+  call $~lib/rt/__newArray
+  local.tee $1
+  i32.store
+  local.get $1
+  i32.const 0
+  call $~lib/array/Array<u64>#__get
+  i32.const 10
+  call $~lib/number/U64#toString
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
  (func $resolve-access/Container#constructor (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/memory/__stack_pointer
@@ -4975,5 +4935,35 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $7
+ )
+ (func $resolve-access/propertyAccess (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  call $resolve-access/Container#constructor
+  local.tee $0
+  i32.store
+  local.get $0
+  i64.const 1
+  call $resolve-access/Container#set:foo
+  local.get $0
+  call $resolve-access/Container#toU32
+  i32.const 10
+  call $~lib/number/U32#toString
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $1
  )
 )

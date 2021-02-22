@@ -27,22 +27,6 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17788))
  (export "memory" (memory $0))
  (start $~start)
- (func $~start
-  call $start:std/hash
- )
- (func $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1404
-  i32.lt_s
-  if
-   i32.const 17808
-   i32.const 17856
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
  (func $~lib/util/hash/HASH<~lib/string/String|null> (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -51,22 +35,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
   local.get $0
   if
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store offset=4
    local.get $0
    local.tee $1
    i32.const 20
@@ -228,10 +198,9 @@
     end
    end
   end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
+ )
+ (func $~start
+  call $start:std/hash
  )
  (func $start:std/hash
   (local $0 f32)
@@ -242,7 +211,17 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1404
+  i32.lt_s
+  if
+   i32.const 17808
+   i32.const 17856
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store

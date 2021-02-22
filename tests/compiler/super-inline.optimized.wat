@@ -1459,22 +1459,6 @@
   unreachable
  )
  (func $~start
-  call $start:super-inline
- )
- (func $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1484
-  i32.lt_s
-  if
-   i32.const 17888
-   i32.const 17936
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $start:super-inline
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -1508,29 +1492,19 @@
   global.get $super-inline/foo
   local.tee $0
   i32.store
-  block $__inlined_func$super-inline/Foo#a@virtual (result i32)
-   local.get $0
-   i32.const 8
-   i32.sub
-   i32.load
-   i32.const 4
-   i32.eq
-   if
-    local.get $0
-    call $super-inline/Bar#a
-    br $__inlined_func$super-inline/Foo#a@virtual
-   end
-   i32.const 0
-  end
+  local.get $0
+  i32.const 8
+  i32.sub
+  i32.load
   drop
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   call $~lib/rt/itcms/__new
@@ -1538,29 +1512,35 @@
   i32.store
   global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
   call $super-inline/Foo#constructor
   local.tee $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $0
   global.set $super-inline/bar
   global.get $~lib/memory/__stack_pointer
   global.get $super-inline/bar
-  local.tee $0
   i32.store
-  local.get $0
-  call $super-inline/Bar#a
-  drop
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
+ )
+ (func $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1484
+  i32.lt_s
+  if
+   i32.const 17888
+   i32.const 17936
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $super-inline/Foo#constructor (param $0 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
@@ -1585,23 +1565,5 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $0
- )
- (func $super-inline/Bar#a (param $0 i32) (result i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
-  i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  i32.const 1
  )
 )

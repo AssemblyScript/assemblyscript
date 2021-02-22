@@ -1804,151 +1804,12 @@
    unreachable
   end
  )
- (func $~lib/string/String.__eq (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
-  local.get $0
-  i32.const 1952
-  i32.eq
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   i32.const 1
-   return
-  end
-  block $folding-inner0
-   local.get $0
-   i32.eqz
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store
-   local.get $0
-   i32.const 20
-   i32.sub
-   i32.load offset=16
-   i32.const 1
-   i32.shr_u
-   local.set $1
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1952
-   i32.store
-   local.get $1
-   i32.const 1948
-   i32.load
-   i32.const 1
-   i32.shr_u
-   i32.ne
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1952
-   i32.store offset=4
-   block $__inlined_func$~lib/util/string/compareImpl (result i32)
-    i32.const 1952
-    local.set $3
-    local.get $0
-    local.tee $2
-    i32.const 7
-    i32.and
-    i32.eqz
-    i32.const 0
-    local.get $1
-    i32.const 4
-    i32.ge_u
-    select
-    if
-     loop $do-continue|0
-      local.get $2
-      i64.load
-      local.get $3
-      i64.load
-      i64.eq
-      if
-       local.get $2
-       i32.const 8
-       i32.add
-       local.set $2
-       local.get $3
-       i32.const 8
-       i32.add
-       local.set $3
-       local.get $1
-       i32.const 4
-       i32.sub
-       local.tee $1
-       i32.const 4
-       i32.ge_u
-       br_if $do-continue|0
-      end
-     end
-    end
-    loop $while-continue|1
-     local.get $1
-     local.tee $0
-     i32.const 1
-     i32.sub
-     local.set $1
-     local.get $0
-     if
-      local.get $3
-      i32.load16_u
-      local.tee $4
-      local.get $2
-      i32.load16_u
-      local.tee $0
-      i32.ne
-      if
-       local.get $0
-       local.get $4
-       i32.sub
-       br $__inlined_func$~lib/util/string/compareImpl
-      end
-      local.get $2
-      i32.const 2
-      i32.add
-      local.set $2
-      local.get $3
-      i32.const 2
-      i32.add
-      local.set $3
-      br $while-continue|1
-     end
-    end
-    i32.const 0
-   end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 8
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   i32.eqz
-   return
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  i32.const 0
- )
  (func $start:resolve-function-expression
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -2024,7 +1885,7 @@
     i32.add
     global.set $~lib/memory/__stack_pointer
     i32.const 1424
-    local.set $1
+    local.set $0
     br $__inlined_func$~lib/util/number/itoa32
    end
    global.get $~lib/memory/__stack_pointer
@@ -2035,58 +1896,58 @@
    local.get $0
    i32.const 31
    i32.shr_u
-   local.tee $2
+   local.tee $1
    select
-   local.tee $0
+   local.tee $2
    i32.const 10
    i32.ge_u
    i32.const 1
    i32.add
-   local.get $0
+   local.get $2
    i32.const 10000
    i32.ge_u
    i32.const 3
    i32.add
-   local.get $0
+   local.get $2
    i32.const 1000
    i32.ge_u
    i32.add
-   local.get $0
+   local.get $2
    i32.const 100
    i32.lt_u
    select
-   local.get $0
+   local.get $2
    i32.const 1000000
    i32.ge_u
    i32.const 6
    i32.add
-   local.get $0
+   local.get $2
    i32.const 1000000000
    i32.ge_u
    i32.const 8
    i32.add
-   local.get $0
+   local.get $2
    i32.const 100000000
    i32.ge_u
    i32.add
-   local.get $0
+   local.get $2
    i32.const 10000000
    i32.lt_u
    select
-   local.get $0
+   local.get $2
    i32.const 100000
    i32.lt_u
    select
-   local.get $2
+   local.get $1
    i32.add
    local.tee $3
    i32.const 1
    i32.shl
    call $~lib/rt/itcms/__new
-   local.tee $1
+   local.tee $0
    i32.store
    loop $do-continue|0
-    local.get $1
+    local.get $0
     local.get $3
     i32.const 1
     i32.sub
@@ -2094,21 +1955,21 @@
     i32.const 1
     i32.shl
     i32.add
-    local.get $0
+    local.get $2
     i32.const 10
     i32.rem_u
     i32.const 48
     i32.add
     i32.store16
-    local.get $0
+    local.get $2
     i32.const 10
     i32.div_u
-    local.tee $0
+    local.tee $2
     br_if $do-continue|0
    end
-   local.get $2
+   local.get $1
    if
-    local.get $1
+    local.get $0
     i32.const 45
     i32.store16
    end
@@ -2118,13 +1979,114 @@
    global.set $~lib/memory/__stack_pointer
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 1952
   i32.store offset=4
-  local.get $1
-  call $~lib/string/String.__eq
+  block $__inlined_func$~lib/string/String.__eq (result i32)
+   i32.const 1
+   local.get $0
+   i32.const 1952
+   i32.eq
+   br_if $__inlined_func$~lib/string/String.__eq
+   drop
+   i32.const 0
+   local.get $0
+   i32.eqz
+   br_if $__inlined_func$~lib/string/String.__eq
+   drop
+   i32.const 0
+   local.get $0
+   i32.const 20
+   i32.sub
+   i32.load offset=16
+   i32.const 1
+   i32.shr_u
+   local.tee $1
+   i32.const 1948
+   i32.load
+   i32.const 1
+   i32.shr_u
+   i32.ne
+   br_if $__inlined_func$~lib/string/String.__eq
+   drop
+   block $__inlined_func$~lib/util/string/compareImpl (result i32)
+    i32.const 1952
+    local.set $3
+    local.get $0
+    local.tee $2
+    i32.const 7
+    i32.and
+    i32.eqz
+    i32.const 0
+    local.get $1
+    local.tee $0
+    i32.const 4
+    i32.ge_u
+    select
+    if
+     loop $do-continue|01
+      local.get $2
+      i64.load
+      local.get $3
+      i64.load
+      i64.eq
+      if
+       local.get $2
+       i32.const 8
+       i32.add
+       local.set $2
+       local.get $3
+       i32.const 8
+       i32.add
+       local.set $3
+       local.get $0
+       i32.const 4
+       i32.sub
+       local.tee $0
+       i32.const 4
+       i32.ge_u
+       br_if $do-continue|01
+      end
+     end
+    end
+    loop $while-continue|1
+     local.get $0
+     local.tee $1
+     i32.const 1
+     i32.sub
+     local.set $0
+     local.get $1
+     if
+      local.get $3
+      i32.load16_u
+      local.tee $1
+      local.get $2
+      i32.load16_u
+      local.tee $4
+      i32.ne
+      if
+       local.get $4
+       local.get $1
+       i32.sub
+       br $__inlined_func$~lib/util/string/compareImpl
+      end
+      local.get $2
+      i32.const 2
+      i32.add
+      local.set $2
+      local.get $3
+      i32.const 2
+      i32.add
+      local.set $3
+      br $while-continue|1
+     end
+    end
+    i32.const 0
+   end
+   i32.eqz
+  end
   i32.eqz
   if
    i32.const 0
