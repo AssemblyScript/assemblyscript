@@ -80,7 +80,7 @@
     i32.const 1152
     i32.const 1200
     i32.load
-    call_indirect (type $i32_f32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_f32_i32_i32_=>_i32)
     local.set $1
     local.get $0
     i32.const 1

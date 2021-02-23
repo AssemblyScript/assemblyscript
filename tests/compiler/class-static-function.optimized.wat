@@ -40,7 +40,7 @@
   i32.store
   i32.const 1056
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   i32.const 42
   i32.ne
   if

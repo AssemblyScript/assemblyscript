@@ -39,10 +39,14 @@ declare type v128 = object;
 declare type funcref = object | null;
 /** External reference. */
 declare type externref = object | null;
-/** Exception reference. */
-declare type exnref = object | null;
 /** Any reference. */
 declare type anyref = object | null;
+/** Equatable reference. */
+declare type eqref = object | null;
+/** 31-bit integer reference. */
+declare type i31ref = object | null;
+/** Data reference. */
+declare type dataref = object | null;
 
 // Compiler hints
 
@@ -1047,10 +1051,6 @@ declare namespace i64x2 {
   export function shr_s(a: v128, b: i32): v128;
   /** Performs a bitwise logical right shift on each 64-bit integer lane by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
-  /** Reduces a vector to a scalar indicating whether any 64-bit integer lane is considered `true`. */
-  export function any_true(a: v128): bool;
-  /** Reduces a vector to a scalar indicating whether all 64-bit integer lanes are considered `true`. */
-  export function all_true(a: v128): bool;
   /** Truncates each 64-bit float lane to a signed integer with saturation. */
   export function trunc_sat_f64x2_s(a: v128): v128;
   /** Truncates each 64-bit float lane to an unsigned integer with saturation. */

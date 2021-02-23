@@ -1836,14 +1836,6 @@ export namespace i64x2 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function any_true(a: v128): bool;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function all_true(a: v128): bool;
-
-  // @ts-ignore: decorator
-  @builtin
   export declare function trunc_sat_f64x2_s(a: v128): v128;
 
   // @ts-ignore: decorator

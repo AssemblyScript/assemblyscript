@@ -1894,7 +1894,7 @@
   i32.const 2
   i32.const 1104
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 2
   i32.ne
   if

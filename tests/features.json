@@ -27,6 +27,7 @@
       "--enable reference-types"
     ],
     "v8_flags": [
+      "--experimental-wasm-reftypes"
     ]
   },
   "gc": {
@@ -34,7 +35,7 @@
       "--enable gc"
     ],
     "v8_flags": [
-      "--experimental-wasm-anyref",
+      "--experimental-wasm-reftypes",
       "--experimental-wasm-gc"
     ]
   },

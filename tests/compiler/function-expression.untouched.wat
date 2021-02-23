@@ -91,7 +91,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
  )
  (func $start:function-expression~anonymous|5 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -156,14 +156,14 @@
   global.set $~argumentsLength
   global.get $function-expression/globalFunc
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.tee $0
   i32.store
   i32.const 1
   global.set $~argumentsLength
   local.get $0
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 25
   i32.eq
   i32.eqz
@@ -206,14 +206,14 @@
   global.set $~argumentsLength
   local.get $0
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.tee $1
   i32.store offset=4
   i32.const 1
   global.set $~argumentsLength
   local.get $1
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 25
   i32.eq
   i32.eqz
@@ -2874,14 +2874,14 @@
   local.get $0
   i32.load
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.tee $1
   i32.store offset=8
   i32.const 1
   global.set $~argumentsLength
   local.get $1
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 25
   i32.eq
   i32.eqz
@@ -2913,7 +2913,7 @@
   global.set $~argumentsLength
   global.get $function-expression/f1
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 1
   i32.eq
   i32.eqz
@@ -2930,7 +2930,7 @@
   global.set $~argumentsLength
   global.get $function-expression/f2
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 2
   i32.eq
   i32.eqz
@@ -2946,12 +2946,12 @@
   global.set $~argumentsLength
   global.get $function-expression/f3
   i32.load
-  call_indirect (type $none_=>_none)
+  call_indirect $0 (type $none_=>_none)
   i32.const 0
   global.set $~argumentsLength
   global.get $function-expression/f4
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   i32.const 1
   i32.eq
   i32.eqz
@@ -3023,7 +3023,7 @@
   global.set $~argumentsLength
   call $function-expression/testOmittedReturn1
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 3
   i32.eq
   i32.eqz
@@ -3041,7 +3041,7 @@
   global.set $~argumentsLength
   call $function-expression/testOmittedReturn2
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 1
   i32.eq
   i32.eqz
@@ -3059,7 +3059,7 @@
   global.set $~argumentsLength
   call $function-expression/testOmittedReturn3
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 42
   i32.eq
   i32.eqz

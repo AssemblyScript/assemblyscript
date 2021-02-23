@@ -459,8 +459,6 @@ function test_i64x2(): void {
   assert(i64x2.shl(i64x2.splat(1), 1) == i64x2.splat(2));
   assert(i64x2.shr_s(i64x2.splat(-2), 1) == i64x2.splat(-1));
   assert(i64x2.shr_u(i64x2.splat(-1), 1) == i64x2.splat(9223372036854775807));
-  assert(i64x2.any_true(i64x2(1, 0)) == true);
-  assert(i64x2.all_true(i64x2.splat(1)) == true);
   assert(
     i64x2.trunc_sat_f64x2_s(f64x2.splat(-1.5))
     ==

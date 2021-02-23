@@ -58,6 +58,7 @@ import {
   SIMDReplaceOp,
   SIMDShiftOp,
   SIMDTernaryOp,
+  RefIsOp,
   NativeType,
   ExpressionRef,
   ExpressionId,
@@ -532,8 +533,6 @@ export namespace BuiltinNames {
   export const i64x2_shl = "~lib/builtins/i64x2.shl";
   export const i64x2_shr_s = "~lib/builtins/i64x2.shr_s";
   export const i64x2_shr_u = "~lib/builtins/i64x2.shr_u";
-  export const i64x2_any_true = "~lib/builtins/i64x2.any_true";
-  export const i64x2_all_true = "~lib/builtins/i64x2.all_true"; // i64x2 has no .eq etc.
   export const i64x2_trunc_sat_f64x2_s = "~lib/builtins/i64x2.trunc_sat_f64x2_s";
   export const i64x2_trunc_sat_f64x2_u = "~lib/builtins/i64x2.trunc_sat_f64x2_u";
   export const i64x2_load32x2_s = "~lib/builtins/i64x2.load32x2_s";
@@ -3037,8 +3036,10 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.F64: return module.if(module.binary(BinaryOp.EqF64, arg0, module.f64(0)), abort);
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
-      case TypeKind.EXNREF:
-      case TypeKind.ANYREF: return module.if(module.ref_is_null(arg0), abort);
+      case TypeKind.ANYREF:
+      case TypeKind.EQREF:
+      case TypeKind.DATAREF: return module.if(module.ref_is(RefIsOp.RefIsNull, arg0), abort);
+      case TypeKind.I31REF: return module.if(module.unary(UnaryOp.EqzI32, module.i31_get(arg0)), abort);
 
     }
   } else {
@@ -3119,12 +3120,27 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       }
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
-      case TypeKind.EXNREF:
-      case TypeKind.ANYREF: {
+      case TypeKind.ANYREF:
+      case TypeKind.EQREF:
+      case TypeKind.DATAREF: {
         let temp = flow.getTempLocal(type);
         let ret = module.if(
-          module.ref_is_null(
+          module.ref_is(RefIsOp.RefIsNull,
             module.local_tee(temp.index, arg0, false) // ref
+          ),
+          abort,
+          module.local_get(temp.index, NativeType.F64)
+        );
+        flow.freeTempLocal(temp);
+        return ret;
+      }
+      case TypeKind.I31REF: {
+        let temp = flow.getTempLocal(type);
+        let ret = module.if(
+          module.unary(UnaryOp.EqzI32,
+            module.i31_get(
+              module.local_tee(temp.index, arg0, false) // ref
+            )
           ),
           abort,
           module.local_get(temp.index, NativeType.F64)
@@ -5364,16 +5380,12 @@ function builtin_v128_any_true(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U16: return module.unary(UnaryOp.AnyTrueI16x8, arg0);
       case TypeKind.I32:
       case TypeKind.U32: return module.unary(UnaryOp.AnyTrueI32x4, arg0);
-      case TypeKind.I64:
-      case TypeKind.U64: return module.unary(UnaryOp.AnyTrueI64x2, arg0);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: {
-        return module.unary(
-          compiler.options.isWasm64
-            ? UnaryOp.AnyTrueI64x2
-            : UnaryOp.AnyTrueI32x4,
-          arg0
-        );
+        if (!compiler.options.isWasm64) {
+          return module.unary(UnaryOp.AnyTrueI32x4, arg0);
+        }
+        break;
       }
     }
   }
@@ -5409,16 +5421,12 @@ function builtin_v128_all_true(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U16: return module.unary(UnaryOp.AllTrueI16x8, arg0);
       case TypeKind.I32:
       case TypeKind.U32: return module.unary(UnaryOp.AllTrueI32x4, arg0);
-      case TypeKind.I64:
-      case TypeKind.U64: return module.unary(UnaryOp.AllTrueI64x2, arg0);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: {
-        return module.unary(
-          compiler.options.isWasm64
-            ? UnaryOp.AllTrueI64x2
-            : UnaryOp.AllTrueI32x4,
-          arg0
-        );
+        if (!compiler.options.isWasm64) {
+          return module.unary(UnaryOp.AllTrueI32x4, arg0);
+        }
+        break;
       }
     }
   }
@@ -8019,24 +8027,6 @@ function builtin_i64x2_shr_u(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_shr(ctx);
 }
 builtins.set(BuiltinNames.i64x2_shr_u, builtin_i64x2_shr_u);
-
-// i64x2.any_true -> v128.any_true<i64>
-function builtin_i64x2_any_true(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.i64 ];
-  ctx.contextualType = Type.i32;
-  return builtin_v128_any_true(ctx);
-}
-builtins.set(BuiltinNames.i64x2_any_true, builtin_i64x2_any_true);
-
-// i64x2.all_true -> v128.all_true<i64>
-function builtin_i64x2_all_true(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.i64 ];
-  ctx.contextualType = Type.i32;
-  return builtin_v128_all_true(ctx);
-}
-builtins.set(BuiltinNames.i64x2_all_true, builtin_i64x2_all_true);
 
 // i64x2.trunc_sat_f64x2_s -> v128.trunc_sat<i64>
 function builtin_i64x2_trunc_sat_f64x2_s(ctx: BuiltinContext): ExpressionRef {

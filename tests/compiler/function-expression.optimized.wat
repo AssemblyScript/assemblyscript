@@ -1583,7 +1583,7 @@
   i32.const 1
   i32.const 1056
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 1
   i32.ne
   if
@@ -1597,7 +1597,7 @@
   i32.const 2
   i32.const 1152
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 2
   i32.ne
   if
@@ -1610,10 +1610,10 @@
   end
   i32.const 1184
   i32.load
-  call_indirect (type $none_=>_none)
+  call_indirect $0 (type $none_=>_none)
   i32.const 1216
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   i32.const 1
   i32.ne
   if
@@ -1631,7 +1631,7 @@
   i32.const 2
   i32.const 1248
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if
@@ -1649,7 +1649,7 @@
   i32.const 2
   i32.const 1280
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 1
   i32.ne
   if
@@ -1667,7 +1667,7 @@
   i32.const 2
   i32.const 1312
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 42
   i32.ne
   if
@@ -1682,7 +1682,7 @@
   i32.const 2
   i32.const 1344
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if
@@ -1697,7 +1697,7 @@
   i32.const 2
   i32.const 1376
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 1
   i32.ne
   if
@@ -1712,7 +1712,7 @@
   i32.const 2
   i32.const 1408
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 42
   i32.ne
   if
@@ -1734,13 +1734,13 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1504
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.tee $0
   i32.store
   i32.const 1
   local.get $0
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 25
   i32.ne
   if
@@ -1769,13 +1769,13 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1568
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.tee $0
   i32.store offset=4
   i32.const 1
   local.get $0
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 25
   i32.ne
   if
@@ -1894,13 +1894,13 @@
   local.get $0
   i32.load
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.tee $0
   i32.store offset=8
   i32.const 1
   local.get $0
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 25
   i32.ne
   if

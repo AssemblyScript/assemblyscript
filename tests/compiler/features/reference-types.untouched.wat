@@ -19,8 +19,6 @@
  (global $features/reference-types/funcGlobalInit (mut funcref) (ref.null func))
  (global $features/reference-types/externGlobal (mut externref) (ref.null extern))
  (global $features/reference-types/externGlobalInit (mut externref) (ref.null extern))
- (global $features/reference-types/exnGlobal (mut exnref) (ref.null exn))
- (global $features/reference-types/exnGlobalInit (mut exnref) (ref.null exn))
  (global $features/reference-types/anyGlobal (mut anyref) (ref.null any))
  (global $features/reference-types/anyGlobalInit (mut anyref) (ref.null any))
  (global $features/reference-types/otherFuncGlobal (mut funcref) (ref.null func))
@@ -41,7 +39,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 61
+   i32.const 54
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -55,7 +53,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 63
+   i32.const 56
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -69,7 +67,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 65
+   i32.const 58
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -85,7 +83,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 61
+   i32.const 54
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -99,7 +97,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 63
+   i32.const 56
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -113,51 +111,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 65
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $features/reference-types/testLocal<exnref>
-  (local $0 exnref)
-  (local $1 exnref)
-  local.get $0
-  ref.is_null
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 61
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  ref.null exn
-  local.set $0
-  local.get $0
-  ref.is_null
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 63
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  ref.null exn
-  local.set $1
-  local.get $1
-  ref.is_null
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 65
+   i32.const 58
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -173,7 +127,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 61
+   i32.const 54
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -187,7 +141,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 63
+   i32.const 56
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -201,7 +155,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 65
+   i32.const 58
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -314,46 +268,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $features/reference-types/exnGlobal
-  ref.is_null
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 46
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  ref.null exn
-  global.set $features/reference-types/exnGlobal
-  global.get $features/reference-types/exnGlobal
-  ref.is_null
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 48
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  ref.null exn
-  global.set $features/reference-types/exnGlobalInit
-  global.get $features/reference-types/exnGlobalInit
-  ref.is_null
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 50
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   global.get $features/reference-types/anyGlobal
   ref.is_null
   i32.eqz
@@ -361,7 +275,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 53
+   i32.const 46
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -375,7 +289,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 55
+   i32.const 48
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -389,14 +303,13 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 57
+   i32.const 50
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
   call $features/reference-types/testLocal<funcref>
   call $features/reference-types/testLocal<externref>
-  call $features/reference-types/testLocal<exnref>
   call $features/reference-types/testLocal<anyref>
   ref.func $features/reference-types/someFunc
   global.set $features/reference-types/funcGlobal
@@ -405,7 +318,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 76
+   i32.const 68
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -417,7 +330,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 78
+   i32.const 70
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -429,16 +342,12 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 81
+   i32.const 73
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   global.get $features/reference-types/funcGlobal
-  global.set $features/reference-types/anyGlobal
-  global.get $features/reference-types/externGlobal
-  global.set $features/reference-types/anyGlobal
-  global.get $features/reference-types/exnGlobal
   global.set $features/reference-types/anyGlobal
  )
  (func $features/reference-types/internal (param $0 externref) (result externref)
