@@ -777,10 +777,10 @@ declare namespace v128 {
   export function trunc_sat<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
   /** Narrows each lane to their respective narrower lanes. */
   export function narrow<TFrom = i16 | i32>(a: v128, b: v128): v128;
-  /** Widens the low lanes of a vector to their respective wider lanes. */
-  export function widen_low<TFrom = i8 | i16>(a: v128): v128;
-  /** Widens the high lanes of a vector to their respective wider lanes. */
-  export function widen_high<TFrom = i8 | i16>(a: v128): v128;
+  /** Extends the low lanes of a vector to their respective wider lanes. */
+  export function extend_low<TFrom = i8 | i16>(a: v128): v128;
+  /** Extends the high lanes of a vector to their respective wider lanes. */
+  export function extend_high<TFrom = i8 | i16>(a: v128): v128;
   /** Computes `(a * b) + c` for each lane. */
   export function qfma<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
   /** Computes `(a * b) - c` for each lane. */
@@ -937,14 +937,14 @@ declare namespace i16x8 {
   export function narrow_i32x4_s(a: v128, b: v128): v128;
   /** Narrows each 32-bit signed integer lane to 16-bit unsigned integer lanes. */
   export function narrow_i32x4_u(a: v128, b: v128): v128;
-  /** Widens the low 8-bit signed integer lanes to 16-bit signed integer lanes. */
-  export function widen_low_i8x16_s(a: v128): v128;
-  /** Widens the low 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
-  export function widen_low_i8x16_u(a: v128): v128;
-  /** Widens the high 8-bit signed integer lanes to 16-bit signed integer lanes. */
-  export function widen_high_i8x16_s(a: v128): v128;
-  /** Widens the high 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
-  export function widen_high_i8x16_u(a: v128): v128;
+  /** Extends the low 8-bit signed integer lanes to 16-bit signed integer lanes. */
+  export function extend_low_i8x16_s(a: v128): v128;
+  /** Extends the low 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
+  export function extend_low_i8x16_u(a: v128): v128;
+  /** Extends the high 8-bit signed integer lanes to 16-bit signed integer lanes. */
+  export function extend_high_i8x16_s(a: v128): v128;
+  /** Extends the high 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
+  export function extend_high_i8x16_u(a: v128): v128;
   /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
   export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
   /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
@@ -1015,14 +1015,14 @@ declare namespace i32x4 {
   export function trunc_sat_f32x4_s(a: v128): v128;
   /** Truncates each 32-bit float lane to an unsigned integer with saturation. */
   export function trunc_sat_f32x4_u(a: v128): v128;
-  /** Widens the low 16-bit signed integer lanes to 32-bit signed integer lanes. */
-  export function widen_low_i16x8_s(a: v128): v128;
-  /** Widens the low 16-bit unsigned integer lane to 32-bit unsigned integer lanes. */
-  export function widen_low_i16x8_u(a: v128): v128;
-  /** Widens the high 16-bit signed integer lanes to 32-bit signed integer lanes. */
-  export function widen_high_i16x8_s(a: v128): v128;
-  /** Widens the high 16-bit unsigned integer lanes to 32-bit unsigned integer lanes. */
-  export function widen_high_i16x8_u(a: v128): v128;
+  /** Extends the low 16-bit signed integer lanes to 32-bit signed integer lanes. */
+  export function extend_low_i16x8_s(a: v128): v128;
+  /** Extends the low 16-bit unsigned integer lane to 32-bit unsigned integer lanes. */
+  export function extend_low_i16x8_u(a: v128): v128;
+  /** Extends the high 16-bit signed integer lanes to 32-bit signed integer lanes. */
+  export function extend_high_i16x8_s(a: v128): v128;
+  /** Extends the high 16-bit unsigned integer lanes to 32-bit unsigned integer lanes. */
+  export function extend_high_i16x8_u(a: v128): v128;
   /** Creates a vector with four 32-bit integer lanes by loading and sign extending four 16-bit integers. */
   export function load16x4_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
   /** Creates a vector with four 32-bit integer lanes by loading and zero extending four 16-bit integers. */

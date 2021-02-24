@@ -1289,11 +1289,11 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function widen_low<T>(a: v128): v128;
+  export declare function extend_low<T>(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function widen_high<T>(a: v128): v128;
+  export declare function extend_high<T>(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
@@ -1610,19 +1610,19 @@ export namespace i16x8 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function widen_low_i8x16_s(a: v128): v128;
+  export declare function extend_low_i8x16_s(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function widen_low_i8x16_u(a: v128): v128;
+  export declare function extend_low_i8x16_u(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function widen_high_i8x16_s(a: v128): v128;
+  export declare function extend_high_i8x16_s(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function widen_high_i8x16_u(a: v128): v128;
+  export declare function extend_high_i8x16_u(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
@@ -1765,19 +1765,19 @@ export namespace i32x4 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function widen_low_i16x8_s(a: v128): v128;
+  export declare function extend_low_i16x8_s(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function widen_low_i16x8_u(a: v128): v128;
+  export declare function extend_low_i16x8_u(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function widen_high_i16x8_s(a: v128): v128;
+  export declare function extend_high_i16x8_s(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function widen_high_i16x8_u(a: v128): v128;
+  export declare function extend_high_i16x8_u(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin

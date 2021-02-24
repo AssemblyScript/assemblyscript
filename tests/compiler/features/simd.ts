@@ -282,10 +282,10 @@ function test_i16x8(): void {
   assert(i16x8.ge_u(one, negOne) == excl1st);
   assert(i16x8.narrow_i32x4_s(i32x4.splat(i32.MAX_VALUE), i32x4.splat(i32.MAX_VALUE)) == i16x8.splat(i16.MAX_VALUE));
   assert(i16x8.narrow_i32x4_u(i32x4.splat(i32.MAX_VALUE), i32x4.splat(i32.MAX_VALUE)) == i16x8.splat(u16.MAX_VALUE));
-  assert(i16x8.widen_low_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(-1));
-  assert(i16x8.widen_low_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(255));
-  assert(i16x8.widen_high_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(-1));
-  assert(i16x8.widen_high_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(255));
+  assert(i16x8.extend_low_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(-1));
+  assert(i16x8.extend_low_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(255));
+  assert(i16x8.extend_high_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(-1));
+  assert(i16x8.extend_high_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(255));
   // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
   // {
   //   let ptr = __alloc(16, 0);
@@ -406,10 +406,10 @@ function test_i32x4(): void {
     ==
     i32x4.splat(0)
   );
-  assert(i32x4.widen_low_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(-1));
-  assert(i32x4.widen_low_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(65535));
-  assert(i32x4.widen_high_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(-1));
-  assert(i32x4.widen_high_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(65535));
+  assert(i32x4.extend_low_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(-1));
+  assert(i32x4.extend_low_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(65535));
+  assert(i32x4.extend_high_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(-1));
+  assert(i32x4.extend_high_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(65535));
   // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
   // {
   //   let ptr = __alloc(16, 0);

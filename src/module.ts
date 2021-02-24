@@ -263,18 +263,18 @@ export enum UnaryOp {
   ConvertU32x4ToF32x4 = 108 /* _BinaryenConvertUVecI32x4ToVecF32x4 */,
   ConvertI64x2ToF64x2 = 109 /* _BinaryenConvertSVecI64x2ToVecF64x2 */,
   ConvertU64x2ToF64x2 = 110 /* _BinaryenConvertUVecI64x2ToVecF64x2 */,
-  WidenLowI8x16ToI16x8 = 111 /* _BinaryenWidenLowSVecI8x16ToVecI16x8 */,
-  WidenHighI8x16ToI16x8 = 112 /* _BinaryenWidenHighSVecI8x16ToVecI16x8 */,
-  WidenLowU8x16ToU16x8 = 113 /* _BinaryenWidenLowUVecI8x16ToVecI16x8 */,
-  WidenHighU8x16ToU16x8 = 114 /* _BinaryenWidenHighUVecI8x16ToVecI16x8 */,
-  WidenLowI16x8ToI32x4 = 115 /* _BinaryenWidenLowSVecI16x8ToVecI32x4 */,
-  WidenHighI16x8ToI32x4 = 116 /* _BinaryenWidenHighSVecI16x8ToVecI32x4 */,
-  WidenLowU16x8ToU32x4 = 117 /* _BinaryenWidenLowUVecI16x8ToVecI32x4 */,
-  WidenHighU16x8ToU32x4 = 118 /* _BinaryenWidenHighUVecI16x8ToVecI32x4 */,
-  WidenLowI32x4ToI64x2 = 119 /* TODO_BinaryenWidenLowSVecI32x4ToVecI64x2 */,
-  WidenHighI32x4ToI64x2 = 120 /* TODO_BinaryenWidenHighSVecI32x4ToVecI64x2 */,
-  WidenLowU32x4ToU64x2 = 121 /* TODO_BinaryenWidenLowUVecI32x4ToVecI64x2 */,
-  WidenHighU32x4ToU64x2 = 122 /* TODO_BinaryenWidenHighUVecI32x4ToVecI64x2 */,
+  ExtendLowI8x16ToI16x8 = 111 /* _BinaryenWidenLowSVecI8x16ToVecI16x8 */,
+  ExtendHighI8x16ToI16x8 = 112 /* _BinaryenWidenHighSVecI8x16ToVecI16x8 */,
+  ExtendLowU8x16ToU16x8 = 113 /* _BinaryenWidenLowUVecI8x16ToVecI16x8 */,
+  ExtendHighU8x16ToU16x8 = 114 /* _BinaryenWidenHighUVecI8x16ToVecI16x8 */,
+  ExtendLowI16x8ToI32x4 = 115 /* _BinaryenWidenLowSVecI16x8ToVecI32x4 */,
+  ExtendHighI16x8ToI32x4 = 116 /* _BinaryenWidenHighSVecI16x8ToVecI32x4 */,
+  ExtendLowU16x8ToU32x4 = 117 /* _BinaryenWidenLowUVecI16x8ToVecI32x4 */,
+  ExtendHighU16x8ToU32x4 = 118 /* _BinaryenWidenHighUVecI16x8ToVecI32x4 */,
+  ExtendLowI32x4ToI64x2 = 119 /* TODO_BinaryenWidenLowSVecI32x4ToVecI64x2 */,
+  ExtendHighI32x4ToI64x2 = 120 /* TODO_BinaryenWidenHighSVecI32x4ToVecI64x2 */,
+  ExtendLowU32x4ToU64x2 = 121 /* TODO_BinaryenWidenLowUVecI32x4ToVecI64x2 */,
+  ExtendHighU32x4ToU64x2 = 122 /* TODO_BinaryenWidenHighUVecI32x4ToVecI64x2 */,
   ConvertLowI32x4ToF64x2 = 123 /* TODO_BinaryenConvertLowSVecI32x4ToVecF64x2 */,
   ConvertLowU32x4ToF64x2 = 124 /* TODO_BinaryenConvertLowUVecI32x4ToVecF64x2 */,
   TruncSatZeroF64x2ToI32x4 = 125 /* TODO_BinaryenTruncSatZeroSVecF64x2ToVecI32x4 */,
@@ -557,6 +557,7 @@ export enum SIMDLoadStoreLaneOp {
   StoreLaneV64x2 = 7 /* TODO_BinaryenStoreLaneVec64x2 */
 }
 
+// TODO: Widen with lane immediate, did these make it?
 export enum SIMDWidenOp {
   WidenSVecI8x16ToVecI32x4 = 0 /* TODO_BinaryenWidenSVecI8x16ToVecI32x4 */,
   WidenUVecI8x16ToVecI32x4 = 1 /* TODO_BinaryenWidenUVecI8x16ToVecI32x4 */

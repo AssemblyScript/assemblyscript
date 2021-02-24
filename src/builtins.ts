@@ -394,8 +394,8 @@ export namespace BuiltinNames {
   export const v128_convert = "~lib/builtins/v128.convert";
   export const v128_trunc_sat = "~lib/builtins/v128.trunc_sat";
   export const v128_narrow = "~lib/builtins/v128.narrow";
-  export const v128_widen_low = "~lib/builtins/v128.widen_low";
-  export const v128_widen_high = "~lib/builtins/v128.widen_high";
+  export const v128_extend_low = "~lib/builtins/v128.extend_low";
+  export const v128_extend_high = "~lib/builtins/v128.extend_high";
   export const v128_qfma = "~lib/builtins/v128.qfma";
   export const v128_qfms = "~lib/builtins/v128.qfms";
 
@@ -479,10 +479,10 @@ export namespace BuiltinNames {
   export const i16x8_ge_u = "~lib/builtins/i16x8.ge_u";
   export const i16x8_narrow_i32x4_s = "~lib/builtins/i16x8.narrow_i32x4_s";
   export const i16x8_narrow_i32x4_u = "~lib/builtins/i16x8.narrow_i32x4_u";
-  export const i16x8_widen_low_i8x16_s = "~lib/builtins/i16x8.widen_low_i8x16_s";
-  export const i16x8_widen_low_i8x16_u = "~lib/builtins/i16x8.widen_low_i8x16_u";
-  export const i16x8_widen_high_i8x16_s = "~lib/builtins/i16x8.widen_high_i8x16_s";
-  export const i16x8_widen_high_i8x16_u = "~lib/builtins/i16x8.widen_high_i8x16_u";
+  export const i16x8_extend_low_i8x16_s = "~lib/builtins/i16x8.extend_low_i8x16_s";
+  export const i16x8_extend_low_i8x16_u = "~lib/builtins/i16x8.extend_low_i8x16_u";
+  export const i16x8_extend_high_i8x16_s = "~lib/builtins/i16x8.extend_high_i8x16_s";
+  export const i16x8_extend_high_i8x16_u = "~lib/builtins/i16x8.extend_high_i8x16_u";
   export const i16x8_load8x8_s = "~lib/builtins/i16x8.load8x8_s";
   export const i16x8_load8x8_u = "~lib/builtins/i16x8.load8x8_u";
 
@@ -517,10 +517,10 @@ export namespace BuiltinNames {
   export const i32x4_ge_u = "~lib/builtins/i32x4.ge_u";
   export const i32x4_trunc_sat_f32x4_s = "~lib/builtins/i32x4.trunc_sat_f32x4_s";
   export const i32x4_trunc_sat_f32x4_u = "~lib/builtins/i32x4.trunc_sat_f32x4_u";
-  export const i32x4_widen_low_i16x8_s = "~lib/builtins/i32x4.widen_low_i16x8_s";
-  export const i32x4_widen_low_i16x8_u = "~lib/builtins/i32x4.widen_low_i16x8_u";
-  export const i32x4_widen_high_i16x8_s = "~lib/builtins/i32x4.widen_high_i16x8_s";
-  export const i32x4_widen_high_i16x8_u = "~lib/builtins/i32x4.widen_high_i16x8_u";
+  export const i32x4_extend_low_i16x8_s = "~lib/builtins/i32x4.extend_low_i16x8_s";
+  export const i32x4_extend_low_i16x8_u = "~lib/builtins/i32x4.extend_low_i16x8_u";
+  export const i32x4_extend_high_i16x8_s = "~lib/builtins/i32x4.extend_high_i16x8_s";
+  export const i32x4_extend_high_i16x8_u = "~lib/builtins/i32x4.extend_high_i16x8_u";
   export const i32x4_load16x4_s = "~lib/builtins/i32x4.load16x4_s";
   export const i32x4_load16x4_u = "~lib/builtins/i32x4.load16x4_u";
 
@@ -5106,8 +5106,8 @@ function builtin_v128_trunc_sat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v128_trunc_sat, builtin_v128_trunc_sat);
 
-// v128.widen_low<T!>(a: v128) -> v128
-function builtin_v128_widen_low(ctx: BuiltinContext): ExpressionRef {
+// v128.extend_low<T!>(a: v128) -> v128
+function builtin_v128_extend_low(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
   if (
@@ -5124,22 +5124,22 @@ function builtin_v128_widen_low(ctx: BuiltinContext): ExpressionRef {
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.I8: return module.unary(UnaryOp.WidenLowI8x16ToI16x8, arg0);
-      case TypeKind.U8: return module.unary(UnaryOp.WidenLowU8x16ToU16x8, arg0);
-      case TypeKind.I16: return module.unary(UnaryOp.WidenLowI16x8ToI32x4, arg0);
-      case TypeKind.U16: return module.unary(UnaryOp.WidenLowU16x8ToU32x4, arg0);
+      case TypeKind.I8: return module.unary(UnaryOp.ExtendLowI8x16ToI16x8, arg0);
+      case TypeKind.U8: return module.unary(UnaryOp.ExtendLowU8x16ToU16x8, arg0);
+      case TypeKind.I16: return module.unary(UnaryOp.ExtendLowI16x8ToI32x4, arg0);
+      case TypeKind.U16: return module.unary(UnaryOp.ExtendLowU16x8ToU32x4, arg0);
     }
   }
   compiler.error(
     DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-    ctx.reportNode.typeArgumentsRange, "v128.widen_low", type.toString()
+    ctx.reportNode.typeArgumentsRange, "v128.extend_low", type.toString()
   );
   return module.unreachable();
 }
-builtins.set(BuiltinNames.v128_widen_low, builtin_v128_widen_low);
+builtins.set(BuiltinNames.v128_extend_low, builtin_v128_extend_low);
 
-// v128.widen_high<T!>(a: v128) -> v128
-function builtin_v128_widen_high(ctx: BuiltinContext): ExpressionRef {
+// v128.extend_high<T!>(a: v128) -> v128
+function builtin_v128_extend_high(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
   if (
@@ -5156,19 +5156,19 @@ function builtin_v128_widen_high(ctx: BuiltinContext): ExpressionRef {
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.I8: return module.unary(UnaryOp.WidenHighI8x16ToI16x8, arg0);
-      case TypeKind.U8: return module.unary(UnaryOp.WidenHighU8x16ToU16x8, arg0);
-      case TypeKind.I16: return module.unary(UnaryOp.WidenHighI16x8ToI32x4, arg0);
-      case TypeKind.U16: return module.unary(UnaryOp.WidenHighU16x8ToU32x4, arg0);
+      case TypeKind.I8: return module.unary(UnaryOp.ExtendHighI8x16ToI16x8, arg0);
+      case TypeKind.U8: return module.unary(UnaryOp.ExtendHighU8x16ToU16x8, arg0);
+      case TypeKind.I16: return module.unary(UnaryOp.ExtendHighI16x8ToI32x4, arg0);
+      case TypeKind.U16: return module.unary(UnaryOp.ExtendHighU16x8ToU32x4, arg0);
     }
   }
   compiler.error(
     DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-    ctx.reportNode.typeArgumentsRange, "v128.widen_high", type.toString()
+    ctx.reportNode.typeArgumentsRange, "v128.extend_high", type.toString()
   );
   return module.unreachable();
 }
-builtins.set(BuiltinNames.v128_widen_high, builtin_v128_widen_high);
+builtins.set(BuiltinNames.v128_extend_high, builtin_v128_extend_high);
 
 // v128.shl<T!>(a: v128, b: i32) -> v128
 function builtin_v128_shl(ctx: BuiltinContext): ExpressionRef {
@@ -7560,41 +7560,41 @@ function builtin_i16x8_narrow_i32x4_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_narrow_i32x4_u, builtin_i16x8_narrow_i32x4_u);
 
-// i16x8.widen_low_i8x16_s -> v128.widen_low<i8>
-function builtin_i16x8_widen_low_i8x16_s(ctx: BuiltinContext): ExpressionRef {
+// i16x8.extend_low_i8x16_s -> v128.extend_low<i8>
+function builtin_i16x8_extend_low_i8x16_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_widen_low(ctx);
+  return builtin_v128_extend_low(ctx);
 }
-builtins.set(BuiltinNames.i16x8_widen_low_i8x16_s, builtin_i16x8_widen_low_i8x16_s);
+builtins.set(BuiltinNames.i16x8_extend_low_i8x16_s, builtin_i16x8_extend_low_i8x16_s);
 
-// i16x8.widen_low_i8x16_u -> v128.widen_low<u8>
-function builtin_i16x8_widen_low_i8x16_u(ctx: BuiltinContext): ExpressionRef {
+// i16x8.extend_low_i8x16_u -> v128.extend_low<u8>
+function builtin_i16x8_extend_low_i8x16_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_widen_low(ctx);
+  return builtin_v128_extend_low(ctx);
 }
-builtins.set(BuiltinNames.i16x8_widen_low_i8x16_u, builtin_i16x8_widen_low_i8x16_u);
+builtins.set(BuiltinNames.i16x8_extend_low_i8x16_u, builtin_i16x8_extend_low_i8x16_u);
 
-// i16x8.widen_high_i8x16_s -> v128.widen_high<i8>
-function builtin_i16x8_widen_high_i8x16_s(ctx: BuiltinContext): ExpressionRef {
+// i16x8.extend_high_i8x16_s -> v128.extend_high<i8>
+function builtin_i16x8_extend_high_i8x16_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_widen_high(ctx);
+  return builtin_v128_extend_high(ctx);
 }
-builtins.set(BuiltinNames.i16x8_widen_high_i8x16_s, builtin_i16x8_widen_high_i8x16_s);
+builtins.set(BuiltinNames.i16x8_extend_high_i8x16_s, builtin_i16x8_extend_high_i8x16_s);
 
-// i16x8.widen_high_i8x16_u -> v128.widen_high<u8>
-function builtin_i16x8_widen_high_i8x16_u(ctx: BuiltinContext): ExpressionRef {
+// i16x8.extend_high_i8x16_u -> v128.extend_high<u8>
+function builtin_i16x8_extend_high_i8x16_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_widen_high(ctx);
+  return builtin_v128_extend_high(ctx);
 }
-builtins.set(BuiltinNames.i16x8_widen_high_i8x16_u, builtin_i16x8_widen_high_i8x16_u);
+builtins.set(BuiltinNames.i16x8_extend_high_i8x16_u, builtin_i16x8_extend_high_i8x16_u);
 
 // i16x8.load8x8_s -> v128.load_ext<i8>
 function builtin_i16x8_load8x8_s(ctx: BuiltinContext): ExpressionRef {
@@ -7893,41 +7893,41 @@ function builtin_i32x4_trunc_sat_f32x4_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_trunc_sat_f32x4_u, builtin_i32x4_trunc_sat_f32x4_u);
 
-// i32x4.widen_low_i16x8_s -> // v128.widen_low<i16>
-function builtin_i32x4_widen_low_i16x8_s(ctx: BuiltinContext): ExpressionRef {
+// i32x4.extend_low_i16x8_s -> // v128.extend_low<i16>
+function builtin_i32x4_extend_low_i16x8_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_widen_low(ctx);
+  return builtin_v128_extend_low(ctx);
 }
-builtins.set(BuiltinNames.i32x4_widen_low_i16x8_s, builtin_i32x4_widen_low_i16x8_s);
+builtins.set(BuiltinNames.i32x4_extend_low_i16x8_s, builtin_i32x4_extend_low_i16x8_s);
 
-// i32x4.widen_low_i16x8_u -> v128.widen_low<u16>
-function builtin_i32x4_widen_low_i16x8_u(ctx: BuiltinContext): ExpressionRef {
+// i32x4.extend_low_i16x8_u -> v128.extend_low<u16>
+function builtin_i32x4_extend_low_i16x8_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_widen_low(ctx);
+  return builtin_v128_extend_low(ctx);
 }
-builtins.set(BuiltinNames.i32x4_widen_low_i16x8_u, builtin_i32x4_widen_low_i16x8_u);
+builtins.set(BuiltinNames.i32x4_extend_low_i16x8_u, builtin_i32x4_extend_low_i16x8_u);
 
-// i32x4.widen_high_i16x8_s -> v128.widen_high<i16>
-function builtin_i32x4_widen_high_i16x8_s(ctx: BuiltinContext): ExpressionRef {
+// i32x4.extend_high_i16x8_s -> v128.extend_high<i16>
+function builtin_i32x4_extend_high_i16x8_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_widen_high(ctx);
+  return builtin_v128_extend_high(ctx);
 }
-builtins.set(BuiltinNames.i32x4_widen_high_i16x8_s, builtin_i32x4_widen_high_i16x8_s);
+builtins.set(BuiltinNames.i32x4_extend_high_i16x8_s, builtin_i32x4_extend_high_i16x8_s);
 
-// i32x4.widen_high_i16x8_u -> v128.widen_high<u16>
-function builtin_i32x4_widen_high_i16x8_u(ctx: BuiltinContext): ExpressionRef {
+// i32x4.extend_high_i16x8_u -> v128.extend_high<u16>
+function builtin_i32x4_extend_high_i16x8_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_widen_high(ctx);
+  return builtin_v128_extend_high(ctx);
 }
-builtins.set(BuiltinNames.i32x4_widen_high_i16x8_u, builtin_i32x4_widen_high_i16x8_u);
+builtins.set(BuiltinNames.i32x4_extend_high_i16x8_u, builtin_i32x4_extend_high_i16x8_u);
 
 // i32x4.load16x4_s -> v128.load_ext<i16>
 function builtin_i32x4_load16x4_s(ctx: BuiltinContext): ExpressionRef {
