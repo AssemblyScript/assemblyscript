@@ -90,7 +90,7 @@ export enum ExpressionId {
   MemorySize = 20 /* _BinaryenMemorySizeId */,
   MemoryGrow = 21 /* _BinaryenMemoryGrowId */,
   Nop = 22 /* _BinaryenNopId */,
-  Prefetch = 23 /* _BinaryenPrefetchId */,
+  // Prefetch (obsolete)
   Unreachable = 24 /* _BinaryenUnreachableId */,
   AtomicRMW = 25 /* _BinaryenAtomicRMWId */,
   AtomicCmpxchg = 26 /* _BinaryenAtomicCmpxchgId */,
@@ -224,7 +224,7 @@ export enum UnaryOp {
   AnyTrueI8x16 = 69 /* _BinaryenAnyTrueVecI8x16 */,
   AllTrueI8x16 = 70 /* _BinaryenAllTrueVecI8x16 */,
   BitmaskI8x16 = 71 /* _BinaryenBitmaskVecI8x16 */,
-  PopcntVecI8x16 = 72 /* TODO_BinaryenPopcntVecI8x16 */,
+  PopcntI8x16 = 72 /* TODO_BinaryenPopcntVecI8x16 */,
   AbsI16x8 = 73 /* _BinaryenAbsVecI16x8 */,
   NegI16x8 = 74 /* _BinaryenNegVecI16x8 */,
   AnyTrueI16x8 = 75 /* _BinaryenAnyTrueVecI16x8 */,
@@ -560,11 +560,6 @@ export enum SIMDLoadStoreLaneOp {
 export enum SIMDWidenOp {
   WidenSVecI8x16ToVecI32x4 = 0 /* TODO_BinaryenWidenSVecI8x16ToVecI32x4 */,
   WidenUVecI8x16ToVecI32x4 = 1 /* TODO_BinaryenWidenUVecI8x16ToVecI32x4 */
-}
-
-export enum PrefetchOp {
-  PrefetchTemporal = 0 /* TODO_BinaryenPrefetchTemporal */,
-  PrefetchNontemporal = 1 /* TODO_BinaryenPrefetchNontemporal */
 }
 
 export enum RefIsOp {
