@@ -691,12 +691,10 @@ declare namespace v128 {
   export function shuffle<T>(a: v128, b: v128, ...lanes: u8[]): v128;
   /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
   export function swizzle(a: v128, s: v128): v128;
-  /** Creates a vector with identical lanes by loading the splatted value. */
-  export function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-  /** Creates a vector by loading the lanes of the specified type and extending each to the next larger type. */
-  export function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
   /** Loads a vector from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Creates a vector by loading the lanes of the specified type and extending each to the next larger type. */
+  export function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
   /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
   export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
   /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
@@ -709,6 +707,16 @@ declare namespace v128 {
   export function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
   /** Creates a vector with two 64-bit integer lanes by loading and zero extending two 32-bit integers. */
   export function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with identical lanes by loading the splatted value. */
+  export function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads an 8-bit integer and splats it sixteen times forming a new vector. */
+  export function load8_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads a 16-bit integer and splats it eight times forming a new vector. */
+  export function load16_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads a 32-bit integer and splats it four times forming a new vector. */
+  export function load32_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads a 64-bit integer and splats it two times forming a new vector. */
+  export function load64_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
   /** Stores a vector to memory. */
   export function store(ptr: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
   /** Adds each lane. */
@@ -1193,20 +1201,6 @@ declare namespace v8x16 {
   export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
   /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
   export function swizzle(a: v128, s: v128): v128;
-  /** Loads an 8-bit integer and splats it sixteen times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-}
-declare namespace v16x8 {
-  /** Loads a 16-bit integer and splats it eight times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-}
-declare namespace v32x4 {
-  /** Loads a 32-bit integer and splats it four times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-}
-declare namespace v64x2 {
-  /** Loads a 64-bit integer and splats it two times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;

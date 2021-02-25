@@ -53,6 +53,46 @@ function test_v128(): void {
     v128.store(ptr, v128.load(ptr, 16), 32);
     __free(ptr);
   }
+  {
+    let ptr = __alloc(16);
+    store<u8>(ptr, 42);
+    assert(
+      v128.load8_splat(ptr)
+      ==
+      v128(42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42)
+    );
+    __free(ptr);
+  }
+  {
+    let ptr = __alloc(16);
+    store<u16>(ptr, 42);
+    assert(
+      v128.load16_splat(ptr)
+      ==
+      v128(42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0)
+    );
+    __free(ptr);
+  }
+  {
+    let ptr = __alloc(16);
+    store<u32>(ptr, 42);
+    assert(
+      v128.load32_splat(ptr)
+      ==
+      v128(42, 0, 0, 0, 42, 0, 0, 0, 42, 0, 0, 0, 42, 0, 0, 0)
+    );
+    __free(ptr);
+  }
+  {
+    let ptr = __alloc(16);
+    store<u64>(ptr, 42);
+    assert(
+      v128.load64_splat(ptr)
+      ==
+      v128(42, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0)
+    );
+    __free(ptr);
+  }
   // generic operations are tested by the aliases below already
 }
 
@@ -623,59 +663,16 @@ function test_v8x16(): void {
     ==
     v128(0, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
   );
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<u8>(ptr, 42);
-  //   assert(
-  //     v8x16.load_splat(ptr)
-  //     ==
-  //     v128(42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42)
-  //   );
-  //   __free(ptr);
-  // }
-}
-
-function test_v16x8(): void {
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<u16>(ptr, 42);
-  //   assert(
-  //     v16x8.load_splat(ptr)
-  //     ==
-  //     v128(42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0)
-  //   );
-  //   __free(ptr);
-  // }
-}
-
-function test_v32x4(): void {
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<u32>(ptr, 42);
-  //   assert(
-  //     v32x4.load_splat(ptr)
-  //     ==
-  //     v128(42, 0, 0, 0, 42, 0, 0, 0, 42, 0, 0, 0, 42, 0, 0, 0)
-  //   );
-  //   __free(ptr);
-  // }
-}
-
-function test_v64x2(): void {
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<u64>(ptr, 42);
-  //   assert(
-  //     v64x2.load_splat(ptr)
-  //     ==
-  //     v128(42, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0)
-  //   );
-  //   __free(ptr);
-  // }
+  {
+    let ptr = __alloc(16);
+    store<u8>(ptr, 42);
+    assert(
+      v128.load8_splat(ptr)
+      ==
+      v128(42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42)
+    );
+    __free(ptr);
+  }
 }
 
 function test_const(): v128 {
@@ -692,8 +689,5 @@ if (ASC_FEATURE_SIMD) {
   test_f32x4();
   test_f64x2();
   test_v8x16();
-  test_v16x8();
-  test_v32x4();
-  test_v64x2();
   test_const();
 }

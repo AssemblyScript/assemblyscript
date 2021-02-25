@@ -1036,7 +1036,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $start:features/simd
+ (func $features/simd/test_v128
   (local $0 i32)
   i32.const 64
   call $~lib/rt/tlsf/__alloc
@@ -1046,6 +1046,94 @@
   v128.store offset=32
   local.get $0
   call $~lib/rt/tlsf/__free
+  i32.const 16
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 42
+  i32.store8
+  local.get $0
+  v8x16.load_splat
+  v128.const i32x4 0x2a2a2a2a 0x2a2a2a2a 0x2a2a2a2a 0x2a2a2a2a
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 59
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+  i32.const 16
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 42
+  i32.store16
+  local.get $0
+  v16x8.load_splat
+  v128.const i32x4 0x002a002a 0x002a002a 0x002a002a 0x002a002a
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 69
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+  i32.const 16
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 42
+  i32.store
+  local.get $0
+  v32x4.load_splat
+  v128.const i32x4 0x0000002a 0x0000002a 0x0000002a 0x0000002a
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 79
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+  i32.const 16
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i64.const 42
+  i64.store
+  local.get $0
+  v64x2.load_splat
+  v128.const i32x4 0x0000002a 0x00000000 0x0000002a 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 89
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+ )
+ (func $start:features/simd
+  (local $0 i32)
+  call $features/simd/test_v128
   i32.const 16
   call $~lib/rt/tlsf/__alloc
   local.tee $0
@@ -1081,7 +1169,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 299
+   i32.const 339
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1095,7 +1183,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 304
+   i32.const 344
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1125,7 +1213,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 418
+   i32.const 458
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1139,7 +1227,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 423
+   i32.const 463
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1163,7 +1251,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 474
+   i32.const 514
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1177,7 +1265,28 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 479
+   i32.const 519
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+  i32.const 16
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 42
+  i32.store8
+  local.get $0
+  v8x16.load_splat
+  v128.const i32x4 0x2a2a2a2a 0x2a2a2a2a 0x2a2a2a2a 0x2a2a2a2a
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 669
    i32.const 5
    call $~lib/builtins/abort
    unreachable

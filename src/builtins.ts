@@ -360,6 +360,10 @@ export namespace BuiltinNames {
   export const v128_load16x4_u = "~lib/builtins/v128.load16x4_u";
   export const v128_load32x2_s = "~lib/builtins/v128.load32x2_s";
   export const v128_load32x2_u = "~lib/builtins/v128.load32x2_u";
+  export const v128_load8_splat = "~lib/builtins/v128.load8_splat";
+  export const v128_load16_splat = "~lib/builtins/v128.load16_splat";
+  export const v128_load32_splat = "~lib/builtins/v128.load32_splat";
+  export const v128_load64_splat = "~lib/builtins/v128.load64_splat";
   export const v128_store = "~lib/builtins/v128.store";
   export const v128_add = "~lib/builtins/v128.add";
   export const v128_sub = "~lib/builtins/v128.sub";
@@ -602,10 +606,6 @@ export namespace BuiltinNames {
 
   export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
   export const v8x16_swizzle = "~lib/builtins/v8x16.swizzle";
-  export const v8x16_load_splat = "~lib/builtins/v8x16.load_splat";
-  export const v16x8_load_splat = "~lib/builtins/v16x8.load_splat";
-  export const v32x4_load_splat = "~lib/builtins/v32x4.load_splat";
-  export const v64x2_load_splat = "~lib/builtins/v64x2.load_splat";
 
   // internals
   export const data_end = "~lib/memory/__data_end";
@@ -6980,6 +6980,42 @@ function builtin_v128_load32x2_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v128_load32x2_u, builtin_v128_load32x2_u);
 
+// v128.load8_splat -> v128.load_splat<u8>
+function builtin_v128_load8_splat(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_load_splat(ctx);
+}
+builtins.set(BuiltinNames.v128_load8_splat, builtin_v128_load8_splat);
+
+// v128.load16_splat -> v128.load_splat<u16>
+function builtin_v128_load16_splat(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_load_splat(ctx);
+}
+builtins.set(BuiltinNames.v128_load16_splat, builtin_v128_load16_splat);
+
+// v128.load32_splat -> v128.load_splat<u32>
+function builtin_v128_load32_splat(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_load_splat(ctx);
+}
+builtins.set(BuiltinNames.v128_load32_splat, builtin_v128_load32_splat);
+
+// v128.load64_splat -> v128.load_splat<u64>
+function builtin_v128_load64_splat(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_load_splat(ctx);
+}
+builtins.set(BuiltinNames.v128_load64_splat, builtin_v128_load64_splat);
+
 // v128.store -> store<v128 from v128>
 function builtin_v128_store(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -8645,42 +8681,6 @@ function builtin_v8x16_swizzle(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_swizzle(ctx);
 }
 builtins.set(BuiltinNames.v8x16_swizzle, builtin_v8x16_swizzle);
-
-// v8x16.load_splat -> v128.load_splat<u8>
-function builtin_v8x16_load_splat(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.u8 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_load_splat(ctx);
-}
-builtins.set(BuiltinNames.v8x16_load_splat, builtin_v8x16_load_splat);
-
-// v16x8.load_splat -> v128.load_splat<u16>
-function builtin_v16x8_load_splat(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.u16 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_load_splat(ctx);
-}
-builtins.set(BuiltinNames.v16x8_load_splat, builtin_v16x8_load_splat);
-
-// v32x4.load_splat -> v128.load_splat<u32>
-function builtin_v32x4_load_splat(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.u32 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_load_splat(ctx);
-}
-builtins.set(BuiltinNames.v32x4_load_splat, builtin_v32x4_load_splat);
-
-// v64x2.load_splat -> v128.load_splat<u64>
-function builtin_v64x2_load_splat(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.u64 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_load_splat(ctx);
-}
-builtins.set(BuiltinNames.v64x2_load_splat, builtin_v64x2_load_splat);
 
 // === Internal helpers =======================================================================
 

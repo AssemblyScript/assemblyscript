@@ -1117,15 +1117,11 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  export declare function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
 
   // @ts-ignore: decorator
   @unsafe @builtin
   export declare function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-
-  // @ts-ignore: decorator
-  @unsafe @builtin
-  export declare function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
 
   // @ts-ignore: decorator
   @builtin
@@ -1150,6 +1146,26 @@ export namespace v128 {
   // @ts-ignore: decorator
   @builtin
   export declare function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function load8_splat(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function load16_splat(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function load32_splat(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function load64_splat(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 
   // @ts-ignore: decorator
   @unsafe @builtin
@@ -2118,31 +2134,6 @@ export namespace v8x16 {
   // @ts-ignore: decorator
   @builtin
   export declare function swizzle(a: v128, s: v128): v128;
-
-  // @ts-ignore: decorator
-  @unsafe @builtin
-  export declare function load_splat(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-}
-
-export namespace v16x8 {
-
-  // @ts-ignore: decorator
-  @unsafe @builtin
-  export declare function load_splat(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-}
-
-export namespace v32x4 {
-
-  // @ts-ignore: decorator
-  @unsafe @builtin
-  export declare function load_splat(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-}
-
-export namespace v64x2 {
-
-  // @ts-ignore: decorator
-  @unsafe @builtin
-  export declare function load_splat(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
