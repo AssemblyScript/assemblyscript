@@ -535,6 +535,10 @@ export namespace BuiltinNames {
   export const i64x2_shr_u = "~lib/builtins/i64x2.shr_u";
   export const i64x2_trunc_sat_f64x2_s = "~lib/builtins/i64x2.trunc_sat_f64x2_s";
   export const i64x2_trunc_sat_f64x2_u = "~lib/builtins/i64x2.trunc_sat_f64x2_u";
+  export const i64x2_extend_low_i32x4_s = "~lib/builtins/i64x2.extend_low_i32x4_s";
+  export const i64x2_extend_low_i32x4_u = "~lib/builtins/i64x2.extend_low_i32x4_u";
+  export const i64x2_extend_high_i32x4_s = "~lib/builtins/i64x2.extend_high_i32x4_s";
+  export const i64x2_extend_high_i32x4_u = "~lib/builtins/i64x2.extend_high_i32x4_u";
   export const i64x2_load32x2_s = "~lib/builtins/i64x2.load32x2_s";
   export const i64x2_load32x2_u = "~lib/builtins/i64x2.load32x2_u";
 
@@ -5128,6 +5132,16 @@ function builtin_v128_extend_low(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U8: return module.unary(UnaryOp.ExtendLowU8x16ToU16x8, arg0);
       case TypeKind.I16: return module.unary(UnaryOp.ExtendLowI16x8ToI32x4, arg0);
       case TypeKind.U16: return module.unary(UnaryOp.ExtendLowU16x8ToU32x4, arg0);
+      case TypeKind.ISIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.I32: return module.unary(UnaryOp.ExtendLowI32x4ToI64x2, arg0);
+      case TypeKind.USIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.U32: return module.unary(UnaryOp.ExtendLowU32x4ToU64x2, arg0);
     }
   }
   compiler.error(
@@ -5160,6 +5174,16 @@ function builtin_v128_extend_high(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U8: return module.unary(UnaryOp.ExtendHighU8x16ToU16x8, arg0);
       case TypeKind.I16: return module.unary(UnaryOp.ExtendHighI16x8ToI32x4, arg0);
       case TypeKind.U16: return module.unary(UnaryOp.ExtendHighU16x8ToU32x4, arg0);
+      case TypeKind.ISIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.I32: return module.unary(UnaryOp.ExtendHighI32x4ToI64x2, arg0);
+      case TypeKind.USIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.U32: return module.unary(UnaryOp.ExtendHighU32x4ToU64x2, arg0);
     }
   }
   compiler.error(
@@ -8045,6 +8069,42 @@ function builtin_i64x2_trunc_sat_f64x2_u(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_trunc_sat(ctx);
 }
 builtins.set(BuiltinNames.i64x2_trunc_sat_f64x2_u, builtin_i64x2_trunc_sat_f64x2_u);
+
+// i64x2.extend_low_i32x4_s -> // v128.extend_low<i32>
+function builtin_i64x2_extend_low_i32x4_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extend_low(ctx);
+}
+builtins.set(BuiltinNames.i64x2_extend_low_i32x4_s, builtin_i64x2_extend_low_i32x4_s);
+
+// i64x2.extend_low_i32x4_u -> v128.extend_low<u32>
+function builtin_i64x2_extend_low_i32x4_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extend_low(ctx);
+}
+builtins.set(BuiltinNames.i64x2_extend_low_i32x4_u, builtin_i64x2_extend_low_i32x4_u);
+
+// i64x2.extend_high_i32x4_s -> v128.extend_high<i32>
+function builtin_i64x2_extend_high_i32x4_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extend_high(ctx);
+}
+builtins.set(BuiltinNames.i64x2_extend_high_i32x4_s, builtin_i64x2_extend_high_i32x4_s);
+
+// i64x2.extend_high_i32x4_u -> v128.extend_high<u32>
+function builtin_i64x2_extend_high_i32x4_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extend_high(ctx);
+}
+builtins.set(BuiltinNames.i64x2_extend_high_i32x4_u, builtin_i64x2_extend_high_i32x4_u);
 
 // i64x2.load32x2_s -> v128.load_ext<i32>
 function builtin_i64x2_load32x2_s(ctx: BuiltinContext): ExpressionRef {

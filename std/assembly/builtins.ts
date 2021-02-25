@@ -1844,6 +1844,22 @@ export namespace i64x2 {
 
   // @ts-ignore: decorator
   @builtin
+  export declare function extend_low_i32x4_s(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function extend_low_i32x4_u(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function extend_high_i32x4_s(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function extend_high_i32x4_u(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
   export declare function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 
   // @ts-ignore: decorator

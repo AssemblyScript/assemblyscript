@@ -778,9 +778,9 @@ declare namespace v128 {
   /** Narrows each lane to their respective narrower lanes. */
   export function narrow<TFrom = i16 | i32>(a: v128, b: v128): v128;
   /** Extends the low lanes of a vector to their respective wider lanes. */
-  export function extend_low<TFrom = i8 | i16>(a: v128): v128;
+  export function extend_low<TFrom = i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
   /** Extends the high lanes of a vector to their respective wider lanes. */
-  export function extend_high<TFrom = i8 | i16>(a: v128): v128;
+  export function extend_high<TFrom = i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
   /** Computes `(a * b) + c` for each lane. */
   export function qfma<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
   /** Computes `(a * b) - c` for each lane. */
@@ -1055,6 +1055,14 @@ declare namespace i64x2 {
   export function trunc_sat_f64x2_s(a: v128): v128;
   /** Truncates each 64-bit float lane to an unsigned integer with saturation. */
   export function trunc_sat_f64x2_u(a: v128): v128;
+  /** Extends the low 32-bit signed integer lanes to 64-bit signed integer lanes. */
+  export function extend_low_i32x4_s(a: v128): v128;
+  /** Extends the low 32-bit unsigned integer lane to 64-bit unsigned integer lanes. */
+  export function extend_low_i32x4_u(a: v128): v128;
+  /** Extends the high 32-bit signed integer lanes to 64-bit signed integer lanes. */
+  export function extend_high_i32x4_s(a: v128): v128;
+  /** Extends the high 32-bit unsigned integer lanes to 64-bit unsigned integer lanes. */
+  export function extend_high_i32x4_u(a: v128): v128;
   /** Creates a vector with two 64-bit integer lanes by loading and sign extending two 32-bit integers. */
   export function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
   /** Creates a vector with two 64-bit integer lanes by loading and zero extending two 32-bit integers. */
