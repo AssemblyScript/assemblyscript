@@ -477,6 +477,7 @@ function test_i64x2(): void {
   var c = i64x2.add(a, b);
   assert(c == i64x2(2, -9223372036854775808));
   assert(i64x2.sub(c, b) == a);
+  assert(i64x2.mul(c, b) == c);
   assert(
     i64x2.neg(a)
     ==

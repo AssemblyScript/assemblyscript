@@ -3488,9 +3488,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  i64x2.neg
-  v128.const i32x4 0xffffffff 0xffffffff 0x00000001 0x80000000
+  local.get $2
+  local.get $1
+  i64x2.mul
+  local.get $2
   i8x16.eq
   i8x16.all_true
   i32.const 0
@@ -3504,6 +3505,22 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  i64x2.neg
+  v128.const i32x4 0xffffffff 0xffffffff 0x00000001 0x80000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 160
+   i32.const 481
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $2
   i64x2.extract_lane 0
   i64.const 2
@@ -3512,7 +3529,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 485
+   i32.const 486
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3525,7 +3542,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 486
+   i32.const 487
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3542,7 +3559,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 487
+   i32.const 488
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3559,7 +3576,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 492
+   i32.const 493
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3637,7 +3654,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 514
+   i32.const 515
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -3653,7 +3670,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 519
+   i32.const 520
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -3682,7 +3699,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 530
+   i32.const 531
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3700,7 +3717,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 532
+   i32.const 533
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3719,7 +3736,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 534
+   i32.const 535
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3736,7 +3753,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 535
+   i32.const 536
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3753,7 +3770,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 536
+   i32.const 537
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3774,7 +3791,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 538
+   i32.const 539
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3791,7 +3808,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 539
+   i32.const 540
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3807,7 +3824,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 540
+   i32.const 541
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3820,7 +3837,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 541
+   i32.const 542
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3833,7 +3850,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 542
+   i32.const 543
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3850,7 +3867,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 543
+   i32.const 544
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3867,7 +3884,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 548
+   i32.const 549
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3898,7 +3915,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 557
+   i32.const 558
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3915,7 +3932,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 558
+   i32.const 559
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3932,7 +3949,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 559
+   i32.const 560
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3949,7 +3966,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 560
+   i32.const 561
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3966,7 +3983,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 561
+   i32.const 562
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3983,7 +4000,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 562
+   i32.const 563
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4000,7 +4017,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 563
+   i32.const 564
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4017,7 +4034,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 564
+   i32.const 565
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4033,7 +4050,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 565
+   i32.const 566
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4088,7 +4105,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 592
+   i32.const 593
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4106,7 +4123,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 594
+   i32.const 595
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4125,7 +4142,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 596
+   i32.const 597
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4142,7 +4159,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 597
+   i32.const 598
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4159,7 +4176,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 598
+   i32.const 599
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4180,7 +4197,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 600
+   i32.const 601
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4197,7 +4214,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 601
+   i32.const 602
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4213,7 +4230,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 602
+   i32.const 603
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4226,7 +4243,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 603
+   i32.const 604
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4239,7 +4256,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 604
+   i32.const 605
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4256,7 +4273,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 605
+   i32.const 606
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4273,7 +4290,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 610
+   i32.const 611
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4304,7 +4321,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 619
+   i32.const 620
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4321,7 +4338,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 620
+   i32.const 621
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4338,7 +4355,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 621
+   i32.const 622
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4355,7 +4372,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 622
+   i32.const 623
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4372,7 +4389,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 623
+   i32.const 624
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4389,7 +4406,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 624
+   i32.const 625
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4406,7 +4423,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 625
+   i32.const 626
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4423,7 +4440,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 626
+   i32.const 627
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4439,7 +4456,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 627
+   i32.const 628
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4494,7 +4511,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 655
+   i32.const 656
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4513,7 +4530,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 661
+   i32.const 662
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4535,7 +4552,7 @@
   if
    i32.const 0
    i32.const 160
-   i32.const 669
+   i32.const 670
    i32.const 5
    call $~lib/builtins/abort
    unreachable

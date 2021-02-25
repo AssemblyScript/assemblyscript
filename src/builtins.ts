@@ -534,7 +534,8 @@ export namespace BuiltinNames {
   export const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
   export const i64x2_replace_lane = "~lib/builtins/i64x2.replace_lane";
   export const i64x2_add = "~lib/builtins/i64x2.add";
-  export const i64x2_sub = "~lib/builtins/i64x2.sub"; // i64x2 has no .mul
+  export const i64x2_sub = "~lib/builtins/i64x2.sub";
+  export const i64x2_mul = "~lib/builtins/i64x2.mul";
   export const i64x2_neg = "~lib/builtins/i64x2.neg";
   export const i64x2_shl = "~lib/builtins/i64x2.shl";
   export const i64x2_shr_s = "~lib/builtins/i64x2.shr_s";
@@ -4159,13 +4160,10 @@ function builtin_v128_mul(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U16: return module.binary(BinaryOp.MulI16x8, arg0, arg1);
       case TypeKind.I32:
       case TypeKind.U32: return module.binary(BinaryOp.MulI32x4, arg0, arg1);
+      case TypeKind.I64:
+      case TypeKind.U64: return module.binary(BinaryOp.MulI64x2, arg0, arg1);
       case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
-        if (!compiler.options.isWasm64) {
-          return module.binary(BinaryOp.MulI32x4, arg0, arg1);
-        }
-        break;
-      }
+      case TypeKind.USIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.MulI64x2 : BinaryOp.MulI32x4, arg0, arg1);
       case TypeKind.F32: return module.binary(BinaryOp.MulF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.MulF64x2, arg0, arg1);
     }
@@ -8069,6 +8067,15 @@ function builtin_i64x2_sub(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_sub(ctx);
 }
 builtins.set(BuiltinNames.i64x2_sub, builtin_i64x2_sub);
+
+// i64x2.mul -> v128.mul<i64>
+function builtin_i64x2_mul(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_mul(ctx);
+}
+builtins.set(BuiltinNames.i64x2_mul, builtin_i64x2_mul);
 
 // i64x2.neg -> v128.neg<i64>
 function builtin_i64x2_neg(ctx: BuiltinContext): ExpressionRef {

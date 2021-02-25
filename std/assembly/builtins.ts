@@ -1181,7 +1181,7 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function mul<T>(a: v128, b: v128): v128; // except i64
+  export declare function mul<T>(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
