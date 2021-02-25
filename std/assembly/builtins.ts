@@ -1117,15 +1117,39 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @unsafe @builtin
-  export declare function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-
-  // @ts-ignore: decorator
-  @unsafe @builtin
   export declare function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
 
   // @ts-ignore: decorator
   @unsafe @builtin
   export declare function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+
+  // @ts-ignore: decorator
+  @unsafe @builtin
+  export declare function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function load8x8_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function load16x4_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function load16x4_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 
   // @ts-ignore: decorator
   @unsafe @builtin
@@ -1623,14 +1647,6 @@ export namespace i16x8 {
   // @ts-ignore: decorator
   @builtin
   export declare function extend_high_i8x16_u(a: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function load8x8_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 
 // @ts-ignore: decorator
@@ -1778,14 +1794,6 @@ export namespace i32x4 {
   // @ts-ignore: decorator
   @builtin
   export declare function extend_high_i16x8_u(a: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function load16x4_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function load16x4_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 
 // @ts-ignore: decorator
@@ -1857,14 +1865,6 @@ export namespace i64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function extend_high_i32x4_u(a: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 
 // @ts-ignore: decorator

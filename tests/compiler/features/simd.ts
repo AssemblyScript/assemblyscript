@@ -286,29 +286,28 @@ function test_i16x8(): void {
   assert(i16x8.extend_low_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(255));
   assert(i16x8.extend_high_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(-1));
   assert(i16x8.extend_high_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(255));
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<i8>(ptr, 1);
-  //   store<i8>(ptr, 2, 1);
-  //   store<i8>(ptr, 3, 2);
-  //   store<i8>(ptr, 4, 3);
-  //   store<i8>(ptr, 5, 4);
-  //   store<i8>(ptr, 6, 5);
-  //   store<i8>(ptr, 7, 6);
-  //   store<i8>(ptr, -1, 7);
-  //   assert(
-  //     i16x8.load8x8_s(ptr)
-  //     ==
-  //     v128(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, -1, -1)
-  //   );
-  //   assert(
-  //     i16x8.load8x8_u(ptr)
-  //     ==
-  //     v128(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, -1, 0)
-  //   );
-  //   __free(ptr);
-  // }
+  {
+    let ptr = __alloc(16);
+    store<i8>(ptr, 1);
+    store<i8>(ptr, 2, 1);
+    store<i8>(ptr, 3, 2);
+    store<i8>(ptr, 4, 3);
+    store<i8>(ptr, 5, 4);
+    store<i8>(ptr, 6, 5);
+    store<i8>(ptr, 7, 6);
+    store<i8>(ptr, -1, 7);
+    assert(
+      v128.load8x8_s(ptr)
+      ==
+      v128(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, -1, -1)
+    );
+    assert(
+      v128.load8x8_u(ptr)
+      ==
+      v128(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, -1, 0)
+    );
+    __free(ptr);
+  }
 }
 
 function test_i32x4(): void {
@@ -410,25 +409,24 @@ function test_i32x4(): void {
   assert(i32x4.extend_low_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(65535));
   assert(i32x4.extend_high_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(-1));
   assert(i32x4.extend_high_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(65535));
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<i16>(ptr, 1);
-  //   store<i16>(ptr, 2, 2);
-  //   store<i16>(ptr, 3, 4);
-  //   store<i16>(ptr, -1, 6);
-  //   assert(
-  //     i32x4.load16x4_s(ptr)
-  //     ==
-  //     v128(1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, -1, -1, -1, -1)
-  //   );
-  //   assert(
-  //     i32x4.load16x4_u(ptr)
-  //     ==
-  //     v128(1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, -1, -1, 0, 0)
-  //   );
-  //   __free(ptr);
-  // }
+  {
+    let ptr = __alloc(16);
+    store<i16>(ptr, 1);
+    store<i16>(ptr, 2, 2);
+    store<i16>(ptr, 3, 4);
+    store<i16>(ptr, -1, 6);
+    assert(
+      v128.load16x4_s(ptr)
+      ==
+      v128(1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, -1, -1, -1, -1)
+    );
+    assert(
+      v128.load16x4_u(ptr)
+      ==
+      v128(1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, -1, -1, 0, 0)
+    );
+    __free(ptr);
+  }
 }
 
 function test_i64x2(): void {
@@ -469,23 +467,22 @@ function test_i64x2(): void {
     ==
     i64x2.splat(0)
   );
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<i32>(ptr, 1);
-  //   store<i32>(ptr, -1, 4);
-  //   assert(
-  //     i64x2.load32x2_s(ptr)
-  //     ==
-  //     v128(1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1)
-  //   );
-  //   assert(
-  //     i64x2.load32x2_u(ptr)
-  //     ==
-  //     v128(1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0)
-  //   );
-  //   __free(ptr);
-  // }
+  {
+    let ptr = __alloc(16);
+    store<i32>(ptr, 1);
+    store<i32>(ptr, -1, 4);
+    assert(
+      v128.load32x2_s(ptr)
+      ==
+      v128(1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1)
+    );
+    assert(
+      v128.load32x2_u(ptr)
+      ==
+      v128(1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0)
+    );
+    __free(ptr);
+  }
 }
 
 function test_f32x4(): void {

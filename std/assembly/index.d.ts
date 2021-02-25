@@ -691,12 +691,24 @@ declare namespace v128 {
   export function shuffle<T>(a: v128, b: v128, ...lanes: u8[]): v128;
   /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
   export function swizzle(a: v128, s: v128): v128;
+  /** Creates a vector with identical lanes by loading the splatted value. */
+  export function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Creates a vector by loading the lanes of the specified type and extending each to the next larger type. */
+  export function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
   /** Loads a vector from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-  /** Creates a vector with identical lanes by loading the splatted value. */
-  export function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128
-  /** Creates a vector by loading the lanes of the specified type and extending each to the next larger type. */
-  export function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128
+  /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
+  export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
+  export function load8x8_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with four 32-bit integer lanes by loading and sign extending four 16-bit integers. */
+  export function load16x4_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with four 32-bit integer lanes by loading and zero extending four 16-bit integers. */
+  export function load16x4_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with two 64-bit integer lanes by loading and sign extending two 32-bit integers. */
+  export function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with two 64-bit integer lanes by loading and zero extending two 32-bit integers. */
+  export function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
   /** Stores a vector to memory. */
   export function store(ptr: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
   /** Adds each lane. */
@@ -945,10 +957,6 @@ declare namespace i16x8 {
   export function extend_high_i8x16_s(a: v128): v128;
   /** Extends the high 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
   export function extend_high_i8x16_u(a: v128): v128;
-  /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
-  export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-  /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
-  export function load8x8_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -1023,10 +1031,6 @@ declare namespace i32x4 {
   export function extend_high_i16x8_s(a: v128): v128;
   /** Extends the high 16-bit unsigned integer lanes to 32-bit unsigned integer lanes. */
   export function extend_high_i16x8_u(a: v128): v128;
-  /** Creates a vector with four 32-bit integer lanes by loading and sign extending four 16-bit integers. */
-  export function load16x4_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-  /** Creates a vector with four 32-bit integer lanes by loading and zero extending four 16-bit integers. */
-  export function load16x4_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
@@ -1063,10 +1067,6 @@ declare namespace i64x2 {
   export function extend_high_i32x4_s(a: v128): v128;
   /** Extends the high 32-bit unsigned integer lanes to 64-bit unsigned integer lanes. */
   export function extend_high_i32x4_u(a: v128): v128;
-  /** Creates a vector with two 64-bit integer lanes by loading and sign extending two 32-bit integers. */
-  export function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-  /** Creates a vector with two 64-bit integer lanes by loading and zero extending two 32-bit integers. */
-  export function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
