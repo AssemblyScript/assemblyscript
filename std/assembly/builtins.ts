@@ -2079,14 +2079,6 @@ export namespace f64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function ge(a: v128, b: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function convert_i64x2_s(a: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function convert_i64x2_u(a: v128): v128;
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */

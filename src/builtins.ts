@@ -594,8 +594,6 @@ export namespace BuiltinNames {
   export const f64x2_le = "~lib/builtins/f64x2.le";
   export const f64x2_gt = "~lib/builtins/f64x2.gt";
   export const f64x2_ge = "~lib/builtins/f64x2.ge";
-  export const f64x2_convert_i64x2_s = "~lib/builtins/f64x2.convert_i64x2_s";
-  export const f64x2_convert_i64x2_u = "~lib/builtins/f64x2.convert_i64x2_u";
 
   // internals
   export const data_end = "~lib/memory/__data_end";
@@ -5049,10 +5047,16 @@ function builtin_v128_convert(ctx: BuiltinContext): ExpressionRef {
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   if (type.isValue) {
     switch (type.kind) {
+      case TypeKind.ISIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
       case TypeKind.I32: return module.unary(UnaryOp.ConvertI32x4ToF32x4, arg0);
+      case TypeKind.USIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
       case TypeKind.U32: return module.unary(UnaryOp.ConvertU32x4ToF32x4, arg0);
-      case TypeKind.I64: return module.unary(UnaryOp.ConvertI64x2ToF64x2, arg0);
-      case TypeKind.U64: return module.unary(UnaryOp.ConvertU64x2ToF64x2, arg0);
     }
   }
   compiler.error(
@@ -8497,24 +8501,6 @@ function builtin_f64x2_ge(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_ge(ctx);
 }
 builtins.set(BuiltinNames.f64x2_ge, builtin_f64x2_ge);
-
-// f64x2.convert_i64x2_s -> v128.convert<i64>
-function builtin_f64x2_convert_i64x2_s(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.i64 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_convert(ctx);
-}
-builtins.set(BuiltinNames.f64x2_convert_i64x2_s, builtin_f64x2_convert_i64x2_s);
-
-// f64x2.convert_i64x2_u -> v128.convert<u64>
-function builtin_f64x2_convert_i64x2_u(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.u64 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_convert(ctx);
-}
-builtins.set(BuiltinNames.f64x2_convert_i64x2_u, builtin_f64x2_convert_i64x2_u);
 
 // === Internal helpers =======================================================================
 

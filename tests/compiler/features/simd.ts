@@ -622,16 +622,6 @@ function test_f64x2(): void {
   assert(f64x2.max(negOne, one) == one);
   assert(f64x2.abs(negOne) == one);
   assert(f64x2.sqrt(f64x2(4.0, 9.0)) == f64x2(2.0, 3.0));
-  assert(
-    f64x2.convert_i64x2_s(i64x2.splat(-1))
-    ==
-    f64x2.splat(-1.0)
-  );
-  assert(
-    f64x2.convert_i64x2_u(i64x2.splat(-1))
-    ==
-    f64x2.splat(18446744073709551615.0)
-  );
 }
 
 function test_const(): v128 {

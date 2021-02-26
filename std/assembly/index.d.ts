@@ -792,7 +792,7 @@ declare namespace v128 {
   /** Computes which lanes of the first vector are greater than or equal those of the second. */
   export function ge<T>(a: v128, b: v128): v128;
   /** Converts each lane of a vector from integer to floating point. */
-  export function convert<TFrom = i32 | u32 | i64 | u64>(a: v128): v128;
+  export function convert<TFrom = i32 | u32>(a: v128): v128;
   /** Truncates each lane of a vector from floating point to integer with saturation. Takes the target type. */
   export function trunc_sat<TTo = i32 | u32>(a: v128): v128;
   /** Narrows each lane to their respective narrower lanes. */
@@ -1173,10 +1173,6 @@ declare namespace f64x2 {
   export function gt(a: v128, b: v128): v128;
   /** Computes which 64-bit float lanes of the first vector are greater than or equal those of the second. */
   export function ge(a: v128, b: v128): v128;
-  /** Converts each 64-bit signed integer lane of a vector to floating point. */
-  export function convert_i64x2_s(a: v128): v128;
-  /** Converts each 64-bit unsigned integer lane of a vector to floating point. */
-  export function convert_i64x2_u(a: v128): v128;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;

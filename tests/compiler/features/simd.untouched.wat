@@ -4498,26 +4498,6 @@
   i32.const 0
   i32.ne
   drop
-  i64.const -1
-  i64x2.splat
-  f64x2.convert_i64x2_s
-  f64.const -1
-  f64x2.splat
-  i8x16.eq
-  i8x16.all_true
-  i32.const 0
-  i32.ne
-  drop
-  i64.const -1
-  i64x2.splat
-  f64x2.convert_i64x2_u
-  f64.const 18446744073709551615
-  f64x2.splat
-  i8x16.eq
-  i8x16.all_true
-  i32.const 0
-  i32.ne
-  drop
  )
  (func $features/simd/test_const (result v128)
   (local $0 v128)
