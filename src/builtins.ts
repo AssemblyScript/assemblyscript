@@ -437,7 +437,6 @@ export namespace BuiltinNames {
   export const i8x16_shl = "~lib/builtins/i8x16.shl";
   export const i8x16_shr_s = "~lib/builtins/i8x16.shr_s";
   export const i8x16_shr_u = "~lib/builtins/i8x16.shr_u";
-  export const i8x16_any_true = "~lib/builtins/i8x16.any_true";
   export const i8x16_all_true = "~lib/builtins/i8x16.all_true";
   export const i8x16_bitmask = "~lib/builtins/i8x16.bitmask";
   export const i8x16_eq = "~lib/builtins/i8x16.eq";
@@ -476,7 +475,6 @@ export namespace BuiltinNames {
   export const i16x8_shl = "~lib/builtins/i16x8.shl";
   export const i16x8_shr_s = "~lib/builtins/i16x8.shr_s";
   export const i16x8_shr_u = "~lib/builtins/i16x8.shr_u";
-  export const i16x8_any_true = "~lib/builtins/i16x8.any_true";
   export const i16x8_all_true = "~lib/builtins/i16x8.all_true";
   export const i16x8_bitmask = "~lib/builtins/i16x8.bitmask";
   export const i16x8_eq = "~lib/builtins/i16x8.eq";
@@ -512,7 +510,6 @@ export namespace BuiltinNames {
   export const i32x4_shl = "~lib/builtins/i32x4.shl";
   export const i32x4_shr_s = "~lib/builtins/i32x4.shr_s";
   export const i32x4_shr_u = "~lib/builtins/i32x4.shr_u";
-  export const i32x4_any_true = "~lib/builtins/i32x4.any_true";
   export const i32x4_all_true = "~lib/builtins/i32x4.all_true";
   export const i32x4_bitmask = "~lib/builtins/i32x4.bitmask";
   export const i32x4_eq = "~lib/builtins/i32x4.eq";
@@ -542,6 +539,7 @@ export namespace BuiltinNames {
   export const i64x2_shl = "~lib/builtins/i64x2.shl";
   export const i64x2_shr_s = "~lib/builtins/i64x2.shr_s";
   export const i64x2_shr_u = "~lib/builtins/i64x2.shr_u";
+  export const i64x2_all_true = "~lib/builtins/i64x2.all_true";
   export const i64x2_trunc_sat_f64x2_s = "~lib/builtins/i64x2.trunc_sat_f64x2_s";
   export const i64x2_trunc_sat_f64x2_u = "~lib/builtins/i64x2.trunc_sat_f64x2_u";
   export const i64x2_extend_low_i32x4_s = "~lib/builtins/i64x2.extend_low_i32x4_s";
@@ -5375,44 +5373,22 @@ function builtin_v128_bitselect(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v128_bitselect, builtin_v128_bitselect);
 
-// v128.any_true<T!>(a: v128) -> bool
+// v128.any_true(a: v128) -> bool
 function builtin_v128_any_true(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
   if (
     checkFeatureEnabled(ctx, Feature.SIMD) |
-    checkTypeRequired(ctx) |
+    checkTypeAbsent(ctx) |
     checkArgsRequired(ctx, 1)
   ) {
     compiler.currentType = Type.bool;
     return module.unreachable();
   }
   var operands = ctx.operands;
-  var type = ctx.typeArguments![0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   compiler.currentType = Type.bool;
-  if (type.isValue) {
-    switch (type.kind) {
-      case TypeKind.I8:
-      case TypeKind.U8: return module.unary(UnaryOp.AnyTrueI8x16, arg0);
-      case TypeKind.I16:
-      case TypeKind.U16: return module.unary(UnaryOp.AnyTrueI16x8, arg0);
-      case TypeKind.I32:
-      case TypeKind.U32: return module.unary(UnaryOp.AnyTrueI32x4, arg0);
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: {
-        if (!compiler.options.isWasm64) {
-          return module.unary(UnaryOp.AnyTrueI32x4, arg0);
-        }
-        break;
-      }
-    }
-  }
-  compiler.error(
-    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-    ctx.reportNode.typeArgumentsRange, "v128.any_true", type.toString()
-  );
-  return module.unreachable();
+  return module.unary(UnaryOp.AnyTrueI8x16, arg0);
 }
 builtins.set(BuiltinNames.v128_any_true, builtin_v128_any_true);
 
@@ -5440,12 +5416,11 @@ function builtin_v128_all_true(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U16: return module.unary(UnaryOp.AllTrueI16x8, arg0);
       case TypeKind.I32:
       case TypeKind.U32: return module.unary(UnaryOp.AllTrueI32x4, arg0);
+      case TypeKind.I64:
+      case TypeKind.U64: return module.unary(UnaryOp.AllTrueI64x2, arg0);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: {
-        if (!compiler.options.isWasm64) {
-          return module.unary(UnaryOp.AllTrueI32x4, arg0);
-        }
-        break;
+        return module.unary(compiler.options.isWasm64 ? UnaryOp.AllTrueI64x2 : UnaryOp.AllTrueI32x4, arg0);
       }
     }
   }
@@ -7201,15 +7176,6 @@ function builtin_i8x16_shr_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_shr_u, builtin_i8x16_shr_u);
 
-// i8x16.any_true -> v128.any_true<i8>
-function builtin_i8x16_any_true(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.i8 ];
-  ctx.contextualType = Type.i32;
-  return builtin_v128_any_true(ctx);
-}
-builtins.set(BuiltinNames.i8x16_any_true, builtin_i8x16_any_true);
-
 // i8x16.all_true -> v128.all_true<i8>
 function builtin_i8x16_all_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -7543,15 +7509,6 @@ function builtin_i16x8_shr_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_shr_u, builtin_i16x8_shr_u);
 
-// i16x8.any_true -> v128.any_true<i16>
-function builtin_i16x8_any_true(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.i16 ];
-  ctx.contextualType = Type.i32;
-  return builtin_v128_any_true(ctx);
-}
-builtins.set(BuiltinNames.i16x8_any_true, builtin_i16x8_any_true);
-
 // i16x8.all_true -> v128.all_true<i16>
 function builtin_i16x8_all_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -7858,15 +7815,6 @@ function builtin_i32x4_shr_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_shr_u, builtin_i32x4_shr_u);
 
-// i32x4.any_true -> v128.any_true<i32>
-function builtin_i32x4_any_true(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.i32 ];
-  ctx.contextualType = Type.i32;
-  return builtin_v128_any_true(ctx);
-}
-builtins.set(BuiltinNames.i32x4_any_true, builtin_i32x4_any_true);
-
 // i32x4.all_true -> v128.all_true<i32>
 function builtin_i32x4_all_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -8118,6 +8066,15 @@ function builtin_i64x2_shr_u(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_shr(ctx);
 }
 builtins.set(BuiltinNames.i64x2_shr_u, builtin_i64x2_shr_u);
+
+// i64x2.all_true -> v128.all_true<i64>
+function builtin_i64x2_all_true(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i64 ];
+  ctx.contextualType = Type.i32;
+  return builtin_v128_all_true(ctx);
+}
+builtins.set(BuiltinNames.i64x2_all_true, builtin_i64x2_all_true);
 
 // i64x2.trunc_sat_f64x2_s -> v128.trunc_sat<i64>
 function builtin_i64x2_trunc_sat_f64x2_s(ctx: BuiltinContext): ExpressionRef {

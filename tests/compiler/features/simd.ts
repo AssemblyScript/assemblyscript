@@ -189,7 +189,7 @@ function test_i8x16(): void {
   assert(i8x16.shl(i8x16.splat(1), 1) == i8x16.splat(2));
   assert(i8x16.shr_s(i8x16.splat(-2), 1) == i8x16.splat(-1));
   assert(i8x16.shr_u(i8x16.splat(-1), 1) == i8x16.splat(127));
-  assert(i8x16.any_true(i8x16(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)) == true);
+  assert(v128.any_true(i8x16(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)) == true);
   assert(i8x16.all_true(i8x16.splat(1)) == true);
   var one = i8x16.replace_lane(i8x16.splat(0), 0, 1);
   var negOne = i8x16.replace_lane(i8x16.splat(0), 0, -1);
@@ -318,7 +318,7 @@ function test_i16x8(): void {
   assert(i16x8.shl(i16x8.splat(1), 1) == i16x8.splat(2));
   assert(i16x8.shr_s(i16x8.splat(-2), 1) == i16x8.splat(-1));
   assert(i16x8.shr_u(i16x8.splat(-1), 1) == i16x8.splat(32767));
-  assert(i16x8.any_true(i16x8(1, 0, 0, 0, 0, 0, 0, 0)) == true);
+  assert(v128.any_true(i16x8(1, 0, 0, 0, 0, 0, 0, 0)) == true);
   assert(i16x8.all_true(i16x8.splat(1)) == true);
   var one = i16x8.replace_lane(i16x8.splat(0), 0, 1);
   var negOne = i16x8.replace_lane(i16x8.splat(0), 0, -1);
@@ -433,7 +433,7 @@ function test_i32x4(): void {
   assert(i32x4.shl(i32x4.splat(1), 1) == i32x4.splat(2));
   assert(i32x4.shr_s(i32x4.splat(-2), 1) == i32x4.splat(-1));
   assert(i32x4.shr_u(i32x4.splat(-1), 1) == i32x4.splat(2147483647));
-  assert(i32x4.any_true(i32x4(1, 0, 0, 0)) == true);
+  assert(v128.any_true(i32x4(1, 0, 0, 0)) == true);
   assert(i32x4.all_true(i32x4.splat(1)) == true);
   var one = i32x4.replace_lane(i32x4.splat(0), 0, 1);
   var negOne = i32x4.replace_lane(i32x4.splat(0), 0, -1);
@@ -512,6 +512,8 @@ function test_i64x2(): void {
   assert(i64x2.shl(i64x2.splat(1), 1) == i64x2.splat(2));
   assert(i64x2.shr_s(i64x2.splat(-2), 1) == i64x2.splat(-1));
   assert(i64x2.shr_u(i64x2.splat(-1), 1) == i64x2.splat(9223372036854775807));
+  assert(v128.any_true(i64x2(1, 0)) == true);
+  assert(i64x2.all_true(i64x2.splat(1)) == true);
   assert(
     i64x2.trunc_sat_f64x2_s(f64x2.splat(-1.5))
     ==

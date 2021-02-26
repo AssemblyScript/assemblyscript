@@ -1131,7 +1131,7 @@
   local.get $0
   call $~lib/rt/tlsf/__free
  )
- (func $start:features/simd
+ (func $~start
   (local $0 i32)
   call $features/simd/test_v128
   i32.const 16
@@ -1234,46 +1234,11 @@
   end
   local.get $0
   call $~lib/rt/tlsf/__free
-  i32.const 16
-  call $~lib/rt/tlsf/__alloc
-  local.tee $0
-  i32.const 1
-  i32.store
-  local.get $0
-  i32.const -1
-  i32.store offset=4
-  local.get $0
-  i64x2.load32x2_s align=4
-  v128.const i32x4 0x00000001 0x00000000 0xffffffff 0xffffffff
-  i8x16.eq
-  i8x16.all_true
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1184
-   i32.const 529
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i64x2.load32x2_u align=4
-  v128.const i32x4 0x00000001 0x00000000 0xffffffff 0x00000000
-  i8x16.eq
-  i8x16.all_true
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1184
-   i32.const 534
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  call $~lib/rt/tlsf/__free
- )
- (func $~start
-  call $start:features/simd
+  i32.const 0
+  i32.const 1184
+  i32.const 516
+  i32.const 3
+  call $~lib/builtins/abort
+  unreachable
  )
 )

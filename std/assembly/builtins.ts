@@ -1233,7 +1233,7 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function any_true<T>(a: v128): bool;
+  export declare function any_true(a: v128): bool;
 
   // @ts-ignore: decorator
   @builtin
@@ -1435,10 +1435,6 @@ export namespace i8x16 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function any_true(a: v128): bool;
-
-  // @ts-ignore: decorator
-  @builtin
   export declare function all_true(a: v128): bool;
 
   // @ts-ignore: decorator
@@ -1598,10 +1594,6 @@ export namespace i16x8 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function any_true(a: v128): bool;
-
-  // @ts-ignore: decorator
-  @builtin
   export declare function all_true(a: v128): bool;
 
   // @ts-ignore: decorator
@@ -1745,10 +1737,6 @@ export namespace i32x4 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function any_true(a: v128): bool;
-
-  // @ts-ignore: decorator
-  @builtin
   export declare function all_true(a: v128): bool;
 
   // @ts-ignore: decorator
@@ -1865,6 +1853,10 @@ export namespace i64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function shr_u(a: v128, b: i32): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function all_true(a: v128): bool;
 
   // @ts-ignore: decorator
   @builtin

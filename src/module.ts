@@ -236,6 +236,7 @@ export enum UnaryOp {
   AllTrueI32x4 = 81 /* _BinaryenAllTrueVecI32x4 */,
   BitmaskI32x4 = 82 /* _BinaryenBitmaskVecI32x4 */,
   NegI64x2 = 83 /* _BinaryenNegVecI64x2 */,
+  AllTrueI64x2 = 81 /* TODO_BinaryenAllTrueVecI64x2 */, // FIXME: missing opcode in binaryen
   BitmaskI64x2 = 84 /* TODO_BinaryenBitmaskVecI64x2 */,
   AbsF32x4 = 85 /* _BinaryenAbsVecF32x4 */,
   NegF32x4 = 86 /* _BinaryenNegVecF32x4 */,
