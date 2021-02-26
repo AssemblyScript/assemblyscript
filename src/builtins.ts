@@ -540,8 +540,6 @@ export namespace BuiltinNames {
   export const i64x2_shr_s = "~lib/builtins/i64x2.shr_s";
   export const i64x2_shr_u = "~lib/builtins/i64x2.shr_u";
   export const i64x2_all_true = "~lib/builtins/i64x2.all_true";
-  export const i64x2_trunc_sat_f64x2_s = "~lib/builtins/i64x2.trunc_sat_f64x2_s";
-  export const i64x2_trunc_sat_f64x2_u = "~lib/builtins/i64x2.trunc_sat_f64x2_u";
   export const i64x2_extend_low_i32x4_s = "~lib/builtins/i64x2.extend_low_i32x4_s";
   export const i64x2_extend_low_i32x4_u = "~lib/builtins/i64x2.extend_low_i32x4_u";
   export const i64x2_extend_high_i32x4_s = "~lib/builtins/i64x2.extend_high_i32x4_s";
@@ -5089,10 +5087,16 @@ function builtin_v128_trunc_sat(ctx: BuiltinContext): ExpressionRef {
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   if (type.isValue) {
     switch (type.kind) {
+      case TypeKind.ISIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
       case TypeKind.I32: return module.unary(UnaryOp.TruncSatF32x4ToI32x4, arg0);
+      case TypeKind.USIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
       case TypeKind.U32: return module.unary(UnaryOp.TruncSatF32x4ToU32x4, arg0);
-      case TypeKind.I64: return module.unary(UnaryOp.TruncSatF64x2ToI64x2, arg0);
-      case TypeKind.U64: return module.unary(UnaryOp.TruncSatF64x2ToU64x2, arg0);
     }
   }
   compiler.error(
@@ -8075,24 +8079,6 @@ function builtin_i64x2_all_true(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_all_true(ctx);
 }
 builtins.set(BuiltinNames.i64x2_all_true, builtin_i64x2_all_true);
-
-// i64x2.trunc_sat_f64x2_s -> v128.trunc_sat<i64>
-function builtin_i64x2_trunc_sat_f64x2_s(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.i64 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_trunc_sat(ctx);
-}
-builtins.set(BuiltinNames.i64x2_trunc_sat_f64x2_s, builtin_i64x2_trunc_sat_f64x2_s);
-
-// i64x2.trunc_sat_f64x2_u -> v128.trunc_sat<u64>
-function builtin_i64x2_trunc_sat_f64x2_u(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.u64 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_trunc_sat(ctx);
-}
-builtins.set(BuiltinNames.i64x2_trunc_sat_f64x2_u, builtin_i64x2_trunc_sat_f64x2_u);
 
 // i64x2.extend_low_i32x4_s -> // v128.extend_low<i32>
 function builtin_i64x2_extend_low_i32x4_s(ctx: BuiltinContext): ExpressionRef {

@@ -794,7 +794,7 @@ declare namespace v128 {
   /** Converts each lane of a vector from integer to floating point. */
   export function convert<TFrom = i32 | u32 | i64 | u64>(a: v128): v128;
   /** Truncates each lane of a vector from floating point to integer with saturation. Takes the target type. */
-  export function trunc_sat<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
+  export function trunc_sat<TTo = i32 | u32>(a: v128): v128;
   /** Narrows each lane to their respective narrower lanes. */
   export function narrow<TFrom = i16 | i32>(a: v128, b: v128): v128;
   /** Extends the low lanes of a vector to their respective wider lanes. */
@@ -1061,10 +1061,6 @@ declare namespace i64x2 {
   export function shr_u(a: v128, b: i32): v128;
   /** Reduces a vector to a scalar indicating whether all 64-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
-  /** Truncates each 64-bit float lane to a signed integer with saturation. */
-  export function trunc_sat_f64x2_s(a: v128): v128;
-  /** Truncates each 64-bit float lane to an unsigned integer with saturation. */
-  export function trunc_sat_f64x2_u(a: v128): v128;
   /** Extends the low 32-bit signed integer lanes to 64-bit signed integer lanes. */
   export function extend_low_i32x4_s(a: v128): v128;
   /** Extends the low 32-bit unsigned integer lane to 64-bit unsigned integer lanes. */
