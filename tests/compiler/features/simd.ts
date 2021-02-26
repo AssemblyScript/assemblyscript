@@ -208,6 +208,21 @@ function test_i8x16(): void {
   assert(i8x16.ge_u(one, negOne) == excl1st);
   assert(i8x16.narrow_i16x8_s(i16x8.splat(i16.MAX_VALUE), i16x8.splat(i16.MAX_VALUE)) == i8x16.splat(i8.MAX_VALUE));
   assert(i8x16.narrow_i16x8_u(i16x8.splat(i16.MAX_VALUE), i16x8.splat(i16.MAX_VALUE)) == i8x16.splat(u8.MAX_VALUE));
+  {
+    let a = v128( 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15);
+    let b = v128(16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
+    assert(
+      i8x16.shuffle(a, b, 0, 17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31)
+      ==
+      v128(0, 17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31)
+    );
+    let c = v128(16, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
+    assert(
+      i8x16.swizzle(a, c)
+      ==
+      v128(0, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+    );
+  }
 }
 
 function test_i16x8(): void {
@@ -650,32 +665,6 @@ function test_f64x2(): void {
   // );
 }
 
-function test_v8x16(): void {
-  var a = v128( 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15);
-  var b = v128(16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
-  assert(
-    v8x16.shuffle(a, b, 0, 17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31)
-    ==
-    v128(0, 17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31)
-  );
-  var c = v128(16, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
-  assert(
-    v8x16.swizzle(a, c)
-    ==
-    v128(0, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
-  );
-  {
-    let ptr = __alloc(16);
-    store<u8>(ptr, 42);
-    assert(
-      v128.load8_splat(ptr)
-      ==
-      v128(42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42)
-    );
-    __free(ptr);
-  }
-}
-
 function test_const(): v128 {
   const one = i32x4.splat(1); // should precompute
   return one;                 // should not inline
@@ -689,6 +678,5 @@ if (ASC_FEATURE_SIMD) {
   test_i64x2();
   test_f32x4();
   test_f64x2();
-  test_v8x16();
   test_const();
 }

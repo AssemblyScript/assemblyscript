@@ -1169,7 +1169,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 339
+   i32.const 354
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1183,7 +1183,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 344
+   i32.const 359
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1213,7 +1213,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 458
+   i32.const 473
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1227,7 +1227,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 463
+   i32.const 478
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1251,7 +1251,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 515
+   i32.const 530
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -1265,28 +1265,7 @@
   if
    i32.const 0
    i32.const 1184
-   i32.const 520
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  call $~lib/rt/tlsf/__free
-  i32.const 16
-  call $~lib/rt/tlsf/__alloc
-  local.tee $0
-  i32.const 42
-  i32.store8
-  local.get $0
-  v8x16.load_splat
-  v128.const i32x4 0x2a2a2a2a 0x2a2a2a2a 0x2a2a2a2a 0x2a2a2a2a
-  i8x16.eq
-  i8x16.all_true
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1184
-   i32.const 670
+   i32.const 535
    i32.const 5
    call $~lib/builtins/abort
    unreachable

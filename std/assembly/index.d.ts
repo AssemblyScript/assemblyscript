@@ -881,6 +881,10 @@ declare namespace i8x16 {
   export function narrow_i16x8_s(a: v128, b: v128): v128;
   /** Narrows each 16-bit signed integer lane to 8-bit unsigned integer lanes. */
   export function narrow_i16x8_u(a: v128, b: v128): v128;
+  /** Selects 8-bit lanes from either vector according to the specified [0-15] respectively [16-31] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
 declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
@@ -1195,12 +1199,6 @@ declare namespace f64x2 {
   export function qfma(a: v128, b: v128, c: v128): v128;
   /** Computes `(a * b) - c` for each 64-bit float lane. */
   export function qfms(a: v128, b: v128, c: v128): v128;
-}
-declare namespace v8x16 {
-  /** Selects 8-bit lanes from either vector according to the specified [0-15] respectively [16-31] lane indexes. */
-  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
-  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
-  export function swizzle(a: v128, s: v128): v128;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;

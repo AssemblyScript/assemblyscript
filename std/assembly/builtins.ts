@@ -1496,6 +1496,18 @@ export namespace i8x16 {
   // @ts-ignore: decorator
   @builtin
   export declare function narrow_i16x8_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function shuffle(
+    a: v128, b: v128,
+    l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8,
+    l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8
+  ): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function swizzle(a: v128, s: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2119,21 +2131,6 @@ export namespace f64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function qfms(a: v128, b: v128, c: v128): v128;
-}
-
-export namespace v8x16 {
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function shuffle(
-    a: v128, b: v128,
-    l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8,
-    l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8
-  ): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function swizzle(a: v128, s: v128): v128;
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
