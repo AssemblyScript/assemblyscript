@@ -163,25 +163,25 @@ function test_i8x16(): void {
     i8x16(1, 2, 3, 4, 5, 6, 7, 8, 1, 1, 1, 1, 1, 1, 1, 1)
   );
   assert(
-    i8x16.add_saturate_s(
+    i8x16.add_sat_s(
       i8x16(126, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127),
       i8x16.splat(2)
     ) == i8x16.splat(127)
   );
   assert(
-    i8x16.add_saturate_u(
+    i8x16.add_sat_u(
       i8x16(-2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1),
       i8x16.splat(2)
     ) == i8x16.splat(-1)
   );
   assert(
-    i8x16.sub_saturate_s(
+    i8x16.sub_sat_s(
       i8x16(-127, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128),
       i8x16.splat(2)
     ) == i8x16.splat(-128)
   );
   assert(
-    i8x16.sub_saturate_u(
+    i8x16.sub_sat_u(
       i8x16(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
       i8x16.splat(2)
     ) == i8x16.splat(0)
@@ -292,25 +292,25 @@ function test_i16x8(): void {
     i16x8(1, 2, 3, 4, 1, 1, 1, 1)
   );
   assert(
-    i16x8.add_saturate_s(
+    i16x8.add_sat_s(
       i16x8(32766, 32767, 32767, 32767, 32767, 32767, 32767, 32767),
       i16x8.splat(2)
     ) == i16x8.splat(32767)
   );
   assert(
-    i16x8.add_saturate_u(
+    i16x8.add_sat_u(
       i16x8(-2, -1, -1, -1, -1, -1, -1, -1),
       i16x8.splat(2)
     ) == i16x8.splat(-1)
   );
   assert(
-    i16x8.sub_saturate_s(
+    i16x8.sub_sat_s(
       i16x8(-32767, -32768, -32768, -32768, -32768, -32768, -32768, -32768),
       i16x8.splat(2)
     ) == i16x8.splat(-32768)
   );
   assert(
-    i16x8.sub_saturate_u(
+    i16x8.sub_sat_u(
       i16x8(1, 0, 0, 0, 0, 0, 0, 0),
       i16x8.splat(2)
     ) == i16x8.splat(0)

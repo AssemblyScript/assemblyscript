@@ -730,9 +730,9 @@ declare namespace v128 {
   /** Negates each lane of a vector. */
   export function neg<T>(a: v128): v128;
   /** Adds each lane using saturation. */
-  export function add_saturate<T>(a: v128, b: v128): v128;
+  export function add_sat<T>(a: v128, b: v128): v128;
   /** Subtracts each lane using saturation. */
-  export function sub_saturate<T>(a: v128, b: v128): v128;
+  export function sub_sat<T>(a: v128, b: v128): v128;
   /** Performs a bitwise left shift on each lane of a vector by a scalar. */
   export function shl<T>(a: v128, b: i32): v128;
   /** Performs a bitwise right shift on each lane of a vector by a scalar. */
@@ -836,13 +836,13 @@ declare namespace i8x16 {
   /** Negates each 8-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 8-bit integer lane using signed saturation. */
-  export function add_saturate_s(a: v128, b: v128): v128;
+  export function add_sat_s(a: v128, b: v128): v128;
   /** Adds each 8-bit integer lane using unsigned saturation. */
-  export function add_saturate_u(a: v128, b: v128): v128;
+  export function add_sat_u(a: v128, b: v128): v128;
   /** Subtracts each 8-bit integer lane using signed saturation. */
-  export function sub_saturate_s(a: v128, b: v128): v128;
+  export function sub_sat_s(a: v128, b: v128): v128;
   /** Subtracts each 8-bit integer lane using unsigned saturation. */
-  export function sub_saturate_u(a: v128, b: v128): v128;
+  export function sub_sat_u(a: v128, b: v128): v128;
   /** Performs a bitwise left shift on each 8-bit integer lane by a scalar. */
   export function shl(a: v128, b: i32): v128;
   /** Performs a bitwise arithmetic right shift on each 8-bit integer lane by a scalar. */
@@ -916,13 +916,13 @@ declare namespace i16x8 {
   /** Negates each 16-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 16-bit integer lane using signed saturation. */
-  export function add_saturate_s(a: v128, b: v128): v128;
+  export function add_sat_s(a: v128, b: v128): v128;
   /** Adds each 16-bit integer lane using unsigned saturation. */
-  export function add_saturate_u(a: v128, b: v128): v128;
+  export function add_sat_u(a: v128, b: v128): v128;
   /** Subtracts each 16-bit integer lane using signed saturation. */
-  export function sub_saturate_s(a: v128, b: v128): v128;
+  export function sub_sat_s(a: v128, b: v128): v128;
   /** Subtracts each 16-bit integer lane using unsigned saturation. */
-  export function sub_saturate_u(a: v128, b: v128): v128;
+  export function sub_sat_u(a: v128, b: v128): v128;
   /** Performs a bitwise left shift on each 16-bit integer lane by a scalar. */
   export function shl(a: v128, b: i32): v128;
   /** Performs a bitwise arithmetic right shift each 16-bit integer lane by a scalar. */

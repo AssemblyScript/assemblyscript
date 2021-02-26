@@ -1193,11 +1193,11 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function add_saturate<T>(a: v128, b: v128): v128;
+  export declare function add_sat<T>(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function sub_saturate<T>(a: v128, b: v128): v128;
+  export declare function sub_sat<T>(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
@@ -1407,19 +1407,19 @@ export namespace i8x16 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function add_saturate_s(a: v128, b: v128): v128;
+  export declare function add_sat_s(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function add_saturate_u(a: v128, b: v128): v128;
+  export declare function add_sat_u(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function sub_saturate_s(a: v128, b: v128): v128;
+  export declare function sub_sat_s(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function sub_saturate_u(a: v128, b: v128): v128;
+  export declare function sub_sat_u(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
@@ -1570,19 +1570,19 @@ export namespace i16x8 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function add_saturate_s(a: v128, b: v128): v128;
+  export declare function add_sat_s(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function add_saturate_u(a: v128, b: v128): v128;
+  export declare function add_sat_u(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function sub_saturate_s(a: v128, b: v128): v128;
+  export declare function sub_sat_s(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function sub_saturate_u(a: v128, b: v128): v128;
+  export declare function sub_sat_u(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin

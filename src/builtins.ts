@@ -370,8 +370,8 @@ export namespace BuiltinNames {
   export const v128_mul = "~lib/builtins/v128.mul";
   export const v128_div = "~lib/builtins/v128.div";
   export const v128_neg = "~lib/builtins/v128.neg";
-  export const v128_add_saturate = "~lib/builtins/v128.add_saturate";
-  export const v128_sub_saturate = "~lib/builtins/v128.sub_saturate";
+  export const v128_add_sat = "~lib/builtins/v128.add_sat";
+  export const v128_sub_sat = "~lib/builtins/v128.sub_sat";
   export const v128_shl = "~lib/builtins/v128.shl";
   export const v128_shr = "~lib/builtins/v128.shr";
   export const v128_and = "~lib/builtins/v128.and";
@@ -430,10 +430,10 @@ export namespace BuiltinNames {
   export const i8x16_avgr_u = "~lib/builtins/i8x16.avgr_u";
   export const i8x16_abs = "~lib/builtins/i8x16.abs";
   export const i8x16_neg = "~lib/builtins/i8x16.neg";
-  export const i8x16_add_saturate_s = "~lib/builtins/i8x16.add_saturate_s";
-  export const i8x16_add_saturate_u = "~lib/builtins/i8x16.add_saturate_u";
-  export const i8x16_sub_saturate_s = "~lib/builtins/i8x16.sub_saturate_s";
-  export const i8x16_sub_saturate_u = "~lib/builtins/i8x16.sub_saturate_u";
+  export const i8x16_add_sat_s = "~lib/builtins/i8x16.add_sat_s";
+  export const i8x16_add_sat_u = "~lib/builtins/i8x16.add_sat_u";
+  export const i8x16_sub_sat_s = "~lib/builtins/i8x16.sub_sat_s";
+  export const i8x16_sub_sat_u = "~lib/builtins/i8x16.sub_sat_u";
   export const i8x16_shl = "~lib/builtins/i8x16.shl";
   export const i8x16_shr_s = "~lib/builtins/i8x16.shr_s";
   export const i8x16_shr_u = "~lib/builtins/i8x16.shr_u";
@@ -469,10 +469,10 @@ export namespace BuiltinNames {
   export const i16x8_avgr_u = "~lib/builtins/i16x8.avgr_u";
   export const i16x8_abs = "~lib/builtins/i16x8.abs";
   export const i16x8_neg = "~lib/builtins/i16x8.neg";
-  export const i16x8_add_saturate_s = "~lib/builtins/i16x8.add_saturate_s";
-  export const i16x8_add_saturate_u = "~lib/builtins/i16x8.add_saturate_u";
-  export const i16x8_sub_saturate_s = "~lib/builtins/i16x8.sub_saturate_s";
-  export const i16x8_sub_saturate_u = "~lib/builtins/i16x8.sub_saturate_u";
+  export const i16x8_add_sat_s = "~lib/builtins/i16x8.add_sat_s";
+  export const i16x8_add_sat_u = "~lib/builtins/i16x8.add_sat_u";
+  export const i16x8_sub_sat_s = "~lib/builtins/i16x8.sub_sat_s";
+  export const i16x8_sub_sat_u = "~lib/builtins/i16x8.sub_sat_u";
   export const i16x8_shl = "~lib/builtins/i16x8.shl";
   export const i16x8_shr_s = "~lib/builtins/i16x8.shr_s";
   export const i16x8_shr_u = "~lib/builtins/i16x8.shr_u";
@@ -4204,8 +4204,8 @@ function builtin_v128_div(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v128_div, builtin_v128_div);
 
-// v128.add_saturate<T!>(a: v128, b: v128) -> v128
-function builtin_v128_add_saturate(ctx: BuiltinContext): ExpressionRef {
+// v128.add_sat<T!>(a: v128, b: v128) -> v128
+function builtin_v128_add_sat(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
   if (
@@ -4231,14 +4231,14 @@ function builtin_v128_add_saturate(ctx: BuiltinContext): ExpressionRef {
   }
   compiler.error(
     DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-    ctx.reportNode.typeArgumentsRange, "v128.add_saturate", type.toString()
+    ctx.reportNode.typeArgumentsRange, "v128.add_sat", type.toString()
   );
   return module.unreachable();
 }
-builtins.set(BuiltinNames.v128_add_saturate, builtin_v128_add_saturate);
+builtins.set(BuiltinNames.v128_add_sat, builtin_v128_add_sat);
 
-// v128.sub_saturate<T!>(a: v128, b: v128) -> v128
-function builtin_v128_sub_saturate(ctx: BuiltinContext): ExpressionRef {
+// v128.sub_sat<T!>(a: v128, b: v128) -> v128
+function builtin_v128_sub_sat(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
   if (
@@ -4264,11 +4264,11 @@ function builtin_v128_sub_saturate(ctx: BuiltinContext): ExpressionRef {
   }
   compiler.error(
     DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-    ctx.reportNode.typeArgumentsRange, "v128.sub_saturate", type.toString()
+    ctx.reportNode.typeArgumentsRange, "v128.sub_sat", type.toString()
   );
   return module.unreachable();
 }
-builtins.set(BuiltinNames.v128_sub_saturate, builtin_v128_sub_saturate);
+builtins.set(BuiltinNames.v128_sub_sat, builtin_v128_sub_sat);
 
 // v128.min<T!>(a: v128, b: v128) -> v128
 function builtin_v128_min(ctx: BuiltinContext): ExpressionRef {
@@ -7138,41 +7138,41 @@ function builtin_i8x16_neg(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_neg, builtin_i8x16_neg);
 
-// i8x16.add_saturate_s -> v128.add_saturate<i8>
-function builtin_i8x16_add_saturate_s(ctx: BuiltinContext): ExpressionRef {
+// i8x16.add_sat_s -> v128.add_sat<i8>
+function builtin_i8x16_add_sat_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_add_saturate(ctx);
+  return builtin_v128_add_sat(ctx);
 }
-builtins.set(BuiltinNames.i8x16_add_saturate_s, builtin_i8x16_add_saturate_s);
+builtins.set(BuiltinNames.i8x16_add_sat_s, builtin_i8x16_add_sat_s);
 
-// i8x16.add_saturate_u -> v128.add_saturate<u8>
-function builtin_i8x16_add_saturate_u(ctx: BuiltinContext): ExpressionRef {
+// i8x16.add_sat_u -> v128.add_sat<u8>
+function builtin_i8x16_add_sat_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_add_saturate(ctx);
+  return builtin_v128_add_sat(ctx);
 }
-builtins.set(BuiltinNames.i8x16_add_saturate_u, builtin_i8x16_add_saturate_u);
+builtins.set(BuiltinNames.i8x16_add_sat_u, builtin_i8x16_add_sat_u);
 
-// i8x16.sub_saturate_s -> v128.sub_saturate<i8>
-function builtin_i8x16_sub_saturate_s(ctx: BuiltinContext): ExpressionRef {
+// i8x16.sub_sat_s -> v128.sub_sat<i8>
+function builtin_i8x16_sub_sat_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_sub_saturate(ctx);
+  return builtin_v128_sub_sat(ctx);
 }
-builtins.set(BuiltinNames.i8x16_sub_saturate_s, builtin_i8x16_sub_saturate_s);
+builtins.set(BuiltinNames.i8x16_sub_sat_s, builtin_i8x16_sub_sat_s);
 
-// i8x16.sub_saturate_u -> v128.sub_saturate<u8>
-function builtin_i8x16_sub_saturate_u(ctx: BuiltinContext): ExpressionRef {
+// i8x16.sub_sat_u -> v128.sub_sat<u8>
+function builtin_i8x16_sub_sat_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_sub_saturate(ctx);
+  return builtin_v128_sub_sat(ctx);
 }
-builtins.set(BuiltinNames.i8x16_sub_saturate_u, builtin_i8x16_sub_saturate_u);
+builtins.set(BuiltinNames.i8x16_sub_sat_u, builtin_i8x16_sub_sat_u);
 
 // i8x16.shl -> v128.shl<i8>
 function builtin_i8x16_shl(ctx: BuiltinContext): ExpressionRef {
@@ -7480,41 +7480,41 @@ function builtin_i16x8_neg(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_neg, builtin_i16x8_neg);
 
-// i16x8.add_saturate_s -> v128.add_saturate<i16>
-function builtin_i16x8_add_saturate_s(ctx: BuiltinContext): ExpressionRef {
+// i16x8.add_sat_s -> v128.add_sat<i16>
+function builtin_i16x8_add_sat_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_add_saturate(ctx);
+  return builtin_v128_add_sat(ctx);
 }
-builtins.set(BuiltinNames.i16x8_add_saturate_s, builtin_i16x8_add_saturate_s);
+builtins.set(BuiltinNames.i16x8_add_sat_s, builtin_i16x8_add_sat_s);
 
-// i16x8.add_saturate_u -> v128.add_saturate<u16>
-function builtin_i16x8_add_saturate_u(ctx: BuiltinContext): ExpressionRef {
+// i16x8.add_sat_u -> v128.add_sat<u16>
+function builtin_i16x8_add_sat_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_add_saturate(ctx);
+  return builtin_v128_add_sat(ctx);
 }
-builtins.set(BuiltinNames.i16x8_add_saturate_u, builtin_i16x8_add_saturate_u);
+builtins.set(BuiltinNames.i16x8_add_sat_u, builtin_i16x8_add_sat_u);
 
-// i16x8.sub_saturate_s -> v128.sub_saturate<i16>
-function builtin_i16x8_sub_saturate_s(ctx: BuiltinContext): ExpressionRef {
+// i16x8.sub_sat_s -> v128.sub_sat<i16>
+function builtin_i16x8_sub_sat_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_sub_saturate(ctx);
+  return builtin_v128_sub_sat(ctx);
 }
-builtins.set(BuiltinNames.i16x8_sub_saturate_s, builtin_i16x8_sub_saturate_s);
+builtins.set(BuiltinNames.i16x8_sub_sat_s, builtin_i16x8_sub_sat_s);
 
-// i16x8.sub_saturate_u -> v128.sub_saturate<u16>
-function builtin_i16x8_sub_saturate_u(ctx: BuiltinContext): ExpressionRef {
+// i16x8.sub_sat_u -> v128.sub_sat<u16>
+function builtin_i16x8_sub_sat_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
   ctx.contextualType = Type.v128;
-  return builtin_v128_sub_saturate(ctx);
+  return builtin_v128_sub_sat(ctx);
 }
-builtins.set(BuiltinNames.i16x8_sub_saturate_u, builtin_i16x8_sub_saturate_u);
+builtins.set(BuiltinNames.i16x8_sub_sat_u, builtin_i16x8_sub_sat_u);
 
 // i16x8.shl -> v128.shl<i16>
 function builtin_i16x8_shl(ctx: BuiltinContext): ExpressionRef {
