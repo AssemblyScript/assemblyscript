@@ -1379,10 +1379,6 @@ export namespace i8x16 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function mul(a: v128, b: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
   export declare function min_s(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator

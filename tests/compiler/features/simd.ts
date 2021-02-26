@@ -104,7 +104,6 @@ function test_i8x16(): void {
   var c = i8x16.add(a, b);
   assert(c == i8x16(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, -128));
   assert(i8x16.sub(c, b) == a);
-  assert(i8x16.mul(c, b) == c);
   assert(
     i8x16.min_s(
       i8x16(0, 127, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),

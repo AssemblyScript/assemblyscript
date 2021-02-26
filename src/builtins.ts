@@ -4153,8 +4153,6 @@ function builtin_v128_mul(ctx: BuiltinContext): ExpressionRef {
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.I8:
-      case TypeKind.U8: return module.binary(BinaryOp.MulI8x16, arg0, arg1);
       case TypeKind.I16:
       case TypeKind.U16: return module.binary(BinaryOp.MulI16x8, arg0, arg1);
       case TypeKind.I32:
@@ -7076,15 +7074,6 @@ function builtin_i8x16_sub(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_sub(ctx);
 }
 builtins.set(BuiltinNames.i8x16_sub, builtin_i8x16_sub);
-
-// i8x16.mul -> v128.mul<i8>
-function builtin_i8x16_mul(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.i8 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_mul(ctx);
-}
-builtins.set(BuiltinNames.i8x16_mul, builtin_i8x16_mul);
 
 // i8x16.min_s -> v128.min<i8>
 function builtin_i8x16_min_s(ctx: BuiltinContext): ExpressionRef {

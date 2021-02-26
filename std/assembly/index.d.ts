@@ -821,8 +821,6 @@ declare namespace i8x16 {
   export function add(a: v128, b: v128): v128;
   /** Subtracts each 8-bit integer lane. */
   export function sub(a: v128, b: v128): v128;
-  /** Multiplies each 8-bit integer lane. */
-  export function mul(a: v128, b: v128): v128;
   /** Computes the signed minimum of each 8-bit integer lane. */
   export function min_s(a: v128, b: v128): v128;
   /** Computes the unsigned minimum of each 8-bit integer lane. */
