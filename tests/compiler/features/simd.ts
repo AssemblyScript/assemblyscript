@@ -581,17 +581,6 @@ function test_f32x4(): void {
     ==
     f32x4.splat(4294967296.0)
   );
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // assert(
-  //   f32x4.qfma(f32x4.splat(2), f32x4.splat(3), f32x4.splat(4))
-  //   ==
-  //   f32x4.splat(10)
-  // );
-  // assert(
-  //   f32x4.qfms(f32x4.splat(2), f32x4.splat(3), f32x4.splat(4))
-  //   ==
-  //   f32x4.splat(2)
-  // );
 }
 
 function test_f64x2(): void {
@@ -643,17 +632,6 @@ function test_f64x2(): void {
     ==
     f64x2.splat(18446744073709551615.0)
   );
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // assert(
-  //   f64x2.qfma(f64x2.splat(2), f64x2.splat(3), f64x2.splat(4))
-  //   ==
-  //   f64x2.splat(10)
-  // );
-  // assert(
-  //   f64x2.qfms(f64x2.splat(2), f64x2.splat(3), f64x2.splat(4))
-  //   ==
-  //   f64x2.splat(2)
-  // );
 }
 
 function test_const(): v128 {

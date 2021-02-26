@@ -1334,14 +1334,6 @@ export namespace v128 {
   // @ts-ignore: decorator
   @builtin
   export declare function extend_high<T>(a: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function qfma<T>(v1: v128, v2: v128, c: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function qfms<T>(v1: v128, v2: v128, c: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1984,14 +1976,6 @@ export namespace f32x4 {
   // @ts-ignore: decorator
   @builtin
   export declare function convert_i32x4_u(a: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function qfma(a: v128, b: v128, c: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function qfms(a: v128, b: v128, c: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -2103,14 +2087,6 @@ export namespace f64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function convert_i64x2_u(a: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function qfma(a: v128, b: v128, c: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function qfms(a: v128, b: v128, c: v128): v128;
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */

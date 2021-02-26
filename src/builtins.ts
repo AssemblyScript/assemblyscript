@@ -406,8 +406,6 @@ export namespace BuiltinNames {
   export const v128_narrow = "~lib/builtins/v128.narrow";
   export const v128_extend_low = "~lib/builtins/v128.extend_low";
   export const v128_extend_high = "~lib/builtins/v128.extend_high";
-  export const v128_qfma = "~lib/builtins/v128.qfma";
-  export const v128_qfms = "~lib/builtins/v128.qfms";
 
   export const i8x16 = "~lib/builtins/i8x16";
   export const i16x8 = "~lib/builtins/i16x8";
@@ -571,8 +569,6 @@ export namespace BuiltinNames {
   export const f32x4_ge = "~lib/builtins/f32x4.ge";
   export const f32x4_convert_i32x4_s = "~lib/builtins/f32x4.convert_i32x4_s";
   export const f32x4_convert_i32x4_u = "~lib/builtins/f32x4.convert_i32x4_u";
-  export const f32x4_qfma = "~lib/builtins/f32x4.qfma";
-  export const f32x4_qfms = "~lib/builtins/f32x4.qfms";
 
   export const f64x2_splat = "~lib/builtins/f64x2.splat";
   export const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
@@ -600,8 +596,6 @@ export namespace BuiltinNames {
   export const f64x2_ge = "~lib/builtins/f64x2.ge";
   export const f64x2_convert_i64x2_s = "~lib/builtins/f64x2.convert_i64x2_s";
   export const f64x2_convert_i64x2_u = "~lib/builtins/f64x2.convert_i64x2_u";
-  export const f64x2_qfma = "~lib/builtins/f64x2.qfma";
-  export const f64x2_qfms = "~lib/builtins/f64x2.qfms";
 
   // internals
   export const data_end = "~lib/memory/__data_end";
@@ -5475,68 +5469,6 @@ function builtin_v128_bitmask(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v128_bitmask, builtin_v128_bitmask);
 
-// v128.qfma<T!>(a: v128, b: v128, c: v128) -> v128
-function builtin_v128_qfma(ctx: BuiltinContext): ExpressionRef {
-  var compiler = ctx.compiler;
-  var module = compiler.module;
-  if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
-    checkTypeRequired(ctx) |
-    checkArgsRequired(ctx, 3)
-  ) {
-    compiler.currentType = Type.v128;
-    return module.unreachable();
-  }
-  var operands = ctx.operands;
-  var type = ctx.typeArguments![0];
-  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  var arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
-  if (type.isValue) {
-    switch (type.kind) {
-      case TypeKind.F32: return module.simd_ternary(SIMDTernaryOp.QFMAF32x4, arg0, arg1, arg2);
-      case TypeKind.F64: return module.simd_ternary(SIMDTernaryOp.QFMAF64x2, arg0, arg1, arg2);
-    }
-  }
-  compiler.error(
-    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-    ctx.reportNode.typeArgumentsRange, "v128.qfma", type.toString()
-  );
-  return module.unreachable();
-}
-builtins.set(BuiltinNames.v128_qfma, builtin_v128_qfma);
-
-// v128.qfms<T!>(a: v128, b: v128, c: v128) -> v128
-function builtin_v128_qfms(ctx: BuiltinContext): ExpressionRef {
-  var compiler = ctx.compiler;
-  var module = compiler.module;
-  if (
-    checkFeatureEnabled(ctx, Feature.SIMD) |
-    checkTypeRequired(ctx) |
-    checkArgsRequired(ctx, 3)
-  ) {
-    compiler.currentType = Type.v128;
-    return module.unreachable();
-  }
-  var operands = ctx.operands;
-  var type = ctx.typeArguments![0];
-  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  var arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
-  if (type.isValue) {
-    switch (type.kind) {
-      case TypeKind.F32: return module.simd_ternary(SIMDTernaryOp.QFMSF32x4, arg0, arg1, arg2);
-      case TypeKind.F64: return module.simd_ternary(SIMDTernaryOp.QFMSF64x2, arg0, arg1, arg2);
-    }
-  }
-  compiler.error(
-    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-    ctx.reportNode.typeArgumentsRange, "v128.qfms", type.toString()
-  );
-  return module.unreachable();
-}
-builtins.set(BuiltinNames.v128_qfms, builtin_v128_qfms);
-
 // === Internal runtime =======================================================================
 
 // __visit_globals(cookie: u32) -> void
@@ -8350,24 +8282,6 @@ function builtin_f32x4_convert_i32x4_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_convert_i32x4_u, builtin_f32x4_convert_i32x4_u);
 
-// f32x4.qfma -> v128.qfma<f32>
-function builtin_f32x4_qfma(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.f32 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_qfma(ctx);
-}
-builtins.set(BuiltinNames.f32x4_qfma, builtin_f32x4_qfma);
-
-// f32x4.qfms -> v128.qfms<f32>
-function builtin_f32x4_qfms(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.f32 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_qfms(ctx);
-}
-builtins.set(BuiltinNames.f32x4_qfms, builtin_f32x4_qfms);
-
 // f64x2.splat -> v128.splat<f64>
 function builtin_f64x2_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -8601,24 +8515,6 @@ function builtin_f64x2_convert_i64x2_u(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_convert(ctx);
 }
 builtins.set(BuiltinNames.f64x2_convert_i64x2_u, builtin_f64x2_convert_i64x2_u);
-
-// f64x2.qfma -> v128.qfma<f64>
-function builtin_f64x2_qfma(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.f64 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_qfma(ctx);
-}
-builtins.set(BuiltinNames.f64x2_qfma, builtin_f64x2_qfma);
-
-// f64x2.qfms -> v128.qfms<f64>
-function builtin_f64x2_qfms(ctx: BuiltinContext): ExpressionRef {
-  checkTypeAbsent(ctx);
-  ctx.typeArguments = [ Type.f64 ];
-  ctx.contextualType = Type.v128;
-  return builtin_v128_qfms(ctx);
-}
-builtins.set(BuiltinNames.f64x2_qfms, builtin_f64x2_qfms);
 
 // === Internal helpers =======================================================================
 

@@ -801,10 +801,6 @@ declare namespace v128 {
   export function extend_low<TFrom = i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
   /** Extends the high lanes of a vector to their respective wider lanes. */
   export function extend_high<TFrom = i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
-  /** Computes `(a * b) + c` for each lane. */
-  export function qfma<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
-  /** Computes `(a * b) - c` for each lane. */
-  export function qfms<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -1125,10 +1121,6 @@ declare namespace f32x4 {
   export function convert_i32x4_s(a: v128): v128;
   /** Converts each 32-bit unsigned integer lane of a vector to floating point. */
   export function convert_i32x4_u(a: v128): v128;
-  /** Computes `(a * b) + c` for each 32-bit float lane. */
-  export function qfma(a: v128, b: v128, c: v128): v128;
-  /** Computes `(a * b) - c` for each 32-bit float lane. */
-  export function qfms(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
 declare function f64x2(a: f64, b: f64): v128;
@@ -1185,10 +1177,6 @@ declare namespace f64x2 {
   export function convert_i64x2_s(a: v128): v128;
   /** Converts each 64-bit unsigned integer lane of a vector to floating point. */
   export function convert_i64x2_u(a: v128): v128;
-  /** Computes `(a * b) + c` for each 64-bit float lane. */
-  export function qfma(a: v128, b: v128, c: v128): v128;
-  /** Computes `(a * b) - c` for each 64-bit float lane. */
-  export function qfms(a: v128, b: v128, c: v128): v128;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
