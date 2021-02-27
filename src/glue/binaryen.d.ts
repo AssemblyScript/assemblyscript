@@ -61,6 +61,7 @@ export declare function _BinaryenFeatureTailCall(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureReferenceTypes(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureMultivalue(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureGC(): BinaryenFeatureFlags;
+export declare function _BinaryenFeatureTypedFunctionReferences(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureAll(): BinaryenFeatureFlags;
 
 type BinaryenExpressionId = i32;
@@ -944,9 +945,12 @@ export declare function _BinaryenGetTable(module: BinaryenModuleRef, name: Binar
 export declare function _BinaryenGetTableByIndex(module: BinaryenModuleRef, index: BinaryenIndex): BinaryenTableRef;
 
 export declare function _BinaryenTableGetName(table: BinaryenTableRef): BinaryenString;
+export declare function _BinaryenTableSetName(table: BinaryenTableRef, name: BinaryenString): void;
 export declare function _BinaryenTableGetInitial(table: BinaryenTableRef): BinaryenIndex;
+export declare function _BinaryenTableSetInitial(table: BinaryenTableRef, initial: BinaryenIndex): void;
 export declare function _BinaryenTableHasMax(table: BinaryenTableRef): bool;
 export declare function _BinaryenTableGetMax(table: BinaryenTableRef): BinaryenIndex;
+export declare function _BinaryenTableSetMax(table: BinaryenTableRef, max: BinaryenIndex): void;
 
 export declare function _BinaryenSetMemory(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, exportName: BinaryenString, segments: BinaryenArray<BinaryenArray<u8>>, segmentPassive: BinaryenArray<bool>, segmentOffsets: BinaryenArray<usize>, segmentSizes: BinaryenArray<u32>, numSegments: BinaryenIndex, shared: bool): void;
 export declare function _BinaryenGetNumMemorySegments(module: BinaryenModuleRef): BinaryenIndex;

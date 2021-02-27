@@ -62,7 +62,7 @@ export enum FeatureFlags {
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
-  TypedFunctionReferences  = 4096, /* TODO_BinaryenTypedFunctionReferences */
+  TypedFunctionReferences  = 4096, /* _BinaryenTypedFunctionReferences */
   All = 8191 /* _BinaryenFeatureAll */
 }
 
