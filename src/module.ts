@@ -393,6 +393,17 @@ export enum BinaryOp {
   LeU32x4 = 103 /* _BinaryenLeUVecI32x4 */,
   GeI32x4 = 104 /* _BinaryenGeSVecI32x4 */,
   GeU32x4 = 105 /* _BinaryenGeUVecI32x4 */,
+  EqI64x2 = 96 /* TODO_BinaryenEqVecI64x2 */, // FIXME: missing opcode in binaryen
+  NeI64x2 = 97 /* TODO_BinaryenNeVecI64x2 */, // FIXME: missing opcode in binaryen
+  LtI64x2 = 98 /* TODO_BinaryenLtSVecI64x2 */, // FIXME: missing opcode in binaryen
+  LtU64x2 = 99 /* TODO_BinaryenLtUVecI64x2 */, // FIXME: missing opcode in binaryen
+  GtI64x2 = 100 /* TODO_BinaryenGtSVecI64x2 */, // FIXME: missing opcode in binaryen
+  GtU64x2 = 101 /* TODO_BinaryenGtUVecI64x2 */, // FIXME: missing opcode in binaryen
+  LeI64x2 = 102 /* TODO_BinaryenLeSVecI64x2 */, // FIXME: missing opcode in binaryen
+  LeU64x2 = 103 /* TODO_BinaryenLeUVecI64x2 */, // FIXME: missing opcode in binaryen
+  GeI64x2 = 104 /* TODO_BinaryenGeSVecI64x2 */, // FIXME: missing opcode in binaryen
+  GeU64x2 = 105 /* TODO_BinaryenGeUVecI64x2 */, // FIXME: missing opcode in binaryen
+  // 106?
   EqF32x4 = 107 /* _BinaryenEqVecF32x4 */,
   NeF32x4 = 108 /* _BinaryenNeVecF32x4 */,
   LtF32x4 = 109 /* _BinaryenLtVecF32x4 */,

@@ -1057,6 +1057,26 @@ declare namespace i64x2 {
   export function shr_u(a: v128, b: i32): v128;
   /** Reduces a vector to a scalar indicating whether all 64-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
+  /** Computes which 64-bit integer lanes are equal. */
+  export function eq(a: v128, b: v128): v128;
+  /** Computes which 64-bit integer lanes are not equal. */
+  export function ne(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are less than those of the second. */
+  export function lt_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are less than those of the second. */
+  export function lt_u(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are less than or equal those of the second. */
+  export function le_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are less than or equal those of the second. */
+  export function le_u(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are greater than those of the second. */
+  export function gt_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are greater than those of the second. */
+  export function gt_u(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are greater than or equal those of the second. */
+  export function ge_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are greater than or equal those of the second. */
+  export function ge_u(a: v128, b: v128): v128;
   /** Extends the low 32-bit signed integer lanes to 64-bit signed integer lanes. */
   export function extend_low_i32x4_s(a: v128): v128;
   /** Extends the low 32-bit unsigned integer lane to 64-bit unsigned integer lanes. */

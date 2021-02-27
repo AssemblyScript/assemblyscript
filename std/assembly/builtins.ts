@@ -1852,6 +1852,46 @@ export namespace i64x2 {
 
   // @ts-ignore: decorator
   @builtin
+  export declare function eq(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function ne(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function lt_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function lt_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function le_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function le_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function gt_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function gt_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function ge_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function ge_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
   export declare function extend_low_i32x4_s(a: v128): v128;
 
   // @ts-ignore: decorator
