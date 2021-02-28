@@ -1194,6 +1194,14 @@ declare namespace f64x2 {
   /** Computes which 64-bit float lanes of the first vector are greater than or equal those of the second. */
   export function ge(a: v128, b: v128): v128;
 }
+
+declare abstract class i31 {
+  /** Creates a new i31ref from the specified integer value. */
+  static new(value: i32): i31ref;
+  /** Gets the integer value of an i31ref. */
+  static get(i31expr: i31ref): i32;
+}
+
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
 /** Special type evaluating the indexed access index type. */

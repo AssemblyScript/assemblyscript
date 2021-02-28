@@ -2121,6 +2121,18 @@ export namespace f64x2 {
   export declare function ge(a: v128, b: v128): v128;
 }
 
+@final
+export abstract class i31 { // FIXME: usage of 'new' requires a class :(
+
+  // @ts-ignore: decorator
+  @builtin
+  static new(value: i32): i31ref { return unreachable(); };
+
+  // @ts-ignore: decorator
+  @builtin
+  static get(i31expr: i31ref): i32 { return unreachable(); };
+}
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 // @ts-ignore: decorator

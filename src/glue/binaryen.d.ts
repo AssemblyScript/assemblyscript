@@ -864,6 +864,16 @@ export declare function _BinaryenTupleExtractSetIndex(expr: BinaryenExpressionRe
 
 export declare function _BinaryenPop(module: BinaryenModuleRef, type: BinaryenType): BinaryenExpressionRef;
 
+export declare function _BinaryenI31New(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenI31NewGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenI31NewSetValue(expr: BinaryenExpressionRef, valueExpr: BinaryenExpressionRef): void;
+
+export declare function _BinaryenI31Get(module: BinaryenModuleRef, i31Expr: BinaryenExpressionRef, signed: bool): BinaryenExpressionRef;
+export declare function _BinaryenI31GetGetI31(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenI31GetSetI31(expr: BinaryenExpressionRef, i31Expr: BinaryenExpressionRef): void;
+export declare function _BinaryenI31GetIsSigned(expr: BinaryenExpressionRef): bool;
+export declare function _BinaryenI31GetSetSigned(expr: BinaryenExpressionRef, signed: bool): void;
+
 type BinaryenFunctionRef = usize;
 
 export declare function _BinaryenAddFunction(module: BinaryenModuleRef, name: BinaryenString, params: BinaryenType, results: BinaryenType, varTypes: BinaryenArray<BinaryenType>, numVarTypes: BinaryenIndex, body: BinaryenExpressionRef): BinaryenFunctionRef;

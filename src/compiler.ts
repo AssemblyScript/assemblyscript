@@ -9940,14 +9940,9 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
-      case TypeKind.DATAREF: {
-        return module.ref_is(RefIsOp.RefIsNull, expr);
-      }
+      case TypeKind.DATAREF:
       case TypeKind.I31REF: {
-        return module.binary(BinaryOp.NeI32,
-          module.i31_get(expr),
-          module.i32(0)
-        );
+        return module.ref_is(RefIsOp.RefIsNull, expr);
       }
       default: {
         assert(false);

@@ -1179,19 +1179,16 @@ export class Module {
   // gc
 
   i31_new(
-    expr: ExpressionRef
+    value: ExpressionRef
   ): ExpressionRef {
-    assert(false);
-    return this.unreachable();
-    // return binaryen._BinaryenI31New(this.ref, expr);
+    return binaryen._BinaryenI31New(this.ref, value);
   }
 
   i31_get(
-    expr: ExpressionRef
+    expr: ExpressionRef,
+    signed: bool
   ): ExpressionRef {
-    assert(false);
-    return this.unreachable();
-    // return binaryen._BinaryenI31Get(this.ref, expr);
+    return binaryen._BinaryenI31Get(this.ref, expr, signed);
   }
 
   // globals

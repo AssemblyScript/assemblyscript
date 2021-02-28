@@ -605,6 +605,9 @@ export namespace BuiltinNames {
   export const f64x2_gt = "~lib/builtins/f64x2.gt";
   export const f64x2_ge = "~lib/builtins/f64x2.ge";
 
+  export const i31_new = "~lib/builtins/i31.new";
+  export const i31_get = "~lib/builtins/i31.get";
+
   // internals
   export const data_end = "~lib/memory/__data_end";
   export const stack_pointer = "~lib/memory/__stack_pointer";
@@ -2920,6 +2923,41 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.memory_data, builtin_memory_data);
 
+// === GC =====================================================================================
+
+function builtin_i31_new(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  var operands = ctx.operands;
+  var arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
+  compiler.currentType = Type.i31ref;
+  return module.i31_new(arg0);
+}
+builtins.set(BuiltinNames.i31_new, builtin_i31_new);
+
+function builtin_i31_get(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkTypeAbsent(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) return module.unreachable();
+  var operands = ctx.operands;
+  var arg0 = compiler.compileExpression(operands[0], Type.i31ref, Constraints.CONV_IMPLICIT);
+  if (ctx.contextualType.is(TypeFlags.UNSIGNED)) {
+    compiler.currentType = Type.u32;
+    return module.i31_get(arg0, false);
+  } else {
+    compiler.currentType = Type.i32;
+    return module.i31_get(arg0, true);
+  }
+}
+builtins.set(BuiltinNames.i31_get, builtin_i31_get);
+
 // === Helpers ================================================================================
 
 // changetype<T!>(value: *) -> T
@@ -3040,8 +3078,8 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
-      case TypeKind.DATAREF: return module.if(module.ref_is(RefIsOp.RefIsNull, arg0), abort);
-      case TypeKind.I31REF: return module.if(module.unary(UnaryOp.EqzI32, module.i31_get(arg0)), abort);
+      case TypeKind.DATAREF:
+      case TypeKind.I31REF: return module.if(module.ref_is(RefIsOp.RefIsNull, arg0), abort);
 
     }
   } else {
@@ -3124,28 +3162,15 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.EXTERNREF:
       case TypeKind.ANYREF:
       case TypeKind.EQREF:
-      case TypeKind.DATAREF: {
+      case TypeKind.DATAREF:
+      case TypeKind.I31REF: {
         let temp = flow.getTempLocal(type);
         let ret = module.if(
           module.ref_is(RefIsOp.RefIsNull,
             module.local_tee(temp.index, arg0, false) // ref
           ),
           abort,
-          module.local_get(temp.index, NativeType.F64)
-        );
-        flow.freeTempLocal(temp);
-        return ret;
-      }
-      case TypeKind.I31REF: {
-        let temp = flow.getTempLocal(type);
-        let ret = module.if(
-          module.unary(UnaryOp.EqzI32,
-            module.i31_get(
-              module.local_tee(temp.index, arg0, false) // ref
-            )
-          ),
-          abort,
-          module.local_get(temp.index, NativeType.F64)
+          module.local_get(temp.index, type.toNativeType())
         );
         flow.freeTempLocal(temp);
         return ret;

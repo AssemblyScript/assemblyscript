@@ -32,6 +32,7 @@
   },
   "gc": {
     "asc_flags": [
+      "--enable reference-types",
       "--enable gc"
     ],
     "v8_flags": [

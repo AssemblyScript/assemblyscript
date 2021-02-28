@@ -169,7 +169,11 @@ import {
   _BinaryenRefEqGetRight,
   _BinaryenRefEqSetLeft,
   _BinaryenRefEqSetRight,
-  _BinaryenFunctionSetBody
+  _BinaryenFunctionSetBody,
+  _BinaryenI31NewGetValue,
+  _BinaryenI31GetGetI31,
+  _BinaryenI31NewSetValue,
+  _BinaryenI31GetSetI31
 } from "../glue/binaryen";
 
 /** Base class of custom Binaryen visitors. */
@@ -865,14 +869,14 @@ export abstract class Visitor {
       }
       case ExpressionId.I31New: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenI31NewGetValue(expr));
         assert(this.stack.pop() == expr);
         this.visitI31New(expr);
         break;
       }
       case ExpressionId.I31Get: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenI31GetGetI31(expr));
         assert(this.stack.pop() == expr);
         this.visitI31Get(expr);
         break;
@@ -1559,11 +1563,19 @@ export function replaceChild(
       break;
     }
     case ExpressionId.I31New: {
-      assert(false); // TODO
+      let value = _BinaryenI31NewGetValue(parent);
+      if (value == search) {
+        _BinaryenI31NewSetValue(parent, replacement);
+        return value;
+      }
       break;
     }
     case ExpressionId.I31Get: {
-      assert(false); // TODO
+      let i31Expr = _BinaryenI31GetGetI31(parent);
+      if (i31Expr == search) {
+        _BinaryenI31GetSetI31(parent, replacement);
+        return i31Expr;
+      }
       break;
     }
     case ExpressionId.CallRef: {
