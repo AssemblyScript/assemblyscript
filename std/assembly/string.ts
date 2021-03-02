@@ -3,7 +3,7 @@
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { compareImpl, strtol, strtod, isSpace, isAscii, isFinalSigma, toLower8, toUpper8 } from "./util/string";
 import { SPECIALS_UPPER, casemap, bsearch } from "./util/casemap";
-import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_NULLREFERENCE } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 import { idof } from "./builtins";
 import { Array } from "./array";
 
@@ -79,8 +79,7 @@ import { Array } from "./array";
     return (first - 0xD800 << 10) + (second - 0xDC00) + 0x10000;
   }
 
-  @operator("+") private static __concat(left: String | null, right: String | null): String {
-    if (right === null || left === null) throw new Error(E_NULLREFERENCE);
+  @operator("+") private static __concat(left: String, right: String): String {
     return left.concat(right);
   }
 
@@ -123,8 +122,8 @@ import { Array } from "./array";
     return !this.__eq(left, right);
   }
 
-  @operator(">") private static __gt(left: String | null, right: String | null): bool {
-    if (left === right || left === null || right === null) return false;
+  @operator(">") private static __gt(left: String, right: String): bool {
+    if (left === right) return false;
     var leftLength  = left.length;
     if (!leftLength) return false;
     var rightLength = right.length;
@@ -134,12 +133,12 @@ import { Array } from "./array";
     return res ? res > 0 : leftLength > rightLength;
   }
 
-  @operator(">=") private static __gte(left: String | null, right: String | null): bool {
+  @operator(">=") private static __gte(left: String, right: String): bool {
     return !this.__lt(left, right);
   }
 
-  @operator("<") private static __lt(left: String | null, right: String | null): bool {
-    if (left === right || left === null || right === null) return false;
+  @operator("<") private static __lt(left: String, right: String): bool {
+    if (left === right) return false;
     var rightLength = right.length;
     if (!rightLength) return false;
     var leftLength  = left.length;
@@ -149,7 +148,7 @@ import { Array } from "./array";
     return res ? res < 0 : leftLength < rightLength;
   }
 
-  @operator("<=") private static __lte(left: String | null, right: String | null): bool {
+  @operator("<=") private static __lte(left: String, right: String): bool {
     return !this.__gt(left, right);
   }
 
