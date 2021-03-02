@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "node ../../bin/asc --extension .as add.as -o module.wasm -d module.wasm.d.ts",
+    "test": "npm run build && npm run test:static && npm run test:dynamic",
+    "test:static": "tsc -m es2020 static-import.test.ts && node --experimental-wasm-modules static-import.test.js",
+    "test:dynamic": "tsc -m es2020 dynamic-import.test.ts && node --experimental-wasm-modules dynamic-import.test.js"
+  }
+}
