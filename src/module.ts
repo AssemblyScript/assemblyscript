@@ -583,10 +583,10 @@ export enum RefIsOp {
 }
 
 export enum RefAsOp {
-  RefAsNonNull = 0 /* TODO_BinaryenRefAsNonNull */,
-  RefAsFunc = 1 /* TODO_BinaryenRefAsFunc */,
-  RefAsData = 2 /* TODO_BinaryenRefAsData */,
-  RefAsI31 = 3 /* TODO_BinaryenRefAsI31 */
+  RefAsNonNull = 0 /* _BinaryenRefAsNonNull */,
+  RefAsFunc = 1 /* _BinaryenRefAsFunc */,
+  RefAsData = 2 /* _BinaryenRefAsData */,
+  RefAsI31 = 3 /* _BinaryenRefAsI31 */
 }
 
 export enum BrOnOp {
@@ -1159,13 +1159,20 @@ export class Module {
     return binaryen._BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
   }
 
-  // reference types
+  // reference types / gc
 
   ref_is(
     op: RefIsOp,
     expr: ExpressionRef
   ): ExpressionRef {
     return binaryen._BinaryenRefIs(this.ref, op, expr);
+  }
+
+  ref_as(
+    op: RefAsOp,
+    expr: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenRefAs(this.ref, op, expr);
   }
 
   ref_func(
@@ -1175,8 +1182,6 @@ export class Module {
     var cStr = this.allocStringCached(name);
     return binaryen._BinaryenRefFunc(this.ref, cStr, type);
   }
-
-  // gc
 
   i31_new(
     value: ExpressionRef

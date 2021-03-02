@@ -470,6 +470,11 @@ export declare function _BinaryenRefIsFunc(): BinaryenOp;
 export declare function _BinaryenRefIsData(): BinaryenOp;
 export declare function _BinaryenRefIsI31(): BinaryenOp;
 
+export declare function _BinaryenRefAsNonNull(): BinaryenOp;
+export declare function _BinaryenRefAsFunc(): BinaryenOp;
+export declare function _BinaryenRefAsData(): BinaryenOp;
+export declare function _BinaryenRefAsAsI31(): BinaryenOp;
+
 type BinaryenExpressionRef = usize;
 
 export declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): BinaryenExpressionId;
@@ -801,6 +806,12 @@ export declare function _BinaryenRefIsGetOp(expr: BinaryenExpressionRef): Binary
 export declare function _BinaryenRefIsSetOp(expr: BinaryenExpressionRef, op: BinaryenOp): void;
 export declare function _BinaryenRefIsGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenRefIsSetValue(expr: BinaryenExpressionRef, valueExpr: BinaryenExpressionRef): void;
+
+export declare function _BinaryenRefAs(module: BinaryenModuleRef, op: BinaryenOp, valueExpr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenRefAsGetOp(expr: BinaryenExpressionRef): BinaryenOp;
+export declare function _BinaryenRefAsSetOp(expr: BinaryenExpressionRef, op: BinaryenOp): void;
+export declare function _BinaryenRefAsGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenRefAsSetValue(expr: BinaryenExpressionRef, valueExpr: BinaryenExpressionRef): void;
 
 export declare function _BinaryenRefFunc(module: BinaryenModuleRef, funcName: BinaryenString, type: BinaryenType): BinaryenExpressionRef;
 export declare function _BinaryenRefFuncGetFunc(expr: BinaryenExpressionRef): BinaryenString;
