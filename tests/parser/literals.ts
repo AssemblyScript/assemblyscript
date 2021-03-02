@@ -70,6 +70,7 @@
 7_;
 1.a;
 2.0b;
+`123`;
 
 // technically invalid, but not handled by AS yet, TS1005: ';' expected
 3 4;

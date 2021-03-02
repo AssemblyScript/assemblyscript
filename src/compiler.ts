@@ -5988,7 +5988,6 @@ export class Compiler extends DiagnosticEmitter {
           let tempTarget = flow.getTempLocal(thisType);
           let tempElement = flow.getTempLocal(elementType);
           let returnType = getterInstance.signature.returnType;
-          flow.freeTempLocal(tempTarget);
           let ret = module.block(null, [
             this.makeCallDirect(setterInstance, [
               module.local_tee(tempTarget.index, thisExpr, thisType.isManaged),
