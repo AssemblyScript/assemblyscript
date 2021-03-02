@@ -1070,6 +1070,15 @@ export class Tokenizer extends DiagnosticEmitter {
     var quote = text.charCodeAt(pos++);
     var start = pos;
     var result = "";
+
+    if (quote == CharCode.BACKTICK) {
+      this.warning(
+        DiagnosticCode.Not_implemented_0,
+        this.range(start - 1, end),
+        "Template Literals can only be used for multi-line strings. Interpolation is not supported."
+      );
+    }
+
     while (true) {
       if (pos >= end) {
         result += text.substring(start, pos);
