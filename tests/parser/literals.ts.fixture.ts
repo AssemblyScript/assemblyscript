@@ -67,6 +67,7 @@ b;
 a;
 2;
 b;
+"123";
 3;
 4;
 5;
@@ -82,3 +83,4 @@ b;
 // ERROR 6188: "Numeric separators are not allowed here." in literals.ts(70,2+0)
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(71,3+0)
 // ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(72,4+0)
+// WARNING 100: "Not implemented: Template Literals can only be used for multi-line strings. Interpolation is not supported." in literals.ts(73,1+102)
