@@ -1447,15 +1447,15 @@
   i32.store
   i32.const 1056
   i32.load
-  call_indirect (type $none_=>_none)
+  call_indirect $0 (type $none_=>_none)
   i32.const 1088
   i32.load
-  call_indirect (type $none_=>_none)
+  call_indirect $0 (type $none_=>_none)
   i32.const 1
   i32.const 2
   i32.const 1120
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if
@@ -1470,7 +1470,7 @@
   i32.const 3
   i32.const 1216
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 5
   i32.ne
   if
@@ -1484,7 +1484,7 @@
   i32.const 1
   i32.const 1248
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 1
   i32.ne
   if
@@ -1609,11 +1609,11 @@
   local.get $0
   i32.const 1680
   i32.load
-  call_indirect (type $i32_=>_none)
+  call_indirect $0 (type $i32_=>_none)
   i32.const 1
   i32.const 1712
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 1
   i32.ne
   if
@@ -1633,7 +1633,7 @@
   i32.const 2
   i32.const 1744
   i32.load
-  call_indirect (type $i32_i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if

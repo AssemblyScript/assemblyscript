@@ -1779,7 +1779,7 @@
   global.set $~argumentsLength
   global.get $builtins/fn
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 3
   i32.eq
   i32.eqz
@@ -1801,7 +1801,7 @@
   i32.store
   local.get $9
   call $~lib/function/Function<%28i32%2Ci32%29=>i32>#get:index
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.eq
   i32.eqz
   if

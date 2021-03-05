@@ -39,10 +39,14 @@ declare type v128 = object;
 declare type funcref = object | null;
 /** External reference. */
 declare type externref = object | null;
-/** Exception reference. */
-declare type exnref = object | null;
 /** Any reference. */
 declare type anyref = object | null;
+/** Equatable reference. */
+declare type eqref = object | null;
+/** 31-bit integer reference. */
+declare type i31ref = object | null;
+/** Data reference. */
+declare type dataref = object | null;
 
 // Compiler hints
 
@@ -689,10 +693,30 @@ declare namespace v128 {
   export function swizzle(a: v128, s: v128): v128;
   /** Loads a vector from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-  /** Creates a vector with identical lanes by loading the splatted value. */
-  export function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128
   /** Creates a vector by loading the lanes of the specified type and extending each to the next larger type. */
-  export function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128
+  export function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
+  export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
+  export function load8x8_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with four 32-bit integer lanes by loading and sign extending four 16-bit integers. */
+  export function load16x4_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with four 32-bit integer lanes by loading and zero extending four 16-bit integers. */
+  export function load16x4_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with two 64-bit integer lanes by loading and sign extending two 32-bit integers. */
+  export function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with two 64-bit integer lanes by loading and zero extending two 32-bit integers. */
+  export function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with identical lanes by loading the splatted value. */
+  export function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads an 8-bit integer and splats it sixteen times forming a new vector. */
+  export function load8_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads a 16-bit integer and splats it eight times forming a new vector. */
+  export function load16_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads a 32-bit integer and splats it four times forming a new vector. */
+  export function load32_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads a 64-bit integer and splats it two times forming a new vector. */
+  export function load64_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
   /** Stores a vector to memory. */
   export function store(ptr: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
   /** Adds each lane. */
@@ -706,9 +730,9 @@ declare namespace v128 {
   /** Negates each lane of a vector. */
   export function neg<T>(a: v128): v128;
   /** Adds each lane using saturation. */
-  export function add_saturate<T>(a: v128, b: v128): v128;
+  export function add_sat<T>(a: v128, b: v128): v128;
   /** Subtracts each lane using saturation. */
-  export function sub_saturate<T>(a: v128, b: v128): v128;
+  export function sub_sat<T>(a: v128, b: v128): v128;
   /** Performs a bitwise left shift on each lane of a vector by a scalar. */
   export function shl<T>(a: v128, b: i32): v128;
   /** Performs a bitwise right shift on each lane of a vector by a scalar. */
@@ -726,7 +750,7 @@ declare namespace v128 {
   /** Selects bits of either vector according to the specified mask. */
   export function bitselect(v1: v128, v2: v128, mask: v128): v128;
   /** Reduces a vector to a scalar indicating whether any lane is considered `true`. */
-  export function any_true<T>(a: v128): bool;
+  export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all lanes are considered `true`. */
   export function all_true<T>(a: v128): bool;
   /** Extracts the high bit of each lane and produces a scalar mask with all bits concatenated. */
@@ -768,19 +792,15 @@ declare namespace v128 {
   /** Computes which lanes of the first vector are greater than or equal those of the second. */
   export function ge<T>(a: v128, b: v128): v128;
   /** Converts each lane of a vector from integer to floating point. */
-  export function convert<TFrom = i32 | u32 | i64 | u64>(a: v128): v128;
+  export function convert<TFrom = i32 | u32>(a: v128): v128;
   /** Truncates each lane of a vector from floating point to integer with saturation. Takes the target type. */
-  export function trunc_sat<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
+  export function trunc_sat<TTo = i32 | u32>(a: v128): v128;
   /** Narrows each lane to their respective narrower lanes. */
   export function narrow<TFrom = i16 | i32>(a: v128, b: v128): v128;
-  /** Widens the low lanes of a vector to their respective wider lanes. */
-  export function widen_low<TFrom = i8 | i16>(a: v128): v128;
-  /** Widens the high lanes of a vector to their respective wider lanes. */
-  export function widen_high<TFrom = i8 | i16>(a: v128): v128;
-  /** Computes `(a * b) + c` for each lane. */
-  export function qfma<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
-  /** Computes `(a * b) - c` for each lane. */
-  export function qfms<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
+  /** Extends the low lanes of a vector to their respective wider lanes. */
+  export function extend_low<TFrom = i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
+  /** Extends the high lanes of a vector to their respective wider lanes. */
+  export function extend_high<TFrom = i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -797,8 +817,6 @@ declare namespace i8x16 {
   export function add(a: v128, b: v128): v128;
   /** Subtracts each 8-bit integer lane. */
   export function sub(a: v128, b: v128): v128;
-  /** Multiplies each 8-bit integer lane. */
-  export function mul(a: v128, b: v128): v128;
   /** Computes the signed minimum of each 8-bit integer lane. */
   export function min_s(a: v128, b: v128): v128;
   /** Computes the unsigned minimum of each 8-bit integer lane. */
@@ -814,21 +832,19 @@ declare namespace i8x16 {
   /** Negates each 8-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 8-bit integer lane using signed saturation. */
-  export function add_saturate_s(a: v128, b: v128): v128;
+  export function add_sat_s(a: v128, b: v128): v128;
   /** Adds each 8-bit integer lane using unsigned saturation. */
-  export function add_saturate_u(a: v128, b: v128): v128;
+  export function add_sat_u(a: v128, b: v128): v128;
   /** Subtracts each 8-bit integer lane using signed saturation. */
-  export function sub_saturate_s(a: v128, b: v128): v128;
+  export function sub_sat_s(a: v128, b: v128): v128;
   /** Subtracts each 8-bit integer lane using unsigned saturation. */
-  export function sub_saturate_u(a: v128, b: v128): v128;
+  export function sub_sat_u(a: v128, b: v128): v128;
   /** Performs a bitwise left shift on each 8-bit integer lane by a scalar. */
   export function shl(a: v128, b: i32): v128;
   /** Performs a bitwise arithmetic right shift on each 8-bit integer lane by a scalar. */
   export function shr_s(a: v128, b: i32): v128;
   /** Performs a bitwise logical right shift on each 8-bit integer lane by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
-  /** Reduces a vector to a scalar indicating whether any 8-bit integer lane is considered `true`. */
-  export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 8-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
   /** Extracts the high bit of each 8-bit integer lane and produces a scalar mask with all bits concatenated. */
@@ -857,6 +873,10 @@ declare namespace i8x16 {
   export function narrow_i16x8_s(a: v128, b: v128): v128;
   /** Narrows each 16-bit signed integer lane to 8-bit unsigned integer lanes. */
   export function narrow_i16x8_u(a: v128, b: v128): v128;
+  /** Selects 8-bit lanes from either vector according to the specified [0-15] respectively [16-31] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
 declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
@@ -890,21 +910,19 @@ declare namespace i16x8 {
   /** Negates each 16-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 16-bit integer lane using signed saturation. */
-  export function add_saturate_s(a: v128, b: v128): v128;
+  export function add_sat_s(a: v128, b: v128): v128;
   /** Adds each 16-bit integer lane using unsigned saturation. */
-  export function add_saturate_u(a: v128, b: v128): v128;
+  export function add_sat_u(a: v128, b: v128): v128;
   /** Subtracts each 16-bit integer lane using signed saturation. */
-  export function sub_saturate_s(a: v128, b: v128): v128;
+  export function sub_sat_s(a: v128, b: v128): v128;
   /** Subtracts each 16-bit integer lane using unsigned saturation. */
-  export function sub_saturate_u(a: v128, b: v128): v128;
+  export function sub_sat_u(a: v128, b: v128): v128;
   /** Performs a bitwise left shift on each 16-bit integer lane by a scalar. */
   export function shl(a: v128, b: i32): v128;
   /** Performs a bitwise arithmetic right shift each 16-bit integer lane by a scalar. */
   export function shr_s(a: v128, b: i32): v128;
   /** Performs a bitwise logical right shift on each 16-bit integer lane by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
-  /** Reduces a vector to a scalar indicating whether any 16-bit integer lane is considered `true`. */
-  export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 16-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
   /** Extracts the high bit of each 16-bit integer lane and produces a scalar mask with all bits concatenated. */
@@ -933,18 +951,14 @@ declare namespace i16x8 {
   export function narrow_i32x4_s(a: v128, b: v128): v128;
   /** Narrows each 32-bit signed integer lane to 16-bit unsigned integer lanes. */
   export function narrow_i32x4_u(a: v128, b: v128): v128;
-  /** Widens the low 8-bit signed integer lanes to 16-bit signed integer lanes. */
-  export function widen_low_i8x16_s(a: v128): v128;
-  /** Widens the low 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
-  export function widen_low_i8x16_u(a: v128): v128;
-  /** Widens the high 8-bit signed integer lanes to 16-bit signed integer lanes. */
-  export function widen_high_i8x16_s(a: v128): v128;
-  /** Widens the high 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
-  export function widen_high_i8x16_u(a: v128): v128;
-  /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
-  export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-  /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
-  export function load8x8_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Extends the low 8-bit signed integer lanes to 16-bit signed integer lanes. */
+  export function extend_low_i8x16_s(a: v128): v128;
+  /** Extends the low 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
+  export function extend_low_i8x16_u(a: v128): v128;
+  /** Extends the high 8-bit signed integer lanes to 16-bit signed integer lanes. */
+  export function extend_high_i8x16_s(a: v128): v128;
+  /** Extends the high 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
+  export function extend_high_i8x16_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -981,8 +995,6 @@ declare namespace i32x4 {
   export function shr_s(a: v128, b: i32): v128;
   /** Performs a bitwise logical right shift on each 32-bit integer lane by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
-  /** Reduces a vector to a scalar indicating whether any 32-bit integer lane is considered `true`. */
-  export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 32-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
   /** Extracts the high bit of each 32-bit integer lane and produces a scalar mask with all bits concatenated. */
@@ -1011,18 +1023,14 @@ declare namespace i32x4 {
   export function trunc_sat_f32x4_s(a: v128): v128;
   /** Truncates each 32-bit float lane to an unsigned integer with saturation. */
   export function trunc_sat_f32x4_u(a: v128): v128;
-  /** Widens the low 16-bit signed integer lanes to 32-bit signed integer lanes. */
-  export function widen_low_i16x8_s(a: v128): v128;
-  /** Widens the low 16-bit unsigned integer lane to 32-bit unsigned integer lanes. */
-  export function widen_low_i16x8_u(a: v128): v128;
-  /** Widens the high 16-bit signed integer lanes to 32-bit signed integer lanes. */
-  export function widen_high_i16x8_s(a: v128): v128;
-  /** Widens the high 16-bit unsigned integer lanes to 32-bit unsigned integer lanes. */
-  export function widen_high_i16x8_u(a: v128): v128;
-  /** Creates a vector with four 32-bit integer lanes by loading and sign extending four 16-bit integers. */
-  export function load16x4_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-  /** Creates a vector with four 32-bit integer lanes by loading and zero extending four 16-bit integers. */
-  export function load16x4_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Extends the low 16-bit signed integer lanes to 32-bit signed integer lanes. */
+  export function extend_low_i16x8_s(a: v128): v128;
+  /** Extends the low 16-bit unsigned integer lane to 32-bit unsigned integer lanes. */
+  export function extend_low_i16x8_u(a: v128): v128;
+  /** Extends the high 16-bit signed integer lanes to 32-bit signed integer lanes. */
+  export function extend_high_i16x8_s(a: v128): v128;
+  /** Extends the high 16-bit unsigned integer lanes to 32-bit unsigned integer lanes. */
+  export function extend_high_i16x8_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
@@ -1047,18 +1055,36 @@ declare namespace i64x2 {
   export function shr_s(a: v128, b: i32): v128;
   /** Performs a bitwise logical right shift on each 64-bit integer lane by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
-  /** Reduces a vector to a scalar indicating whether any 64-bit integer lane is considered `true`. */
-  export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 64-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
-  /** Truncates each 64-bit float lane to a signed integer with saturation. */
-  export function trunc_sat_f64x2_s(a: v128): v128;
-  /** Truncates each 64-bit float lane to an unsigned integer with saturation. */
-  export function trunc_sat_f64x2_u(a: v128): v128;
-  /** Creates a vector with two 64-bit integer lanes by loading and sign extending two 32-bit integers. */
-  export function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-  /** Creates a vector with two 64-bit integer lanes by loading and zero extending two 32-bit integers. */
-  export function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Computes which 64-bit integer lanes are equal. */
+  export function eq(a: v128, b: v128): v128;
+  /** Computes which 64-bit integer lanes are not equal. */
+  export function ne(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are less than those of the second. */
+  export function lt_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are less than those of the second. */
+  export function lt_u(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are less than or equal those of the second. */
+  export function le_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are less than or equal those of the second. */
+  export function le_u(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are greater than those of the second. */
+  export function gt_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are greater than those of the second. */
+  export function gt_u(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are greater than or equal those of the second. */
+  export function ge_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are greater than or equal those of the second. */
+  export function ge_u(a: v128, b: v128): v128;
+  /** Extends the low 32-bit signed integer lanes to 64-bit signed integer lanes. */
+  export function extend_low_i32x4_s(a: v128): v128;
+  /** Extends the low 32-bit unsigned integer lane to 64-bit unsigned integer lanes. */
+  export function extend_low_i32x4_u(a: v128): v128;
+  /** Extends the high 32-bit signed integer lanes to 64-bit signed integer lanes. */
+  export function extend_high_i32x4_s(a: v128): v128;
+  /** Extends the high 32-bit unsigned integer lanes to 64-bit unsigned integer lanes. */
+  export function extend_high_i32x4_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -1115,10 +1141,6 @@ declare namespace f32x4 {
   export function convert_i32x4_s(a: v128): v128;
   /** Converts each 32-bit unsigned integer lane of a vector to floating point. */
   export function convert_i32x4_u(a: v128): v128;
-  /** Computes `(a * b) + c` for each 32-bit float lane. */
-  export function qfma(a: v128, b: v128, c: v128): v128;
-  /** Computes `(a * b) - c` for each 32-bit float lane. */
-  export function qfms(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
 declare function f64x2(a: f64, b: f64): v128;
@@ -1171,35 +1193,15 @@ declare namespace f64x2 {
   export function gt(a: v128, b: v128): v128;
   /** Computes which 64-bit float lanes of the first vector are greater than or equal those of the second. */
   export function ge(a: v128, b: v128): v128;
-  /** Converts each 64-bit signed integer lane of a vector to floating point. */
-  export function convert_i64x2_s(a: v128): v128;
-  /** Converts each 64-bit unsigned integer lane of a vector to floating point. */
-  export function convert_i64x2_u(a: v128): v128;
-  /** Computes `(a * b) + c` for each 64-bit float lane. */
-  export function qfma(a: v128, b: v128, c: v128): v128;
-  /** Computes `(a * b) - c` for each 64-bit float lane. */
-  export function qfms(a: v128, b: v128, c: v128): v128;
 }
-declare namespace v8x16 {
-  /** Selects 8-bit lanes from either vector according to the specified [0-15] respectively [16-31] lane indexes. */
-  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
-  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
-  export function swizzle(a: v128, s: v128): v128;
-  /** Loads an 8-bit integer and splats it sixteen times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+
+declare abstract class i31 {
+  /** Creates a new i31ref from the specified integer value. */
+  static new(value: i32): i31ref;
+  /** Gets the integer value of an i31ref. */
+  static get(i31expr: i31ref): i32;
 }
-declare namespace v16x8 {
-  /** Loads a 16-bit integer and splats it eight times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-}
-declare namespace v32x4 {
-  /** Loads a 32-bit integer and splats it four times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-}
-declare namespace v64x2 {
-  /** Loads a 64-bit integer and splats it two times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-}
+
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
 /** Special type evaluating the indexed access index type. */

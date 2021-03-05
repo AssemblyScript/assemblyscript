@@ -981,8 +981,10 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeType(CommonNames.v128, Type.v128);
     this.registerNativeType(CommonNames.funcref, Type.funcref);
     this.registerNativeType(CommonNames.externref, Type.externref);
-    this.registerNativeType(CommonNames.exnref, Type.exnref);
     this.registerNativeType(CommonNames.anyref, Type.anyref);
+    this.registerNativeType(CommonNames.eqref, Type.eqref);
+    this.registerNativeType(CommonNames.i31ref, Type.i31ref);
+    this.registerNativeType(CommonNames.dataref, Type.dataref);
 
     // register compiler hints
     this.registerConstantInteger(CommonNames.ASC_TARGET, Type.i32,
@@ -1241,11 +1243,11 @@ export class Program extends DiagnosticEmitter {
     if (options.hasFeature(Feature.REFERENCE_TYPES)) {
       this.registerWrapperClass(Type.funcref, CommonNames.Funcref);
       this.registerWrapperClass(Type.externref, CommonNames.Externref);
-      if (options.hasFeature(Feature.EXCEPTION_HANDLING)) {
-        this.registerWrapperClass(Type.exnref, CommonNames.Exnref);
-      }
       if (options.hasFeature(Feature.GC)) {
         this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
+        this.registerWrapperClass(Type.eqref, CommonNames.Eqref);
+        this.registerWrapperClass(Type.i31ref, CommonNames.I31ref);
+        this.registerWrapperClass(Type.dataref, CommonNames.Dataref);
       }
     }
 
@@ -3681,8 +3683,10 @@ export class Function extends TypedElement {
   tempV128s: Local[] | null = null;
   tempFuncrefs: Local[] | null = null;
   tempExternrefs: Local[] | null = null;
-  tempExnrefs: Local[] | null = null;
   tempAnyrefs: Local[] | null = null;
+  tempEqrefs: Local[] | null = null;
+  tempI31refs: Local[] | null = null;
+  tempDatarefs: Local[] | null = null;
 
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;

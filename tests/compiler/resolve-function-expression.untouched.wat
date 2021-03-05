@@ -3058,7 +3058,7 @@
   global.set $~argumentsLength
   i32.const 32
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 42
   i32.eq
   i32.eqz
@@ -3075,7 +3075,7 @@
   global.set $~argumentsLength
   i32.const 144
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 42
   i32.eq
   i32.eqz
@@ -3109,7 +3109,7 @@
   global.set $~argumentsLength
   i32.const 176
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 10
   call $~lib/number/I32#toString
   local.set $0

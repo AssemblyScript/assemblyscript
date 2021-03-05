@@ -2565,19 +2565,19 @@
   global.set $~argumentsLength
   global.get $function-call/fnVoid
   i32.load
-  call_indirect (type $none_=>_none)
+  call_indirect $0 (type $none_=>_none)
   i32.const 0
   global.set $~argumentsLength
   global.get $function-call/faVoid
   i32.load
-  call_indirect (type $none_=>_none)
+  call_indirect $0 (type $none_=>_none)
   i32.const 1
   i32.const 2
   i32.const 2
   global.set $~argumentsLength
   global.get $function-call/fnRet
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 3
   i32.eq
   i32.eqz
@@ -2595,7 +2595,7 @@
   global.set $~argumentsLength
   global.get $function-call/faRet
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 5
   i32.eq
   i32.eqz
@@ -2612,7 +2612,7 @@
   global.set $~argumentsLength
   global.get $function-call/fnThis
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 1
   i32.eq
   i32.eqz
@@ -2654,13 +2654,13 @@
   global.set $~argumentsLength
   i32.const 656
   i32.load
-  call_indirect (type $i32_=>_none)
+  call_indirect $0 (type $i32_=>_none)
   i32.const 1
   i32.const 0
   global.set $~argumentsLength
   i32.const 688
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 1
   i32.eq
   i32.eqz
@@ -2684,7 +2684,7 @@
   global.set $~argumentsLength
   i32.const 720
   i32.load
-  call_indirect (type $i32_i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_i32_=>_i32)
   i32.const 3
   i32.eq
   i32.eqz

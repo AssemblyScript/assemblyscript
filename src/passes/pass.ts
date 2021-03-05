@@ -80,13 +80,12 @@ import {
   _BinaryenMemoryFillGetDest,
   _BinaryenMemoryFillGetValue,
   _BinaryenMemoryFillGetSize,
-  _BinaryenRefIsNullGetValue,
+  _BinaryenRefIsGetValue,
   _BinaryenTryGetBody,
-  _BinaryenTryGetCatchBody,
+  _BinaryenTryGetNumCatchBodies,
+  _BinaryenTryGetCatchBodyAt,
   _BinaryenThrowGetNumOperands,
   _BinaryenThrowGetOperandAt,
-  _BinaryenRethrowGetExnref,
-  _BinaryenBrOnExnGetExnref,
   _BinaryenTupleMakeGetOperandAt,
   _BinaryenTupleMakeGetNumOperands,
   _BinaryenIfSetCondition,
@@ -144,12 +143,10 @@ import {
   _BinaryenMemoryFillSetDest,
   _BinaryenMemoryFillSetValue,
   _BinaryenMemoryFillSetSize,
-  _BinaryenRefIsNullSetValue,
+  _BinaryenRefIsSetValue,
   _BinaryenTrySetBody,
-  _BinaryenTrySetCatchBody,
+  _BinaryenTrySetCatchBodyAt,
   _BinaryenThrowSetOperandAt,
-  _BinaryenRethrowSetExnref,
-  _BinaryenBrOnExnSetExnref,
   _BinaryenTupleMakeSetOperandAt,
   _BinaryenBlockGetName,
   _BinaryenLoopGetName,
@@ -166,15 +163,17 @@ import {
   _BinaryenAtomicNotifySetNotifyCount,
   _BinaryenRefFuncGetFunc,
   _BinaryenThrowGetEvent,
-  _BinaryenBrOnExnGetEvent,
-  _BinaryenBrOnExnGetName,
   _BinaryenTupleExtractGetTuple,
   _BinaryenTupleExtractSetTuple,
   _BinaryenRefEqGetLeft,
   _BinaryenRefEqGetRight,
   _BinaryenRefEqSetLeft,
   _BinaryenRefEqSetRight,
-  _BinaryenFunctionSetBody
+  _BinaryenFunctionSetBody,
+  _BinaryenI31NewGetValue,
+  _BinaryenI31GetGetI31,
+  _BinaryenI31NewSetValue,
+  _BinaryenI31GetSetI31
 } from "../glue/binaryen";
 
 /** Base class of custom Binaryen visitors. */
@@ -367,7 +366,7 @@ export abstract class Visitor {
     // unimp
   }
 
-  visitRefIsNull(expr: ExpressionRef): void {
+  visitRefIs(expr: ExpressionRef): void {
     // unimp
   }
 
@@ -388,10 +387,6 @@ export abstract class Visitor {
   }
 
   visitRethrow(expr: ExpressionRef): void {
-    // unimp
-  }
-
-  visitBrOnExn(expr: ExpressionRef): void {
     // unimp
   }
 
@@ -423,7 +418,7 @@ export abstract class Visitor {
     // unimp
   }
 
-  visitBrOnCast(expr: ExpressionRef): void {
+  visitBrOn(expr: ExpressionRef): void {
     // unimp
   }
 
@@ -460,6 +455,10 @@ export abstract class Visitor {
   }
 
   visitArrayLen(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitRefAs(expr: ExpressionRef): void {
     // unimp
   }
 
@@ -801,11 +800,11 @@ export abstract class Visitor {
         this.visitRefNull(expr);
         break;
       }
-      case ExpressionId.RefIsNull: {
+      case ExpressionId.RefIs: {
         this.stack.push(expr);
-        this.visit(_BinaryenRefIsNullGetValue(expr));
+        this.visit(_BinaryenRefIsGetValue(expr));
         assert(this.stack.pop() == expr);
-        this.visitRefIsNull(expr);
+        this.visitRefIs(expr);
         break;
       }
       case ExpressionId.RefFunc: {
@@ -826,7 +825,10 @@ export abstract class Visitor {
       case ExpressionId.Try: {
         this.stack.push(expr);
         this.visit(_BinaryenTryGetBody(expr));
-        this.visit(_BinaryenTryGetCatchBody(expr));
+        let numCatchBodies = _BinaryenTryGetNumCatchBodies(expr);
+        for (let i: Index = 0; i < numCatchBodies; ++i) {
+          this.visit(_BinaryenTryGetCatchBodyAt(expr, i));
+        }
         assert(this.stack.pop() == expr);
         this.visitTry(expr);
         break;
@@ -843,19 +845,7 @@ export abstract class Visitor {
         break;
       }
       case ExpressionId.Rethrow: {
-        this.stack.push(expr);
-        this.visit(_BinaryenRethrowGetExnref(expr));
-        assert(this.stack.pop() == expr);
         this.visitRethrow(expr);
-        break;
-      }
-      case ExpressionId.BrOnExn: {
-        this.stack.push(expr);
-        this.visitEvent(_BinaryenBrOnExnGetEvent(expr));
-        this.visitLabel(_BinaryenBrOnExnGetName(expr));
-        this.visit(_BinaryenBrOnExnGetExnref(expr));
-        assert(this.stack.pop() == expr);
-        this.visitBrOnExn(expr);
         break;
       }
       case ExpressionId.TupleMake: {
@@ -879,14 +869,14 @@ export abstract class Visitor {
       }
       case ExpressionId.I31New: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenI31NewGetValue(expr));
         assert(this.stack.pop() == expr);
         this.visitI31New(expr);
         break;
       }
       case ExpressionId.I31Get: {
         this.stack.push(expr);
-        assert(false); // TODO
+        this.visit(_BinaryenI31GetGetI31(expr));
         assert(this.stack.pop() == expr);
         this.visitI31Get(expr);
         break;
@@ -912,11 +902,11 @@ export abstract class Visitor {
         this.visitRefCast(expr);
         break;
       }
-      case ExpressionId.BrOnCast: {
+      case ExpressionId.BrOn: {
         this.stack.push(expr);
         assert(false); // TODO
         assert(this.stack.pop() == expr);
-        this.visitBrOnCast(expr);
+        this.visitBrOn(expr);
         break;
       }
       case ExpressionId.RttCanon: {
@@ -980,6 +970,13 @@ export abstract class Visitor {
         assert(false); // TODO
         assert(this.stack.pop() == expr);
         this.visitArrayLen(expr);
+        break;
+      }
+      case ExpressionId.RefAs: {
+        this.stack.push(expr);
+        assert(false); // TODO
+        assert(this.stack.pop() == expr);
+        this.visitRefAs(expr);
         break;
       }
       default: throw new Error("unexpected expression kind");
@@ -1492,10 +1489,10 @@ export function replaceChild(
     case ExpressionId.RefNull: {
       break;
     }
-    case ExpressionId.RefIsNull: {
-      let value = _BinaryenRefIsNullGetValue(parent);
+    case ExpressionId.RefIs: {
+      let value = _BinaryenRefIsGetValue(parent);
       if (value == search) {
-        _BinaryenRefIsNullSetValue(parent, replacement);
+        _BinaryenRefIsSetValue(parent, replacement);
         return value;
       }
       break;
@@ -1522,10 +1519,13 @@ export function replaceChild(
         _BinaryenTrySetBody(parent, replacement);
         return body;
       }
-      let catchBody = _BinaryenTryGetCatchBody(parent);
-      if (catchBody == search) {
-        _BinaryenTrySetCatchBody(parent, replacement);
-        return catchBody;
+      let numCatchBodies = _BinaryenTryGetNumCatchBodies(parent);
+      for (let i: Index = 0; i < numCatchBodies; ++i) {
+        let catchBody = _BinaryenTryGetCatchBodyAt(parent, i);
+        if (catchBody == search) {
+          _BinaryenTrySetCatchBodyAt(parent, i, replacement);
+          return catchBody;
+        }
       }
       break;
     }
@@ -1541,19 +1541,6 @@ export function replaceChild(
       break;
     }
     case ExpressionId.Rethrow: {
-      let exnref = _BinaryenRethrowGetExnref(parent);
-      if (exnref == search) {
-        _BinaryenRethrowSetExnref(parent, replacement);
-        return exnref;
-      }
-      break;
-    }
-    case ExpressionId.BrOnExn: {
-      let exnref = _BinaryenBrOnExnGetExnref(parent);
-      if (exnref == search) {
-        _BinaryenBrOnExnSetExnref(parent, replacement);
-        return exnref;
-      }
       break;
     }
     case ExpressionId.TupleMake: {
@@ -1576,11 +1563,19 @@ export function replaceChild(
       break;
     }
     case ExpressionId.I31New: {
-      assert(false); // TODO
+      let value = _BinaryenI31NewGetValue(parent);
+      if (value == search) {
+        _BinaryenI31NewSetValue(parent, replacement);
+        return value;
+      }
       break;
     }
     case ExpressionId.I31Get: {
-      assert(false); // TODO
+      let i31Expr = _BinaryenI31GetGetI31(parent);
+      if (i31Expr == search) {
+        _BinaryenI31GetSetI31(parent, replacement);
+        return i31Expr;
+      }
       break;
     }
     case ExpressionId.CallRef: {
@@ -1595,7 +1590,7 @@ export function replaceChild(
       assert(false); // TODO
       break;
     }
-    case ExpressionId.BrOnCast: {
+    case ExpressionId.BrOn: {
       assert(false); // TODO
       break;
     }
@@ -1632,6 +1627,10 @@ export function replaceChild(
       break;
     }
     case ExpressionId.ArrayLen: {
+      assert(false); // TODO
+      break;
+    }
+    case ExpressionId.RefAs: {
       assert(false); // TODO
       break;
     }

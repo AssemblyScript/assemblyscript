@@ -592,8 +592,10 @@ export class TSDBuilder extends ExportsWalker {
       case TypeKind.VOID: return "void";
       case TypeKind.FUNCREF: return "funcref";
       case TypeKind.EXTERNREF: return "externref";
-      case TypeKind.EXNREF: return "exnref";
       case TypeKind.ANYREF: return "anyref";
+      case TypeKind.EQREF: return "eqref";
+      case TypeKind.I31REF: return "i31ref";
+      case TypeKind.DATAREF: return "dataref";
       default: {
         assert(false);
         return "any";

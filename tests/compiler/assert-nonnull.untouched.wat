@@ -65,7 +65,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
  )
  (func $assert-nonnull/testObjFn (param $0 i32) (result i32)
   i32.const 0
@@ -73,7 +73,7 @@
   local.get $0
   i32.load offset=4
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
@@ -459,7 +459,7 @@
   global.set $~argumentsLength
   local.get $2
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.set $3
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -483,7 +483,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.tee $1
   i32.store
   local.get $1
@@ -521,7 +521,7 @@
   local.get $0
   i32.load offset=4
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.tee $1
   i32.store
   local.get $1

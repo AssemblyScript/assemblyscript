@@ -42,13 +42,6 @@ assert(!externGlobal);
 var externGlobalInit: externref = null;
 assert(!externGlobalInit);
 
-var exnGlobal: exnref;
-assert(!exnGlobal);
-exnGlobal = null;
-assert(!exnGlobal);
-var exnGlobalInit: exnref = null;
-assert(!exnGlobalInit);
-
 var anyGlobal: anyref;
 assert(!anyGlobal);
 anyGlobal = null;
@@ -66,7 +59,6 @@ function testLocal<T>(): void {
 }
 testLocal<funcref>();
 testLocal<externref>();
-testLocal<exnref>();
 testLocal<anyref>();
 
 // funcref can represent function references
@@ -84,8 +76,3 @@ assert(otherFuncGlobal);
 // can assign any reference type to anyref
 
 anyGlobal = funcGlobal;
-anyGlobal = externGlobal;
-anyGlobal = exnGlobal;
-
-// TODO: Not implemented: ref.cast
-// exnGlobal = <exnref>anyGlobal;

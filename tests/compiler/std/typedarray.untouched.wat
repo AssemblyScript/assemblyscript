@@ -3505,7 +3505,7 @@
        global.set $~argumentsLength
        local.get $2
        i32.load
-       call_indirect (type $f64_f64_=>_i32)
+       call_indirect $0 (type $f64_f64_=>_i32)
        i32.const 0
        i32.lt_s
        if
@@ -3641,7 +3641,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $f64_f64_=>_i32)
+    call_indirect $0 (type $f64_f64_=>_i32)
     i32.const 0
     i32.lt_s
     if
@@ -3773,7 +3773,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $f64_f64_=>_i32)
+      call_indirect $0 (type $f64_f64_=>_i32)
       i32.const 0
       i32.lt_s
       if
@@ -3881,7 +3881,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $f64_f64_=>_i32)
+    call_indirect $0 (type $f64_f64_=>_i32)
     i32.const 0
     i32.lt_s
     if
@@ -5862,7 +5862,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -5940,7 +5940,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -5998,7 +5998,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -6080,7 +6080,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -6162,7 +6162,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -6220,7 +6220,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -6302,7 +6302,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -6384,7 +6384,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i64_i64_i32_i32_=>_i64)
+    call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
     local.set $3
     local.get $7
     i32.const 1
@@ -6466,7 +6466,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i64_i64_i32_i32_=>_i64)
+    call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
     local.set $3
     local.get $7
     i32.const 1
@@ -6548,7 +6548,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $f32_f32_i32_i32_=>_f32)
+    call_indirect $0 (type $f32_f32_i32_i32_=>_f32)
     local.set $3
     local.get $7
     i32.const 1
@@ -6606,7 +6606,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $f64_f64_i32_i32_=>_f64)
+    call_indirect $0 (type $f64_f64_i32_i32_=>_f64)
     local.set $3
     local.get $7
     i32.const 1
@@ -7861,7 +7861,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -7918,7 +7918,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -7975,7 +7975,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -8032,7 +8032,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -8089,7 +8089,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -8146,7 +8146,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -8203,7 +8203,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i32_i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_i32_=>_i32)
     local.set $3
     local.get $7
     i32.const 1
@@ -8260,7 +8260,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i64_i64_i32_i32_=>_i64)
+    call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
     local.set $3
     local.get $7
     i32.const 1
@@ -8317,7 +8317,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $i64_i64_i32_i32_=>_i64)
+    call_indirect $0 (type $i64_i64_i32_i32_=>_i64)
     local.set $3
     local.get $7
     i32.const 1
@@ -8374,7 +8374,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $f32_f32_i32_i32_=>_f32)
+    call_indirect $0 (type $f32_f32_i32_i32_=>_f32)
     local.set $3
     local.get $7
     i32.const 1
@@ -8431,7 +8431,7 @@
     global.set $~argumentsLength
     local.get $4
     i32.load
-    call_indirect (type $f64_f64_i32_i32_=>_f64)
+    call_indirect $0 (type $f64_f64_i32_i32_=>_f64)
     local.set $3
     local.get $7
     i32.const 1
@@ -8816,7 +8816,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Int8Array,i8>|inlined.0
@@ -8886,7 +8886,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Uint8Array,u8>|inlined.0
@@ -8954,7 +8954,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
@@ -9024,7 +9024,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Int16Array,i16>|inlined.0
@@ -9094,7 +9094,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Uint16Array,u16>|inlined.0
@@ -9160,7 +9160,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Int32Array,i32>|inlined.0
@@ -9224,7 +9224,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Uint32Array,u32>|inlined.0
@@ -9288,7 +9288,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i64_i32_i32_=>_i32)
+     call_indirect $0 (type $i64_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Int64Array,i64>|inlined.0
@@ -9352,7 +9352,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i64_i32_i32_=>_i32)
+     call_indirect $0 (type $i64_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Uint64Array,u64>|inlined.0
@@ -9416,7 +9416,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $f32_i32_i32_=>_i32)
+     call_indirect $0 (type $f32_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Float32Array,f32>|inlined.0
@@ -9480,7 +9480,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $f64_i32_i32_=>_i32)
+     call_indirect $0 (type $f64_i32_i32_=>_i32)
      if
       i32.const 1
       br $~lib/typedarray/SOME<~lib/typedarray/Float64Array,f64>|inlined.0
@@ -9548,7 +9548,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int8Array,i8>|inlined.0
@@ -9618,7 +9618,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8Array,u8>|inlined.0
@@ -9686,7 +9686,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint8ClampedArray,u8>|inlined.0
@@ -9756,7 +9756,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int16Array,i16>|inlined.0
@@ -9826,7 +9826,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint16Array,u16>|inlined.0
@@ -9892,7 +9892,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int32Array,i32>|inlined.0
@@ -9956,7 +9956,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i32_i32_i32_=>_i32)
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint32Array,u32>|inlined.0
@@ -10020,7 +10020,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i64_i32_i32_=>_i32)
+     call_indirect $0 (type $i64_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Int64Array,i64>|inlined.0
@@ -10084,7 +10084,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $i64_i32_i32_=>_i32)
+     call_indirect $0 (type $i64_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Uint64Array,u64>|inlined.0
@@ -10148,7 +10148,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $f32_i32_i32_=>_i32)
+     call_indirect $0 (type $f32_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float32Array,f32>|inlined.0
@@ -10212,7 +10212,7 @@
      global.set $~argumentsLength
      local.get $2
      i32.load
-     call_indirect (type $f64_i32_i32_=>_i32)
+     call_indirect $0 (type $f64_i32_i32_=>_i32)
      if
       local.get $5
       br $~lib/typedarray/FIND_INDEX<~lib/typedarray/Float64Array,f64>|inlined.0
@@ -10283,7 +10283,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $i32_i32_i32_=>_i32)
+      call_indirect $0 (type $i32_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -10358,7 +10358,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $i32_i32_i32_=>_i32)
+      call_indirect $0 (type $i32_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -10431,7 +10431,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $i32_i32_i32_=>_i32)
+      call_indirect $0 (type $i32_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -10506,7 +10506,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $i32_i32_i32_=>_i32)
+      call_indirect $0 (type $i32_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -10581,7 +10581,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $i32_i32_i32_=>_i32)
+      call_indirect $0 (type $i32_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -10652,7 +10652,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $i32_i32_i32_=>_i32)
+      call_indirect $0 (type $i32_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -10721,7 +10721,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $i32_i32_i32_=>_i32)
+      call_indirect $0 (type $i32_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -10790,7 +10790,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $i64_i32_i32_=>_i32)
+      call_indirect $0 (type $i64_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -10859,7 +10859,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $i64_i32_i32_=>_i32)
+      call_indirect $0 (type $i64_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -11179,7 +11179,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $f32_i32_i32_=>_i32)
+      call_indirect $0 (type $f32_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -11505,7 +11505,7 @@
       global.set $~argumentsLength
       local.get $2
       i32.load
-      call_indirect (type $f64_i32_i32_=>_i32)
+      call_indirect $0 (type $f64_i32_i32_=>_i32)
       if
        br $for-continue|0
       end
@@ -11565,7 +11565,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_none)
+    call_indirect $0 (type $i32_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -11612,7 +11612,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_none)
+    call_indirect $0 (type $i32_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -11659,7 +11659,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_none)
+    call_indirect $0 (type $i32_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -11706,7 +11706,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_none)
+    call_indirect $0 (type $i32_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -11753,7 +11753,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_none)
+    call_indirect $0 (type $i32_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -11800,7 +11800,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_none)
+    call_indirect $0 (type $i32_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -11847,7 +11847,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_none)
+    call_indirect $0 (type $i32_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -11894,7 +11894,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i64_i32_i32_=>_none)
+    call_indirect $0 (type $i64_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -11941,7 +11941,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i64_i32_i32_=>_none)
+    call_indirect $0 (type $i64_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -11988,7 +11988,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $f32_i32_i32_=>_none)
+    call_indirect $0 (type $f32_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -12035,7 +12035,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $f64_i32_i32_=>_none)
+    call_indirect $0 (type $f64_i32_i32_=>_none)
     local.get $5
     i32.const 1
     i32.add
@@ -53588,7 +53588,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     i32.store8
     local.get $9
     i32.const 1
@@ -53689,7 +53689,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     i32.store8
     local.get $9
     i32.const 1
@@ -53790,7 +53790,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     i32.store8
     local.get $9
     i32.const 1
@@ -53891,7 +53891,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     i32.store16
     local.get $9
     i32.const 1
@@ -53992,7 +53992,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     i32.store16
     local.get $9
     i32.const 1
@@ -54093,7 +54093,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     i32.store
     local.get $9
     i32.const 1
@@ -54194,7 +54194,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     i32.store
     local.get $9
     i32.const 1
@@ -54295,7 +54295,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i64_i32_i32_=>_i64)
+    call_indirect $0 (type $i64_i32_i32_=>_i64)
     i64.store
     local.get $9
     i32.const 1
@@ -54396,7 +54396,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i64_i32_i32_=>_i64)
+    call_indirect $0 (type $i64_i32_i32_=>_i64)
     i64.store
     local.get $9
     i32.const 1
@@ -54497,7 +54497,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $f32_i32_i32_=>_f32)
+    call_indirect $0 (type $f32_i32_i32_=>_f32)
     f32.store
     local.get $9
     i32.const 1
@@ -54598,7 +54598,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $f64_i32_i32_=>_f64)
+    call_indirect $0 (type $f64_i32_i32_=>_f64)
     f64.store
     local.get $9
     i32.const 1
@@ -54698,7 +54698,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8
@@ -54819,7 +54819,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8
@@ -54940,7 +54940,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8
@@ -55061,7 +55061,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8
@@ -55182,7 +55182,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8
@@ -55303,7 +55303,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8
@@ -55424,7 +55424,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8
@@ -55545,7 +55545,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i64_i32_i32_=>_i32)
+    call_indirect $0 (type $i64_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8
@@ -55666,7 +55666,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $i64_i32_i32_=>_i32)
+    call_indirect $0 (type $i64_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8
@@ -55787,7 +55787,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $f32_i32_i32_=>_i32)
+    call_indirect $0 (type $f32_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8
@@ -55908,7 +55908,7 @@
     global.set $~argumentsLength
     local.get $2
     i32.load
-    call_indirect (type $f64_i32_i32_=>_i32)
+    call_indirect $0 (type $f64_i32_i32_=>_i32)
     if
      local.get $6
      local.get $8

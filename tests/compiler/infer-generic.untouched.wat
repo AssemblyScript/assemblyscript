@@ -82,7 +82,7 @@
     global.set $~argumentsLength
     local.get $1
     i32.load
-    call_indirect (type $i32_f32_i32_i32_=>_i32)
+    call_indirect $0 (type $i32_f32_i32_i32_=>_i32)
     local.set $3
     local.get $4
     i32.const 1

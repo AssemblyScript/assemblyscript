@@ -432,7 +432,7 @@
   i32.store
   local.get $0
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
@@ -471,7 +471,7 @@
   i32.store
   local.get $0
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
@@ -501,7 +501,7 @@
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.tee $0
   i32.store
   local.get $0
@@ -536,7 +536,7 @@
   local.get $0
   i32.load offset=4
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
@@ -563,7 +563,7 @@
   local.get $0
   i32.load offset=4
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.tee $0
   i32.store
   local.get $0

@@ -125,8 +125,10 @@ export namespace CommonNames {
   export const v128 = "v128";
   export const funcref = "funcref";
   export const externref = "externref";
-  export const exnref = "exnref";
   export const anyref = "anyref";
+  export const eqref = "eqref";
+  export const i31ref = "i31ref";
+  export const dataref = "dataref";
   export const i8x16 = "i8x16";
   export const u8x16 = "u8x16";
   export const i16x8 = "i16x8";
@@ -193,8 +195,10 @@ export namespace CommonNames {
   export const V128 = "V128";
   export const Funcref = "Funcref";
   export const Externref = "Externref";
-  export const Exnref = "Exnref";
   export const Anyref = "Anyref";
+  export const Eqref = "Eqref";
+  export const I31ref = "I31ref";
+  export const Dataref = "Dataref";
   export const String = "String";
   export const Array = "Array";
   export const StaticArray = "StaticArray";
