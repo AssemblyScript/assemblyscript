@@ -25,6 +25,7 @@ import {
   ExpressionRef,
   UnaryOp,
   BinaryOp,
+  RefIsOp,
   NativeType,
   FunctionRef,
   ExpressionId,
@@ -668,15 +669,6 @@ export class Compiler extends DiagnosticEmitter {
     // import memory if requested (default memory is named '0' by Binaryen)
     if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
 
-    // set up function table (first elem is blank)
-    var tableBase = this.options.tableBase;
-    if (!tableBase) tableBase = 1; // leave first elem blank
-    var functionTableNames = new Array<string>(functionTable.length);
-    for (let i = 0, k = functionTable.length; i < k; ++i) {
-      functionTableNames[i] = functionTable[i].internalName;
-    }
-    module.setFunctionTable(tableBase + functionTable.length, Module.UNLIMITED_TABLE, functionTableNames, module.i32(tableBase));
-
     // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) {
       module.addTableImport("0", "env", "table");
@@ -696,6 +688,15 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
     }
+
+    // set up function table (first elem is blank)
+    var tableBase = this.options.tableBase;
+    if (!tableBase) tableBase = 1; // leave first elem blank
+    var functionTableNames = new Array<string>(functionTable.length);
+    for (let i = 0, k = functionTable.length; i < k; ++i) {
+      functionTableNames[i] = functionTable[i].internalName;
+    }
+    module.setFunctionTable(tableBase + functionTable.length, Module.UNLIMITED_TABLE, functionTableNames, module.i32(tableBase));
 
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
@@ -4932,9 +4933,13 @@ export class Compiler extends DiagnosticEmitter {
           module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
         );
       }
+      case TypeKind.EQREF:
+      case TypeKind.I31REF:
+      case TypeKind.DATAREF: {
+        return module.ref_eq(leftExpr, rightExpr);
+      }
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
-      case TypeKind.EXNREF:
       case TypeKind.ANYREF: {
         this.error(
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
@@ -4991,9 +4996,15 @@ export class Compiler extends DiagnosticEmitter {
           module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
         );
       }
+      case TypeKind.EQREF:
+      case TypeKind.I31REF:
+      case TypeKind.DATAREF: {
+        return module.unary(UnaryOp.EqzI32,
+          module.ref_eq(leftExpr, rightExpr)
+        );
+      }
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
-      case TypeKind.EXNREF:
       case TypeKind.ANYREF: {
         this.error(
           DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
@@ -9710,11 +9721,10 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
         return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode);
-      case TypeKind.EXNREF: {
-        return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode)
-            && this.checkFeatureEnabled(Feature.EXCEPTION_HANDLING, reportNode);
-      }
-      case TypeKind.ANYREF: {
+      case TypeKind.ANYREF:
+      case TypeKind.EQREF:
+      case TypeKind.I31REF:
+      case TypeKind.DATAREF: {
         return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode)
             && this.checkFeatureEnabled(Feature.GC, reportNode);
       }
@@ -9816,9 +9826,10 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.V128: return module.v128(v128_zero);
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
-      case TypeKind.EXNREF:
       case TypeKind.ANYREF:
-        return module.ref_null(type.toNativeType());
+      case TypeKind.EQREF:
+      case TypeKind.DATAREF: return module.ref_null(type.toNativeType());
+      case TypeKind.I31REF: return module.i31_new(module.i32(0));
     }
   }
 
@@ -9840,6 +9851,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: return module.i64(1);
       case TypeKind.F32: return module.f32(1);
       case TypeKind.F64: return module.f64(1);
+      case TypeKind.I31REF: return module.i31_new(module.i32(1));
     }
   }
 
@@ -9925,9 +9937,11 @@ export class Compiler extends DiagnosticEmitter {
       }
       case TypeKind.FUNCREF:
       case TypeKind.EXTERNREF:
-      case TypeKind.EXNREF:
-      case TypeKind.ANYREF:{
-        return module.ref_is_null(expr);
+      case TypeKind.ANYREF:
+      case TypeKind.EQREF:
+      case TypeKind.DATAREF:
+      case TypeKind.I31REF: {
+        return module.ref_is(RefIsOp.RefIsNull, expr);
       }
       default: {
         assert(false);

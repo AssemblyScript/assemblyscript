@@ -53,6 +53,46 @@ function test_v128(): void {
     v128.store(ptr, v128.load(ptr, 16), 32);
     __free(ptr);
   }
+  {
+    let ptr = __alloc(16);
+    store<u8>(ptr, 42);
+    assert(
+      v128.load8_splat(ptr)
+      ==
+      v128(42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42)
+    );
+    __free(ptr);
+  }
+  {
+    let ptr = __alloc(16);
+    store<u16>(ptr, 42);
+    assert(
+      v128.load16_splat(ptr)
+      ==
+      v128(42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0)
+    );
+    __free(ptr);
+  }
+  {
+    let ptr = __alloc(16);
+    store<u32>(ptr, 42);
+    assert(
+      v128.load32_splat(ptr)
+      ==
+      v128(42, 0, 0, 0, 42, 0, 0, 0, 42, 0, 0, 0, 42, 0, 0, 0)
+    );
+    __free(ptr);
+  }
+  {
+    let ptr = __alloc(16);
+    store<u64>(ptr, 42);
+    assert(
+      v128.load64_splat(ptr)
+      ==
+      v128(42, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0)
+    );
+    __free(ptr);
+  }
   // generic operations are tested by the aliases below already
 }
 
@@ -64,7 +104,6 @@ function test_i8x16(): void {
   var c = i8x16.add(a, b);
   assert(c == i8x16(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, -128));
   assert(i8x16.sub(c, b) == a);
-  assert(i8x16.mul(c, b) == c);
   assert(
     i8x16.min_s(
       i8x16(0, 127, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -124,25 +163,25 @@ function test_i8x16(): void {
     i8x16(1, 2, 3, 4, 5, 6, 7, 8, 1, 1, 1, 1, 1, 1, 1, 1)
   );
   assert(
-    i8x16.add_saturate_s(
+    i8x16.add_sat_s(
       i8x16(126, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127, 127),
       i8x16.splat(2)
     ) == i8x16.splat(127)
   );
   assert(
-    i8x16.add_saturate_u(
+    i8x16.add_sat_u(
       i8x16(-2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1),
       i8x16.splat(2)
     ) == i8x16.splat(-1)
   );
   assert(
-    i8x16.sub_saturate_s(
+    i8x16.sub_sat_s(
       i8x16(-127, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128, -128),
       i8x16.splat(2)
     ) == i8x16.splat(-128)
   );
   assert(
-    i8x16.sub_saturate_u(
+    i8x16.sub_sat_u(
       i8x16(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
       i8x16.splat(2)
     ) == i8x16.splat(0)
@@ -150,7 +189,7 @@ function test_i8x16(): void {
   assert(i8x16.shl(i8x16.splat(1), 1) == i8x16.splat(2));
   assert(i8x16.shr_s(i8x16.splat(-2), 1) == i8x16.splat(-1));
   assert(i8x16.shr_u(i8x16.splat(-1), 1) == i8x16.splat(127));
-  assert(i8x16.any_true(i8x16(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)) == true);
+  assert(v128.any_true(i8x16(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)) == true);
   assert(i8x16.all_true(i8x16.splat(1)) == true);
   var one = i8x16.replace_lane(i8x16.splat(0), 0, 1);
   var negOne = i8x16.replace_lane(i8x16.splat(0), 0, -1);
@@ -168,6 +207,21 @@ function test_i8x16(): void {
   assert(i8x16.ge_u(one, negOne) == excl1st);
   assert(i8x16.narrow_i16x8_s(i16x8.splat(i16.MAX_VALUE), i16x8.splat(i16.MAX_VALUE)) == i8x16.splat(i8.MAX_VALUE));
   assert(i8x16.narrow_i16x8_u(i16x8.splat(i16.MAX_VALUE), i16x8.splat(i16.MAX_VALUE)) == i8x16.splat(u8.MAX_VALUE));
+  {
+    let a = v128( 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15);
+    let b = v128(16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
+    assert(
+      i8x16.shuffle(a, b, 0, 17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31)
+      ==
+      v128(0, 17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31)
+    );
+    let c = v128(16, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
+    assert(
+      i8x16.swizzle(a, c)
+      ==
+      v128(0, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+    );
+  }
 }
 
 function test_i16x8(): void {
@@ -238,25 +292,25 @@ function test_i16x8(): void {
     i16x8(1, 2, 3, 4, 1, 1, 1, 1)
   );
   assert(
-    i16x8.add_saturate_s(
+    i16x8.add_sat_s(
       i16x8(32766, 32767, 32767, 32767, 32767, 32767, 32767, 32767),
       i16x8.splat(2)
     ) == i16x8.splat(32767)
   );
   assert(
-    i16x8.add_saturate_u(
+    i16x8.add_sat_u(
       i16x8(-2, -1, -1, -1, -1, -1, -1, -1),
       i16x8.splat(2)
     ) == i16x8.splat(-1)
   );
   assert(
-    i16x8.sub_saturate_s(
+    i16x8.sub_sat_s(
       i16x8(-32767, -32768, -32768, -32768, -32768, -32768, -32768, -32768),
       i16x8.splat(2)
     ) == i16x8.splat(-32768)
   );
   assert(
-    i16x8.sub_saturate_u(
+    i16x8.sub_sat_u(
       i16x8(1, 0, 0, 0, 0, 0, 0, 0),
       i16x8.splat(2)
     ) == i16x8.splat(0)
@@ -264,7 +318,7 @@ function test_i16x8(): void {
   assert(i16x8.shl(i16x8.splat(1), 1) == i16x8.splat(2));
   assert(i16x8.shr_s(i16x8.splat(-2), 1) == i16x8.splat(-1));
   assert(i16x8.shr_u(i16x8.splat(-1), 1) == i16x8.splat(32767));
-  assert(i16x8.any_true(i16x8(1, 0, 0, 0, 0, 0, 0, 0)) == true);
+  assert(v128.any_true(i16x8(1, 0, 0, 0, 0, 0, 0, 0)) == true);
   assert(i16x8.all_true(i16x8.splat(1)) == true);
   var one = i16x8.replace_lane(i16x8.splat(0), 0, 1);
   var negOne = i16x8.replace_lane(i16x8.splat(0), 0, -1);
@@ -282,33 +336,32 @@ function test_i16x8(): void {
   assert(i16x8.ge_u(one, negOne) == excl1st);
   assert(i16x8.narrow_i32x4_s(i32x4.splat(i32.MAX_VALUE), i32x4.splat(i32.MAX_VALUE)) == i16x8.splat(i16.MAX_VALUE));
   assert(i16x8.narrow_i32x4_u(i32x4.splat(i32.MAX_VALUE), i32x4.splat(i32.MAX_VALUE)) == i16x8.splat(u16.MAX_VALUE));
-  assert(i16x8.widen_low_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(-1));
-  assert(i16x8.widen_low_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(255));
-  assert(i16x8.widen_high_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(-1));
-  assert(i16x8.widen_high_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(255));
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<i8>(ptr, 1);
-  //   store<i8>(ptr, 2, 1);
-  //   store<i8>(ptr, 3, 2);
-  //   store<i8>(ptr, 4, 3);
-  //   store<i8>(ptr, 5, 4);
-  //   store<i8>(ptr, 6, 5);
-  //   store<i8>(ptr, 7, 6);
-  //   store<i8>(ptr, -1, 7);
-  //   assert(
-  //     i16x8.load8x8_s(ptr)
-  //     ==
-  //     v128(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, -1, -1)
-  //   );
-  //   assert(
-  //     i16x8.load8x8_u(ptr)
-  //     ==
-  //     v128(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, -1, 0)
-  //   );
-  //   __free(ptr);
-  // }
+  assert(i16x8.extend_low_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(-1));
+  assert(i16x8.extend_low_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 8, 0)) == i16x8.splat(255));
+  assert(i16x8.extend_high_i8x16_s(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(-1));
+  assert(i16x8.extend_high_i8x16_u(i8x16.replace_lane(i8x16.splat(-1), 0, 0)) == i16x8.splat(255));
+  {
+    let ptr = __alloc(16);
+    store<i8>(ptr, 1);
+    store<i8>(ptr, 2, 1);
+    store<i8>(ptr, 3, 2);
+    store<i8>(ptr, 4, 3);
+    store<i8>(ptr, 5, 4);
+    store<i8>(ptr, 6, 5);
+    store<i8>(ptr, 7, 6);
+    store<i8>(ptr, -1, 7);
+    assert(
+      v128.load8x8_s(ptr)
+      ==
+      v128(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, -1, -1)
+    );
+    assert(
+      v128.load8x8_u(ptr)
+      ==
+      v128(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, -1, 0)
+    );
+    __free(ptr);
+  }
 }
 
 function test_i32x4(): void {
@@ -380,7 +433,7 @@ function test_i32x4(): void {
   assert(i32x4.shl(i32x4.splat(1), 1) == i32x4.splat(2));
   assert(i32x4.shr_s(i32x4.splat(-2), 1) == i32x4.splat(-1));
   assert(i32x4.shr_u(i32x4.splat(-1), 1) == i32x4.splat(2147483647));
-  assert(i32x4.any_true(i32x4(1, 0, 0, 0)) == true);
+  assert(v128.any_true(i32x4(1, 0, 0, 0)) == true);
   assert(i32x4.all_true(i32x4.splat(1)) == true);
   var one = i32x4.replace_lane(i32x4.splat(0), 0, 1);
   var negOne = i32x4.replace_lane(i32x4.splat(0), 0, -1);
@@ -406,29 +459,28 @@ function test_i32x4(): void {
     ==
     i32x4.splat(0)
   );
-  assert(i32x4.widen_low_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(-1));
-  assert(i32x4.widen_low_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(65535));
-  assert(i32x4.widen_high_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(-1));
-  assert(i32x4.widen_high_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(65535));
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<i16>(ptr, 1);
-  //   store<i16>(ptr, 2, 2);
-  //   store<i16>(ptr, 3, 4);
-  //   store<i16>(ptr, -1, 6);
-  //   assert(
-  //     i32x4.load16x4_s(ptr)
-  //     ==
-  //     v128(1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, -1, -1, -1, -1)
-  //   );
-  //   assert(
-  //     i32x4.load16x4_u(ptr)
-  //     ==
-  //     v128(1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, -1, -1, 0, 0)
-  //   );
-  //   __free(ptr);
-  // }
+  assert(i32x4.extend_low_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(-1));
+  assert(i32x4.extend_low_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 4, 0)) == i32x4.splat(65535));
+  assert(i32x4.extend_high_i16x8_s(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(-1));
+  assert(i32x4.extend_high_i16x8_u(i16x8.replace_lane(i16x8.splat(-1), 0, 0)) == i32x4.splat(65535));
+  {
+    let ptr = __alloc(16);
+    store<i16>(ptr, 1);
+    store<i16>(ptr, 2, 2);
+    store<i16>(ptr, 3, 4);
+    store<i16>(ptr, -1, 6);
+    assert(
+      v128.load16x4_s(ptr)
+      ==
+      v128(1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, -1, -1, -1, -1)
+    );
+    assert(
+      v128.load16x4_u(ptr)
+      ==
+      v128(1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, -1, -1, 0, 0)
+    );
+    __free(ptr);
+  }
 }
 
 function test_i64x2(): void {
@@ -439,6 +491,7 @@ function test_i64x2(): void {
   var c = i64x2.add(a, b);
   assert(c == i64x2(2, -9223372036854775808));
   assert(i64x2.sub(c, b) == a);
+  assert(i64x2.mul(c, b) == c);
   assert(
     i64x2.neg(a)
     ==
@@ -459,35 +512,24 @@ function test_i64x2(): void {
   assert(i64x2.shl(i64x2.splat(1), 1) == i64x2.splat(2));
   assert(i64x2.shr_s(i64x2.splat(-2), 1) == i64x2.splat(-1));
   assert(i64x2.shr_u(i64x2.splat(-1), 1) == i64x2.splat(9223372036854775807));
-  assert(i64x2.any_true(i64x2(1, 0)) == true);
+  assert(v128.any_true(i64x2(1, 0)) == true);
   assert(i64x2.all_true(i64x2.splat(1)) == true);
-  assert(
-    i64x2.trunc_sat_f64x2_s(f64x2.splat(-1.5))
-    ==
-    i64x2.splat(-1)
-  );
-  assert(
-    i64x2.trunc_sat_f64x2_u(f64x2.splat(-1.5))
-    ==
-    i64x2.splat(0)
-  );
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<i32>(ptr, 1);
-  //   store<i32>(ptr, -1, 4);
-  //   assert(
-  //     i64x2.load32x2_s(ptr)
-  //     ==
-  //     v128(1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1)
-  //   );
-  //   assert(
-  //     i64x2.load32x2_u(ptr)
-  //     ==
-  //     v128(1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0)
-  //   );
-  //   __free(ptr);
-  // }
+  {
+    let ptr = __alloc(16);
+    store<i32>(ptr, 1);
+    store<i32>(ptr, -1, 4);
+    assert(
+      v128.load32x2_s(ptr)
+      ==
+      v128(1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1)
+    );
+    assert(
+      v128.load32x2_u(ptr)
+      ==
+      v128(1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0)
+    );
+    __free(ptr);
+  }
 }
 
 function test_f32x4(): void {
@@ -539,17 +581,6 @@ function test_f32x4(): void {
     ==
     f32x4.splat(4294967296.0)
   );
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // assert(
-  //   f32x4.qfma(f32x4.splat(2), f32x4.splat(3), f32x4.splat(4))
-  //   ==
-  //   f32x4.splat(10)
-  // );
-  // assert(
-  //   f32x4.qfms(f32x4.splat(2), f32x4.splat(3), f32x4.splat(4))
-  //   ==
-  //   f32x4.splat(2)
-  // );
 }
 
 function test_f64x2(): void {
@@ -591,96 +622,6 @@ function test_f64x2(): void {
   assert(f64x2.max(negOne, one) == one);
   assert(f64x2.abs(negOne) == one);
   assert(f64x2.sqrt(f64x2(4.0, 9.0)) == f64x2(2.0, 3.0));
-  assert(
-    f64x2.convert_i64x2_s(i64x2.splat(-1))
-    ==
-    f64x2.splat(-1.0)
-  );
-  assert(
-    f64x2.convert_i64x2_u(i64x2.splat(-1))
-    ==
-    f64x2.splat(18446744073709551615.0)
-  );
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // assert(
-  //   f64x2.qfma(f64x2.splat(2), f64x2.splat(3), f64x2.splat(4))
-  //   ==
-  //   f64x2.splat(10)
-  // );
-  // assert(
-  //   f64x2.qfms(f64x2.splat(2), f64x2.splat(3), f64x2.splat(4))
-  //   ==
-  //   f64x2.splat(2)
-  // );
-}
-
-function test_v8x16(): void {
-  var a = v128( 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15);
-  var b = v128(16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
-  assert(
-    v8x16.shuffle(a, b, 0, 17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31)
-    ==
-    v128(0, 17, 2, 19, 4, 21, 6, 23, 8, 25, 10, 27, 12, 29, 14, 31)
-  );
-  var c = v128(16, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
-  assert(
-    v8x16.swizzle(a, c)
-    ==
-    v128(0, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
-  );
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<u8>(ptr, 42);
-  //   assert(
-  //     v8x16.load_splat(ptr)
-  //     ==
-  //     v128(42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42)
-  //   );
-  //   __free(ptr);
-  // }
-}
-
-function test_v16x8(): void {
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<u16>(ptr, 42);
-  //   assert(
-  //     v16x8.load_splat(ptr)
-  //     ==
-  //     v128(42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0, 42, 0)
-  //   );
-  //   __free(ptr);
-  // }
-}
-
-function test_v32x4(): void {
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<u32>(ptr, 42);
-  //   assert(
-  //     v32x4.load_splat(ptr)
-  //     ==
-  //     v128(42, 0, 0, 0, 42, 0, 0, 0, 42, 0, 0, 0, 42, 0, 0, 0)
-  //   );
-  //   __free(ptr);
-  // }
-}
-
-function test_v64x2(): void {
-  // TODO: not yet implemented in binaryen/src/wasm-interpreter.h
-  // {
-  //   let ptr = __alloc(16, 0);
-  //   store<u64>(ptr, 42);
-  //   assert(
-  //     v64x2.load_splat(ptr)
-  //     ==
-  //     v128(42, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0)
-  //   );
-  //   __free(ptr);
-  // }
 }
 
 function test_const(): v128 {
@@ -696,9 +637,5 @@ if (ASC_FEATURE_SIMD) {
   test_i64x2();
   test_f32x4();
   test_f64x2();
-  test_v8x16();
-  test_v16x8();
-  test_v32x4();
-  test_v64x2();
   test_const();
 }

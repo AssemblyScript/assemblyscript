@@ -215,7 +215,7 @@
       " simd                SIMD types and operations.",
       " threads             Threading and atomic operations.",
       " reference-types     Reference types and operations.",
-      " gc                  Garbage collection (anyref, WIP).",
+      " gc                  Garbage collection (WIP).",
       ""
     ],
     "TODO_doesNothingYet": [

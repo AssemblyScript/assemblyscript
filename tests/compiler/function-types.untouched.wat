@@ -54,7 +54,7 @@
   global.set $~argumentsLength
   local.get $2
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
  )
  (func $function-types/doAdd<i32> (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -63,7 +63,7 @@
   global.set $~argumentsLength
   call $function-types/makeAdder<i32>
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
  )
  (func $function-types/addI32 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -77,7 +77,7 @@
   global.set $~argumentsLength
   local.get $2
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
  )
  (func $~start
   call $start:function-types
@@ -113,7 +113,7 @@
   global.set $~argumentsLength
   global.get $function-types/i32Adder
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 3
   i32.eq
   i32.eqz
@@ -133,7 +133,7 @@
   global.set $~argumentsLength
   global.get $function-types/i64Adder
   i32.load
-  call_indirect (type $i64_i64_=>_i64)
+  call_indirect $0 (type $i64_i64_=>_i64)
   i64.const 30
   i64.eq
   i32.eqz
@@ -151,7 +151,7 @@
   global.set $~argumentsLength
   call $function-types/makeAdder<f64>
   i32.load
-  call_indirect (type $f64_f64_=>_f64)
+  call_indirect $0 (type $f64_f64_=>_f64)
   f64.const 4
   f64.eq
   i32.eqz

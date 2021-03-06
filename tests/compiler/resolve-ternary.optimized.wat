@@ -3034,7 +3034,7 @@
   i32.const 1
   i32.const 3040
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 2
   i32.ne
   if
@@ -3048,7 +3048,7 @@
   i32.const 1
   i32.const 3104
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 4
   i32.ne
   if
@@ -3062,7 +3062,7 @@
   i32.const 1
   i32.const 3072
   i32.load
-  call_indirect (type $i32_=>_i32)
+  call_indirect $0 (type $i32_=>_i32)
   i32.const 3
   i32.ne
   if

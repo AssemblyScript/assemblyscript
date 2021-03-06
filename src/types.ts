@@ -63,10 +63,14 @@ export const enum TypeKind {
   FUNCREF,
   /** External reference. */
   EXTERNREF,
-  /** Exception reference. */
-  EXNREF,
   /** Any reference. */
   ANYREF,
+  /** Equatable reference. */
+  EQREF,
+  /** 31-bit integer reference. */
+  I31REF,
+  /** Data reference. */
+  DATAREF,
 
   // other
 
@@ -396,7 +400,7 @@ export class Type {
             if (targetFunction = target.getSignature()) {
               return currentFunction.isAssignableTo(targetFunction);
             }
-          } else if (this.isExternalReference && (this.kind == target.kind || target.kind == TypeKind.ANYREF)) {
+          } else if (this.isExternalReference && (this.kind == target.kind || (target.kind == TypeKind.ANYREF && this.kind != TypeKind.EXTERNREF))) {
             return true;
           }
         }
@@ -497,8 +501,10 @@ export class Type {
       case TypeKind.V128: return "v128";
       case TypeKind.FUNCREF: return "funcref";
       case TypeKind.EXTERNREF: return "externref";
-      case TypeKind.EXNREF: return "exnref";
       case TypeKind.ANYREF: return "anyref";
+      case TypeKind.EQREF: return "eqref";
+      case TypeKind.I31REF: return "i31ref";
+      case TypeKind.DATAREF: return "dataref";
       default: assert(false);
       case TypeKind.VOID: return "void";
     }
@@ -524,10 +530,13 @@ export class Type {
       case TypeKind.F32: return NativeType.F32;
       case TypeKind.F64: return NativeType.F64;
       case TypeKind.V128: return NativeType.V128;
+      // TODO: nullable/non-nullable refs have different native types
       case TypeKind.FUNCREF: return NativeType.Funcref;
       case TypeKind.EXTERNREF: return NativeType.Externref;
-      case TypeKind.EXNREF: return NativeType.Exnref;
       case TypeKind.ANYREF: return NativeType.Anyref;
+      case TypeKind.EQREF: return NativeType.Eqref;
+      case TypeKind.I31REF: return NativeType.I31ref;
+      case TypeKind.DATAREF: return NativeType.Dataref;
       case TypeKind.VOID: return NativeType.None;
     }
   }
@@ -673,15 +682,28 @@ export class Type {
     TypeFlags.REFERENCE, 0
   );
 
-  /** Exception reference. */
-  static readonly exnref: Type = new Type(TypeKind.EXNREF,
+  /** Any reference. */
+  static readonly anyref: Type = new Type(TypeKind.ANYREF,
     TypeFlags.EXTERNAL   |
     TypeFlags.NULLABLE   |
     TypeFlags.REFERENCE, 0
   );
 
-  /** Any reference. */
-  static readonly anyref: Type = new Type(TypeKind.ANYREF,
+  /** Equatable reference. */
+  static readonly eqref: Type = new Type(TypeKind.EQREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** 31-bit integer reference. */
+  static readonly i31ref: Type = new Type(TypeKind.I31REF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** Data reference. */
+  static readonly dataref: Type = new Type(TypeKind.DATAREF,
     TypeFlags.EXTERNAL   |
     TypeFlags.NULLABLE   |
     TypeFlags.REFERENCE, 0

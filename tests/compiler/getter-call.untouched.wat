@@ -2504,7 +2504,7 @@
   local.get $0
   call $getter-call/C#get:x
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 4

@@ -46,7 +46,7 @@
   local.get $1
   local.get $2
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
  )
  (func $~start
   call $start:function-types
@@ -82,7 +82,7 @@
   i32.const 2
   i32.const 1056
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 3
   i32.ne
   if
@@ -99,7 +99,7 @@
   i64.const 20
   i32.const 1152
   i32.load
-  call_indirect (type $i64_i64_=>_i64)
+  call_indirect $0 (type $i64_i64_=>_i64)
   i64.const 30
   i64.ne
   if
@@ -116,7 +116,7 @@
   f64.const 2.5
   i32.const 1184
   i32.load
-  call_indirect (type $f64_f64_=>_f64)
+  call_indirect $0 (type $f64_f64_=>_f64)
   f64.const 4
   f64.ne
   if
@@ -151,7 +151,7 @@
   i32.const 4
   i32.const 1056
   i32.load
-  call_indirect (type $i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_=>_i32)
   i32.const 7
   i32.ne
   if

@@ -23,7 +23,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
  )
  (func $~start
   call $start:class-static-function

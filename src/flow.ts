@@ -305,8 +305,10 @@ export class Flow {
       case <u32>NativeType.V128: { temps = parentFunction.tempV128s; break; }
       case <u32>NativeType.Funcref: { temps = parentFunction.tempFuncrefs; break; }
       case <u32>NativeType.Externref: { temps = parentFunction.tempExternrefs; break; }
-      case <u32>NativeType.Exnref: { temps = parentFunction.tempExnrefs; break; }
       case <u32>NativeType.Anyref: { temps = parentFunction.tempAnyrefs; break; }
+      case <u32>NativeType.Eqref: { temps = parentFunction.tempEqrefs; break; }
+      case <u32>NativeType.I31ref: { temps = parentFunction.tempI31refs; break; }
+      case <u32>NativeType.Dataref: { temps = parentFunction.tempDatarefs; break; }
       default: throw new Error("concrete type expected");
     }
     var local: Local;
@@ -390,16 +392,28 @@ export class Flow {
         else parentFunction.tempExternrefs = temps = [];
         break;
       }
-      case <u32>NativeType.Exnref: {
-        let tempExnrefs = parentFunction.tempExnrefs;
-        if (tempExnrefs) temps = tempExnrefs;
-        else parentFunction.tempExnrefs = temps = [];
-        break;
-      }
       case <u32>NativeType.Anyref: {
         let tempAnyrefs = parentFunction.tempAnyrefs;
         if (tempAnyrefs) temps = tempAnyrefs;
         else parentFunction.tempAnyrefs = temps = [];
+        break;
+      }
+      case <u32>NativeType.Eqref: {
+        let tempEqrefs = parentFunction.tempEqrefs;
+        if (tempEqrefs) temps = tempEqrefs;
+        else parentFunction.tempEqrefs = temps = [];
+        break;
+      }
+      case <u32>NativeType.I31ref: {
+        let tempI31refs = parentFunction.tempI31refs;
+        if (tempI31refs) temps = tempI31refs;
+        else parentFunction.tempI31refs = temps = [];
+        break;
+      }
+      case <u32>NativeType.Dataref: {
+        let tempDatarefs = parentFunction.tempDatarefs;
+        if (tempDatarefs) temps = tempDatarefs;
+        else parentFunction.tempDatarefs = temps = [];
         break;
       }
       default: throw new Error("concrete type expected");

@@ -1516,7 +1516,7 @@
   i32.store
   i32.const 1456
   i32.load
-  call_indirect (type $none_=>_i32)
+  call_indirect $0 (type $none_=>_i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add

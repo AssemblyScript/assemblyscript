@@ -11,9 +11,17 @@ export abstract class Externref extends Ref {
 }
 
 @final @unmanaged
-export abstract class Exnref extends Ref {
+export abstract class Anyref extends Ref {
 }
 
 @final @unmanaged
-export abstract class Anyref extends Ref {
+export abstract class Eqref extends Ref {
+}
+
+@final @unmanaged
+export abstract class I31ref extends Ref {
+}
+
+@final @unmanaged
+export abstract class Dataref extends Ref {
 }

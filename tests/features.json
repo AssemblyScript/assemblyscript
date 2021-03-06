@@ -27,14 +27,16 @@
       "--enable reference-types"
     ],
     "v8_flags": [
+      "--experimental-wasm-reftypes"
     ]
   },
   "gc": {
     "asc_flags": [
+      "--enable reference-types",
       "--enable gc"
     ],
     "v8_flags": [
-      "--experimental-wasm-anyref",
+      "--experimental-wasm-reftypes",
       "--experimental-wasm-gc"
     ]
   },
