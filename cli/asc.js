@@ -33,6 +33,7 @@
 const fs = require("fs");
 const path = require("path");
 const process = require("process"); // ensure shim
+const globby = require("globby");
 
 process.exit = ((exit) => function(code) {
   if (code) console.log(new Error("exit " + code.toString()).stack);
@@ -367,7 +368,8 @@ exports.main = function main(argv, options, callback) {
 
     // Append entries
     if (asconfig.entries) {
-      for (let entry of asconfig.entries) {
+      const paths = globby.sync(asconfig.entries);
+      for (let entry of paths) {
         argv.push(optionsUtil.resolvePath(entry, asconfigDir));
       }
     }

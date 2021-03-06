@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "binaryen": "100.0.0",
+    "globby": "11.0.2",
     "long": "^4.0.0",
     "source-map-support": "^0.5.19",
     "ts-node": "^6.2.0"

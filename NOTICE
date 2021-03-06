@@ -33,6 +33,7 @@ under the licensing terms detailed in LICENSE:
 * Piotr Oleś <piotrek.oles@gmail.com>
 * Saúl Cabrera <saulecabrera@gmail.com>
 * Chance Snow <git@chancesnow.me>
+* Jerry Green <me@jerrygreen.me>
 * Peter Salomonsen <petersalomonsen@runbox.com>
 
 Portions of this software are derived from third-party works licensed under
@@ -59,6 +60,6 @@ the following terms:
   The 3-Clause BSD License (https://opensource.org/licenses/BSD-3-Clause)
 
 * Arm Optimized Routines: https://github.com/ARM-software/optimized-routines
-  
+
   Copyright (c) Arm Limited
   The MIT License (https://opensource.org/licenses/MIT)
