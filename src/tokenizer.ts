@@ -1067,13 +1067,13 @@ export class Tokenizer extends DiagnosticEmitter {
     return text.substring(start, pos);
   }
 
-  readingTemplate: bool = false;
+  readingTemplateString: bool = false;
 
   readString(quote: i32 = 0): string {
     var text = this.source.text;
     var end = this.end;
     var pos = this.pos;
-    var quote = quote || text.charCodeAt(pos++);
+    if (!quote) quote = text.charCodeAt(pos++);
     var start = pos;
     var result = "";
 
@@ -1103,7 +1103,7 @@ export class Tokenizer extends DiagnosticEmitter {
         if (c == CharCode.DOLLAR && pos + 1 < end && text.charCodeAt(pos + 1) == CharCode.OPENBRACE) {
           result += text.substring(start, pos);
           this.pos = pos + 2;
-          this.readingTemplate = true;
+          this.readingTemplateString = true;
           return result;
         }
       } else if (isLineBreak(c)) {
@@ -1117,7 +1117,7 @@ export class Tokenizer extends DiagnosticEmitter {
       ++pos;
     }
     this.pos = pos;
-    this.readingTemplate = false;
+    this.readingTemplateString = false;
     return result;
   }
 

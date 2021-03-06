@@ -3804,7 +3804,7 @@ export class Parser extends DiagnosticEmitter {
         let parts = new Array<string>();
         parts.push(tn.readString());
         let exprs = new Array<Expression>();
-        while (tn.readingTemplate) {
+        while (tn.readingTemplateString) {
           let expr = this.parseExpression(tn);
           if (!expr) return null;
           exprs.push(expr);
