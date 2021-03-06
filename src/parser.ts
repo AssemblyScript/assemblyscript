@@ -3800,7 +3800,12 @@ export class Parser extends DiagnosticEmitter {
       case Token.STRINGLITERAL: {
         return Node.createStringLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
       }
-      case Token.TEMPLATELITERAL: {
+      case Token.TEMPLATELITERAL:
+      case Token.TAGGEDTEMPLATELITERAL: {
+        let tag: string | null = null;
+        if (token == Token.TAGGEDTEMPLATELITERAL) {
+          tag = tn.readIdentifier();
+        }
         let parts = new Array<string>();
         parts.push(tn.readString());
         let exprs = new Array<Expression>();
@@ -3817,7 +3822,7 @@ export class Parser extends DiagnosticEmitter {
           }
           parts.push(tn.readString(CharCode.BACKTICK));
         }
-        return Node.createTemplateLiteralExpression(parts, exprs, tn.range(startPos, tn.pos));
+        return Node.createTemplateLiteralExpression(tag, parts, exprs, tn.range(startPos, tn.pos));
       }
       case Token.INTEGERLITERAL: {
         let value = tn.readInteger();

@@ -29,8 +29,7 @@ import {
   isIdentifierStart,
   isIdentifierPart,
   isDecimalDigit,
-  isOctalDigit,
-  isKeywordCharacter
+  isOctalDigit
 } from "./util";
 
 /** Named token types. */
@@ -161,9 +160,10 @@ export enum Token {
 
   IDENTIFIER,
   STRINGLITERAL,
-  TEMPLATELITERAL,
   INTEGERLITERAL,
   FLOATLITERAL,
+  TEMPLATELITERAL,
+  TAGGEDTEMPLATELITERAL,
 
   // meta
 
@@ -910,34 +910,26 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         default: {
           if (isIdentifierStart(c)) {
-            if (isKeywordCharacter(c)) {
-              let posBefore = pos;
-              while (
-                ++pos < end &&
-                isIdentifierPart(c = text.charCodeAt(pos))
-              ) {
-                if (!isKeywordCharacter(c)) {
-                  this.pos = posBefore;
-                  return Token.IDENTIFIER;
-                }
-              }
-              let keywordText = text.substring(posBefore, pos);
-              let keywordToken = tokenFromKeyword(keywordText);
+            let posBefore = pos;
+            while (
+              ++pos < end &&
+              isIdentifierPart(c = text.charCodeAt(pos))
+            ) { /* nop */ }
+            if (identifierHandling != IdentifierHandling.ALWAYS) {
+              let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
               if (
-                keywordToken !== Token.INVALID &&
-                identifierHandling !== IdentifierHandling.ALWAYS &&
+                maybeKeywordToken !== Token.INVALID &&
                 !(
                   identifierHandling === IdentifierHandling.PREFER &&
-                  tokenIsAlsoIdentifier(keywordToken)
+                  tokenIsAlsoIdentifier(maybeKeywordToken)
                 )
               ) {
                 this.pos = pos;
-                return keywordToken;
+                return maybeKeywordToken;
               }
-              this.pos = pos = posBefore;
             }
-            this.pos = pos;
-            return Token.IDENTIFIER; // expects a call to readIdentifier
+            this.pos = posBefore;
+            return c == CharCode.BACKTICK ? Token.TAGGEDTEMPLATELITERAL : Token.IDENTIFIER;
           } else if (isWhiteSpace(c)) {
             ++pos;
             break;
@@ -1067,6 +1059,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return text.substring(start, pos);
   }
 
+  templateTag: string | null = null;
   readingTemplateString: bool = false;
 
   readString(quote: i32 = 0): string {

@@ -201,11 +201,6 @@ export function isIdentifierStart(c: i32): bool {
       || c > 0x7F && isUnicodeIdentifierStart(c);
 }
 
-/** Tests if the specified character code is a valid keyword character. */
-export function isKeywordCharacter(c: i32): bool {
-  return c >= CharCode.a && c <= CharCode.z;
-}
-
 /** Tests if the specified character code is a valid part of an identifier. */
 export function isIdentifierPart(c: i32): bool {
   const c0 = c | 32; // unify uppercases and lowercases a|A - z|Z

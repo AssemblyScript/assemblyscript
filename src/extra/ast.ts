@@ -781,8 +781,10 @@ export class ASTBuilder {
 
   visitTemplateLiteralExpression(node: TemplateLiteralExpression): void {
     var sb = this.sb;
+    var tag = node.tag;
     var parts = node.parts;
     var expressions = node.expressions;
+    if (tag !== null) sb.push(tag);
     sb.push("`");
     this.visitRawString(parts[0], CharCode.BACKTICK);
     assert(parts.length == expressions.length + 1);

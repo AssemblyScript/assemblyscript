@@ -8013,9 +8013,11 @@ export class Compiler extends DiagnosticEmitter {
     expression: TemplateLiteralExpression,
     constraints: Constraints
   ): ExpressionRef {
-    var parts = expression.parts;
-    if (parts.length == 1) {
-      return this.ensureStaticString(parts[0]);
+    if (!expression.tag) {
+      let parts = expression.parts;
+      if (parts.length == 1) {
+        return this.ensureStaticString(parts[0]);
+      }
     }
     // TODO
     this.error(
