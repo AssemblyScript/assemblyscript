@@ -759,7 +759,7 @@ export class ASTBuilder {
         case CharCode.BACKTICK: {
           if (quote == CharCode.BACKTICK) {
             if (i > off) sb.push(str.substring(off, i));
-            sb.push("\\'");
+            sb.push("\\`");
             off = ++i;
           } else {
             ++i;

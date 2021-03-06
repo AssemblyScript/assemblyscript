@@ -57,6 +57,7 @@
 0.1;
 0.1;
 "";
+"\"";
 "123";
 "1\"23";
 "1\"2\\3";
@@ -75,6 +76,8 @@
 `${a}456${b}`;
 `123${a}${b}`;
 `${a}${b}789`;
+`\``;
+`\`${a}\`${b}\``;
 4;
 b;
 7;
@@ -90,10 +93,10 @@ c;
 d;
 a;
 b;
-// ERROR 1109: "Expression expected." in literals.ts(80,4+1)
-// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(81,2+0)
-// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(82,2+0)
-// ERROR 1109: "Expression expected." in literals.ts(83,3+1)
-// ERROR 6188: "Numeric separators are not allowed here." in literals.ts(85,2+0)
-// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(86,3+0)
-// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(87,4+0)
+// ERROR 1109: "Expression expected." in literals.ts(83,4+1)
+// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(84,2+0)
+// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(85,2+0)
+// ERROR 1109: "Expression expected." in literals.ts(86,3+1)
+// ERROR 6188: "Numeric separators are not allowed here." in literals.ts(88,2+0)
+// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(89,3+0)
+// ERROR 1351: "An identifier or keyword cannot immediately follow a numeric literal." in literals.ts(90,4+0)
