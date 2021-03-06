@@ -3802,12 +3802,11 @@ export class Parser extends DiagnosticEmitter {
       }
       case Token.TEMPLATELITERAL:
       case Token.TAGGEDTEMPLATELITERAL: {
+        let isTaggedTemplate = token == Token.TAGGEDTEMPLATELITERAL;
         let tag: string | null = null;
-        if (token == Token.TAGGEDTEMPLATELITERAL) {
-          tag = tn.readIdentifier();
-        }
+        if (isTaggedTemplate) tag = tn.readIdentifier();
         let parts = new Array<string>();
-        parts.push(tn.readString());
+        parts.push(tn.readString(0, isTaggedTemplate));
         let exprs = new Array<Expression>();
         while (tn.readingTemplateString) {
           let expr = this.parseExpression(tn);
@@ -3820,7 +3819,7 @@ export class Parser extends DiagnosticEmitter {
             );
             return null;
           }
-          parts.push(tn.readString(CharCode.BACKTICK));
+          parts.push(tn.readString(CharCode.BACKTICK, isTaggedTemplate));
         }
         return Node.createTemplateLiteralExpression(tag, parts, exprs, tn.range(startPos, tn.pos));
       }

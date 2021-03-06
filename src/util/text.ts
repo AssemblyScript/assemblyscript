@@ -185,6 +185,11 @@ export function isOctalDigit(c: i32): bool {
   return c >= CharCode._0 && c <= CharCode._7;
 }
 
+/** Tests if the specified character code is a valid hexadecimal digit. */
+export function isHexDigit(c: i32): bool {
+  return isDecimalDigit(c) || ((c | 32) >= CharCode.a && (c | 32) <= CharCode.f);
+}
+
 /** Tests if the specified character code is trivially alphanumeric. */
 export function isTrivialAlphanum(code: i32): bool {
   return code >= CharCode.a && code <= CharCode.z
@@ -194,7 +199,7 @@ export function isTrivialAlphanum(code: i32): bool {
 
 /** Tests if the specified character code is a valid start of an identifier. */
 export function isIdentifierStart(c: i32): bool {
-  const c0 = c | 32; // unify uppercases and lowercases a|A - z|Z
+  let c0 = c | 32; // unify uppercases and lowercases a|A - z|Z
   return c0 >= CharCode.a && c0 <= CharCode.z
       || c == CharCode._
       || c == CharCode.DOLLAR

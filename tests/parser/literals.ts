@@ -79,6 +79,7 @@
 `\``;
 `\`${a}\`${b}\``;
 tag`123`;
+tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision/
 
 // invalid
 1..;
@@ -89,6 +90,7 @@ tag`123`;
 7_;
 1.a;
 2.0b;
+`\unicode\xGG\u\x`;
 
 // technically invalid, but not handled by AS yet, TS1005: ';' expected
 3 4;
