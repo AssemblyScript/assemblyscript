@@ -675,12 +675,11 @@ export class ASTBuilder {
     this.sb.push(i64_to_string(node.value));
   }
 
-  visitStringLiteral(str: string, singleQuoted: bool = false): void {
+  visitStringLiteral(str: string): void {
     var sb = this.sb;
-    var quote = singleQuoted ? "'" : "\"";
-    sb.push(quote);
-    this.visitRawString(str, singleQuoted ? CharCode.SINGLEQUOTE : CharCode.DOUBLEQUOTE);
-    sb.push(quote);
+    sb.push("\"");
+    this.visitRawString(str, CharCode.DOUBLEQUOTE);
+    sb.push("\"");
   }
 
   private visitRawString(str: string, quote: CharCode): void {
