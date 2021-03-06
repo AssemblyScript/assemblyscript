@@ -161,6 +161,7 @@ export enum Token {
 
   IDENTIFIER,
   STRINGLITERAL,
+  TEMPLATELITERAL,
   INTEGERLITERAL,
   FLOATLITERAL,
 
@@ -553,10 +554,13 @@ export class Tokenizer extends DiagnosticEmitter {
           return Token.EXCLAMATION;
         }
         case CharCode.DOUBLEQUOTE:
-        case CharCode.SINGLEQUOTE:
-        case CharCode.BACKTICK: { // TODO
+        case CharCode.SINGLEQUOTE: {
           this.pos = pos;
-          return Token.STRINGLITERAL; // expects a call to readString
+          return Token.STRINGLITERAL;
+        }
+        case CharCode.BACKTICK: {
+          this.pos = pos;
+          return Token.TEMPLATELITERAL;
         }
         case CharCode.PERCENT: {
           ++pos;
@@ -1063,21 +1067,15 @@ export class Tokenizer extends DiagnosticEmitter {
     return text.substring(start, pos);
   }
 
-  readString(): string {
+  readingTemplate: bool = false;
+
+  readString(quote: i32 = 0): string {
     var text = this.source.text;
     var end = this.end;
     var pos = this.pos;
-    var quote = text.charCodeAt(pos++);
+    var quote = quote || text.charCodeAt(pos++);
     var start = pos;
     var result = "";
-
-    if (quote == CharCode.BACKTICK) {
-      this.warning(
-        DiagnosticCode.Not_implemented_0,
-        this.range(start - 1, end),
-        "Template Literals can only be used for multi-line strings. Interpolation is not supported."
-      );
-    }
 
     while (true) {
       if (pos >= end) {
@@ -1101,7 +1099,14 @@ export class Tokenizer extends DiagnosticEmitter {
         start = pos;
         continue;
       }
-      if (isLineBreak(c) && quote != CharCode.BACKTICK) {
+      if (quote == CharCode.BACKTICK) {
+        if (c == CharCode.DOLLAR && pos + 1 < end && text.charCodeAt(pos + 1) == CharCode.OPENBRACE) {
+          result += text.substring(start, pos);
+          this.pos = pos + 2;
+          this.readingTemplate = true;
+          return result;
+        }
+      } else if (isLineBreak(c)) {
         result += text.substring(start, pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
@@ -1112,6 +1117,7 @@ export class Tokenizer extends DiagnosticEmitter {
       ++pos;
     }
     this.pos = pos;
+    this.readingTemplate = false;
     return result;
   }
 

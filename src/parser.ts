@@ -29,6 +29,7 @@ import {
 } from "./diagnostics";
 
 import {
+  CharCode,
   normalizePath
 } from "./util";
 
@@ -3798,6 +3799,25 @@ export class Parser extends DiagnosticEmitter {
       }
       case Token.STRINGLITERAL: {
         return Node.createStringLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
+      }
+      case Token.TEMPLATELITERAL: {
+        let parts = new Array<string>();
+        parts.push(tn.readString());
+        let exprs = new Array<Expression>();
+        while (tn.readingTemplate) {
+          let expr = this.parseExpression(tn);
+          if (!expr) return null;
+          exprs.push(expr);
+          if (!tn.skip(Token.CLOSEBRACE)) {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), "}"
+            );
+            return null;
+          }
+          parts.push(tn.readString(CharCode.BACKTICK));
+        }
+        return Node.createTemplateLiteralExpression(parts, exprs, tn.range(startPos, tn.pos));
       }
       case Token.INTEGERLITERAL: {
         let value = tn.readInteger();

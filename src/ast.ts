@@ -378,6 +378,14 @@ export abstract class Node {
     return new SuperExpression(range);
   }
 
+  static createTemplateLiteralExpression(
+    parts: string[],
+    expressions: Expression[],
+    range: Range
+  ): TemplateLiteralExpression {
+    return new TemplateLiteralExpression(parts, expressions, range);
+  }
+
   static createThisExpression(
     range: Range
   ): ThisExpression {
@@ -1087,6 +1095,7 @@ export enum LiteralKind {
   FLOAT,
   INTEGER,
   STRING,
+  TEMPLATE,
   REGEXP,
   ARRAY,
   OBJECT
@@ -1440,6 +1449,20 @@ export class SuperExpression extends IdentifierExpression {
   ) {
     super("super", false, range);
     this.kind = NodeKind.SUPER;
+  }
+}
+
+/** Represents a template literal expression. */
+export class TemplateLiteralExpression extends LiteralExpression {
+  constructor(
+    /** String parts. */
+    public parts: string[],
+    /** Expression parts. */
+    public expressions: Expression[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(LiteralKind.TEMPLATE, range);
   }
 }
 

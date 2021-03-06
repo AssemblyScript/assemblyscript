@@ -25,6 +25,7 @@ import {
   FloatLiteralExpression,
   IntegerLiteralExpression,
   StringLiteralExpression,
+  TemplateLiteralExpression,
   RegexpLiteralExpression,
   ArrayLiteralExpression,
   AssertionExpression,
@@ -637,6 +638,10 @@ export class ASTBuilder {
         this.visitStringLiteralExpression(<StringLiteralExpression>node);
         break;
       }
+      case LiteralKind.TEMPLATE: {
+        this.visitTemplateLiteralExpression(<TemplateLiteralExpression>node);
+        break;
+      }
       case LiteralKind.REGEXP: {
         this.visitRegexpLiteralExpression(<RegexpLiteralExpression>node);
         break;
@@ -672,9 +677,15 @@ export class ASTBuilder {
 
   visitStringLiteral(str: string, singleQuoted: bool = false): void {
     var sb = this.sb;
-    var off = 0;
     var quote = singleQuoted ? "'" : "\"";
     sb.push(quote);
+    this.visitRawString(str, singleQuoted ? CharCode.SINGLEQUOTE : CharCode.DOUBLEQUOTE);
+    sb.push(quote);
+  }
+
+  private visitRawString(str: string, quote: CharCode): void {
+    var sb = this.sb;
+    var off = 0;
     var i = 0;
     for (let k = str.length; i < k;) {
       switch (str.charCodeAt(i)) {
@@ -721,7 +732,7 @@ export class ASTBuilder {
           break;
         }
         case CharCode.DOUBLEQUOTE: {
-          if (!singleQuoted) {
+          if (quote == CharCode.DOUBLEQUOTE) {
             if (i > off) sb.push(str.substring(off, i));
             sb.push("\\\"");
             off = ++i;
@@ -731,7 +742,7 @@ export class ASTBuilder {
           break;
         }
         case CharCode.SINGLEQUOTE: {
-          if (singleQuoted) {
+          if (quote == CharCode.SINGLEQUOTE) {
             if (i > off) sb.push(str.substring(off, i));
             sb.push("\\'");
             off = ++i;
@@ -746,6 +757,16 @@ export class ASTBuilder {
           off = ++i;
           break;
         }
+        case CharCode.BACKTICK: {
+          if (quote == CharCode.BACKTICK) {
+            if (i > off) sb.push(str.substring(off, i));
+            sb.push("\\'");
+            off = ++i;
+          } else {
+            ++i;
+          }
+          break;
+        }
         default: {
           ++i;
           break;
@@ -753,11 +774,26 @@ export class ASTBuilder {
       }
     }
     if (i > off) sb.push(str.substring(off, i));
-    sb.push(quote);
   }
 
   visitStringLiteralExpression(node: StringLiteralExpression): void {
     this.visitStringLiteral(node.value);
+  }
+
+  visitTemplateLiteralExpression(node: TemplateLiteralExpression): void {
+    var sb = this.sb;
+    var parts = node.parts;
+    var expressions = node.expressions;
+    sb.push("`");
+    this.visitRawString(parts[0], CharCode.BACKTICK);
+    assert(parts.length == expressions.length + 1);
+    for (let i = 0, k = expressions.length; i < k; ++i) {
+      sb.push("${");
+      this.visitNode(expressions[i]);
+      sb.push("}");
+      this.visitRawString(parts[i + 1], CharCode.BACKTICK);
+    }
+    sb.push("`");
   }
 
   visitRegexpLiteralExpression(node: RegexpLiteralExpression): void {

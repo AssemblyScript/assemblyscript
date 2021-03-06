@@ -167,6 +167,7 @@ import {
   TernaryExpression,
   ArrayLiteralExpression,
   StringLiteralExpression,
+  TemplateLiteralExpression,
   UnaryPostfixExpression,
   UnaryPrefixExpression,
 
@@ -7979,6 +7980,10 @@ export class Compiler extends DiagnosticEmitter {
         assert(!implicitlyNegate);
         return this.compileStringLiteral(<StringLiteralExpression>expression, constraints);
       }
+      case LiteralKind.TEMPLATE: {
+        assert(!implicitlyNegate);
+        return this.compileTemplateLiteral(<TemplateLiteralExpression>expression, constraints);
+      }
       case LiteralKind.OBJECT: {
         assert(!implicitlyNegate);
         return this.compileObjectLiteral(<ObjectLiteralExpression>expression, contextualType);
@@ -8002,6 +8007,23 @@ export class Compiler extends DiagnosticEmitter {
     constraints: Constraints
   ): ExpressionRef {
     return this.ensureStaticString(expression.value);
+  }
+
+  private compileTemplateLiteral(
+    expression: TemplateLiteralExpression,
+    constraints: Constraints
+  ): ExpressionRef {
+    var parts = expression.parts;
+    if (parts.length == 1) {
+      return this.ensureStaticString(parts[0]);
+    }
+    // TODO
+    this.error(
+      DiagnosticCode.Not_implemented_0,
+      expression.range, "Template Literals can only be used for multi-line strings. Interpolation is not supported."
+    );
+    this.currentType = this.program.stringInstance.type;
+    return this.module.unreachable();
   }
 
   private compileArrayLiteral(
