@@ -9,11 +9,11 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i64_i32_=>_none (func (param i32 i32 i64 i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
- (type $i64_=>_i64 (func (param i64) (result i64)))
  (type $i32_i32_i32_=>_i64 (func (param i32 i32 i32) (result i64)))
  (type $i32_i32_f32_i32_=>_none (func (param i32 i32 f32 i32)))
  (type $i32_i32_f64_i32_=>_none (func (param i32 i32 f64 i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i64_=>_i64 (func (param i64) (result i64)))
  (type $i32_i32_i32_=>_f32 (func (param i32 i32 i32) (result f32)))
  (type $i32_i32_i32_=>_f64 (func (param i32 i32 i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -2672,7 +2672,7 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/polyfills/bswap<i16> (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (param $0 i32) (result i32)
   i32.const 1
   drop
   i32.const 2
@@ -2685,14 +2685,12 @@
   i32.and
   i32.shl
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.const 65535
+  i32.and
   i32.const 8
   i32.const 15
   i32.and
-  i32.shr_s
+  i32.shr_u
   i32.const 255
   i32.and
   i32.or
@@ -2729,32 +2727,8 @@
    local.get $3
   else
    local.get $3
-   call $~lib/polyfills/bswap<i16>
+   call $~lib/polyfills/bswap<u16>
   end
- )
- (func $~lib/polyfills/bswap<i32> (param $0 i32) (result i32)
-  i32.const 1
-  drop
-  i32.const 4
-  i32.const 2
-  i32.eq
-  drop
-  i32.const 4
-  i32.const 4
-  i32.eq
-  drop
-  local.get $0
-  i32.const -16711936
-  i32.and
-  i32.const 8
-  i32.rotl
-  local.get $0
-  i32.const 16711935
-  i32.and
-  i32.const 8
-  i32.rotr
-  i32.or
-  return
  )
  (func $~lib/dataview/DataView#getInt32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -2787,61 +2761,8 @@
    local.get $3
   else
    local.get $3
-   call $~lib/polyfills/bswap<i32>
+   call $~lib/polyfills/bswap<u32>
   end
- )
- (func $~lib/polyfills/bswap<i64> (param $0 i64) (result i64)
-  (local $1 i64)
-  (local $2 i64)
-  (local $3 i64)
-  i32.const 1
-  drop
-  i32.const 8
-  i32.const 2
-  i32.eq
-  drop
-  i32.const 8
-  i32.const 4
-  i32.eq
-  drop
-  i32.const 8
-  i32.const 8
-  i32.eq
-  drop
-  local.get $0
-  i64.const 8
-  i64.shr_u
-  i64.const 71777214294589695
-  i64.and
-  local.set $1
-  local.get $0
-  i64.const 71777214294589695
-  i64.and
-  i64.const 8
-  i64.shl
-  local.set $2
-  local.get $1
-  local.get $2
-  i64.or
-  local.set $3
-  local.get $3
-  i64.const 16
-  i64.shr_u
-  i64.const 281470681808895
-  i64.and
-  local.set $1
-  local.get $3
-  i64.const 281470681808895
-  i64.and
-  i64.const 16
-  i64.shl
-  local.set $2
-  local.get $1
-  local.get $2
-  i64.or
-  i64.const 32
-  i64.rotr
-  return
  )
  (func $~lib/dataview/DataView#getInt64 (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i64)
@@ -2874,7 +2795,7 @@
    local.get $3
   else
    local.get $3
-   call $~lib/polyfills/bswap<i64>
+   call $~lib/polyfills/bswap<u64>
   end
  )
  (func $~lib/dataview/DataView#getUint8 (param $0 i32) (param $1 i32) (result i32)
@@ -2895,30 +2816,6 @@
   local.get $1
   i32.add
   i32.load8_u
- )
- (func $~lib/polyfills/bswap<u16> (param $0 i32) (result i32)
-  i32.const 1
-  drop
-  i32.const 2
-  i32.const 2
-  i32.eq
-  drop
-  local.get $0
-  i32.const 8
-  i32.const 15
-  i32.and
-  i32.shl
-  local.get $0
-  i32.const 65535
-  i32.and
-  i32.const 8
-  i32.const 15
-  i32.and
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.or
-  return
  )
  (func $~lib/dataview/DataView#getUint16 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3146,7 +3043,7 @@
    local.get $2
   else
    local.get $2
-   call $~lib/polyfills/bswap<i16>
+   call $~lib/polyfills/bswap<u16>
   end
   i32.store16
  )
@@ -3178,7 +3075,7 @@
    local.get $2
   else
    local.get $2
-   call $~lib/polyfills/bswap<i32>
+   call $~lib/polyfills/bswap<u32>
   end
   i32.store
  )
@@ -3210,7 +3107,7 @@
    local.get $2
   else
    local.get $2
-   call $~lib/polyfills/bswap<i64>
+   call $~lib/polyfills/bswap<u64>
   end
   i64.store
  )
