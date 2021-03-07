@@ -9944,9 +9944,7 @@ export class Compiler extends DiagnosticEmitter {
         // Needs to be true when the ref is _not_ null.
         // Therefore: 1 - <ref.is_null>
         // Therefore: !(<ref.is_null>)
-        return type.size == 64
-          ? module.unary(UnaryOp.EqzI64, module.ref_is(RefIsOp.RefIsNull, expr))
-          : module.unary(UnaryOp.EqzI32, module.ref_is(RefIsOp.RefIsNull, expr));
+        return module.unary(UnaryOp.EqzI32, module.ref_is(RefIsOp.RefIsNull, expr));
 
       }
       default: {
