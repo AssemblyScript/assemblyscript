@@ -111,6 +111,11 @@ To (re-)create a specific fixture only:
 $> npm run test:compiler -- testNameWithoutTs --create
 ```
 
+Features
+--------
+
+Tests for experimental features (usually enabled via the `--enable` CLI flag) are disabled by default. To enable a feature, set the `ASC_FEATURES` environment variable to a comma-separated list of feature names (see [`features.json`](./features.json)). You can also set `ASC_FEATURES="*"` to enable all features.
+
 Other
 -----
 
