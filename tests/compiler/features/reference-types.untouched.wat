@@ -37,10 +37,9 @@
  (func $features/reference-types/testLocal<funcref>
   (local $0 funcref)
   (local $1 funcref)
-  i32.const 1
   local.get $0
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -53,10 +52,9 @@
   end
   ref.null func
   local.set $0
-  i32.const 1
   local.get $0
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -69,10 +67,9 @@
   end
   ref.null func
   local.set $1
-  i32.const 1
   local.get $1
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -87,10 +84,9 @@
  (func $features/reference-types/testLocal<externref>
   (local $0 externref)
   (local $1 externref)
-  i32.const 1
   local.get $0
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -103,10 +99,9 @@
   end
   ref.null extern
   local.set $0
-  i32.const 1
   local.get $0
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -119,10 +114,9 @@
   end
   ref.null extern
   local.set $1
-  i32.const 1
   local.get $1
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -137,10 +131,9 @@
  (func $features/reference-types/testLocal<anyref>
   (local $0 anyref)
   (local $1 anyref)
-  i32.const 1
   local.get $0
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -153,10 +146,9 @@
   end
   ref.null any
   local.set $0
-  i32.const 1
   local.get $0
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -169,10 +161,9 @@
   end
   ref.null any
   local.set $1
-  i32.const 1
   local.get $1
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -211,10 +202,9 @@
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/get
   call $~lib/bindings/console/log
-  i32.const 1
   call $features/reference-types/somethingReal
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   if
    i32.const 0
@@ -228,10 +218,9 @@
     unreachable
    end
   end
-  i32.const 1
   call $features/reference-types/somethingNull
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   if
    nop
@@ -247,10 +236,9 @@
     unreachable
    end
   end
-  i32.const 1
   call $features/reference-types/somethingReal
   ref.is_null
-  i32.sub
+  i32.eqz
   if
    nop
   else
@@ -265,10 +253,9 @@
     unreachable
    end
   end
-  i32.const 1
   call $features/reference-types/somethingNull
   ref.is_null
-  i32.sub
+  i32.eqz
   if
    i32.const 0
    i32.eqz
@@ -281,10 +268,9 @@
     unreachable
    end
   end
-  i32.const 1
   global.get $features/reference-types/funcGlobal
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -297,10 +283,9 @@
   end
   ref.null func
   global.set $features/reference-types/funcGlobal
-  i32.const 1
   global.get $features/reference-types/funcGlobal
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -313,10 +298,9 @@
   end
   ref.null func
   global.set $features/reference-types/funcGlobalInit
-  i32.const 1
   global.get $features/reference-types/funcGlobalInit
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -327,10 +311,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
   global.get $features/reference-types/externGlobal
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -343,10 +326,9 @@
   end
   ref.null extern
   global.set $features/reference-types/externGlobal
-  i32.const 1
   global.get $features/reference-types/externGlobal
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -359,10 +341,9 @@
   end
   ref.null extern
   global.set $features/reference-types/externGlobalInit
-  i32.const 1
   global.get $features/reference-types/externGlobalInit
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -373,10 +354,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
   global.get $features/reference-types/anyGlobal
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -389,10 +369,9 @@
   end
   ref.null any
   global.set $features/reference-types/anyGlobal
-  i32.const 1
   global.get $features/reference-types/anyGlobal
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
@@ -405,10 +384,9 @@
   end
   ref.null any
   global.set $features/reference-types/anyGlobalInit
-  i32.const 1
   global.get $features/reference-types/anyGlobalInit
   ref.is_null
-  i32.sub
+  i32.eqz
   i32.eqz
   i32.eqz
   if
