@@ -9941,7 +9941,12 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.EQREF:
       case TypeKind.DATAREF:
       case TypeKind.I31REF: {
-        return module.ref_is(RefIsOp.RefIsNull, expr);
+        // Needs to be true when the ref is _not_ null.
+        // Therefore: 1 - <ref.is_null>
+        return type.size == 64
+          ? module.binary(BinaryOp.SubI64, module.i64(1), module.ref_is(RefIsOp.RefIsNull, expr))
+          : module.binary(BinaryOp.SubI32, module.i32(1), module.ref_is(RefIsOp.RefIsNull, expr));
+
       }
       default: {
         assert(false);

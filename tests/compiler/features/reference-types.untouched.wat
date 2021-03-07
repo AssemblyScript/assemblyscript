@@ -1,5 +1,6 @@
 (module
  (type $none_=>_none (func))
+ (type $none_=>_externref (func (result externref)))
  (type $externref_=>_externref (func (param externref) (result externref)))
  (type $externref_=>_none (func (param externref)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -11,6 +12,8 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "console" "log" (func $~lib/bindings/console/log (param externref)))
  (import "Reflect" "get" (func $~lib/bindings/Reflect/get (param externref externref) (result externref)))
+ (import "reference-types" "somethingReal" (func $features/reference-types/somethingReal (result externref)))
+ (import "reference-types" "somethingNull" (func $features/reference-types/somethingNull (result externref)))
  (import "reference-types" "external" (func $features/reference-types/external (param externref) (result externref)))
  (memory $0 1)
  (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s\00\00\00\00\00\00\00")
@@ -26,6 +29,8 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
  (global $~lib/memory/__heap_base i32 (i32.const 16476))
  (export "external" (func $features/reference-types/external))
+ (export "somethingReal" (func $features/reference-types/somethingReal))
+ (export "somethingNull" (func $features/reference-types/somethingNull))
  (export "internal" (func $features/reference-types/internal))
  (export "memory" (memory $0))
  (start $~start)
@@ -165,7 +170,6 @@
   nop
  )
  (func $start:features/reference-types
-  (local $0 funcref)
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
@@ -175,7 +179,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 19
+   i32.const 21
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -188,57 +192,75 @@
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/get
   call $~lib/bindings/console/log
-  global.get $features/reference-types/funcGlobal
+  i32.const 1
+  call $features/reference-types/somethingReal
   ref.is_null
-  i32.eqz
+  i32.sub
   i32.eqz
   if
    i32.const 0
-   i32.const 32
-   i32.const 32
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 32
+    i32.const 33
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
-  ref.null func
-  global.set $features/reference-types/funcGlobal
-  global.get $features/reference-types/funcGlobal
+  i32.const 1
+  call $features/reference-types/somethingNull
   ref.is_null
-  i32.eqz
+  i32.sub
   i32.eqz
   if
+   nop
+  else
    i32.const 0
-   i32.const 32
-   i32.const 34
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 32
+    i32.const 38
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
-  ref.null func
-  global.set $features/reference-types/funcGlobalInit
-  global.get $features/reference-types/funcGlobalInit
+  i32.const 1
+  call $features/reference-types/somethingReal
   ref.is_null
-  i32.eqz
-  i32.eqz
+  i32.sub
   if
+   nop
+  else
    i32.const 0
-   i32.const 32
-   i32.const 36
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 32
+    i32.const 43
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
-  global.get $features/reference-types/externGlobal
+  i32.const 1
+  call $features/reference-types/somethingNull
   ref.is_null
-  i32.eqz
-  i32.eqz
+  i32.sub
   if
    i32.const 0
-   i32.const 32
-   i32.const 39
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 32
+    i32.const 46
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
   ref.null extern
   global.set $features/reference-types/externGlobal
