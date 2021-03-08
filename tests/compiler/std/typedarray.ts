@@ -845,5 +845,34 @@ testTypedArraySet<Float64Array>();
   valuesEqual<Uint8ClampedArray>(targetClampedArray, [1, 255, 100, 255, 0, 0, 100, 10, 255, 0]);
 }
 
+function testArraySort<ArrayType extends TypedArray<T>, T extends number>(): void {
+  var source: ArrayType = instantiate<ArrayType>(3);
+  source[2] = <T>1;
+  source[1] = <T>2;
+  source[0] = <T>3;
+
+  let result = source.sort();
+  assert(result[0] == <T>1);
+  assert(result[1] == <T>2);
+  assert(result[2] == <T>3);
+  result.sort((a, b) => i32(b > a) - i32(b < a));
+  assert(result[0] == <T>3);
+  assert(result[1] == <T>2);
+  assert(result[2] == <T>1);
+}
+
+testArraySort<Int8Array, i8>();
+testArraySort<Uint8Array, u8>();
+testArraySort<Uint8ClampedArray, u8>();
+testArraySort<Int16Array, i16>();
+testArraySort<Uint16Array, u16>();
+testArraySort<Int32Array, i32>();
+testArraySort<Uint32Array, u32>();
+testArraySort<Int64Array, i64>();
+testArraySort<Uint64Array, u64>();
+testArraySort<Float32Array, f32>();
+testArraySort<Float64Array, f64>();
+
+
 __stack_pointer = __heap_base;
 __collect();
