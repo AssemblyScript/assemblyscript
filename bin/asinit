@@ -381,7 +381,7 @@ function ensureIndexJs() {
     const ver = process.versions.node.split('.');
     const maj = parseInt(ver[0]);
     const min = parseInt(ver[1]);
-    const supportESM = maj >= 14 || (maj >= 13 && min >= 2) || (maj >= 12 && min >= 17 && maj < 13);
+    const supportESM = maj >= 14 || (maj == 13 && min >= 2) || (maj == 12 && min >= 17);
     fs.writeFileSync(indexFile, [
       "const fs = require(\"fs\");",
       "const loader = require(\"@assemblyscript/loader" + (supportESM ? "" : "/umd") + "\");",
