@@ -4,8 +4,8 @@
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -1939,17 +1939,15 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/polyfills/bswap<i16> (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  i32.const 255
-  i32.and
+ (func $~lib/polyfills/bswap<u16> (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
+  local.get $0
+  i32.const 65535
+  i32.and
+  i32.const 8
+  i32.shr_u
   i32.or
  )
  (func $~lib/dataview/DataView#getInt16 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -1982,7 +1980,7 @@
    local.get $0
   else
    local.get $0
-   call $~lib/polyfills/bswap<i16>
+   call $~lib/polyfills/bswap<u16>
   end
  )
  (func $~lib/dataview/DataView#getInt32 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -2062,17 +2060,6 @@
   i32.load offset=4
   i32.add
   i32.load8_u
- )
- (func $~lib/polyfills/bswap<u16> (param $0 i32) (result i32)
-  local.get $0
-  i32.const 8
-  i32.shl
-  local.get $0
-  i32.const 65535
-  i32.and
-  i32.const 8
-  i32.shr_u
-  i32.or
  )
  (func $~lib/dataview/DataView#getUint16 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
@@ -2242,7 +2229,7 @@
    local.get $1
   else
    local.get $1
-   call $~lib/polyfills/bswap<i16>
+   call $~lib/polyfills/bswap<u16>
   end
   i32.store16
  )
