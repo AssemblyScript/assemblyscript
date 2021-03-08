@@ -80,11 +80,10 @@ import { Array } from "./array";
   }
 
   @operator("+") private static __concat(left: String, right: String): String {
-    return select<String>(left, changetype<String>("null"), left !== null).concat(right);
+    return left.concat(right);
   }
 
   concat(other: String): String {
-    if (other === null) other = changetype<String>("null");
     var thisSize: isize = this.length << 1;
     var otherSize: isize = other.length << 1;
     var outSize: usize = thisSize + otherSize;
@@ -96,7 +95,6 @@ import { Array } from "./array";
   }
 
   endsWith(search: String, end: i32 = String.MAX_LENGTH): bool {
-    if (search === null) return false;
     end = min(max(end, 0), this.length);
     var searchLength = <isize>search.length;
     var searchStart = <isize>end - searchLength;
@@ -124,8 +122,8 @@ import { Array } from "./array";
     return !this.__eq(left, right);
   }
 
-  @operator(">") private static __gt(left: String | null, right: String | null): bool {
-    if (left === right || left === null || right === null) return false;
+  @operator(">") private static __gt(left: String, right: String): bool {
+    if (left === right) return false;
     var leftLength  = left.length;
     if (!leftLength) return false;
     var rightLength = right.length;
@@ -140,7 +138,7 @@ import { Array } from "./array";
   }
 
   @operator("<") private static __lt(left: String, right: String): bool {
-    if (left === right || left === null || right === null) return false;
+    if (left === right) return false;
     var rightLength = right.length;
     if (!rightLength) return false;
     var leftLength  = left.length;
@@ -196,7 +194,6 @@ import { Array } from "./array";
   }
 
   startsWith(search: String, start: i32 = 0): bool {
-    if (search === null) search = changetype<String>("null");
     var len = <isize>this.length;
     var searchStart = min(max(<isize>start, 0), len);
     var searchLength = <isize>search.length;

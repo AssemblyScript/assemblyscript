@@ -11,12 +11,11 @@
  (data (i32.const 76) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
  (data (i32.const 124) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 252) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 284) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/memory/__data_end i32 (i32.const 316))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16700))
- (global $~lib/memory/__heap_base i32 (i32.const 16700))
+ (global $~lib/memory/__data_end i32 (i32.const 284))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16668))
+ (global $~lib/memory/__heap_base i32 (i32.const 16668))
  (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $export:std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $export:std/array-access/stringArrayPropertyAccess))
@@ -164,13 +163,58 @@
   end
   i32.const 0
  )
+ (func $~lib/string/String#startsWith (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  call $~lib/string/String#get:length
+  local.set $3
+  local.get $2
+  local.tee $4
+  i32.const 0
+  local.tee $5
+  local.get $4
+  local.get $5
+  i32.gt_s
+  select
+  local.tee $5
+  local.get $3
+  local.tee $4
+  local.get $5
+  local.get $4
+  i32.lt_s
+  select
+  local.set $6
+  local.get $1
+  call $~lib/string/String#get:length
+  local.set $7
+  local.get $7
+  local.get $6
+  i32.add
+  local.get $3
+  i32.gt_s
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  local.get $6
+  local.get $1
+  i32.const 0
+  local.get $7
+  call $~lib/util/string/compareImpl
+  i32.eqz
+ )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16720
-   i32.const 16768
+   i32.const 16688
+   i32.const 16736
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -450,81 +494,6 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $3
- )
- (func $~lib/string/String#startsWith (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  local.get $1
-  i32.const 0
-  i32.eq
-  if
-   global.get $~lib/memory/__stack_pointer
-   i32.const 304
-   local.tee $1
-   i32.store
-  end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.set $3
-  local.get $2
-  local.tee $4
-  i32.const 0
-  local.tee $5
-  local.get $4
-  local.get $5
-  i32.gt_s
-  select
-  local.tee $5
-  local.get $3
-  local.tee $4
-  local.get $5
-  local.get $4
-  i32.lt_s
-  select
-  local.set $6
-  local.get $1
-  call $~lib/string/String#get:length
-  local.set $7
-  local.get $7
-  local.get $6
-  i32.add
-  local.get $3
-  i32.gt_s
-  if
-   i32.const 0
-   local.set $8
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $8
-   return
-  end
-  local.get $0
-  local.get $6
-  local.get $1
-  i32.const 0
-  local.get $7
-  call $~lib/util/string/compareImpl
-  i32.eqz
-  local.set $8
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.add
-  global.set $~lib/memory/__stack_pointer
-  local.get $8
  )
  (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
