@@ -29,7 +29,11 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
     }
   } else if (isString<T>()) {
     return (a: T, b: T): i32 => {
-      if (a === b || a === null || b === null) return 0;
+      if (a === b) return 0;
+      if (isNullable<T>()) {
+        if (a === null) return  1;
+        if (b === null) return -1;
+      }
       var alen = changetype<string>(a).length;
       var blen = changetype<string>(b).length;
       if (!(alen | blen)) return 0;

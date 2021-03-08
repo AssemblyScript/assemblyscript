@@ -1033,14 +1033,23 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 // Test sorting strings
 
 {
-  let randomStringsActual:   (string | null)[] = ["a", "b", "a", "ab", "ba", "", null];
-  let randomStringsExpected: (string | null)[] = ["", "a", "a", "ab", "b", "ba", null];
+  let stringsActual:   string[] = ["a", "b", "a", "ab", "ba", ""];
+  let stringsExpected: string[] = ["", "a", "a", "ab", "b", "ba"];
 
-  assertSorted<string | null>(randomStringsActual);
-  assert(isArraysEqual<string | null>(randomStringsActual, randomStringsExpected));
+  assertSorted<string>(stringsActual);
+  assert(isArraysEqual<string>(stringsActual, stringsExpected));
 
   let randomStrings400 = createRandomStringArray(400);
   assertSorted<string>(randomStrings400);
+}
+
+// Test sorting nullable strings
+{
+  let nullableStringsActual:   (string | null)[] = [null, "d", null, "c", "b", null, null, "a", null];
+  let nullableStringsExpected: (string | null)[] = ["a", "b", "c", "d", null, null, null, null, null];
+
+  assertSorted<string | null>(nullableStringsActual);
+  assert(isArraysEqual<string | null>(nullableStringsActual, nullableStringsExpected));
 }
 
 // Array#join //////////////////////////////////////////////////////////////////////////////////////
