@@ -4326,6 +4326,18 @@ export class Class extends TypedElement {
     return this.parent.lookup(name);
   }
 
+  /** Gets the method of the specified name, resolved with the given type arguments. */
+  getMethod(name: string, typeArguments: Type[] | null = null): Function | null {
+    var members = this.members;
+    if (members !== null && members.has(name)) {
+      let bound = changetype<Element>(members.get(name));
+      if (bound.kind == ElementKind.FUNCTION_PROTOTYPE) {
+        return this.program.resolver.resolveFunction(<FunctionPrototype>bound, typeArguments);
+      }
+    }
+    return null;
+  }
+
   /** Calculates the memory offset of the specified field. */
   offsetof(fieldName: string): u32 {
     var members = assert(this.members);

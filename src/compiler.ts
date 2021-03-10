@@ -400,7 +400,7 @@ export class Compiler extends DiagnosticEmitter {
     super(program.diagnostics);
     this.program = program;
     var options = program.options;
-    var module = Module.create(options.stackSize > 0);
+    var module = Module.create(options.stackSize > 0, options.nativeSizeType);
     this.module = module;
     if (options.memoryBase) {
       this.memoryOffset = i64_new(options.memoryBase);
@@ -1994,9 +1994,12 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Adds an array header to static memory and returns the created segment. */
-  private addStaticArrayHeader(elementType: Type, bufferSegment: MemorySegment): MemorySegment {
+  private addStaticArrayHeader(
+    elementType: Type,
+    bufferSegment: MemorySegment,
+    arrayPrototype: ClassPrototype = this.program.arrayPrototype
+  ): MemorySegment {
     var program = this.program;
-    var arrayPrototype = assert(program.arrayPrototype);
     var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
     var bufferLength = readI32(bufferSegment.buffer, program.OBJECTInstance.offsetof("rtSize"));
     var arrayLength = i32(bufferLength / elementType.byteSize);
@@ -8013,16 +8016,59 @@ export class Compiler extends DiagnosticEmitter {
     expression: TemplateLiteralExpression,
     constraints: Constraints
   ): ExpressionRef {
-    if (!expression.tag) {
-      let parts = expression.parts;
-      if (parts.length == 1) {
-        return this.ensureStaticString(parts[0]);
-      }
+    var tag = expression.tag;
+    var parts = expression.parts;
+    var numParts = parts.length;
+    var expressions = expression.expressions;
+    assert(numParts - 1 == expressions.length);
+
+    // Shortcut if just a string
+    if (tag === null && numParts == 1) {
+      return this.ensureStaticString(parts[0]);
     }
+
+    var module = this.module;
+    var stringType = this.program.stringInstance.type;
+
+    // Compile to a `StaticArray<string>#join("")` if untagged
+    if (tag === null) {
+      let length = 2 * numParts - 1;
+      let values = new Array<usize>(length);
+      values[0] = this.ensureStaticString(parts[0]);
+      for (let i = 1; i < numParts; ++i) {
+        values[2 * i - 1] = module.usize(0);
+        values[2 * i] = this.ensureStaticString(parts[i]);
+      }
+      let arrayInstance = assert(this.resolver.resolveClass(this.program.staticArrayPrototype, [ stringType ]));
+      let segment = this.addStaticBuffer(stringType, values, arrayInstance.id);
+      let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
+      let joinInstance = assert(arrayInstance.getMethod("join"));
+      let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true));
+      let stmts = new Array<ExpressionRef>();
+      for (let i = 0, k = numParts - 1; i < k; ++i) {
+        // TODO: toString
+        let expr = this.compileExpression(expressions[i], stringType, Constraints.CONV_IMPLICIT);
+        stmts.push(
+          this.makeCallDirect(indexedSetInstance, [
+            module.usize(offset),
+            module.i32(2 * i + 1),
+            expr
+          ], expression)
+        );
+      }
+      stmts.push(
+        this.makeCallDirect(joinInstance, [
+          module.usize(offset),
+          this.ensureStaticString("")
+        ], expression)
+      );
+      return module.flatten(stmts, stringType.toNativeType());
+    }
+
     // TODO
     this.error(
       DiagnosticCode.Not_implemented_0,
-      expression.range, "Template Literals can only be used for multi-line strings. Interpolation is not supported."
+      expression.range, "Tagged template literals"
     );
     this.currentType = this.program.stringInstance.type;
     return this.module.unreachable();

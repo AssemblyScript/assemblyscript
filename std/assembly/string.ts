@@ -820,3 +820,9 @@ export namespace String {
     }
   }
 }
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+class TemplateStringsArray extends Array<string> {
+  readonly raw: string;
+}
