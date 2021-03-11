@@ -125,8 +125,7 @@ export abstract class ExportsWalker {
         let propertyInstance = (<PropertyPrototype>element).instance;
         if (!propertyInstance) break;
         element = propertyInstance;
-        // fall-through
-        break;
+        // intentional fall-through, do not put a "break;" here.
       }
       case ElementKind.PROPERTY: {
         let propertyInstance = <Property>element;
