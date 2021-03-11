@@ -346,6 +346,8 @@ assert(parseFloat(" \t\n\r.1") == 0.1);
 }
 assert("" == "");
 // @ts-ignore
+assert(nullStr == null);
+// @ts-ignore
 assert("" != nullStr);
 // @ts-ignore
 assert(nullStr != "");
@@ -370,11 +372,6 @@ assert("ba" > "a");
 assert("ba" >= "aa");
 assert("ba" > "ab");
 assert(!("ba" < "ab"));
-
-// @ts-ignore
-assert(!("b" < nullStr));
-// @ts-ignore
-assert(!(nullStr < "b"));
 
 assert("abc" > "");
 assert("" < "abc");

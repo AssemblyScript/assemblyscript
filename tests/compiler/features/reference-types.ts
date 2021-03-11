@@ -1,6 +1,8 @@
 // can use externref as a parameter or return type
 
 export declare function external(a: externref): externref;
+export declare function somethingReal(): externref;
+export declare function somethingNull(): externref;
 
 export function internal(a: externref): externref {
   const b = external(a);
@@ -25,6 +27,44 @@ import * as console from "bindings/console";
 console.log(someObject);
 console.log(someKey);
 console.log(Reflect.get(someObject, someKey));
+
+// Truthiness conversion
+if(!somethingReal()) {
+  assert(false);
+}
+if(!somethingNull()) {
+  // nop
+} else {
+  assert(false);
+}
+if(somethingReal()) {
+  // nop
+} else {
+  assert(false);
+}
+if(somethingNull()) {
+  assert(false);
+}
+
+// Explicit null checks (don’t work yet)
+/*
+if(somethingReal() !== null) {
+  // nop
+} else {
+  assert(false);
+}
+if(somethingReal() === null) {
+  assert(false);
+}
+if(somethingNull() === null) {
+  // nop
+} else {
+  assert(false);
+}
+if(somethingNull() !== null) {
+  assert(false);
+}
+*/
 
 // can represent and recognize 'null'
 

@@ -9,6 +9,12 @@ exports.preInstantiate = function(imports, exports) {
     external: function(a) {
       return a;
     },
+    somethingReal() {
+      return {};
+    },
+    somethingNull() {
+      return null;
+    },
     someObject: {
       theKey: "Hello world!"
     },
