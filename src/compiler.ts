@@ -6463,8 +6463,7 @@ export class Compiler extends DiagnosticEmitter {
     if (hasRest) {
       this.error(
         DiagnosticCode.Not_implemented_0,
-        reportNode.range,
-        "Rest parameters"
+        reportNode.range, "Rest parameters"
       );
       return false;
     }
@@ -8046,13 +8045,15 @@ export class Compiler extends DiagnosticEmitter {
       let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true));
       let stmts = new Array<ExpressionRef>();
       for (let i = 0, k = numParts - 1; i < k; ++i) {
-        // TODO: toString
-        let expr = this.compileExpression(expressions[i], stringType, Constraints.CONV_IMPLICIT);
+        let expression = expressions[i];
         stmts.push(
           this.makeCallDirect(indexedSetInstance, [
             module.usize(offset),
             module.i32(2 * i + 1),
-            expr
+            this.makeToString(
+              this.compileExpression(expression, stringType),
+              this.currentType, expression
+            )
           ], expression)
         );
       }
@@ -10018,6 +10019,54 @@ export class Compiler extends DiagnosticEmitter {
         return module.i32(0);
       }
     }
+  }
+
+  /** Makes a string conversion of the given expression. */
+  makeToString(expr: ExpressionRef, type: Type, reportNode: Node): ExpressionRef {
+    var stringType = this.program.stringInstance.type;
+    if (type == stringType) {
+      return expr;
+    }
+    var classType = type.getClassOrWrapper(this.program);
+    if (classType) {
+      let toStringInstance = classType.getMethod("toString");
+      if (toStringInstance) {
+        let toStringSignature = toStringInstance.signature;
+        if (!this.checkCallSignature( // reports
+          toStringSignature,
+          0,
+          true,
+          reportNode
+        )) {
+          this.currentType = stringType;
+          return this.module.unreachable();
+        }
+        if (!type.isStrictlyAssignableTo(assert(toStringSignature.thisType))) {
+          this.errorRelated(
+            DiagnosticCode.The_this_types_of_each_signature_are_incompatible,
+            reportNode.range, toStringInstance.identifierAndSignatureRange
+          );
+          this.currentType = stringType;
+          return this.module.unreachable();
+        }
+        let toStringReturnType = toStringSignature.returnType;
+        if (!toStringReturnType.isStrictlyAssignableTo(stringType)) {
+          this.errorRelated(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            reportNode.range, toStringInstance.identifierAndSignatureRange, toStringReturnType.toString(), stringType.toString()
+          );
+          this.currentType = stringType;
+          return this.module.unreachable();
+        }
+        return this.makeCallDirect(toStringInstance, [ expr ], reportNode);
+      }
+    }
+    this.error(
+      DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+      reportNode.range, type.toString(), stringType.toString()
+    );
+    this.currentType = stringType;
+    return this.module.unreachable();
   }
 
   /** Makes an allocation suitable to hold the data of an instance of the given class. */

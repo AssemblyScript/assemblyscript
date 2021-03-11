@@ -687,18 +687,18 @@ export class Module {
     return binaryen._BinaryenConst(this.ref, out);
   }
 
-  isize<T>(value: T): ExpressionRef {
-    if (i64_is(value)) {
-      if (this.sizeType == NativeType.I64) {
-        return this.i64(i64_low(value), i64_high(value));
-      }
-      assert(i64_is_i32(value));
-      return this.i32(i64_low(value));
-    }
-    return this.sizeType == NativeType.I64
-      ? this.i64(i32(value), i32(value) < 0 ? -1 : 0)
-      : this.i32(i32(value));
-  }
+  // isize<T>(value: T): ExpressionRef {
+  //   if (i64_is(value)) {
+  //     if (this.sizeType == NativeType.I64) {
+  //       return this.i64(i64_low(value), i64_high(value));
+  //     }
+  //     assert(i64_is_i32(value));
+  //     return this.i32(i64_low(value));
+  //   }
+  //   return this.sizeType == NativeType.I64
+  //     ? this.i64(i32(value), i32(value) < 0 ? -1 : 0)
+  //     : this.i32(i32(value));
+  // }
 
   usize<T>(value: T): ExpressionRef {
     if (i64_is(value)) {
