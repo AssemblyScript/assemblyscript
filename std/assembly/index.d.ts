@@ -1687,6 +1687,10 @@ declare namespace String {
   }
 }
 
+declare class TemplateStringsArray extends Array<string> {
+  readonly raw: string;
+}
+
 declare class Object {
   /** The Object.is() method determines whether two values are the same value. */
   static is<T>(value1: T, value2: T): bool;

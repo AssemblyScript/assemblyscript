@@ -170,7 +170,9 @@ import {
   TemplateLiteralExpression,
   UnaryPostfixExpression,
   UnaryPrefixExpression,
+  CompiledExpression,
 
+  TypeNode,
   NamedTypeNode,
 
   findDecorator,
@@ -1878,8 +1880,15 @@ export class Compiler extends DiagnosticEmitter {
     return segment;
   }
 
-  /** Ensures that a string exists in static memory and returns a pointer to it. Deduplicates. */
+  /** Ensures that a string exists in static memory and returns a pointer expression. Deduplicates. */
   ensureStaticString(stringValue: string): ExpressionRef {
+    var ptr = this.ensureStaticStringPtr(stringValue);
+    this.currentType = this.program.stringInstance.type;
+    return this.module.usize(ptr);
+  }
+
+  /** Ensures that a string exists in static memory and returns a pointer to it. Deduplicates. */
+  ensureStaticStringPtr(stringValue: string): i64 {
     var program = this.program;
     var totalOverhead = program.totalOverhead;
     var stringInstance = assert(program.stringInstance);
@@ -1896,14 +1905,7 @@ export class Compiler extends DiagnosticEmitter {
       stringSegment = this.addRuntimeMemorySegment(buf);
       segments.set(stringValue, stringSegment);
     }
-    var ptr = i64_add(stringSegment.offset, i64_new(totalOverhead));
-    this.currentType = stringInstance.type;
-    if (this.options.isWasm64) {
-      return this.module.i64(i64_low(ptr), i64_high(ptr));
-    } else {
-      assert(i64_is_u32(ptr));
-      return this.module.i32(i64_low(ptr));
-    }
+    return i64_add(stringSegment.offset, i64_new(totalOverhead));
   }
 
   /** Writes a series of static values of the specified type to a buffer. */
@@ -1997,10 +1999,13 @@ export class Compiler extends DiagnosticEmitter {
   private addStaticArrayHeader(
     elementType: Type,
     bufferSegment: MemorySegment,
-    arrayPrototype: ClassPrototype = this.program.arrayPrototype
+    /** Optional array instance override. */
+    arrayInstance: Class | null = null
   ): MemorySegment {
     var program = this.program;
-    var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
+    if (!arrayInstance) {
+      arrayInstance = assert(this.resolver.resolveClass(this.program.arrayPrototype, [ elementType ]));
+    }
     var bufferLength = readI32(bufferSegment.buffer, program.OBJECTInstance.offsetof("rtSize"));
     var arrayLength = i32(bufferLength / elementType.byteSize);
     var bufferAddress = i64_add(bufferSegment.offset, i64_new(program.totalOverhead));
@@ -3471,6 +3476,12 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.UNARYPREFIX: {
         expr = this.compileUnaryPrefixExpression(<UnaryPrefixExpression>expression, contextualType, constraints);
+        break;
+      }
+      case NodeKind.COMPILED: {
+        let compiled = <CompiledExpression>expression;
+        expr = compiled.expr;
+        this.currentType = compiled.type;
         break;
       }
       default: {
@@ -6374,6 +6385,35 @@ export class Compiler extends DiagnosticEmitter {
     );
   }
 
+  /** Compiles the given arguments like a call expression according to the specified context. */
+  private compileCallExpressionLike(
+    /** Called expression. */
+    expression: Expression,
+    /** Call type arguments. */
+    typeArguments: TypeNode[] | null,
+    /** Call arguments. */
+    args: Expression[],
+    /** Diagnostic range. */
+    range: Range,
+    /** Contextual type indicating the return type the caller expects, if any. */
+    contextualType: Type,
+    /** Constraints indicating contextual conditions. */
+    constraints: Constraints = Constraints.NONE
+  ): ExpressionRef {
+    // Desugaring like this can happen many times. Let's cache the intermediate allocation.
+    var call = this._reusableCallExpression;
+    if (call) {
+      call.expression = expression;
+      call.typeArguments = typeArguments;
+      call.args = args;
+      call.range = range;
+    } else {
+      this._reusableCallExpression = call = Node.createCallExpression(expression, typeArguments, args, range);
+    }
+    return this.compileCallExpression(call, contextualType, constraints);
+  }
+  private _reusableCallExpression: CallExpression | null = null;
+
   private compileCallExpressionBuiltin(
     prototype: FunctionPrototype,
     expression: CallExpression,
@@ -8021,7 +8061,7 @@ export class Compiler extends DiagnosticEmitter {
     var expressions = expression.expressions;
     assert(numParts - 1 == expressions.length);
 
-    // Shortcut if just a string
+    // Shortcut if just a (multi-line) string
     if (tag === null && numParts == 1) {
       return this.ensureStaticString(parts[0]);
     }
@@ -8066,13 +8106,32 @@ export class Compiler extends DiagnosticEmitter {
       return module.flatten(stmts, stringType.toNativeType());
     }
 
-    // TODO
-    this.error(
-      DiagnosticCode.Not_implemented_0,
-      expression.range, "Tagged template literals"
+    // Otherwise compile to a call to the tag function
+    var flow = this.currentFlow;
+    var target = this.resolver.lookupExpression(tag, flow); // reports
+    if (!target) {
+      this.currentType = this.program.stringInstance.type;
+      return module.unreachable();
+    }
+    var partExprs = new Array<ExpressionRef>(numParts);
+    for (let i = 0; i < numParts; ++i) {
+      partExprs[i] = this.ensureStaticString(parts[i]);
+    }
+    var arrayInstance = this.program.templateStringsArrayInstance;
+    var bufferSegment = this.addStaticBuffer(this.options.usizeType, partExprs);
+    var headerSegment = this.addStaticArrayHeader(stringType, bufferSegment, arrayInstance);
+    arrayInstance.writeField("raw", this.ensureStaticStringPtr(""), headerSegment.buffer); // TODO
+
+    // Desugar to compileCallExpression
+    var args = expressions.slice();
+    args.unshift(
+      Node.createCompiledExpression(
+        module.usize(i64_add(headerSegment.offset, i64_new(this.program.totalOverhead))),
+        arrayInstance.type,
+        this.program.nativeRange
+      )
     );
-    this.currentType = this.program.stringInstance.type;
-    return this.module.unreachable();
+    return this.compileCallExpressionLike(tag, null, args, expression.range, stringType);
   }
 
   private compileArrayLiteral(

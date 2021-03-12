@@ -449,6 +449,8 @@ export class Program extends DiagnosticEmitter {
   diagnosticsOffset: i32 = 0;
   /** Special native code source. */
   nativeSource: Source;
+  /** Special native code range. */
+  get nativeRange(): Range { return this.nativeSource.range; }
   /** Special native code file. */
   nativeFile!: File;
   /** Next class id. */
@@ -628,6 +630,14 @@ export class Program extends DiagnosticEmitter {
     return cached;
   }
   private _stringInstance: Class | null = null;
+
+  /** Gets the standard `TemplateStringsArray` instance. */
+  get templateStringsArrayInstance(): Class {
+    var cached = this._templateStringsArrayInstance;
+    if (!cached) this._templateStringsArrayInstance = cached = this.requireClass(CommonNames.TemplateStringsArray);
+    return cached;
+  }
+  private _templateStringsArrayInstance: Class | null = null;
 
   /** Gets the standard `abort` instance, if not explicitly disabled. */
   get abortInstance(): Function | null {

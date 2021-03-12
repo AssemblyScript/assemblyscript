@@ -784,7 +784,7 @@ export class ASTBuilder {
     var tag = node.tag;
     var parts = node.parts;
     var expressions = node.expressions;
-    if (tag !== null) sb.push(tag);
+    if (tag) this.visitNode(tag);
     sb.push("`");
     this.visitRawString(parts[0], CharCode.BACKTICK);
     assert(parts.length == expressions.length + 1);

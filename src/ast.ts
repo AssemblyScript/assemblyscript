@@ -33,6 +33,14 @@ import {
   isTrivialAlphanum
 } from "./util";
 
+import {
+  ExpressionRef
+} from "./module";
+
+import {
+  Type
+} from "./types";
+
 /** Indicates the kind of a node. */
 export enum NodeKind {
 
@@ -69,6 +77,7 @@ export enum NodeKind {
   CONSTRUCTOR,
   UNARYPOSTFIX,
   UNARYPREFIX,
+  COMPILED,
 
   // statements
   BLOCK,
@@ -379,7 +388,7 @@ export abstract class Node {
   }
 
   static createTemplateLiteralExpression(
-    tag: string | null,
+    tag: Expression | null,
     parts: string[],
     expressions: Expression[],
     range: Range
@@ -413,6 +422,14 @@ export abstract class Node {
     range: Range
   ): UnaryPrefixExpression {
     return new UnaryPrefixExpression(operator, operand, range);
+  }
+
+  static createCompiledExpression(
+    expr: ExpressionRef,
+    type: Type,
+    range: Range
+  ): Expression {
+    return new CompiledExpression(expr, type, range);
   }
 
   // statements
@@ -1456,8 +1473,8 @@ export class SuperExpression extends IdentifierExpression {
 /** Represents a template literal expression. */
 export class TemplateLiteralExpression extends LiteralExpression {
   constructor(
-    /** Template tag, if any. */
-    public tag: string | null,
+    /** Tag expression, if any. */
+    public tag: Expression | null,
     /** String parts. */
     public parts: string[],
     /** Expression parts. */
@@ -1543,6 +1560,20 @@ export class UnaryPrefixExpression extends UnaryExpression {
     range: Range
   ) {
     super(NodeKind.UNARYPREFIX, operator, operand, range);
+  }
+}
+
+/** Represents a special pre-compiled expression. If the expression has side-effects, special care has to be taken. */
+export class CompiledExpression extends Expression {
+  constructor(
+    /** Compiled expression. */
+    public expr: ExpressionRef,
+    /** Type of the compiled expression. */
+    public type: Type,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.COMPILED, range);
   }
 }
 

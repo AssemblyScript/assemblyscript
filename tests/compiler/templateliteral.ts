@@ -40,3 +40,27 @@ function test_ref(): void {
   assert(`(A=${a}, B=${b})` == "(A=ref#1, B=ref#2)");
 }
 test_ref();
+
+function tag(parts: TemplateStringsArray, a: i32): string {
+  assert(parts.length == 2);
+  assert(parts[0] == "a");
+  assert(parts[1] == "b");
+  assert(a == 1);
+  return parts[0] + a.toString() + parts[1];
+}
+
+namespace ns {
+  export function tag(parts: string[] /* ! */, a: i32): string {
+    assert(parts.length == 2);
+    assert(parts[0] == "c");
+    assert(parts[1] == "d");
+    assert(a == 2);
+    return parts[0] + a.toString() + parts[1];
+  }
+}
+
+function test_tag(): void {
+  assert(tag`a${1}b` == "a1b");
+  assert(ns.tag`c${2}d` == "c2d");
+}
+test_tag();

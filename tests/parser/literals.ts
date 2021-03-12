@@ -79,6 +79,7 @@
 `\``;
 `\`${a}\`${b}\``;
 tag`123`;
+ns.tag`123`;
 tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision/
 
 // invalid

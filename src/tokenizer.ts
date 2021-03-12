@@ -163,7 +163,6 @@ export enum Token {
   INTEGERLITERAL,
   FLOATLITERAL,
   TEMPLATELITERAL,
-  TAGGEDTEMPLATELITERAL,
 
   // meta
 
@@ -929,7 +928,7 @@ export class Tokenizer extends DiagnosticEmitter {
               }
             }
             this.pos = posBefore;
-            return c == CharCode.BACKTICK ? Token.TAGGEDTEMPLATELITERAL : Token.IDENTIFIER;
+            return Token.IDENTIFIER;
           } else if (isWhiteSpace(c)) {
             ++pos;
             break;
