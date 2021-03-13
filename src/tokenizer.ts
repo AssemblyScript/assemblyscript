@@ -1059,6 +1059,8 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readingTemplateString: bool = false;
+  readStringStart: i32 = 0;
+  readStringEnd: i32 = 0;
 
   readString(quote: i32 = 0, isTaggedTemplate: bool = false): string {
     var text = this.source.text;
@@ -1066,6 +1068,7 @@ export class Tokenizer extends DiagnosticEmitter {
     var pos = this.pos;
     if (!quote) quote = text.charCodeAt(pos++);
     var start = pos;
+    this.readStringStart = start;
     var result = "";
 
     while (true) {
@@ -1075,10 +1078,12 @@ export class Tokenizer extends DiagnosticEmitter {
           DiagnosticCode.Unterminated_string_literal,
           this.range(start - 1, end)
         );
+        this.readStringEnd = end;
         break;
       }
       let c = text.charCodeAt(pos);
       if (c == quote) {
+        this.readStringEnd = pos;
         result += text.substring(start, pos++);
         break;
       }
@@ -1093,6 +1098,7 @@ export class Tokenizer extends DiagnosticEmitter {
       if (quote == CharCode.BACKTICK) {
         if (c == CharCode.DOLLAR && pos + 1 < end && text.charCodeAt(pos + 1) == CharCode.OPENBRACE) {
           result += text.substring(start, pos);
+          this.readStringEnd = pos;
           this.pos = pos + 2;
           this.readingTemplateString = true;
           return result;
@@ -1103,6 +1109,7 @@ export class Tokenizer extends DiagnosticEmitter {
           DiagnosticCode.Unterminated_string_literal,
           this.range(start - 1, pos)
         );
+        this.readStringEnd = pos;
         break;
       }
       ++pos;
@@ -1603,12 +1610,11 @@ export class Tokenizer extends DiagnosticEmitter {
         value = (value << 4) + c + (10 - CharCode.A);
       } else if (c >= CharCode.a && c <= CharCode.f) {
         value = (value << 4) + c + (10 - CharCode.a);
+      } else if (~startIfTaggedTemplate) {
+        this.pos = --pos;
+        return text.substring(startIfTaggedTemplate, pos);
       } else {
         this.pos = pos;
-        if (~startIfTaggedTemplate) {
-          remain = 1; // invalid
-          break;
-        }
         this.error(
           DiagnosticCode.Hexadecimal_digit_expected,
           this.range(pos - 1, pos)

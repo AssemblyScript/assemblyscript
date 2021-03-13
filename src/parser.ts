@@ -4144,8 +4144,10 @@ export class Parser extends DiagnosticEmitter {
     // at '`': ... '`'
     var startPos = tag ? tag.range.start : tn.tokenPos;
     var parts = new Array<string>();
+    var rawParts = new Array<string>();
     var exprs = new Array<Expression>();
     parts.push(tn.readString(0, tag != null));
+    rawParts.push(tn.source.text.substring(tn.readStringStart, tn.readStringEnd));
     while (tn.readingTemplateString) {
       let expr = this.parseExpression(tn);
       if (!expr) return null;
@@ -4158,8 +4160,9 @@ export class Parser extends DiagnosticEmitter {
         return null;
       }
       parts.push(tn.readString(CharCode.BACKTICK, tag != null));
+      rawParts.push(tn.source.text.substring(tn.readStringStart, tn.readStringEnd));
     }
-    return Node.createTemplateLiteralExpression(tag, parts, exprs, tn.range(startPos, tn.pos));
+    return Node.createTemplateLiteralExpression(tag, parts, rawParts, exprs, tn.range(startPos, tn.pos));
   }
 
   private joinPropertyCall(

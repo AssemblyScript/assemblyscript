@@ -8106,27 +8106,70 @@ export class Compiler extends DiagnosticEmitter {
       return module.flatten(stmts, stringType.toNativeType());
     }
 
-    // Otherwise compile to a call to the tag function
-    var flow = this.currentFlow;
-    var target = this.resolver.lookupExpression(tag, flow); // reports
-    if (!target) {
-      this.currentType = this.program.stringInstance.type;
-      return module.unreachable();
+    // Try to find out whether the template function takes a full-blown TemplateStringsArray or if
+    // it is sufficient to compile to a normal array. While technically incorrect, this allows us
+    // to avoid generating unnecessary static data that is not explicitly signaled to be used.
+    var tsaArrayInstance = this.program.templateStringsArrayInstance;
+    var arrayInstance = tsaArrayInstance;
+    var target = this.resolver.lookupExpression(tag, this.currentFlow, Type.auto, ReportMode.SWALLOW);
+    if (target) {
+      switch (target.kind) {
+        case ElementKind.FUNCTION_PROTOTYPE: {
+          let instance = this.resolver.resolveFunction(<FunctionPrototype>target, null, uniqueMap<string,Type>(), ReportMode.SWALLOW);
+          if (!instance) break;
+          target = instance;
+          // fall-through
+        }
+        case ElementKind.FUNCTION: {
+          let instance = <Function>target;
+          let parameterTypes = instance.signature.parameterTypes;
+          if (parameterTypes.length) {
+            let first = parameterTypes[0].getClass();
+            if (first !== null && !first.extends(tsaArrayInstance.prototype)) {
+              arrayInstance = assert(this.resolver.resolveClass(this.program.arrayPrototype, [ stringType ]));
+            }
+          }
+          break;
+        }
+      }
     }
+
+    // Compile to a call to the tag function
+    var rawParts = expression.rawParts;
+    assert(rawParts.length == numParts);
     var partExprs = new Array<ExpressionRef>(numParts);
     for (let i = 0; i < numParts; ++i) {
       partExprs[i] = this.ensureStaticString(parts[i]);
     }
-    var arrayInstance = this.program.templateStringsArrayInstance;
-    var bufferSegment = this.addStaticBuffer(this.options.usizeType, partExprs);
-    var headerSegment = this.addStaticArrayHeader(stringType, bufferSegment, arrayInstance);
-    arrayInstance.writeField("raw", this.ensureStaticStringPtr(""), headerSegment.buffer); // TODO
+    var arraySegment: MemorySegment;
+    if (arrayInstance == tsaArrayInstance) {
+      var rawExprs = new Array<ExpressionRef>(numParts);
+      for (let i = 0; i < numParts; ++i) {
+        rawExprs[i] = this.ensureStaticString(rawParts[i]);
+      }
+      arraySegment = this.addStaticArrayHeader(stringType,
+        this.addStaticBuffer(this.options.usizeType, partExprs),
+        arrayInstance
+      );
+      var rawHeaderSegment = this.addStaticArrayHeader(stringType,
+        this.addStaticBuffer(this.options.usizeType, rawExprs)
+      );
+      arrayInstance.writeField("raw",
+        i64_add(rawHeaderSegment.offset, i64_new(this.program.totalOverhead)),
+        arraySegment.buffer
+      );
+    } else {
+      arraySegment = this.addStaticArrayHeader(stringType,
+        this.addStaticBuffer(this.options.usizeType, partExprs),
+        arrayInstance
+      );
+    }
 
     // Desugar to compileCallExpression
     var args = expressions.slice();
     args.unshift(
       Node.createCompiledExpression(
-        module.usize(i64_add(headerSegment.offset, i64_new(this.program.totalOverhead))),
+        module.usize(i64_add(arraySegment.offset, i64_new(this.program.totalOverhead))),
         arrayInstance.type,
         this.program.nativeRange
       )

@@ -1688,7 +1688,7 @@ declare namespace String {
 }
 
 declare class TemplateStringsArray extends Array<string> {
-  readonly raw: string;
+  readonly raw: string[];
 }
 
 declare class Object {

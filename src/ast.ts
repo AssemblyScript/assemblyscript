@@ -390,10 +390,11 @@ export abstract class Node {
   static createTemplateLiteralExpression(
     tag: Expression | null,
     parts: string[],
+    rawParts: string[],
     expressions: Expression[],
     range: Range
   ): TemplateLiteralExpression {
-    return new TemplateLiteralExpression(tag, parts, expressions, range);
+    return new TemplateLiteralExpression(tag, parts, rawParts, expressions, range);
   }
 
   static createThisExpression(
@@ -1477,6 +1478,8 @@ export class TemplateLiteralExpression extends LiteralExpression {
     public tag: Expression | null,
     /** String parts. */
     public parts: string[],
+    /** Raw string parts. */
+    public rawParts: string[],
     /** Expression parts. */
     public expressions: Expression[],
     /** Source range. */

@@ -42,25 +42,43 @@ function test_ref(): void {
 test_ref();
 
 function tag(parts: TemplateStringsArray, a: i32): string {
+  var raw = parts.raw;
   assert(parts.length == 2);
+  assert(raw.length == 2);
   assert(parts[0] == "a");
+  assert(raw[0] == "a");
   assert(parts[1] == "b");
+  assert(raw[1] == "b");
   assert(a == 1);
   return parts[0] + a.toString() + parts[1];
 }
 
 namespace ns {
-  export function tag(parts: string[] /* ! */, a: i32): string {
-    assert(parts.length == 2);
-    assert(parts[0] == "c");
+  export function tag(parts: string[] /* ! */, a: i32, b: i32): string {
+    assert(!(parts instanceof TemplateStringsArray)); // optimized away
+    assert(parts.length == 3);
+    assert(parts[0] == "r");
     assert(parts[1] == "d");
+    assert(parts[2] == "");
     assert(a == 2);
-    return parts[0] + a.toString() + parts[1];
+    assert(b == 2);
+    return parts[0] + a.toString() + parts[1] + b.toString();
   }
 }
 
 function test_tag(): void {
   assert(tag`a${1}b` == "a1b");
-  assert(ns.tag`c${2}d` == "c2d");
+  assert(ns.tag`r${2}d${2}` == "r2d2");
 }
 test_tag();
+
+function raw(parts: TemplateStringsArray): string {
+  return parts.raw.join("");
+}
+
+function test_raw(): void {
+  assert(raw`` == "");
+  assert(raw`\u` == "\\u");
+  assert(raw`\u1` == "\\u1");
+}
+test_raw();

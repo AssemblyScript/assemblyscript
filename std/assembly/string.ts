@@ -819,5 +819,5 @@ export namespace String {
 }
 
 export class TemplateStringsArray extends Array<string> {
-  readonly raw: string;
+  readonly raw: string[];
 }
