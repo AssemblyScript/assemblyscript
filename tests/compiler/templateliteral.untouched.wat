@@ -97,7 +97,13 @@
  (data (i32.const 5532) ",\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\14\00\00\00\90\15\00\00\90\15\00\00\04\00\00\00\01\00\00\00\00\16\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 5580) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00p\15\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 5612) ",\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\10\00\00\00\e0\15\00\00\e0\15\00\00\04\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 5664) "\07\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04A\00\00\00\00\00\00 \00\00\00\00\00\00\00\02A\00\00\06\00\00\00\02A\00\00\00\00\00\00")
+ (data (i32.const 5660) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\00\10\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5692) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00\\\00u\001\000\000\000\00")
+ (data (i32.const 5724) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04\00\00\000\16\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5756) ",\00\00\00\00\00\00\00\00\00\00\00\05\00\00\00\14\00\00\00p\16\00\00p\16\00\00\04\00\00\00\01\00\00\00\e0\16\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5804) "\1c\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00P\16\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5836) ",\00\00\00\00\00\00\00\00\00\00\00\06\00\00\00\10\00\00\00\c0\16\00\00\c0\16\00\00\04\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 5888) "\07\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04A\00\00\00\00\00\00 \00\00\00\00\00\00\00\02A\00\00\06\00\00\00\02A\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
@@ -117,10 +123,10 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 5664))
- (global $~lib/memory/__data_end i32 (i32.const 5724))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22108))
- (global $~lib/memory/__heap_base i32 (i32.const 22108))
+ (global $~lib/rt/__rtti_base i32 (i32.const 5888))
+ (global $~lib/memory/__data_end i32 (i32.const 5948))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22332))
+ (global $~lib/memory/__heap_base i32 (i32.const 22332))
  (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
@@ -5930,8 +5936,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 22128
-   i32.const 22176
+   i32.const 22352
+   i32.const 22400
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -7375,6 +7381,34 @@
    i32.const 0
    i32.const 560
    i32.const 82
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 5776
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=8
+  local.get $0
+  call $templateliteral/raw
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 5712
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 560
+   i32.const 83
    i32.const 3
    call $~lib/builtins/abort
    unreachable

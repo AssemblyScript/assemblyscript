@@ -80,5 +80,6 @@ function test_raw(): void {
   assert(raw`` == "");
   assert(raw`\u` == "\\u");
   assert(raw`\u1` == "\\u1");
+  assert(raw`\u1000` == "\\u1000");
 }
 test_raw();
