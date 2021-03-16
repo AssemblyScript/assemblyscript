@@ -50,7 +50,7 @@ export function escapeUnsafe(dst: usize, src: usize, len: isize, table: usize): 
     if (i > org) {
       if (!org) {
         if (i >= len) return false;
-        dst = __realloc(dst, len * 12 / 10);
+        dst = __renew(dst, len * 12 / 10);
       }
       let size = <usize>(i - org) << 1;
       memory.copy(
@@ -79,21 +79,19 @@ export function escapeUnsafe(dst: usize, src: usize, len: isize, table: usize): 
 export function escapeURI(str: string): string | null {
   var len = str.length;
   if (!len) return str;
-  var result = __alloc(1, idof<string>());
+  var result = __new(1, idof<string>());
   if (!escapeUnsafe(result, changetype<usize>(str), len, URI_SAFE)) {
-    __free(result);
     return null;
   }
-  return changetype<string>(result); // retain
+  return changetype<string>(result);
 }
 
 export function escapeURIComponent(str: string): string | null {
   var len = str.length;
   if (!len) return str;
-  var result = __alloc(1, idof<string>());
+  var result = __new(1, idof<string>());
   if (!escapeUnsafe(result, changetype<usize>(str), len, URL_SAFE)) {
-    __free(result);
     return null;
   }
-  return changetype<string>(result); // retain
+  return changetype<string>(result);
 }
