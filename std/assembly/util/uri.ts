@@ -1,4 +1,5 @@
 // References:
+// https://github.com/brianmario/escape_utils/blob/master/ext/escape_utils/houdini_uri_e.c
 // https://github.com/brianmario/escape_utils/blob/master/ext/escape_utils/houdini_uri_u.c
 
 import { CharCode } from "./string";
