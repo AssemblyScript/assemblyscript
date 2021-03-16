@@ -79,7 +79,7 @@ export function escapeUnsafe(dst: usize, src: usize, len: isize, table: usize): 
 export function escapeURI(str: string): string | null {
   var len = str.length;
   if (!len) return str;
-  var result = __new(1, idof<string>());
+  var result = __new(len, idof<string>());
   if (!escapeUnsafe(result, changetype<usize>(str), len, URI_SAFE)) {
     return null;
   }
@@ -89,7 +89,7 @@ export function escapeURI(str: string): string | null {
 export function escapeURIComponent(str: string): string | null {
   var len = str.length;
   if (!len) return str;
-  var result = __new(1, idof<string>());
+  var result = __new(len, idof<string>());
   if (!escapeUnsafe(result, changetype<usize>(str), len, URL_SAFE)) {
     return null;
   }
