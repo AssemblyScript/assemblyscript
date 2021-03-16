@@ -4,12 +4,15 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s\00")
- (data (i32.const 64) "\08\00\00\00\01\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 12) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 76) "\1c\00\00\00\00\00\00\00\00\00\00\00\03\00\00\00\08\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 2 funcref)
  (elem (i32.const 1) $call-optional/opt@varargs)
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $call-optional/optIndirect (mut i32) (i32.const 80))
+ (global $call-optional/optIndirect (mut i32) (i32.const 96))
+ (global $~lib/memory/__data_end i32 (i32.const 108))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16492))
+ (global $~lib/memory/__heap_base i32 (i32.const 16492))
  (export "memory" (memory $0))
  (start $~start)
  (func $call-optional/opt (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -99,7 +102,7 @@
   global.set $~argumentsLength
   global.get $call-optional/optIndirect
   i32.load
-  call_indirect (type $i32_i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_i32_=>_i32)
   i32.const 0
   i32.eq
   i32.eqz
@@ -118,7 +121,7 @@
   global.set $~argumentsLength
   global.get $call-optional/optIndirect
   i32.load
-  call_indirect (type $i32_i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_i32_=>_i32)
   i32.const 5
   i32.eq
   i32.eqz
@@ -137,7 +140,7 @@
   global.set $~argumentsLength
   global.get $call-optional/optIndirect
   i32.load
-  call_indirect (type $i32_i32_i32_=>_i32)
+  call_indirect $0 (type $i32_i32_i32_=>_i32)
   i32.const 12
   i32.eq
   i32.eqz

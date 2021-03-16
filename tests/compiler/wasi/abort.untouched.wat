@@ -1,26 +1,32 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (memory $0 1)
- (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00t\00h\00e\00 \00m\00e\00s\00s\00a\00g\00e\00")
- (data (i32.const 64) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00w\00a\00s\00i\00/\00a\00b\00o\00r\00t\00.\00t\00s\00")
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00t\00h\00e\00 \00m\00e\00s\00s\00a\00g\00e\00\00\00\00\00\00\00")
+ (data (i32.const 60) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00w\00a\00s\00i\00/\00a\00b\00o\00r\00t\00.\00t\00s\00\00\00")
  (table $0 1 funcref)
- (export "_start" (func $~start))
- (export "memory" (memory $0))
+ (global $~lib/memory/__data_end i32 (i32.const 108))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16492))
+ (global $~lib/memory/__heap_base i32 (i32.const 16492))
  (export "test" (func $wasi/abort/test))
- (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
+ (export "memory" (memory $0))
+ (export "_start" (func $~start))
+ (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
   local.get $0
+  local.get $1
+  i32.store
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
-  i32.const 16
+  i32.const 20
   i32.sub
-  i32.load offset=12
+  i32.load offset=16
   i32.const 1
   i32.shr_u
  )
@@ -295,8 +301,10 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/__release (param $0 i32)
-  nop
+ (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store offset=4
  )
  (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
@@ -304,15 +312,9 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
   i32.const 0
   i32.const 12
-  i32.store
+  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
   i32.const 12
   local.set $4
   local.get $4
@@ -450,7 +452,7 @@
   local.get $4
   i32.const 12
   i32.sub
-  i32.store offset=4
+  call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf_len
   i32.const 2
   i32.const 0
   i32.const 1
@@ -459,10 +461,6 @@
   drop
   i32.const 255
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
  )
  (func $wasi/abort/test
   i32.const 0

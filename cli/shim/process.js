@@ -6,7 +6,8 @@ module.exports = {
   umask() {
     return 0;
   },
-  hrtime
+  hrtime,
+  argv: []
 };
 
 // https://github.com/kumavis/browser-process-hrtime v1.0.0
@@ -45,12 +46,12 @@ var performanceNow =
   function(){ return (new Date()).getTime(); };
 
 function hrtime(previousTimestamp) {
-  var clocktime = performanceNow.call(performance) * 1e-3;
-  var seconds = Math.floor(clocktime);
-  var nanoseconds = Math.floor((clocktime % 1) * 1e9);
+  var clocktime = performanceNow.call(performance);
+  var seconds = Math.floor(clocktime * 1e-3);
+  var nanoseconds = Math.floor(clocktime * 1e6 - seconds * 1e9);
   if (previousTimestamp) {
-    seconds = seconds - previousTimestamp[0];
-    nanoseconds = nanoseconds - previousTimestamp[1];
+    seconds -= previousTimestamp[0];
+    nanoseconds -= previousTimestamp[1];
     if (nanoseconds < 0) {
       seconds--;
       nanoseconds += 1e9;

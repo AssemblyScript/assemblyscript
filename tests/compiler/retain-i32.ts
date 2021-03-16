@@ -7,7 +7,7 @@ function test(a: u32, b: u32): void {
   assert(<i8>(a & b) == <i8>(<i8>a & <i8>b));
   assert(<i8>(a | b) == <i8>(<i8>a | <i8>b));
   assert(<i8>(a ^ b) == <i8>(<i8>a ^ <i8>b));
-  assert(<i8>(a << b) == <i8>(<i8>a << <i8>b));
+  assert(<i8>(a << (b & 7)) == <i8>(<i8>a << <i8>b));
 
   // unsigned
   assert(<u8>(a + b) == <u8>(<u8>a + <u8>b));
@@ -16,7 +16,7 @@ function test(a: u32, b: u32): void {
   assert(<u8>(a & b) == <u8>(<u8>a & <u8>b));
   assert(<u8>(a | b) == <u8>(<u8>a | <u8>b));
   assert(<u8>(a ^ b) == <u8>(<u8>a ^ <u8>b));
-  assert(<u8>(a << b) == <u8>(<u8>a << <u8>b));
+  assert(<u8>(a << (b & 7)) == <u8>(<u8>a << <u8>b));
 }
 
 // signed

@@ -1,7 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { HASH } from "./util/hash";
-import { E_KEYNOTFOUND } from "util/error";
+import { E_KEYNOTFOUND } from "./util/error";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
 
@@ -88,8 +88,9 @@ export class Map<K,V> {
       changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
     while (entry) {
-      if (!(entry.taggedNext & EMPTY) && entry.key == key) return entry;
-      entry = changetype<MapEntry<K,V>>(entry.taggedNext & ~EMPTY);
+      let taggedNext = entry.taggedNext;
+      if (!(taggedNext & EMPTY) && entry.key == key) return entry;
+      entry = changetype<MapEntry<K,V>>(taggedNext & ~EMPTY);
     }
     return null;
   }
@@ -110,14 +111,9 @@ export class Map<K,V> {
     var hashCode = HASH<K>(key);
     var entry = this.find(key, hashCode); // unmanaged!
     if (entry) {
+      entry.value = value;
       if (isManaged<V>()) {
-        let oldRef = changetype<usize>(entry.value);
-        if (changetype<usize>(value) != oldRef) {
-          entry.value = changetype<V>(__retain(changetype<usize>(value)));
-          __release(oldRef);
-        }
-      } else {
-        entry.value = value;
+        __link(changetype<usize>(this), changetype<usize>(value), true);
       }
     } else {
       // check if rehashing is necessary
@@ -132,12 +128,14 @@ export class Map<K,V> {
       let entries = this.entries;
       entry = changetype<MapEntry<K,V>>(changetype<usize>(entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<K,V>());
       // link with the map
-      entry.key = isManaged<K>()
-        ? changetype<K>(__retain(changetype<usize>(key)))
-        : key;
-      entry.value = isManaged<V>()
-        ? changetype<V>(__retain(changetype<usize>(value)))
-        : value;
+      entry.key = key;
+      if (isManaged<K>()) {
+        __link(changetype<usize>(this), changetype<usize>(key), true);
+      }
+      entry.value = value;
+      if (isManaged<V>()) {
+        __link(changetype<usize>(this), changetype<usize>(value), true);
+      }
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
@@ -150,8 +148,6 @@ export class Map<K,V> {
   delete(key: K): bool {
     var entry = this.find(key, HASH<K>(key));
     if (!entry) return false;
-    if (isManaged<K>()) __release(changetype<usize>(entry.key));
-    if (isManaged<V>()) __release(changetype<usize>(entry.value));
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate
@@ -177,9 +173,10 @@ export class Map<K,V> {
       let oldEntry = changetype<MapEntry<K,V>>(oldPtr);
       if (!(oldEntry.taggedNext & EMPTY)) {
         let newEntry = changetype<MapEntry<K,V>>(newPtr);
-        newEntry.key = oldEntry.key;
+        let oldEntryKey = oldEntry.key;
+        newEntry.key = oldEntryKey;
         newEntry.value = oldEntry.value;
-        let newBucketIndex = HASH<K>(oldEntry.key) & newBucketsMask;
+        let newBucketIndex = HASH<K>(oldEntryKey) & newBucketsMask;
         let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
         newEntry.taggedNext = load<usize>(newBucketPtrBase);
         store<usize>(newBucketPtrBase, newPtr);
@@ -233,7 +230,7 @@ export class Map<K,V> {
 
   // RT integration
 
-  @unsafe private __visit_impl(cookie: u32): void {
+  @unsafe private __visit(cookie: u32): void {
     __visit(changetype<usize>(this.buckets), cookie);
     var entries = changetype<usize>(this.entries);
     if (isManaged<K>() || isManaged<V>()) {

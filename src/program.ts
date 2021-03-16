@@ -148,6 +148,10 @@ import {
   BuiltinNames
 } from "./builtins";
 
+// Memory manager constants
+const AL_SIZE = 16;
+const AL_MASK = AL_SIZE - 1;
+
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
   constructor(
@@ -627,12 +631,14 @@ export class Program extends DiagnosticEmitter {
 
   /** Gets the standard `abort` instance, if not explicitly disabled. */
   get abortInstance(): Function | null {
-    return this.lookupFunction(CommonNames.abort);
+    var prototype = this.lookup(CommonNames.abort);
+    if (!prototype || prototype.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
+    return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
   }
 
   // Runtime interface
 
-  /** Gets the runtime `__alloc(size: usize, id: u32): usize` instance. */
+  /** Gets the runtime `__alloc(size: usize): usize` instance. */
   get allocInstance(): Function {
     var cached = this._allocInstance;
     if (!cached) this._allocInstance = cached = this.requireFunction(CommonNames.alloc);
@@ -656,21 +662,29 @@ export class Program extends DiagnosticEmitter {
   }
   private _freeInstance: Function | null = null;
 
-  /** Gets the runtime `__retain(ptr: usize): usize` instance. */
-  get retainInstance(): Function {
-    var cached = this._retainInstance;
-    if (!cached) this._retainInstance = cached = this.requireFunction(CommonNames.retain);
+  /** Gets the runtime `__new(size: usize, id: u32): usize` instance. */
+  get newInstance(): Function {
+    var cached = this._newInstance;
+    if (!cached) this._newInstance = cached = this.requireFunction(CommonNames.new_);
     return cached;
   }
-  private _retainInstance: Function | null = null;
+  private _newInstance: Function | null = null;
 
-  /** Gets the runtime `__release(ptr: usize): void` instance. */
-  get releaseInstance(): Function {
-    var cached = this._releaseInstance;
-    if (!cached) this._releaseInstance = cached = this.requireFunction(CommonNames.release);
+  /** Gets the runtime `__renew(ptr: usize, size: usize): usize` instance. */
+  get renewInstance(): Function {
+    var cached = this._renewInstance;
+    if (!cached) this._renewInstance = cached = this.requireFunction(CommonNames.renew);
     return cached;
   }
-  private _releaseInstance: Function | null = null;
+  private _renewInstance: Function | null = null;
+
+  /** Gets the runtime `__link(parentPtr: usize, childPtr: usize, expectMultiple: bool): void` instance. */
+  get linkInstance(): Function {
+    var cached = this._linkInstance;
+    if (!cached) this._linkInstance = cached = this.requireFunction(CommonNames.link);
+    return cached;
+  }
+  private _linkInstance: Function | null = null;
 
   /** Gets the runtime `__collect(): void` instance. */
   get collectInstance(): Function {
@@ -704,21 +718,37 @@ export class Program extends DiagnosticEmitter {
   }
   private _instanceofInstance: Function | null = null;
 
-  /** Gets the runtime `__allocBuffer(size: usize, id: u32, data: usize = 0): usize` instance. */
-  get allocBufferInstance(): Function {
-    var cached = this._allocBufferInstance;
-    if (!cached) this._allocBufferInstance = cached = this.requireFunction(CommonNames.allocBuffer);
+  /** Gets the runtime `__newBuffer(size: usize, id: u32, data: usize = 0): usize` instance. */
+  get newBufferInstance(): Function {
+    var cached = this._newBufferInstance;
+    if (!cached) this._newBufferInstance = cached = this.requireFunction(CommonNames.newBuffer);
     return cached;
   }
-  private _allocBufferInstance: Function | null = null;
+  private _newBufferInstance: Function | null = null;
 
-  /** Gets the runtime `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` instance. */
-  get allocArrayInstance(): Function {
-    var cached = this._allocArrayInstance;
-    if (!cached) this._allocArrayInstance = cached = this.requireFunction(CommonNames.allocArray);
+  /** Gets the runtime `__newArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` instance. */
+  get newArrayInstance(): Function {
+    var cached = this._newArrayInstance;
+    if (!cached) this._newArrayInstance = cached = this.requireFunction(CommonNames.newArray);
     return cached;
   }
-  private _allocArrayInstance: Function | null = null;
+  private _newArrayInstance: Function | null = null;
+
+  /** Gets the runtime's internal `BLOCK` instance. */
+  get BLOCKInstance(): Class {
+    var cached = this._BLOCKInstance;
+    if (!cached) this._BLOCKInstance = cached = this.requireClass(CommonNames.BLOCK);
+    return cached;
+  }
+  private _BLOCKInstance: Class | null = null;
+
+  /** Gets the runtime's internal `OBJECT` instance. */
+  get OBJECTInstance(): Class {
+    var cached = this._OBJECTInstance;
+    if (!cached) this._OBJECTInstance = cached = this.requireClass(CommonNames.OBJECT);
+    return cached;
+  }
+  private _OBJECTInstance: Class | null = null;
 
   // Utility
 
@@ -737,9 +767,57 @@ export class Program extends DiagnosticEmitter {
     return null;
   }
 
-  /** Gets the size of a runtime header. */
-  get runtimeHeaderSize(): i32 {
-    return 16;
+  /** Gets the overhead of a memory manager block. */
+  get blockOverhead(): i32 {
+    // BLOCK | data...
+    //       ^ 16b alignment
+    return this.BLOCKInstance.nextMemoryOffset;
+  }
+
+  /** Gets the overhead of a managed object, excl. block overhead, incl. alignment. */
+  get objectOverhead(): i32 {
+    // OBJECT+align | data...
+    //        └ 0 ┘ ^ 16b alignment
+    return (this.OBJECTInstance.nextMemoryOffset - this.blockOverhead + AL_MASK) & ~AL_MASK;
+  }
+
+  /** Gets the total overhead of a managed object, incl. block overhead. */
+  get totalOverhead(): i32 {
+    // BLOCK | OBJECT+align | data...
+    // └     = TOTAL      ┘ ^ 16b alignment
+    return this.blockOverhead + this.objectOverhead;
+  }
+
+  /** Computes the next properly aligned offset of a memory manager block, given the current bump offset. */
+  computeBlockStart(currentOffset: i32): i32 {
+    var blockOverhead = this.blockOverhead;
+    return ((currentOffset + blockOverhead + AL_MASK) & ~AL_MASK) - blockOverhead;
+  }
+
+  /** Computes the next properly aligned offset of a memory manager block, given the current bump offset. */
+  computeBlockStart64(currentOffset: i64): i64 {
+    var blockOverhead = i64_new(this.blockOverhead);
+    return i64_sub(i64_align(i64_add(currentOffset, blockOverhead), AL_SIZE), blockOverhead);
+  }
+
+  /** Computes the size of a memory manager block, excl. block overhead. */
+  computeBlockSize(payloadSize: i32, isManaged: bool): i32 {
+    // see: std/rt/tlsf.ts, computeSize; becomes mmInfo
+    if (isManaged) payloadSize += this.objectOverhead;
+    // we know that payload must be aligned, and that block sizes must be chosen
+    // so that blocks are adjacent with the next payload aligned. hence, block
+    // size is payloadSize rounded up to where the next block would start:
+    var blockSize = this.computeBlockStart(payloadSize);
+    // make sure that block size is valid according to TLSF requirements
+    var blockOverhead = this.blockOverhead;
+    var blockMinsize = ((3 * this.options.usizeType.byteSize + blockOverhead + AL_MASK) & ~AL_MASK) - blockOverhead;
+    if (blockSize < blockMinsize) blockSize = blockMinsize;
+    const blockMaxsize = 1 << 30; // 1 << (FL_BITS + SB_BITS - 1), exclusive
+    const tagsMask = 3;
+    if (blockSize >= blockMaxsize || (blockSize & tagsMask) != 0) {
+      throw new Error("invalid block size");
+    }
+    return blockSize;
   }
 
   /** Creates a native variable declaration. */
@@ -901,7 +979,12 @@ export class Program extends DiagnosticEmitter {
     // compiler needs to check this condition whenever such a value is created
     // respectively stored or loaded.
     this.registerNativeType(CommonNames.v128, Type.v128);
+    this.registerNativeType(CommonNames.funcref, Type.funcref);
     this.registerNativeType(CommonNames.externref, Type.externref);
+    this.registerNativeType(CommonNames.anyref, Type.anyref);
+    this.registerNativeType(CommonNames.eqref, Type.eqref);
+    this.registerNativeType(CommonNames.i31ref, Type.i31ref);
+    this.registerNativeType(CommonNames.dataref, Type.dataref);
 
     // register compiler hints
     this.registerConstantInteger(CommonNames.ASC_TARGET, Type.i32,
@@ -918,6 +1001,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.shrinkLevelHint, 0));
     this.registerConstantInteger(CommonNames.ASC_LOW_MEMORY_LIMIT, Type.i32,
       i64_new(options.lowMemoryLimit, 0));
+    this.registerConstantInteger(CommonNames.ASC_EXPORT_RUNTIME, Type.bool,
+      i64_new(options.exportRuntime ? 1 : 0, 0));
 
     // register feature hints
     this.registerConstantInteger(CommonNames.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
@@ -940,6 +1025,10 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.REFERENCE_TYPES) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_MULTI_VALUE, Type.bool,
       i64_new(options.hasFeature(Feature.MULTI_VALUE) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_GC, Type.bool,
+      i64_new(options.hasFeature(Feature.GC) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_MEMORY64, Type.bool,
+      i64_new(options.hasFeature(Feature.MEMORY64) ? 1 : 0, 0));
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
@@ -1116,7 +1205,7 @@ export class Program extends DiagnosticEmitter {
           if (element) {
             file.ensureExport(exportName, element);
           } else {
-            let globalElement = this.lookupGlobal(localName);
+            let globalElement = this.lookup(localName);
             if (globalElement !== null && isDeclaredElement(globalElement.kind)) { // export { memory }
               file.ensureExport(exportName, <DeclaredElement>globalElement);
             } else {
@@ -1151,7 +1240,16 @@ export class Program extends DiagnosticEmitter {
     this.registerWrapperClass(Type.f32, CommonNames.F32);
     this.registerWrapperClass(Type.f64, CommonNames.F64);
     if (options.hasFeature(Feature.SIMD)) this.registerWrapperClass(Type.v128, CommonNames.V128);
-    if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerWrapperClass(Type.externref, CommonNames.Externref);
+    if (options.hasFeature(Feature.REFERENCE_TYPES)) {
+      this.registerWrapperClass(Type.funcref, CommonNames.Funcref);
+      this.registerWrapperClass(Type.externref, CommonNames.Externref);
+      if (options.hasFeature(Feature.GC)) {
+        this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
+        this.registerWrapperClass(Type.eqref, CommonNames.Eqref);
+        this.registerWrapperClass(Type.i31ref, CommonNames.I31ref);
+        this.registerWrapperClass(Type.dataref, CommonNames.Dataref);
+      }
+    }
 
     // resolve prototypes of extended classes or interfaces
     var resolver = this.resolver;
@@ -1408,31 +1506,36 @@ export class Program extends DiagnosticEmitter {
     }
   }
 
+  /** Looks up the element of the specified name in the global scope. */
+  lookup(name: string): Element | null {
+    var elements = this.elementsByName;
+    if (elements.has(name)) return assert(elements.get(name));
+    return null;
+  }
+
   /** Requires that a global library element of the specified kind is present and returns it. */
   private require(name: string, kind: ElementKind): Element {
-    var element = this.lookupGlobal(name);
+    var element = this.lookup(name);
     if (!element) throw new Error("Missing standard library component: " + name);
-    if (element.kind != kind) throw Error("Invalid standard library component: " + name);
+    if (element.kind != kind) throw Error("Invalid standard library component kind: " + name);
     return element;
   }
 
+  /** Requires that a global variable is present and returns it. */
+  requireGlobal(name: string): Global {
+    return <Global>this.require(name, ElementKind.GLOBAL);
+  }
+
   /** Requires that a non-generic global class is present and returns it. */
-  private requireClass(name: string): Class {
+  requireClass(name: string): Class {
     var prototype = this.require(name, ElementKind.CLASS_PROTOTYPE);
     var resolved = this.resolver.resolveClass(<ClassPrototype>prototype, null);
     if (!resolved) throw new Error("Invalid standard library class: " + name);
     return resolved;
   }
 
-  /** Obtains a non-generic global function and returns it. Returns `null` if it does not exist. */
-  private lookupFunction(name: string): Function | null {
-    var prototype = this.lookupGlobal(name);
-    if (!prototype || prototype.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
-    return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-  }
-
   /** Requires that a global function is present and returns it. */
-  private requireFunction(name: string, typeArguments: Type[] | null = null): Function {
+  requireFunction(name: string, typeArguments: Type[] | null = null): Function {
     var prototype = <FunctionPrototype>this.require(name, ElementKind.FUNCTION_PROTOTYPE);
     var resolved = this.resolver.resolveFunction(prototype, typeArguments);
     if (!resolved) throw new Error("Invalid standard library function: " + name);
@@ -1511,7 +1614,7 @@ export class Program extends DiagnosticEmitter {
   private registerWrapperClass(type: Type, className: string): void {
     var wrapperClasses = this.wrapperClasses;
     assert(!type.isInternalReference && !wrapperClasses.has(type));
-    var element = assert(this.lookupGlobal(className));
+    var element = assert(this.lookup(className));
     assert(element.kind == ElementKind.CLASS_PROTOTYPE);
     var classElement = assert(this.resolver.resolveClass(<ClassPrototype>element, null));
     classElement.wrappedType = type;
@@ -1577,20 +1680,6 @@ export class Program extends DiagnosticEmitter {
     }
     elementsByName.set(name, element);
     return element;
-  }
-
-  /** Looks up the element of the specified name in the global scope. */
-  lookupGlobal(name: string): Element | null {
-    var elements = this.elementsByName;
-    if (elements.has(name)) return assert(elements.get(name));
-    return null;
-  }
-
-  /** Looks up the element of the specified name in the global scope. Errors if not present. */
-  requireGlobal(name: string): Element {
-    var elements = this.elementsByName;
-    if (elements.has(name)) return assert(elements.get(name));
-    throw new Error("missing global");
   }
 
   /** Tries to locate a foreign file given its normalized path. */
@@ -2427,7 +2516,7 @@ export class Program extends DiagnosticEmitter {
         default: assert(false); // namespace member expected
       }
     }
-    if (original != element) copyMembers(original, element); // retain original parent
+    if (original != element) copyMembers(original, element); // keep original parent
     return element;
   }
 
@@ -2502,17 +2591,6 @@ export class Program extends DiagnosticEmitter {
   //   } while (current = current.base);
   //   return null;
   // }
-
-  /** Finds all cyclic classes. */
-  findCyclicClasses(): Set<Class> {
-    var cyclics = new Set<Class>();
-    // TODO: for (let instance of this.managedClasses.values()) {
-    for (let _values = Map_values(this.managedClasses), i = 0, k = _values.length; i < k; ++i) {
-      let instance = unchecked(_values[i]);
-      if (!instance.isAcyclic) cyclics.add(instance);
-    }
-    return cyclics;
-  }
 }
 
 /** Indicates the specific kind of an {@link Element}. */
@@ -2955,7 +3033,7 @@ export class File extends Element {
   lookup(name: string): Element | null {
     var element = this.lookupInSelf(name);
     if (element) return element;
-    return this.program.lookupGlobal(name);
+    return this.program.lookup(name);
   }
 
   /** Ensures that an element is an export of this file. */
@@ -3474,13 +3552,13 @@ export class Function extends TypedElement {
   virtualStub: Function | null = null;
   /** Runtime memory segment, if created. */
   memorySegment: MemorySegment | null = null;
+  /** Original function, if a stub. Otherwise `this`. */
+  original!: Function;
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
   /** Counting id of anonymous inner functions. */
   nextAnonymousId: i32 = 0;
-  /** Counting id of autorelease variables. */
-  nextAutoreleaseId: i32 = 0;
 
   /** Constructs a new concrete function. */
   constructor(
@@ -3509,6 +3587,7 @@ export class Function extends TypedElement {
     this.flags = prototype.flags | CommonFlags.RESOLVED;
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
+    this.original = this;
     var program = prototype.program;
     this.type = signature.type;
     if (!prototype.is(CommonFlags.AMBIENT)) {
@@ -3553,12 +3632,13 @@ export class Function extends TypedElement {
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
   newStub(postfix: string): Function {
     var stub = new Function(
-      this.name + STUB_DELIMITER + postfix,
+      this.original.name + STUB_DELIMITER + postfix,
       this.prototype,
       this.typeArguments,
       this.signature.clone(),
       this.contextualTypeArguments
     );
+    stub.original = this.original;
     stub.set(this.flags & ~CommonFlags.COMPILED | CommonFlags.STUB);
     return stub;
   }
@@ -3601,8 +3681,12 @@ export class Function extends TypedElement {
   tempF32s: Local[] | null = null;
   tempF64s: Local[] | null = null;
   tempV128s: Local[] | null = null;
+  tempFuncrefs: Local[] | null = null;
   tempExternrefs: Local[] | null = null;
-  tempExnrefs: Local[] | null = null;
+  tempAnyrefs: Local[] | null = null;
+  tempEqrefs: Local[] | null = null;
+  tempI31refs: Local[] | null = null;
+  tempDatarefs: Local[] | null = null;
 
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;
@@ -3627,7 +3711,7 @@ export class Function extends TypedElement {
           range.debugInfoRef,
           source.debugInfoIndex,
           source.lineAt(range.start),
-          source.columnAt()
+          source.columnAt() - 1 // source maps are 0-based
         );
       }
     }
@@ -3715,15 +3799,44 @@ export class Field extends VariableLikeElement {
     registerConcreteElement(this.program, this);
   }
 
+  /** Gets the field's `this` type. */
+  get thisType(): Type {
+    var parent = this.parent;
+    assert(parent.kind == ElementKind.CLASS);
+    return (<Class>parent).type;
+  }
+
   /** Gets the internal name of the respective getter function. */
   get internalGetterName(): string {
-    return this.parent.internalName + INSTANCE_DELIMITER + GETTER_PREFIX + this.name;
+    var cached = this._internalGetterName;
+    if (cached === null) this._internalGetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + GETTER_PREFIX + this.name;
+    return cached;
   }
+  private _internalGetterName: string | null = null;
 
   /** Gets the internal name of the respective setter function. */
   get internalSetterName(): string {
-    return this.parent.internalName + INSTANCE_DELIMITER + SETTER_PREFIX + this.name;
+    var cached = this._internalSetterName;
+    if (cached === null) this._internalSetterName = cached = this.parent.internalName + INSTANCE_DELIMITER + SETTER_PREFIX + this.name;
+    return cached;
   }
+  private _internalSetterName: string | null = null;
+
+  /** Gets the signature of the respective getter function. */
+  get internalGetterSignature(): Signature {
+    var cached = this._internalGetterSignature;
+    if (!cached) this._internalGetterSignature = cached = new Signature(this.program, null, this.type, this.thisType);
+    return cached;
+  }
+  private _internalGetterSignature: Signature | null = null;
+
+  /** Gets the signature of the respective setter function. */
+  get internalSetterSignature(): Signature {
+    var cached = this._internalSetterSignature;
+    if (!cached) this._internalGetterSignature = cached = new Signature(this.program, [ this.type ], Type.void, this.thisType);
+    return cached;
+  }
+  private _internalSetterSignature: Signature | null = null;
 }
 
 /** A property comprised of a getter and a setter function. */
@@ -4009,12 +4122,6 @@ export class ClassPrototype extends DeclaredElement {
   }
 }
 
-const enum AcyclicState {
-  UNKNOWN,
-  ACYCLIC,
-  NOT_ACYCLIC
-}
-
 /** A resolved class. */
 export class Class extends TypedElement {
 
@@ -4038,8 +4145,6 @@ export class Class extends TypedElement {
   indexSignature: IndexSignature | null = null;
   /** Unique class id. */
   private _id: u32 = 0;
-  /** Remembers acyclic state. */
-  private _acyclic: AcyclicState = AcyclicState.UNKNOWN;
   /** Runtime type information flags. */
   rttiFlags: u32 = 0;
   /** Wrapped type, if a wrapper for a basic type. */
@@ -4050,6 +4155,8 @@ export class Class extends TypedElement {
   implementers: Set<Class> | null = null;
   /** Whether the field initialization check has already been performed. */
   didCheckFieldInitialization: bool = false;
+  /** Runtime visitor function reference. */
+  visitRef: FunctionRef = 0;
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {
@@ -4206,9 +4313,8 @@ export class Class extends TypedElement {
     var instance: Class | null = this;
     do {
       let overloads = instance.overloads;
-      if (overloads) {
-        let overload = overloads.get(kind);
-        if (overload) return overload;
+      if (overloads != null && overloads.has(kind)) {
+        return assert(overloads.get(kind));
       }
       instance = instance.base;
     } while (instance);
@@ -4231,20 +4337,21 @@ export class Class extends TypedElement {
 
   /** Creates a buffer suitable to hold a runtime instance of this class. */
   createBuffer(overhead: i32 = 0): Uint8Array {
-    var size = this.nextMemoryOffset + overhead;
-    var buffer = new Uint8Array(this.program.runtimeHeaderSize + size);
-    assert(!this.program.options.isWasm64); // TODO: WASM64, mmInfo is usize
-    // see: std/assembly/rt/common.ts
-    assert(size < (1 << 28));     // 1 bit BUFFERED + 3 bits color
-    writeI32(size, buffer, 0);    // mmInfo = 0
-    writeI32(1, buffer, 4);       // gcInfo (RC) = 1
-    writeI32(this.id, buffer, 8); // rtId
-    writeI32(size, buffer, 12);   // rtSize
+    var program = this.program;
+    var payloadSize = this.nextMemoryOffset + overhead;
+    var blockSize = program.computeBlockSize(payloadSize, true); // excl. overhead
+    var buffer = new Uint8Array(program.blockOverhead + blockSize);
+    var OBJECT = program.OBJECTInstance;
+    OBJECT.writeField("mmInfo", blockSize, buffer, 0);
+    OBJECT.writeField("gcInfo", 0, buffer, 0);
+    OBJECT.writeField("gcInfo2", 0, buffer, 0);
+    OBJECT.writeField("rtId", this.id, buffer, 0);
+    OBJECT.writeField("rtSize", payloadSize, buffer, 0);
     return buffer;
   }
 
   /** Writes a field value to a buffer and returns the number of bytes written. */
-  writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.runtimeHeaderSize): i32 {
+  writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.totalOverhead): i32 {
     var element = this.lookupInSelf(name);
     if (element !== null && element.kind == ElementKind.FIELD) {
       let fieldInstance = <Field>element;
@@ -4370,98 +4477,43 @@ export class Class extends TypedElement {
     return Type.void;
   }
 
-  /** Tests if this class is inherently acyclic. */
-  get isAcyclic(): bool {
-    var acyclic = this._acyclic;
-    if (acyclic == AcyclicState.UNKNOWN) {
-      let hasCycle = this.cyclesTo(this);
-      if (hasCycle) this._acyclic = acyclic = AcyclicState.NOT_ACYCLIC;
-      else this._acyclic = acyclic = AcyclicState.ACYCLIC;
-    }
-    return acyclic == AcyclicState.ACYCLIC;
-  }
+  /** Tests if this class is pointerfree. Useful to know for the GC. */
+  get isPointerfree(): bool {
+    var program = this.program;
 
-  /** Tests if this class potentially forms a reference cycle to another one. */
-  private cyclesTo(other: Class, except: Set<Class> = new Set()): bool {
-    // TODO: The pure RC paper describes acyclic data structures as classes that may contain
-    //
-    // - scalars
-    // - references to classes that are both acyclic and final (here: Java); and
-    // - arrays (in our case: also sets, maps) of either of the above
-    //
-    // Our implementation, however, treats all objects that do not reference themselves directly
-    // or indirectly as acylic, allowing them to contain inner cycles of other non-acyclic objects.
-    // This contradicts the second assumption and must be revisited when actually implementing RC.
-
-    if (except.has(this)) return false;
-    except.add(this); // don't recurse indefinitely
-
-    // Find out if any field references 'other' directly or indirectly
-    var current: Class | null;
     var instanceMembers = this.members;
     if (instanceMembers) {
-      // TODO: for (let member of instanceMembers.values()) {
+
+      // Check that there are no managed instance fields
       for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         if (member.kind == ElementKind.FIELD) {
           let fieldType = (<Field>member).type;
-          if (fieldType.isReference) {
-            if ((current = fieldType.getClass()) !== null && (
-              current === other ||
-              current.cyclesTo(other, except)
-            )) return true;
-          }
+          if (fieldType.isManaged) return false;
         }
       }
+
+      // Check that this isn't a managed collection
+      if (instanceMembers.has(CommonNames.visit)) {
+        let prototype = this.prototype;
+        if (
+          prototype == program.arrayPrototype ||
+          prototype == program.staticArrayPrototype ||
+          prototype == program.setPrototype ||
+          prototype == program.mapPrototype
+        ) {
+          // Note that we cannot know for sure anymore as soon as the collection
+          // is extended, because user code may implement a custom visitor.
+          let typeArguments = assert(this.getTypeArgumentsTo(prototype));
+          for (let i = 0, k = typeArguments.length; i < k; ++i) {
+            if (typeArguments[i].isManaged) return false;
+          }
+          return true;
+        }
+        return false; // has a custom __visit
+      }
     }
-
-    // Do the same for non-field data
-    var basePrototype: ClassPrototype | null;
-
-    // Array<T->other?>
-    if ((basePrototype = this.program.arrayPrototype) !== null && this.prototype.extends(basePrototype)) {
-      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
-      assert(typeArguments.length == 1);
-      if (
-        (current = typeArguments[0].classReference) !== null &&
-        (
-          current === other ||
-          current.cyclesTo(other, except)
-        )
-      ) return true;
-
-    // Set<K->other?>
-    } else if ((basePrototype = this.program.setPrototype) !== null && this.prototype.extends(basePrototype)) {
-      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
-      assert(typeArguments.length == 1);
-      if (
-        (current = typeArguments[0].classReference) !== null &&
-        (
-          current === other ||
-          current.cyclesTo(other, except)
-        )
-      ) return true;
-
-    // Map<K->other?,V->other?>
-    } else if ((basePrototype = this.program.mapPrototype) !== null && this.prototype.extends(basePrototype)) {
-      let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
-      assert(typeArguments.length == 2);
-      if (
-        (current = typeArguments[0].classReference) !== null &&
-        (
-          current === other ||
-          current.cyclesTo(other, except)
-        )
-      ) return true;
-      if (
-        (current = typeArguments[1].classReference) !== null &&
-        (
-          current === other ||
-          current.cyclesTo(other, except)
-        )
-      ) return true;
-    }
-    return false;
+    return true;
   }
 
   /** Gets all extendees of this class (that do not have the specified instance member). */

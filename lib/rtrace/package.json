@@ -1,7 +1,50 @@
 {
   "name": "@assemblyscript/rtrace",
-  "types": "index.d.ts",
-  "version": "0.1.0",
+  "description": "A tiny utility to sanitize the AssemblyScript runtime.",
+  "keywords": [
+    "assemblyscript",
+    "rtrace",
+    "webassembly",
+    "wasm"
+  ],
+  "version": "0.0.0",
+  "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "license": "Apache-2.0",
-  "main": "index.js"
+  "homepage": "https://assemblyscript.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AssemblyScript/assemblyscript.git",
+    "directory": "lib/rtrace"
+  },
+  "bugs": {
+    "url": "https://github.com/AssemblyScript/assemblyscript/issues"
+  },
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    "import": "./index.js",
+    "require": "./umd/index.js"
+  },
+  "bin": {
+    "rtplot": "bin/rtplot.js"
+  },
+  "scripts": {
+    "build": "npx esm2umd rtrace index.js > umd/index.js",
+    "test": "node tests"
+  },
+  "dependencies": {
+    "d3": "^6.3.1",
+    "jsdom": "^16.4.0"
+  },
+  "files": [
+    "index.d.ts",
+    "index.js",
+    "package.json",
+    "umd/index.d.ts",
+    "umd/index.js",
+    "umd/package.json",
+    "bin/rtplot.js",
+    "README.md"
+  ]
 }

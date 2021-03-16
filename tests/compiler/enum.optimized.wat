@@ -28,7 +28,6 @@
  (global $enum/SelfReference.ONE i32 (i32.const 1))
  (global $enum/SelfReferenceConst.ZERO i32 (i32.const 0))
  (global $enum/SelfReferenceConst.ONE i32 (i32.const 1))
- (export "memory" (memory $0))
  (export "Implicit.ZERO" (global $enum/Implicit.ZERO))
  (export "Implicit.ONE" (global $enum/Implicit.ONE))
  (export "Implicit.TWO" (global $enum/Implicit.TWO))
@@ -57,4 +56,5 @@
  (export "SelfReference.ONE" (global $enum/SelfReference.ONE))
  (export "SelfReferenceConst.ZERO" (global $enum/SelfReferenceConst.ZERO))
  (export "SelfReferenceConst.ONE" (global $enum/SelfReferenceConst.ONE))
+ (export "memory" (memory $0))
 )

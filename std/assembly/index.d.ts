@@ -35,8 +35,18 @@ declare type f32 = number;
 declare type f64 = number;
 /** A 128-bit vector. */
 declare type v128 = object;
-/** A host reference. */
-declare type externref = object;
+/** Function reference. */
+declare type funcref = object | null;
+/** External reference. */
+declare type externref = object | null;
+/** Any reference. */
+declare type anyref = object | null;
+/** Equatable reference. */
+declare type eqref = object | null;
+/** 31-bit integer reference. */
+declare type i31ref = object | null;
+/** Data reference. */
+declare type dataref = object | null;
 
 // Compiler hints
 
@@ -54,6 +64,8 @@ declare const ASC_OPTIMIZE_LEVEL: i32;
 declare const ASC_SHRINK_LEVEL: i32;
 /** Provided lowMemoryLimit option. */
 declare const ASC_LOW_MEMORY_LIMIT: i32;
+/** Provided noExportRuntime option. */
+declare const ASC_NO_EXPORT_RUNTIME: i32;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
 /** Whether the mutable globals feature is enabled. */
@@ -74,6 +86,10 @@ declare const ASC_FEATURE_TAIL_CALLS: bool;
 declare const ASC_FEATURE_REFERENCE_TYPES: bool;
 /** Whether the multi value types feature is enabled. */
 declare const ASC_FEATURE_MULTI_VALUE: bool;
+/** Whether the garbage collection feature is enabled. */
+declare const ASC_FEATURE_GC: bool;
+/** Whether the memory64 feature is enabled. */
+declare const ASC_FEATURE_MEMORY64: bool;
 
 // Builtins
 
@@ -109,6 +125,14 @@ declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
+/** Computes the sum of two integers or floats. */
+declare function add<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
+/** Computes the difference of two integers or floats. */
+declare function sub<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
+/** Computes the product of two integers or floats. */
+declare function mul<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
+/** Computes the quotient of two integers or floats. */
+declare function div<T = i32 | i64 | f32 | f64>(left: T, right: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
@@ -120,6 +144,10 @@ declare function unreachable(): never;
 declare const NaN: f32 | f64;
 /** Positive infinity as a 32-bit or 64-bit float depending on context. */
 declare const Infinity: f32 | f64;
+/** Data end offset. */
+declare const __data_end: usize;
+/** Stack pointer offset. */
+declare var __stack_pointer: usize;
 /** Heap base offset. */
 declare const __heap_base: usize;
 /** Determines the byte size of the specified underlying core type. Compiles to a constant. */
@@ -266,6 +294,28 @@ declare namespace i32 {
   export function store16(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 32-bit integer value to memory. */
   export function store(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  /** Performs the sign-agnostic count leading zero bits operation on a 32-bit integer. All zero bits are considered leading if the value is zero. */
+  export function clz(value: i32): i32;
+  /** Performs the sign-agnostic count tailing zero bits operation on a 32-bit integer. All zero bits are considered trailing if the value is zero. */
+  export function ctz(value: i32): i32;
+  /** Performs the sign-agnostic count number of one bits operation on a 32-bit integer. */
+  export function popcnt(value: i32): i32;
+  /** Performs the sign-agnostic rotate left operation on a 32-bit integer. */
+  export function rotl(value: i32, shift: i32): i32;
+  /** Performs the sign-agnostic rotate right operation on a 32-bit integer. */
+  export function rotr(value: i32, shift: i32): i32;
+  /** Reinterprets the bits of the specified 32-bit float as a 32-bit integer. */
+  export function reinterpret_f32(value: f32): i32;
+  /** Computes the sum of two 32-bit integers. */
+  export function add(left: i32, right: i32): i32;
+  /** Computes the difference of two 32-bit integers. */
+  export function sub(left: i32, right: i32): i32;
+  /** Computes the product of two 32-bit integers. */
+  export function mul(left: i32, right: i32): i32;
+  /** Computes the signed quotient of two 32-bit integers. */
+  export function div_s(left: i32, right: i32): i32;
+  /** Computes the unsigned quotient of two 32-bit integers. */
+  export function div_u(left: i32, right: i32): i32;
   /** Atomic 32-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
@@ -364,6 +414,28 @@ declare namespace i64 {
   export function store32(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 64-bit integer value to memory. */
   export function store(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  /** Performs the sign-agnostic count leading zero bits operation on a 64-bit integer. All zero bits are considered leading if the value is zero. */
+  export function clz(value: i64): i64;
+  /** Performs the sign-agnostic count tailing zero bits operation on a 64-bit integer. All zero bits are considered trailing if the value is zero. */
+  export function ctz(value: i64): i64;
+  /** Performs the sign-agnostic count number of one bits operation on a 64-bit integer. */
+  export function popcnt(value: i64): i64;
+  /** Performs the sign-agnostic rotate left operation on a 64-bit integer. */
+  export function rotl(value: i64, shift: i64): i64;
+  /** Performs the sign-agnostic rotate right operation on a 64-bit integer. */
+  export function rotr(value: i64, shift: i64): i64;
+  /** Reinterprets the bits of the specified 64-bit float as a 64-bit integer. */
+  export function reinterpret_f64(value: f64): i64;
+  /** Computes the sum of two 64-bit integers. */
+  export function add(left: i64, right: i64): i64;
+  /** Computes the difference of two 64-bit integers. */
+  export function sub(left: i64, right: i64): i64;
+  /** Computes the product of two 64-bit integers. */
+  export function mul(left: i64, right: i64): i64;
+  /** Computes the signed quotient of two 64-bit integers. */
+  export function div_s(left: i64, right: i64): i64;
+  /** Computes the unsigned quotient of two 64-bit integers. */
+  export function div_u(left: i64, right: i64): i64;
   /** Atomic 64-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
@@ -523,6 +595,34 @@ declare namespace f32 {
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
   export function store(ptr: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
+  /** Computes the sum of two 32-bit floats. */
+  export function add(left: f32, right: f32): f32;
+  /** Computes the difference of two 32-bit floats. */
+  export function sub(left: f32, right: f32): f32;
+  /** Computes the product of two 32-bit floats. */
+  export function mul(left: f32, right: f32): f32;
+  /** Computes the quotient of two 32-bit floats. */
+  export function div(left: f32, right: f32): f32;
+  /** Computes the absolute value of a 32-bit float. */
+  export function abs(value: f32): f32;
+  /** Determines the maximum of two 32-bit floats. If either operand is `NaN`, returns `NaN`. */
+  export function max(left: f32, right: f32): f32;
+  /** Determines the minimum of two 32-bit floats. If either operand is `NaN`, returns `NaN`. */
+  export function min(left: f32, right: f32): f32;
+  /** Performs the ceiling operation on a 32-bit float. */
+  export function ceil(value: f32): f32;
+  /** Composes a 32-bit float from the magnitude of `x` and the sign of `y`. */
+  export function copysign(x: f32, y: f32): f32;
+  /** Performs the floor operation on a 32-bit float. */
+  export function floor(value: f32): f32;
+  /** Rounds to the nearest integer tied to even of a 32-bit float. */
+  export function nearest(value: f32): f32;
+  /** Reinterprets the bits of the specified 32-bit integer as a 32-bit float. */
+  export function reinterpret_i32(value: i32): f32;
+  /** Calculates the square root of a 32-bit float. */
+  export function sqrt(value: f32): f32;
+  /** Rounds to the nearest integer towards zero of a 32-bit float. */
+  export function trunc(value: f32): f32;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: any): f64;
@@ -549,6 +649,34 @@ declare namespace f64 {
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
   export function store(ptr: usize, value: f64, immOffset?: usize, immAlign?: usize): void;
+  /** Computes the sum of two 64-bit floats. */
+  export function add(left: f64, right: f64): f64;
+  /** Computes the difference of two 64-bit floats. */
+  export function sub(left: f64, right: f64): f64;
+  /** Computes the product of two 64-bit floats. */
+  export function mul(left: f64, right: f64): f64;
+  /** Computes the quotient of two 64-bit floats. */
+  export function div(left: f64, right: f64): f64;
+  /** Computes the absolute value of a 64-bit float. */
+  export function abs(value: f64): f64;
+  /** Determines the maximum of two 64-bit floats. If either operand is `NaN`, returns `NaN`. */
+  export function max(left: f64, right: f64): f64;
+  /** Determines the minimum of two 64-bit floats. If either operand is `NaN`, returns `NaN`. */
+  export function min(left: f64, right: f64): f64;
+  /** Performs the ceiling operation on a 64-bit float. */
+  export function ceil(value: f64): f64;
+  /** Composes a 64-bit float from the magnitude of `x` and the sign of `y`. */
+  export function copysign(x: f64, y: f64): f64;
+  /** Performs the floor operation on a 64-bit float. */
+  export function floor(value: f64): f64;
+  /** Rounds to the nearest integer tied to even of a 64-bit float. */
+  export function nearest(value: f64): f64;
+  /** Reinterprets the bits of the specified 64-bit integer as a 64-bit float. */
+  export function reinterpret_i64(value: i64): f64;
+  /** Calculates the square root of a 64-bit float. */
+  export function sqrt(value: f64): f64;
+  /** Rounds to the nearest integer towards zero of a 64-bit float. */
+  export function trunc(value: f64): f64;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function v128(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -565,10 +693,30 @@ declare namespace v128 {
   export function swizzle(a: v128, s: v128): v128;
   /** Loads a vector from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-  /** Creates a vector with identical lanes by loading the splatted value. */
-  export function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128
   /** Creates a vector by loading the lanes of the specified type and extending each to the next larger type. */
-  export function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128
+  export function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
+  export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
+  export function load8x8_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with four 32-bit integer lanes by loading and sign extending four 16-bit integers. */
+  export function load16x4_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with four 32-bit integer lanes by loading and zero extending four 16-bit integers. */
+  export function load16x4_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with two 64-bit integer lanes by loading and sign extending two 32-bit integers. */
+  export function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with two 64-bit integer lanes by loading and zero extending two 32-bit integers. */
+  export function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with identical lanes by loading the splatted value. */
+  export function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads an 8-bit integer and splats it sixteen times forming a new vector. */
+  export function load8_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads a 16-bit integer and splats it eight times forming a new vector. */
+  export function load16_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads a 32-bit integer and splats it four times forming a new vector. */
+  export function load32_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Loads a 64-bit integer and splats it two times forming a new vector. */
+  export function load64_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
   /** Stores a vector to memory. */
   export function store(ptr: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
   /** Adds each lane. */
@@ -582,9 +730,9 @@ declare namespace v128 {
   /** Negates each lane of a vector. */
   export function neg<T>(a: v128): v128;
   /** Adds each lane using saturation. */
-  export function add_saturate<T>(a: v128, b: v128): v128;
+  export function add_sat<T>(a: v128, b: v128): v128;
   /** Subtracts each lane using saturation. */
-  export function sub_saturate<T>(a: v128, b: v128): v128;
+  export function sub_sat<T>(a: v128, b: v128): v128;
   /** Performs a bitwise left shift on each lane of a vector by a scalar. */
   export function shl<T>(a: v128, b: i32): v128;
   /** Performs a bitwise right shift on each lane of a vector by a scalar. */
@@ -602,7 +750,7 @@ declare namespace v128 {
   /** Selects bits of either vector according to the specified mask. */
   export function bitselect(v1: v128, v2: v128, mask: v128): v128;
   /** Reduces a vector to a scalar indicating whether any lane is considered `true`. */
-  export function any_true<T>(a: v128): bool;
+  export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all lanes are considered `true`. */
   export function all_true<T>(a: v128): bool;
   /** Extracts the high bit of each lane and produces a scalar mask with all bits concatenated. */
@@ -644,19 +792,15 @@ declare namespace v128 {
   /** Computes which lanes of the first vector are greater than or equal those of the second. */
   export function ge<T>(a: v128, b: v128): v128;
   /** Converts each lane of a vector from integer to floating point. */
-  export function convert<TFrom = i32 | u32 | i64 | u64>(a: v128): v128;
+  export function convert<TFrom = i32 | u32>(a: v128): v128;
   /** Truncates each lane of a vector from floating point to integer with saturation. Takes the target type. */
-  export function trunc_sat<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
+  export function trunc_sat<TTo = i32 | u32>(a: v128): v128;
   /** Narrows each lane to their respective narrower lanes. */
   export function narrow<TFrom = i16 | i32>(a: v128, b: v128): v128;
-  /** Widens the low lanes of a vector to their respective wider lanes. */
-  export function widen_low<TFrom = i8 | i16>(a: v128): v128;
-  /** Widens the high lanes of a vector to their respective wider lanes. */
-  export function widen_high<TFrom = i8 | i16>(a: v128): v128;
-  /** Computes `(a * b) + c` for each lane. */
-  export function qfma<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
-  /** Computes `(a * b) - c` for each lane. */
-  export function qfms<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
+  /** Extends the low lanes of a vector to their respective wider lanes. */
+  export function extend_low<TFrom = i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
+  /** Extends the high lanes of a vector to their respective wider lanes. */
+  export function extend_high<TFrom = i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -673,8 +817,6 @@ declare namespace i8x16 {
   export function add(a: v128, b: v128): v128;
   /** Subtracts each 8-bit integer lane. */
   export function sub(a: v128, b: v128): v128;
-  /** Multiplies each 8-bit integer lane. */
-  export function mul(a: v128, b: v128): v128;
   /** Computes the signed minimum of each 8-bit integer lane. */
   export function min_s(a: v128, b: v128): v128;
   /** Computes the unsigned minimum of each 8-bit integer lane. */
@@ -690,21 +832,19 @@ declare namespace i8x16 {
   /** Negates each 8-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 8-bit integer lane using signed saturation. */
-  export function add_saturate_s(a: v128, b: v128): v128;
+  export function add_sat_s(a: v128, b: v128): v128;
   /** Adds each 8-bit integer lane using unsigned saturation. */
-  export function add_saturate_u(a: v128, b: v128): v128;
+  export function add_sat_u(a: v128, b: v128): v128;
   /** Subtracts each 8-bit integer lane using signed saturation. */
-  export function sub_saturate_s(a: v128, b: v128): v128;
+  export function sub_sat_s(a: v128, b: v128): v128;
   /** Subtracts each 8-bit integer lane using unsigned saturation. */
-  export function sub_saturate_u(a: v128, b: v128): v128;
+  export function sub_sat_u(a: v128, b: v128): v128;
   /** Performs a bitwise left shift on each 8-bit integer lane by a scalar. */
   export function shl(a: v128, b: i32): v128;
   /** Performs a bitwise arithmetic right shift on each 8-bit integer lane by a scalar. */
   export function shr_s(a: v128, b: i32): v128;
   /** Performs a bitwise logical right shift on each 8-bit integer lane by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
-  /** Reduces a vector to a scalar indicating whether any 8-bit integer lane is considered `true`. */
-  export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 8-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
   /** Extracts the high bit of each 8-bit integer lane and produces a scalar mask with all bits concatenated. */
@@ -733,6 +873,10 @@ declare namespace i8x16 {
   export function narrow_i16x8_s(a: v128, b: v128): v128;
   /** Narrows each 16-bit signed integer lane to 8-bit unsigned integer lanes. */
   export function narrow_i16x8_u(a: v128, b: v128): v128;
+  /** Selects 8-bit lanes from either vector according to the specified [0-15] respectively [16-31] lane indexes. */
+  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
+  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
+  export function swizzle(a: v128, s: v128): v128;
 }
 /** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
 declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
@@ -766,21 +910,19 @@ declare namespace i16x8 {
   /** Negates each 16-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 16-bit integer lane using signed saturation. */
-  export function add_saturate_s(a: v128, b: v128): v128;
+  export function add_sat_s(a: v128, b: v128): v128;
   /** Adds each 16-bit integer lane using unsigned saturation. */
-  export function add_saturate_u(a: v128, b: v128): v128;
+  export function add_sat_u(a: v128, b: v128): v128;
   /** Subtracts each 16-bit integer lane using signed saturation. */
-  export function sub_saturate_s(a: v128, b: v128): v128;
+  export function sub_sat_s(a: v128, b: v128): v128;
   /** Subtracts each 16-bit integer lane using unsigned saturation. */
-  export function sub_saturate_u(a: v128, b: v128): v128;
+  export function sub_sat_u(a: v128, b: v128): v128;
   /** Performs a bitwise left shift on each 16-bit integer lane by a scalar. */
   export function shl(a: v128, b: i32): v128;
   /** Performs a bitwise arithmetic right shift each 16-bit integer lane by a scalar. */
   export function shr_s(a: v128, b: i32): v128;
   /** Performs a bitwise logical right shift on each 16-bit integer lane by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
-  /** Reduces a vector to a scalar indicating whether any 16-bit integer lane is considered `true`. */
-  export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 16-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
   /** Extracts the high bit of each 16-bit integer lane and produces a scalar mask with all bits concatenated. */
@@ -809,18 +951,14 @@ declare namespace i16x8 {
   export function narrow_i32x4_s(a: v128, b: v128): v128;
   /** Narrows each 32-bit signed integer lane to 16-bit unsigned integer lanes. */
   export function narrow_i32x4_u(a: v128, b: v128): v128;
-  /** Widens the low 8-bit signed integer lanes to 16-bit signed integer lanes. */
-  export function widen_low_i8x16_s(a: v128): v128;
-  /** Widens the low 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
-  export function widen_low_i8x16_u(a: v128): v128;
-  /** Widens the high 8-bit signed integer lanes to 16-bit signed integer lanes. */
-  export function widen_high_i8x16_s(a: v128): v128;
-  /** Widens the high 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
-  export function widen_high_i8x16_u(a: v128): v128;
-  /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
-  export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-  /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
-  export function load8x8_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Extends the low 8-bit signed integer lanes to 16-bit signed integer lanes. */
+  export function extend_low_i8x16_s(a: v128): v128;
+  /** Extends the low 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
+  export function extend_low_i8x16_u(a: v128): v128;
+  /** Extends the high 8-bit signed integer lanes to 16-bit signed integer lanes. */
+  export function extend_high_i8x16_s(a: v128): v128;
+  /** Extends the high 8-bit unsigned integer lanes to 16-bit unsigned integer lanes. */
+  export function extend_high_i8x16_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -857,8 +995,6 @@ declare namespace i32x4 {
   export function shr_s(a: v128, b: i32): v128;
   /** Performs a bitwise logical right shift on each 32-bit integer lane by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
-  /** Reduces a vector to a scalar indicating whether any 32-bit integer lane is considered `true`. */
-  export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 32-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
   /** Extracts the high bit of each 32-bit integer lane and produces a scalar mask with all bits concatenated. */
@@ -887,18 +1023,14 @@ declare namespace i32x4 {
   export function trunc_sat_f32x4_s(a: v128): v128;
   /** Truncates each 32-bit float lane to an unsigned integer with saturation. */
   export function trunc_sat_f32x4_u(a: v128): v128;
-  /** Widens the low 16-bit signed integer lanes to 32-bit signed integer lanes. */
-  export function widen_low_i16x8_s(a: v128): v128;
-  /** Widens the low 16-bit unsigned integer lane to 32-bit unsigned integer lanes. */
-  export function widen_low_i16x8_u(a: v128): v128;
-  /** Widens the high 16-bit signed integer lanes to 32-bit signed integer lanes. */
-  export function widen_high_i16x8_s(a: v128): v128;
-  /** Widens the high 16-bit unsigned integer lanes to 32-bit unsigned integer lanes. */
-  export function widen_high_i16x8_u(a: v128): v128;
-  /** Creates a vector with four 32-bit integer lanes by loading and sign extending four 16-bit integers. */
-  export function load16x4_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-  /** Creates a vector with four 32-bit integer lanes by loading and zero extending four 16-bit integers. */
-  export function load16x4_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Extends the low 16-bit signed integer lanes to 32-bit signed integer lanes. */
+  export function extend_low_i16x8_s(a: v128): v128;
+  /** Extends the low 16-bit unsigned integer lane to 32-bit unsigned integer lanes. */
+  export function extend_low_i16x8_u(a: v128): v128;
+  /** Extends the high 16-bit signed integer lanes to 32-bit signed integer lanes. */
+  export function extend_high_i16x8_s(a: v128): v128;
+  /** Extends the high 16-bit unsigned integer lanes to 32-bit unsigned integer lanes. */
+  export function extend_high_i16x8_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
@@ -923,18 +1055,36 @@ declare namespace i64x2 {
   export function shr_s(a: v128, b: i32): v128;
   /** Performs a bitwise logical right shift on each 64-bit integer lane by a scalar. */
   export function shr_u(a: v128, b: i32): v128;
-  /** Reduces a vector to a scalar indicating whether any 64-bit integer lane is considered `true`. */
-  export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 64-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
-  /** Truncates each 64-bit float lane to a signed integer with saturation. */
-  export function trunc_sat_f64x2_s(a: v128): v128;
-  /** Truncates each 64-bit float lane to an unsigned integer with saturation. */
-  export function trunc_sat_f64x2_u(a: v128): v128;
-  /** Creates a vector with two 64-bit integer lanes by loading and sign extending two 32-bit integers. */
-  export function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
-  /** Creates a vector with two 64-bit integer lanes by loading and zero extending two 32-bit integers. */
-  export function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Computes which 64-bit integer lanes are equal. */
+  export function eq(a: v128, b: v128): v128;
+  /** Computes which 64-bit integer lanes are not equal. */
+  export function ne(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are less than those of the second. */
+  export function lt_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are less than those of the second. */
+  export function lt_u(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are less than or equal those of the second. */
+  export function le_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are less than or equal those of the second. */
+  export function le_u(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are greater than those of the second. */
+  export function gt_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are greater than those of the second. */
+  export function gt_u(a: v128, b: v128): v128;
+  /** Computes which 64-bit signed integer lanes of the first vector are greater than or equal those of the second. */
+  export function ge_s(a: v128, b: v128): v128;
+  /** Computes which 64-bit unsigned integer lanes of the first vector are greater than or equal those of the second. */
+  export function ge_u(a: v128, b: v128): v128;
+  /** Extends the low 32-bit signed integer lanes to 64-bit signed integer lanes. */
+  export function extend_low_i32x4_s(a: v128): v128;
+  /** Extends the low 32-bit unsigned integer lane to 64-bit unsigned integer lanes. */
+  export function extend_low_i32x4_u(a: v128): v128;
+  /** Extends the high 32-bit signed integer lanes to 64-bit signed integer lanes. */
+  export function extend_high_i32x4_s(a: v128): v128;
+  /** Extends the high 32-bit unsigned integer lanes to 64-bit unsigned integer lanes. */
+  export function extend_high_i32x4_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -991,10 +1141,6 @@ declare namespace f32x4 {
   export function convert_i32x4_s(a: v128): v128;
   /** Converts each 32-bit unsigned integer lane of a vector to floating point. */
   export function convert_i32x4_u(a: v128): v128;
-  /** Computes `(a * b) + c` for each 32-bit float lane. */
-  export function qfma(a: v128, b: v128, c: v128): v128;
-  /** Computes `(a * b) - c` for each 32-bit float lane. */
-  export function qfms(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
 declare function f64x2(a: f64, b: f64): v128;
@@ -1047,35 +1193,15 @@ declare namespace f64x2 {
   export function gt(a: v128, b: v128): v128;
   /** Computes which 64-bit float lanes of the first vector are greater than or equal those of the second. */
   export function ge(a: v128, b: v128): v128;
-  /** Converts each 64-bit signed integer lane of a vector to floating point. */
-  export function convert_i64x2_s(a: v128): v128;
-  /** Converts each 64-bit unsigned integer lane of a vector to floating point. */
-  export function convert_i64x2_u(a: v128): v128;
-  /** Computes `(a * b) + c` for each 64-bit float lane. */
-  export function qfma(a: v128, b: v128, c: v128): v128;
-  /** Computes `(a * b) - c` for each 64-bit float lane. */
-  export function qfms(a: v128, b: v128, c: v128): v128;
 }
-declare namespace v8x16 {
-  /** Selects 8-bit lanes from either vector according to the specified [0-15] respectively [16-31] lane indexes. */
-  export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
-  /** Selects 8-bit lanes from the first vector according to the indexes [0-15] specified by the 8-bit lanes of the second vector. */
-  export function swizzle(a: v128, s: v128): v128;
-  /** Loads an 8-bit integer and splats it sixteen times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+
+declare abstract class i31 {
+  /** Creates a new i31ref from the specified integer value. */
+  static new(value: i32): i31ref;
+  /** Gets the integer value of an i31ref. */
+  static get(i31expr: i31ref): i32;
 }
-declare namespace v16x8 {
-  /** Loads a 16-bit integer and splats it eight times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-}
-declare namespace v32x4 {
-  /** Loads a 32-bit integer and splats it four times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-}
-declare namespace v64x2 {
-  /** Loads a 64-bit integer and splats it two times forming a new vector. */
-  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
-}
+
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;
 /** Special type evaluating the indexed access index type. */
@@ -1202,12 +1328,14 @@ declare namespace memory {
   export function data<T>(values: T[], align?: i32): usize;
 }
 
-/** Garbage collector interface. */
-declare namespace gc {
-  /** Can be set to `false` to disable automatic collection. Defaults to `true`. */
-  export var auto: bool;
-  /** Performs a full garbage collection cycle. */
-  export function collect(): void;
+/** Heap memory interface. */
+declare namespace heap {
+  /** Allocates a chunk of memory of at least the specified size. */
+  export function alloc(size: usize): usize;
+  /** Reallocates a chunk of memory to have at least the specified size. */
+  export function realloc(ptr: usize, size: usize): usize;
+  /** Frees a chunk of memory. Does hardly anything (most recent block only) with the stub/none runtime. */
+  export function free(ptr: usize): void;
 }
 
 /** Table operations. */
@@ -1261,52 +1389,52 @@ declare class DataView {
   /** Constructs a new `DataView` with the given properties */
   constructor(buffer: ArrayBuffer, byteOffset?: i32, byteLength?: i32);
   /** The `getFloat32()` method gets a signed 32-bit float (float) at the specified byte offset from the start of the `DataView`. */
-  getFloat32(byteOffset: i32, littleEndian?: boolean): f32;
+  getFloat32(byteOffset: i32, littleEndian?: bool): f32;
   /** The `getFloat64()` method gets a signed 64-bit float (double) at the specified byte offset from the start of the `DataView`. */
-  getFloat64(byteOffset: i32, littleEndian?: boolean): f64;
+  getFloat64(byteOffset: i32, littleEndian?: bool): f64;
   /** The `getInt8()` method gets a signed 8-bit integer (byte) at the specified byte offset from the start of the `DataView`. */
   getInt8(byteOffset: i32): i8;
   /** The `getInt16()` method gets a signed 16-bit integer (short) at the specified byte offset from the start of the `DataView`. */
-  getInt16(byteOffset: i32, littleEndian?: boolean): i16;
+  getInt16(byteOffset: i32, littleEndian?: bool): i16;
   /** The `getInt32()` method gets a signed 32-bit integer (long) at the specified byte offset from the start of the `DataView`. */
-  getInt32(byteOffset: i32, littleEndian?: boolean): i32;
+  getInt32(byteOffset: i32, littleEndian?: bool): i32;
   /** The `getInt64()` method gets a signed 64-bit integer (long long) at the specified byte offset from the start of the `DataView`. */
-  getInt64(byteOffset: i32, littleEndian?: boolean): i64;
+  getInt64(byteOffset: i32, littleEndian?: bool): i64;
   /** The `getUint8()` method gets an unsigned 8-bit integer (unsigned byte) at the specified byte offset from the start of the `DataView`. */
   getUint8(byteOffset: i32): u8;
   /** The `getUint16()` method gets an unsigned 16-bit integer (unsigned short) at the specified byte offset from the start of the `DataView`. */
-  getUint16(byteOffset: i32, littleEndian?: boolean): u16;
+  getUint16(byteOffset: i32, littleEndian?: bool): u16;
   /** The `getUint32()` method gets an unsigned 32-bit integer (unsigned long) at the specified byte offset from the start of the `DataView`. */
-  getUint32(byteOffset: i32, littleEndian?: boolean): u32;
+  getUint32(byteOffset: i32, littleEndian?: bool): u32;
   /** The `getUint64()` method gets an unsigned 64-bit integer (unsigned long long) at the specified byte offset from the start of the `DataView`. */
-  getUint64(byteOffset: i32, littleEndian?: boolean): u64;
+  getUint64(byteOffset: i32, littleEndian?: bool): u64;
   /** The `setFloat32()` method stores a signed 32-bit float (float) value at the specified byte offset from the start of the `DataView`. */
-  setFloat32(byteOffset: i32, value: f32, littleEndian?: boolean): void;
+  setFloat32(byteOffset: i32, value: f32, littleEndian?: bool): void;
   /** The `setFloat64()` method stores a signed 64-bit float (double) value at the specified byte offset from the start of the `DataView`. */
-  setFloat64(byteOffset: i32, value: f64, littleEndian?: boolean): void;
+  setFloat64(byteOffset: i32, value: f64, littleEndian?: bool): void;
   /** The `setInt8()` method stores a signed 8-bit integer (byte) value at the specified byte offset from the start of the `DataView`. */
   setInt8(byteOffset: i32, value: i8): void;
   /** The `setInt16()` method stores a signed 16-bit integer (short) value at the specified byte offset from the start of the `DataView`. */
-  setInt16(byteOffset: i32, value: i16, littleEndian?: boolean): void;
+  setInt16(byteOffset: i32, value: i16, littleEndian?: bool): void;
   /** The `setInt32()` method stores a signed 32-bit integer (long) value at the specified byte offset from the start of the `DataView`. */
-  setInt32(byteOffset: i32, value: i32, littleEndian?: boolean): void;
+  setInt32(byteOffset: i32, value: i32, littleEndian?: bool): void;
   /** The `setInt64()` method stores a signed 64-bit integer (long long) value at the specified byte offset from the start of the `DataView`. */
-  setInt64(byteOffset: i32, value: i64, littleEndian?: boolean): void;
+  setInt64(byteOffset: i32, value: i64, littleEndian?: bool): void;
   /** The `setUint8()` method stores an unsigned 8-bit integer (byte) value at the specified byte offset from the start of the `DataView`. */
   setUint8(byteOffset: i32, value: u8): void;
   /** The `setUint16()` method stores an unsigned 16-bit integer (unsigned short) value at the specified byte offset from the start of the `DataView`. */
-  setUint16(byteOffset: i32, value: u16, littleEndian?: boolean): void;
+  setUint16(byteOffset: i32, value: u16, littleEndian?: bool): void;
   /** The `setUint32()` method stores an unsigned 32-bit integer (unsigned long) value at the specified byte offset from the start of the `DataView`. */
-  setUint32(byteOffset: i32, value: u32, littleEndian?: boolean): void;
+  setUint32(byteOffset: i32, value: u32, littleEndian?: bool): void;
   /** The `setUint64()` method stores an unsigned 64-bit integer (unsigned long long) value at the specified byte offset from the start of the `DataView`. */
-  setUint64(byteOffset: i32, value: u64, littleEndian?: boolean): void;
+  setUint64(byteOffset: i32, value: u64, littleEndian?: bool): void;
   /** Returns a string representation of DataView. */
   toString(): string;
 }
 
 interface ArrayLike<T> {
+  [key: number]: T;
   length: i32;
-  // [key: number]: T;
 }
 
 /** Interface for a typed view on an array buffer. */
@@ -1334,6 +1462,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   readonly byteLength: i32;
   /** The length (in elements). */
   readonly length: i32;
+  /** Returns value using relative indexing. Index may be negative */
+  at(index: i32): T;
   /** The includes() method determines whether a typed array includes a certain element, returning true or false as appropriate. */
   includes(searchElement: T, fromIndex?: i32): bool;
   /** The indexOf() method returns the first index at which a given element can be found in the typed array, or -1 if it is not present. */
@@ -1444,6 +1574,7 @@ declare class Array<T> {
   /** Constructs a new array. */
   constructor(capacity?: i32);
 
+  at(index: i32): T;
   fill(value: T, start?: i32, end?: i32): this;
   every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   findIndex(predicate: (element: T, index: i32, array?: Array<T>) => bool): i32;
@@ -1480,6 +1611,7 @@ declare class StaticArray<T> {
   static slice<T>(source: StaticArray<T>, start?: i32, end?: i32): StaticArray<T>;
   readonly length: i32;
   constructor(length?: i32);
+  at(index: i32): T;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
@@ -1496,6 +1628,7 @@ declare class String {
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
   readonly length: i32;
+  at(index: i32): string;
   charAt(index: i32): string;
   charCodeAt(index: i32): i32;
   codePointAt(index: i32): i32;
@@ -1801,6 +1934,73 @@ declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: 
 /** Environmental seeding function. */
 declare function seed(): f64;
 
+/** Node-like process on top of WASI. */
+declare namespace process {
+  /** String representing the CPU architecture for which the binary was compiled. Either `wasm32` or `wasm64`. */
+  export const arch: string;
+  /** String representing the operating system platform for which the binary was compiled. Always `wasm`. */
+  export const platform: string;
+  /** Array of command line arguments passed to the binary upon instantiation. */
+  export const argv: string[];
+  /** Map of variables in the binary's user environment. */
+  export const env: Map<string,string>;
+  /** Process exit code to use when the process exits gracefully. Defaults to `0`. */
+  export var exitCode: i32;
+  /** Terminates the process with either the given exit code, or `process.exitCode` if omitted. */
+  export function exit(code?: i32): void;
+  /** Stream connected to `stdin` (fd `0`). */
+  export const stdin: ReadableStream;
+  /** Stream connected to `stdout` (fd `1`). */
+  export const stdout: WritableStream;
+  /** Stream connected to `stderr` (fd `2`). */
+  export const stderr: WritableStream;
+  /** Obtains the system's current time of day, in milliseconds since Unix epoch. */
+  export function time(): i64;
+  /** Obtains the system's monotonic high resolution time, in nanoseconds since an arbitrary time in the past. */
+  export function hrtime(): u64;
+
+  interface Stream {
+    /** Closes the stream. Throws if already closed or if the stream cannot be closed. */
+    close(): void;
+  }
+  interface ReadableStream extends Stream {
+    /** Reads available data from the stream, into `buffer` at offset `offset`, returning the number of bytes read. */
+    read(buffer: ArrayBuffer, offset?: isize): i32;
+  }
+  interface WritableStream extends Stream {
+    /** Writes string or buffer to the stream. */
+    write<T extends string | ArrayBuffer>(data: T): void;
+  }
+}
+
+/** Browser-like console on top of WASI. */
+declare namespace console {
+  /** Logs `message` to console if `assertion` is false-ish. */
+  export function assert<T>(assertion: T, message: string): void;
+  /** Outputs `message` to the console. */
+  export function log(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Debug:". */
+  export function debug(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Info:". */
+  export function info(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Warning:". */
+  export function warn(message: string): void;
+  /** Outputs `message` to the console, prefixed with "Error:". */
+  export function error(message: string): void;
+  /** Starts a new timer using the specified `label`. */
+  export function time(label: string): void;
+  /** Logs the current value of a timer previously started with `console.time`. */
+  export function timeLog(label: string): void;
+  /** Logs the current value of a timer previously started with `console.time` and discards the timer. */
+  export function timeEnd(label: string): void;
+}
+
+/** Browser-like crypto utilities on top of WASI. */
+declare namespace crypto {
+  /** Fills `array` with cryptographically strong random values. */
+  export function getRandomValues(array: Uint8Array): void;
+}
+
 // Decorators
 
 interface TypedPropertyDescriptor<T> {
@@ -1866,6 +2066,3 @@ declare function external(...args: any[]): any;
 
 /** Annotates a global for lazy compilation. */
 declare function lazy(...args: any[]): any;
-
-/** Annotates a function as the explicit start function. */
-declare function start(...args: any[]): any;

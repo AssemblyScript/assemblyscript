@@ -16,6 +16,9 @@
  (global $~lib/util/math/log_tail (mut f64) (f64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
+ (global $~lib/memory/__data_end i32 (i32.const 6664))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 23048))
+ (global $~lib/memory/__heap_base i32 (i32.const 23048))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/math/ipow32 (param $0 i32) (param $1 i32) (result i32)
@@ -28,6 +31,20 @@
   i32.const 1
   i32.lt_s
   drop
+  local.get $0
+  i32.const 2
+  i32.eq
+  if
+   i32.const 1
+   local.get $1
+   i32.shl
+   i32.const 0
+   local.get $1
+   i32.const 32
+   i32.lt_u
+   select
+   return
+  end
   local.get $1
   i32.const 0
   i32.le_s
@@ -1214,6 +1231,19 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
+  local.get $1
+  f32.abs
+  f32.const 1
+  f32.eq
+  if
+   local.get $0
+   local.get $0
+   f32.trunc
+   f32.sub
+   local.get $0
+   f32.copysign
+   return
+  end
   local.get $0
   i32.reinterpret_f32
   local.set $2
@@ -1275,16 +1305,12 @@
   local.get $7
   i32.le_u
   if
+   local.get $0
    local.get $9
    local.get $7
-   i32.eq
-   if
-    f32.const 0
-    local.get $0
-    f32.mul
-    return
-   end
-   local.get $0
+   i32.ne
+   f32.convert_i32_u
+   f32.mul
    return
   end
   local.get $4
@@ -1298,11 +1324,9 @@
    i32.sub
    local.set $4
    local.get $2
-   i32.const 0
+   i32.const 1
    local.get $4
    i32.sub
-   i32.const 1
-   i32.add
    i32.shl
    local.set $2
   else
@@ -1330,11 +1354,9 @@
    i32.sub
    local.set $5
    local.get $3
-   i32.const 0
+   i32.const 1
    local.get $5
    i32.sub
-   i32.const 1
-   i32.add
    i32.shl
    local.set $3
   else
@@ -1447,8 +1469,6 @@
   local.get $2
   local.get $6
   i32.or
-  local.set $2
-  local.get $2
   f32.reinterpret_i32
  )
  (func $~lib/math/NativeMathf.pow (param $0 f32) (param $1 f32) (result f32)
@@ -2076,6 +2096,19 @@
   (local $9 i64)
   (local $10 i32)
   (local $11 i64)
+  local.get $1
+  f64.abs
+  f64.const 1
+  f64.eq
+  if
+   local.get $0
+   local.get $0
+   f64.trunc
+   f64.sub
+   local.get $0
+   f64.copysign
+   return
+  end
   local.get $0
   i64.reinterpret_f64
   local.set $2
@@ -2137,16 +2170,12 @@
   local.get $7
   i64.le_u
   if
+   local.get $0
    local.get $9
    local.get $7
-   i64.eq
-   if
-    f64.const 0
-    local.get $0
-    f64.mul
-    return
-   end
-   local.get $0
+   i64.ne
+   f64.convert_i32_u
+   f64.mul
    return
   end
   local.get $4
@@ -2162,11 +2191,9 @@
    i64.sub
    local.set $4
    local.get $2
-   i64.const 0
+   i64.const 1
    local.get $4
    i64.sub
-   i64.const 1
-   i64.add
    i64.shl
    local.set $2
   else
@@ -2196,11 +2223,9 @@
    i64.sub
    local.set $5
    local.get $3
-   i64.const 0
+   i64.const 1
    local.get $5
    i64.sub
-   i64.const 1
-   i64.add
    i64.shl
    local.set $3
   else
@@ -2315,8 +2340,6 @@
   i64.const 63
   i64.shl
   i64.or
-  local.set $2
-  local.get $2
   f64.reinterpret_i64
  )
  (func $start:binary

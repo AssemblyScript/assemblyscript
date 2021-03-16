@@ -1,8 +1,8 @@
 (module
  (type $externref_=>_externref (func (param externref) (result externref)))
  (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $externref_=>_none (func (param externref)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $externref_externref_=>_i32 (func (param externref externref) (result i32)))
  (type $externref_externref_=>_externref (func (param externref externref) (result externref)))
  (import "reference-types" "someObject" (global $features/reference-types/someObject externref))
@@ -13,10 +13,12 @@
  (import "Reflect" "get" (func $~lib/bindings/Reflect/get (param externref externref) (result externref)))
  (import "reference-types" "external" (func $features/reference-types/external (param externref) (result externref)))
  (memory $0 1)
- (data (i32.const 1024) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s")
- (export "memory" (memory $0))
+ (data (i32.const 1036) "L")
+ (data (i32.const 1048) "\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s")
+ (global $features/reference-types/funcGlobal (mut funcref) (ref.null func))
  (export "external" (func $features/reference-types/external))
  (export "internal" (func $features/reference-types/internal))
+ (export "memory" (memory $0))
  (start $~start)
  (func $features/reference-types/internal (param $0 externref) (result externref)
   local.get $0
@@ -31,7 +33,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 19
    i32.const 1
    call $~lib/builtins/abort
@@ -45,4 +47,23 @@
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/get
   call $~lib/bindings/console/log
+  global.get $features/reference-types/funcGlobal
+  ref.is_null
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 32
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  ref.null func
+  global.set $features/reference-types/funcGlobal
+  i32.const 0
+  i32.const 1056
+  i32.const 34
+  i32.const 1
+  call $~lib/builtins/abort
+  unreachable
+ )
 )

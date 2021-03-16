@@ -21,18 +21,27 @@
   "bugs": {
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
+  "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
+  "exports": {
+    "import": "./index.js",
+    "require": "./umd/index.js"
+  },
   "scripts": {
     "asbuild": "npm run asbuild:default && npm run asbuild:legacy",
-    "asbuild:default": "node ../../bin/asc tests/assembly/index.ts -b tests/build/default.wasm",
-    "asbuild:legacy": "node ../../bin/asc tests/assembly/index.ts --disable mutable-globals -b tests/build/legacy.wasm",
-    "test": "node tests"
+    "asbuild:default": "node ../../bin/asc tests/assembly/index.ts --binaryFile tests/build/default.wasm --exportRuntime",
+    "asbuild:legacy": "node ../../bin/asc tests/assembly/index.ts --disable mutable-globals --binaryFile tests/build/legacy.wasm --exportRuntime",
+    "build": "npx esm2umd loader index.js > umd/index.js",
+    "test": "node tests && node tests/umd"
   },
   "files": [
     "index.d.ts",
     "index.js",
     "package.json",
+    "umd/index.d.ts",
+    "umd/index.js",
+    "umd/package.json",
     "README.md"
   ]
 }

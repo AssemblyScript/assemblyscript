@@ -1,6 +1,2 @@
 {
-  "asc_flags": [
-    "--runtime full",
-    "--use ASC_RTRACE=1"
-  ]
 }

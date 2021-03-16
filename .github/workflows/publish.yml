@@ -15,25 +15,47 @@ jobs:
       with:
         node-version: current
     - name: Install dependencies
-      run: npm ci
-    - name: Build distribution files
+      run: | # npm>=7 is currently broken: https://github.com/npm/cli/issues/1973
+        npm -g install npm@6
+        npm -v
+        npm ci
+    - name: Build packages
       run: |
-        npm run clean
-        npm run build
-    - name: Test distribution files
-      run: npm test
-    - name: Make semantic release
+        VERSION=$(npx aspublish --version)
+        if [[ "$VERSION" == "" ]]; then
+          echo "Changes do not trigger a release"
+        elif [[ "$VERSION" != "0."* ]]; then
+          echo "Unexpected version: $VERSION"
+          exit 1
+        else
+          echo "Building version: $VERSION"
+          npm version "$VERSION" --no-git-tag-version
+          npm run build
+          npm test
+          cd lib/loader
+          npm version "$VERSION" --no-git-tag-version
+          npm run build
+          npm test
+          cd ../rtrace
+          npm version "$VERSION" --no-git-tag-version
+          npm run build
+          npm test
+          cd ../..
+        fi
+    - name: Publish packages
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      # On success, semantic-release will update the version and publish,
-      # triggering the postversion script that'll update the loader's version
-      # as well. If nothing was published, the version will still be '0.0.0'.
       run: |
-        node node_modules/semantic-release/bin/semantic-release.js --unstable
+        if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
+          npx aspublish
+        fi
         cd lib/loader
         if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
-          npm config set "//registry.npmjs.org/:_authToken=${NPM_TOKEN}"
+          npm publish --access public
+        fi
+        cd ../rtrace
+        if [ $(node -pe "require('./package.json').version") != "0.0.0" ]; then
           npm publish --access public
         fi
         cd ../..

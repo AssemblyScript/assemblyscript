@@ -6,7 +6,7 @@
   },
   "options": {
     "enable": ["simd"],
-    "runtime": "half",
+    "exportRuntime": true,
     "noEmit": false
   },
   "extends": "./extends.json"

@@ -1,7 +1,3 @@
 {
-  "asc_flags": [
-    "--runtime half",
-    "--explicitStart",
-    "--use ASC_RTRACE=1"
-  ]
+  "asc_rtrace": true
 }

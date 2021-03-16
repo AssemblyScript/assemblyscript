@@ -1,6 +1,11 @@
 {
   "mutable-globals": {
   },
+  "nontrapping-f2i": {
+    "asc_flags": [
+      "--enable nontrapping-f2i"
+    ]
+  },
   "simd": {
     "asc_flags": [
       "--enable simd"
@@ -23,6 +28,16 @@
     ],
     "v8_flags": [
       "--experimental-wasm-reftypes"
+    ]
+  },
+  "gc": {
+    "asc_flags": [
+      "--enable reference-types",
+      "--enable gc"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-reftypes",
+      "--experimental-wasm-gc"
     ]
   },
   "bigint-integration": {

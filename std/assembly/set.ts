@@ -85,8 +85,9 @@ export class Set<T> {
       changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE
     );
     while (entry) {
-      if (!(entry.taggedNext & EMPTY) && entry.key == key) return entry;
-      entry = changetype<SetEntry<T>>(entry.taggedNext & ~EMPTY);
+      let taggedNext = entry.taggedNext;
+      if (!(taggedNext & EMPTY) && entry.key == key) return entry;
+      entry = changetype<SetEntry<T>>(taggedNext & ~EMPTY);
     }
     return null;
   }
@@ -110,9 +111,10 @@ export class Set<T> {
       }
       // append new entry
       entry = changetype<SetEntry<T>>(changetype<usize>(this.entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<T>());
-      entry.key = isManaged<T>()
-        ? changetype<T>(__retain(changetype<usize>(key)))
-        : key;
+      entry.key = key;
+      if (isManaged<T>()) {
+        __link(changetype<usize>(this), changetype<usize>(key), true);
+      }
       ++this.entriesCount;
       // link with previous entry in bucket
       let bucketPtrBase = changetype<usize>(this.buckets) + <usize>(hashCode & this.bucketsMask) * BUCKET_SIZE;
@@ -131,7 +133,6 @@ export class Set<T> {
   delete(key: T): bool {
     var entry = this.find(key, HASH<T>(key)); // unmanaged!
     if (!entry) return false;
-    if (isManaged<T>()) __release(changetype<usize>(entry.key)); // exact 'key'
     entry.taggedNext |= EMPTY;
     --this.entriesCount;
     // check if rehashing is appropriate
@@ -157,8 +158,9 @@ export class Set<T> {
       let oldEntry = changetype<SetEntry<T>>(oldPtr); // unmanaged!
       if (!(oldEntry.taggedNext & EMPTY)) {
         let newEntry = changetype<SetEntry<T>>(newPtr); // unmanaged!
-        newEntry.key = oldEntry.key;
-        let newBucketIndex = HASH<T>(oldEntry.key) & newBucketsMask;
+        let oldEntryKey = oldEntry.key;
+        newEntry.key = oldEntryKey;
+        let newBucketIndex = HASH<T>(oldEntryKey) & newBucketsMask;
         let newBucketPtrBase = changetype<usize>(newBuckets) + <usize>newBucketIndex * BUCKET_SIZE;
         newEntry.taggedNext = load<usize>(newBucketPtrBase);
         store<usize>(newBucketPtrBase, newPtr);
@@ -196,7 +198,7 @@ export class Set<T> {
 
   // RT integration
 
-  @unsafe private __visit_impl(cookie: u32): void {
+  @unsafe private __visit(cookie: u32): void {
     __visit(changetype<usize>(this.buckets), cookie);
     var entries = changetype<usize>(this.entries);
     if (isManaged<T>()) {

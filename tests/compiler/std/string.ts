@@ -13,15 +13,23 @@ assert("\xDFab" == "ßab");
 
 assert(str.length == 16);
 assert(str.charCodeAt(0) == 0x68);
+assert(str.codePointAt(1) == 105);
+assert(str.at(15) == str.charAt(15));
+assert(str.at(-1) == str.charAt(str.length - 1));
+assert(str.at(-str.length) == "h");
 
 assert(!!"" == false);
 assert(!!"\0" == true);
 assert(!!"a" == true);
 
 assert(String.fromCharCode(0) == "\0");
+assert(String.fromCharCode(65600) == "@");
 assert(String.fromCharCode(54) == "6");
 assert(String.fromCharCode(0x10000 + 54) == "6");
 assert(String.fromCharCode(0xD800, 0xDF00) == "𐌀");
+assert(String.fromCharCodes([0, 54]) == "\06");
+assert(String.fromCharCodes([65, 66, 67]) == "ABC");
+assert(String.fromCharCodes([0xD834, 0xDF06, 0x61, 0xD834, 0xDF07]) == "\uD834\uDF06a\uD834\uDF07");
 
 assert(String.fromCodePoint(0) == "\0");
 assert(String.fromCodePoint(54) == "6");
@@ -173,6 +181,7 @@ assert(parseFloat("1e-60") == 1e-60);
 assert(parseFloat("1e60") == 1e+60);
 
 // special cases
+assert(parseFloat("123.4e") == 123.4);
 assert(parseFloat("-.00000") == -0.0);
 assert(parseFloat("1x") == 1.0);
 assert(parseFloat("-11e-1string") == -1.1);
@@ -336,16 +345,26 @@ assert(parseFloat(" \t\n\r.1") == 0.1);
   assert(c != "a");
 }
 assert("" == "");
+// @ts-ignore
+assert(nullStr == null);
+// @ts-ignore
 assert("" != nullStr);
+// @ts-ignore
 assert(nullStr != "");
+// @ts-ignore
 assert("a" != "b");
 assert("a" == "a");
+// @ts-ignore
 assert("key1" != "key2");
 assert("key1" == "key1");
+// @ts-ignore
 assert("ke1" != "ke2");
+// @ts-ignore
 assert("key12" != "key11");
 assert("イロハニホヘト" == "イロハニホヘト");
+// @ts-ignore
 assert("イロハニホヘト" != "ウヰノオクヤマ");
+// @ts-ignore
 assert("D’fhuascail" != "D’ḟuascail");
 
 assert("b" > "a");
@@ -353,9 +372,6 @@ assert("ba" > "a");
 assert("ba" >= "aa");
 assert("ba" > "ab");
 assert(!("ba" < "ab"));
-
-assert(!("b" < nullStr));
-assert(!(nullStr < "b"));
 
 assert("abc" > "");
 assert("" < "abc");
@@ -367,6 +383,28 @@ assert(!("" < ""));
 assert(!("" > ""));
 assert("" >= "");
 assert("" <= "");
+
+assert("1" < "10");
+assert("10" > "1");
+assert(!("11" < "10"));
+assert(!("10" > "11"));
+assert("11" > "10");
+assert("10" < "11");
+assert(!("11" < "11"));
+assert(!("11" > "11"));
+assert("11" <= "11");
+assert("11" >= "11");
+assert(!("10" >= "101"));
+assert("101" >= "10");
+assert("10" <= "101");
+assert("1" == "1");
+assert("11" == "11");
+assert("123" == "123");
+// @ts-ignore
+assert("123" != "122");
+assert("1234" == "1234");
+// @ts-ignore
+assert("1233" != "1234");
 
 {
   let a = String.fromCodePoint(0xFF61);
@@ -423,6 +461,12 @@ assert("abc".replaceAll("abc", "-") == "-");
 assert("abc".replaceAll("abd", "-") == "abc");
 assert("abc".replaceAll("", "+") == "+a+b+c+");
 assert("abc".replaceAll("", "") == "abc");
+
+// regressions
+assert("abcde".replaceAll("a", "---") == "---bcde");
+assert("ab".replaceAll("ab", "-----") == "-----");
+assert("aaa".replaceAll("a", "----") == "------------");
+assert("aaa".replaceAll("aa", "---") == "---a");
 
 // test cases for slice method
 str = "abcdefghijklmn";
@@ -728,6 +772,14 @@ assert(dtoa(1.1e+128) == "1.1e+128");
 assert(dtoa(1.1e-64) == "1.1e-64");
 assert(dtoa(0.000035689) == "0.000035689");
 
+
+// concat
+
+assert("Hello ".concat("World") == "Hello World");
+assert("".concat("bar") == "bar");
+assert("bar".concat("") == "bar");
+assert("".concat("") == "");
+
 // assert(dtoa(f32.MAX_VALUE) == "3.4028234663852886e+38"); // FIXME
 // assert(dtoa(f32.EPSILON) == "1.1920928955078125e-7"); // FIXME
 
@@ -737,4 +789,7 @@ export function getString(): string {
 
 // Unleak globals
 
-__release(changetype<usize>(str));
+str = changetype<string>(0);
+
+__stack_pointer = __heap_base;
+__collect();

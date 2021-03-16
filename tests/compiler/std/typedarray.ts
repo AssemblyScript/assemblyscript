@@ -335,6 +335,29 @@ testReduce<Uint64Array, u64>();
 testReduce<Float32Array, f32>();
 testReduce<Float64Array, f64>();
 
+function testAt<ArrayType extends TypedArray<T>, T extends number>(): void {
+  var array: ArrayType = instantiate<ArrayType>(3);
+  array[0] = <T>1;
+  array[1] = <T>2;
+  array[2] = <T>3;
+
+  assert(array.at( 0) == <T>1);
+  assert(array.at(-1) == <T>3);
+  assert(array.at(-3) == <T>1);
+}
+
+testAt<Int8Array, i8>();
+testAt<Uint8Array, u8>();
+testAt<Uint8ClampedArray, u8>();
+testAt<Int16Array, i16>();
+testAt<Uint16Array, u16>();
+testAt<Int32Array, i32>();
+testAt<Uint32Array, u32>();
+testAt<Int64Array, i64>();
+testAt<Uint64Array, u64>();
+testAt<Float32Array, f32>();
+testAt<Float64Array, f64>();
+
 function testReduceRight<ArrayType extends TypedArray<T>, T extends number>(): void {
   var array: ArrayType = instantiate<ArrayType>(3);
   array[0] = <T>1;
@@ -821,3 +844,35 @@ testTypedArraySet<Float64Array>();
   targetClampedArray.set(e, 5);
   valuesEqual<Uint8ClampedArray>(targetClampedArray, [1, 255, 100, 255, 0, 0, 100, 10, 255, 0]);
 }
+
+function testArraySort<ArrayType extends TypedArray<T>, T extends number>(): void {
+  var source: ArrayType = instantiate<ArrayType>(3);
+  source[2] = <T>1;
+  source[1] = <T>2;
+  source[0] = <T>3;
+
+  let result = source.sort();
+  assert(result[0] == <T>1);
+  assert(result[1] == <T>2);
+  assert(result[2] == <T>3);
+  result.sort((a, b) => i32(b > a) - i32(b < a));
+  assert(result[0] == <T>3);
+  assert(result[1] == <T>2);
+  assert(result[2] == <T>1);
+}
+
+testArraySort<Int8Array, i8>();
+testArraySort<Uint8Array, u8>();
+testArraySort<Uint8ClampedArray, u8>();
+testArraySort<Int16Array, i16>();
+testArraySort<Uint16Array, u16>();
+testArraySort<Int32Array, i32>();
+testArraySort<Uint32Array, u32>();
+testArraySort<Int64Array, i64>();
+testArraySort<Uint64Array, u64>();
+testArraySort<Float32Array, f32>();
+testArraySort<Float64Array, f64>();
+
+
+__stack_pointer = __heap_base;
+__collect();

@@ -16,6 +16,8 @@ function preamble(name) {
 
 // Build the C-like library
 const lib = {
+  mode: "production",
+  target: ["web", "es6"],
   entry: [ "./src/glue/js", "./src/index.ts" ],
   module: {
     rules: [
@@ -53,7 +55,8 @@ const lib = {
             preamble: preamble("The AssemblyScript Compiler.")
           }
         },
-        sourceMap: true
+        parallel: true,
+        extractComments: false
       })
     ],
   }
@@ -62,21 +65,16 @@ const lib = {
 // Build asc for browser usage
 const shimDir = path.join(__dirname, "cli", "shim");
 const bin = {
+  mode: "production",
+  target: ["web", "es6"],
   context: path.join(__dirname, "cli"),
   entry: [ "./asc.js" ],
   externals: [
     "binaryen",
-    "assemblyscript",
-    "ts-node"
+    "assemblyscript"
   ],
   node: {
-    "buffer": false,
-    "fs": false,
-    "global": true,
-    "os": false,
-    "path": false,
-    "process": false,
-    "crypto": false
+    global: true
   },
   output: {
     filename: "asc.js",
@@ -106,9 +104,6 @@ const bin = {
       __dirname: JSON.stringify(".")
     }),
 
-    // Ignored node-only dependencies
-    new webpack.IgnorePlugin(/\.\/src|package\.json|^(ts-node|glob)$/),
-
     // Browser shims
     new webpack.NormalModuleReplacementPlugin(/^path$/, path.join(shimDir, "path")),
     new webpack.NormalModuleReplacementPlugin(/^process$/, path.join(shimDir, "process")),
@@ -124,7 +119,8 @@ const bin = {
             preamble: preamble("The AssemblyScript Compiler Frontend.")
           }
         },
-        sourceMap: true
+        parallel: true,
+        extractComments: false
       })
     ],
   }

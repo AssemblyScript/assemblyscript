@@ -239,13 +239,23 @@ String["fromCodePoints"] = function fromCodePoints(arr) {
   return parts;
 };
 
+if (!String.prototype.at) {
+  Object.defineProperty(String.prototype, "at", {
+    value: function at(index) {
+      return this.charAt(index >= 0 ? index : index + this.length);
+    },
+    configurable: true
+  });
+}
+
 if (!String.prototype.replaceAll) {
   Object.defineProperty(String.prototype, "replaceAll", {
     value: function replaceAll(search, replacment) {
       var res = this.split(search).join(replacment);
       if (!search.length) res = replacment + res + replacment;
       return res;
-    }
+    },
+    configurable: true
   });
 }
 
@@ -266,6 +276,23 @@ const arraySort = Array.prototype.sort;
 Array.prototype.sort = function sort(comparator) {
   return arraySort.call(this, comparator || defaultComparator);
 };
+
+[ Array,
+  Uint8ClampedArray,
+  Uint8Array, Int8Array,
+  Uint16Array, Int16Array,
+  Uint32Array, Int32Array,
+  Float32Array, Float64Array
+].forEach(Ctr => {
+  if (!Ctr.prototype.at) {
+    Object.defineProperty(Ctr.prototype, "at", {
+      value: function at(index) {
+        return this[index >= 0 ? index : index + this.length];
+      },
+      configurable: true
+    });
+  }
+});
 
 globalScope["isInteger"] = Number.isInteger;
 
@@ -325,7 +352,7 @@ Object.defineProperties(globalScope["JSMath"], {
   sincos_cos: { value: 0.0, writable: true },
   signbit: {
     value: function signbit(x) {
-      F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
+      F64[0] = x; return Boolean(U64[1] >>> 31);
     }
   },
   sincos: {

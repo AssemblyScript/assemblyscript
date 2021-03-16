@@ -1151,12 +1151,20 @@ export class Resolver extends DiagnosticEmitter {
       this.currentElementExpression = null;
       return element;
     }
+    var outerFlow = ctxFlow.outer;
+    if (outerFlow) {
+      if (element = outerFlow.lookup(name)) {
+        this.currentThisExpression = null;
+        this.currentElementExpression = null;
+        return element;
+      }
+    }
     if (element = ctxElement.lookup(name)) {
       this.currentThisExpression = null;
       this.currentElementExpression = null;
       return element;
     }
-    if (element = this.program.lookupGlobal(name)) {
+    if (element = this.program.lookup(name)) {
       this.currentThisExpression = null;
       this.currentElementExpression = null;
       return element;
@@ -1195,7 +1203,7 @@ export class Resolver extends DiagnosticEmitter {
           if (signatureReference) {
             return signatureReference.type.asNullable();
           } else if (ctxType.isExternalReference) {
-            return Type.externref.asNullable();
+            return ctxType; // TODO: nullable?
           }
         }
         return this.program.options.usizeType;

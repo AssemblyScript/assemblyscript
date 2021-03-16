@@ -1070,6 +1070,15 @@ export class Tokenizer extends DiagnosticEmitter {
     var quote = text.charCodeAt(pos++);
     var start = pos;
     var result = "";
+
+    if (quote == CharCode.BACKTICK) {
+      this.warning(
+        DiagnosticCode.Not_implemented_0,
+        this.range(start - 1, end),
+        "Template Literals can only be used for multi-line strings. Interpolation is not supported."
+      );
+    }
+
     while (true) {
       if (pos >= end) {
         result += text.substring(start, pos);
@@ -1609,6 +1618,17 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     this.pos = pos;
     return String.fromCharCode(value);
+  }
+
+  checkForIdentifierStartAfterNumericLiteral(): void {
+    // TODO: BigInt n
+    var pos = this.pos;
+    if (pos < this.end && isIdentifierStart(this.source.text.charCodeAt(pos))) {
+      this.error(
+        DiagnosticCode.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal,
+        this.range(pos)
+      );
+    }
   }
 
   readUnicodeEscape(): string {

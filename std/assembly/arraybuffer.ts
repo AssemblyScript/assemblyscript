@@ -1,6 +1,6 @@
 /// <reference path="./rt/index.d.ts" />
 
-import { BLOCK, BLOCK_MAXSIZE, BLOCK_OVERHEAD } from "./rt/common";
+import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { idof } from "./builtins";
 import { E_INVALIDLENGTH } from "./util/error";
 
@@ -16,10 +16,10 @@ export abstract class ArrayBufferView {
 
   protected constructor(length: i32, alignLog2: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
-    var buffer = __alloc(length = length << alignLog2, idof<ArrayBuffer>());
-    memory.fill(buffer, 0, <usize>length);
-    this.buffer = changetype<ArrayBuffer>(buffer); // retains
-    this.dataStart = buffer;
+    var buffer = changetype<ArrayBuffer>(__new(length = length << alignLog2, idof<ArrayBuffer>()));
+    memory.fill(changetype<usize>(buffer), 0, <usize>length);
+    this.buffer = buffer; // links
+    this.dataStart = changetype<usize>(buffer);
     this.byteLength = length;
   }
 }
@@ -47,13 +47,13 @@ export abstract class ArrayBufferView {
 
   constructor(length: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE) throw new RangeError(E_INVALIDLENGTH);
-    var buffer = __alloc(<usize>length, idof<ArrayBuffer>());
-    memory.fill(buffer, 0, <usize>length);
-    return changetype<ArrayBuffer>(buffer); // retains
+    var buffer = changetype<ArrayBuffer>(__new(<usize>length, idof<ArrayBuffer>()));
+    memory.fill(changetype<usize>(buffer), 0, <usize>length);
+    return buffer;
   }
 
   get byteLength(): i32 {
-    return changetype<BLOCK>(changetype<usize>(this) - BLOCK_OVERHEAD).rtSize;
+    return changetype<OBJECT>(changetype<usize>(this) - TOTAL_OVERHEAD).rtSize;
   }
 
   slice(begin: i32 = 0, end: i32 = BLOCK_MAXSIZE): ArrayBuffer {
@@ -61,9 +61,9 @@ export abstract class ArrayBufferView {
     begin = begin < 0 ? max(length + begin, 0) : min(begin, length);
     end   = end   < 0 ? max(length + end  , 0) : min(end  , length);
     var outSize = <usize>max(end - begin, 0);
-    var out = __alloc(outSize, idof<ArrayBuffer>());
-    memory.copy(out, changetype<usize>(this) + <usize>begin, outSize);
-    return changetype<ArrayBuffer>(out); // retains
+    var out = changetype<ArrayBuffer>(__new(outSize, idof<ArrayBuffer>()));
+    memory.copy(changetype<usize>(out), changetype<usize>(this) + <usize>begin, outSize);
+    return out;
   }
 
   toString(): string {

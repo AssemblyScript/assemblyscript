@@ -3,6 +3,6 @@
   "scripts": {
     "test": "node ./index",
     "test:forever": "node ./forever",
-    "test:all": "npm run test rt-full && npm run test rt-stub"
+    "test:all": "npm run test default && npm run test stub"
   }
 }

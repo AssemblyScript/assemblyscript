@@ -59,8 +59,18 @@ export const enum TypeKind {
 
   // references
 
-  /** Any host reference. */
+  /** Function reference. */
+  FUNCREF,
+  /** External reference. */
   EXTERNREF,
+  /** Any reference. */
+  ANYREF,
+  /** Equatable reference. */
+  EQREF,
+  /** 31-bit integer reference. */
+  I31REF,
+  /** Data reference. */
+  DATAREF,
 
   // other
 
@@ -319,6 +329,9 @@ export class Type {
 
   /** Gets the corresponding non-nullable type. */
   get nonNullableType(): Type {
+    if (this.isExternalReference) {
+      return this; // TODO
+    }
     return assert(this._nonNullableType); // set either in ctor or asNullable
   }
 
@@ -387,7 +400,7 @@ export class Type {
             if (targetFunction = target.getSignature()) {
               return currentFunction.isAssignableTo(targetFunction);
             }
-          } else if (this.kind == TypeKind.EXTERNREF && target.kind == TypeKind.EXTERNREF) {
+          } else if (this.isExternalReference && (this.kind == target.kind || (target.kind == TypeKind.ANYREF && this.kind != TypeKind.EXTERNREF))) {
             return true;
           }
         }
@@ -462,16 +475,14 @@ export class Type {
         return this.isNullableReference
           ? classReference.internalName + nullablePostfix
           : classReference.internalName;
+      } else {
+        let signatureReference = this.getSignature();
+        if (signatureReference) {
+          return this.isNullableReference
+            ? "(" + signatureReference.toString(validWat) + ")" + nullablePostfix
+            : signatureReference.toString(validWat);
+        }
       }
-      let signatureReference = this.getSignature();
-      if (signatureReference) {
-        return this.isNullableReference
-          ? "(" + signatureReference.toString(validWat) + ")" + nullablePostfix
-          : signatureReference.toString(validWat);
-      }
-      // TODO: Reflect.apply(value, "toString", []) ?
-      assert(this.kind == TypeKind.EXTERNREF);
-      return "externref";
     }
     switch (this.kind) {
       case TypeKind.I8: return "i8";
@@ -488,7 +499,12 @@ export class Type {
       case TypeKind.F32: return "f32";
       case TypeKind.F64: return "f64";
       case TypeKind.V128: return "v128";
+      case TypeKind.FUNCREF: return "funcref";
       case TypeKind.EXTERNREF: return "externref";
+      case TypeKind.ANYREF: return "anyref";
+      case TypeKind.EQREF: return "eqref";
+      case TypeKind.I31REF: return "i31ref";
+      case TypeKind.DATAREF: return "dataref";
       default: assert(false);
       case TypeKind.VOID: return "void";
     }
@@ -514,7 +530,13 @@ export class Type {
       case TypeKind.F32: return NativeType.F32;
       case TypeKind.F64: return NativeType.F64;
       case TypeKind.V128: return NativeType.V128;
+      // TODO: nullable/non-nullable refs have different native types
+      case TypeKind.FUNCREF: return NativeType.Funcref;
       case TypeKind.EXTERNREF: return NativeType.Externref;
+      case TypeKind.ANYREF: return NativeType.Anyref;
+      case TypeKind.EQREF: return NativeType.Eqref;
+      case TypeKind.I31REF: return NativeType.I31ref;
+      case TypeKind.DATAREF: return NativeType.Dataref;
       case TypeKind.VOID: return NativeType.None;
     }
   }
@@ -646,9 +668,44 @@ export class Type {
     TypeFlags.VALUE, 128
   );
 
-  /** Any host reference. */
+  /** Function reference. */
+  static readonly funcref: Type = new Type(TypeKind.FUNCREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** External reference. */
   static readonly externref: Type = new Type(TypeKind.EXTERNREF,
     TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** Any reference. */
+  static readonly anyref: Type = new Type(TypeKind.ANYREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** Equatable reference. */
+  static readonly eqref: Type = new Type(TypeKind.EQREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** 31-bit integer reference. */
+  static readonly i31ref: Type = new Type(TypeKind.I31REF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** Data reference. */
+  static readonly dataref: Type = new Type(TypeKind.DATAREF,
+    TypeFlags.EXTERNAL   |
+    TypeFlags.NULLABLE   |
     TypeFlags.REFERENCE, 0
   );
 
@@ -807,6 +864,40 @@ export class Signature {
     var thisReturnType = this.returnType;
     var targetReturnType = target.returnType;
     return thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType);
+  }
+
+  /** Tests if this signature has at least one managed operand. */
+  get hasManagedOperands(): bool {
+    var thisType = this.thisType;
+    if (thisType) {
+      if (thisType.isManaged) return true;
+    }
+    var parameterTypes = this.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      if (parameterTypes[i].isManaged) return true;
+    }
+    return false;
+  }
+
+  /** Gets the indices of all managed operands. */
+  getManagedOperandIndices(): i32[] {
+    var indices = new Array<i32>();
+    var index = 0;
+    var thisType = this.thisType;
+    if (thisType) {
+      if (thisType.isManaged) {
+        indices.push(index);
+      }
+      ++index;
+    }
+    var parameterTypes = this.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      if (parameterTypes[i].isManaged) {
+        indices.push(index);
+      }
+      ++index;
+    }
+    return indices;
   }
 
   /** Converts this signature to a string. */

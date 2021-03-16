@@ -1,21 +1,23 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00.\00t\00s\00")
- (data (i32.const 64) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a\00")
- (data (i32.const 96) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00b\00")
- (data (i32.const 128) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00a\00b\00")
- (data (i32.const 160) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00.\00t\00s\00\00\00")
+ (data (i32.const 60) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00a\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 92) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00b\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 124) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00a\00b\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 156) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/memory/__data_end i32 (i32.const 188))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16572))
+ (global $~lib/memory/__heap_base i32 (i32.const 16572))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/object/Object.is<f64> (param $0 f64) (param $1 f64) (result i32)
@@ -90,17 +92,11 @@
   i32.ne
   i32.eq
  )
- (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~lib/rt/stub/__release (param $0 i32)
-  nop
- )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
-  i32.const 16
+  i32.const 20
   i32.sub
-  i32.load offset=12
+  i32.load offset=16
   i32.const 1
   i32.shr_u
  )
@@ -110,13 +106,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $2
-  call $~lib/rt/stub/__retain
-  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -203,12 +192,6 @@
      local.get $8
      local.get $9
      i32.sub
-     local.set $10
-     local.get $0
-     call $~lib/rt/stub/__release
-     local.get $2
-     call $~lib/rt/stub/__release
-     local.get $10
      return
     end
     local.get $5
@@ -223,33 +206,14 @@
    end
   end
   i32.const 0
-  local.set $7
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $7
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
   local.get $0
   local.get $1
   i32.eq
   if
    i32.const 1
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
    return
   end
   local.get $0
@@ -264,86 +228,67 @@
   end
   if
    i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
    i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
    return
   end
   local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $2
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $~lib/object/Object.is<~lib/string/String> (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
   i32.const 0
   drop
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
-  local.set $2
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $~lib/object/Object.is<~lib/string/String|null> (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
   i32.const 0
   drop
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
-  local.set $2
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
+ )
+ (func $~start
+  call $start:std/object
+ )
+ (func $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__data_end
+  i32.lt_s
+  if
+   i32.const 16592
+   i32.const 16640
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $start:std/object
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
@@ -833,7 +778,17 @@
    unreachable
   end
   i32.const 80
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
   i32.const 80
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
   call $~lib/object/Object.is<~lib/string/String>
   i32.const 1
   i32.eq
@@ -847,7 +802,17 @@
    unreachable
   end
   i32.const 80
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
   i32.const 112
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
   call $~lib/object/Object.is<~lib/string/String>
   i32.const 0
   i32.eq
@@ -861,7 +826,17 @@
    unreachable
   end
   i32.const 80
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
   i32.const 144
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
   call $~lib/object/Object.is<~lib/string/String>
   i32.const 0
   i32.eq
@@ -889,6 +864,11 @@
    unreachable
   end
   i32.const 176
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
   i32.const 0
   call $~lib/object/Object.is<~lib/string/String|null>
   i32.const 0
@@ -904,6 +884,11 @@
   end
   i32.const 0
   i32.const 176
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
   call $~lib/object/Object.is<~lib/string/String|null>
   i32.const 0
   i32.eq
@@ -916,8 +901,9 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  call $start:std/object
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )

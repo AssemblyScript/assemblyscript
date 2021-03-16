@@ -1,0 +1,49 @@
+{
+  "entries": [
+    "./glue/wasm/index.ts",
+    "./index.ts"
+  ],
+  "options": {
+    "explicitStart": true,
+    "exportRuntime": true,
+    "initialMemory": 768,
+    "runtime": "incremental",
+    "measure": true
+  },
+  "targets": {
+    "untouched": {
+      "binaryFile": "../out/assemblyscript.untouched.wasm",
+      "textFile": "../out/assemblyscript.untouched.wast",
+      "tsdFile": "../out/assemblyscript.d.ts",
+      "debug": true
+    },
+    "optimized": {
+      "binaryFile": "../out/assemblyscript.optimized.wasm",
+      "textFile": "../out/assemblyscript.optimized.wast",
+      "tsdFile": "../out/assemblyscript.d.ts",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0
+    },
+    "rtraced": {
+      "binaryFile": "../out/assemblyscript.rtraced.wasm",
+      "textFile": "../out/assemblyscript.rtraced.wast",
+      "tsdFile": "../out/assemblyscript.d.ts",
+      "debug": true,
+      "use": "ASC_RTRACE=1",
+      "runPasses": []
+    },
+    "untouched-bootstrap": {
+      "binaryFile": "../out/assemblyscript.untouched-bootstrap.wasm",
+      "textFile": "../out/assemblyscript.untouched-bootstrap.wast",
+      "tsdFile": "../out/assemblyscript.d.ts",
+      "debug": true
+    },
+    "optimized-bootstrap": {
+      "binaryFile": "../out/assemblyscript.optimized-bootstrap.wasm",
+      "textFile": "../out/assemblyscript.optimized-bootstrap.wast",
+      "tsdFile": "../out/assemblyscript.d.ts",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0
+    }
+  }
+}

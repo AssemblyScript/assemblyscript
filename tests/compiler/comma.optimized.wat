@@ -3,7 +3,8 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1024) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00c\00o\00m\00m\00a\00.\00t\00s")
+ (data (i32.const 1036) ",")
+ (data (i32.const 1048) "\01\00\00\00\10\00\00\00c\00o\00m\00m\00a\00.\00t\00s")
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -23,7 +24,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 4
    i32.const 1
    call $~lib/builtins/abort
@@ -32,7 +33,7 @@
   global.get $comma/b
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 5
    i32.const 1
    call $~lib/builtins/abort
@@ -49,7 +50,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 8
    i32.const 1
    call $~lib/builtins/abort
@@ -60,7 +61,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 9
    i32.const 1
    call $~lib/builtins/abort
@@ -81,9 +82,9 @@
   i32.const 2
   global.set $comma/a
   loop $for-loop|0
-   local.get $0
    global.get $comma/a
-   i32.lt_s
+   local.get $0
+   i32.gt_s
    if
     global.get $comma/a
     i32.const 1
@@ -101,7 +102,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 1056
    i32.const 22
    i32.const 1
    call $~lib/builtins/abort

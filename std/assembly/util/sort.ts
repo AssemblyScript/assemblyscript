@@ -32,10 +32,11 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
       if (a === b || a === null || b === null) return 0;
       var alen = changetype<string>(a).length;
       var blen = changetype<string>(b).length;
-      if (!alen && !blen) return 0;
+      if (!(alen | blen)) return 0;
       if (!alen) return -1;
       if (!blen) return  1;
-      return compareImpl(changetype<string>(a), 0, changetype<string>(b), 0, <usize>min(alen, blen));
+      let res = compareImpl(changetype<string>(a), 0, changetype<string>(b), 0, <usize>min(alen, blen));
+      return res ? res : alen - blen;
     };
   } else {
     return (a: T, b: T): i32 => (i32(a > b) - i32(a < b));
@@ -87,7 +88,7 @@ function weakHeapSort<T>(
   const shift32 = alignof<u32>();
 
   var bitsetSize = (<usize>length + 31) >> 5 << shift32;
-  var bitset = __alloc(bitsetSize, 0); // indexed in 32-bit chunks below
+  var bitset = __alloc(bitsetSize); // indexed in 32-bit chunks below
   memory.fill(bitset, 0, bitsetSize);
 
   // see: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.21.1863&rep=rep1&type=pdf

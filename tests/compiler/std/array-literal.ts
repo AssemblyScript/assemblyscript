@@ -38,14 +38,17 @@ var dynamicArrayRefWithCtor: RefWithCtor[] = [new RefWithCtor(), new RefWithCtor
 assert(dynamicArrayRefWithCtor.length == 3);
 
 // Unleak globals
-__release(changetype<usize>(emptyArrayI32));
-__release(changetype<usize>(dynamicArrayI8));
-__release(changetype<usize>(dynamicArrayI32));
-__release(changetype<usize>(dynamicArrayRef));
-__release(changetype<usize>(dynamicArrayRefWithCtor));
+emptyArrayI32 = changetype<i32[]>(0);
+dynamicArrayI8 = changetype<i8[]>(0);
+dynamicArrayI32 = changetype<i32[]>(0);
+dynamicArrayRef = changetype<Ref[]>(0);
+dynamicArrayRefWithCtor = changetype<RefWithCtor[]>(0);
 
-// Make sure unassigned literals don't
+// Make sure unassigned literals don't leak
 function doesntLeak(refs: Ref[]): void {}
 {
   doesntLeak([ new Ref() ]);
 }
+
+__stack_pointer = __heap_base;
+__collect();

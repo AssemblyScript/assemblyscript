@@ -129,6 +129,19 @@ export function setLowMemoryLimit(options: Options, lowMemoryLimit: i32): void {
   options.lowMemoryLimit = lowMemoryLimit;
 }
 
+/** Sets the `exportRuntime` option. */
+export function setExportRuntime(options: Options, exportRuntime: bool): void {
+  options.exportRuntime = exportRuntime;
+}
+
+/** Default stack size. */
+export const DEFAULT_STACK_SIZE = 16384;
+
+/** Sets the `stackSize` option. */
+export function setStackSize(options: Options, stackSize: i32): void {
+  options.stackSize = stackSize;
+}
+
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */
@@ -149,6 +162,10 @@ export const FEATURE_TAIL_CALLS = Feature.TAIL_CALLS;
 export const FEATURE_REFERENCE_TYPES = Feature.REFERENCE_TYPES;
 /** Multi value types. */
 export const FEATURE_MULTI_VALUE = Feature.MULTI_VALUE;
+/** Garbage collection. */
+export const FEATURE_GC = Feature.GC;
+/** Memory64. */
+export const FEATURE_MEMORY64 = Feature.MEMORY64;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {

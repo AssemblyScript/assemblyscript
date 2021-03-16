@@ -3129,7 +3129,7 @@ assert(NativeMath.signbit(-0.0) == true);
 assert(NativeMath.signbit(1.0)  == false);
 assert(NativeMath.signbit(-1.0) == true);
 assert(NativeMath.signbit(+NaN) == false);
-assert(NativeMath.signbit(-NaN) == false);
+assert(NativeMath.signbit(-NaN) == true);
 assert(NativeMath.signbit(+Infinity) == false);
 assert(NativeMath.signbit(-Infinity) == true);
 
@@ -3142,7 +3142,7 @@ assert(NativeMathf.signbit(-0.0) == true);
 assert(NativeMathf.signbit(1.0)  == false);
 assert(NativeMathf.signbit(-1.0) == true);
 assert(NativeMathf.signbit(+NaN) == false);
-assert(NativeMathf.signbit(-NaN) == false);
+assert(NativeMathf.signbit(-NaN) == true);
 assert(NativeMathf.signbit(+Infinity) == false);
 assert(NativeMathf.signbit(-Infinity) == true);
 
@@ -4074,6 +4074,8 @@ assert(ipow64(3, 128) == -9204772141784466943); // should overflow
 
 assert(ipow64(1, -1) == 1);
 assert(ipow64(2, -1) == 0);
+assert(ipow64(2, 64) == 0);
+assert(ipow64(2, 128) == 0);
 
 // integer pow operators
 

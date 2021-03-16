@@ -165,3 +165,6 @@
   assert(view.byteOffset == 0);
   assert(view.byteLength == 8);
 }
+
+__stack_pointer = __heap_base;
+__collect();

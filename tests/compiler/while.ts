@@ -207,3 +207,5 @@ function testIfImplicitContinueElse(): void {
 ran = false;
 testIfImplicitContinueElse();
 assert(ran);
+
+__collect();

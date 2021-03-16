@@ -1,9 +1,12 @@
+import { OBJECT, TOTAL_OVERHEAD } from "rt/common";
+
 // from contextual type
 const arr1: StaticArray<i32> = [1,2,3];
 assert(arr1[1] == 2);
 assert(arr1.length == 3);
 arr1[1] = 4;
 assert(arr1[1] == 4);
+assert(changetype<OBJECT>(changetype<usize>(arr1) - TOTAL_OVERHEAD).rtId == idof<StaticArray<i32>>());
 
 // from assertion
 const arr2 = [1,2,3] as StaticArray<i32>;
@@ -32,3 +35,6 @@ var arr4: StaticArray<Ref> = [ new Ref(), new Ref() ];
 
 arr3 = changetype<StaticArray<i32>>(0); // unleak
 arr4 = changetype<StaticArray<Ref>>(0);
+
+__stack_pointer = __heap_base;
+__collect();

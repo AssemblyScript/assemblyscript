@@ -9,6 +9,12 @@ check(HASH<string>(""));
 check(HASH<string>("a"));
 check(HASH<string>("ab"));
 check(HASH<string>("abc"));
+check(HASH<string>("abcd"));
+check(HASH<string>("abcde"));
+check(HASH<string>("abcdef"));
+check(HASH<string>("abcdefg"));
+check(HASH<string>("abcdefgh"));
+check(HASH<string>("abcdefghi"));
 
 check(HASH<f32>(0.0));
 check(HASH<f32>(1.0));

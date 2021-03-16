@@ -126,7 +126,6 @@ export abstract class ExportsWalker {
         if (!propertyInstance) break;
         element = propertyInstance;
         // fall-through
-        break;
       }
       case ElementKind.PROPERTY: {
         let propertyInstance = <Property>element;
@@ -459,11 +458,11 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("(");
     var parameters = signature.parameterTypes;
     var numParameters = parameters.length;
-    // var requiredParameters = signature.requiredParameters;
+    var requiredParameters = signature.requiredParameters;
     for (let i = 0; i < numParameters; ++i) {
       if (i) sb.push(", ");
-      // if (i >= requiredParameters) sb.push("optional ");
       sb.push(element.getParameterName(i));
+      if (i >= requiredParameters) sb.push("?");
       sb.push(": ");
       sb.push(this.typeToString(parameters[i]));
     }
@@ -496,6 +495,14 @@ export class TSDBuilder extends ExportsWalker {
       sb.push(extendsNode.name.identifier.text); // TODO: fqn?
     }
     sb.push(" {\n");
+    if (!isInterface) {
+      indent(sb, this.indentLevel);
+      sb.push("static wrap(ptr: usize): ");
+      sb.push(name);
+      sb.push(";\n");
+      indent(sb, this.indentLevel);
+      sb.push("valueOf(): usize;\n");
+    }
     var staticMembers = element.prototype.members;
     if (staticMembers) {
       // TODO: for (let member of staticMembers.values()) {
@@ -582,6 +589,12 @@ export class TSDBuilder extends ExportsWalker {
       case TypeKind.F64: return "f64";
       case TypeKind.V128: return "v128";
       case TypeKind.VOID: return "void";
+      case TypeKind.FUNCREF: return "funcref";
+      case TypeKind.EXTERNREF: return "externref";
+      case TypeKind.ANYREF: return "anyref";
+      case TypeKind.EQREF: return "eqref";
+      case TypeKind.I31REF: return "i31ref";
+      case TypeKind.DATAREF: return "dataref";
       default: {
         assert(false);
         return "any";
@@ -596,24 +609,24 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("  type i8 = number;\n");
     sb.push("  type i16 = number;\n");
     sb.push("  type i32 = number;\n");
-    sb.push("  type i64 = BigInt;\n");
+    sb.push("  type i64 = bigint;\n");
     if (isWasm64) {
-      sb.push("  type isize = BigInt;\n");
+      sb.push("  type isize = bigint;\n");
     } else {
       sb.push("  type isize = number;\n");
     }
     sb.push("  type u8 = number;\n");
     sb.push("  type u16 = number;\n");
     sb.push("  type u32 = number;\n");
-    sb.push("  type u64 = BigInt;\n");
+    sb.push("  type u64 = bigint;\n");
     if (isWasm64) {
-      sb.push("  type usize = BigInt;\n");
+      sb.push("  type usize = bigint;\n");
     } else {
       sb.push("  type usize = number;\n");
     }
     sb.push("  type f32 = number;\n");
     sb.push("  type f64 = number;\n");
-    sb.push("  type bool = any;\n");
+    sb.push("  type bool = boolean | number;\n");
     ++this.indentLevel;
     this.walk();
     --this.indentLevel;

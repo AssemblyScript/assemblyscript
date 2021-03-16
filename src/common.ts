@@ -123,7 +123,12 @@ export namespace CommonNames {
   export const f32 = "f32";
   export const f64 = "f64";
   export const v128 = "v128";
+  export const funcref = "funcref";
   export const externref = "externref";
+  export const anyref = "anyref";
+  export const eqref = "eqref";
+  export const i31ref = "i31ref";
+  export const dataref = "dataref";
   export const i8x16 = "i8x16";
   export const u8x16 = "u8x16";
   export const i16x8 = "i16x8";
@@ -159,6 +164,7 @@ export namespace CommonNames {
   export const ASC_OPTIMIZE_LEVEL = "ASC_OPTIMIZE_LEVEL";
   export const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
   export const ASC_LOW_MEMORY_LIMIT = "ASC_LOW_MEMORY_LIMIT";
+  export const ASC_EXPORT_RUNTIME = "ASC_EXPORT_RUNTIME";
   export const ASC_WASI = "ASC_WASI";
   export const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
   export const ASC_FEATURE_MUTABLE_GLOBALS = "ASC_FEATURE_MUTABLE_GLOBALS";
@@ -170,6 +176,8 @@ export namespace CommonNames {
   export const ASC_FEATURE_TAIL_CALLS = "ASC_FEATURE_TAIL_CALLS";
   export const ASC_FEATURE_REFERENCE_TYPES = "ASC_FEATURE_REFERENCE_TYPES";
   export const ASC_FEATURE_MULTI_VALUE = "ASC_FEATURE_MULTI_VALUE";
+  export const ASC_FEATURE_GC = "ASC_FEATURE_GC";
+  export const ASC_FEATURE_MEMORY64 = "ASC_FEATURE_MEMORY64";
   // classes
   export const I8 = "I8";
   export const I16 = "I16";
@@ -185,7 +193,12 @@ export namespace CommonNames {
   export const F32 = "F32";
   export const F64 = "F64";
   export const V128 = "V128";
+  export const Funcref = "Funcref";
   export const Externref = "Externref";
+  export const Anyref = "Anyref";
+  export const Eqref = "Eqref";
+  export const I31ref = "I31ref";
+  export const Dataref = "Dataref";
   export const String = "String";
   export const Array = "Array";
   export const StaticArray = "StaticArray";
@@ -221,14 +234,17 @@ export namespace CommonNames {
   export const alloc = "__alloc";
   export const realloc = "__realloc";
   export const free = "__free";
-  export const retain = "__retain";
-  export const release = "__release";
+  export const new_ = "__new";
+  export const renew = "__renew";
+  export const link = "__link";
   export const collect = "__collect";
   export const typeinfo = "__typeinfo";
   export const instanceof_ = "__instanceof";
   export const visit = "__visit";
-  export const allocBuffer = "__allocBuffer";
-  export const allocArray = "__allocArray";
+  export const newBuffer = "__newBuffer";
+  export const newArray = "__newArray";
+  export const BLOCK = "~lib/rt/common/BLOCK";
+  export const OBJECT = "~lib/rt/common/OBJECT";
 }
 
 // shared

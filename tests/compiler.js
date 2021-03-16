@@ -3,12 +3,13 @@ const fs  = require("fs");
 const path = require("path");
 const os = require("os");
 const v8 = require("v8");
+const WASI = require("wasi").WASI;
 const glob = require("glob");
 const colorsUtil = require("../cli/util/colors");
 const optionsUtil = require("../cli/util/options");
 const diff = require("./util/diff");
 const asc = require("../cli/asc.js");
-const rtrace = require("../lib/rtrace");
+const { Rtrace } = require("../lib/rtrace/umd");
 const cluster = require("cluster");
 const coreCount = require("physical-cpu-count");
 
@@ -121,6 +122,7 @@ function runTest(basename) {
   stderr.isTTY = true;
 
   var asc_flags = [];
+  var asc_rtrace = !!config.asc_rtrace;
   var v8_flags = "";
   var v8_no_flags = "";
   var missing_features = [];
@@ -284,14 +286,14 @@ function runTest(basename) {
 
       const instantiateUntouched = section("instantiate untouched");
       if (!config.skipInstantiate) {
-        if (!testInstantiate(basename, untouchedBuffer, glue, stderr)) {
+        if (!testInstantiate(basename, untouchedBuffer, glue, stderr, config.asc_wasi)) {
           failed = true;
           failedTests.add(basename);
           instantiateUntouched.end(FAILURE);
         } else {
           instantiateUntouched.end(SUCCESS);
           const instantiateOptimized = section("instantiate optimized");
-          if (!testInstantiate(basename, optimizedBuffer, glue, stderr)) {
+          if (!testInstantiate(basename, optimizedBuffer, glue, stderr, config.asc_wasi)) {
             failed = true;
             failedTests.add(basename);
             instantiateOptimized.end(FAILURE);
@@ -302,6 +304,54 @@ function runTest(basename) {
       } else {
         instantiateUntouched.end(SKIPPED);
       }
+
+      if (!asc_rtrace) return;
+
+      stdout.length = 0;
+      stderr.length = 0;
+
+      // Build rtraced
+      var cmd = [
+        basename + ".ts",
+        "--baseDir", basedir,
+        "--binaryFile", // -> stdout
+        "--debug",
+        "--use", "ASC_RTRACE=1",
+        "--explicitStart",
+        // "--runPasses", "instrument-memory"
+      ];
+      if (asc_flags) {
+        Array.prototype.push.apply(cmd, asc_flags);
+      }
+      const compileRtraced = section("compile rtraced");
+      asc.main(cmd, {
+        stdout: stdout,
+        stderr: stderr
+      }, err => {
+        if (err) {
+          stderr.write("---\n");
+          stderr.write(err.stack);
+          stderr.write("\n---\n");
+          failed = true;
+          failedMessages.set(basename, err.message);
+          failedTests.add(basename);
+          compileRtraced.end(FAILURE);
+          return 1;
+        } else {
+          compileRtraced.end(SUCCESS);
+        }
+        let rtracedBuffer = stdout.toBuffer();
+        const instantiateRtrace = section("instantiate rtrace");
+        v8.setFlagsFromString("--experimental-wasm-bigint");
+        if (!testInstantiate(basename, rtracedBuffer, glue, stderr, config.asc_wasi)) {
+          failed = true;
+          failedTests.add(basename);
+          instantiateRtrace.end(FAILURE);
+        } else {
+          instantiateRtrace.end(SUCCESS);
+        }
+        v8.setFlagsFromString("--no-experimental-wasm-bigint");
+      });
     });
     if (failed) return 1;
   });
@@ -311,7 +361,7 @@ function runTest(basename) {
 }
 
 // Tests if instantiation of a module succeeds
-function testInstantiate(basename, binaryBuffer, glue, stderr) {
+function testInstantiate(basename, binaryBuffer, glue, stderr, wasiOptions) {
   var failed = false;
   try {
     let memory = new WebAssembly.Memory({ initial: 10 });
@@ -327,20 +377,22 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       return String.fromCharCode.apply(String, U16.subarray(ptr16, ptr16 + len16));
     }
 
-    function onerror(e) {
-      console.log("  ERROR: " + e);
-      failed = true;
-      failedMessages.set(basename, e.message);
-    }
+    let rtrace = new Rtrace({
+      onerror(err, info) {
+        console.log("  ERROR: " + err.stack);
+        failed = true;
+        failedMessages.set(basename, err.message);
+      },
+      oninfo(msg, info) {
+        if (!args.rtraceVerbose) return;
+        console.log("  " + msg);
+      },
+      getMemory() {
+        return instance.exports.memory;
+      }
+    });
 
-    function oninfo(i) {
-      console.log("  " + i);
-    }
-
-    let rtr = rtrace(onerror, args.rtraceVerbose ? oninfo : null);
-
-    var imports = {
-      rtrace: rtr,
+    var imports = rtrace.install({
       env: {
         memory,
         abort: function(msg, file, line, column) {
@@ -351,15 +403,23 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
         },
         seed: function() {
           return 0xA5534817; // make tests deterministic
+        },
+        visit: function() {
+          // override in tests
         }
       },
       Math,
       Date,
       Reflect
-    };
+    });
     if (glue.preInstantiate) {
       console.log("  [call preInstantiate]");
       glue.preInstantiate(imports, exports);
+    }
+    var wasi = null;
+    if (wasiOptions) {
+      wasi = new WASI(wasiOptions);
+      imports.wasi_snapshot_preview1 = wasi.wasiImport;
     }
     var instance = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), imports);
     Object.setPrototypeOf(exports, instance.exports);
@@ -367,7 +427,11 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       console.log("  [call postInstantiate]");
       glue.postInstantiate(instance);
     }
-    if (exports._start) {
+    if (wasi) {
+      console.log("  [wasi start]");
+      let code = wasi.start(instance);
+      console.log("  [wasi exit] code=" + code);
+    } else if (exports._start) {
       console.log("  [call start]");
       exports._start();
     }
@@ -375,7 +439,7 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       console.log("  [call postStart]");
       glue.postStart(instance);
     }
-    let leakCount = rtr.check();
+    let leakCount = rtrace.check();
     if (leakCount) {
       let msg = "memory leak detected: " + leakCount + " leaking";
       failed = true;
@@ -383,12 +447,12 @@ function testInstantiate(basename, binaryBuffer, glue, stderr) {
       console.log("  " + msg);
     }
     if (!failed) {
-      if (rtr.active) {
+      if (rtrace.active) {
         console.log("  " +
-          rtr.allocCount + " allocs, " +
-          rtr.freeCount + " frees, " +
-          rtr.incrementCount + " increments, " +
-          rtr.decrementCount + " decrements"
+          rtrace.allocCount + " allocs, " +
+          rtrace.freeCount + " frees, " +
+          rtrace.resizeCount + " resizes, " +
+          rtrace.moveCount + " moves"
         );
       }
       return true;

@@ -23,7 +23,7 @@ function i64_is<T>(value: T): bool {
 // @ts-ignore: decorator
 @global @inline
 function i64_new(lo: i32, hi: i32 = 0): i64 {
-  return lo | (hi << 32);
+  return <i64><u32>lo | (<i64>hi << 32);
 }
 
 // @ts-ignore: decorator

@@ -65,9 +65,7 @@ import {
   getLocalSetIndex,
   getIfCondition,
   getConstValueI64High,
-  getUnaryValue,
-  getCallOperandAt,
-  traverse
+  getUnaryValue
 } from "./module";
 
 import {
@@ -165,16 +163,7 @@ export enum LocalFlags {
   /** Local is non-null. */
   NONNULL = 1 << 2,
   /** Local is initialized. */
-  INITIALIZED = 1 << 3,
-  /** Local is retained. */
-  RETAINED = 1 << 4,
-
-  /** Local must be conditionally retained. */
-  CONDITIONALLY_RETAINED = 1 << 5,
-
-  /** Any retained flag. */
-  ANY_RETAINED = RETAINED
-               | CONDITIONALLY_RETAINED
+  INITIALIZED = 1 << 3
 }
 
 /** Flags indicating the current state of a field. */
@@ -225,6 +214,8 @@ export class Flow {
 
   /** Parent flow. */
   parent: Flow | null = null;
+  /** Outer flow. Only relevant for first-class functions. */
+  outer: Flow | null = null;
   /** Flow flags indicating specific conditions. */
   flags: FlowFlags = FlowFlags.NONE;
   /** The label we break to when encountering a continue statement. */
@@ -277,6 +268,7 @@ export class Flow {
   fork(resetBreakContext: bool = false): Flow {
     var branch = new Flow(this.parentFunction);
     branch.parent = this;
+    branch.outer = this.outer;
     if (resetBreakContext) {
       branch.flags = this.flags & ~(
         FlowFlags.BREAKS |
@@ -311,8 +303,12 @@ export class Flow {
       case <u32>NativeType.F32: { temps = parentFunction.tempF32s; break; }
       case <u32>NativeType.F64: { temps = parentFunction.tempF64s; break; }
       case <u32>NativeType.V128: { temps = parentFunction.tempV128s; break; }
+      case <u32>NativeType.Funcref: { temps = parentFunction.tempFuncrefs; break; }
       case <u32>NativeType.Externref: { temps = parentFunction.tempExternrefs; break; }
-      case <u32>NativeType.Exnref: { temps = parentFunction.tempExnrefs; break; }
+      case <u32>NativeType.Anyref: { temps = parentFunction.tempAnyrefs; break; }
+      case <u32>NativeType.Eqref: { temps = parentFunction.tempEqrefs; break; }
+      case <u32>NativeType.I31ref: { temps = parentFunction.tempI31refs; break; }
+      case <u32>NativeType.Dataref: { temps = parentFunction.tempDatarefs; break; }
       default: throw new Error("concrete type expected");
     }
     var local: Local;
@@ -342,17 +338,6 @@ export class Flow {
       }
     }
     this.unsetLocalFlag(local.index, ~0);
-    return local;
-  }
-
-  /** Gets a local that sticks around until this flow is exited, and then released. */
-  getAutoreleaseLocal(type: Type, except: Set<i32> | null = null): Local {
-    var local = this.getTempLocal(type, except);
-    local.set(CommonFlags.SCOPED);
-    var scopedLocals = this.scopedLocals;
-    if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
-    scopedLocals.set("~auto" + (this.parentFunction.nextAutoreleaseId++).toString(), local);
-    this.setLocalFlag(local.index, LocalFlags.RETAINED);
     return local;
   }
 
@@ -395,16 +380,40 @@ export class Flow {
         else parentFunction.tempV128s = temps = [];
         break;
       }
+      case <u32>NativeType.Funcref: {
+        let tempFuncrefs = parentFunction.tempFuncrefs;
+        if (tempFuncrefs) temps = tempFuncrefs;
+        else parentFunction.tempFuncrefs = temps = [];
+        break;
+      }
       case <u32>NativeType.Externref: {
         let tempExternrefs = parentFunction.tempExternrefs;
         if (tempExternrefs) temps = tempExternrefs;
         else parentFunction.tempExternrefs = temps = [];
         break;
       }
-      case <u32>NativeType.Exnref: {
-        let tempExnrefs = parentFunction.tempExnrefs;
-        if (tempExnrefs) temps = tempExnrefs;
-        else parentFunction.tempExnrefs = temps = [];
+      case <u32>NativeType.Anyref: {
+        let tempAnyrefs = parentFunction.tempAnyrefs;
+        if (tempAnyrefs) temps = tempAnyrefs;
+        else parentFunction.tempAnyrefs = temps = [];
+        break;
+      }
+      case <u32>NativeType.Eqref: {
+        let tempEqrefs = parentFunction.tempEqrefs;
+        if (tempEqrefs) temps = tempEqrefs;
+        else parentFunction.tempEqrefs = temps = [];
+        break;
+      }
+      case <u32>NativeType.I31ref: {
+        let tempI31refs = parentFunction.tempI31refs;
+        if (tempI31refs) temps = tempI31refs;
+        else parentFunction.tempI31refs = temps = [];
+        break;
+      }
+      case <u32>NativeType.Dataref: {
+        let tempDatarefs = parentFunction.tempDatarefs;
+        if (tempDatarefs) temps = tempDatarefs;
+        else parentFunction.tempDatarefs = temps = [];
         break;
       }
       default: throw new Error("concrete type expected");
@@ -446,27 +455,26 @@ export class Flow {
   /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
   addScopedAlias(name: string, type: Type, index: i32, reportNode: Node | null = null): Local {
     var scopedLocals = this.scopedLocals;
-    if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
-    else {
-      let existingLocal = scopedLocals.get(name);
-      if (existingLocal) {
-        if (reportNode) {
-          if (!existingLocal.declaration.range.source.isNative) {
-            this.parentFunction.program.errorRelated(
-              DiagnosticCode.Duplicate_identifier_0,
-              reportNode.range,
-              existingLocal.declaration.name.range,
-              name
-            );
-          } else {
-            this.parentFunction.program.error(
-              DiagnosticCode.Duplicate_identifier_0,
-              reportNode.range, name
-            );
-          }
+    if (!scopedLocals) {
+      this.scopedLocals = scopedLocals = new Map();
+    } else if (scopedLocals.has(name)) {
+      let existingLocal = assert(scopedLocals.get(name));
+      if (reportNode) {
+        if (!existingLocal.declaration.range.source.isNative) {
+          this.parentFunction.program.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            reportNode.range,
+            existingLocal.declaration.name.range,
+            name
+          );
+        } else {
+          this.parentFunction.program.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            reportNode.range, name
+          );
         }
-        return existingLocal;
       }
+      return existingLocal;
     }
     assert(index < this.parentFunction.localsByIndex.length);
     var scopedAlias = new Local(name, index, type, this.parentFunction);
@@ -598,7 +606,7 @@ export class Flow {
   /** Tests if the specified `this` field has the specified flag or flags. */
   isThisFieldFlag(field: Field, flag: FieldFlags): bool {
     var fieldFlags = this.thisFieldFlags;
-    if (fieldFlags) {
+    if (fieldFlags != null && fieldFlags.has(field)) {
       return (changetype<FieldFlags>(fieldFlags.get(field)) & flag) == flag;
     }
     return false;
@@ -760,24 +768,12 @@ export class Flow {
     for (let i = 0; i < maxLocalFlags; ++i) {
       let thisFlags = i < numThisLocalFlags ? thisLocalFlags[i] : 0;
       let otherFlags = i < numOtherLocalFlags ? otherLocalFlags[i] : 0;
-      let newFlags = thisFlags & otherFlags & (
+      thisLocalFlags[i] = thisFlags & otherFlags & (
         LocalFlags.CONSTANT  |
         LocalFlags.WRAPPED   |
         LocalFlags.NONNULL   |
         LocalFlags.INITIALIZED
       );
-      if (thisFlags & LocalFlags.RETAINED) {
-        if (otherFlags & LocalFlags.RETAINED) {
-          newFlags |= LocalFlags.RETAINED;
-        } else {
-          newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
-        }
-      } else if (otherFlags & LocalFlags.RETAINED) {
-        newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
-      } else {
-        newFlags |= (thisFlags | otherFlags) & LocalFlags.CONDITIONALLY_RETAINED;
-      }
-      thisLocalFlags[i] = newFlags;
     }
 
     // field flags do not matter here since there's only INITIALIZED, which can
@@ -898,24 +894,12 @@ export class Flow {
       for (let i = 0; i < maxLocalFlags; ++i) {
         let leftFlags = i < numLeftLocalFlags ? leftLocalFlags[i] : 0;
         let rightFlags = i < numRightLocalFlags ? rightLocalFlags[i] : 0;
-        let newFlags = leftFlags & rightFlags & (
+        thisLocalFlags[i] = leftFlags & rightFlags & (
           LocalFlags.CONSTANT  |
           LocalFlags.WRAPPED   |
           LocalFlags.NONNULL   |
           LocalFlags.INITIALIZED
         );
-        if (leftFlags & LocalFlags.RETAINED) {
-          if (rightFlags & LocalFlags.RETAINED) {
-            newFlags |= LocalFlags.RETAINED;
-          } else {
-            newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
-          }
-        } else if (rightFlags & LocalFlags.RETAINED) {
-          newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
-        } else {
-          newFlags |= (leftFlags | rightFlags) & LocalFlags.CONDITIONALLY_RETAINED;
-        }
-        thisLocalFlags[i] = newFlags;
       }
     }
 
@@ -976,11 +960,6 @@ export class Flow {
       if (this.isLocalFlag(i, LocalFlags.NONNULL) != other.isLocalFlag(i, LocalFlags.NONNULL)) {
         this.unsetLocalFlag(i, LocalFlags.NONNULL); // assume possibly null
       }
-      assert(
-        // having different retain states would be a problem because the compiler
-        // either can't release a retained local or would release a non-retained local
-        this.isAnyLocalFlag(i, LocalFlags.ANY_RETAINED) == other.isAnyLocalFlag(i, LocalFlags.ANY_RETAINED)
-      );
     }
   }
 
@@ -1106,15 +1085,6 @@ export class Flow {
             }
             break;
           }
-        }
-        break;
-      }
-      case ExpressionId.Call: {
-        let name = getCallTarget(expr);
-        let program = this.parentFunction.program;
-        if (name == program.retainInstance.internalName) {
-          // __retain just passes through the argument
-          this.inheritNonnullIfTrue(getCallOperandAt(expr, 0), iff);
         }
         break;
       }
@@ -1499,23 +1469,4 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
   );
 }
 
-/** Finds all indexes of locals used in the specified expression. */
-export function findUsedLocals(expr: ExpressionRef, used: Set<i32> = new Set<i32>()): Set<i32> {
-  traverse(expr, used, findUsedLocalsVisit);
-  return used;
-}
-
-/** A visitor function for use with `traverse` that finds all indexes of used locals. */
-function findUsedLocalsVisit(expr: ExpressionRef, used: Set<i32>): void {
-  switch (getExpressionId(expr)) {
-    case ExpressionId.LocalGet: {
-      used.add(getLocalGetIndex(expr));
-      break;
-    }
-    case ExpressionId.LocalSet: {
-      used.add(getLocalSetIndex(expr));
-      // fall-through for value
-    }
-    default: traverse(expr, used, findUsedLocalsVisit);
-  }
-}
+export { findUsedLocals } from "./passes/findusedlocals";
