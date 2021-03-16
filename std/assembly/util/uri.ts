@@ -1,10 +1,5 @@
 // References:
-// https://github.com/vmg/houdini
 // https://github.com/brianmario/escape_utils/blob/master/ext/escape_utils/houdini_uri_u.c
-// https://github.com/brianmario/escape_utils/blob/master/ext/escape_utils/escape_utils.c
-// https://github.com/brianmario/escape_utils/blob/master/ext/escape_utils/houdini.h
-//
-// https://github.com/JetBrains/jdk8u_nashorn/blob/master/src/jdk/nashorn/internal/runtime/URIUtils.java
 
 import { CharCode } from "./string";
 
