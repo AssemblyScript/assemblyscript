@@ -34,25 +34,14 @@ import { CharCode } from "./string";
   0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46
 ]);
 
-function encode(dst: usize, offset: usize, c: u32): isize {
-  store<u16>(dst + offset, CharCode.PERCENT); // %
-  offset += 1 << 1;
-  if (c > 0x80) {
-    store<u16>(dst + offset, CharCode.u); // u
-    let hex = (
-      (<u32>load<u8>(HEX_CHARS + ((c >>> 12) & 0x0F))) |
-      (<u32>load<u8>(HEX_CHARS + ((c >>>  8) & 0x0F)) << 16)
-    );
-    store<u32>(dst + offset, hex, 2); // XX
-    offset += 3 << 1;
-  }
+function encode(dst: usize, offset: usize, ch: u32): usize {
   let hex = (
-    (<u32>load<u8>(HEX_CHARS + ((c >>> 4) & 0x0F))) |
-    (<u32>load<u8>(HEX_CHARS + ((c >>> 0) & 0x0F)) << 16)
+    (<u32>load<u8>(HEX_CHARS + ((ch >>> 4) & 0x0F))) |
+    (<u32>load<u8>(HEX_CHARS + ((ch >>> 0) & 0x0F)) << 16)
   );
-  store<u32>(dst + offset, hex); // XX
-  offset += 2 << 1;
-  return offset;
+  store<u16>(dst + offset, CharCode.PERCENT, 0); // %
+  store<u32>(dst + offset, hex, 2); // XX
+  return offset + (3 << 1);
 }
 
 export function escape(dst: usize, src: usize, len: isize, table: usize): bool {
