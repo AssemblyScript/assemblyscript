@@ -45,7 +45,6 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/util/uri/URL_SAFE i32 (i32.const 444))
- (global $~lib/util/uri/HEX_CHARS i32 (i32.const 780))
  (global $~lib/rt/__rtti_base i32 (i32.const 1040))
  (global $~lib/memory/__data_end i32 (i32.const 1068))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17452))
@@ -3673,7 +3672,7 @@
  )
  (func $~lib/util/uri/storeHex (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  global.get $~lib/util/uri/HEX_CHARS
+  i32.const 780
   local.get $2
   i32.const 4
   i32.shr_u
@@ -3681,7 +3680,7 @@
   i32.and
   i32.add
   i32.load8_u
-  global.get $~lib/util/uri/HEX_CHARS
+  i32.const 780
   local.get $2
   i32.const 0
   i32.shr_u
