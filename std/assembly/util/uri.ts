@@ -34,7 +34,7 @@ import { CharCode } from "./string";
   0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46
 ]);
 
-function encodeHexPoint(dst: usize, offset: usize, c: u32): isize {
+function encode(dst: usize, offset: usize, c: u32): isize {
   const U: u16 = 0x75; // u
   const P: u16 = CharCode.PERCENT; // %
 
@@ -58,7 +58,7 @@ function encodeHexPoint(dst: usize, offset: usize, c: u32): isize {
   return offset;
 }
 
-export function escapeUnsafe(dst: usize, src: usize, len: isize, table: usize): bool {
+export function escape(dst: usize, src: usize, len: isize, table: usize): bool {
   var i: isize = 0, org: isize, offset: usize = 0;
   while (i < len) {
     org = i;
@@ -101,18 +101,18 @@ export function escapeUnsafe(dst: usize, src: usize, len: isize, table: usize): 
     }
 
     if (c <= 0x7F) {
-      offset += encodeHexPoint(dst, offset, c);
+      offset += encode(dst, offset, c);
     } else {
       if (c <= 0x800) {
-        offset += encodeHexPoint(dst, offset, (c >> 6) | 0xC0);
+        offset += encode(dst, offset, (c >> 6) | 0xC0);
       } else {
         if (c < 0x10000) {
-          offset += encodeHexPoint(dst, offset, (c >> 12) | 0xE0);
+          offset += encode(dst, offset, (c >> 12) | 0xE0);
         } else {
-          offset += encodeHexPoint(dst, offset, (c >> 18) | 0xF0);
-          offset += encodeHexPoint(dst, offset, ((c >> 12) & 0x3F) | 0x80);
+          offset += encode(dst, offset, (c >> 18) | 0xF0);
+          offset += encode(dst, offset, ((c >> 12) & 0x3F) | 0x80);
         }
-        offset += encodeHexPoint(dst, offset, ((c >> 6) & 0x3F) | 0x80);
+        offset += encode(dst, offset, ((c >> 6) & 0x3F) | 0x80);
       }
     }
   }
@@ -123,7 +123,7 @@ export function escapeURI(str: string): string | null {
   var len = str.length;
   if (!len) return str;
   var result = __new(len, idof<string>());
-  if (!escapeUnsafe(result, changetype<usize>(str), len, URI_SAFE)) {
+  if (!escape(result, changetype<usize>(str), len, URI_SAFE)) {
     return null;
   }
   return changetype<string>(result);
@@ -133,7 +133,7 @@ export function escapeURIComponent(str: string): string | null {
   var len = str.length;
   if (!len) return str;
   var result = __new(len, idof<string>());
-  if (!escapeUnsafe(result, changetype<usize>(str), len, URL_SAFE)) {
+  if (!escape(result, changetype<usize>(str), len, URL_SAFE)) {
     return null;
   }
   return changetype<string>(result);
