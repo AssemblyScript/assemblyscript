@@ -133,7 +133,7 @@ abstract class WritableStream extends Stream {
 abstract class ReadableStream extends Stream {
   read(buffer: ArrayBuffer, offset: usize = 0): i32 {
     var end = <usize>buffer.byteLength;
-    if (offset < 0 || offset > end) {
+    if (offset > end) {
       throw new Error(E_INDEXOUTOFRANGE);
     }
     store<usize>(iobuf, changetype<usize>(buffer) + offset);
