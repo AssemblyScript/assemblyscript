@@ -5,27 +5,27 @@
 import { CharCode } from "./string";
 
 // @ts-ignore: decorator
-@lazy const URI_SAFE = memory.data<u8>([
+@lazy export const URI_SAFE = memory.data<u8>([
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
   0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1
 ]);
 
 // @ts-ignore: decorator
-@lazy const URL_SAFE = memory.data<u8>([
+@lazy export const URL_SAFE = memory.data<u8>([
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+  0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
   0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
   0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1
 ]);
 
 // @ts-ignore: decorator
@@ -44,8 +44,9 @@ function storeHex(dst: usize, offset: usize, ch: u32): usize {
   return offset + (3 << 1);
 }
 
-function encode(dst: usize, src: usize, len: isize, table: usize): bool {
+export function encode(dst: usize, src: usize, len: isize, table: usize): void {
   var i: isize = 0, org: isize, offset: usize = 0;
+  var outLen = len;
   while (i < len) {
     org = i;
     let c: u32, c1: u32;
@@ -57,11 +58,12 @@ function encode(dst: usize, src: usize, len: isize, table: usize): bool {
       ++i;
     } while (i < len);
 
+    if (offset >= <usize>(outLen << 1)) {
+      outLen = outLen * 12 / 10;
+      dst = __renew(dst, outLen << 1);
+    }
+
     if (i > org) {
-      if (!org) {
-        if (i >= len) return false;
-        dst = __renew(dst, len * 12 / 10);
-      }
       let size = <usize>(i - org) << 1;
       memory.copy(
         dst + offset,
@@ -71,17 +73,17 @@ function encode(dst: usize, src: usize, len: isize, table: usize): bool {
       offset += size;
     }
 
+    // if (i >= len) break;
+
     if (c >= 0xDC00 && c <= 0xDFFF) {
-      // throw new Error("invalid character");
-      return false;
+      throw new Error("invalid character");
     }
 
     if (c >= 0xD800 && c <= 0xDBFF) {
       c1 = <u32>load<u16>(src + (i << 1));
       ++i;
       if (c1 < 0xDC00 || c1 > 0xDFFF) {
-        // throw new Error("expecting surrogate pair");
-        return false;
+        throw new Error("expecting surrogate pair");
       }
       c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
     }
@@ -102,25 +104,4 @@ function encode(dst: usize, src: usize, len: isize, table: usize): bool {
       }
     }
   }
-  return true;
-}
-
-export function encodeURI(str: string): string | null {
-  var len = str.length;
-  if (!len) return str;
-  var result = __new(len, idof<string>());
-  if (!encode(result, changetype<usize>(str), len, URI_SAFE)) {
-    return null;
-  }
-  return changetype<string>(result);
-}
-
-export function encodeURIComponent(str: string): string | null {
-  var len = str.length;
-  if (!len) return str;
-  var result = __new(len, idof<string>());
-  if (!encode(result, changetype<usize>(str), len, URL_SAFE)) {
-    return null;
-  }
-  return changetype<string>(result);
 }
