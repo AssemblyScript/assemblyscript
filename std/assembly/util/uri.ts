@@ -34,7 +34,7 @@ import { CharCode } from "./string";
   0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46
 ]);
 
-function encode(dst: usize, offset: usize, ch: u32): usize {
+function storeHex(dst: usize, offset: usize, ch: u32): usize {
   let hex = (
     (<u32>load<u8>(HEX_CHARS + ((ch >>> 4) & 0x0F))) |
     (<u32>load<u8>(HEX_CHARS + ((ch >>> 0) & 0x0F)) << 16)
@@ -44,7 +44,7 @@ function encode(dst: usize, offset: usize, ch: u32): usize {
   return offset + (3 << 1);
 }
 
-export function escape(dst: usize, src: usize, len: isize, table: usize): bool {
+function encode(dst: usize, src: usize, len: isize, table: usize): bool {
   var i: isize = 0, org: isize, offset: usize = 0;
   while (i < len) {
     org = i;
@@ -87,39 +87,39 @@ export function escape(dst: usize, src: usize, len: isize, table: usize): bool {
     }
 
     if (c < 0x80) {
-      offset += encode(dst, offset, c);
+      offset += storeHex(dst, offset, c);
     } else {
       if (c <= 0x800) {
-        offset += encode(dst, offset, (c >> 6) | 0xC0);
+        offset += storeHex(dst, offset, (c >> 6) | 0xC0);
       } else {
         if (c < 0x10000) {
-          offset += encode(dst, offset, (c >> 12) | 0xE0);
+          offset += storeHex(dst, offset, (c >> 12) | 0xE0);
         } else {
-          offset += encode(dst, offset, (c >> 18) | 0xF0);
-          offset += encode(dst, offset, ((c >> 12) & 0x3F) | 0x80);
+          offset += storeHex(dst, offset, (c >> 18) | 0xF0);
+          offset += storeHex(dst, offset, ((c >> 12) & 0x3F) | 0x80);
         }
-        offset += encode(dst, offset, ((c >> 6) & 0x3F) | 0x80);
+        offset += storeHex(dst, offset, ((c >> 6) & 0x3F) | 0x80);
       }
     }
   }
   return true;
 }
 
-export function escapeURI(str: string): string | null {
+export function encodeURI(str: string): string | null {
   var len = str.length;
   if (!len) return str;
   var result = __new(len, idof<string>());
-  if (!escape(result, changetype<usize>(str), len, URI_SAFE)) {
+  if (!encode(result, changetype<usize>(str), len, URI_SAFE)) {
     return null;
   }
   return changetype<string>(result);
 }
 
-export function escapeURIComponent(str: string): string | null {
+export function encodeURIComponent(str: string): string | null {
   var len = str.length;
   if (!len) return str;
   var result = __new(len, idof<string>());
-  if (!escape(result, changetype<usize>(str), len, URL_SAFE)) {
+  if (!encode(result, changetype<usize>(str), len, URL_SAFE)) {
     return null;
   }
   return changetype<string>(result);
