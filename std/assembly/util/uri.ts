@@ -65,7 +65,7 @@ export function escape(dst: usize, src: usize, len: isize, table: usize): bool {
     let c: u32, c1: u32;
     do {
       c = <u32>load<u16>(src + (i << 1));
-      if (c <= 127) {
+      if (c < 0x80) {
         if (!load<u8>(table + c)) break;
       } else break;
       ++i;
@@ -100,7 +100,7 @@ export function escape(dst: usize, src: usize, len: isize, table: usize): bool {
       c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
     }
 
-    if (c <= 0x7F) {
+    if (c < 0x80) {
       offset += encode(dst, offset, c);
     } else {
       if (c <= 0x800) {
