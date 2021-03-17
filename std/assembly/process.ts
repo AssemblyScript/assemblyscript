@@ -131,7 +131,7 @@ abstract class WritableStream extends Stream {
 
 @unmanaged
 abstract class ReadableStream extends Stream {
-  read(buffer: ArrayBuffer, offset: isize = 0): i32 {
+  read(buffer: ArrayBuffer, offset: usize = 0): i32 {
     var end = <usize>buffer.byteLength;
     if (offset < 0 || offset > end) {
       throw new Error(E_INDEXOUTOFRANGE);
