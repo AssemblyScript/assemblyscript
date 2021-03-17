@@ -45,10 +45,9 @@ function storeHex(dst: usize, offset: usize, ch: u32): usize {
 }
 
 export function encode(dst: usize, src: usize, len: isize, table: usize): void {
-  var i: isize = 0, org: isize, offset: usize = 0;
-  var outLen = len;
+  var i: isize = 0, offset: usize = 0, outLen = len;
   while (i < len) {
-    org = i;
+    let org = i;
     let c: u32, c1: u32;
     do {
       c = <u32>load<u16>(src + (i << 1));
@@ -70,10 +69,9 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): void {
         src + <usize>(org << 1),
         size
       );
+      if (i >= len) break;
       offset += size;
     }
-
-    // if (i >= len) break;
 
     if (c >= 0xDC00 && c <= 0xDFFF) {
       throw new Error("invalid character");

@@ -3720,229 +3720,250 @@
   i32.const 0
   local.set $4
   i32.const 0
-  local.set $6
+  local.set $5
   local.get $2
-  local.set $7
-  loop $while-continue|0
-   local.get $4
-   local.get $2
-   i32.lt_s
-   local.set $8
-   local.get $8
-   if
+  local.set $6
+  block $while-break|0
+   loop $while-continue|0
     local.get $4
-    local.set $5
-    block $do-break|1
-     loop $do-continue|1
+    local.get $2
+    i32.lt_s
+    local.set $7
+    local.get $7
+    if
+     local.get $4
+     local.set $8
+     block $do-break|1
+      loop $do-continue|1
+       local.get $1
+       local.get $4
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.load16_u
+       local.set $9
+       local.get $9
+       i32.const 128
+       i32.lt_u
+       if
+        local.get $3
+        local.get $9
+        i32.add
+        i32.load8_u
+        i32.eqz
+        if
+         br $do-break|1
+        end
+       else
+        br $do-break|1
+       end
+       local.get $4
+       i32.const 1
+       i32.add
+       local.set $4
+       local.get $4
+       local.get $2
+       i32.lt_s
+       local.set $11
+       local.get $11
+       br_if $do-continue|1
+      end
+     end
+     local.get $5
+     local.get $6
+     i32.const 1
+     i32.shl
+     i32.ge_u
+     if
+      local.get $6
+      i32.const 12
+      i32.mul
+      i32.const 10
+      i32.div_s
+      local.set $6
+      local.get $0
+      local.get $6
+      i32.const 1
+      i32.shl
+      call $~lib/rt/itcms/__renew
+      local.set $0
+     end
+     local.get $4
+     local.get $8
+     i32.gt_s
+     if
+      local.get $4
+      local.get $8
+      i32.sub
+      i32.const 1
+      i32.shl
+      local.set $11
+      local.get $0
+      local.get $5
+      i32.add
+      local.get $1
+      local.get $8
+      i32.const 1
+      i32.shl
+      i32.add
+      local.get $11
+      call $~lib/memory/memory.copy
+      local.get $4
+      local.get $2
+      i32.ge_s
+      if
+       br $while-break|0
+      end
+      local.get $5
+      local.get $11
+      i32.add
+      local.set $5
+     end
+     local.get $9
+     i32.const 56320
+     i32.ge_u
+     if (result i32)
+      local.get $9
+      i32.const 57343
+      i32.le_u
+     else
+      i32.const 0
+     end
+     if
+      i32.const 592
+      i32.const 656
+      i32.const 77
+      i32.const 7
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $9
+     i32.const 55296
+     i32.ge_u
+     if (result i32)
+      local.get $9
+      i32.const 56319
+      i32.le_u
+     else
+      i32.const 0
+     end
+     if
       local.get $1
       local.get $4
       i32.const 1
       i32.shl
       i32.add
       i32.load16_u
-      local.set $9
-      local.get $9
-      i32.const 128
-      i32.lt_u
-      if
-       local.get $3
-       local.get $9
-       i32.add
-       i32.load8_u
-       i32.eqz
-       if
-        br $do-break|1
-       end
-      else
-       br $do-break|1
-      end
+      local.set $10
       local.get $4
       i32.const 1
       i32.add
       local.set $4
-      local.get $4
-      local.get $2
-      i32.lt_s
-      local.set $11
-      local.get $11
-      br_if $do-continue|1
-     end
-    end
-    local.get $6
-    local.get $7
-    i32.const 1
-    i32.shl
-    i32.ge_u
-    if
-     local.get $7
-     i32.const 12
-     i32.mul
-     i32.const 10
-     i32.div_s
-     local.set $7
-     local.get $0
-     local.get $7
-     i32.const 1
-     i32.shl
-     call $~lib/rt/itcms/__renew
-     local.set $0
-    end
-    local.get $4
-    local.get $5
-    i32.gt_s
-    if
-     local.get $4
-     local.get $5
-     i32.sub
-     i32.const 1
-     i32.shl
-     local.set $11
-     local.get $0
-     local.get $6
-     i32.add
-     local.get $1
-     local.get $5
-     i32.const 1
-     i32.shl
-     i32.add
-     local.get $11
-     call $~lib/memory/memory.copy
-     local.get $6
-     local.get $11
-     i32.add
-     local.set $6
-    end
-    local.get $9
-    i32.const 56320
-    i32.ge_u
-    if (result i32)
-     local.get $9
-     i32.const 57343
-     i32.le_u
-    else
-     i32.const 0
-    end
-    if
-     i32.const 592
-     i32.const 656
-     i32.const 79
-     i32.const 7
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $9
-    i32.const 55296
-    i32.ge_u
-    if (result i32)
-     local.get $9
-     i32.const 56319
-     i32.le_u
-    else
-     i32.const 0
-    end
-    if
-     local.get $1
-     local.get $4
-     i32.const 1
-     i32.shl
-     i32.add
-     i32.load16_u
-     local.set $10
-     local.get $4
-     i32.const 1
-     i32.add
-     local.set $4
-     local.get $10
-     i32.const 56320
-     i32.lt_u
-     if (result i32)
-      i32.const 1
-     else
       local.get $10
-      i32.const 57343
-      i32.gt_u
-     end
-     if
-      i32.const 720
-      i32.const 656
-      i32.const 86
-      i32.const 9
-      call $~lib/builtins/abort
-      unreachable
-     end
-     local.get $9
-     i32.const 1023
-     i32.and
-     i32.const 10
-     i32.shl
-     local.get $10
-     i32.const 1023
-     i32.and
-     i32.or
-     i32.const 65536
-     i32.add
-     local.set $9
-    end
-    local.get $9
-    i32.const 128
-    i32.lt_u
-    if
-     local.get $6
-     local.get $0
-     local.get $6
-     local.get $9
-     call $~lib/util/uri/storeHex
-     i32.add
-     local.set $6
-    else
-     local.get $9
-     i32.const 2048
-     i32.le_u
-     if
-      local.get $6
-      local.get $0
-      local.get $6
+      i32.const 56320
+      i32.lt_u
+      if (result i32)
+       i32.const 1
+      else
+       local.get $10
+       i32.const 57343
+       i32.gt_u
+      end
+      if
+       i32.const 720
+       i32.const 656
+       i32.const 84
+       i32.const 9
+       call $~lib/builtins/abort
+       unreachable
+      end
       local.get $9
-      i32.const 6
-      i32.shr_u
-      i32.const 192
+      i32.const 1023
+      i32.and
+      i32.const 10
+      i32.shl
+      local.get $10
+      i32.const 1023
+      i32.and
       i32.or
+      i32.const 65536
+      i32.add
+      local.set $9
+     end
+     local.get $9
+     i32.const 128
+     i32.lt_u
+     if
+      local.get $5
+      local.get $0
+      local.get $5
+      local.get $9
       call $~lib/util/uri/storeHex
       i32.add
-      local.set $6
+      local.set $5
      else
       local.get $9
-      i32.const 65536
-      i32.lt_u
+      i32.const 2048
+      i32.le_u
       if
-       local.get $6
+       local.get $5
        local.get $0
-       local.get $6
+       local.get $5
        local.get $9
-       i32.const 12
+       i32.const 6
        i32.shr_u
-       i32.const 224
+       i32.const 192
        i32.or
        call $~lib/util/uri/storeHex
        i32.add
-       local.set $6
+       local.set $5
       else
-       local.get $6
-       local.get $0
-       local.get $6
        local.get $9
-       i32.const 18
-       i32.shr_u
-       i32.const 240
-       i32.or
-       call $~lib/util/uri/storeHex
-       i32.add
-       local.set $6
-       local.get $6
+       i32.const 65536
+       i32.lt_u
+       if
+        local.get $5
+        local.get $0
+        local.get $5
+        local.get $9
+        i32.const 12
+        i32.shr_u
+        i32.const 224
+        i32.or
+        call $~lib/util/uri/storeHex
+        i32.add
+        local.set $5
+       else
+        local.get $5
+        local.get $0
+        local.get $5
+        local.get $9
+        i32.const 18
+        i32.shr_u
+        i32.const 240
+        i32.or
+        call $~lib/util/uri/storeHex
+        i32.add
+        local.set $5
+        local.get $5
+        local.get $0
+        local.get $5
+        local.get $9
+        i32.const 12
+        i32.shr_u
+        i32.const 63
+        i32.and
+        i32.const 128
+        i32.or
+        call $~lib/util/uri/storeHex
+        i32.add
+        local.set $5
+       end
+       local.get $5
        local.get $0
-       local.get $6
+       local.get $5
        local.get $9
-       i32.const 12
+       i32.const 6
        i32.shr_u
        i32.const 63
        i32.and
@@ -3950,24 +3971,11 @@
        i32.or
        call $~lib/util/uri/storeHex
        i32.add
-       local.set $6
+       local.set $5
       end
-      local.get $6
-      local.get $0
-      local.get $6
-      local.get $9
-      i32.const 6
-      i32.shr_u
-      i32.const 63
-      i32.and
-      i32.const 128
-      i32.or
-      call $~lib/util/uri/storeHex
-      i32.add
-      local.set $6
      end
+     br $while-continue|0
     end
-    br $while-continue|0
    end
   end
  )
