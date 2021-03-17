@@ -35,13 +35,10 @@ import { CharCode } from "./string";
 ]);
 
 function encode(dst: usize, offset: usize, c: u32): isize {
-  const U: u16 = 0x75; // u
-  const P: u16 = CharCode.PERCENT; // %
-
-  store<u16>(dst + offset, P); // %
+  store<u16>(dst + offset, CharCode.PERCENT); // %
   offset += 1 << 1;
-  if (c >= 0xFF) {
-    store<u16>(dst + offset, U); // u
+  if (c > 0x80) {
+    store<u16>(dst + offset, CharCode.u); // u
     let hex = (
       (<u32>load<u8>(HEX_CHARS + ((c >>> 12) & 0x0F))) |
       (<u32>load<u8>(HEX_CHARS + ((c >>>  8) & 0x0F)) << 16)
