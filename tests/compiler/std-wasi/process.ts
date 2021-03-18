@@ -31,3 +31,5 @@ console.log(process.hrtime().toString());
 
 console.log("== exit ==");
 process.exit(42);
+
+process.stdin.read(new ArrayBuffer(0));
