@@ -139,7 +139,7 @@ jobs:
       env:
         ASC_FEATURES: mutable-globals,threads,reference-types,bigint-integration,gc
       run: |
-        npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/threads
+        npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/threads std-wasi/process std-wasi/crypto
   test-runtimes:
     name: "Runtimes"
     runs-on: ubuntu-latest
