@@ -13,3 +13,6 @@ assert(encodeURIComponent("ABCDXYZafgklmnyzz0123456789-_.!~*'()") == "ABCDXYZafg
 
 // assert(encodeURIComponent("\uD800")); // malformed URI sequence
 // assert(encodeURIComponent("\uDFFF")); // malformed URI sequence
+
+__stack_pointer = __heap_base;
+__collect();
