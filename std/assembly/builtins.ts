@@ -54,7 +54,7 @@ export declare function isManaged<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
-export declare function isVoid<T>(): boolean;
+export declare function isVoid<T>(): bool;
 
 // @ts-ignore
 @builtin
