@@ -1883,7 +1883,8 @@ export namespace NativeMath {
       let r = pp0 + z * (pp1 + z * (pp2 + z * (pp3 + z * pp4)));
       let s = 1.0 + z * (qq1 + z * (qq2 + z * (qq3 + z * (qq4 + z * qq5))));
       let y = r / s;
-      if (sig || ux < 0x3FD00000) {  // x < 1/4
+      // @ts-ignore
+      if (sig | (ux < 0x3FD00000)) {  // x < 1 / 4
         return 1.0 - (x + x * y);
       }
       return 0.5 - (x - 0.5 + x * y);
@@ -3389,7 +3390,8 @@ export namespace NativeMathf {
       let r = pp0f   + z * (pp1f + z * (pp2f + z * (pp3f + z * pp4f)));
       let s = <f32>1 + z * (qq1f + z * (qq2f + z * (qq3f + z * (qq4f + z * qq5f))));
       let y = r / s;
-      if (sig || ux < 0x3E800000) { // x < 1 / 4
+      // @ts-ignore
+      if (sig | (ux < 0x3E800000)) { // x < 1 / 4
         return <f32>1 - (x + x * y);
       }
       return <f32>0.5 - (x - 0.5 + x * y);

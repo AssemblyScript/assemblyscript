@@ -11544,12 +11544,11 @@
    f64.add
    f64.div
    local.set $5
-   i32.const 1
+   local.get $1
    local.get $2
    i32.const 1070596096
    i32.lt_u
-   local.get $1
-   select
+   i32.or
    if
     f64.const 1
     local.get $0
@@ -12136,12 +12135,11 @@
    f32.add
    f32.div
    local.set $5
-   i32.const 1
+   local.get $1
    local.get $2
    i32.const 1048576000
    i32.lt_u
-   local.get $1
-   select
+   i32.or
    if
     f32.const 1
     local.get $0

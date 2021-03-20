@@ -16724,13 +16724,10 @@
    f64.div
    local.set $6
    local.get $2
-   if (result i32)
-    i32.const 1
-   else
-    local.get $1
-    i32.const 1070596096
-    i32.lt_u
-   end
+   local.get $1
+   i32.const 1070596096
+   i32.lt_u
+   i32.or
    if
     f64.const 1
     local.get $0
@@ -17373,13 +17370,10 @@
    f32.div
    local.set $6
    local.get $2
-   if (result i32)
-    i32.const 1
-   else
-    local.get $1
-    i32.const 1048576000
-    i32.lt_u
-   end
+   local.get $1
+   i32.const 1048576000
+   i32.lt_u
+   i32.or
    if
     f32.const 1
     local.get $0
