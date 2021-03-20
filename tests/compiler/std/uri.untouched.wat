@@ -30,7 +30,9 @@
  (data (i32.const 876) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00a\001\00\00\00\00\00\00\00\00\00")
  (data (i32.const 908) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00a\00b\00_\00\00\00\00\00\00\00")
  (data (i32.const 940) "\\\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00H\00\00\00A\00B\00C\00D\00X\00Y\00Z\00a\00f\00g\00k\00l\00m\00n\00y\00z\00z\000\001\002\003\004\005\006\007\008\009\00-\00_\00.\00!\00~\00*\00\'\00(\00)\00\00\00\00\00")
- (data (i32.const 1040) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1036) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00+\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1068) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00%\002\00B\00\00\00\00\00\00\00")
+ (data (i32.const 1104) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -45,10 +47,10 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/util/uri/URL_SAFE i32 (i32.const 444))
- (global $~lib/rt/__rtti_base i32 (i32.const 1040))
- (global $~lib/memory/__data_end i32 (i32.const 1068))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17452))
- (global $~lib/memory/__heap_base i32 (i32.const 17452))
+ (global $~lib/rt/__rtti_base i32 (i32.const 1104))
+ (global $~lib/memory/__data_end i32 (i32.const 1132))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17516))
+ (global $~lib/memory/__heap_base i32 (i32.const 17516))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
@@ -3769,29 +3771,29 @@
        br_if $do-continue|1
       end
      end
-     local.get $5
-     local.get $6
-     i32.const 1
-     i32.shl
-     i32.ge_u
-     if
-      local.get $6
-      i32.const 12
-      i32.mul
-      i32.const 10
-      i32.div_s
-      local.set $6
-      local.get $0
-      local.get $6
-      i32.const 1
-      i32.shl
-      call $~lib/rt/itcms/__renew
-      local.set $0
-     end
      local.get $4
      local.get $8
      i32.gt_s
      if
+      local.get $5
+      local.get $6
+      i32.const 1
+      i32.shl
+      i32.ge_u
+      if
+       local.get $6
+       i32.const 12
+       i32.mul
+       i32.const 10
+       i32.div_s
+       local.set $6
+       local.get $0
+       local.get $6
+       i32.const 1
+       i32.shl
+       call $~lib/rt/itcms/__renew
+       local.set $0
+      end
       local.get $4
       local.get $8
       i32.sub
@@ -3832,7 +3834,7 @@
      if
       i32.const 592
       i32.const 656
-      i32.const 77
+      i32.const 76
       i32.const 7
       call $~lib/builtins/abort
       unreachable
@@ -3872,7 +3874,7 @@
       if
        i32.const 720
        i32.const 656
-       i32.const 84
+       i32.const 83
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -3894,6 +3896,27 @@
      i32.const 128
      i32.lt_u
      if
+      local.get $5
+      i32.const 5
+      i32.add
+      local.get $6
+      i32.const 1
+      i32.shl
+      i32.ge_u
+      if
+       local.get $6
+       i32.const 6
+       i32.add
+       i32.const 1
+       i32.sub
+       local.set $6
+       local.get $0
+       local.get $6
+       i32.const 1
+       i32.shl
+       call $~lib/rt/itcms/__renew
+       local.set $0
+      end
       local.get $5
       local.get $0
       local.get $5
@@ -4258,8 +4281,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 17472
-   i32.const 17520
+   i32.const 17536
+   i32.const 17584
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -4432,6 +4455,34 @@
    i32.const 0
    i32.const 816
    i32.const 6
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1056
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=8
+  local.get $0
+  call $~lib/uri/encodeURIComponent
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 1088
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 816
+   i32.const 9
    i32.const 1
    call $~lib/builtins/abort
    unreachable

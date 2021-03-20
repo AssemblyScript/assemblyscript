@@ -57,12 +57,11 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): void {
       ++i;
     } while (i < len);
 
-    if (offset >= <usize>(outLen << 1)) {
-      outLen = outLen * 12 / 10;
-      dst = __renew(dst, outLen << 1);
-    }
-
     if (i > org) {
+      if (offset >= <usize>(outLen << 1)) {
+        outLen = outLen * 12 / 10;
+        dst = __renew(dst, outLen << 1);
+      }
       let size = <usize>(i - org) << 1;
       memory.copy(
         dst + offset,
@@ -87,6 +86,10 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): void {
     }
 
     if (c < 0x80) {
+      if (offset + 6 >= <usize>(outLen << 1)) {
+        outLen = outLen + 6 - 1;
+        dst = __renew(dst, outLen << 1);
+      }
       offset += storeHex(dst, offset, c);
     } else {
       if (c <= 0x800) {
