@@ -2005,7 +2005,7 @@ export namespace NativeMathf {
       let xm1 = x - 1;
       return log1p(xm1 + builtin_sqrt(xm1 * (xm1 + 2)));
     }
-    if (u < 0x3f800000 + (12 << 23)) { // 2 <= x < 0x1p12
+    if (u < 0x3F800000 + (12 << 23)) { // 2 <= x < 0x1p12
       return log(2 * x - 1 / (x + builtin_sqrt<f32>(x * x - 1)));
     }
     // x >= 0x1p12 or x <= -2 or NaN
