@@ -2002,10 +2002,15 @@ export namespace NativeMathf {
     var u = reinterpret<u32>(x);
     var a = u & 0x7FFFFFFF;
     if (a < 0x3F800000 + (1 << 23)) {
+      // |x| < 2, invalid if x < 1
       let xm1 = x - 1;
       return log1p(xm1 + builtin_sqrt(xm1 * (xm1 + 2)));
     }
-    if (a < 0x3F800000 + (12 << 23)) return log(2 * x - 1 / (x + builtin_sqrt<f32>(x * x - 1)));
+    if (u < 0x3f800000 + (12 << 23)) {
+      // 2 <= x < 0x1p12
+      return log(2 * x - 1 / (x + builtin_sqrt<f32>(x * x - 1)));
+    }
+    // x >= 0x1p12 or x <= -2 or NaN
     return log(x) + s;
   }
 
@@ -2316,7 +2321,6 @@ export namespace NativeMathf {
 
   export function expm1(x: f32): f32 { // see: musl/src/math/expm1f.c and SUN COPYRIGHT NOTICE above
     const
-      o_threshold = reinterpret<f32>(0x42B17180), //  8.8721679688e+01f
       ln2_hi      = reinterpret<f32>(0x3F317180), //  6.9313812256e-01f
       ln2_lo      = reinterpret<f32>(0x3717F7D1), //  9.0580006145e-06f
       invln2      = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+00f
@@ -2329,7 +2333,7 @@ export namespace NativeMathf {
     if (hx >= 0x4195B844) {
       if (hx > 0x7F800000) return x;
       if (sign_) return -1;
-      if (x > o_threshold) {
+      if (hx > 0x42b17217) { // x > log(FLT_MAX)
         x *= Ox1p127f;
         return x;
       }

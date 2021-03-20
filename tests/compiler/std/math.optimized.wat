@@ -1515,9 +1515,9 @@
   block $__inlined_func$~lib/math/NativeMathf.acosh (result f32)
    local.get $0
    i32.reinterpret_f32
+   local.tee $3
    i32.const 2147483647
    i32.and
-   local.tee $3
    i32.const 1073741824
    i32.lt_u
    if
@@ -4616,9 +4616,9 @@
     f32.const -1
     return
    end
-   local.get $0
-   f32.const 88.7216796875
-   f32.gt
+   local.get $4
+   i32.const 1118925335
+   i32.gt_u
    if
     local.get $0
     f32.const 1701411834604692317316873e14
