@@ -16349,7 +16349,7 @@
    return
   end
   f32.const 1
-  f32.const 0
+  f32.const 7.52316384526264e-37
   f32.sub
   local.set $6
   local.get $1
@@ -17898,11 +17898,11 @@
   local.get $2
   if (result f32)
    f32.const 2
-   f32.const 0
+   f32.const 7.52316384526264e-37
    f32.sub
   else
-   f32.const 0
-   f32.const 0
+   f32.const 7.52316384526264e-37
+   f32.const 7.52316384526264e-37
    f32.mul
   end
  )

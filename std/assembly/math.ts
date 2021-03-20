@@ -1847,8 +1847,8 @@ export namespace NativeMath {
     if (ux >= 0x7FF00000) {
       return f64(sig | 1) + 1.0 / x; // erf(nan)=nan, erf(+-inf)=+-1
     }
-    if (ux < 0x3FEB0000) {  // |x| < 0.84375
-      if (ux < 0x3E300000) {  // |x| < 2**-28
+    if (ux < 0x3FEB0000) {    // |x| < 0.84375
+      if (ux < 0x3E300000) {  // |x| < 2 ** -28
         // avoid underflow
         return 0.125 * (8 * x + efx8 * x);
       }
@@ -3344,7 +3344,7 @@ export namespace NativeMathf {
 
   export function erf(x: f32): f32 { // see: musl/tree/src/math/erff.c
     const efx8 = reinterpret<f32>(0x3F8375D4); // 1.0270333290e+00
-    const Ox1p_120f: f32 = 0; // TODO: 0x1p-120f
+    const Ox1p_120f = reinterpret<f32>(0x03800000); // 0x1p-120f
 
     var ux  = reinterpret<u32>(x);
     var sig = (<i32>ux) >> 31;
@@ -3372,7 +3372,7 @@ export namespace NativeMathf {
   }
 
   export function erfc(x: f32): f32 { // see: musl/tree/src/math/erff.c
-    const Ox1p_120f: f32 = 0; // 0x1p-120f
+    const Ox1p_120f = reinterpret<f32>(0x03800000); // 0x1p-120f
 
     var ux  = reinterpret<u32>(x);
     var sig = ux >> 31;
