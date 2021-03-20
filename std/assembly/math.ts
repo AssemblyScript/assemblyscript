@@ -2331,7 +2331,7 @@ export namespace NativeMathf {
     if (hx >= 0x4195B844) {
       if (hx > 0x7F800000) return x;
       if (sign_) return -1;
-      if (hx > 0x42b17217) { // x > log(FLT_MAX)
+      if (hx > 0x42B17217) { // x > log(FLT_MAX)
         x *= Ox1p127f;
         return x;
       }
