@@ -10,6 +10,8 @@
  (type $none_=>_f64 (func (result f64)))
  (type $none_=>_none (func))
  (type $f64_=>_i32 (func (param f64) (result i32)))
+ (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $i64_i64_i64_i32_=>_i32 (func (param i64 i64 i64 i32) (result i32)))
  (type $i64_=>_none (func (param i64)))
  (type $f64_=>_none (func (param f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -11427,7 +11429,7 @@
   if
    i32.const 0
    i32.const 13376
-   i32.const 1399
+   i32.const 1499
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -15847,6 +15849,2082 @@
   else
    i32.const 0
   end
+ )
+ (func $~lib/math/NativeMath.erf (param $0 f64) (result f64)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 f64)
+  (local $4 f64)
+  (local $5 f64)
+  (local $6 f64)
+  (local $7 i32)
+  (local $8 f64)
+  (local $9 f64)
+  local.get $0
+  i64.reinterpret_f64
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.set $1
+  local.get $1
+  i32.const 31
+  i32.shr_s
+  local.set $2
+  local.get $1
+  i32.const 2147483647
+  i32.and
+  local.set $1
+  local.get $1
+  i32.const 2146435072
+  i32.ge_u
+  if
+   local.get $2
+   i32.const 1
+   i32.or
+   f64.convert_i32_s
+   f64.const 1
+   local.get $0
+   f64.div
+   f64.add
+   return
+  end
+  local.get $1
+  i32.const 1072365568
+  i32.lt_u
+  if
+   local.get $1
+   i32.const 1043333120
+   i32.lt_u
+   if
+    f64.const 0.125
+    f64.const 8
+    local.get $0
+    f64.mul
+    f64.const 1.0270333367641007
+    local.get $0
+    f64.mul
+    f64.add
+    f64.mul
+    return
+   end
+   local.get $0
+   local.get $0
+   f64.mul
+   local.set $3
+   f64.const 0.12837916709551256
+   local.get $3
+   f64.const -0.3250421072470015
+   local.get $3
+   f64.const -0.02848174957559851
+   local.get $3
+   f64.const -0.005770270296489442
+   local.get $3
+   f64.const -2.3763016656650163e-05
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.set $4
+   f64.const 1
+   local.get $3
+   f64.const 0.39791722395915535
+   local.get $3
+   f64.const 0.0650222499887673
+   local.get $3
+   f64.const 0.005081306281875766
+   local.get $3
+   f64.const 1.3249473800432164e-04
+   local.get $3
+   f64.const -3.960228278775368e-06
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.set $5
+   local.get $4
+   local.get $5
+   f64.div
+   local.set $6
+   local.get $0
+   local.get $0
+   local.get $6
+   f64.mul
+   f64.add
+   return
+  end
+  f64.const 1
+  f64.const 2.2250738585072014e-308
+  f64.sub
+  local.set $6
+  local.get $1
+  i32.const 1075314688
+  i32.lt_u
+  if
+   f64.const 1
+   block $~lib/math/erfc2|inlined.0 (result f64)
+    local.get $1
+    local.set $7
+    local.get $0
+    local.set $3
+    local.get $7
+    i32.const 1072955392
+    i32.lt_u
+    if
+     local.get $3
+     local.set $4
+     local.get $4
+     f64.abs
+     f64.const 1
+     f64.sub
+     local.set $5
+     f64.const -2.3621185607526594e-03
+     local.get $5
+     f64.const 0.41485611868374833
+     local.get $5
+     f64.const -0.3722078760357013
+     local.get $5
+     f64.const 0.31834661990116175
+     local.get $5
+     f64.const -0.11089469428239668
+     local.get $5
+     f64.const 0.035478304325618236
+     local.get $5
+     f64.const -0.002166375594868791
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     local.set $8
+     f64.const 1
+     local.get $5
+     f64.const 0.10642088040084423
+     local.get $5
+     f64.const 0.540397917702171
+     local.get $5
+     f64.const 0.07182865441419627
+     local.get $5
+     f64.const 0.12617121980876164
+     local.get $5
+     f64.const 0.01363708391202905
+     local.get $5
+     f64.const 0.011984499846799107
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     local.set $9
+     f64.const 1
+     f64.const 0.8450629115104675
+     f64.sub
+     local.get $8
+     local.get $9
+     f64.div
+     f64.sub
+     br $~lib/math/erfc2|inlined.0
+    end
+    local.get $3
+    f64.abs
+    local.set $3
+    f64.const 1
+    local.get $3
+    local.get $3
+    f64.mul
+    f64.div
+    local.set $9
+    local.get $7
+    i32.const 1074191213
+    i32.lt_u
+    if
+     f64.const -0.009864944034847148
+     local.get $9
+     f64.const -0.6938585727071818
+     local.get $9
+     f64.const -10.558626225323291
+     local.get $9
+     f64.const -62.375332450326006
+     local.get $9
+     f64.const -162.39666946257347
+     local.get $9
+     f64.const -184.60509290671104
+     local.get $9
+     f64.const -81.2874355063066
+     local.get $9
+     f64.const -9.814329344169145
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     local.set $8
+     f64.const 1
+     local.get $9
+     f64.const 19.651271667439257
+     local.get $9
+     f64.const 137.65775414351904
+     local.get $9
+     f64.const 434.56587747522923
+     local.get $9
+     f64.const 645.3872717332679
+     local.get $9
+     f64.const 429.00814002756783
+     local.get $9
+     f64.const 108.63500554177944
+     local.get $9
+     f64.const 6.570249770319282
+     local.get $9
+     f64.const -0.0604244152148581
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     local.set $5
+    else
+     f64.const -0.0098649429247001
+     local.get $9
+     f64.const -0.799283237680523
+     local.get $9
+     f64.const -17.757954917754752
+     local.get $9
+     f64.const -160.63638485582192
+     local.get $9
+     f64.const -637.5664433683896
+     local.get $9
+     f64.const -1025.0951316110772
+     local.get $9
+     f64.const -483.5191916086514
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     local.set $8
+     f64.const 1
+     local.get $9
+     f64.const 30.33806074348246
+     local.get $9
+     f64.const 325.7925129965739
+     local.get $9
+     f64.const 1536.729586084437
+     local.get $9
+     f64.const 3199.8582195085955
+     local.get $9
+     f64.const 2553.0504064331644
+     local.get $9
+     f64.const 474.52854120695537
+     local.get $9
+     f64.const -22.44095244658582
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     f64.mul
+     f64.add
+     local.set $5
+    end
+    local.get $3
+    i64.reinterpret_f64
+    i64.const -4294967296
+    i64.and
+    f64.reinterpret_i64
+    local.set $4
+    local.get $4
+    f64.neg
+    local.get $4
+    f64.mul
+    f64.const 0.5625
+    f64.sub
+    call $~lib/math/NativeMath.exp
+    local.get $4
+    local.get $3
+    f64.sub
+    local.get $4
+    local.get $3
+    f64.add
+    f64.mul
+    local.get $8
+    local.get $5
+    f64.div
+    f64.add
+    call $~lib/math/NativeMath.exp
+    f64.mul
+    local.get $3
+    f64.div
+   end
+   f64.sub
+   local.set $6
+  end
+  local.get $6
+  local.get $0
+  f64.copysign
+ )
+ (func $std/math/test_erf (param $0 i64) (param $1 i64) (param $2 i64) (param $3 i32) (result i32)
+  (local $4 f64)
+  (local $5 f64)
+  (local $6 f64)
+  local.get $0
+  f64.reinterpret_i64
+  local.set $4
+  local.get $1
+  f64.reinterpret_i64
+  local.set $5
+  local.get $2
+  f64.reinterpret_i64
+  local.set $6
+  local.get $4
+  call $~lib/math/NativeMath.erf
+  local.get $5
+  local.get $6
+  local.get $3
+  call $std/math/check<f64>
+ )
+ (func $~lib/math/NativeMathf.erf (param $0 f32) (result f32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 f32)
+  (local $4 f32)
+  (local $5 f32)
+  (local $6 f32)
+  (local $7 i32)
+  (local $8 f32)
+  (local $9 f32)
+  local.get $0
+  i32.reinterpret_f32
+  local.set $1
+  local.get $1
+  i32.const 31
+  i32.shr_s
+  local.set $2
+  local.get $1
+  i32.const 2147483647
+  i32.and
+  local.set $1
+  local.get $1
+  i32.const 2139095040
+  i32.ge_u
+  if
+   local.get $2
+   i32.const 1
+   i32.or
+   f32.convert_i32_s
+   f32.const 1
+   local.get $0
+   f32.div
+   f32.add
+   return
+  end
+  local.get $1
+  i32.const 1062731776
+  i32.lt_u
+  if
+   local.get $1
+   i32.const 830472192
+   i32.lt_u
+   if
+    f32.const 0.125
+    f32.const 8
+    local.get $0
+    f32.mul
+    f32.const 1.0270333290100098
+    local.get $0
+    f32.mul
+    f32.add
+    f32.mul
+    return
+   end
+   local.get $0
+   local.get $0
+   f32.mul
+   local.set $3
+   f32.const 0.12837916612625122
+   local.get $3
+   f32.const -0.32504209876060486
+   local.get $3
+   f32.const -0.028481749817728996
+   local.get $3
+   f32.const -0.005770270247012377
+   local.get $3
+   f32.const -2.3763017452438362e-05
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   local.set $4
+   f32.const 1
+   local.get $3
+   f32.const 0.3979172110557556
+   local.get $3
+   f32.const 0.06502225250005722
+   local.get $3
+   f32.const 5.0813062116503716e-03
+   local.get $3
+   f32.const 1.324947370449081e-04
+   local.get $3
+   f32.const -3.9602282413397916e-06
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   local.set $5
+   local.get $4
+   local.get $5
+   f32.div
+   local.set $6
+   local.get $0
+   local.get $0
+   local.get $6
+   f32.mul
+   f32.add
+   return
+  end
+  f32.const 1
+  f32.const 0
+  f32.sub
+  local.set $6
+  local.get $1
+  i32.const 1086324736
+  i32.lt_u
+  if
+   f32.const 1
+   block $~lib/math/erfc2f|inlined.0 (result f32)
+    local.get $1
+    local.set $7
+    local.get $0
+    local.set $3
+    local.get $7
+    i32.const 1067450368
+    i32.lt_u
+    if
+     local.get $3
+     local.set $4
+     local.get $4
+     f32.abs
+     f32.const 1
+     f32.sub
+     local.set $5
+     f32.const -2.3621185682713985e-03
+     local.get $5
+     f32.const 0.41485610604286194
+     local.get $5
+     f32.const -0.3722078800201416
+     local.get $5
+     f32.const 0.31834661960601807
+     local.get $5
+     f32.const -0.11089469492435455
+     local.get $5
+     f32.const 0.03547830507159233
+     local.get $5
+     f32.const -0.002166375517845154
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     local.set $8
+     f32.const 1
+     local.get $5
+     f32.const 0.10642088204622269
+     local.get $5
+     f32.const 0.5403979420661926
+     local.get $5
+     f32.const 0.07182865589857101
+     local.get $5
+     f32.const 0.12617121636867523
+     local.get $5
+     f32.const 0.01363708358258009
+     local.get $5
+     f32.const 0.011984500102698803
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     local.set $9
+     f32.const 1
+     f32.const 0.8450629115104675
+     f32.sub
+     local.get $8
+     local.get $9
+     f32.div
+     f32.sub
+     br $~lib/math/erfc2f|inlined.0
+    end
+    local.get $3
+    f32.abs
+    local.set $3
+    f32.const 1
+    local.get $3
+    local.get $3
+    f32.mul
+    f32.div
+    local.set $9
+    local.get $7
+    i32.const 1077336941
+    i32.lt_u
+    if
+     f32.const -0.009864944033324718
+     local.get $9
+     f32.const -0.6938585638999939
+     local.get $9
+     f32.const -10.558626174926758
+     local.get $9
+     f32.const -62.37533187866211
+     local.get $9
+     f32.const -162.39666748046875
+     local.get $9
+     f32.const -184.60508728027344
+     local.get $9
+     f32.const -81.28743743896484
+     local.get $9
+     f32.const -9.814329147338867
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     local.set $8
+     f32.const 1
+     local.get $9
+     f32.const 19.65127182006836
+     local.get $9
+     f32.const 137.6577606201172
+     local.get $9
+     f32.const 434.5658874511719
+     local.get $9
+     f32.const 645.3872680664062
+     local.get $9
+     f32.const 429.0081481933594
+     local.get $9
+     f32.const 108.63500213623047
+     local.get $9
+     f32.const 6.570249557495117
+     local.get $9
+     f32.const -0.06042441353201866
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     local.set $5
+    else
+     f32.const -0.009864943102002144
+     local.get $9
+     f32.const -0.7992832660675049
+     local.get $9
+     f32.const -17.75795555114746
+     local.get $9
+     f32.const -160.63638305664062
+     local.get $9
+     f32.const -637.5664672851562
+     local.get $9
+     f32.const -1025.0950927734375
+     local.get $9
+     f32.const -483.5191955566406
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     local.set $8
+     f32.const 1
+     local.get $9
+     f32.const 30.33806037902832
+     local.get $9
+     f32.const 325.7925109863281
+     local.get $9
+     f32.const 1536.7296142578125
+     local.get $9
+     f32.const 3199.858154296875
+     local.get $9
+     f32.const 2553.05029296875
+     local.get $9
+     f32.const 474.5285339355469
+     local.get $9
+     f32.const -22.44095230102539
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     f32.mul
+     f32.add
+     local.set $5
+    end
+    local.get $3
+    i32.reinterpret_f32
+    i32.const -8192
+    i32.and
+    f32.reinterpret_i32
+    local.set $4
+    local.get $4
+    f32.neg
+    local.get $4
+    f32.mul
+    f32.const 0.5625
+    f32.sub
+    call $~lib/math/NativeMathf.exp
+    local.get $4
+    local.get $3
+    f32.sub
+    local.get $4
+    local.get $3
+    f32.add
+    f32.mul
+    local.get $8
+    local.get $5
+    f32.div
+    f32.add
+    call $~lib/math/NativeMathf.exp
+    f32.mul
+    local.get $3
+    f32.div
+   end
+   f32.sub
+   local.set $6
+  end
+  local.get $6
+  local.get $0
+  f32.copysign
+ )
+ (func $std/math/test_erff (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 f32)
+  (local $5 f32)
+  (local $6 f32)
+  local.get $0
+  f32.reinterpret_i32
+  local.set $4
+  local.get $1
+  f32.reinterpret_i32
+  local.set $5
+  local.get $2
+  f32.reinterpret_i32
+  local.set $6
+  local.get $4
+  call $~lib/math/NativeMathf.erf
+  local.get $5
+  local.get $6
+  local.get $3
+  call $std/math/check<f32>
+ )
+ (func $~lib/math/NativeMath.erfc (param $0 f64) (result f64)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 f64)
+  (local $4 f64)
+  (local $5 f64)
+  (local $6 f64)
+  (local $7 i32)
+  (local $8 f64)
+  local.get $0
+  i64.reinterpret_f64
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.set $1
+  local.get $1
+  i32.const 31
+  i32.shr_u
+  local.set $2
+  local.get $1
+  i32.const 2147483647
+  i32.and
+  local.set $1
+  local.get $1
+  i32.const 2146435072
+  i32.ge_u
+  if
+   local.get $2
+   i32.const 1
+   i32.shl
+   f64.convert_i32_u
+   f64.const 1
+   local.get $0
+   f64.div
+   f64.add
+   return
+  end
+  local.get $1
+  i32.const 1072365568
+  i32.lt_u
+  if
+   local.get $1
+   i32.const 1013972992
+   i32.lt_u
+   if
+    f64.const 1
+    local.get $0
+    f64.sub
+    return
+   end
+   local.get $0
+   local.get $0
+   f64.mul
+   local.set $3
+   f64.const 0.12837916709551256
+   local.get $3
+   f64.const -0.3250421072470015
+   local.get $3
+   f64.const -0.02848174957559851
+   local.get $3
+   f64.const -0.005770270296489442
+   local.get $3
+   f64.const -2.3763016656650163e-05
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.set $4
+   f64.const 1
+   local.get $3
+   f64.const 0.39791722395915535
+   local.get $3
+   f64.const 0.0650222499887673
+   local.get $3
+   f64.const 0.005081306281875766
+   local.get $3
+   f64.const 1.3249473800432164e-04
+   local.get $3
+   f64.const -3.960228278775368e-06
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.set $5
+   local.get $4
+   local.get $5
+   f64.div
+   local.set $6
+   local.get $2
+   if (result i32)
+    i32.const 1
+   else
+    local.get $1
+    i32.const 1070596096
+    i32.lt_u
+   end
+   if
+    f64.const 1
+    local.get $0
+    local.get $0
+    local.get $6
+    f64.mul
+    f64.add
+    f64.sub
+    return
+   end
+   f64.const 0.5
+   local.get $0
+   f64.const 0.5
+   f64.sub
+   local.get $0
+   local.get $6
+   f64.mul
+   f64.add
+   f64.sub
+   return
+  end
+  local.get $1
+  i32.const 1077673984
+  i32.lt_u
+  if
+   local.get $2
+   if (result f64)
+    f64.const 2
+    block $~lib/math/erfc2|inlined.1 (result f64)
+     local.get $1
+     local.set $7
+     local.get $0
+     local.set $3
+     local.get $7
+     i32.const 1072955392
+     i32.lt_u
+     if
+      local.get $3
+      local.set $4
+      local.get $4
+      f64.abs
+      f64.const 1
+      f64.sub
+      local.set $6
+      f64.const -2.3621185607526594e-03
+      local.get $6
+      f64.const 0.41485611868374833
+      local.get $6
+      f64.const -0.3722078760357013
+      local.get $6
+      f64.const 0.31834661990116175
+      local.get $6
+      f64.const -0.11089469428239668
+      local.get $6
+      f64.const 0.035478304325618236
+      local.get $6
+      f64.const -0.002166375594868791
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $5
+      f64.const 1
+      local.get $6
+      f64.const 0.10642088040084423
+      local.get $6
+      f64.const 0.540397917702171
+      local.get $6
+      f64.const 0.07182865441419627
+      local.get $6
+      f64.const 0.12617121980876164
+      local.get $6
+      f64.const 0.01363708391202905
+      local.get $6
+      f64.const 0.011984499846799107
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $8
+      f64.const 1
+      f64.const 0.8450629115104675
+      f64.sub
+      local.get $5
+      local.get $8
+      f64.div
+      f64.sub
+      br $~lib/math/erfc2|inlined.1
+     end
+     local.get $3
+     f64.abs
+     local.set $3
+     f64.const 1
+     local.get $3
+     local.get $3
+     f64.mul
+     f64.div
+     local.set $8
+     local.get $7
+     i32.const 1074191213
+     i32.lt_u
+     if
+      f64.const -0.009864944034847148
+      local.get $8
+      f64.const -0.6938585727071818
+      local.get $8
+      f64.const -10.558626225323291
+      local.get $8
+      f64.const -62.375332450326006
+      local.get $8
+      f64.const -162.39666946257347
+      local.get $8
+      f64.const -184.60509290671104
+      local.get $8
+      f64.const -81.2874355063066
+      local.get $8
+      f64.const -9.814329344169145
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $5
+      f64.const 1
+      local.get $8
+      f64.const 19.651271667439257
+      local.get $8
+      f64.const 137.65775414351904
+      local.get $8
+      f64.const 434.56587747522923
+      local.get $8
+      f64.const 645.3872717332679
+      local.get $8
+      f64.const 429.00814002756783
+      local.get $8
+      f64.const 108.63500554177944
+      local.get $8
+      f64.const 6.570249770319282
+      local.get $8
+      f64.const -0.0604244152148581
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $6
+     else
+      f64.const -0.0098649429247001
+      local.get $8
+      f64.const -0.799283237680523
+      local.get $8
+      f64.const -17.757954917754752
+      local.get $8
+      f64.const -160.63638485582192
+      local.get $8
+      f64.const -637.5664433683896
+      local.get $8
+      f64.const -1025.0951316110772
+      local.get $8
+      f64.const -483.5191916086514
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $5
+      f64.const 1
+      local.get $8
+      f64.const 30.33806074348246
+      local.get $8
+      f64.const 325.7925129965739
+      local.get $8
+      f64.const 1536.729586084437
+      local.get $8
+      f64.const 3199.8582195085955
+      local.get $8
+      f64.const 2553.0504064331644
+      local.get $8
+      f64.const 474.52854120695537
+      local.get $8
+      f64.const -22.44095244658582
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $6
+     end
+     local.get $3
+     i64.reinterpret_f64
+     i64.const -4294967296
+     i64.and
+     f64.reinterpret_i64
+     local.set $4
+     local.get $4
+     f64.neg
+     local.get $4
+     f64.mul
+     f64.const 0.5625
+     f64.sub
+     call $~lib/math/NativeMath.exp
+     local.get $4
+     local.get $3
+     f64.sub
+     local.get $4
+     local.get $3
+     f64.add
+     f64.mul
+     local.get $5
+     local.get $6
+     f64.div
+     f64.add
+     call $~lib/math/NativeMath.exp
+     f64.mul
+     local.get $3
+     f64.div
+    end
+    f64.sub
+   else
+    block $~lib/math/erfc2|inlined.2 (result f64)
+     local.get $1
+     local.set $7
+     local.get $0
+     local.set $3
+     local.get $7
+     i32.const 1072955392
+     i32.lt_u
+     if
+      local.get $3
+      local.set $8
+      local.get $8
+      f64.abs
+      f64.const 1
+      f64.sub
+      local.set $4
+      f64.const -2.3621185607526594e-03
+      local.get $4
+      f64.const 0.41485611868374833
+      local.get $4
+      f64.const -0.3722078760357013
+      local.get $4
+      f64.const 0.31834661990116175
+      local.get $4
+      f64.const -0.11089469428239668
+      local.get $4
+      f64.const 0.035478304325618236
+      local.get $4
+      f64.const -0.002166375594868791
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $6
+      f64.const 1
+      local.get $4
+      f64.const 0.10642088040084423
+      local.get $4
+      f64.const 0.540397917702171
+      local.get $4
+      f64.const 0.07182865441419627
+      local.get $4
+      f64.const 0.12617121980876164
+      local.get $4
+      f64.const 0.01363708391202905
+      local.get $4
+      f64.const 0.011984499846799107
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $5
+      f64.const 1
+      f64.const 0.8450629115104675
+      f64.sub
+      local.get $6
+      local.get $5
+      f64.div
+      f64.sub
+      br $~lib/math/erfc2|inlined.2
+     end
+     local.get $3
+     f64.abs
+     local.set $3
+     f64.const 1
+     local.get $3
+     local.get $3
+     f64.mul
+     f64.div
+     local.set $5
+     local.get $7
+     i32.const 1074191213
+     i32.lt_u
+     if
+      f64.const -0.009864944034847148
+      local.get $5
+      f64.const -0.6938585727071818
+      local.get $5
+      f64.const -10.558626225323291
+      local.get $5
+      f64.const -62.375332450326006
+      local.get $5
+      f64.const -162.39666946257347
+      local.get $5
+      f64.const -184.60509290671104
+      local.get $5
+      f64.const -81.2874355063066
+      local.get $5
+      f64.const -9.814329344169145
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $6
+      f64.const 1
+      local.get $5
+      f64.const 19.651271667439257
+      local.get $5
+      f64.const 137.65775414351904
+      local.get $5
+      f64.const 434.56587747522923
+      local.get $5
+      f64.const 645.3872717332679
+      local.get $5
+      f64.const 429.00814002756783
+      local.get $5
+      f64.const 108.63500554177944
+      local.get $5
+      f64.const 6.570249770319282
+      local.get $5
+      f64.const -0.0604244152148581
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $4
+     else
+      f64.const -0.0098649429247001
+      local.get $5
+      f64.const -0.799283237680523
+      local.get $5
+      f64.const -17.757954917754752
+      local.get $5
+      f64.const -160.63638485582192
+      local.get $5
+      f64.const -637.5664433683896
+      local.get $5
+      f64.const -1025.0951316110772
+      local.get $5
+      f64.const -483.5191916086514
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $6
+      f64.const 1
+      local.get $5
+      f64.const 30.33806074348246
+      local.get $5
+      f64.const 325.7925129965739
+      local.get $5
+      f64.const 1536.729586084437
+      local.get $5
+      f64.const 3199.8582195085955
+      local.get $5
+      f64.const 2553.0504064331644
+      local.get $5
+      f64.const 474.52854120695537
+      local.get $5
+      f64.const -22.44095244658582
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      f64.mul
+      f64.add
+      local.set $4
+     end
+     local.get $3
+     i64.reinterpret_f64
+     i64.const -4294967296
+     i64.and
+     f64.reinterpret_i64
+     local.set $8
+     local.get $8
+     f64.neg
+     local.get $8
+     f64.mul
+     f64.const 0.5625
+     f64.sub
+     call $~lib/math/NativeMath.exp
+     local.get $8
+     local.get $3
+     f64.sub
+     local.get $8
+     local.get $3
+     f64.add
+     f64.mul
+     local.get $6
+     local.get $4
+     f64.div
+     f64.add
+     call $~lib/math/NativeMath.exp
+     f64.mul
+     local.get $3
+     f64.div
+    end
+   end
+   return
+  end
+  local.get $2
+  if (result f64)
+   f64.const 2
+   f64.const 2.2250738585072014e-308
+   f64.sub
+  else
+   f64.const 2.2250738585072014e-308
+   f64.const 2.2250738585072014e-308
+   f64.mul
+  end
+ )
+ (func $std/math/test_erfc (param $0 i64) (param $1 i64) (param $2 i64) (param $3 i32) (result i32)
+  (local $4 f64)
+  (local $5 f64)
+  (local $6 f64)
+  local.get $0
+  f64.reinterpret_i64
+  local.set $4
+  local.get $1
+  f64.reinterpret_i64
+  local.set $5
+  local.get $2
+  f64.reinterpret_i64
+  local.set $6
+  local.get $4
+  call $~lib/math/NativeMath.erfc
+  local.get $5
+  local.get $6
+  local.get $3
+  call $std/math/check<f64>
+ )
+ (func $~lib/math/NativeMathf.erfc (param $0 f32) (result f32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 f32)
+  (local $4 f32)
+  (local $5 f32)
+  (local $6 f32)
+  (local $7 i32)
+  (local $8 f32)
+  local.get $0
+  i32.reinterpret_f32
+  local.set $1
+  local.get $1
+  i32.const 31
+  i32.shr_u
+  local.set $2
+  local.get $1
+  i32.const 2147483647
+  i32.and
+  local.set $1
+  local.get $1
+  i32.const 2139095040
+  i32.ge_u
+  if
+   local.get $2
+   i32.const 1
+   i32.shl
+   f32.convert_i32_u
+   f32.const 1
+   local.get $0
+   f32.div
+   f32.add
+   return
+  end
+  local.get $1
+  i32.const 1062731776
+  i32.lt_u
+  if
+   local.get $1
+   i32.const 595591168
+   i32.lt_u
+   if
+    f32.const 1
+    local.get $0
+    f32.sub
+    return
+   end
+   local.get $0
+   local.get $0
+   f32.mul
+   local.set $3
+   f32.const 0.12837916612625122
+   local.get $3
+   f32.const -0.32504209876060486
+   local.get $3
+   f32.const -0.028481749817728996
+   local.get $3
+   f32.const -0.005770270247012377
+   local.get $3
+   f32.const -2.3763017452438362e-05
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   local.set $4
+   f32.const 1
+   local.get $3
+   f32.const 0.3979172110557556
+   local.get $3
+   f32.const 0.06502225250005722
+   local.get $3
+   f32.const 5.0813062116503716e-03
+   local.get $3
+   f32.const 1.324947370449081e-04
+   local.get $3
+   f32.const -3.9602282413397916e-06
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   f32.mul
+   f32.add
+   local.set $5
+   local.get $4
+   local.get $5
+   f32.div
+   local.set $6
+   local.get $2
+   if (result i32)
+    i32.const 1
+   else
+    local.get $1
+    i32.const 1048576000
+    i32.lt_u
+   end
+   if
+    f32.const 1
+    local.get $0
+    local.get $0
+    local.get $6
+    f32.mul
+    f32.add
+    f32.sub
+    return
+   end
+   f32.const 0.5
+   local.get $0
+   f32.const 0.5
+   f32.sub
+   local.get $0
+   local.get $6
+   f32.mul
+   f32.add
+   f32.sub
+   return
+  end
+  local.get $1
+  i32.const 1105199104
+  i32.lt_u
+  if
+   local.get $2
+   if (result f32)
+    f32.const 2
+    block $~lib/math/erfc2f|inlined.1 (result f32)
+     local.get $1
+     local.set $7
+     local.get $0
+     local.set $3
+     local.get $7
+     i32.const 1067450368
+     i32.lt_u
+     if
+      local.get $3
+      local.set $4
+      local.get $4
+      f32.abs
+      f32.const 1
+      f32.sub
+      local.set $6
+      f32.const -2.3621185682713985e-03
+      local.get $6
+      f32.const 0.41485610604286194
+      local.get $6
+      f32.const -0.3722078800201416
+      local.get $6
+      f32.const 0.31834661960601807
+      local.get $6
+      f32.const -0.11089469492435455
+      local.get $6
+      f32.const 0.03547830507159233
+      local.get $6
+      f32.const -0.002166375517845154
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $5
+      f32.const 1
+      local.get $6
+      f32.const 0.10642088204622269
+      local.get $6
+      f32.const 0.5403979420661926
+      local.get $6
+      f32.const 0.07182865589857101
+      local.get $6
+      f32.const 0.12617121636867523
+      local.get $6
+      f32.const 0.01363708358258009
+      local.get $6
+      f32.const 0.011984500102698803
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $8
+      f32.const 1
+      f32.const 0.8450629115104675
+      f32.sub
+      local.get $5
+      local.get $8
+      f32.div
+      f32.sub
+      br $~lib/math/erfc2f|inlined.1
+     end
+     local.get $3
+     f32.abs
+     local.set $3
+     f32.const 1
+     local.get $3
+     local.get $3
+     f32.mul
+     f32.div
+     local.set $8
+     local.get $7
+     i32.const 1077336941
+     i32.lt_u
+     if
+      f32.const -0.009864944033324718
+      local.get $8
+      f32.const -0.6938585638999939
+      local.get $8
+      f32.const -10.558626174926758
+      local.get $8
+      f32.const -62.37533187866211
+      local.get $8
+      f32.const -162.39666748046875
+      local.get $8
+      f32.const -184.60508728027344
+      local.get $8
+      f32.const -81.28743743896484
+      local.get $8
+      f32.const -9.814329147338867
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $5
+      f32.const 1
+      local.get $8
+      f32.const 19.65127182006836
+      local.get $8
+      f32.const 137.6577606201172
+      local.get $8
+      f32.const 434.5658874511719
+      local.get $8
+      f32.const 645.3872680664062
+      local.get $8
+      f32.const 429.0081481933594
+      local.get $8
+      f32.const 108.63500213623047
+      local.get $8
+      f32.const 6.570249557495117
+      local.get $8
+      f32.const -0.06042441353201866
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $6
+     else
+      f32.const -0.009864943102002144
+      local.get $8
+      f32.const -0.7992832660675049
+      local.get $8
+      f32.const -17.75795555114746
+      local.get $8
+      f32.const -160.63638305664062
+      local.get $8
+      f32.const -637.5664672851562
+      local.get $8
+      f32.const -1025.0950927734375
+      local.get $8
+      f32.const -483.5191955566406
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $5
+      f32.const 1
+      local.get $8
+      f32.const 30.33806037902832
+      local.get $8
+      f32.const 325.7925109863281
+      local.get $8
+      f32.const 1536.7296142578125
+      local.get $8
+      f32.const 3199.858154296875
+      local.get $8
+      f32.const 2553.05029296875
+      local.get $8
+      f32.const 474.5285339355469
+      local.get $8
+      f32.const -22.44095230102539
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $6
+     end
+     local.get $3
+     i32.reinterpret_f32
+     i32.const -8192
+     i32.and
+     f32.reinterpret_i32
+     local.set $4
+     local.get $4
+     f32.neg
+     local.get $4
+     f32.mul
+     f32.const 0.5625
+     f32.sub
+     call $~lib/math/NativeMathf.exp
+     local.get $4
+     local.get $3
+     f32.sub
+     local.get $4
+     local.get $3
+     f32.add
+     f32.mul
+     local.get $5
+     local.get $6
+     f32.div
+     f32.add
+     call $~lib/math/NativeMathf.exp
+     f32.mul
+     local.get $3
+     f32.div
+    end
+    f32.sub
+   else
+    block $~lib/math/erfc2f|inlined.2 (result f32)
+     local.get $1
+     local.set $7
+     local.get $0
+     local.set $3
+     local.get $7
+     i32.const 1067450368
+     i32.lt_u
+     if
+      local.get $3
+      local.set $8
+      local.get $8
+      f32.abs
+      f32.const 1
+      f32.sub
+      local.set $4
+      f32.const -2.3621185682713985e-03
+      local.get $4
+      f32.const 0.41485610604286194
+      local.get $4
+      f32.const -0.3722078800201416
+      local.get $4
+      f32.const 0.31834661960601807
+      local.get $4
+      f32.const -0.11089469492435455
+      local.get $4
+      f32.const 0.03547830507159233
+      local.get $4
+      f32.const -0.002166375517845154
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $6
+      f32.const 1
+      local.get $4
+      f32.const 0.10642088204622269
+      local.get $4
+      f32.const 0.5403979420661926
+      local.get $4
+      f32.const 0.07182865589857101
+      local.get $4
+      f32.const 0.12617121636867523
+      local.get $4
+      f32.const 0.01363708358258009
+      local.get $4
+      f32.const 0.011984500102698803
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $5
+      f32.const 1
+      f32.const 0.8450629115104675
+      f32.sub
+      local.get $6
+      local.get $5
+      f32.div
+      f32.sub
+      br $~lib/math/erfc2f|inlined.2
+     end
+     local.get $3
+     f32.abs
+     local.set $3
+     f32.const 1
+     local.get $3
+     local.get $3
+     f32.mul
+     f32.div
+     local.set $5
+     local.get $7
+     i32.const 1077336941
+     i32.lt_u
+     if
+      f32.const -0.009864944033324718
+      local.get $5
+      f32.const -0.6938585638999939
+      local.get $5
+      f32.const -10.558626174926758
+      local.get $5
+      f32.const -62.37533187866211
+      local.get $5
+      f32.const -162.39666748046875
+      local.get $5
+      f32.const -184.60508728027344
+      local.get $5
+      f32.const -81.28743743896484
+      local.get $5
+      f32.const -9.814329147338867
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $6
+      f32.const 1
+      local.get $5
+      f32.const 19.65127182006836
+      local.get $5
+      f32.const 137.6577606201172
+      local.get $5
+      f32.const 434.5658874511719
+      local.get $5
+      f32.const 645.3872680664062
+      local.get $5
+      f32.const 429.0081481933594
+      local.get $5
+      f32.const 108.63500213623047
+      local.get $5
+      f32.const 6.570249557495117
+      local.get $5
+      f32.const -0.06042441353201866
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $4
+     else
+      f32.const -0.009864943102002144
+      local.get $5
+      f32.const -0.7992832660675049
+      local.get $5
+      f32.const -17.75795555114746
+      local.get $5
+      f32.const -160.63638305664062
+      local.get $5
+      f32.const -637.5664672851562
+      local.get $5
+      f32.const -1025.0950927734375
+      local.get $5
+      f32.const -483.5191955566406
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $6
+      f32.const 1
+      local.get $5
+      f32.const 30.33806037902832
+      local.get $5
+      f32.const 325.7925109863281
+      local.get $5
+      f32.const 1536.7296142578125
+      local.get $5
+      f32.const 3199.858154296875
+      local.get $5
+      f32.const 2553.05029296875
+      local.get $5
+      f32.const 474.5285339355469
+      local.get $5
+      f32.const -22.44095230102539
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      f32.mul
+      f32.add
+      local.set $4
+     end
+     local.get $3
+     i32.reinterpret_f32
+     i32.const -8192
+     i32.and
+     f32.reinterpret_i32
+     local.set $8
+     local.get $8
+     f32.neg
+     local.get $8
+     f32.mul
+     f32.const 0.5625
+     f32.sub
+     call $~lib/math/NativeMathf.exp
+     local.get $8
+     local.get $3
+     f32.sub
+     local.get $8
+     local.get $3
+     f32.add
+     f32.mul
+     local.get $6
+     local.get $4
+     f32.div
+     f32.add
+     call $~lib/math/NativeMathf.exp
+     f32.mul
+     local.get $3
+     f32.div
+    end
+   end
+   return
+  end
+  local.get $2
+  if (result f32)
+   f32.const 2
+   f32.const 0
+   f32.sub
+  else
+   f32.const 0
+   f32.const 0
+   f32.mul
+  end
+ )
+ (func $std/math/test_erfcf (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+  (local $4 f32)
+  (local $5 f32)
+  (local $6 f32)
+  local.get $0
+  f32.reinterpret_i32
+  local.set $4
+  local.get $1
+  f32.reinterpret_i32
+  local.set $5
+  local.get $2
+  f32.reinterpret_i32
+  local.set $6
+  local.get $4
+  call $~lib/math/NativeMathf.erfc
+  local.get $5
+  local.get $6
+  local.get $3
+  call $std/math/check<f32>
  )
  (func $~lib/math/dtoi32 (param $0 f64) (result i32)
   (local $1 i32)
@@ -58040,6 +60118,374 @@
   global.get $std/math/INEXACT
   call $std/math/test_sincos
   drop
+  i64.const -4602641186874283791
+  i64.const -4616189618054758400
+  i64.const -4822430703297757184
+  global.get $std/math/INEXACT
+  call $std/math/test_erf
+  drop
+  i64.const 4616578323568966759
+  i64.const 4607182418792819341
+  i64.const 4595959478666395648
+  global.get $std/math/INEXACT
+  call $std/math/test_erf
+  drop
+  i64.const -4602464091242371353
+  i64.const -4616189618054758400
+  i64.const -4856313964973260800
+  global.get $std/math/INEXACT
+  call $std/math/test_erf
+  drop
+  i64.const -4604332007749985084
+  i64.const -4616189618054758400
+  i64.const -4675333723976105984
+  global.get $std/math/INEXACT
+  call $std/math/test_erf
+  drop
+  i64.const 4621406507342668262
+  i64.const 4607182418800017408
+  i64.const 4264908847119859712
+  global.get $std/math/INEXACT
+  call $std/math/test_erf
+  drop
+  i64.const 4604137858433287319
+  i64.const 4604037324040016550
+  i64.const 4600115794217533440
+  global.get $std/math/INEXACT
+  call $std/math/test_erf
+  drop
+  i64.const -4622375691843501615
+  i64.const -4621869099206057201
+  i64.const -4625754138708279296
+  global.get $std/math/INEXACT
+  call $std/math/test_erf
+  drop
+  i64.const 4603235101512779211
+  i64.const 4603336934479865465
+  i64.const 4587405971839516672
+  global.get $std/math/INEXACT
+  call $std/math/test_erf
+  drop
+  i64.const 4605148163534189634
+  i64.const 4604718076478330597
+  i64.const 4582222713501777920
+  global.get $std/math/INEXACT
+  call $std/math/test_erf
+  drop
+  i64.const -4619083057392940530
+  i64.const -4619225918560826409
+  i64.const -4626487030853926912
+  global.get $std/math/INEXACT
+  call $std/math/test_erf
+  drop
+  i64.const 0
+  i64.const 0
+  i64.const 0
+  i32.const 0
+  call $std/math/test_erf
+  drop
+  i64.const 1152921504606846976
+  i64.const 1152921504606846976
+  i64.const 0
+  i32.const 0
+  call $std/math/test_erf
+  drop
+  i64.const 9218868437227405312
+  i64.const 4607182418800017408
+  i64.const 0
+  i32.const 0
+  call $std/math/test_erf
+  drop
+  i64.const -4503599627370496
+  i64.const -4616189618054758400
+  i64.const 0
+  i32.const 0
+  call $std/math/test_erf
+  drop
+  i64.const 9221120237041090560
+  i64.const 9221120237041090560
+  i64.const 0
+  i32.const 0
+  call $std/math/test_erf
+  drop
+  i32.const -1056894512
+  i32.const -1082130432
+  i32.const -1709554081
+  global.get $std/math/INEXACT
+  call $std/math/test_erff
+  drop
+  i32.const 1082854452
+  i32.const 1065353216
+  i32.const 1004251905
+  global.get $std/math/INEXACT
+  call $std/math/test_erff
+  drop
+  i32.const -1056564646
+  i32.const -1082130432
+  i32.const -1772666530
+  global.get $std/math/INEXACT
+  call $std/math/test_erff
+  drop
+  i32.const -1060043912
+  i32.const -1082130432
+  i32.const -1435564515
+  global.get $std/math/INEXACT
+  call $std/math/test_erff
+  drop
+  i32.const 1091847646
+  i32.const 1065353216
+  i32.const 184549376
+  global.get $std/math/INEXACT
+  call $std/math/test_erff
+  drop
+  i32.const 1059682280
+  i32.const 1059495020
+  i32.const -1101644848
+  global.get $std/math/INEXACT
+  call $std/math/test_erff
+  drop
+  i32.const -1093652892
+  i32.const -1092709290
+  i32.const 1050393313
+  global.get $std/math/INEXACT
+  call $std/math/test_erff
+  drop
+  i32.const 1058000765
+  i32.const 1058190444
+  i32.const 1053212850
+  global.get $std/math/INEXACT
+  call $std/math/test_erff
+  drop
+  i32.const 1061564120
+  i32.const 1060763021
+  i32.const 1055470256
+  global.get $std/math/INEXACT
+  call $std/math/test_erff
+  drop
+  i32.const -1087519883
+  i32.const -1087785983
+  i32.const 1053987903
+  global.get $std/math/INEXACT
+  call $std/math/test_erff
+  drop
+  i32.const 0
+  i32.const 0
+  i32.const 0
+  i32.const 0
+  call $std/math/test_erff
+  drop
+  i32.const 268435456
+  i32.const 268435456
+  i32.const 0
+  i32.const 0
+  call $std/math/test_erff
+  drop
+  i32.const 2139095040
+  i32.const 1065353216
+  i32.const 0
+  i32.const 0
+  call $std/math/test_erff
+  drop
+  i32.const -8388608
+  i32.const -1082130432
+  i32.const 0
+  i32.const 0
+  call $std/math/test_erff
+  drop
+  i32.const 2143289344
+  i32.const 2143289344
+  i32.const 0
+  i32.const 0
+  call $std/math/test_erff
+  drop
+  i64.const -4602641186874283791
+  i64.const 4611686018427387904
+  i64.const 4396437733929648128
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i64.const 4616578323568966759
+  i64.const 4470796096516416978
+  i64.const -4625010188632457216
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i64.const -4602464091242371353
+  i64.const 4611686018427387904
+  i64.const 4362554471180402688
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i64.const -4604332007749985084
+  i64.const 4611686018427387904
+  i64.const 4543534713251299328
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i64.const 4621406507342668262
+  i64.const 4030905104282833751
+  i64.const -4621755121502519296
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i64.const 4604137858433287319
+  i64.const 4599961809437907637
+  i64.const 4598797670365003776
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i64.const -4622375691843501615
+  i64.const 4609140248232720580
+  i64.const 4599231454545707008
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i64.const 4603235101512779211
+  i64.const 4601362588558209806
+  i64.const -4631462465387888640
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i64.const 4605148163534189634
+  i64.const 4598600304561279542
+  i64.const -4636645723725627392
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i64.const -4619083057392940530
+  i64.const 4610167868174353899
+  i64.const -4622622464378142720
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i64.const 0
+  i64.const 4607182418800017408
+  i64.const 0
+  i32.const 0
+  call $std/math/test_erfc
+  drop
+  i64.const -9223372036854775808
+  i64.const 4607182418800017408
+  i64.const 0
+  i32.const 0
+  call $std/math/test_erfc
+  drop
+  i64.const 9218868437227405312
+  i64.const 0
+  i64.const 0
+  i32.const 0
+  call $std/math/test_erfc
+  drop
+  i64.const -4503599627370496
+  i64.const 4611686018427387904
+  i64.const 0
+  i32.const 0
+  call $std/math/test_erfc
+  drop
+  i64.const 9221120237041090560
+  i64.const 9221120237041090560
+  i64.const 0
+  i32.const 0
+  call $std/math/test_erfc
+  drop
+  i64.const 4608830954484908218
+  i64.const 4587852795391849103
+  i64.const 4600709147707572224
+  global.get $std/math/INEXACT
+  call $std/math/test_erfc
+  drop
+  i32.const -1056894512
+  i32.const 1073741824
+  i32.const 429540959
+  global.get $std/math/INEXACT
+  call $std/math/test_erfcf
+  drop
+  i32.const 1082854452
+  i32.const 811313921
+  i32.const -1096552700
+  global.get $std/math/INEXACT
+  call $std/math/test_erfcf
+  drop
+  i32.const -1056564646
+  i32.const 1073741824
+  i32.const 366428508
+  global.get $std/math/INEXACT
+  call $std/math/test_erfcf
+  drop
+  i32.const -1060043912
+  i32.const 1073741824
+  i32.const 703530525
+  global.get $std/math/INEXACT
+  call $std/math/test_erfcf
+  drop
+  i32.const 1091847646
+  i32.const 2182553
+  i32.const -1090778605
+  global.get $std/math/INEXACT
+  global.get $std/math/UNDERFLOW
+  i32.or
+  call $std/math/test_erfcf
+  drop
+  i32.const 1059682280
+  i32.const 1051903784
+  i32.const 1054227408
+  global.get $std/math/INEXACT
+  call $std/math/test_erfcf
+  drop
+  i32.const -1093652892
+  i32.const 1068999958
+  i32.const 1054413128
+  global.get $std/math/INEXACT
+  call $std/math/test_erfcf
+  drop
+  i32.const 1058000765
+  i32.const 1054512937
+  i32.const 1046805814
+  global.get $std/math/INEXACT
+  call $std/math/test_erfcf
+  drop
+  i32.const 1061564120
+  i32.const 1049367783
+  i32.const 1035364990
+  global.get $std/math/INEXACT
+  call $std/math/test_erfcf
+  drop
+  i32.const -1087519883
+  i32.const 1070914049
+  i32.const 1050064352
+  global.get $std/math/INEXACT
+  call $std/math/test_erfcf
+  drop
+  i32.const 0
+  i32.const 1065353216
+  i32.const 0
+  i32.const 0
+  call $std/math/test_erfcf
+  drop
+  i32.const -2147483648
+  i32.const 1065353216
+  i32.const 0
+  i32.const 0
+  call $std/math/test_erfcf
+  drop
+  i32.const 2139095040
+  i32.const 0
+  i32.const 0
+  i32.const 0
+  call $std/math/test_erfcf
+  drop
+  i32.const -8388608
+  i32.const 1073741824
+  i32.const 0
+  i32.const 0
+  call $std/math/test_erfcf
+  drop
+  i32.const 2143289344
+  i32.const 2143289344
+  i32.const 0
+  i32.const 0
+  call $std/math/test_erfcf
+  drop
   f64.const 2
   f64.const 4
   call $~lib/math/NativeMath.imul
@@ -58049,7 +60495,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4010
+   i32.const 4168
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58063,7 +60509,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4011
+   i32.const 4169
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58077,7 +60523,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4012
+   i32.const 4170
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58091,7 +60537,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4013
+   i32.const 4171
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58105,7 +60551,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4014
+   i32.const 4172
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58119,7 +60565,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4015
+   i32.const 4173
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58133,7 +60579,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4016
+   i32.const 4174
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58147,7 +60593,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4017
+   i32.const 4175
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58161,7 +60607,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4018
+   i32.const 4176
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58175,7 +60621,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4019
+   i32.const 4177
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58189,7 +60635,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4020
+   i32.const 4178
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58203,7 +60649,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4021
+   i32.const 4179
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58216,7 +60662,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4025
+   i32.const 4183
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58229,7 +60675,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4026
+   i32.const 4184
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58242,7 +60688,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4027
+   i32.const 4185
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58255,7 +60701,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4028
+   i32.const 4186
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58268,7 +60714,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4029
+   i32.const 4187
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58281,7 +60727,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4030
+   i32.const 4188
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58294,7 +60740,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4031
+   i32.const 4189
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58307,7 +60753,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4032
+   i32.const 4190
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58320,7 +60766,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4033
+   i32.const 4191
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58333,7 +60779,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4034
+   i32.const 4192
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58346,7 +60792,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4035
+   i32.const 4193
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58360,7 +60806,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4036
+   i32.const 4194
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58373,7 +60819,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4037
+   i32.const 4195
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58386,7 +60832,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4038
+   i32.const 4196
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58400,7 +60846,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4039
+   i32.const 4197
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58413,7 +60859,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4040
+   i32.const 4198
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58427,7 +60873,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4044
+   i32.const 4202
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58441,7 +60887,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4045
+   i32.const 4203
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58455,7 +60901,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4046
+   i32.const 4204
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58469,7 +60915,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4047
+   i32.const 4205
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58483,7 +60929,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4049
+   i32.const 4207
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58497,7 +60943,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4050
+   i32.const 4208
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58511,7 +60957,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4051
+   i32.const 4209
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58525,7 +60971,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4052
+   i32.const 4210
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58539,7 +60985,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4054
+   i32.const 4212
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58553,7 +60999,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4055
+   i32.const 4213
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58567,7 +61013,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4056
+   i32.const 4214
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58581,7 +61027,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4057
+   i32.const 4215
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58595,7 +61041,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4059
+   i32.const 4217
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58609,7 +61055,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4060
+   i32.const 4218
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58623,7 +61069,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4061
+   i32.const 4219
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58637,7 +61083,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4062
+   i32.const 4220
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58651,7 +61097,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4064
+   i32.const 4222
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58665,7 +61111,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4065
+   i32.const 4223
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58679,7 +61125,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4066
+   i32.const 4224
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58693,7 +61139,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4067
+   i32.const 4225
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58707,7 +61153,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4069
+   i32.const 4227
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58721,7 +61167,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4070
+   i32.const 4228
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58735,7 +61181,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4071
+   i32.const 4229
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58749,7 +61195,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4072
+   i32.const 4230
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58763,7 +61209,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4073
+   i32.const 4231
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58777,7 +61223,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4075
+   i32.const 4233
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58791,7 +61237,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4076
+   i32.const 4234
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58805,7 +61251,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4077
+   i32.const 4235
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58819,7 +61265,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4078
+   i32.const 4236
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58851,7 +61297,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4084
+   i32.const 4242
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58865,7 +61311,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4085
+   i32.const 4243
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58879,7 +61325,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4086
+   i32.const 4244
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58893,7 +61339,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4087
+   i32.const 4245
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58907,7 +61353,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4088
+   i32.const 4246
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58921,7 +61367,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4089
+   i32.const 4247
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58935,7 +61381,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4091
+   i32.const 4249
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58949,7 +61395,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4092
+   i32.const 4250
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58981,7 +61427,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4095
+   i32.const 4253
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -58995,7 +61441,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4097
+   i32.const 4255
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59009,7 +61455,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4098
+   i32.const 4256
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59041,7 +61487,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4101
+   i32.const 4259
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59059,7 +61505,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4103
+   i32.const 4261
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59077,7 +61523,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4104
+   i32.const 4262
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59093,7 +61539,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4105
+   i32.const 4263
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59109,7 +61555,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4106
+   i32.const 4264
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59125,7 +61571,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4107
+   i32.const 4265
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59139,7 +61585,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4109
+   i32.const 4267
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59153,7 +61599,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4110
+   i32.const 4268
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59167,7 +61613,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4111
+   i32.const 4269
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59181,7 +61627,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4112
+   i32.const 4270
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59195,7 +61641,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4113
+   i32.const 4271
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59209,7 +61655,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4114
+   i32.const 4272
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59223,7 +61669,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4115
+   i32.const 4273
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59237,7 +61683,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4116
+   i32.const 4274
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59251,7 +61697,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4117
+   i32.const 4275
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59271,7 +61717,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4119
+   i32.const 4277
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59289,7 +61735,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4120
+   i32.const 4278
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59304,7 +61750,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4122
+   i32.const 4280
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59319,7 +61765,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4123
+   i32.const 4281
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59334,7 +61780,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4124
+   i32.const 4282
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59348,7 +61794,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4125
+   i32.const 4283
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -59362,7 +61808,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 4126
+   i32.const 4284
    i32.const 1
    call $~lib/builtins/abort
    unreachable

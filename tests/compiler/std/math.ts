@@ -4005,6 +4005,164 @@ test_sincos(0x3FE1F9EF934745CB, 0x3FE10BAF3A5F550E, 0xBFD6B8FCE0000000, 0x3FEB15
 test_sincos(0x3FE8C5DB097F7442, 0x3FE65F1C5E591DB2, 0xBFDB5EFC20000000, 0x3FE6E164E427022B, 0xBFB5DB4C20000000, INEXACT);
 test_sincos(0xBFE5B86EA8118A0E, 0xBFE417318671B83D, 0xBFD87FFC00000000, 0x3FE8E83D35A366C0, 0x3FD3C52400000000, INEXACT);
 
+// Math.erf ////////////////////////////////////////////////////////////////////////////////
+
+function test_erf(value: u64, expected_erf: u64, error_erf: u64, flags: i32): bool {
+  var arg    = reinterpret<f64>(value);
+  var experf = reinterpret<f64>(expected_erf);
+  var errerf = reinterpret<f64>(error_erf);
+  return (check<f64>(NativeMath.erf(arg), experf, errerf, flags));
+}
+
+// sanity
+// -0x1.02239f3c6a8f1p+3,                 -0x1p+0, -0x1.348d36p-46
+//  0x1.161868e18bc67p+2,    0x1.fffffff922a8dp-1,   0x1.820cbap-3
+// -0x1.0c34b3e01e6e7p+3,                 -0x1p+0, -0x1.ae82dcp-54
+// -0x1.a206f0a19dcc4p+2,                 -0x1p+0, -0x1.de0bfcp-14
+//  0x1.288bbb0d6a1e6p+3,                  0x1p+0,         0x1p-76
+//  0x1.52efd0cd80497p-1,    0x1.4d38d900b92a6p-1,   0x1.6e4f14p-2
+// -0x1.a05cc754481d1p-2,   -0x1.bd28abf77e30fp-2,  -0x1.e051e8p-3
+//  0x1.1f9ef934745cbp-1,    0x1.2568d691ba679p-1,   0x1.9bd6d2p-5
+//  0x1.8c5db097f7442p-1,    0x1.73eb1974f96e5p-1,   0x1.75347cp-6
+// -0x1.5b86ea8118a0ep-1,   -0x1.5368032e78bd7p-1,  -0x1.b6a8ecp-3
+
+test_erf(0xC0202239F3C6A8F1, 0xBFF0000000000000, 0xBD1348D360000000, INEXACT);
+test_erf(0x401161868E18BC67, 0x3FEFFFFFFF922A8D, 0x3FC820CBA0000000, INEXACT);
+test_erf(0xC020C34B3E01E6E7, 0xBFF0000000000000, 0xBC9AE82DC0000000, INEXACT);
+test_erf(0xC01A206F0A19DCC4, 0xBFF0000000000000, 0xBF1DE0BFC0000000, INEXACT);
+test_erf(0x402288BBB0D6A1E6, 0x3FF0000000000000, 0x3B30000000000000, INEXACT);
+test_erf(0x3FE52EFD0CD80497, 0x3FE4D38D900B92A6, 0x3FD6E4F140000000, INEXACT);
+test_erf(0xBFDA05CC754481D1, 0xBFDBD28ABF77E30F, 0xBFCE051E80000000, INEXACT);
+test_erf(0x3FE1F9EF934745CB, 0x3FE2568D691BA679, 0x3FA9BD6D20000000, INEXACT);
+test_erf(0x3FE8C5DB097F7442, 0x3FE73EB1974F96E5, 0x3F975347C0000000, INEXACT);
+test_erf(0xBFE5B86EA8118A0E, 0xBFE5368032E78BD7, 0xBFCB6A8EC0000000, INEXACT);
+
+// special
+test_erf(0x0000000000000000, 0x0000000000000000, 0, 0); //  0.0,  0.0
+test_erf(0x1000000000000000, 0x1000000000000000, 0, 0); // -0.0, -0.0
+test_erf(0x7FF0000000000000, 0x3FF0000000000000, 0, 0); //  inf,  1.0
+test_erf(0xFFF0000000000000, 0xBFF0000000000000, 0, 0); // -inf, -1.0
+test_erf(0x7FF8000000000000, 0x7FF8000000000000, 0, 0); //  nan,  nan
+
+// Mathf.erf ////////////////////////////////////////////////////////////////////////////////
+
+function test_erff(value: u32, expected_erf: u32, error_erf: u32, flags: i32): bool {
+  var arg    = reinterpret<f32>(value);
+  var experf = reinterpret<f32>(expected_erf);
+  var errerf = reinterpret<f32>(error_erf);
+  return (check<f32>(NativeMathf.erf(arg), experf, errerf, flags));
+}
+
+// sanity
+//  -0x1.0223ap+3,         -0x1p+0, -0x1.348cbep-75
+//  0x1.161868p+2,          0x1p+0,   0x1.b75602p-8
+// -0x1.0c34b4p+3,         -0x1p+0, -0x1.ae82bcp-83
+//  -0x1.a206fp+2,         -0x1p+0, -0x1.de0c3ap-43
+//  0x1.288bbcp+3,          0x1p+0,        0x1p-105
+//   0x1.52efdp-1,   0x1.4d38d8p-1,   -0x1.ac77ap-3
+// -0x1.a05cc8p-2,  -0x1.bd28acp-2,   0x1.3775c2p-2
+//  0x1.1f9efap-1,   0x1.2568d8p-1,   0x1.8d8164p-2
+//   0x1.8c5dbp-1,   0x1.73eb1ap-1,    0x1.d2656p-2
+// -0x1.5b86eap-1,  -0x1.536802p-1,   0x1.a5287ep-2
+
+test_erff(0xC10111D0, 0xBF800000, 0x9A1A465F, INEXACT);
+test_erff(0x408B0C34, 0x3F800000, 0x3BDBAB01, INEXACT);
+test_erff(0xC1061A5A, 0xBF800000, 0x9657415E, INEXACT);
+test_erff(0xC0D10378, 0xBF800000, 0xAA6F061D, INEXACT);
+test_erff(0x411445DE, 0x3F800000, 0x0B000000, INEXACT);
+test_erff(0x3F2977E8, 0x3F269C6C, 0xBE563BD0, INEXACT);
+test_erff(0xBED02E64, 0xBEDE9456, 0x3E9BBAE1, INEXACT);
+test_erff(0x3F0FCF7D, 0x3F12B46C, 0x3EC6C0B2, INEXACT);
+test_erff(0x3F462ED8, 0x3F39F58D, 0x3EE932B0, INEXACT);
+test_erff(0xBF2DC375, 0xBF29B401, 0x3ED2943F, INEXACT);
+
+// special
+test_erff(0x00000000, 0x00000000, 0, 0); //  0.0,  0.0
+test_erff(0x10000000, 0x10000000, 0, 0); // -0.0, -0.0
+test_erff(0x7F800000, 0x3F800000, 0, 0); //  inf,  1.0
+test_erff(0xFF800000, 0xBF800000, 0, 0); // -inf, -1.0
+test_erff(0x7FC00000, 0x7FC00000, 0, 0); //  nan,  nan
+
+// Math.erfc ////////////////////////////////////////////////////////////////////////////////
+
+function test_erfc(value: u64, expected_erfc: u64, error_erfc: u64, flags: i32): bool {
+  var arg     = reinterpret<f64>(value);
+  var experfc = reinterpret<f64>(expected_erfc);
+  var errerfc = reinterpret<f64>(error_erfc);
+  return (check<f64>(NativeMath.erfc(arg), experfc, errerfc, flags));
+}
+
+// sanity
+// -0x1.02239f3c6a8f1p+3,                  0x1p+1,  0x1.348d36p-47
+//  0x1.161868e18bc67p+2,   0x1.b755ccc1065d2p-31,  -0x1.0a9bcep-2
+// -0x1.0c34b3e01e6e7p+3,                  0x1p+1,  0x1.ae82d8p-55
+// -0x1.a206f0a19dcc4p+2,                  0x1p+1,  0x1.de0bfcp-15
+//  0x1.288bbb0d6a1e6p+3,  0x1.0a6d5f0165357p-128,  -0x1.c3a344p-2
+//  0x1.52efd0cd80497p-1,    0x1.658e4dfe8dab5p-2,   0x1.2361dap-2
+// -0x1.a05cc754481d1p-2,    0x1.6f4a2afddf8c4p+0,   0x1.3c0a3ep-2
+//  0x1.1f9ef934745cbp-1,    0x1.b52e52dc8b30ep-2,  -0x1.9bd6d2p-4
+//  0x1.8c5db097f7442p-1,    0x1.1829cd160d236p-2,  -0x1.75347cp-5
+// -0x1.5b86ea8118a0ep-1,    0x1.a9b401973c5ebp+0,  -0x1.9255c4p-2
+
+test_erfc(0xC0202239F3C6A8F1, 0x4000000000000000, 0x3D0348D360000000, INEXACT);
+test_erfc(0x401161868E18BC67, 0x3E0B755CCC1065D2, 0xBFD0A9BCE0000000, INEXACT);
+test_erfc(0xC020C34B3E01E6E7, 0x4000000000000000, 0x3C8AE82D80000000, INEXACT);
+test_erfc(0xC01A206F0A19DCC4, 0x4000000000000000, 0x3F0DE0BFC0000000, INEXACT);
+test_erfc(0x402288BBB0D6A1E6, 0x37F0A6D5F0165357, 0xBFDC3A3440000000, INEXACT);
+test_erfc(0x3FE52EFD0CD80497, 0x3FD658E4DFE8DAB5, 0x3FD2361DA0000000, INEXACT);
+test_erfc(0xBFDA05CC754481D1, 0x3FF6F4A2AFDDF8C4, 0x3FD3C0A3E0000000, INEXACT);
+test_erfc(0x3FE1F9EF934745CB, 0x3FDB52E52DC8B30E, 0xBFB9BD6D20000000, INEXACT);
+test_erfc(0x3FE8C5DB097F7442, 0x3FD1829CD160D236, 0xBFA75347C0000000, INEXACT);
+test_erfc(0xBFE5B86EA8118A0E, 0x3FFA9B401973C5EB, 0xBFD9255C40000000, INEXACT);
+
+// special
+test_erfc(                 0, 0x3FF0000000000000,                  0,       0);
+test_erfc(0x8000000000000000, 0x3FF0000000000000,                  0,       0);
+test_erfc(0x7FF0000000000000,                  0,                  0,       0);
+test_erfc(0xFFF0000000000000, 0x4000000000000000,                  0,       0);
+test_erfc(0x7FF8000000000000, 0x7FF8000000000000,                  0,       0);
+test_erfc(0x3FF5DB559FE5C0BA, 0x3FAB53CF571D328F, 0x3FD9009820000000, INEXACT);
+
+
+// Mathf.erfc ////////////////////////////////////////////////////////////////////////////////
+
+function test_erfcf(value: u32, expected_erfcf: u32, error_erfcf: u32, flags: i32): bool {
+  var arg      = reinterpret<f32>(value);
+  var experfcf = reinterpret<f32>(expected_erfcf);
+  var errerfcf = reinterpret<f32>(error_erfcf);
+  return (check<f32>(NativeMathf.erfc(arg), experfcf, errerfcf, flags));
+}
+
+// sanity
+//  -0x1.0223ap+3,          0x1p+1,  0x1.348cbep-76
+//  0x1.161868p+2,  0x1.b75602p-31,  -0x1.47de08p-2
+// -0x1.0c34b4p+3,          0x1p+1,  0x1.ae82b8p-84
+//  -0x1.a206fp+2,          0x1p+1,  0x1.de0c3ap-44
+//  0x1.288bbcp+3, 0x1.0a6cc8p-128,  -0x1.f81426p-2
+//   0x1.52efdp-1,    0x1.658e5p-2,    0x1.ac77ap-2
+// -0x1.a05cc8p-2,   0x1.6f4a2cp+0,    0x1.b2229p-2
+//  0x1.1f9efap-1,   0x1.b52e52p-2,   0x1.c9fa6cp-3
+//   0x1.8c5dbp-1,   0x1.1829cep-2,   0x1.6cd4fcp-4
+// -0x1.5b86eap-1,   0x1.a9b402p+0,    0x1.2d6bcp-2
+
+test_erfcf(0xC10111D0, 0x40000000, 0x199A465F, INEXACT);
+test_erfcf(0x408B0C34, 0x305BAB01, 0xBEA3EF04, INEXACT);
+test_erfcf(0xC1061A5A, 0x40000000, 0x15D7415C, INEXACT);
+test_erfcf(0xC0D10378, 0x40000000, 0x29EF061D, INEXACT);
+test_erfcf(0x411445DE, 0x00214D99, 0xBEFC0A13, INEXACT | UNDERFLOW);
+test_erfcf(0x3F2977E8, 0x3EB2C728, 0x3ED63BD0, INEXACT);
+test_erfcf(0xBED02E64, 0x3FB7A516, 0x3ED91148, INEXACT);
+test_erfcf(0x3F0FCF7D, 0x3EDA9729, 0x3E64FD36, INEXACT);
+test_erfcf(0x3F462ED8, 0x3E8C14E7, 0x3DB66A7E, INEXACT);
+test_erfcf(0xBF2DC375, 0x3FD4DA01, 0x3E96B5E0, INEXACT);
+
+// special
+test_erfcf(         0, 0x3F800000, 0, 0);
+test_erfcf(0x80000000, 0x3F800000, 0, 0);
+test_erfcf(0x7F800000,          0, 0, 0);
+test_erfcf(0xFF800000, 0x40000000, 0, 0);
+test_erfcf(0x7FC00000, 0x7FC00000, 0, 0);
+
 // Math.imul //////////////////////////////////////////////////////////////////////////////////
 
 assert(NativeMath.imul(2, 4) == 8);

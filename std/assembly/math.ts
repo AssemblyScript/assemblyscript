@@ -43,6 +43,21 @@ import {
 ]);
 
 /** @internal */
+// Coefficients for approximation to erf on [0, 0.84375]
+// @ts-ignore: decorator
+@lazy @inline const
+  pp0 = reinterpret<f64>(0x3FC06EBA8214DB68), //  1.28379167095512558561e-01
+  pp1 = reinterpret<f64>(0xBFD4CD7D691CB913), // -3.25042107247001499370e-01
+  pp2 = reinterpret<f64>(0xBF9D2A51DBD7194F), // -2.84817495755985104766e-02
+  pp3 = reinterpret<f64>(0xBF77A291236668E4), // -5.77027029648944159157e-03
+  pp4 = reinterpret<f64>(0xBEF8EAD6120016AC), // -2.37630166566501626084e-05
+  qq1 = reinterpret<f64>(0x3FD97779CDDADC09), //  3.97917223959155352819e-01
+  qq2 = reinterpret<f64>(0x3FB0A54C5536CEBA), //  6.50222499887672944485e-02
+  qq3 = reinterpret<f64>(0x3F74D022C4D36B0F), //  5.08130628187576562776e-03
+  qq4 = reinterpret<f64>(0x3F215DC9221C1A10), //  1.32494738004321644526e-04
+  qq5 = reinterpret<f64>(0xBED09C4342A26120); // -3.96022827877536812320e-06
+
+/** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
   const                   // see: musl/src/math/asin.c and SUN COPYRIGHT NOTICE above
     pS0 = reinterpret<f64>(0x3FC5555555555555), //  1.66666666666666657415e-01
@@ -359,6 +374,91 @@ function tan_kern(x: f64, y: f64, iy: i32): f64 { // see: src/lib/msun/src/k_tan
   s = one + t * z;
   return t + a * (s + t * v);
 }
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function erfc1(x: f64): f64 {
+  // Coefficients for approximation to  erf  in [0.84375,1.25]
+  const
+    pa0 = reinterpret<f64>(0xBF6359B8BEF77538), // -2.36211856075265944077e-03
+    pa1 = reinterpret<f64>(0x3FDA8D00AD92B34D), //  4.14856118683748331666e-01
+    pa2 = reinterpret<f64>(0xBFD7D240FBB8C3F1), // -3.72207876035701323847e-01
+    pa3 = reinterpret<f64>(0x3FD45FCA805120E4), //  3.18346619901161753674e-01
+    pa4 = reinterpret<f64>(0xBFBC63983D3E28EC), // -1.10894694282396677476e-01
+    pa5 = reinterpret<f64>(0x3FA22A36599795EB), //  3.54783043256182359371e-02
+    pa6 = reinterpret<f64>(0xBF61BF380A96073F), // -2.16637559486879084300e-03
+    qa1 = reinterpret<f64>(0x3FBB3E6618EEE323), //  1.06420880400844228286e-01
+    qa2 = reinterpret<f64>(0x3FE14AF092EB6F33), //  5.40397917702171048937e-01
+    qa3 = reinterpret<f64>(0x3FB2635CD99FE9A7), //  7.18286544141962662868e-02
+    qa4 = reinterpret<f64>(0x3FC02660E763351F), //  1.26171219808761642112e-01
+    qa5 = reinterpret<f64>(0x3F8BEDC26B51DD1C), //  1.36370839120290507362e-02
+    qa6 = reinterpret<f64>(0x3F888B545735151D), //  1.19844998467991074170e-02
+    erx = reinterpret<f64>(0x3FEB0AC160000000); //  8.45062911510467529297e-01
+
+  var s = builtin_abs<f64>(x) - 1.0;
+  var P = pa0 + s * (pa1 + s * (pa2 + s * (pa3 + s * (pa4 + s * (pa5 + s * pa6)))));
+  var Q = 1.0 + s * (qa1 + s * (qa2 + s * (qa3 + s * (qa4 + s * (qa5 + s * qa6)))));
+  return 1 - erx - P / Q;
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function erfc2(ux: u32, x: f64): f64 { // see: musl/tree/src/math/erf.c
+  // Coefficients for approximation to  erfc in [1.25, 1 / 0.35]
+  const
+    ra0 = reinterpret<f64>(0xBF843412600D6435), // -9.86494403484714822705e-03
+    ra1 = reinterpret<f64>(0xBFE63416E4BA7360), // -6.93858572707181764372e-01
+    ra2 = reinterpret<f64>(0xC0251E0441B0E726), // -1.05586262253232909814e+01
+    ra3 = reinterpret<f64>(0xC04F300AE4CBA38D), // -6.23753324503260060396e+01
+    ra4 = reinterpret<f64>(0xC0644CB184282266), // -1.62396669462573470355e+02
+    ra5 = reinterpret<f64>(0xC067135CEBCCABB2), // -1.84605092906711035994e+02
+    ra6 = reinterpret<f64>(0xC054526557E4D2F2), // -8.12874355063065934246e+01
+    ra7 = reinterpret<f64>(0xC023A0EFC69AC25C), // -9.81432934416914548592e+00
+    sa1 = reinterpret<f64>(0x4033A6B9BD707687), //  1.96512716674392571292e+01
+    sa2 = reinterpret<f64>(0x4061350C526AE721), //  1.37657754143519042600e+02
+    sa3 = reinterpret<f64>(0x407B290DD58A1A71), //  4.34565877475229228821e+02
+    sa4 = reinterpret<f64>(0x40842B1921EC2868), //  6.45387271733267880336e+02
+    sa5 = reinterpret<f64>(0x407AD02157700314), //  4.29008140027567833386e+02
+    sa6 = reinterpret<f64>(0x405B28A3EE48AE2C), //  1.08635005541779435134e+02
+    sa7 = reinterpret<f64>(0x401A47EF8E484A93), //  6.57024977031928170135e+00
+    sa8 = reinterpret<f64>(0xBFAEEFF2EE749A62); // -6.04244152148580987438e-02
+
+  // Coefficients for approximation to  erfc in [1 / .35, 28]
+  const
+    rb0 = reinterpret<f64>(0xBF84341239E86F4A), // -9.86494292470009928597e-03
+    rb1 = reinterpret<f64>(0xBFE993BA70C285DE), // -7.99283237680523006574e-01
+    rb2 = reinterpret<f64>(0xC031C209555F995A), // -1.77579549177547519889e+01
+    rb3 = reinterpret<f64>(0xC064145D43C5ED98), // -1.60636384855821916062e+02
+    rb4 = reinterpret<f64>(0xC083EC881375F228), // -6.37566443368389627722e+02
+    rb5 = reinterpret<f64>(0xC09004616A2E5992), // -1.02509513161107724954e+03
+    rb6 = reinterpret<f64>(0xC07E384E9BDC383F), // -4.83519191608651397019e+02
+    sb1 = reinterpret<f64>(0x403E568B261D5190), //  3.03380607434824582924e+01
+    sb2 = reinterpret<f64>(0x40745CAE221B9F0A), //  3.25792512996573918826e+02
+    sb3 = reinterpret<f64>(0x409802EB189D5118), //  1.53672958608443695994e+03
+    sb4 = reinterpret<f64>(0x40A8FFB7688C246A), //  3.19985821950859553908e+03
+    sb5 = reinterpret<f64>(0x40A3F219CEDF3BE6), //  2.55305040643316442583e+03
+    sb6 = reinterpret<f64>(0x407DA874E79FE763), //  4.74528541206955367215e+02
+    sb7 = reinterpret<f64>(0xC03670E242712D62); // -2.24409524465858183362e+01
+
+  if (ux < 0x3FF40000) { // |x| < 1.25
+    return erfc1(x);
+  }
+  x = builtin_abs<f64>(x);
+  var s = 1.0 / (x * x);
+  var R: f64, S: f64;
+  if (ux < 0x4006DB6D) { // |x| < 1/.35 ~ 2.85714
+    R = ra0 + s * (ra1 + s * (ra2 + s * (ra3 + s * (ra4 + s * (ra5 + s * (ra6 + s * ra7))))));
+    S = 1.0 + s * (sa1 + s * (sa2 + s * (sa3 + s * (sa4 + s * (sa5 + s * (sa6 + s * (sa7 + s * sa8)))))));
+  } else { // |x| > 1 / .35
+    R = rb0 + s * (rb1 + s * (rb2 + s * (rb3 + s * (rb4 + s * (rb5 + s * rb6)))));
+    S = 1.0 + s * (sb1 + s * (sb2 + s * (sb3 + s * (sb4 + s * (sb5 + s * (sb6 + s * sb7))))));
+  }
+  var z = reinterpret<f64>(reinterpret<u64>(x) & 0xFFFFFFFF00000000);
+  return NativeMath.exp(-z * z - 0.5625) * NativeMath.exp((z - x) * (z + x) + R / S) / x;
+}
+
 
 /** @internal */
 function dtoi32(x: f64): i32 {
@@ -1735,6 +1835,64 @@ export namespace NativeMath {
     sincos_sin = sin;
     sincos_cos = cos;
   }
+
+  export function erf(x: f64): f64 { // see: musl/tree/src/math/erf.c
+    const efx8 = reinterpret<f64>(0x3FF06EBA8214DB69); // 1.02703333676410069053e+00
+    const Ox1p_1022 = reinterpret<f64>(0x0010000000000000); // 0x1p-1022
+
+    var ux  = <u32>(reinterpret<u64>(x) >> 32);
+    var sig = (<i32>ux) >> 31;
+    ux &= 0x7FFFFFFF;
+
+    if (ux >= 0x7FF00000) {
+      return f64(sig | 1) + 1.0 / x; // erf(nan)=nan, erf(+-inf)=+-1
+    }
+    if (ux < 0x3FEB0000) {  // |x| < 0.84375
+      if (ux < 0x3E300000) {  // |x| < 2**-28
+        // avoid underflow
+        return 0.125 * (8 * x + efx8 * x);
+      }
+      let z = x * x;
+      let r = pp0 + z * (pp1 + z * (pp2 + z * (pp3 + z * pp4)));
+      let s = 1.0 + z * (qq1 + z * (qq2 + z * (qq3 + z * (qq4 + z * qq5))));
+      let y = r / s;
+      return x + x * y;
+    }
+    let y = 1.0 - Ox1p_1022;
+    if (ux < 0x40180000) { // 0.84375 <= |x| < 6
+      y = 1.0 - erfc2(ux, x);
+    }
+    return copysign(y, x);
+  }
+
+  export function erfc(x: f64): f64 { // see: musl/tree/src/math/erf.c
+    const Ox1p_1022 = reinterpret<f64>(0x0010000000000000); // 0x1p-1022
+
+    var ux  = <u32>(reinterpret<u64>(x) >> 32);
+    var sig = ux >> 31;
+    ux &= 0x7FFFFFFF;
+
+    if (ux >= 0x7FF00000) {
+      return f64(sig << 1) + 1.0 / x; // erfc(nan)=nan, erfc(+-inf)=0,2
+    }
+    if (ux < 0x3FEB0000) {   // |x| < 0.84375
+      if (ux < 0x3C700000) { // |x| < 2 ** -56
+        return 1.0 - x;
+      }
+      let z = x * x;
+      let r = pp0 + z * (pp1 + z * (pp2 + z * (pp3 + z * pp4)));
+      let s = 1.0 + z * (qq1 + z * (qq2 + z * (qq3 + z * (qq4 + z * qq5))));
+      let y = r / s;
+      if (sig || ux < 0x3FD00000) {  // x < 1/4
+        return 1.0 - (x + x * y);
+      }
+      return 0.5 - (x - 0.5 + x * y);
+    }
+    if (ux < 0x403C0000) {  // 0.84375 <= |x| < 28
+      return sig ? 2.0 - erfc2(ux, x) : erfc2(ux, x);
+    }
+    return sig ? 2.0 - Ox1p_1022 : Ox1p_1022 * Ox1p_1022;
+  }
 }
 
 // @ts-ignore: decorator
@@ -1748,6 +1906,21 @@ export namespace NativeMath {
   0xFE5163ABDEBBC561
 ]);
 
+// Coefficients for approximation to erf on [0, 0.84375]
+// @ts-ignore: decorator
+@lazy @inline const
+  pp0f = reinterpret<f32>(0x3e0375d4), //  1.2837916613e-01
+  pp1f = reinterpret<f32>(0xbea66beb), // -3.2504209876e-01
+  pp2f = reinterpret<f32>(0xbce9528f), // -2.8481749818e-02
+  pp3f = reinterpret<f32>(0xbbbd1489), // -5.7702702470e-03
+  pp4f = reinterpret<f32>(0xb7c756b1), // -2.3763017452e-05
+  qq1f = reinterpret<f32>(0x3ecbbbce), //  3.9791721106e-01
+  qq2f = reinterpret<f32>(0x3d852a63), //  6.5022252500e-02
+  qq3f = reinterpret<f32>(0x3ba68116), //  5.0813062117e-03
+  qq4f = reinterpret<f32>(0x390aee49), //  1.3249473704e-04
+  qq5f = reinterpret<f32>(0xb684e21a); // -3.9602282413e-06
+
+/** @internal */
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   const                    // see: musl/src/math/asinf.c and SUN COPYRIGHT NOTICE above
     pS0 = reinterpret<f32>(0x3E2AAA75), //  1.6666586697e-01f
@@ -1759,6 +1932,7 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   return p / q;
 }
 
+/** @internal */
 // @ts-ignore: decorator
 @inline
 function expo2f(x: f32, sign: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
@@ -1770,6 +1944,7 @@ function expo2f(x: f32, sign: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   return NativeMathf.exp(x - kln2) * (sign * scale) * scale;
 }
 
+/** @internal */
 // @ts-ignore: decorator
 @inline
 function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
@@ -1800,6 +1975,7 @@ function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/mast
   return q;
 }
 
+/** @internal */
 // @ts-ignore: decorator
 @inline
 function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
@@ -1817,6 +1993,7 @@ function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/m
   return select(-q, q, sign);
 }
 
+/** @internal */
 // |sin(x)/x - s(x)| < 2**-37.5 (~[-4.89e-12, 4.824e-12]).
 // @ts-ignore: decorator
 @inline
@@ -1833,6 +2010,7 @@ function sin_kernf(x: f64): f32 { // see: musl/tree/src/math/__sindf.c
   return <f32>((x + s * (S1 + z * S2)) + s * w * r);
 }
 
+/** @internal */
 // |cos(x) - c(x)| < 2**-34.1 (~[-5.37e-11, 5.295e-11]).
 // @ts-ignore: decorator
 @inline
@@ -1848,6 +2026,7 @@ function cos_kernf(x: f64): f32 { // see: musl/tree/src/math/__cosdf.c
   return <f32>(((1 + z * C0) + w * C1) + (w * z) * r);
 }
 
+/** @internal */
 // |tan(x)/x - t(x)| < 2**-25.5 (~[-2e-08, 2e-08]).
 // @ts-ignore: decorator
 @inline
@@ -1871,6 +2050,7 @@ function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
   return <f32>(odd ? -1 / r : r);
 }
 
+/** @internal */
 // See: jdh8/metallic/src/math/float/log2f.c and jdh8/metallic/src/math/float/kernel/atanh.h
 // @ts-ignore: decorator
 @inline
@@ -1891,6 +2071,7 @@ function log2f(x: f64): f64 {
   return (2 * log2e) * y + <f64>exponent;
 }
 
+/** @internal */
 // See: jdh8/metallic/src/math/float/exp2f.h and jdh8/metallic/blob/master/src/math/float/kernel/exp2f.h
 // @ts-ignore: decorator
 @inline
@@ -1912,6 +2093,91 @@ function exp2f(x: f64): f64 {
   var y = 1 + x * (c0 + c1 * x + (c2 + c3 * x) * xx + (c4 + c5 * x) * (xx * xx));
   return reinterpret<f64>(reinterpret<i64>(y) + (<i64>n << 52));
 }
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function erfc1f(x: f32): f32 { // see: musl/tree/src/math/erff.c
+  // Coefficients for approximation to erf in [0.84375, 1.25]
+  const
+    pa0 = reinterpret<f32>(0xBB1ACDC6), // 2.3621185683e-03
+    pa1 = reinterpret<f32>(0x3ED46805), // 4.1485610604e-01
+    pa2 = reinterpret<f32>(0xBEBE9208), // 3.7220788002e-01
+    pa3 = reinterpret<f32>(0x3EA2FE54), // 3.1834661961e-01
+    pa4 = reinterpret<f32>(0xBDE31CC2), // 1.1089469492e-01
+    pa5 = reinterpret<f32>(0x3D1151B3), // 3.5478305072e-02
+    pa6 = reinterpret<f32>(0xBB0DF9C0), // 2.1663755178e-03
+    qa1 = reinterpret<f32>(0x3DD9F331), // 1.0642088205e-01
+    qa2 = reinterpret<f32>(0x3F0A5785), // 5.4039794207e-01
+    qa3 = reinterpret<f32>(0x3D931AE7), // 7.1828655899e-02
+    qa4 = reinterpret<f32>(0x3E013307), // 1.2617121637e-01
+    qa5 = reinterpret<f32>(0x3C5F6E13), // 1.3637083583e-02
+    qa6 = reinterpret<f32>(0x3C445AA3), // 1.1984500103e-02
+    erx = reinterpret<f32>(0x3F58560B); // 8.4506291151e-01
+
+  var s = builtin_abs<f32>(x) - 1;
+  var P = pa0    + s * (pa1 + s * (pa2 + s * (pa3 + s * (pa4 + s * (pa5 + s * pa6)))));
+  var Q = <f32>1 + s * (qa1 + s * (qa2 + s * (qa3 + s * (qa4 + s * (qa5 + s * qa6)))));
+  return <f32>1 - erx - P / Q;
+}
+
+/** @internal */
+// @ts-ignore: decorator
+@inline
+function erfc2f(ux: u32, x: f32): f32 { // see: musl/tree/src/math/erff.c
+  // Coefficients for approximation to erfc in [1.25, 1 / 0.35]
+  const
+    ra0 = reinterpret<f32>(0xBC21A093), // -9.8649440333e-03
+    ra1 = reinterpret<f32>(0xBF31A0B7), // -6.9385856390e-01
+    ra2 = reinterpret<f32>(0xC128F022), // -1.0558626175e+01
+    ra3 = reinterpret<f32>(0xC2798057), // -6.2375331879e+01
+    ra4 = reinterpret<f32>(0xC322658C), // -1.6239666748e+02
+    ra5 = reinterpret<f32>(0xC3389AE7), // -1.8460508728e+02
+    ra6 = reinterpret<f32>(0xC2A2932B), // -8.1287437439e+01
+    ra7 = reinterpret<f32>(0xC11D077E), // -9.8143291473e+00
+    sa1 = reinterpret<f32>(0x419D35CE), //  1.9651271820e+01
+    sa2 = reinterpret<f32>(0x4309A863), //  1.3765776062e+02
+    sa3 = reinterpret<f32>(0x43D9486F), //  4.3456588745e+02
+    sa4 = reinterpret<f32>(0x442158C9), //  6.4538726807e+02
+    sa5 = reinterpret<f32>(0x43D6810B), //  4.2900814819e+02
+    sa6 = reinterpret<f32>(0x42D9451F), //  1.0863500214e+02
+    sa7 = reinterpret<f32>(0x40D23F7C), //  6.5702495575e+00
+    sa8 = reinterpret<f32>(0xBD777F97); // -6.0424413532e-02
+
+  // Coefficients for approximation to  erfc in [1 / .35, 28]
+  const
+    rb0 = reinterpret<f32>(0xbc21a092), // -9.8649431020e-03
+    rb1 = reinterpret<f32>(0xbf4c9dd4), // -7.9928326607e-01
+    rb2 = reinterpret<f32>(0xc18e104b), // -1.7757955551e+01
+    rb3 = reinterpret<f32>(0xc320a2ea), // -1.6063638306e+02
+    rb4 = reinterpret<f32>(0xc41f6441), // -6.3756646729e+02
+    rb5 = reinterpret<f32>(0xc480230b), // -1.0250950928e+03
+    rb6 = reinterpret<f32>(0xc3f1c275), // -4.8351919556e+02
+    sb1 = reinterpret<f32>(0x41f2b459), //  3.0338060379e+01
+    sb2 = reinterpret<f32>(0x43a2e571), //  3.2579251099e+02
+    sb3 = reinterpret<f32>(0x44c01759), //  1.5367296143e+03
+    sb4 = reinterpret<f32>(0x4547fdbb), //  3.1998581543e+03
+    sb5 = reinterpret<f32>(0x451f90ce), //  2.5530502930e+03
+    sb6 = reinterpret<f32>(0x43ed43a7), //  4.7452853394e+02
+    sb7 = reinterpret<f32>(0xc1b38712); // -2.2440952301e+01
+
+  if (ux < 0x3FA00000) { // |x| < 1.25
+    return erfc1f(x);
+  }
+  x = builtin_abs<f32>(x);
+  let s: f32 = 1.0 / (x * x);
+  let R: f32, S: f32;
+  if (ux < 0x4036DB6D) { // |x| < 1 / 0.35
+    R = ra0    + s * (ra1 + s * (ra2 + s * (ra3 + s * (ra4 + s * (ra5 + s * (ra6 + s * ra7))))));
+    S = <f32>1 + s * (sa1 + s * (sa2 + s * (sa3 + s * (sa4 + s * (sa5 + s * (sa6 + s * (sa7 + s * sa8)))))));
+  } else { // |x| >= 1 / 0.35
+    R = rb0    + s * (rb1 + s * (rb2 + s * (rb3 + s * (rb4 + s * (rb5 + s * rb6)))));
+    S = <f32>1 + s * (sb1 + s * (sb2 + s * (sb3 + s * (sb4 + s * (sb5 + s * (sb6 + s * sb7))))));
+  }
+  var z = reinterpret<f32>(reinterpret<u32>(x) & 0xFFFFE000);
+  return NativeMathf.exp(-z * z - 0.5625) * NativeMathf.exp((z - x) * (z + x) + R / S) / x;
+}
+
 
 export namespace NativeMathf {
 
@@ -3074,6 +3340,64 @@ export namespace NativeMathf {
     }
     sincos_sin = sin;
     sincos_cos = cos;
+  }
+
+  export function erf(x: f32): f32 { // see: musl/tree/src/math/erff.c
+    const efx8 = reinterpret<f32>(0x3F8375D4); // 1.0270333290e+00
+    const Ox1p_120f: f32 = 0; // TODO: 0x1p-120f
+
+    var ux  = reinterpret<u32>(x);
+    var sig = (<i32>ux) >> 31;
+    ux &= 0x7FFFFFFF;
+
+    if (ux >= 0x7F800000) { // erf(nan)=nan, erf(+-inf)=+-1
+      return f32(sig | 1) + 1.0 / x;
+    }
+    if (ux < 0x3F580000) {   // |x| < 0.84375
+      if (ux < 0x31800000) { // |x| < 2 ** -28
+        // avoid underflow
+        return 0.125 * (8.0 * x + efx8 * x);
+      }
+      let z = x * x;
+      let r = pp0f   + z * (pp1f + z * (pp2f + z * (pp3f + z * pp4f)));
+      let s = <f32>1 + z * (qq1f + z * (qq2f + z * (qq3f + z * (qq4f + z * qq5f))));
+      let y = r / s;
+      return x + x * y;
+    }
+    let y = <f32>1 - Ox1p_120f;
+    if (ux < 0x40C00000) { // |x| < 6
+      y = <f32>1 - erfc2f(ux, x);
+    }
+    return copysign<f32>(y, x);
+  }
+
+  export function erfc(x: f32): f32 { // see: musl/tree/src/math/erff.c
+    const Ox1p_120f: f32 = 0; // 0x1p-120f
+
+    var ux  = reinterpret<u32>(x);
+    var sig = ux >> 31;
+    ux &= 0x7FFFFFFF;
+
+    if (ux >= 0x7F800000) {
+      return f32(sig << 1) + 1.0 / x; // erfc(nan)=nan, erfc(+-inf)=0,2
+    }
+    if (ux < 0x3F580000) {   // |x| < 0.84375
+      if (ux < 0x23800000) { // |x| < 2 ** -56
+        return <f32>1 - x;
+      }
+      let z = x * x;
+      let r = pp0f   + z * (pp1f + z * (pp2f + z * (pp3f + z * pp4f)));
+      let s = <f32>1 + z * (qq1f + z * (qq2f + z * (qq3f + z * (qq4f + z * qq5f))));
+      let y = r / s;
+      if (sig || ux < 0x3E800000) { // x < 1 / 4
+        return <f32>1 - (x + x * y);
+      }
+      return <f32>0.5 - (x - 0.5 + x * y);
+    }
+    if (ux < 0x41E00000) { // |x| < 28
+      return sig ? <f32>2 - erfc2f(ux, x) : erfc2f(ux, x);
+    }
+    return sig ? <f32>2 - Ox1p_120f : Ox1p_120f * Ox1p_120f;
   }
 }
 

@@ -1914,6 +1914,10 @@ interface INativeMath<T> extends IMath<T> {
   sincos(x: T): void;
   /** Returns 2 raised to the given power x. Equivalent to 2 ** x. */
   exp2(x: T): T;
+  /** Returns the error function. */
+  erf(x: T): T;
+  /** Returns the complementary error function. */
+  erfc(x: T): T;
 }
 
 /** Double precision math imported from JavaScript. */
