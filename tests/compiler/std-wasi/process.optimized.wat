@@ -7,8 +7,8 @@
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
@@ -19,6 +19,7 @@
  (import "wasi_snapshot_preview1" "environ_sizes_get" (func $~lib/bindings/wasi_snapshot_preview1/environ_sizes_get (param i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "environ_get" (func $~lib/bindings/wasi_snapshot_preview1/environ_get (param i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
+ (import "wasi_snapshot_preview1" "fd_read" (func $~lib/bindings/wasi_snapshot_preview1/fd_read (param i32 i32 i32 i32) (result i32)))
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\14\00\00\00=\00=\00 \00a\00r\00c\00h\00 \00=\00=")
@@ -4637,6 +4638,43 @@
   call $~lib/console/console.log
   i32.const 42
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  local.set $1
+  i32.const 1088
+  local.get $0
+  i32.store
+  i32.const 1092
+  local.get $1
+  i32.store
+  i32.const 0
+  i32.const 1088
+  i32.const 1
+  i32.const 1096
+  call $~lib/bindings/wasi_snapshot_preview1/fd_read
+  local.tee $0
+  i32.const 65535
+  i32.and
+  if
+   local.get $0
+   call $~lib/bindings/wasi_snapshot_preview1/errnoToString
+   i32.const 4112
+   i32.const 142
+   i32.const 14
+   call $~lib/wasi/index/abort
+   unreachable
+  end
+  i32.const 1096
+  i32.load
+  drop
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
@@ -4736,7 +4774,7 @@
   if
    i32.const 0
    i32.const 4816
-   i32.const 749
+   i32.const 746
    i32.const 7
    call $~lib/wasi/index/abort
    unreachable
