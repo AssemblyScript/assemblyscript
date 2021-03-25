@@ -27,8 +27,9 @@
  )
  (func $if/ifAlwaysReturns (param $0 i32) (result i32)
   local.get $0
-  i32.eqz
-  if
+  if (result i32)
+   i32.const 1
+  else
    i32.const 1088
    i32.const 1056
    i32.const 37
@@ -36,6 +37,5 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
  )
 )

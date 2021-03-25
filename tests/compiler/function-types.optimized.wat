@@ -66,6 +66,8 @@
  )
  (func $start:function-types
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -164,10 +166,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 1216
+  local.tee $0
   i32.store
   i32.const 4
   i32.const 5
-  i32.const 1216
+  local.get $0
   call $function-types/doAddWithFn<i32>
   i32.const 9
   i32.ne
@@ -181,6 +184,8 @@
   end
   i32.const 2
   global.set $~argumentsLength
+  i32.const 1
+  i32.const 2
   i32.const 0
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -201,14 +206,11 @@
     end
     unreachable
    end
-   i32.const 1056
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 1056
+   local.tee $0
    i32.store
   end
-  i32.const 1
-  i32.const 2
   local.get $0
   call $function-types/doAddWithFn<i32>
   global.get $~lib/memory/__stack_pointer
@@ -227,10 +229,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 1056
+  local.tee $0
   i32.store
   i32.const 1
   i32.const 2
-  i32.const 1056
+  local.get $0
   call $function-types/doAddWithFn<i32>
   i32.const 3
   i32.ne

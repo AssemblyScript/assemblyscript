@@ -394,6 +394,36 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 92
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 93
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 94
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~start
   call $start:switch

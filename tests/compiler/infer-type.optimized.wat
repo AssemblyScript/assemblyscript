@@ -5,9 +5,12 @@
  (start $~start)
  (func $~start
   (local $0 i32)
+  (local $1 i32)
+  i32.const 10
+  local.set $1
   loop $for-loop|0
    local.get $0
-   i32.const 10
+   local.get $1
    i32.lt_s
    if
     local.get $0

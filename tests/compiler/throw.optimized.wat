@@ -715,13 +715,15 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 19724
+  local.set $1
   local.get $0
   i32.const -16
   i32.and
   i32.const 19712
   i32.load
   local.tee $0
-  if (result i32)
+  if
    local.get $0
    i32.const 4
    i32.add
@@ -746,10 +748,9 @@
    else
     i32.const 19724
    end
-  else
-   i32.const 19724
+   local.set $1
   end
-  local.tee $1
+  local.get $1
   i32.sub
   local.tee $0
   i32.const 20
@@ -803,12 +804,12 @@
   i32.eqz
   if
    memory.size
-   local.tee $2
+   local.tee $1
    i32.const 1
    i32.lt_s
    if (result i32)
     i32.const 1
-    local.get $2
+    local.get $1
     i32.sub
     memory.grow
     i32.const 0
@@ -825,6 +826,8 @@
    i32.const 19712
    i32.const 0
    i32.store
+   i32.const 0
+   local.set $1
    loop $for-loop|0
     local.get $1
     i32.const 23

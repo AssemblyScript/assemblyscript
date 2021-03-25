@@ -203,8 +203,8 @@
   call $start:std/hash
  )
  (func $start:std/hash
-  (local $0 f32)
-  (local $1 i32)
+  (local $0 i32)
+  (local $1 f32)
   (local $2 f64)
   (local $3 i64)
   global.get $~lib/memory/__stack_pointer
@@ -229,54 +229,76 @@
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1056
+  local.tee $0
   i32.store
-  i32.const 1056
+  local.get $0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1088
+  local.tee $0
   i32.store
-  i32.const 1088
+  local.get $0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1120
+  local.tee $0
   i32.store
-  i32.const 1120
+  local.get $0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1152
+  local.tee $0
   i32.store
-  i32.const 1152
+  local.get $0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1184
+  local.tee $0
   i32.store
-  i32.const 1184
+  local.get $0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1216
+  local.tee $0
   i32.store
-  i32.const 1216
+  local.get $0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1248
+  local.tee $0
   i32.store
-  i32.const 1248
+  local.get $0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1280
+  local.tee $0
   i32.store
-  i32.const 1280
+  local.get $0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1328
+  local.tee $0
   i32.store
-  i32.const 1328
+  local.get $0
   call $~lib/util/hash/HASH<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 1376
+  local.tee $0
   i32.store
-  i32.const 1376
+  local.get $0
   call $~lib/util/hash/HASH<~lib/string/String|null>
+  f64.const 0
+  local.set $2
+  f64.const 1
+  local.set $2
+  f64.const 1.1
+  local.set $2
+  f64.const 0
+  local.set $2
+  f64.const inf
+  local.set $2
+  f64.const nan:0x8000000000000
+  local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add

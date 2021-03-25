@@ -1,7 +1,7 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
@@ -1299,6 +1299,16 @@
    global.set $~lib/rt/itcms/visitCount
   end
  )
+ (func $~lib/rt/itcms/Object#get:size (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+  i32.const 3
+  i32.const -1
+  i32.xor
+  i32.and
+  i32.const 4
+  i32.add
+ )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1872,12 +1882,14 @@
   i32.const 42384
   i32.const 0
   i32.store
+  i32.const 0
+  local.set $0
   loop $for-loop|0
-   local.get $1
+   local.get $0
    i32.const 23
    i32.lt_u
    if
-    local.get $1
+    local.get $0
     i32.const 2
     i32.shl
     i32.const 40816
@@ -1885,14 +1897,14 @@
     i32.const 0
     i32.store offset=4
     i32.const 0
-    local.set $0
+    local.set $1
     loop $for-loop|1
-     local.get $0
+     local.get $1
      i32.const 16
      i32.lt_u
      if
-      local.get $0
       local.get $1
+      local.get $0
       i32.const 4
       i32.shl
       i32.add
@@ -1902,17 +1914,17 @@
       i32.add
       i32.const 0
       i32.store offset=96
-      local.get $0
+      local.get $1
       i32.const 1
       i32.add
-      local.set $0
+      local.set $1
       br $for-loop|1
      end
     end
-    local.get $1
+    local.get $0
     i32.const 1
     i32.add
-    local.set $1
+    local.set $0
     br $for-loop|0
    end
   end
@@ -2103,11 +2115,7 @@
      else
       global.get $~lib/rt/itcms/total
       local.get $0
-      i32.load
-      i32.const -4
-      i32.and
-      i32.const 4
-      i32.add
+      call $~lib/rt/itcms/Object#get:size
       i32.sub
       global.set $~lib/rt/itcms/total
       local.get $0
@@ -2181,6 +2189,7 @@
  )
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $1
   i32.const 256
   i32.lt_u
@@ -2210,12 +2219,14 @@
    i32.clz
    i32.sub
    local.set $2
+   i32.const 1
+   i32.const 4
+   i32.shl
    local.get $1
    local.get $2
    i32.const 4
    i32.sub
    i32.shr_u
-   i32.const 16
    i32.xor
    local.set $1
    local.get $2
@@ -2246,7 +2257,9 @@
   i32.shl
   i32.add
   i32.load offset=4
+  i32.const 0
   i32.const -1
+  i32.xor
   local.get $1
   i32.shl
   i32.and
@@ -2266,7 +2279,9 @@
   else
    local.get $0
    i32.load
+   i32.const 0
    i32.const -1
+   i32.xor
    local.get $2
    i32.const 1
    i32.add
@@ -2304,7 +2319,7 @@
     i32.add
     i32.load offset=96
    else
-    i32.const 0
+    local.get $3
    end
   end
  )
@@ -2746,11 +2761,7 @@
   call $~lib/rt/itcms/Object#linkTo
   global.get $~lib/rt/itcms/total
   local.get $2
-  i32.load
-  i32.const -4
-  i32.and
-  i32.const 4
-  i32.add
+  call $~lib/rt/itcms/Object#get:size
   i32.add
   global.set $~lib/rt/itcms/total
   local.get $2
@@ -4082,6 +4093,7 @@
   local.get $2
  )
  (func $~lib/math/NativeMath.scalbn (param $0 f64) (param $1 i32) (result f64)
+  (local $2 i32)
   local.get $1
   i32.const 1023
   i32.gt_s
@@ -4102,8 +4114,9 @@
     i32.sub
     local.tee $1
     i32.const 1023
+    local.tee $2
     local.get $1
-    i32.const 1023
+    local.get $2
     i32.lt_s
     select
     local.set $1
@@ -4119,7 +4132,9 @@
    i32.lt_s
    if (result f64)
     local.get $0
-    f64.const 2.004168360008973e-292
+    f64.const 2.2250738585072014e-308
+    f64.const 9007199254740992
+    f64.mul
     f64.mul
     local.set $0
     local.get $1
@@ -4134,13 +4149,16 @@
      i32.add
      local.tee $1
      i32.const -1022
+     local.tee $2
      local.get $1
-     i32.const -1022
+     local.get $2
      i32.gt_s
      select
      local.set $1
      local.get $0
-     f64.const 2.004168360008973e-292
+     f64.const 2.2250738585072014e-308
+     f64.const 9007199254740992
+     f64.mul
      f64.mul
     else
      local.get $0
@@ -5455,6 +5473,10 @@
  )
  (func $~lib/util/number/utoa_hex_simple<u64> (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i64)
+  (local $4 i64)
+  i32.const 57
+  i64.extend_i32_s
+  local.set $3
   loop $do-continue|0
    local.get $0
    local.get $2
@@ -5469,12 +5491,12 @@
    i64.and
    i64.const 48
    i64.or
-   local.tee $3
+   local.tee $4
    i64.const 39
    i64.const 0
    local.get $3
-   i64.const 57
-   i64.gt_u
+   local.get $4
+   i64.lt_u
    select
    i64.add
    i64.store16
@@ -5877,7 +5899,11 @@
    i32.const 1
    i32.shl
    i32.add
-   i32.const 3145774
+   i32.const 48
+   i32.const 16
+   i32.shl
+   i32.const 46
+   i32.or
    i32.store
    local.get $1
    i32.const 2
@@ -5920,7 +5946,11 @@
    i32.const 1
    i32.shl
    i32.add
-   i32.const 3145774
+   i32.const 48
+   i32.const 16
+   i32.shl
+   i32.const 46
+   i32.or
    i32.store
    local.get $3
    i32.const 2
@@ -5980,7 +6010,11 @@
      i32.shl
      call $~lib/memory/memory.copy
      local.get $0
-     i32.const 3014704
+     i32.const 46
+     i32.const 16
+     i32.shl
+     i32.const 48
+     i32.or
      i32.store
      i32.const 2
      local.set $2

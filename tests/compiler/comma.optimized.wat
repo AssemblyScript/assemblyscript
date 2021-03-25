@@ -81,6 +81,26 @@
   global.set $comma/b
   i32.const 2
   global.set $comma/a
+  i32.const 0
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 18
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $comma/b
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 19
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   loop $for-loop|0
    global.get $comma/a
    local.get $0

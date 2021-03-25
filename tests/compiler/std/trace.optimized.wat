@@ -35,6 +35,7 @@
   call $start:std/trace
  )
  (func $start:std/trace
+  (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -55,8 +56,9 @@
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 1056
+  local.tee $0
   i32.store
-  i32.const 1056
+  local.get $0
   i32.const 0
   f64.const 0
   f64.const 0
@@ -66,8 +68,9 @@
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
   i32.const 1104
+  local.tee $0
   i32.store
-  i32.const 1104
+  local.get $0
   i32.const 0
   f64.const 0
   f64.const 0
@@ -77,8 +80,9 @@
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
   i32.const 1152
+  local.tee $0
   i32.store
-  i32.const 1152
+  local.get $0
   i32.const 1
   f64.const 1
   f64.const 0
@@ -88,8 +92,9 @@
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
   i32.const 1200
+  local.tee $0
   i32.store
-  i32.const 1200
+  local.get $0
   i32.const 2
   f64.const 1
   f64.const 2
@@ -99,8 +104,9 @@
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
   i32.const 1248
+  local.tee $0
   i32.store
-  i32.const 1248
+  local.get $0
   i32.const 3
   f64.const 1
   f64.const 2
@@ -110,8 +116,9 @@
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
   i32.const 1296
+  local.tee $0
   i32.store
-  i32.const 1296
+  local.get $0
   i32.const 4
   f64.const 1
   f64.const 2
@@ -121,8 +128,9 @@
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
   i32.const 1344
+  local.tee $0
   i32.store
-  i32.const 1344
+  local.get $0
   i32.const 5
   f64.const 1
   f64.const 2
@@ -132,8 +140,9 @@
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
   i32.const 1392
+  local.tee $0
   i32.store
-  i32.const 1392
+  local.get $0
   i32.const 5
   f64.const 1.1
   f64.const 2.2

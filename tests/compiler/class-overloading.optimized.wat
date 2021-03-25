@@ -319,6 +319,16 @@
    global.set $~lib/rt/itcms/visitCount
   end
  )
+ (func $~lib/rt/itcms/Object#get:size (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+  i32.const 3
+  i32.const -1
+  i32.xor
+  i32.and
+  i32.const 4
+  i32.add
+ )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -892,12 +902,14 @@
   i32.const 19888
   i32.const 0
   i32.store
+  i32.const 0
+  local.set $0
   loop $for-loop|0
-   local.get $1
+   local.get $0
    i32.const 23
    i32.lt_u
    if
-    local.get $1
+    local.get $0
     i32.const 2
     i32.shl
     i32.const 18320
@@ -905,14 +917,14 @@
     i32.const 0
     i32.store offset=4
     i32.const 0
-    local.set $0
+    local.set $1
     loop $for-loop|1
-     local.get $0
+     local.get $1
      i32.const 16
      i32.lt_u
      if
-      local.get $0
       local.get $1
+      local.get $0
       i32.const 4
       i32.shl
       i32.add
@@ -922,17 +934,17 @@
       i32.add
       i32.const 0
       i32.store offset=96
-      local.get $0
+      local.get $1
       i32.const 1
       i32.add
-      local.set $0
+      local.set $1
       br $for-loop|1
      end
     end
-    local.get $1
+    local.get $0
     i32.const 1
     i32.add
-    local.set $1
+    local.set $0
     br $for-loop|0
    end
   end
@@ -1123,11 +1135,7 @@
      else
       global.get $~lib/rt/itcms/total
       local.get $0
-      i32.load
-      i32.const -4
-      i32.and
-      i32.const 4
-      i32.add
+      call $~lib/rt/itcms/Object#get:size
       i32.sub
       global.set $~lib/rt/itcms/total
       local.get $0
@@ -1202,6 +1210,17 @@
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  i32.const 1
+  i32.const 16
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 1424
+   i32.const 334
+   i32.const 14
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   i32.load offset=4
   i32.const -2
@@ -1463,11 +1482,7 @@
   call $~lib/rt/itcms/Object#linkTo
   global.get $~lib/rt/itcms/total
   local.get $1
-  i32.load
-  i32.const -4
-  i32.and
-  i32.const 4
-  i32.add
+  call $~lib/rt/itcms/Object#get:size
   i32.add
   global.set $~lib/rt/itcms/total
   local.get $1
@@ -1913,6 +1928,7 @@
  )
  (func $start:class-overloading
   (local $0 i32)
+  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -1951,11 +1967,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -1978,11 +1995,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2005,11 +2023,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2032,11 +2051,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2055,11 +2075,16 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 5
-  call $~lib/rt/itcms/__new
+  i32.const 0
   local.tee $0
-  i32.store
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 5
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $class-overloading/B#constructor
@@ -2081,11 +2106,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1616
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1616
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2109,8 +2135,9 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1616
   i32.store offset=4
-  i32.const 1616
-  i32.const 1616
+  local.get $0
+  local.tee $1
+  local.get $0
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2134,8 +2161,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1616
   i32.store offset=4
-  i32.const 1616
-  i32.const 1616
+  local.get $1
+  local.get $1
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2157,8 +2184,8 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 1616
   i32.store offset=4
-  i32.const 1616
-  i32.const 1616
+  local.get $1
+  local.get $1
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2184,11 +2211,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2211,11 +2239,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2238,11 +2267,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2263,11 +2293,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2293,11 +2324,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2320,11 +2352,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2347,11 +2380,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2372,11 +2406,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1520
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1520
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2395,11 +2430,16 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  call $~lib/rt/itcms/__new
+  i32.const 0
   local.tee $0
-  i32.store
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $0
   call $class-overloading/E#constructor
@@ -2423,11 +2463,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1648
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1648
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2450,11 +2491,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1648
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1648
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2477,11 +2519,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1648
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1648
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2504,11 +2547,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1648
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1648
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2527,11 +2571,16 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 10
-  call $~lib/rt/itcms/__new
+  i32.const 0
   local.tee $0
-  i32.store
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 10
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
@@ -2550,11 +2599,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1680
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1680
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2573,11 +2623,16 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 12
-  call $~lib/rt/itcms/__new
+  i32.const 0
   local.tee $0
-  i32.store
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 12
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
@@ -2596,11 +2651,12 @@
   global.get $class-overloading/which
   local.tee $0
   i32.store
+  local.get $0
   global.get $~lib/memory/__stack_pointer
   i32.const 1712
+  local.tee $0
   i32.store offset=4
   local.get $0
-  i32.const 1712
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2619,11 +2675,16 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  global.get $~lib/memory/__stack_pointer
-  i32.const 14
-  call $~lib/rt/itcms/__new
+  i32.const 0
   local.tee $0
-  i32.store
+  i32.eqz
+  if
+   global.get $~lib/memory/__stack_pointer
+   i32.const 14
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+  end
   global.get $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -2634,19 +2695,21 @@
   i32.const 0
   i32.store
   local.get $0
+  local.tee $1
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 13
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $1
    i32.store
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
+  local.tee $0
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 4

@@ -1696,7 +1696,7 @@ export class Module {
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
         passes.push("merge-blocks");
-        passes.push("precompute-propagate");
+        // passes.push("precompute-propagate");
       }
       if (optimizeLevel >= 3) {
         passes.push("flatten");
@@ -1718,9 +1718,9 @@ export class Module {
       passes.push("remove-unused-brs");
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("inlining");
-        passes.push("precompute-propagate");
+        // passes.push("precompute-propagate");
       } else {
-        passes.push("precompute");
+        // passes.push("precompute");
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("pick-load-signs");
@@ -1787,11 +1787,11 @@ export class Module {
         passes.push("code-folding");
       }
       // precompute works best after global optimizations
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        passes.push("precompute-propagate");
-      } else {
-        passes.push("precompute");
-      }
+      // if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+      //   passes.push("precompute-propagate");
+      // } else {
+      //   passes.push("precompute");
+      // }
       passes.push("directize"); // replace indirect with direct calls
       passes.push("dae-optimizing"); // reduce arity
       passes.push("inlining-optimizing"); // and inline if possible
@@ -1804,7 +1804,7 @@ export class Module {
           passes.push("simplify-globals");
           passes.push("vacuum");
 
-          passes.push("precompute-propagate");
+          // passes.push("precompute-propagate");
 
           // replace indirect with direct calls again and inline
           passes.push("inlining-optimizing");
@@ -1817,7 +1817,7 @@ export class Module {
           passes.push("vacuum");
 
           passes.push("inlining");
-          passes.push("precompute-propagate");
+          // passes.push("precompute-propagate");
           passes.push("vacuum");
 
           passes.push("coalesce-locals");

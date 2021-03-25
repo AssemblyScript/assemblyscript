@@ -109,9 +109,13 @@
    i64.shl
   else
    local.get $2
-   i64.const 4503599627370495
+   i64.const -1
+   i64.const 12
+   i64.shr_u
    i64.and
-   i64.const 4503599627370496
+   i64.const 1
+   i64.const 52
+   i64.shl
    i64.or
   end
   local.set $2
@@ -131,9 +135,13 @@
    i64.shl
   else
    local.get $3
-   i64.const 4503599627370495
+   i64.const -1
+   i64.const 12
+   i64.shr_u
    i64.and
-   i64.const 4503599627370496
+   i64.const 1
+   i64.const 52
+   i64.shl
    i64.or
   end
   local.set $3
@@ -196,7 +204,9 @@
    i64.gt_s
    if (result i64)
     local.get $2
-    i64.const 4503599627370496
+    i64.const 1
+    i64.const 52
+    i64.shl
     i64.sub
     local.get $4
     i64.const 52
@@ -234,7 +244,8 @@
   f64.const 0
   f64.eq
   if
-   f64.const 1
+   i32.const 1
+   f64.convert_i32_u
    local.get $1
    f64.div
    f64.const 1
@@ -344,9 +355,13 @@
   local.get $4
   if (result i32)
    local.get $2
-   i32.const 8388607
+   i32.const -1
+   i32.const 9
+   i32.shr_u
    i32.and
-   i32.const 8388608
+   i32.const 1
+   i32.const 23
+   i32.shl
    i32.or
   else
    local.get $2
@@ -365,9 +380,13 @@
   local.get $5
   if (result i32)
    local.get $3
-   i32.const 8388607
+   i32.const -1
+   i32.const 9
+   i32.shr_u
    i32.and
-   i32.const 8388608
+   i32.const 1
+   i32.const 23
+   i32.shl
    i32.or
   else
    local.get $3
@@ -442,7 +461,9 @@
    i32.gt_s
    if (result i32)
     local.get $2
-    i32.const 8388608
+    i32.const 1
+    i32.const 23
+    i32.shl
     i32.sub
     local.get $4
     i32.const 23
@@ -477,7 +498,8 @@
    f32.ne
    br_if $__inlined_func$std/mod/check<f32>
    drop
-   f32.const 1
+   i32.const 1
+   f32.convert_i32_u
    local.get $2
    f32.div
    f32.const 1
@@ -1172,7 +1194,8 @@
    unreachable
   end
   f64.const 0
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const 0
   call $std/mod/test_fmod
   i32.eqz
@@ -1185,7 +1208,8 @@
    unreachable
   end
   f64.const -0
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const -0
   call $std/mod/test_fmod
   i32.eqz
@@ -1224,7 +1248,8 @@
    unreachable
   end
   f64.const 1
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const 1
   call $std/mod/test_fmod
   i32.eqz
@@ -1237,7 +1262,8 @@
    unreachable
   end
   f64.const -1
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const -1
   call $std/mod/test_fmod
   i32.eqz
@@ -1275,7 +1301,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const 0
   f64.const nan:0x8000000000000
   call $std/mod/test_fmod
@@ -1288,7 +1315,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const -0
   f64.const nan:0x8000000000000
   call $std/mod/test_fmod
@@ -1327,7 +1355,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const 1
   f64.const nan:0x8000000000000
   call $std/mod/test_fmod
@@ -1340,7 +1369,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const -1
   f64.const nan:0x8000000000000
   call $std/mod/test_fmod
@@ -1366,7 +1396,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const inf
   f64.const nan:0x8000000000000
   call $std/mod/test_fmod
@@ -1380,7 +1411,8 @@
    unreachable
   end
   f64.const inf
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const nan:0x8000000000000
   call $std/mod/test_fmod
   i32.eqz
@@ -1392,8 +1424,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
-  f64.const -inf
+  f64.const inf
+  f64.neg
+  f64.const inf
+  f64.neg
   f64.const nan:0x8000000000000
   call $std/mod/test_fmod
   i32.eqz
@@ -1418,7 +1452,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
   call $std/mod/test_fmod
@@ -1445,7 +1480,8 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const nan:0x8000000000000
   call $std/mod/test_fmod
   i32.eqz
@@ -1965,7 +2001,8 @@
    unreachable
   end
   f32.const 0
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const 0
   call $std/mod/test_fmodf
   i32.eqz
@@ -1978,7 +2015,8 @@
    unreachable
   end
   f32.const -0
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const -0
   call $std/mod/test_fmodf
   i32.eqz
@@ -2017,7 +2055,8 @@
    unreachable
   end
   f32.const 1
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const 1
   call $std/mod/test_fmodf
   i32.eqz
@@ -2030,7 +2069,8 @@
    unreachable
   end
   f32.const -1
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const -1
   call $std/mod/test_fmodf
   i32.eqz
@@ -2068,7 +2108,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const 0
   f32.const nan:0x400000
   call $std/mod/test_fmodf
@@ -2081,7 +2122,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const -0
   f32.const nan:0x400000
   call $std/mod/test_fmodf
@@ -2120,7 +2162,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const 1
   f32.const nan:0x400000
   call $std/mod/test_fmodf
@@ -2133,7 +2176,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const -1
   f32.const nan:0x400000
   call $std/mod/test_fmodf
@@ -2159,7 +2203,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const inf
   f32.const nan:0x400000
   call $std/mod/test_fmodf
@@ -2173,7 +2218,8 @@
    unreachable
   end
   f32.const inf
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const nan:0x400000
   call $std/mod/test_fmodf
   i32.eqz
@@ -2185,8 +2231,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
-  f32.const -inf
+  f32.const inf
+  f32.neg
+  f32.const inf
+  f32.neg
   f32.const nan:0x400000
   call $std/mod/test_fmodf
   i32.eqz
@@ -2211,7 +2259,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const nan:0x400000
   f32.const nan:0x400000
   call $std/mod/test_fmodf
@@ -2238,7 +2287,8 @@
    unreachable
   end
   f32.const nan:0x400000
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const nan:0x400000
   call $std/mod/test_fmodf
   i32.eqz

@@ -281,6 +281,16 @@
    global.set $~lib/rt/itcms/visitCount
   end
  )
+ (func $~lib/rt/itcms/Object#get:size (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+  i32.const 3
+  i32.const -1
+  i32.xor
+  i32.and
+  i32.const 4
+  i32.add
+ )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -854,12 +864,14 @@
   i32.const 19520
   i32.const 0
   i32.store
+  i32.const 0
+  local.set $0
   loop $for-loop|0
-   local.get $1
+   local.get $0
    i32.const 23
    i32.lt_u
    if
-    local.get $1
+    local.get $0
     i32.const 2
     i32.shl
     i32.const 17952
@@ -867,14 +879,14 @@
     i32.const 0
     i32.store offset=4
     i32.const 0
-    local.set $0
+    local.set $1
     loop $for-loop|1
-     local.get $0
+     local.get $1
      i32.const 16
      i32.lt_u
      if
-      local.get $0
       local.get $1
+      local.get $0
       i32.const 4
       i32.shl
       i32.add
@@ -884,17 +896,17 @@
       i32.add
       i32.const 0
       i32.store offset=96
-      local.get $0
+      local.get $1
       i32.const 1
       i32.add
-      local.set $0
+      local.set $1
       br $for-loop|1
      end
     end
-    local.get $1
+    local.get $0
     i32.const 1
     i32.add
-    local.set $1
+    local.set $0
     br $for-loop|0
    end
   end
@@ -1085,11 +1097,7 @@
      else
       global.get $~lib/rt/itcms/total
       local.get $0
-      i32.load
-      i32.const -4
-      i32.and
-      i32.const 4
-      i32.add
+      call $~lib/rt/itcms/Object#get:size
       i32.sub
       global.set $~lib/rt/itcms/total
       local.get $0
@@ -1164,6 +1172,17 @@
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  i32.const 1
+  i32.const 16
+  i32.ge_u
+  if
+   i32.const 0
+   i32.const 1392
+   i32.const 334
+   i32.const 14
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   i32.load offset=4
   i32.const -2
@@ -1425,11 +1444,7 @@
   call $~lib/rt/itcms/Object#linkTo
   global.get $~lib/rt/itcms/total
   local.get $1
-  i32.load
-  i32.const -4
-  i32.and
-  i32.const 4
-  i32.add
+  call $~lib/rt/itcms/Object#get:size
   i32.add
   global.set $~lib/rt/itcms/total
   local.get $1

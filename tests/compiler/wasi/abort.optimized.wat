@@ -347,8 +347,12 @@
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
  )
  (func $wasi/abort/test
-  call $~lib/wasi/index/abort
-  unreachable
+  i32.const 0
+  i32.eqz
+  if
+   call $~lib/wasi/index/abort
+   unreachable
+  end
  )
  (func $~start
   nop
