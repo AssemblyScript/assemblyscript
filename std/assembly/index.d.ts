@@ -801,6 +801,10 @@ declare namespace v128 {
   export function extend_low<TFrom = i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
   /** Extends the high lanes of a vector to their respective wider lanes. */
   export function extend_high<TFrom = i8 | u8 | i16 | u16 | i32 | u32>(a: v128): v128;
+  /** Computes (a * b) + c for each floating point lane. */
+  export function qfma<T = f32 | f64>(a: v128, b: v128, c: v128): v128
+  /** Computes (a * b) - c for each floating point lane. */
+  export function qfms<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
