@@ -163,9 +163,15 @@ function loadHex(src: usize, offset: usize): u32 {
   // trace("c0", 1, c0);
   // trace("c1", 1, c1);
 
-  if (!isHex(c0) || !isHex(c1)) return -1;
+  // if (!isHex(c0) || !isHex(c1)) return -1;
+  // return fromHex(c0) << 4 | fromHex(c1);
 
-  return fromHex(c0) << 4 | fromHex(c1);
+  c0 = fromHex(c0);
+  c1 = fromHex(c1);
+
+  return c0 < 16 && c1 < 16
+    ? c0 << 4 | c1
+    : -1;
 }
 
 export function decode(dst: usize, src: usize, len: usize, component: bool = false): usize {

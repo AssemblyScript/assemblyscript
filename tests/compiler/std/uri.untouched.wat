@@ -3640,60 +3640,13 @@
   local.get $2
   local.set $4
   local.get $4
-  i32.const 48
-  i32.sub
-  i32.const 10
-  i32.lt_u
-  if (result i32)
-   i32.const 1
-  else
-   local.get $4
-   i32.const 32
-   i32.or
-   i32.const 97
-   i32.sub
-   i32.const 6
-   i32.lt_u
-  end
-  i32.eqz
-  if (result i32)
-   i32.const 1
-  else
-   local.get $3
-   local.set $4
-   local.get $4
-   i32.const 48
-   i32.sub
-   i32.const 10
-   i32.lt_u
-   if (result i32)
-    i32.const 1
-   else
-    local.get $4
-    i32.const 32
-    i32.or
-    i32.const 97
-    i32.sub
-    i32.const 6
-    i32.lt_u
-   end
-   i32.eqz
-  end
-  if
-   i32.const -1
-   return
-  end
-  local.get $2
-  local.set $4
-  local.get $4
   i32.const 32
   i32.or
   i32.const 39
   i32.rem_u
   i32.const 9
   i32.sub
-  i32.const 4
-  i32.shl
+  local.set $2
   local.get $3
   local.set $4
   local.get $4
@@ -3703,7 +3656,26 @@
   i32.rem_u
   i32.const 9
   i32.sub
-  i32.or
+  local.set $3
+  local.get $2
+  i32.const 16
+  i32.lt_u
+  if (result i32)
+   local.get $3
+   i32.const 16
+   i32.lt_u
+  else
+   i32.const 0
+  end
+  if (result i32)
+   local.get $2
+   i32.const 4
+   i32.shl
+   local.get $3
+   i32.or
+  else
+   i32.const -1
+  end
  )
  (func $~lib/rt/itcms/__renew (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3886,7 +3858,7 @@
      if
       i32.const 464
       i32.const 512
-      i32.const 197
+      i32.const 203
       i32.const 7
       call $~lib/builtins/abort
       unreachable
@@ -3913,7 +3885,7 @@
      if
       i32.const 464
       i32.const 512
-      i32.const 200
+      i32.const 206
       i32.const 7
       call $~lib/builtins/abort
       unreachable
@@ -4064,7 +4036,7 @@
          if
           i32.const 464
           i32.const 512
-          i32.const 232
+          i32.const 238
           i32.const 11
           call $~lib/builtins/abort
           unreachable
@@ -4091,7 +4063,7 @@
          if
           i32.const 464
           i32.const 512
-          i32.const 235
+          i32.const 241
           i32.const 11
           call $~lib/builtins/abort
           unreachable
@@ -4149,7 +4121,7 @@
       if
        i32.const 464
        i32.const 512
-       i32.const 247
+       i32.const 253
        i32.const 9
        call $~lib/builtins/abort
        unreachable
