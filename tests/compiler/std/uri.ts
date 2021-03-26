@@ -3,12 +3,14 @@
 
 // not escaped
 
-/*
 assert(encodeURIComponent("") == "");
 assert(encodeURIComponent("a") == "a");
 assert(encodeURIComponent("a1") == "a1");
 assert(encodeURIComponent("ab_") == "ab_");
-assert(encodeURIComponent("ABCDXYZafgklmnwyz0123456789-_.!~*'()") == "ABCDXYZafgklmnwyz0123456789-_.!~*'()");
+assert(
+  encodeURIComponent("ABCDXYZafgklmnwyz0123456789-_.!~*'()") ==
+  "ABCDXYZafgklmnwyz0123456789-_.!~*'()"
+);
 
 // escaped
 
@@ -44,7 +46,10 @@ assert(
 assert(encodeURI("") == "");
 assert(encodeURI("a") == "a");
 assert(encodeURI(";,/?:@&=+$#") == ";,/?:@&=+$#");
-assert(encodeURI("ABCDXYZafgklmnwyz0123456789-_.!~*'()") == "ABCDXYZafgklmnwyz0123456789-_.!~*'()");
+assert(
+  encodeURI("ABCDXYZafgklmnwyz0123456789-_.!~*'()") ==
+  "ABCDXYZafgklmnwyz0123456789-_.!~*'()"
+);
 
 // escaped
 
@@ -60,14 +65,18 @@ assert(
 
 // assert(encodeURI("\uD800")); // malformed URI sequence
 // assert(encodeURI("\uDFFF")); // malformed URI sequence
-*/
 
 // decodeURIComponent
 
 assert(decodeURIComponent("") == "");
 assert(decodeURIComponent("a") == "a");
-
 assert(decodeURIComponent("%26") == "&");
+assert(decodeURIComponent("%3b%2f%3f%3a%40%3d%2b%24%2c%23") == ";/?:@=+$,#");
+assert(decodeURIComponent("%3B%2F%3F%3A%40%3D%2B%24%2C%23") == ";/?:@=+$,#");
+assert(
+  decodeURIComponent("http:%2F%2Fen.wikipedia.org/wiki/UTF-8%23Description") ==
+  "http://en.wikipedia.org/wiki/UTF-8#Description"
+); // fail
 
 // decodeURI
 
