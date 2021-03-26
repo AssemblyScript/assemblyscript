@@ -1,5 +1,5 @@
 /**
- * @fileoverview Floating point glue code for JaavaScript.
+ * @fileoverview Floating point glue code for JavaScript.
  * @license Apache-2.0
  */
 
