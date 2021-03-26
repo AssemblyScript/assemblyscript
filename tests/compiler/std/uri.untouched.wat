@@ -40,7 +40,15 @@
  (data (i32.const 1180) "l\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00Z\00\00\00%\00E\00C\00%\009\005\00%\008\008\00%\00E\00B\00%\008\005\00%\009\005\00%\00E\00D\00%\009\005\00%\009\008\00%\00E\00C\00%\008\004\00%\00B\008\00%\00E\00C\00%\009\00A\00%\009\004\00\00\00")
  (data (i32.const 1292) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\04\00\00\00\00\d8\ff\df\00\00\00\00\00\00\00\00")
  (data (i32.const 1324) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00%\00F\000\00%\009\000\00%\008\00F\00%\00B\00F\00\00\00\00\00")
- (data (i32.const 1376) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1372) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00{\da\01\dc-\00P\da\02\dc\00\00")
+ (data (i32.const 1404) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\002\00\00\00%\00F\002\00%\00A\00E\00%\00B\000\00%\008\001\00-\00%\00F\002\00%\00A\004\00%\008\000\00%\008\002\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1484) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00\n\00\t\00\0b\00\0c\00\0d\00\00\00")
+ (data (i32.const 1516) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00%\000\00A\00%\000\009\00%\000\00B\00%\000\00C\00%\000\00D\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1580) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00;\00/\00?\00:\00@\00&\00=\00+\00$\00,\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1628) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00<\00\00\00%\003\00B\00%\002\00F\00%\003\00F\00%\003\00A\00%\004\000\00%\002\006\00%\003\00D\00%\002\00B\00%\002\004\00%\002\00C\00")
+ (data (i32.const 1708) "l\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\\\00\00\00h\00t\00t\00p\00:\00/\00/\00e\00n\00.\00w\00i\00k\00i\00p\00e\00d\00i\00a\00.\00o\00r\00g\00/\00w\00i\00k\00i\00/\00U\00T\00F\00-\008\00#\00D\00e\00s\00c\00r\00i\00p\00t\00i\00o\00n\00")
+ (data (i32.const 1820) "\8c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00t\00\00\00h\00t\00t\00p\00%\003\00A\00%\002\00F\00%\002\00F\00e\00n\00.\00w\00i\00k\00i\00p\00e\00d\00i\00a\00.\00o\00r\00g\00%\002\00F\00w\00i\00k\00i\00%\002\00F\00U\00T\00F\00-\008\00%\002\003\00D\00e\00s\00c\00r\00i\00p\00t\00i\00o\00n\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 1968) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -55,10 +63,10 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/util/uri/URL_SAFE i32 (i32.const 444))
- (global $~lib/rt/__rtti_base i32 (i32.const 1376))
- (global $~lib/memory/__data_end i32 (i32.const 1404))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17788))
- (global $~lib/memory/__heap_base i32 (i32.const 17788))
+ (global $~lib/rt/__rtti_base i32 (i32.const 1968))
+ (global $~lib/memory/__data_end i32 (i32.const 1996))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18380))
+ (global $~lib/memory/__heap_base i32 (i32.const 18380))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
@@ -4369,8 +4377,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 17808
-   i32.const 17856
+   i32.const 18400
+   i32.const 18448
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -4683,6 +4691,118 @@
    i32.const 0
    i32.const 720
    i32.const 15
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1392
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=8
+  local.get $0
+  call $~lib/uri/encodeURIComponent
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 1424
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 16
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1504
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=8
+  local.get $0
+  call $~lib/uri/encodeURIComponent
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 1536
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 18
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1600
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=8
+  local.get $0
+  call $~lib/uri/encodeURIComponent
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 1648
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 20
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1728
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=8
+  local.get $0
+  call $~lib/uri/encodeURIComponent
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 1840
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store offset=4
+  local.get $0
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 720
+   i32.const 22
    i32.const 1
    call $~lib/builtins/abort
    unreachable
