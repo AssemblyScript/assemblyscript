@@ -36,10 +36,10 @@ function storeHex(dst: usize, offset: usize, ch: u32): void {
     0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46
   ]);
 
-  let hex = (
-    (<u32>load<u8>(HEX_CHARS + ((ch >>> 4) & 0x0F))) |
-    (<u32>load<u8>(HEX_CHARS + ((ch >>> 0) & 0x0F)) << 16)
-  );
+  let hex =
+    <u32>load<u8>(HEX_CHARS + (ch >> 4 & 0x0F)) |
+    <u32>load<u8>(HEX_CHARS + (ch      & 0x0F)) << 16;
+
   store<u16>(dst + offset, CharCode.PERCENT, 0); // %
   store<u32>(dst + offset, hex, 2); // XX
 }
@@ -57,7 +57,7 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
     } while (++i < len);
 
     if (i > org) {
-      let size = (i - org) << 1;
+      let size = i - org << 1;
       if (offset + size > outSize) {
         outSize = offset + size;
         dst = __renew(dst, outSize);
@@ -113,10 +113,10 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
         } else {
           storeHex(dst, offset, (c >> 18) | 0xF0);
           offset += 6;
-          storeHex(dst, offset, ((c >> 12) & 0x3F) | 0x80);
+          storeHex(dst, offset, (c >> 12 & 0x3F) | 0x80);
           offset += 6;
         }
-        storeHex(dst, offset, ((c >> 6) & 0x3F) | 0x80);
+        storeHex(dst, offset, (c >> 6 & 0x3F) | 0x80);
         offset += 6;
       }
       storeHex(dst, offset, (c & 0x3F) | 0x80);

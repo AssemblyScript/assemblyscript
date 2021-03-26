@@ -3692,8 +3692,6 @@
   i32.load8_u
   i32.const 684
   local.get $2
-  i32.const 0
-  i32.shr_u
   i32.const 15
   i32.and
   i32.add
