@@ -44,8 +44,8 @@ function storeHex(dst: usize, offset: usize, ch: u32): usize {
   return offset + (3 << 1);
 }
 
-export function encode(dst: usize, src: usize, len: isize, table: usize): void {
-  var i: isize = 0, offset: usize = 0, outLen = len;
+export function encode(dst: usize, src: usize, len: isize, table: usize): usize {
+  var i: isize = 0, offset: usize = 0, outSize = <usize>len << 1;
   while (i < len) {
     let org = i;
     let c: u32, c1: u32;
@@ -58,18 +58,18 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): void {
     } while (i < len);
 
     if (i > org) {
-      if (offset >= <usize>(outLen << 1)) {
-        outLen = outLen * 12 / 10;
-        dst = __renew(dst, outLen << 1);
-      }
       let size = <usize>(i - org) << 1;
+      if (offset + size > outSize) {
+        outSize = offset + size;
+        dst = __renew(dst, outSize);
+      }
       memory.copy(
         dst + offset,
-        src + <usize>(org << 1),
+        src + (<usize>org << 1),
         size
       );
-      if (i >= len) break;
       offset += size;
+      if (i >= len) break;
     }
 
     if (c >= 0xDC00 && c <= 0xDFFF) {
@@ -85,11 +85,14 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): void {
       c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
     }
 
+    if (offset >= outSize) {
+      trace("offset", 1, offset);
+      trace("outSize", 1, outSize);
+      outSize = (offset + 6) * 12 / 10;
+      dst = __renew(dst, outSize);
+    }
+
     if (c < 0x80) {
-      if (offset + 6 >= <usize>(outLen << 1)) {
-        outLen = outLen + 6 - 1;
-        dst = __renew(dst, outLen << 1);
-      }
       offset += storeHex(dst, offset, c);
     } else {
       if (c <= 0x800) {
@@ -105,4 +108,8 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): void {
       }
     }
   }
+  if (outSize > offset) {
+    dst = __renew(dst, offset);
+  }
+  return dst;
 }
