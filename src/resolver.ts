@@ -778,11 +778,7 @@ export class Resolver extends DiagnosticEmitter {
           }
           let defaultType = typeParameterNode.defaultType;
           if (defaultType) {
-            let resolvedDefaultType = this.resolveType(
-              defaultType,
-              ctxFlow.actualFunction,
-              contextualTypeArguments
-            );
+            let resolvedDefaultType = this.resolveType(defaultType, ctxFlow.actualFunction, contextualTypeArguments, reportMode);
             if (!resolvedDefaultType) return null;
             resolvedTypeArguments[i] = resolvedDefaultType;
             continue;
