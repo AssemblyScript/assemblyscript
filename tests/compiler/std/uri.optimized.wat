@@ -2108,6 +2108,17 @@
       i32.const 56319
       i32.le_u
       if (result i32)
+       local.get $2
+       local.get $4
+       i32.le_s
+       if
+        i32.const 1744
+        i32.const 1680
+        i32.const 80
+        i32.const 11
+        call $~lib/builtins/abort
+        unreachable
+       end
        local.get $1
        local.get $4
        i32.const 1
@@ -2130,7 +2141,7 @@
        if
         i32.const 1744
         i32.const 1680
-        i32.const 82
+        i32.const 85
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -2187,7 +2198,7 @@
      else
       local.get $3
       i32.const 2048
-      i32.le_u
+      i32.lt_u
       if
        local.get $0
        local.get $6

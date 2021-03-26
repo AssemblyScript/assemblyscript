@@ -76,6 +76,9 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
         throw new Error("invalid character");
       }
       if (c <= 0xDBFF) {
+        if (i >= len) {
+          throw new Error("expecting surrogate pair");
+        }
         c1 = <u32>load<u16>(src + (i << 1));
         ++i;
         if (c1 < 0xDC00 || c1 > 0xDFFF) {
@@ -94,7 +97,7 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
       storeHex(dst, offset, c);
       offset += 6;
     } else {
-      if (c <= 0x800) {
+      if (c < 0x800) {
         storeHex(dst, offset, (c >> 6) | 0xC0);
         offset += 6;
       } else {
