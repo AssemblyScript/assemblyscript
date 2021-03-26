@@ -64,16 +64,16 @@ assert(
 
 // decodeURIComponent
 
-// assert(decodeURIComponent("") == "");
-// assert(decodeURIComponent("a") == "a");
+assert(decodeURIComponent("") == "");
+assert(decodeURIComponent("a") == "a");
 
 assert(decodeURIComponent("%26") == "&");
 
 // decodeURI
 
-// assert(decodeURI("") == "");
-// assert(decodeURI("a") == "a");
-// assert(decodeURI("%26") == "%26");
+assert(decodeURI("") == "");
+assert(decodeURI("a") == "a");
+assert(decodeURI("%26") == "%26");
 
 __stack_pointer = __heap_base;
 __collect();

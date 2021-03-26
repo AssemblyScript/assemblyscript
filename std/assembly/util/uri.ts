@@ -156,13 +156,12 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
   return (ch | 32) % 39 - 9;
 }
 
-function loadHex(src: usize, i: usize): u32 {
-  // i -= 1;
-  let c0 = <u32>load<u16>(src + (i << 1));
-  let c1 = <u32>load<u16>(src + (i << 1), 2);
+function loadHex(src: usize, offset: usize): u32 {
+  let c0 = <u32>load<u16>(src + offset, 0);
+  let c1 = <u32>load<u16>(src + offset, 2);
 
-  trace("c0", 1, c0);
-  trace("c1", 1, c1);
+  // trace("c0", 1, c0);
+  // trace("c1", 1, c1);
 
   if (!isHex(c0) || !isHex(c1)) return -1;
 
@@ -170,15 +169,13 @@ function loadHex(src: usize, i: usize): u32 {
 }
 
 export function decode(dst: usize, src: usize, len: usize, component: bool = false): usize {
-  var i: usize = 0, offset: usize = 0, org: usize, ch: u32;
+  var i: usize = 0, offset: usize = 0, org: usize, ch: u32 = 0;
 
   while (i < len) {
     org = i;
-    do {
-      ch = load<u16>(src + (i++ << 1));
-    } while (i < len && ch != CharCode.PERCENT);
+    while (i < len && (ch = load<u16>(src + (i << 1))) != CharCode.PERCENT) i++;
 
-    if (i > org) {
+    if (ch != CharCode.PERCENT && i > org) {
       let size = i - org << 1;
       if (size == 2) {
         store<u16>(dst + offset, load<u16>(src + (org << 1)));
@@ -199,11 +196,8 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
     if (i >= len || ch != CharCode.PERCENT) {
       throw new URIError(E_URI_MALFORMED);
     }
-    if (i + 2 >= len) {
-      ch = loadHex(src, i + 1);
-      if (ch == -1) {
-        throw new URIError(E_URI_MALFORMED);
-      }
+    if (i + 2 >= len || (ch = loadHex(src, i + 1 << 1)) == -1) {
+      throw new URIError(E_URI_MALFORMED);
     }
 
     i += 3;
@@ -237,11 +231,8 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
         if (i >= len || load<u16>(src + (i << 1)) != CharCode.PERCENT) {
           throw new URIError(E_URI_MALFORMED);
         }
-        if (i + 2 >= len) {
-          c1 = loadHex(src, i + 1);
-          if (c1 == -1) {
-            throw new URIError(E_URI_MALFORMED);
-          }
+        if (i + 2 >= len || (c1 = loadHex(src, i + 1 << 1)) == -1) {
+          throw new URIError(E_URI_MALFORMED);
         }
         i += 3;
 
@@ -262,7 +253,7 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
   if ((len << 1) > offset) {
     dst = __renew(dst, offset);
   }
-  trace(changetype<string>(dst));
+  // trace(changetype<string>(dst));
 
   return dst;
 }
