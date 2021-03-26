@@ -3734,7 +3734,7 @@
    loop $while-continue|0
     local.get $4
     local.get $2
-    i32.lt_s
+    i32.lt_u
     local.set $7
     local.get $7
     if
@@ -3769,7 +3769,7 @@
        i32.add
        local.tee $4
        local.get $2
-       i32.lt_s
+       i32.lt_u
        local.set $11
        local.get $11
        br_if $do-continue|1
@@ -3777,7 +3777,7 @@
      end
      local.get $4
      local.get $8
-     i32.gt_s
+     i32.gt_u
      if
       local.get $4
       local.get $8
@@ -3848,7 +3848,7 @@
       local.set $5
       local.get $4
       local.get $2
-      i32.ge_s
+      i32.ge_u
       if
        br $while-break|0
       end
@@ -3881,7 +3881,7 @@
       if
        local.get $4
        local.get $2
-       i32.ge_s
+       i32.ge_u
        if
         i32.const 592
         i32.const 640

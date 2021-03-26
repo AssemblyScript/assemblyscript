@@ -2014,7 +2014,7 @@
   loop $while-continue|0
    local.get $2
    local.get $4
-   i32.gt_s
+   i32.gt_u
    if
     block $while-break|0
      local.get $4
@@ -2042,13 +2042,13 @@
        i32.const 1
        i32.add
        local.tee $4
-       i32.gt_s
+       i32.gt_u
        br_if $do-continue|1
       end
      end
      local.get $4
      local.get $5
-     i32.gt_s
+     i32.gt_u
      if
       local.get $7
       local.get $6
@@ -2117,7 +2117,7 @@
       local.set $6
       local.get $2
       local.get $4
-      i32.le_s
+      i32.le_u
       br_if $while-break|0
      end
      local.get $7
@@ -2150,7 +2150,7 @@
       if (result i32)
        local.get $2
        local.get $4
-       i32.le_s
+       i32.le_u
        if
         i32.const 1616
         i32.const 1664

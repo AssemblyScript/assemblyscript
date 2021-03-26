@@ -44,8 +44,8 @@ function storeHex(dst: usize, offset: usize, ch: u32): void {
   store<u32>(dst + offset, hex, 2); // XX
 }
 
-export function encode(dst: usize, src: usize, len: isize, table: usize): usize {
-  var i: isize = 0, offset: usize = 0, outSize = <usize>len << 1;
+export function encode(dst: usize, src: usize, len: usize, table: usize): usize {
+  var i: usize = 0, offset: usize = 0, outSize = len << 1;
   while (i < len) {
     let org = i;
     let c: u32, c1: u32;
@@ -57,19 +57,19 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
     } while (++i < len);
 
     if (i > org) {
-      let size = <usize>(i - org) << 1;
+      let size = (i - org) << 1;
       if (offset + size > outSize) {
         outSize = offset + size;
         dst = __renew(dst, outSize);
       }
       if (size == 2) {
-        store<u16>(dst + offset, load<u16>(src + (<usize>org << 1)));
+        store<u16>(dst + offset, load<u16>(src + (org << 1)));
       } else if (size == 4) {
-        store<u32>(dst + offset, load<u32>(src + (<usize>org << 1)));
+        store<u32>(dst + offset, load<u32>(src + (org << 1)));
       } else {
         memory.copy(
           dst + offset,
-          src + (<usize>org << 1),
+          src + (org << 1),
           size
         );
       }
