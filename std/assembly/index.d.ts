@@ -1745,6 +1745,9 @@ declare class TypeError extends Error { }
 /** Class for indicating an error when trying to interpret syntactically invalid code. */
 declare class SyntaxError extends Error { }
 
+/** Class for indicating an error when a global URI handling function was used in a wrong way. */
+declare class URIError extends Error { }
+
 interface Boolean {
   toString(radix?: number): string;
 }

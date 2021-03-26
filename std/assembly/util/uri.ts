@@ -2,6 +2,7 @@
 // https://github.com/brianmario/escape_utils/blob/master/ext/escape_utils/houdini_uri_e.c
 // https://github.com/brianmario/escape_utils/blob/master/ext/escape_utils/houdini_uri_u.c
 
+import { E_URI_MALFORMED } from "./error";
 import { CharCode } from "./string";
 
 // @ts-ignore: decorator
@@ -73,16 +74,16 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
 
     if (c >= 0xD800) {
       if (c >= 0xDC00 && c <= 0xDFFF) {
-        throw new Error("invalid character");
+        throw new URIError(E_URI_MALFORMED);
       }
       if (c <= 0xDBFF) {
         if (i >= len) {
-          throw new Error("expecting surrogate pair");
+          throw new URIError(E_URI_MALFORMED);
         }
         c1 = <u32>load<u16>(src + (i << 1));
         ++i;
         if (c1 < 0xDC00 || c1 > 0xDFFF) {
-          throw new Error("expecting surrogate pair");
+          throw new URIError(E_URI_MALFORMED);
         }
         c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
       }
