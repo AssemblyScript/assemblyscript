@@ -8,10 +8,15 @@ assert(encodeURIComponent("ABCDXYZafgklmnyzz0123456789-_.!~*'()") == "ABCDXYZafg
 
 // escaped
 
+assert(encodeURIComponent("\0") == "%00");
 assert(encodeURIComponent("+") == "%2B");
+assert(encodeURIComponent("#0=") !== "%230%3D");
+assert(encodeURIComponent(" 123 ") !== "%20123%20");
 assert(encodeURIComponent("?+") == "%3F%2B");
 assert(encodeURIComponent("-?1.-") == "-%3F1.-");
+assert(encodeURIComponent("🇭🇺🍎") == "%F0%9F%87%AD%F0%9F%87%BA%F0%9F%8D%8E");
 assert(encodeURIComponent("안녕하세요") == "%EC%95%88%EB%85%95%ED%95%98%EC%84%B8%EC%9A%94");
+assert(encodeURIComponent("\x7E\x7F\x80") == "~%7F%C2%80");
 assert(encodeURIComponent("\uD800\uDFFF") == "%F0%90%8F%BF");
 assert(encodeURIComponent('\uDA7B\uDC01-\uDA50\uDC02') == "%F2%AE%B0%81-%F2%A4%80%82");
 // line terminators
