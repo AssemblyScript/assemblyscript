@@ -44,6 +44,8 @@ import { Array } from "./array";
     return out;
   }
 
+  @builtin static raw(parts: TemplateStringsArray, ...args: unknown[]): string { return unreachable(); }
+
   get length(): i32 {
     return changetype<OBJECT>(changetype<usize>(this) - TOTAL_OVERHEAD).rtSize >> 1;
   }

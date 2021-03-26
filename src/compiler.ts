@@ -8174,6 +8174,11 @@ export class Compiler extends DiagnosticEmitter {
         this.program.nativeRange
       )
     );
+    // TODO: Requires ReadonlyArray to be safe
+    this.error(
+      DiagnosticCode.Not_implemented_0,
+      expression.range, "Tagged template literals"
+    );
     return this.compileCallExpressionLike(tag, null, args, expression.range, stringType);
   }
 

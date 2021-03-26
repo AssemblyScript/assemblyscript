@@ -1627,6 +1627,7 @@ declare class String {
   static fromCharCodes(arr: u16[]): string;
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
+  static raw(parts: TemplateStringsArray, ...args: any[]): string;
   readonly length: i32;
   at(index: i32): string;
   charAt(index: i32): string;
