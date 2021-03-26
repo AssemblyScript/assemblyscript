@@ -231,22 +231,21 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
         ch = 0;
       }
 
+      let c1: u32 = 0;
       while (n-- > 0) {
         // decode hex
-        if (i >= len || ch != CharCode.PERCENT) {
+        if (i >= len || load<u16>(src + (i << 1)) != CharCode.PERCENT) {
           throw new URIError(E_URI_MALFORMED);
         }
-        let c1: u32 = 0;
         if (i + 2 >= len) {
           c1 = loadHex(src, i + 1);
           if (c1 == -1) {
             throw new URIError(E_URI_MALFORMED);
           }
         }
-        if (c1 == -1) break;
         i += 3;
 
-        if ((c1 & 0xc0) != 0x80) {
+        if ((c1 & 0xC0) != 0x80) {
           ch = 0;
           break;
         }
@@ -256,10 +255,9 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
       if (ch < lo || ch > 0x10FFFF || (ch >= 0xD800 && ch < 0xE000)) {
         throw new URIError(E_URI_MALFORMED);
       }
-
-      store<u16>(dst + offset, ch);
-      offset += 2;
     }
+    store<u16>(dst + offset, ch);
+    offset += 2;
   }
   if ((len << 1) > offset) {
     dst = __renew(dst, offset);

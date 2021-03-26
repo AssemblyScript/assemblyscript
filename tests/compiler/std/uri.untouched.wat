@@ -3940,18 +3940,20 @@
         end
        end
       end
+      i32.const 0
+      local.set $11
       block $while-break|2
        loop $while-continue|2
         local.get $9
-        local.tee $11
+        local.tee $12
         i32.const 1
         i32.sub
         local.set $9
-        local.get $11
+        local.get $12
         i32.const 0
         i32.gt_s
-        local.set $11
-        local.get $11
+        local.set $12
+        local.get $12
         if
          local.get $4
          local.get $2
@@ -3959,20 +3961,23 @@
          if (result i32)
           i32.const 1
          else
-          local.get $7
+          local.get $1
+          local.get $4
+          i32.const 1
+          i32.shl
+          i32.add
+          i32.load16_u
           i32.const 37
           i32.ne
          end
          if
           i32.const 464
           i32.const 512
-          i32.const 237
+          i32.const 238
           i32.const 11
           call $~lib/builtins/abort
           unreachable
          end
-         i32.const 0
-         local.set $12
          local.get $4
          i32.const 2
          i32.add
@@ -3984,8 +3989,8 @@
           i32.const 1
           i32.add
           call $~lib/util/uri/loadHex
-          local.set $12
-          local.get $12
+          local.set $11
+          local.get $11
           i32.const -1
           i32.eq
           if
@@ -3997,17 +4002,11 @@
            unreachable
           end
          end
-         local.get $12
-         i32.const -1
-         i32.eq
-         if
-          br $while-break|2
-         end
          local.get $4
          i32.const 3
          i32.add
          local.set $4
-         local.get $12
+         local.get $11
          i32.const 192
          i32.and
          i32.const 128
@@ -4020,7 +4019,7 @@
          local.get $7
          i32.const 6
          i32.shl
-         local.get $12
+         local.get $11
          i32.const 63
          i32.and
          i32.or
@@ -4056,21 +4055,21 @@
       if
        i32.const 464
        i32.const 512
-       i32.const 257
+       i32.const 256
        i32.const 9
        call $~lib/builtins/abort
        unreachable
       end
-      local.get $0
-      local.get $5
-      i32.add
-      local.get $7
-      i32.store16
-      local.get $5
-      i32.const 2
-      i32.add
-      local.set $5
      end
+     local.get $0
+     local.get $5
+     i32.add
+     local.get $7
+     i32.store16
+     local.get $5
+     i32.const 2
+     i32.add
+     local.set $5
      br $while-continue|0
     end
    end
@@ -4400,10 +4399,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  local.get $1
-  i32.const 1
-  i32.sub
-  local.set $1
   local.get $0
   local.get $1
   i32.const 1
