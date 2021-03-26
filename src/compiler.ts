@@ -167,9 +167,12 @@ import {
   TernaryExpression,
   ArrayLiteralExpression,
   StringLiteralExpression,
+  TemplateLiteralExpression,
   UnaryPostfixExpression,
   UnaryPrefixExpression,
+  CompiledExpression,
 
+  TypeNode,
   NamedTypeNode,
 
   findDecorator,
@@ -399,7 +402,7 @@ export class Compiler extends DiagnosticEmitter {
     super(program.diagnostics);
     this.program = program;
     var options = program.options;
-    var module = Module.create(options.stackSize > 0);
+    var module = Module.create(options.stackSize > 0, options.nativeSizeType);
     this.module = module;
     if (options.memoryBase) {
       this.memoryOffset = i64_new(options.memoryBase);
@@ -1877,8 +1880,15 @@ export class Compiler extends DiagnosticEmitter {
     return segment;
   }
 
-  /** Ensures that a string exists in static memory and returns a pointer to it. Deduplicates. */
+  /** Ensures that a string exists in static memory and returns a pointer expression. Deduplicates. */
   ensureStaticString(stringValue: string): ExpressionRef {
+    var ptr = this.ensureStaticStringPtr(stringValue);
+    this.currentType = this.program.stringInstance.type;
+    return this.module.usize(ptr);
+  }
+
+  /** Ensures that a string exists in static memory and returns a pointer to it. Deduplicates. */
+  ensureStaticStringPtr(stringValue: string): i64 {
     var program = this.program;
     var totalOverhead = program.totalOverhead;
     var stringInstance = assert(program.stringInstance);
@@ -1895,14 +1905,7 @@ export class Compiler extends DiagnosticEmitter {
       stringSegment = this.addRuntimeMemorySegment(buf);
       segments.set(stringValue, stringSegment);
     }
-    var ptr = i64_add(stringSegment.offset, i64_new(totalOverhead));
-    this.currentType = stringInstance.type;
-    if (this.options.isWasm64) {
-      return this.module.i64(i64_low(ptr), i64_high(ptr));
-    } else {
-      assert(i64_is_u32(ptr));
-      return this.module.i32(i64_low(ptr));
-    }
+    return i64_add(stringSegment.offset, i64_new(totalOverhead));
   }
 
   /** Writes a series of static values of the specified type to a buffer. */
@@ -1993,10 +1996,16 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Adds an array header to static memory and returns the created segment. */
-  private addStaticArrayHeader(elementType: Type, bufferSegment: MemorySegment): MemorySegment {
+  private addStaticArrayHeader(
+    elementType: Type,
+    bufferSegment: MemorySegment,
+    /** Optional array instance override. */
+    arrayInstance: Class | null = null
+  ): MemorySegment {
     var program = this.program;
-    var arrayPrototype = assert(program.arrayPrototype);
-    var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
+    if (!arrayInstance) {
+      arrayInstance = assert(this.resolver.resolveClass(this.program.arrayPrototype, [ elementType ]));
+    }
     var bufferLength = readI32(bufferSegment.buffer, program.OBJECTInstance.offsetof("rtSize"));
     var arrayLength = i32(bufferLength / elementType.byteSize);
     var bufferAddress = i64_add(bufferSegment.offset, i64_new(program.totalOverhead));
@@ -3467,6 +3476,12 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.UNARYPREFIX: {
         expr = this.compileUnaryPrefixExpression(<UnaryPrefixExpression>expression, contextualType, constraints);
+        break;
+      }
+      case NodeKind.COMPILED: {
+        let compiled = <CompiledExpression>expression;
+        expr = compiled.expr;
+        this.currentType = compiled.type;
         break;
       }
       default: {
@@ -6370,6 +6385,35 @@ export class Compiler extends DiagnosticEmitter {
     );
   }
 
+  /** Compiles the given arguments like a call expression according to the specified context. */
+  private compileCallExpressionLike(
+    /** Called expression. */
+    expression: Expression,
+    /** Call type arguments. */
+    typeArguments: TypeNode[] | null,
+    /** Call arguments. */
+    args: Expression[],
+    /** Diagnostic range. */
+    range: Range,
+    /** Contextual type indicating the return type the caller expects, if any. */
+    contextualType: Type,
+    /** Constraints indicating contextual conditions. */
+    constraints: Constraints = Constraints.NONE
+  ): ExpressionRef {
+    // Desugaring like this can happen many times. Let's cache the intermediate allocation.
+    var call = this._reusableCallExpression;
+    if (call) {
+      call.expression = expression;
+      call.typeArguments = typeArguments;
+      call.args = args;
+      call.range = range;
+    } else {
+      this._reusableCallExpression = call = Node.createCallExpression(expression, typeArguments, args, range);
+    }
+    return this.compileCallExpression(call, contextualType, constraints);
+  }
+  private _reusableCallExpression: CallExpression | null = null;
+
   private compileCallExpressionBuiltin(
     prototype: FunctionPrototype,
     expression: CallExpression,
@@ -6459,8 +6503,7 @@ export class Compiler extends DiagnosticEmitter {
     if (hasRest) {
       this.error(
         DiagnosticCode.Not_implemented_0,
-        reportNode.range,
-        "Rest parameters"
+        reportNode.range, "Rest parameters"
       );
       return false;
     }
@@ -7979,6 +8022,10 @@ export class Compiler extends DiagnosticEmitter {
         assert(!implicitlyNegate);
         return this.compileStringLiteral(<StringLiteralExpression>expression, constraints);
       }
+      case LiteralKind.TEMPLATE: {
+        assert(!implicitlyNegate);
+        return this.compileTemplateLiteral(<TemplateLiteralExpression>expression, constraints);
+      }
       case LiteralKind.OBJECT: {
         assert(!implicitlyNegate);
         return this.compileObjectLiteral(<ObjectLiteralExpression>expression, contextualType);
@@ -8002,6 +8049,137 @@ export class Compiler extends DiagnosticEmitter {
     constraints: Constraints
   ): ExpressionRef {
     return this.ensureStaticString(expression.value);
+  }
+
+  private compileTemplateLiteral(
+    expression: TemplateLiteralExpression,
+    constraints: Constraints
+  ): ExpressionRef {
+    var tag = expression.tag;
+    var parts = expression.parts;
+    var numParts = parts.length;
+    var expressions = expression.expressions;
+    assert(numParts - 1 == expressions.length);
+
+    // Shortcut if just a (multi-line) string
+    if (tag === null && numParts == 1) {
+      return this.ensureStaticString(parts[0]);
+    }
+
+    var module = this.module;
+    var stringType = this.program.stringInstance.type;
+
+    // Compile to a `StaticArray<string>#join("")` if untagged
+    if (tag === null) {
+      let length = 2 * numParts - 1;
+      let values = new Array<usize>(length);
+      values[0] = this.ensureStaticString(parts[0]);
+      for (let i = 1; i < numParts; ++i) {
+        values[2 * i - 1] = module.usize(0);
+        values[2 * i] = this.ensureStaticString(parts[i]);
+      }
+      let arrayInstance = assert(this.resolver.resolveClass(this.program.staticArrayPrototype, [ stringType ]));
+      let segment = this.addStaticBuffer(stringType, values, arrayInstance.id);
+      let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
+      let joinInstance = assert(arrayInstance.getMethod("join"));
+      let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true));
+      let stmts = new Array<ExpressionRef>();
+      for (let i = 0, k = numParts - 1; i < k; ++i) {
+        let expression = expressions[i];
+        stmts.push(
+          this.makeCallDirect(indexedSetInstance, [
+            module.usize(offset),
+            module.i32(2 * i + 1),
+            this.makeToString(
+              this.compileExpression(expression, stringType),
+              this.currentType, expression
+            )
+          ], expression)
+        );
+      }
+      stmts.push(
+        this.makeCallDirect(joinInstance, [
+          module.usize(offset),
+          this.ensureStaticString("")
+        ], expression)
+      );
+      return module.flatten(stmts, stringType.toNativeType());
+    }
+
+    // Try to find out whether the template function takes a full-blown TemplateStringsArray or if
+    // it is sufficient to compile to a normal array. While technically incorrect, this allows us
+    // to avoid generating unnecessary static data that is not explicitly signaled to be used.
+    var tsaArrayInstance = this.program.templateStringsArrayInstance;
+    var arrayInstance = tsaArrayInstance;
+    var target = this.resolver.lookupExpression(tag, this.currentFlow, Type.auto, ReportMode.SWALLOW);
+    if (target) {
+      switch (target.kind) {
+        case ElementKind.FUNCTION_PROTOTYPE: {
+          let instance = this.resolver.resolveFunction(<FunctionPrototype>target, null, uniqueMap<string,Type>(), ReportMode.SWALLOW);
+          if (!instance) break;
+          target = instance;
+          // fall-through
+        }
+        case ElementKind.FUNCTION: {
+          let instance = <Function>target;
+          let parameterTypes = instance.signature.parameterTypes;
+          if (parameterTypes.length) {
+            let first = parameterTypes[0].getClass();
+            if (first !== null && !first.extends(tsaArrayInstance.prototype)) {
+              arrayInstance = assert(this.resolver.resolveClass(this.program.arrayPrototype, [ stringType ]));
+            }
+          }
+          break;
+        }
+      }
+    }
+
+    // Compile to a call to the tag function
+    var rawParts = expression.rawParts;
+    assert(rawParts.length == numParts);
+    var partExprs = new Array<ExpressionRef>(numParts);
+    for (let i = 0; i < numParts; ++i) {
+      partExprs[i] = this.ensureStaticString(parts[i]);
+    }
+    var arraySegment: MemorySegment;
+    if (arrayInstance == tsaArrayInstance) {
+      var rawExprs = new Array<ExpressionRef>(numParts);
+      for (let i = 0; i < numParts; ++i) {
+        rawExprs[i] = this.ensureStaticString(rawParts[i]);
+      }
+      arraySegment = this.addStaticArrayHeader(stringType,
+        this.addStaticBuffer(this.options.usizeType, partExprs),
+        arrayInstance
+      );
+      var rawHeaderSegment = this.addStaticArrayHeader(stringType,
+        this.addStaticBuffer(this.options.usizeType, rawExprs)
+      );
+      arrayInstance.writeField("raw",
+        i64_add(rawHeaderSegment.offset, i64_new(this.program.totalOverhead)),
+        arraySegment.buffer
+      );
+    } else {
+      arraySegment = this.addStaticArrayHeader(stringType,
+        this.addStaticBuffer(this.options.usizeType, partExprs),
+        arrayInstance
+      );
+    }
+
+    // Desugar to compileCallExpression
+    var args = expressions.slice();
+    args.unshift(
+      Node.createCompiledExpression(
+        module.usize(i64_add(arraySegment.offset, i64_new(this.program.totalOverhead))),
+        arrayInstance.type,
+        this.program.nativeRange
+      )
+    );
+    // TODO: Requires ReadonlyArray to be safe
+    this.error(
+      DiagnosticCode.Not_implemented_0,
+      expression.range, "Tagged template literals"
+    );
+    return this.compileCallExpressionLike(tag, null, args, expression.range, stringType);
   }
 
   private compileArrayLiteral(
@@ -9951,6 +10129,54 @@ export class Compiler extends DiagnosticEmitter {
         return module.i32(0);
       }
     }
+  }
+
+  /** Makes a string conversion of the given expression. */
+  makeToString(expr: ExpressionRef, type: Type, reportNode: Node): ExpressionRef {
+    var stringType = this.program.stringInstance.type;
+    if (type == stringType) {
+      return expr;
+    }
+    var classType = type.getClassOrWrapper(this.program);
+    if (classType) {
+      let toStringInstance = classType.getMethod("toString");
+      if (toStringInstance) {
+        let toStringSignature = toStringInstance.signature;
+        if (!this.checkCallSignature( // reports
+          toStringSignature,
+          0,
+          true,
+          reportNode
+        )) {
+          this.currentType = stringType;
+          return this.module.unreachable();
+        }
+        if (!type.isStrictlyAssignableTo(assert(toStringSignature.thisType))) {
+          this.errorRelated(
+            DiagnosticCode.The_this_types_of_each_signature_are_incompatible,
+            reportNode.range, toStringInstance.identifierAndSignatureRange
+          );
+          this.currentType = stringType;
+          return this.module.unreachable();
+        }
+        let toStringReturnType = toStringSignature.returnType;
+        if (!toStringReturnType.isStrictlyAssignableTo(stringType)) {
+          this.errorRelated(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            reportNode.range, toStringInstance.identifierAndSignatureRange, toStringReturnType.toString(), stringType.toString()
+          );
+          this.currentType = stringType;
+          return this.module.unreachable();
+        }
+        return this.makeCallDirect(toStringInstance, [ expr ], reportNode);
+      }
+    }
+    this.error(
+      DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+      reportNode.range, type.toString(), stringType.toString()
+    );
+    this.currentType = stringType;
+    return this.module.unreachable();
   }
 
   /** Makes an allocation suitable to hold the data of an instance of the given class. */

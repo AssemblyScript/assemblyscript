@@ -5,3 +5,6 @@ lib/parse/index.js
 out/
 raw/
 tests/parser/
+
+# FIXME: Tagged template literal tests with invalid escapes
+tests/compiler/templateliteral.ts
