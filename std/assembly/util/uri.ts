@@ -95,7 +95,7 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
 
     let estSize = offset + (c < 0x80 ? 1 * 6 : 4 * 6);
     if (estSize > outSize) {
-      outSize = estSize * 15 / 10;
+      outSize = len > 1 ? estSize * 15 / 10 : estSize;
       dst = __renew(dst, outSize);
     }
 

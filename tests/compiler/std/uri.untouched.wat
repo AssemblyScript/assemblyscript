@@ -3951,11 +3951,18 @@
      local.get $6
      i32.gt_u
      if
-      local.get $11
-      i32.const 15
-      i32.mul
-      i32.const 10
-      i32.div_u
+      local.get $2
+      i32.const 1
+      i32.gt_u
+      if (result i32)
+       local.get $11
+       i32.const 15
+       i32.mul
+       i32.const 10
+       i32.div_u
+      else
+       local.get $11
+      end
       local.set $6
       local.get $0
       local.get $6

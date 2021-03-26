@@ -2214,6 +2214,11 @@
       i32.mul
       i32.const 10
       i32.div_u
+      local.get $5
+      local.get $2
+      i32.const 1
+      i32.gt_u
+      select
       local.tee $7
       call $~lib/rt/itcms/__renew
       local.set $0
