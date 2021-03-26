@@ -29,8 +29,7 @@ import {
   isIdentifierStart,
   isIdentifierPart,
   isDecimalDigit,
-  isOctalDigit,
-  isKeywordCharacter
+  isOctalDigit
 } from "./util";
 
 /** Named token types. */
@@ -163,6 +162,7 @@ export enum Token {
   STRINGLITERAL,
   INTEGERLITERAL,
   FLOATLITERAL,
+  TEMPLATELITERAL,
 
   // meta
 
@@ -553,10 +553,13 @@ export class Tokenizer extends DiagnosticEmitter {
           return Token.EXCLAMATION;
         }
         case CharCode.DOUBLEQUOTE:
-        case CharCode.SINGLEQUOTE:
-        case CharCode.BACKTICK: { // TODO
+        case CharCode.SINGLEQUOTE: {
           this.pos = pos;
-          return Token.STRINGLITERAL; // expects a call to readString
+          return Token.STRINGLITERAL;
+        }
+        case CharCode.BACKTICK: {
+          this.pos = pos;
+          return Token.TEMPLATELITERAL;
         }
         case CharCode.PERCENT: {
           ++pos;
@@ -906,34 +909,26 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         default: {
           if (isIdentifierStart(c)) {
-            if (isKeywordCharacter(c)) {
-              let posBefore = pos;
-              while (
-                ++pos < end &&
-                isIdentifierPart(c = text.charCodeAt(pos))
-              ) {
-                if (!isKeywordCharacter(c)) {
-                  this.pos = posBefore;
-                  return Token.IDENTIFIER;
-                }
-              }
-              let keywordText = text.substring(posBefore, pos);
-              let keywordToken = tokenFromKeyword(keywordText);
+            let posBefore = pos;
+            while (
+              ++pos < end &&
+              isIdentifierPart(c = text.charCodeAt(pos))
+            ) { /* nop */ }
+            if (identifierHandling != IdentifierHandling.ALWAYS) {
+              let maybeKeywordToken = tokenFromKeyword(text.substring(posBefore, pos));
               if (
-                keywordToken !== Token.INVALID &&
-                identifierHandling !== IdentifierHandling.ALWAYS &&
+                maybeKeywordToken !== Token.INVALID &&
                 !(
                   identifierHandling === IdentifierHandling.PREFER &&
-                  tokenIsAlsoIdentifier(keywordToken)
+                  tokenIsAlsoIdentifier(maybeKeywordToken)
                 )
               ) {
                 this.pos = pos;
-                return keywordToken;
+                return maybeKeywordToken;
               }
-              this.pos = pos = posBefore;
             }
-            this.pos = pos;
-            return Token.IDENTIFIER; // expects a call to readIdentifier
+            this.pos = posBefore;
+            return Token.IDENTIFIER;
           } else if (isWhiteSpace(c)) {
             ++pos;
             break;
@@ -1063,21 +1058,18 @@ export class Tokenizer extends DiagnosticEmitter {
     return text.substring(start, pos);
   }
 
-  readString(): string {
+  readingTemplateString: bool = false;
+  readStringStart: i32 = 0;
+  readStringEnd: i32 = 0;
+
+  readString(quote: i32 = 0, isTaggedTemplate: bool = false): string {
     var text = this.source.text;
     var end = this.end;
     var pos = this.pos;
-    var quote = text.charCodeAt(pos++);
+    if (!quote) quote = text.charCodeAt(pos++);
     var start = pos;
+    this.readStringStart = start;
     var result = "";
-
-    if (quote == CharCode.BACKTICK) {
-      this.warning(
-        DiagnosticCode.Not_implemented_0,
-        this.range(start - 1, end),
-        "Template Literals can only be used for multi-line strings. Interpolation is not supported."
-      );
-    }
 
     while (true) {
       if (pos >= end) {
@@ -1086,36 +1078,50 @@ export class Tokenizer extends DiagnosticEmitter {
           DiagnosticCode.Unterminated_string_literal,
           this.range(start - 1, end)
         );
+        this.readStringEnd = end;
         break;
       }
       let c = text.charCodeAt(pos);
       if (c == quote) {
+        this.readStringEnd = pos;
         result += text.substring(start, pos++);
         break;
       }
       if (c == CharCode.BACKSLASH) {
         result += text.substring(start, pos);
         this.pos = pos; // save
-        result += this.readEscapeSequence();
+        result += this.readEscapeSequence(isTaggedTemplate);
         pos = this.pos; // restore
         start = pos;
         continue;
       }
-      if (isLineBreak(c) && quote != CharCode.BACKTICK) {
+      if (quote == CharCode.BACKTICK) {
+        if (c == CharCode.DOLLAR && pos + 1 < end && text.charCodeAt(pos + 1) == CharCode.OPENBRACE) {
+          result += text.substring(start, pos);
+          this.readStringEnd = pos;
+          this.pos = pos + 2;
+          this.readingTemplateString = true;
+          return result;
+        }
+      } else if (isLineBreak(c)) {
         result += text.substring(start, pos);
         this.error(
           DiagnosticCode.Unterminated_string_literal,
           this.range(start - 1, pos)
         );
+        this.readStringEnd = pos;
         break;
       }
       ++pos;
     }
     this.pos = pos;
+    this.readingTemplateString = false;
     return result;
   }
 
-  readEscapeSequence(): string {
+  readEscapeSequence(isTaggedTemplate: bool = false): string {
+    // for context on isTaggedTemplate, see: https://tc39.es/proposal-template-literal-revision/
+    var start = this.pos;
     var end = this.end;
     if (++this.pos >= end) {
       this.error(
@@ -1128,7 +1134,13 @@ export class Tokenizer extends DiagnosticEmitter {
     var text = this.source.text;
     var c = text.charCodeAt(this.pos++);
     switch (c) {
-      case CharCode._0: return "\0";
+      case CharCode._0: {
+        if (isTaggedTemplate && this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
+          ++this.pos;
+          return text.substring(start, this.pos);
+        }
+        return "\0";
+      }
       case CharCode.b: return "\b";
       case CharCode.t: return "\t";
       case CharCode.n: return "\n";
@@ -1143,12 +1155,12 @@ export class Tokenizer extends DiagnosticEmitter {
           text.charCodeAt(this.pos) == CharCode.OPENBRACE
         ) {
           ++this.pos;
-          return this.readExtendedUnicodeEscape(); // \u{DDDDDDDD}
+          return this.readExtendedUnicodeEscape(isTaggedTemplate ? start : -1); // \u{DDDDDDDD}
         }
-        return this.readUnicodeEscape(); // \uDDDD
+        return this.readUnicodeEscape(isTaggedTemplate ? start : -1); // \uDDDD
       }
       case CharCode.x: {
-        return this.readHexadecimalEscape(); // \xDD
+        return this.readHexadecimalEscape(2, isTaggedTemplate ? start : - 1); // \xDD
       }
       case CharCode.CARRIAGERETURN: {
         if (
@@ -1585,7 +1597,7 @@ export class Tokenizer extends DiagnosticEmitter {
     throw new Error("not implemented"); // TBD
   }
 
-  readHexadecimalEscape(remain: i32 = 2): string {
+  readHexadecimalEscape(remain: i32 = 2, startIfTaggedTemplate: i32 = -1): string {
     var value = 0;
     var text = this.source.text;
     var pos = this.pos;
@@ -1598,22 +1610,28 @@ export class Tokenizer extends DiagnosticEmitter {
         value = (value << 4) + c + (10 - CharCode.A);
       } else if (c >= CharCode.a && c <= CharCode.f) {
         value = (value << 4) + c + (10 - CharCode.a);
+      } else if (~startIfTaggedTemplate) {
+        this.pos = --pos;
+        return text.substring(startIfTaggedTemplate, pos);
       } else {
+        this.pos = pos;
         this.error(
           DiagnosticCode.Hexadecimal_digit_expected,
           this.range(pos - 1, pos)
         );
-        this.pos = pos;
         return "";
       }
       if (--remain == 0) break;
     }
-    if (remain) {
+    if (remain) { // invalid
+      this.pos = pos;
+      if (~startIfTaggedTemplate) {
+        return text.substring(startIfTaggedTemplate, pos);
+      }
       this.error(
         DiagnosticCode.Unexpected_end_of_text,
         this.range(pos)
       );
-      this.pos = pos;
       return "";
     }
     this.pos = pos;
@@ -1631,11 +1649,11 @@ export class Tokenizer extends DiagnosticEmitter {
     }
   }
 
-  readUnicodeEscape(): string {
-    return this.readHexadecimalEscape(4);
+  readUnicodeEscape(startIfTaggedTemplate: i32 = -1): string {
+    return this.readHexadecimalEscape(4, startIfTaggedTemplate);
   }
 
-  private readExtendedUnicodeEscape(): string {
+  private readExtendedUnicodeEscape(startIfTaggedTemplate: i32 = -1): string {
     var start = this.pos;
     var value = this.readHexInteger();
     var value32 = i64_low(value);
@@ -1643,32 +1661,42 @@ export class Tokenizer extends DiagnosticEmitter {
 
     assert(!i64_high(value));
     if (value32 > 0x10FFFF) {
-      this.error(
-        DiagnosticCode.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive,
-        this.range(start, this.pos)
-      );
+      if (startIfTaggedTemplate == -1) {
+        this.error(
+          DiagnosticCode.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive,
+          this.range(start, this.pos)
+        );
+      }
       invalid = true;
     }
 
     var end = this.end;
     var text = this.source.text;
     if (this.pos >= end) {
-      this.error(
-        DiagnosticCode.Unexpected_end_of_text,
-        this.range(start, end)
-      );
+      if (startIfTaggedTemplate == -1) {
+        this.error(
+          DiagnosticCode.Unexpected_end_of_text,
+          this.range(start, end)
+        );
+      }
       invalid = true;
     } else if (text.charCodeAt(this.pos) == CharCode.CLOSEBRACE) {
       ++this.pos;
     } else {
-      this.error(
-        DiagnosticCode.Unterminated_Unicode_escape_sequence,
-        this.range(start, this.pos)
-      );
+      if (startIfTaggedTemplate == -1) {
+        this.error(
+          DiagnosticCode.Unterminated_Unicode_escape_sequence,
+          this.range(start, this.pos)
+        );
+      }
       invalid = true;
     }
 
-    if (invalid) return "";
+    if (invalid) {
+      return ~startIfTaggedTemplate
+        ? text.substring(startIfTaggedTemplate, this.pos)
+        : "";
+    }
     return value32 < 0x10000
       ? String.fromCharCode(value32)
       : String.fromCharCode(

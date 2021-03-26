@@ -281,7 +281,14 @@ export enum UnaryOp {
   TruncSatZeroF64x2ToI32x4 = 125 /* TODO_BinaryenTruncSatZeroSVecF64x2ToVecI32x4 */,
   TruncSatZeroF64x2ToU32x4 = 126 /* TODO_BinaryenTruncSatZeroUVecF64x2ToVecI32x4 */,
   DemoteZeroF64x2ToF32x4 = 127 /* TODO_BinaryenDemoteZeroVecF64x2ToVecF32x4 */,
-  PromoteLowF32x4ToF64x2 = 128 /* TODO_BinaryenPromoteLowVecF32x4ToVecF64x2 */
+  PromoteLowF32x4ToF64x2 = 128 /* TODO_BinaryenPromoteLowVecF32x4ToVecF64x2 */,
+  _last = PromoteLowF32x4ToF64x2,
+
+  // Target dependent
+  ClzSize,
+  CtzSize,
+  PopcntSize,
+  EqzSize
 }
 
 export enum BinaryOp {
@@ -484,7 +491,35 @@ export enum BinaryOp {
   NarrowU16x8ToU8x16 = 188 /* _BinaryenNarrowUVecI16x8ToVecI8x16 */,
   NarrowI32x4ToI16x8 = 189 /* _BinaryenNarrowSVecI32x4ToVecI16x8 */,
   NarrowU32x4ToU16x8 = 190 /* _BinaryenNarrowUVecI32x4ToVecI16x8 */,
-  SwizzleV8x16 = 191 /* _BinaryenSwizzleVec8x16 */
+  SwizzleV8x16 = 191 /* _BinaryenSwizzleVec8x16 */,
+  _last = SwizzleV8x16,
+
+  // Target dependent
+  AddSize,
+  SubSize,
+  MulSize,
+  DivISize,
+  DivUSize,
+  RemISize,
+  RemUSize,
+  AndSize,
+  OrSize,
+  XorSize,
+  ShlSize,
+  ShrISize,
+  ShrUSize,
+  RotlSize,
+  RotrSize,
+  EqSize,
+  NeSize,
+  LtISize,
+  LtUSize,
+  LeISize,
+  LeUSize,
+  GtISize,
+  GtUSize,
+  GeISize,
+  GeUSize
 }
 
 export enum AtomicRMWOp {
@@ -617,20 +652,23 @@ export class Module {
     /** Binaryen module reference. */
     public ref: ModuleRef,
     /** Whether a shadow stack is used. */
-    public useShadowStack: bool
+    public useShadowStack: bool,
+    /** Architecture-dependent size type. */
+    public sizeType: NativeType
   ) {
+    assert(sizeType == NativeType.I32 || sizeType == NativeType.I64);
     this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
   }
 
   private lit: usize;
 
-  static create(useShadowStack: bool): Module {
-    return new Module(binaryen._BinaryenModuleCreate(), useShadowStack);
+  static create(useShadowStack: bool, sizeType: NativeType): Module {
+    return new Module(binaryen._BinaryenModuleCreate(), useShadowStack, sizeType);
   }
 
-  static createFrom(buffer: Uint8Array, useShadowStack: bool): Module {
+  static createFrom(buffer: Uint8Array, useShadowStack: bool, sizeType: NativeType): Module {
     var cArr = allocU8Array(buffer);
-    var module = new Module(binaryen._BinaryenModuleRead(cArr, buffer.length), useShadowStack);
+    var module = new Module(binaryen._BinaryenModuleRead(cArr, buffer.length), useShadowStack, sizeType);
     binaryen._free(changetype<usize>(cArr));
     return module;
   }
@@ -647,6 +685,32 @@ export class Module {
     var out = this.lit;
     binaryen._BinaryenLiteralInt64(out, valueLow, valueHigh);
     return binaryen._BinaryenConst(this.ref, out);
+  }
+
+  // isize<T>(value: T): ExpressionRef {
+  //   if (i64_is(value)) {
+  //     if (this.sizeType == NativeType.I64) {
+  //       return this.i64(i64_low(value), i64_high(value));
+  //     }
+  //     assert(i64_is_i32(value));
+  //     return this.i32(i64_low(value));
+  //   }
+  //   return this.sizeType == NativeType.I64
+  //     ? this.i64(i32(value), i32(value) < 0 ? -1 : 0)
+  //     : this.i32(i32(value));
+  // }
+
+  usize<T>(value: T): ExpressionRef {
+    if (i64_is(value)) {
+      if (this.sizeType == NativeType.I64) {
+        return this.i64(i64_low(value), i64_high(value));
+      }
+      assert(i64_is_u32(value));
+      return this.i32(i64_low(value));
+    }
+    return this.sizeType == NativeType.I64
+      ? this.i64(i32(value))
+      : this.i32(i32(value));
   }
 
   f32(value: f32): ExpressionRef {
@@ -683,9 +747,19 @@ export class Module {
 
   unary(
     op: UnaryOp,
-    expr: ExpressionRef
+    value: ExpressionRef
   ): ExpressionRef {
-    return binaryen._BinaryenUnary(this.ref, op, expr);
+    if (op > UnaryOp._last) {
+      let isWam64 = this.sizeType == NativeType.I64;
+      switch (op) {
+        case UnaryOp.ClzSize: return this.unary(isWam64 ? UnaryOp.ClzI64 : UnaryOp.ClzI32, value);
+        case UnaryOp.CtzSize: return this.unary(isWam64 ? UnaryOp.CtzI64 : UnaryOp.CtzI32, value);
+        case UnaryOp.PopcntSize: return this.unary(isWam64 ? UnaryOp.PopcntI64 : UnaryOp.PopcntI32, value);
+        case UnaryOp.EqzSize: return this.unary(isWam64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32, value);
+      }
+      assert(false);
+    }
+    return binaryen._BinaryenUnary(this.ref, op, value);
   }
 
   binary(
@@ -693,6 +767,37 @@ export class Module {
     left: ExpressionRef,
     right: ExpressionRef
   ): ExpressionRef {
+    if (op > BinaryOp._last) {
+      let isWasm64 = this.sizeType == NativeType.I64;
+      switch (op) {
+        case BinaryOp.AddSize: return this.binary(isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32, left, right);
+        case BinaryOp.SubSize: return this.binary(isWasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32, left, right);
+        case BinaryOp.MulSize: return this.binary(isWasm64 ? BinaryOp.MulI64 : BinaryOp.MulI32, left, right);
+        case BinaryOp.DivISize: return this.binary(isWasm64 ? BinaryOp.DivI64 : BinaryOp.DivI32, left, right);
+        case BinaryOp.DivUSize: return this.binary(isWasm64 ? BinaryOp.DivU64 : BinaryOp.DivU32, left, right);
+        case BinaryOp.RemISize: return this.binary(isWasm64 ? BinaryOp.RemI64 : BinaryOp.RemI32, left, right);
+        case BinaryOp.RemUSize: return this.binary(isWasm64 ? BinaryOp.RemU64 : BinaryOp.RemU32, left, right);
+        case BinaryOp.AndSize: return this.binary(isWasm64 ? BinaryOp.AndI64 : BinaryOp.AndI32, left, right);
+        case BinaryOp.OrSize: return this.binary(isWasm64 ? BinaryOp.OrI64 : BinaryOp.OrI32, left, right);
+        case BinaryOp.XorSize: return this.binary(isWasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32, left, right);
+        case BinaryOp.ShlSize: return this.binary(isWasm64 ? BinaryOp.ShlI64 : BinaryOp.ShlI32, left, right);
+        case BinaryOp.ShrISize: return this.binary(isWasm64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32, left, right);
+        case BinaryOp.ShrUSize: return this.binary(isWasm64 ? BinaryOp.ShrU64 : BinaryOp.ShrU32, left, right);
+        case BinaryOp.RotlSize: return this.binary(isWasm64 ? BinaryOp.RotlI64 : BinaryOp.RotlI32, left, right);
+        case BinaryOp.RotrSize: return this.binary(isWasm64 ? BinaryOp.RotrI64 : BinaryOp.RotrI32, left, right);
+        case BinaryOp.EqSize: return this.binary(isWasm64 ? BinaryOp.EqI64 : BinaryOp.EqI32, left, right);
+        case BinaryOp.NeSize: return this.binary(isWasm64 ? BinaryOp.NeI64 : BinaryOp.NeI32, left, right);
+        case BinaryOp.LtISize: return this.binary(isWasm64 ? BinaryOp.LtI64 : BinaryOp.LtI32, left, right);
+        case BinaryOp.LtUSize: return this.binary(isWasm64 ? BinaryOp.LtU64 : BinaryOp.LtU32, left, right);
+        case BinaryOp.LeISize: return this.binary(isWasm64 ? BinaryOp.LeI64 : BinaryOp.LeI32, left, right);
+        case BinaryOp.LeUSize: return this.binary(isWasm64 ? BinaryOp.LeU64 : BinaryOp.LeU32, left, right);
+        case BinaryOp.GtISize: return this.binary(isWasm64 ? BinaryOp.GtI64 : BinaryOp.GtI32, left, right);
+        case BinaryOp.GtUSize: return this.binary(isWasm64 ? BinaryOp.GtU64 : BinaryOp.GtU32, left, right);
+        case BinaryOp.GeISize: return this.binary(isWasm64 ? BinaryOp.GeI64 : BinaryOp.GeI32, left, right);
+        case BinaryOp.GeUSize: return this.binary(isWasm64 ? BinaryOp.GeU64 : BinaryOp.GeU32, left, right);
+      }
+      assert(false);
+    }
     return binaryen._BinaryenBinary(this.ref, op, left, right);
   }
 

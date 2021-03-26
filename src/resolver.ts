@@ -2224,7 +2224,8 @@ export class Resolver extends DiagnosticEmitter {
         let fltType = ctxType == Type.f32 ? Type.f32 : Type.f64;
         return assert(fltType.getClassOrWrapper(this.program));
       }
-      case LiteralKind.STRING: {
+      case LiteralKind.STRING:
+      case LiteralKind.TEMPLATE: {
         return this.program.stringInstance;
       }
       case LiteralKind.ARRAY: {

@@ -223,6 +223,7 @@ export namespace CommonNames {
   export const Uint64Array = "Uint64Array";
   export const Float32Array = "Float32Array";
   export const Float64Array = "Float64Array";
+  export const TemplateStringsArray = "TemplateStringsArray";
   export const Error = "Error";
   // runtime
   export const abort = "abort";
