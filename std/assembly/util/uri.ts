@@ -85,10 +85,10 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
       c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
     }
 
-    if (offset >= outSize) {
+    if (offset + 6 > outSize) {
       trace("offset", 1, offset);
       trace("outSize", 1, outSize);
-      outSize = (offset + 6) * 12 / 10;
+      outSize = max(outSize * 12 / 10, offset + 6);
       dst = __renew(dst, outSize);
     }
 
@@ -107,6 +107,7 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
         offset += storeHex(dst, offset, ((c >> 6) & 0x3F) | 0x80);
       }
     }
+    ++i;
   }
   if (outSize > offset) {
     dst = __renew(dst, offset);

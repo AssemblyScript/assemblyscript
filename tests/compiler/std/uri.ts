@@ -8,9 +8,9 @@
 
 // escaped
 
-assert(encodeURIComponent("+") == "%2B");
+// assert(encodeURIComponent("+") == "%2B");
 // assert(encodeURIComponent("?+") == "%3F%2B");
-// assert(encodeURIComponent("-?1.-") == "-%3F1.-");
+assert(encodeURIComponent("-?1.-") == "-%3F1.-");
 // assert(encodeURIComponent("\uD800\uDFFF") == "%F0%90%8F%BF");
 
 // assert(encodeURIComponent("\uD800")); // malformed URI sequence
