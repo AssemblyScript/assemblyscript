@@ -629,6 +629,14 @@ export class Program extends DiagnosticEmitter {
   }
   private _stringInstance: Class | null = null;
 
+  /** Gets the standard `Object` instance. */
+  get objectInstance(): Class {
+    var cached = this._objectInstance;
+    if (!cached) this._objectInstance = cached = this.requireClass(CommonNames.Object);
+    return cached;
+  }
+  private _objectInstance: Class | null = null;
+
   /** Gets the standard `abort` instance, if not explicitly disabled. */
   get abortInstance(): Function | null {
     var prototype = this.lookup(CommonNames.abort);
