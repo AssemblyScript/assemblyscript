@@ -2060,21 +2060,10 @@
      i32.ne
      local.get $2
      local.get $4
-     i32.le_u
-     select
-     if
-      i32.const 1488
-      i32.const 1536
-      i32.const 203
-      i32.const 7
-      call $~lib/builtins/abort
-      unreachable
-     end
-     local.get $2
-     local.get $4
      i32.const 2
      i32.add
      i32.le_u
+     select
      if (result i32)
       i32.const 1
      else
@@ -2209,6 +2198,8 @@
         block $while-break|2
          local.get $2
          local.get $4
+         i32.const 2
+         i32.add
          i32.le_u
          if (result i32)
           i32.const 1
@@ -2222,19 +2213,6 @@
           i32.const 37
           i32.ne
          end
-         if
-          i32.const 1488
-          i32.const 1536
-          i32.const 238
-          i32.const 11
-          call $~lib/builtins/abort
-          unreachable
-         end
-         local.get $2
-         local.get $4
-         i32.const 2
-         i32.add
-         i32.le_u
          if (result i32)
           i32.const 1
          else
@@ -2252,7 +2230,7 @@
          if
           i32.const 1488
           i32.const 1536
-          i32.const 241
+          i32.const 240
           i32.const 11
           call $~lib/builtins/abort
           unreachable
@@ -2304,7 +2282,7 @@
       if
        i32.const 1488
        i32.const 1536
-       i32.const 253
+       i32.const 251
        i32.const 9
        call $~lib/builtins/abort
        unreachable

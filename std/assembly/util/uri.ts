@@ -199,12 +199,11 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
     }
 
     // decode hex
-    if (i >= len || ch != CharCode.PERCENT) {
-      throw new URIError(E_URI_MALFORMED);
-    }
-    if (i + 2 >= len || (ch = loadHex(src, i + 1 << 1)) == -1) {
-      throw new URIError(E_URI_MALFORMED);
-    }
+    if (
+      i + 2 >= len ||
+      ch != CharCode.PERCENT ||
+      (ch = loadHex(src, i + 1 << 1)) == -1
+    ) throw new URIError(E_URI_MALFORMED);
 
     i += 3;
     if (ch < 0x80) {
@@ -234,14 +233,13 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
       let c1: u32 = 0;
       while (n-- > 0) {
         // decode hex
-        if (i >= len || load<u16>(src + (i << 1)) != CharCode.PERCENT) {
-          throw new URIError(E_URI_MALFORMED);
-        }
-        if (i + 2 >= len || (c1 = loadHex(src, i + 1 << 1)) == -1) {
-          throw new URIError(E_URI_MALFORMED);
-        }
-        i += 3;
+        if (
+          i + 2 >= len ||
+          load<u16>(src + (i << 1)) != CharCode.PERCENT ||
+          (c1 = loadHex(src, i + 1 << 1)) == -1
+        ) throw new URIError(E_URI_MALFORMED);
 
+        i += 3;
         if ((c1 & 0xC0) != 0x80) {
           ch = 0;
           break;
