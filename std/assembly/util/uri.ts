@@ -7,26 +7,26 @@ import { CharCode } from "./string";
 
 // @ts-ignore: decorator
 @lazy export const URI_UNSAFE = memory.data<u8>([
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+/* skip 32 + 1 head slots
+  */ 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0,
   1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, /*
+  skip 128 + 1 tail slots */
 ]);
 
 // @ts-ignore: decorator
 @lazy export const URL_UNSAFE = memory.data<u8>([
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+/* skip 32 + 1 head slots
+  */ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
   1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0,
   1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, /*
+  skip 128 + 1 tail slots */
 ]);
 
 function storeHex(dst: usize, offset: usize, ch: u32): void {
@@ -51,8 +51,8 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
     let c: u32, c1: u32;
     do {
       c = <u32>load<u16>(src + (i << 1));
-      if (c < 0x7F) {
-        if (load<u8>(table + c)) break;
+      if ((c - 33) < 0x7F - 33) {
+        if (load<u8>(table + (c - 33))) break;
       } else break;
     } while (++i < len);
 
