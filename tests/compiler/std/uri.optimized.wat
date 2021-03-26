@@ -2044,7 +2044,7 @@
        i32.add
        i32.load16_u
        local.tee $3
-       i32.const 128
+       i32.const 127
        i32.ge_u
        br_if $do-break|1
        local.get $3

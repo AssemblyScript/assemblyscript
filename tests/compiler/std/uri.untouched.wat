@@ -3756,7 +3756,7 @@
        i32.load16_u
        local.set $9
        local.get $9
-       i32.const 128
+       i32.const 127
        i32.lt_u
        if
         local.get $3
