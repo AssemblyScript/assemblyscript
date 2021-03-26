@@ -2069,16 +2069,48 @@
        call $~lib/rt/itcms/__renew
        local.set $0
       end
-      local.get $0
-      local.get $6
-      i32.add
-      local.get $1
-      local.get $5
-      i32.const 1
-      i32.shl
-      i32.add
       local.get $8
-      call $~lib/memory/memory.copy
+      i32.const 2
+      i32.eq
+      if
+       local.get $0
+       local.get $6
+       i32.add
+       local.get $1
+       local.get $5
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.load16_u
+       i32.store16
+      else
+       local.get $8
+       i32.const 4
+       i32.eq
+       if
+        local.get $0
+        local.get $6
+        i32.add
+        local.get $1
+        local.get $5
+        i32.const 1
+        i32.shl
+        i32.add
+        i32.load
+        i32.store
+       else
+        local.get $0
+        local.get $6
+        i32.add
+        local.get $1
+        local.get $5
+        i32.const 1
+        i32.shl
+        i32.add
+        local.get $8
+        call $~lib/memory/memory.copy
+       end
+      end
       local.get $6
       local.get $8
       i32.add
@@ -2107,7 +2139,7 @@
       if
        i32.const 1616
        i32.const 1664
-       i32.const 77
+       i32.const 82
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -2122,7 +2154,7 @@
        if
         i32.const 1616
         i32.const 1664
-        i32.const 81
+        i32.const 86
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -2147,7 +2179,7 @@
        if
         i32.const 1616
         i32.const 1664
-        i32.const 85
+        i32.const 90
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -2212,7 +2244,7 @@
        local.get $3
        i32.const 65536
        i32.lt_u
-       if (result i32)
+       if
         local.get $0
         local.get $6
         local.get $3
@@ -2221,9 +2253,6 @@
         i32.const 224
         i32.or
         call $~lib/util/uri/storeHex
-        local.get $6
-        i32.const 6
-        i32.add
        else
         local.get $0
         local.get $6
@@ -2237,7 +2266,7 @@
         local.get $6
         i32.const 6
         i32.add
-        local.tee $5
+        local.tee $6
         local.get $3
         i32.const 12
         i32.shr_u
@@ -2246,10 +2275,10 @@
         i32.const 128
         i32.or
         call $~lib/util/uri/storeHex
-        local.get $5
-        i32.const 6
-        i32.add
        end
+       local.get $6
+       i32.const 6
+       i32.add
        local.tee $6
        local.get $3
        i32.const 6

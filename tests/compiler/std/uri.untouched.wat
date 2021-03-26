@@ -3800,16 +3800,48 @@
        call $~lib/rt/itcms/__renew
        local.set $0
       end
-      local.get $0
-      local.get $5
-      i32.add
-      local.get $1
-      local.get $8
-      i32.const 1
-      i32.shl
-      i32.add
       local.get $11
-      call $~lib/memory/memory.copy
+      i32.const 2
+      i32.eq
+      if
+       local.get $0
+       local.get $5
+       i32.add
+       local.get $1
+       local.get $8
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.load16_u
+       i32.store16
+      else
+       local.get $11
+       i32.const 4
+       i32.eq
+       if
+        local.get $0
+        local.get $5
+        i32.add
+        local.get $1
+        local.get $8
+        i32.const 1
+        i32.shl
+        i32.add
+        i32.load
+        i32.store
+       else
+        local.get $0
+        local.get $5
+        i32.add
+        local.get $1
+        local.get $8
+        i32.const 1
+        i32.shl
+        i32.add
+        local.get $11
+        call $~lib/memory/memory.copy
+       end
+      end
       local.get $5
       local.get $11
       i32.add
@@ -3838,7 +3870,7 @@
       if
        i32.const 592
        i32.const 640
-       i32.const 77
+       i32.const 82
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -3853,7 +3885,7 @@
        if
         i32.const 592
         i32.const 640
-        i32.const 81
+        i32.const 86
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -3881,7 +3913,7 @@
        if
         i32.const 592
         i32.const 640
-        i32.const 85
+        i32.const 90
         i32.const 11
         call $~lib/builtins/abort
         unreachable

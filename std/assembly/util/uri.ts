@@ -62,12 +62,17 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
         outSize = offset + size;
         dst = __renew(dst, outSize);
       }
-
-      memory.copy(
-        dst + offset,
-        src + (<usize>org << 1),
-        size
-      );
+      if (size == 2) {
+        store<u16>(dst + offset, load<u16>(src + (<usize>org << 1)));
+      } else if (size == 4) {
+        store<u32>(dst + offset, load<u32>(src + (<usize>org << 1)));
+      } else {
+        memory.copy(
+          dst + offset,
+          src + (<usize>org << 1),
+          size
+        );
+      }
       offset += size;
       if (i >= len) break;
     }
