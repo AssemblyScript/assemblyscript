@@ -29,6 +29,14 @@ import { CharCode } from "./string";
   skip 128 + 1 always set to '1' tail slots */
 ]);
 
+// @ts-ignore: decorator
+@lazy export const URI_RESERVED = memory.data<u8>([
+  /*  skip 32 + 3 always set to '0' head slots
+        */ 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1,
+  1, /* skip 191 always set to '0' tail slots */
+]);
+
 function storeHex(dst: usize, offset: usize, ch: u32): void {
   // @ts-ignore: decorator
   const HEX_CHARS = memory.data<u8>([
@@ -127,5 +135,136 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
   if (outSize > offset) {
     dst = __renew(dst, offset);
   }
+  return dst;
+}
+
+// @ts-ignore: decorator
+@inline function isReserved(ch: u32): bool {
+  if (((ch - 35) >>> 0) < 30) {
+    return <bool>load<u16>(URI_RESERVED + (ch - 35));
+  }
+  return false;
+}
+
+// @ts-ignore: decorator
+@inline function isHex(ch: u32): bool {
+  return ch - CharCode._0 < 10 || (ch | 32) - CharCode.a < 6;
+}
+
+// @ts-ignore: decorator
+@inline function fromHex(ch: u32): u32 {
+  return (ch | 32) % 39 - 9;
+}
+
+function loadHex(src: usize, i: usize): u32 {
+  // i -= 1;
+  let c0 = <u32>load<u16>(src + (i << 1));
+  let c1 = <u32>load<u16>(src + (i << 1), 2);
+
+  trace("c0", 1, c0);
+  trace("c1", 1, c1);
+
+  if (!isHex(c0) || !isHex(c1)) return -1;
+
+  return fromHex(c0) << 4 | fromHex(c1);
+}
+
+export function decode(dst: usize, src: usize, len: usize, component: bool = false): usize {
+  var i: usize = 0, offset: usize = 0, org: usize, ch: u32;
+
+  while (i < len) {
+    org = i;
+    do {
+      ch = load<u16>(src + (i++ << 1));
+    } while (i < len && ch != CharCode.PERCENT);
+
+    if (i > org) {
+      let size = i - org << 1;
+      if (size == 2) {
+        store<u16>(dst + offset, load<u16>(src + (org << 1)));
+      } else if (size == 4) {
+        store<u32>(dst + offset, load<u32>(src + (org << 1)));
+      } else {
+        memory.copy(
+          dst + offset,
+          src + (org << 1),
+          size
+        );
+      }
+      offset += size;
+      if (i >= len) break;
+    }
+
+    // decode hex
+    if (i >= len || ch != CharCode.PERCENT) {
+      throw new URIError(E_URI_MALFORMED);
+    }
+    if (i + 2 >= len) {
+      ch = loadHex(src, i + 1);
+      if (ch == -1) {
+        throw new URIError(E_URI_MALFORMED);
+      }
+    }
+
+    i += 3;
+    if (ch < 0x80) {
+      if (!component && isReserved(ch)) {
+        ch = CharCode.PERCENT;
+        i -= 2;
+      }
+    } else {
+      // decode UTF-8 sequence
+      let n = 0, lo: u32 = 1;
+      if (ch >= 0xC0 && ch <= 0xDF) {
+        n   = 1;
+        lo  = 0x80;
+        ch &= 0x1F;
+      } else if (ch >= 0xE0 && ch <= 0xEF) {
+        n   = 2;
+        lo  = 0x800;
+        ch &= 0x0F;
+      } else if (ch >= 0xF0 && ch <= 0xF7) {
+        n   = 3;
+        lo  = 0x10000;
+        ch &= 0x07;
+      } else {
+        ch = 0;
+      }
+
+      while (n-- > 0) {
+        // decode hex
+        if (i >= len || ch != CharCode.PERCENT) {
+          throw new URIError(E_URI_MALFORMED);
+        }
+        let c1: u32 = 0;
+        if (i + 2 >= len) {
+          c1 = loadHex(src, i + 1);
+          if (c1 == -1) {
+            throw new URIError(E_URI_MALFORMED);
+          }
+        }
+        if (c1 == -1) break;
+        i += 3;
+
+        if ((c1 & 0xc0) != 0x80) {
+          ch = 0;
+          break;
+        }
+        ch = (ch << 6) | (c1 & 0x3F);
+      }
+
+      if (ch < lo || ch > 0x10FFFF || (ch >= 0xD800 && ch < 0xE000)) {
+        throw new URIError(E_URI_MALFORMED);
+      }
+
+      store<u16>(dst + offset, ch);
+      offset += 2;
+    }
+  }
+  if ((len << 1) > offset) {
+    dst = __renew(dst, offset);
+  }
+  trace(changetype<string>(dst));
+
   return dst;
 }

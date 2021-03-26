@@ -220,6 +220,10 @@ declare function lengthof<T extends (...args: any[]) => any>(func?: T): i32;
 declare function encodeURI(str: string): string;
 /** Encodes a text string as a valid component of a Uniform Resource Identifier (URI). */
 declare function encodeURIComponent(str: string): string;
+/** Decodes a Uniform Resource Identifier (URI) previously created by encodeURI. */
+declare function decodeURI(str: string): string;
+/** Decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent. */
+declare function decodeURIComponent(str: string): string;
 
 /** Atomic operations. */
 declare namespace atomic {
