@@ -2210,10 +2210,8 @@
      if
       local.get $0
       local.get $5
-      i32.const 15
-      i32.mul
-      i32.const 10
-      i32.div_u
+      i32.const 1
+      i32.shl
       local.get $5
       local.get $2
       i32.const 1
