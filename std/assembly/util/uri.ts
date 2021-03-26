@@ -51,7 +51,7 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
     let c: u32, c1: u32;
     do {
       c = <u32>load<u16>(src + (i << 1));
-      if ((c - 33) < 0x7F - 33) {
+      if (c - 33 < 94) { // 127 - 33
         if (load<u8>(table + (c - 33))) break;
       } else break;
     } while (++i < len);

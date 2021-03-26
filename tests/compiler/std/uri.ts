@@ -1,10 +1,13 @@
+
+// encodeURIComponent
+
 // not escaped
 
 assert(encodeURIComponent("") == "");
 assert(encodeURIComponent("a") == "a");
 assert(encodeURIComponent("a1") == "a1");
 assert(encodeURIComponent("ab_") == "ab_");
-assert(encodeURIComponent("ABCDXYZafgklmnyzz0123456789-_.!~*'()") == "ABCDXYZafgklmnyzz0123456789-_.!~*'()");
+assert(encodeURIComponent("ABCDXYZafgklmnwyz0123456789-_.!~*'()") == "ABCDXYZafgklmnwyz0123456789-_.!~*'()");
 
 // escaped
 
@@ -31,6 +34,31 @@ assert(
 
 // assert(encodeURIComponent("\uD800")); // malformed URI sequence
 // assert(encodeURIComponent("\uDFFF")); // malformed URI sequence
+
+
+// encodeURI
+
+// not escaped
+
+assert(encodeURI("") == "");
+assert(encodeURI("a") == "a");
+assert(encodeURI(";,/?:@&=+$#") == ";,/?:@&=+$#");
+assert(encodeURI("ABCDXYZafgklmnwyz0123456789-_.!~*'()") == "ABCDXYZafgklmnwyz0123456789-_.!~*'()");
+
+// escaped
+
+assert(encodeURI(" ") == "%20");
+assert(encodeURI("\x7E\x7F\x80") == "~%7F%C2%80");
+assert(encodeURI("\uD800\uDFFF") == "%F0%90%8F%BF");
+// line terminators
+assert(encodeURI("\n\t\v\f\r") == "%0A%09%0B%0C%0D");
+assert(
+  encodeURI("http://en.wikipedia.org/wiki/UTF-8#Description") ==
+  "http://en.wikipedia.org/wiki/UTF-8#Description"
+);
+
+// assert(encodeURI("\uD800")); // malformed URI sequence
+// assert(encodeURI("\uDFFF")); // malformed URI sequence
 
 __stack_pointer = __heap_base;
 __collect();
