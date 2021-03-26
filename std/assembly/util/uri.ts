@@ -80,8 +80,7 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
         if (i >= len) {
           throw new URIError(E_URI_MALFORMED);
         }
-        c1 = <u32>load<u16>(src + (i << 1));
-        ++i;
+        c1 = <u32>load<u16>(src + (++i << 1));
         if (c1 < 0xDC00 || c1 > 0xDFFF) {
           throw new URIError(E_URI_MALFORMED);
         }
