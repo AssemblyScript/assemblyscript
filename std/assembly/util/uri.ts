@@ -181,7 +181,7 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
     org = i;
     while (i < len && (ch = load<u16>(src + (i << 1))) != CharCode.PERCENT) i++;
 
-    if (ch != CharCode.PERCENT && i > org) {
+    if (i > org) {
       let size = i - org << 1;
       if (size == 2) {
         store<u16>(dst + offset, load<u16>(src + (org << 1)));

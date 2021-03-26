@@ -2641,11 +2641,6 @@
      local.get $4
      local.get $5
      i32.gt_u
-     i32.const 0
-     local.get $7
-     i32.const 37
-     i32.ne
-     select
      if
       local.get $4
       local.get $5

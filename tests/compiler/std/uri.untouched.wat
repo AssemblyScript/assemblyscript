@@ -4428,16 +4428,9 @@
        br $while-continue|1
       end
      end
-     local.get $7
-     i32.const 37
-     i32.ne
-     if (result i32)
-      local.get $4
-      local.get $6
-      i32.gt_u
-     else
-      i32.const 0
-     end
+     local.get $4
+     local.get $6
+     i32.gt_u
      if
       local.get $4
       local.get $6

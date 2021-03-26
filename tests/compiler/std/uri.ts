@@ -76,7 +76,7 @@ assert(decodeURIComponent("%3B%2F%3F%3A%40%3D%2B%24%2C%23") == ";/?:@=+$,#");
 assert(
   decodeURIComponent("http:%2F%2Fen.wikipedia.org/wiki/UTF-8%23Description") ==
   "http://en.wikipedia.org/wiki/UTF-8#Description"
-); // fail
+);
 
 // decodeURI
 
