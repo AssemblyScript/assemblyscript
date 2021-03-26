@@ -88,8 +88,9 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
       }
     }
 
-    if (offset + 6 * 4 > outSize) {
-      outSize = max(outSize * 20 / 10, offset + 6 * 4);
+    let estSize = offset + (c < 0x80 ? 1 * 6 : 4 * 6);
+    if (estSize > outSize) {
+      outSize = estSize * 15 / 10;
       dst = __renew(dst, outSize);
     }
 

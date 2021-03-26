@@ -3721,7 +3721,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
   i32.const 0
   local.set $4
   i32.const 0
@@ -3902,29 +3901,29 @@
       end
      end
      local.get $5
-     i32.const 6
-     i32.const 4
-     i32.mul
+     local.get $9
+     i32.const 128
+     i32.lt_u
+     if (result i32)
+      i32.const 1
+      i32.const 6
+      i32.mul
+     else
+      i32.const 4
+      i32.const 6
+      i32.mul
+     end
      i32.add
+     local.set $11
+     local.get $11
      local.get $6
      i32.gt_u
      if
-      local.get $6
-      i32.const 20
+      local.get $11
+      i32.const 15
       i32.mul
       i32.const 10
       i32.div_u
-      local.tee $11
-      local.get $5
-      i32.const 6
-      i32.const 4
-      i32.mul
-      i32.add
-      local.tee $12
-      local.get $11
-      local.get $12
-      i32.gt_u
-      select
       local.set $6
       local.get $0
       local.get $6

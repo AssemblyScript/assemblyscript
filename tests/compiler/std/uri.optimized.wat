@@ -2084,6 +2084,10 @@
       i32.le_s
       br_if $while-break|0
      end
+     local.get $7
+     local.get $6
+     i32.const 6
+     i32.const 24
      local.get $3
      i32.const 55296
      i32.ge_u
@@ -2162,27 +2166,20 @@
       end
       local.set $3
      end
-     local.get $7
-     local.get $6
-     i32.const 24
+     local.get $3
+     i32.const 128
+     i32.lt_u
+     select
      i32.add
+     local.tee $5
      i32.lt_u
      if
       local.get $0
-      local.get $7
-      i32.const 20
+      local.get $5
+      i32.const 15
       i32.mul
       i32.const 10
       i32.div_u
-      local.tee $0
-      local.get $6
-      i32.const 24
-      i32.add
-      local.tee $5
-      local.get $0
-      local.get $5
-      i32.gt_u
-      select
       local.tee $7
       call $~lib/rt/itcms/__renew
       local.set $0
@@ -2213,7 +2210,7 @@
        local.get $3
        i32.const 65536
        i32.lt_u
-       if
+       if (result i32)
         local.get $0
         local.get $6
         local.get $3
@@ -2222,6 +2219,9 @@
         i32.const 224
         i32.or
         call $~lib/util/uri/storeHex
+        local.get $6
+        i32.const 6
+        i32.add
        else
         local.get $0
         local.get $6
@@ -2235,7 +2235,7 @@
         local.get $6
         i32.const 6
         i32.add
-        local.tee $6
+        local.tee $5
         local.get $3
         i32.const 12
         i32.shr_u
@@ -2244,10 +2244,10 @@
         i32.const 128
         i32.or
         call $~lib/util/uri/storeHex
+        local.get $5
+        i32.const 6
+        i32.add
        end
-       local.get $6
-       i32.const 6
-       i32.add
        local.tee $6
        local.get $3
        i32.const 6
