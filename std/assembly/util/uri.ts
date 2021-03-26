@@ -85,8 +85,8 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
       }
     }
 
-    if (offset + 6 > outSize) {
-      outSize = max(outSize * 12 / 10, offset + 6);
+    if (offset + 6 * 4 > outSize) {
+      outSize = max(outSize * 20 / 10, offset + 6 * 4);
       dst = __renew(dst, outSize);
     }
 
@@ -110,11 +110,14 @@ export function encode(dst: usize, src: usize, len: isize, table: usize): usize 
         storeHex(dst, offset, ((c >> 6) & 0x3F) | 0x80);
         offset += 6;
       }
+      storeHex(dst, offset, (c & 0x3F) | 0x80);
+      offset += 6;
     }
     ++i;
   }
   if (outSize > offset) {
     dst = __renew(dst, offset);
   }
+  // trace(changetype<string>(dst));
   return dst;
 }
