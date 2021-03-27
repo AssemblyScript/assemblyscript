@@ -238,8 +238,9 @@ function storeHex(dst: usize, offset: usize, ch: u32): void {
 function loadHex(src: usize, offset: usize): u32 {
   let c0 = <u32>load<u16>(src + offset, 0);
   let c1 = <u32>load<u16>(src + offset, 2);
-  if (!(isHex(c0) && isHex(c1))) return -1;
-  return fromHex(c0) << 4 | fromHex(c1);
+  return isHex(c0) && isHex(c1)
+    ? fromHex(c0) << 4 | fromHex(c1)
+    : -1;
 }
 
 // @ts-ignore: decorator

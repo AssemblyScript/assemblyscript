@@ -2573,6 +2573,24 @@
   local.get $1
   i32.load16_u offset=2
   local.tee $1
+  i32.const 32
+  i32.or
+  i32.const 39
+  i32.rem_u
+  i32.const 9
+  i32.sub
+  local.get $0
+  i32.const 32
+  i32.or
+  i32.const 39
+  i32.rem_u
+  i32.const 9
+  i32.sub
+  i32.const 4
+  i32.shl
+  i32.or
+  i32.const -1
+  local.get $1
   i32.const 48
   i32.sub
   i32.const 10
@@ -2600,28 +2618,7 @@
   i32.lt_u
   i32.or
   select
-  i32.eqz
-  if
-   i32.const -1
-   return
-  end
-  local.get $1
-  i32.const 32
-  i32.or
-  i32.const 39
-  i32.rem_u
-  i32.const 9
-  i32.sub
-  local.get $0
-  i32.const 32
-  i32.or
-  i32.const 39
-  i32.rem_u
-  i32.const 9
-  i32.sub
-  i32.const 4
-  i32.shl
-  i32.or
+  select
  )
  (func $~lib/util/uri/decode (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
