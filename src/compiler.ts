@@ -6438,7 +6438,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(typeParameterNodes),
         typeArgumentNodes,
         this.currentFlow.actualFunction.parent,
-        uniqueMap<string,Type>(this.currentFlow.contextualTypeArguments),
+        uniqueMap<string,Type>(this.currentFlow.contextualTypeArguments), // don't update
         expression
       );
     }
