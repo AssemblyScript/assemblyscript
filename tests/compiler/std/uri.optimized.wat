@@ -6,11 +6,9 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01")
@@ -2935,22 +2933,27 @@
   local.get $1
   i32.const 1
   i32.shl
-  i32.lt_u
+  i32.gt_u
   if
+   i32.const 0
+   i32.const 1632
+   i32.const 214
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $6
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.lt_u
+  if (result i32)
    local.get $0
    local.get $6
    call $~lib/rt/itcms/__renew
-   local.set $0
+  else
+   local.get $0
   end
-  local.get $0
-  i32.const 0
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  f64.const 0
-  call $~lib/builtins/trace
-  local.get $0
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid

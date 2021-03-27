@@ -210,6 +210,8 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
     store<u16>(dst + offset, ch);
     offset += 2;
   }
+
+  assert(offset <= (len << 1));
   if ((len << 1) > offset) {
     dst = __renew(dst, offset);
   }
