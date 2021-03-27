@@ -174,13 +174,13 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
       offset += 2;
     } else {
       // decode UTF-8 sequence
-      let bytes = utf8LenFromUpperByte(ch);
+      let nb = utf8LenFromUpperByte(ch);
 
       let c1: u32 = 0;
-      let lo: u32 = (17 * bytes >> 2) - 1;
-      ch &= bytes ? (0x80 >> bytes) - 1 : 0;
+      let lo: u32 = (17 * nb >> 2) - 1;
+      ch &= nb ? (0x80 >> nb) - 1 : 0;
 
-      while (--bytes > 0) {
+      while (--nb != 0) {
         // decode hex
         if (
           i + 2 >= len ||

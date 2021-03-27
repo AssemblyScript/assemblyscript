@@ -4628,7 +4628,7 @@
         i32.sub
         local.tee $9
         i32.const 0
-        i32.gt_u
+        i32.ne
         local.set $12
         local.get $12
         if
