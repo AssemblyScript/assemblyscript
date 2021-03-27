@@ -2119,7 +2119,7 @@
    call $~lib/math/NativeMathf.log1p
    return
   end
-  local.get $2
+  local.get $1
   i32.const 1065353216
   i32.const 12
   i32.const 23
@@ -6582,9 +6582,9 @@
     f32.const -1
     return
    end
-   local.get $0
-   f32.const 88.7216796875
-   f32.gt
+   local.get $2
+   i32.const 1118925335
+   i32.gt_u
    if
     local.get $0
     f32.const 1701411834604692317316873e14
@@ -11427,7 +11427,7 @@
   if
    i32.const 0
    i32.const 13376
-   i32.const 1399
+   i32.const 1417
    i32.const 5
    call $~lib/builtins/abort
    unreachable
