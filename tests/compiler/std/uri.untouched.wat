@@ -4137,8 +4137,6 @@
   local.get $1
   global.get $~lib/util/uri/URL_UNSAFE
   call $~lib/util/uri/encode
-  local.set $2
-  local.get $2
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
@@ -4312,8 +4310,6 @@
   local.get $1
   global.get $~lib/util/uri/URI_UNSAFE
   call $~lib/util/uri/encode
-  local.set $2
-  local.get $2
  )
  (func $~lib/util/uri/loadHex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -4839,8 +4835,6 @@
   local.get $1
   i32.const 1
   call $~lib/util/uri/decode
-  local.set $2
-  local.get $2
  )
  (func $~lib/rt/itcms/__collect
   (local $0 i32)
