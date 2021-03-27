@@ -9019,7 +9019,8 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.PROPERTY: {
         let propertyInstance = <Property>target;
-        let getterInstance = assert(propertyInstance.getterInstance);
+        let getterInstance = propertyInstance.getterInstance;
+        if (!getterInstance) return module.unreachable(); // failed earlier
         let thisArg: ExpressionRef = 0;
         if (getterInstance.is(CommonFlags.INSTANCE)) {
           thisArg = this.compileExpression(
