@@ -30,8 +30,8 @@ assert(
   "http%3A%2F%2Fen.wikipedia.org%2Fwiki%2FUTF-8%23Description"
 );
 
-// assert(encodeURIComponent("\uD800")); // malformed URI sequence
-// assert(encodeURIComponent("\uDFFF")); // malformed URI sequence
+// assert(encodeURIComponent("\uD800"));    // malformed URI sequence (ok)
+// assert(encodeURIComponent("\uDFFF"));    // malformed URI sequence (ok)
 
 
 // encodeURI
@@ -53,8 +53,8 @@ assert(
   "http://en.wikipedia.org/wiki/UTF-8#Description"
 );
 
-// assert(encodeURI("\uD800")); // malformed URI sequence
-// assert(encodeURI("\uDFFF")); // malformed URI sequence
+// assert(encodeURI("\uD800"));         // malformed URI sequence (ok)
+// assert(encodeURI("\uDFFF"));         // malformed URI sequence (ok)
 
 
 // decodeURIComponent
@@ -62,6 +62,7 @@ assert(
 assert(decodeURIComponent("") == "");
 assert(decodeURIComponent("a") == "a");
 assert(decodeURIComponent("%26") == "&");
+assert(decodeURIComponent('%5E') == "^");
 assert(decodeURIComponent("\uD800") == "\uD800");
 assert(decodeURIComponent("\uD800\uDFFF") == "\uD800\uDFFF");
 assert(decodeURIComponent("%3b%2f%3f%3a%40%3d%2b%24%2c%23") == ";/?:@=+$,#");
@@ -73,12 +74,19 @@ assert(
 
 assert(decodeURIComponent("%F0%9F%87%AD%F0%9F%87%BA%F0%9F%8D%8E") == "🇭🇺🍎");
 
+// assert(decodeURIComponent("%1"));        // malformed URI sequence (ok)
+// assert(decodeURIComponent("%1/"));       // malformed URI sequence (ok)
+// assert(decodeURIComponent("%1`"));       // malformed URI sequence (ok)
+// assert(decodeURIComponent("%1g"));       // malformed URI sequence (ok)
+// assert(decodeURIComponent("%\uFFFF"));   // malformed URI sequence (ok)
 
 // decodeURI
 
 assert(decodeURI("") == "");
 assert(decodeURI("a") == "a");
 assert(decodeURI("%26") == "%26");
+assert(decodeURI("%DF%80") == "߀");
+assert(decodeURI("%C2%BF") == "¿");
 assert(decodeURI("\uD800") == "\uD800");
 assert(decodeURI("\uD800\uDFFF") == "\uD800\uDFFF");
 assert(decodeURI("%3b%2f%3f%3a%40%3d%2b%24%2c%23") == "%3b%2f%3f%3a%40%3d%2b%24%2c%23");
@@ -88,8 +96,10 @@ assert(
   "http:%2F%2Fen.wikipedia.org/wiki/UTF-8%23Description"
 );
 
-// assert(decodeURI("%\x10"));     // malformed URI sequence
-// assert(decodeURI("%\x10\x10")); // malformed URI sequence
+// assert(decodeURI("%\x10"));        // malformed URI sequence (ok)
+// assert(decodeURI("%\x10\x10"));    // malformed URI sequence (ok)
+// assert(decodeURI("%C2%0x80"));     // malformed URI sequence (ok)
+// assert(decodeURI("%80%BF"));       // malformed URI sequence (ok)
 
 __stack_pointer = __heap_base;
 __collect();
