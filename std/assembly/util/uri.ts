@@ -175,20 +175,11 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
     } else {
       // decode UTF-8 sequence
       let bytes = utf8LenFromUpperByte(ch);
-      let lo: u32 = 1;
-      if (bytes == 2) {
-        lo  = 0x80;
-        ch &= 0x1F;
-      } else if (bytes == 3) {
-        lo  = 0x800;
-        ch &= 0x0F;
-      } else if (bytes == 4) {
-        lo  = 0x10000;
-        ch &= 0x07;
-      } else {
-        ch = 0;
-      }
+
       let c1: u32 = 0;
+      let lo: u32 = (17 * bytes >> 2) - 1;
+      ch &= (0x80 >> bytes) - 1;
+
       while (--bytes > 0) {
         // decode hex
         if (
@@ -205,7 +196,7 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
         ch = (ch << 6) | (c1 & 0x3F);
       }
 
-      if (ch < lo || ch > 0x10FFFF || (ch >= 0xD800 && ch < 0xE000)) {
+      if (ch < lo || lo == -1 || ch > 0x10FFFF || (ch >= 0xD800 && ch < 0xE000)) {
         throw new URIError(E_URI_MALFORMED);
       }
 
@@ -230,7 +221,7 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
 }
 
 // @ts-ignore: decorator
-@inline function utf8LenFromUpperByte(c0: u32): i32 {
+@inline function utf8LenFromUpperByte(c0: u32): u32 {
   if (ASC_SHRINK_LEVEL > 1) {
     if (c0 >= 0xC0 && c0 <= 0xDF) return 2;
     if (c0 >= 0xE0 && c0 <= 0xEF) return 3;
@@ -238,7 +229,7 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
     return 0;
   } else {
     return c0 - 128 <= 128
-      ? <i32>load<u8>(UTF8_BYTE_LEN + (c0 - 128))
+      ? <u32>load<u8>(UTF8_BYTE_LEN + (c0 - 128))
       : 0;
   }
 }

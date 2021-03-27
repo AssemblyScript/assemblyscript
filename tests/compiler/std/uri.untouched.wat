@@ -4598,48 +4598,24 @@
        br $~lib/util/uri/utf8LenFromUpperByte|inlined.0
       end
       local.set $9
-      i32.const 1
-      local.set $10
-      local.get $9
-      i32.const 2
-      i32.eq
-      if
-       i32.const 128
-       local.set $10
-       local.get $7
-       i32.const 31
-       i32.and
-       local.set $7
-      else
-       local.get $9
-       i32.const 3
-       i32.eq
-       if
-        i32.const 2048
-        local.set $10
-        local.get $7
-        i32.const 15
-        i32.and
-        local.set $7
-       else
-        local.get $9
-        i32.const 4
-        i32.eq
-        if
-         i32.const 65536
-         local.set $10
-         local.get $7
-         i32.const 7
-         i32.and
-         local.set $7
-        else
-         i32.const 0
-         local.set $7
-        end
-       end
-      end
       i32.const 0
+      local.set $10
+      i32.const 17
+      local.get $9
+      i32.mul
+      i32.const 2
+      i32.shr_u
+      i32.const 1
+      i32.sub
       local.set $11
+      local.get $7
+      i32.const 128
+      local.get $9
+      i32.shr_u
+      i32.const 1
+      i32.sub
+      i32.and
+      local.set $7
       block $while-break|2
        loop $while-continue|2
         local.get $9
@@ -4647,7 +4623,7 @@
         i32.sub
         local.tee $9
         i32.const 0
-        i32.gt_s
+        i32.gt_u
         local.set $12
         local.get $12
         if
@@ -4678,14 +4654,14 @@
           i32.const 1
           i32.shl
           call $~lib/util/uri/loadHex
-          local.tee $11
+          local.tee $10
           i32.const -1
           i32.eq
          end
          if
           i32.const 560
           i32.const 608
-          i32.const 198
+          i32.const 189
           i32.const 11
           call $~lib/builtins/abort
           unreachable
@@ -4694,7 +4670,7 @@
          i32.const 3
          i32.add
          local.set $4
-         local.get $11
+         local.get $10
          i32.const 192
          i32.and
          i32.const 128
@@ -4707,7 +4683,7 @@
          local.get $7
          i32.const 6
          i32.shl
-         local.get $11
+         local.get $10
          i32.const 63
          i32.and
          i32.or
@@ -4717,8 +4693,15 @@
        end
       end
       local.get $7
-      local.get $10
+      local.get $11
       i32.lt_u
+      if (result i32)
+       i32.const 1
+      else
+       local.get $11
+       i32.const -1
+       i32.eq
+      end
       if (result i32)
        i32.const 1
       else
@@ -4743,7 +4726,7 @@
       if
        i32.const 560
        i32.const 608
-       i32.const 209
+       i32.const 200
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -4806,7 +4789,7 @@
   if
    i32.const 0
    i32.const 608
-   i32.const 225
+   i32.const 216
    i32.const 3
    call $~lib/builtins/abort
    unreachable
