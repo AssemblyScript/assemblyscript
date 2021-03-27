@@ -37,20 +37,6 @@ import { CharCode } from "./string";
   1, /* skip 191 always set to '0' tail slots */
 ]);
 
-function storeHex(dst: usize, offset: usize, ch: u32): void {
-  // @ts-ignore: decorator
-  const HEX_CHARS = memory.data<u8>([
-    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
-    0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46
-  ]);
-
-  let hex =
-    <u32>load<u8>(HEX_CHARS + (ch >> 4 & 0x0F)) |
-    <u32>load<u8>(HEX_CHARS + (ch      & 0x0F)) << 16;
-
-  store<u16>(dst + offset, CharCode.PERCENT, 0); // %
-  store<u32>(dst + offset, hex, 2); // XX
-}
 
 export function encode(dst: usize, src: usize, len: usize, table: usize): usize {
   var i: usize = 0, offset: usize = 0, outSize = len << 1;
@@ -136,42 +122,6 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
     dst = __renew(dst, offset);
   }
   return dst;
-}
-
-// @ts-ignore: decorator
-@inline function isReserved(ch: u32): bool {
-  if (((ch - 35) >>> 0) < 30) {
-    return <bool>load<u16>(URI_RESERVED + (ch - 35));
-  }
-  return false;
-}
-
-// @ts-ignore: decorator
-// @inline function isHex(ch: u32): bool {
-//   return ch - CharCode._0 < 10 || (ch | 32) - CharCode.a < 6;
-// }
-
-// @ts-ignore: decorator
-@inline function fromHex(ch: u32): u32 {
-  return (ch | 32) % 39 - 9;
-}
-
-function loadHex(src: usize, offset: usize): u32 {
-  let c0 = <u32>load<u16>(src + offset, 0);
-  let c1 = <u32>load<u16>(src + offset, 2);
-
-  // trace("c0", 1, c0);
-  // trace("c1", 1, c1);
-
-  // if (!isHex(c0) || !isHex(c1)) return -1;
-  // return fromHex(c0) << 4 | fromHex(c1);
-
-  c0 = fromHex(c0);
-  c1 = fromHex(c1);
-
-  return c0 < 16 && c1 < 16
-    ? c0 << 4 | c1
-    : -1;
 }
 
 export function decode(dst: usize, src: usize, len: usize, component: bool = false): usize {
@@ -260,4 +210,57 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
   // trace(changetype<string>(dst));
 
   return dst;
+}
+
+
+// @ts-ignore: decorator
+@inline function isReserved(ch: u32): bool {
+  if (((ch - 35) >>> 0) < 30) {
+    return <bool>load<u16>(URI_RESERVED + (ch - 35));
+  }
+  return false;
+}
+
+// @ts-ignore: decorator
+// @inline function isHex(ch: u32): bool {
+//   return ch - CharCode._0 < 10 || (ch | 32) - CharCode.a < 6;
+// }
+
+// @ts-ignore: decorator
+@inline function fromHex(ch: u32): u32 {
+  return (ch | 32) % 39 - 9;
+}
+
+function storeHex(dst: usize, offset: usize, ch: u32): void {
+  // @ts-ignore: decorator
+  const HEX_CHARS = memory.data<u8>([
+    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
+    0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46
+  ]);
+
+  let hex =
+    <u32>load<u8>(HEX_CHARS + (ch >> 4 & 0x0F)) |
+    <u32>load<u8>(HEX_CHARS + (ch      & 0x0F)) << 16;
+
+  store<u16>(dst + offset, CharCode.PERCENT, 0); // %
+  store<u32>(dst + offset, hex, 2); // XX
+}
+
+
+function loadHex(src: usize, offset: usize): u32 {
+  let c0 = <u32>load<u16>(src + offset, 0);
+  let c1 = <u32>load<u16>(src + offset, 2);
+
+  // trace("c0", 1, c0);
+  // trace("c1", 1, c1);
+
+  // if (!isHex(c0) || !isHex(c1)) return -1;
+  // return fromHex(c0) << 4 | fromHex(c1);
+
+  c0 = fromHex(c0);
+  c1 = fromHex(c1);
+
+  return c0 < 16 && c1 < 16
+    ? c0 << 4 | c1
+    : -1;
 }
