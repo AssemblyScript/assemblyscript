@@ -2545,7 +2545,7 @@ export class SwitchBuilder {
     var entry = new Array<ExpressionRef>(1 + numValues + 1);
     var labels = new Array<string>(numCases);
     for (let i = 0; i < numCases; ++i) {
-      labels[i] = "case" + i.toString() + labelPostfix;
+      labels[i] = `case${i}${labelPostfix}`;
     }
     entry[0] = module.local_set(localIndex, this.condition, false); // u32
     for (let i = 0; i < numValues; ++i) {

@@ -2739,7 +2739,7 @@ export class Resolver extends DiagnosticEmitter {
     signature.requiredParameters = requiredParameters;
 
     var nameInclTypeParameters = prototype.name;
-    if (instanceKey.length) nameInclTypeParameters += "<" + instanceKey + ">";
+    if (instanceKey.length) nameInclTypeParameters += `<${instanceKey}>`;
     var instance = new Function(
       nameInclTypeParameters,
       prototype,
@@ -2847,7 +2847,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Otherwise create
     var nameInclTypeParamters = prototype.name;
-    if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
+    if (instanceKey.length) nameInclTypeParamters += `<${instanceKey}>`;
     if (prototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
       instance = new Interface(nameInclTypeParamters, <InterfacePrototype>prototype, typeArguments);
     } else {

@@ -142,33 +142,18 @@ export class DiagnosticMessage {
 
   /** Converts this message to a string. */
   toString(): string {
+    var category = diagnosticCategoryToString(this.category);
     var range = this.range;
     if (range) {
       let source = range.source;
-      return (
-        diagnosticCategoryToString(this.category) +
-        " " +
-        this.code.toString() +
-        ": \"" +
-        this.message +
-        "\" in " +
-        source.normalizedPath +
-        "(" +
-        source.lineAt(range.start).toString() +
-        "," +
-        source.columnAt().toString() +
-        "+" +
-        (range.end - range.start).toString() +
-        ")"
-      );
+      let path = source.normalizedPath;
+      let line = source.lineAt(range.start);
+      let column = source.columnAt();
+      let len = range.end - range.start;
+
+      return `${category} ${this.code}: "${this.message}" in ${path}(${line},${column}+${len})`;
     }
-    return (
-      diagnosticCategoryToString(this.category) +
-      " " +
-      this.code.toString() +
-      ": " +
-      this.message
-    );
+    return `${category} ${this.code}: ${this.message}`;
   }
 }
 

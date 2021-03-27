@@ -2826,7 +2826,7 @@ export abstract class Element {
 
   /** Returns a string representation of this element. */
   toString(): string {
-    return this.internalName + ", kind=" + this.kind.toString();
+    return `${this.internalName}, kind=${this.kind}`;
   }
 }
 
@@ -3084,8 +3084,8 @@ export class File extends Element {
 
   /** Creates an imported namespace from this file. */
   asAliasNamespace(
-    name: string, 
-    parent: Element, 
+    name: string,
+    parent: Element,
     localIdentifier: IdentifierExpression
   ): Namespace {
     var declaration = this.program.makeNativeNamespaceDeclaration(name);
@@ -3658,9 +3658,7 @@ export class Function extends TypedElement {
     // if it has a name, check previously as this method will throw otherwise
     var localIndex = this.signature.parameterTypes.length + this.additionalLocals.length;
     if (this.is(CommonFlags.INSTANCE)) ++localIndex;
-    var localName = name !== null
-      ? name
-      : "var$" + localIndex.toString();
+    var localName = name !== null ? name : `var$${localIndex}`;
     if (!declaration) declaration = this.program.makeNativeVariableDeclaration(localName);
     var local = new Local(
       localName,
@@ -4747,7 +4745,7 @@ var cachedDefaultParameterNames: string[] = [];
 /** Gets the cached default parameter name for the specified index. */
 export function getDefaultParameterName(index: i32): string {
   for (let i = cachedDefaultParameterNames.length; i <= index; ++i) {
-    cachedDefaultParameterNames.push("$" + i.toString());
+    cachedDefaultParameterNames.push(`$${i}`);
   }
   return cachedDefaultParameterNames[index];
 }
