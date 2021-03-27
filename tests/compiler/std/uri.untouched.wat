@@ -4337,13 +4337,53 @@
   local.get $2
   local.set $4
   local.get $4
+  i32.const 48
+  i32.sub
+  i32.const 10
+  i32.lt_u
+  local.get $4
+  i32.const 32
+  i32.or
+  i32.const 97
+  i32.sub
+  i32.const 6
+  i32.lt_u
+  i32.or
+  if (result i32)
+   local.get $3
+   local.set $4
+   local.get $4
+   i32.const 48
+   i32.sub
+   i32.const 10
+   i32.lt_u
+   local.get $4
+   i32.const 32
+   i32.or
+   i32.const 97
+   i32.sub
+   i32.const 6
+   i32.lt_u
+   i32.or
+  else
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const -1
+   return
+  end
+  local.get $2
+  local.set $4
+  local.get $4
   i32.const 32
   i32.or
   i32.const 39
   i32.rem_u
   i32.const 9
   i32.sub
-  local.set $2
+  i32.const 4
+  i32.shl
   local.get $3
   local.set $4
   local.get $4
@@ -4353,26 +4393,7 @@
   i32.rem_u
   i32.const 9
   i32.sub
-  local.set $3
-  local.get $2
-  i32.const 16
-  i32.lt_u
-  if (result i32)
-   local.get $3
-   i32.const 16
-   i32.lt_u
-  else
-   i32.const 0
-  end
-  if (result i32)
-   local.get $2
-   i32.const 4
-   i32.shl
-   local.get $3
-   i32.or
-  else
-   i32.const -1
-  end
+  i32.or
  )
  (func $~lib/util/uri/decode (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)

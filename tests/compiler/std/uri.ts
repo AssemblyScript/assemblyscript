@@ -88,5 +88,8 @@ assert(
   "http:%2F%2Fen.wikipedia.org/wiki/UTF-8%23Description"
 );
 
+// assert(decodeURI("%\x10"));     // malformed URI sequence
+// assert(decodeURI("%\x10\x10")); // malformed URI sequence
+
 __stack_pointer = __heap_base;
 __collect();
