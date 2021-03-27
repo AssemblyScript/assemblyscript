@@ -201,14 +201,18 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
         throw new URIError(E_URI_MALFORMED);
       }
     }
+    if (ch >= 0x10000) {
+      ch -= 0x10000;
+      store<u16>(dst + offset, (ch >> 10) + 0xD800);
+      offset += 2;
+      ch = (ch & 0x3FF) + 0xDC00;
+    }
     store<u16>(dst + offset, ch);
     offset += 2;
   }
   if ((len << 1) > offset) {
     dst = __renew(dst, offset);
   }
-  // trace(changetype<string>(dst));
-
   return dst;
 }
 

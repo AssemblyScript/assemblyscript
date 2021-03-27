@@ -7,10 +7,12 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -4612,7 +4614,7 @@
         i32.ge_u
         if (result i32)
          local.get $7
-         i32.const 244
+         i32.const 247
          i32.le_u
         else
          i32.const 0
@@ -4745,6 +4747,34 @@
        unreachable
       end
      end
+     local.get $7
+     i32.const 65536
+     i32.ge_u
+     if
+      local.get $7
+      i32.const 65536
+      i32.sub
+      local.set $7
+      local.get $0
+      local.get $5
+      i32.add
+      local.get $7
+      i32.const 10
+      i32.shr_u
+      i32.const 55296
+      i32.add
+      i32.store16
+      local.get $5
+      i32.const 2
+      i32.add
+      local.set $5
+      local.get $7
+      i32.const 1023
+      i32.and
+      i32.const 56320
+      i32.add
+      local.set $7
+     end
      local.get $0
      local.get $5
      i32.add
@@ -4769,6 +4799,14 @@
    call $~lib/rt/itcms/__renew
    local.set $0
   end
+  local.get $0
+  i32.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  call $~lib/builtins/trace
   local.get $0
  )
  (func $~lib/uri/decodeURIComponent (param $0 i32) (result i32)
