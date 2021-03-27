@@ -39,14 +39,6 @@ import { CharCode } from "./string";
 
 // @ts-ignore: decorator
 @lazy export const UTF8_BYTE_LEN = memory.data<u8>([
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -183,7 +175,7 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
       }
     } else {
       // decode UTF-8 sequence
-      let n = utf8LenFromByte(ch);
+      let n = utf8LenFromUpperByte(ch);
       let lo: u32 = 1;
       if (n == 2) {
         lo  = 0x80;
@@ -239,16 +231,15 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
 }
 
 // @ts-ignore: decorator
-@inline function utf8LenFromByte(c0: u32): i32 {
+@inline function utf8LenFromUpperByte(c0: u32): i32 {
   if (ASC_SHRINK_LEVEL > 1) {
-    if (c0  < 0x80)               return 1;
     if (c0 >= 0xC0 && c0 <= 0xDF) return 2;
     if (c0 >= 0xE0 && c0 <= 0xEF) return 3;
     if (c0 >= 0xF0 && c0 <= 0xF7) return 4;
     return 0;
   } else {
-    return c0 <= 0xFF
-      ? <i32>load<u8>(UTF8_BYTE_LEN + c0)
+    return c0 - 128 <= 128
+      ? <i32>load<u8>(UTF8_BYTE_LEN + (c0 - 128))
       : 0;
   }
 }
