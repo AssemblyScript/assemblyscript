@@ -37,6 +37,26 @@ import { CharCode } from "./string";
   1, /* skip 191 always set to '0' tail slots */
 ]);
 
+// @ts-ignore: decorator
+@lazy export const UTF8_BYTE_LEN = memory.data<u8>([
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+  4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+]);
+
 
 export function encode(dst: usize, src: usize, len: usize, table: usize): usize {
   var i: usize = 0, offset: usize = 0, outSize = len << 1;
@@ -163,17 +183,15 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
       }
     } else {
       // decode UTF-8 sequence
-      let n = 0, lo: u32 = 1;
-      if (ch >= 0xC0 && ch <= 0xDF) {
-        n   = 1;
+      let n = utf8LenFromByte(ch);
+      let lo: u32 = 1;
+      if (n == 2) {
         lo  = 0x80;
         ch &= 0x1F;
-      } else if (ch >= 0xE0 && ch <= 0xEF) {
-        n   = 2;
+      } else if (n == 3) {
         lo  = 0x800;
         ch &= 0x0F;
-      } else if (ch >= 0xF0 && ch <= 0xF7) {
-        n   = 3;
+      } else if (n == 4) {
         lo  = 0x10000;
         ch &= 0x07;
       } else {
@@ -181,7 +199,7 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
       }
 
       let c1: u32 = 0;
-      while (n-- > 0) {
+      while (--n > 0) {
         // decode hex
         if (
           i + 2 >= len ||
@@ -220,6 +238,20 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
   return dst;
 }
 
+// @ts-ignore: decorator
+@inline function utf8LenFromByte(c0: u32): i32 {
+  if (ASC_SHRINK_LEVEL > 1) {
+    if (c0  < 0x80)               return 1;
+    if (c0 >= 0xC0 && c0 <= 0xDF) return 2;
+    if (c0 >= 0xE0 && c0 <= 0xEF) return 3;
+    if (c0 >= 0xF0 && c0 <= 0xF7) return 4;
+    return 0;
+  } else {
+    return c0 <= 0xFF
+      ? <i32>load<u8>(UTF8_BYTE_LEN + c0)
+      : 0;
+  }
+}
 
 // @ts-ignore: decorator
 @inline function isReserved(ch: u32): bool {

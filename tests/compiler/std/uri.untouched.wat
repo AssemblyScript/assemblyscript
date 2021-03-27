@@ -63,7 +63,8 @@
  (data (i32.const 2508) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00 \00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 2540) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00%\002\000\00\00\00\00\00\00\00")
  (data (i32.const 2572) "\01\01\00\01\00\00\00\00\01\01\00\00\01\00\00\00\00\00\00\00\00\00\00\01\01\00\01\00\01\01")
- (data (i32.const 2608) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2602) "\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\03\03\03\03\03\03\03\03\03\03\03\03\03\03\03\03\04\04\04\04\04\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 2864) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -80,10 +81,11 @@
  (global $~lib/util/uri/URL_UNSAFE i32 (i32.const 444))
  (global $~lib/util/uri/URI_UNSAFE i32 (i32.const 2364))
  (global $~lib/util/uri/URI_RESERVED i32 (i32.const 2572))
- (global $~lib/rt/__rtti_base i32 (i32.const 2608))
- (global $~lib/memory/__data_end i32 (i32.const 2636))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19020))
- (global $~lib/memory/__heap_base i32 (i32.const 19020))
+ (global $~lib/util/uri/UTF8_BYTE_LEN i32 (i32.const 2602))
+ (global $~lib/rt/__rtti_base i32 (i32.const 2864))
+ (global $~lib/memory/__data_end i32 (i32.const 2892))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19276))
+ (global $~lib/memory/__heap_base i32 (i32.const 19276))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
@@ -3896,7 +3898,7 @@
       if
        i32.const 560
        i32.const 608
-       i32.const 76
+       i32.const 96
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -3911,7 +3913,7 @@
        if
         i32.const 560
         i32.const 608
-        i32.const 80
+        i32.const 100
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -3939,7 +3941,7 @@
        if
         i32.const 560
         i32.const 608
-        i32.const 84
+        i32.const 104
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -4510,7 +4512,7 @@
      if
       i32.const 560
       i32.const 608
-      i32.const 156
+      i32.const 176
       i32.const 7
       call $~lib/builtins/abort
       unreachable
@@ -4555,23 +4557,33 @@
        local.set $4
       end
      else
-      i32.const 0
+      block $~lib/util/uri/utf8LenFromByte|inlined.0 (result i32)
+       local.get $7
+       local.set $9
+       i32.const 0
+       i32.const 1
+       i32.gt_s
+       drop
+       local.get $9
+       i32.const 255
+       i32.le_u
+       if (result i32)
+        global.get $~lib/util/uri/UTF8_BYTE_LEN
+        local.get $9
+        i32.add
+        i32.load8_u
+       else
+        i32.const 0
+       end
+       br $~lib/util/uri/utf8LenFromByte|inlined.0
+      end
       local.set $9
       i32.const 1
       local.set $10
-      local.get $7
-      i32.const 192
-      i32.ge_u
-      if (result i32)
-       local.get $7
-       i32.const 223
-       i32.le_u
-      else
-       i32.const 0
-      end
+      local.get $9
+      i32.const 2
+      i32.eq
       if
-       i32.const 1
-       local.set $9
        i32.const 128
        local.set $10
        local.get $7
@@ -4579,19 +4591,10 @@
        i32.and
        local.set $7
       else
-       local.get $7
-       i32.const 224
-       i32.ge_u
-       if (result i32)
-        local.get $7
-        i32.const 239
-        i32.le_u
-       else
-        i32.const 0
-       end
+       local.get $9
+       i32.const 3
+       i32.eq
        if
-        i32.const 2
-        local.set $9
         i32.const 2048
         local.set $10
         local.get $7
@@ -4599,19 +4602,10 @@
         i32.and
         local.set $7
        else
-        local.get $7
-        i32.const 240
-        i32.ge_u
-        if (result i32)
-         local.get $7
-         i32.const 247
-         i32.le_u
-        else
-         i32.const 0
-        end
+        local.get $9
+        i32.const 4
+        i32.eq
         if
-         i32.const 3
-         local.set $9
          i32.const 65536
          local.set $10
          local.get $7
@@ -4629,11 +4623,9 @@
       block $while-break|2
        loop $while-continue|2
         local.get $9
-        local.tee $12
         i32.const 1
         i32.sub
-        local.set $9
-        local.get $12
+        local.tee $9
         i32.const 0
         i32.gt_s
         local.set $12
@@ -4673,7 +4665,7 @@
          if
           i32.const 560
           i32.const 608
-          i32.const 190
+          i32.const 208
           i32.const 11
           call $~lib/builtins/abort
           unreachable
@@ -4731,7 +4723,7 @@
       if
        i32.const 560
        i32.const 608
-       i32.const 201
+       i32.const 219
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -4794,7 +4786,7 @@
   if
    i32.const 0
    i32.const 608
-   i32.const 216
+   i32.const 234
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -4944,8 +4936,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 19040
-   i32.const 19088
+   i32.const 19296
+   i32.const 19344
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
