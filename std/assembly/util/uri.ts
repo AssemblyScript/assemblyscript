@@ -178,7 +178,7 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
 
       let c1: u32 = 0;
       let lo: u32 = (17 * bytes >> 2) - 1;
-      ch &= (0x80 >> bytes) - 1;
+      ch &= bytes ? (0x80 >> bytes) - 1 : 0;
 
       while (--bytes > 0) {
         // decode hex

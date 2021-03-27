@@ -4609,11 +4609,16 @@
       i32.sub
       local.set $11
       local.get $7
-      i32.const 128
       local.get $9
-      i32.shr_u
-      i32.const 1
-      i32.sub
+      if (result i32)
+       i32.const 128
+       local.get $9
+       i32.shr_u
+       i32.const 1
+       i32.sub
+      else
+       i32.const 0
+      end
       i32.and
       local.set $7
       block $while-break|2

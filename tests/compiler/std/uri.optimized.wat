@@ -2804,6 +2804,9 @@
       i32.shr_u
       i32.const 1
       i32.sub
+      i32.const 0
+      local.get $5
+      select
       i32.and
       local.set $4
       loop $while-continue|2
