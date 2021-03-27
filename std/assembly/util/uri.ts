@@ -39,6 +39,7 @@ import { CharCode } from "./string";
 
 // @ts-ignore: decorator
 @lazy export const UTF8_BYTE_LEN = memory.data<u8>([
+  /* skip 128 always set to '1' head slots */
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
