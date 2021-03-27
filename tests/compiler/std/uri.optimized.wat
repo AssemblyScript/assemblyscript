@@ -2595,54 +2595,54 @@
   (local $8 i32)
   loop $while-continue|0
    local.get $1
-   local.get $4
+   local.get $3
    i32.gt_u
    if
     block $while-break|0
-     local.get $4
-     local.set $3
+     local.get $3
+     local.set $2
      loop $while-continue|1
       local.get $1
-      local.get $4
+      local.get $3
       i32.gt_u
       if (result i32)
-       local.get $4
+       local.get $3
        i32.const 1
        i32.shl
        i32.const 2416
        i32.add
        i32.load16_u
-       local.tee $2
+       local.tee $5
        i32.const 37
        i32.ne
       else
        i32.const 0
       end
       if
-       local.get $4
+       local.get $3
        i32.const 1
        i32.add
-       local.set $4
+       local.set $3
        br $while-continue|1
       end
      end
+     local.get $2
      local.get $3
-     local.get $4
      i32.lt_u
      if
-      local.get $4
       local.get $3
+      local.get $2
       i32.sub
       i32.const 1
       i32.shl
-      local.tee $5
+      local.tee $4
       i32.const 2
       i32.eq
       if
        local.get $0
        local.get $6
        i32.add
-       local.get $3
+       local.get $2
        i32.const 1
        i32.shl
        i32.const 2416
@@ -2650,14 +2650,14 @@
        i32.load16_u
        i32.store16
       else
-       local.get $5
+       local.get $4
        i32.const 4
        i32.eq
        if
         local.get $0
         local.get $6
         i32.add
-        local.get $3
+        local.get $2
         i32.const 1
         i32.shl
         i32.const 2416
@@ -2668,30 +2668,30 @@
         local.get $0
         local.get $6
         i32.add
-        local.get $3
+        local.get $2
         i32.const 1
         i32.shl
         i32.const 2416
         i32.add
-        local.get $5
+        local.get $4
         call $~lib/memory/memory.copy
        end
       end
-      local.get $5
+      local.get $4
       local.get $6
       i32.add
       local.set $6
       local.get $1
-      local.get $4
+      local.get $3
       i32.le_u
       br_if $while-break|0
      end
      i32.const 1
-     local.get $2
+     local.get $5
      i32.const 37
      i32.ne
      local.get $1
-     local.get $4
+     local.get $3
      i32.const 2
      i32.add
      i32.le_u
@@ -2699,13 +2699,13 @@
      if (result i32)
       i32.const 1
      else
-      local.get $4
+      local.get $3
       i32.const 1
       i32.add
       i32.const 1
       i32.shl
       call $~lib/util/uri/loadHex
-      local.tee $2
+      local.tee $5
       i32.const -1
       i32.eq
      end
@@ -2717,66 +2717,66 @@
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $4
+     local.get $3
      i32.const 3
      i32.add
-     local.set $4
-     local.get $2
+     local.set $3
+     local.get $5
      i32.const 128
      i32.ge_u
      if
       i32.const 0
-      local.set $3
+      local.set $2
       i32.const 1
       local.set $7
-      local.get $2
+      local.get $5
       i32.const 223
       i32.le_u
       i32.const 0
-      local.get $2
+      local.get $5
       i32.const 192
       i32.ge_u
       select
       if (result i32)
        i32.const 1
-       local.set $3
+       local.set $2
        i32.const 128
        local.set $7
-       local.get $2
+       local.get $5
        i32.const 31
        i32.and
       else
-       local.get $2
+       local.get $5
        i32.const 239
        i32.le_u
        i32.const 0
-       local.get $2
+       local.get $5
        i32.const 224
        i32.ge_u
        select
        if (result i32)
         i32.const 2
-        local.set $3
+        local.set $2
         i32.const 2048
         local.set $7
-        local.get $2
+        local.get $5
         i32.const 15
         i32.and
        else
-        local.get $2
+        local.get $5
         i32.const 247
         i32.le_u
         i32.const 0
-        local.get $2
+        local.get $5
         i32.const 240
         i32.ge_u
         select
         if (result i32)
          i32.const 3
-         local.set $3
+         local.set $2
          i32.const 65536
          local.set $7
-         local.get $2
+         local.get $5
          i32.const 7
          i32.and
         else
@@ -2784,29 +2784,29 @@
         end
        end
       end
-      local.set $2
+      local.set $5
       i32.const 0
       local.set $8
       loop $while-continue|2
-       local.get $3
-       local.tee $5
+       local.get $2
+       local.tee $4
        i32.const 1
        i32.sub
-       local.set $3
-       local.get $5
+       local.set $2
+       local.get $4
        i32.const 0
        i32.gt_s
        if
         block $while-break|2
          local.get $1
-         local.get $4
+         local.get $3
          i32.const 2
          i32.add
          i32.le_u
          if (result i32)
           i32.const 1
          else
-          local.get $4
+          local.get $3
           i32.const 1
           i32.shl
           i32.const 2416
@@ -2818,7 +2818,7 @@
          if (result i32)
           i32.const 1
          else
-          local.get $4
+          local.get $3
           i32.const 1
           i32.add
           i32.const 1
@@ -2836,10 +2836,10 @@
           call $~lib/builtins/abort
           unreachable
          end
-         local.get $4
+         local.get $3
          i32.const 3
          i32.add
-         local.set $4
+         local.set $3
          local.get $8
          i32.const 192
          i32.and
@@ -2847,35 +2847,35 @@
          i32.ne
          if
           i32.const 0
-          local.set $2
+          local.set $5
           br $while-break|2
          end
          local.get $8
          i32.const 63
          i32.and
-         local.get $2
+         local.get $5
          i32.const 6
          i32.shl
          i32.or
-         local.set $2
+         local.set $5
          br $while-continue|2
         end
        end
       end
       i32.const 1
-      local.get $2
+      local.get $5
       i32.const 57344
       i32.lt_u
       i32.const 0
-      local.get $2
+      local.get $5
       i32.const 55296
       i32.ge_u
       select
       i32.const 1
-      local.get $2
+      local.get $5
       i32.const 1114111
       i32.gt_u
-      local.get $2
+      local.get $5
       local.get $7
       i32.lt_u
       select
@@ -2889,41 +2889,43 @@
        unreachable
       end
      end
-     local.get $2
+     local.get $5
      i32.const 65536
-     i32.ge_u
-     if
+     i32.lt_u
+     if (result i32)
       local.get $0
       local.get $6
       i32.add
-      local.get $2
-      i32.const 65536
-      i32.sub
-      local.tee $2
-      i32.const 10
-      i32.shr_u
-      i32.const 55296
-      i32.add
+      local.get $5
       i32.store16
       local.get $6
       i32.const 2
       i32.add
-      local.set $6
-      local.get $2
+     else
+      local.get $0
+      local.get $6
+      i32.add
+      local.get $5
+      i32.const 65536
+      i32.sub
+      local.tee $5
       i32.const 1023
       i32.and
       i32.const 56320
+      i32.or
+      i32.const 16
+      i32.shl
+      local.get $5
+      i32.const 10
+      i32.shr_u
+      i32.const 55296
+      i32.or
+      i32.or
+      i32.store
+      local.get $6
+      i32.const 4
       i32.add
-      local.set $2
      end
-     local.get $0
-     local.get $6
-     i32.add
-     local.get $2
-     i32.store16
-     local.get $6
-     i32.const 2
-     i32.add
      local.set $6
      br $while-continue|0
     end
@@ -2937,7 +2939,7 @@
   if
    i32.const 0
    i32.const 1632
-   i32.const 214
+   i32.const 216
    i32.const 3
    call $~lib/builtins/abort
    unreachable
