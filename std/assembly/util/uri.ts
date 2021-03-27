@@ -49,6 +49,7 @@ import { CharCode } from "./string";
 
 export function encode(dst: usize, src: usize, len: usize, table: usize): usize {
   var i: usize = 0, offset: usize = 0, outSize = len << 1;
+
   while (i < len) {
     let org = i;
     let c: u32, c1: u32;
@@ -170,19 +171,16 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
         ch = CharCode.PERCENT;
         i -= 2;
       }
-      store<u16>(dst + offset, ch);
-      offset += 2;
     } else {
       // decode UTF-8 sequence
       let nb = utf8LenFromUpperByte(ch);
-
-      let c1: u32 = 0;
       // lo  = 2 => 0x80, 3 => 0x800, 4 => 0x10000, _ => -1
       let lo: u32 = 1 << (17 * nb >> 2) - 1;
       // ch &= 2 => 31,   3 => 15,    4 => 7,       _ =>  0
       ch &= nb ? (0x80 >> nb) - 1 : 0;
 
       while (--nb != 0) {
+        let c1: u32;
         // decode hex
         if (
           i + 2 >= len ||
@@ -202,17 +200,17 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
         throw new URIError(E_URI_MALFORMED);
       }
 
-      if (ch < 0x10000) {
-        store<u16>(dst + offset, ch);
-        offset += 2;
-      } else {
+      if (ch >= 0x10000) {
         ch -= 0x10000;
         let lo = ch >> 10 | 0xD800;
         let hi = (ch & 0x03FF) | 0xDC00;
         store<u32>(dst + offset, lo | (hi << 16));
         offset += 4;
+        continue;
       }
     }
+    store<u16>(dst + offset, ch);
+    offset += 2;
   }
 
   assert(offset <= (len << 1));
@@ -225,9 +223,9 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
 // @ts-ignore: decorator
 @inline function utf8LenFromUpperByte(c0: u32): u32 {
   if (ASC_SHRINK_LEVEL > 1) {
-    if (c0 >= 0xC0 && c0 <= 0xDF) return 2;
-    if (c0 >= 0xE0 && c0 <= 0xEF) return 3;
-    if (c0 >= 0xF0 && c0 <= 0xF7) return 4;
+    if (c0 - 0xC0 <= 0xDF - 0xC0) return 2;
+    if (c0 - 0xE0 <= 0xEF - 0xE0) return 3;
+    if (c0 - 0xF0 <= 0xF7 - 0xF0) return 4;
     return 0;
   } else {
     return c0 - 128 <= 128

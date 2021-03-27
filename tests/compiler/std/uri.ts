@@ -1,8 +1,6 @@
 
 // encodeURIComponent
 
-// not escaped
-
 assert(encodeURIComponent("") == "");
 assert(encodeURIComponent("a") == "a");
 assert(encodeURIComponent("a1") == "a1");
@@ -11,9 +9,6 @@ assert(
   encodeURIComponent("ABCDXYZafgklmnwyz0123456789-_.!~*'()") ==
   "ABCDXYZafgklmnwyz0123456789-_.!~*'()"
 );
-
-// escaped
-
 assert(encodeURIComponent("\0") == "%00");
 assert(encodeURIComponent("+") == "%2B");
 assert(encodeURIComponent("#0=") !== "%230%3D");
@@ -41,8 +36,6 @@ assert(
 
 // encodeURI
 
-// not escaped
-
 assert(encodeURI("") == "");
 assert(encodeURI("a") == "a");
 assert(encodeURI(";,/?:@&=+$#") == ";,/?:@&=+$#");
@@ -50,9 +43,6 @@ assert(
   encodeURI("ABCDXYZafgklmnwyz0123456789-_.!~*'()") ==
   "ABCDXYZafgklmnwyz0123456789-_.!~*'()"
 );
-
-// escaped
-
 assert(encodeURI(" ") == "%20");
 assert(encodeURI("\x7E\x7F\x80") == "~%7F%C2%80");
 assert(encodeURI("\uD800\uDFFF") == "%F0%90%8F%BF");
@@ -66,11 +56,13 @@ assert(
 // assert(encodeURI("\uD800")); // malformed URI sequence
 // assert(encodeURI("\uDFFF")); // malformed URI sequence
 
+
 // decodeURIComponent
 
 assert(decodeURIComponent("") == "");
 assert(decodeURIComponent("a") == "a");
 assert(decodeURIComponent("%26") == "&");
+assert(decodeURIComponent("\uD800") == "\uD800");
 assert(decodeURIComponent("\uD800\uDFFF") == "\uD800\uDFFF");
 assert(decodeURIComponent("%3b%2f%3f%3a%40%3d%2b%24%2c%23") == ";/?:@=+$,#");
 assert(decodeURIComponent("%3B%2F%3F%3A%40%3D%2B%24%2C%23") == ";/?:@=+$,#");
@@ -81,11 +73,13 @@ assert(
 
 assert(decodeURIComponent("%F0%9F%87%AD%F0%9F%87%BA%F0%9F%8D%8E") == "🇭🇺🍎");
 
+
 // decodeURI
 
 assert(decodeURI("") == "");
 assert(decodeURI("a") == "a");
 assert(decodeURI("%26") == "%26");
+assert(decodeURI("\uD800") == "\uD800");
 assert(decodeURI("\uD800\uDFFF") == "\uD800\uDFFF");
 assert(decodeURI("%3b%2f%3f%3a%40%3d%2b%24%2c%23") == "%3b%2f%3f%3a%40%3d%2b%24%2c%23");
 assert(decodeURI("%F0%9F%87%AD%F0%9F%87%BA%F0%9F%8D%8E") == "🇭🇺🍎");
