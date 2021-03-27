@@ -177,8 +177,10 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
       let nb = utf8LenFromUpperByte(ch);
 
       let c1: u32 = 0;
-      let lo: u32 = 1 << (17 * nb >> 2) - 1; // 2 => 0x80, 3 => 0x800, 4 => 0x10000
-      ch &= nb ? (0x80 >> nb) - 1 : 0;       // 2 => 31,   3 => 15,    4 => 7
+      // lo  = 2 => 0x80, 3 => 0x800, 4 => 0x10000, _ => -1
+      let lo: u32 = 1 << (17 * nb >> 2) - 1;
+      // ch &= 2 => 31,   3 => 15,    4 => 7,       _ =>  0
+      ch &= nb ? (0x80 >> nb) - 1 : 0;
 
       while (--nb != 0) {
         // decode hex
