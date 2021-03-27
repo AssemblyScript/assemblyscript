@@ -147,9 +147,9 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
 }
 
 // @ts-ignore: decorator
-@inline function isHex(ch: u32): bool {
-  return ch - CharCode._0 < 10 || (ch | 32) - CharCode.a < 6;
-}
+// @inline function isHex(ch: u32): bool {
+//   return ch - CharCode._0 < 10 || (ch | 32) - CharCode.a < 6;
+// }
 
 // @ts-ignore: decorator
 @inline function fromHex(ch: u32): u32 {
