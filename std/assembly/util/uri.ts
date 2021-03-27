@@ -175,23 +175,22 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
       }
     } else {
       // decode UTF-8 sequence
-      let n = utf8LenFromUpperByte(ch);
+      let bytes = utf8LenFromUpperByte(ch);
       let lo: u32 = 1;
-      if (n == 2) {
+      if (bytes == 2) {
         lo  = 0x80;
         ch &= 0x1F;
-      } else if (n == 3) {
+      } else if (bytes == 3) {
         lo  = 0x800;
         ch &= 0x0F;
-      } else if (n == 4) {
+      } else if (bytes == 4) {
         lo  = 0x10000;
         ch &= 0x07;
       } else {
         ch = 0;
       }
-
       let c1: u32 = 0;
-      while (--n > 0) {
+      while (--bytes > 0) {
         // decode hex
         if (
           i + 2 >= len ||
