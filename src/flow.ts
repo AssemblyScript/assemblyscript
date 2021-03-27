@@ -1456,7 +1456,7 @@ export class Flow {
     if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
     if (this.is(FlowFlags.CONDITIONALLY_ACCESSES_THIS)) sb.push("CONDITIONALLY_ACCESSES_THIS");
     if (this.is(FlowFlags.MAY_RETURN_NONTHIS)) sb.push("MAY_RETURN_NONTHIS");
-    return `Flow(${this.actualFunction.toString()})[${levels}] ${sb.join(" ")}`;
+    return `Flow(${this.actualFunction})[${levels}] ${sb.join(" ")}`;
   }
 }
 
