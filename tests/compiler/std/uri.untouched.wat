@@ -4530,25 +4530,21 @@
       local.get $3
       i32.eqz
       if (result i32)
-       block $~lib/util/uri/isReserved|inlined.0 (result i32)
-        local.get $7
-        local.set $9
+       local.get $7
+       local.set $9
+       local.get $9
+       i32.const 35
+       i32.sub
+       i32.const 30
+       i32.lt_u
+       if (result i32)
+        global.get $~lib/util/uri/URI_RESERVED
         local.get $9
         i32.const 35
         i32.sub
-        i32.const 0
-        i32.shr_u
-        i32.const 30
-        i32.lt_u
-        if
-         global.get $~lib/util/uri/URI_RESERVED
-         local.get $9
-         i32.const 35
-         i32.sub
-         i32.add
-         i32.load16_u
-         br $~lib/util/uri/isReserved|inlined.0
-        end
+        i32.add
+        i32.load16_u
+       else
         i32.const 0
        end
       else

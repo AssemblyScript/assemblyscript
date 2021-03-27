@@ -124,7 +124,7 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
   return dst;
 }
 
-export function decode(dst: usize, src: usize, len: usize, component: bool = false): usize {
+export function decode(dst: usize, src: usize, len: usize, component: bool): usize {
   var i: usize = 0, offset: usize = 0, org: usize, ch: u32 = 0;
 
   while (i < len) {
@@ -223,10 +223,9 @@ export function decode(dst: usize, src: usize, len: usize, component: bool = fal
 
 // @ts-ignore: decorator
 @inline function isReserved(ch: u32): bool {
-  if (((ch - 35) >>> 0) < 30) {
-    return <bool>load<u16>(URI_RESERVED + (ch - 35));
-  }
-  return false;
+  return (ch - 35) < 30
+    ? <bool>load<u16>(URI_RESERVED + (ch - 35))
+    : false;
 }
 
 // @ts-ignore: decorator
@@ -258,9 +257,6 @@ function storeHex(dst: usize, offset: usize, ch: u32): void {
 function loadHex(src: usize, offset: usize): u32 {
   let c0 = <u32>load<u16>(src + offset, 0);
   let c1 = <u32>load<u16>(src + offset, 2);
-
-  // trace("c0", 1, c0);
-  // trace("c1", 1, c1);
 
   // if (!isHex(c0) || !isHex(c1)) return -1;
   // return fromHex(c0) << 4 | fromHex(c1);
