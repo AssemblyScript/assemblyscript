@@ -4600,6 +4600,7 @@
       local.set $9
       i32.const 0
       local.set $10
+      i32.const 1
       i32.const 17
       local.get $9
       i32.mul
@@ -4607,6 +4608,7 @@
       i32.shr_u
       i32.const 1
       i32.sub
+      i32.shl
       local.set $11
       local.get $7
       local.get $9

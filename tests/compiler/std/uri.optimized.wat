@@ -2777,6 +2777,7 @@
       local.set $8
       local.get $4
       local.set $5
+      i32.const 1
       local.get $4
       i32.const 128
       i32.sub
@@ -2797,6 +2798,7 @@
       i32.shr_u
       i32.const 1
       i32.sub
+      i32.shl
       local.set $9
       local.get $4
       i32.const 128
