@@ -70,6 +70,7 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
     qS2 = reinterpret<f64>(0x40002AE59C598AC8), //  2.02094576023350569471e+00
     qS3 = reinterpret<f64>(0xBFE6066C1B8D0159), // -6.88283971605453293030e-01
     qS4 = reinterpret<f64>(0x3FB3B8C5B12E9282); //  7.70381505559019352791e-02
+
   var p = z * (pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5)))));
   var q = 1.0 + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)));
   return p / q;
@@ -192,7 +193,7 @@ function pio2_large_quot(x: f64, u: i64): i32 { // see: jdh8/metallic/blob/maste
 
   var shifter = 0x3CB0000000000000 - (pio2_right(rlo ^ slo, rhi ^ shi) << 52);
   var signbit = (u ^ rhi) & 0x8000000000000000;
-  var coeff = reinterpret<f64>(shifter | signbit);
+  var coeff   = reinterpret<f64>(shifter | signbit);
 
   rempio2_y0 *= coeff;
   rempio2_y1 *= coeff;
@@ -204,13 +205,14 @@ function pio2_large_quot(x: f64, u: i64): i32 { // see: jdh8/metallic/blob/maste
 // @ts-ignore: decorator
 @inline
 function rempio2(x: f64, u: u64, sign: i32): i32 {
-  const pio2_1  = reinterpret<f64>(0x3FF921FB54400000); // 1.57079632673412561417e+00
-  const pio2_1t = reinterpret<f64>(0x3DD0B4611A626331); // 6.07710050650619224932e-11
-  const pio2_2  = reinterpret<f64>(0x3DD0B4611A600000); // 6.07710050630396597660e-11
-  const pio2_2t = reinterpret<f64>(0x3BA3198A2E037073); // 2.02226624879595063154e-21
-  const pio2_3  = reinterpret<f64>(0x3BA3198A2E000000); // 2.02226624871116645580e-21
-  const pio2_3t = reinterpret<f64>(0x397B839A252049C1); // 8.47842766036889956997e-32
-  const invpio2 = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
+  const
+    pio2_1  = reinterpret<f64>(0x3FF921FB54400000), // 1.57079632673412561417e+00
+    pio2_1t = reinterpret<f64>(0x3DD0B4611A626331), // 6.07710050650619224932e-11
+    pio2_2  = reinterpret<f64>(0x3DD0B4611A600000), // 6.07710050630396597660e-11
+    pio2_2t = reinterpret<f64>(0x3BA3198A2E037073), // 2.02226624879595063154e-21
+    pio2_3  = reinterpret<f64>(0x3BA3198A2E000000), // 2.02226624871116645580e-21
+    pio2_3t = reinterpret<f64>(0x397B839A252049C1), // 8.47842766036889956997e-32
+    invpio2 = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
 
   var ix = <u32>(u >> 32) & 0x7FFFFFFF;
 
@@ -284,12 +286,13 @@ function rempio2(x: f64, u: u64, sign: i32): i32 {
 // @ts-ignore: decorator
 @inline
 function sin_kern(x: f64, y: f64, iy: i32): f64 { // see: musl/tree/src/math/__sin.c
-  const S1 = reinterpret<f64>(0xBFC5555555555549); // -1.66666666666666324348e-01
-  const S2 = reinterpret<f64>(0x3F8111111110F8A6); //  8.33333333332248946124e-03
-  const S3 = reinterpret<f64>(0xBF2A01A019C161D5); // -1.98412698298579493134e-04
-  const S4 = reinterpret<f64>(0x3EC71DE357B1FE7D); //  2.75573137070700676789e-06
-  const S5 = reinterpret<f64>(0xBE5AE5E68A2B9CEB); // -2.50507602534068634195e-08
-  const S6 = reinterpret<f64>(0x3DE5D93A5ACFD57C); //  1.58969099521155010221e-10
+  const
+    S1 = reinterpret<f64>(0xBFC5555555555549), // -1.66666666666666324348e-01
+    S2 = reinterpret<f64>(0x3F8111111110F8A6), //  8.33333333332248946124e-03
+    S3 = reinterpret<f64>(0xBF2A01A019C161D5), // -1.98412698298579493134e-04
+    S4 = reinterpret<f64>(0x3EC71DE357B1FE7D), //  2.75573137070700676789e-06
+    S5 = reinterpret<f64>(0xBE5AE5E68A2B9CEB), // -2.50507602534068634195e-08
+    S6 = reinterpret<f64>(0x3DE5D93A5ACFD57C); //  1.58969099521155010221e-10
 
   var z = x * x;
   var w = z * z;
@@ -306,12 +309,13 @@ function sin_kern(x: f64, y: f64, iy: i32): f64 { // see: musl/tree/src/math/__s
 // @ts-ignore: decorator
 @inline
 function cos_kern(x: f64, y: f64): f64 { // see: musl/tree/src/math/__cos.c
-  const C1 = reinterpret<f64>(0x3FA555555555554C); //  4.16666666666666019037e-02
-  const C2 = reinterpret<f64>(0xBF56C16C16C15177); // -1.38888888888741095749e-03
-  const C3 = reinterpret<f64>(0x3EFA01A019CB1590); //  2.48015872894767294178e-05
-  const C4 = reinterpret<f64>(0xBE927E4F809C52AD); // -2.75573143513906633035e-07
-  const C5 = reinterpret<f64>(0x3E21EE9EBDB4B1C4); //  2.08757232129817482790e-09
-  const C6 = reinterpret<f64>(0xBDA8FAE9BE8838D4); // -1.13596475577881948265e-11
+  const
+    C1 = reinterpret<f64>(0x3FA555555555554C), //  4.16666666666666019037e-02
+    C2 = reinterpret<f64>(0xBF56C16C16C15177), // -1.38888888888741095749e-03
+    C3 = reinterpret<f64>(0x3EFA01A019CB1590), //  2.48015872894767294178e-05
+    C4 = reinterpret<f64>(0xBE927E4F809C52AD), // -2.75573143513906633035e-07
+    C5 = reinterpret<f64>(0x3E21EE9EBDB4B1C4), //  2.08757232129817482790e-09
+    C6 = reinterpret<f64>(0xBDA8FAE9BE8838D4); // -1.13596475577881948265e-11
 
   var z = x * x;
   var w = z * z;
@@ -323,23 +327,25 @@ function cos_kern(x: f64, y: f64): f64 { // see: musl/tree/src/math/__cos.c
 
 /** @internal */
 function tan_kern(x: f64, y: f64, iy: i32): f64 { // see: src/lib/msun/src/k_tan.c
-  const T0  = reinterpret<f64>(0x3FD5555555555563); //  3.33333333333334091986e-01
-  const T1  = reinterpret<f64>(0x3FC111111110FE7A); //  1.33333333333201242699e-01
-  const T2  = reinterpret<f64>(0x3FABA1BA1BB341FE); //  5.39682539762260521377e-02
-  const T3  = reinterpret<f64>(0x3F9664F48406D637); //  2.18694882948595424599e-02
-  const T4  = reinterpret<f64>(0x3F8226E3E96E8493); //  8.86323982359930005737e-03
-  const T5  = reinterpret<f64>(0x3F6D6D22C9560328); //  3.59207910759131235356e-03
-  const T6  = reinterpret<f64>(0x3F57DBC8FEE08315); //  1.45620945432529025516e-03
-  const T7  = reinterpret<f64>(0x3F4344D8F2F26501); //  5.88041240820264096874e-04
-  const T8  = reinterpret<f64>(0x3F3026F71A8D1068); //  2.46463134818469906812e-04
-  const T9  = reinterpret<f64>(0x3F147E88A03792A6); //  7.81794442939557092300e-05
-  const T10 = reinterpret<f64>(0x3F12B80F32F0A7E9); //  7.14072491382608190305e-05
-  const T11 = reinterpret<f64>(0xBEF375CBDB605373); // -1.85586374855275456654e-05
-  const T12 = reinterpret<f64>(0x3EFB2A7074BF7AD4); //  2.59073051863633712884e-05
+  const
+    T0  = reinterpret<f64>(0x3FD5555555555563), //  3.33333333333334091986e-01
+    T1  = reinterpret<f64>(0x3FC111111110FE7A), //  1.33333333333201242699e-01
+    T2  = reinterpret<f64>(0x3FABA1BA1BB341FE), //  5.39682539762260521377e-02
+    T3  = reinterpret<f64>(0x3F9664F48406D637), //  2.18694882948595424599e-02
+    T4  = reinterpret<f64>(0x3F8226E3E96E8493), //  8.86323982359930005737e-03
+    T5  = reinterpret<f64>(0x3F6D6D22C9560328), //  3.59207910759131235356e-03
+    T6  = reinterpret<f64>(0x3F57DBC8FEE08315), //  1.45620945432529025516e-03
+    T7  = reinterpret<f64>(0x3F4344D8F2F26501), //  5.88041240820264096874e-04
+    T8  = reinterpret<f64>(0x3F3026F71A8D1068), //  2.46463134818469906812e-04
+    T9  = reinterpret<f64>(0x3F147E88A03792A6), //  7.81794442939557092300e-05
+    T10 = reinterpret<f64>(0x3F12B80F32F0A7E9), //  7.14072491382608190305e-05
+    T11 = reinterpret<f64>(0xBEF375CBDB605373), // -1.85586374855275456654e-05
+    T12 = reinterpret<f64>(0x3EFB2A7074BF7AD4); //  2.59073051863633712884e-05
 
-  const one    = reinterpret<f64>(0x3FF0000000000000); // 1.00000000000000000000e+00
-  const pio4   = reinterpret<f64>(0x3FE921FB54442D18); // 7.85398163397448278999e-01
-  const pio4lo = reinterpret<f64>(0x3C81A62633145C07); // 3.06161699786838301793e-17
+  const
+    one    = reinterpret<f64>(0x3FF0000000000000), // 1.00000000000000000000e+00
+    pio4   = reinterpret<f64>(0x3FE921FB54442D18), // 7.85398163397448278999e-01
+    pio4lo = reinterpret<f64>(0x3C81A62633145C07); // 3.06161699786838301793e-17
 
   var z: f64, r: f64, v: f64, w: f64, s: f64;
   var hx = <i32>(reinterpret<u64>(x) >> 32); // high word of x
@@ -558,6 +564,7 @@ export namespace NativeMath {
       pio2_hi   = reinterpret<f64>(0x3FF921FB54442D18), // 1.57079632679489655800e+00
       pio2_lo   = reinterpret<f64>(0x3C91A62633145C07), // 6.12323399573676603587e-17
       Ox1p_120f = reinterpret<f32>(0x03800000);
+
     var hx = <u32>(reinterpret<u64>(x) >> 32);
     var ix = hx & 0x7FFFFFFF;
     if (ix >= 0x3FF00000) {
@@ -602,6 +609,7 @@ export namespace NativeMath {
       pio2_hi   = reinterpret<f64>(0x3FF921FB54442D18), // 1.57079632679489655800e+00
       pio2_lo   = reinterpret<f64>(0x3C91A62633145C07), // 6.12323399573676603587e-17
       Ox1p_120f = reinterpret<f32>(0x03800000);
+
     var hx = <u32>(reinterpret<u64>(x) >> 32);
     var ix = hx & 0x7FFFFFFF;
     if (ix >= 0x3FF00000) {
@@ -660,6 +668,7 @@ export namespace NativeMath {
       aT9       = reinterpret<f64>(0xBFA2B4442C6A6C2F), // -3.65315727442169155270e-02
       aT10      = reinterpret<f64>(0x3F90AD3AE322DA11), //  1.62858201153657823623e-02
       Ox1p_120f = reinterpret<f32>(0x03800000);
+
     var ix = <u32>(reinterpret<u64>(x) >> 32);
     var sx = x;
     ix &= 0x7FFFFFFF;
@@ -775,7 +784,8 @@ export namespace NativeMath {
       P2     = reinterpret<f64>(0x3FF9F1604A49D6C2), //  1.621429720105354466140
       P3     = reinterpret<f64>(0xBFE844CBBEE751D9), // -0.758397934778766047437
       P4     = reinterpret<f64>(0x3FC2B000D4E4EDD7), //  0.145996192886612446982
-      Ox1p54 = reinterpret<f64>(0x4350000000000000);
+      Ox1p54 = reinterpret<f64>(0x4350000000000000); //  0x1p54
+
     var u = reinterpret<u64>(x);
     var hx = <u32>(u >> 32) & 0x7FFFFFFF;
     if (hx >= 0x7FF00000) return x + x;
@@ -879,7 +889,8 @@ export namespace NativeMath {
         P5        = reinterpret<f64>(0x3E66376972BEA4D0), //  4.13813679705723846039e-08
         overflow  = reinterpret<f64>(0x40862E42FEFA39EF), //  709.782712893383973096
         underflow = reinterpret<f64>(0xC0874910D52D3051), // -745.13321910194110842
-        Ox1p1023  = reinterpret<f64>(0x7FE0000000000000);
+        Ox1p1023  = reinterpret<f64>(0x7FE0000000000000); //  0x1p1023
+
       let hx = <u32>(reinterpret<u64>(x) >> 32);
       let sign_ = <i32>(hx >> 31);
       hx &= 0x7FFFFFFF;
@@ -926,7 +937,8 @@ export namespace NativeMath {
       Q3          = reinterpret<f64>(0xBF14CE199EAADBB7), // -7.93650757867487942473e-05
       Q4          = reinterpret<f64>(0x3ED0CFCA86E65239), //  4.00821782732936239552e-06
       Q5          = reinterpret<f64>(0xBE8AFDB76E09C32D), // -2.01099218183624371326e-07
-      Ox1p1023    = reinterpret<f64>(0x7FE0000000000000);
+      Ox1p1023    = reinterpret<f64>(0x7FE0000000000000); //  0x1p1023
+
     var u = reinterpret<u64>(x);
     var hx = <u32>(u >> 32 & 0x7FFFFFFF);
     var k = 0, sign_ = <i32>(u >> 63);
@@ -996,6 +1008,7 @@ export namespace NativeMath {
       SPLIT    = reinterpret<f64>(0x41A0000000000000) + 1, // 0x1p27 + 1
       Ox1p700  = reinterpret<f64>(0x6BB0000000000000),
       Ox1p_700 = reinterpret<f64>(0x1430000000000000);
+
     var ux = reinterpret<u64>(x);
     var uy = reinterpret<u64>(y);
     ux &= 0x7FFFFFFFFFFFFFFF;
@@ -1060,7 +1073,8 @@ export namespace NativeMath {
         Lg5    = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
         Lg6    = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
         Lg7    = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
-        Ox1p54 = reinterpret<f64>(0x4350000000000000);
+        Ox1p54 = reinterpret<f64>(0x4350000000000000); // 0x1p54
+
       let u = reinterpret<u64>(x);
       let hx = <u32>(u >> 32);
       let k = 0;
@@ -1107,7 +1121,8 @@ export namespace NativeMath {
       Lg5       = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
       Lg6       = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
       Lg7       = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
-      Ox1p54    = reinterpret<f64>(0x4350000000000000);
+      Ox1p54    = reinterpret<f64>(0x4350000000000000); // 0x1p54
+
     var u = reinterpret<u64>(x);
     var hx = <u32>(u >> 32);
     var k = 0;
@@ -1161,6 +1176,7 @@ export namespace NativeMath {
       Lg5    = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
       Lg6    = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
       Lg7    = reinterpret<f64>(0x3FC2F112DF3E5244); // 1.479819860511658591e-01
+
     var u = reinterpret<u64>(x);
     var hx = <u32>(u >> 32);
     var k = 1;
@@ -1216,7 +1232,8 @@ export namespace NativeMath {
         Lg5     = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
         Lg6     = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
         Lg7     = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
-        Ox1p54  = reinterpret<f64>(0x4350000000000000);
+        Ox1p54  = reinterpret<f64>(0x4350000000000000); // 1p54
+
       let u = reinterpret<u64>(x);
       let hx = <u32>(u >> 32);
       let k = 0;
@@ -1318,6 +1335,7 @@ export namespace NativeMath {
         ivln2_h = reinterpret<f64>(0x3FF7154760000000), //  1.44269502162933349609e+00
         ivln2_l = reinterpret<f64>(0x3E54AE0BF85DDF44), //  1.92596299112661746887e-08
         inv3    = reinterpret<f64>(0x3FD5555555555555); //  0.3333333333333333333333
+
       let u_ = reinterpret<u64>(x);
       let hx = <i32>(u_ >> 32);
       let lx = <u32>u_;
@@ -1567,18 +1585,18 @@ export namespace NativeMath {
 
   export function sinh(x: f64): f64 { // see: musl/src/math/sinh.c
     var u = reinterpret<u64>(x) & 0x7FFFFFFFFFFFFFFF;
-    var absx = reinterpret<f64>(u);
+    var a = reinterpret<f64>(u);
     var w = <u32>(u >> 32);
     var h = builtin_copysign(0.5, x);
     if (w < 0x40862E42) {
-      let t = expm1(absx);
+      let t = expm1(a);
       if (w < 0x3FF00000) {
         if (w < 0x3FF00000 - (26 << 20)) return x;
         return h * (2 * t - t * t / (t + 1));
       }
       return h * (t + t / (t + 1));
     }
-    return expo2(absx, 2 * h);
+    return expo2(a, 2 * h);
   }
 
   // @ts-ignore: decorator
@@ -1643,6 +1661,7 @@ export namespace NativeMath {
       Ox1p53    = reinterpret<f64>(0x4340000000000000),
       Ox1p1023  = reinterpret<f64>(0x7FE0000000000000),
       Ox1p_1022 = reinterpret<f64>(0x0010000000000000);
+
     var y = x;
     if (n > 1023) {
       y *= Ox1p1023;
@@ -1928,6 +1947,7 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
     pS1 = reinterpret<f32>(0xBD2F13BA), // -4.2743422091e-02f
     pS2 = reinterpret<f32>(0xBC0DD36B), // -8.6563630030e-03f
     qS1 = reinterpret<f32>(0xBF34E5AE); // -7.0662963390e-01f
+
   var p = z * (pS0 + z * (pS1 + z * pS2));
   var q: f32 = 1 + z * qS1;
   return p / q;
@@ -1980,9 +2000,10 @@ function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/mast
 // @ts-ignore: decorator
 @inline
 function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
-  const pi2hi = reinterpret<f64>(0x3FF921FB50000000); // 1.57079631090164184570
-  const pi2lo = reinterpret<f64>(0x3E5110B4611A6263); // 1.58932547735281966916e-8
-  const _2_pi = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
+  const
+    pi2hi = reinterpret<f64>(0x3FF921FB50000000), // 1.57079631090164184570
+    pi2lo = reinterpret<f64>(0x3E5110B4611A6263), // 1.58932547735281966916e-8
+    _2_pi = reinterpret<f64>(0x3FE45F306DC9C883); // 0.63661977236758134308
 
   if (u < 0x4DC90FDB) { // π * 0x1p28
     let q = nearest(x * _2_pi);
@@ -1999,10 +2020,11 @@ function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/m
 // @ts-ignore: decorator
 @inline
 function sin_kernf(x: f64): f32 { // see: musl/tree/src/math/__sindf.c
-  const S1 = reinterpret<f64>(0xBFC5555554CBAC77); // -0x15555554cbac77.0p-55
-  const S2 = reinterpret<f64>(0x3F811110896EFBB2); //  0x111110896efbb2.0p-59
-  const S3 = reinterpret<f64>(0xBF2A00F9E2CAE774); // -0x1a00f9e2cae774.0p-65
-  const S4 = reinterpret<f64>(0x3EC6CD878C3B46A7); //  0x16cd878c3b46a7.0p-71
+  const
+    S1 = reinterpret<f64>(0xBFC5555554CBAC77), // -0x15555554cbac77.0p-55
+    S2 = reinterpret<f64>(0x3F811110896EFBB2), //  0x111110896efbb2.0p-59
+    S3 = reinterpret<f64>(0xBF2A00F9E2CAE774), // -0x1a00f9e2cae774.0p-65
+    S4 = reinterpret<f64>(0x3EC6CD878C3B46A7); //  0x16cd878c3b46a7.0p-71
 
   var z = x * x;
   var w = z * z;
@@ -2016,10 +2038,11 @@ function sin_kernf(x: f64): f32 { // see: musl/tree/src/math/__sindf.c
 // @ts-ignore: decorator
 @inline
 function cos_kernf(x: f64): f32 { // see: musl/tree/src/math/__cosdf.c
-  const C0 = reinterpret<f64>(0xBFDFFFFFFD0C5E81); // -0x1ffffffd0c5e81.0p-54
-  const C1 = reinterpret<f64>(0x3FA55553E1053A42); //  0x155553e1053a42.0p-57
-  const C2 = reinterpret<f64>(0xBF56C087E80F1E27); // -0x16c087e80f1e27.0p-62
-  const C3 = reinterpret<f64>(0x3EF99342E0EE5069); //  0x199342e0ee5069.0p-68
+  const
+    C0 = reinterpret<f64>(0xBFDFFFFFFD0C5E81), // -0x1ffffffd0c5e81.0p-54
+    C1 = reinterpret<f64>(0x3FA55553E1053A42), //  0x155553e1053a42.0p-57
+    C2 = reinterpret<f64>(0xBF56C087E80F1E27), // -0x16c087e80f1e27.0p-62
+    C3 = reinterpret<f64>(0x3EF99342E0EE5069); //  0x199342e0ee5069.0p-68
 
   var z = x * x;
   var w = z * z;
@@ -2032,13 +2055,13 @@ function cos_kernf(x: f64): f32 { // see: musl/tree/src/math/__cosdf.c
 // @ts-ignore: decorator
 @inline
 function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
-
-  const T0 = reinterpret<f64>(0x3FD5554D3418C99F); // 0x15554d3418c99f.0p-54
-  const T1 = reinterpret<f64>(0x3FC112FD38999F72); // 0x1112fd38999f72.0p-55
-  const T2 = reinterpret<f64>(0x3FAB54C91D865AFE); // 0x1b54c91d865afe.0p-57
-  const T3 = reinterpret<f64>(0x3F991DF3908C33CE); // 0x191df3908c33ce.0p-58
-  const T4 = reinterpret<f64>(0x3F685DADFCECF44E); // 0x185dadfcecf44e.0p-61
-  const T5 = reinterpret<f64>(0x3F8362B9BF971BCD); // 0x1362b9bf971bcd.0p-59
+  const
+    T0 = reinterpret<f64>(0x3FD5554D3418C99F), // 0x15554d3418c99f.0p-54
+    T1 = reinterpret<f64>(0x3FC112FD38999F72), // 0x1112fd38999f72.0p-55
+    T2 = reinterpret<f64>(0x3FAB54C91D865AFE), // 0x1b54c91d865afe.0p-57
+    T3 = reinterpret<f64>(0x3F991DF3908C33CE), // 0x191df3908c33ce.0p-58
+    T4 = reinterpret<f64>(0x3F685DADFCECF44E), // 0x185dadfcecf44e.0p-61
+    T5 = reinterpret<f64>(0x3F8362B9BF971BCD); // 0x1362b9bf971bcd.0p-59
 
   var z = x * x;
   var r = T4 + z * T5;
@@ -2232,7 +2255,8 @@ export namespace NativeMathf {
     const
       pio2_hi   = reinterpret<f32>(0x3FC90FDA), // 1.5707962513e+00f
       pio2_lo   = reinterpret<f32>(0x33A22168), // 7.5497894159e-08f
-      Ox1p_120f = reinterpret<f32>(0x03800000);
+      Ox1p_120f = reinterpret<f32>(0x03800000); // 0x1p-120f
+
     var hx = reinterpret<u32>(x);
     var ix = hx & 0x7FFFFFFF;
     if (ix >= 0x3F800000) {
@@ -2268,18 +2292,22 @@ export namespace NativeMathf {
     const s = reinterpret<f32>(0x3F317218); // 0.693147180559945309417232121458176568f
     var u = reinterpret<u32>(x);
     var a = u & 0x7FFFFFFF;
-    if (a < 0x3F800000 + (1 << 23)) {
+    if (a < 0x3F800000 + (1 << 23)) { // |x| < 2, invalid if x < 1
       let xm1 = x - 1;
       return log1p(xm1 + builtin_sqrt(xm1 * (xm1 + 2)));
     }
-    if (a < 0x3F800000 + (12 << 23)) return log(2 * x - 1 / (x + builtin_sqrt<f32>(x * x - 1)));
+    if (u < 0x3F800000 + (12 << 23)) { // 2 <= x < 0x1p12
+      return log(2 * x - 1 / (x + builtin_sqrt<f32>(x * x - 1)));
+    }
+    // x >= 0x1p12 or x <= -2 or NaN
     return log(x) + s;
   }
 
   export function asin(x: f32): f32 { // see: musl/src/math/asinf.c and SUN COPYRIGHT NOTICE above
     const
       pio2      = reinterpret<f32>(0x3FC90FDB), // 1.570796326794896558e+00f
-      Ox1p_120f = reinterpret<f32>(0x03800000);
+      Ox1p_120f = reinterpret<f32>(0x03800000); // 0x1p-120f
+
     var sx = x;
     var hx = reinterpret<u32>(x) & 0x7FFFFFFF;
     if (hx >= 0x3F800000) {
@@ -2322,7 +2350,8 @@ export namespace NativeMathf {
       aT2       = reinterpret<f32>(0x3E11F50D), //  1.4253635705e-01f
       aT3       = reinterpret<f32>(0xBDDA1247), // -1.0648017377e-01f
       aT4       = reinterpret<f32>(0x3D7CAC25), //  6.1687607318e-02f
-      Ox1p_120f = reinterpret<f32>(0x03800000);
+      Ox1p_120f = reinterpret<f32>(0x03800000); //  0x1p-120f
+
     var ix = reinterpret<u32>(x);
     var sx = x;
     ix &= 0x7FFFFFFF;
@@ -2385,6 +2414,7 @@ export namespace NativeMathf {
     const
       pi    = reinterpret<f32>(0x40490FDB), //  3.1415927410e+00f
       pi_lo = reinterpret<f32>(0xB3BBBD2E); // -8.7422776573e-08f
+
     if (isNaN(x) || isNaN(y)) return x + y;
     var ix = reinterpret<u32>(x);
     var iy = reinterpret<u32>(y);
@@ -2429,6 +2459,7 @@ export namespace NativeMathf {
       B1      = <u32>709958130,
       B2      = <u32>642849266,
       Ox1p24f = reinterpret<f32>(0x4B800000);
+
     var u = reinterpret<u32>(x);
     var hx = u & 0x7FFFFFFF;
     if (hx >= 0x7F800000) return x + x;
@@ -2462,10 +2493,11 @@ export namespace NativeMathf {
   }
 
   export function cos(x: f32): f32 { // see: musl/src/math/cosf.c
-    const c1pio2 = reinterpret<f64>(0x3FF921FB54442D18); // M_PI_2 * 1
-    const c2pio2 = reinterpret<f64>(0x400921FB54442D18); // M_PI_2 * 2
-    const c3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // M_PI_2 * 3
-    const c4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
+    const
+      c1pio2 = reinterpret<f64>(0x3FF921FB54442D18), // M_PI_2 * 1
+      c2pio2 = reinterpret<f64>(0x400921FB54442D18), // M_PI_2 * 2
+      c3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // M_PI_2 * 3
+      c4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
@@ -2541,7 +2573,8 @@ export namespace NativeMathf {
         invln2   = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+0f
         P1       = reinterpret<f32>(0x3E2AAA8F), //  1.6666625440e-1f
         P2       = reinterpret<f32>(0xBB355215), // -2.7667332906e-3f
-        Ox1p127f = reinterpret<f32>(0x7F000000);
+        Ox1p127f = reinterpret<f32>(0x7F000000); //  0x1p+127f
+
       let hx = reinterpret<u32>(x);
       let sign_ = <i32>(hx >> 31);
       hx &= 0x7FFFFFFF;
@@ -2583,20 +2616,20 @@ export namespace NativeMathf {
 
   export function expm1(x: f32): f32 { // see: musl/src/math/expm1f.c and SUN COPYRIGHT NOTICE above
     const
-      o_threshold = reinterpret<f32>(0x42B17180), //  8.8721679688e+01f
-      ln2_hi      = reinterpret<f32>(0x3F317180), //  6.9313812256e-01f
-      ln2_lo      = reinterpret<f32>(0x3717F7D1), //  9.0580006145e-06f
-      invln2      = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+00f
-      Q1          = reinterpret<f32>(0xBD088868), // -3.3333212137e-02f
-      Q2          = reinterpret<f32>(0x3ACF3010), //  1.5807170421e-03f
-      Ox1p127f    = reinterpret<f32>(0x7F000000);
+      ln2_hi   = reinterpret<f32>(0x3F317180), //  6.9313812256e-01f
+      ln2_lo   = reinterpret<f32>(0x3717F7D1), //  9.0580006145e-06f
+      invln2   = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+00f
+      Q1       = reinterpret<f32>(0xBD088868), // -3.3333212137e-02f
+      Q2       = reinterpret<f32>(0x3ACF3010), //  1.5807170421e-03f
+      Ox1p127f = reinterpret<f32>(0x7F000000); //  0x1p+127f
+
     var u = reinterpret<u32>(x);
     var hx = u & 0x7FFFFFFF;
     var sign_ = <i32>(u >> 31);
     if (hx >= 0x4195B844) {
       if (hx > 0x7F800000) return x;
       if (sign_) return -1;
-      if (x > o_threshold) {
+      if (hx > 0x42B17217) { // x > log(FLT_MAX)
         x *= Ox1p127f;
         return x;
       }
@@ -2655,6 +2688,7 @@ export namespace NativeMathf {
     const
       Ox1p90f  = reinterpret<f32>(0x6C800000),
       Ox1p_90f = reinterpret<f32>(0x12800000);
+
     var ux = reinterpret<u32>(x);
     var uy = reinterpret<u32>(y);
     ux &= 0x7FFFFFFF;
@@ -2706,6 +2740,7 @@ export namespace NativeMathf {
         Lg3     = reinterpret<f32>(0x3E91E9EE), // 0x91e9ee.0p-25f
         Lg4     = reinterpret<f32>(0x3E789E26), // 0xf89e26.0p-26f
         Ox1p25f = reinterpret<f32>(0x4C000000);
+
       let u = reinterpret<u32>(x);
       let k = 0;
       if (u < 0x00800000 || <bool>(u >> 31)) {
@@ -2746,7 +2781,8 @@ export namespace NativeMathf {
       Lg2       = reinterpret<f32>(0x3ECCCE13), //  0xccce13.0p-25f, 0.40000972152f
       Lg3       = reinterpret<f32>(0x3E91E9EE), //  0x91e9ee.0p-25f, 0.28498786688f
       Lg4       = reinterpret<f32>(0x3E789E26), //  0xf89e26.0p-26f, 0.24279078841f
-      Ox1p25f   = reinterpret<f32>(0x4C000000);
+      Ox1p25f   = reinterpret<f32>(0x4C000000); //  0x1p25f
+
     var ix = reinterpret<u32>(x);
     var k = 0;
     if (ix < 0x00800000 || <bool>(ix >> 31)) {
@@ -2789,6 +2825,7 @@ export namespace NativeMathf {
       Lg2    = reinterpret<f32>(0x3ECCCE13), // 0xccce13.0p-25f, 0.40000972152f
       Lg3    = reinterpret<f32>(0x3E91E9EE), // 0x91e9ee.0p-25f, 0.28498786688f
       Lg4    = reinterpret<f32>(0x3E789E26); // 0xf89e26.0p-26f, 0.24279078841f
+
     var ix = reinterpret<u32>(x);
     var c: f32 = 0, f: f32 = 0;
     var k: i32 = 1;
@@ -2838,7 +2875,8 @@ export namespace NativeMathf {
         Lg2     = reinterpret<f32>(0x3ECCCE13), //  0xccce13.0p-25f, 0.40000972152f
         Lg3     = reinterpret<f32>(0x3E91E9EE), //  0x91e9ee.0p-25f, 0.28498786688f
         Lg4     = reinterpret<f32>(0x3E789E26), //  0xf89e26.0p-26f, 0.24279078841f
-        Ox1p25f = reinterpret<f32>(0x4C000000);
+        Ox1p25f = reinterpret<f32>(0x4C000000); //  0x1p25f
+
       let ix = reinterpret<u32>(x);
       let k: i32 = 0;
       if (ix < 0x00800000 || <bool>(ix >> 31)) {
@@ -2981,10 +3019,11 @@ export namespace NativeMathf {
   }
 
   export function sin(x: f32): f32 { // see: musl/src/math/sinf.c
-    const s1pio2 = reinterpret<f64>(0x3FF921FB54442D18); // M_PI_2 * 1
-    const s2pio2 = reinterpret<f64>(0x400921FB54442D18); // M_PI_2 * 2
-    const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // M_PI_2 * 3
-    const s4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
+    const
+      s1pio2 = reinterpret<f64>(0x3FF921FB54442D18), // M_PI_2 * 1
+      s2pio2 = reinterpret<f64>(0x400921FB54442D18), // M_PI_2 * 2
+      s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // M_PI_2 * 3
+      s4pio2 = reinterpret<f64>(0x401921FB54442D18); // M_PI_2 * 4
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
@@ -3025,17 +3064,17 @@ export namespace NativeMathf {
 
   export function sinh(x: f32): f32 { // see: musl/src/math/sinhf.c
     var u = reinterpret<u32>(x) & 0x7FFFFFFF;
-    var absx = reinterpret<f32>(u);
+    var a = reinterpret<f32>(u);
     var h = builtin_copysign<f32>(0.5, x);
     if (u < 0x42B17217) {
-      let t = expm1(absx);
+      let t = expm1(a);
       if (u < 0x3F800000) {
         if (u < 0x3F800000 - (12 << 23)) return x;
         return h * (2 * t - t * t / (t + 1));
       }
       return h * (t + t / (t + 1));
     }
-    return expo2f(absx, 2 * h);
+    return expo2f(a, 2 * h);
   }
 
   // @ts-ignore: decorator
@@ -3045,10 +3084,11 @@ export namespace NativeMathf {
   }
 
   export function tan(x: f32): f32 { // see: musl/src/math/tanf.c
-    const t1pio2 = reinterpret<f64>(0x3FF921FB54442D18); // 1 * M_PI_2
-    const t2pio2 = reinterpret<f64>(0x400921FB54442D18); // 2 * M_PI_2
-    const t3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // 3 * M_PI_2
-    const t4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
+    const
+      t1pio2 = reinterpret<f64>(0x3FF921FB54442D18), // 1 * M_PI_2
+      t2pio2 = reinterpret<f64>(0x400921FB54442D18), // 2 * M_PI_2
+      t3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // 3 * M_PI_2
+      t4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;
@@ -3119,6 +3159,7 @@ export namespace NativeMathf {
       Ox1p24f   = reinterpret<f32>(0x4B800000),
       Ox1p127f  = reinterpret<f32>(0x7F000000),
       Ox1p_126f = reinterpret<f32>(0x00800000);
+
     var y = x;
     if (n > 127) {
       y *= Ox1p127f;
@@ -3266,10 +3307,11 @@ export namespace NativeMathf {
   }
 
   export function sincos(x: f32): void { // see: musl/tree/src/math/sincosf.c
-    const s1pio2 = reinterpret<f64>(0x3FF921FB54442D18); // 1 * M_PI_2
-    const s2pio2 = reinterpret<f64>(0x400921FB54442D18); // 2 * M_PI_2
-    const s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2); // 3 * M_PI_2
-    const s4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
+    const
+      s1pio2 = reinterpret<f64>(0x3FF921FB54442D18), // 1 * M_PI_2
+      s2pio2 = reinterpret<f64>(0x400921FB54442D18), // 2 * M_PI_2
+      s3pio2 = reinterpret<f64>(0x4012D97C7F3321D2), // 3 * M_PI_2
+      s4pio2 = reinterpret<f64>(0x401921FB54442D18); // 4 * M_PI_2
 
     var ix = reinterpret<u32>(x);
     var sign = ix >> 31;

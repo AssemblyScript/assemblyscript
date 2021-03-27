@@ -1627,6 +1627,7 @@ declare class String {
   static fromCharCodes(arr: u16[]): string;
   static fromCodePoint(code: i32): string;
   static fromCodePoints(arr: i32[]): string;
+  static raw(parts: TemplateStringsArray, ...args: any[]): string;
   readonly length: i32;
   at(index: i32): string;
   charAt(index: i32): string;
@@ -1685,6 +1686,10 @@ declare namespace String {
     /** Decodes raw UTF-16 bytes to a string. */
     export function decodeUnsafe(buf: usize, len: usize): string;
   }
+}
+
+declare class TemplateStringsArray extends Array<string> {
+  readonly raw: string[];
 }
 
 declare class Object {
