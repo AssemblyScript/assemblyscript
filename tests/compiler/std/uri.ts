@@ -71,7 +71,7 @@ assert(
 assert(decodeURIComponent("") == "");
 assert(decodeURIComponent("a") == "a");
 assert(decodeURIComponent("%26") == "&");
-assert(decodeURIComponent("\uD800\uDFFF") == "𐏿");
+assert(decodeURIComponent("\uD800\uDFFF") == "\uD800\uDFFF");
 assert(decodeURIComponent("%3b%2f%3f%3a%40%3d%2b%24%2c%23") == ";/?:@=+$,#");
 assert(decodeURIComponent("%3B%2F%3F%3A%40%3D%2B%24%2C%23") == ";/?:@=+$,#");
 assert(
@@ -86,7 +86,7 @@ assert(decodeURIComponent("%F0%9F%87%AD%F0%9F%87%BA%F0%9F%8D%8E") == "🇭🇺�
 assert(decodeURI("") == "");
 assert(decodeURI("a") == "a");
 assert(decodeURI("%26") == "%26");
-assert(decodeURI("\uD800\uDFFF") == "𐏿");
+assert(decodeURI("\uD800\uDFFF") == "\uD800\uDFFF");
 assert(decodeURI("%3b%2f%3f%3a%40%3d%2b%24%2c%23") == "%3b%2f%3f%3a%40%3d%2b%24%2c%23");
 assert(decodeURI("%F0%9F%87%AD%F0%9F%87%BA%F0%9F%8D%8E") == "🇭🇺🍎");
 assert(

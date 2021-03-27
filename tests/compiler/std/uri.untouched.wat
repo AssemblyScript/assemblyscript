@@ -3904,7 +3904,7 @@
       if
        i32.const 560
        i32.const 608
-       i32.const 89
+       i32.const 85
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -3919,7 +3919,7 @@
        if
         i32.const 560
         i32.const 608
-        i32.const 93
+        i32.const 89
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -3947,7 +3947,7 @@
        if
         i32.const 560
         i32.const 608
-        i32.const 97
+        i32.const 93
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -4383,6 +4383,7 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
   i32.const 0
   local.set $4
   i32.const 0
@@ -4518,7 +4519,7 @@
      if
       i32.const 560
       i32.const 608
-      i32.const 169
+      i32.const 165
       i32.const 7
       call $~lib/builtins/abort
       unreachable
@@ -4562,6 +4563,15 @@
        i32.sub
        local.set $4
       end
+      local.get $0
+      local.get $5
+      i32.add
+      local.get $7
+      i32.store16
+      local.get $5
+      i32.const 2
+      i32.add
+      local.set $5
      else
       block $~lib/util/uri/utf8LenFromUpperByte|inlined.0 (result i32)
        local.get $7
@@ -4675,7 +4685,7 @@
          if
           i32.const 560
           i32.const 608
-          i32.const 200
+          i32.const 198
           i32.const 11
           call $~lib/builtins/abort
           unreachable
@@ -4733,55 +4743,55 @@
       if
        i32.const 560
        i32.const 608
-       i32.const 211
+       i32.const 209
        i32.const 9
        call $~lib/builtins/abort
        unreachable
       end
-     end
-     local.get $7
-     i32.const 65536
-     i32.lt_u
-     if
-      local.get $0
-      local.get $5
-      i32.add
-      local.get $7
-      i32.store16
-      local.get $5
-      i32.const 2
-      i32.add
-      local.set $5
-     else
       local.get $7
       i32.const 65536
-      i32.sub
-      local.set $7
-      local.get $7
-      i32.const 10
-      i32.shr_u
-      i32.const 55296
-      i32.or
-      local.set $11
-      local.get $7
-      i32.const 1023
-      i32.and
-      i32.const 56320
-      i32.or
-      local.set $10
-      local.get $0
-      local.get $5
-      i32.add
-      local.get $11
-      local.get $10
-      i32.const 16
-      i32.shl
-      i32.or
-      i32.store
-      local.get $5
-      i32.const 4
-      i32.add
-      local.set $5
+      i32.lt_u
+      if
+       local.get $0
+       local.get $5
+       i32.add
+       local.get $7
+       i32.store16
+       local.get $5
+       i32.const 2
+       i32.add
+       local.set $5
+      else
+       local.get $7
+       i32.const 65536
+       i32.sub
+       local.set $7
+       local.get $7
+       i32.const 10
+       i32.shr_u
+       i32.const 55296
+       i32.or
+       local.set $12
+       local.get $7
+       i32.const 1023
+       i32.and
+       i32.const 56320
+       i32.or
+       local.set $13
+       local.get $0
+       local.get $5
+       i32.add
+       local.get $12
+       local.get $13
+       i32.const 16
+       i32.shl
+       i32.or
+       i32.store
+       local.get $5
+       i32.const 4
+       i32.add
+       local.set $5
+      end
      end
      br $while-continue|0
     end
@@ -4796,7 +4806,7 @@
   if
    i32.const 0
    i32.const 608
-   i32.const 226
+   i32.const 225
    i32.const 3
    call $~lib/builtins/abort
    unreachable

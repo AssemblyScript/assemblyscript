@@ -1,7 +1,3 @@
-// References:
-// https://github.com/brianmario/escape_utils/blob/master/ext/escape_utils/houdini_uri_e.c
-// https://github.com/brianmario/escape_utils/blob/master/ext/escape_utils/houdini_uri_u.c
-
 import { E_URI_MALFORMED } from "./error";
 import { CharCode } from "./string";
 
@@ -174,6 +170,8 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
         ch = CharCode.PERCENT;
         i -= 2;
       }
+      store<u16>(dst + offset, ch);
+      offset += 2;
     } else {
       // decode UTF-8 sequence
       let bytes = utf8LenFromUpperByte(ch);
@@ -210,16 +208,17 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
       if (ch < lo || ch > 0x10FFFF || (ch >= 0xD800 && ch < 0xE000)) {
         throw new URIError(E_URI_MALFORMED);
       }
-    }
-    if (ch < 0x10000) {
-      store<u16>(dst + offset, ch);
-      offset += 2;
-    } else {
-      ch -= 0x10000;
-      let lo = ch >> 10 | 0xD800;
-      let hi = (ch & 0x03FF) | 0xDC00;
-      store<u32>(dst + offset, lo | (hi << 16));
-      offset += 4;
+
+      if (ch < 0x10000) {
+        store<u16>(dst + offset, ch);
+        offset += 2;
+      } else {
+        ch -= 0x10000;
+        let lo = ch >> 10 | 0xD800;
+        let hi = (ch & 0x03FF) | 0xDC00;
+        store<u32>(dst + offset, lo | (hi << 16));
+        offset += 4;
+      }
     }
   }
 
