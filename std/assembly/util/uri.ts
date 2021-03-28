@@ -253,7 +253,7 @@ function loadHex(src: usize, offset: usize): u32 {
   if (ASC_SHRINK_LEVEL > 1) {
     if (c0 - 0xC0 <= 0xDF - 0xC0) return 2;
     if (c0 - 0xE0 <= 0xEF - 0xE0) return 3;
-    if (c0 - 0xF0 <= 0xF7 - 0xF0) return 4;
+    if (c0 - 0xF0 <= 0xF4 - 0xF0) return 4;
     return 0;
   } else {
     return c0 - 128 <= 128

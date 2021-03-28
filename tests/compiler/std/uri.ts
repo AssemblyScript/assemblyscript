@@ -91,6 +91,8 @@ assert(decodeURI("\uD800") == "\uD800");
 assert(decodeURI("\uD800\uDFFF") == "\uD800\uDFFF");
 assert(decodeURI("%3b%2f%3f%3a%40%3d%2b%24%2c%23") == "%3b%2f%3f%3a%40%3d%2b%24%2c%23");
 assert(decodeURI("%F0%9F%87%AD%F0%9F%87%BA%F0%9F%8D%8E") == "🇭🇺🍎");
+assert(decodeURI("\xf7\xb8W\xef\x0f\xf4V") == "÷¸WïôV");
+assert(decodeURI("\xF4\xB8\xEF") == "ô¸ï");
 assert(
   decodeURI("http:%2F%2Fen.wikipedia.org/wiki/UTF-8%23Description") ==
   "http:%2F%2Fen.wikipedia.org/wiki/UTF-8%23Description"
