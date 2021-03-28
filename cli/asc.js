@@ -794,9 +794,9 @@ exports.main = function main(argv, options, callback) {
 
   // Pre-emptively initialize the program
   stats.initializeCount++;
-  stats.initializeTime += measure(() => {
+  stats.initializeTime += measure(() => crashHandler(() => {
     assemblyscript.initializeProgram(program);
-  });
+  }));
 
   // Call afterInitialize transform hook
   {
@@ -806,7 +806,7 @@ exports.main = function main(argv, options, callback) {
 
   var module;
   stats.compileCount++;
-  stats.compileTime += measure(() => {
+  stats.compileTime += measure(() => crashHandler(() => {
     module = assemblyscript.compile(program);
     // From here on we are going to use Binaryen.js, except that we keep pass
     // order as defined in the compiler.
@@ -823,7 +823,7 @@ exports.main = function main(argv, options, callback) {
         original.optimize(...args);
       };
     }
-  });
+  }));
   var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
   if (numErrors) {
     if (module) module.dispose();
@@ -1332,3 +1332,28 @@ exports.tscOptions = {
   types: [],
   allowJs: false
 };
+
+// Gracefully handle crashes
+function crashHandler(fn) {
+  try {
+    fn();
+  } catch (e) {
+    const r = colorsUtil.red("▌ ");
+    console.error([
+      "\n",
+      r, "Whoops, the AssemblyScript compiler has crashed :-(\n",
+      r, "\n",
+      r, "Here is a stack trace that may or may not be useful:\n",
+      r, "\n",
+      e.stack.replace(/^/mg, r), "\n",
+      r, "\n",
+      r, "If it refers to the dist files, try to 'npm install source-map-support' and\n",
+      r, "run again, which should then show the actual code location in the sources.\n",
+      r, "\n",
+      r, "If you see where the error is, feel free to send us a pull request. If not,\n",
+      r, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues\n",
+      "",
+    ].join(""));
+    process.exit(1);
+  }
+}
