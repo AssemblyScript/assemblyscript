@@ -140,7 +140,6 @@ export const DEFAULT_STACK_SIZE = 16384;
 /** Sets the `stackSize` option. */
 export function setStackSize(options: Options, stackSize: i32): void {
   options.stackSize = stackSize;
-
 }
 
 /** Sets the bundle version. */
