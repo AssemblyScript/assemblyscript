@@ -241,14 +241,14 @@ function loadHex(src: usize, offset: usize): u32 {
   // if (c0 - 0xE0 <= 0xEF - 0xE0) return 3;
   // if (c0 - 0xF0 <= 0xF7 - 0xF0) return 4;
   // return 0;
-  return c0 - 0xC0 <= 55
+  return c0 - 0xC0 < 56
     ? clz(~(c0 << 24))
     : 0;
 }
 
 // @ts-ignore: decorator
 @inline function isReserved(ch: u32): bool {
-  return (ch - 35) < 30
+  return ch - 35 < 30
     ? <bool>load<u16>(URI_RESERVED + (ch - 35))
     : false;
 }

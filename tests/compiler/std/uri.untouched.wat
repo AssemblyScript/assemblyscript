@@ -4596,8 +4596,8 @@
       local.get $9
       i32.const 192
       i32.sub
-      i32.const 55
-      i32.le_u
+      i32.const 56
+      i32.lt_u
       if (result i32)
        local.get $9
        i32.const 24

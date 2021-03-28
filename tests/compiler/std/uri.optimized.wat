@@ -2813,8 +2813,8 @@
       local.get $6
       i32.const 192
       i32.sub
-      i32.const 55
-      i32.le_u
+      i32.const 56
+      i32.lt_u
       select
       local.tee $8
       i32.const 17
