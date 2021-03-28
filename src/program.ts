@@ -129,7 +129,8 @@ import {
   writeF64,
   writeI64,
   writeI32AsI64,
-  writeI64AsI32
+  writeI64AsI32,
+  getSemanticVersion
 } from "./util";
 
 import {
@@ -998,6 +999,7 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeType(CommonNames.dataref, Type.dataref);
 
     // register compiler hints
+    const semanticVersion = getSemanticVersion(options.bundleVersion);
     this.registerConstantInteger(CommonNames.ASC_TARGET, Type.i32,
       i64_new(options.isWasm64 ? Target.WASM64 : Target.WASM32));
     this.registerConstantInteger(CommonNames.ASC_NO_ASSERT, Type.bool,
@@ -1014,14 +1016,12 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.lowMemoryLimit, 0));
     this.registerConstantInteger(CommonNames.ASC_EXPORT_RUNTIME, Type.bool,
       i64_new(options.exportRuntime ? 1 : 0, 0));
-    this.registerConstantInteger(CommonNames.ASC_VERSION, Type.i32,
-      i64_new(234));
     this.registerConstantInteger(CommonNames.ASC_VERSION_MAJOR, Type.i32,
-      i64_new(123));
+      i64_new(semanticVersion.major));
     this.registerConstantInteger(CommonNames.ASC_VERSION_MINOR, Type.i32,
-      i64_new(567));
+      i64_new(semanticVersion.minor));
     this.registerConstantInteger(CommonNames.ASC_VERSION_PATCH, Type.i32,
-      i64_new(789));
+      i64_new(semanticVersion.patch));
 
     // register feature hints
     this.registerConstantInteger(CommonNames.ASC_FEATURE_SIGN_EXTENSION, Type.bool,

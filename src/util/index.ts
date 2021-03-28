@@ -10,3 +10,4 @@ export * from "./path";
 export * from "./terminal";
 export * from "./text";
 export * from "./vector";
+export * from "./version";
