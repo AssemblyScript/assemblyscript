@@ -160,9 +160,9 @@ export function decode(dst: usize, src: usize, len: usize, component: bool): usi
     } else {
       // decode UTF-8 sequence
       let nb = utf8LenFromUpperByte(ch);
-      // lo  = 2 => 0x80, 3 => 0x800, 4 => 0x10000, _ => -1
+      // minimal surrogate: 2 => 0x80, 3 => 0x800, 4 => 0x10000, _ => -1
       let lo: u32 = 1 << (17 * nb >> 2) - 1;
-      // ch &= 2 => 31,   3 => 15,    4 => 7,       _ =>  0
+      // mask: 2 => 31, 3 => 15, 4 => 7, _ =>  0
       ch &= nb ? (0x80 >> nb) - 1 : 0;
 
       while (--nb != 0) {
@@ -236,6 +236,7 @@ function loadHex(src: usize, offset: usize): u32 {
 
 // @ts-ignore: decorator
 @inline function utf8LenFromUpperByte(c0: u32): u32 {
+  // same as
   // if (c0 - 0xC0 <= 0xDF - 0xC0) return 2;
   // if (c0 - 0xE0 <= 0xEF - 0xE0) return 3;
   // if (c0 - 0xF0 <= 0xF7 - 0xF0) return 4;
