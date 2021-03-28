@@ -942,6 +942,7 @@ export class Program extends DiagnosticEmitter {
     this.initialized = true;
 
     var options = this.options;
+    console.log("bundleVersion", options.bundleVersion);
 
     // register native types
     this.registerNativeType(CommonNames.i8, Type.i8);
@@ -3084,8 +3085,8 @@ export class File extends Element {
 
   /** Creates an imported namespace from this file. */
   asAliasNamespace(
-    name: string, 
-    parent: Element, 
+    name: string,
+    parent: Element,
     localIdentifier: IdentifierExpression
   ): Namespace {
     var declaration = this.program.makeNativeNamespaceDeclaration(name);
