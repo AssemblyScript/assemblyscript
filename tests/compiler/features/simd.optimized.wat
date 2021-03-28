@@ -31,7 +31,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 273
+   i32.const 270
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -40,18 +40,12 @@
   i32.const -4
   i32.and
   local.tee $2
-  i32.const 1073741820
-  i32.lt_u
-  i32.const 0
-  local.get $2
   i32.const 12
-  i32.ge_u
-  select
-  i32.eqz
+  i32.lt_u
   if
    i32.const 0
    i32.const 1056
-   i32.const 275
+   i32.const 272
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -65,12 +59,19 @@
    i32.shr_u
    local.set $2
   else
-   local.get $2
    i32.const 31
    local.get $2
+   i32.const 1073741820
+   local.get $2
+   i32.const 1073741820
+   i32.lt_u
+   select
+   local.tee $2
    i32.clz
    i32.sub
-   local.tee $3
+   local.set $3
+   local.get $2
+   local.get $3
    i32.const 4
    i32.sub
    i32.shr_u
@@ -94,7 +95,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 288
+   i32.const 286
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -179,8 +180,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
   local.get $1
   i32.eqz
   if
@@ -193,7 +192,7 @@
   end
   local.get $1
   i32.load
-  local.tee $4
+  local.tee $3
   i32.const 1
   i32.and
   i32.eqz
@@ -213,13 +212,17 @@
   i32.const -4
   i32.and
   i32.add
-  local.tee $5
+  local.tee $4
   i32.load
   local.tee $2
   i32.const 1
   i32.and
   if
+   local.get $0
    local.get $4
+   call $~lib/rt/tlsf/removeBlock
+   local.get $1
+   local.get $3
    i32.const -4
    i32.and
    i32.const 4
@@ -228,35 +231,25 @@
    i32.const -4
    i32.and
    i32.add
+   local.get $3
+   i32.const 3
+   i32.and
+   i32.or
    local.tee $3
-   i32.const 1073741820
-   i32.lt_u
-   if
-    local.get $0
-    local.get $5
-    call $~lib/rt/tlsf/removeBlock
-    local.get $1
-    local.get $3
-    local.get $4
-    i32.const 3
-    i32.and
-    i32.or
-    local.tee $4
-    i32.store
-    local.get $1
-    i32.const 4
-    i32.add
-    local.get $1
-    i32.load
-    i32.const -4
-    i32.and
-    i32.add
-    local.tee $5
-    i32.load
-    local.set $2
-   end
+   i32.store
+   local.get $1
+   i32.const 4
+   i32.add
+   local.get $1
+   i32.load
+   i32.const -4
+   i32.and
+   i32.add
+   local.tee $4
+   i32.load
+   local.set $2
   end
-  local.get $4
+  local.get $3
   i32.const 2
   i32.and
   if
@@ -264,76 +257,60 @@
    i32.const 4
    i32.sub
    i32.load
-   local.tee $3
+   local.tee $1
    i32.load
-   local.tee $7
+   local.tee $6
    i32.const 1
    i32.and
    i32.eqz
    if
     i32.const 0
     i32.const 1056
-    i32.const 224
+    i32.const 222
     i32.const 16
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $7
+   local.get $0
+   local.get $1
+   call $~lib/rt/tlsf/removeBlock
+   local.get $1
+   local.get $6
    i32.const -4
    i32.and
    i32.const 4
    i32.add
-   local.get $4
+   local.get $3
    i32.const -4
    i32.and
    i32.add
-   local.tee $8
-   i32.const 1073741820
-   i32.lt_u
-   if (result i32)
-    local.get $0
-    local.get $3
-    call $~lib/rt/tlsf/removeBlock
-    local.get $3
-    local.get $8
-    local.get $7
-    i32.const 3
-    i32.and
-    i32.or
-    local.tee $4
-    i32.store
-    local.get $3
-   else
-    local.get $1
-   end
-   local.set $1
+   local.get $6
+   i32.const 3
+   i32.and
+   i32.or
+   local.tee $3
+   i32.store
   end
-  local.get $5
+  local.get $4
   local.get $2
   i32.const 2
   i32.or
   i32.store
-  local.get $4
+  local.get $3
   i32.const -4
   i32.and
   local.tee $3
-  i32.const 1073741820
-  i32.lt_u
-  i32.const 0
-  local.get $3
   i32.const 12
-  i32.ge_u
-  select
-  i32.eqz
+  i32.lt_u
   if
    i32.const 0
    i32.const 1056
-   i32.const 239
+   i32.const 235
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $4
   local.get $3
   local.get $1
   i32.const 4
@@ -343,12 +320,12 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 240
+   i32.const 236
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $4
   i32.const 4
   i32.sub
   local.get $1
@@ -356,34 +333,38 @@
   local.get $3
   i32.const 256
   i32.lt_u
-  if
+  if (result i32)
    local.get $3
    i32.const 4
    i32.shr_u
-   local.set $3
   else
-   local.get $3
    i32.const 31
    local.get $3
+   i32.const 1073741820
+   local.get $3
+   i32.const 1073741820
+   i32.lt_u
+   select
+   local.tee $3
    i32.clz
    i32.sub
    local.tee $4
+   i32.const 7
+   i32.sub
+   local.set $5
+   local.get $3
+   local.get $4
    i32.const 4
    i32.sub
    i32.shr_u
    i32.const 16
    i32.xor
-   local.set $3
-   local.get $4
-   i32.const 7
-   i32.sub
-   local.set $6
   end
-  local.get $3
+  local.tee $3
   i32.const 16
   i32.lt_u
   i32.const 0
-  local.get $6
+  local.get $5
   i32.const 23
   i32.lt_u
   select
@@ -391,14 +372,14 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 256
+   i32.const 253
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   local.get $3
-  local.get $6
+  local.get $5
   i32.const 4
   i32.shl
   i32.add
@@ -421,7 +402,7 @@
   end
   local.get $0
   local.get $3
-  local.get $6
+  local.get $5
   i32.const 4
   i32.shl
   i32.add
@@ -434,12 +415,12 @@
   local.get $0
   i32.load
   i32.const 1
-  local.get $6
+  local.get $5
   i32.shl
   i32.or
   i32.store
   local.get $0
-  local.get $6
+  local.get $5
   i32.const 2
   i32.shl
   i32.add
@@ -461,7 +442,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 381
+   i32.const 379
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -489,7 +470,7 @@
    if
     i32.const 0
     i32.const 1056
-    i32.const 388
+    i32.const 386
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -517,7 +498,7 @@
    if
     i32.const 0
     i32.const 1056
-    i32.const 401
+    i32.const 399
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -699,7 +680,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 334
+   i32.const 332
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -751,7 +732,7 @@
     if
      i32.const 0
      i32.const 1056
-     i32.const 347
+     i32.const 345
      i32.const 18
      call $~lib/builtins/abort
      unreachable
@@ -782,7 +763,7 @@
   if
    i32.const 1120
    i32.const 1056
-   i32.const 462
+   i32.const 460
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -873,7 +854,7 @@
    if
     i32.const 0
     i32.const 1056
-    i32.const 500
+    i32.const 498
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -888,7 +869,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 502
+   i32.const 500
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -907,7 +888,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 361
+   i32.const 359
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1022,7 +1003,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 565
+   i32.const 561
    i32.const 3
    call $~lib/builtins/abort
    unreachable
