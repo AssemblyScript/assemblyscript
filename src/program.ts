@@ -943,7 +943,6 @@ export class Program extends DiagnosticEmitter {
     this.initialized = true;
 
     var options = this.options;
-    console.log("bundleVersion", options.bundleVersion);
 
     // register native types
     this.registerNativeType(CommonNames.i8, Type.i8);
