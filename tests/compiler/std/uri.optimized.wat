@@ -109,38 +109,37 @@
  (data (i32.const 3576) "\01\00\00\00\06\00\00\00%\002\000")
  (data (i32.const 3596) "\01\01\00\01\00\00\00\00\01\01\00\00\01")
  (data (i32.const 3619) "\01\01\00\01\00\01\01")
- (data (i32.const 3690) "\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\02\03\03\03\03\03\03\03\03\03\03\03\03\03\03\03\03\04\04\04\04\04")
+ (data (i32.const 3628) "\1c")
+ (data (i32.const 3640) "\01\00\00\00\06\00\00\00%\002\006")
+ (data (i32.const 3660) "\1c")
+ (data (i32.const 3672) "\01\00\00\00\02\00\00\00&")
+ (data (i32.const 3692) "\1c")
+ (data (i32.const 3704) "\01\00\00\00\06\00\00\00%\005\00E")
+ (data (i32.const 3724) "\1c")
+ (data (i32.const 3736) "\01\00\00\00\02\00\00\00^")
  (data (i32.const 3756) "\1c")
- (data (i32.const 3768) "\01\00\00\00\06\00\00\00%\002\006")
- (data (i32.const 3788) "\1c")
- (data (i32.const 3800) "\01\00\00\00\02\00\00\00&")
- (data (i32.const 3820) "\1c")
- (data (i32.const 3832) "\01\00\00\00\06\00\00\00%\005\00E")
- (data (i32.const 3852) "\1c")
- (data (i32.const 3864) "\01\00\00\00\02\00\00\00^")
- (data (i32.const 3884) "\1c")
- (data (i32.const 3896) "\01\00\00\00\02\00\00\00\00\d8")
+ (data (i32.const 3768) "\01\00\00\00\02\00\00\00\00\d8")
+ (data (i32.const 3788) "L")
+ (data (i32.const 3800) "\01\00\00\00<\00\00\00%\003\00b\00%\002\00f\00%\003\00f\00%\003\00a\00%\004\000\00%\003\00d\00%\002\00b\00%\002\004\00%\002\00c\00%\002\003")
+ (data (i32.const 3868) ",")
+ (data (i32.const 3880) "\01\00\00\00\14\00\00\00;\00/\00?\00:\00@\00=\00+\00$\00,\00#")
  (data (i32.const 3916) "L")
- (data (i32.const 3928) "\01\00\00\00<\00\00\00%\003\00b\00%\002\00f\00%\003\00f\00%\003\00a\00%\004\000\00%\003\00d\00%\002\00b\00%\002\004\00%\002\00c\00%\002\003")
- (data (i32.const 3996) ",")
- (data (i32.const 4008) "\01\00\00\00\14\00\00\00;\00/\00?\00:\00@\00=\00+\00$\00,\00#")
- (data (i32.const 4044) "L")
- (data (i32.const 4056) "\01\00\00\00<\00\00\00%\003\00B\00%\002\00F\00%\003\00F\00%\003\00A\00%\004\000\00%\003\00D\00%\002\00B\00%\002\004\00%\002\00C\00%\002\003")
- (data (i32.const 4124) "|")
- (data (i32.const 4136) "\01\00\00\00h\00\00\00h\00t\00t\00p\00:\00%\002\00F\00%\002\00F\00e\00n\00.\00w\00i\00k\00i\00p\00e\00d\00i\00a\00.\00o\00r\00g\00/\00w\00i\00k\00i\00/\00U\00T\00F\00-\008\00%\002\003\00D\00e\00s\00c\00r\00i\00p\00t\00i\00o\00n")
- (data (i32.const 4252) "\1c")
- (data (i32.const 4264) "\01\00\00\00\0c\00\00\00%\00D\00F\00%\008\000")
- (data (i32.const 4284) "\1c")
- (data (i32.const 4296) "\01\00\00\00\02\00\00\00\c0\07")
- (data (i32.const 4316) "\1c")
- (data (i32.const 4328) "\01\00\00\00\0c\00\00\00%\00C\002\00%\00B\00F")
- (data (i32.const 4348) "\1c")
- (data (i32.const 4360) "\01\00\00\00\02\00\00\00\bf")
- (data (i32.const 4380) ",")
- (data (i32.const 4392) "\01\00\00\00\0e\00\00\00\f7\00\b8\00W\00\ef\00\0f\00\f4\00V")
- (data (i32.const 4428) "\1c")
- (data (i32.const 4440) "\01\00\00\00\06\00\00\00\f4\00\b8\00\ef")
- (data (i32.const 4464) "\03\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 3928) "\01\00\00\00<\00\00\00%\003\00B\00%\002\00F\00%\003\00F\00%\003\00A\00%\004\000\00%\003\00D\00%\002\00B\00%\002\004\00%\002\00C\00%\002\003")
+ (data (i32.const 3996) "|")
+ (data (i32.const 4008) "\01\00\00\00h\00\00\00h\00t\00t\00p\00:\00%\002\00F\00%\002\00F\00e\00n\00.\00w\00i\00k\00i\00p\00e\00d\00i\00a\00.\00o\00r\00g\00/\00w\00i\00k\00i\00/\00U\00T\00F\00-\008\00%\002\003\00D\00e\00s\00c\00r\00i\00p\00t\00i\00o\00n")
+ (data (i32.const 4124) "\1c")
+ (data (i32.const 4136) "\01\00\00\00\0c\00\00\00%\00D\00F\00%\008\000")
+ (data (i32.const 4156) "\1c")
+ (data (i32.const 4168) "\01\00\00\00\02\00\00\00\c0\07")
+ (data (i32.const 4188) "\1c")
+ (data (i32.const 4200) "\01\00\00\00\0c\00\00\00%\00C\002\00%\00B\00F")
+ (data (i32.const 4220) "\1c")
+ (data (i32.const 4232) "\01\00\00\00\02\00\00\00\bf")
+ (data (i32.const 4252) ",")
+ (data (i32.const 4264) "\01\00\00\00\0e\00\00\00\f7\00\b8\00W\00\ef\00\0f\00\f4\00V")
+ (data (i32.const 4300) "\1c")
+ (data (i32.const 4312) "\01\00\00\00\06\00\00\00\f4\00\b8\00\ef")
+ (data (i32.const 4336) "\03\00\00\00 \00\00\00\00\00\00\00 ")
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -151,7 +150,7 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 20876))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 20748))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/initLazy (param $0 i32) (result i32)
@@ -282,7 +281,7 @@
    if
     i32.const 0
     local.get $0
-    i32.const 20876
+    i32.const 20748
     i32.lt_u
     local.get $0
     i32.load offset=8
@@ -328,7 +327,7 @@
    i32.const 1
   else
    local.get $1
-   i32.const 4464
+   i32.const 4336
    i32.load
    i32.gt_u
    if
@@ -342,7 +341,7 @@
    local.get $1
    i32.const 3
    i32.shl
-   i32.const 4468
+   i32.const 4340
    i32.add
    i32.load
    i32.const 32
@@ -947,10 +946,10 @@
   if
    unreachable
   end
-  i32.const 20880
+  i32.const 20752
   i32.const 0
   i32.store
-  i32.const 22448
+  i32.const 22320
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -961,7 +960,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 20880
+    i32.const 20752
     i32.add
     i32.const 0
     i32.store offset=4
@@ -979,7 +978,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 20880
+      i32.const 20752
       i32.add
       i32.const 0
       i32.store offset=96
@@ -997,13 +996,13 @@
     br $for-loop|0
    end
   end
-  i32.const 20880
-  i32.const 22452
+  i32.const 20752
+  i32.const 22324
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 20880
+  i32.const 20752
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (result i32)
@@ -1082,7 +1081,7 @@
       local.set $0
       loop $while-continue|0
        local.get $0
-       i32.const 20876
+       i32.const 20748
        i32.lt_u
        if
         local.get $0
@@ -1172,7 +1171,7 @@
       unreachable
      end
      local.get $0
-     i32.const 20876
+     i32.const 20748
      i32.lt_u
      if
       local.get $0
@@ -1195,7 +1194,7 @@
       i32.const 4
       i32.add
       local.tee $1
-      i32.const 20876
+      i32.const 20748
       i32.ge_u
       if
        global.get $~lib/rt/tlsf/ROOT
@@ -2224,7 +2223,7 @@
       if
        i32.const 1584
        i32.const 1632
-       i32.const 86
+       i32.const 72
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -2239,7 +2238,7 @@
        if
         i32.const 1584
         i32.const 1632
-        i32.const 90
+        i32.const 76
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -2264,7 +2263,7 @@
        if
         i32.const 1584
         i32.const 1632
-        i32.const 94
+        i32.const 80
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -2645,42 +2644,42 @@
   (local $9 i32)
   loop $while-continue|0
    local.get $2
-   local.get $6
+   local.get $4
    i32.gt_u
    if
     block $while-break|0
-     local.get $6
+     local.get $4
      local.set $5
      loop $while-continue|1
       local.get $2
-      local.get $6
+      local.get $4
       i32.gt_u
       if (result i32)
        local.get $1
-       local.get $6
+       local.get $4
        i32.const 1
        i32.shl
        i32.add
        i32.load16_u
-       local.tee $4
+       local.tee $6
        i32.const 37
        i32.ne
       else
        i32.const 0
       end
       if
-       local.get $6
+       local.get $4
        i32.const 1
        i32.add
-       local.set $6
+       local.set $4
        br $while-continue|1
       end
      end
+     local.get $4
      local.get $5
-     local.get $6
-     i32.lt_u
+     i32.gt_u
      if
-      local.get $6
+      local.get $4
       local.get $5
       i32.sub
       i32.const 1
@@ -2732,16 +2731,16 @@
       i32.add
       local.set $7
       local.get $2
-      local.get $6
+      local.get $4
       i32.le_u
       br_if $while-break|0
      end
      i32.const 1
-     local.get $4
+     local.get $6
      i32.const 37
      i32.ne
      local.get $2
-     local.get $6
+     local.get $4
      i32.const 2
      i32.add
      i32.le_u
@@ -2750,29 +2749,29 @@
       i32.const 1
      else
       local.get $1
-      local.get $6
+      local.get $4
       i32.const 1
       i32.add
       i32.const 1
       i32.shl
       call $~lib/util/uri/loadHex
-      local.tee $4
+      local.tee $6
       i32.const -1
       i32.eq
      end
      if
       i32.const 1584
       i32.const 1632
-      i32.const 166
+      i32.const 152
       i32.const 7
       call $~lib/builtins/abort
       unreachable
      end
-     local.get $6
+     local.get $4
      i32.const 3
      i32.add
-     local.set $6
-     local.get $4
+     local.set $4
+     local.get $6
      i32.const 128
      i32.lt_u
      if
@@ -2780,13 +2779,13 @@
       if (result i32)
        i32.const 0
       else
-       local.get $4
+       local.get $6
        i32.const 35
        i32.sub
        i32.const 30
        i32.lt_u
        if (result i32)
-        local.get $4
+        local.get $6
         i32.const 3561
         i32.add
         i32.load16_u
@@ -2795,31 +2794,29 @@
        end
       end
       if
-       local.get $6
+       i32.const 37
+       local.set $6
+       local.get $4
        i32.const 2
        i32.sub
-       local.set $6
-       i32.const 37
        local.set $4
       end
      else
-      local.get $4
-      local.set $5
       i32.const 1
-      local.get $4
-      i32.const 128
+      local.get $6
+      i32.const 24
+      i32.shl
+      i32.const -1
+      i32.xor
+      i32.clz
+      i32.const 0
+      local.get $6
+      i32.const 192
       i32.sub
-      i32.const 128
+      i32.const 55
       i32.le_u
-      if (result i32)
-       local.get $5
-       i32.const 3498
-       i32.add
-       i32.load8_u
-      else
-       i32.const 0
-      end
-      local.tee $5
+      select
+      local.tee $8
       i32.const 17
       i32.mul
       i32.const 2
@@ -2827,27 +2824,27 @@
       i32.const 1
       i32.sub
       i32.shl
-      local.set $8
-      local.get $4
+      local.set $5
+      local.get $6
       i32.const 128
-      local.get $5
+      local.get $8
       i32.shr_u
       i32.const 1
       i32.sub
       i32.const 0
-      local.get $5
+      local.get $8
       select
       i32.and
-      local.set $4
+      local.set $6
       loop $while-continue|2
-       local.get $5
+       local.get $8
        i32.const 1
        i32.sub
-       local.tee $5
+       local.tee $8
        if
         block $while-break|2
          local.get $2
-         local.get $6
+         local.get $4
          i32.const 2
          i32.add
          i32.le_u
@@ -2855,7 +2852,7 @@
           i32.const 1
          else
           local.get $1
-          local.get $6
+          local.get $4
           i32.const 1
           i32.shl
           i32.add
@@ -2867,7 +2864,7 @@
           i32.const 1
          else
           local.get $1
-          local.get $6
+          local.get $4
           i32.const 1
           i32.add
           i32.const 1
@@ -2880,15 +2877,15 @@
          if
           i32.const 1584
           i32.const 1632
-          i32.const 189
+          i32.const 175
           i32.const 11
           call $~lib/builtins/abort
           unreachable
          end
-         local.get $6
+         local.get $4
          i32.const 3
          i32.add
-         local.set $6
+         local.set $4
          local.get $9
          i32.const 192
          i32.and
@@ -2896,70 +2893,70 @@
          i32.ne
          if
           i32.const 0
-          local.set $4
+          local.set $6
           br $while-break|2
          end
          local.get $9
          i32.const 63
          i32.and
-         local.get $4
+         local.get $6
          i32.const 6
          i32.shl
          i32.or
-         local.set $4
+         local.set $6
          br $while-continue|2
         end
        end
       end
       i32.const 1
-      local.get $4
+      local.get $6
       i32.const 57344
       i32.lt_u
       i32.const 0
-      local.get $4
+      local.get $6
       i32.const 55296
       i32.ge_u
       select
       i32.const 1
-      local.get $4
+      local.get $6
       i32.const 1114111
       i32.gt_u
       i32.const 1
-      local.get $8
+      local.get $5
       i32.const -1
       i32.eq
-      local.get $4
-      local.get $8
-      i32.lt_u
+      local.get $5
+      local.get $6
+      i32.gt_u
       select
       select
       select
       if
        i32.const 1584
        i32.const 1632
-       i32.const 200
+       i32.const 186
        i32.const 9
        call $~lib/builtins/abort
        unreachable
       end
-      local.get $4
+      local.get $6
       i32.const 65536
       i32.ge_u
       if
        local.get $0
        local.get $7
        i32.add
-       local.get $4
+       local.get $6
        i32.const 65536
        i32.sub
-       local.tee $4
+       local.tee $6
        i32.const 1023
        i32.and
        i32.const 56320
        i32.or
        i32.const 16
        i32.shl
-       local.get $4
+       local.get $6
        i32.const 10
        i32.shr_u
        i32.const 55296
@@ -2976,7 +2973,7 @@
      local.get $0
      local.get $7
      i32.add
-     local.get $4
+     local.get $6
      i32.store16
      local.get $7
      i32.const 2
@@ -2994,7 +2991,7 @@
   if
    i32.const 0
    i32.const 1632
-   i32.const 216
+   i32.const 202
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -3096,11 +3093,11 @@
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 4492
+  i32.const 4364
   i32.lt_s
   if
-   i32.const 20896
-   i32.const 20944
+   i32.const 20768
+   i32.const 20816
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3115,7 +3112,7 @@
   memory.size
   i32.const 16
   i32.shl
-  i32.const 20876
+  i32.const 20748
   i32.sub
   i32.const 1
   i32.shr_u
@@ -3832,19 +3829,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 3776
+  i32.const 3648
   i32.store offset=8
-  i32.const 3776
+  i32.const 3648
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 3808
+  i32.const 3680
   i32.store offset=4
   local.get $0
-  i32.const 3808
+  i32.const 3680
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3856,19 +3853,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 3840
+  i32.const 3712
   i32.store offset=8
-  i32.const 3840
+  i32.const 3712
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 3872
+  i32.const 3744
   i32.store offset=4
   local.get $0
-  i32.const 3872
+  i32.const 3744
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3880,19 +3877,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 3904
+  i32.const 3776
   i32.store offset=8
-  i32.const 3904
+  i32.const 3776
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 3904
+  i32.const 3776
   i32.store offset=4
   local.get $0
-  i32.const 3904
+  i32.const 3776
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3928,19 +3925,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 3936
+  i32.const 3808
   i32.store offset=8
-  i32.const 3936
+  i32.const 3808
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 4016
+  i32.const 3888
   i32.store offset=4
   local.get $0
-  i32.const 4016
+  i32.const 3888
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3952,19 +3949,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 4064
+  i32.const 3936
   i32.store offset=8
-  i32.const 4064
+  i32.const 3936
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 4016
+  i32.const 3888
   i32.store offset=4
   local.get $0
-  i32.const 4016
+  i32.const 3888
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -3976,9 +3973,9 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 4144
+  i32.const 4016
   i32.store offset=8
-  i32.const 4144
+  i32.const 4016
   call $~lib/uri/decodeURIComponent
   local.set $0
   global.get $~lib/memory/__stack_pointer
@@ -4072,19 +4069,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 3776
+  i32.const 3648
   i32.store offset=8
-  i32.const 3776
+  i32.const 3648
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 3776
+  i32.const 3648
   i32.store offset=4
   local.get $0
-  i32.const 3776
+  i32.const 3648
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4096,19 +4093,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 4272
+  i32.const 4144
   i32.store offset=8
-  i32.const 4272
+  i32.const 4144
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 4304
+  i32.const 4176
   i32.store offset=4
   local.get $0
-  i32.const 4304
+  i32.const 4176
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4120,19 +4117,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 4336
+  i32.const 4208
   i32.store offset=8
-  i32.const 4336
+  i32.const 4208
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 4368
+  i32.const 4240
   i32.store offset=4
   local.get $0
-  i32.const 4368
+  i32.const 4240
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4144,19 +4141,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 3904
+  i32.const 3776
   i32.store offset=8
-  i32.const 3904
+  i32.const 3776
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 3904
+  i32.const 3776
   i32.store offset=4
   local.get $0
-  i32.const 3904
+  i32.const 3776
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4192,19 +4189,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 3936
+  i32.const 3808
   i32.store offset=8
-  i32.const 3936
+  i32.const 3808
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 3936
+  i32.const 3808
   i32.store offset=4
   local.get $0
-  i32.const 3936
+  i32.const 3808
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4240,19 +4237,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 4400
+  i32.const 4272
   i32.store offset=8
-  i32.const 4400
+  i32.const 4272
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 4400
+  i32.const 4272
   i32.store offset=4
   local.get $0
-  i32.const 4400
+  i32.const 4272
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4264,19 +4261,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 4448
+  i32.const 4320
   i32.store offset=8
-  i32.const 4448
+  i32.const 4320
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 4448
+  i32.const 4320
   i32.store offset=4
   local.get $0
-  i32.const 4448
+  i32.const 4320
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4288,19 +4285,19 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 4144
+  i32.const 4016
   i32.store offset=8
-  i32.const 4144
+  i32.const 4016
   call $~lib/uri/decodeURI
   local.set $0
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
   global.get $~lib/memory/__stack_pointer
-  i32.const 4144
+  i32.const 4016
   i32.store offset=4
   local.get $0
-  i32.const 4144
+  i32.const 4016
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -4311,7 +4308,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 20876
+  i32.const 20748
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/rt/itcms/state
   i32.const 0

@@ -33,20 +33,6 @@ import { CharCode } from "./string";
   1, /* skip 191 always set to '0' tail slots */
 ]);
 
-// @ts-ignore: decorator
-@lazy export const UTF8_BYTE_LEN = memory.data<u8>([
-  /* skip 128 always set to '1' head slots */
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-  4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-]);
-
-
 export function encode(dst: usize, src: usize, len: usize, table: usize): usize {
   var i: usize = 0, offset: usize = 0, outSize = len << 1;
 
@@ -250,16 +236,13 @@ function loadHex(src: usize, offset: usize): u32 {
 
 // @ts-ignore: decorator
 @inline function utf8LenFromUpperByte(c0: u32): u32 {
-  if (ASC_SHRINK_LEVEL > 1) {
-    if (c0 - 0xC0 <= 0xDF - 0xC0) return 2;
-    if (c0 - 0xE0 <= 0xEF - 0xE0) return 3;
-    if (c0 - 0xF0 <= 0xF4 - 0xF0) return 4;
-    return 0;
-  } else {
-    return c0 - 128 <= 128
-      ? <u32>load<u8>(UTF8_BYTE_LEN + (c0 - 128))
-      : 0;
-  }
+  // if (c0 - 0xC0 <= 0xDF - 0xC0) return 2;
+  // if (c0 - 0xE0 <= 0xEF - 0xE0) return 3;
+  // if (c0 - 0xF0 <= 0xF7 - 0xF0) return 4;
+  // return 0;
+  return c0 - 0xC0 <= 55
+    ? clz(~(c0 << 24))
+    : 0;
 }
 
 // @ts-ignore: decorator
