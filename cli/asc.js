@@ -249,9 +249,9 @@ exports.main = function main(argv, options, callback) {
   let bundleMinorVersion = 0, bundleMajorVersion = 0, bundlePatchVersion = 0;
   const versionParts = (exports.version || "").split(".");
   if(versionParts.length === 3) {
-    bundleMajorVersion = parseInt(versionParts[0]);
-    bundleMinorVersion = parseInt(versionParts[1]);
-    bundlePatchVersion = parseInt(versionParts[2]);
+    bundleMajorVersion = parseInt(versionParts[0]) | 0;
+    bundleMinorVersion = parseInt(versionParts[1]) | 0;
+    bundlePatchVersion = parseInt(versionParts[2]) | 0;
   }
 
   const stdout = options.stdout || process.stdout;
