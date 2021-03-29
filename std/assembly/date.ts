@@ -125,7 +125,7 @@ export class Date {
 
   setUTCDate(value: i32): void {
     ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
-    throwIfNotInRange(value, 1, lastDayOfMonth(year, month));
+    throwIfNotInRange(value, 1, daysInMonth(year, month));
     const mills = this.epochMillis % MILLIS_PER_DAY;
     this.epochMillis =
       i64(daysSinceEpoch(year, month, value)) * MILLIS_PER_DAY + mills;
@@ -205,15 +205,10 @@ function isLeap(y: i32): bool {
   return y % 4 == 0 && (y % 100 != 0 || y % 400 == 0);
 }
 
-// http://howardhinnant.github.io/date_algorithms.html#last_day_of_month_common_year
-function lastDayOfMonthNonLeapYear(m: i32): i32 {
-  const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  return days[m - 1];
-}
-
-// http://howardhinnant.github.io/date_algorithms.html#last_day_of_month
-function lastDayOfMonth(y: i32, m: i32): i32 {
-  return m != 2 || !isLeap(y) ? lastDayOfMonthNonLeapYear(m) : 29;
+function daysInMonth(year: i32, month: i32): i32 {
+  return month == 2
+    ? 28 + i32(isLeap(year))
+    : 30 + ((month + i32(month >= 8)) & 1);
 }
 
 // ymdFromEpochDays returns values via globals to avoid allocations
