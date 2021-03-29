@@ -33,12 +33,6 @@
 const fs = require("fs");
 const path = require("path");
 const process = require("process"); // ensure shim
-
-process.exit = ((exit) => function(code) {
-  if (code) console.log(new Error("exit " + code.toString()).stack);
-  exit(code);
-})(process.exit);
-
 const utf8 = require("./util/utf8");
 const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
@@ -794,9 +788,13 @@ exports.main = function main(argv, options, callback) {
 
   // Pre-emptively initialize the program
   stats.initializeCount++;
-  stats.initializeTime += measure(() => crashHandler(() => {
-    assemblyscript.initializeProgram(program);
-  }));
+  stats.initializeTime += measure(() => {
+    try {
+      assemblyscript.initializeProgram(program);
+    } catch (e) {
+      crash("initialize", e);
+    }
+  });
 
   // Call afterInitialize transform hook
   {
@@ -806,8 +804,12 @@ exports.main = function main(argv, options, callback) {
 
   var module;
   stats.compileCount++;
-  stats.compileTime += measure(() => crashHandler(() => {
-    module = assemblyscript.compile(program);
+  stats.compileTime += measure(() => {
+    try {
+      module = assemblyscript.compile(program);
+    } catch (e) {
+      crash("compile", e);
+    }
     // From here on we are going to use Binaryen.js, except that we keep pass
     // order as defined in the compiler.
     if (typeof module === "number") { // Wasm
@@ -823,7 +825,7 @@ exports.main = function main(argv, options, callback) {
         original.optimize(...args);
       };
     }
-  }));
+  });
   var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
   if (numErrors) {
     if (module) module.dispose();
@@ -877,23 +879,50 @@ exports.main = function main(argv, options, callback) {
     }
     if (opts.runPasses.length) {
       opts.runPasses.forEach(pass => {
-        if (runPasses.indexOf(pass = pass.trim()) < 0)
+        if (runPasses.indexOf(pass = pass.trim()) < 0) {
           runPasses.push(pass);
+        }
       });
     }
   }
 
   stats.optimizeTime += measure(() => {
     stats.optimizeCount++;
-    module.optimize(optimizeLevel, shrinkLevel, debugInfo);
-    module.runPasses(runPasses);
+    try {
+      module.optimize(optimizeLevel, shrinkLevel, debugInfo);
+    } catch (e) {
+      crash("optimize", e);
+    }
+    try {
+      module.runPasses(runPasses);
+    } catch (e) {
+      crash("runPasses", e);
+    }
     if (converge) {
-      let last = module.emitBinary();
+      let last;
+      try {
+        last = module.emitBinary();
+      } catch (e) {
+        crash("emit (converge)", e);
+      }
       do {
         stats.optimizeCount++;
-        module.optimize(optimizeLevel, shrinkLevel, debugInfo);
-        module.runPasses(runPasses);
-        let next = module.emitBinary();
+        try {
+          module.optimize(optimizeLevel, shrinkLevel, debugInfo);
+        } catch (e) {
+          crash("optimize (converge)", e);
+        }
+        try {
+          module.runPasses(runPasses);
+        } catch (e) {
+          crash("runPasses (converge)", e);
+        }
+        let next;
+        try {
+          next = module.emitBinary();
+        } catch (e) {
+          crash("emit (converge)", e);
+        }
         if (next.length >= last.length) {
           if (next.length > last.length) {
             stderr.write("Last converge was suboptimial." + EOL);
@@ -936,7 +965,11 @@ exports.main = function main(argv, options, callback) {
       let wasm;
       stats.emitCount++;
       stats.emitTime += measure(() => {
-        wasm = module.emitBinary(sourceMapURL);
+        try {
+          wasm = module.emitBinary(sourceMapURL);
+        } catch (e) {
+          crash("emitBinary", e);
+        }
       });
 
       if (opts.binaryFile.length) {
@@ -977,17 +1010,25 @@ exports.main = function main(argv, options, callback) {
         let wastFormat = opts.textFile.endsWith('.wast');
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          if (wastFormat) {
-            out = module.emitText();
-          } else {
-            out = module.emitStackIR(true);
+          try {
+            if (wastFormat) {
+              out = module.emitText();
+            } else {
+              out = module.emitStackIR(true);
+            }
+          } catch (e) {
+            crash("emitText", e);
           }
         });
         writeFile(opts.textFile, out, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          out = module.emitStackIR(true);
+          try {
+            out = module.emitStackIR(true);
+          } catch (e) {
+            crash("emitText", e);
+          }
         });
         writeStdout(out);
       }
@@ -999,13 +1040,21 @@ exports.main = function main(argv, options, callback) {
       if (opts.idlFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          idl = assemblyscript.buildIDL(program);
+          try {
+            idl = assemblyscript.buildIDL(program);
+          } catch (e) {
+            crash("buildIDL", e);
+          }
         });
         writeFile(opts.idlFile, __getString(idl), baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          idl = assemblyscript.buildIDL(program);
+          try {
+            idl = assemblyscript.buildIDL(program);
+          } catch (e) {
+            crash("buildIDL", e);
+          }
         });
         writeStdout(__getString(idl));
         hasStdout = true;
@@ -1018,13 +1067,21 @@ exports.main = function main(argv, options, callback) {
       if (opts.tsdFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          tsd = assemblyscript.buildTSD(program);
+          try {
+            tsd = assemblyscript.buildTSD(program);
+          } catch (e) {
+            crash("buildTSD", e);
+          }
         });
         writeFile(opts.tsdFile, __getString(tsd), baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          tsd = assemblyscript.buildTSD(program);
+          try {
+            tsd = assemblyscript.buildTSD(program);
+          } catch (e) {
+            crash("buildTSD", e);
+          }
         });
         writeStdout(__getString(tsd));
         hasStdout = true;
@@ -1037,13 +1094,21 @@ exports.main = function main(argv, options, callback) {
       if (opts.jsFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          js = module.emitAsmjs();
+          try {
+            js = module.emitAsmjs();
+          } catch (e) {
+            crash("emitJS", e);
+          }
         });
         writeFile(opts.jsFile, js, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          js = module.emitAsmjs();
+          try {
+            js = module.emitAsmjs();
+          } catch (e) {
+            crash("emitJS", e);
+          }
         });
         writeStdout(js);
       }
@@ -1334,26 +1399,23 @@ exports.tscOptions = {
 };
 
 // Gracefully handle crashes
-function crashHandler(fn) {
-  try {
-    fn();
-  } catch (e) {
-    const r = colorsUtil.red("▌ ");
-    console.error([
-      "\n",
-      r, "Whoops, the AssemblyScript compiler has crashed :-(\n",
-      r, "\n",
-      r, "Here is a stack trace that may or may not be useful:\n",
-      r, "\n",
-      e.stack.replace(/^/mg, r), "\n",
-      r, "\n",
-      r, "If it refers to the dist files, try to 'npm install source-map-support' and\n",
-      r, "run again, which should then show the actual code location in the sources.\n",
-      r, "\n",
-      r, "If you see where the error is, feel free to send us a pull request. If not,\n",
-      r, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues\n",
-      "",
-    ].join(""));
-    process.exit(1);
-  }
+function crash(stage, e) {
+  const r = colorsUtil.red("▌ ");
+  console.error([
+    "\n",
+    r, "Whoops, the AssemblyScript compiler has crashed during ", stage, " :-(\n",
+    r, "\n",
+    r, "Here is a stack trace that may or may not be useful:\n",
+    r, "\n",
+    e.stack.replace(/^/mg, r), "\n",
+    r, "\n",
+    r, "If it refers to the dist files, try to 'npm install source-map-support' and\n",
+    r, "run again, which should then show the actual code location in the sources.\n",
+    r, "\n",
+    r, "If you see where the error is, feel free to send us a pull request. If not,\n",
+    r, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues\n",
+    r, "\n",
+    r, "Thank you!\n"
+  ].join(""));
+  process.exit(1);
 }
