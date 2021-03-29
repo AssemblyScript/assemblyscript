@@ -148,3 +148,38 @@
     assert(date.getUTCFullYear() == 20212);
 }
 
+// Date#toString /////////////////////////////////////////////////////////////////////////////////
+{
+    let date = new Date(1231231231020);
+    assert(date.toISOString() == "2009-01-06T08:40:31.020Z");
+    date = new Date(1231231231456);
+    assert(date.toISOString() == "2009-01-06T08:40:31.456Z");
+    date = new Date(322331231231020)
+    assert(date.toISOString() == "+012184-04-08T13:07:11.020Z");
+}
+
+// Date#fromString /////////////////////////////////////////////////////////////////////////////////
+{
+    // supports year / month / day
+    let date = Date.fromString("1976-02-02");
+    assert(date.getTime() == 192067200000);
+    date = Date.fromString("1976-2-2");
+    assert(date.getTime() == 192067200000);
+    date = Date.fromString("2345-11-04");
+    assert(date.getTime() == 11860387200000);
+
+    // supports two digit years
+    assert(Date.fromString("1976-04-02").getTime() == Date.fromString("76-04-02").getTime());
+
+    // supports year / month / day / hour / minute / second
+    date = Date.fromString("1976-02-02T12:34:56");
+    assert(date.getTime() == 192112496000);
+
+    // supports milliseconds
+    date = Date.fromString("1976-02-02T12:34:56.456");
+    assert(date.getTime() == 192112496456);
+
+    // supports 'Z' suffix
+    date = Date.fromString("1976-02-02T12:34:56.456Z");
+    assert(date.getTime() == 192112496456);
+}

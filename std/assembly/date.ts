@@ -20,6 +20,46 @@ export class Date {
     return <i64>Date_now();
   }
 
+  static fromString(dateTimeString: string): Date {
+    let hour: i32 = 0,
+      minute: i32 = 0,
+      second: i32 = 0,
+      millisecond: i32 = 0;
+    let dateString: string;
+
+    if (dateTimeString.includes("T")) {
+      // includes a time component
+      const parts = dateTimeString.split("T");
+      const timeString = parts[1];
+      // parse the HH-MM-SS component
+      const timeParts = timeString.split(":");
+      hour = I32.parseInt(timeParts[0]);
+      minute = I32.parseInt(timeParts[1]);
+      if (timeParts[2].includes(".")) {
+        // includes milliseconds
+        const secondParts = timeParts[2].split(".");
+        second = I32.parseInt(secondParts[0]);
+        millisecond = I32.parseInt(secondParts[1]);
+      } else {
+        second = I32.parseInt(timeParts[2]);
+      }
+      dateString = parts[0];
+    } else {
+      dateString = dateTimeString;
+    }
+    // parse the YYYY-MM-DD component
+    const parts = dateString.split("-");
+    const year = I32.parseInt(
+      parts[0].length == 2 ? "19" + parts[0] : parts[0]
+    );
+    const month = I32.parseInt(parts[1]);
+    const day = I32.parseInt(parts[2]);
+
+    return new Date(
+      epochMillis(year, month, day, hour, minute, second, millisecond)
+    );
+  }
+
   private epochMillis: i64;
 
   constructor(epochMillis: i64) {
@@ -105,6 +145,50 @@ export class Date {
     this.epochMillis =
       i64(daysSinceEpoch(value, ymd.month, ymd.day)) * MILLIS_PER_DAY + mills;
   }
+
+  toISOString(): string {
+    const ymd = ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+
+    let yearStr = ymd.year.toString();
+    if (yearStr.length > 4) {
+      yearStr = "+" + yearStr.padStart(6, "0");
+    }
+
+    return (
+      yearStr +
+      "-" +
+      ymd.month.toString().padStart(2, "0") +
+      "-" +
+      ymd.day.toString().padStart(2, "0") +
+      "T" +
+      this.getUTCHours().toString().padStart(2, "0") +
+      ":" +
+      this.getUTCMinutes().toString().padStart(2, "0") +
+      ":" +
+      this.getUTCSeconds().toString().padStart(2, "0") +
+      "." +
+      this.getUTCMilliseconds().toString().padStart(3, "0") +
+      "Z"
+    );
+  }
+}
+
+function epochMillis(
+  year: i32,
+  month: i32,
+  day: i32,
+  hour: i32,
+  minute: i32,
+  second: i32,
+  milliseconds: i32
+): i64 {
+  return (
+    i64(daysSinceEpoch(year, month, day)) * MILLIS_PER_DAY +
+    hour * MILLIS_PER_HOUR +
+    minute * MILLIS_PER_MINUTE +
+    second * MILLIS_PER_SECOND +
+    milliseconds
+  );
 }
 
 function throwIfNotInRange(value: i32, lower: i32, upper: i32): void {
