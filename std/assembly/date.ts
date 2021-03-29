@@ -1,5 +1,5 @@
 import { E_VALUEOUTOFRANGE } from "util/error";
-import { UTC as Date_UTC, now as Date_now } from "./bindings/Date";
+import { now as Date_now } from "./bindings/Date";
 
 export class Date {
   @inline static UTC(
@@ -9,11 +9,9 @@ export class Date {
     hour: i32 = 0,
     minute: i32 = 0,
     second: i32 = 0,
-    millisecond: i64 = 0
+    millisecond: i32 = 0
   ): i64 {
-    return <i64>(
-      Date_UTC(year, month, day, hour, minute, second, <f64>millisecond)
-    );
+    return epochMillis(year, month + 1, day, hour, minute, second, millisecond);
   }
 
   @inline static now(): i64 {

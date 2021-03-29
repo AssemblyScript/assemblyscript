@@ -18,8 +18,6 @@
  (type $i32_=>_i64 (func (param i32) (result i64)))
  (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (type $i32_i64_=>_i64 (func (param i32 i64) (result i64)))
- (type $i32_i32_i32_i32_i32_i32_f64_=>_f64 (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
- (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s\00\00\00\00\00\00\00")
@@ -88,6 +86,112 @@
  (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
+ (func $~lib/date/daysSinceEpoch (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  local.get $1
+  i32.const 2
+  i32.le_s
+  if (result i32)
+   i32.const 1
+  else
+   i32.const 0
+  end
+  i32.sub
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.ge_s
+  if (result i32)
+   local.get $0
+  else
+   local.get $0
+   i32.const 399
+   i32.sub
+  end
+  i32.const 400
+  i32.div_s
+  local.set $3
+  local.get $0
+  local.get $3
+  i32.const 400
+  i32.mul
+  i32.sub
+  local.set $4
+  i32.const 153
+  local.get $1
+  local.get $1
+  i32.const 2
+  i32.gt_s
+  if (result i32)
+   i32.const -3
+  else
+   i32.const 9
+  end
+  i32.add
+  i32.mul
+  i32.const 2
+  i32.add
+  i32.const 5
+  i32.div_s
+  local.get $2
+  i32.add
+  i32.const 1
+  i32.sub
+  local.set $5
+  local.get $4
+  i32.const 365
+  i32.mul
+  local.get $4
+  i32.const 4
+  i32.div_s
+  i32.add
+  local.get $4
+  i32.const 100
+  i32.div_s
+  i32.sub
+  local.get $5
+  i32.add
+  local.set $6
+  local.get $3
+  i32.const 146097
+  i32.mul
+  local.get $6
+  i32.add
+  i32.const 719468
+  i32.sub
+ )
+ (func $~lib/date/epochMillis (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i32) (result i64)
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/date/daysSinceEpoch
+  i64.extend_i32_s
+  global.get $~lib/date/MILLIS_PER_DAY
+  i64.extend_i32_s
+  i64.mul
+  local.get $3
+  global.get $~lib/date/MILLIS_PER_HOUR
+  i32.mul
+  i64.extend_i32_s
+  i64.add
+  local.get $4
+  global.get $~lib/date/MILLIS_PER_MINUTE
+  i32.mul
+  i64.extend_i32_s
+  i64.add
+  local.get $5
+  global.get $~lib/date/MILLIS_PER_SECOND
+  i32.mul
+  i64.extend_i32_s
+  i64.add
+  local.get $6
+  i64.extend_i32_s
+  i64.add
+ )
  (func $~lib/date/Date#set:epochMillis (param $0 i32) (param $1 i64)
   local.get $0
   local.get $1
@@ -2519,7 +2623,7 @@
   if
    i32.const 480
    i32.const 544
-   i32.const 195
+   i32.const 193
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -3984,84 +4088,6 @@
    i32.const 29
   end
  )
- (func $~lib/date/daysSinceEpoch (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  local.get $0
-  local.get $1
-  i32.const 2
-  i32.le_s
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 0
-  end
-  i32.sub
-  local.set $0
-  local.get $0
-  i32.const 0
-  i32.ge_s
-  if (result i32)
-   local.get $0
-  else
-   local.get $0
-   i32.const 399
-   i32.sub
-  end
-  i32.const 400
-  i32.div_s
-  local.set $3
-  local.get $0
-  local.get $3
-  i32.const 400
-  i32.mul
-  i32.sub
-  local.set $4
-  i32.const 153
-  local.get $1
-  local.get $1
-  i32.const 2
-  i32.gt_s
-  if (result i32)
-   i32.const -3
-  else
-   i32.const 9
-  end
-  i32.add
-  i32.mul
-  i32.const 2
-  i32.add
-  i32.const 5
-  i32.div_s
-  local.get $2
-  i32.add
-  i32.const 1
-  i32.sub
-  local.set $5
-  local.get $4
-  i32.const 365
-  i32.mul
-  local.get $4
-  i32.const 4
-  i32.div_s
-  i32.add
-  local.get $4
-  i32.const 100
-  i32.div_s
-  i32.sub
-  local.get $5
-  i32.add
-  local.set $6
-  local.get $3
-  i32.const 146097
-  i32.mul
-  local.get $6
-  i32.add
-  i32.const 719468
-  i32.sub
- )
  (func $~lib/date/Date#setUTCDate (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i64)
@@ -5464,34 +5490,6 @@
   local.get $1
   call $~lib/util/string/strtol<i32>
  )
- (func $~lib/date/epochMillis (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i32) (result i64)
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/date/daysSinceEpoch
-  i64.extend_i32_s
-  global.get $~lib/date/MILLIS_PER_DAY
-  i64.extend_i32_s
-  i64.mul
-  local.get $3
-  global.get $~lib/date/MILLIS_PER_HOUR
-  i32.mul
-  i64.extend_i32_s
-  i64.add
-  local.get $4
-  global.get $~lib/date/MILLIS_PER_MINUTE
-  i32.mul
-  i64.extend_i32_s
-  i64.add
-  local.get $5
-  global.get $~lib/date/MILLIS_PER_SECOND
-  i32.mul
-  i64.extend_i32_s
-  i64.add
-  local.get $6
-  i64.extend_i32_s
-  i64.add
- )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
   i32.const 272
@@ -6640,8 +6638,9 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i64)
-  (local $7 i32)
+  (local $6 i32)
+  (local $7 i64)
+  (local $8 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -6665,18 +6664,18 @@
   local.set $4
   i32.const 0
   local.set $5
-  i64.const 0
+  i32.const 0
   local.set $6
   local.get $2
   local.get $1
+  i32.const 1
+  i32.add
   local.get $0
   local.get $3
   local.get $4
   local.get $5
   local.get $6
-  f64.convert_i64_s
-  call $~lib/bindings/Date/UTC
-  i64.trunc_f64_s
+  call $~lib/date/epochMillis
   i64.const 0
   i64.eq
   i32.eqz
@@ -6689,10 +6688,12 @@
    unreachable
   end
   i32.const 1970
-  local.set $5
+  local.set $6
   i32.const 0
-  local.set $4
+  local.set $5
   i32.const 1
+  local.set $4
+  i32.const 0
   local.set $3
   i32.const 0
   local.set $2
@@ -6700,18 +6701,16 @@
   local.set $1
   i32.const 0
   local.set $0
-  i64.const 0
-  local.set $6
+  local.get $6
   local.get $5
+  i32.const 1
+  i32.add
   local.get $4
   local.get $3
   local.get $2
   local.get $1
   local.get $0
-  local.get $6
-  f64.convert_i64_s
-  call $~lib/bindings/Date/UTC
-  i64.trunc_f64_s
+  call $~lib/date/epochMillis
   i64.const 0
   i64.eq
   i32.eqz
@@ -6724,31 +6723,31 @@
    unreachable
   end
   i32.const 2018
+  local.set $6
+  i32.const 10
   local.set $5
   i32.const 10
   local.set $4
-  i32.const 10
-  local.set $3
   i32.const 11
+  local.set $3
+  i32.const 0
   local.set $2
   i32.const 0
   local.set $1
-  i32.const 0
+  i32.const 1
   local.set $0
-  i64.const 1
-  local.set $6
+  local.get $6
   local.get $5
+  i32.const 1
+  i32.add
   local.get $4
   local.get $3
   local.get $2
   local.get $1
   local.get $0
-  local.get $6
-  f64.convert_i64_s
-  call $~lib/bindings/Date/UTC
-  i64.trunc_f64_s
-  local.set $6
-  local.get $6
+  call $~lib/date/epochMillis
+  local.set $7
+  local.get $7
   i64.const 1541847600001
   i64.eq
   i32.eqz
@@ -6778,16 +6777,16 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   i64.const 1541847600001
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 0
-  local.get $6
+  local.get $7
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
-  call $~lib/date/Date#getTime
   local.get $6
+  call $~lib/date/Date#getTime
+  local.get $7
   i64.eq
   i32.eqz
   if
@@ -6798,15 +6797,15 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
   local.get $6
+  local.get $7
   i64.const 1
   i64.add
   call $~lib/date/Date#setTime
   drop
-  local.get $5
-  call $~lib/date/Date#getTime
   local.get $6
+  call $~lib/date/Date#getTime
+  local.get $7
   i64.const 1
   i64.add
   i64.eq
@@ -6823,9 +6822,9 @@
   i32.const 0
   i64.const 5918283958183706
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCFullYear
   i32.const 189512
   i32.eq
@@ -6838,7 +6837,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMonth
   i32.const 11
   i32.eq
@@ -6851,7 +6850,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCDate
   i32.const 14
   i32.eq
@@ -6864,7 +6863,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCHours
   i32.const 22
   i32.eq
@@ -6877,7 +6876,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMinutes
   i32.const 9
   i32.eq
@@ -6890,7 +6889,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCSeconds
   i32.const 43
   i32.eq
@@ -6903,7 +6902,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMilliseconds
   i32.const 706
   i32.eq
@@ -6920,9 +6919,9 @@
   i32.const 0
   i64.const 123814991274
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCFullYear
   i32.const 1973
   i32.eq
@@ -6935,7 +6934,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMonth
   i32.const 11
   i32.eq
@@ -6948,7 +6947,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCDate
   i32.const 4
   i32.eq
@@ -6961,7 +6960,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCHours
   i32.const 1
   i32.eq
@@ -6974,7 +6973,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMinutes
   i32.const 3
   i32.eq
@@ -6987,7 +6986,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCSeconds
   i32.const 11
   i32.eq
@@ -7000,7 +6999,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMilliseconds
   i32.const 274
   i32.eq
@@ -7017,9 +7016,9 @@
   i32.const 0
   i64.const 399464523963984
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMilliseconds
   i32.const 984
   i32.eq
@@ -7032,10 +7031,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 12
   call $~lib/date/Date#setUTCMilliseconds
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMilliseconds
   i32.const 12
   i32.eq
@@ -7048,10 +7047,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 568
   call $~lib/date/Date#setUTCMilliseconds
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMilliseconds
   i32.const 568
   i32.eq
@@ -7064,19 +7063,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 0
   call $~lib/date/Date#setUTCMilliseconds
-  local.get $5
+  local.get $6
   i32.const 999
   call $~lib/date/Date#setUTCMilliseconds
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i64.const 372027318331986
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCSeconds
   i32.const 31
   i32.eq
@@ -7089,10 +7088,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 12
   call $~lib/date/Date#setUTCSeconds
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCSeconds
   i32.const 12
   i32.eq
@@ -7105,10 +7104,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 50
   call $~lib/date/Date#setUTCSeconds
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCSeconds
   i32.const 50
   i32.eq
@@ -7121,19 +7120,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 0
   call $~lib/date/Date#setUTCSeconds
-  local.get $5
+  local.get $6
   i32.const 59
   call $~lib/date/Date#setUTCSeconds
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i64.const 372027318331986
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMinutes
   i32.const 45
   i32.eq
@@ -7146,10 +7145,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 12
   call $~lib/date/Date#setUTCMinutes
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMinutes
   i32.const 12
   i32.eq
@@ -7162,10 +7161,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 50
   call $~lib/date/Date#setUTCMinutes
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMinutes
   i32.const 50
   i32.eq
@@ -7178,19 +7177,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 0
   call $~lib/date/Date#setUTCMinutes
-  local.get $5
+  local.get $6
   i32.const 59
   call $~lib/date/Date#setUTCMinutes
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i64.const 372027318331986
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCHours
   i32.const 17
   i32.eq
@@ -7203,10 +7202,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 12
   call $~lib/date/Date#setUTCHours
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCHours
   i32.const 12
   i32.eq
@@ -7219,10 +7218,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 2
   call $~lib/date/Date#setUTCHours
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCHours
   i32.const 2
   i32.eq
@@ -7235,19 +7234,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 0
   call $~lib/date/Date#setUTCHours
-  local.get $5
+  local.get $6
   i32.const 23
   call $~lib/date/Date#setUTCHours
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i64.const 123814991274
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCFullYear
   i32.const 1973
   i32.eq
@@ -7260,7 +7259,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMonth
   i32.const 11
   i32.eq
@@ -7273,10 +7272,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 12
   call $~lib/date/Date#setUTCDate
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCDate
   i32.const 12
   i32.eq
@@ -7289,10 +7288,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 2
   call $~lib/date/Date#setUTCDate
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCDate
   i32.const 2
   i32.eq
@@ -7305,40 +7304,40 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 1
   call $~lib/date/Date#setUTCDate
-  local.get $5
+  local.get $6
   i32.const 30
   call $~lib/date/Date#setUTCDate
-  local.get $5
+  local.get $6
   i32.const 1
   call $~lib/date/Date#setUTCMonth
-  local.get $5
+  local.get $6
   i32.const 1
   call $~lib/date/Date#setUTCDate
-  local.get $5
+  local.get $6
   i32.const 31
   call $~lib/date/Date#setUTCDate
-  local.get $5
+  local.get $6
   i32.const 2024
   call $~lib/date/Date#setUTCFullYear
-  local.get $5
+  local.get $6
   i32.const 2
   call $~lib/date/Date#setUTCMonth
-  local.get $5
+  local.get $6
   i32.const 1
   call $~lib/date/Date#setUTCDate
-  local.get $5
+  local.get $6
   i32.const 29
   call $~lib/date/Date#setUTCDate
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i64.const 7899943856218720
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMonth
   i32.const 3
   i32.eq
@@ -7351,10 +7350,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 10
   call $~lib/date/Date#setUTCMonth
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMonth
   i32.const 10
   i32.eq
@@ -7367,10 +7366,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 2
   call $~lib/date/Date#setUTCMonth
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCMonth
   i32.const 2
   i32.eq
@@ -7383,19 +7382,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 1
   call $~lib/date/Date#setUTCMonth
-  local.get $5
+  local.get $6
   i32.const 12
   call $~lib/date/Date#setUTCMonth
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i64.const 7941202527925698
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCFullYear
   i32.const 253616
   i32.eq
@@ -7408,10 +7407,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 1976
   call $~lib/date/Date#setUTCFullYear
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCFullYear
   i32.const 1976
   i32.eq
@@ -7424,10 +7423,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const 20212
   call $~lib/date/Date#setUTCFullYear
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getUTCFullYear
   i32.const 20212
   i32.eq
@@ -7444,21 +7443,21 @@
   i32.const 0
   i64.const 1231231231020
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#toISOString
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   i32.const 2720
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=8
-  local.get $7
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -7473,21 +7472,21 @@
   i32.const 0
   i64.const 1231231231456
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#toISOString
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   i32.const 2800
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=8
-  local.get $7
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -7502,21 +7501,21 @@
   i32.const 0
   i64.const 322331231231020
   call $~lib/date/Date#constructor
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#toISOString
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   i32.const 2880
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=8
-  local.get $7
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -7529,15 +7528,15 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 2960
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   call $~lib/date/Date.fromString
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getTime
   i64.const 192067200000
   i64.eq
@@ -7552,15 +7551,15 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3216
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   call $~lib/date/Date.fromString
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getTime
   i64.const 192067200000
   i64.eq
@@ -7575,15 +7574,15 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3264
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   call $~lib/date/Date.fromString
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getTime
   i64.const 11860387200000
   i64.eq
@@ -7597,30 +7596,30 @@
    unreachable
   end
   i32.const 3312
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=8
-  local.get $7
+  local.get $8
   call $~lib/date/Date.fromString
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   call $~lib/date/Date#getTime
   i32.const 3360
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=8
-  local.get $7
+  local.get $8
   call $~lib/date/Date.fromString
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   call $~lib/date/Date#getTime
   i64.eq
   i32.eqz
@@ -7634,15 +7633,15 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3408
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   call $~lib/date/Date.fromString
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getTime
   i64.const 192112496000
   i64.eq
@@ -7657,15 +7656,15 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3472
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   call $~lib/date/Date.fromString
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getTime
   i64.const 192112496456
   i64.eq
@@ -7680,15 +7679,15 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3552
-  local.set $7
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $8
   i32.store offset=4
-  local.get $7
+  local.get $8
   call $~lib/date/Date.fromString
-  local.tee $5
+  local.tee $6
   i32.store
-  local.get $5
+  local.get $6
   call $~lib/date/Date#getTime
   i64.const 192112496456
   i64.eq
