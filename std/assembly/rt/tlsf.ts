@@ -207,9 +207,8 @@ function insertBlock(root: Root, block: Block): void {
 
   // merge with right block if also free
   if (rightInfo & FREE) {
-    let newSize = (blockInfo & ~TAGS_MASK) + BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK);
     removeBlock(root, right);
-    block.mmInfo = blockInfo = (blockInfo & TAGS_MASK) | newSize;
+    block.mmInfo = blockInfo = blockInfo + BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK); // keep block tags
     right = GETRIGHT(block);
     rightInfo = right.mmInfo;
     // 'back' is set below
@@ -220,10 +219,9 @@ function insertBlock(root: Root, block: Block): void {
     let left = GETFREELEFT(block);
     let leftInfo = left.mmInfo;
     if (DEBUG) assert(leftInfo & FREE); // must be free according to right tags
-    let newSize = (leftInfo & ~TAGS_MASK) + BLOCK_OVERHEAD + (blockInfo & ~TAGS_MASK);
     removeBlock(root, left);
-    left.mmInfo = blockInfo = (leftInfo & TAGS_MASK) | newSize;
     block = left;
+    block.mmInfo = blockInfo = leftInfo + BLOCK_OVERHEAD + (blockInfo & ~TAGS_MASK); // keep left tags
     // 'back' is set below
   }
 
