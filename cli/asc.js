@@ -903,7 +903,7 @@ exports.main = function main(argv, options, callback) {
       try {
         last = module.emitBinary();
       } catch (e) {
-        crash("emit (converge)", e);
+        crash("emitBinary (converge)", e);
       }
       do {
         stats.optimizeCount++;
@@ -921,7 +921,7 @@ exports.main = function main(argv, options, callback) {
         try {
           next = module.emitBinary();
         } catch (e) {
-          crash("emit (converge)", e);
+          crash("emitBinary (converge)", e);
         }
         if (next.length >= last.length) {
           if (next.length > last.length) {
@@ -1400,22 +1400,22 @@ exports.tscOptions = {
 
 // Gracefully handle crashes
 function crash(stage, e) {
-  const r = colorsUtil.red("▌ ");
+  const BAR = colorsUtil.red("▌ ");
   console.error([
-    "\n",
-    r, "Whoops, the AssemblyScript compiler has crashed during ", stage, " :-(\n",
-    r, "\n",
-    r, "Here is a stack trace that may or may not be useful:\n",
-    r, "\n",
-    e.stack.replace(/^/mg, r), "\n",
-    r, "\n",
-    r, "If it refers to the dist files, try to 'npm install source-map-support' and\n",
-    r, "run again, which should then show the actual code location in the sources.\n",
-    r, "\n",
-    r, "If you see where the error is, feel free to send us a pull request. If not,\n",
-    r, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues\n",
-    r, "\n",
-    r, "Thank you!\n"
+    EOL,
+    BAR, "Whoops, the AssemblyScript compiler has crashed during ", stage, " :-(", EOL,
+    BAR, EOL,
+    BAR, "Here is a stack trace that may or may not be useful:", EOL,
+    BAR, EOL,
+    e.stack.replace(/^/mg, BAR), EOL,
+    BAR, EOL,
+    BAR, "If it refers to the dist files, try to 'npm install source-map-support' and", EOL,
+    BAR, "run again, which should then show the actual code location in the sources.", EOL,
+    BAR, EOL,
+    BAR, "If you see where the error is, feel free to send us a pull request. If not,", EOL,
+    BAR, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues", EOL,
+    BAR, EOL,
+    BAR, "Thank you!", EOL
   ].join(""));
   process.exit(1);
 }
