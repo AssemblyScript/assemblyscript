@@ -1722,6 +1722,22 @@ declare class Date {
   getTime(): i64;
   /** Sets the UTC timestamp of this date in milliseconds. */
   setTime(value: i64): i64;
+
+  getUTCFullYear(): i32;
+  getUTCMonth(): i32;
+  getUTCDate(): i32;
+  getUTCHours(): i32;
+  getUTCMinutes(): i32;
+  getUTCSeconds(): i32;
+  getUTCMilliseconds(): i32;
+
+  setUTCFullYear(value: i32): void;
+  setUTCMonth(value: i32): void;
+  setUTCDate(value: i32): void;
+  setUTCHours(value: i32): void;
+  setUTCMinutes(value: i32): void;
+  setUTCSeconds(value: i32): void;
+  setUTCMilliseconds(value: i32): void;
 }
 
 /** Class for representing a runtime error. Base class of all errors. */
