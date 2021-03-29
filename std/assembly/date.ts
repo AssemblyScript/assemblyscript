@@ -20,9 +20,9 @@ export class Date {
 
   static fromString(dateTimeString: string): Date {
     let hour: i32 = 0,
-      minute: i32 = 0,
-      second: i32 = 0,
-      millisecond: i32 = 0;
+        minute: i32 = 0,
+        second: i32 = 0,
+        millisecond: i32 = 0;
     let dateString: string;
 
     if (dateTimeString.includes("T")) {
