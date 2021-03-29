@@ -74,15 +74,18 @@ export class Date {
   }
 
   getUTCFullYear(): i32 {
-    return ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY)).year;
+    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    return year;
   }
 
   getUTCMonth(): i32 {
-    return ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY)).month - 1;
+    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    return month - 1;
   }
 
   getUTCDate(): i32 {
-    return ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY)).day;
+    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    return day;
   }
 
   getUTCHours(): i32 {
@@ -121,33 +124,32 @@ export class Date {
   }
 
   setUTCDate(value: i32): void {
-    const ymd = ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
-    throwIfNotInRange(value, 1, lastDayOfMonth(ymd.year, ymd.month));
+    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    throwIfNotInRange(value, 1, lastDayOfMonth(year, month));
     const mills = this.epochMillis % MILLIS_PER_DAY;
     this.epochMillis =
-      i64(daysSinceEpoch(ymd.year, ymd.month, value)) * MILLIS_PER_DAY + mills;
+      i64(daysSinceEpoch(year, month, value)) * MILLIS_PER_DAY + mills;
   }
 
   setUTCMonth(value: i32): void {
     throwIfNotInRange(value, 1, 12);
-    const ymd = ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
     const mills = this.epochMillis % MILLIS_PER_DAY;
     this.epochMillis =
-      i64(daysSinceEpoch(ymd.year, value + 1, ymd.day)) * MILLIS_PER_DAY +
-      mills;
+      i64(daysSinceEpoch(year, value + 1, day)) * MILLIS_PER_DAY + mills;
   }
 
   setUTCFullYear(value: i32): void {
-    const ymd = ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
     const mills = this.epochMillis % MILLIS_PER_DAY;
     this.epochMillis =
-      i64(daysSinceEpoch(value, ymd.month, ymd.day)) * MILLIS_PER_DAY + mills;
+      i64(daysSinceEpoch(value, month, day)) * MILLIS_PER_DAY + mills;
   }
 
   toISOString(): string {
-    const ymd = ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
 
-    let yearStr = ymd.year.toString();
+    let yearStr = year.toString();
     if (yearStr.length > 4) {
       yearStr = "+" + yearStr.padStart(6, "0");
     }
@@ -155,9 +157,9 @@ export class Date {
     return (
       yearStr +
       "-" +
-      ymd.month.toString().padStart(2, "0") +
+      month.toString().padStart(2, "0") +
       "-" +
-      ymd.day.toString().padStart(2, "0") +
+      day.toString().padStart(2, "0") +
       "T" +
       this.getUTCHours().toString().padStart(2, "0") +
       ":" +
@@ -198,12 +200,6 @@ const MILLIS_PER_HOUR = 1_000 * 60 * 60;
 const MILLIS_PER_MINUTE = 1_000 * 60;
 const MILLIS_PER_SECOND = 1_000;
 
-class YMD {
-  year: i32;
-  month: i32;
-  day: i32;
-}
-
 // http://howardhinnant.github.io/date_algorithms.html#is_leap
 function isLeap(y: i32): bool {
   return y % 4 == 0 && (y % 100 != 0 || y % 400 == 0);
@@ -220,22 +216,20 @@ function lastDayOfMonth(y: i32, m: i32): i32 {
   return m != 2 || !isLeap(y) ? lastDayOfMonthNonLeapYear(m) : 29;
 }
 
+// ymdFromEpochDays returns values via globals to avoid allocations
+let year: i32, month: i32, day: i32;
 // see: http://howardhinnant.github.io/date_algorithms.html#civil_from_days
-function ymdFromEpochDays(z: i32): YMD {
+function ymdFromEpochDays(z: i32): void {
   z += 719468;
   const era = (z >= 0 ? z : z - 146096) / 146097;
   const doe = z - era * 146097; // [0, 146096]
   const yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365; // [0, 399]
-  const y = yoe + era * 400;
+  year = yoe + era * 400;
   const doy = doe - (365 * yoe + yoe / 4 - yoe / 100); // [0, 365]
   const mp = (5 * doy + 2) / 153; // [0, 11]
-  const d = doy - (153 * mp + 2) / 5 + 1; // [1, 31]
-  const m = mp + (mp < 10 ? 3 : -9); // [1, 12]
-  return {
-    year: y + (m <= 2 ? 1 : 0),
-    month: m,
-    day: d,
-  };
+  day = doy - (153 * mp + 2) / 5 + 1; // [1, 31]
+  month = mp + (mp < 10 ? 3 : -9); // [1, 12]
+  year += (month <= 2 ? 1 : 0);
 }
 
 // http://howardhinnant.github.io/date_algorithms.html#days_from_civil
