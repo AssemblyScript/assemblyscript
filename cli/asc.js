@@ -245,6 +245,15 @@ exports.main = function main(argv, options, callback) {
     options = {};
   }
 
+  // Bundle semantic version
+  let bundleMinorVersion = 0, bundleMajorVersion = 0, bundlePatchVersion = 0;
+  const versionParts = (exports.version || "").split(".");
+  if(versionParts.length === 3) {
+    bundleMajorVersion = parseInt(versionParts[0]);
+    bundleMinorVersion = parseInt(versionParts[1]);
+    bundlePatchVersion = parseInt(versionParts[2]);
+  }
+
   const stdout = options.stdout || process.stdout;
   const stderr = options.stderr || process.stderr;
   const readFile = options.readFile || readFileNode;
@@ -422,7 +431,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setPedantic(compilerOptions, opts.pedantic);
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
   assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
-  assemblyscript.setBundleVersion(compilerOptions, exports.version);
+  assemblyscript.setBundleVersion(compilerOptions, bundleMajorVersion, bundleMinorVersion, bundlePatchVersion);
   if (!opts.stackSize && opts.runtime == "incremental") {
     opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
   }

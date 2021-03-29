@@ -251,8 +251,12 @@ export class Options {
   exportRuntime: bool = false;
   /** Stack size in bytes, if using a stack. */
   stackSize: i32 = 0;
-  /* Bundle version from the root package.json */
-  bundleVersion: string = "0.0.0";
+  /** Semantic major bundle version from root package.json */
+  bundleMajorVersion: i32 = 0;
+  /** Semantic minor bundle version from root package.json */
+  bundleMinorVersion: i32 = 0;
+  /** Semantic patch bundle version from root package.json */
+  bundlePatchVersion: i32 = 0;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;

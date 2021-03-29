@@ -142,9 +142,16 @@ export function setStackSize(options: Options, stackSize: i32): void {
   options.stackSize = stackSize;
 }
 
-/** Sets the bundle version. */
-export function setBundleVersion(options: Options, bundleVersion: string): void {
-  options.bundleVersion = bundleVersion;
+/** Sets the bundle semantic version. */
+export function setBundleVersion(
+  options: Options,
+  bundleMajorVersion: i32,
+  bundleMinorVersion: i32,
+  bundlePatchVersion: i32,
+): void {
+  options.bundleMajorVersion = bundleMajorVersion;
+  options.bundleMinorVersion = bundleMinorVersion;
+  options.bundlePatchVersion = bundlePatchVersion;
 }
 
 /** Sign extension operations. */
