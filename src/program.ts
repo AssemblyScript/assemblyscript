@@ -129,8 +129,7 @@ import {
   writeF64,
   writeI64,
   writeI32AsI64,
-  writeI64AsI32,
-  getSemanticVersion
+  writeI64AsI32
 } from "./util";
 
 import {
@@ -944,6 +943,15 @@ export class Program extends DiagnosticEmitter {
 
     var options = this.options;
 
+    // Semantic version from root package.json
+    let bundleMinorVersion = 0, bundleMajorVersion = 0, bundlePatchVersion = 0;
+    const versionParts = (options.bundleVersion || "").split(".");
+    if(versionParts.length === 3) {
+      bundleMajorVersion = i32(parseInt(versionParts[0]));
+      bundleMinorVersion = i32(parseInt(versionParts[1]));
+      bundlePatchVersion = i32(parseInt(versionParts[2]));
+    }
+
     // register native types
     this.registerNativeType(CommonNames.i8, Type.i8);
     this.registerNativeType(CommonNames.i16, Type.i16);
@@ -998,7 +1006,6 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeType(CommonNames.dataref, Type.dataref);
 
     // register compiler hints
-    const semanticVersion = getSemanticVersion(options.bundleVersion);
     this.registerConstantInteger(CommonNames.ASC_TARGET, Type.i32,
       i64_new(options.isWasm64 ? Target.WASM64 : Target.WASM32));
     this.registerConstantInteger(CommonNames.ASC_NO_ASSERT, Type.bool,
@@ -1016,11 +1023,11 @@ export class Program extends DiagnosticEmitter {
     this.registerConstantInteger(CommonNames.ASC_EXPORT_RUNTIME, Type.bool,
       i64_new(options.exportRuntime ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_VERSION_MAJOR, Type.i32,
-      i64_new(semanticVersion.major));
+      i64_new(bundleMajorVersion));
     this.registerConstantInteger(CommonNames.ASC_VERSION_MINOR, Type.i32,
-      i64_new(semanticVersion.minor));
+      i64_new(bundleMinorVersion));
     this.registerConstantInteger(CommonNames.ASC_VERSION_PATCH, Type.i32,
-      i64_new(semanticVersion.patch));
+      i64_new(bundlePatchVersion));
 
     // register feature hints
     this.registerConstantInteger(CommonNames.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
