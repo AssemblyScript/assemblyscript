@@ -248,7 +248,7 @@ exports.main = function main(argv, options, callback) {
   // Bundle semantic version
   let bundleMinorVersion = 0, bundleMajorVersion = 0, bundlePatchVersion = 0;
   const versionParts = (exports.version || "").split(".");
-  if(versionParts.length === 3) {
+  if (versionParts.length === 3) {
     bundleMajorVersion = parseInt(versionParts[0]) | 0;
     bundleMinorVersion = parseInt(versionParts[1]) | 0;
     bundlePatchVersion = parseInt(versionParts[2]) | 0;
