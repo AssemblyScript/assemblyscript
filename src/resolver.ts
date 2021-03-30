@@ -306,7 +306,7 @@ export class Resolver extends DiagnosticEmitter {
           typeParameterNodes,
           typeArgumentNodes,
           ctxElement,
-          ctxTypes = uniqueMap(ctxTypes), // inherit
+          ctxTypes = uniqueMap(ctxTypes), // update
           node,
           reportMode
         );
@@ -644,7 +644,7 @@ export class Resolver extends DiagnosticEmitter {
     typeArgumentNodes: TypeNode[] | null,
     /** Contextual element. */
     ctxElement: Element,
-    /** Contextual types, i.e. `T`. */
+    /** Contextual types, i.e. `T`. Updated in place with the new set of contextual types. */
     ctxTypes: Map<string,Type> = uniqueMap<string,Type>(),
     /** Alternative report node in case of empty type arguments. */
     alternativeReportNode: Node | null = null,
@@ -675,18 +675,20 @@ export class Resolver extends DiagnosticEmitter {
       return null;
     }
     var typeArguments = new Array<Type>(maxParameterCount);
+    var oldCtxTypes = uniqueMap<string,Type>(ctxTypes);
+    ctxTypes.clear();
     for (let i = 0; i < maxParameterCount; ++i) {
       let type = i < argumentCount
         ? this.resolveType( // reports
             typeArgumentNodes![i],
             ctxElement,
-            ctxTypes,
+            oldCtxTypes, // update
             reportMode
           )
         : this.resolveType( // reports
             assert(typeParameters[i].defaultType),
             ctxElement,
-            ctxTypes,
+            uniqueMap<string,Type>(ctxTypes), // don't update
             reportMode
           );
       if (!type) return null;
@@ -2816,7 +2818,7 @@ export class Resolver extends DiagnosticEmitter {
         assert(prototype.typeParameterNodes),
         typeArgumentNodes,
         ctxElement,
-        ctxTypes,
+        ctxTypes, // update
         reportNode,
         reportMode
       );
@@ -3292,7 +3294,7 @@ export class Resolver extends DiagnosticEmitter {
         assert(prototype.typeParameterNodes), // must be present if generic
         typeArgumentNodes,
         ctxElement,
-        ctxTypes,
+        ctxTypes, // update
         reportNode,
         reportMode
       );
