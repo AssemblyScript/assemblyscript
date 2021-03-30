@@ -770,11 +770,19 @@ export class Resolver extends DiagnosticEmitter {
       // apply concrete types to the generic function signature
       let resolvedTypeArguments = new Array<Type>(numTypeParameters);
       for (let i = 0; i < numTypeParameters; ++i) {
-        let name = typeParameterNodes[i].name.text;
+        let typeParameterNode = typeParameterNodes[i];
+        let name = typeParameterNode.name.text;
         if (contextualTypeArguments.has(name)) {
           let inferredType = assert(contextualTypeArguments.get(name));
           if (inferredType != Type.auto) {
             resolvedTypeArguments[i] = inferredType;
+            continue;
+          }
+          let defaultType = typeParameterNode.defaultType;
+          if (defaultType) {
+            let resolvedDefaultType = this.resolveType(defaultType, ctxFlow.actualFunction, contextualTypeArguments, reportMode);
+            if (!resolvedDefaultType) return null;
+            resolvedTypeArguments[i] = resolvedDefaultType;
             continue;
           }
         }
@@ -2249,10 +2257,12 @@ export class Resolver extends DiagnosticEmitter {
           if (numNullLiterals == length) { // all nulls infers as usize
             elementType = this.program.options.usizeType;
           } else {
-            this.error(
-              DiagnosticCode.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
-              node.range, "T"
-            );
+            if (reportMode == ReportMode.REPORT) {
+              this.error(
+                DiagnosticCode.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
+                node.range, "T"
+              );
+            }
             return null;
           }
         }
@@ -2263,6 +2273,16 @@ export class Resolver extends DiagnosticEmitter {
           elementType = elementType.asNullable();
         }
         return assert(this.resolveClass(this.program.arrayPrototype, [ elementType ]));
+      }
+      case LiteralKind.OBJECT: {
+        if (ctxType.isClass) return ctxType.classReference;
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Expression_cannot_be_represented_by_a_type,
+            node.range
+          );
+        }
+        return null;
       }
     }
     assert(false);
