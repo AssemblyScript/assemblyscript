@@ -33,8 +33,11 @@ import { CharCode } from "./string";
   1, /* skip 191 always set to '0' tail slots */
 ]);
 
-export function encode(dst: usize, src: usize, len: usize, table: usize): usize {
+export function encode(src: usize, len: usize, table: usize): usize {
+  if (!len) return src;
+
   var i: usize = 0, offset: usize = 0, outSize = len << 1;
+  var dst = __new(outSize, idof<String>());
 
   while (i < len) {
     let org = i;
@@ -120,8 +123,11 @@ export function encode(dst: usize, src: usize, len: usize, table: usize): usize 
   return dst;
 }
 
-export function decode(dst: usize, src: usize, len: usize, component: bool): usize {
+export function decode(src: usize, len: usize, component: bool): usize {
+  if (!len) return src;
+
   var i: usize = 0, offset: usize = 0, org: usize, ch: u32 = 0;
+  var dst = __new(len << 1, idof<String>());
 
   while (i < len) {
     org = i;
