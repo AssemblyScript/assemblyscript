@@ -649,6 +649,9 @@ export namespace BuiltinNames {
   export const Float32Array = "~lib/typedarray/Float32Array";
   export const Float64Array = "~lib/typedarray/Float64Array";
 
+  // std/string.ts
+  export const String_raw = "~lib/string/String.raw";
+
   // std/bindings/wasi.ts
   export const wasiAbort = "~lib/wasi/index/abort";
   export const wasiTrace = "~lib/wasi/index/trace";
@@ -3336,6 +3339,19 @@ function builtin_function_call(ctx: BuiltinContext): ExpressionRef {
   return compiler.compileCallIndirect(signature, functionArg, ctx.operands, ctx.reportNode, thisArg, ctx.contextualType == Type.void);
 }
 function_builtins.set("call", builtin_function_call);
+
+// String.raw(parts: TemplateStringsArray, ...values: unknown[]): string
+function builtin_string_raw(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  compiler.currentType = ctx.compiler.program.stringInstance.type;
+  compiler.error(
+    DiagnosticCode.Not_implemented_0,
+    ctx.reportNode.range, "String.raw"
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.String_raw, builtin_string_raw);
 
 // === Portable type conversions ==============================================================
 

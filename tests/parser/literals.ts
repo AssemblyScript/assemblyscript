@@ -56,10 +56,31 @@
 1.0e+1;
 1e-1;
 1.0e-1;
+"";
+"\"";
 "123";
 "1\"23";
 "1\"2\\3";
 "\0\n\\n\r";
+``;
+`123`;
+`123${a}`;
+`123${a}456`;
+`123${a}456${b}`;
+`123${a}456${b}789`;
+`${a}`;
+`${a}456`;
+`${a}456${b}`;
+`${a}456${b}789`;
+`${a}${b}`;
+`${a}456${b}`;
+`123${a}${b}`;
+`${a}${b}789`;
+`\``;
+`\`${a}\`${b}\``;
+tag`123`;
+ns.tag`123`;
+tag`\unicode\xGG\u\x`; // see https://tc39.es/proposal-template-literal-revision/
 
 // invalid
 1..;
@@ -70,7 +91,7 @@
 7_;
 1.a;
 2.0b;
-`123`;
+`\unicode\xGG\u\x`;
 
 // technically invalid, but not handled by AS yet, TS1005: ';' expected
 3 4;

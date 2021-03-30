@@ -449,6 +449,8 @@ export class Program extends DiagnosticEmitter {
   diagnosticsOffset: i32 = 0;
   /** Special native code source. */
   nativeSource: Source;
+  /** Special native code range. */
+  get nativeRange(): Range { return this.nativeSource.range; }
   /** Special native code file. */
   nativeFile!: File;
   /** Next class id. */
@@ -628,6 +630,22 @@ export class Program extends DiagnosticEmitter {
     return cached;
   }
   private _stringInstance: Class | null = null;
+
+  /** Gets the standard `Object` instance. */
+  get objectInstance(): Class {
+    var cached = this._objectInstance;
+    if (!cached) this._objectInstance = cached = this.requireClass(CommonNames.Object);
+    return cached;
+  }
+  private _objectInstance: Class | null = null;
+
+  /** Gets the standard `TemplateStringsArray` instance. */
+  get templateStringsArrayInstance(): Class {
+    var cached = this._templateStringsArrayInstance;
+    if (!cached) this._templateStringsArrayInstance = cached = this.requireClass(CommonNames.TemplateStringsArray);
+    return cached;
+  }
+  private _templateStringsArrayInstance: Class | null = null;
 
   /** Gets the standard `abort` instance, if not explicitly disabled. */
   get abortInstance(): Function | null {
@@ -4324,6 +4342,18 @@ export class Class extends TypedElement {
   /* @override */
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
+  }
+
+  /** Gets the method of the specified name, resolved with the given type arguments. */
+  getMethod(name: string, typeArguments: Type[] | null = null): Function | null {
+    var members = this.members;
+    if (members !== null && members.has(name)) {
+      let bound = changetype<Element>(members.get(name));
+      if (bound.kind == ElementKind.FUNCTION_PROTOTYPE) {
+        return this.program.resolver.resolveFunction(<FunctionPrototype>bound, typeArguments);
+      }
+    }
+    return null;
   }
 
   /** Calculates the memory offset of the specified field. */
