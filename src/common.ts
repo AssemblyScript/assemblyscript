@@ -178,6 +178,9 @@ export namespace CommonNames {
   export const ASC_FEATURE_MULTI_VALUE = "ASC_FEATURE_MULTI_VALUE";
   export const ASC_FEATURE_GC = "ASC_FEATURE_GC";
   export const ASC_FEATURE_MEMORY64 = "ASC_FEATURE_MEMORY64";
+  export const ASC_VERSION_MAJOR = "ASC_VERSION_MAJOR";
+  export const ASC_VERSION_MINOR = "ASC_VERSION_MINOR";
+  export const ASC_VERSION_PATCH = "ASC_VERSION_PATCH";
   // classes
   export const I8 = "I8";
   export const I16 = "I16";

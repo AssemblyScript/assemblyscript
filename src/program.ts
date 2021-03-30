@@ -1021,6 +1021,12 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.lowMemoryLimit, 0));
     this.registerConstantInteger(CommonNames.ASC_EXPORT_RUNTIME, Type.bool,
       i64_new(options.exportRuntime ? 1 : 0, 0));
+    this.registerConstantInteger(CommonNames.ASC_VERSION_MAJOR, Type.i32,
+      i64_new(options.bundleMajorVersion));
+    this.registerConstantInteger(CommonNames.ASC_VERSION_MINOR, Type.i32,
+      i64_new(options.bundleMinorVersion));
+    this.registerConstantInteger(CommonNames.ASC_VERSION_PATCH, Type.i32,
+      i64_new(options.bundlePatchVersion));
 
     // register feature hints
     this.registerConstantInteger(CommonNames.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
@@ -3092,8 +3098,8 @@ export class File extends Element {
 
   /** Creates an imported namespace from this file. */
   asAliasNamespace(
-    name: string, 
-    parent: Element, 
+    name: string,
+    parent: Element,
     localIdentifier: IdentifierExpression
   ): Namespace {
     var declaration = this.program.makeNativeNamespaceDeclaration(name);
