@@ -88,6 +88,8 @@ export function encode(src: usize, len: usize, table: usize): usize {
 
     let estSize = offset + (c < 0x80 ? 1 * 6 : 4 * 6);
     if (estSize > outSize) {
+      // doubling estimated size but only for greater than one
+      // input lenght due to we already estemated it for worst case
       outSize = len > 1 ? estSize << 1 : estSize;
       dst = __renew(dst, outSize);
     }
@@ -126,11 +128,11 @@ export function encode(src: usize, len: usize, table: usize): usize {
 export function decode(src: usize, len: usize, component: bool): usize {
   if (!len) return src;
 
-  var i: usize = 0, offset: usize = 0, org: usize, ch: u32 = 0;
+  var i: usize = 0, offset: usize = 0, ch: u32 = 0;
   var dst = __new(len << 1, idof<String>());
 
   while (i < len) {
-    org = i;
+    let org = i;
     while (i < len && (ch = load<u16>(src + (i << 1))) != CharCode.PERCENT) i++;
 
     if (i > org) {
@@ -219,12 +221,13 @@ function storeHex(dst: usize, offset: usize, ch: u32): void {
     0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46
   ]);
 
-  let hex =
-    <u32>load<u8>(HEX_CHARS + (ch >> 4 & 0x0F)) |
-    <u32>load<u8>(HEX_CHARS + (ch      & 0x0F)) << 16;
-
   store<u16>(dst + offset, CharCode.PERCENT, 0); // %
-  store<u32>(dst + offset, hex, 2); // XX
+  store<u32>(
+    dst + offset,
+    <u32>load<u8>(HEX_CHARS + (ch >> 4 & 0x0F)) |
+    <u32>load<u8>(HEX_CHARS + (ch      & 0x0F)) << 16,
+    2
+  ); // XX
 }
 
 function loadHex(src: usize, offset: usize): u32 {

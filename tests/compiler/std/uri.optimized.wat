@@ -2022,6 +2022,13 @@
   local.get $3
  )
  (func $~lib/util/uri/storeHex (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  local.get $1
+  i32.add
+  local.tee $0
+  i32.const 37
+  i32.store16
+  local.get $0
   local.get $2
   i32.const 4
   i32.shr_u
@@ -2039,15 +2046,6 @@
   i32.const 16
   i32.shl
   i32.or
-  local.set $2
-  local.get $0
-  local.get $1
-  i32.add
-  local.tee $0
-  i32.const 37
-  i32.store16
-  local.get $0
-  local.get $2
   i32.store offset=2
  )
  (func $~lib/util/uri/encode (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -2728,7 +2726,7 @@
      if
       i32.const 1584
       i32.const 1632
-      i32.const 158
+      i32.const 160
       i32.const 7
       call $~lib/builtins/abort
       unreachable
@@ -2843,7 +2841,7 @@
          if
           i32.const 1584
           i32.const 1632
-          i32.const 181
+          i32.const 183
           i32.const 11
           call $~lib/builtins/abort
           unreachable
@@ -2900,7 +2898,7 @@
       if
        i32.const 1584
        i32.const 1632
-       i32.const 192
+       i32.const 194
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -2957,7 +2955,7 @@
   if
    i32.const 0
    i32.const 1632
-   i32.const 208
+   i32.const 210
    i32.const 3
    call $~lib/builtins/abort
    unreachable
