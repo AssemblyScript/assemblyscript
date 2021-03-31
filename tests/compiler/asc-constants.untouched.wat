@@ -19,9 +19,6 @@
  (global $~lib/ASC_FEATURE_MULTI_VALUE i32 (i32.const 0))
  (global $~lib/ASC_FEATURE_GC i32 (i32.const 0))
  (global $~lib/ASC_FEATURE_MEMORY64 i32 (i32.const 0))
- (global $~lib/ASC_VERSION_MAJOR i32 (i32.const 0))
- (global $~lib/ASC_VERSION_MINOR i32 (i32.const 0))
- (global $~lib/ASC_VERSION_PATCH i32 (i32.const 0))
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
@@ -62,11 +59,11 @@
   drop
   i32.const 0
   drop
-  i32.const 0
+  i32.const 1
   drop
-  i32.const 0
+  i32.const 1
   drop
-  i32.const 0
+  i32.const 1
   drop
  )
  (func $~start
