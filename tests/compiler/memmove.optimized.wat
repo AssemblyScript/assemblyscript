@@ -182,7 +182,7 @@
    end
   end
  )
- (func $start:memmove
+ (func $~start
   i32.const 8
   i64.const 1229782938247303441
   i64.store
@@ -357,8 +357,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  call $start:memmove
  )
 )

@@ -11,6 +11,7 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $~start
+  (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -27,9 +28,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 0
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1056
   i32.store
   i32.const 1056

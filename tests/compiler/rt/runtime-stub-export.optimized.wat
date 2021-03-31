@@ -53,7 +53,7 @@
    unreachable
   end
   global.get $~lib/rt/stub/offset
-  global.get $~lib/rt/stub/offset
+  local.tee $6
   i32.const 4
   i32.add
   local.tee $4
@@ -108,6 +108,7 @@
   end
   local.get $2
   global.set $~lib/rt/stub/offset
+  local.get $6
   local.get $7
   i32.store
   local.get $4

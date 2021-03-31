@@ -3,7 +3,6 @@
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
@@ -102,7 +101,7 @@
   i32.load offset=16
   i32.const 1
   i32.shr_u
-  local.tee $2
+  local.tee $4
   local.get $1
   i32.const 20
   i32.sub
@@ -116,36 +115,41 @@
   end
   block $__inlined_func$~lib/util/string/compareImpl (result i32)
    local.get $0
-   local.tee $3
-   i32.const 7
-   i32.and
+   local.set $2
    local.get $1
-   i32.const 7
-   i32.and
-   i32.or
-   i32.eqz
-   i32.const 0
-   local.get $2
+   local.set $3
+   local.get $4
    local.tee $0
    i32.const 4
    i32.ge_u
-   select
+   if (result i32)
+    local.get $2
+    i32.const 7
+    i32.and
+    local.get $3
+    i32.const 7
+    i32.and
+    i32.or
+    i32.eqz
+   else
+    i32.const 0
+   end
    if
     loop $do-continue|0
-     local.get $3
+     local.get $2
      i64.load
-     local.get $1
+     local.get $3
      i64.load
      i64.eq
      if
+      local.get $2
+      i32.const 8
+      i32.add
+      local.set $2
       local.get $3
       i32.const 8
       i32.add
       local.set $3
-      local.get $1
-      i32.const 8
-      i32.add
-      local.set $1
       local.get $0
       i32.const 4
       i32.sub
@@ -158,54 +162,39 @@
    end
    loop $while-continue|1
     local.get $0
-    local.tee $2
+    local.tee $1
     i32.const 1
     i32.sub
     local.set $0
-    local.get $2
+    local.get $1
     if
-     local.get $3
+     local.get $2
      i32.load16_u
-     local.tee $2
-     local.get $1
+     local.tee $1
+     local.get $3
      i32.load16_u
      local.tee $4
      i32.ne
      if
-      local.get $2
+      local.get $1
       local.get $4
       i32.sub
       br $__inlined_func$~lib/util/string/compareImpl
      end
+     local.get $2
+     i32.const 2
+     i32.add
+     local.set $2
      local.get $3
      i32.const 2
      i32.add
      local.set $3
-     local.get $1
-     i32.const 2
-     i32.add
-     local.set $1
      br $while-continue|1
     end
    end
    i32.const 0
   end
   i32.eqz
- )
- (func $~lib/atomics/Atomics.isLockFree (param $0 i32) (result i32)
-  i32.const 1
-  local.get $0
-  i32.const 4
-  i32.eq
-  i32.const 1
-  local.get $0
-  i32.const 2
-  i32.eq
-  local.get $0
-  i32.const 1
-  i32.eq
-  select
-  select
  )
  (func $start:builtins~anonymous|1
   nop
@@ -217,6 +206,7 @@
   call $start:builtins
  )
  (func $start:builtins
+  (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.sub
@@ -233,9 +223,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i64.const 0
   i64.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 0
   i32.store offset=8
   i32.const 31
@@ -593,9 +584,10 @@
   i32.const 1168
   i32.store offset=8
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1056
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1056
   i32.store offset=4
   i32.const 1056
@@ -620,9 +612,10 @@
   i32.const 1168
   i32.store offset=8
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1200
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1200
   i32.store offset=4
   i32.const 1200
@@ -706,82 +699,6 @@
   i32.const 8
   f64.const 1
   f64.store
-  i32.const 0
-  call $~lib/atomics/Atomics.isLockFree
-  if
-   i32.const 0
-   i32.const 1120
-   i32.const 494
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  call $~lib/atomics/Atomics.isLockFree
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1120
-   i32.const 495
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 2
-  call $~lib/atomics/Atomics.isLockFree
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1120
-   i32.const 496
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 3
-  call $~lib/atomics/Atomics.isLockFree
-  if
-   i32.const 0
-   i32.const 1120
-   i32.const 497
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 4
-  call $~lib/atomics/Atomics.isLockFree
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1120
-   i32.const 498
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 5
-  call $~lib/atomics/Atomics.isLockFree
-  if
-   i32.const 0
-   i32.const 1120
-   i32.const 499
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 8
-  call $~lib/atomics/Atomics.isLockFree
-  if
-   i32.const 0
-   i32.const 1120
-   i32.const 500
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   global.get $~lib/memory/__stack_pointer
   i32.const 1280
   i32.store
@@ -794,9 +711,10 @@
   f64.const 24
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1376
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1376
   i32.store offset=4
   i32.const 1376
@@ -812,9 +730,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1376
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1376
   i32.store offset=4
   i32.const 1376
@@ -830,9 +749,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1424
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1424
   i32.store offset=4
   i32.const 1424
@@ -848,9 +768,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1456
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1456
   i32.store offset=4
   i32.const 1456
@@ -866,9 +787,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1488
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1488
   i32.store offset=4
   i32.const 1488
@@ -884,9 +806,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1520
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1520
   i32.store offset=4
   i32.const 1520
@@ -902,9 +825,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1552
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1552
   i32.store offset=4
   i32.const 1552
@@ -920,9 +844,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1584
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1584
   i32.store offset=4
   i32.const 1584
@@ -938,9 +863,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1616
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1616
   i32.store offset=4
   i32.const 1616
@@ -956,9 +882,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1648
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1648
   i32.store offset=4
   i32.const 1648
@@ -974,9 +901,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1680
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1680
   i32.store offset=4
   i32.const 1680
@@ -992,9 +920,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1712
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1712
   i32.store offset=4
   i32.const 1712
@@ -1010,9 +939,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1744
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1744
   i32.store offset=4
   i32.const 1744
@@ -1028,9 +958,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1776
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1776
   i32.store offset=4
   i32.const 1776
@@ -1046,9 +977,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1808
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1808
   i32.store offset=4
   i32.const 1808
@@ -1064,9 +996,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1840
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1840
   i32.store offset=4
   i32.const 1840
@@ -1082,9 +1015,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1872
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1872
   i32.store offset=4
   i32.const 1872
@@ -1100,9 +1034,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1904
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1904
   i32.store offset=4
   i32.const 1904
@@ -1118,9 +1053,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1456
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1456
   i32.store offset=4
   i32.const 1456
@@ -1136,9 +1072,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1376
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1376
   i32.store offset=4
   i32.const 1376

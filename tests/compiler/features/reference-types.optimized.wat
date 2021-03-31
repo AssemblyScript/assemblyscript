@@ -31,7 +31,13 @@
  (func $features/reference-types/someFunc
   nop
  )
- (func $start:features/reference-types
+ (func $features/reference-types/internal (param $0 externref) (result externref)
+  local.get $0
+  call $features/reference-types/external
+  call $features/reference-types/external
+  call $features/reference-types/external
+ )
+ (func $~start
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
@@ -149,14 +155,5 @@
   end
   global.get $features/reference-types/funcGlobal
   global.set $features/reference-types/anyGlobal
- )
- (func $features/reference-types/internal (param $0 externref) (result externref)
-  local.get $0
-  call $features/reference-types/external
-  call $features/reference-types/external
-  call $features/reference-types/external
- )
- (func $~start
-  call $start:features/reference-types
  )
 )

@@ -1,7 +1,6 @@
 (module
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 0)
@@ -25,7 +24,12 @@
  (export "testLogicalOrMulti" (func $export:possibly-null/testLogicalAndMulti))
  (export "testAssign" (func $export:possibly-null/testLogicalAndMulti))
  (export "testNeverNull" (func $export:possibly-null/testTrue))
- (func $~stack_check
+ (func $export:possibly-null/testTrue (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
   i32.const 1024
   i32.lt_s
@@ -37,17 +41,11 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $export:possibly-null/testTrue (param $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
+  local.tee $1
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $1
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
@@ -57,7 +55,17 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 1024
+  i32.lt_s
+  if
+   i32.const 17440
+   i32.const 17488
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   local.get $0
   i32.store
@@ -75,15 +83,27 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $export:possibly-null/testWhile2 (param $0 i32) (param $1 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  call $~stack_check
   global.get $~lib/memory/__stack_pointer
+  i32.const 1024
+  i32.lt_s
+  if
+   i32.const 17440
+   i32.const 17488
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $2
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $2
   local.get $1
   i32.store offset=4
   loop $while-continue|0
@@ -100,15 +120,27 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $export:possibly-null/testWhile3 (param $0 i32) (param $1 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  call $~stack_check
   global.get $~lib/memory/__stack_pointer
+  i32.const 1024
+  i32.lt_s
+  if
+   i32.const 17440
+   i32.const 17488
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $2
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $2
   local.get $1
   i32.store offset=4
   loop $while-continue|0
@@ -128,18 +160,30 @@
   global.set $~lib/memory/__stack_pointer
  )
  (func $export:possibly-null/testLogicalAndMulti (param $0 i32) (param $1 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  call $~stack_check
   global.get $~lib/memory/__stack_pointer
+  i32.const 1024
+  i32.lt_s
+  if
+   i32.const 17440
+   i32.const 17488
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $2
   local.get $0
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $2
   local.get $1
   i32.store offset=4
-  global.get $~lib/memory/__stack_pointer
+  local.get $2
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer

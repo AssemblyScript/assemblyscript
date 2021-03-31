@@ -37,37 +37,11 @@
   i32.add
   i32.add
  )
- (func $start:call-optional
+ (func $~start
   i32.const 1
   global.set $~argumentsLength
-  i32.const 3
-  i32.const 0
-  i32.const 0
-  call $call-optional/opt@varargs
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 2
   global.set $~argumentsLength
-  i32.const 3
-  i32.const 4
-  i32.const 0
-  call $call-optional/opt@varargs
-  i32.const 5
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 5
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 1
   global.set $~argumentsLength
   i32.const 3
@@ -120,8 +94,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  call $start:call-optional
  )
 )

@@ -172,8 +172,8 @@
    local.set $2
    local.get $1
    i64.extend_i32_u
-   local.get $1
-   i64.extend_i32_u
+   local.tee $4
+   local.get $4
    i64.const 32
    i64.shl
    i64.or
@@ -208,7 +208,7 @@
    end
   end
  )
- (func $start:memset
+ (func $~start
   i32.const 17468
   global.set $memset/dest
   i32.const 17468
@@ -293,8 +293,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  call $start:memset
  )
 )
