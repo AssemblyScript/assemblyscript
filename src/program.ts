@@ -1723,38 +1723,42 @@ export class Program extends DiagnosticEmitter {
     queuedExports: Map<File,Map<string,QueuedExport>>
   ): DeclaredElement | null {
     do {
-      // search already resolved exports
+      // check if already resolved
       let element = foreignFile.lookupExport(foreignName);
       if (element) return element;
 
-      // otherwise traverse queued exports
+      // follow queued exports
       if (queuedExports.has(foreignFile)) {
         let fileQueuedExports = assert(queuedExports.get(foreignFile));
         if (fileQueuedExports.has(foreignName)) {
           let queuedExport = assert(fileQueuedExports.get(foreignName));
           let queuedExportForeignPath = queuedExport.foreignPath;
-          if (queuedExportForeignPath) { // imported from another file
+
+          // re-exported from another file
+          if (queuedExportForeignPath) {
             let otherFile = this.lookupForeignFile(queuedExportForeignPath, assert(queuedExport.foreignPathAlt));
-            if (!otherFile) return null; // no such file
+            if (!otherFile) return null;
             foreignName = queuedExport.localIdentifier.text;
             foreignFile = otherFile;
             continue;
-          } else { // local element of this file
-            element = foreignFile.lookupInSelf(queuedExport.localIdentifier.text);
-            if (element) return element;
           }
-        }
-      }
-      // and star exports
-      let exportsStar = foreignFile.exportsStar;
-      if (exportsStar) {
-        for (let i = 0, k = exportsStar.length; i < k; ++i) {
-          element = this.lookupForeign(foreignName, exportsStar[i], queuedExports);
+
+          // exported from this file
+          element = foreignFile.lookupInSelf(queuedExport.localIdentifier.text);
           if (element) return element;
         }
       }
       break;
     } while (true);
+
+    // follow star exports
+    var exportsStar = foreignFile.exportsStar;
+    if (exportsStar) {
+      for (let i = 0, k = exportsStar.length; i < k; ++i) {
+        let element = this.lookupForeign(foreignName, exportsStar[i], queuedExports);
+        if (element) return element;
+      }
+    }
     return null;
   }
 
