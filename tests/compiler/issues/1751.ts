@@ -1,1 +1,1 @@
-import { Foo } from './1751/reexport';
+import { Foo } from './1751/_reexport';
