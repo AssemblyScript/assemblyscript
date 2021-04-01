@@ -90,6 +90,12 @@ declare const ASC_FEATURE_MULTI_VALUE: bool;
 declare const ASC_FEATURE_GC: bool;
 /** Whether the memory64 feature is enabled. */
 declare const ASC_FEATURE_MEMORY64: bool;
+/** Major version of the compiler. */
+declare const ASC_VERSION_MAJOR: i32;
+/** Minor version of the compiler. */
+declare const ASC_VERSION_MINOR: i32;
+/** Patch version of the compiler. */
+declare const ASC_VERSION_PATCH: i32;
 
 // Builtins
 

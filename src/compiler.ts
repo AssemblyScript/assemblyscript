@@ -251,6 +251,12 @@ export class Options {
   exportRuntime: bool = false;
   /** Stack size in bytes, if using a stack. */
   stackSize: i32 = 0;
+  /** Semantic major bundle version from root package.json */
+  bundleMajorVersion: i32 = 0;
+  /** Semantic minor bundle version from root package.json */
+  bundleMinorVersion: i32 = 0;
+  /** Semantic patch bundle version from root package.json */
+  bundlePatchVersion: i32 = 0;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -1509,7 +1515,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!this.compileFunctionBody(instance, stmts)) {
         stmts.push(module.unreachable());
       }
-     
+
       this.currentFlow = previousFlow;
 
       // create the function
@@ -7533,7 +7539,7 @@ export class Compiler extends DiagnosticEmitter {
         expr = module.local_tee(local.index, expr, ftype.isManaged);
       }
     }
-    
+
     return expr;
   }
 

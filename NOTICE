@@ -36,6 +36,7 @@ under the licensing terms detailed in LICENSE:
 * Peter Salomonsen <petersalomonsen@runbox.com>
 * ookangzheng <git-ed@runbox.no>
 * yjhmelody <yjh465402634@gmail.com>
+* bnbarak <bn.barak@gmail.com>
 
 Portions of this software are derived from third-party works licensed under
 the following terms:
@@ -61,6 +62,6 @@ the following terms:
   The 3-Clause BSD License (https://opensource.org/licenses/BSD-3-Clause)
 
 * Arm Optimized Routines: https://github.com/ARM-software/optimized-routines
-  
+
   Copyright (c) Arm Limited
   The MIT License (https://opensource.org/licenses/MIT)
