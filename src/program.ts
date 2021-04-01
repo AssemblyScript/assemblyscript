@@ -1141,11 +1141,12 @@ export class Program extends DiagnosticEmitter {
         let queuedImport = queuedImports[i];
         let localIdentifier = queuedImport.localIdentifier;
         let foreignIdentifier = queuedImport.foreignIdentifier;
+        // File must be found here, as it would otherwise already have been reported by the parser
+        let foreignFile = assert(this.lookupForeignFile(queuedImport.foreignPath, queuedImport.foreignPathAlt));
         if (foreignIdentifier) { // i.e. import { foo [as bar] } from "./baz"
           let element = this.lookupForeign(
             foreignIdentifier.text,
-            queuedImport.foreignPath,
-            queuedImport.foreignPathAlt,
+            foreignFile,
             queuedExports
           );
           if (element) {
@@ -1160,25 +1161,19 @@ export class Program extends DiagnosticEmitter {
             ++i;
           }
         } else { // i.e. import * as bar from "./bar"
-          let foreignFile = this.lookupForeignFile(queuedImport.foreignPath, queuedImport.foreignPathAlt);
-          if (foreignFile) {
-            let localFile = queuedImport.localFile;
-            let localName = localIdentifier.text;
-            localFile.add(
+          let localFile = queuedImport.localFile;
+          let localName = localIdentifier.text;
+          localFile.add(
+            localName,
+            foreignFile.asAliasNamespace(
               localName,
-              foreignFile.asAliasNamespace(
-                localName,
-                localFile,
-                localIdentifier
-              ),
-              localIdentifier // isImport
-            );
-            queuedImports.splice(i, 1);
-            madeProgress = true;
-          } else {
-            ++i;
-            assert(false); // already reported by the parser not finding the file
-          }
+              localFile,
+              localIdentifier
+            ),
+            localIdentifier // isImport
+          );
+          queuedImports.splice(i, 1);
+          madeProgress = true;
         }
       }
       if (!madeProgress) {
@@ -1209,12 +1204,9 @@ export class Program extends DiagnosticEmitter {
         let localName = queuedExport.localIdentifier.text;
         let foreignPath = queuedExport.foreignPath;
         if (foreignPath) { // i.e. export { foo [as bar] } from "./baz"
-          let element = this.lookupForeign(
-            localName,
-            foreignPath,
-            assert(queuedExport.foreignPathAlt), // must be set if foreignPath is
-            queuedExports
-          );
+          // File must be found here, as it would otherwise already have been reported by the parser
+          let foreignFile = assert(this.lookupForeignFile(foreignPath, assert(queuedExport.foreignPathAlt)));
+          let element = this.lookupForeign(localName, foreignFile, queuedExports);
           if (element) {
             file.ensureExport(exportName, element);
           } else {
@@ -1725,17 +1717,12 @@ export class Program extends DiagnosticEmitter {
   private lookupForeign(
     /** Identifier within the other file. */
     foreignName: string,
-    /** Normalized path to the other file. */
-    foreignPath: string,
-    /** Alternative normalized path to the other file. */
-    foreignPathAlt: string,
+    /** The other file. */
+    foreignFile: File,
     /** So far queued exports. */
     queuedExports: Map<File,Map<string,QueuedExport>>
   ): DeclaredElement | null {
     do {
-      let foreignFile = this.lookupForeignFile(foreignPath, foreignPathAlt);
-      if (!foreignFile) return null; // no such file
-
       // search already resolved exports
       let element = foreignFile.lookupExport(foreignName);
       if (element) return element;
@@ -1747,14 +1734,23 @@ export class Program extends DiagnosticEmitter {
           let queuedExport = assert(fileQueuedExports.get(foreignName));
           let queuedExportForeignPath = queuedExport.foreignPath;
           if (queuedExportForeignPath) { // imported from another file
+            let otherFile = this.lookupForeignFile(queuedExportForeignPath, assert(queuedExport.foreignPathAlt));
+            if (!otherFile) return null; // no such file
             foreignName = queuedExport.localIdentifier.text;
-            foreignPath = queuedExportForeignPath;
-            foreignPathAlt = assert(queuedExport.foreignPathAlt);
+            foreignFile = otherFile;
             continue;
           } else { // local element of this file
             element = foreignFile.lookupInSelf(queuedExport.localIdentifier.text);
             if (element) return element;
           }
+        }
+      }
+      // and star exports
+      let exportsStar = foreignFile.exportsStar;
+      if (exportsStar) {
+        for (let i = 0, k = exportsStar.length; i < k; ++i) {
+          element = this.lookupForeign(foreignName, exportsStar[i], queuedExports);
+          if (element) return element;
         }
       }
       break;
@@ -2334,10 +2330,13 @@ export class Program extends DiagnosticEmitter {
       : foreignPath + INDEX_SUFFIX;
 
     // resolve right away if the element exists
-    var element = this.lookupForeign(declaration.foreignName.text, foreignPath, foreignPathAlt, queuedExports);
-    if (element) {
-      parent.add(declaration.name.text, element, declaration.name /* isImport */);
-      return;
+    var foreignFile = this.lookupForeignFile(foreignPath, foreignPathAlt);
+    if (foreignFile) {
+      var element = this.lookupForeign(declaration.foreignName.text, foreignFile, queuedExports);
+      if (element) {
+        parent.add(declaration.name.text, element, declaration.name /* isImport */);
+        return;
+      }
     }
 
     // otherwise queue it
