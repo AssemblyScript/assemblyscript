@@ -55,17 +55,12 @@ export function encode(src: usize, len: usize, table: usize): usize {
         outSize = offset + size;
         dst = __renew(dst, outSize);
       }
-      if (size == 2) {
-        store<u16>(dst + offset, load<u16>(src + (org << 1)));
-      } else if (size == 4) {
-        store<u32>(dst + offset, load<u32>(src + (org << 1)));
-      } else {
-        memory.copy(
-          dst + offset,
-          src + (org << 1),
-          size
-        );
-      }
+      // TODO: should we optimize for short cases like 2 byte size?
+      memory.copy(
+        dst + offset,
+        src + (org << 1),
+        size
+      );
       offset += size;
       if (i >= len) break;
     }
@@ -137,17 +132,12 @@ export function decode(src: usize, len: usize, component: bool): usize {
 
     if (i > org) {
       let size = i - org << 1;
-      if (size == 2) {
-        store<u16>(dst + offset, load<u16>(src + (org << 1)));
-      } else if (size == 4) {
-        store<u32>(dst + offset, load<u32>(src + (org << 1)));
-      } else {
-        memory.copy(
-          dst + offset,
-          src + (org << 1),
-          size
-        );
-      }
+      // TODO: should we optimize for short cases like 2 byte size?
+      memory.copy(
+        dst + offset,
+        src + (org << 1),
+        size
+      );
       offset += size;
       if (i >= len) break;
     }

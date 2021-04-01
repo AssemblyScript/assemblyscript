@@ -3822,48 +3822,16 @@
        call $~lib/rt/itcms/__renew
        local.set $6
       end
+      local.get $6
+      local.get $4
+      i32.add
+      local.get $0
+      local.get $8
+      i32.const 1
+      i32.shl
+      i32.add
       local.get $11
-      i32.const 2
-      i32.eq
-      if
-       local.get $6
-       local.get $4
-       i32.add
-       local.get $0
-       local.get $8
-       i32.const 1
-       i32.shl
-       i32.add
-       i32.load16_u
-       i32.store16
-      else
-       local.get $11
-       i32.const 4
-       i32.eq
-       if
-        local.get $6
-        local.get $4
-        i32.add
-        local.get $0
-        local.get $8
-        i32.const 1
-        i32.shl
-        i32.add
-        i32.load
-        i32.store
-       else
-        local.get $6
-        local.get $4
-        i32.add
-        local.get $0
-        local.get $8
-        i32.const 1
-        i32.shl
-        i32.add
-        local.get $11
-        call $~lib/memory/memory.copy
-       end
-      end
+      call $~lib/memory/memory.copy
       local.get $4
       local.get $11
       i32.add
@@ -3892,7 +3860,7 @@
       if
        i32.const 560
        i32.const 608
-       i32.const 75
+       i32.const 70
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -3907,7 +3875,7 @@
        if
         i32.const 560
         i32.const 608
-        i32.const 79
+        i32.const 74
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -3935,7 +3903,7 @@
        if
         i32.const 560
         i32.const 608
-        i32.const 83
+        i32.const 78
         i32.const 11
         call $~lib/builtins/abort
         unreachable
@@ -4424,48 +4392,16 @@
       i32.const 1
       i32.shl
       local.set $9
+      local.get $6
+      local.get $4
+      i32.add
+      local.get $0
+      local.get $8
+      i32.const 1
+      i32.shl
+      i32.add
       local.get $9
-      i32.const 2
-      i32.eq
-      if
-       local.get $6
-       local.get $4
-       i32.add
-       local.get $0
-       local.get $8
-       i32.const 1
-       i32.shl
-       i32.add
-       i32.load16_u
-       i32.store16
-      else
-       local.get $9
-       i32.const 4
-       i32.eq
-       if
-        local.get $6
-        local.get $4
-        i32.add
-        local.get $0
-        local.get $8
-        i32.const 1
-        i32.shl
-        i32.add
-        i32.load
-        i32.store
-       else
-        local.get $6
-        local.get $4
-        i32.add
-        local.get $0
-        local.get $8
-        i32.const 1
-        i32.shl
-        i32.add
-        local.get $9
-        call $~lib/memory/memory.copy
-       end
-      end
+      call $~lib/memory/memory.copy
       local.get $4
       local.get $9
       i32.add
@@ -4506,7 +4442,7 @@
      if
       i32.const 560
       i32.const 608
-      i32.const 160
+      i32.const 150
       i32.const 7
       call $~lib/builtins/abort
       unreachable
@@ -4637,7 +4573,7 @@
          if
           i32.const 560
           i32.const 608
-          i32.const 183
+          i32.const 173
           i32.const 11
           call $~lib/builtins/abort
           unreachable
@@ -4702,7 +4638,7 @@
       if
        i32.const 560
        i32.const 608
-       i32.const 194
+       i32.const 184
        i32.const 9
        call $~lib/builtins/abort
        unreachable
@@ -4765,7 +4701,7 @@
   if
    i32.const 0
    i32.const 608
-   i32.const 210
+   i32.const 200
    i32.const 3
    call $~lib/builtins/abort
    unreachable
