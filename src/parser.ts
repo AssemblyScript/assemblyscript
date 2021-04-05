@@ -16,7 +16,6 @@ import {DiagnosticCode, DiagnosticEmitter, DiagnosticMessage} from "./diagnostic
 import {CharCode, normalizePath} from "./util";
 
 import {
-  ArrayLiteralExpression,
   ArrowKind,
   AssertionKind,
   BlockStatement,
@@ -24,10 +23,10 @@ import {
   CallExpression,
   ClassDeclaration,
   ClassExpression,
-  CommaExpression,
   ContinueStatement,
   DeclarationStatement,
-  DecoratorNode, DestructVariableStatement,
+  DecoratorNode,
+  DestructVariableStatement,
   DoStatement,
   EnumDeclaration,
   EnumValueDeclaration,
@@ -70,7 +69,6 @@ import {
   VoidStatement,
   WhileStatement
 } from "./ast";
-import instanceof_ = CommonNames.instanceof_;
 
 /** Represents a dependee. */
 class Dependee {
@@ -908,21 +906,20 @@ export class Parser extends DiagnosticEmitter {
         throw new Error("Destructuring must end with a closing bracket");
       }
       if(tn.skip(Token.EQUALS)) {
-        const arrayExpression = this.parseExpression(tn);
-        if(arrayExpression) {
-          declarations.forEach((dec, index) => {
-            const next = Node.createIntegerLiteralExpression(i64_new(index), tn.range(0, 1));;
-            const expr = Node.createElementAccessExpression(
-              arrayExpression,
-              next,
-              tn.range(startPos, tn.pos)
-            );
-            dec.initializer = expr;
-          });
-          ret = Node.createDestructedVariableStatement(decorators, declarations);
-        } else {
-          throw new Error("results in not an array");
+        let arrayExpression = this.parseExpression(tn);
+        if(!arrayExpression) return null;
+        for(let index = 0; index < declarations.length; index++) {
+          var declaration = declarations[index];
+          var indexExpression = Node.createIntegerLiteralExpression(i64_new(index), tn.range());
+          declaration.initializer = Node.createElementAccessExpression(
+            arrayExpression,
+            indexExpression,
+            tn.range(startPos, tn.pos)
+          );
         }
+
+        ret = Node.createDestructedVariableStatement(decorators, declarations);
+
       } else {
         throw new Error("RHS does not include =");
       }
