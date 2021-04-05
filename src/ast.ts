@@ -725,9 +725,8 @@ export abstract class Node {
   static createDestructedVariableStatement(
     decorators: DecoratorNode[] | null,
     declarations: VariableDeclaration[],
-    ranges: Range[]
   ): DestructVariableStatement {
-    return new DestructVariableStatement(decorators, declarations, ranges);
+    return new DestructVariableStatement(decorators, declarations);
   }
 
   static createVariableDeclaration(
@@ -2317,17 +2316,14 @@ export class VariableStatement extends Statement {
 
 /** Represents a variable statement wrapping {@link VariableDeclaration}s. */
 export class DestructVariableStatement extends Statement {
-  ranges: Range[] = [];
   constructor(
     /** Array of decorators. */
     public decorators: DecoratorNode[] | null,
     /** Array of member declarations. */
     public declarations: VariableDeclaration[],
     /** Source range. */
-    _ranges: Range[]
   ) {
     super(NodeKind.VARIABLE, new Range(0, 0));
-    this.ranges = _ranges;
   }
 }
 

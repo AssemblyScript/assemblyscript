@@ -7,7 +7,7 @@
  * @license Apache-2.0
  */
 
-import {CommonFlags, LIBRARY_PREFIX, PATH_DELIMITER} from "./common";
+import {CommonFlags, CommonNames, LIBRARY_PREFIX, PATH_DELIMITER} from "./common";
 
 import {CommentHandler, IdentifierHandling, isIllegalVariableIdentifier, Range, Token, Tokenizer} from "./tokenizer";
 
@@ -16,6 +16,7 @@ import {DiagnosticCode, DiagnosticEmitter, DiagnosticMessage} from "./diagnostic
 import {CharCode, normalizePath} from "./util";
 
 import {
+  ArrayLiteralExpression,
   ArrowKind,
   AssertionKind,
   BlockStatement,
@@ -69,6 +70,7 @@ import {
   VoidStatement,
   WhileStatement
 } from "./ast";
+import instanceof_ = CommonNames.instanceof_;
 
 /** Represents a dependee. */
 class Dependee {
@@ -895,38 +897,33 @@ export class Parser extends DiagnosticEmitter {
     var ret = null;
     if(tn.skip(Token.OPENBRACKET)) {
       do {
-        const declaration = this.parseVariableDeclaration(tn, flags, decorators, true);
+        const declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor, true); //this.parseVariableDeclaration(tn, flags, decorators, true);
         if(declaration) {
-          declaration.kind = NodeKind.NA;
           declarations.push(declaration);
         } else {
-          // throw error;
+          throw new Error("Failed to get declaration");
         }
       } while (tn.skip(Token.COMMA));
       if(!tn.skip(Token.CLOSEBRACKET)){
-        // Throw error
+        throw new Error("Destructuring must end with a closing bracket");
       }
       if(tn.skip(Token.EQUALS)) {
         const arrayNode = this.parseExpression(tn);
-        if(arrayNode && declarations) {
-          // @ts-ignore
+        if(arrayNode && arrayNode instanceof ArrayLiteralExpression) {
           const expressions = arrayNode.elementExpressions;
-          // @ts-ignore
-          const ranges = expressions.reduce((ranges, exp) => {
-            ranges.push(exp.range);
-            return ranges;
-          }, []);
-
-          declarations.forEach((dec, index) => {
-            dec.initializer = expressions[index];
-          });
-
-          return Node.createDestructedVariableStatement(decorators, declarations, ranges);
+          if(expressions.length !== 0 && expressions.length === declarations.length) {
+            declarations.forEach((dec, index) => {
+              dec.initializer = expressions[index];
+            });
+            ret = Node.createDestructedVariableStatement(decorators, declarations);
+          } else {
+            throw new Error("There is a mismatch between the declarations and the expressions");
+          }
         } else {
-          // throw error;
+          throw new Error("results in not an array");
         }
       } else {
-        // throw error
+        throw new Error("RHS does not include =");
       }
     } else {
       do {
@@ -945,7 +942,8 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     parentFlags: CommonFlags,
     parentDecorators: DecoratorNode[] | null,
-    isFor: bool = false
+    isFor: bool = false,
+    skipInitializer: boolean = false
   ): VariableDeclaration | null {
 
     // before: Identifier (':' Type)? ('=' Expression)?
@@ -983,10 +981,10 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
       initializer = this.parseExpression(tn, Precedence.COMMA + 1);
-      if (!initializer) return null;
+      if (!initializer && !skipInitializer) return null;
     } else if (!isFor) {
       if (flags & CommonFlags.CONST) {
-        if (!(flags & CommonFlags.AMBIENT)) {
+        if (!skipInitializer && !(flags & CommonFlags.AMBIENT)) {
           this.error(
             DiagnosticCode._const_declarations_must_be_initialized,
             identifier.range
@@ -1000,7 +998,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     var range = Range.join(identifier.range, tn.range());
-    if (initializer !== null && (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0) {
+    if (!skipInitializer && initializer !== null && (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
         range

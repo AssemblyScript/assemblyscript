@@ -1579,7 +1579,7 @@ export class ASTBuilder {
     }
   }
 
-  visitVariableStatement(node: VariableStatement | DestructVariableStatement): void {
+  visitVariableStatement(node: VariableStatement): void {
     var decorators = node.decorators;
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
@@ -1587,10 +1587,6 @@ export class ASTBuilder {
       }
     }
     var sb = this.sb;
-    if(node.ranges !== undefined) {
-      var x = 1;
-      x + 1;
-    }
     var declarations = node.declarations;
     var numDeclarations = assert(declarations.length);
     var firstDeclaration = declarations[0];
