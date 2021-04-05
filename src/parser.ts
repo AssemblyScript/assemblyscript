@@ -7,87 +7,67 @@
  * @license Apache-2.0
  */
 
-import {
-  CommonFlags,
-  LIBRARY_PREFIX,
-  PATH_DELIMITER
-} from "./common";
+import {CommonFlags, LIBRARY_PREFIX, PATH_DELIMITER} from "./common";
+
+import {CommentHandler, IdentifierHandling, isIllegalVariableIdentifier, Range, Token, Tokenizer} from "./tokenizer";
+
+import {DiagnosticCode, DiagnosticEmitter, DiagnosticMessage} from "./diagnostics";
+
+import {CharCode, normalizePath} from "./util";
 
 import {
-  Tokenizer,
-  Token,
-  Range,
-  CommentHandler,
-  IdentifierHandling,
-  isIllegalVariableIdentifier
-} from "./tokenizer";
-
-import {
-  DiagnosticCode,
-  DiagnosticEmitter,
-  DiagnosticMessage
-} from "./diagnostics";
-
-import {
-  CharCode,
-  normalizePath
-} from "./util";
-
-import {
-  Node,
-  NodeKind,
-  Source,
-  SourceKind,
-  TypeNode,
-  TypeName,
-  NamedTypeNode,
-  FunctionTypeNode,
   ArrowKind,
-
-  Expression,
   AssertionKind,
-  CallExpression,
-  ClassExpression,
-  FunctionExpression,
-  IdentifierExpression,
-  StringLiteralExpression,
-
-  Statement,
   BlockStatement,
   BreakStatement,
+  CallExpression,
   ClassDeclaration,
+  ClassExpression,
+  CommaExpression,
   ContinueStatement,
   DeclarationStatement,
-  DecoratorNode,
+  DecoratorNode, DestructVariableStatement,
   DoStatement,
   EnumDeclaration,
   EnumValueDeclaration,
   ExportImportStatement,
   ExportMember,
   ExportStatement,
+  Expression,
   ExpressionStatement,
   ForOfStatement,
   FunctionDeclaration,
+  FunctionExpression,
+  FunctionTypeNode,
+  IdentifierExpression,
   IfStatement,
   ImportDeclaration,
   ImportStatement,
   IndexSignatureNode,
+  mangleInternalPath,
+  NamedTypeNode,
   NamespaceDeclaration,
-  ParameterNode,
+  Node,
+  NodeKind,
   ParameterKind,
+  ParameterNode,
   ReturnStatement,
+  Source,
+  SourceKind,
+  Statement,
+  StringLiteralExpression,
   SwitchCase,
   SwitchStatement,
   ThrowStatement,
   TryStatement,
   TypeDeclaration,
+  TypeName,
+  TypeNode,
   TypeParameterNode,
-  VariableStatement,
   VariableDeclaration,
+  VariableStatement,
   VoidStatement,
-  WhileStatement,
-
-  mangleInternalPath
+  WhileStatement
 } from "./ast";
 
 /** Represents a dependee. */
@@ -907,18 +887,55 @@ export class Parser extends DiagnosticEmitter {
     decorators: DecoratorNode[] | null,
     startPos: i32,
     isFor: bool = false
-  ): VariableStatement | null {
+  ): VariableStatement | DestructVariableStatement | null {
 
     // at ('const' | 'let' | 'var'): VariableDeclaration (',' VariableDeclaration)* ';'?
 
     var declarations = new Array<VariableDeclaration>();
-    do {
-      let declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);
-      if (!declaration) return null;
-      declarations.push(declaration);
-    } while (tn.skip(Token.COMMA));
+    var ret = null;
+    if(tn.skip(Token.OPENBRACKET)) {
+      console.log(tn.peek());
+      do {
+        const declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);
+        if(declaration) {
+          declaration.kind = NodeKind.NA;
+          declarations.push(declaration);
+        } else {
+          // throw error;
+        }
+      } while (tn.skip(Token.COMMA));
+      if(!tn.skip(Token.CLOSEBRACKET)){
+         // Throw error
+      }
+      if(tn.skip(Token.EQUALS)) {
+        // Do something
+        const arrayNode = this.parseExpression(tn);
+        // Node.createVariableStatement(decorators, declarations, tn.range(tn.pos));
+        if(arrayNode) {
+          // @ts-ignore
+          const expressions = arrayNode.elementExpressions;
+          // @ts-ignore
+          const ranges = expressions.reduce((ranges, exp) => {
+            ranges.push(exp.range);
+            return ranges;
+          }, []);
 
-    var ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
+          return Node.createDestructedVariableStatement(decorators, declarations, ranges);
+        } else {
+          // throw error;
+        }
+      } else {
+        // throw error
+      }
+    } else {
+      do {
+        let declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);
+        if (!declaration) return null;
+        declarations.push(declaration);
+      } while (tn.skip(Token.COMMA));
+      ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
+    }
+
     tn.skip(Token.SEMICOLON);
     return ret;
   }

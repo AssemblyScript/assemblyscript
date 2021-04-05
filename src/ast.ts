@@ -119,7 +119,8 @@ export enum NodeKind {
   EXPORTMEMBER,
   SWITCHCASE,
   INDEXSIGNATURE,
-  COMMENT
+  COMMENT,
+  NA
 }
 
 /** Base class of all nodes. */
@@ -719,6 +720,14 @@ export abstract class Node {
     range: Range
   ): VariableStatement {
     return new VariableStatement(decorators, declarations, range);
+  }
+
+  static createDestructedVariableStatement(
+    decorators: DecoratorNode[] | null,
+    declarations: VariableDeclaration[],
+    ranges: Range[]
+  ): DestructVariableStatement {
+    return new DestructVariableStatement(decorators, declarations, ranges);
   }
 
   static createVariableDeclaration(
@@ -2291,15 +2300,34 @@ export class VariableDeclaration extends VariableLikeDeclarationStatement {
 
 /** Represents a variable statement wrapping {@link VariableDeclaration}s. */
 export class VariableStatement extends Statement {
+  ranges: undefined;
   constructor(
     /** Array of decorators. */
     public decorators: DecoratorNode[] | null,
     /** Array of member declarations. */
     public declarations: VariableDeclaration[],
     /** Source range. */
-    range: Range
+    range: Range,
+    /** Source range. */
+    ranges?: Range[]
   ) {
     super(NodeKind.VARIABLE, range);
+  }
+}
+
+/** Represents a variable statement wrapping {@link VariableDeclaration}s. */
+export class DestructVariableStatement extends Statement {
+  ranges: Range[] = [];
+  constructor(
+    /** Array of decorators. */
+    public decorators: DecoratorNode[] | null,
+    /** Array of member declarations. */
+    public declarations: VariableDeclaration[],
+    /** Source range. */
+    _ranges: Range[]
+  ) {
+    super(NodeKind.VARIABLE, new Range(0, 0));
+    this.ranges = _ranges;
   }
 }
 
