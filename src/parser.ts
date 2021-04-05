@@ -894,9 +894,8 @@ export class Parser extends DiagnosticEmitter {
     var declarations = new Array<VariableDeclaration>();
     var ret = null;
     if(tn.skip(Token.OPENBRACKET)) {
-      console.log(tn.peek());
       do {
-        const declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);
+        const declaration = this.parseVariableDeclaration(tn, flags, decorators, true);
         if(declaration) {
           declaration.kind = NodeKind.NA;
           declarations.push(declaration);
@@ -905,13 +904,11 @@ export class Parser extends DiagnosticEmitter {
         }
       } while (tn.skip(Token.COMMA));
       if(!tn.skip(Token.CLOSEBRACKET)){
-         // Throw error
+        // Throw error
       }
       if(tn.skip(Token.EQUALS)) {
-        // Do something
         const arrayNode = this.parseExpression(tn);
-        // Node.createVariableStatement(decorators, declarations, tn.range(tn.pos));
-        if(arrayNode) {
+        if(arrayNode && declarations) {
           // @ts-ignore
           const expressions = arrayNode.elementExpressions;
           // @ts-ignore
@@ -919,6 +916,10 @@ export class Parser extends DiagnosticEmitter {
             ranges.push(exp.range);
             return ranges;
           }, []);
+
+          declarations.forEach((dec, index) => {
+            dec.initializer = expressions[index];
+          });
 
           return Node.createDestructedVariableStatement(decorators, declarations, ranges);
         } else {
