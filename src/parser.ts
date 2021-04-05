@@ -897,7 +897,7 @@ export class Parser extends DiagnosticEmitter {
     var ret = null;
     if(tn.skip(Token.OPENBRACKET)) {
       do {
-        const declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor, true); //this.parseVariableDeclaration(tn, flags, decorators, true);
+        const declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor, true);
         if(declaration) {
           declarations.push(declaration);
         } else {
@@ -908,17 +908,18 @@ export class Parser extends DiagnosticEmitter {
         throw new Error("Destructuring must end with a closing bracket");
       }
       if(tn.skip(Token.EQUALS)) {
-        const arrayNode = this.parseExpression(tn);
-        if(arrayNode && arrayNode instanceof ArrayLiteralExpression) {
-          const expressions = arrayNode.elementExpressions;
-          if(expressions.length !== 0 && expressions.length === declarations.length) {
-            declarations.forEach((dec, index) => {
-              dec.initializer = expressions[index];
-            });
-            ret = Node.createDestructedVariableStatement(decorators, declarations);
-          } else {
-            throw new Error("There is a mismatch between the declarations and the expressions");
-          }
+        const arrayExpression = this.parseExpression(tn);
+        if(arrayExpression) {
+          declarations.forEach((dec, index) => {
+            const next = Node.createIntegerLiteralExpression(i64_new(index), tn.range(0, 1));;
+            const expr = Node.createElementAccessExpression(
+              arrayExpression,
+              next,
+              tn.range(startPos, tn.pos)
+            );
+            dec.initializer = expr;
+          });
+          ret = Node.createDestructedVariableStatement(decorators, declarations);
         } else {
           throw new Error("results in not an array");
         }
