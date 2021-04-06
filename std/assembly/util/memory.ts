@@ -201,17 +201,17 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
   } else {
     // fill head and tail with minimal branching
     if (!n) return;
-    let dend = dest + n - 4;
+    let dend = dest + n;
     store<u8>(dest, c);
-    store<u8>(dend, c, 3);
+    store<u8>(dend - 1, c);
     if (n <= 2) return;
     store<u8>(dest, c, 1);
     store<u8>(dest, c, 2);
-    store<u8>(dend, c, 2);
-    store<u8>(dend, c, 1);
+    store<u8>(dend - 2, c);
+    store<u8>(dend - 3, c);
     if (n <= 6) return;
     store<u8>(dest, c, 3);
-    store<u8>(dend, c);
+    store<u8>(dend - 4, c);
     if (n <= 8) return;
 
     // advance pointer to align it at 4-byte boundary
@@ -223,23 +223,23 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
     let c32: u32 = <u32>-1 / 255 * c;
 
     // fill head/tail up to 28 bytes each in preparation
-    dend = dest + n - 28;
+    dend = dest + n;
     store<u32>(dest, c32);
-    store<u32>(dend, c32, 24);
+    store<u32>(dend - 4, c32);
     if (n <= 8) return;
     store<u32>(dest, c32, 4);
     store<u32>(dest, c32, 8);
-    store<u32>(dend, c32, 16);
-    store<u32>(dend, c32, 20);
+    store<u32>(dend - 12, c32);
+    store<u32>(dend - 8, c32);
     if (n <= 24) return;
     store<u32>(dest, c32, 12);
     store<u32>(dest, c32, 16);
     store<u32>(dest, c32, 20);
     store<u32>(dest, c32, 24);
-    store<u32>(dend, c32);
-    store<u32>(dend, c32, 4);
-    store<u32>(dend, c32, 8);
-    store<u32>(dend, c32, 12);
+    store<u32>(dend - 28, c32);
+    store<u32>(dend - 24, c32);
+    store<u32>(dend - 20, c32);
+    store<u32>(dend - 16, c32);
 
     // align to a multiple of 8
     k = 24 + (dest & 4);
