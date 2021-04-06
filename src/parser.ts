@@ -7,7 +7,7 @@
  * @license Apache-2.0
  */
 
-import {CommonFlags, CommonNames, LIBRARY_PREFIX, PATH_DELIMITER} from "./common";
+import {CommonFlags, LIBRARY_PREFIX, PATH_DELIMITER} from "./common";
 
 import {CommentHandler, IdentifierHandling, isIllegalVariableIdentifier, Range, Token, Tokenizer} from "./tokenizer";
 
@@ -881,6 +881,53 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
+  parseDestructedVariable(
+    tn: Tokenizer,
+    flags: CommonFlags,
+    decorators: DecoratorNode[] | null,
+    startPos: i32,
+    isFor: bool = false
+  ): DestructVariableStatement | null {
+    var declarations = new Array<VariableDeclaration>();
+    if(!tn.skip(Token.OPENBRACKET)) {
+      return null;
+    }
+    do {
+      const declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor, true);
+      if(declaration) {
+        declarations.push(declaration);
+      } else {
+        throw new Error("Failed to get declaration");
+      }
+    } while (tn.skip(Token.COMMA));
+    if(!tn.skip(Token.CLOSEBRACKET)){
+      throw new Error("Destructuring must end with a closing bracket");
+    }
+    if(tn.skip(Token.EQUALS)) {
+      let arrayExpression = this.parseExpression(tn);
+      if(!arrayExpression) return null;
+      arrayExpression = this.maybeParseCallExpression(tn, arrayExpression);
+
+      /**
+       * TODO: To avoid running same callable for each destructuring, need to instantiate a new variable
+       * on the fly
+       * */
+      for(let index = 0; index < declarations.length; index++) {
+        var declaration = declarations[index];
+        var arrayIndexExpression = Node.createIntegerLiteralExpression(i64_new(index), tn.range());
+        const initializer = Node.createElementAccessExpression(
+          arrayExpression,
+          arrayIndexExpression,
+          tn.range(startPos, tn.pos)
+        );
+        declaration.initializer = initializer;
+      }
+      return Node.createDestructedVariableStatement(decorators, declarations);
+    } else {
+      throw new Error("RHS does not include =");
+    }
+  }
+
   parseVariable(
     tn: Tokenizer,
     flags: CommonFlags,
@@ -893,36 +940,8 @@ export class Parser extends DiagnosticEmitter {
 
     var declarations = new Array<VariableDeclaration>();
     var ret = null;
-    if(tn.skip(Token.OPENBRACKET)) {
-      do {
-        const declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor, true);
-        if(declaration) {
-          declarations.push(declaration);
-        } else {
-          throw new Error("Failed to get declaration");
-        }
-      } while (tn.skip(Token.COMMA));
-      if(!tn.skip(Token.CLOSEBRACKET)){
-        throw new Error("Destructuring must end with a closing bracket");
-      }
-      if(tn.skip(Token.EQUALS)) {
-        let arrayExpression = this.parseExpression(tn);
-        if(!arrayExpression) return null;
-        for(let index = 0; index < declarations.length; index++) {
-          var declaration = declarations[index];
-          var indexExpression = Node.createIntegerLiteralExpression(i64_new(index), tn.range());
-          declaration.initializer = Node.createElementAccessExpression(
-            arrayExpression,
-            indexExpression,
-            tn.range(startPos, tn.pos)
-          );
-        }
-
-        ret = Node.createDestructedVariableStatement(decorators, declarations);
-
-      } else {
-        throw new Error("RHS does not include =");
-      }
+    if(tn.peek() == Token.OPENBRACKET && !isFor) {
+      ret = this.parseDestructedVariable(tn, flags, decorators, startPos, isFor);
     } else {
       do {
         let declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);
@@ -945,7 +964,9 @@ export class Parser extends DiagnosticEmitter {
   ): VariableDeclaration | null {
 
     // before: Identifier (':' Type)? ('=' Expression)?
-
+    if(tn.peek() == Token.OPENBRACKET) {
+      return null;
+    }
     if (!tn.skipIdentifier()) {
       this.error(
         DiagnosticCode.Identifier_expected,
