@@ -119,8 +119,7 @@ export enum NodeKind {
   EXPORTMEMBER,
   SWITCHCASE,
   INDEXSIGNATURE,
-  COMMENT,
-  NA
+  COMMENT
 }
 
 /** Base class of all nodes. */
