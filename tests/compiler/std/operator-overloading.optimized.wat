@@ -1450,28 +1450,37 @@
   i32.const 0
   i32.store8
   local.get $0
-  i32.const 4
+  i32.const 8
   i32.add
+  local.tee $1
+  i32.const 1
+  i32.sub
   i32.const 0
-  i32.store8 offset=3
+  i32.store8
   local.get $0
   i32.const 0
   i32.store8 offset=1
   local.get $0
   i32.const 0
   i32.store8 offset=2
-  local.get $0
+  local.get $1
+  i32.const 2
+  i32.sub
   i32.const 0
-  i32.store8 offset=6
-  local.get $0
+  i32.store8
+  local.get $1
+  i32.const 3
+  i32.sub
   i32.const 0
-  i32.store8 offset=5
+  i32.store8
   local.get $0
   i32.const 0
   i32.store8 offset=3
-  local.get $0
+  local.get $1
+  i32.const 4
+  i32.sub
   i32.const 0
-  i32.store8 offset=4
+  i32.store8
   local.get $0
  )
  (func $~lib/math/ipow32 (param $0 i32) (param $1 i32) (result i32)

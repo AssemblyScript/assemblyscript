@@ -201,17 +201,16 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
   } else {
     // fill head and tail with minimal branching
     if (!n) return;
-    let dend = dest + n - 4;
     store<u8>(dest, c);
-    store<u8>(dend, c, 3);
+    store<u8>(dest + n - 1, c);
     if (n <= 2) return;
-    store<u8>(dest, c, 1);
-    store<u8>(dest, c, 2);
-    store<u8>(dend, c, 2);
-    store<u8>(dend, c, 1);
+    store<u8>(dest + 1, c);
+    store<u8>(dest + 2, c);
+    store<u8>(dest + n - 2, c);
+    store<u8>(dest + n - 3, c);
     if (n <= 6) return;
-    store<u8>(dest, c, 3);
-    store<u8>(dend, c);
+    store<u8>(dest + 3, c);
+    store<u8>(dest + n - 4, c);
     if (n <= 8) return;
 
     // advance pointer to align it at 4-byte boundary
@@ -223,23 +222,22 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
     let c32: u32 = <u32>-1 / 255 * c;
 
     // fill head/tail up to 28 bytes each in preparation
-    dend = dest + n - 28;
     store<u32>(dest, c32);
-    store<u32>(dend, c32, 24);
+    store<u32>(dest + n - 4, c32);
     if (n <= 8) return;
-    store<u32>(dest, c32, 4);
-    store<u32>(dest, c32, 8);
-    store<u32>(dend, c32, 16);
-    store<u32>(dend, c32, 20);
+    store<u32>(dest + 4, c32);
+    store<u32>(dest + 8, c32);
+    store<u32>(dest + n - 12, c32);
+    store<u32>(dest + n - 8, c32);
     if (n <= 24) return;
-    store<u32>(dest, c32, 12);
-    store<u32>(dest, c32, 16);
-    store<u32>(dest, c32, 20);
-    store<u32>(dest, c32, 24);
-    store<u32>(dend, c32);
-    store<u32>(dend, c32, 4);
-    store<u32>(dend, c32, 8);
-    store<u32>(dend, c32, 12);
+    store<u32>(dest + 12, c32);
+    store<u32>(dest + 16, c32);
+    store<u32>(dest + 20, c32);
+    store<u32>(dest + 24, c32);
+    store<u32>(dest + n - 28, c32);
+    store<u32>(dest + n - 24, c32);
+    store<u32>(dest + n - 20, c32);
+    store<u32>(dest + n - 16, c32);
 
     // align to a multiple of 8
     k = 24 + (dest & 4);
@@ -250,9 +248,9 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
     let c64: u64 = <u64>c32 | (<u64>c32 << 32);
     while (n >= 32) {
       store<u64>(dest, c64);
-      store<u64>(dest, c64, 8);
-      store<u64>(dest, c64, 16);
-      store<u64>(dest, c64, 24);
+      store<u64>(dest + 8, c64);
+      store<u64>(dest + 16, c64);
+      store<u64>(dest + 24, c64);
       n -= 32;
       dest += 32;
     }

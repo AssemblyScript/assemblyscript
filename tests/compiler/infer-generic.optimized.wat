@@ -1334,6 +1334,7 @@
  )
  (func $~lib/rt/itcms/__new (result i32)
   (local $0 i32)
+  (local $1 i32)
   global.get $~lib/rt/itcms/total
   global.get $~lib/rt/itcms/threshold
   i32.ge_u
@@ -1411,20 +1412,29 @@
   i32.const 0
   i32.store8
   local.get $0
+  i32.const 4
+  i32.add
+  local.tee $1
+  i32.const 1
+  i32.sub
   i32.const 0
-  i32.store8 offset=3
+  i32.store8
   local.get $0
   i32.const 0
   i32.store8 offset=1
   local.get $0
   i32.const 0
   i32.store8 offset=2
-  local.get $0
+  local.get $1
+  i32.const 2
+  i32.sub
   i32.const 0
-  i32.store8 offset=2
-  local.get $0
+  i32.store8
+  local.get $1
+  i32.const 3
+  i32.sub
   i32.const 0
-  i32.store8 offset=1
+  i32.store8
   local.get $0
  )
  (func $infer-generic/test1 (param $0 f32) (result f32)
