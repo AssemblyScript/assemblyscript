@@ -4630,9 +4630,12 @@ function builtin_v128_lt(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I32: return module.binary(BinaryOp.LtI32x4, arg0, arg1);
       case TypeKind.U32: return module.binary(BinaryOp.LtU32x4, arg0, arg1);
       case TypeKind.I64: return module.binary(BinaryOp.LtI64x2, arg0, arg1);
-      case TypeKind.U64: return module.binary(BinaryOp.LtU64x2, arg0, arg1);
+      // no LtU64x2
       case TypeKind.ISIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.LtI64x2 : BinaryOp.LtI32x4, arg0, arg1);
-      case TypeKind.USIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.LtU64x2 : BinaryOp.LtU32x4, arg0, arg1);
+      case TypeKind.USIZE: {
+        if (compiler.options.isWasm64) break;
+        return module.binary(BinaryOp.LtU32x4, arg0, arg1);
+      }
       case TypeKind.F32: return module.binary(BinaryOp.LtF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.LtF64x2, arg0, arg1);
     }
@@ -4671,9 +4674,12 @@ function builtin_v128_le(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I32: return module.binary(BinaryOp.LeI32x4, arg0, arg1);
       case TypeKind.U32: return module.binary(BinaryOp.LeU32x4, arg0, arg1);
       case TypeKind.I64: return module.binary(BinaryOp.LeI64x2, arg0, arg1);
-      case TypeKind.U64: return module.binary(BinaryOp.LeU64x2, arg0, arg1);
+      // no LeU64x2
       case TypeKind.ISIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.LeI64x2 : BinaryOp.LeI32x4, arg0, arg1);
-      case TypeKind.USIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.LeU64x2 : BinaryOp.LeU32x4, arg0, arg1);
+      case TypeKind.USIZE: {
+        if (compiler.options.isWasm64) break;
+        return module.binary(BinaryOp.LeU32x4, arg0, arg1);
+      }
       case TypeKind.F32: return module.binary(BinaryOp.LeF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.LeF64x2, arg0, arg1);
     }
@@ -4712,9 +4718,12 @@ function builtin_v128_gt(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I32: return module.binary(BinaryOp.GtI32x4, arg0, arg1);
       case TypeKind.U32: return module.binary(BinaryOp.GtU32x4, arg0, arg1);
       case TypeKind.I64: return module.binary(BinaryOp.GtI64x2, arg0, arg1);
-      case TypeKind.U64: return module.binary(BinaryOp.GtU64x2, arg0, arg1);
+      // no GtU64x2
       case TypeKind.ISIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.GtI64x2 : BinaryOp.GtI32x4, arg0, arg1);
-      case TypeKind.USIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.GtU64x2 : BinaryOp.GtU32x4, arg0, arg1);
+      case TypeKind.USIZE: {
+        if (compiler.options.isWasm64) break;
+        return module.binary(BinaryOp.GtU32x4, arg0, arg1);
+      }
       case TypeKind.F32: return module.binary(BinaryOp.GtF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.GtF64x2, arg0, arg1);
     }
@@ -4753,9 +4762,12 @@ function builtin_v128_ge(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I32: return module.binary(BinaryOp.GeI32x4, arg0, arg1);
       case TypeKind.U32: return module.binary(BinaryOp.GeU32x4, arg0, arg1);
       case TypeKind.I64: return module.binary(BinaryOp.GeI64x2, arg0, arg1);
-      case TypeKind.U64: return module.binary(BinaryOp.GeU64x2, arg0, arg1);
+      // no GeU64x2
       case TypeKind.ISIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.GeI64x2 : BinaryOp.GeI32x4, arg0, arg1);
-      case TypeKind.USIZE: return module.binary(compiler.options.isWasm64 ? BinaryOp.GeU64x2 : BinaryOp.GeU32x4, arg0, arg1);
+      case TypeKind.USIZE: {
+        if (compiler.options.isWasm64) break;
+        return module.binary(BinaryOp.GeU32x4, arg0, arg1);
+      }
       case TypeKind.F32: return module.binary(BinaryOp.GeF32x4, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.GeF64x2, arg0, arg1);
     }
@@ -4868,18 +4880,14 @@ function builtin_v128_abs(ctx: BuiltinContext): ExpressionRef {
     switch (type.kind) {
       case TypeKind.I8: return module.unary(UnaryOp.AbsI8x16, arg0);
       case TypeKind.I16: return module.unary(UnaryOp.AbsI16x8, arg0);
-      case TypeKind.ISIZE: {
-        if (compiler.options.isWasm64) break;
-        // fall-through
-      }
       case TypeKind.I32: return module.unary(UnaryOp.AbsI32x4, arg0);
-      case TypeKind.USIZE: {
-        if (compiler.options.isWasm64) break;
-        // fall-through
-      }
+      case TypeKind.I64: return module.unary(UnaryOp.AbsI64x2, arg0);
+      case TypeKind.ISIZE: return module.unary(compiler.options.isWasm64 ? UnaryOp.AbsI64x2 : UnaryOp.AbsI32x4, arg0);
       case TypeKind.U8:
       case TypeKind.U16:
-      case TypeKind.U32: return arg0;
+      case TypeKind.U32:
+      case TypeKind.U64:
+      case TypeKind.USIZE: return arg0;
       case TypeKind.F32: return module.unary(UnaryOp.AbsF32x4, arg0);
       case TypeKind.F64: return module.unary(UnaryOp.AbsF64x2, arg0);
     }
@@ -5403,7 +5411,7 @@ function builtin_v128_any_true(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   compiler.currentType = Type.bool;
-  return module.unary(UnaryOp.AnyTrueI8x16, arg0);
+  return module.unary(UnaryOp.AnyTrueV128, arg0);
 }
 builtins.set(BuiltinNames.v128_any_true, builtin_v128_any_true);
 

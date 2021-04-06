@@ -7,6 +7,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
@@ -14,7 +15,6 @@
  (data (i32.const 1112) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 1164) "<")
  (data (i32.const 1176) "\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s")
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -1021,7 +1021,7 @@
   i32.const 42
   i32.store8
   local.get $0
-  v8x16.load_splat
+  v128.load8_splat
   v128.const i32x4 0x2a2a2a2a 0x2a2a2a2a 0x2a2a2a2a 0x2a2a2a2a
   i8x16.eq
   i8x16.all_true
@@ -1042,7 +1042,7 @@
   i32.const 42
   i32.store16
   local.get $0
-  v16x8.load_splat
+  v128.load16_splat
   v128.const i32x4 0x002a002a 0x002a002a 0x002a002a 0x002a002a
   i8x16.eq
   i8x16.all_true
@@ -1063,7 +1063,7 @@
   i32.const 42
   i32.store
   local.get $0
-  v32x4.load_splat
+  v128.load32_splat
   v128.const i32x4 0x0000002a 0x0000002a 0x0000002a 0x0000002a
   i8x16.eq
   i8x16.all_true
@@ -1084,7 +1084,7 @@
   i64.const 42
   i64.store
   local.get $0
-  v64x2.load_splat
+  v128.load64_splat
   v128.const i32x4 0x0000002a 0x00000000 0x0000002a 0x00000000
   i8x16.eq
   i8x16.all_true
@@ -1100,7 +1100,7 @@
   local.get $0
   call $~lib/rt/tlsf/__free
  )
- (func $~start
+ (func $start:features/simd
   (local $0 i32)
   call $features/simd/test_v128
   i32.const 16
@@ -1130,7 +1130,7 @@
   i32.const 255
   i32.store8 offset=7
   local.get $0
-  i16x8.load8x8_s align=1
+  v128.load8x8_s align=1
   v128.const i32x4 0x00020001 0x00040003 0x00060005 0xffff0007
   i8x16.eq
   i8x16.all_true
@@ -1144,7 +1144,7 @@
    unreachable
   end
   local.get $0
-  i16x8.load8x8_u align=1
+  v128.load8x8_u align=1
   v128.const i32x4 0x00020001 0x00040003 0x00060005 0x00ff0007
   i8x16.eq
   i8x16.all_true
@@ -1174,7 +1174,7 @@
   i32.const 65535
   i32.store16 offset=6
   local.get $0
-  i32x4.load16x4_s align=2
+  v128.load16x4_s align=2
   v128.const i32x4 0x00000001 0x00000002 0x00000003 0xffffffff
   i8x16.eq
   i8x16.all_true
@@ -1188,7 +1188,7 @@
    unreachable
   end
   local.get $0
-  i32x4.load16x4_u align=2
+  v128.load16x4_u align=2
   v128.const i32x4 0x00000001 0x00000002 0x00000003 0x0000ffff
   i8x16.eq
   i8x16.all_true
@@ -1203,11 +1203,46 @@
   end
   local.get $0
   call $~lib/rt/tlsf/__free
-  i32.const 0
-  i32.const 1184
-  i32.const 516
-  i32.const 3
-  call $~lib/builtins/abort
-  unreachable
+  i32.const 16
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 1
+  i32.store
+  local.get $0
+  i32.const -1
+  i32.store offset=4
+  local.get $0
+  v128.load32x2_s align=4
+  v128.const i32x4 0x00000001 0x00000000 0xffffffff 0xffffffff
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 521
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  v128.load32x2_u align=4
+  v128.const i32x4 0x00000001 0x00000000 0xffffffff 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 526
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+ )
+ (func $~start
+  call $start:features/simd
  )
 )

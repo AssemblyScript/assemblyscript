@@ -705,7 +705,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = 0, k = functionTable.length; i < k; ++i) {
       functionTableNames[i] = functionTable[i].internalName;
     }
-    module.setFunctionTable(tableBase + functionTable.length, Module.UNLIMITED_TABLE, functionTableNames, module.i32(tableBase));
+    module.addFunctionTable("0", tableBase + functionTable.length, Module.UNLIMITED_TABLE, functionTableNames, module.i32(tableBase));
 
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
@@ -5013,7 +5013,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.binary(BinaryOp.NeF64, leftExpr, rightExpr);
       }
       case TypeKind.V128: {
-        return module.unary(UnaryOp.AnyTrueI8x16,
+        return module.unary(UnaryOp.AnyTrueV128,
           module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
         );
       }
