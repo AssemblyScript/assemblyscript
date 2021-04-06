@@ -2305,9 +2305,7 @@ export class VariableStatement extends Statement {
     /** Array of member declarations. */
     public declarations: VariableDeclaration[],
     /** Source range. */
-    range: Range,
-    /** Source range. */
-    ranges?: Range[]
+    range: Range
   ) {
     super(NodeKind.VARIABLE, range);
   }
