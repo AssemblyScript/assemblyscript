@@ -1,1 +1,1 @@
-const [arr] = [1];
+const [x] = [1];
