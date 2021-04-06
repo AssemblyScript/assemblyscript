@@ -6,7 +6,6 @@
 import { OptionDescription } from "./util/options";
 export { OptionDescription };
 import { Transform } from "./transform";
-export { Transform };
 
 /** Ready promise resolved once/if the compiler is ready. */
 export const ready: Promise<void>;
