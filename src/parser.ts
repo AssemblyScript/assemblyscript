@@ -6,68 +6,88 @@
  *
  * @license Apache-2.0
  */
-
-import {CommonFlags, LIBRARY_PREFIX, PATH_DELIMITER} from "./common";
-
-import {CommentHandler, IdentifierHandling, isIllegalVariableIdentifier, Range, Token, Tokenizer} from "./tokenizer";
-
-import {DiagnosticCode, DiagnosticEmitter, DiagnosticMessage} from "./diagnostics";
-
-import {CharCode, normalizePath} from "./util";
+import {
+  CommonFlags,
+  LIBRARY_PREFIX,
+  PATH_DELIMITER
+} from "./common";
 
 import {
+  Tokenizer,
+  Token,
+  Range,
+  CommentHandler,
+  IdentifierHandling,
+  isIllegalVariableIdentifier
+} from "./tokenizer";
+
+import {
+  DiagnosticCode,
+  DiagnosticEmitter,
+  DiagnosticMessage
+} from "./diagnostics";
+
+import {
+  CharCode,
+  normalizePath
+} from "./util";
+
+import {
+  Node,
+  NodeKind,
+  Source,
+  SourceKind,
+  TypeNode,
+  TypeName,
+  NamedTypeNode,
+  FunctionTypeNode,
   ArrowKind,
+
+  Expression,
   AssertionKind,
+  CallExpression,
+  ClassExpression,
+  FunctionExpression,
+  IdentifierExpression,
+  StringLiteralExpression,
+
+  Statement,
   BlockStatement,
   BreakStatement,
-  CallExpression,
   ClassDeclaration,
-  ClassExpression,
   ContinueStatement,
   DeclarationStatement,
   DecoratorNode,
-  DestructVariableStatement,
   DoStatement,
   EnumDeclaration,
   EnumValueDeclaration,
   ExportImportStatement,
   ExportMember,
   ExportStatement,
-  Expression,
   ExpressionStatement,
   ForOfStatement,
   FunctionDeclaration,
-  FunctionExpression,
-  FunctionTypeNode,
-  IdentifierExpression,
   IfStatement,
   ImportDeclaration,
   ImportStatement,
   IndexSignatureNode,
-  mangleInternalPath,
-  NamedTypeNode,
   NamespaceDeclaration,
-  Node,
-  NodeKind,
-  ParameterKind,
   ParameterNode,
+  ParameterKind,
   ReturnStatement,
-  Source,
-  SourceKind,
-  Statement,
-  StringLiteralExpression,
   SwitchCase,
   SwitchStatement,
   ThrowStatement,
   TryStatement,
   TypeDeclaration,
-  TypeName,
-  TypeNode,
   TypeParameterNode,
-  VariableDeclaration,
   VariableStatement,
+  VariableDeclaration,
+  DestructVariableStatement,
   VoidStatement,
-  WhileStatement
+  WhileStatement,
+
+  mangleInternalPath
 } from "./ast";
 
 /** Represents a dependee. */

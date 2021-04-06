@@ -2320,7 +2320,7 @@ export class DestructVariableStatement extends Statement {
     public declarations: VariableDeclaration[],
     /** Source range. */
   ) {
-    super(NodeKind.VARIABLE, new Range(0, 0));
+    super(NodeKind.VARIABLE, new Range(-1, -1));
   }
 }
 

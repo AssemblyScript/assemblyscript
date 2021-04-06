@@ -86,7 +86,7 @@ import {
   SwitchCase,
   IndexSignatureNode,
 
-  isTypeOmitted, DestructVariableStatement
+  isTypeOmitted
 } from "../ast";
 
 import {
