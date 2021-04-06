@@ -501,6 +501,9 @@ exports.main = function main(argv, options, callback) {
 
   // Set up transforms
   const transforms = [];
+  if (Array.isArray(options.transforms)) {
+    transforms.push(...options.transforms);
+  }
   if (opts.transform) {
     let tsNodeRegistered = false;
     let transformArgs = unique(opts.transform);
