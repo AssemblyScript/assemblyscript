@@ -1832,6 +1832,10 @@ export namespace i64x2 {
 
   // @ts-ignore: decorator
   @builtin
+  export declare function abs(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
   export declare function neg(a: v128): v128;
 
   // @ts-ignore: decorator
@@ -1852,6 +1856,10 @@ export namespace i64x2 {
 
   // @ts-ignore: decorator
   @builtin
+  export declare function bitmask(a: v128): i32;
+
+  // @ts-ignore: decorator
+  @builtin
   export declare function eq(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
@@ -1864,15 +1872,7 @@ export namespace i64x2 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function lt_u(a: v128, b: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
   export declare function le_s(a: v128, b: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function le_u(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
@@ -1880,15 +1880,7 @@ export namespace i64x2 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function gt_u(a: v128, b: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
   export declare function ge_s(a: v128, b: v128): v128;
-
-  // @ts-ignore: decorator
-  @builtin
-  export declare function ge_u(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
