@@ -174,6 +174,30 @@ export abstract class Node {
     return new TypeParameterNode(name, extendsType, defaultType, range);
   }
 
+  static createCompoundNamedType(
+    identifiers: IdentifierExpression[],
+    typeParameters: TypeNode[] | null,
+    isNullable: bool,
+    range: Range
+  ): NamedTypeNode {
+    let length = identifiers.length;
+    if (length == 0) throw new Error(); // how should errors be handled?
+    let first = identifiers[0];
+    let node = new TypeName(first, null, first.range);
+    let result = node;
+    for (let i = 1; i < length; i++) {
+      let next = identifiers[i];
+      let nextNode = new TypeName(next, null, next.range)
+      node.next = nextNode;
+      node = nextNode;
+    }
+    return this.createNamedType(
+      result,
+      typeParameters,
+      isNullable,
+      range
+    );
+  }
   static createParameter(
     parameterKind: ParameterKind,
     name: IdentifierExpression,
