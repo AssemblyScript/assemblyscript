@@ -187,7 +187,7 @@ export abstract class Node {
     let result = node;
     for (let i = 1; i < length; i++) {
       let next = identifiers[i];
-      let nextNode = new TypeName(next, null, next.range)
+      let nextNode = new TypeName(next, null, next.range);
       node.next = nextNode;
       node = nextNode;
     }
