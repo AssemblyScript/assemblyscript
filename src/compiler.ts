@@ -9049,8 +9049,11 @@ export class Compiler extends DiagnosticEmitter {
           : module.i32(i64_low(offset));
       }
     }
-    assert(false);
-    return module.unreachable();
+    this.error(
+      DiagnosticCode.Expression_refers_to_a_static_element_that_does_not_compile_to_a_value_at_runtime,
+      expression.range
+    );
+    return this.module.unreachable();
   }
 
   private compileTernaryExpression(
