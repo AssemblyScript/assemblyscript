@@ -222,7 +222,7 @@ export enum UnaryOp {
   NegI8x16 = 69 /* _BinaryenNegVecI8x16 */,
   AllTrueI8x16 = 70 /* _BinaryenAllTrueVecI8x16 */,
   BitmaskI8x16 = 71 /* _BinaryenBitmaskVecI8x16 */,
-  PopcntI8x16 = 72 /* TODO_BinaryenPopcntVecI8x16 */, // UNIMP
+  PopcntI8x16 = 72 /* _BinaryenPopcntVecI8x16 */, // UNIMP
   AbsI16x8 = 73 /* _BinaryenAbsVecI16x8 */,
   NegI16x8 = 74 /* _BinaryenNegVecI16x8 */,
   AllTrueI16x8 = 75 /* _BinaryenAllTrueVecI16x8 */,
@@ -231,10 +231,10 @@ export enum UnaryOp {
   NegI32x4 = 78 /* _BinaryenNegVecI32x4 */,
   AllTrueI32x4 = 79 /* _BinaryenAllTrueVecI32x4 */,
   BitmaskI32x4 = 80 /* _BinaryenBitmaskVecI32x4 */,
-  AbsI64x2 = 81 /* TODO_BinaryenAbsVecI64x2 */,
+  AbsI64x2 = 81 /* _BinaryenAbsVecI64x2 */,
   NegI64x2 = 82 /* _BinaryenNegVecI64x2 */,
-  AllTrueI64x2 = 83 /* TODO_BinaryenAllTrueVecI64x2 */,
-  BitmaskI64x2 = 84 /* TODO_BinaryenBitmaskVecI64x2 */, // UNIMP
+  AllTrueI64x2 = 83 /* _BinaryenAllTrueVecI64x2 */,
+  BitmaskI64x2 = 84 /* _BinaryenBitmaskVecI64x2 */, // UNIMP
   AbsF32x4 = 85 /* _BinaryenAbsVecF32x4 */,
   NegF32x4 = 86 /* _BinaryenNegVecF32x4 */,
   SqrtF32x4 = 87 /* _BinaryenSqrtVecF32x4 */,
@@ -249,10 +249,10 @@ export enum UnaryOp {
   FloorF64x2 = 96 /* _BinaryenFloorVecF64x2 */,
   TruncF64x2 = 97 /* _BinaryenTruncVecF64x2 */,
   NearestF64x2 = 98 /* _BinaryenNearestVecF64x2 */,
-  ExtAddPairwiseI8x16ToI16x8 = 99 /* TODO_BinaryenExtAddPairwiseSVecI8x16ToI16x8 */, // UNIMP
-  ExtAddPairwiseU8x16ToU16x8 = 100 /* TODO_BinaryenExtAddPairwiseUVecI8x16ToI16x8 */, // UNIMP
-  ExtAddPairwiseI16x8ToI32x4 = 101 /* TODO_BinaryenExtAddPairwiseSVecI16x8ToI32x4 */, // UNIMP
-  ExtAddPairwiseU16x8ToU32x4 = 102 /* TODO_BinaryenExtAddPairwiseUVecI16x8ToI32x4 */, // UNIMP
+  ExtAddPairwiseI8x16ToI16x8 = 99 /* _BinaryenExtAddPairwiseSVecI8x16ToI16x8 */, // UNIMP
+  ExtAddPairwiseU8x16ToU16x8 = 100 /* _BinaryenExtAddPairwiseUVecI8x16ToI16x8 */, // UNIMP
+  ExtAddPairwiseI16x8ToI32x4 = 101 /* _BinaryenExtAddPairwiseSVecI16x8ToI32x4 */, // UNIMP
+  ExtAddPairwiseU16x8ToU32x4 = 102 /* _BinaryenExtAddPairwiseUVecI16x8ToI32x4 */, // UNIMP
   TruncSatF32x4ToI32x4 = 103 /* _BinaryenTruncSatSVecF32x4ToVecI32x4 */,
   TruncSatF32x4ToU32x4 = 104 /* _BinaryenTruncSatUVecF32x4ToVecI32x4 */,
   ConvertI32x4ToF32x4 = 105 /* _BinaryenConvertSVecI32x4ToVecF32x4 */,
@@ -265,16 +265,16 @@ export enum UnaryOp {
   ExtendHighI16x8ToI32x4 = 112 /* _BinaryenExtendHighSVecI16x8ToVecI32x4 */,
   ExtendLowU16x8ToU32x4 = 113 /* _BinaryenExtendLowUVecI16x8ToVecI32x4 */,
   ExtendHighU16x8ToU32x4 = 114 /* _BinaryenExtendHighUVecI16x8ToVecI32x4 */,
-  ExtendLowI32x4ToI64x2 = 119 /* TODO_BinaryenExtendLowSVecI32x4ToVecI64x2 */,
-  ExtendHighI32x4ToI64x2 = 120 /* TODO_BinaryenExtendHighSVecI32x4ToVecI64x2 */,
-  ExtendLowU32x4ToU64x2 = 121 /* TODO_BinaryenExtendLowUVecI32x4ToVecI64x2 */,
-  ExtendHighU32x4ToU64x2 = 122 /* TODO_BinaryenExtendHighUVecI32x4ToVecI64x2 */,
-  ConvertLowI32x4ToF64x2 = 123 /* TODO_BinaryenConvertLowSVecI32x4ToVecF64x2 */, // UNIMP
-  ConvertLowU32x4ToF64x2 = 124 /* TODO_BinaryenConvertLowUVecI32x4ToVecF64x2 */, // UNIMP
-  TruncSatZeroF64x2ToI32x4 = 125 /* TODO_BinaryenTruncSatZeroSVecF64x2ToVecI32x4 */, // UNIMP
-  TruncSatZeroF64x2ToU32x4 = 126 /* TODO_BinaryenTruncSatZeroUVecF64x2ToVecI32x4 */, // UNIMP
-  DemoteZeroF64x2ToF32x4 = 127 /* TODO_BinaryenDemoteZeroVecF64x2ToVecF32x4 */, // UNIMP
-  PromoteLowF32x4ToF64x2 = 128 /* TODO_BinaryenPromoteLowVecF32x4ToVecF64x2 */, // UNIMP
+  ExtendLowI32x4ToI64x2 = 115 /* _BinaryenExtendLowSVecI32x4ToVecI64x2 */,
+  ExtendHighI32x4ToI64x2 = 116 /* _BinaryenExtendHighSVecI32x4ToVecI64x2 */,
+  ExtendLowU32x4ToU64x2 = 117 /* _BinaryenExtendLowUVecI32x4ToVecI64x2 */,
+  ExtendHighU32x4ToU64x2 = 118 /* _BinaryenExtendHighUVecI32x4ToVecI64x2 */,
+  ConvertLowI32x4ToF64x2 = 119 /* _BinaryenConvertLowSVecI32x4ToVecF64x2 */, // UNIMP
+  ConvertLowU32x4ToF64x2 = 120 /* _BinaryenConvertLowUVecI32x4ToVecF64x2 */, // UNIMP
+  TruncSatZeroF64x2ToI32x4 = 121 /* _BinaryenTruncSatZeroSVecF64x2ToVecI32x4 */, // UNIMP
+  TruncSatZeroF64x2ToU32x4 = 122 /* _BinaryenTruncSatZeroUVecF64x2ToVecI32x4 */, // UNIMP
+  DemoteZeroF64x2ToF32x4 = 123 /* _BinaryenDemoteZeroVecF64x2ToVecF32x4 */, // UNIMP
+  PromoteLowF32x4ToF64x2 = 124 /* _BinaryenPromoteLowVecF32x4ToVecF64x2 */, // UNIMP
   _last = PromoteLowF32x4ToF64x2,
 
   // Target dependent
@@ -393,12 +393,12 @@ export enum BinaryOp {
   LeU32x4 = 103 /* _BinaryenLeUVecI32x4 */,
   GeI32x4 = 104 /* _BinaryenGeSVecI32x4 */,
   GeU32x4 = 105 /* _BinaryenGeUVecI32x4 */,
-  EqI64x2 = 106 /* TODO_BinaryenEqVecI64x2 */,
-  NeI64x2 = 107 /* TODO_BinaryenNeVecI64x2 */,
-  LtI64x2 = 108 /* TODO_BinaryenLtSVecI64x2 */,
-  GtI64x2 = 109 /* TODO_BinaryenGtSVecI64x2 */,
-  LeI64x2 = 110 /* TODO_BinaryenLeSVecI64x2 */,
-  GeI64x2 = 111 /* TODO_BinaryenGeSVecI64x2 */,
+  EqI64x2 = 106 /* _BinaryenEqVecI64x2 */,
+  NeI64x2 = 107 /* _BinaryenNeVecI64x2 */,
+  LtI64x2 = 108 /* _BinaryenLtSVecI64x2 */,
+  GtI64x2 = 109 /* _BinaryenGtSVecI64x2 */,
+  LeI64x2 = 110 /* _BinaryenLeSVecI64x2 */,
+  GeI64x2 = 111 /* _BinaryenGeSVecI64x2 */,
   EqF32x4 = 112 /* _BinaryenEqVecF32x4 */,
   NeF32x4 = 113 /* _BinaryenNeVecF32x4 */,
   LtF32x4 = 114 /* _BinaryenLtVecF32x4 */,
@@ -438,11 +438,11 @@ export enum BinaryOp {
   MaxI16x8 = 148 /* _BinaryenMaxSVecI16x8 */,
   MaxU16x8 = 149 /* _BinaryenMaxUVecI16x8 */,
   AvgrU16x8 = 150 /* _BinaryenAvgrUVecI16x8 */,
-  Q15MulrSatI16x8 = 151 /* TODO_BinaryenQ15MulrSatSVecI16x8 */, // UNIMP
-  ExtMulLowI16x8 = 152 /* TODO_BinaryenExtMulLowSVecI16x8 */, // UNIMP
-  ExtMulHighI16x8 = 153 /* TODO_BinaryenExtMulHighSVecI16x8 */, // UNIMP
-  ExtMulLowU16x8 = 154 /* TODO_BinaryenExtMulLowUVecI16x8 */, // UNIMP
-  ExtMulHighU16x8 = 155 /* TODO_BinaryenExtMulHighUVecI16x8 */, // UNIMP
+  Q15MulrSatI16x8 = 151 /* _BinaryenQ15MulrSatSVecI16x8 */, // UNIMP
+  ExtMulLowI16x8 = 152 /* _BinaryenExtMulLowSVecI16x8 */, // UNIMP
+  ExtMulHighI16x8 = 153 /* _BinaryenExtMulHighSVecI16x8 */, // UNIMP
+  ExtMulLowU16x8 = 154 /* _BinaryenExtMulLowUVecI16x8 */, // UNIMP
+  ExtMulHighU16x8 = 155 /* _BinaryenExtMulHighUVecI16x8 */, // UNIMP
   AddI32x4 = 156 /* _BinaryenAddVecI32x4 */,
   SubI32x4 = 157 /* _BinaryenSubVecI32x4 */,
   MulI32x4 = 158 /* _BinaryenMulVecI32x4 */,
@@ -451,17 +451,17 @@ export enum BinaryOp {
   MaxI32x4 = 161 /* _BinaryenMaxSVecI32x4 */,
   MaxU32x4 = 162 /* _BinaryenMaxUVecI32x4 */,
   DotI16x8 = 163 /* _BinaryenDotSVecI16x8ToVecI32x4 */,
-  ExtMulLowI32x4 = 164 /* TODO_BinaryenExtMulLowSVecI32x4 */, // UNIMP
-  ExtMulHighI32x4 = 165 /* TODO_BinaryenExtMulHighSVecI32x4 */, // UNIMP
-  ExtMulLowU32x4 = 166 /* TODO_BinaryenExtMulLowUVecI32x4 */, // UNIMP
-  ExtMulHighU32x4 = 167 /* TODO_BinaryenExtMulHighUVecI32x4 */, // UNIMP
+  ExtMulLowI32x4 = 164 /* _BinaryenExtMulLowSVecI32x4 */, // UNIMP
+  ExtMulHighI32x4 = 165 /* _BinaryenExtMulHighSVecI32x4 */, // UNIMP
+  ExtMulLowU32x4 = 166 /* _BinaryenExtMulLowUVecI32x4 */, // UNIMP
+  ExtMulHighU32x4 = 167 /* _BinaryenExtMulHighUVecI32x4 */, // UNIMP
   AddI64x2 = 168 /* _BinaryenAddVecI64x2 */,
   SubI64x2 = 169 /* _BinaryenSubVecI64x2 */,
   MulI64x2 = 170 /* _BinaryenMulVecI64x2 */,
-  ExtMulLowI64x2 = 171 /* TODO_BinaryenExtMulLowSVecI64x2 */, // UNIMP
-  ExtMulHighI64x2 = 172 /* TODO_BinaryenExtMulHighSVecI64x2 */, // UNIMP
-  ExtMulLowU64x2 = 173 /* TODO_BinaryenExtMulLowUVecI64x2 */, // UNIMP
-  ExtMulHighU64x2 = 174 /* TODO_BinaryenExtMulHighUVecI64x2 */, // UNIMP
+  ExtMulLowI64x2 = 171 /* _BinaryenExtMulLowSVecI64x2 */, // UNIMP
+  ExtMulHighI64x2 = 172 /* _BinaryenExtMulHighSVecI64x2 */, // UNIMP
+  ExtMulLowU64x2 = 173 /* _BinaryenExtMulLowUVecI64x2 */, // UNIMP
+  ExtMulHighU64x2 = 174 /* _BinaryenExtMulHighUVecI64x2 */, // UNIMP
   AddF32x4 = 175 /* _BinaryenAddVecF32x4 */,
   SubF32x4 = 176 /* _BinaryenSubVecF32x4 */,
   MulF32x4 = 177 /* _BinaryenMulVecF32x4 */,
@@ -568,19 +568,19 @@ export enum SIMDLoadOp {
   LoadU16ToU32x4 = 7 /* _BinaryenLoadExtUVec16x4ToVecI32x4 */,
   LoadI32ToI64x2 = 8 /* _BinaryenLoadExtSVec32x2ToVecI64x2 */,
   LoadU32ToU64x2 = 9 /* _BinaryenLoadExtUVec32x2ToVecI64x2 */,
-  Load32Zero = 10 /* TODO_BinaryenLoad32Zero */, // UNIMP
-  Load64Zero = 11 /* TODO_BinaryenLoad64Zero */ // UNIMP
+  Load32Zero = 10 /* _BinaryenLoad32Zero */, // UNIMP
+  Load64Zero = 11 /* _BinaryenLoad64Zero */, // UNIMP
 }
 
 export enum SIMDLoadStoreLaneOp {
-  LoadLaneV8x16 = 0 /* TODO_BinaryenLoadLaneVec8x16 */, // UNIMP
-  LoadLaneV16x8 = 1 /* TODO_BinaryenLoadLaneVec16x8 */, // UNIMP
-  LoadLaneV32x4 = 2 /* TODO_BinaryenLoadLaneVec32x4 */, // UNIMP
-  LoadLaneV64x2 = 3 /* TODO_BinaryenLoadLaneVec64x2 */, // UNIMP
-  StoreLaneV8x16 = 4 /* TODO_BinaryenStoreLaneVec8x16 */, // UNIMP
-  StoreLaneV16x8 = 5 /* TODO_BinaryenStoreLaneVec16x8 */, // UNIMP
-  StoreLaneV32x4 = 6 /* TODO_BinaryenStoreLaneVec32x4 */, // UNIMP
-  StoreLaneV64x2 = 7 /* TODO_BinaryenStoreLaneVec64x2 */ // UNIMP
+  Load8Lane = 0 /* _BinaryenLoad8LaneVec128 */, // UNIMP
+  Load16Lane = 1 /* _BinaryenLoad16LaneVec128 */, // UNIMP
+  Load32Lane = 2 /* _BinaryenLoad32LaneVec128 */, // UNIMP
+  Load64Lane = 3 /* _BinaryenLoad64LaneVec128 */, // UNIMP
+  Store8Lane = 4 /* _BinaryenStore8LaneVec128 */, // UNIMP
+  Store16Lane = 5 /* _BinaryenStore16LaneVec128 */, // UNIMP
+  Store32Lane = 6 /* _BinaryenStore32LaneVec128 */, // UNIMP
+  Store64Lane = 7 /* _BinaryenStore64LaneVec128 */, // UNIMP
 }
 
 export enum SIMDTernaryOp {
