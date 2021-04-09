@@ -1509,7 +1509,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!this.compileFunctionBody(instance, stmts)) {
         stmts.push(module.unreachable());
       }
-     
+
       this.currentFlow = previousFlow;
 
       // create the function
@@ -7533,7 +7533,7 @@ export class Compiler extends DiagnosticEmitter {
         expr = module.local_tee(local.index, expr, ftype.isManaged);
       }
     }
-    
+
     return expr;
   }
 

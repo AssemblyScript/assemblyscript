@@ -83,7 +83,6 @@ import {
   TypeParameterNode,
   VariableStatement,
   VariableDeclaration,
-  DestructVariableStatement,
   VoidStatement,
   WhileStatement,
 
@@ -907,7 +906,7 @@ export class Parser extends DiagnosticEmitter {
     decorators: DecoratorNode[] | null,
     startPos: i32,
     isFor: bool = false
-  ): DestructVariableStatement | null {
+  ): VariableStatement | null {
     var declarations = new Array<VariableDeclaration>();
     if(!tn.skip(Token.OPENBRACKET)) {
       return null;
@@ -928,10 +927,6 @@ export class Parser extends DiagnosticEmitter {
       if(!arrayExpression) return null;
       arrayExpression = this.maybeParseCallExpression(tn, arrayExpression);
 
-      /**
-       * TODO: To avoid running same callable for each destructuring, need to instantiate a new variable
-       * on the fly
-       * */
       for(let index = 0; index < declarations.length; index++) {
         var declaration = declarations[index];
         var arrayIndexExpression = Node.createIntegerLiteralExpression(i64_new(index), tn.range());
@@ -954,7 +949,7 @@ export class Parser extends DiagnosticEmitter {
     decorators: DecoratorNode[] | null,
     startPos: i32,
     isFor: bool = false
-  ): VariableStatement | DestructVariableStatement | null {
+  ): VariableStatement | null {
 
     // at ('const' | 'let' | 'var'): VariableDeclaration (',' VariableDeclaration)* ';'?
 

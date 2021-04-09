@@ -1,1 +1,2 @@
-const [x] = [1];
+const [x] = [999];
+assert(x == 999);
