@@ -1509,7 +1509,8 @@ export class Program extends DiagnosticEmitter {
                 this.errorRelated(
                   DiagnosticCode.Duplicate_identifier_0,
                   thisMember.identifierNode.range,
-                  baseMember.identifierNode.range
+                  baseMember.identifierNode.range,
+                  baseMember.identifierNode.text
                 );
               }
             }
