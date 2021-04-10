@@ -923,15 +923,15 @@ export class Parser extends DiagnosticEmitter {
       throw new Error("Destructuring must end with a closing bracket");
     }
     if(tn.skip(Token.EQUALS)) {
-      let arrayExpression = this.parseExpression(tn);
-      if(!arrayExpression) return null;
-      arrayExpression = this.maybeParseCallExpression(tn, arrayExpression);
+      let expression = this.parseExpression(tn);
+      if(!expression) return null;
+      expression = this.maybeParseCallExpression(tn, expression);
 
       for(let index = 0; index < declarations.length; index++) {
         var declaration = declarations[index];
         var arrayIndexExpression = Node.createIntegerLiteralExpression(i64_new(index), tn.range());
         const initializer = Node.createElementAccessExpression(
-          arrayExpression,
+          expression,
           arrayIndexExpression,
           tn.range(startPos, tn.pos)
         );
