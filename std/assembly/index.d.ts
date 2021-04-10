@@ -761,6 +761,8 @@ declare namespace v128 {
   export function all_true<T>(a: v128): bool;
   /** Extracts the high bit of each lane and produces a scalar mask with all bits concatenated. */
   export function bitmask<T>(a: v128): i32;
+  /** Counts the number of bits set to one within each lane. */
+  export function popcnt<T>(a: v128): v128;
   /** Computes the minimum of each lane. */
   export function min<T>(a: v128, b: v128): v128;
   /** Computes the maximum of each lane. */
@@ -855,6 +857,8 @@ declare namespace i8x16 {
   export function all_true(a: v128): bool;
   /** Extracts the high bit of each 8-bit integer lane and produces a scalar mask with all bits concatenated. */
   export function bitmask(a: v128): i32;
+  /** Counts the number of bits set to one within each 8-bit integer lane. */
+  export function popcnt(a: v128): v128;
   /** Computes which 8-bit integer lanes are equal. */
   export function eq(a: v128, b: v128): v128;
   /** Computes which 8-bit integer lanes are not equal. */

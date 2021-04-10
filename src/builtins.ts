@@ -383,6 +383,7 @@ export namespace BuiltinNames {
   export const v128_any_true = "~lib/builtins/v128.any_true";
   export const v128_all_true = "~lib/builtins/v128.all_true";
   export const v128_bitmask = "~lib/builtins/v128.bitmask";
+  export const v128_popcnt = "~lib/builtins/v128.popcnt";
   export const v128_min = "~lib/builtins/v128.min";
   export const v128_max = "~lib/builtins/v128.max";
   export const v128_pmin = "~lib/builtins/v128.pmin";
@@ -437,6 +438,7 @@ export namespace BuiltinNames {
   export const i8x16_shr_u = "~lib/builtins/i8x16.shr_u";
   export const i8x16_all_true = "~lib/builtins/i8x16.all_true";
   export const i8x16_bitmask = "~lib/builtins/i8x16.bitmask";
+  export const i8x16_popcnt = "~lib/builtins/i8x16.popcnt";
   export const i8x16_eq = "~lib/builtins/i8x16.eq";
   export const i8x16_ne = "~lib/builtins/i8x16.ne";
   export const i8x16_lt_s = "~lib/builtins/i8x16.lt_s";
@@ -5495,6 +5497,36 @@ function builtin_v128_bitmask(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v128_bitmask, builtin_v128_bitmask);
 
+// v128.popcnt<T!>(a: v128) -> v128
+function builtin_v128_popcnt(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var type = ctx.typeArguments![0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  compiler.currentType = Type.v128;
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.U8: return module.unary(UnaryOp.PopcntI8x16, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.popcnt", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_popcnt, builtin_v128_popcnt);
+
 // === Internal runtime =======================================================================
 
 // __visit_globals(cookie: u32) -> void
@@ -7155,6 +7187,15 @@ function builtin_i8x16_bitmask(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_bitmask(ctx);
 }
 builtins.set(BuiltinNames.i8x16_bitmask, builtin_i8x16_bitmask);
+
+// i8x16.popcnt -> v128.popcnt<i8>
+function builtin_i8x16_popcnt(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_popcnt(ctx);
+}
+builtins.set(BuiltinNames.i8x16_popcnt, builtin_i8x16_popcnt);
 
 // i8x16.eq -> v128.eq<i8>
 function builtin_i8x16_eq(ctx: BuiltinContext): ExpressionRef {

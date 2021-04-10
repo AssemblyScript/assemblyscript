@@ -1245,6 +1245,10 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
+  export declare function popcnt<T>(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
   export declare function min<T>(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
@@ -1432,6 +1436,10 @@ export namespace i8x16 {
   // @ts-ignore: decorator
   @builtin
   export declare function bitmask(a: v128): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function popcnt(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
