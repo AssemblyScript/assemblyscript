@@ -176,7 +176,7 @@ import {
   NamedTypeNode,
 
   findDecorator,
-  isTypeOmitted
+  isTypeOmitted, VariableDeclaration
 } from "./ast";
 
 import {
@@ -7331,6 +7331,28 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.flatten(exprs, this.currentType.toNativeType());
   }
 
+  getFromLocalCache (targetExpression: Expression, thisType: any, cacheCallableExpression?: VariableDeclaration) {
+    if(cacheCallableExpression) {
+      let tempLocal;
+      if(!this.currentFlow.scopedLocals) {
+        this.currentFlow.scopedLocals = new Map<string, Local>();
+      }
+      if(this.currentFlow.scopedLocals?.has("xxxx")) {
+        tempLocal = this.currentFlow.scopedLocals?.get("xxxx");
+        return Number(tempLocal?.constantIntegerValue);
+      } else {
+        const local = new Local("xxxx", -1, thisType, this.currentFlow.parentFunction);
+        const expressionRef = this.compileExpression(targetExpression, thisType, Constraints.CONV_IMPLICIT);
+        local.setConstantIntegerValue(
+          i64_new(expressionRef), thisType
+        );
+        this.currentFlow.scopedLocals?.set("xxxx", local);
+        return expressionRef;
+      }
+    }
+    return this.compileExpression(targetExpression, thisType, Constraints.CONV_IMPLICIT);
+  }
+
   private compileElementAccessExpression(
     expression: ElementAccessExpression,
     contextualType: Type,
@@ -7338,6 +7360,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
     var targetExpression = expression.expression;
+    var cacheCallableDeclaration = expression.cacheCallableDeclaration;
     var targetType = this.resolver.resolveExpression(targetExpression, this.currentFlow); // reports
     if (targetType) {
       let classReference = targetType.getClassOrWrapper(this.program);
@@ -7346,9 +7369,7 @@ export class Compiler extends DiagnosticEmitter {
         let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (indexedGet) {
           let thisType = assert(indexedGet.signature.thisType);
-          let thisArg = this.compileExpression(targetExpression, thisType,
-            Constraints.CONV_IMPLICIT
-          );
+          let thisArg = this.getFromLocalCache(targetExpression, thisType, cacheCallableDeclaration);
           if (!isUnchecked && this.options.pedantic) {
             this.pedantic(
               DiagnosticCode.Indexed_access_may_involve_bounds_checking,

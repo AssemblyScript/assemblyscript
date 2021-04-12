@@ -274,9 +274,10 @@ export abstract class Node {
   static createElementAccessExpression(
     expression: Expression,
     elementExpression: Expression,
-    range: Range
+    range: Range,
+    cacheCallableDeclaration?: VariableDeclaration
   ): ElementAccessExpression {
-    return new ElementAccessExpression(expression, elementExpression, range);
+    return new ElementAccessExpression(expression, elementExpression, range, cacheCallableDeclaration);
   }
 
   static createFalseExpression(
@@ -1274,7 +1275,9 @@ export class ElementAccessExpression extends Expression {
     /** Element of the expression being accessed. */
     public elementExpression: Expression,
     /** Source range. */
-    range: Range
+    range: Range,
+    /** */
+    public cacheCallableDeclaration: VariableDeclaration | undefined
   ) {
     super(NodeKind.ELEMENTACCESS, range);
   }
@@ -2307,7 +2310,7 @@ export class VariableStatement extends Statement {
     /** Source range. */
     range: Range,
     /** */
-    public isDestructed: boolean = false
+    public cacheCallableExpression: boolean = false
   ) {
     super(NodeKind.VARIABLE, range);
   }

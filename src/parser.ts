@@ -933,7 +933,8 @@ export class Parser extends DiagnosticEmitter {
         const initializer = Node.createElementAccessExpression(
           expression,
           arrayIndexExpression,
-          tn.range(startPos, tn.pos)
+          tn.range(startPos, tn.pos),
+          declaration
         );
         declaration.initializer = initializer;
       }
