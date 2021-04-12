@@ -407,7 +407,7 @@ export function indent(sb: string[], level: i32): void {
 }
 
 
-export function randomId() {
+export function randomId(): string {
   var size = 10;
   var key = "";
   var characters = 'abcdefghijklmnopqrstuvwxyz';
