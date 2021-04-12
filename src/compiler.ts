@@ -7331,25 +7331,24 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.flatten(exprs, this.currentType.toNativeType());
   }
 
-  getFromLocalCache (targetExpression: Expression, thisType: any, cacheCallableExpression?: string) {
-    if(cacheCallableExpression) {
-      var cachedKey = `cacheCallable_${cacheCallableExpression}`;
-      if(!this.currentFlow.scopedLocals) {
-        this.currentFlow.scopedLocals = new Map<string, Local>();
-      }
-      if(this.currentFlow.scopedLocals?.has(cachedKey)) {
-        return Number(this.currentFlow.scopedLocals?.get(cachedKey)?.constantIntegerValue);
-      } else {
-        const local = new Local(cachedKey, -1, thisType, this.currentFlow.parentFunction);
-        const expressionRef = this.compileExpression(targetExpression, thisType, Constraints.CONV_IMPLICIT);
-        local.setConstantIntegerValue(
-          i64_new(expressionRef), thisType
+  private compileExpressionPossibleCache (targetExpression: Expression, type: Type, key: string | undefined) {
+    if(key !== undefined) {
+      var cacheKey = `cachedCallable_${key}`;
+      var cachedValue = this.currentFlow.getScopedLocal(cacheKey);
+      if(cachedValue === null) {
+        var expressionRef = this.currentFlow.addScopedDummyLocalWithIntegerValue(
+          cacheKey,
+          type,
+          i64_new(this.compileExpression(targetExpression, type, Constraints.CONV_IMPLICIT))
+        ).constantIntegerValue;
+        return Number(
+          expressionRef
         );
-        this.currentFlow.scopedLocals?.set(cachedKey, local);
-        return expressionRef;
+      } else {
+        return Number(cachedValue.constantIntegerValue);
       }
     }
-    return this.compileExpression(targetExpression, thisType, Constraints.CONV_IMPLICIT);
+    return this.compileExpression(targetExpression, type, Constraints.CONV_IMPLICIT);
   }
 
   private compileElementAccessExpression(
@@ -7359,7 +7358,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
     var targetExpression = expression.expression;
-    var cacheCallableDeclaration = expression.cacheCallableDeclaration;
+    var destructingKey = expression.destructingKey;
     var targetType = this.resolver.resolveExpression(targetExpression, this.currentFlow); // reports
     if (targetType) {
       let classReference = targetType.getClassOrWrapper(this.program);
@@ -7368,7 +7367,7 @@ export class Compiler extends DiagnosticEmitter {
         let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (indexedGet) {
           let thisType = assert(indexedGet.signature.thisType);
-          let thisArg = this.getFromLocalCache(targetExpression, thisType, cacheCallableDeclaration);
+          let thisArg = this.compileExpressionPossibleCache(targetExpression, thisType, destructingKey);
           if (!isUnchecked && this.options.pedantic) {
             this.pedantic(
               DiagnosticCode.Indexed_access_may_involve_bounds_checking,
