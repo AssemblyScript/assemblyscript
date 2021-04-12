@@ -1276,7 +1276,7 @@ export class ElementAccessExpression extends Expression {
     public elementExpression: Expression,
     /** Source range. */
     range: Range,
-    /** */
+    /** Unique key to cache callable expression in compile to avoid multiple compiles when destructing */
     public destructingKey: string | undefined
   ) {
     super(NodeKind.ELEMENTACCESS, range);
