@@ -558,18 +558,18 @@ export enum SIMDShiftOp {
 }
 
 export enum SIMDLoadOp {
-  LoadSplatV8x16 = 0 /* _BinaryenLoadSplatVec8x16 */,
-  LoadSplatV16x8 = 1 /* _BinaryenLoadSplatVec16x8 */,
-  LoadSplatV32x4 = 2 /* _BinaryenLoadSplatVec32x4 */,
-  LoadSplatV64x2 = 3 /* _BinaryenLoadSplatVec64x2 */,
+  LoadSplatV8x16 = 0 /* _BinaryenLoad8SplatVec128 */,
+  LoadSplatV16x8 = 1 /* _BinaryenLoad16SplatVec128 */,
+  LoadSplatV32x4 = 2 /* _BinaryenLoad32SplatVec128 */,
+  LoadSplatV64x2 = 3 /* _BinaryenLoad64SplatVec128 */,
   LoadI8ToI16x8 = 4 /* _BinaryenLoadExtSVec8x8ToVecI16x8 */,
   LoadU8ToU16x8 = 5 /* _BinaryenLoadExtUVec8x8ToVecI16x8 */,
   LoadI16ToI32x4 = 6 /* _BinaryenLoadExtSVec16x4ToVecI32x4 */,
   LoadU16ToU32x4 = 7 /* _BinaryenLoadExtUVec16x4ToVecI32x4 */,
   LoadI32ToI64x2 = 8 /* _BinaryenLoadExtSVec32x2ToVecI64x2 */,
   LoadU32ToU64x2 = 9 /* _BinaryenLoadExtUVec32x2ToVecI64x2 */,
-  Load32Zero = 10 /* _BinaryenLoad32Zero */, // UNIMP
-  Load64Zero = 11 /* _BinaryenLoad64Zero */, // UNIMP
+  Load32Zero = 10 /* _BinaryenLoad32ZeroVec128 */, // UNIMP
+  Load64Zero = 11 /* _BinaryenLoad64ZeroVec128 */, // UNIMP
 }
 
 export enum SIMDLoadStoreLaneOp {
