@@ -2301,7 +2301,6 @@ export class VariableDeclaration extends VariableLikeDeclarationStatement {
 
 /** Represents a variable statement wrapping {@link VariableDeclaration}s. */
 export class VariableStatement extends Statement {
-  ranges: undefined;
   constructor(
     /** Array of decorators. */
     public decorators: DecoratorNode[] | null,

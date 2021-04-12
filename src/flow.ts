@@ -454,7 +454,7 @@ export class Flow {
 
   /** Adds a new scoped dummy local of the specified name and initiate a integer value. */
   addScopedDummyLocalWithIntegerValue(name: string, type: Type, integerValue: i64): Local {
-    var local = this.addScopedLocal(name,type);
+    var local = this.addScopedLocal(name, type);
     local.setConstantIntegerValue(integerValue, type);
     return local;
   }

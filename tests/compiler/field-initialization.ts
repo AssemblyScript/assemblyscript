@@ -17,7 +17,7 @@ class Value {
 }
 
 class Ref_Init {
-  a: ArrayBuffer = `new ArrayBuffer(0)`; // OK
+  a: ArrayBuffer = new ArrayBuffer(0); // OK
 }
 {
   let o = new Ref_Init();
