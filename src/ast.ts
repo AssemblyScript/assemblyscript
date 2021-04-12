@@ -275,7 +275,7 @@ export abstract class Node {
     expression: Expression,
     elementExpression: Expression,
     range: Range,
-    cacheCallableDeclaration?: VariableDeclaration
+    cacheCallableDeclaration?: string
   ): ElementAccessExpression {
     return new ElementAccessExpression(expression, elementExpression, range, cacheCallableDeclaration);
   }
@@ -1277,7 +1277,7 @@ export class ElementAccessExpression extends Expression {
     /** Source range. */
     range: Range,
     /** */
-    public cacheCallableDeclaration: VariableDeclaration | undefined
+    public cacheCallableDeclaration: string | undefined
   ) {
     super(NodeKind.ELEMENTACCESS, range);
   }

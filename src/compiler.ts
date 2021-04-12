@@ -7331,22 +7331,21 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.flatten(exprs, this.currentType.toNativeType());
   }
 
-  getFromLocalCache (targetExpression: Expression, thisType: any, cacheCallableExpression?: VariableDeclaration) {
+  getFromLocalCache (targetExpression: Expression, thisType: any, cacheCallableExpression?: string) {
     if(cacheCallableExpression) {
-      let tempLocal;
+      var cachedKey = `cacheCallable_${cacheCallableExpression}`;
       if(!this.currentFlow.scopedLocals) {
         this.currentFlow.scopedLocals = new Map<string, Local>();
       }
-      if(this.currentFlow.scopedLocals?.has("xxxx")) {
-        tempLocal = this.currentFlow.scopedLocals?.get("xxxx");
-        return Number(tempLocal?.constantIntegerValue);
+      if(this.currentFlow.scopedLocals?.has(cachedKey)) {
+        return Number(this.currentFlow.scopedLocals?.get(cachedKey)?.constantIntegerValue);
       } else {
-        const local = new Local("xxxx", -1, thisType, this.currentFlow.parentFunction);
+        const local = new Local(cachedKey, -1, thisType, this.currentFlow.parentFunction);
         const expressionRef = this.compileExpression(targetExpression, thisType, Constraints.CONV_IMPLICIT);
         local.setConstantIntegerValue(
           i64_new(expressionRef), thisType
         );
-        this.currentFlow.scopedLocals?.set("xxxx", local);
+        this.currentFlow.scopedLocals?.set(cachedKey, local);
         return expressionRef;
       }
     }

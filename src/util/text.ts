@@ -405,3 +405,14 @@ export function indent(sb: string[], level: i32): void {
     sb.push(indentX1);
   }
 }
+
+
+export function randomId() {
+  var size = 10;
+  var key = "";
+  var characters = 'abcdefghijklmnopqrstuvwxyz';
+  for (var i = 0; i < size; i++ ) {
+    key += characters.charAt(Math.floor(Math.random() * 26));
+  }
+  return  key;
+}

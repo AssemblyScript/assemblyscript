@@ -29,7 +29,7 @@ import {
 
 import {
   CharCode,
-  normalizePath
+  normalizePath, randomId
 } from "./util";
 
 import {
@@ -907,6 +907,7 @@ export class Parser extends DiagnosticEmitter {
     startPos: i32,
     isFor: bool = false
   ): VariableStatement | null {
+    var destructingKey = randomId();
     var declarations = new Array<VariableDeclaration>();
     if(!tn.skip(Token.OPENBRACKET)) {
       return null;
@@ -934,7 +935,7 @@ export class Parser extends DiagnosticEmitter {
           expression,
           arrayIndexExpression,
           tn.range(startPos, tn.pos),
-          declaration
+          destructingKey
         );
         declaration.initializer = initializer;
       }
