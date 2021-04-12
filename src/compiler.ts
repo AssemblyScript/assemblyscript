@@ -5837,7 +5837,10 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       default: {
-        assert(false);
+        this.error(
+          DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
+          expression.range, target.internalName
+        );
         return this.module.unreachable();
       }
     }
