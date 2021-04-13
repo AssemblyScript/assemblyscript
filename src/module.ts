@@ -957,17 +957,17 @@ export enum SIMDLoadOp {
   /** v128.load64_splat */
   Load64Splat = 3 /* _BinaryenLoad64SplatVec128 */,
   /** v128.load8x8_s */
-  Load8x8S = 4 /* _BinaryenLoadExtSVec8x8ToVecI16x8 */,
+  Load8x8S = 4 /* _BinaryenLoad8x8SVec128 */,
   /** v128.load8x8_u */
-  Load8x8U = 5 /* _BinaryenLoadExtUVec8x8ToVecI16x8 */,
+  Load8x8U = 5 /* _BinaryenLoad8x8UVec128 */,
   /** v128.load16x4_s */
-  Load16x4S = 6 /* _BinaryenLoadExtSVec16x4ToVecI32x4 */,
+  Load16x4S = 6 /* _BinaryenLoad16x4SVec128 */,
   /** v128.load16x4_u */
-  Load16x4U = 7 /* _BinaryenLoadExtUVec16x4ToVecI32x4 */,
+  Load16x4U = 7 /* _BinaryenLoad16x4UVec128 */,
   /** v128.load32x2_s */
-  Load32x2S = 8 /* _BinaryenLoadExtSVec32x2ToVecI64x2 */,
+  Load32x2S = 8 /* _BinaryenLoad32x2SVec128 */,
   /** v128.load32x2_u */
-  Load32x2U = 9 /* _BinaryenLoadExtUVec32x2ToVecI64x2 */,
+  Load32x2U = 9 /* _BinaryenLoad32x2UVec128 */,
   /** v128.load32_zero */
   Load32Zero = 10 /* _BinaryenLoad32ZeroVec128 */, // UNIMP
   /** v128.load64_zero */
