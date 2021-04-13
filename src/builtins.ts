@@ -1767,13 +1767,13 @@ function builtin_reinterpret(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32: {
         let arg0 = compiler.compileExpression(operands[0], Type.f32, Constraints.CONV_IMPLICIT);
         compiler.currentType = type;
-        return module.unary(UnaryOp.ReinterpretF32, arg0);
+        return module.unary(UnaryOp.ReinterpretF32ToI32, arg0);
       }
       case TypeKind.I64:
       case TypeKind.U64: {
         let arg0 = compiler.compileExpression(operands[0], Type.f64, Constraints.CONV_IMPLICIT);
         compiler.currentType = type;
-        return module.unary(UnaryOp.ReinterpretF64, arg0);
+        return module.unary(UnaryOp.ReinterpretF64ToI64, arg0);
       }
       case TypeKind.ISIZE:
       case TypeKind.USIZE: {
@@ -1786,20 +1786,20 @@ function builtin_reinterpret(ctx: BuiltinContext): ExpressionRef {
         compiler.currentType = type;
         return module.unary(
           compiler.options.isWasm64
-            ? UnaryOp.ReinterpretF64
-            : UnaryOp.ReinterpretF32,
+            ? UnaryOp.ReinterpretF64ToI64
+            : UnaryOp.ReinterpretF32ToI32,
           arg0
         );
       }
       case TypeKind.F32: {
         let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
         compiler.currentType = Type.f32;
-        return module.unary(UnaryOp.ReinterpretI32, arg0);
+        return module.unary(UnaryOp.ReinterpretI32ToF32, arg0);
       }
       case TypeKind.F64: {
         let arg0 = compiler.compileExpression(operands[0], Type.i64, Constraints.CONV_IMPLICIT);
         compiler.currentType = Type.f64;
-        return module.unary(UnaryOp.ReinterpretI64, arg0);
+        return module.unary(UnaryOp.ReinterpretI64ToF64, arg0);
       }
     }
   }
@@ -3952,7 +3952,7 @@ function builtin_v128_swizzle(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-  return module.binary(BinaryOp.SwizzleV8x16, arg0, arg1);
+  return module.binary(BinaryOp.SwizzleI8x16, arg0, arg1);
 }
 builtins.set(BuiltinNames.v128_swizzle, builtin_v128_swizzle);
 
@@ -3991,28 +3991,28 @@ function builtin_v128_load_splat(ctx: BuiltinContext): ExpressionRef {
     switch (type.kind) {
       case TypeKind.I8:
       case TypeKind.U8: {
-        return module.simd_load(SIMDLoadOp.LoadSplatV8x16, arg0, immOffset, immAlign);
+        return module.simd_load(SIMDLoadOp.Load8Splat, arg0, immOffset, immAlign);
       }
       case TypeKind.I16:
       case TypeKind.U16: {
-        return module.simd_load(SIMDLoadOp.LoadSplatV16x8, arg0, immOffset, immAlign);
+        return module.simd_load(SIMDLoadOp.Load16Splat, arg0, immOffset, immAlign);
       }
       case TypeKind.I32:
       case TypeKind.U32:
       case TypeKind.F32: {
-        return module.simd_load(SIMDLoadOp.LoadSplatV32x4, arg0, immOffset, immAlign);
+        return module.simd_load(SIMDLoadOp.Load32Splat, arg0, immOffset, immAlign);
       }
       case TypeKind.ISIZE:
       case TypeKind.USIZE: {
         if (!compiler.options.isWasm64) {
-          return module.simd_load(SIMDLoadOp.LoadSplatV32x4, arg0, immOffset, immAlign);
+          return module.simd_load(SIMDLoadOp.Load32Splat, arg0, immOffset, immAlign);
         }
         // fall-through
       }
       case TypeKind.I64:
       case TypeKind.U64:
       case TypeKind.F64: {
-        return module.simd_load(SIMDLoadOp.LoadSplatV64x2, arg0, immOffset, immAlign);
+        return module.simd_load(SIMDLoadOp.Load64Splat, arg0, immOffset, immAlign);
       }
     }
   }
@@ -4057,20 +4057,20 @@ function builtin_v128_load_ext(ctx: BuiltinContext): ExpressionRef {
   compiler.currentType = Type.v128;
   if (type.isValue) {
     switch (type.kind) {
-      case TypeKind.I8: return module.simd_load(SIMDLoadOp.LoadI8ToI16x8, arg0, immOffset, immAlign);
-      case TypeKind.U8: return module.simd_load(SIMDLoadOp.LoadU8ToU16x8, arg0, immOffset, immAlign);
-      case TypeKind.I16: return module.simd_load(SIMDLoadOp.LoadI16ToI32x4, arg0, immOffset, immAlign);
-      case TypeKind.U16: return module.simd_load(SIMDLoadOp.LoadU16ToU32x4, arg0, immOffset, immAlign);
+      case TypeKind.I8: return module.simd_load(SIMDLoadOp.Load8x8S, arg0, immOffset, immAlign);
+      case TypeKind.U8: return module.simd_load(SIMDLoadOp.Load8x8U, arg0, immOffset, immAlign);
+      case TypeKind.I16: return module.simd_load(SIMDLoadOp.Load16x4S, arg0, immOffset, immAlign);
+      case TypeKind.U16: return module.simd_load(SIMDLoadOp.Load16x4U, arg0, immOffset, immAlign);
       case TypeKind.ISIZE: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
-      case TypeKind.I32: return module.simd_load(SIMDLoadOp.LoadI32ToI64x2, arg0, immOffset, immAlign);
+      case TypeKind.I32: return module.simd_load(SIMDLoadOp.Load32x2S, arg0, immOffset, immAlign);
       case TypeKind.USIZE: {
         if (compiler.options.isWasm64) break;
         // fall-through
       }
-      case TypeKind.U32: return module.simd_load(SIMDLoadOp.LoadU32ToU64x2, arg0, immOffset, immAlign);
+      case TypeKind.U32: return module.simd_load(SIMDLoadOp.Load32x2U, arg0, immOffset, immAlign);
     }
   }
   compiler.error(
@@ -5350,7 +5350,7 @@ builtins.set(BuiltinNames.v128_xor, builtin_v128_xor);
 
 // v128.andnot(a: v128, b: v128) -> v128
 function builtin_v128_andnot(ctx: BuiltinContext): ExpressionRef {
-  return builtin_v128_bitwise_binary(ctx, BinaryOp.AndNotV128);
+  return builtin_v128_bitwise_binary(ctx, BinaryOp.AndnotV128);
 }
 builtins.set(BuiltinNames.v128_andnot, builtin_v128_andnot);
 
