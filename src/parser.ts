@@ -29,7 +29,7 @@ import {
 
 import {
   CharCode,
-  normalizePath, randomId
+  normalizePath
 } from "./util";
 
 import {
@@ -900,14 +900,14 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  parseDestructedVariable(
+  parseDestructedVariableDeclaration(
     tn: Tokenizer,
     flags: CommonFlags,
     decorators: DecoratorNode[] | null,
     startPos: i32,
     isFor: bool = false
   ): VariableStatement | null {
-    var destructingKey = randomId();
+    var destructingKey = "test_key";
     var declarations = new Array<VariableDeclaration>();
     if(!tn.skip(Token.OPENBRACKET)) {
       return null;
@@ -958,7 +958,7 @@ export class Parser extends DiagnosticEmitter {
     var declarations = new Array<VariableDeclaration>();
     var ret = null;
     if(tn.peek() == Token.OPENBRACKET && !isFor) {
-      ret = this.parseDestructedVariable(tn, flags, decorators, startPos, isFor);
+      ret = this.parseDestructedVariableDeclaration(tn, flags, decorators, startPos, isFor);
     } else {
       do {
         let declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);

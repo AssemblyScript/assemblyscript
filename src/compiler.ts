@@ -7331,7 +7331,7 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.flatten(exprs, this.currentType.toNativeType());
   }
 
-  private compileExpressionPossibleCached (targetExpression: Expression, type: Type, key: string | undefined) {
+  private compileExpressionMaybeCached (targetExpression: Expression, type: Type, key: string | undefined) {
     if(key !== undefined) {
       var cacheKey = `cachedCallable_${key}`;
       var cachedValue = this.currentFlow.getScopedLocal(cacheKey);
@@ -7367,7 +7367,7 @@ export class Compiler extends DiagnosticEmitter {
         let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (indexedGet) {
           let thisType = assert(indexedGet.signature.thisType);
-          let thisArg = this.compileExpressionPossibleCached(targetExpression, thisType, destructingKey);
+          let thisArg = this.compileExpressionMaybeCached(targetExpression, thisType, destructingKey);
           if (!isUnchecked && this.options.pedantic) {
             this.pedantic(
               DiagnosticCode.Indexed_access_may_involve_bounds_checking,
