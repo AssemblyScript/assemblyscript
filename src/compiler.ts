@@ -6335,7 +6335,16 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.PROPERTY: {
         let propertyInstance = <Property>target;
-        let getterInstance = assert(propertyInstance.getterInstance);
+        let getterInstance = propertyInstance.getterInstance;
+
+        if (!getterInstance) {
+          this.error(
+            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+            expression.range, this.currentType.toString()
+          );
+          return module.unreachable();
+        }
+
         let thisArg: ExpressionRef = 0;
         if (propertyInstance.is(CommonFlags.INSTANCE)) {
           thisArg = this.compileExpression(
