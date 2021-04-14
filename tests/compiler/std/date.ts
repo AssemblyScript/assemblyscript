@@ -209,3 +209,40 @@
   date = Date.fromString("1976-02-02T12:34:56.456Z");
   assert(date.getTime() == 192112496456);
 }
+
+// Minimum / Maximum dates /////////////////////////////////////////////////////////////////////////
+{
+  let minDate = new Date(-8640000000000000);
+  let maxDate = new Date(8640000000000000);
+
+  assert(minDate.getTime() == <i64>-8640000000000000);
+  assert(maxDate.getTime() == <i64> 8640000000000000);
+
+  assert(minDate.getUTCFullYear() == -271821);
+  assert(maxDate.getUTCFullYear() ==  275760);
+
+  assert(minDate.getUTCMonth() == 3);
+  assert(maxDate.getUTCMonth() == 8);
+
+  assert(minDate.getUTCDate() == 20);
+  assert(maxDate.getUTCDate() == 13);
+
+  assert(minDate.toISOString() == "-271821-04-20T00:00:00.000Z");
+  assert(maxDate.toISOString() == "+275760-09-13T00:00:00.000Z");
+
+  let maxDateDec = new Date( 8640000000000000 - 1);
+  let minDateInc = new Date(-8640000000000000 + 1);
+
+  trace("", 2, minDateInc.getUTCDate(), minDateInc.getUTCMinutes());
+
+  // assert(minDateInc.getUTCDate() == 20);
+
+  // assert(maxDateDec.toISOString() == "+275760-09-12T23:59:59.999Z");
+  // trace(minDateInc.toISOString());
+
+
+  // assert(new Date(-8640000000000000 + 1).toISOString() == "-271821-04-20T00:00:00.001Z");
+
+  // console.log(new Date(maxDate.getTime() + 1).toString()); // Invalid Date
+  // console.log(new Date(minDate.getTime() - 1).toString()); // Invalid Date
+}

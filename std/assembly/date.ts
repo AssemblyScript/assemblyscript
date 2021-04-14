@@ -158,7 +158,7 @@ export class Date {
 
   toISOString(): string {
     var yearStr = this.year.toString();
-    if (yearStr.length > 4) {
+    if (this.epochMillis > 0 && yearStr.length > 4) {
       yearStr = "+" + yearStr.padStart(6, "0");
     }
 
@@ -224,9 +224,10 @@ function ymdFromEpochDays(z: i32): i32 {
   var yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365; // [0, 399]
   var year = yoe + era * 400;
   var doy = doe - (365 * yoe + yoe / 4 - yoe / 100); // [0, 365]
-  var mp = (5 * doy + 2) / 153; // [0, 11]
-  _day = doy - (153 * mp + 2) / 5 + 1; // [1, 31]
-  var mo = _month = mp + (mp < 10 ? 3 : -9); // [1, 12]
+  var mo = (5 * doy + 2) / 153; // [0, 11]
+  _day = doy - (153 * mo + 2) / 5 + 1; // [1, 31]
+  mo += mo < 10 ? 3 : -9; // [1, 12]
+  _month = mo;
   year += i32(mo <= 2);
   return year;
 }
