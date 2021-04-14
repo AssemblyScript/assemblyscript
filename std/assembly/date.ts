@@ -10,9 +10,13 @@ import { now as Date_now } from "./bindings/Date";
 
 // ymdFromEpochDays returns values via globals to avoid allocations
 // @ts-ignore: decorator
-@lazy let month: i32, day: i32;
+@lazy let _month: i32, _day: i32;
 
 export class Date {
+  private year: i32 = 0;
+  private month: i32 = 0;
+  private day: i32 = 0;
+
   @inline static UTC(
     year: i32,
     month: i32 = 0,
@@ -68,7 +72,11 @@ export class Date {
     return new Date(epochMillis(year, month, day, hour, min, sec, ms));
   }
 
-  constructor(private epochMillis: i64) {}
+  constructor(private epochMillis: i64) {
+    this.year = ymdFromEpochDays(i32(epochMillis / MILLIS_PER_DAY));
+    this.month = _month;
+    this.day = _day;
+  }
 
   getTime(): i64 {
     return this.epochMillis;
@@ -76,21 +84,22 @@ export class Date {
 
   setTime(value: i64): i64 {
     this.epochMillis = value;
+    this.year = ymdFromEpochDays(i32(value / MILLIS_PER_DAY));
+    this.month = _month;
+    this.day = _day;
     return value;
   }
 
   getUTCFullYear(): i32 {
-    return this.computeUTCDate();
+    return this.year;
   }
 
   getUTCMonth(): i32 {
-    this.computeUTCDate();
-    return month - 1;
+    return this.month - 1;
   }
 
   getUTCDate(): i32 {
-    this.computeUTCDate();
-    return day;
+    return this.day;
   }
 
   getUTCHours(): i32 {
@@ -110,50 +119,45 @@ export class Date {
   }
 
   setUTCMilliseconds(value: i32): void {
-    this.epochMillis += value - this.getUTCMilliseconds();
+    this.setTime(this.epochMillis + value - this.getUTCMilliseconds());
   }
 
   setUTCSeconds(value: i32): void {
     if (value < 0 || value > 59) throw new RangeError(E_VALUEOUTOFRANGE);
-    this.epochMillis += (value - this.getUTCSeconds()) * MILLIS_PER_SECOND;
+    this.setTime(this.epochMillis + (value - this.getUTCSeconds()) * MILLIS_PER_SECOND);
   }
 
   setUTCMinutes(value: i32): void {
     if (value < 0 || value > 59) throw new RangeError(E_VALUEOUTOFRANGE);
-    this.epochMillis += (value - this.getUTCMinutes()) * MILLIS_PER_MINUTE;
+    this.setTime(this.epochMillis + (value - this.getUTCMinutes()) * MILLIS_PER_MINUTE);
   }
 
   setUTCHours(value: i32): void {
     if (value < 0 || value > 23) throw new RangeError(E_VALUEOUTOFRANGE);
-    this.epochMillis += (value - this.getUTCHours()) * MILLIS_PER_HOUR;
+    this.setTime(this.epochMillis + (value - this.getUTCHours()) * MILLIS_PER_HOUR);
   }
 
   setUTCDate(value: i32): void {
-    var year = this.computeUTCDate();
+    var year = this.year;
+    var month = this.month;
     if (value < 1 || value > daysInMonth(year, month)) throw new RangeError(E_VALUEOUTOFRANGE);
     var ms = this.epochMillis % MILLIS_PER_DAY;
-    this.epochMillis =
-      i64(daysSinceEpoch(year, month, value)) * MILLIS_PER_DAY + ms;
+    this.setTime(i64(daysSinceEpoch(year, month, value)) * MILLIS_PER_DAY + ms);
   }
 
   setUTCMonth(value: i32): void {
     if (value < 1 || value > 12) throw new RangeError(E_VALUEOUTOFRANGE);
-    var year = this.computeUTCDate();
     var ms = this.epochMillis % MILLIS_PER_DAY;
-    this.epochMillis =
-      i64(daysSinceEpoch(year, value + 1, day)) * MILLIS_PER_DAY + ms;
+    this.setTime(i64(daysSinceEpoch(this.year, value + 1, this.day)) * MILLIS_PER_DAY + ms);
   }
 
   setUTCFullYear(value: i32): void {
-    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
     var ms = this.epochMillis % MILLIS_PER_DAY;
-    this.epochMillis =
-      i64(daysSinceEpoch(value, month, day)) * MILLIS_PER_DAY + ms;
+    this.setTime(i64(daysSinceEpoch(value, this.month, this.day)) * MILLIS_PER_DAY + ms);
   }
 
   toISOString(): string {
-    var year = this.computeUTCDate();
-    var yearStr = year.toString();
+    var yearStr = this.year.toString();
     if (yearStr.length > 4) {
       yearStr = "+" + yearStr.padStart(6, "0");
     }
@@ -161,9 +165,9 @@ export class Date {
     return (
       yearStr +
       "-" +
-      month.toString().padStart(2, "0") +
+      this.month.toString().padStart(2, "0") +
       "-" +
-      day.toString().padStart(2, "0") +
+      this.day.toString().padStart(2, "0") +
       "T" +
       this.getUTCHours().toString().padStart(2, "0") +
       ":" +
@@ -174,10 +178,6 @@ export class Date {
       this.getUTCMilliseconds().toString().padStart(3, "0") +
       "Z"
     );
-  }
-
-  private computeUTCDate(): i32 {
-    return ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
   }
 }
 
@@ -225,9 +225,9 @@ function ymdFromEpochDays(z: i32): i32 {
   var year = yoe + era * 400;
   var doy = doe - (365 * yoe + yoe / 4 - yoe / 100); // [0, 365]
   var mp = (5 * doy + 2) / 153; // [0, 11]
-  day = doy - (153 * mp + 2) / 5 + 1; // [1, 31]
-  month = mp + (mp < 10 ? 3 : -9); // [1, 12]
-  year += i32(month <= 2);
+  _day = doy - (153 * mp + 2) / 5 + 1; // [1, 31]
+  var mo = _month = mp + (mp < 10 ? 3 : -9); // [1, 12]
+  year += i32(mo <= 2);
   return year;
 }
 
