@@ -67,7 +67,6 @@ export class Date {
     var day   = I32.parseInt(parts[2]);
     var month = I32.parseInt(parts[1]);
     var year  = I32.parseInt(parts[0]);
-    if (year < 100) year += 1900;
 
     return new Date(epochMillis(year, month, day, hour, min, sec, ms));
   }
@@ -201,6 +200,7 @@ function epochMillis(
   second: i32,
   milliseconds: i32
 ): i64 {
+  if (year >= 0 && year <= 99) year += 1900;
   return (
     i64(daysSinceEpoch(year, month, day)) * MILLIS_PER_DAY +
     hour * MILLIS_PER_HOUR +
