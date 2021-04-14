@@ -123,6 +123,12 @@
   date.setUTCDate(1);
   date.setUTCDate(29);
 
+  assert(date.getTime() == 1711674191274);
+  assert(date.getUTCDate() == 29);
+  assert(date.getUTCMinutes() == 3);
+  assert(date.getUTCSeconds() == 11);
+  assert(date.getUTCMilliseconds() == 274);
+
   date = new Date(1362106799999);
   date.setUTCDate(20);
   assert(date.getTime() == 1363748399999);
