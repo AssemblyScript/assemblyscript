@@ -118,42 +118,42 @@ export class Date {
     return i32(this.epochMillis % MILLIS_PER_SECOND);
   }
 
-  setUTCMilliseconds(value: i32): void {
-    this.setTime(this.epochMillis + value - this.getUTCMilliseconds());
+  setUTCMilliseconds(millis: i32): void {
+    this.setTime(this.epochMillis + (millis - this.getUTCMilliseconds()));
   }
 
-  setUTCSeconds(value: i32): void {
-    if (value < 0 || value > 59) throw new RangeError(E_VALUEOUTOFRANGE);
-    this.setTime(this.epochMillis + (value - this.getUTCSeconds()) * MILLIS_PER_SECOND);
+  setUTCSeconds(seconds: i32): void {
+    if (seconds < 0 || seconds > 59) throw new RangeError(E_VALUEOUTOFRANGE);
+    this.setTime(this.epochMillis + (seconds - this.getUTCSeconds()) * MILLIS_PER_SECOND);
   }
 
-  setUTCMinutes(value: i32): void {
-    if (value < 0 || value > 59) throw new RangeError(E_VALUEOUTOFRANGE);
-    this.setTime(this.epochMillis + (value - this.getUTCMinutes()) * MILLIS_PER_MINUTE);
+  setUTCMinutes(minutes: i32): void {
+    if (minutes < 0 || minutes > 59) throw new RangeError(E_VALUEOUTOFRANGE);
+    this.setTime(this.epochMillis + (minutes - this.getUTCMinutes()) * MILLIS_PER_MINUTE);
   }
 
-  setUTCHours(value: i32): void {
-    if (value < 0 || value > 23) throw new RangeError(E_VALUEOUTOFRANGE);
-    this.setTime(this.epochMillis + (value - this.getUTCHours()) * MILLIS_PER_HOUR);
+  setUTCHours(hours: i32): void {
+    if (hours < 0 || hours > 23) throw new RangeError(E_VALUEOUTOFRANGE);
+    this.setTime(this.epochMillis + (hours - this.getUTCHours()) * MILLIS_PER_HOUR);
   }
 
-  setUTCDate(value: i32): void {
+  setUTCDate(day: i32): void {
     var year = this.year;
     var month = this.month;
-    if (value < 1 || value > daysInMonth(year, month)) throw new RangeError(E_VALUEOUTOFRANGE);
+    if (day < 1 || day > daysInMonth(year, month)) throw new RangeError(E_VALUEOUTOFRANGE);
     var ms = this.epochMillis % MILLIS_PER_DAY;
-    this.setTime(i64(daysSinceEpoch(year, month, value)) * MILLIS_PER_DAY + ms);
+    this.setTime(i64(daysSinceEpoch(year, month, day)) * MILLIS_PER_DAY + ms);
   }
 
-  setUTCMonth(value: i32): void {
-    if (value < 1 || value > 12) throw new RangeError(E_VALUEOUTOFRANGE);
+  setUTCMonth(month: i32): void {
+    if (month < 1 || month > 12) throw new RangeError(E_VALUEOUTOFRANGE);
     var ms = this.epochMillis % MILLIS_PER_DAY;
-    this.setTime(i64(daysSinceEpoch(this.year, value + 1, this.day)) * MILLIS_PER_DAY + ms);
+    this.setTime(i64(daysSinceEpoch(this.year, month + 1, this.day)) * MILLIS_PER_DAY + ms);
   }
 
-  setUTCFullYear(value: i32): void {
+  setUTCFullYear(year: i32): void {
     var ms = this.epochMillis % MILLIS_PER_DAY;
-    this.setTime(i64(daysSinceEpoch(value, this.month, this.day)) * MILLIS_PER_DAY + ms);
+    this.setTime(i64(daysSinceEpoch(year, this.month, this.day)) * MILLIS_PER_DAY + ms);
   }
 
   toISOString(): string {

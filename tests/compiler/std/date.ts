@@ -122,6 +122,15 @@
   date.setUTCMonth(2);
   date.setUTCDate(1);
   date.setUTCDate(29);
+
+  date = new Date(1362106799999);
+  date.setUTCDate(20);
+  assert(date.getTime() == 1363748399999);
+  date.setUTCDate(1);
+  assert(date.getTime() == 1362106799999);
+
+  date.setUTCMilliseconds(1000);
+  assert(date.getTime() == 1362106800000);
 }
 
 // Date#setUTCMonth /////////////////////////////////////////////////////////////////////////////////
