@@ -3,8 +3,8 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
@@ -91,7 +91,6 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/date/year (mut i32) (i32.const 0))
  (global $~lib/date/day (mut i32) (i32.const 0))
  (global $~lib/date/month (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 19508))
@@ -1863,9 +1862,10 @@
   call $~lib/memory/memory.fill
   local.get $1
  )
- (func $~lib/date/ymdFromEpochDays (param $0 i32)
+ (func $~lib/date/ymdFromEpochDays (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.const 719468
   i32.add
@@ -1900,12 +1900,7 @@
   i32.sub
   i32.const 365
   i32.div_s
-  local.tee $1
-  local.get $2
-  i32.const 400
-  i32.mul
-  i32.add
-  global.set $~lib/date/year
+  local.set $1
   local.get $0
   local.get $1
   i32.const 365
@@ -1919,7 +1914,7 @@
   i32.div_s
   i32.sub
   i32.sub
-  local.tee $1
+  local.tee $3
   i32.const 5
   i32.mul
   i32.const 2
@@ -1927,7 +1922,7 @@
   i32.const 153
   i32.div_s
   local.set $0
-  local.get $1
+  local.get $3
   local.get $0
   i32.const 153
   i32.mul
@@ -1948,21 +1943,15 @@
   select
   i32.add
   global.set $~lib/date/month
-  global.get $~lib/date/year
+  local.get $1
+  local.get $2
+  i32.const 400
+  i32.mul
+  i32.add
   global.get $~lib/date/month
   i32.const 2
   i32.le_s
   i32.add
-  global.set $~lib/date/year
- )
- (func $~lib/date/Date#getUTCFullYear (param $0 i32) (result i32)
-  local.get $0
-  i64.load
-  i64.const 86400000
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
-  global.get $~lib/date/year
  )
  (func $~lib/date/Date#getUTCMonth (param $0 i32) (result i32)
   local.get $0
@@ -1971,6 +1960,7 @@
   i64.div_s
   i32.wrap_i64
   call $~lib/date/ymdFromEpochDays
+  drop
   global.get $~lib/date/month
   i32.const 1
   i32.sub
@@ -1982,6 +1972,7 @@
   i64.div_s
   i32.wrap_i64
   call $~lib/date/ymdFromEpochDays
+  drop
   global.get $~lib/date/day
  )
  (func $~lib/date/Date#getUTCHours (param $0 i32) (result i32)
@@ -2038,7 +2029,7 @@
   if
    i32.const 1504
    i32.const 1568
-   i32.const 121
+   i32.const 117
    i32.const 34
    call $~lib/builtins/abort
    unreachable
@@ -2068,7 +2059,7 @@
   if
    i32.const 1504
    i32.const 1568
-   i32.const 126
+   i32.const 122
    i32.const 34
    call $~lib/builtins/abort
    unreachable
@@ -2098,7 +2089,7 @@
   if
    i32.const 1504
    i32.const 1568
-   i32.const 131
+   i32.const 127
    i32.const 34
    call $~lib/builtins/abort
    unreachable
@@ -2118,12 +2109,14 @@
  )
  (func $~lib/date/Date#setUTCDate (param $0 i32) (param $1 i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   i64.load
   i64.const 86400000
   i64.div_s
   i32.wrap_i64
   call $~lib/date/ymdFromEpochDays
+  local.set $2
   local.get $1
   i32.const 1
   i32.lt_s
@@ -2133,8 +2126,7 @@
    local.get $1
    i32.const 0
    i32.const 1
-   global.get $~lib/date/year
-   local.tee $2
+   local.get $2
    i32.const 400
    i32.rem_s
    i32.eqz
@@ -2151,8 +2143,8 @@
    i32.const 28
    i32.add
    global.get $~lib/date/month
-   local.tee $2
-   local.get $2
+   local.tee $3
+   local.get $3
    i32.const 8
    i32.ge_s
    i32.add
@@ -2160,7 +2152,7 @@
    i32.and
    i32.const 30
    i32.add
-   local.get $2
+   local.get $3
    i32.const 2
    i32.eq
    select
@@ -2169,7 +2161,7 @@
   if
    i32.const 1504
    i32.const 1568
-   i32.const 137
+   i32.const 133
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -2179,7 +2171,7 @@
   i64.load
   i64.const 86400000
   i64.rem_s
-  global.get $~lib/date/year
+  local.get $2
   global.get $~lib/date/month
   local.get $1
   call $~lib/date/daysSinceEpoch
@@ -2190,6 +2182,7 @@
   i64.store
  )
  (func $~lib/date/Date#setUTCMonth (param $0 i32) (param $1 i32)
+  (local $2 i32)
   i32.const 1
   local.get $1
   i32.const 12
@@ -2201,7 +2194,7 @@
   if
    i32.const 1504
    i32.const 1568
-   i32.const 144
+   i32.const 140
    i32.const 34
    call $~lib/builtins/abort
    unreachable
@@ -2212,12 +2205,13 @@
   i64.div_s
   i32.wrap_i64
   call $~lib/date/ymdFromEpochDays
+  local.set $2
   local.get $0
   local.get $0
   i64.load
   i64.const 86400000
   i64.rem_s
-  global.get $~lib/date/year
+  local.get $2
   local.get $1
   i32.const 1
   i32.add
@@ -2236,6 +2230,7 @@
   i64.div_s
   i32.wrap_i64
   call $~lib/date/ymdFromEpochDays
+  drop
   local.get $0
   local.get $0
   i64.load
@@ -3406,8 +3401,9 @@
   i64.div_s
   i32.wrap_i64
   call $~lib/date/ymdFromEpochDays
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  global.get $~lib/date/year
+  local.get $1
   call $~lib/number/I32#toString
   local.tee $1
   i32.store
@@ -4242,7 +4238,11 @@
   local.tee $0
   i32.store
   local.get $0
-  call $~lib/date/Date#getUTCFullYear
+  i64.load
+  i64.const 86400000
+  i64.div_s
+  i32.wrap_i64
+  call $~lib/date/ymdFromEpochDays
   i32.const 189512
   i32.ne
   if
@@ -4334,7 +4334,11 @@
   local.tee $0
   i32.store
   local.get $0
-  call $~lib/date/Date#getUTCFullYear
+  i64.load
+  i64.const 86400000
+  i64.div_s
+  i32.wrap_i64
+  call $~lib/date/ymdFromEpochDays
   i32.const 1973
   i32.ne
   if
@@ -4647,7 +4651,11 @@
   local.tee $0
   i32.store
   local.get $0
-  call $~lib/date/Date#getUTCFullYear
+  i64.load
+  i64.const 86400000
+  i64.div_s
+  i32.wrap_i64
+  call $~lib/date/ymdFromEpochDays
   i32.const 1973
   i32.ne
   if
@@ -4786,7 +4794,11 @@
   local.tee $0
   i32.store
   local.get $0
-  call $~lib/date/Date#getUTCFullYear
+  i64.load
+  i64.const 86400000
+  i64.div_s
+  i32.wrap_i64
+  call $~lib/date/ymdFromEpochDays
   i32.const 253616
   i32.ne
   if
@@ -4801,7 +4813,11 @@
   i32.const 1976
   call $~lib/date/Date#setUTCFullYear
   local.get $0
-  call $~lib/date/Date#getUTCFullYear
+  i64.load
+  i64.const 86400000
+  i64.div_s
+  i32.wrap_i64
+  call $~lib/date/ymdFromEpochDays
   i32.const 1976
   i32.ne
   if
@@ -4816,7 +4832,11 @@
   i32.const 20212
   call $~lib/date/Date#setUTCFullYear
   local.get $0
-  call $~lib/date/Date#getUTCFullYear
+  i64.load
+  i64.const 86400000
+  i64.div_s
+  i32.wrap_i64
+  call $~lib/date/ymdFromEpochDays
   i32.const 20212
   i32.ne
   if

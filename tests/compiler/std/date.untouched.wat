@@ -72,7 +72,6 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/date/year (mut i32) (i32.const 0))
  (global $~lib/date/day (mut i32) (i32.const 0))
  (global $~lib/date/month (mut i32) (i32.const 0))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
@@ -2511,7 +2510,7 @@
   call $~lib/date/Date#set:epochMillis
   local.get $1
  )
- (func $~lib/date/ymdFromEpochDays (param $0 i32)
+ (func $~lib/date/ymdFromEpochDays (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2519,6 +2518,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   local.get $0
   i32.const 719468
   i32.add
@@ -2569,7 +2569,7 @@
   i32.const 400
   i32.mul
   i32.add
-  global.set $~lib/date/year
+  local.set $6
   local.get $4
   i32.const 365
   local.get $5
@@ -2583,18 +2583,18 @@
   i32.div_s
   i32.sub
   i32.sub
-  local.set $6
+  local.set $7
   i32.const 5
-  local.get $6
+  local.get $7
   i32.mul
   i32.const 2
   i32.add
   i32.const 153
   i32.div_s
-  local.set $7
-  local.get $6
-  i32.const 153
+  local.set $8
   local.get $7
+  i32.const 153
+  local.get $8
   i32.mul
   i32.const 2
   i32.add
@@ -2604,8 +2604,8 @@
   i32.const 1
   i32.add
   global.set $~lib/date/day
-  local.get $7
-  local.get $7
+  local.get $8
+  local.get $8
   i32.const 10
   i32.lt_s
   if (result i32)
@@ -2615,40 +2615,38 @@
   end
   i32.add
   global.set $~lib/date/month
-  global.get $~lib/date/year
+  local.get $6
   global.get $~lib/date/month
   i32.const 2
   i32.le_s
   i32.add
-  global.set $~lib/date/year
+  local.set $6
+  local.get $6
+ )
+ (func $~lib/date/Date#computeUTCDate (param $0 i32) (result i32)
+  local.get $0
+  i64.load
+  i64.const 86400000
+  i64.div_s
+  i32.wrap_i64
+  call $~lib/date/ymdFromEpochDays
  )
  (func $~lib/date/Date#getUTCFullYear (param $0 i32) (result i32)
   local.get $0
-  i64.load
-  i64.const 86400000
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
-  global.get $~lib/date/year
+  call $~lib/date/Date#computeUTCDate
  )
  (func $~lib/date/Date#getUTCMonth (param $0 i32) (result i32)
   local.get $0
-  i64.load
-  i64.const 86400000
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
+  call $~lib/date/Date#computeUTCDate
+  drop
   global.get $~lib/date/month
   i32.const 1
   i32.sub
  )
  (func $~lib/date/Date#getUTCDate (param $0 i32) (result i32)
   local.get $0
-  i64.load
-  i64.const 86400000
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
+  call $~lib/date/Date#computeUTCDate
+  drop
   global.get $~lib/date/day
  )
  (func $~lib/date/Date#getUTCHours (param $0 i32) (result i32)
@@ -2711,7 +2709,7 @@
   if
    i32.const 480
    i32.const 544
-   i32.const 121
+   i32.const 117
    i32.const 34
    call $~lib/builtins/abort
    unreachable
@@ -2743,7 +2741,7 @@
   if
    i32.const 480
    i32.const 544
-   i32.const 126
+   i32.const 122
    i32.const 34
    call $~lib/builtins/abort
    unreachable
@@ -2775,7 +2773,7 @@
   if
    i32.const 480
    i32.const 544
-   i32.const 131
+   i32.const 127
    i32.const 34
    call $~lib/builtins/abort
    unreachable
@@ -2841,13 +2839,11 @@
   end
  )
  (func $~lib/date/Date#setUTCDate (param $0 i32) (param $1 i32)
-  (local $2 i64)
+  (local $2 i32)
+  (local $3 i64)
   local.get $0
-  i64.load
-  i64.const 86400000
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
+  call $~lib/date/Date#computeUTCDate
+  local.set $2
   local.get $1
   i32.const 1
   i32.lt_s
@@ -2855,7 +2851,7 @@
    i32.const 1
   else
    local.get $1
-   global.get $~lib/date/year
+   local.get $2
    global.get $~lib/date/month
    call $~lib/date/daysInMonth
    i32.gt_s
@@ -2863,7 +2859,7 @@
   if
    i32.const 480
    i32.const 544
-   i32.const 137
+   i32.const 133
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -2872,21 +2868,22 @@
   i64.load
   i64.const 86400000
   i64.rem_s
-  local.set $2
+  local.set $3
   local.get $0
-  global.get $~lib/date/year
+  local.get $2
   global.get $~lib/date/month
   local.get $1
   call $~lib/date/daysSinceEpoch
   i64.extend_i32_s
   i64.const 86400000
   i64.mul
-  local.get $2
+  local.get $3
   i64.add
   call $~lib/date/Date#set:epochMillis
  )
  (func $~lib/date/Date#setUTCMonth (param $0 i32) (param $1 i32)
-  (local $2 i64)
+  (local $2 i32)
+  (local $3 i64)
   local.get $1
   i32.const 1
   i32.lt_s
@@ -2900,24 +2897,21 @@
   if
    i32.const 480
    i32.const 544
-   i32.const 144
+   i32.const 140
    i32.const 34
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i64.load
-  i64.const 86400000
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
+  call $~lib/date/Date#computeUTCDate
+  local.set $2
   local.get $0
   i64.load
   i64.const 86400000
   i64.rem_s
-  local.set $2
+  local.set $3
   local.get $0
-  global.get $~lib/date/year
+  local.get $2
   local.get $1
   i32.const 1
   i32.add
@@ -2926,7 +2920,7 @@
   i64.extend_i32_s
   i64.const 86400000
   i64.mul
-  local.get $2
+  local.get $3
   i64.add
   call $~lib/date/Date#set:epochMillis
  )
@@ -2938,6 +2932,7 @@
   i64.div_s
   i32.wrap_i64
   call $~lib/date/ymdFromEpochDays
+  drop
   local.get $0
   i64.load
   i64.const 86400000
@@ -5693,6 +5688,7 @@
  (func $~lib/date/Date#toISOString (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 112
   i32.sub
@@ -5741,299 +5737,296 @@
   i64.const 0
   i64.store offset=104
   local.get $0
-  i64.load
-  i64.const 86400000
-  i64.div_s
-  i32.wrap_i64
-  call $~lib/date/ymdFromEpochDays
+  call $~lib/date/Date#computeUTCDate
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  global.get $~lib/date/year
+  local.get $1
   i32.const 10
   call $~lib/number/I32#toString
-  local.tee $1
+  local.tee $2
   i32.store
-  local.get $1
+  local.get $2
   call $~lib/string/String#get:length
   i32.const 4
   i32.gt_s
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 2368
-   local.set $2
+   local.set $3
    global.get $~lib/memory/__stack_pointer
-   local.get $2
+   local.get $3
    i32.store offset=4
+   local.get $3
    local.get $2
-   local.get $1
    i32.const 6
    i32.const 784
-   local.set $2
+   local.set $3
    global.get $~lib/memory/__stack_pointer
-   local.get $2
+   local.get $3
    i32.store offset=12
-   local.get $2
+   local.get $3
    call $~lib/string/String#padStart
-   local.set $2
+   local.set $3
    global.get $~lib/memory/__stack_pointer
-   local.get $2
+   local.get $3
    i32.store offset=8
-   local.get $2
+   local.get $3
    call $~lib/string/String.__concat
-   local.tee $1
+   local.tee $2
    i32.store
   end
-  local.get $1
+  local.get $2
   i32.const 2432
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=100
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=92
-  local.get $2
+  local.get $3
   global.get $~lib/date/month
   i32.const 10
   call $~lib/number/I32#toString
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=104
-  local.get $2
+  local.get $3
   i32.const 2
   i32.const 784
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=108
-  local.get $2
+  local.get $3
   call $~lib/string/String#padStart
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=96
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=84
-  local.get $2
+  local.get $3
   i32.const 2432
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=88
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=76
-  local.get $2
+  local.get $3
   global.get $~lib/date/day
   i32.const 10
   call $~lib/number/I32#toString
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=84
-  local.get $2
+  local.get $3
   i32.const 2
   i32.const 784
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=92
-  local.get $2
+  local.get $3
   call $~lib/string/String#padStart
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=80
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=68
-  local.get $2
+  local.get $3
   i32.const 2464
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=72
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=60
-  local.get $2
+  local.get $3
   local.get $0
   call $~lib/date/Date#getUTCHours
   i32.const 10
   call $~lib/number/I32#toString
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=68
-  local.get $2
+  local.get $3
   i32.const 2
   i32.const 784
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=76
-  local.get $2
+  local.get $3
   call $~lib/string/String#padStart
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=64
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=52
-  local.get $2
+  local.get $3
   i32.const 2496
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=56
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=44
-  local.get $2
+  local.get $3
   local.get $0
   call $~lib/date/Date#getUTCMinutes
   i32.const 10
   call $~lib/number/I32#toString
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=52
-  local.get $2
+  local.get $3
   i32.const 2
   i32.const 784
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=60
-  local.get $2
+  local.get $3
   call $~lib/string/String#padStart
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=48
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=36
-  local.get $2
+  local.get $3
   i32.const 2496
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=40
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=28
-  local.get $2
+  local.get $3
   local.get $0
   call $~lib/date/Date#getUTCSeconds
   i32.const 10
   call $~lib/number/I32#toString
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=36
-  local.get $2
+  local.get $3
   i32.const 2
   i32.const 784
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=44
-  local.get $2
+  local.get $3
   call $~lib/string/String#padStart
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=32
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=12
-  local.get $2
+  local.get $3
   i32.const 2528
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=24
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=16
-  local.get $2
+  local.get $3
   local.get $0
   call $~lib/date/Date#getUTCMilliseconds
   i32.const 10
   call $~lib/number/I32#toString
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=12
-  local.get $2
+  local.get $3
   i32.const 3
   i32.const 784
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=28
-  local.get $2
+  local.get $3
   call $~lib/string/String#padStart
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=20
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=4
-  local.get $2
+  local.get $3
   i32.const 2560
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   i32.store offset=8
-  local.get $2
+  local.get $3
   call $~lib/string/String.__concat
-  local.set $2
+  local.set $3
   global.get $~lib/memory/__stack_pointer
   i32.const 112
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
  )
  (func $~lib/string/String#split (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)

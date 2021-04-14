@@ -10,10 +10,7 @@ import { now as Date_now } from "./bindings/Date";
 
 // ymdFromEpochDays returns values via globals to avoid allocations
 // @ts-ignore: decorator
-@lazy let
-  year: i32,
-  month: i32,
-  day: i32;
+@lazy let month: i32, day: i32;
 
 export class Date {
   @inline static UTC(
@@ -83,17 +80,16 @@ export class Date {
   }
 
   getUTCFullYear(): i32 {
-    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
-    return year;
+    return this.computeUTCDate();
   }
 
   getUTCMonth(): i32 {
-    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    this.computeUTCDate();
     return month - 1;
   }
 
   getUTCDate(): i32 {
-    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    this.computeUTCDate();
     return day;
   }
 
@@ -133,7 +129,7 @@ export class Date {
   }
 
   setUTCDate(value: i32): void {
-    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    var year = this.computeUTCDate();
     if (value < 1 || value > daysInMonth(year, month)) throw new RangeError(E_VALUEOUTOFRANGE);
     var ms = this.epochMillis % MILLIS_PER_DAY;
     this.epochMillis =
@@ -142,7 +138,7 @@ export class Date {
 
   setUTCMonth(value: i32): void {
     if (value < 1 || value > 12) throw new RangeError(E_VALUEOUTOFRANGE);
-    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
+    var year = this.computeUTCDate();
     var ms = this.epochMillis % MILLIS_PER_DAY;
     this.epochMillis =
       i64(daysSinceEpoch(year, value + 1, day)) * MILLIS_PER_DAY + ms;
@@ -156,8 +152,7 @@ export class Date {
   }
 
   toISOString(): string {
-    ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
-
+    var year = this.computeUTCDate();
     var yearStr = year.toString();
     if (yearStr.length > 4) {
       yearStr = "+" + yearStr.padStart(6, "0");
@@ -179,6 +174,10 @@ export class Date {
       this.getUTCMilliseconds().toString().padStart(3, "0") +
       "Z"
     );
+  }
+
+  private computeUTCDate(): i32 {
+    return ymdFromEpochDays(i32(this.epochMillis / MILLIS_PER_DAY));
   }
 }
 
@@ -218,17 +217,18 @@ function daysInMonth(year: i32, month: i32): i32 {
 }
 
 // see: http://howardhinnant.github.io/date_algorithms.html#civil_from_days
-function ymdFromEpochDays(z: i32): void {
+function ymdFromEpochDays(z: i32): i32 {
   z += 719468;
   var era = floorDiv(z, 146097);
   var doe = z - era * 146097; // [0, 146096]
   var yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365; // [0, 399]
-  year = yoe + era * 400;
+  var year = yoe + era * 400;
   var doy = doe - (365 * yoe + yoe / 4 - yoe / 100); // [0, 365]
   var mp = (5 * doy + 2) / 153; // [0, 11]
   day = doy - (153 * mp + 2) / 5 + 1; // [1, 31]
   month = mp + (mp < 10 ? 3 : -9); // [1, 12]
   year += i32(month <= 2);
+  return year;
 }
 
 // http://howardhinnant.github.io/date_algorithms.html#days_from_civil
