@@ -74,7 +74,7 @@ export class Date {
 
   constructor(private epochMillis: i64) {
     // this differs from JavaScript which prefer return NaN or "Invalid Date" string
-    // insted throw exceprion
+    // instead throwing exception.
     if (invalidDate(epochMillis)) {
       throw new RangeError(E_INVALIDDATE);
     }
