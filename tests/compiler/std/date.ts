@@ -131,6 +131,15 @@
 
   date.setUTCMilliseconds(1000);
   assert(date.getTime() == 1362106800000);
+
+  date.setUTCMilliseconds(60 * 60 * 1000);
+  assert(date.getTime() == 1362110400000);
+
+  date.setUTCMilliseconds(60 * 60 * 1000 + 1);
+  assert(date.getTime() == 1362114000001);
+
+  date.setUTCMilliseconds(60 * 60 * 1000 + 1);
+  assert(date.getTime() == 1362117600001);
 }
 
 // Date#setUTCMonth /////////////////////////////////////////////////////////////////////////////////
