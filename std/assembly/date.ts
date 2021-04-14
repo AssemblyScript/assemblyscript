@@ -62,10 +62,11 @@ export class Date {
     }
     // parse the YYYY-MM-DD component
     var parts = dateString.split("-");
-    var y     = parts[0];
-    var year  = I32.parseInt(y.length == 2 ? "19" + y : y);
-    var month = I32.parseInt(parts[1]);
+
     var day   = I32.parseInt(parts[2]);
+    var month = I32.parseInt(parts[1]);
+    var year  = I32.parseInt(parts[0]);
+    if (year < 100) year += 1900;
 
     return new Date(epochMillis(year, month, day, hour, min, sec, ms));
   }
