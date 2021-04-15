@@ -1994,22 +1994,19 @@
   local.get $1
  )
  (func $~lib/date/Date#setTime (param $0 i32) (param $1 i64)
-  (local $2 i64)
   i32.const 1
-  local.get $0
-  i64.load offset=16
-  local.tee $2
+  local.get $1
   i64.const 8640000000000000
   i64.gt_s
-  local.get $2
+  local.get $1
   i64.const -8640000000000000
   i64.lt_s
   select
   if
    i32.const 1104
    i32.const 1152
-   i32.const 91
-   i32.const 7
+   i32.const 89
+   i32.const 28
    call $~lib/builtins/abort
    unreachable
   end
@@ -2147,7 +2144,7 @@
   if
    i32.const 1600
    i32.const 1152
-   i32.const 133
+   i32.const 132
    i32.const 38
    call $~lib/builtins/abort
    unreachable
@@ -2177,7 +2174,7 @@
   if
    i32.const 1600
    i32.const 1152
-   i32.const 138
+   i32.const 137
    i32.const 38
    call $~lib/builtins/abort
    unreachable
@@ -2207,7 +2204,7 @@
   if
    i32.const 1600
    i32.const 1152
-   i32.const 143
+   i32.const 142
    i32.const 34
    call $~lib/builtins/abort
    unreachable
@@ -2281,7 +2278,7 @@
   if
    i32.const 1600
    i32.const 1152
-   i32.const 151
+   i32.const 150
    i32.const 52
    call $~lib/builtins/abort
    unreachable
@@ -2333,7 +2330,7 @@
   if
    i32.const 1600
    i32.const 1152
-   i32.const 158
+   i32.const 157
    i32.const 34
    call $~lib/builtins/abort
    unreachable
@@ -5914,8 +5911,8 @@
   if
    i32.const 1104
    i32.const 1152
-   i32.const 78
-   i32.const 7
+   i32.const 77
+   i32.const 35
    call $~lib/builtins/abort
    unreachable
   end

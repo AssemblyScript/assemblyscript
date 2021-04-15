@@ -74,9 +74,8 @@ export class Date {
   constructor(private epochMillis: i64) {
     // this differs from JavaScript which prefer return NaN or "Invalid Date" string
     // instead throwing exception.
-    if (invalidDate(epochMillis)) {
-      throw new RangeError(E_INVALIDDATE);
-    }
+    if (invalidDate(epochMillis)) throw new RangeError(E_INVALIDDATE);
+
     this.year = ymdFromEpochDays(i32(floorDiv(epochMillis, MILLIS_PER_DAY)));
     this.month = _month;
     this.day = _day;
@@ -86,15 +85,15 @@ export class Date {
     return this.epochMillis;
   }
 
-  setTime(value: i64): i64 {
-    if (invalidDate(this.epochMillis)) {
-      throw new RangeError(E_INVALIDDATE);
-    }
-    this.epochMillis = value;
-    this.year = ymdFromEpochDays(i32(floorDiv(value, MILLIS_PER_DAY)));
+  setTime(time: i64): i64 {
+    if (invalidDate(time)) throw new RangeError(E_INVALIDDATE);
+
+    this.epochMillis = time;
+    this.year = ymdFromEpochDays(i32(floorDiv(time, MILLIS_PER_DAY)));
     this.month = _month;
     this.day = _day;
-    return value;
+
+    return time;
   }
 
   getUTCFullYear(): i32 {
