@@ -7332,22 +7332,22 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   private compileExpressionMaybeCached (targetExpression: Expression, type: Type, constraints: Constraints, cacheKey: string | undefined) {
-    // if(false) { // cacheKey !== undefined
-    //   var cachedValue = this.currentFlow.getScopedLocal(cacheKey);
-    //   if(cachedValue === null) {
-    //     var expressionRef = this.currentFlow.addScopedDummyLocalWithIntegerValue(
-    //       cacheKey,
-    //       type,
-    //       i64_new(this.compileExpression(targetExpression, type, constraints))
-    //     ).constantIntegerValue;
-    //     assert(expressionRef);
-    //     return Number(
-    //       expressionRef
-    //     );
-    //   } else {
-    //     return Number(cachedValue.constantIntegerValue);
-    //   }
-    // }
+    if(cacheKey !== undefined) {
+      var cachedValue = this.currentFlow.getScopedLocal(cacheKey);
+      if(cachedValue === null) {
+        var expressionRef = this.currentFlow.addScopedDummyLocalWithIntegerValue(
+          cacheKey,
+          type,
+          i64_new(this.compileExpression(targetExpression, type, constraints))
+        ).constantIntegerValue;
+        assert(expressionRef);
+        return Number(
+          expressionRef
+        );
+      } else {
+        return Number(cachedValue.constantIntegerValue);
+      }
+    }
     return this.compileExpression(targetExpression, type, constraints);
   }
 

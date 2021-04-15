@@ -6,4 +6,4 @@ const [x_copy, y_copy] = func();
 
 assert(x_copy == x);
 assert(y_copy == y);
-assert(funcRunCount == 2);
+assert(funcRunCount == 1);

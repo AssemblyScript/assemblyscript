@@ -3814,6 +3814,7 @@
  )
  (func $start:array-destructuring
   (local $0 i32)
+  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -3840,20 +3841,20 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   call $array-destructuring/func
-  local.set $0
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   i32.store
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/array/Array<i32>#__get
   global.set $array-destructuring/x_copy
   call $array-destructuring/func
-  local.set $0
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   i32.store
-  local.get $0
+  local.get $1
   i32.const 1
   call $~lib/array/Array<i32>#__get
   global.set $array-destructuring/y_copy
@@ -3882,7 +3883,7 @@
    unreachable
   end
   global.get $array-destructuring/funcRunCount
-  i32.const 2
+  i32.const 1
   i32.eq
   i32.eqz
   if
