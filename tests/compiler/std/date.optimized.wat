@@ -5558,13 +5558,37 @@
   f64.const 0
   call $~lib/builtins/trace
   local.get $0
+  i32.load
+  i32.const -271821
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 245
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.load offset=4
+  i32.const 4
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 246
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
   i32.load offset=8
   i32.const 20
   i32.ne
   if
    i32.const 0
    i32.const 1056
-   i32.const 245
+   i32.const 247
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -5585,7 +5609,7 @@
   if
    i32.const 0
    i32.const 1056
-   i32.const 246
+   i32.const 253
    i32.const 3
    call $~lib/builtins/abort
    unreachable

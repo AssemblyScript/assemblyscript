@@ -8351,6 +8351,32 @@
   f64.const 0
   call $~lib/builtins/trace
   local.get $4
+  call $~lib/date/Date#getUTCFullYear
+  i32.const -271821
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 245
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  call $~lib/date/Date#getUTCMonth
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 246
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
   call $~lib/date/Date#getUTCDate
   i32.const 20
   i32.eq
@@ -8358,7 +8384,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 245
+   i32.const 247
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -8381,7 +8407,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 246
+   i32.const 253
    i32.const 3
    call $~lib/builtins/abort
    unreachable
