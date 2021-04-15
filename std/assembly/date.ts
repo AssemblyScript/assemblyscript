@@ -36,6 +36,11 @@ export class Date {
     return <i64>Date_now();
   }
 
+  // It can parse only ISO 8601 inputs: YYYY-MM-DDThh:mm-ss.nnnnZ
+  @inline static parse(dateString: string): Date {
+    return this.fromString(dateString);
+  }
+
   static fromString(dateTimeString: string): Date {
     if (!dateTimeString.length) throw new RangeError(E_INVALIDDATE);
     var
