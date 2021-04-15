@@ -64,12 +64,15 @@ export class Date {
       }
     }
     // parse the YYYY-MM-DD component
+    var day = 1, month = 1;
     var parts = dateString.split("-");
+    var len = parts.length;
 
-    var day   = I32.parseInt(parts[2]);
-    var month = I32.parseInt(parts[1]);
-    var year  = I32.parseInt(parts[0]);
-
+    var year = I32.parseInt(parts[0]);
+    if (len > 1) {
+      month = len >= 2 ? I32.parseInt(parts[1]) : 1;
+      day   = len == 3 ? I32.parseInt(parts[2]) : 1;
+    }
     return new Date(epochMillis(year, month, day, hour, min, sec, ms));
   }
 

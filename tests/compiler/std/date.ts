@@ -246,6 +246,15 @@
   // supports 'Z' suffix
   date = Date.fromString("1976-02-02T12:34:56.456Z");
   assert(date.getTime() == 192112496456);
+
+  date = Date.fromString("1976");
+  assert(date.getTime() == 189302400000);
+
+  date = Date.fromString("1976-02");
+  assert(date.getTime() == 191980800000);
+
+  date = Date.fromString("1976-02-02");
+  assert(date.getTime() == 192067200000);
 }
 
 // Minimum / Maximum dates ////////////////////////////////////////////////////////////////////////
