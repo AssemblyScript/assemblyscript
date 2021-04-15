@@ -166,12 +166,13 @@ export class Date {
   }
 
   toISOString(): string {
-    var yearStr = abs(this.year).toString();
-    var isNeg = this.year < 0;
-    if (isNeg || this.year >= 10000) {
-      yearStr = (isNeg ? "-" : "+") + yearStr.padStart(6, "0");
+    var yearStr: string;
+    var year = this.year;
+    var isNeg = year < 0;
+    if (isNeg || year >= 10000) {
+      yearStr = (isNeg ? "-" : "+") + abs(year).toString().padStart(6, "0");
     } else {
-      yearStr = yearStr.padStart(4, "0");
+      yearStr = year.toString().padStart(4, "0");
     }
 
     return (
