@@ -184,8 +184,8 @@
   assert(date.toISOString() == "9999-12-31T23:59:59.999Z");
   date = new Date(253402300800000);
   assert(date.toISOString() == "+010000-01-01T00:00:00.000Z");
-  // date = new Date(-62847038769226);
-  // assert(date.toISOString() == "-000022-06-16T17:13:50.774Z"); // FAIL
+  date = new Date(-62847038769226);
+  assert(date.toISOString() == "-000022-06-16T17:13:50.774Z");
 }
 
 // Date#fromString /////////////////////////////////////////////////////////////////////////////////
@@ -240,18 +240,16 @@
   let maxDateDec = new Date( 8640000000000000 - 1);
   let minDateInc = new Date(-8640000000000000 + 1);
 
-  trace("", 2, minDateInc.getUTCDate(), minDateInc.getUTCMinutes());
-
   assert(minDateInc.getUTCFullYear() == -271821);
   assert(minDateInc.getUTCMonth() == 3);
   assert(minDateInc.getUTCDate() == 20);
-  // assert(minDateInc.getUTCHours() == 0);
-  // assert(minDateInc.getUTCMinutes() == 0);
-  // assert(minDateInc.getUTCSeconds() == 0);
-  // assert(minDateInc.getUTCMilliseconds() == 1);
+  assert(minDateInc.getUTCHours() == 0);
+  assert(minDateInc.getUTCMinutes() == 0);
+  assert(minDateInc.getUTCSeconds() == 0);
+  assert(minDateInc.getUTCMilliseconds() == 1);
 
   assert(maxDateDec.toISOString() == "+275760-09-12T23:59:59.999Z");
-  // assert(minDateInc.toISOString() == "-271821-04-20T00:00:00.001Z");
+  assert(minDateInc.toISOString() == "-271821-04-20T00:00:00.001Z");
 
   // new Date(maxDate.getTime() + 1); // Invalid Date
   // new Date(minDate.getTime() - 1); // Invalid Date

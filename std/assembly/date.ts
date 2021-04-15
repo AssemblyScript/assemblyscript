@@ -110,19 +110,19 @@ export class Date {
   }
 
   getUTCHours(): i32 {
-    return i32(this.epochMillis % MILLIS_PER_DAY) / MILLIS_PER_HOUR;
+    return i32(floorMod(this.epochMillis, MILLIS_PER_DAY)) / MILLIS_PER_HOUR;
   }
 
   getUTCMinutes(): i32 {
-    return i32(this.epochMillis % MILLIS_PER_HOUR) / MILLIS_PER_MINUTE;
+    return i32(floorMod(this.epochMillis, MILLIS_PER_HOUR)) / MILLIS_PER_MINUTE;
   }
 
   getUTCSeconds(): i32 {
-    return i32(this.epochMillis % MILLIS_PER_MINUTE) / MILLIS_PER_SECOND;
+    return i32(floorMod(this.epochMillis, MILLIS_PER_MINUTE)) / MILLIS_PER_SECOND;
   }
 
   getUTCMilliseconds(): i32 {
-    return i32(this.epochMillis % MILLIS_PER_SECOND);
+    return i32(floorMod(this.epochMillis, MILLIS_PER_SECOND));
   }
 
   setUTCMilliseconds(millis: i32): void {
@@ -149,20 +149,20 @@ export class Date {
     var year = this.year;
     var month = this.month;
     if (day < 1 || day > daysInMonth(year, month)) throw new RangeError(E_VALUEOUTOFRANGE);
-    var ms = this.epochMillis % MILLIS_PER_DAY;
+    var ms = floorMod(this.epochMillis, MILLIS_PER_DAY);
     this.setTime(i64(daysSinceEpoch(year, month, day)) * MILLIS_PER_DAY + ms);
   }
 
   setUTCMonth(month: i32): void {
     if (this.month == month) return;
     if (month < 1 || month > 12) throw new RangeError(E_VALUEOUTOFRANGE);
-    var ms = this.epochMillis % MILLIS_PER_DAY;
+    var ms = floorMod(this.epochMillis, MILLIS_PER_DAY);
     this.setTime(i64(daysSinceEpoch(this.year, month + 1, this.day)) * MILLIS_PER_DAY + ms);
   }
 
   setUTCFullYear(year: i32): void {
     if (this.year == year) return;
-    var ms = this.epochMillis % MILLIS_PER_DAY;
+    var ms = floorMod(this.epochMillis, MILLIS_PER_DAY);
     this.setTime(i64(daysSinceEpoch(year, this.month, this.day)) * MILLIS_PER_DAY + ms);
   }
 
@@ -214,6 +214,11 @@ function epochMillis(
 // @ts-ignore: decorator
 @inline function floorDiv<T extends number>(a: T, b: T): T {
   return (a >= 0 ? a : a - b + 1) / b as T;
+}
+
+// @ts-ignore: decorator
+@inline function floorMod<T extends number>(a: T, b: T): T {
+  return a - b * floorDiv<T>(a, b) as T;
 }
 
 // http://howardhinnant.github.io/date_algorithms.html#is_leap
