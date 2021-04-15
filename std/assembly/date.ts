@@ -26,6 +26,7 @@ export class Date {
     second: i32 = 0,
     millisecond: i32 = 0
   ): i64 {
+    if (year >= 0 && year <= 99) year += 1900;
     var ms = epochMillis(year, month + 1, day, hour, minute, second, millisecond);
     if (invalidDate(ms)) throw new RangeError(E_INVALIDDATE);
     return ms;
@@ -36,6 +37,7 @@ export class Date {
   }
 
   static fromString(dateTimeString: string): Date {
+    if (!dateTimeString.length) throw new RangeError(E_INVALIDDATE);
     var
       hour: i32 = 0,
       min: i32 = 0,
@@ -201,7 +203,6 @@ function epochMillis(
   second: i32,
   milliseconds: i32
 ): i64 {
-  if (year >= 0 && year <= 99) year += 1900;
   return (
     i64(daysSinceEpoch(year, month, day)) * MILLIS_PER_DAY +
     hour * MILLIS_PER_HOUR +

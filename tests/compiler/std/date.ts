@@ -229,12 +229,6 @@
   date = Date.fromString("2345-11-04");
   assert(date.getTime() == 11860387200000);
 
-  // supports two digit years
-  assert(
-    Date.fromString("1976-04-02").getTime() ==
-      Date.fromString("76-04-02").getTime()
-  );
-
   // supports year / month / day / hour / minute / second
   date = Date.fromString("1976-02-02T12:34:56");
   assert(date.getTime() == 192112496000);
@@ -246,6 +240,12 @@
   // supports 'Z' suffix
   date = Date.fromString("1976-02-02T12:34:56.456Z");
   assert(date.getTime() == 192112496456);
+
+  date = Date.fromString("0000");
+  assert(date.getTime() == -62167219200000);
+
+  date = Date.fromString("0001");
+  assert(date.getTime() == -62135596800000);
 
   date = Date.fromString("1976");
   assert(date.getTime() == 189302400000);
