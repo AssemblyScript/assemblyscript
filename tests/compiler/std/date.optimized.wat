@@ -152,7 +152,7 @@
   i32.const 2
   i32.add
   i32.const 5
-  i32.div_s
+  i32.div_u
   i32.add
   local.get $0
   local.get $3
@@ -163,12 +163,12 @@
   i32.const 365
   i32.mul
   local.get $0
-  i32.const 4
-  i32.div_s
+  i32.const 2
+  i32.shr_u
   i32.add
   local.get $0
   i32.const 100
-  i32.div_s
+  i32.div_u
   i32.sub
   i32.add
   i32.add
@@ -249,30 +249,30 @@
   local.tee $0
   local.get $0
   i32.const 1460
-  i32.div_s
+  i32.div_u
   i32.sub
   local.get $0
   i32.const 36524
-  i32.div_s
+  i32.div_u
   i32.add
   local.get $0
   i32.const 146096
-  i32.div_s
+  i32.div_u
   i32.sub
   i32.const 365
-  i32.div_s
+  i32.div_u
   local.set $1
   local.get $0
   local.get $1
   i32.const 365
   i32.mul
   local.get $1
-  i32.const 4
-  i32.div_s
+  i32.const 2
+  i32.shr_u
   i32.add
   local.get $1
   i32.const 100
-  i32.div_s
+  i32.div_u
   i32.sub
   i32.sub
   local.tee $3
@@ -290,7 +290,7 @@
   i32.const 2
   i32.add
   i32.const 5
-  i32.div_s
+  i32.div_u
   i32.sub
   i32.const 1
   i32.add

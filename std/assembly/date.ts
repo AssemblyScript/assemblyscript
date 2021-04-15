@@ -227,8 +227,8 @@ function invalidDate(millis: i64): bool {
 // see: http://howardhinnant.github.io/date_algorithms.html#civil_from_days
 function ymdFromEpochDays(z: i32): i32 {
   z += 719468;
-  var era = floorDiv(z, 146097);
-  var doe = z - era * 146097; // [0, 146096]
+  var era = <u32>floorDiv(z, 146097);
+  var doe = <u32>z - era * 146097; // [0, 146096]
   var yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365; // [0, 399]
   var year = yoe + era * 400;
   var doy = doe - (365 * yoe + yoe / 4 - yoe / 100); // [0, 365]
@@ -236,16 +236,16 @@ function ymdFromEpochDays(z: i32): i32 {
   _day = doy - (153 * mo + 2) / 5 + 1; // [1, 31]
   mo += mo < 10 ? 3 : -9; // [1, 12]
   _month = mo;
-  year += i32(mo <= 2);
+  year += u32(mo <= 2);
   return year;
 }
 
 // http://howardhinnant.github.io/date_algorithms.html#days_from_civil
 function daysSinceEpoch(y: i32, m: i32, d: i32): i32 {
   y -= i32(m <= 2);
-  var era = floorDiv(y, 400);
-  var yoe = y - era * 400; // [0, 399]
-  var doy = (153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1; // [0, 365]
+  var era = <u32>floorDiv(y, 400);
+  var yoe = <u32>y - era * 400; // [0, 399]
+  var doy = <u32>(153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1; // [0, 365]
   var doe = yoe * 365 + yoe / 4 - yoe / 100 + doy; // [0, 146096]
   return era * 146097 + doe - 719468;
 }
