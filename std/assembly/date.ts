@@ -53,17 +53,23 @@ export class Date {
       timeString = dateTimeString.substring(posT + 1);
       // parse the HH-MM-SS component
       let timeParts = timeString.split(":");
+      let len = timeParts.length;
+      if (len <= 1) throw new RangeError(E_INVALIDDATE);
+
       hour = I32.parseInt(timeParts[0]);
       min  = I32.parseInt(timeParts[1]);
-      let secAndMs = timeParts[2];
-      let posDot = secAndMs.indexOf(".");
-      if (~posDot) {
-        // includes milliseconds
-        sec = I32.parseInt(secAndMs.substring(0, posDot));
-        ms  = I32.parseInt(secAndMs.substring(posDot + 1));
-      } else {
-        sec = I32.parseInt(secAndMs);
+      if (len >= 3) {
+        let secAndMs = timeParts[2];
+        let posDot = secAndMs.indexOf(".");
+        if (~posDot) {
+          // includes milliseconds
+          sec = I32.parseInt(secAndMs.substring(0, posDot));
+          ms  = I32.parseInt(secAndMs.substring(posDot + 1));
+        } else {
+          sec = I32.parseInt(secAndMs);
+        }
       }
+      trace("", 4, hour, min, sec, ms);
     }
     // parse the YYYY-MM-DD component
     var parts = dateString.split("-");
@@ -74,6 +80,7 @@ export class Date {
       month = len >= 2 ? I32.parseInt(parts[1]) : 1;
       day   = len == 3 ? I32.parseInt(parts[2]) : 1;
     }
+    trace("", 3, year, month, day);
     return new Date(epochMillis(year, month, day, hour, min, sec, ms));
   }
 
