@@ -6,10 +6,10 @@
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
  (type $none_=>_i32 (func (result i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -213,6 +213,15 @@
   i64.add
   i64.add
   i64.add
+ )
+ (func $~lib/date/invalidDate (param $0 i64) (result i32)
+  local.get $0
+  i64.const -8640000000000000
+  i64.lt_s
+  local.get $0
+  i64.const 8640000000000000
+  i64.gt_s
+  i32.or
  )
  (func $~lib/date/ymdFromEpochDays (param $0 i32) (result i32)
   (local $1 i32)
@@ -1988,14 +1997,8 @@
   local.get $1
  )
  (func $~lib/date/Date#setTime (param $0 i32) (param $1 i64)
-  i32.const 1
   local.get $1
-  i64.const 8640000000000000
-  i64.gt_s
-  local.get $1
-  i64.const -8640000000000000
-  i64.lt_s
-  select
+  call $~lib/date/invalidDate
   if
    i32.const 1056
    i32.const 1104
@@ -4216,7 +4219,6 @@
   i64.const 0
   i64.store offset=16
   block $folding-inner0
-   i32.const 1
    i32.const 1970
    i32.const 1
    i32.const 1
@@ -4226,12 +4228,7 @@
    i32.const 0
    call $~lib/date/epochMillis
    local.tee $1
-   i64.const 8640000000000000
-   i64.gt_s
-   local.get $1
-   i64.const -8640000000000000
-   i64.lt_s
-   select
+   call $~lib/date/invalidDate
    br_if $folding-inner0
    local.get $1
    i64.eqz
@@ -4244,7 +4241,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 1
    i32.const 1970
    i32.const 1
    i32.const 1
@@ -4254,12 +4250,7 @@
    i32.const 0
    call $~lib/date/epochMillis
    local.tee $1
-   i64.const 8640000000000000
-   i64.gt_s
-   local.get $1
-   i64.const -8640000000000000
-   i64.lt_s
-   select
+   call $~lib/date/invalidDate
    br_if $folding-inner0
    local.get $1
    i64.eqz
@@ -4272,7 +4263,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 1
    i32.const 70
    i32.const 1
    i32.const 1
@@ -4282,12 +4272,7 @@
    i32.const 0
    call $~lib/date/epochMillis
    local.tee $1
-   i64.const 8640000000000000
-   i64.gt_s
-   local.get $1
-   i64.const -8640000000000000
-   i64.lt_s
-   select
+   call $~lib/date/invalidDate
    br_if $folding-inner0
    local.get $1
    i64.eqz
@@ -4300,7 +4285,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 1
    i32.const 90
    i32.const 1
    i32.const 1
@@ -4310,12 +4294,7 @@
    i32.const 0
    call $~lib/date/epochMillis
    local.tee $1
-   i64.const 8640000000000000
-   i64.gt_s
-   local.get $1
-   i64.const -8640000000000000
-   i64.lt_s
-   select
+   call $~lib/date/invalidDate
    br_if $folding-inner0
    local.get $1
    i64.const 631152000000
@@ -4328,7 +4307,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 1
    i32.const -90
    i32.const 1
    i32.const 1
@@ -4338,12 +4316,7 @@
    i32.const 0
    call $~lib/date/epochMillis
    local.tee $1
-   i64.const 8640000000000000
-   i64.gt_s
-   local.get $1
-   i64.const -8640000000000000
-   i64.lt_s
-   select
+   call $~lib/date/invalidDate
    br_if $folding-inner0
    local.get $1
    i64.const -65007360000000
@@ -4356,7 +4329,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 1
    i32.const 2018
    i32.const 11
    i32.const 10
@@ -4366,12 +4338,7 @@
    i32.const 1
    call $~lib/date/epochMillis
    local.tee $1
-   i64.const 8640000000000000
-   i64.gt_s
-   local.get $1
-   i64.const -8640000000000000
-   i64.lt_s
-   select
+   call $~lib/date/invalidDate
    br_if $folding-inner0
    local.get $1
    i64.const 1541847600001
@@ -4384,7 +4351,6 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 1
    i32.const 275760
    i32.const 9
    i32.const 13
@@ -4394,12 +4360,7 @@
    i32.const 0
    call $~lib/date/epochMillis
    local.tee $1
-   i64.const 8640000000000000
-   i64.gt_s
-   local.get $1
-   i64.const -8640000000000000
-   i64.lt_s
-   select
+   call $~lib/date/invalidDate
    br_if $folding-inner0
    local.get $1
    i64.const 8640000000000000
@@ -6082,14 +6043,8 @@
   local.get $1
   local.get $0
   i64.store offset=16
-  i32.const 1
   local.get $0
-  i64.const 8640000000000000
-  i64.gt_s
-  local.get $0
-  i64.const -8640000000000000
-  i64.lt_s
-  select
+  call $~lib/date/invalidDate
   if
    i32.const 1056
    i32.const 1104

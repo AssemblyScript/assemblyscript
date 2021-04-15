@@ -11,6 +11,7 @@
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
@@ -215,6 +216,15 @@
   local.get $6
   i64.extend_i32_s
   i64.add
+ )
+ (func $~lib/date/invalidDate (param $0 i64) (result i32)
+  local.get $0
+  i64.const -8640000000000000
+  i64.lt_s
+  local.get $0
+  i64.const 8640000000000000
+  i64.gt_s
+  i32.or
  )
  (func $~lib/date/ymdFromEpochDays (param $0 i32) (result i32)
   (local $1 i32)
@@ -2664,17 +2674,7 @@
   (local $2 i64)
   (local $3 i64)
   local.get $1
-  local.set $2
-  local.get $2
-  i64.const -8640000000000000
-  i64.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $2
-   i64.const 8640000000000000
-   i64.gt_s
-  end
+  call $~lib/date/invalidDate
   if
    i32.const 32
    i32.const 80
@@ -6791,8 +6791,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i64)
-  (local $8 i64)
-  (local $9 i32)
+  (local $8 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 24
   i32.sub
@@ -6833,17 +6832,7 @@
   call $~lib/date/epochMillis
   local.set $7
   local.get $7
-  local.set $8
-  local.get $8
-  i64.const -8640000000000000
-  i64.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $8
-   i64.const 8640000000000000
-   i64.gt_s
-  end
+  call $~lib/date/invalidDate
   if
    i32.const 32
    i32.const 80
@@ -6890,17 +6879,7 @@
   call $~lib/date/epochMillis
   local.set $7
   local.get $7
-  local.set $8
-  local.get $8
-  i64.const -8640000000000000
-  i64.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $8
-   i64.const 8640000000000000
-   i64.gt_s
-  end
+  call $~lib/date/invalidDate
   if
    i32.const 32
    i32.const 80
@@ -6947,17 +6926,7 @@
   call $~lib/date/epochMillis
   local.set $7
   local.get $7
-  local.set $8
-  local.get $8
-  i64.const -8640000000000000
-  i64.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $8
-   i64.const 8640000000000000
-   i64.gt_s
-  end
+  call $~lib/date/invalidDate
   if
    i32.const 32
    i32.const 80
@@ -7004,17 +6973,7 @@
   call $~lib/date/epochMillis
   local.set $7
   local.get $7
-  local.set $8
-  local.get $8
-  i64.const -8640000000000000
-  i64.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $8
-   i64.const 8640000000000000
-   i64.gt_s
-  end
+  call $~lib/date/invalidDate
   if
    i32.const 32
    i32.const 80
@@ -7061,17 +7020,7 @@
   call $~lib/date/epochMillis
   local.set $7
   local.get $7
-  local.set $8
-  local.get $8
-  i64.const -8640000000000000
-  i64.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $8
-   i64.const 8640000000000000
-   i64.gt_s
-  end
+  call $~lib/date/invalidDate
   if
    i32.const 32
    i32.const 80
@@ -7118,17 +7067,7 @@
   call $~lib/date/epochMillis
   local.set $7
   local.get $7
-  local.set $8
-  local.get $8
-  i64.const -8640000000000000
-  i64.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $8
-   i64.const 8640000000000000
-   i64.gt_s
-  end
+  call $~lib/date/invalidDate
   if
    i32.const 32
    i32.const 80
@@ -7175,17 +7114,7 @@
   call $~lib/date/epochMillis
   local.set $7
   local.get $7
-  local.set $8
-  local.get $8
-  i64.const -8640000000000000
-  i64.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $8
-   i64.const 8640000000000000
-   i64.gt_s
-  end
+  call $~lib/date/invalidDate
   if
    i32.const 32
    i32.const 80
@@ -8283,17 +8212,17 @@
   i32.store
   local.get $1
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 2576
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8314,17 +8243,17 @@
   i32.store
   local.get $1
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 2656
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8343,17 +8272,17 @@
   i32.store
   local.get $1
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 2736
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8372,17 +8301,17 @@
   i32.store
   local.get $1
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 2816
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8401,17 +8330,17 @@
   i32.store
   local.get $1
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 2896
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8430,17 +8359,17 @@
   i32.store
   local.get $1
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 2976
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8459,17 +8388,17 @@
   i32.store
   local.get $1
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 3056
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8488,17 +8417,17 @@
   i32.store
   local.get $1
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 3136
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8517,17 +8446,17 @@
   i32.store
   local.get $1
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 3216
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8540,11 +8469,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3296
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   call $~lib/date/Date.fromString
   local.tee $1
   i32.store
@@ -8563,11 +8492,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3568
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   call $~lib/date/Date.fromString
   local.tee $1
   i32.store
@@ -8586,11 +8515,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3616
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   call $~lib/date/Date.fromString
   local.tee $1
   i32.store
@@ -8608,30 +8537,30 @@
    unreachable
   end
   i32.const 3664
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/date/Date.fromString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   call $~lib/date/Date#getTime
   i32.const 3712
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/date/Date.fromString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   call $~lib/date/Date#getTime
   i64.eq
   i32.eqz
@@ -8645,11 +8574,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3760
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   call $~lib/date/Date.fromString
   local.tee $1
   i32.store
@@ -8668,11 +8597,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3824
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   call $~lib/date/Date.fromString
   local.tee $1
   i32.store
@@ -8691,11 +8620,11 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 3904
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   call $~lib/date/Date.fromString
   local.tee $1
   i32.store
@@ -8830,17 +8759,17 @@
   end
   local.get $1
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 3984
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8853,17 +8782,17 @@
   end
   local.get $2
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 4064
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -8983,17 +8912,17 @@
   end
   local.get $3
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 4144
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -9006,17 +8935,17 @@
   end
   local.get $4
   call $~lib/date/Date#toISOString
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=4
-  local.get $9
+  local.get $8
   i32.const 4224
-  local.set $9
+  local.set $8
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $8
   i32.store offset=8
-  local.get $9
+  local.get $8
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -9067,17 +8996,7 @@
   local.get $1
   call $~lib/date/Date#set:epochMillis
   local.get $1
-  local.set $2
-  local.get $2
-  i64.const -8640000000000000
-  i64.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $2
-   i64.const 8640000000000000
-   i64.gt_s
-  end
+  call $~lib/date/invalidDate
   if
    i32.const 32
    i32.const 80

@@ -219,9 +219,9 @@ function epochMillis(
   return (a >= 0 ? a % b : a - (a - b + 1) / b * b) as T;
 }
 
-// @ts-ignore: decorator
-@inline function invalidDate(millis: i64): bool {
-  return millis < -8640000000000000 || millis > 8640000000000000;
+function invalidDate(millis: i64): bool {
+  // @ts-ignore
+  return (millis < -8640000000000000) | (millis > 8640000000000000);
 }
 
 // see: http://howardhinnant.github.io/date_algorithms.html#civil_from_days
