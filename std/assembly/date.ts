@@ -166,6 +166,7 @@ export class Date {
   }
 
   toISOString(): string {
+    // TODO: add more low-level helper which combine toString and padStart without extra allocation
     var yearStr: string;
     var year = this.year;
     var isNeg = year < 0;

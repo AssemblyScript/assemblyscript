@@ -54,7 +54,9 @@
   assert(date.getUTCMilliseconds() == 568);
   // test boundaries
   date.setUTCMilliseconds(0);
+  assert(date.getTime() == 399464523963000);
   date.setUTCMilliseconds(999);
+  assert(date.getTime() == 399464523963999);
 }
 
 // Date#setUTCSeconds //////////////////////////////////////////////////////////////////////////////
@@ -67,7 +69,9 @@
   assert(date.getUTCSeconds() == 50);
   // test boundaries
   date.setUTCSeconds(0);
+  assert(date.getTime() == 372027318300986);
   date.setUTCSeconds(59);
+  assert(date.getTime() == 372027318359986);
 }
 
 // Date#setUTCMinutes //////////////////////////////////////////////////////////////////////////////
@@ -80,7 +84,9 @@
   assert(date.getUTCMinutes() == 50);
   // test boundaries
   date.setUTCMinutes(0);
+  assert(date.getTime() == 372027315631986);
   date.setUTCMinutes(59);
+  assert(date.getTime() == 372027319171986);
 }
 
 // Date#setUTCHours ////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +99,9 @@
   assert(date.getUTCHours() == 2);
   // test boundaries
   date.setUTCHours(0);
+  assert(date.getTime() == 372027257131986);
   date.setUTCHours(23);
+  assert(date.getTime() == 372027339931986);
 }
 
 // Date#setUTCDate /////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +187,6 @@
   date = new Date(-62167219200000 - 1);
   assert(date.toISOString() == "-000001-12-31T23:59:59.999Z");
   date = new Date(-62127219200000);
-  trace(date.toISOString());
   assert(date.toISOString() == "0001-04-07T23:06:40.000Z");
   date = new Date(1231231231020);
   assert(date.toISOString() == "2009-01-06T08:40:31.020Z");
