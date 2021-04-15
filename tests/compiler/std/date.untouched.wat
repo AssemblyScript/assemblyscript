@@ -2734,8 +2734,6 @@
  (func $~lib/date/Date#getUTCHours (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 i64)
   local.get $0
   i64.load offset=16
   local.set $2
@@ -2743,27 +2741,25 @@
   i64.extend_i32_s
   local.set $1
   local.get $2
-  local.get $1
-  local.get $2
-  local.set $4
-  local.get $1
-  local.set $3
-  local.get $4
   i64.const 0
   i64.ge_s
   if (result i64)
-   local.get $4
+   local.get $2
+   local.get $1
+   i64.rem_s
   else
-   local.get $4
-   local.get $3
+   local.get $2
+   local.get $2
+   local.get $1
    i64.sub
    i64.const 1
    i64.add
+   local.get $1
+   i64.div_s
+   local.get $1
+   i64.mul
+   i64.sub
   end
-  local.get $3
-  i64.div_s
-  i64.mul
-  i64.sub
   i32.wrap_i64
   i32.const 3600000
   i32.div_s
@@ -2771,8 +2767,6 @@
  (func $~lib/date/Date#getUTCMinutes (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 i64)
   local.get $0
   i64.load offset=16
   local.set $2
@@ -2780,27 +2774,25 @@
   i64.extend_i32_s
   local.set $1
   local.get $2
-  local.get $1
-  local.get $2
-  local.set $4
-  local.get $1
-  local.set $3
-  local.get $4
   i64.const 0
   i64.ge_s
   if (result i64)
-   local.get $4
+   local.get $2
+   local.get $1
+   i64.rem_s
   else
-   local.get $4
-   local.get $3
+   local.get $2
+   local.get $2
+   local.get $1
    i64.sub
    i64.const 1
    i64.add
+   local.get $1
+   i64.div_s
+   local.get $1
+   i64.mul
+   i64.sub
   end
-  local.get $3
-  i64.div_s
-  i64.mul
-  i64.sub
   i32.wrap_i64
   i32.const 60000
   i32.div_s
@@ -2808,8 +2800,6 @@
  (func $~lib/date/Date#getUTCSeconds (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 i64)
   local.get $0
   i64.load offset=16
   local.set $2
@@ -2817,27 +2807,25 @@
   i64.extend_i32_s
   local.set $1
   local.get $2
-  local.get $1
-  local.get $2
-  local.set $4
-  local.get $1
-  local.set $3
-  local.get $4
   i64.const 0
   i64.ge_s
   if (result i64)
-   local.get $4
+   local.get $2
+   local.get $1
+   i64.rem_s
   else
-   local.get $4
-   local.get $3
+   local.get $2
+   local.get $2
+   local.get $1
    i64.sub
    i64.const 1
    i64.add
+   local.get $1
+   i64.div_s
+   local.get $1
+   i64.mul
+   i64.sub
   end
-  local.get $3
-  i64.div_s
-  i64.mul
-  i64.sub
   i32.wrap_i64
   i32.const 1000
   i32.div_s
@@ -2845,8 +2833,6 @@
  (func $~lib/date/Date#getUTCMilliseconds (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 i64)
   local.get $0
   i64.load offset=16
   local.set $2
@@ -2854,27 +2840,25 @@
   i64.extend_i32_s
   local.set $1
   local.get $2
-  local.get $1
-  local.get $2
-  local.set $4
-  local.get $1
-  local.set $3
-  local.get $4
   i64.const 0
   i64.ge_s
   if (result i64)
-   local.get $4
+   local.get $2
+   local.get $1
+   i64.rem_s
   else
-   local.get $4
-   local.get $3
+   local.get $2
+   local.get $2
+   local.get $1
    i64.sub
    i64.const 1
    i64.add
+   local.get $1
+   i64.div_s
+   local.get $1
+   i64.mul
+   i64.sub
   end
-  local.get $3
-  i64.div_s
-  i64.mul
-  i64.sub
   i32.wrap_i64
  )
  (func $~lib/date/Date#setUTCMilliseconds (param $0 i32) (param $1 i32)
@@ -2939,8 +2923,6 @@
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
-  (local $5 i64)
-  (local $6 i64)
   local.get $0
   i32.load offset=8
   local.get $1
@@ -2955,28 +2937,26 @@
   i64.extend_i32_s
   local.set $2
   local.get $3
-  local.get $2
-  local.get $3
-  local.set $5
-  local.get $2
-  local.set $4
-  local.get $5
   i64.const 0
   i64.ge_s
   if (result i64)
-   local.get $5
+   local.get $3
+   local.get $2
+   i64.rem_s
   else
-   local.get $5
-   local.get $4
+   local.get $3
+   local.get $3
+   local.get $2
    i64.sub
    i64.const 1
    i64.add
+   local.get $2
+   i64.div_s
+   local.get $2
+   i64.mul
+   i64.sub
   end
-  local.get $4
-  i64.div_s
-  i64.mul
-  i64.sub
-  local.set $6
+  local.set $4
   local.get $0
   local.get $0
   i32.load
@@ -2987,7 +2967,7 @@
   i64.extend_i32_s
   i64.const 86400000
   i64.mul
-  local.get $6
+  local.get $4
   i64.add
   call $~lib/date/Date#setTime
   drop
@@ -2996,8 +2976,6 @@
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
-  (local $5 i64)
-  (local $6 i64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3012,28 +2990,26 @@
   i64.extend_i32_s
   local.set $2
   local.get $3
-  local.get $2
-  local.get $3
-  local.set $5
-  local.get $2
-  local.set $4
-  local.get $5
   i64.const 0
   i64.ge_s
   if (result i64)
-   local.get $5
+   local.get $3
+   local.get $2
+   i64.rem_s
   else
-   local.get $5
-   local.get $4
+   local.get $3
+   local.get $3
+   local.get $2
    i64.sub
    i64.const 1
    i64.add
+   local.get $2
+   i64.div_s
+   local.get $2
+   i64.mul
+   i64.sub
   end
-  local.get $4
-  i64.div_s
-  i64.mul
-  i64.sub
-  local.set $6
+  local.set $4
   local.get $0
   local.get $0
   i32.load
@@ -3046,7 +3022,7 @@
   i64.extend_i32_s
   i64.const 86400000
   i64.mul
-  local.get $6
+  local.get $4
   i64.add
   call $~lib/date/Date#setTime
   drop
@@ -3055,8 +3031,6 @@
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
-  (local $5 i64)
-  (local $6 i64)
   local.get $0
   i32.load
   local.get $1
@@ -3071,28 +3045,26 @@
   i64.extend_i32_s
   local.set $2
   local.get $3
-  local.get $2
-  local.get $3
-  local.set $5
-  local.get $2
-  local.set $4
-  local.get $5
   i64.const 0
   i64.ge_s
   if (result i64)
-   local.get $5
+   local.get $3
+   local.get $2
+   i64.rem_s
   else
-   local.get $5
-   local.get $4
+   local.get $3
+   local.get $3
+   local.get $2
    i64.sub
    i64.const 1
    i64.add
+   local.get $2
+   i64.div_s
+   local.get $2
+   i64.mul
+   i64.sub
   end
-  local.get $4
-  i64.div_s
-  i64.mul
-  i64.sub
-  local.set $6
+  local.set $4
   local.get $0
   local.get $1
   local.get $0
@@ -3103,7 +3075,7 @@
   i64.extend_i32_s
   i64.const 86400000
   i64.mul
-  local.get $6
+  local.get $4
   i64.add
   call $~lib/date/Date#setTime
   drop

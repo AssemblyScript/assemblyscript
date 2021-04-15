@@ -214,7 +214,7 @@ function epochMillis(
 
 // @ts-ignore: decorator
 @inline function floorMod<T extends number>(a: T, b: T): T {
-  return a - b * floorDiv<T>(a, b) as T;
+  return (a >= 0 ? a % b : a - (a - b + 1) / b * b) as T;
 }
 
 // @ts-ignore: decorator

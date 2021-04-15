@@ -2033,19 +2033,23 @@
   local.get $0
   i64.load offset=16
   local.tee $1
-  local.get $1
-  local.get $1
-  i64.const 86399999
-  i64.sub
-  local.get $1
   i64.const 0
   i64.ge_s
-  select
-  i64.const 86400000
-  i64.div_s
-  i64.const 86400000
-  i64.mul
-  i64.sub
+  if (result i64)
+   local.get $1
+   i64.const 86400000
+   i64.rem_s
+  else
+   local.get $1
+   local.get $1
+   i64.const 86399999
+   i64.sub
+   i64.const 86400000
+   i64.div_s
+   i64.const 86400000
+   i64.mul
+   i64.sub
+  end
   i32.wrap_i64
   i32.const 3600000
   i32.div_s
@@ -2055,19 +2059,23 @@
   local.get $0
   i64.load offset=16
   local.tee $1
-  local.get $1
-  local.get $1
-  i64.const 3599999
-  i64.sub
-  local.get $1
   i64.const 0
   i64.ge_s
-  select
-  i64.const 3600000
-  i64.div_s
-  i64.const 3600000
-  i64.mul
-  i64.sub
+  if (result i64)
+   local.get $1
+   i64.const 3600000
+   i64.rem_s
+  else
+   local.get $1
+   local.get $1
+   i64.const 3599999
+   i64.sub
+   i64.const 3600000
+   i64.div_s
+   i64.const 3600000
+   i64.mul
+   i64.sub
+  end
   i32.wrap_i64
   i32.const 60000
   i32.div_s
@@ -2077,19 +2085,23 @@
   local.get $0
   i64.load offset=16
   local.tee $1
-  local.get $1
-  local.get $1
-  i64.const 59999
-  i64.sub
-  local.get $1
   i64.const 0
   i64.ge_s
-  select
-  i64.const 60000
-  i64.div_s
-  i64.const 60000
-  i64.mul
-  i64.sub
+  if (result i64)
+   local.get $1
+   i64.const 60000
+   i64.rem_s
+  else
+   local.get $1
+   local.get $1
+   i64.const 59999
+   i64.sub
+   i64.const 60000
+   i64.div_s
+   i64.const 60000
+   i64.mul
+   i64.sub
+  end
   i32.wrap_i64
   i32.const 1000
   i32.div_s
@@ -2099,19 +2111,23 @@
   local.get $0
   i64.load offset=16
   local.tee $1
-  local.get $1
-  local.get $1
-  i64.const 999
-  i64.sub
-  local.get $1
   i64.const 0
   i64.ge_s
-  select
-  i64.const 1000
-  i64.div_s
-  i64.const 1000
-  i64.mul
-  i64.sub
+  if (result i64)
+   local.get $1
+   i64.const 1000
+   i64.rem_s
+  else
+   local.get $1
+   local.get $1
+   i64.const 999
+   i64.sub
+   i64.const 1000
+   i64.div_s
+   i64.const 1000
+   i64.mul
+   i64.sub
+  end
   i32.wrap_i64
  )
  (func $~lib/date/Date#setUTCMilliseconds (param $0 i32) (param $1 i32)
@@ -2181,19 +2197,23 @@
   local.get $0
   i64.load offset=16
   local.tee $2
-  local.get $2
-  local.get $2
-  i64.const 86399999
-  i64.sub
-  local.get $2
   i64.const 0
   i64.ge_s
-  select
-  i64.const 86400000
-  i64.div_s
-  i64.const 86400000
-  i64.mul
-  i64.sub
+  if (result i64)
+   local.get $2
+   i64.const 86400000
+   i64.rem_s
+  else
+   local.get $2
+   local.get $2
+   i64.const 86399999
+   i64.sub
+   i64.const 86400000
+   i64.div_s
+   i64.const 86400000
+   i64.mul
+   i64.sub
+  end
   local.get $0
   i32.load
   local.get $0
@@ -2219,19 +2239,23 @@
   local.get $0
   i64.load offset=16
   local.tee $2
-  local.get $2
-  local.get $2
-  i64.const 86399999
-  i64.sub
-  local.get $2
   i64.const 0
   i64.ge_s
-  select
-  i64.const 86400000
-  i64.div_s
-  i64.const 86400000
-  i64.mul
-  i64.sub
+  if (result i64)
+   local.get $2
+   i64.const 86400000
+   i64.rem_s
+  else
+   local.get $2
+   local.get $2
+   i64.const 86399999
+   i64.sub
+   i64.const 86400000
+   i64.div_s
+   i64.const 86400000
+   i64.mul
+   i64.sub
+  end
   local.get $0
   i32.load
   local.get $1
@@ -2259,19 +2283,23 @@
   local.get $0
   i64.load offset=16
   local.tee $2
-  local.get $2
-  local.get $2
-  i64.const 86399999
-  i64.sub
-  local.get $2
   i64.const 0
   i64.ge_s
-  select
-  i64.const 86400000
-  i64.div_s
-  i64.const 86400000
-  i64.mul
-  i64.sub
+  if (result i64)
+   local.get $2
+   i64.const 86400000
+   i64.rem_s
+  else
+   local.get $2
+   local.get $2
+   i64.const 86399999
+   i64.sub
+   i64.const 86400000
+   i64.div_s
+   i64.const 86400000
+   i64.mul
+   i64.sub
+  end
   local.get $1
   local.get $0
   i32.load offset=4
