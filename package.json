@@ -82,7 +82,7 @@
     "test:packages": "cd tests/packages && npm run test",
     "test:extension": "cd tests/extension && npm run test",
     "test:asconfig": "cd tests/asconfig && npm run test",
-     "make": "npm run clean && npm test && npm run build && npm test",
+    "make": "npm run clean && npm test && npm run build && npm test",
     "all": "npm run check && npm run make",
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
     "prepublishOnly": "node scripts/prepublish",
