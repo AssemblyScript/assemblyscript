@@ -168,9 +168,11 @@ export class Date {
 
   toISOString(): string {
     var yearStr = abs(this.year).toString();
-    var isNeg = this.epochMillis < 0;
-    if (isNeg || yearStr.length > 4) {
+    var isNeg = this.year < 0;
+    if (isNeg || this.year >= 10000) {
       yearStr = (isNeg ? "-" : "+") + yearStr.padStart(6, "0");
+    } else {
+      yearStr = yearStr.padStart(4, "0");
     }
 
     return (

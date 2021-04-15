@@ -174,7 +174,14 @@
 
 // Date#toISOString ////////////////////////////////////////////////////////////////////////////////
 {
-  let date = new Date(1231231231020);
+  let date = new Date(-62167219200000);
+  assert(date.toISOString() == "0000-01-01T00:00:00.000Z");
+  date = new Date(-62167219200000 - 1);
+  assert(date.toISOString() == "-000001-12-31T23:59:59.999Z");
+  date = new Date(-62127219200000);
+  trace(date.toISOString());
+  assert(date.toISOString() == "0001-04-07T23:06:40.000Z");
+  date = new Date(1231231231020);
   assert(date.toISOString() == "2009-01-06T08:40:31.020Z");
   date = new Date(1231231231456);
   assert(date.toISOString() == "2009-01-06T08:40:31.456Z");
