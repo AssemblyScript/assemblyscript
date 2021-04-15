@@ -52,11 +52,18 @@
   assert(date.getUTCMilliseconds() == 12);
   date.setUTCMilliseconds(568);
   assert(date.getUTCMilliseconds() == 568);
-  // test boundaries
+  // test in boundaries
   date.setUTCMilliseconds(0);
   assert(date.getTime() == 399464523963000);
   date.setUTCMilliseconds(999);
   assert(date.getTime() == 399464523963999);
+  // test out of boundaries
+  date.setUTCMilliseconds(2000);
+  assert(date.getUTCMilliseconds() == 0);
+  assert(date.getTime() == 399464523965000);
+  date.setUTCMilliseconds(-2000);
+  assert(date.getUTCMilliseconds() == 0);
+  assert(date.getTime() == 399464523963000);
 }
 
 // Date#setUTCSeconds //////////////////////////////////////////////////////////////////////////////
@@ -155,6 +162,14 @@
 
   date.setUTCMilliseconds(60 * 60 * 1000 + 1);
   assert(date.getTime() == 1362117600001);
+
+  date = new Date(123814991274);
+  date.setUTCDate(-2208);
+  assert(date.getTime() == -67301808726);
+
+  date = new Date(123814991274);
+  date.setUTCDate(2208);
+  assert(date.getTime() == 314240591274);
 }
 
 // Date#setUTCMonth ////////////////////////////////////////////////////////////////////////////////

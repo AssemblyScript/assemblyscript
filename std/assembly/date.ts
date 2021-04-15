@@ -1,4 +1,4 @@
-import { E_VALUEOUTOFRANGE, E_INVALIDDATE } from "util/error";
+import { E_INVALIDDATE } from "util/error";
 import { now as Date_now } from "./bindings/Date";
 
 // @ts-ignore: decorator
@@ -129,32 +129,25 @@ export class Date {
   }
 
   setUTCSeconds(seconds: i32): void {
-    if (seconds < 0 || seconds > 59) throw new RangeError(E_VALUEOUTOFRANGE);
     this.setTime(this.epochMillis + (seconds - this.getUTCSeconds()) * MILLIS_PER_SECOND);
   }
 
   setUTCMinutes(minutes: i32): void {
-    if (minutes < 0 || minutes > 59) throw new RangeError(E_VALUEOUTOFRANGE);
     this.setTime(this.epochMillis + (minutes - this.getUTCMinutes()) * MILLIS_PER_MINUTE);
   }
 
   setUTCHours(hours: i32): void {
-    if (hours < 0 || hours > 23) throw new RangeError(E_VALUEOUTOFRANGE);
     this.setTime(this.epochMillis + (hours - this.getUTCHours()) * MILLIS_PER_HOUR);
   }
 
   setUTCDate(day: i32): void {
     if (this.day == day) return;
-    var year = this.year;
-    var month = this.month;
-    if (day < 1 || day > daysInMonth(year, month)) throw new RangeError(E_VALUEOUTOFRANGE);
     var ms = floorMod(this.epochMillis, MILLIS_PER_DAY);
-    this.setTime(i64(daysSinceEpoch(year, month, day)) * MILLIS_PER_DAY + ms);
+    this.setTime(i64(daysSinceEpoch(this.year, this.month, day)) * MILLIS_PER_DAY + ms);
   }
 
   setUTCMonth(month: i32): void {
     if (this.month == month) return;
-    if (month < 1 || month > 12) throw new RangeError(E_VALUEOUTOFRANGE);
     var ms = floorMod(this.epochMillis, MILLIS_PER_DAY);
     this.setTime(i64(daysSinceEpoch(this.year, month + 1, this.day)) * MILLIS_PER_DAY + ms);
   }
@@ -222,18 +215,6 @@ function epochMillis(
 // @ts-ignore: decorator
 @inline function floorMod<T extends number>(a: T, b: T): T {
   return a - b * floorDiv<T>(a, b) as T;
-}
-
-// http://howardhinnant.github.io/date_algorithms.html#is_leap
-// @ts-ignore: decorator
-@inline function isLeap(y: i32): bool {
-  return y % 4 == 0 && (y % 100 != 0 || y % 400 == 0);
-}
-
-function daysInMonth(year: i32, month: i32): i32 {
-  return month == 2
-    ? 28 + i32(isLeap(year))
-    : 30 + ((month + i32(month >= 8)) & 1);
 }
 
 // @ts-ignore: decorator
