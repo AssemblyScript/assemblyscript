@@ -2666,7 +2666,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 102
+   i32.const 104
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -6792,31 +6792,24 @@
   call $~lib/array/Array<~lib/string/String>#get:length
   local.set $16
   local.get $16
-  i32.const 1
-  i32.gt_s
+  i32.const 2
+  i32.ge_s
   if
-   local.get $16
-   i32.const 2
-   i32.ge_s
-   if (result i32)
-    local.get $12
-    i32.const 1
-    call $~lib/array/Array<~lib/string/String>#__get
-    local.set $17
-    global.get $~lib/memory/__stack_pointer
-    local.get $17
-    i32.store offset=16
-    local.get $17
-    i32.const 0
-    call $~lib/number/I32.parseInt
-   else
-    i32.const 1
-   end
+   local.get $12
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   local.set $17
+   global.get $~lib/memory/__stack_pointer
+   local.get $17
+   i32.store offset=16
+   local.get $17
+   i32.const 0
+   call $~lib/number/I32.parseInt
    local.set $14
    local.get $16
    i32.const 3
-   i32.eq
-   if (result i32)
+   i32.ge_s
+   if
     local.get $12
     i32.const 2
     call $~lib/array/Array<~lib/string/String>#__get
@@ -6827,10 +6820,8 @@
     local.get $17
     i32.const 0
     call $~lib/number/I32.parseInt
-   else
-    i32.const 1
+    local.set $15
    end
-   local.set $15
   end
   i32.const 2416
   local.set $17
@@ -9274,7 +9265,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 90
+   i32.const 92
    i32.const 35
    call $~lib/builtins/abort
    unreachable

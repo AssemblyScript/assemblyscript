@@ -76,9 +76,11 @@ export class Date {
     var year = I32.parseInt(parts[0]);
     var month = 1, day = 1;
     var len = parts.length;
-    if (len > 1) {
-      month = len >= 2 ? I32.parseInt(parts[1]) : 1;
-      day   = len == 3 ? I32.parseInt(parts[2]) : 1;
+    if (len >= 2) {
+      month = I32.parseInt(parts[1]);
+      if (len >= 3) {
+        day = I32.parseInt(parts[2]);
+      }
     }
     trace("", 3, year, month, day);
     return new Date(epochMillis(year, month, day, hour, min, sec, ms));

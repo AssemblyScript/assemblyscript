@@ -1996,7 +1996,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 102
+   i32.const 104
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -4216,30 +4216,25 @@
   local.set $1
   local.get $2
   i32.load offset=12
-  local.tee $8
-  i32.const 1
-  i32.gt_s
+  local.tee $0
+  local.set $8
+  local.get $0
+  i32.const 2
+  i32.ge_s
   if (result i32)
-   local.get $8
-   i32.const 2
-   i32.ge_s
-   if (result i32)
-    local.get $2
-    i32.const 1
-    call $~lib/array/Array<~lib/string/String>#__get
-    local.set $0
-    global.get $~lib/memory/__stack_pointer
-    local.get $0
-    i32.store offset=16
-    local.get $0
-    call $~lib/util/string/strtol<i32>
-   else
-    i32.const 1
-   end
+   local.get $2
+   i32.const 1
+   call $~lib/array/Array<~lib/string/String>#__get
+   local.set $0
+   global.get $~lib/memory/__stack_pointer
+   local.get $0
+   i32.store offset=16
+   local.get $0
+   call $~lib/util/string/strtol<i32>
    local.set $1
    local.get $8
    i32.const 3
-   i32.eq
+   i32.ge_s
    if (result i32)
     local.get $2
     i32.const 2
@@ -6202,7 +6197,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 90
+   i32.const 92
    i32.const 35
    call $~lib/builtins/abort
    unreachable
