@@ -2660,6 +2660,7 @@
  )
  (func $~lib/date/Date#setTime (param $0 i32) (param $1 i64) (result i64)
   (local $2 i64)
+  (local $3 i64)
   local.get $0
   i64.load offset=16
   local.set $2
@@ -2686,7 +2687,23 @@
   call $~lib/date/Date#set:epochMillis
   local.get $0
   local.get $1
-  i64.const 86400000
+  local.set $3
+  i32.const 86400000
+  i64.extend_i32_s
+  local.set $2
+  local.get $3
+  i64.const 0
+  i64.ge_s
+  if (result i64)
+   local.get $3
+  else
+   local.get $3
+   local.get $2
+   i64.sub
+   i64.const 1
+   i64.add
+  end
+  local.get $2
   i64.div_s
   i32.wrap_i64
   call $~lib/date/ymdFromEpochDays
@@ -8333,6 +8350,19 @@
   f64.const 0
   f64.const 0
   call $~lib/builtins/trace
+  local.get $4
+  call $~lib/date/Date#getUTCDate
+  i32.const 20
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 245
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $3
   call $~lib/date/Date#toISOString
   local.set $8
@@ -8363,7 +8393,8 @@
  )
  (func $~lib/date/Date#constructor (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
-  (local $3 i32)
+  (local $3 i64)
+  (local $4 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -8416,7 +8447,23 @@
   end
   local.get $0
   local.get $1
-  i64.const 86400000
+  local.set $3
+  i32.const 86400000
+  i64.extend_i32_s
+  local.set $2
+  local.get $3
+  i64.const 0
+  i64.ge_s
+  if (result i64)
+   local.get $3
+  else
+   local.get $3
+   local.get $2
+   i64.sub
+   i64.const 1
+   i64.add
+  end
+  local.get $2
   i64.div_s
   i32.wrap_i64
   call $~lib/date/ymdFromEpochDays
@@ -8428,12 +8475,12 @@
   global.get $~lib/date/_day
   call $~lib/date/Date#set:day
   local.get $0
-  local.set $3
+  local.set $4
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $4
  )
  (func $~lib/util/number/itoa32 (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

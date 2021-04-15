@@ -2008,6 +2008,13 @@
   i64.store offset=16
   local.get $0
   local.get $1
+  local.get $1
+  i64.const 86399999
+  i64.sub
+  local.get $1
+  i64.const 0
+  i64.ge_s
+  select
   i64.const 86400000
   i64.div_s
   i32.wrap_i64
@@ -5550,6 +5557,18 @@
   f64.const 0
   f64.const 0
   call $~lib/builtins/trace
+  local.get $0
+  i32.load offset=8
+  i32.const 20
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 245
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $1
   call $~lib/date/Date#toISOString
   local.set $0
@@ -5622,6 +5641,13 @@
   end
   local.get $1
   local.get $0
+  local.get $0
+  i64.const 86399999
+  i64.sub
+  local.get $0
+  i64.const 0
+  i64.ge_s
+  select
   i64.const 86400000
   i64.div_s
   i32.wrap_i64

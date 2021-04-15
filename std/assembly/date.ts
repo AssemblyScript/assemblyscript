@@ -77,7 +77,7 @@ export class Date {
     if (invalidDate(epochMillis)) {
       throw new RangeError(E_INVALIDDATE);
     }
-    this.year = ymdFromEpochDays(i32(epochMillis / MILLIS_PER_DAY));
+    this.year = ymdFromEpochDays(i32(floorDiv(epochMillis, MILLIS_PER_DAY)));
     this.month = _month;
     this.day = _day;
   }
@@ -91,7 +91,7 @@ export class Date {
       throw new RangeError(E_INVALIDDATE);
     }
     this.epochMillis = value;
-    this.year = ymdFromEpochDays(i32(value / MILLIS_PER_DAY));
+    this.year = ymdFromEpochDays(i32(floorDiv(value, MILLIS_PER_DAY)));
     this.month = _month;
     this.day = _day;
     return value;
@@ -212,8 +212,8 @@ function epochMillis(
 }
 
 // @ts-ignore: decorator
-@inline function floorDiv(a: i32, b: i32): i32 {
-  return (a >= 0 ? a : a - b + 1) / b;
+@inline function floorDiv<T extends number>(a: T, b: T): T {
+  return (a >= 0 ? a : a - b + 1) / b as T;
 }
 
 // http://howardhinnant.github.io/date_algorithms.html#is_leap

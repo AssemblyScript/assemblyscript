@@ -242,7 +242,7 @@
 
   trace("", 2, minDateInc.getUTCDate(), minDateInc.getUTCMinutes());
 
-  // assert(minDateInc.getUTCDate() == 20);
+  assert(minDateInc.getUTCDate() == 20);
   assert(maxDateDec.toISOString() == "+275760-09-12T23:59:59.999Z");
   // assert(minDateInc.toISOString() == "-271821-04-20T00:00:00.001Z");
 
