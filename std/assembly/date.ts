@@ -26,7 +26,9 @@ export class Date {
     second: i32 = 0,
     millisecond: i32 = 0
   ): i64 {
-    return epochMillis(year, month + 1, day, hour, minute, second, millisecond);
+    var ms = epochMillis(year, month + 1, day, hour, minute, second, millisecond);
+    if (invalidDate(ms)) throw new RangeError(E_INVALIDDATE);
+    return ms;
   }
 
   @inline static now(): i64 {
