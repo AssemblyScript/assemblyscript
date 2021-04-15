@@ -21,7 +21,8 @@
  (data (i32.const 352) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 380) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 444) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 496) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\t\00\00\00\00\00\00")
+ (data (i32.const 492) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00,\00\00\00a\00r\00r\00a\00y\00-\00d\00e\00s\00t\00r\00u\00c\00t\00u\00r\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 560) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\t\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $array-destructuring/x i32 (i32.const 999))
  (global $array-destructuring/y i32 (i32.const 888))
@@ -39,11 +40,10 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $array-destructuring/x_copy (mut i32) (i32.const 0))
- (global $array-destructuring/y_copy (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 496))
- (global $~lib/memory/__data_end i32 (i32.const 532))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16916))
- (global $~lib/memory/__heap_base i32 (i32.const 16916))
+ (global $~lib/rt/__rtti_base i32 (i32.const 560))
+ (global $~lib/memory/__data_end i32 (i32.const 596))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16980))
+ (global $~lib/memory/__heap_base i32 (i32.const 16980))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
@@ -3803,8 +3803,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16944
-   i32.const 16992
+   i32.const 17008
+   i32.const 17056
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -3813,7 +3813,6 @@
  )
  (func $start:array-destructuring
   (local $0 i32)
-  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -3840,23 +3839,26 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   call $array-destructuring/func
-  local.set $1
+  local.set $0
   global.get $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $0
   i32.store
-  local.get $1
+  local.get $0
   i32.const 0
   call $~lib/array/Array<i32>#__get
   global.set $array-destructuring/x_copy
-  call $array-destructuring/func
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
-  i32.const 1
-  call $~lib/array/Array<i32>#__get
-  global.set $array-destructuring/y_copy
+  global.get $array-destructuring/x_copy
+  global.get $array-destructuring/x
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 6
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
