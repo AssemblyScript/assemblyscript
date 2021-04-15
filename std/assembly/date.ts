@@ -64,11 +64,10 @@ export class Date {
       }
     }
     // parse the YYYY-MM-DD component
-    var day = 1, month = 1;
     var parts = dateString.split("-");
-    var len = parts.length;
-
     var year = I32.parseInt(parts[0]);
+    var month = 1, day = 1;
+    var len = parts.length;
     if (len > 1) {
       month = len >= 2 ? I32.parseInt(parts[1]) : 1;
       day   = len == 3 ? I32.parseInt(parts[2]) : 1;

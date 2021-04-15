@@ -2006,7 +2006,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 94
+   i32.const 93
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -4097,7 +4097,7 @@
    i32.store offset=16
    local.get $2
    call $~lib/util/string/strtol<i32>
-   local.set $6
+   local.set $5
    local.get $0
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
@@ -4107,7 +4107,7 @@
    i32.store offset=16
    local.get $2
    call $~lib/util/string/strtol<i32>
-   local.set $7
+   local.set $6
    global.get $~lib/memory/__stack_pointer
    local.get $0
    i32.const 2
@@ -4135,7 +4135,7 @@
     i32.store offset=16
     local.get $3
     call $~lib/util/string/strtol<i32>
-    local.set $5
+    local.set $3
     local.get $0
     local.get $2
     i32.const 1
@@ -4148,15 +4148,13 @@
     i32.store offset=16
     local.get $0
     call $~lib/util/string/strtol<i32>
-    local.set $8
+    local.set $7
    else
     local.get $0
     call $~lib/util/string/strtol<i32>
-    local.set $5
+    local.set $3
    end
   end
-  i32.const 1
-  local.set $2
   global.get $~lib/memory/__stack_pointer
   i32.const 1600
   i32.store
@@ -4164,29 +4162,30 @@
   local.get $1
   i32.const 1600
   call $~lib/string/String#split
-  local.tee $1
+  local.tee $2
   i32.store offset=24
-  local.get $1
-  i32.load offset=12
-  local.set $3
-  local.get $1
+  local.get $2
   i32.const 0
   call $~lib/array/Array<~lib/string/String>#__get
-  local.set $4
+  local.set $0
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $0
   i32.store offset=16
-  local.get $4
+  local.get $0
   call $~lib/util/string/strtol<i32>
-  local.get $3
+  i32.const 1
+  local.set $1
+  local.get $2
+  i32.load offset=12
+  local.tee $4
   i32.const 1
   i32.gt_s
   if (result i32)
-   local.get $3
+   local.get $4
    i32.const 2
    i32.ge_s
    if (result i32)
-    local.get $1
+    local.get $2
     i32.const 1
     call $~lib/array/Array<~lib/string/String>#__get
     local.set $0
@@ -4198,12 +4197,12 @@
    else
     i32.const 1
    end
-   local.set $2
-   local.get $3
+   local.set $1
+   local.get $4
    i32.const 3
    i32.eq
    if (result i32)
-    local.get $1
+    local.get $2
     i32.const 2
     call $~lib/array/Array<~lib/string/String>#__get
     local.set $0
@@ -4219,12 +4218,12 @@
    i32.const 1
   end
   local.set $0
-  local.get $2
+  local.get $1
   local.get $0
-  local.get $6
-  local.get $7
   local.get $5
-  local.get $8
+  local.get $6
+  local.get $3
+  local.get $7
   call $~lib/date/epochMillis
   call $~lib/date/Date#constructor
   global.get $~lib/memory/__stack_pointer
@@ -6140,7 +6139,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 82
+   i32.const 81
    i32.const 35
    call $~lib/builtins/abort
    unreachable

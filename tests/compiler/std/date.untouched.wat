@@ -2680,7 +2680,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 94
+   i32.const 93
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -6727,10 +6727,6 @@
     local.set $3
    end
   end
-  i32.const 1
-  local.set $11
-  i32.const 1
-  local.set $12
   global.get $~lib/memory/__stack_pointer
   local.get $5
   i32.const 576
@@ -6741,12 +6737,9 @@
   local.get $16
   global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/string/String#split
-  local.tee $13
+  local.tee $11
   i32.store offset=24
-  local.get $13
-  call $~lib/array/Array<~lib/string/String>#get:length
-  local.set $14
-  local.get $13
+  local.get $11
   i32.const 0
   call $~lib/array/Array<~lib/string/String>#__get
   local.set $16
@@ -6756,16 +6749,23 @@
   local.get $16
   i32.const 0
   call $~lib/number/I32.parseInt
+  local.set $12
+  i32.const 1
+  local.set $13
+  i32.const 1
+  local.set $14
+  local.get $11
+  call $~lib/array/Array<~lib/string/String>#get:length
   local.set $15
-  local.get $14
+  local.get $15
   i32.const 1
   i32.gt_s
   if
-   local.get $14
+   local.get $15
    i32.const 2
    i32.ge_s
    if (result i32)
-    local.get $13
+    local.get $11
     i32.const 1
     call $~lib/array/Array<~lib/string/String>#__get
     local.set $16
@@ -6778,12 +6778,12 @@
    else
     i32.const 1
    end
-   local.set $12
-   local.get $14
+   local.set $13
+   local.get $15
    i32.const 3
    i32.eq
    if (result i32)
-    local.get $13
+    local.get $11
     i32.const 2
     call $~lib/array/Array<~lib/string/String>#__get
     local.set $16
@@ -6796,12 +6796,12 @@
    else
     i32.const 1
    end
-   local.set $11
+   local.set $14
   end
   i32.const 0
-  local.get $15
   local.get $12
-  local.get $11
+  local.get $13
+  local.get $14
   local.get $1
   local.get $2
   local.get $3
@@ -9102,7 +9102,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 82
+   i32.const 81
    i32.const 35
    call $~lib/builtins/abort
    unreachable
