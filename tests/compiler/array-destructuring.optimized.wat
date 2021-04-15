@@ -1,11 +1,11 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -39,6 +39,7 @@
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $array-destructuring/x_copy (mut i32) (i32.const 0))
+ (global $array-destructuring/y_copy (mut i32) (i32.const 0))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18004))
  (export "memory" (memory $0))
  (start $~start)
@@ -1899,69 +1900,12 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (param $0 i32)
-  block $invalid
-   block $~lib/array/Array<i32>
-    block $~lib/arraybuffer/ArrayBufferView
-     block $~lib/string/String
-      block $~lib/arraybuffer/ArrayBuffer
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $invalid
-      end
-      return
-     end
-     return
-    end
-    local.get $0
-    i32.load
-    local.tee $0
-    if
-     local.get $0
-     call $~lib/rt/itcms/__visit
-    end
-    return
-   end
-   local.get $0
-   i32.load
-   call $~lib/rt/itcms/__visit
-   return
-  end
-  unreachable
- )
- (func $~start
+ (func $array-destructuring/func (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  call $~stack_check
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  memory.size
-  i32.const 16
-  i32.shl
-  i32.const 18004
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 1200
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 1232
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 1376
-  call $~lib/rt/itcms/initLazy
-  global.set $~lib/rt/itcms/fromSpace
   global.get $array-destructuring/funcRunCount
   i32.const 1
   i32.add
@@ -2054,12 +1998,13 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
   local.get $0
-  i32.store
+ )
+ (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
   local.get $0
   i32.load offset=12
-  i32.eqz
+  i32.ge_u
   if
    i32.const 1280
    i32.const 1488
@@ -2070,23 +2015,46 @@
   end
   local.get $0
   i32.load offset=4
-  i32.load
-  global.set $array-destructuring/x_copy
-  global.get $array-destructuring/x_copy
-  i32.const 999
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1536
-   i32.const 6
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  local.get $1
+  i32.const 2
+  i32.shl
   i32.add
-  global.set $~lib/memory/__stack_pointer
+  i32.load
+ )
+ (func $~lib/rt/__visit_members (param $0 i32)
+  block $invalid
+   block $~lib/array/Array<i32>
+    block $~lib/arraybuffer/ArrayBufferView
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $invalid
+      end
+      return
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.tee $0
+    if
+     local.get $0
+     call $~lib/rt/itcms/__visit
+    end
+    return
+   end
+   local.get $0
+   i32.load
+   call $~lib/rt/itcms/__visit
+   return
+  end
+  unreachable
+ )
+ (func $~start
+  call $start:array-destructuring
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
@@ -2100,5 +2068,88 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $start:array-destructuring
+  (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  memory.size
+  i32.const 16
+  i32.shl
+  i32.const 18004
+  i32.sub
+  i32.const 1
+  i32.shr_u
+  global.set $~lib/rt/itcms/threshold
+  i32.const 1200
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/pinSpace
+  i32.const 1232
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/toSpace
+  i32.const 1376
+  call $~lib/rt/itcms/initLazy
+  global.set $~lib/rt/itcms/fromSpace
+  call $array-destructuring/func
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 0
+  call $~lib/array/Array<i32>#__get
+  global.set $array-destructuring/x_copy
+  call $array-destructuring/func
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 1
+  call $~lib/array/Array<i32>#__get
+  global.set $array-destructuring/y_copy
+  global.get $array-destructuring/x_copy
+  i32.const 999
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1536
+   i32.const 7
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $array-destructuring/y_copy
+  i32.const 888
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1536
+   i32.const 8
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $array-destructuring/funcRunCount
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1536
+   i32.const 9
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
 )

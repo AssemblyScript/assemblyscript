@@ -40,6 +40,7 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $array-destructuring/x_copy (mut i32) (i32.const 0))
+ (global $array-destructuring/y_copy (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 560))
  (global $~lib/memory/__data_end i32 (i32.const 596))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16980))
@@ -3847,6 +3848,15 @@
   i32.const 0
   call $~lib/array/Array<i32>#__get
   global.set $array-destructuring/x_copy
+  call $array-destructuring/func
+  local.set $0
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.const 1
+  call $~lib/array/Array<i32>#__get
+  global.set $array-destructuring/y_copy
   global.get $array-destructuring/x_copy
   global.get $array-destructuring/x
   i32.eq
@@ -3854,7 +3864,31 @@
   if
    i32.const 0
    i32.const 512
-   i32.const 6
+   i32.const 7
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $array-destructuring/y_copy
+  global.get $array-destructuring/y
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 8
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $array-destructuring/funcRunCount
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 9
    i32.const 1
    call $~lib/builtins/abort
    unreachable
