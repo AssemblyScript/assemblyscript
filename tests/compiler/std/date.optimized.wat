@@ -8,13 +8,11 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i32_i64_=>_none (func (param i32 i64)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\18\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00D\00a\00t\00e")
@@ -98,16 +96,18 @@
  (data (i32.const 3512) "\01\00\00\00\08\00\00\001\009\007\006")
  (data (i32.const 3532) ",")
  (data (i32.const 3544) "\01\00\00\00\0e\00\00\001\009\007\006\00-\000\002")
- (data (i32.const 3580) "L")
- (data (i32.const 3592) "\01\00\00\006\00\00\00-\002\007\001\008\002\001\00-\000\004\00-\002\000\00T\000\000\00:\000\000\00:\000\000\00.\000\000\000\00Z")
- (data (i32.const 3660) "L")
- (data (i32.const 3672) "\01\00\00\006\00\00\00+\002\007\005\007\006\000\00-\000\009\00-\001\003\00T\000\000\00:\000\000\00:\000\000\00.\000\000\000\00Z")
- (data (i32.const 3740) "L")
- (data (i32.const 3752) "\01\00\00\006\00\00\00+\002\007\005\007\006\000\00-\000\009\00-\001\002\00T\002\003\00:\005\009\00:\005\009\00.\009\009\009\00Z")
- (data (i32.const 3820) "L")
- (data (i32.const 3832) "\01\00\00\006\00\00\00-\002\007\001\008\002\001\00-\000\004\00-\002\000\00T\000\000\00:\000\000\00:\000\000\00.\000\000\001\00Z")
- (data (i32.const 3904) "\06\00\00\00 \00\00\00\00\00\00\00 ")
- (data (i32.const 3932) " \00\00\00\00\00\00\00\02A\00\00\00\00\00\00\02\t")
+ (data (i32.const 3580) "<")
+ (data (i32.const 3592) "\01\00\00\00 \00\00\001\009\007\006\00-\000\002\00-\000\002\00T\001\002\00:\003\004")
+ (data (i32.const 3644) "L")
+ (data (i32.const 3656) "\01\00\00\006\00\00\00-\002\007\001\008\002\001\00-\000\004\00-\002\000\00T\000\000\00:\000\000\00:\000\000\00.\000\000\000\00Z")
+ (data (i32.const 3724) "L")
+ (data (i32.const 3736) "\01\00\00\006\00\00\00+\002\007\005\007\006\000\00-\000\009\00-\001\003\00T\000\000\00:\000\000\00:\000\000\00.\000\000\000\00Z")
+ (data (i32.const 3804) "L")
+ (data (i32.const 3816) "\01\00\00\006\00\00\00+\002\007\005\007\006\000\00-\000\009\00-\001\002\00T\002\003\00:\005\009\00:\005\009\00.\009\009\009\00Z")
+ (data (i32.const 3884) "L")
+ (data (i32.const 3896) "\01\00\00\006\00\00\00-\002\007\001\008\002\001\00-\000\004\00-\002\000\00T\000\000\00:\000\000\00:\000\000\00.\000\000\001\00Z")
+ (data (i32.const 3968) "\06\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 3996) " \00\00\00\00\00\00\00\02A\00\00\00\00\00\00\02\t")
  (global $~lib/date/_day (mut i32) (i32.const 0))
  (global $~lib/date/_month (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
@@ -120,7 +120,7 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 20340))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 20404))
  (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
@@ -443,7 +443,7 @@
    if
     i32.const 0
     local.get $0
-    i32.const 20340
+    i32.const 20404
     i32.lt_u
     local.get $0
     i32.load offset=8
@@ -489,7 +489,7 @@
    i32.const 1
   else
    local.get $1
-   i32.const 3904
+   i32.const 3968
    i32.load
    i32.gt_u
    if
@@ -503,7 +503,7 @@
    local.get $1
    i32.const 3
    i32.shl
-   i32.const 3908
+   i32.const 3972
    i32.add
    i32.load
    i32.const 32
@@ -1077,10 +1077,10 @@
   if
    unreachable
   end
-  i32.const 20352
+  i32.const 20416
   i32.const 0
   i32.store
-  i32.const 21920
+  i32.const 21984
   i32.const 0
   i32.store
   loop $for-loop|0
@@ -1091,7 +1091,7 @@
     local.get $1
     i32.const 2
     i32.shl
-    i32.const 20352
+    i32.const 20416
     i32.add
     i32.const 0
     i32.store offset=4
@@ -1109,7 +1109,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 20352
+      i32.const 20416
       i32.add
       i32.const 0
       i32.store offset=96
@@ -1127,13 +1127,13 @@
     br $for-loop|0
    end
   end
-  i32.const 20352
-  i32.const 21924
+  i32.const 20416
+  i32.const 21988
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 20352
+  i32.const 20416
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/itcms/step (result i32)
@@ -1212,7 +1212,7 @@
       local.set $0
       loop $while-continue|0
        local.get $0
-       i32.const 20340
+       i32.const 20404
        i32.lt_u
        if
         local.get $0
@@ -1302,7 +1302,7 @@
       unreachable
      end
      local.get $0
-     i32.const 20340
+     i32.const 20404
      i32.lt_u
      if
       local.get $0
@@ -1325,7 +1325,7 @@
       i32.const 4
       i32.add
       local.tee $1
-      i32.const 20340
+      i32.const 20404
       i32.ge_u
       if
        global.get $~lib/rt/tlsf/ROOT
@@ -1996,7 +1996,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 104
+   i32.const 102
    i32.const 28
    call $~lib/builtins/abort
    unreachable
@@ -3397,11 +3397,11 @@
  )
  (func $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i32.const 3956
+  i32.const 4020
   i32.lt_s
   if
-   i32.const 20368
-   i32.const 20416
+   i32.const 20432
+   i32.const 20480
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -4177,21 +4177,6 @@
      local.set $3
     end
    end
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1984
-   i32.store offset=16
-   i32.const 1984
-   i32.const 4
-   local.get $5
-   f64.convert_i32_s
-   local.get $6
-   f64.convert_i32_s
-   local.get $3
-   f64.convert_i32_s
-   local.get $7
-   f64.convert_i32_s
-   f64.const 0
-   call $~lib/builtins/trace
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 1600
@@ -4211,7 +4196,6 @@
   i32.store offset=16
   local.get $0
   call $~lib/util/string/strtol<i32>
-  local.set $4
   i32.const 1
   local.set $1
   local.get $2
@@ -4252,21 +4236,6 @@
    i32.const 1
   end
   local.set $0
-  global.get $~lib/memory/__stack_pointer
-  i32.const 1984
-  i32.store offset=16
-  i32.const 1984
-  i32.const 3
-  local.get $4
-  f64.convert_i32_s
-  local.get $1
-  f64.convert_i32_s
-  local.get $0
-  f64.convert_i32_s
-  f64.const 0
-  f64.const 0
-  call $~lib/builtins/trace
-  local.get $4
   local.get $1
   local.get $0
   local.get $5
@@ -4456,7 +4425,7 @@
    memory.size
    i32.const 16
    i32.shl
-   i32.const 20340
+   i32.const 20404
    i32.sub
    i32.const 1
    i32.shr_u
@@ -5874,6 +5843,46 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
+   i32.const 3600
+   i32.store offset=4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 3600
+   call $~lib/date/Date.fromString
+   local.tee $0
+   i32.store
+   local.get $0
+   i64.load offset=16
+   i64.const 192112440000
+   i64.ne
+   if
+    i32.const 0
+    i32.const 1152
+    i32.const 260
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   i32.const 3232
+   i32.store offset=4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 3232
+   call $~lib/date/Date.fromString
+   local.tee $0
+   i32.store
+   local.get $0
+   i64.load offset=16
+   i64.const 192112496000
+   i64.ne
+   if
+    i32.const 0
+    i32.const 1152
+    i32.const 263
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
    i64.const -8640000000000000
    call $~lib/date/Date#constructor
    local.tee $0
@@ -5890,7 +5899,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 275
+    i32.const 273
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -5902,7 +5911,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 276
+    i32.const 274
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -5914,7 +5923,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 278
+    i32.const 276
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -5926,7 +5935,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 279
+    i32.const 277
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -5938,7 +5947,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 281
+    i32.const 279
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -5950,7 +5959,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 282
+    i32.const 280
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -5962,7 +5971,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 284
+    i32.const 282
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -5974,7 +5983,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 285
+    i32.const 283
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -5986,16 +5995,16 @@
    local.get $0
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
-   i32.const 3600
+   i32.const 3664
    i32.store offset=8
    local.get $0
-   i32.const 3600
+   i32.const 3664
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
     i32.const 1152
-    i32.const 287
+    i32.const 285
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6007,16 +6016,16 @@
    local.get $0
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
-   i32.const 3680
+   i32.const 3744
    i32.store offset=8
    local.get $0
-   i32.const 3680
+   i32.const 3744
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
     i32.const 1152
-    i32.const 288
+    i32.const 286
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6038,7 +6047,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 293
+    i32.const 291
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6050,7 +6059,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 294
+    i32.const 292
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6062,7 +6071,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 295
+    i32.const 293
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6072,7 +6081,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 296
+    i32.const 294
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6082,7 +6091,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 297
+    i32.const 295
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6092,7 +6101,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 298
+    i32.const 296
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6104,7 +6113,7 @@
    if
     i32.const 0
     i32.const 1152
-    i32.const 299
+    i32.const 297
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6116,16 +6125,16 @@
    local.get $2
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
-   i32.const 3760
+   i32.const 3824
    i32.store offset=8
    local.get $2
-   i32.const 3760
+   i32.const 3824
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
     i32.const 1152
-    i32.const 301
+    i32.const 299
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6137,16 +6146,16 @@
    local.get $0
    i32.store offset=4
    global.get $~lib/memory/__stack_pointer
-   i32.const 3840
+   i32.const 3904
    i32.store offset=8
    local.get $0
-   i32.const 3840
+   i32.const 3904
    call $~lib/string/String.__eq
    i32.eqz
    if
     i32.const 0
     i32.const 1152
-    i32.const 302
+    i32.const 300
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -6197,7 +6206,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 92
+   i32.const 90
    i32.const 35
    call $~lib/builtins/abort
    unreachable

@@ -230,11 +230,11 @@
   assert(date.getTime() == 11860387200000);
 
   // supports year / month / day / hour / minute / second
-  date = Date.fromString("1976-02-02T12:34:56");
+  date = Date.fromString("1976-02-02T12:34:56"); // still use Z suffix
   assert(date.getTime() == 192112496000);
 
   // supports milliseconds
-  date = Date.fromString("1976-02-02T12:34:56.456");
+  date = Date.fromString("1976-02-02T12:34:56.456"); // still use Z suffix
   assert(date.getTime() == 192112496456);
 
   // supports 'Z' suffix
@@ -256,13 +256,11 @@
   date = Date.fromString("1976-02-02");
   assert(date.getTime() == 192067200000);
 
-  // date = Date.fromString("1976-02-02T12:34");
-  // trace("", 1, date.getTime() as f64);
-  // assert(date.getTime() == 192101640000); // FAIL
+  date = Date.fromString("1976-02-02T12:34"); // still use Z suffix
+  assert(date.getTime() == 192112440000);
 
-  // date = Date.fromString("1976-02-02T12:34:56");
-  // trace("", 1, date.getTime() as f64);
-  // assert(date.getTime() == 192101696000); // FAIL
+  date = Date.fromString("1976-02-02T12:34:56"); // still use Z suffix
+  assert(date.getTime() == 192112496000);
 
   // date = Date.fromString("1976-02-02T12"); // Invalid Date
 }

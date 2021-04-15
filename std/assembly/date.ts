@@ -69,7 +69,6 @@ export class Date {
           sec = I32.parseInt(secAndMs);
         }
       }
-      trace("", 4, hour, min, sec, ms);
     }
     // parse the YYYY-MM-DD component
     var parts = dateString.split("-");
@@ -82,7 +81,6 @@ export class Date {
         day = I32.parseInt(parts[2]);
       }
     }
-    trace("", 3, year, month, day);
     return new Date(epochMillis(year, month, day, hour, min, sec, ms));
   }
 
