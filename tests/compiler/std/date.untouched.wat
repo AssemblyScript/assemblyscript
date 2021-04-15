@@ -63,7 +63,8 @@
  (data (i32.const 3468) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\000\00\00\001\009\007\006\00-\000\002\00-\000\002\00T\001\002\00:\003\004\00:\005\006\00.\004\005\006\00Z\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 3548) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00-\002\007\001\008\002\001\00-\000\004\00-\002\000\00T\000\000\00:\000\000\00:\000\000\00.\000\000\000\00Z\00\00\00\00\00\00\00")
  (data (i32.const 3628) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00+\002\007\005\007\006\000\00-\000\009\00-\001\003\00T\000\000\00:\000\000\00:\000\000\00.\000\000\000\00Z\00\00\00\00\00\00\00")
- (data (i32.const 3712) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\02A\00\00\00\00\00\00\02\t\00\00\00\00\00\00")
+ (data (i32.const 3708) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00+\002\007\005\007\006\000\00-\000\009\00-\001\002\00T\002\003\00:\005\009\00:\005\009\00.\009\009\009\00Z\00\00\00\00\00\00\00")
+ (data (i32.const 3792) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\02A\00\00\00\00\00\00\02\t\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/date/_day (mut i32) (i32.const 0))
  (global $~lib/date/_month (mut i32) (i32.const 0))
@@ -80,10 +81,10 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
- (global $~lib/rt/__rtti_base i32 (i32.const 3712))
- (global $~lib/memory/__data_end i32 (i32.const 3764))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 20148))
- (global $~lib/memory/__heap_base i32 (i32.const 20148))
+ (global $~lib/rt/__rtti_base i32 (i32.const 3792))
+ (global $~lib/memory/__data_end i32 (i32.const 3844))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 20228))
+ (global $~lib/memory/__heap_base i32 (i32.const 20228))
  (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
@@ -5766,8 +5767,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 20176
-   i32.const 20224
+   i32.const 20256
+   i32.const 20304
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -8254,6 +8255,29 @@
   f64.const 0
   f64.const 0
   call $~lib/builtins/trace
+  local.get $3
+  call $~lib/date/Date#toISOString
+  local.set $8
+  global.get $~lib/memory/__stack_pointer
+  local.get $8
+  i32.store offset=4
+  local.get $8
+  i32.const 3728
+  local.set $8
+  global.get $~lib/memory/__stack_pointer
+  local.get $8
+  i32.store offset=8
+  local.get $8
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 240
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   global.get $~lib/memory/__stack_pointer
   i32.const 24
   i32.add
