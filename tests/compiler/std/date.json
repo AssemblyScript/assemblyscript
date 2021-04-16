@@ -1,4 +1,5 @@
 {
   "asc_flags": [
+    "--explicitStart"
   ]
 }

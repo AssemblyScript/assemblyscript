@@ -5,6 +5,7 @@
 
 import { OptionDescription } from "./util/options";
 export { OptionDescription };
+import { Transform } from "./transform";
 
 /** Ready promise resolved once/if the compiler is ready. */
 export const ready: Promise<void>;
@@ -192,6 +193,8 @@ export interface APIOptions {
   listFiles?: (dirname: string, baseDir: string) => string[] | null;
   /** Handler for diagnostic messages. */
   reportDiagnostic?: DiagnosticReporter;
+  /** Additional transforms to apply. */
+  transforms?: Transform[];
 }
 
 /** Convenience function that parses and compiles source strings directly. */
