@@ -927,8 +927,8 @@ export class Parser extends DiagnosticEmitter {
       if(!expression) return null;
       expression = this.maybeParseCallExpression(tn, expression);
       var isCallableExpression = expression.kind === NodeKind.CALL;
-      var localCallableVarDeclaration;
-      var localCallableIdentifier;
+      var localCallableVarDeclaration: VariableDeclaration | undefined;
+      var localCallableIdentifier: IdentifierExpression | undefined;
       if(isCallableExpression) {
         const callableIntermediateName = "_" + ((expression as CallExpression).expression as IdentifierExpression).text;
         localCallableIdentifier =  Node.createIdentifierExpression(callableIntermediateName, tn.range());
