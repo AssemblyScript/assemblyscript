@@ -345,8 +345,6 @@ const runtimeFunctions = [ "__new", "__pin", "__unpin", "__collect" ];
 /** Globals to export if `--exportRuntime` is set. */
 const runtimeGlobals = [ "__rtti_base" ];
 
-const test: {[key: string]: number} = {};
-
 /** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {
 
@@ -1511,7 +1509,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!this.compileFunctionBody(instance, stmts)) {
         stmts.push(module.unreachable());
       }
-
+     
       this.currentFlow = previousFlow;
 
       // create the function
@@ -7333,22 +7331,6 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.flatten(exprs, this.currentType.toNativeType());
   }
 
-  private compileExpressionMaybeCached (targetExpression: Expression, type: Type, constraints: Constraints, cacheKey: string | undefined) {
-    if(cacheKey !== undefined) {
-      // var cachedValue = this.currentFlow.getScopedLocal(cacheKey);
-      if(test[cacheKey] === undefined) {
-        var expressionRef = this.compileExpression(targetExpression, type, constraints);
-        test[cacheKey] = Number(
-          expressionRef
-        );
-        return test[cacheKey];
-      } else {
-        return test[cacheKey];
-      }
-    }
-    return this.compileExpression(targetExpression, type, constraints);
-  }
-
   private compileElementAccessExpression(
     expression: ElementAccessExpression,
     contextualType: Type,
@@ -7356,7 +7338,6 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
     var targetExpression = expression.expression;
-    var destructingKey = expression.destructingKey;
     var targetType = this.resolver.resolveExpression(targetExpression, this.currentFlow); // reports
     if (targetType) {
       let classReference = targetType.getClassOrWrapper(this.program);
@@ -7365,7 +7346,9 @@ export class Compiler extends DiagnosticEmitter {
         let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (indexedGet) {
           let thisType = assert(indexedGet.signature.thisType);
-          let thisArg = this.compileExpressionMaybeCached(targetExpression, thisType, Constraints.CONV_IMPLICIT, destructingKey);
+          let thisArg = this.compileExpression(targetExpression, thisType,
+            Constraints.CONV_IMPLICIT
+          );
           if (!isUnchecked && this.options.pedantic) {
             this.pedantic(
               DiagnosticCode.Indexed_access_may_involve_bounds_checking,
@@ -7550,7 +7533,7 @@ export class Compiler extends DiagnosticEmitter {
         expr = module.local_tee(local.index, expr, ftype.isManaged);
       }
     }
-
+    
     return expr;
   }
 
