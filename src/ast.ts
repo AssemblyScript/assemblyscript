@@ -275,9 +275,8 @@ export abstract class Node {
     expression: Expression,
     elementExpression: Expression,
     range: Range,
-    destructingKey?: string
   ): ElementAccessExpression {
-    return new ElementAccessExpression(expression, elementExpression, range, destructingKey);
+    return new ElementAccessExpression(expression, elementExpression, range);
   }
 
   static createFalseExpression(
@@ -1268,9 +1267,7 @@ export class ElementAccessExpression extends Expression {
     /** Element of the expression being accessed. */
     public elementExpression: Expression,
     /** Source range. */
-    range: Range,
-    /** Unique key to cache callable expression in compile to avoid multiple compiles when destructing */
-    public destructingKey: string | undefined
+    range: Range
   ) {
     super(NodeKind.ELEMENTACCESS, range);
   }
@@ -2300,9 +2297,7 @@ export class VariableStatement extends Statement {
     /** Array of member declarations. */
     public declarations: VariableDeclaration[],
     /** Source range. */
-    range: Range,
-    /** */
-    public cacheCallableExpression: boolean = false
+    range: Range
   ) {
     super(NodeKind.VARIABLE, range);
   }
