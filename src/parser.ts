@@ -6,55 +6,22 @@
  *
  * @license Apache-2.0
  */
-import {
-  CommonFlags,
-  LIBRARY_PREFIX,
-  PATH_DELIMITER
-} from "./common";
+import {CommonFlags, LIBRARY_PREFIX, PATH_DELIMITER} from "./common";
+
+import {CommentHandler, IdentifierHandling, isIllegalVariableIdentifier, Range, Token, Tokenizer} from "./tokenizer";
+
+import {DiagnosticCode, DiagnosticEmitter, DiagnosticMessage} from "./diagnostics";
+
+import {CharCode, normalizePath} from "./util";
 
 import {
-  Tokenizer,
-  Token,
-  Range,
-  CommentHandler,
-  IdentifierHandling,
-  isIllegalVariableIdentifier
-} from "./tokenizer";
-
-import {
-  DiagnosticCode,
-  DiagnosticEmitter,
-  DiagnosticMessage
-} from "./diagnostics";
-
-import {
-  CharCode,
-  normalizePath
-} from "./util";
-
-import {
-  Node,
-  NodeKind,
-  Source,
-  SourceKind,
-  TypeNode,
-  TypeName,
-  NamedTypeNode,
-  FunctionTypeNode,
   ArrowKind,
-
-  Expression,
   AssertionKind,
-  CallExpression,
-  ClassExpression,
-  FunctionExpression,
-  IdentifierExpression,
-  StringLiteralExpression,
-
-  Statement,
   BlockStatement,
   BreakStatement,
+  CallExpression,
   ClassDeclaration,
+  ClassExpression,
   ContinueStatement,
   DeclarationStatement,
   DecoratorNode,
@@ -64,29 +31,41 @@ import {
   ExportImportStatement,
   ExportMember,
   ExportStatement,
+  Expression,
   ExpressionStatement,
   ForOfStatement,
   FunctionDeclaration,
+  FunctionExpression,
+  FunctionTypeNode,
+  IdentifierExpression,
   IfStatement,
   ImportDeclaration,
   ImportStatement,
   IndexSignatureNode,
+  mangleInternalPath,
+  NamedTypeNode,
   NamespaceDeclaration,
-  ParameterNode,
+  Node,
+  NodeKind,
   ParameterKind,
+  ParameterNode,
   ReturnStatement,
+  Source,
+  SourceKind,
+  Statement,
+  StringLiteralExpression,
   SwitchCase,
   SwitchStatement,
   ThrowStatement,
   TryStatement,
   TypeDeclaration,
+  TypeName,
+  TypeNode,
   TypeParameterNode,
-  VariableStatement,
   VariableDeclaration,
+  VariableStatement,
   VoidStatement,
-  WhileStatement,
-
-  mangleInternalPath
+  WhileStatement
 } from "./ast";
 
 /** Represents a dependee. */
@@ -907,7 +886,6 @@ export class Parser extends DiagnosticEmitter {
     startPos: i32,
     isFor: bool = false
   ): VariableStatement | null {
-    var destructingKey = "test_key";
     var declarations = new Array<VariableDeclaration>();
     if(!tn.skip(Token.OPENBRACKET)) {
       return null;
@@ -927,19 +905,36 @@ export class Parser extends DiagnosticEmitter {
       let expression = this.parseExpression(tn);
       if(!expression) return null;
       expression = this.maybeParseCallExpression(tn, expression);
+      var isCallableExpression = expression.kind === NodeKind.CALL;
+      var localCallableVarDeclaration;
+      var localCallableIdentifier;
+      if(isCallableExpression) {
+        const callableIntermediateName = "_" + ((expression as CallExpression).expression as IdentifierExpression).text
+        localCallableIdentifier =  Node.createIdentifierExpression(callableIntermediateName, new Range(-1, -1));
+        localCallableVarDeclaration = Node.createVariableDeclaration(
+          localCallableIdentifier,
+          decorators,
+          flags,
+          null,
+          expression,
+          new Range(-1, -1)
+        );
+      }
 
       for(let index = 0; index < declarations.length; index++) {
         var declaration = declarations[index];
         var arrayIndexExpression = Node.createIntegerLiteralExpression(i64_new(index), tn.range());
         const initializer = Node.createElementAccessExpression(
-          expression,
+          localCallableIdentifier !== undefined ? localCallableIdentifier : expression,
           arrayIndexExpression,
-          tn.range(startPos, tn.pos),
-          destructingKey
+          tn.range(startPos, tn.pos)
         );
         declaration.initializer = initializer;
       }
-      return Node.createDestructedVariableStatement(decorators, declarations);
+      if(localCallableVarDeclaration !== undefined) {
+        declarations.unshift(localCallableVarDeclaration);
+      }
+      return Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
     } else {
       throw new Error("RHS does not include =");
     }

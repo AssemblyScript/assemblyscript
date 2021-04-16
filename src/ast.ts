@@ -722,13 +722,6 @@ export abstract class Node {
     return new VariableStatement(decorators, declarations, range);
   }
 
-  static createDestructedVariableStatement(
-    decorators: DecoratorNode[] | null,
-    declarations: VariableDeclaration[],
-  ): VariableStatement {
-    return new VariableStatement(decorators, declarations, new Range(-1, -1), true);
-  }
-
   static createVariableDeclaration(
     name: IdentifierExpression,
     decorators: DecoratorNode[] | null,

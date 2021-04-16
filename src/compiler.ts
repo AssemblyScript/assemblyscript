@@ -345,6 +345,8 @@ const runtimeFunctions = [ "__new", "__pin", "__unpin", "__collect" ];
 /** Globals to export if `--exportRuntime` is set. */
 const runtimeGlobals = [ "__rtti_base" ];
 
+const test: {[key: string]: number} = {};
+
 /** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {
 
@@ -7333,19 +7335,15 @@ export class Compiler extends DiagnosticEmitter {
 
   private compileExpressionMaybeCached (targetExpression: Expression, type: Type, constraints: Constraints, cacheKey: string | undefined) {
     if(cacheKey !== undefined) {
-      var cachedValue = this.currentFlow.getScopedLocal(cacheKey);
-      if(cachedValue === null) {
-        var expressionRef = this.currentFlow.addScopedDummyLocalWithIntegerValue(
-          cacheKey,
-          type,
-          i64_new(this.compileExpression(targetExpression, type, constraints))
-        ).constantIntegerValue;
-        assert(expressionRef);
-        return Number(
+      // var cachedValue = this.currentFlow.getScopedLocal(cacheKey);
+      if(test[cacheKey] === undefined) {
+        var expressionRef = this.compileExpression(targetExpression, type, constraints);
+        test[cacheKey] = Number(
           expressionRef
         );
+        return test[cacheKey];
       } else {
-        return Number(cachedValue.constantIntegerValue);
+        return test[cacheKey];
       }
     }
     return this.compileExpression(targetExpression, type, constraints);
