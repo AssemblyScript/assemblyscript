@@ -930,8 +930,8 @@ export class Parser extends DiagnosticEmitter {
       var localCallableVarDeclaration;
       var localCallableIdentifier;
       if(isCallableExpression) {
-        const callableIntermediateName = "_" + ((expression as CallExpression).expression as IdentifierExpression).text
-        localCallableIdentifier =  Node.createIdentifierExpression(callableIntermediateName, new Range(-1, -1));
+        const callableIntermediateName = "_" + ((expression as CallExpression).expression as IdentifierExpression).text;
+        localCallableIdentifier =  Node.createIdentifierExpression(callableIntermediateName, tn.range());
         localCallableVarDeclaration = Node.createVariableDeclaration(
           localCallableIdentifier,
           decorators,

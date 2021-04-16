@@ -274,7 +274,7 @@ export abstract class Node {
   static createElementAccessExpression(
     expression: Expression,
     elementExpression: Expression,
-    range: Range,
+    range: Range
   ): ElementAccessExpression {
     return new ElementAccessExpression(expression, elementExpression, range);
   }
