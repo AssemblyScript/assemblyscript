@@ -1,6 +1,8 @@
 import { E_URI_MALFORMED } from "./error";
 import { CharCode } from "./string";
 
+// Tuncated lookup boolean table that helps us quickly determine
+// if a char needs to be escaped for URIs (RFC 2396).
 // @ts-ignore: decorator
 @lazy export const URI_UNSAFE = memory.data<u8>([
 /* skip 32 + 1 always set to '1' head slots
@@ -13,6 +15,8 @@ import { CharCode } from "./string";
   skip 128 + 1 always set to '1' tail slots */
 ]);
 
+// Tuncated lookup boolean table that helps us quickly determine
+// if a char needs to be escaped for URLs (RFC 3986).
 // @ts-ignore: decorator
 @lazy export const URL_UNSAFE = memory.data<u8>([
 /* skip 32 + 1 always set to '1' head slots
@@ -25,6 +29,7 @@ import { CharCode } from "./string";
   skip 128 + 1 always set to '1' tail slots */
 ]);
 
+// Tuncated lookup boolean table for determine reserved chars: ;/?:@&=+$,#
 // @ts-ignore: decorator
 @lazy export const URI_RESERVED = memory.data<u8>([
   /*  skip 32 + 3 always set to '0' head slots
@@ -42,13 +47,17 @@ export function encode(src: usize, len: usize, table: usize): usize {
   while (i < len) {
     let org = i;
     let c: u32, c1: u32;
+    // fast scan a check chars until it valid ASCII
+    // and safe for copying withoud escaping.
     do {
       c = <u32>load<u16>(src + (i << 1));
+      // is it valid ASII and safe?
       if (c - 33 < 94) { // 127 - 33
         if (load<u8>(table + (c - 33))) break;
       } else break;
     } while (++i < len);
 
+    // if we have some safe range of sequence just copy it without encoding
     if (i > org) {
       let size = i - org << 1;
       if (offset + size > outSize) {
@@ -62,9 +71,11 @@ export function encode(src: usize, len: usize, table: usize): usize {
         size
       );
       offset += size;
+      // return if we reach end on input string
       if (i >= len) break;
     }
 
+    // decode UTF16 with checking for unpaired surrogates
     if (c >= 0xD800) {
       if (c >= 0xDC00 && c <= 0xDFFF) {
         throw new URIError(E_URI_MALFORMED);
@@ -90,9 +101,11 @@ export function encode(src: usize, len: usize, table: usize): usize {
     }
 
     if (c < 0x80) {
+      // encode ASCII unsafe cope point
       storeHex(dst, offset, c);
       offset += 6;
     } else {
+      // encode UTF-8 unsafe cope point
       if (c < 0x800) {
         storeHex(dst, offset, (c >> 6) | 0xC0);
         offset += 6;
@@ -114,6 +127,7 @@ export function encode(src: usize, len: usize, table: usize): usize {
     }
     ++i;
   }
+  // shink output string buffer if necessary
   if (outSize > offset) {
     dst = __renew(dst, offset);
   }
@@ -180,10 +194,12 @@ export function decode(src: usize, len: usize, component: bool): usize {
         ch = (ch << 6) | (c1 & 0x3F);
       }
 
+      // check if UTF8 code point properly fit into invalid UTF16 encoding
       if (ch < lo || lo == -1 || ch > 0x10FFFF || (ch >= 0xD800 && ch < 0xE000)) {
         throw new URIError(E_URI_MALFORMED);
       }
 
+      // encode UTF16
       if (ch >= 0x10000) {
         ch -= 0x10000;
         let lo = ch >> 10 | 0xD800;
@@ -198,6 +214,7 @@ export function decode(src: usize, len: usize, component: bool): usize {
   }
 
   assert(offset <= (len << 1));
+  // shink output string buffer if necessary
   if ((len << 1) > offset) {
     dst = __renew(dst, offset);
   }
