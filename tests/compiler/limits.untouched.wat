@@ -1,7 +1,5 @@
 (module
  (type $none_=>_none (func))
- (memory $0 0)
- (table $0 1 funcref)
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i16.MIN_VALUE i32 (i32.const -32768))
@@ -31,6 +29,8 @@
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (memory $0 0)
+ (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
  (func $start:limits
