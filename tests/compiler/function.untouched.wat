@@ -14,11 +14,11 @@
  (type $none_=>_f64 (func (result f64)))
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (memory $0 0)
- (table $0 1 funcref)
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (memory $0 0)
+ (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
  (func $function/_

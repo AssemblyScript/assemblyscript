@@ -1,7 +1,5 @@
 (module
  (type $none_=>_none (func))
- (memory $0 0)
- (table $0 1 funcref)
  (global $~lib/ASC_TARGET i32 (i32.const 1))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/ASC_MEMORY_BASE i32 (i32.const 0))
@@ -22,6 +20,8 @@
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (memory $0 0)
+ (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
  (func $start:asc-constants
