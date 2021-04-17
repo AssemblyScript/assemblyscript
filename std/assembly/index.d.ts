@@ -769,6 +769,8 @@ declare namespace v128 {
   export function all_true<T>(a: v128): bool;
   /** Extracts the high bit of each lane and produces a scalar mask with all bits concatenated. */
   export function bitmask<T>(a: v128): i32;
+  /** Counts the number of bits set to one within each lane. */
+  export function popcnt<T>(a: v128): v128;
   /** Computes the minimum of each lane. */
   export function min<T>(a: v128, b: v128): v128;
   /** Computes the maximum of each lane. */
@@ -841,7 +843,7 @@ declare namespace i8x16 {
   export function max_u(a: v128, b: v128): v128;
   /** Computes the unsigned average of each 8-bit integer lane. */
   export function avgr_u(a: v128, b: v128): v128;
-  /** Compules the absolute value of each 8-bit integer lane. */
+  /** Computes the absolute value of each 8-bit integer lane. */
   export function abs(a: v128): v128;
   /** Negates each 8-bit integer lane. */
   export function neg(a: v128): v128;
@@ -863,6 +865,8 @@ declare namespace i8x16 {
   export function all_true(a: v128): bool;
   /** Extracts the high bit of each 8-bit integer lane and produces a scalar mask with all bits concatenated. */
   export function bitmask(a: v128): i32;
+  /** Counts the number of bits set to one within each 8-bit integer lane. */
+  export function popcnt(a: v128): v128;
   /** Computes which 8-bit integer lanes are equal. */
   export function eq(a: v128, b: v128): v128;
   /** Computes which 8-bit integer lanes are not equal. */
@@ -919,7 +923,7 @@ declare namespace i16x8 {
   export function max_u(a: v128, b: v128): v128;
   /** Computes the unsigned average of each 16-bit integer lane. */
   export function avgr_u(a: v128, b: v128): v128;
-  /** Compules the absolute value of each 16-bit integer lane. */
+  /** Computes the absolute value of each 16-bit integer lane. */
   export function abs(a: v128): v128;
   /** Negates each 16-bit integer lane. */
   export function neg(a: v128): v128;
@@ -999,7 +1003,7 @@ declare namespace i32x4 {
   export function max_u(a: v128, b: v128): v128;
   /** Computes the dot product of two 16-bit integer lanes each, yielding 32-bit integer lanes. */
   export function dot_i16x8_s(a: v128, b: v128): v128;
-  /** Compules the absolute value of each 32-bit integer lane. */
+  /** Computes the absolute value of each 32-bit integer lane. */
   export function abs(a: v128): v128;
   /** Negates each 32-bit integer lane. */
   export function neg(a: v128): v128;
@@ -1061,6 +1065,8 @@ declare namespace i64x2 {
   export function sub(a: v128, b: v128): v128;
   /** Multiplies each 64-bit integer lane. */
   export function mul(a: v128, b: v128): v128;
+  /** Computes the absolute value of each 64-bit integer lane. */
+  export function abs(a: v128): v128;
   /** Negates each 64-bit integer lane. */
   export function neg(a: v128): v128;
   /** Performs a bitwise left shift on each 64-bit integer lane by a scalar. */
@@ -1071,26 +1077,20 @@ declare namespace i64x2 {
   export function shr_u(a: v128, b: i32): v128;
   /** Reduces a vector to a scalar indicating whether all 64-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
+  /** Extracts the high bit of each 64-bit integer lane and produces a scalar mask with all bits concatenated. */
+  export function bitmask(a: v128): i32;
   /** Computes which 64-bit integer lanes are equal. */
   export function eq(a: v128, b: v128): v128;
   /** Computes which 64-bit integer lanes are not equal. */
   export function ne(a: v128, b: v128): v128;
   /** Computes which 64-bit signed integer lanes of the first vector are less than those of the second. */
   export function lt_s(a: v128, b: v128): v128;
-  /** Computes which 64-bit unsigned integer lanes of the first vector are less than those of the second. */
-  export function lt_u(a: v128, b: v128): v128;
   /** Computes which 64-bit signed integer lanes of the first vector are less than or equal those of the second. */
   export function le_s(a: v128, b: v128): v128;
-  /** Computes which 64-bit unsigned integer lanes of the first vector are less than or equal those of the second. */
-  export function le_u(a: v128, b: v128): v128;
   /** Computes which 64-bit signed integer lanes of the first vector are greater than those of the second. */
   export function gt_s(a: v128, b: v128): v128;
-  /** Computes which 64-bit unsigned integer lanes of the first vector are greater than those of the second. */
-  export function gt_u(a: v128, b: v128): v128;
   /** Computes which 64-bit signed integer lanes of the first vector are greater than or equal those of the second. */
   export function ge_s(a: v128, b: v128): v128;
-  /** Computes which 64-bit unsigned integer lanes of the first vector are greater than or equal those of the second. */
-  export function ge_u(a: v128, b: v128): v128;
   /** Extends the low 32-bit signed integer lanes to 64-bit signed integer lanes. */
   export function extend_low_i32x4_s(a: v128): v128;
   /** Extends the low 32-bit unsigned integer lane to 64-bit unsigned integer lanes. */

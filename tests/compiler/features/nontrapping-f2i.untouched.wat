@@ -1,7 +1,5 @@
 (module
  (type $none_=>_none (func))
- (memory $0 0)
- (table $0 1 funcref)
  (global $~lib/builtins/f32.MAX_VALUE f32 (f32.const 3402823466385288598117041e14))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
@@ -18,6 +16,8 @@
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
  (global $~started (mut i32) (i32.const 0))
+ (memory $0 0)
+ (table $0 1 funcref)
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $start:features/nontrapping-f2i

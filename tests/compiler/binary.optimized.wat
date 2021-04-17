@@ -1,11 +1,11 @@
 (module
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (memory $0 0)
  (global $binary/i (mut i32) (i32.const 0))
  (global $binary/I (mut i64) (i64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
+ (memory $0 0)
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/math/ipow32 (param $0 i32) (result i32)
