@@ -2706,7 +2706,7 @@
         local.get $6
         i32.const 3561
         i32.add
-        i32.load16_u
+        i32.load8_u
        else
         i32.const 0
        end

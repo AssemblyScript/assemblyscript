@@ -265,7 +265,7 @@ function loadHex(src: usize, offset: usize): u32 {
 // @ts-ignore: decorator
 @inline function isReserved(ch: u32): bool {
   return ch - 35 < 30
-    ? <bool>load<u16>(URI_RESERVED + (ch - 35))
+    ? <bool>load<u8>(URI_RESERVED + (ch - 35))
     : false;
 }
 
