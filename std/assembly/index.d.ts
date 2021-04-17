@@ -222,6 +222,14 @@ declare function fmod(x: f64, y: f64): f64;
 declare function fmodf(x: f32, y: f32): f32;
 /** Returns the number of parameters in the given function signature type. */
 declare function lengthof<T extends (...args: any[]) => any>(func?: T): i32;
+/** Encodes a text string as a valid Uniform Resource Identifier (URI). */
+declare function encodeURI(str: string): string;
+/** Encodes a text string as a valid component of a Uniform Resource Identifier (URI). */
+declare function encodeURIComponent(str: string): string;
+/** Decodes a Uniform Resource Identifier (URI) previously created by encodeURI. */
+declare function decodeURI(str: string): string;
+/** Decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent. */
+declare function decodeURIComponent(str: string): string;
 
 /** Atomic operations. */
 declare namespace atomic {
@@ -1772,6 +1780,9 @@ declare class TypeError extends Error { }
 
 /** Class for indicating an error when trying to interpret syntactically invalid code. */
 declare class SyntaxError extends Error { }
+
+/** Class for indicating an error when a global URI handling function was used in a wrong way. */
+declare class URIError extends Error { }
 
 interface Boolean {
   toString(radix?: number): string;
