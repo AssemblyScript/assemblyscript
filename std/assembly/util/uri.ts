@@ -101,11 +101,11 @@ export function encode(src: usize, len: usize, table: usize): usize {
     }
 
     if (c < 0x80) {
-      // encode ASCII unsafe cope point
+      // encode ASCII unsafe code point
       storeHex(dst, offset, c);
       offset += 6;
     } else {
-      // encode UTF-8 unsafe cope point
+      // encode UTF-8 unsafe code point
       if (c < 0x800) {
         storeHex(dst, offset, (c >> 6) | 0xC0);
         offset += 6;
