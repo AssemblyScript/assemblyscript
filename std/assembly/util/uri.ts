@@ -1,7 +1,7 @@
 import { E_URI_MALFORMED } from "./error";
 import { CharCode } from "./string";
 
-// Tuncated lookup boolean table that helps us quickly determine
+// Truncated lookup boolean table that helps us quickly determine
 // if a char needs to be escaped for URIs (RFC 2396).
 // @ts-ignore: decorator
 @lazy export const URI_UNSAFE = memory.data<u8>([
@@ -15,7 +15,7 @@ import { CharCode } from "./string";
   skip 128 + 1 always set to '1' tail slots */
 ]);
 
-// Tuncated lookup boolean table that helps us quickly determine
+// Truncated lookup boolean table that helps us quickly determine
 // if a char needs to be escaped for URLs (RFC 3986).
 // @ts-ignore: decorator
 @lazy export const URL_UNSAFE = memory.data<u8>([
@@ -29,7 +29,7 @@ import { CharCode } from "./string";
   skip 128 + 1 always set to '1' tail slots */
 ]);
 
-// Tuncated lookup boolean table for determine reserved chars: ;/?:@&=+$,#
+// Truncated lookup boolean table for determine reserved chars: ;/?:@&=+$,#
 // @ts-ignore: decorator
 @lazy export const URI_RESERVED = memory.data<u8>([
   /*  skip 32 + 3 always set to '0' head slots
