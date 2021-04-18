@@ -182,9 +182,17 @@
   assert(date.getUTCMonth() == 10);
   date.setUTCMonth(2);
   assert(date.getUTCMonth() == 2);
+  assert(date.getTime() == 7899941177818720);
   // test boundaries
   date.setUTCMonth(1);
   date.setUTCMonth(12);
+  assert(date.getTime() == 7899967616218720);
+
+  // test out of boundaries
+  date.setUTCMonth(0);
+  assert(date.getTime() == 7899967616218720);
+  date.setUTCMonth(13);
+  assert(date.getTime() == 7900001830618720);
 }
 
 // Date#setUTCFullYear /////////////////////////////////////////////////////////////////////////////
@@ -195,6 +203,8 @@
   assert(date.getUTCFullYear() == 1976);
   date.setUTCFullYear(20212);
   assert(date.getUTCFullYear() == 20212);
+  date.setUTCFullYear(71);
+  assert(date.getUTCFullYear() == 71);
 }
 
 // Date#toISOString ////////////////////////////////////////////////////////////////////////////////
