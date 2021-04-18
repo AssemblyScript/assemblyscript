@@ -518,7 +518,7 @@ exports.main = function main(argv, options, callback) {
       }
       try {
         transforms.push(dynrequire(dynrequire.resolve(filename, { paths: [baseDir, process.cwd()] })));
-      } catch(e) {
+      } catch (e) {
         return callback(e);
       }
     }
