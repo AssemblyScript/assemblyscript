@@ -272,7 +272,15 @@
   date = Date.fromString("1976-02-02T12:34:56"); // still use Z suffix
   assert(date.getTime() == 192112496000);
 
-  // date = Date.fromString("1976-02-02T12"); // Invalid Date
+  // date = Date.fromString('0Z');
+  // assert(date.getTime() == 946684800000); // fail
+
+  // date = Date.fromString('000Z');
+  // assert(date.getTime() == 946684800000); // fail
+
+  // Date.fromString("");              // Invalid Date
+  // Date.fromString("1000000");       // Invalid Date
+  // Date.fromString("1976-02-02T12"); // Invalid Date
 }
 
 // Minimum / Maximum dates ////////////////////////////////////////////////////////////////////////
