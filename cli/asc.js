@@ -532,15 +532,15 @@ exports.main = function main(argv, options, callback) {
         return classOrModule; 
       }
       return Object.assign(classOrModule.prototype, {
-          program,
-          baseDir,
-          stdout,
-          stderr,
-          log: console.error,
-          readFile,
-          writeFile,
-          listFiles
-        });
+        program,
+        baseDir,
+        stdout,
+        stderr,
+        log: console.error,
+        readFile,
+        writeFile,
+        listFiles
+      });
     });
   } catch (e) {
     return callback(e)
