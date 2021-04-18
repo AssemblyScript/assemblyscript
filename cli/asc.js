@@ -531,7 +531,7 @@ exports.main = function main(argv, options, callback) {
       if (typeof classOrModule !== "function") {
         return classOrModule; 
       }
-      return Object.assign(classOrModule.prototype, {
+      Object.assign(classOrModule.prototype, {
         program,
         baseDir,
         stdout,
@@ -541,6 +541,7 @@ exports.main = function main(argv, options, callback) {
         writeFile,
         listFiles
       });
+      return new classOrModule();
     });
   } catch (e) {
     return callback(e);
