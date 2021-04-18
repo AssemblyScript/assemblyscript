@@ -273,10 +273,10 @@
   assert(date.getTime() == 192112496000);
 
   // date = Date.fromString('0Z');
-  // assert(date.getTime() == 946684800000); // fail
+  // assert(date.getTime() == 946684800000); // FIXME: fail
 
   // date = Date.fromString('000Z');
-  // assert(date.getTime() == 946684800000); // fail
+  // assert(date.getTime() == 946684800000); // FIXME: fail
 
   // Date.fromString("");              // Invalid Date
   // Date.fromString("1000000");       // Invalid Date
