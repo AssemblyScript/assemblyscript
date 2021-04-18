@@ -543,7 +543,7 @@ exports.main = function main(argv, options, callback) {
       });
     });
   } catch (e) {
-    return callback(e)
+    return callback(e);
   }
 
   function applyTransform(name, ...args) {
