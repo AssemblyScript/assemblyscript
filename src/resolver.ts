@@ -877,7 +877,6 @@ export class Resolver extends DiagnosticEmitter {
     }
     if (isTypedElement(kind)) {
       let type = (<TypedElement>element).type;
-      assert(type != Type.void);
       let classReference = type.getClassOrWrapper(this.program);
       if (classReference) {
         let wrappedType = classReference.wrappedType;
