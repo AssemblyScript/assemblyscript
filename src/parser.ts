@@ -926,11 +926,17 @@ export class Parser extends DiagnosticEmitter {
       let expression = this.parseExpression(tn);
       if(!expression) return null;
       expression = this.maybeParseCallExpression(tn, expression);
-      var isCallableExpression = expression.kind === NodeKind.CALL;
-      var localCallableVarDeclaration: VariableDeclaration | undefined;
-      var localCallableIdentifier: IdentifierExpression | undefined;
-      if(isCallableExpression) {
-        const callableIntermediateName = "_" + ((expression as CallExpression).expression as IdentifierExpression).text;
+      /**
+       * In case need destruct from a callable node, such as:
+       * function func() { return [1, 2]; };
+       * const [a, b] = func();
+       */
+      var localCallableVarDeclaration: VariableDeclaration | null = null;
+      var localCallableIdentifier: IdentifierExpression | null = null;
+      var isCallNode = expression.kind === NodeKind.CALL;
+      var callableIntermediateName = isCallNode ? "_" + ((expression as CallExpression).expression as IdentifierExpression).text : "";
+
+      if(isCallNode) {
         localCallableIdentifier =  Node.createIdentifierExpression(callableIntermediateName, tn.range());
         localCallableVarDeclaration = Node.createVariableDeclaration(
           localCallableIdentifier,
@@ -944,15 +950,16 @@ export class Parser extends DiagnosticEmitter {
 
       for(let index = 0; index < declarations.length; index++) {
         var declaration = declarations[index];
-        var arrayIndexExpression = Node.createIntegerLiteralExpression(i64_new(index), tn.range());
-        const initializer = Node.createElementAccessExpression(
-          localCallableIdentifier !== undefined ? localCallableIdentifier : expression,
-          arrayIndexExpression,
+        if(isCallNode && declaration?.name.text === callableIntermediateName) {
+          throw new Error(`Variable name ${callableIntermediateName} already exists in the variable declaration block`);
+        }
+        declaration.initializer = Node.createElementAccessExpression(
+          localCallableIdentifier ?? expression,
+          Node.createIntegerLiteralExpression(i64_new(index), tn.range()),
           tn.range(startPos, tn.pos)
         );
-        declaration.initializer = initializer;
       }
-      if(localCallableVarDeclaration !== undefined) {
+      if(localCallableVarDeclaration) {
         declarations.unshift(localCallableVarDeclaration);
       }
       return Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
