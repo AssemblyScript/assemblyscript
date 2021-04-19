@@ -33,7 +33,7 @@ export class Array<T> {
   // `dataStart` (equals `buffer`) and `byteLength` (equals computed `buffer.byteLength`), but the
   // block is 16 bytes anyway so it's fine to have a couple extra fields in there.
 
-  private buffer: ArrayBuffer;
+  readonly buffer: ArrayBuffer;
   private dataStart: usize;
   private byteLength: i32;
 
