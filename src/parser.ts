@@ -930,6 +930,9 @@ export class Parser extends DiagnosticEmitter {
        * In case need destruct from a callable node, such as:
        * function func() { return [1, 2]; };
        * const [a, b] = func();
+       *
+       * The output should be:
+       * const _func = func(), a = _func[0], b = _func[1];
        */
       var localCallableVarDeclaration: VariableDeclaration | null = null;
       var localCallableIdentifier: IdentifierExpression | null = null;
