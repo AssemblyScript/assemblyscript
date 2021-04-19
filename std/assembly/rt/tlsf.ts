@@ -207,14 +207,11 @@ function insertBlock(root: Root, block: Block): void {
 
   // merge with right block if also free
   if (rightInfo & FREE) {
-    let newSize = (blockInfo & ~TAGS_MASK) + BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK);
-    if (newSize < BLOCK_MAXSIZE) {
-      removeBlock(root, right);
-      block.mmInfo = blockInfo = (blockInfo & TAGS_MASK) | newSize;
-      right = GETRIGHT(block);
-      rightInfo = right.mmInfo;
-      // 'back' is set below
-    }
+    removeBlock(root, right);
+    block.mmInfo = blockInfo = blockInfo + BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK); // keep block tags
+    right = GETRIGHT(block);
+    rightInfo = right.mmInfo;
+    // 'back' is set below
   }
 
   // merge with left block if also free
@@ -222,13 +219,10 @@ function insertBlock(root: Root, block: Block): void {
     let left = GETFREELEFT(block);
     let leftInfo = left.mmInfo;
     if (DEBUG) assert(leftInfo & FREE); // must be free according to right tags
-    let newSize = (leftInfo & ~TAGS_MASK) + BLOCK_OVERHEAD + (blockInfo & ~TAGS_MASK);
-    if (newSize < BLOCK_MAXSIZE) {
-      removeBlock(root, left);
-      left.mmInfo = blockInfo = (leftInfo & TAGS_MASK) | newSize;
-      block = left;
-      // 'back' is set below
-    }
+    removeBlock(root, left);
+    block = left;
+    block.mmInfo = blockInfo = leftInfo + BLOCK_OVERHEAD + (blockInfo & ~TAGS_MASK); // keep left tags
+    // 'back' is set below
   }
 
   right.mmInfo = rightInfo | LEFTFREE;
@@ -236,7 +230,7 @@ function insertBlock(root: Root, block: Block): void {
 
   // we now know the size of the block
   var size = blockInfo & ~TAGS_MASK;
-  if (DEBUG) assert(size >= BLOCK_MINSIZE && size < BLOCK_MAXSIZE); // must be a valid size
+  if (DEBUG) assert(size >= BLOCK_MINSIZE); // must be a valid size
   if (DEBUG) assert(changetype<usize>(block) + BLOCK_OVERHEAD + size == changetype<usize>(right)); // must match
 
   // set 'back' to itself at the end of block
@@ -249,8 +243,9 @@ function insertBlock(root: Root, block: Block): void {
     sl = <u32>(size >> AL_BITS);
   } else {
     const inv: usize = sizeof<usize>() * 8 - 1;
-    fl = inv - clz<usize>(size);
-    sl = <u32>((size >> (fl - SL_BITS)) ^ (1 << SL_BITS));
+    let boundedSize = min(size, BLOCK_MAXSIZE);
+    fl = inv - clz<usize>(boundedSize);
+    sl = <u32>((boundedSize >> (fl - SL_BITS)) ^ (1 << SL_BITS));
     fl -= SB_BITS - 1;
   }
   if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
@@ -272,7 +267,7 @@ function removeBlock(root: Root, block: Block): void {
   var blockInfo = block.mmInfo;
   if (DEBUG) assert(blockInfo & FREE); // must be free
   var size = blockInfo & ~TAGS_MASK;
-  if (DEBUG) assert(size >= BLOCK_MINSIZE && size < BLOCK_MAXSIZE); // must be valid
+  if (DEBUG) assert(size >= BLOCK_MINSIZE); // must be valid
 
   // mapping_insert
   var fl: usize, sl: u32;
@@ -281,8 +276,9 @@ function removeBlock(root: Root, block: Block): void {
     sl = <u32>(size >> AL_BITS);
   } else {
     const inv: usize = sizeof<usize>() * 8 - 1;
-    fl = inv - clz<usize>(size);
-    sl = <u32>((size >> (fl - SL_BITS)) ^ (1 << SL_BITS));
+    let boundedSize = min(size, BLOCK_MAXSIZE);
+    fl = inv - clz<usize>(boundedSize);
+    sl = <u32>((boundedSize >> (fl - SL_BITS)) ^ (1 << SL_BITS));
     fl -= SB_BITS - 1;
   }
   if (DEBUG) assert(fl < FL_BITS && sl < SL_SIZE); // fl/sl out of range
@@ -528,8 +524,6 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
     let mergeSize = blockSize + BLOCK_OVERHEAD + (rightInfo & ~TAGS_MASK);
     if (mergeSize >= payloadSize) {
       removeBlock(root, right);
-      // TODO: this can yield an intermediate block larger than BLOCK_MAXSIZE, which
-      // is immediately split though. does this trigger any assertions / issues?
       block.mmInfo = (blockInfo & TAGS_MASK) | mergeSize;
       prepareBlock(root, block, payloadSize);
       if (isDefined(ASC_RTRACE)) onresize(block, BLOCK_OVERHEAD + blockSize);

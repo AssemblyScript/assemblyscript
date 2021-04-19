@@ -7,7 +7,10 @@ module.exports = {
     return 0;
   },
   hrtime,
-  argv: []
+  argv: [],
+  exit(code = 0) {
+    throw Error(`exit ${code}`);
+  }
 };
 
 // https://github.com/kumavis/browser-process-hrtime v1.0.0

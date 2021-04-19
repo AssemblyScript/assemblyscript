@@ -958,8 +958,7 @@ export declare function _BinaryenEventGetResults(event: BinaryenEventRef): Binar
 
 type BinaryenTableRef = usize;
 
-export declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, funcs: BinaryenArray<BinaryenString>, numFuncs: BinaryenIndex, offset: BinaryenExpressionRef): void;
-export declare function _BinaryenAddTable(module: BinaryenModuleRef, name: BinaryenString, initial: BinaryenIndex, maximum: BinaryenIndex, funcNames: BinaryenArray<BinaryenString>, numFunctNames: BinaryenIndex, offset: BinaryenExpressionRef): BinaryenTableRef;
+export declare function _BinaryenAddTable(module: BinaryenModuleRef, name: BinaryenString, initial: BinaryenIndex, maximum: BinaryenIndex): BinaryenTableRef;
 export declare function _BinaryenRemoveTable(module: BinaryenModuleRef, table: BinaryenString): void;
 export declare function _BinaryenGetNumTables(module: BinaryenModuleRef): BinaryenIndex;
 export declare function _BinaryenGetTable(module: BinaryenModuleRef, name: BinaryenString): BinaryenTableRef;
@@ -972,6 +971,15 @@ export declare function _BinaryenTableSetInitial(table: BinaryenTableRef, initia
 export declare function _BinaryenTableHasMax(table: BinaryenTableRef): bool;
 export declare function _BinaryenTableGetMax(table: BinaryenTableRef): BinaryenIndex;
 export declare function _BinaryenTableSetMax(table: BinaryenTableRef, max: BinaryenIndex): void;
+
+type BinaryenElementSegmentRef = usize;
+
+export declare function _BinaryenAddActiveElementSegment(module: BinaryenModuleRef, table: BinaryenString, name: BinaryenString, funcNames: BinaryenArray<BinaryenString>, numFuncNames: BinaryenIndex, offset: BinaryenExpressionRef): BinaryenElementSegmentRef;
+export declare function _BinaryenAddPassiveElementSegment(module: BinaryenModuleRef, name: BinaryenString, funcNames: BinaryenArray<BinaryenString>, numFuncNames: BinaryenIndex): BinaryenElementSegmentRef;
+export declare function _BinaryenRemoveElementSegment(module: BinaryenModuleRef, name: BinaryenString): void;
+export declare function _BinaryenGetNumElementSegments(module: BinaryenModuleRef, name: BinaryenString): BinaryenIndex;
+export declare function _BinaryenGetElementSegment(module: BinaryenModuleRef, name: BinaryenString): BinaryenElementSegmentRef;
+export declare function _BinaryenGetElementSegmentByIndex(module: BinaryenModuleRef, index: BinaryenIndex): BinaryenElementSegmentRef;
 
 export declare function _BinaryenSetMemory(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, exportName: BinaryenString, segments: BinaryenArray<BinaryenArray<u8>>, segmentPassive: BinaryenArray<bool>, segmentOffsets: BinaryenArray<usize>, segmentSizes: BinaryenArray<u32>, numSegments: BinaryenIndex, shared: bool): void;
 export declare function _BinaryenGetNumMemorySegments(module: BinaryenModuleRef): BinaryenIndex;

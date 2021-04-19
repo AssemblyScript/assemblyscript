@@ -35,3 +35,10 @@ export class SyntaxError extends Error {
     this.name = "SyntaxError";
   }
 }
+
+export class URIError extends Error {
+  constructor(message: string = "") {
+    super(message);
+    this.name = "URIError";
+  }
+}

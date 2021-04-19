@@ -4,6 +4,8 @@
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17804))
+ (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\1a\00\00\00z\00e\00r\00o\00_\00i\00m\00p\00l\00i\00c\00i\00t")
@@ -21,8 +23,6 @@
  (data (i32.const 1336) "\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00i\00n\00t")
  (data (i32.const 1372) ",")
  (data (i32.const 1384) "\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17804))
- (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $~start

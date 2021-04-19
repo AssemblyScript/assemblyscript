@@ -50,3 +50,12 @@ assert(inferCompatible(1, 1.0));
 
 const arr: f32[] = [1.0, 2.0, 3.0];
 arr.reduce(((acc, cur) => acc && cur != 0), false);
+
+// should fall back to default type
+
+class Ref { x: i32; }
+function inferDefault<T = Ref>(a: T): T {
+  return a;
+}
+assert(inferDefault(1) == 1);
+assert(inferDefault({ x: 2 }) instanceof Ref);
