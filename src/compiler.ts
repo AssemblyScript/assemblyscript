@@ -6336,11 +6336,12 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.PROPERTY: {
         let propertyInstance = <Property>target;
         let getterInstance = propertyInstance.getterInstance;
+        let type = assert(this.resolver.getTypeOfElement(target));
 
         if (!getterInstance) {
           this.error(
             DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, this.currentType.toString()
+            expression.range, type.toString()
           );
           return module.unreachable();
         }
