@@ -499,11 +499,14 @@ exports.main = function main(argv, options, callback) {
   // Initialize the program
   program = __pin(assemblyscript.newProgram(compilerOptions));
 
-  // Set up transforms
-  const transforms = [];
+  // Collect transforms *constructors* from the `--transform` CLI flag as well
+  // as the `transform` option into the `transforms` array.
+  let transforms = [];
+  // `transform` option from `main()`
   if (Array.isArray(options.transforms)) {
     transforms.push(...options.transforms);
   }
+  // `--transform` CLI flag
   if (opts.transform) {
     let tsNodeRegistered = false;
     let transformArgs = unique(opts.transform);
@@ -514,26 +517,34 @@ exports.main = function main(argv, options, callback) {
         tsNodeRegistered = true;
       }
       try {
-        const classOrModule = dynrequire(dynrequire.resolve(filename, { paths: [baseDir, process.cwd()] }));
-        if (typeof classOrModule === "function") {
-          Object.assign(classOrModule.prototype, {
-            program,
-            baseDir,
-            stdout,
-            stderr,
-            log: console.error,
-            readFile,
-            writeFile,
-            listFiles
-          });
-          transforms.push(new classOrModule());
-        } else {
-          transforms.push(classOrModule); // legacy module
-        }
+        transforms.push(dynrequire(dynrequire.resolve(filename, { paths: [baseDir, process.cwd()] })));
       } catch (e) {
         return callback(e);
       }
     }
+  }
+
+  // Fix up the prototype of the transforms’ constructors and instantiate them.
+  try {
+    transforms = transforms.map(classOrModule => {
+      // Except if it’s a legacy module, just pass it through.
+      if (typeof classOrModule !== "function") {
+        return classOrModule; 
+      }
+      Object.assign(classOrModule.prototype, {
+        program,
+        baseDir,
+        stdout,
+        stderr,
+        log: console.error,
+        readFile,
+        writeFile,
+        listFiles
+      });
+      return new classOrModule();
+    });
+  } catch (e) {
+    return callback(e);
   }
 
   function applyTransform(name, ...args) {
