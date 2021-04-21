@@ -12,6 +12,7 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $array-destructuring/x i32 (i32.const 999))
  (global $array-destructuring/y i32 (i32.const 888))
+ (global $array-destructuring/funcRunCount (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -3691,6 +3692,10 @@
  (func $array-destructuring/func (result i32)
   (local $0 i32)
   (local $1 i32)
+  global.get $array-destructuring/funcRunCount
+  i32.const 1
+  i32.add
+  global.set $array-destructuring/funcRunCount
   i32.const 2
   i32.const 2
   i32.const 3

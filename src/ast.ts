@@ -274,9 +274,10 @@ export abstract class Node {
   static createElementAccessExpression(
     expression: Expression,
     elementExpression: Expression,
-    range: Range
+    range: Range,
+    destructingKey?: string
   ): ElementAccessExpression {
-    return new ElementAccessExpression(expression, elementExpression, range);
+    return new ElementAccessExpression(expression, elementExpression, range, destructingKey);
   }
 
   static createFalseExpression(
@@ -1267,7 +1268,9 @@ export class ElementAccessExpression extends Expression {
     /** Element of the expression being accessed. */
     public elementExpression: Expression,
     /** Source range. */
-    range: Range
+    range: Range,
+    /** Key to cache the expressionRef */
+    public destructingKey: string | undefined
   ) {
     super(NodeKind.ELEMENTACCESS, range);
   }
