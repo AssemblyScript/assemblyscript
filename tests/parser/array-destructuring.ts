@@ -1,10 +1,11 @@
-// Basic destructuring
+// Destructuring directly from an array
 const arr = [1, 2];
 const [a, b] = arr;
 
-// Destructuring from a literal
-const [x, y] = [3, 4];
+// Destructuring directly from a callable
+function func(): number[] { return arr; }
+const [x, y] = func();
 
-// Destructuring from a callable
-const func = () => [5,6];
-const [m,n] = func();
+// Throw an error for having duplicate names _func
+// const [_func] = func();
+

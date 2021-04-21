@@ -907,7 +907,6 @@ export class Parser extends DiagnosticEmitter {
     startPos: i32,
     isFor: bool = false
   ): VariableStatement | null {
-    var destructingKey = "test_key";
     var declarations = new Array<VariableDeclaration>();
     if(!tn.skip(Token.OPENBRACKET)) {
       return null;
@@ -927,19 +926,46 @@ export class Parser extends DiagnosticEmitter {
       let expression = this.parseExpression(tn);
       if(!expression) return null;
       expression = this.maybeParseCallExpression(tn, expression);
+      /**
+       * In case need destruct from a callable node, such as:
+       * function func() { return [1, 2]; };
+       * const [a, b] = func();
+       *
+       * The output should be:
+       * const _func = func(), a = _func[0], b = _func[1];
+       */
+      var localCallableVarDeclaration: VariableDeclaration | null = null;
+      var localCallableIdentifier: IdentifierExpression | null = null;
+      var isCallNode = expression.kind === NodeKind.CALL;
+      var callableIntermediateName = isCallNode ? "_" + ((expression as CallExpression).expression as IdentifierExpression).text : "";
+
+      if(isCallNode) {
+        localCallableIdentifier =  Node.createIdentifierExpression(callableIntermediateName, tn.range());
+        localCallableVarDeclaration = Node.createVariableDeclaration(
+          localCallableIdentifier,
+          decorators,
+          flags,
+          null,
+          expression,
+          new Range(-1, -1)
+        );
+      }
 
       for(let index = 0; index < declarations.length; index++) {
         var declaration = declarations[index];
-        var arrayIndexExpression = Node.createIntegerLiteralExpression(i64_new(index), tn.range());
-        const initializer = Node.createElementAccessExpression(
-          expression,
-          arrayIndexExpression,
-          tn.range(startPos, tn.pos),
-          destructingKey
+        if(isCallNode && declaration?.name.text === callableIntermediateName) {
+          throw new Error(`Variable name ${callableIntermediateName} already exists in the variable declaration block`);
+        }
+        declaration.initializer = Node.createElementAccessExpression(
+          localCallableIdentifier ?? expression,
+          Node.createIntegerLiteralExpression(i64_new(index), tn.range()),
+          tn.range(startPos, tn.pos)
         );
-        declaration.initializer = initializer;
       }
-      return Node.createDestructedVariableStatement(decorators, declarations);
+      if(localCallableVarDeclaration) {
+        declarations.unshift(localCallableVarDeclaration);
+      }
+      return Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
     } else {
       throw new Error("RHS does not include =");
     }

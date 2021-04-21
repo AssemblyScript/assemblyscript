@@ -452,13 +452,6 @@ export class Flow {
     return scopedDummy;
   }
 
-  /** Adds a new scoped dummy local of the specified name and initiate a integer value. */
-  addScopedDummyLocalWithIntegerValue(name: string, type: Type, integerValue: i64): Local {
-    var local = this.addScopedLocal(name, type);
-    local.setConstantIntegerValue(integerValue, type);
-    return local;
-  }
-
   /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
   addScopedAlias(name: string, type: Type, index: i32, reportNode: Node | null = null): Local {
     var scopedLocals = this.scopedLocals;
