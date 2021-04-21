@@ -38,8 +38,8 @@
       " Default optimizations   -O / -O3s",
       " Make a release build    -O --noAssert",
       " Make a debug build      --debug",
-      " Optimize for speed      -O3",
-      " Optimize for size       -O3z --converge",
+      " Optimize for speed      -Ospeed",
+      " Optimize for size       -Osize",
       ""
     ],
     "type": "b",
@@ -390,5 +390,7 @@
   "-O0z": { "value": { "optimizeLevel": 0, "shrinkLevel": 2 } },
   "-O1z": { "value": { "optimizeLevel": 1, "shrinkLevel": 2 } },
   "-O2z": { "value": { "optimizeLevel": 2, "shrinkLevel": 2 } },
-  "-O3z": { "value": { "optimizeLevel": 3, "shrinkLevel": 2 } }
+  "-O3z": { "value": { "optimizeLevel": 3, "shrinkLevel": 2 } },
+  "-Ospeed": { "value": { "optimizeLevel": 3, "shrinkLevel": 0 } },
+  "-Osize": { "value": { "optimizeLevel": 0, "shrinkLevel": 2, "converge": true } }
 }

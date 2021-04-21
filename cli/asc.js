@@ -33,12 +33,6 @@
 const fs = require("fs");
 const path = require("path");
 const process = require("process"); // ensure shim
-
-process.exit = ((exit) => function(code) {
-  if (code) console.log(new Error("exit " + code.toString()).stack);
-  exit(code);
-})(process.exit);
-
 const utf8 = require("./util/utf8");
 const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
@@ -245,6 +239,15 @@ exports.main = function main(argv, options, callback) {
     options = {};
   }
 
+  // Bundle semantic version
+  let bundleMinorVersion = 0, bundleMajorVersion = 0, bundlePatchVersion = 0;
+  const versionParts = (exports.version || "").split(".");
+  if (versionParts.length === 3) {
+    bundleMajorVersion = parseInt(versionParts[0]) | 0;
+    bundleMinorVersion = parseInt(versionParts[1]) | 0;
+    bundlePatchVersion = parseInt(versionParts[2]) | 0;
+  }
+
   const stdout = options.stdout || process.stdout;
   const stderr = options.stderr || process.stderr;
   const readFile = options.readFile || readFileNode;
@@ -422,6 +425,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setPedantic(compilerOptions, opts.pedantic);
   assemblyscript.setLowMemoryLimit(compilerOptions, opts.lowMemoryLimit >>> 0);
   assemblyscript.setExportRuntime(compilerOptions, opts.exportRuntime);
+  assemblyscript.setBundleVersion(compilerOptions, bundleMajorVersion, bundleMinorVersion, bundlePatchVersion);
   if (!opts.stackSize && opts.runtime == "incremental") {
     opts.stackSize = assemblyscript.DEFAULT_STACK_SIZE;
   }
@@ -495,8 +499,14 @@ exports.main = function main(argv, options, callback) {
   // Initialize the program
   program = __pin(assemblyscript.newProgram(compilerOptions));
 
-  // Set up transforms
-  const transforms = [];
+  // Collect transforms *constructors* from the `--transform` CLI flag as well
+  // as the `transform` option into the `transforms` array.
+  let transforms = [];
+  // `transform` option from `main()`
+  if (Array.isArray(options.transforms)) {
+    transforms.push(...options.transforms);
+  }
+  // `--transform` CLI flag
   if (opts.transform) {
     let tsNodeRegistered = false;
     let transformArgs = unique(opts.transform);
@@ -507,26 +517,34 @@ exports.main = function main(argv, options, callback) {
         tsNodeRegistered = true;
       }
       try {
-        const classOrModule = dynrequire(dynrequire.resolve(filename, { paths: [baseDir, process.cwd()] }));
-        if (typeof classOrModule === "function") {
-          Object.assign(classOrModule.prototype, {
-            program,
-            baseDir,
-            stdout,
-            stderr,
-            log: console.error,
-            readFile,
-            writeFile,
-            listFiles
-          });
-          transforms.push(new classOrModule());
-        } else {
-          transforms.push(classOrModule); // legacy module
-        }
+        transforms.push(dynrequire(dynrequire.resolve(filename, { paths: [baseDir, process.cwd()] })));
       } catch (e) {
         return callback(e);
       }
     }
+  }
+
+  // Fix up the prototype of the transforms’ constructors and instantiate them.
+  try {
+    transforms = transforms.map(classOrModule => {
+      // Except if it’s a legacy module, just pass it through.
+      if (typeof classOrModule !== "function") {
+        return classOrModule; 
+      }
+      Object.assign(classOrModule.prototype, {
+        program,
+        baseDir,
+        stdout,
+        stderr,
+        log: console.error,
+        readFile,
+        writeFile,
+        listFiles
+      });
+      return new classOrModule();
+    });
+  } catch (e) {
+    return callback(e);
   }
 
   function applyTransform(name, ...args) {
@@ -795,7 +813,11 @@ exports.main = function main(argv, options, callback) {
   // Pre-emptively initialize the program
   stats.initializeCount++;
   stats.initializeTime += measure(() => {
-    assemblyscript.initializeProgram(program);
+    try {
+      assemblyscript.initializeProgram(program);
+    } catch (e) {
+      crash("initialize", e);
+    }
   });
 
   // Call afterInitialize transform hook
@@ -807,7 +829,11 @@ exports.main = function main(argv, options, callback) {
   var module;
   stats.compileCount++;
   stats.compileTime += measure(() => {
-    module = assemblyscript.compile(program);
+    try {
+      module = assemblyscript.compile(program);
+    } catch (e) {
+      crash("compile", e);
+    }
     // From here on we are going to use Binaryen.js, except that we keep pass
     // order as defined in the compiler.
     if (typeof module === "number") { // Wasm
@@ -877,23 +903,50 @@ exports.main = function main(argv, options, callback) {
     }
     if (opts.runPasses.length) {
       opts.runPasses.forEach(pass => {
-        if (runPasses.indexOf(pass = pass.trim()) < 0)
+        if (runPasses.indexOf(pass = pass.trim()) < 0) {
           runPasses.push(pass);
+        }
       });
     }
   }
 
   stats.optimizeTime += measure(() => {
     stats.optimizeCount++;
-    module.optimize(optimizeLevel, shrinkLevel, debugInfo);
-    module.runPasses(runPasses);
+    try {
+      module.optimize(optimizeLevel, shrinkLevel, debugInfo);
+    } catch (e) {
+      crash("optimize", e);
+    }
+    try {
+      module.runPasses(runPasses);
+    } catch (e) {
+      crash("runPasses", e);
+    }
     if (converge) {
-      let last = module.emitBinary();
+      let last;
+      try {
+        last = module.emitBinary();
+      } catch (e) {
+        crash("emitBinary (converge)", e);
+      }
       do {
         stats.optimizeCount++;
-        module.optimize(optimizeLevel, shrinkLevel, debugInfo);
-        module.runPasses(runPasses);
-        let next = module.emitBinary();
+        try {
+          module.optimize(optimizeLevel, shrinkLevel, debugInfo);
+        } catch (e) {
+          crash("optimize (converge)", e);
+        }
+        try {
+          module.runPasses(runPasses);
+        } catch (e) {
+          crash("runPasses (converge)", e);
+        }
+        let next;
+        try {
+          next = module.emitBinary();
+        } catch (e) {
+          crash("emitBinary (converge)", e);
+        }
         if (next.length >= last.length) {
           if (next.length > last.length) {
             stderr.write("Last converge was suboptimial." + EOL);
@@ -936,7 +989,11 @@ exports.main = function main(argv, options, callback) {
       let wasm;
       stats.emitCount++;
       stats.emitTime += measure(() => {
-        wasm = module.emitBinary(sourceMapURL);
+        try {
+          wasm = module.emitBinary(sourceMapURL);
+        } catch (e) {
+          crash("emitBinary", e);
+        }
       });
 
       if (opts.binaryFile.length) {
@@ -977,17 +1034,25 @@ exports.main = function main(argv, options, callback) {
         let wastFormat = opts.textFile.endsWith('.wast');
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          if (wastFormat) {
-            out = module.emitText();
-          } else {
-            out = module.emitStackIR(true);
+          try {
+            if (wastFormat) {
+              out = module.emitText();
+            } else {
+              out = module.emitStackIR(true);
+            }
+          } catch (e) {
+            crash("emitText", e);
           }
         });
         writeFile(opts.textFile, out, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          out = module.emitStackIR(true);
+          try {
+            out = module.emitStackIR(true);
+          } catch (e) {
+            crash("emitText", e);
+          }
         });
         writeStdout(out);
       }
@@ -999,13 +1064,21 @@ exports.main = function main(argv, options, callback) {
       if (opts.idlFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          idl = assemblyscript.buildIDL(program);
+          try {
+            idl = assemblyscript.buildIDL(program);
+          } catch (e) {
+            crash("buildIDL", e);
+          }
         });
         writeFile(opts.idlFile, __getString(idl), baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          idl = assemblyscript.buildIDL(program);
+          try {
+            idl = assemblyscript.buildIDL(program);
+          } catch (e) {
+            crash("buildIDL", e);
+          }
         });
         writeStdout(__getString(idl));
         hasStdout = true;
@@ -1018,13 +1091,21 @@ exports.main = function main(argv, options, callback) {
       if (opts.tsdFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          tsd = assemblyscript.buildTSD(program);
+          try {
+            tsd = assemblyscript.buildTSD(program);
+          } catch (e) {
+            crash("buildTSD", e);
+          }
         });
         writeFile(opts.tsdFile, __getString(tsd), baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          tsd = assemblyscript.buildTSD(program);
+          try {
+            tsd = assemblyscript.buildTSD(program);
+          } catch (e) {
+            crash("buildTSD", e);
+          }
         });
         writeStdout(__getString(tsd));
         hasStdout = true;
@@ -1037,13 +1118,21 @@ exports.main = function main(argv, options, callback) {
       if (opts.jsFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          js = module.emitAsmjs();
+          try {
+            js = module.emitAsmjs();
+          } catch (e) {
+            crash("emitJS", e);
+          }
         });
         writeFile(opts.jsFile, js, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          js = module.emitAsmjs();
+          try {
+            js = module.emitAsmjs();
+          } catch (e) {
+            crash("emitJS", e);
+          }
         });
         writeStdout(js);
       }
@@ -1332,3 +1421,25 @@ exports.tscOptions = {
   types: [],
   allowJs: false
 };
+
+// Gracefully handle crashes
+function crash(stage, e) {
+  const BAR = colorsUtil.red("▌ ");
+  console.error([
+    EOL,
+    BAR, "Whoops, the AssemblyScript compiler has crashed during ", stage, " :-(", EOL,
+    BAR, EOL,
+    BAR, "Here is a stack trace that may or may not be useful:", EOL,
+    BAR, EOL,
+    e.stack.replace(/^/mg, BAR), EOL,
+    BAR, EOL,
+    BAR, "If it refers to the dist files, try to 'npm install source-map-support' and", EOL,
+    BAR, "run again, which should then show the actual code location in the sources.", EOL,
+    BAR, EOL,
+    BAR, "If you see where the error is, feel free to send us a pull request. If not,", EOL,
+    BAR, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues", EOL,
+    BAR, EOL,
+    BAR, "Thank you!", EOL
+  ].join(""));
+  process.exit(1);
+}
