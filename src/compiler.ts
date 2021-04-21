@@ -7342,11 +7342,10 @@ export class Compiler extends DiagnosticEmitter {
 
   private compileExpressionMaybeCached (targetExpression: Expression, type: Type, key: string | undefined) {
     if(key !== undefined) {
-      var cacheKey = `cachedCallable_${key}`;
-      var cachedValue = this.currentFlow.getScopedLocal(cacheKey);
+      var cachedValue = this.currentFlow.getScopedLocal(key);
       if(cachedValue === null) {
         var expressionRef = this.currentFlow.addScopedDummyLocalWithIntegerValue(
-          cacheKey,
+          key,
           type,
           i64_new(this.compileExpression(targetExpression, type, Constraints.CONV_IMPLICIT))
         ).constantIntegerValue;
