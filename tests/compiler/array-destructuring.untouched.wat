@@ -25,7 +25,6 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $array-destructuring/_func (mut i32) (i32.const 0))
  (global $array-destructuring/x_copy (mut i32) (i32.const 0))
  (global $array-destructuring/y_copy (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 560))
@@ -3730,13 +3729,6 @@
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
   (local $1 i32)
-  global.get $array-destructuring/_func
-  local.tee $1
-  if
-   local.get $1
-   local.get $0
-   call $~lib/rt/itcms/__visit
-  end
   i32.const 256
   local.get $0
   call $~lib/rt/itcms/__visit
@@ -3814,6 +3806,7 @@
  )
  (func $start:array-destructuring
   (local $0 i32)
+  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -3840,22 +3833,20 @@
   call $~lib/rt/itcms/initLazy
   global.set $~lib/rt/itcms/fromSpace
   call $array-destructuring/func
-  global.set $array-destructuring/_func
-  global.get $array-destructuring/_func
-  local.set $0
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   i32.store
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/array/Array<i32>#__get
   global.set $array-destructuring/x_copy
-  global.get $array-destructuring/_func
-  local.set $0
+  call $array-destructuring/func
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   i32.store
-  local.get $0
+  local.get $1
   i32.const 1
   call $~lib/array/Array<i32>#__get
   global.set $array-destructuring/y_copy

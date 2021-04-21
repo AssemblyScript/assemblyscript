@@ -7340,12 +7340,12 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.flatten(exprs, this.currentType.toNativeType());
   }
 
-  private compileExpressionMaybeCached (targetExpression: Expression, type: Type, key: string | undefined) {
-    if(key !== undefined) {
-      var cachedValue = this.currentFlow.getScopedLocal(key);
+  private compileExpressionMaybeCached (targetExpression: Expression, type: Type, expressionRefCacheKey: string | null) {
+    if(expressionRefCacheKey !== null) {
+      var cachedValue = this.currentFlow.getScopedLocal(expressionRefCacheKey);
       if(cachedValue === null) {
         var expressionRef = this.currentFlow.addScopedDummyLocalWithIntegerValue(
-          key,
+          expressionRefCacheKey,
           type,
           i64_new(this.compileExpression(targetExpression, type, Constraints.CONV_IMPLICIT))
         ).constantIntegerValue;
@@ -7366,7 +7366,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
     var targetExpression = expression.expression;
-    var destructingKey = expression.destructingKey;
+    var expressionRefCacheKey = expression.expressionRefCacheKey;
     var targetType = this.resolver.resolveExpression(targetExpression, this.currentFlow); // reports
     if (targetType) {
       let classReference = targetType.getClassOrWrapper(this.program);
@@ -7375,7 +7375,7 @@ export class Compiler extends DiagnosticEmitter {
         let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (indexedGet) {
           let thisType = assert(indexedGet.signature.thisType);
-          let thisArg = this.compileExpressionMaybeCached(targetExpression, thisType, destructingKey);
+          let thisArg = this.compileExpressionMaybeCached(targetExpression, thisType, expressionRefCacheKey);
           if (!isUnchecked && this.options.pedantic) {
             this.pedantic(
               DiagnosticCode.Indexed_access_may_involve_bounds_checking,

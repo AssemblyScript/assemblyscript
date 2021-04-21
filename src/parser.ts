@@ -926,46 +926,20 @@ export class Parser extends DiagnosticEmitter {
       let expression = this.parseExpression(tn);
       if(!expression) return null;
       expression = this.maybeParseCallExpression(tn, expression);
-      /**
-       * In case need destruct from a callable node, such as:
-       * function func() { return [1, 2]; };
-       * const [a, b] = func();
-       *
-       * The output should be:
-       * const _func = func(), a = _func[0], b = _func[1];
-       */
-      var localCallableVarDeclaration: VariableDeclaration | null = null;
-      var localCallableIdentifier: IdentifierExpression | null = null;
-      var isCallNode = expression.kind === NodeKind.CALL;
-      var callableIntermediateName = isCallNode ? "_" + ((expression as CallExpression).expression as IdentifierExpression).text : "";
-
-      if(isCallNode) {
-        localCallableIdentifier =  Node.createIdentifierExpression(callableIntermediateName, tn.range());
-        localCallableVarDeclaration = Node.createVariableDeclaration(
-          localCallableIdentifier,
-          decorators,
-          flags,
-          null,
-          expression,
-          new Range(-1, -1)
-        );
-      }
+      var expressionRefCacheKey = expression.kind === NodeKind.CALL ?
+        "_" + ((expression as CallExpression).expression as IdentifierExpression).text : null;
 
       for(let index = 0; index < declarations.length; index++) {
         var declaration = declarations[index];
-        if(isCallNode && declaration?.name.text === callableIntermediateName) {
-          throw new Error(`Variable name ${callableIntermediateName} already exists in the variable declaration block`);
-        }
+        var arrayIndexExpression = Node.createIntegerLiteralExpression(i64_new(index), tn.range());
         declaration.initializer = Node.createElementAccessExpression(
-          localCallableIdentifier ?? expression,
-          Node.createIntegerLiteralExpression(i64_new(index), tn.range()),
-          tn.range(startPos, tn.pos)
+          expression,
+          arrayIndexExpression,
+          tn.range(startPos, tn.pos),
+          expressionRefCacheKey
         );
       }
-      if(localCallableVarDeclaration) {
-        declarations.unshift(localCallableVarDeclaration);
-      }
-      return Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
+      return Node.createDestructedVariableStatement(decorators, declarations);
     } else {
       throw new Error("RHS does not include =");
     }
@@ -4074,7 +4048,8 @@ export class Parser extends DiagnosticEmitter {
           expr = Node.createElementAccessExpression(
             expr,
             next,
-            tn.range(startPos, tn.pos)
+            tn.range(startPos, tn.pos),
+            null
           );
           expr = this.maybeParseCallExpression(tn, expr);
           break;
