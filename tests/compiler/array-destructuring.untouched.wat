@@ -3858,30 +3858,6 @@
   i32.const 1
   call $~lib/array/Array<i32>#__get
   global.set $array-destructuring/y_copy
-  global.get $array-destructuring/x_copy
-  global.get $array-destructuring/x
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 512
-   i32.const 7
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $array-destructuring/y_copy
-  global.get $array-destructuring/y
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 512
-   i32.const 8
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   global.get $array-destructuring/funcRunCount
   i32.const 1
   i32.eq
@@ -3889,7 +3865,23 @@
   if
    i32.const 0
    i32.const 512
-   i32.const 9
+   i32.const 6
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $array-destructuring/x_copy
+  global.get $array-destructuring/y_copy
+  i32.add
+  global.get $array-destructuring/x
+  global.get $array-destructuring/y
+  i32.add
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 7
    i32.const 1
    call $~lib/builtins/abort
    unreachable
