@@ -4064,7 +4064,9 @@ export class Compiler extends DiagnosticEmitter {
         // check operator overload
         let classReference = leftType.getClassOrWrapper(this.program);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.ADD);
+          // This breaks the compiler
+          let operatorType = this.resolver.resolveExpression(right, this.currentFlow, this.currentType);
+          let overload = classReference.lookupOverload(OperatorKind.ADD, false, operatorType);
           if (overload) {
             expr = this.compileBinaryOverload(overload, left, leftExpr, right, expression);
             break;
