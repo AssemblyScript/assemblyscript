@@ -3555,6 +3555,7 @@ export class FunctionPrototype extends DeclaredElement {
 
   /* Checks if this function cannot co-exist with existing overloads given as param */
   hasOverloadConflict(kindOverloads: FunctionPrototype[]): boolean {
+    // TODO: implement checks
     return true;
   }
 }
