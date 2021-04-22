@@ -3184,80 +3184,83 @@ export class Resolver extends DiagnosticEmitter {
     // TODO: for (let [overloadKind, overloadPrototype] of overloadPrototypes) {
     for (let _keys = Map_keys(overloadPrototypes), i = 0, k = _keys.length; i < k; ++i) {
       let overloadKind = unchecked(_keys[i]);
-      let overloadPrototype = assert(overloadPrototypes.get(overloadKind));
+      let kindOverloadPrototypes = assert(overloadPrototypes.get(overloadKind));
       assert(overloadKind != OperatorKind.INVALID);
-      let operatorInstance: Function | null;
-      if (overloadPrototype.is(CommonFlags.INSTANCE)) {
-        let boundPrototype = overloadPrototype.toBound(instance);
-        operatorInstance = this.resolveFunction(
-          boundPrototype,
-          null,
-          uniqueMap<string,Type>(),
-          reportMode
-        );
-      } else {
-        operatorInstance = this.resolveFunction(
-          overloadPrototype,
-          null,
-          uniqueMap<string,Type>(),
-          reportMode
-        );
-      }
-      if (!operatorInstance) continue;
-      let overloads = instance.overloads;
-      if (!overloads) instance.overloads = overloads = new Map();
-      // inc/dec are special in that an instance overload attempts to re-assign
-      // the corresponding value, thus requiring a matching return type, while a
-      // static overload works like any other overload.
-      if (operatorInstance.is(CommonFlags.INSTANCE)) {
-        switch (overloadKind) {
-          case OperatorKind.PREFIX_INC:
-          case OperatorKind.PREFIX_DEC:
-          case OperatorKind.POSTFIX_INC:
-          case OperatorKind.POSTFIX_DEC: {
-            let returnType = operatorInstance.signature.returnType;
-            if (!returnType.isAssignableTo(instance.type)) {
-              if (reportMode == ReportMode.REPORT) {
-                this.error(
-                  DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-                  overloadPrototype.functionTypeNode.returnType.range, returnType.toString(), instance.type.toString()
-                );
+      for (let j = 0, m = kindOverloadPrototypes.length; j < m; j++) {
+        const overloadPrototype = unchecked(kindOverloadPrototypes[j])
+        let operatorInstance: Function | null;
+        if (overloadPrototype.is(CommonFlags.INSTANCE)) {
+          let boundPrototype = overloadPrototype.toBound(instance);
+          operatorInstance = this.resolveFunction(
+            boundPrototype,
+            null,
+            uniqueMap<string,Type>(),
+            reportMode
+          );
+        } else {
+          operatorInstance = this.resolveFunction(
+            overloadPrototype,
+            null,
+            uniqueMap<string,Type>(),
+            reportMode
+          );
+        }
+        if (!operatorInstance) continue;
+        let overloads = instance.overloads;
+        if (!overloads) instance.overloads = overloads = new Map();
+        // inc/dec are special in that an instance overload attempts to re-assign
+        // the corresponding value, thus requiring a matching return type, while a
+        // static overload works like any other overload.
+        if (operatorInstance.is(CommonFlags.INSTANCE)) {
+          switch (overloadKind) {
+            case OperatorKind.PREFIX_INC:
+            case OperatorKind.PREFIX_DEC:
+            case OperatorKind.POSTFIX_INC:
+            case OperatorKind.POSTFIX_DEC: {
+              let returnType = operatorInstance.signature.returnType;
+              if (!returnType.isAssignableTo(instance.type)) {
+                if (reportMode == ReportMode.REPORT) {
+                  this.error(
+                    DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+                    overloadPrototype.functionTypeNode.returnType.range, returnType.toString(), instance.type.toString()
+                  );
+                }
               }
             }
           }
         }
-      }
-      const kindOverloads = overloads.get(overloadKind) || [];
-      const hasConflict = (current: Function) => {
-        if (!kindOverloads.length) return false;
-        return kindOverloads.some((existing) => {
-          if (existing.is(CommonFlags.STATIC) && current.is(CommonFlags.STATIC)) {
-            return true;
-          }
-          const existingPT = existing.signature.parameterTypes;
-          const currentPT = current.signature.parameterTypes;
-          if (existingPT.length != 1 || currentPT.length != 1) {
-            return true;
-          }
-          return existingPT[0] === currentPT[0];
-        });
-      }
-      if (!hasConflict(operatorInstance)) {
-        kindOverloads.push(operatorInstance);
-        overloads.set(overloadKind, kindOverloads);
-        if (overloadKind == OperatorKind.INDEXED_GET || overloadKind == OperatorKind.INDEXED_SET) {
-          let index = instance.indexSignature;
-          if (!index) instance.indexSignature = index = new IndexSignature(instance);
-          if (overloadKind == OperatorKind.INDEXED_GET) {
-            index.setType(operatorInstance.signature.returnType);
-          }
+        const kindOverloads = overloads.get(overloadKind) || [];
+        const hasConflict = (current: Function) => {
+          if (!kindOverloads.length) return false;
+          return kindOverloads.some((existing) => {
+            if (existing.is(CommonFlags.STATIC) && current.is(CommonFlags.STATIC)) {
+              return true;
+            }
+            const existingPT = existing.signature.parameterTypes;
+            const currentPT = current.signature.parameterTypes;
+            if (existingPT.length != 1 || currentPT.length != 1) {
+              return true;
+            }
+            return existingPT[0] === currentPT[0];
+          });
         }
-      } else {
-        if (reportMode == ReportMode.REPORT) {
-          this.error(
-            DiagnosticCode.Duplicate_decorator,
-            operatorInstance.declaration.range
-          );
+        if (!hasConflict(operatorInstance)) {
+          kindOverloads.push(operatorInstance);
+          overloads.set(overloadKind, kindOverloads);
+          if (overloadKind == OperatorKind.INDEXED_GET || overloadKind == OperatorKind.INDEXED_SET) {
+            let index = instance.indexSignature;
+            if (!index) instance.indexSignature = index = new IndexSignature(instance);
+            if (overloadKind == OperatorKind.INDEXED_GET) {
+              index.setType(operatorInstance.signature.returnType);
+            }
+          }
+        } else {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Duplicate_decorator,
+              operatorInstance.declaration.range
+            );
+          }
         }
       }
     }

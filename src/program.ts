@@ -1991,7 +1991,7 @@ export class Program extends DiagnosticEmitter {
                     );
                   } else {
                     prototype.operatorKind = kind;
-                    overloads.set(kind, prototype);
+                    overloads.set(kind, [prototype]);
                   }
                 }
               } else {
@@ -4033,7 +4033,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Constructor prototype. */
   constructorPrototype: FunctionPrototype | null = null;
   /** Operator overload prototypes. */
-  overloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
+  overloadPrototypes: Map<OperatorKind, FunctionPrototype[]> = new Map();
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
   /** Classes extending this class. */
