@@ -1984,14 +1984,17 @@ export class Program extends DiagnosticEmitter {
                   );
                 } else {
                   let overloads = classPrototype.overloadPrototypes;
-                  if (overloads.has(kind)) {
+                  let kindOverloads = overloads.get(kind);
+                  if (kindOverloads && prototype.hasOverloadConflict(kindOverloads)) {
                     this.error(
                       DiagnosticCode.Duplicate_function_implementation,
                       firstArg.range
                     );
                   } else {
+                    const protos = kindOverloads || [];
+                    protos.push(prototype);
+                    overloads.set(kind, protos);
                     prototype.operatorKind = kind;
-                    overloads.set(kind, [prototype]);
                   }
                 }
               } else {
@@ -3549,6 +3552,11 @@ export class FunctionPrototype extends DeclaredElement {
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
   }
+
+  /* Checks if this function cannot co-exist with existing overloads given as param */
+  hasOverloadConflict(kindOverloads: FunctionPrototype[]): boolean {
+    return true;
+  }
 }
 
 /** A resolved function. */
@@ -3743,6 +3751,21 @@ export class Function extends TypedElement {
         );
       }
     }
+  }
+  /* Checks if this function can co-exist with existing overloads given as param */
+  hasOverloadConflict(kindOverloads: Function[]): boolean {
+    if (!kindOverloads.length) return false;
+    return kindOverloads.some((existing) => {
+      if (existing.is(CommonFlags.STATIC) && this.is(CommonFlags.STATIC)) {
+        return true;
+      }
+      const existingPT = existing.signature.parameterTypes;
+      const thisPT = this.signature.parameterTypes;
+      if (existingPT.length != 1 || thisPT.length != 1) {
+        return true;
+      }
+      return existingPT[0] === thisPT[0];
+    });
   }
 }
 
