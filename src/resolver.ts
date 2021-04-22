@@ -3187,7 +3187,7 @@ export class Resolver extends DiagnosticEmitter {
       let kindOverloadPrototypes = assert(overloadPrototypes.get(overloadKind));
       assert(overloadKind != OperatorKind.INVALID);
       for (let j = 0, m = kindOverloadPrototypes.length; j < m; j++) {
-        const overloadPrototype = unchecked(kindOverloadPrototypes[j])
+        const overloadPrototype = unchecked(kindOverloadPrototypes[j]);
         let operatorInstance: Function | null;
         if (overloadPrototype.is(CommonFlags.INSTANCE)) {
           let boundPrototype = overloadPrototype.toBound(instance);

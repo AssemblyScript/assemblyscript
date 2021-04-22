@@ -1991,7 +1991,7 @@ export class Program extends DiagnosticEmitter {
                       firstArg.range
                     );
                   } else {
-                    const protos = kindOverloads || [];
+                    const protos = kindOverloads || [];
                     protos.push(prototype);
                     overloads.set(kind, protos);
                     prototype.operatorKind = kind;
