@@ -4345,7 +4345,7 @@ export class Class extends TypedElement {
   }
 
   /** Looks up the operator overload of the specified kind. */
-  lookupOverload(kind: OperatorKind, unchecked: bool = false, rightType?: Type): Function | null {
+  lookupOverload(kind: OperatorKind, unchecked: bool = false, rightType?: Type | null): Function | null {
     if (unchecked) {
       switch (kind) {
         case OperatorKind.INDEXED_GET: {

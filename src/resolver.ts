@@ -1973,11 +1973,11 @@ export class Resolver extends DiagnosticEmitter {
         let leftType = this.resolveExpression(left, ctxFlow, ctxType, reportMode);
         if (!leftType) return null;
         let classReference = leftType.getClassOrWrapper(this.program);
+        let rightType = this.resolveExpression(right, ctxFlow, leftType, reportMode);
         if (classReference) {
-          let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator));
+          let overload = classReference.lookupOverload(OperatorKind.fromBinaryToken(operator), false, rightType);
           if (overload) return overload.signature.returnType;
         }
-        let rightType = this.resolveExpression(right, ctxFlow, leftType, reportMode);
         if (!rightType) return null;
         let commonType = Type.commonDenominator(leftType, rightType, false);
         if (!commonType) {
