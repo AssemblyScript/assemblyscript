@@ -4168,7 +4168,7 @@ export class Class extends TypedElement {
   /** Constructor instance. */
   constructorInstance: Function | null = null;
   /** Operator overloads. */
-  overloads: Map<OperatorKind,Function> | null = null;
+  overloads: Map<OperatorKind,Function[]> | null = null;
   /** Index signature, if present. */
   indexSignature: IndexSignature | null = null;
   /** Unique class id. */
@@ -4322,7 +4322,7 @@ export class Class extends TypedElement {
   }
 
   /** Looks up the operator overload of the specified kind. */
-  lookupOverload(kind: OperatorKind, unchecked: bool = false): Function | null {
+  lookupOverload(kind: OperatorKind, unchecked: bool = false, rightType?: Type): Function | null {
     if (unchecked) {
       switch (kind) {
         case OperatorKind.INDEXED_GET: {
@@ -4341,10 +4341,21 @@ export class Class extends TypedElement {
     var instance: Class | null = this;
     do {
       let overloads = instance.overloads;
-      if (overloads != null && overloads.has(kind)) {
-        return assert(overloads.get(kind));
-      }
       instance = instance.base;
+      if (overloads == null || !overloads.has(kind)) {
+        continue;
+      }
+      const kindOverloads = overloads.get(kind)!;
+      if (!rightType) {
+        return assert(kindOverloads[0]); // No RHS type specified -> return first
+      }
+      const found = kindOverloads.find((overload) => {
+        const paramTypes = overload.signature.parameterTypes;
+        return paramTypes.length && paramTypes[0] === rightType;
+      });
+      if (found) {
+        return assert(found);
+      }
     } while (instance);
     return null;
   }

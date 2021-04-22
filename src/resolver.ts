@@ -3227,8 +3227,24 @@ export class Resolver extends DiagnosticEmitter {
           }
         }
       }
-      if (!overloads.has(overloadKind)) {
-        overloads.set(overloadKind, operatorInstance);
+      const kindOverloads = overloads.get(overloadKind) || [];
+      const hasConflict = (current: Function) => {
+        if (!kindOverloads.length) return false;
+        return kindOverloads.some((existing) => {
+          if (existing.is(CommonFlags.STATIC) && current.is(CommonFlags.STATIC)) {
+            return true;
+          }
+          const existingPT = existing.signature.parameterTypes;
+          const currentPT = current.signature.parameterTypes;
+          if (existingPT.length != 1 || currentPT.length != 1) {
+            return true;
+          }
+          return existingPT[0] === currentPT[0];
+        });
+      }
+      if (!hasConflict(operatorInstance)) {
+        kindOverloads.push(operatorInstance);
+        overloads.set(overloadKind, kindOverloads);
         if (overloadKind == OperatorKind.INDEXED_GET || overloadKind == OperatorKind.INDEXED_SET) {
           let index = instance.indexSignature;
           if (!index) instance.indexSignature = index = new IndexSignature(instance);
