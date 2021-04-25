@@ -270,7 +270,7 @@ function daysSinceEpoch(y: i32, m: i32, d: i32): i32 {
 }
 
 // TomohikoSakamoto algorithm from https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week
-export function dayOfWeek(year: i32, month: i32, day: i32): i32 {
+function dayOfWeek(year: i32, month: i32, day: i32): i32 {
   const tab = memory.data<u8>([0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4]);
 
   year -= i32(month < 3);
