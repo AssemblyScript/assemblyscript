@@ -408,7 +408,7 @@ function ensureTestsIndexJs() {
     fs.writeFileSync(testsIndexFile, [
       "const assert = require(\"assert\");",
       "const myModule = require(\"..\");",
-      "assert.equal(myModule.add(1, 2), 3);",
+      "assert.strictEqual(myModule.add(1, 2), 3);",
       "console.log(\"ok\");"
     ].join("\n") + "\n");
     console.log(colors.green("  Created: ") + testsIndexFile);
