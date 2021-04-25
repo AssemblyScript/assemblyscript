@@ -2312,37 +2312,47 @@
  )
  (func $~lib/date/Date#getUTCDay (param $0 i32) (result i32)
   (local $1 i32)
-  local.get $0
-  i32.load offset=8
+  (local $2 i32)
   local.get $0
   i32.load
   local.get $0
   i32.load offset=4
-  local.tee $1
+  local.tee $2
   i32.const 3
   i32.lt_s
   i32.sub
-  local.tee $0
+  local.set $1
   local.get $0
+  i32.load offset=8
+  local.get $2
+  i32.const 1579
+  i32.add
+  i32.load8_u
+  local.get $1
+  local.get $1
   i32.const 4
   i32.div_s
-  local.get $0
+  local.get $1
   i32.const 100
   i32.div_s
   i32.sub
-  local.get $0
+  local.get $1
   i32.const 400
   i32.div_s
   i32.add
   i32.add
-  local.get $1
-  i32.const 1579
-  i32.add
-  i32.load8_u
   i32.add
   i32.add
   i32.const 7
   i32.rem_s
+  local.tee $0
+  i32.const 7
+  i32.const 0
+  local.get $0
+  i32.const 0
+  i32.lt_s
+  select
+  i32.add
  )
  (func $~lib/number/I32#toString (param $0 i32) (result i32)
   (local $1 i32)

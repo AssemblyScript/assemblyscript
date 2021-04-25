@@ -3069,6 +3069,7 @@
   drop
  )
  (func $~lib/date/dayOfWeek (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   local.get $0
   local.get $1
   i32.const 3
@@ -3103,6 +3104,17 @@
   i32.add
   i32.const 7
   i32.rem_s
+  local.set $3
+  local.get $3
+  local.get $3
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   i32.const 7
+  else
+   i32.const 0
+  end
+  i32.add
  )
  (func $~lib/date/Date#getUTCDay (param $0 i32) (result i32)
   local.get $0
