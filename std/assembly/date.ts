@@ -277,6 +277,5 @@ function dayOfWeek(year: i32, month: i32, day: i32): i32 {
   year -= i32(month < 3);
   year += year / 4 - year / 100 + year / 400;
   month = <i32>load<u8>(tab + month - 1);
-  const w = (year + month + day) % 7;
-  return w + (w < 0 ? 7 : 0);
+  return floorMod(year + month + day, 7);
 }
