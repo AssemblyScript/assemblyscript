@@ -235,7 +235,8 @@ function epochMillis(
 
 // @ts-ignore: decorator
 @inline function floorMod<T extends number>(a: T, b: T): T {
-  return (a >= 0 ? a % b : a - (a - b + 1) / b * b) as T;
+  var m = a % b;
+  return m + (m < 0 ? b : 0) as T;
 }
 
 function invalidDate(millis: i64): bool {
