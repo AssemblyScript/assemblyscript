@@ -131,19 +131,19 @@ export class Date {
   }
 
   getUTCHours(): i32 {
-    return i32(floorMod(this.epochMillis, MILLIS_PER_DAY)) / MILLIS_PER_HOUR;
+    return i32(euclidRem(this.epochMillis, MILLIS_PER_DAY)) / MILLIS_PER_HOUR;
   }
 
   getUTCMinutes(): i32 {
-    return i32(floorMod(this.epochMillis, MILLIS_PER_HOUR)) / MILLIS_PER_MINUTE;
+    return i32(euclidRem(this.epochMillis, MILLIS_PER_HOUR)) / MILLIS_PER_MINUTE;
   }
 
   getUTCSeconds(): i32 {
-    return i32(floorMod(this.epochMillis, MILLIS_PER_MINUTE)) / MILLIS_PER_SECOND;
+    return i32(euclidRem(this.epochMillis, MILLIS_PER_MINUTE)) / MILLIS_PER_SECOND;
   }
 
   getUTCMilliseconds(): i32 {
-    return i32(floorMod(this.epochMillis, MILLIS_PER_SECOND));
+    return i32(euclidRem(this.epochMillis, MILLIS_PER_SECOND));
   }
 
   setUTCMilliseconds(millis: i32): void {
@@ -164,19 +164,19 @@ export class Date {
 
   setUTCDate(day: i32): void {
     if (this.day == day) return;
-    var ms = floorMod(this.epochMillis, MILLIS_PER_DAY);
+    var ms = euclidRem(this.epochMillis, MILLIS_PER_DAY);
     this.setTime(i64(daysSinceEpoch(this.year, this.month, day)) * MILLIS_PER_DAY + ms);
   }
 
   setUTCMonth(month: i32): void {
     if (this.month == month) return;
-    var ms = floorMod(this.epochMillis, MILLIS_PER_DAY);
+    var ms = euclidRem(this.epochMillis, MILLIS_PER_DAY);
     this.setTime(i64(daysSinceEpoch(this.year, month + 1, this.day)) * MILLIS_PER_DAY + ms);
   }
 
   setUTCFullYear(year: i32): void {
     if (this.year == year) return;
-    var ms = floorMod(this.epochMillis, MILLIS_PER_DAY);
+    var ms = euclidRem(this.epochMillis, MILLIS_PER_DAY);
     this.setTime(i64(daysSinceEpoch(year, this.month, this.day)) * MILLIS_PER_DAY + ms);
   }
 
@@ -234,7 +234,7 @@ function epochMillis(
 }
 
 // @ts-ignore: decorator
-@inline function floorMod<T extends number>(a: T, b: T): T {
+@inline function euclidRem<T extends number>(a: T, b: T): T {
   var m = a % b;
   return m + (m < 0 ? b : 0) as T;
 }
@@ -277,5 +277,5 @@ function dayOfWeek(year: i32, month: i32, day: i32): i32 {
   year -= i32(month < 3);
   year += year / 4 - year / 100 + year / 400;
   month = <i32>load<u8>(tab + month - 1);
-  return floorMod(year + month + day, 7);
+  return euclidRem(year + month + day, 7);
 }
