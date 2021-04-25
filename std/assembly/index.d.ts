@@ -1737,6 +1737,7 @@ declare class Date {
   getUTCFullYear(): i32;
   getUTCMonth(): i32;
   getUTCDate(): i32;
+  getUTCDay(): i32;
   getUTCHours(): i32;
   getUTCMinutes(): i32;
   getUTCSeconds(): i32;

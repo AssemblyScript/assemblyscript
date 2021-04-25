@@ -174,6 +174,24 @@
   assert(date.getTime() == 314240591274);
 }
 
+// Date#setUTCDay //////////////////////////////////////////////////////////////////////////////////
+{
+  // tests from test262
+  const july6: i64 = 1467763200000;
+  const july9: i64 = 1468022400000;
+  const dayMs: i64 = 24 * 60 * 60 * 1000;
+
+  assert(new Date(july6    ).getUTCDay() == 3);
+  assert(new Date(july6 - 1).getUTCDay() == 2);
+  assert(new Date(july6 + dayMs - 1).getUTCDay() == 3);
+  assert(new Date(july6 + dayMs    ).getUTCDay() == 4);
+
+  assert(new Date(july9    ).getUTCDay() == 6);
+  assert(new Date(july9 - 1).getUTCDay() == 5);
+  assert(new Date(july9 + dayMs - 1).getUTCDay() == 6);
+  assert(new Date(july9 + dayMs    ).getUTCDay() == 0);
+}
+
 // Date#setUTCMonth ////////////////////////////////////////////////////////////////////////////////
 {
   let date = new Date(7899943856218720);

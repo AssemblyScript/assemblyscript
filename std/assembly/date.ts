@@ -126,6 +126,10 @@ export class Date {
     return this.day;
   }
 
+  getUTCDay(): i32 {
+    return dayOfWeek(this.year, this.month, this.day);
+  }
+
   getUTCHours(): i32 {
     return i32(floorMod(this.epochMillis, MILLIS_PER_DAY)) / MILLIS_PER_HOUR;
   }
@@ -263,4 +267,14 @@ function daysSinceEpoch(y: i32, m: i32, d: i32): i32 {
   var doy = <u32>(153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1; // [0, 365]
   var doe = yoe * 365 + yoe / 4 - yoe / 100 + doy; // [0, 146096]
   return era * 146097 + doe - 719468;
+}
+
+// TomohikoSakamoto algorithm from https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week
+export function dayOfWeek(year: i32, month: i32, day: i32): i32 {
+  const tab = memory.data<u8>([0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4]);
+
+  year -= i32(month < 3);
+  year += year / 4 - year / 100 + year / 400;
+  month = <i32>load<u8>(tab + month - 1);
+  return (year + month + day) % 7;
 }
