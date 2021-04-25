@@ -1586,8 +1586,7 @@ declare class Array<T> {
   /** Current length of the array. */
   length: i32;
   /** Constructs a new array. */
-  constructor(capacity?: i32);
-
+  constructor(length?: i32);
   at(index: i32): T;
   fill(value: T, start?: i32, end?: i32): this;
   every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
