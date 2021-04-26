@@ -48,3 +48,7 @@ export const E_NOT_PINNED: string = "Object is not pinned";
 // @ts-ignore: decorator
 @lazy @inline
 export const E_URI_MALFORMED: string = "URI malformed";
+
+// @ts-ignore: decorator
+@lazy @inline
+export const E_INVALIDDATE: string = "Invalid Date";

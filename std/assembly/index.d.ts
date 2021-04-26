@@ -1723,7 +1723,9 @@ declare class Date {
   ): i64;
   /** Returns the current UTC timestamp in milliseconds. */
   static now(): i64;
-  static fromString(dateStr: string): Date;
+  /** Parses a string representation of a date, and returns the number of milliseconds since January 1, 1970, 00:00:00 UTC. */
+  static parse(dateString: string): Date;
+  static fromString(dateString: string): Date;
   /** Constructs a new date object from an UTC timestamp in milliseconds. */
   constructor(value: i64);
   /** Returns the UTC timestamp of this date in milliseconds. */
@@ -1734,6 +1736,7 @@ declare class Date {
   getUTCFullYear(): i32;
   getUTCMonth(): i32;
   getUTCDate(): i32;
+  getUTCDay(): i32;
   getUTCHours(): i32;
   getUTCMinutes(): i32;
   getUTCSeconds(): i32;
