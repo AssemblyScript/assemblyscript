@@ -590,6 +590,7 @@
  (export "memory" (memory $0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
+ (export "ArrayU32#get:dataStart" (func $export:~lib/array/Array<u32>#get:dataStart))
  (export "ArrayU32#constructor" (func $export:std/array/ArrayU32#constructor@varargs))
  (export "ArrayU32#get:length" (func $export:~lib/array/Array<u32>#get:length))
  (export "ArrayU32#set:length" (func $export:~lib/array/Array<u32>#set:length))
@@ -616,6 +617,7 @@
  (export "ArrayU32#join" (func $export:~lib/array/Array<u32>#join@varargs))
  (export "ArrayU32#flat" (func $export:~lib/array/Array<u32>#flat))
  (export "ArrayU32#toString" (func $export:~lib/array/Array<u32>#toString))
+ (export "ArrayU8#get:dataStart" (func $export:~lib/array/Array<u32>#get:dataStart))
  (export "ArrayU8#constructor" (func $export:std/array/ArrayU8#constructor@varargs))
  (export "ArrayU8#get:length" (func $export:~lib/array/Array<u32>#get:length))
  (export "ArrayU8#set:length" (func $export:~lib/array/Array<u8>#set:length))
@@ -642,6 +644,7 @@
  (export "ArrayU8#join" (func $export:~lib/array/Array<u8>#join@varargs))
  (export "ArrayU8#flat" (func $export:~lib/array/Array<u32>#flat))
  (export "ArrayU8#toString" (func $export:~lib/array/Array<u8>#toString))
+ (export "ArrayStr#get:dataStart" (func $export:~lib/array/Array<u32>#get:dataStart))
  (export "ArrayStr#constructor" (func $export:std/array/ArrayStr#constructor@varargs))
  (export "ArrayStr#get:length" (func $export:~lib/array/Array<u32>#get:length))
  (export "ArrayStr#set:length" (func $export:~lib/array/Array<u32>#set:length))
@@ -22235,6 +22238,22 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   local.get $4
+ )
+ (func $export:~lib/array/Array<u32>#get:dataStart (param $0 i32) (result i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  local.get $0
+  i32.store
+  local.get $0
+  i32.load offset=4
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
  )
  (func $export:std/array/ArrayU32#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer

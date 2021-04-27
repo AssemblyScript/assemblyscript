@@ -34,7 +34,7 @@ export class Array<T> {
   // block is 16 bytes anyway so it's fine to have a couple extra fields in there.
 
   private buffer: ArrayBuffer;
-  private dataStart: usize;
+  @unsafe readonly dataStart: usize;
   private byteLength: i32;
 
   // Also note that Array<T> with non-nullable T must guard against uninitialized null values
@@ -395,7 +395,7 @@ export class Array<T> {
     var length  = this.length_;
     start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
     deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
-    var result = changetype<Array<T>>(__newArray(deleteCount, alignof<T>(), idof<Array<T>>())); 
+    var result = changetype<Array<T>>(__newArray(deleteCount, alignof<T>(), idof<Array<T>>()));
     var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());
