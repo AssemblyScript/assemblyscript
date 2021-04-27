@@ -236,7 +236,7 @@ export class Date {
     );
   }
 
-  // Note: it uses UTC time instead local (with timezone offset)
+  // Note: it uses UTC time instead local time (without timezone offset)
   toTimeString(): string {
     // TODO: add timezone
     return (
@@ -248,7 +248,7 @@ export class Date {
     );
   }
 
-  // Note: it uses UTC date and time instead local (with timezone offset)
+  // Note: it uses UTC datetime instead local datetime (without timezone offset)
   toString(): string {
     return this.toDateString() + " " + this.toTimeString();
   }
