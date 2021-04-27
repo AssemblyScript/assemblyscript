@@ -1149,7 +1149,7 @@ exports.main = function main(argv, options, callback) {
   function readFileNode(filename, baseDir) {
     let name = path.resolve(baseDir, filename);
     try {
-      let text;
+      let text = null;
       stats.readCount++;
       stats.readTime += measure(() => {
         text = fs.readFileSync(name, "utf8");
