@@ -247,6 +247,26 @@
   assert(date.toISOString() == "-000022-06-16T17:13:50.774Z");
 }
 
+// Date#toDateString ///////////////////////////////////////////////////////////////////////////////
+{
+  let date = new Date(-61536067200000);
+  assert(date.toDateString() == "Wed Jan 01 0020");
+  date = new Date(1580601600000);
+  assert(date.toDateString() == "Sun Feb 02 2020");
+  // negative year
+  date = new Date(-62183116800000); // '-000001-07-01T00:00Z'
+  assert(date.toDateString() == "Thu Jul 01 -0001");
+}
+
+// Date#toTimeString ///////////////////////////////////////////////////////////////////////////////
+{
+  let date = new Date(-61536067200000);
+  assert(date.toTimeString() == "00:00:00"); // use UTC time instead local
+
+  date = new Date(253402300799999);
+  assert(date.toTimeString() == "23:59:59"); // use UTC time instead local
+}
+
 // Date#fromString /////////////////////////////////////////////////////////////////////////////////
 {
   // supports year / month / day

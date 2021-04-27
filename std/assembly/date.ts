@@ -208,6 +208,50 @@ export class Date {
       "Z"
     );
   }
+
+  toDateString(): string {
+    // TODO: use u64 static data instead 4 chars
+    // also use stream itoa variants.
+    const weeks: StaticArray<string> = [
+      "Sun ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat "
+    ];
+
+    const months: StaticArray<string> = [
+      "Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ",
+      "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "
+    ];
+
+    var mo = this.month;
+    var da = this.day;
+    var yr = this.year;
+    var wd = dayOfWeek(yr, mo, da);
+    var year = abs(yr).toString().padStart(4, "0");
+    if (yr < 0) year = "-" + year;
+
+    return (
+      unchecked(weeks[wd]) +
+      unchecked(months[mo - 1]) +
+      da.toString().padStart(2, "0") +
+      " " + year
+    );
+  }
+
+  // Note: it uses UTC time instead local time (without timezone offset)
+  toTimeString(): string {
+    // TODO: add timezone
+    return (
+      this.getUTCHours().toString().padStart(2, "0") +
+      ":" +
+      this.getUTCMinutes().toString().padStart(2, "0") +
+      ":" +
+      this.getUTCSeconds().toString().padStart(2, "0")
+    );
+  }
+
+  // Note: it uses UTC datetime instead local datetime (without timezone offset)
+  toString(): string {
+    return this.toDateString() + " " + this.toTimeString();
+  }
 }
 
 function epochMillis(
@@ -275,7 +319,7 @@ function dayOfWeek(year: i32, month: i32, day: i32): i32 {
   const tab = memory.data<u8>([0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4]);
 
   year -= i32(month < 3);
-  year += year / 4 - year / 100 + year / 400;
+  year += floorDiv(year, 4) - floorDiv(year, 100) + floorDiv(year, 400);
   month = <i32>load<u8>(tab + month - 1);
   return euclidRem(year + month + day, 7);
 }
