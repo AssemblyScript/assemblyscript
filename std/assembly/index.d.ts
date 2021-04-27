@@ -1459,7 +1459,7 @@ interface ArrayBufferView {
   readonly byteOffset: i32;
   /** The length in bytes from the start of the referenced {@link ArrayBuffer}. */
   readonly byteLength: i32;
-  /** Returns raw pointer to backing data store including offset (unsafe). */
+  /** Returns raw pointer to data storage including offset (unsafe). */
   readonly dataStart: usize;
 }
 
@@ -1476,7 +1476,7 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   readonly byteOffset: i32;
   /** The length in bytes from the start of the referenced {@link ArrayBuffer}. */
   readonly byteLength: i32;
-  /** Returns raw pointer to backing data store including offset (unsafe). */
+  /** Returns raw pointer to data storage including offset (unsafe). */
   readonly dataStart: usize;
   /** The length (in elements). */
   readonly length: i32;
@@ -1589,7 +1589,7 @@ declare class Array<T> {
   [key: number]: T;
   /** Current length of the array. */
   length: i32;
-  /** Returns raw pointer to backing data store (unsafe). */
+  /** Returns raw pointer to data storage (unsafe). */
   readonly dataStart: usize;
   /** Constructs a new array. */
   constructor(length?: i32);
