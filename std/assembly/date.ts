@@ -210,6 +210,8 @@ export class Date {
   }
 
   toDateString(): string {
+    // TODO: use u64 static data instead 4 chars
+    // also use stream itoa variants.
     const weeks: StaticArray<string> = [
       "Sun ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat "
     ];
