@@ -258,6 +258,15 @@
   assert(date.toDateString() == "Thu Jul 01 -0001");
 }
 
+// Date#toTimeString ///////////////////////////////////////////////////////////////////////////////
+{
+  let date = new Date(-61536067200000);
+  assert(date.toTimeString() == "00:00:00"); // use UTC time instead local
+
+  date = new Date(253402300799999);
+  assert(date.toTimeString() == "23:59:59"); // use UTC time instead local
+}
+
 // Date#fromString /////////////////////////////////////////////////////////////////////////////////
 {
   // supports year / month / day
