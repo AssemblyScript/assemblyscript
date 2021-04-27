@@ -208,6 +208,30 @@ export class Date {
       "Z"
     );
   }
+
+  toDateString(): string {
+    const weeks: StaticArray<string> = [
+      "Sun ", "Mon ", "Tue ", "Wed ", "Thu ", "Fri ", "Sat "
+    ];
+
+    const months: StaticArray<string> = [
+      "Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ",
+      "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "
+    ];
+
+    var weekday = this.getUTCDay();
+    var month = this.month;
+    var day = this.day;
+    var year = abs(this.year).toString().padStart(4, "0");
+    if (this.year < 0) year = "-" + year;
+
+    return (
+      unchecked(weeks[weekday]) +
+      unchecked(months[month - 1]) +
+      day.toString().padStart(2, "0") +
+      " " + year
+    );
+  }
 }
 
 function epochMillis(
@@ -275,7 +299,7 @@ function dayOfWeek(year: i32, month: i32, day: i32): i32 {
   const tab = memory.data<u8>([0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4]);
 
   year -= i32(month < 3);
-  year += year / 4 - year / 100 + year / 400;
+  year += floorDiv(year, 4) - floorDiv(year, 100) + floorDiv(year, 400);
   month = <i32>load<u8>(tab + month - 1);
   return euclidRem(year + month + day, 7);
 }
