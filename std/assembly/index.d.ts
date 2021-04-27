@@ -1756,8 +1756,10 @@ declare class Date {
   setUTCSeconds(value: i32): void;
   setUTCMilliseconds(value: i32): void;
 
+  toString(): string;
   toISOString(): string;
   toDateString(): string;
+  toTimeString(): string;
 }
 
 /** Class for representing a runtime error. Base class of all errors. */

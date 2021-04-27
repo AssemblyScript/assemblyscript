@@ -235,6 +235,20 @@ export class Date {
       " " + year
     );
   }
+
+  toTimeString(): string {
+    return (
+      this.getUTCHours().toString().padStart(2, "0") +
+      ":" +
+      this.getUTCMinutes().toString().padStart(2, "0") +
+      ":" +
+      this.getUTCSeconds().toString().padStart(2, "0")
+    );
+  }
+
+  toString(): string {
+    return this.toDateString() + " " + this.toTimeString();
+  }
 }
 
 function epochMillis(
