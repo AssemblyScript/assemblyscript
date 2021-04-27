@@ -219,16 +219,17 @@ export class Date {
       "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec "
     ];
 
-    var weekday = this.getUTCDay();
-    var month = this.month;
-    var day = this.day;
-    var year = abs(this.year).toString().padStart(4, "0");
-    if (this.year < 0) year = "-" + year;
+    var mo = this.month;
+    var da = this.day;
+    var yr = this.year;
+    var wd = dayOfWeek(yr, mo, da);
+    var year = abs(yr).toString().padStart(4, "0");
+    if (yr < 0) year = "-" + year;
 
     return (
-      unchecked(weeks[weekday]) +
-      unchecked(months[month - 1]) +
-      day.toString().padStart(2, "0") +
+      unchecked(weeks[wd]) +
+      unchecked(months[mo - 1]) +
+      da.toString().padStart(2, "0") +
       " " + year
     );
   }

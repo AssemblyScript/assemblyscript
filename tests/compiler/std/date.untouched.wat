@@ -6364,6 +6364,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 44
   i32.sub
@@ -6402,130 +6403,133 @@
   local.tee $2
   i32.store offset=4
   local.get $0
-  call $~lib/date/Date#getUTCDay
+  i32.load offset=4
   local.set $3
   local.get $0
-  i32.load offset=4
+  i32.load offset=8
   local.set $4
   local.get $0
-  i32.load offset=8
-  local.set $5
-  global.get $~lib/memory/__stack_pointer
-  local.get $0
   i32.load
-  local.tee $6
+  local.set $5
+  local.get $5
+  local.get $3
+  local.get $4
+  call $~lib/date/dayOfWeek
+  local.set $6
+  global.get $~lib/memory/__stack_pointer
+  local.get $5
+  local.tee $7
   i32.const 31
   i32.shr_s
-  local.tee $7
-  local.get $6
-  i32.add
+  local.tee $8
   local.get $7
+  i32.add
+  local.get $8
   i32.xor
   i32.const 10
   call $~lib/number/I32#toString
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=8
-  local.get $9
+  local.get $10
   i32.const 4
   i32.const 848
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=12
-  local.get $9
+  local.get $10
   call $~lib/string/String#padStart
-  local.tee $8
+  local.tee $9
   i32.store offset=16
-  local.get $0
-  i32.load
+  local.get $5
   i32.const 0
   i32.lt_s
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 592
-   local.set $9
+   local.set $10
    global.get $~lib/memory/__stack_pointer
-   local.get $9
+   local.get $10
    i32.store offset=8
+   local.get $10
    local.get $9
-   local.get $8
    call $~lib/string/String.__concat
-   local.tee $8
+   local.tee $9
    i32.store offset=16
   end
   local.get $1
-  local.get $3
+  local.get $6
   call $~lib/staticarray/StaticArray<~lib/string/String>#__uget
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=32
-  local.get $9
+  local.get $10
   local.get $2
-  local.get $4
+  local.get $3
   i32.const 1
   i32.sub
   call $~lib/staticarray/StaticArray<~lib/string/String>#__uget
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=36
-  local.get $9
+  local.get $10
   call $~lib/string/String.__concat
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=24
-  local.get $9
-  local.get $5
+  local.get $10
+  local.get $4
   i32.const 10
   call $~lib/number/I32#toString
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=32
-  local.get $9
+  local.get $10
   i32.const 2
   i32.const 848
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=40
-  local.get $9
+  local.get $10
   call $~lib/string/String#padStart
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=28
-  local.get $9
+  local.get $10
   call $~lib/string/String.__concat
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=20
-  local.get $9
+  local.get $10
   i32.const 4048
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=12
-  local.get $9
+  local.get $10
   call $~lib/string/String.__concat
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
   i32.store offset=8
+  local.get $10
   local.get $9
-  local.get $8
   call $~lib/string/String.__concat
-  local.set $9
+  local.set $10
   global.get $~lib/memory/__stack_pointer
   i32.const 44
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $10
  )
  (func $~lib/string/String#split (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
