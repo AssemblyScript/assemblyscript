@@ -1758,6 +1758,7 @@ declare class Date {
 
   toString(): string;
   toISOString(): string;
+  toUTCString(): string;
   toDateString(): string;
   toTimeString(): string;
 }

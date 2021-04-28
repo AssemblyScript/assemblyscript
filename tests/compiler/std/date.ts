@@ -267,6 +267,17 @@
   assert(date.toTimeString() == "23:59:59"); // use UTC time instead local
 }
 
+// Date#toUTCString ///////////////////////////////////////////////////////////////////////////////
+{
+  let date = new Date(-61536067200000);
+  assert(date.toUTCString() == "Wed, 01 Jan 0020 00:00:00 GMT");
+  date = new Date(1580741613467);
+  assert(date.toUTCString() == "Mon, 03 Feb 2020 14:53:33 GMT");
+  // negative year
+  date = new Date(-62183116800000); // '-000001-07-01T00:00Z'
+  assert(date.toUTCString() == "Thu, 01 Jul -0001 00:00:00 GMT");
+}
+
 // Date#fromString /////////////////////////////////////////////////////////////////////////////////
 {
   // supports year / month / day

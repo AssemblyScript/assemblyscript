@@ -209,6 +209,38 @@ export class Date {
     );
   }
 
+  toUTCString(): string {
+    const weeks: StaticArray<string> = [
+      "Sun, ", "Mon, ", "Tue, ", "Wed, ", "Thu, ", "Fri, ", "Sat, "
+    ];
+
+    const months: StaticArray<string> = [
+      " Jan ", " Feb ", " Mar ", " Apr ", " May ", " Jun ",
+      " Jul ", " Aug ", " Sep ", " Oct ", " Nov ", " Dec "
+    ];
+
+    var mo = this.month;
+    var da = this.day;
+    var yr = this.year;
+    var wd = dayOfWeek(yr, mo, da);
+    var year = abs(yr).toString().padStart(4, "0");
+    if (yr < 0) year = "-" + year;
+
+    return (
+      unchecked(weeks[wd]) +
+      da.toString().padStart(2, "0") +
+      unchecked(months[mo - 1]) +
+      year +
+      " " +
+      this.getUTCHours().toString().padStart(2, "0") +
+      ":" +
+      this.getUTCMinutes().toString().padStart(2, "0") +
+      ":" +
+      this.getUTCSeconds().toString().padStart(2, "0") +
+      " GMT"
+    );
+  }
+
   toDateString(): string {
     // TODO: use u64 static data instead 4 chars
     // also use stream itoa variants.
