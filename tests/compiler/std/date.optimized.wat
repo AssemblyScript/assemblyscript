@@ -2415,15 +2415,6 @@
   select
   i32.add
  )
- (func $~lib/date/Date#getUTCDay (param $0 i32) (result i32)
-  local.get $0
-  i32.load
-  local.get $0
-  i32.load offset=4
-  local.get $0
-  i32.load offset=8
-  call $~lib/date/dayOfWeek
- )
  (func $~lib/number/I32#toString (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -4962,7 +4953,7 @@
   (local $1 i64)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 24
+  i32.const 36
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
@@ -4975,6 +4966,12 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store offset=16
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store offset=24
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store offset=32
   block $folding-inner0
    i32.const 1970
    i32.const 1
@@ -5996,14 +5993,18 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    i64.const 1467763200000
    call $~lib/date/Date#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
+   local.tee $0
    i32.store offset=4
    local.get $0
-   call $~lib/date/Date#getUTCDay
+   i32.load
+   local.get $0
+   i32.load offset=4
+   local.get $0
+   i32.load offset=8
+   call $~lib/date/dayOfWeek
    i32.const 3
    i32.ne
    if
@@ -6014,14 +6015,18 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    i64.const 1467763199999
    call $~lib/date/Date#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.store offset=8
    local.get $0
-   i32.store offset=4
+   i32.load
    local.get $0
-   call $~lib/date/Date#getUTCDay
+   i32.load offset=4
+   local.get $0
+   i32.load offset=8
+   call $~lib/date/dayOfWeek
    i32.const 2
    i32.ne
    if
@@ -6032,14 +6037,18 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    i64.const 1467849599999
    call $~lib/date/Date#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.store offset=12
    local.get $0
-   i32.store offset=4
+   i32.load
    local.get $0
-   call $~lib/date/Date#getUTCDay
+   i32.load offset=4
+   local.get $0
+   i32.load offset=8
+   call $~lib/date/dayOfWeek
    i32.const 3
    i32.ne
    if
@@ -6050,14 +6059,18 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    i64.const 1467849600000
    call $~lib/date/Date#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.store offset=16
    local.get $0
-   i32.store offset=4
+   i32.load
    local.get $0
-   call $~lib/date/Date#getUTCDay
+   i32.load offset=4
+   local.get $0
+   i32.load offset=8
+   call $~lib/date/dayOfWeek
    i32.const 4
    i32.ne
    if
@@ -6068,14 +6081,18 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    i64.const 1468022400000
    call $~lib/date/Date#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.store offset=20
    local.get $0
-   i32.store offset=4
+   i32.load
    local.get $0
-   call $~lib/date/Date#getUTCDay
+   i32.load offset=4
+   local.get $0
+   i32.load offset=8
+   call $~lib/date/dayOfWeek
    i32.const 6
    i32.ne
    if
@@ -6086,14 +6103,18 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    i64.const 1468022399999
    call $~lib/date/Date#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.store offset=24
    local.get $0
-   i32.store offset=4
+   i32.load
    local.get $0
-   call $~lib/date/Date#getUTCDay
+   i32.load offset=4
+   local.get $0
+   i32.load offset=8
+   call $~lib/date/dayOfWeek
    i32.const 5
    i32.ne
    if
@@ -6104,14 +6125,18 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    i64.const 1468108799999
    call $~lib/date/Date#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.store
    local.get $0
-   i32.store offset=4
+   i32.load
    local.get $0
-   call $~lib/date/Date#getUTCDay
+   i32.load offset=4
+   local.get $0
+   i32.load offset=8
+   call $~lib/date/dayOfWeek
    i32.const 6
    i32.ne
    if
@@ -6122,14 +6147,18 @@
     call $~lib/builtins/abort
     unreachable
    end
+   global.get $~lib/memory/__stack_pointer
    i64.const 1468108800000
    call $~lib/date/Date#constructor
-   local.set $0
-   global.get $~lib/memory/__stack_pointer
-   local.get $0
+   local.tee $0
    i32.store offset=4
    local.get $0
-   call $~lib/date/Date#getUTCDay
+   i32.load
+   local.get $0
+   i32.load offset=4
+   local.get $0
+   i32.load offset=8
+   call $~lib/date/dayOfWeek
    if
     i32.const 0
     i32.const 1152
@@ -6142,7 +6171,7 @@
    i64.const 7899943856218720
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i32.load offset=4
    i32.const 4
@@ -6249,7 +6278,7 @@
    i64.const 7941202527925698
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i32.load
    i32.const 253616
@@ -6311,16 +6340,16 @@
    i64.const -62167219200000
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toISOString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 2160
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 2160
    call $~lib/string/String.__eq
@@ -6337,16 +6366,16 @@
    i64.const -62167219200001
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toISOString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 2240
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 2240
    call $~lib/string/String.__eq
@@ -6363,16 +6392,16 @@
    i64.const -62127219200000
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toISOString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 2320
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 2320
    call $~lib/string/String.__eq
@@ -6389,16 +6418,16 @@
    i64.const 1231231231020
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toISOString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 2400
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 2400
    call $~lib/string/String.__eq
@@ -6415,16 +6444,16 @@
    i64.const 1231231231456
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toISOString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 2480
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 2480
    call $~lib/string/String.__eq
@@ -6441,16 +6470,16 @@
    i64.const 322331231231020
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toISOString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 2560
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 2560
    call $~lib/string/String.__eq
@@ -6467,16 +6496,16 @@
    i64.const 253402300799999
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toISOString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 2640
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 2640
    call $~lib/string/String.__eq
@@ -6493,16 +6522,16 @@
    i64.const 253402300800000
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toISOString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 2720
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 2720
    call $~lib/string/String.__eq
@@ -6519,16 +6548,16 @@
    i64.const -62847038769226
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toISOString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 2800
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 2800
    call $~lib/string/String.__eq
@@ -6545,16 +6574,16 @@
    i64.const -61536067200000
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toDateString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 3648
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 3648
    call $~lib/string/String.__eq
@@ -6571,16 +6600,16 @@
    i64.const 1580601600000
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toDateString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 3712
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 3712
    call $~lib/string/String.__eq
@@ -6597,16 +6626,16 @@
    i64.const -62183116800000
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toDateString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 3776
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 3776
    call $~lib/string/String.__eq
@@ -6623,16 +6652,16 @@
    i64.const -61536067200000
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toTimeString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 3840
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 3840
    call $~lib/string/String.__eq
@@ -6649,16 +6678,16 @@
    i64.const 253402300799999
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toTimeString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 3888
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 3888
    call $~lib/string/String.__eq
@@ -6675,16 +6704,16 @@
    i64.const -61536067200000
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toUTCString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 4704
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 4704
    call $~lib/string/String.__eq
@@ -6701,16 +6730,16 @@
    i64.const 1580741613467
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toUTCString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 4784
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 4784
    call $~lib/string/String.__eq
@@ -6727,16 +6756,16 @@
    i64.const -62183116800000
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    call $~lib/date/Date#toUTCString
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 4864
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 4864
    call $~lib/string/String.__eq
@@ -6751,12 +6780,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 4944
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 4944
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 192067200000
@@ -6771,12 +6800,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5216
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5216
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 192067200000
@@ -6791,12 +6820,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5264
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5264
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 11860387200000
@@ -6811,12 +6840,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5312
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5312
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 192112496000
@@ -6831,12 +6860,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5376
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5376
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 192112496456
@@ -6851,12 +6880,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5456
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5456
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 192112496456
@@ -6871,12 +6900,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5536
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5536
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const -62167219200000
@@ -6891,12 +6920,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5568
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5568
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const -62135596800000
@@ -6911,12 +6940,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5600
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5600
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 189302400000
@@ -6931,12 +6960,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5632
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5632
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 191980800000
@@ -6951,12 +6980,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 4944
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 4944
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 192067200000
@@ -6971,12 +7000,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5680
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5680
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 192112440000
@@ -6991,12 +7020,12 @@
    end
    global.get $~lib/memory/__stack_pointer
    i32.const 5312
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5312
    call $~lib/date/Date.fromString
    local.tee $0
-   i32.store
+   i32.store offset=4
    local.get $0
    i64.load offset=16
    i64.const 192112496000
@@ -7013,12 +7042,12 @@
    i64.const -8640000000000000
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store
+   i32.store offset=4
    global.get $~lib/memory/__stack_pointer
    i64.const 8640000000000000
    call $~lib/date/Date#constructor
    local.tee $2
-   i32.store offset=12
+   i32.store
    local.get $0
    i64.load offset=16
    i64.const -8640000000000000
@@ -7120,10 +7149,10 @@
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5744
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 5744
    call $~lib/string/String.__eq
@@ -7141,10 +7170,10 @@
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5824
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 5824
    call $~lib/string/String.__eq
@@ -7166,7 +7195,7 @@
    i64.const -8639999999999999
    call $~lib/date/Date#constructor
    local.tee $0
-   i32.store offset=20
+   i32.store offset=12
    local.get $0
    i32.load
    i32.const -271821
@@ -7250,10 +7279,10 @@
    local.set $2
    global.get $~lib/memory/__stack_pointer
    local.get $2
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5904
-   i32.store offset=8
+   i32.store offset=32
    local.get $2
    i32.const 5904
    call $~lib/string/String.__eq
@@ -7271,10 +7300,10 @@
    local.set $0
    global.get $~lib/memory/__stack_pointer
    local.get $0
-   i32.store offset=4
+   i32.store offset=28
    global.get $~lib/memory/__stack_pointer
    i32.const 5984
-   i32.store offset=8
+   i32.store offset=32
    local.get $0
    i32.const 5984
    call $~lib/string/String.__eq
@@ -7288,7 +7317,7 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   i32.const 24
+   i32.const 36
    i32.add
    global.set $~lib/memory/__stack_pointer
    return

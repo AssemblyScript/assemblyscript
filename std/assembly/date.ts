@@ -99,7 +99,7 @@ export class Date {
     this.day = _day;
   }
 
-  getTime(): i64 {
+  @inline getTime(): i64 {
     return this.epochMillis;
   }
 
@@ -114,19 +114,19 @@ export class Date {
     return time;
   }
 
-  getUTCFullYear(): i32 {
+  @inline getUTCFullYear(): i32 {
     return this.year;
   }
 
-  getUTCMonth(): i32 {
+  @inline getUTCMonth(): i32 {
     return this.month - 1;
   }
 
-  getUTCDate(): i32 {
+  @inline getUTCDate(): i32 {
     return this.day;
   }
 
-  getUTCDay(): i32 {
+  @inline getUTCDay(): i32 {
     return dayOfWeek(this.year, this.month, this.day);
   }
 
