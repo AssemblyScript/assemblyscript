@@ -99,7 +99,7 @@ export class Date {
     this.day = _day;
   }
 
-  getTime(): i64 {
+  @inline getTime(): i64 {
     return this.epochMillis;
   }
 
@@ -114,19 +114,19 @@ export class Date {
     return time;
   }
 
-  getUTCFullYear(): i32 {
+  @inline getUTCFullYear(): i32 {
     return this.year;
   }
 
-  getUTCMonth(): i32 {
+  @inline getUTCMonth(): i32 {
     return this.month - 1;
   }
 
-  getUTCDate(): i32 {
+  @inline getUTCDate(): i32 {
     return this.day;
   }
 
-  getUTCDay(): i32 {
+  @inline getUTCDay(): i32 {
     return dayOfWeek(this.year, this.month, this.day);
   }
 
@@ -206,6 +206,38 @@ export class Date {
       "." +
       this.getUTCMilliseconds().toString().padStart(3, "0") +
       "Z"
+    );
+  }
+
+  toUTCString(): string {
+    const weeks: StaticArray<string> = [
+      "Sun, ", "Mon, ", "Tue, ", "Wed, ", "Thu, ", "Fri, ", "Sat, "
+    ];
+
+    const months: StaticArray<string> = [
+      " Jan ", " Feb ", " Mar ", " Apr ", " May ", " Jun ",
+      " Jul ", " Aug ", " Sep ", " Oct ", " Nov ", " Dec "
+    ];
+
+    var mo = this.month;
+    var da = this.day;
+    var yr = this.year;
+    var wd = dayOfWeek(yr, mo, da);
+    var year = abs(yr).toString().padStart(4, "0");
+    if (yr < 0) year = "-" + year;
+
+    return (
+      unchecked(weeks[wd]) +
+      da.toString().padStart(2, "0") +
+      unchecked(months[mo - 1]) +
+      year +
+      " " +
+      this.getUTCHours().toString().padStart(2, "0") +
+      ":" +
+      this.getUTCMinutes().toString().padStart(2, "0") +
+      ":" +
+      this.getUTCSeconds().toString().padStart(2, "0") +
+      " GMT"
     );
   }
 
