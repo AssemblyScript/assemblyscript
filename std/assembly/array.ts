@@ -6,14 +6,17 @@ import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, jo
 import { idof, isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
+// @ts-ignore: decorator
+@inline @lazy const MIN_CAPACITY = 8;
+
 /** Ensures that the given array has _at least_ the specified backing size. */
-function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
+function ensureSize(array: usize, minSize: usize, alignLog2: u32, growFactor: u32 = 0): void {
   // depends on the fact that Arrays mimic ArrayBufferView
   var oldCapacity = changetype<ArrayBufferView>(array).byteLength;
   if (minSize > <usize>oldCapacity >>> alignLog2) {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
-    let newCapacity = minSize << alignLog2;
+    let newCapacity = minSize << alignLog2 + growFactor;
     let newData = __renew(oldData, newCapacity);
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     if (newData !== oldData) { // oldData has been free'd
@@ -56,7 +59,8 @@ export class Array<T> {
 
   constructor(length: i32 = 0) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
-    var bufferSize = <usize>length << alignof<T>();
+    // reserve capacity for at least MIN_CAPACITY elements
+    var bufferSize = <usize>max(MIN_CAPACITY, length) << alignof<T>();
     var buffer = changetype<ArrayBuffer>(__new(bufferSize, idof<ArrayBuffer>()));
     memory.fill(changetype<usize>(buffer), 0, bufferSize);
     this.buffer = buffer; // links
@@ -106,7 +110,7 @@ export class Array<T> {
   @operator("[]=") private __set(index: i32, value: T): void {
     if (<u32>index >= <u32>this.length_) {
       if (index < 0) throw new RangeError(E_INDEXOUTOFRANGE);
-      ensureSize(changetype<usize>(this), index + 1, alignof<T>());
+      ensureSize(changetype<usize>(this), index + 1, alignof<T>(), 1);
       this.length_ = index + 1;
     }
     this.__uset(index, value);
@@ -204,7 +208,8 @@ export class Array<T> {
   push(value: T): i32 {
     var length = this.length_;
     var newLength = length + 1;
-    ensureSize(changetype<usize>(this), newLength, alignof<T>());
+    // growFactor == 1 means new capacity will increase by factor of 2
+    ensureSize(changetype<usize>(this), newLength, alignof<T>(), 1);
     if (isManaged<T>()) {
       store<usize>(this.dataStart + (<usize>length << alignof<T>()), changetype<usize>(value));
       __link(changetype<usize>(this), changetype<usize>(value), true);
