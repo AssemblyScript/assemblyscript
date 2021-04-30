@@ -1987,7 +1987,7 @@
    if
     i32.const 1344
     i32.const 1104
-    i32.const 108
+    i32.const 112
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -2011,7 +2011,7 @@
     if
      i32.const 1056
      i32.const 1104
-     i32.const 14
+     i32.const 17
      i32.const 48
      call $~lib/builtins/abort
      unreachable
@@ -2022,7 +2022,7 @@
     local.set $3
     block $__inlined_func$~lib/rt/itcms/__renew
      local.get $4
-     i32.const 2
+     i32.const 3
      i32.shl
      local.tee $10
      local.tee $5
@@ -2245,13 +2245,13 @@
   i32.const 0
   i32.store offset=12
   global.get $~lib/memory/__stack_pointer
-  i32.const 12
+  i32.const 32
   i32.const 0
   call $~lib/rt/itcms/__new
   local.tee $1
   i32.store offset=4
   local.get $1
-  i32.const 12
+  i32.const 32
   call $~lib/memory/memory.fill
   local.get $0
   local.get $1
@@ -2260,7 +2260,7 @@
   local.get $1
   i32.store offset=4
   local.get $0
-  i32.const 12
+  i32.const 32
   i32.store offset=8
   local.get $0
   i32.const 3
@@ -2395,7 +2395,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 92
+   i32.const 96
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -2415,7 +2415,7 @@
   if
    i32.const 1552
    i32.const 1104
-   i32.const 96
+   i32.const 100
    i32.const 40
    call $~lib/builtins/abort
    unreachable

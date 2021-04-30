@@ -2169,7 +2169,7 @@
    if
     i32.const 1616
     i32.const 1664
-    i32.const 14
+    i32.const 17
     i32.const 48
     call $~lib/builtins/abort
     unreachable
@@ -2180,7 +2180,7 @@
    local.set $0
    block $__inlined_func$~lib/rt/itcms/__renew
     local.get $1
-    i32.const 2
+    i32.const 3
     i32.shl
     local.tee $8
     local.tee $3
