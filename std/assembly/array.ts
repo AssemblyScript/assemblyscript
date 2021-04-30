@@ -9,14 +9,19 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_H
 // @ts-ignore: decorator
 @inline @lazy const MIN_CAPACITY = 8;
 
+// @ts-ignore: decorator
+@inline function nextPowerOf2<T extends number>(n: T): T {
+  return n == 0 ? MIN_CAPACITY as T : 1 << (32 - clz<T>(n - 1 as T)) as T;
+}
+
 /** Ensures that the given array has _at least_ the specified backing size. */
-function ensureSize(array: usize, minSize: usize, alignLog2: u32, growFactor: u32 = 0): void {
+function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
   // depends on the fact that Arrays mimic ArrayBufferView
   var oldCapacity = changetype<ArrayBufferView>(array).byteLength;
   if (minSize > <usize>oldCapacity >>> alignLog2) {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
-    let newCapacity = minSize << alignLog2 + growFactor;
+    let newCapacity = nextPowerOf2(minSize << alignLog2);
     let newData = __renew(oldData, newCapacity);
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     if (newData !== oldData) { // oldData has been free'd
@@ -110,7 +115,7 @@ export class Array<T> {
   @operator("[]=") private __set(index: i32, value: T): void {
     if (<u32>index >= <u32>this.length_) {
       if (index < 0) throw new RangeError(E_INDEXOUTOFRANGE);
-      ensureSize(changetype<usize>(this), index + 1, alignof<T>(), 1);
+      ensureSize(changetype<usize>(this), index + 1, alignof<T>());
       this.length_ = index + 1;
     }
     this.__uset(index, value);
@@ -209,7 +214,7 @@ export class Array<T> {
     var length = this.length_;
     var newLength = length + 1;
     // growFactor == 1 means new capacity will increase by factor of 2
-    ensureSize(changetype<usize>(this), newLength, alignof<T>(), 1);
+    ensureSize(changetype<usize>(this), newLength, alignof<T>());
     if (isManaged<T>()) {
       store<usize>(this.dataStart + (<usize>length << alignof<T>()), changetype<usize>(value));
       __link(changetype<usize>(this), changetype<usize>(value), true);

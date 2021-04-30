@@ -3074,7 +3074,7 @@
    if
     i32.const 4992
     i32.const 5040
-    i32.const 17
+    i32.const 22
     i32.const 48
     call $~lib/builtins/abort
     unreachable
@@ -3084,9 +3084,20 @@
    local.tee $8
    local.set $2
    block $__inlined_func$~lib/rt/itcms/__renew
+    i32.const 1
+    i32.const 32
     local.get $3
-    i32.const 3
+    i32.const 2
     i32.shl
+    local.tee $3
+    i32.const 1
+    i32.sub
+    i32.clz
+    i32.sub
+    i32.shl
+    i32.const 8
+    local.get $3
+    select
     local.tee $9
     local.tee $4
     local.get $8
@@ -7673,7 +7684,7 @@
   if
    i32.const 1392
    i32.const 5040
-   i32.const 96
+   i32.const 101
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -7693,7 +7704,7 @@
   if
    i32.const 5088
    i32.const 5040
-   i32.const 100
+   i32.const 105
    i32.const 40
    call $~lib/builtins/abort
    unreachable
