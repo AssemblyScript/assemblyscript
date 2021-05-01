@@ -3178,7 +3178,7 @@
    if
     i32.const 4448
     i32.const 4496
-    i32.const 22
+    i32.const 23
     i32.const 48
     call $~lib/wasi/index/abort
     unreachable
@@ -3189,18 +3189,19 @@
    local.tee $4
    i32.const 1
    i32.const 32
+   i32.const 8
    local.get $1
+   local.get $1
+   i32.const 8
+   i32.lt_u
+   select
    i32.const 2
    i32.shl
-   local.tee $1
    i32.const 1
    i32.sub
    i32.clz
    i32.sub
    i32.shl
-   i32.const 8
-   local.get $1
-   select
    local.tee $3
    call $~lib/rt/itcms/__renew
    local.tee $1
@@ -3242,7 +3243,7 @@
    if
     i32.const 4672
     i32.const 4496
-    i32.const 118
+    i32.const 119
     i32.const 22
     call $~lib/wasi/index/abort
     unreachable
@@ -4714,7 +4715,7 @@
   if
    i32.const 4448
    i32.const 4496
-   i32.const 67
+   i32.const 68
    i32.const 60
    call $~lib/wasi/index/abort
    unreachable
@@ -5076,7 +5077,7 @@
   if
    i32.const 4672
    i32.const 4496
-   i32.const 102
+   i32.const 103
    i32.const 42
    call $~lib/wasi/index/abort
    unreachable
@@ -5096,7 +5097,7 @@
   if
    i32.const 4912
    i32.const 4496
-   i32.const 106
+   i32.const 107
    i32.const 40
    call $~lib/wasi/index/abort
    unreachable

@@ -9,9 +9,10 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_H
 // @ts-ignore: decorator
 @inline @lazy const MIN_CAPACITY = 8;
 
+// NOTE: n should be greate than zero
 // @ts-ignore: decorator
 @inline function nextPowerOf2<T extends number>(n: T): T {
-  return n == 0 ? MIN_CAPACITY as T : 1 << (32 - clz<T>(n - 1 as T)) as T;
+  return 1 << (32 - clz<T>(n - 1 as T)) as T;
 }
 
 /** Ensures that the given array has _at least_ the specified backing size. */
@@ -22,7 +23,7 @@ function ensureCapacity(array: usize, minSize: usize, alignLog2: u32): void {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
     // find next power of two size. It usually grows old capacity by factor of two
-    let newCapacity = nextPowerOf2(minSize << alignLog2);
+    let newCapacity = nextPowerOf2<usize>(max<usize>(MIN_CAPACITY, minSize) << alignLog2);
     let newData = __renew(oldData, newCapacity);
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     if (newData !== oldData) { // oldData has been free'd
