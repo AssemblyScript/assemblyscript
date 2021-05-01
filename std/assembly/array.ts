@@ -25,7 +25,7 @@ function ensureCapacity(array: usize, minSize: usize, alignLog2: u32, canGrow: b
     let newCapacity = max<usize>(MIN_CAPACITY, minSize) << alignLog2;
     if (canGrow) {
       // Find next power of two size. It usually grows old capacity by factor of two.
-      // Make sure we don't reach BLOCK_MAXSIZE for new capacity after growing.
+      // Make sure we don't reach BLOCK_MAXSIZE for new growed capacity.
       newCapacity = min<usize>(nextPowerOf2(newCapacity), BLOCK_MAXSIZE);
       if (minSize > newCapacity >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     }
