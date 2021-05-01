@@ -7254,7 +7254,7 @@
   i32.const 1
   call $~lib/rt/itcms/__link
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -7354,7 +7354,7 @@
   local.get $0
   local.get $3
   i32.const 2
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   i32.const 1
   drop
   local.get $0
@@ -26997,7 +26997,7 @@
   if
    i32.const 240
    i32.const 14224
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -27022,7 +27022,7 @@
   if
    i32.const 14272
    i32.const 14224
-   i32.const 105
+   i32.const 106
    i32.const 40
    call $~lib/builtins/abort
    unreachable

@@ -3737,7 +3737,7 @@
   call $~lib/memory/memory.copy
   local.get $3
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3837,7 +3837,7 @@
   local.get $0
   local.get $3
   i32.const 2
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   i32.const 1
   drop
   local.get $0

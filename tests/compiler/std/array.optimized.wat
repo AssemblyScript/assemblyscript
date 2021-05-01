@@ -2711,7 +2711,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -2849,7 +2849,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -2907,7 +2907,7 @@
   end
   i32.const 1
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3028,7 +3028,7 @@
   i32.add
   local.tee $2
   i32.const 2
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.get $3
@@ -3050,7 +3050,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3111,7 +3111,7 @@
   local.get $0
   local.get $1
   i32.const 2
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   local.get $0
   local.get $1
   i32.store offset=12
@@ -3134,7 +3134,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 134
+   i32.const 135
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -3308,7 +3308,7 @@
   i32.add
   local.tee $2
   i32.const 2
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.tee $3
@@ -3476,7 +3476,7 @@
    if
     i32.const 1344
     i32.const 1104
-    i32.const 117
+    i32.const 118
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -3487,7 +3487,7 @@
    i32.add
    local.tee $3
    i32.const 2
-   call $~lib/array/ensureSize
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $3
    i32.store offset=12
@@ -3908,7 +3908,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -5045,7 +5045,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -5913,7 +5913,7 @@
    if
     i32.const 1344
     i32.const 1104
-    i32.const 117
+    i32.const 118
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -5924,7 +5924,7 @@
    i32.add
    local.tee $3
    i32.const 2
-   call $~lib/array/ensureSize
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $3
    i32.store offset=12
@@ -7951,7 +7951,7 @@
   i32.add
   local.tee $2
   i32.const 0
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   local.get $3
   local.get $0
   i32.load offset=4
@@ -8440,7 +8440,7 @@
   i32.add
   local.tee $2
   i32.const 2
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.get $3
@@ -8528,7 +8528,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 66
+   i32.const 67
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -8645,7 +8645,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 66
+   i32.const 67
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -18577,7 +18577,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 66
+   i32.const 67
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -19106,7 +19106,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -19126,7 +19126,7 @@
   if
    i32.const 5696
    i32.const 1104
-   i32.const 105
+   i32.const 106
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -19245,7 +19245,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -19635,7 +19635,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 66
+   i32.const 67
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -22499,7 +22499,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 134
+   i32.const 135
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -23406,7 +23406,7 @@
   local.get $0
   local.get $1
   i32.const 0
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   local.get $0
   local.get $1
   i32.store offset=12
@@ -23570,7 +23570,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 134
+   i32.const 135
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -24204,7 +24204,7 @@
   i32.add
   local.tee $2
   i32.const 0
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.tee $3
@@ -24801,7 +24801,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 134
+   i32.const 135
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -24821,7 +24821,7 @@
   if
    i32.const 5696
    i32.const 1104
-   i32.const 138
+   i32.const 139
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -25564,7 +25564,7 @@
   i32.add
   local.tee $2
   i32.const 2
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   local.get $0
   i32.load offset=4
   local.tee $3

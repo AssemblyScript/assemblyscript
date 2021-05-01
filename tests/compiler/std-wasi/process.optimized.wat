@@ -3160,7 +3160,7 @@
   call $~lib/memory/memory.copy
   local.get $3
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3242,7 +3242,7 @@
    if
     i32.const 4672
     i32.const 4496
-    i32.const 117
+    i32.const 118
     i32.const 22
     call $~lib/wasi/index/abort
     unreachable
@@ -3252,7 +3252,7 @@
    i32.const 1
    i32.add
    local.tee $3
-   call $~lib/array/ensureSize
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $3
    i32.store offset=12
@@ -4421,7 +4421,7 @@
   end
   local.get $2
   local.get $0
-  call $~lib/array/ensureSize
+  call $~lib/array/ensureCapacity
   local.get $2
   local.get $0
   i32.store offset=12
@@ -4714,7 +4714,7 @@
   if
    i32.const 4448
    i32.const 4496
-   i32.const 66
+   i32.const 67
    i32.const 60
    call $~lib/wasi/index/abort
    unreachable
@@ -5076,7 +5076,7 @@
   if
    i32.const 4672
    i32.const 4496
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/wasi/index/abort
    unreachable
@@ -5096,7 +5096,7 @@
   if
    i32.const 4912
    i32.const 4496
-   i32.const 105
+   i32.const 106
    i32.const 40
    call $~lib/wasi/index/abort
    unreachable

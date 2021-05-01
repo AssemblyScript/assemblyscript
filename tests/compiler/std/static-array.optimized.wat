@@ -68,7 +68,7 @@
   if
    i32.const 1472
    i32.const 1536
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -1937,7 +1937,7 @@
    end
   end
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2104,7 +2104,7 @@
   if
    i32.const 1472
    i32.const 1536
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -2125,7 +2125,7 @@
   if
    i32.const 1472
    i32.const 1536
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -2146,7 +2146,7 @@
   if
    i32.const 1472
    i32.const 1536
-   i32.const 101
+   i32.const 102
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -2283,7 +2283,7 @@
   if
    i32.const 1088
    i32.const 2
-   call $~lib/array/ensureSize
+   call $~lib/array/ensureCapacity
    i32.const 1100
    i32.const 1
    i32.store
@@ -2361,7 +2361,7 @@
   if
    i32.const 1184
    i32.const 3
-   call $~lib/array/ensureSize
+   call $~lib/array/ensureCapacity
    i32.const 1196
    i32.const 1
    i32.store
@@ -2439,7 +2439,7 @@
   if
    i32.const 1264
    i32.const 2
-   call $~lib/array/ensureSize
+   call $~lib/array/ensureCapacity
    i32.const 1276
    i32.const 1
    i32.store
@@ -2517,7 +2517,7 @@
   if
    i32.const 1360
    i32.const 3
-   call $~lib/array/ensureSize
+   call $~lib/array/ensureCapacity
    i32.const 1372
    i32.const 1
    i32.store
