@@ -16,14 +16,19 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_H
 }
 
 /** Ensures that the given array has _at least_ the specified backing size. */
-function ensureCapacity(array: usize, minSize: usize, alignLog2: u32): void {
-  // depends on the fact that Arrays mimic ArrayBufferView
+function ensureCapacity(array: usize, minSize: usize, alignLog2: u32, canGrow: bool = true): void {
+  // Depends on the fact that Arrays mimic ArrayBufferView
   var oldCapacity = changetype<ArrayBufferView>(array).byteLength;
   if (minSize > <usize>oldCapacity >>> alignLog2) {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
-    // find next power of two size. It usually grows old capacity by factor of two
-    let newCapacity = nextPowerOf2<usize>(max<usize>(MIN_CAPACITY, minSize) << alignLog2);
+    let newCapacity = max<usize>(MIN_CAPACITY, minSize) << alignLog2;
+    if (canGrow) {
+      // Find next power of two size. It usually grows old capacity by factor of two.
+      // Make sure we don't reach BLOCK_MAXSIZE for new capacity after growing.
+      newCapacity = min<usize>(nextPowerOf2(newCapacity), BLOCK_MAXSIZE);
+      if (minSize > newCapacity >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
+    }
     let newData = __renew(oldData, newCapacity);
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     if (newData !== oldData) { // oldData has been free'd
@@ -81,7 +86,7 @@ export class Array<T> {
   }
 
   set length(newLength: i32) {
-    ensureCapacity(changetype<usize>(this), newLength, alignof<T>());
+    ensureCapacity(changetype<usize>(this), newLength, alignof<T>(), false);
     this.length_ = newLength;
   }
 

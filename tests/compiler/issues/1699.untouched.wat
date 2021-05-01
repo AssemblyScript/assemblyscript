@@ -3742,16 +3742,17 @@
   call $~lib/memory/memory.copy
   local.get $3
  )
- (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   local.get $0
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $1
-  local.get $3
+  local.get $4
   local.get $2
   i32.shr_u
   i32.gt_u
@@ -3771,51 +3772,76 @@
    end
    local.get $0
    i32.load
-   local.set $4
+   local.set $5
    i32.const 8
-   local.tee $5
-   local.get $1
    local.tee $6
-   local.get $5
+   local.get $1
+   local.tee $7
    local.get $6
+   local.get $7
    i32.gt_u
    select
    local.get $2
    i32.shl
    local.set $6
-   i32.const 1
-   i32.const 32
-   local.get $6
-   i32.const 1
-   i32.sub
-   i32.clz
-   i32.sub
-   i32.shl
-   local.set $6
-   local.get $4
+   local.get $3
+   if
+    local.get $6
+    local.set $7
+    i32.const 1
+    i32.const 32
+    local.get $7
+    i32.const 1
+    i32.sub
+    i32.clz
+    i32.sub
+    i32.shl
+    local.tee $7
+    i32.const 1073741820
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.lt_u
+    select
+    local.set $6
+    local.get $1
+    local.get $6
+    local.get $2
+    i32.shr_u
+    i32.gt_u
+    if
+     i32.const 32
+     i32.const 80
+     i32.const 30
+     i32.const 48
+     call $~lib/builtins/abort
+     unreachable
+    end
+   end
+   local.get $5
    local.get $6
    call $~lib/rt/itcms/__renew
-   local.set $5
-   local.get $5
-   local.get $3
+   local.set $7
+   local.get $7
+   local.get $4
    i32.add
    i32.const 0
    local.get $6
-   local.get $3
+   local.get $4
    i32.sub
    call $~lib/memory/memory.fill
+   local.get $7
    local.get $5
-   local.get $4
    i32.ne
    if
     local.get $0
-    local.get $5
+    local.get $7
     i32.store
     local.get $0
-    local.get $5
+    local.get $7
     i32.store offset=4
     local.get $0
-    local.get $5
+    local.get $7
     i32.const 0
     call $~lib/rt/itcms/__link
    end
@@ -3852,7 +3878,7 @@
    if
     i32.const 320
     i32.const 80
-    i32.const 119
+    i32.const 124
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -3862,6 +3888,7 @@
    i32.const 1
    i32.add
    i32.const 2
+   i32.const 1
    call $~lib/array/ensureCapacity
    local.get $0
    local.get $1
@@ -4179,7 +4206,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 68
+   i32.const 73
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -4274,7 +4301,7 @@
   if
    i32.const 320
    i32.const 80
-   i32.const 103
+   i32.const 108
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4299,7 +4326,7 @@
   if
    i32.const 528
    i32.const 80
-   i32.const 107
+   i32.const 112
    i32.const 40
    call $~lib/builtins/abort
    unreachable
