@@ -7316,19 +7316,6 @@
     i32.lt_u
     select
     local.set $6
-    local.get $1
-    local.get $6
-    local.get $2
-    i32.shr_u
-    i32.gt_u
-    if
-     i32.const 12624
-     i32.const 14224
-     i32.const 30
-     i32.const 48
-     call $~lib/builtins/abort
-     unreachable
-    end
    end
    local.get $5
    local.get $6
@@ -27024,7 +27011,7 @@
   if
    i32.const 240
    i32.const 14224
-   i32.const 108
+   i32.const 107
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -27049,7 +27036,7 @@
   if
    i32.const 14272
    i32.const 14224
-   i32.const 112
+   i32.const 111
    i32.const 40
    call $~lib/builtins/abort
    unreachable

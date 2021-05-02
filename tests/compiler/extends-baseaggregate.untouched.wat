@@ -3799,19 +3799,6 @@
     i32.lt_u
     select
     local.set $6
-    local.get $1
-    local.get $6
-    local.get $2
-    i32.shr_u
-    i32.gt_u
-    if
-     i32.const 592
-     i32.const 640
-     i32.const 30
-     i32.const 48
-     call $~lib/builtins/abort
-     unreachable
-    end
    end
    local.get $5
    local.get $6

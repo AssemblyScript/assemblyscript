@@ -9,7 +9,7 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_H
 // @ts-ignore: decorator
 @inline @lazy const MIN_CAPACITY = 8;
 
-// NOTE: n should be greater than one
+// NOTE: n should fix in range (1; 1 << 31]
 // @ts-ignore: decorator
 @inline function nextPowerOf2(n: usize): usize {
   return 1 << 32 - clz(n - 1);
@@ -27,7 +27,6 @@ function ensureCapacity(array: usize, minSize: usize, alignLog2: u32, canGrow: b
       // Find next power of two size. It usually grows old capacity by factor of two.
       // Make sure we don't reach BLOCK_MAXSIZE for new growed capacity.
       newCapacity = min<usize>(nextPowerOf2(newCapacity), BLOCK_MAXSIZE);
-      if (minSize > newCapacity >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     }
     let newData = __renew(oldData, newCapacity);
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
