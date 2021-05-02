@@ -9,7 +9,7 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_H
 // @ts-ignore: decorator
 @inline @lazy const MIN_CAPACITY = 8;
 
-// NOTE: n should be greater than zero
+// NOTE: n should be greater than one
 // @ts-ignore: decorator
 @inline function nextPowerOf2(n: usize): usize {
   return 1 << 32 - clz(n - 1);
