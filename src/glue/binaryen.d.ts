@@ -769,6 +769,9 @@ export declare function _BinaryenSIMDLoadSetAlign(expr: BinaryenExpressionRef, a
 export declare function _BinaryenSIMDLoadGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenSIMDLoadSetPtr(expr: BinaryenExpressionRef, ptrExpr: BinaryenExpressionRef): void;
 
+export declare function _BinaryenSIMDLoadStoreLane(module: BinaryenModuleRef, op: BinaryenOp, offset: u32, align: u32, index: u8, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef): BinaryenExpressionRef;
+// TODO: getters and setters
+
 export declare function _BinaryenMemoryInit(module: BinaryenModuleRef, segmentIndex: u32, destExpr: BinaryenExpressionRef, offsetExpr: BinaryenExpressionRef, sizeExpr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenMemoryInitGetSegment(expr: BinaryenExpressionRef): u32;
 export declare function _BinaryenMemoryInitSetSegment(expr: BinaryenExpressionRef, segmentIndex: u32): void;
