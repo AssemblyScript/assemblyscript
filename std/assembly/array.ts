@@ -11,15 +11,15 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_H
 
 // NOTE: n should be greater than zero
 // @ts-ignore: decorator
-@inline function nextPowerOf2<T extends number>(n: T): T {
-  return 1 << (32 - clz<T>(n - 1 as T)) as T;
+@inline function nextPowerOf2(n: usize): usize {
+  return 1 << 32 - clz(n - 1);
 }
 
 /** Ensures that the given array has _at least_ the specified backing size. */
 function ensureCapacity(array: usize, minSize: usize, alignLog2: u32, canGrow: bool = true): void {
   // Depends on the fact that Arrays mimic ArrayBufferView
-  var oldCapacity = changetype<ArrayBufferView>(array).byteLength;
-  if (minSize > <usize>oldCapacity >>> alignLog2) {
+  var oldCapacity = <usize>changetype<ArrayBufferView>(array).byteLength;
+  if (minSize > oldCapacity >>> alignLog2) {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
     let newCapacity = max<usize>(MIN_CAPACITY, minSize) << alignLog2;
@@ -36,7 +36,7 @@ function ensureCapacity(array: usize, minSize: usize, alignLog2: u32, canGrow: b
       store<usize>(array, newData, offsetof<ArrayBufferView>("dataStart"));
       __link(array, changetype<usize>(newData), false);
     }
-    store<u32>(array, newCapacity, offsetof<ArrayBufferView>("byteLength"));
+    store<u32>(array, <u32>newCapacity, offsetof<ArrayBufferView>("byteLength"));
   }
 }
 
