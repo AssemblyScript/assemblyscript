@@ -4193,9 +4193,9 @@
    local.get $0
    i32.load
    local.set $5
-   i32.const 8
-   local.tee $6
    local.get $1
+   local.tee $6
+   i32.const 8
    local.tee $7
    local.get $6
    local.get $7
@@ -14292,9 +14292,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  local.tee $2
   local.get $1
+  local.tee $2
+  i32.const 8
   local.tee $3
   local.get $2
   local.get $3
@@ -14520,9 +14520,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  local.tee $2
   local.get $1
+  local.tee $2
+  i32.const 8
   local.tee $3
   local.get $2
   local.get $3
@@ -14748,9 +14748,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  local.tee $2
   local.get $1
+  local.tee $2
+  i32.const 8
   local.tee $3
   local.get $2
   local.get $3
@@ -14976,9 +14976,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  local.tee $2
   local.get $1
+  local.tee $2
+  i32.const 8
   local.tee $3
   local.get $2
   local.get $3
@@ -15204,9 +15204,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  local.tee $2
   local.get $1
+  local.tee $2
+  i32.const 8
   local.tee $3
   local.get $2
   local.get $3
@@ -15432,9 +15432,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  local.tee $2
   local.get $1
+  local.tee $2
+  i32.const 8
   local.tee $3
   local.get $2
   local.get $3
@@ -15660,9 +15660,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  local.tee $2
   local.get $1
+  local.tee $2
+  i32.const 8
   local.tee $3
   local.get $2
   local.get $3
@@ -15888,9 +15888,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  local.tee $2
   local.get $1
+  local.tee $2
+  i32.const 8
   local.tee $3
   local.get $2
   local.get $3
@@ -16116,9 +16116,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  local.tee $2
   local.get $1
+  local.tee $2
+  i32.const 8
   local.tee $3
   local.get $2
   local.get $3
@@ -16344,9 +16344,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
-  local.tee $2
   local.get $1
+  local.tee $2
+  i32.const 8
   local.tee $3
   local.get $2
   local.get $3

@@ -2180,11 +2180,11 @@
    block $__inlined_func$~lib/rt/itcms/__renew
     i32.const 1
     i32.const 32
-    i32.const 8
-    local.get $1
     local.get $1
     i32.const 8
-    i32.lt_u
+    local.get $1
+    i32.const 8
+    i32.gt_u
     select
     i32.const 2
     i32.shl

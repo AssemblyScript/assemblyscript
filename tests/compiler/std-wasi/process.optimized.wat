@@ -3182,11 +3182,11 @@
     call $~lib/wasi/index/abort
     unreachable
    end
-   i32.const 8
-   local.get $1
    local.get $1
    i32.const 8
-   i32.lt_u
+   local.get $1
+   i32.const 8
+   i32.gt_u
    select
    i32.const 2
    i32.shl
@@ -4734,11 +4734,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $0
   local.get $0
   i32.const 8
-  i32.lt_s
+  local.get $0
+  i32.const 8
+  i32.gt_s
   select
   i32.const 2
   i32.shl

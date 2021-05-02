@@ -22,7 +22,7 @@ function ensureCapacity(array: usize, minSize: usize, alignLog2: u32, canGrow: b
   if (minSize > oldCapacity >>> alignLog2) {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
-    let newCapacity = max<usize>(MIN_CAPACITY, minSize) << alignLog2;
+    let newCapacity = max<usize>(minSize, MIN_CAPACITY) << alignLog2;
     if (canGrow) {
       // Find next power of two size. It usually grows old capacity by factor of two.
       // Make sure we don't reach BLOCK_MAXSIZE for new growed capacity.
@@ -71,7 +71,7 @@ export class Array<T> {
   constructor(length: i32 = 0) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     // reserve capacity for at least MIN_CAPACITY elements
-    var bufferSize = <usize>max(MIN_CAPACITY, length) << alignof<T>();
+    var bufferSize = <usize>max(length, MIN_CAPACITY) << alignof<T>();
     var buffer = changetype<ArrayBuffer>(__new(bufferSize, idof<ArrayBuffer>()));
     memory.fill(changetype<usize>(buffer), 0, bufferSize);
     this.buffer = buffer; // links
@@ -496,7 +496,7 @@ export class Array<T> {
     }
 
     // calculate the byteLength of the resulting backing ArrayBuffer
-    var byteLength = <usize>size << usize(alignof<valueof<T>>());
+    var byteLength = <usize>max(size, MIN_CAPACITY) << usize(alignof<valueof<T>>());
     var outBuffer = changetype<ArrayBuffer>(__new(byteLength, idof<ArrayBuffer>()));
 
     // create the return value and initialize it

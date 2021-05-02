@@ -2286,11 +2286,11 @@
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 8
-   local.get $1
    local.get $1
    i32.const 8
-   i32.lt_u
+   local.get $1
+   i32.const 8
+   i32.gt_u
    select
    local.get $2
    i32.shl
@@ -2723,11 +2723,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $4
   local.get $4
   i32.const 8
-  i32.lt_s
+  local.get $4
+  i32.const 8
+  i32.gt_s
   select
   local.tee $7
   i32.const 0
@@ -3492,11 +3492,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $4
   local.get $4
   i32.const 8
-  i32.lt_s
+  local.get $4
+  i32.const 8
+  i32.gt_s
   select
   local.tee $7
   i32.const 0
@@ -4357,11 +4357,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $4
   local.get $4
   i32.const 8
-  i32.lt_s
+  local.get $4
+  i32.const 8
+  i32.gt_s
   select
   i32.const 1
   i32.shl
@@ -5130,11 +5130,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $4
   local.get $4
   i32.const 8
-  i32.lt_s
+  local.get $4
+  i32.const 8
+  i32.gt_s
   select
   i32.const 1
   i32.shl
@@ -5983,11 +5983,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $4
   local.get $4
   i32.const 8
-  i32.lt_s
+  local.get $4
+  i32.const 8
+  i32.gt_s
   select
   i32.const 2
   i32.shl
@@ -6753,11 +6753,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $4
   local.get $4
   i32.const 8
-  i32.lt_s
+  local.get $4
+  i32.const 8
+  i32.gt_s
   select
   i32.const 2
   i32.shl
@@ -7640,11 +7640,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $4
   local.get $4
   i32.const 8
-  i32.lt_s
+  local.get $4
+  i32.const 8
+  i32.gt_s
   select
   i32.const 3
   i32.shl
@@ -8413,11 +8413,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $4
   local.get $4
   i32.const 8
-  i32.lt_s
+  local.get $4
+  i32.const 8
+  i32.gt_s
   select
   i32.const 3
   i32.shl
@@ -9218,11 +9218,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $4
   local.get $4
   i32.const 8
-  i32.lt_s
+  local.get $4
+  i32.const 8
+  i32.gt_s
   select
   i32.const 2
   i32.shl
@@ -10071,11 +10071,11 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
-  local.get $4
   local.get $4
   i32.const 8
-  i32.lt_s
+  local.get $4
+  i32.const 8
+  i32.gt_s
   select
   i32.const 3
   i32.shl
