@@ -7,6 +7,7 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i64_i64_=>_none (func (param i32 i64 i64)))
@@ -14,7 +15,6 @@
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
  (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (type $i32_f32_=>_none (func (param i32 f32)))
  (type $i32_f32_i32_=>_none (func (param i32 f32 i32)))
@@ -2212,16 +2212,14 @@
    end
   end
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $1
   local.get $0
   i32.load offset=8
-  local.tee $5
+  local.tee $4
   local.get $2
   i32.shr_u
   i32.gt_u
@@ -2234,25 +2232,52 @@
    if
     i32.const 1456
     i32.const 1728
-    i32.const 14
+    i32.const 17
     i32.const 48
     call $~lib/builtins/abort
     unreachable
    end
+   local.get $1
+   i32.const 8
+   local.get $1
+   i32.const 8
+   i32.gt_u
+   select
+   local.get $2
+   i32.shl
+   local.set $1
+   local.get $4
+   local.set $5
    local.get $0
    i32.load
    local.tee $6
-   local.set $3
+   local.set $4
    block $__inlined_func$~lib/rt/itcms/__renew
-    local.get $1
-    local.get $2
-    i32.shl
-    local.tee $7
-    local.tee $4
-    local.get $6
+    local.get $3
+    if (result i32)
+     local.get $5
+     i32.const 1
+     i32.shl
+     local.tee $2
+     i32.const 1073741820
+     local.get $2
+     i32.const 1073741820
+     i32.lt_u
+     select
+     local.tee $2
+     local.get $1
+     local.get $1
+     local.get $2
+     i32.lt_u
+     select
+    else
+     local.get $1
+    end
+    local.tee $2
+    local.get $4
     i32.const 20
     i32.sub
-    local.tee $2
+    local.tee $3
     i32.load
     i32.const -4
     i32.and
@@ -2260,33 +2285,33 @@
     i32.sub
     i32.le_u
     if
-     local.get $2
-     local.get $4
-     i32.store offset=16
      local.get $3
+     local.get $2
+     i32.store offset=16
+     local.get $4
      local.set $1
      br $__inlined_func$~lib/rt/itcms/__renew
     end
-    local.get $4
     local.get $2
+    local.get $3
     i32.load offset=12
     call $~lib/rt/itcms/__new
     local.tee $1
+    local.get $4
+    local.get $2
     local.get $3
-    local.get $4
-    local.get $2
     i32.load offset=16
-    local.tee $2
+    local.tee $3
     local.get $2
-    local.get $4
-    i32.gt_u
+    local.get $3
+    i32.lt_u
     select
     call $~lib/memory/memory.copy
    end
    local.get $1
    local.get $5
    i32.add
-   local.get $7
+   local.get $2
    local.get $5
    i32.sub
    call $~lib/memory/memory.fill
@@ -2305,7 +2330,7 @@
     call $~lib/rt/itcms/__link
    end
    local.get $0
-   local.get $7
+   local.get $2
    i32.store offset=8
   end
  )
@@ -2322,7 +2347,7 @@
    if
     i32.const 1248
     i32.const 1728
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -2333,7 +2358,8 @@
    i32.add
    local.tee $3
    i32.const 0
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $3
    i32.store offset=12
@@ -2349,7 +2375,8 @@
   local.get $0
   local.get $1
   i32.const 0
-  call $~lib/array/ensureSize
+  i32.const 0
+  call $~lib/array/ensureCapacity
   local.get $0
   local.get $1
   i32.store offset=12
@@ -2367,7 +2394,7 @@
    if
     i32.const 1248
     i32.const 1728
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -2378,7 +2405,8 @@
    i32.add
    local.tee $3
    i32.const 2
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $3
    i32.store offset=12
@@ -2396,7 +2424,8 @@
   local.get $0
   local.get $1
   i32.const 2
-  call $~lib/array/ensureSize
+  i32.const 0
+  call $~lib/array/ensureCapacity
   local.get $0
   local.get $1
   i32.store offset=12
@@ -2409,7 +2438,7 @@
   if
    i32.const 1248
    i32.const 1728
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -2819,6 +2848,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -3067,7 +3097,7 @@
   i32.store
   local.get $1
   i32.load offset=8
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.load offset=16
@@ -3104,19 +3134,25 @@
   if
    i32.const 1456
    i32.const 1728
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $4
+  i32.const 8
+  local.get $4
+  i32.const 8
+  i32.gt_s
+  select
+  local.tee $7
   i32.const 0
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
   local.get $5
-  local.get $4
+  local.get $7
   call $~lib/memory/memory.fill
   local.get $2
   local.get $5
@@ -3125,7 +3161,7 @@
   local.get $5
   i32.store offset=4
   local.get $2
-  local.get $4
+  local.get $7
   i32.store offset=8
   local.get $2
   local.get $4
@@ -3141,7 +3177,7 @@
    local.get $6
    i32.gt_s
    if
-    local.get $8
+    local.get $9
     local.get $6
     i32.const 12
     i32.mul
@@ -3241,7 +3277,7 @@
     if
      i32.const 1248
      i32.const 1728
-     i32.const 92
+     i32.const 99
      i32.const 42
      call $~lib/builtins/abort
      unreachable
@@ -3857,6 +3893,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -4091,7 +4128,7 @@
   i32.store
   local.get $1
   i32.load offset=8
-  local.set $8
+  local.set $9
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.load offset=16
@@ -4128,19 +4165,25 @@
   if
    i32.const 1456
    i32.const 1728
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $4
+  i32.const 8
+  local.get $4
+  i32.const 8
+  i32.gt_s
+  select
+  local.tee $7
   i32.const 0
   call $~lib/rt/itcms/__new
   local.tee $5
   i32.store offset=4
   local.get $5
-  local.get $4
+  local.get $7
   call $~lib/memory/memory.fill
   local.get $2
   local.get $5
@@ -4149,7 +4192,7 @@
   local.get $5
   i32.store offset=4
   local.get $2
-  local.get $4
+  local.get $7
   i32.store offset=8
   local.get $2
   local.get $4
@@ -4165,7 +4208,7 @@
    local.get $6
    i32.gt_s
    if
-    local.get $8
+    local.get $9
     local.get $6
     i32.const 12
     i32.mul
@@ -4265,7 +4308,7 @@
     if
      i32.const 1248
      i32.const 1728
-     i32.const 92
+     i32.const 99
      i32.const 42
      call $~lib/builtins/abort
      unreachable
@@ -4744,7 +4787,7 @@
    if
     i32.const 1248
     i32.const 1728
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -4755,7 +4798,8 @@
    i32.add
    local.tee $3
    i32.const 1
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $3
    i32.store offset=12
@@ -4773,7 +4817,8 @@
   local.get $0
   local.get $1
   i32.const 1
-  call $~lib/array/ensureSize
+  i32.const 0
+  call $~lib/array/ensureCapacity
   local.get $0
   local.get $1
   i32.store offset=12
@@ -5251,13 +5296,18 @@
   if
    i32.const 1456
    i32.const 1728
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $4
+  i32.const 8
+  local.get $4
+  i32.const 8
+  i32.gt_s
+  select
   i32.const 1
   i32.shl
   local.tee $7
@@ -5391,7 +5441,7 @@
     if
      i32.const 1248
      i32.const 1728
-     i32.const 92
+     i32.const 99
      i32.const 42
      call $~lib/builtins/abort
      unreachable
@@ -6281,13 +6331,18 @@
   if
    i32.const 1456
    i32.const 1728
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $4
+  i32.const 8
+  local.get $4
+  i32.const 8
+  i32.gt_s
+  select
   i32.const 1
   i32.shl
   local.tee $7
@@ -6421,7 +6476,7 @@
     if
      i32.const 1248
      i32.const 1728
-     i32.const 92
+     i32.const 99
      i32.const 42
      call $~lib/builtins/abort
      unreachable
@@ -7876,13 +7931,18 @@
   if
    i32.const 1456
    i32.const 1728
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $4
+  i32.const 8
+  local.get $4
+  i32.const 8
+  i32.gt_s
+  select
   i32.const 2
   i32.shl
   local.tee $7
@@ -8016,7 +8076,7 @@
     if
      i32.const 1248
      i32.const 1728
-     i32.const 92
+     i32.const 99
      i32.const 42
      call $~lib/builtins/abort
      unreachable
@@ -8497,7 +8557,7 @@
    if
     i32.const 1248
     i32.const 1728
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -8508,7 +8568,8 @@
    i32.add
    local.tee $3
    i32.const 3
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $3
    i32.store offset=12
@@ -8526,7 +8587,8 @@
   local.get $0
   local.get $1
   i32.const 3
-  call $~lib/array/ensureSize
+  i32.const 0
+  call $~lib/array/ensureCapacity
   local.get $0
   local.get $1
   i32.store offset=12
@@ -9006,13 +9068,18 @@
   if
    i32.const 1456
    i32.const 1728
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $4
+  i32.const 8
+  local.get $4
+  i32.const 8
+  i32.gt_s
+  select
   i32.const 3
   i32.shl
   local.tee $8
@@ -9146,7 +9213,7 @@
     if
      i32.const 1248
      i32.const 1728
-     i32.const 92
+     i32.const 99
      i32.const 42
      call $~lib/builtins/abort
      unreachable
@@ -10027,13 +10094,18 @@
   if
    i32.const 1456
    i32.const 1728
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $4
+  i32.const 8
+  local.get $4
+  i32.const 8
+  i32.gt_s
+  select
   i32.const 3
   i32.shl
   local.tee $8
@@ -10167,7 +10239,7 @@
     if
      i32.const 1248
      i32.const 1728
-     i32.const 92
+     i32.const 99
      i32.const 42
      call $~lib/builtins/abort
      unreachable
@@ -11080,13 +11152,18 @@
   if
    i32.const 1456
    i32.const 1728
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $5
+  i32.const 8
+  local.get $5
+  i32.const 8
+  i32.gt_s
+  select
   i32.const 2
   i32.shl
   local.tee $8
@@ -11145,7 +11222,7 @@
       if
        i32.const 1248
        i32.const 1728
-       i32.const 108
+       i32.const 115
        i32.const 22
        call $~lib/builtins/abort
        unreachable
@@ -11156,7 +11233,8 @@
       i32.add
       local.tee $4
       i32.const 2
-      call $~lib/array/ensureSize
+      i32.const 1
+      call $~lib/array/ensureCapacity
       local.get $3
       local.get $4
       i32.store offset=12
@@ -11253,7 +11331,7 @@
     if
      i32.const 1248
      i32.const 1728
-     i32.const 92
+     i32.const 99
      i32.const 42
      call $~lib/builtins/abort
      unreachable
@@ -12180,13 +12258,18 @@
   if
    i32.const 1456
    i32.const 1728
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $5
+  i32.const 8
+  local.get $5
+  i32.const 8
+  i32.gt_s
+  select
   i32.const 3
   i32.shl
   local.tee $8
@@ -12245,7 +12328,7 @@
       if
        i32.const 1248
        i32.const 1728
-       i32.const 108
+       i32.const 115
        i32.const 22
        call $~lib/builtins/abort
        unreachable
@@ -12256,7 +12339,8 @@
       i32.add
       local.tee $4
       i32.const 3
-      call $~lib/array/ensureSize
+      i32.const 1
+      call $~lib/array/ensureCapacity
       local.get $3
       local.get $4
       i32.store offset=12
@@ -12353,7 +12437,7 @@
     if
      i32.const 1248
      i32.const 1728
-     i32.const 92
+     i32.const 99
      i32.const 42
      call $~lib/builtins/abort
      unreachable
@@ -12885,13 +12969,18 @@
   if
    i32.const 1456
    i32.const 1728
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $0
+  i32.const 8
+  local.get $0
+  i32.const 8
+  i32.gt_s
+  select
   i32.const 2
   i32.shl
   local.tee $3
