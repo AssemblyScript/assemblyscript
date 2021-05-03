@@ -4739,7 +4739,7 @@
   i32.const 8
   local.get $0
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   i32.const 2
   i32.shl
