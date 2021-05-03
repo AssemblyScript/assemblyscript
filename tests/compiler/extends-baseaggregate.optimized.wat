@@ -2157,7 +2157,7 @@
   local.tee $1
   i32.const 1176
   i32.load
-  local.tee $5
+  local.tee $4
   i32.const 2
   i32.shr_u
   i32.gt_u
@@ -2168,7 +2168,7 @@
    if
     i32.const 1616
     i32.const 1664
-    i32.const 23
+    i32.const 17
     i32.const 48
     call $~lib/builtins/abort
     unreachable
@@ -2178,8 +2178,16 @@
    local.tee $6
    local.set $0
    block $__inlined_func$~lib/rt/itcms/__renew
+    local.get $4
     i32.const 1
-    i32.const 32
+    i32.shl
+    local.tee $3
+    i32.const 1073741820
+    local.get $3
+    i32.const 1073741820
+    i32.lt_u
+    select
+    local.tee $3
     local.get $1
     i32.const 8
     local.get $1
@@ -2188,15 +2196,9 @@
     select
     i32.const 2
     i32.shl
-    i32.const 1
-    i32.sub
-    i32.clz
-    i32.sub
-    i32.shl
     local.tee $1
-    i32.const 1073741820
     local.get $1
-    i32.const 1073741820
+    local.get $3
     i32.lt_u
     select
     local.tee $7
@@ -2204,7 +2206,7 @@
     local.get $6
     i32.const 20
     i32.sub
-    local.tee $4
+    local.tee $5
     i32.load
     i32.const -4
     i32.and
@@ -2212,19 +2214,19 @@
     i32.sub
     i32.le_u
     if
-     local.get $4
+     local.get $5
      local.get $3
      i32.store offset=16
      br $__inlined_func$~lib/rt/itcms/__renew
     end
     local.get $3
-    local.get $4
+    local.get $5
     i32.load offset=12
     call $~lib/rt/itcms/__new
     local.tee $1
     local.get $0
     local.get $3
-    local.get $4
+    local.get $5
     i32.load offset=16
     local.tee $0
     local.get $0
@@ -2236,10 +2238,10 @@
     local.set $0
    end
    local.get $0
-   local.get $5
+   local.get $4
    i32.add
    local.get $7
-   local.get $5
+   local.get $4
    i32.sub
    call $~lib/memory/memory.fill
    local.get $0

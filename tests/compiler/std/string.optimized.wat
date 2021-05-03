@@ -5051,9 +5051,9 @@
   local.tee $6
   i32.const 1
   i32.add
-  local.tee $3
+  local.tee $5
   local.set $2
-  local.get $3
+  local.get $5
   local.get $0
   i32.load offset=8
   local.tee $4
@@ -5067,7 +5067,7 @@
    if
     i32.const 13648
     i32.const 15248
-    i32.const 23
+    i32.const 17
     i32.const 48
     call $~lib/builtins/abort
     unreachable
@@ -5076,8 +5076,16 @@
    local.get $0
    i32.load
    local.tee $7
+   local.get $4
    i32.const 1
-   i32.const 32
+   i32.shl
+   local.tee $3
+   i32.const 1073741820
+   local.get $3
+   i32.const 1073741820
+   i32.lt_u
+   select
+   local.tee $3
    local.get $2
    i32.const 8
    local.get $2
@@ -5086,22 +5094,16 @@
    select
    i32.const 2
    i32.shl
-   i32.const 1
-   i32.sub
-   i32.clz
-   i32.sub
-   i32.shl
    local.tee $2
-   i32.const 1073741820
    local.get $2
-   i32.const 1073741820
+   local.get $3
    i32.lt_u
    select
-   local.tee $5
+   local.tee $3
    call $~lib/rt/itcms/__renew
    local.tee $2
    i32.add
-   local.get $5
+   local.get $3
    local.get $4
    i32.sub
    call $~lib/memory/memory.fill
@@ -5121,7 +5123,7 @@
     call $~lib/rt/itcms/__link
    end
    local.get $0
-   local.get $5
+   local.get $3
    i32.store offset=8
   end
   local.get $0
@@ -5137,7 +5139,7 @@
   i32.const 1
   call $~lib/rt/itcms/__link
   local.get $0
-  local.get $3
+  local.get $5
   i32.store offset=12
  )
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
@@ -21803,7 +21805,7 @@
   if
    i32.const 1264
    i32.const 15248
-   i32.const 107
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -21823,7 +21825,7 @@
   if
    i32.const 15296
    i32.const 15248
-   i32.const 111
+   i32.const 103
    i32.const 40
    call $~lib/builtins/abort
    unreachable

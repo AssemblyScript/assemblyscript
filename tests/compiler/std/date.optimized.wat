@@ -3062,7 +3062,7 @@
   local.tee $3
   local.get $0
   i32.load offset=8
-  local.tee $6
+  local.tee $5
   i32.const 2
   i32.shr_u
   i32.gt_u
@@ -3073,7 +3073,7 @@
    if
     i32.const 4992
     i32.const 5040
-    i32.const 23
+    i32.const 17
     i32.const 48
     call $~lib/builtins/abort
     unreachable
@@ -3083,8 +3083,16 @@
    local.tee $7
    local.set $2
    block $__inlined_func$~lib/rt/itcms/__renew
+    local.get $5
     i32.const 1
-    i32.const 32
+    i32.shl
+    local.tee $4
+    i32.const 1073741820
+    local.get $4
+    i32.const 1073741820
+    i32.lt_u
+    select
+    local.tee $4
     local.get $3
     i32.const 8
     local.get $3
@@ -3093,15 +3101,9 @@
     select
     i32.const 2
     i32.shl
-    i32.const 1
-    i32.sub
-    i32.clz
-    i32.sub
-    i32.shl
     local.tee $3
-    i32.const 1073741820
     local.get $3
-    i32.const 1073741820
+    local.get $4
     i32.lt_u
     select
     local.tee $8
@@ -3109,7 +3111,7 @@
     local.get $7
     i32.const 20
     i32.sub
-    local.tee $5
+    local.tee $6
     i32.load
     i32.const -4
     i32.and
@@ -3117,19 +3119,19 @@
     i32.sub
     i32.le_u
     if
-     local.get $5
+     local.get $6
      local.get $4
      i32.store offset=16
      br $__inlined_func$~lib/rt/itcms/__renew
     end
     local.get $4
-    local.get $5
+    local.get $6
     i32.load offset=12
     call $~lib/rt/itcms/__new
     local.tee $3
     local.get $2
     local.get $4
-    local.get $5
+    local.get $6
     i32.load offset=16
     local.tee $2
     local.get $2
@@ -3141,10 +3143,10 @@
     local.set $2
    end
    local.get $2
-   local.get $6
+   local.get $5
    i32.add
    local.get $8
-   local.get $6
+   local.get $5
    i32.sub
    call $~lib/memory/memory.fill
    local.get $2
@@ -7690,7 +7692,7 @@
   if
    i32.const 1392
    i32.const 5040
-   i32.const 107
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -7710,7 +7712,7 @@
   if
    i32.const 5088
    i32.const 5040
-   i32.const 111
+   i32.const 103
    i32.const 40
    call $~lib/builtins/abort
    unreachable

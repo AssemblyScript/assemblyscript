@@ -7,27 +7,19 @@ import { idof, isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
 // @ts-ignore: decorator
-@inline @lazy const MIN_SIZE = 8;
-
-// NOTE: n should fix in range (1; 1 << 31]
-// @ts-ignore: decorator
-@inline function nextPowerOf2(n: usize): usize {
-  return 1 << 32 - clz(n - 1);
-}
+@inline @lazy const MIN_SIZE: usize = 8;
 
 /** Ensures that the given array has _at least_ the specified backing size. */
-function ensureCapacity(array: usize, mewSize: usize, alignLog2: u32, canGrow: bool = true): void {
+function ensureCapacity(array: usize, newSize: usize, alignLog2: u32, canGrow: bool = true): void {
   // Depends on the fact that Arrays mimic ArrayBufferView
   var oldCapacity = <usize>changetype<ArrayBufferView>(array).byteLength;
-  if (mewSize > oldCapacity >>> alignLog2) {
-    if (mewSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
+  if (newSize > oldCapacity >>> alignLog2) {
+    if (newSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
-    let newCapacity = max<usize>(mewSize, MIN_SIZE) << alignLog2;
-    if (canGrow) {
-      // Find next power of two size. It usually grows old capacity by factor of two.
-      // Make sure we don't reach BLOCK_MAXSIZE for new growed capacity.
-      newCapacity = min<usize>(nextPowerOf2(newCapacity), BLOCK_MAXSIZE);
-    }
+    // Grows old capacity by factor of two.
+    // Make sure we don't reach BLOCK_MAXSIZE for new growed capacity.
+    let newCapacity = max(newSize, MIN_SIZE) << alignLog2;
+    if (canGrow) newCapacity = max(min(oldCapacity << 1, BLOCK_MAXSIZE), newCapacity);
     let newData = __renew(oldData, newCapacity);
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     if (newData !== oldData) { // oldData has been free'd
