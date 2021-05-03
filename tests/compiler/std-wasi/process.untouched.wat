@@ -9,9 +9,9 @@
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $none_=>_i64 (func (result i64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
@@ -5253,16 +5253,17 @@
   call $~lib/memory/memory.copy
   local.get $3
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   local.get $0
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $1
-  local.get $3
+  local.get $4
   local.get $2
   i32.shr_u
   i32.gt_u
@@ -5275,47 +5276,75 @@
    if
     i32.const 3424
     i32.const 3472
-    i32.const 14
+    i32.const 17
     i32.const 48
     call $~lib/wasi/index/abort
     unreachable
    end
    local.get $0
    i32.load
-   local.set $4
+   local.set $5
    local.get $1
+   local.tee $6
+   i32.const 8
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.gt_u
+   select
    local.get $2
    i32.shl
-   local.set $5
-   local.get $4
-   local.get $5
-   call $~lib/rt/itcms/__renew
    local.set $6
-   local.get $6
    local.get $3
+   if
+    local.get $4
+    i32.const 1
+    i32.shl
+    local.tee $7
+    i32.const 1073741820
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.lt_u
+    select
+    local.tee $8
+    local.get $6
+    local.tee $7
+    local.get $8
+    local.get $7
+    i32.gt_u
+    select
+    local.set $6
+   end
+   local.get $5
+   local.get $6
+   call $~lib/rt/itcms/__renew
+   local.set $8
+   local.get $8
+   local.get $4
    i32.add
    i32.const 0
-   local.get $5
-   local.get $3
-   i32.sub
-   call $~lib/memory/memory.fill
    local.get $6
    local.get $4
+   i32.sub
+   call $~lib/memory/memory.fill
+   local.get $8
+   local.get $5
    i32.ne
    if
     local.get $0
-    local.get $6
+    local.get $8
     i32.store
     local.get $0
-    local.get $6
+    local.get $8
     i32.store offset=4
     local.get $0
-    local.get $6
+    local.get $8
     i32.const 0
     call $~lib/rt/itcms/__link
    end
    local.get $0
-   local.get $5
+   local.get $6
    i32.store offset=8
   end
  )
@@ -5347,7 +5376,7 @@
    if
     i32.const 3648
     i32.const 3472
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/wasi/index/abort
     unreachable
@@ -5357,7 +5386,8 @@
    i32.const 1
    i32.add
    i32.const 2
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $1
    i32.const 1
@@ -6047,7 +6077,8 @@
   local.get $0
   local.get $1
   i32.const 2
-  call $~lib/array/ensureSize
+  i32.const 0
+  call $~lib/array/ensureCapacity
   local.get $0
   local.get $1
   call $~lib/array/Array<~lib/string/String>#set:length_
@@ -7641,6 +7672,8 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -7679,44 +7712,51 @@
   if
    i32.const 3424
    i32.const 3472
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/wasi/index/abort
    unreachable
   end
   local.get $1
+  local.tee $2
+  i32.const 8
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.gt_s
+  select
   i32.const 2
   i32.shl
-  local.set $2
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $4
   i32.const 0
   call $~lib/rt/itcms/__new
-  local.tee $3
+  local.tee $5
   i32.store offset=4
-  local.get $3
+  local.get $5
   i32.const 0
-  local.get $2
+  local.get $4
   call $~lib/memory/memory.fill
   local.get $0
-  local.get $3
+  local.get $5
   call $~lib/array/Array<~lib/string/String>#set:buffer
   local.get $0
-  local.get $3
+  local.get $5
   call $~lib/array/Array<~lib/string/String>#set:dataStart
   local.get $0
-  local.get $2
+  local.get $4
   call $~lib/array/Array<~lib/string/String>#set:byteLength
   local.get $0
   local.get $1
   call $~lib/array/Array<~lib/string/String>#set:length_
   local.get $0
-  local.set $4
+  local.set $6
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $6
  )
  (func $~lib/string/String.UTF8.decodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -8099,7 +8139,7 @@
   if
    i32.const 3648
    i32.const 3472
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/wasi/index/abort
    unreachable
@@ -8124,7 +8164,7 @@
   if
    i32.const 3888
    i32.const 3472
-   i32.const 96
+   i32.const 103
    i32.const 40
    call $~lib/wasi/index/abort
    unreachable

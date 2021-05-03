@@ -5,10 +5,10 @@
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (type $i32_i32_f32_=>_none (func (param i32 i32 f32)))
  (type $i32_i32_f64_=>_none (func (param i32 i32 f64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
@@ -72,7 +72,7 @@
   if
    i32.const 448
    i32.const 512
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3760,16 +3760,17 @@
    end
   end
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   local.get $0
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $1
-  local.get $3
+  local.get $4
   local.get $2
   i32.shr_u
   i32.gt_u
@@ -3782,47 +3783,75 @@
    if
     i32.const 560
     i32.const 512
-    i32.const 14
+    i32.const 17
     i32.const 48
     call $~lib/builtins/abort
     unreachable
    end
    local.get $0
    i32.load
-   local.set $4
+   local.set $5
    local.get $1
+   local.tee $6
+   i32.const 8
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.gt_u
+   select
    local.get $2
    i32.shl
-   local.set $5
-   local.get $4
-   local.get $5
-   call $~lib/rt/itcms/__renew
    local.set $6
-   local.get $6
    local.get $3
+   if
+    local.get $4
+    i32.const 1
+    i32.shl
+    local.tee $7
+    i32.const 1073741820
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.lt_u
+    select
+    local.tee $8
+    local.get $6
+    local.tee $7
+    local.get $8
+    local.get $7
+    i32.gt_u
+    select
+    local.set $6
+   end
+   local.get $5
+   local.get $6
+   call $~lib/rt/itcms/__renew
+   local.set $8
+   local.get $8
+   local.get $4
    i32.add
    i32.const 0
-   local.get $5
-   local.get $3
-   i32.sub
-   call $~lib/memory/memory.fill
    local.get $6
    local.get $4
+   i32.sub
+   call $~lib/memory/memory.fill
+   local.get $8
+   local.get $5
    i32.ne
    if
     local.get $0
-    local.get $6
+    local.get $8
     i32.store
     local.get $0
-    local.get $6
+    local.get $8
     i32.store offset=4
     local.get $0
-    local.get $6
+    local.get $8
     i32.const 0
     call $~lib/rt/itcms/__link
    end
    local.get $0
-   local.get $5
+   local.get $6
    i32.store offset=8
   end
  )
@@ -3855,7 +3884,7 @@
    if
     i32.const 448
     i32.const 512
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -3865,7 +3894,8 @@
    i32.const 1
    i32.add
    i32.const 2
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $1
    i32.const 1
@@ -3890,7 +3920,7 @@
   if
    i32.const 448
    i32.const 512
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3936,7 +3966,7 @@
    if
     i32.const 448
     i32.const 512
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -3946,7 +3976,8 @@
    i32.const 1
    i32.add
    i32.const 3
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $1
    i32.const 1
@@ -3971,7 +4002,7 @@
   if
    i32.const 448
    i32.const 512
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4017,7 +4048,7 @@
    if
     i32.const 448
     i32.const 512
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -4027,7 +4058,8 @@
    i32.const 1
    i32.add
    i32.const 2
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $1
    i32.const 1
@@ -4052,7 +4084,7 @@
   if
    i32.const 448
    i32.const 512
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4098,7 +4130,7 @@
    if
     i32.const 448
     i32.const 512
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -4108,7 +4140,8 @@
    i32.const 1
    i32.add
    i32.const 3
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $1
    i32.const 1

@@ -2683,6 +2683,8 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -2721,44 +2723,51 @@
   if
    i32.const 432
    i32.const 480
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   local.get $1
+  local.tee $2
+  i32.const 8
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.gt_s
+  select
   i32.const 2
   i32.shl
-  local.set $2
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $4
   i32.const 0
   call $~lib/rt/itcms/__new
-  local.tee $3
+  local.tee $5
   i32.store offset=4
-  local.get $3
+  local.get $5
   i32.const 0
-  local.get $2
+  local.get $4
   call $~lib/memory/memory.fill
   local.get $0
-  local.get $3
+  local.get $5
   call $~lib/array/Array<i32>#set:buffer
   local.get $0
-  local.get $3
+  local.get $5
   call $~lib/array/Array<i32>#set:dataStart
   local.get $0
-  local.get $2
+  local.get $4
   call $~lib/array/Array<i32>#set:byteLength
   local.get $0
   local.get $1
   call $~lib/array/Array<i32>#set:length_
   local.get $0
-  local.set $4
+  local.set $6
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $6
  )
  (func $class/GenericInitializer<i32>#constructor (param $0 i32) (result i32)
   (local $1 i32)
