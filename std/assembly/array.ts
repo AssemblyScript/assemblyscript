@@ -488,7 +488,7 @@ export class Array<T> {
     }
 
     // calculate the byteLength of the resulting backing ArrayBuffer
-    var byteLength = <usize>max(size, MIN_SIZE) << usize(alignof<valueof<T>>());
+    var byteLength = <usize>size << usize(alignof<valueof<T>>());
     var outBuffer = changetype<ArrayBuffer>(__new(byteLength, idof<ArrayBuffer>()));
 
     // create the return value and initialize it

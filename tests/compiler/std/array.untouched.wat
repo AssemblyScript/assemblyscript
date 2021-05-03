@@ -33117,13 +33117,6 @@
    end
   end
   local.get $3
-  local.tee $6
-  i32.const 8
-  local.tee $4
-  local.get $6
-  local.get $4
-  i32.gt_s
-  select
   i32.const 2
   i32.shl
   local.set $7
@@ -33158,35 +33151,35 @@
   i32.const 0
   local.set $10
   i32.const 0
-  local.set $6
+  local.set $4
   loop $for-loop|1
-   local.get $6
+   local.get $4
    local.get $1
    i32.lt_s
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    if
     block $for-continue|1
      local.get $2
-     local.get $6
+     local.get $4
      i32.const 2
      i32.shl
      i32.add
      i32.load
-     local.set $5
-     local.get $5
+     local.set $6
+     local.get $6
      i32.const 0
      i32.eq
      if
       br $for-continue|1
      end
-     local.get $5
+     local.get $6
      i32.load offset=8
      local.set $11
      local.get $8
      local.get $10
      i32.add
-     local.get $5
+     local.get $6
      i32.load offset=4
      local.get $11
      call $~lib/memory/memory.copy
@@ -33195,10 +33188,10 @@
      i32.add
      local.set $10
     end
-    local.get $6
+    local.get $4
     i32.const 1
     i32.add
-    local.set $6
+    local.set $4
     br $for-loop|1
    end
   end
@@ -33280,13 +33273,6 @@
    end
   end
   local.get $3
-  local.tee $6
-  i32.const 8
-  local.tee $4
-  local.get $6
-  local.get $4
-  i32.gt_s
-  select
   i32.const 2
   i32.shl
   local.set $7
@@ -33321,35 +33307,35 @@
   i32.const 0
   local.set $10
   i32.const 0
-  local.set $6
+  local.set $4
   loop $for-loop|1
-   local.get $6
+   local.get $4
    local.get $1
    i32.lt_s
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    if
     block $for-continue|1
      local.get $2
-     local.get $6
+     local.get $4
      i32.const 2
      i32.shl
      i32.add
      i32.load
-     local.set $5
-     local.get $5
+     local.set $6
+     local.get $6
      i32.const 0
      i32.eq
      if
       br $for-continue|1
      end
-     local.get $5
+     local.get $6
      i32.load offset=8
      local.set $11
      local.get $8
      local.get $10
      i32.add
-     local.get $5
+     local.get $6
      i32.load offset=4
      local.get $11
      call $~lib/memory/memory.copy
@@ -33358,26 +33344,26 @@
      i32.add
      local.set $10
     end
-    local.get $6
+    local.get $4
     i32.const 1
     i32.add
-    local.set $6
+    local.set $4
     br $for-loop|1
    end
   end
   i32.const 1
   drop
   i32.const 0
-  local.set $6
+  local.set $4
   loop $for-loop|2
-   local.get $6
+   local.get $4
    local.get $3
    i32.lt_s
-   local.set $4
-   local.get $4
+   local.set $5
+   local.get $5
    if
     local.get $8
-    local.get $6
+    local.get $4
     i32.const 2
     i32.shl
     i32.add
@@ -33387,10 +33373,10 @@
     local.get $11
     i32.const 1
     call $~lib/rt/itcms/__link
-    local.get $6
+    local.get $4
     i32.const 1
     i32.add
-    local.set $6
+    local.set $4
     br $for-loop|2
    end
   end
