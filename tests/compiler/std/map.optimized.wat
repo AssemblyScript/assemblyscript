@@ -3144,7 +3144,7 @@
   i32.const 8
   local.get $4
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   local.tee $7
   i32.const 0
@@ -4175,7 +4175,7 @@
   i32.const 8
   local.get $4
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   local.tee $7
   i32.const 0
@@ -5306,7 +5306,7 @@
   i32.const 8
   local.get $4
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   i32.const 1
   i32.shl
@@ -6341,7 +6341,7 @@
   i32.const 8
   local.get $4
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   i32.const 1
   i32.shl
@@ -7941,7 +7941,7 @@
   i32.const 8
   local.get $4
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   i32.const 2
   i32.shl
@@ -9078,7 +9078,7 @@
   i32.const 8
   local.get $4
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   i32.const 3
   i32.shl
@@ -10104,7 +10104,7 @@
   i32.const 8
   local.get $4
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   i32.const 3
   i32.shl
@@ -11162,7 +11162,7 @@
   i32.const 8
   local.get $5
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   i32.const 2
   i32.shl
@@ -12268,7 +12268,7 @@
   i32.const 8
   local.get $5
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   i32.const 3
   i32.shl
@@ -12979,7 +12979,7 @@
   i32.const 8
   local.get $0
   i32.const 8
-  i32.gt_s
+  i32.gt_u
   select
   i32.const 2
   i32.shl

@@ -41,7 +41,7 @@ export class Array<T> {
 
   private buffer: ArrayBuffer;
   @unsafe readonly dataStart: usize;
-  private byteLength: i32;
+  private byteLength: i32; // Uses here as capacity
 
   // Also note that Array<T> with non-nullable T must guard against uninitialized null values
   // whenever an element is accessed. Otherwise, the compiler wouldn't be able to guarantee
@@ -63,7 +63,7 @@ export class Array<T> {
   constructor(length: i32 = 0) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     // reserve capacity for at least MIN_SIZE elements
-    var bufferSize = <usize>max(length, MIN_SIZE) << alignof<T>();
+    var bufferSize = max(<usize>length, MIN_SIZE) << alignof<T>();
     var buffer = changetype<ArrayBuffer>(__new(bufferSize, idof<ArrayBuffer>()));
     memory.fill(changetype<usize>(buffer), 0, bufferSize);
     this.buffer = buffer; // links
