@@ -455,7 +455,7 @@ function computeSize(size: usize): usize {
 
 /** Prepares and checks an allocation size. */
 function prepareSize(size: usize): usize {
-  if (size >= BLOCK_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
+  if (size > BLOCK_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   return computeSize(size);
 }
 
