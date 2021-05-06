@@ -30,7 +30,7 @@ import { Array } from "./array";
   }
 
   static fromCodePoint(code: i32): String {
-    var hasSur = code > 0xFFFF;
+    var hasSur = <u32>code > 0xFFFF;
     var out = changetype<String>(__new(2 << i32(hasSur), idof<String>()));
     if (!hasSur) {
       store<u16>(changetype<usize>(out), <u16>code);

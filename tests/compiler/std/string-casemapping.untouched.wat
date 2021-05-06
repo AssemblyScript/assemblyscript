@@ -8590,7 +8590,7 @@
   i32.store
   local.get $0
   i32.const 65535
-  i32.gt_s
+  i32.gt_u
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 2
