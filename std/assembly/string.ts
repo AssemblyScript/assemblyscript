@@ -30,12 +30,12 @@ import { Array } from "./array";
   }
 
   static fromCodePoint(code: i32): String {
-    assert(<u32>code <= 0x10FFFF);
     var hasSur = code > 0xFFFF;
     var out = changetype<String>(__new(2 << i32(hasSur), idof<String>()));
     if (!hasSur) {
       store<u16>(changetype<usize>(out), <u16>code);
     } else {
+      assert(<u32>code <= 0x10FFFF);
       code -= 0x10000;
       let hi = (code & 0x03FF) | 0xDC00;
       let lo = (code >>> 10) | 0xD800;

@@ -25393,18 +25393,6 @@
   i32.const 0
   i32.store
   local.get $0
-  i32.const 1114111
-  i32.le_u
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 304
-   i32.const 33
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
   i32.const 65535
   i32.gt_s
   local.set $1
@@ -25423,6 +25411,18 @@
    local.get $0
    i32.store16
   else
+   local.get $0
+   i32.const 1114111
+   i32.le_u
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 304
+    i32.const 38
+    i32.const 7
+    call $~lib/builtins/abort
+    unreachable
+   end
    local.get $0
    i32.const 65536
    i32.sub
