@@ -38,8 +38,8 @@ import { Array } from "./array";
       assert(<u32>code <= 0x10FFFF);
       code -= 0x10000;
       let hi = (code & 0x03FF) | 0xDC00;
-      let lo = (code >>> 10) | 0xD800;
-      store<u32>(changetype<usize>(out), lo | (hi << 16));
+      let lo = code >>> 10 | 0xD800;
+      store<u32>(changetype<usize>(out), lo | hi << 16);
     }
     return out;
   }
