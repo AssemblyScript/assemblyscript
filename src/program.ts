@@ -2635,8 +2635,6 @@ export enum ElementKind {
   FUNCTION_PROTOTYPE,
   /** A {@link Function}. */
   FUNCTION,
-  /** A {@link FunctionTarget}. */
-  FUNCTION_TARGET,
   /** A {@link ClassPrototype}. */
   CLASS_PROTOTYPE,
   /** A {@link Class}. */
