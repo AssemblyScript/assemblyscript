@@ -5967,22 +5967,11 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  local.get $0
-  i32.const 1114111
-  i32.gt_u
-  if
-   i32.const 0
-   i32.const 15344
-   i32.const 33
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
   global.get $~lib/memory/__stack_pointer
   i32.const 2
   local.get $0
   i32.const 65535
-  i32.gt_s
+  i32.gt_u
   local.tee $2
   i32.shl
   i32.const 1
@@ -5991,6 +5980,17 @@
   i32.store
   local.get $2
   if
+   local.get $0
+   i32.const 1114111
+   i32.gt_u
+   if
+    i32.const 0
+    i32.const 15344
+    i32.const 39
+    i32.const 7
+    call $~lib/builtins/abort
+    unreachable
+   end
    local.get $1
    local.get $0
    i32.const 65536
