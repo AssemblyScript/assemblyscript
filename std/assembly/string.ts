@@ -35,6 +35,7 @@ import { Array } from "./array";
     if (!hasSur) {
       store<u16>(changetype<usize>(out), <u16>code);
     } else {
+      // Checks valid code point range
       assert(<u32>code <= 0x10FFFF);
       code -= 0x10000;
       let hi = (code & 0x03FF) | 0xDC00;
