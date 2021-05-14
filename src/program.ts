@@ -946,29 +946,13 @@ export class Program extends DiagnosticEmitter {
 
   /** Replace a old source with a new source according to internalPath */
   replaceSource(newSource: Source): void {
-    var parser = this.parser;
-    parser.donelog.delete(newSource.internalPath);
-    parser.seenlog.delete(newSource.internalPath);
-    var sources = parser.sources;
-    var newSources: Source[] = [];
-    for(let i = 0; i < sources.length; i++) {
-      if(sources[i].internalPath != newSource.internalPath) {
-        newSources.push(sources[i]);
+    var sources = this.sources;
+    for (let i = 0, len = sources.length; i < len; i++) {
+      if (sources[i].internalPath == newSource.internalPath) {
+        sources[i] = newSource;
+        break;
       }
     }
-    parser.sources = newSources;
-    sources = this.sources;
-    newSources = [];
-    for(let i = 0; i < sources.length; i++) {
-      if(sources[i].internalPath != newSource.internalPath) {
-        newSources.push(sources[i]);
-      }
-    }
-    this.sources = newSources;
-    parser.donelog.add(newSource.internalPath);
-    parser.seenlog.add(newSource.internalPath);
-    parser.sources.push(newSource);
-    this.sources.push(newSource);
   }
 
 
