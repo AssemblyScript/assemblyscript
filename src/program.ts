@@ -949,12 +949,22 @@ export class Program extends DiagnosticEmitter {
     var parser = this.parser;
     parser.donelog.delete(newSource.internalPath);
     parser.seenlog.delete(newSource.internalPath);
-    parser.sources = parser.sources.filter(
-      (source) => source.internalPath !== newSource.internalPath
-    );
-    this.sources = this.sources.filter(
-      (source) => source.internalPath !== newSource.internalPath
-    );
+    var sources = parser.sources;
+    var newSources: Source[] = [];
+    for(let i = 0; i < sources.length; i++) {
+      if(sources[i].internalPath != newSource.internalPath) {
+        newSources.push(sources[i]);
+      }
+    }
+    parser.sources = newSources;
+    sources = this.sources;
+    newSources = [];
+    for(let i = 0; i < sources.length; i++) {
+      if(sources[i].internalPath != newSource.internalPath) {
+        newSources.push(sources[i]);
+      }
+    }
+    this.sources = newSources;
     parser.donelog.add(newSource.internalPath);
     parser.seenlog.add(newSource.internalPath);
     parser.sources.push(newSource);
