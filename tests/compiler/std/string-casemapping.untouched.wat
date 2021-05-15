@@ -18,6 +18,24 @@
  (import "string_casemapping" "toLowerCaseFromIndex" (func $std/string-casemapping/toLowerCaseFromIndex (param i32 i32) (result i32)))
  (import "string_casemapping" "toUpperCaseFromIndex" (func $std/string-casemapping/toUpperCaseFromIndex (param i32 i32) (result i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
+ (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/util/casemap/SPECIALS_UPPER i32 (i32.const 464))
+ (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
+ (global $~lib/rt/__rtti_base i32 (i32.const 20032))
+ (global $~lib/memory/__data_end i32 (i32.const 20068))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 36452))
+ (global $~lib/memory/__heap_base i32 (i32.const 36452))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 44) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
@@ -199,24 +217,6 @@
  (data (i32.const 19964) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00=\00 \00\00\00\00\00\00\00")
  (data (i32.const 20032) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\a4\00\00\00\00\00\00\00")
  (table $0 1 funcref)
- (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/util/casemap/SPECIALS_UPPER i32 (i32.const 464))
- (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~lib/rt/__rtti_base i32 (i32.const 20032))
- (global $~lib/memory/__data_end i32 (i32.const 20068))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 36452))
- (global $~lib/memory/__heap_base i32 (i32.const 36452))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
@@ -1778,12 +1778,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 64
    i32.const 400
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -2277,15 +2277,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 4
-   i32.sub
    local.set $6
    local.get $5
    local.get $4
    i32.store8
    local.get $6
+   i32.const 1
+   i32.sub
    local.get $4
-   i32.store8 offset=3
+   i32.store8
    local.get $3
    i32.const 2
    i32.le_u
@@ -2299,11 +2299,15 @@
    local.get $4
    i32.store8 offset=2
    local.get $6
+   i32.const 2
+   i32.sub
    local.get $4
-   i32.store8 offset=2
+   i32.store8
    local.get $6
+   i32.const 3
+   i32.sub
    local.get $4
-   i32.store8 offset=1
+   i32.store8
    local.get $3
    i32.const 6
    i32.le_u
@@ -2314,6 +2318,8 @@
    local.get $4
    i32.store8 offset=3
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $4
    i32.store8
    local.get $3
@@ -2351,15 +2357,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 28
-   i32.sub
    local.set $6
    local.get $5
    local.get $8
    i32.store
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $8
-   i32.store offset=24
+   i32.store
    local.get $3
    i32.const 8
    i32.le_u
@@ -2373,11 +2379,15 @@
    local.get $8
    i32.store offset=8
    local.get $6
+   i32.const 12
+   i32.sub
    local.get $8
-   i32.store offset=16
+   i32.store
    local.get $6
+   i32.const 8
+   i32.sub
    local.get $8
-   i32.store offset=20
+   i32.store
    local.get $3
    i32.const 24
    i32.le_u
@@ -2397,17 +2407,25 @@
    local.get $8
    i32.store offset=24
    local.get $6
+   i32.const 28
+   i32.sub
    local.get $8
    i32.store
    local.get $6
+   i32.const 24
+   i32.sub
    local.get $8
-   i32.store offset=4
+   i32.store
    local.get $6
+   i32.const 20
+   i32.sub
    local.get $8
-   i32.store offset=8
+   i32.store
    local.get $6
+   i32.const 16
+   i32.sub
    local.get $8
-   i32.store offset=12
+   i32.store
    i32.const 24
    local.get $5
    i32.const 4
@@ -8571,20 +8589,8 @@
   i32.const 0
   i32.store
   local.get $0
-  i32.const 1114111
-  i32.le_u
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 14576
-   i32.const 33
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
   i32.const 65535
-  i32.gt_s
+  i32.gt_u
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 2
@@ -8601,6 +8607,18 @@
    local.get $0
    i32.store16
   else
+   local.get $0
+   i32.const 1114111
+   i32.le_u
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 14576
+    i32.const 39
+    i32.const 7
+    call $~lib/builtins/abort
+    unreachable
+   end
    local.get $0
    i32.const 65536
    i32.sub

@@ -4,9 +4,6 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s\00")
- (table $0 1 funcref)
  (global $std/pointer/one (mut i32) (i32.const 0))
  (global $std/pointer/two (mut i32) (i32.const 0))
  (global $std/pointer/add (mut i32) (i32.const 0))
@@ -17,6 +14,9 @@
  (global $~lib/memory/__data_end i32 (i32.const 60))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16444))
  (global $~lib/memory/__heap_base i32 (i32.const 16444))
+ (memory $0 1)
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s\00")
+ (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
  (func $std/pointer/Entry#set:key (param $0 i32) (param $1 i32)
@@ -57,15 +57,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 4
-   i32.sub
    local.set $6
    local.get $5
    local.get $4
    i32.store8
    local.get $6
+   i32.const 1
+   i32.sub
    local.get $4
-   i32.store8 offset=3
+   i32.store8
    local.get $3
    i32.const 2
    i32.le_u
@@ -79,11 +79,15 @@
    local.get $4
    i32.store8 offset=2
    local.get $6
+   i32.const 2
+   i32.sub
    local.get $4
-   i32.store8 offset=2
+   i32.store8
    local.get $6
+   i32.const 3
+   i32.sub
    local.get $4
-   i32.store8 offset=1
+   i32.store8
    local.get $3
    i32.const 6
    i32.le_u
@@ -94,6 +98,8 @@
    local.get $4
    i32.store8 offset=3
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $4
    i32.store8
    local.get $3
@@ -131,15 +137,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 28
-   i32.sub
    local.set $6
    local.get $5
    local.get $8
    i32.store
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $8
-   i32.store offset=24
+   i32.store
    local.get $3
    i32.const 8
    i32.le_u
@@ -153,11 +159,15 @@
    local.get $8
    i32.store offset=8
    local.get $6
+   i32.const 12
+   i32.sub
    local.get $8
-   i32.store offset=16
+   i32.store
    local.get $6
+   i32.const 8
+   i32.sub
    local.get $8
-   i32.store offset=20
+   i32.store
    local.get $3
    i32.const 24
    i32.le_u
@@ -177,17 +187,25 @@
    local.get $8
    i32.store offset=24
    local.get $6
+   i32.const 28
+   i32.sub
    local.get $8
    i32.store
    local.get $6
+   i32.const 24
+   i32.sub
    local.get $8
-   i32.store offset=4
+   i32.store
    local.get $6
+   i32.const 20
+   i32.sub
    local.get $8
-   i32.store offset=8
+   i32.store
    local.get $6
+   i32.const 16
+   i32.sub
    local.get $8
-   i32.store offset=12
+   i32.store
    i32.const 24
    local.get $5
    i32.const 4

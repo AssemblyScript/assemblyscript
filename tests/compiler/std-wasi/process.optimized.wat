@@ -1,8 +1,8 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
@@ -20,6 +20,23 @@
  (import "wasi_snapshot_preview1" "environ_get" (func $~lib/bindings/wasi_snapshot_preview1/environ_get (param i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
  (import "wasi_snapshot_preview1" "fd_read" (func $~lib/bindings/wasi_snapshot_preview1/fd_read (param i32 i32 i32 i32) (result i32)))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/process/process.argv (mut i32) (i32.const 0))
+ (global $std-wasi/process/argv (mut i32) (i32.const 0))
+ (global $~lib/process/process.env (mut i32) (i32.const 0))
+ (global $std-wasi/process/env (mut i32) (i32.const 0))
+ (global $std-wasi/process/envKeys (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22268))
+ (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\14\00\00\00=\00=\00 \00a\00r\00c\00h\00 \00=\00=")
@@ -241,23 +258,6 @@
  (data (i32.const 5800) "\01\00\00\00\14\00\00\00=\00=\00 \00e\00x\00i\00t\00 \00=\00=")
  (data (i32.const 5840) "\05\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 5868) "\02A\00\00\00\00\00\00\10A\82")
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
- (global $~lib/process/process.argv (mut i32) (i32.const 0))
- (global $std-wasi/process/argv (mut i32) (i32.const 0))
- (global $~lib/process/process.env (mut i32) (i32.const 0))
- (global $std-wasi/process/env (mut i32) (i32.const 0))
- (global $std-wasi/process/envKeys (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22268))
- (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -1646,12 +1646,12 @@
   (local $4 i32)
   local.get $1
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 4240
    i32.const 4176
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/wasi/index/abort
    unreachable
   end
@@ -2620,11 +2620,11 @@
    local.get $0
    local.get $1
    i32.add
-   i32.const 4
-   i32.sub
    local.tee $2
+   i32.const 1
+   i32.sub
    i32.const 0
-   i32.store8 offset=3
+   i32.store8
    local.get $1
    i32.const 2
    i32.le_u
@@ -2636,11 +2636,15 @@
    i32.const 0
    i32.store8 offset=2
    local.get $2
+   i32.const 2
+   i32.sub
    i32.const 0
-   i32.store8 offset=2
+   i32.store8
    local.get $2
+   i32.const 3
+   i32.sub
    i32.const 0
-   i32.store8 offset=1
+   i32.store8
    local.get $1
    i32.const 6
    i32.le_u
@@ -2649,6 +2653,8 @@
    i32.const 0
    i32.store8 offset=3
    local.get $2
+   i32.const 4
+   i32.sub
    i32.const 0
    i32.store8
    local.get $1
@@ -2674,11 +2680,11 @@
    i32.and
    local.tee $2
    i32.add
-   i32.const 28
-   i32.sub
    local.tee $1
+   i32.const 4
+   i32.sub
    i32.const 0
-   i32.store offset=24
+   i32.store
    local.get $2
    i32.const 8
    i32.le_u
@@ -2690,11 +2696,15 @@
    i32.const 0
    i32.store offset=8
    local.get $1
+   i32.const 12
+   i32.sub
    i32.const 0
-   i32.store offset=16
+   i32.store
    local.get $1
+   i32.const 8
+   i32.sub
    i32.const 0
-   i32.store offset=20
+   i32.store
    local.get $2
    i32.const 24
    i32.le_u
@@ -2712,17 +2722,25 @@
    i32.const 0
    i32.store offset=24
    local.get $1
+   i32.const 28
+   i32.sub
    i32.const 0
    i32.store
    local.get $1
+   i32.const 24
+   i32.sub
    i32.const 0
-   i32.store offset=4
+   i32.store
    local.get $1
+   i32.const 20
+   i32.sub
    i32.const 0
-   i32.store offset=8
+   i32.store
    local.get $1
+   i32.const 16
+   i32.sub
    i32.const 0
-   i32.store offset=12
+   i32.store
    local.get $0
    local.get $0
    i32.const 4
@@ -3142,14 +3160,13 @@
   call $~lib/memory/memory.copy
   local.get $3
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32)
-  (local $2 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
   local.get $0
   i32.load offset=8
-  local.tee $2
+  local.tee $3
   i32.const 2
   i32.shr_u
   i32.gt_u
@@ -3160,43 +3177,68 @@
    if
     i32.const 4448
     i32.const 4496
-    i32.const 14
+    i32.const 17
     i32.const 48
     call $~lib/wasi/index/abort
     unreachable
    end
-   local.get $2
+   local.get $1
+   i32.const 8
+   local.get $1
+   i32.const 8
+   i32.gt_u
+   select
+   i32.const 2
+   i32.shl
+   local.set $1
    local.get $0
    i32.load
    local.tee $4
-   local.get $1
-   i32.const 2
-   i32.shl
-   local.tee $3
-   call $~lib/rt/itcms/__renew
-   local.tee $1
-   i32.add
-   local.get $3
    local.get $2
+   if
+    local.get $3
+    i32.const 1
+    i32.shl
+    local.tee $2
+    i32.const 1073741820
+    local.get $2
+    i32.const 1073741820
+    i32.lt_u
+    select
+    local.tee $2
+    local.get $1
+    local.get $1
+    local.get $2
+    i32.lt_u
+    select
+    local.set $1
+   end
+   local.get $1
+   call $~lib/rt/itcms/__renew
+   local.tee $2
+   local.get $3
+   i32.add
+   local.get $1
+   local.get $3
    i32.sub
    call $~lib/memory/memory.fill
-   local.get $1
+   local.get $2
    local.get $4
    i32.ne
    if
     local.get $0
-    local.get $1
+    local.get $2
     i32.store
     local.get $0
-    local.get $1
+    local.get $2
     i32.store offset=4
     local.get $0
-    local.get $1
+    local.get $2
     i32.const 0
     call $~lib/rt/itcms/__link
    end
    local.get $0
-   local.get $3
+   local.get $1
    i32.store offset=8
   end
  )
@@ -3213,7 +3255,7 @@
    if
     i32.const 4672
     i32.const 4496
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/wasi/index/abort
     unreachable
@@ -3223,7 +3265,8 @@
    i32.const 1
    i32.add
    local.tee $3
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $3
    i32.store offset=12
@@ -4392,7 +4435,8 @@
   end
   local.get $2
   local.get $0
-  call $~lib/array/ensureSize
+  i32.const 0
+  call $~lib/array/ensureCapacity
   local.get $2
   local.get $0
   i32.store offset=12
@@ -4685,13 +4729,18 @@
   if
    i32.const 4448
    i32.const 4496
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/wasi/index/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
   local.get $0
+  i32.const 8
+  local.get $0
+  i32.const 8
+  i32.gt_u
+  select
   i32.const 2
   i32.shl
   local.tee $3
@@ -4743,7 +4792,7 @@
   if
    i32.const 0
    i32.const 4816
-   i32.const 748
+   i32.const 749
    i32.const 7
    call $~lib/wasi/index/abort
    unreachable
@@ -5042,7 +5091,7 @@
   if
    i32.const 4672
    i32.const 4496
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/wasi/index/abort
    unreachable
@@ -5062,7 +5111,7 @@
   if
    i32.const 4912
    i32.const 4496
-   i32.const 96
+   i32.const 103
    i32.const 40
    call $~lib/wasi/index/abort
    unreachable

@@ -15,6 +15,31 @@
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
+ (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $std-wasi/crypto/ab (mut i32) (i32.const 0))
+ (global $std-wasi/crypto/buf (mut i32) (i32.const 0))
+ (global $~lib/process/process.stdout i32 (i32.const 1))
+ (global $~lib/process/iobuf i32 (i32.const 5536))
+ (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
+ (global $std-wasi/crypto/b1 (mut i32) (i32.const 0))
+ (global $std-wasi/crypto/b2 (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~lib/rt/__rtti_base i32 (i32.const 5728))
+ (global $~lib/memory/__data_end i32 (i32.const 5764))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22148))
+ (global $~lib/memory/__heap_base i32 (i32.const 22148))
+ (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
  (data (i32.const 60) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s\00\00\00\00\00\00\00")
@@ -121,31 +146,6 @@
  (data (i32.const 5660) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00s\00t\00d\00-\00w\00a\00s\00i\00/\00c\00r\00y\00p\00t\00o\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 5728) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00A\00\00\00\02\00\00\00")
  (table $0 1 funcref)
- (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $std-wasi/crypto/ab (mut i32) (i32.const 0))
- (global $std-wasi/crypto/buf (mut i32) (i32.const 0))
- (global $~lib/process/process.stdout i32 (i32.const 1))
- (global $~lib/process/iobuf i32 (i32.const 5536))
- (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
- (global $std-wasi/crypto/b1 (mut i32) (i32.const 0))
- (global $std-wasi/crypto/b2 (mut i32) (i32.const 0))
- (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 5728))
- (global $~lib/memory/__data_end i32 (i32.const 5764))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22148))
- (global $~lib/memory/__heap_base i32 (i32.const 22148))
- (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
@@ -2144,12 +2144,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 144
    i32.const 480
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/wasi/index/abort
    unreachable
   end
@@ -2643,15 +2643,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 4
-   i32.sub
    local.set $6
    local.get $5
    local.get $4
    i32.store8
    local.get $6
+   i32.const 1
+   i32.sub
    local.get $4
-   i32.store8 offset=3
+   i32.store8
    local.get $3
    i32.const 2
    i32.le_u
@@ -2665,11 +2665,15 @@
    local.get $4
    i32.store8 offset=2
    local.get $6
+   i32.const 2
+   i32.sub
    local.get $4
-   i32.store8 offset=2
+   i32.store8
    local.get $6
+   i32.const 3
+   i32.sub
    local.get $4
-   i32.store8 offset=1
+   i32.store8
    local.get $3
    i32.const 6
    i32.le_u
@@ -2680,6 +2684,8 @@
    local.get $4
    i32.store8 offset=3
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $4
    i32.store8
    local.get $3
@@ -2717,15 +2723,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 28
-   i32.sub
    local.set $6
    local.get $5
    local.get $8
    i32.store
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $8
-   i32.store offset=24
+   i32.store
    local.get $3
    i32.const 8
    i32.le_u
@@ -2739,11 +2745,15 @@
    local.get $8
    i32.store offset=8
    local.get $6
+   i32.const 12
+   i32.sub
    local.get $8
-   i32.store offset=16
+   i32.store
    local.get $6
+   i32.const 8
+   i32.sub
    local.get $8
-   i32.store offset=20
+   i32.store
    local.get $3
    i32.const 24
    i32.le_u
@@ -2763,17 +2773,25 @@
    local.get $8
    i32.store offset=24
    local.get $6
+   i32.const 28
+   i32.sub
    local.get $8
    i32.store
    local.get $6
+   i32.const 24
+   i32.sub
    local.get $8
-   i32.store offset=4
+   i32.store
    local.get $6
+   i32.const 20
+   i32.sub
    local.get $8
-   i32.store offset=8
+   i32.store
    local.get $6
+   i32.const 16
+   i32.sub
    local.get $8
-   i32.store offset=12
+   i32.store
    i32.const 24
    local.get $5
    i32.const 4

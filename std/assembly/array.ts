@@ -6,14 +6,20 @@ import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, jo
 import { idof, isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
+// @ts-ignore: decorator
+@inline @lazy const MIN_SIZE: usize = 8;
+
 /** Ensures that the given array has _at least_ the specified backing size. */
-function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
-  // depends on the fact that Arrays mimic ArrayBufferView
-  var oldCapacity = changetype<ArrayBufferView>(array).byteLength;
-  if (minSize > <usize>oldCapacity >>> alignLog2) {
-    if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
+function ensureCapacity(array: usize, newSize: usize, alignLog2: u32, canGrow: bool = true): void {
+  // Depends on the fact that Arrays mimic ArrayBufferView
+  var oldCapacity = <usize>changetype<ArrayBufferView>(array).byteLength;
+  if (newSize > oldCapacity >>> alignLog2) {
+    if (newSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
-    let newCapacity = minSize << alignLog2;
+    // Grows old capacity by factor of two.
+    // Make sure we don't reach BLOCK_MAXSIZE for new growed capacity.
+    let newCapacity = max(newSize, MIN_SIZE) << alignLog2;
+    if (canGrow) newCapacity = max(min(oldCapacity << 1, BLOCK_MAXSIZE), newCapacity);
     let newData = __renew(oldData, newCapacity);
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     if (newData !== oldData) { // oldData has been free'd
@@ -21,7 +27,7 @@ function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
       store<usize>(array, newData, offsetof<ArrayBufferView>("dataStart"));
       __link(array, changetype<usize>(newData), false);
     }
-    store<u32>(array, newCapacity, offsetof<ArrayBufferView>("byteLength"));
+    store<u32>(array, <u32>newCapacity, offsetof<ArrayBufferView>("byteLength"));
   }
 }
 
@@ -34,8 +40,8 @@ export class Array<T> {
   // block is 16 bytes anyway so it's fine to have a couple extra fields in there.
 
   private buffer: ArrayBuffer;
-  private dataStart: usize;
-  private byteLength: i32;
+  @unsafe readonly dataStart: usize;
+  private byteLength: i32; // Uses here as capacity
 
   // Also note that Array<T> with non-nullable T must guard against uninitialized null values
   // whenever an element is accessed. Otherwise, the compiler wouldn't be able to guarantee
@@ -56,7 +62,8 @@ export class Array<T> {
 
   constructor(length: i32 = 0) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
-    var bufferSize = <usize>length << alignof<T>();
+    // reserve capacity for at least MIN_SIZE elements
+    var bufferSize = max(<usize>length, MIN_SIZE) << alignof<T>();
     var buffer = changetype<ArrayBuffer>(__new(bufferSize, idof<ArrayBuffer>()));
     memory.fill(changetype<usize>(buffer), 0, bufferSize);
     this.buffer = buffer; // links
@@ -70,7 +77,7 @@ export class Array<T> {
   }
 
   set length(newLength: i32) {
-    ensureSize(changetype<usize>(this), newLength, alignof<T>());
+    ensureCapacity(changetype<usize>(this), newLength, alignof<T>(), false);
     this.length_ = newLength;
   }
 
@@ -106,7 +113,7 @@ export class Array<T> {
   @operator("[]=") private __set(index: i32, value: T): void {
     if (<u32>index >= <u32>this.length_) {
       if (index < 0) throw new RangeError(E_INDEXOUTOFRANGE);
-      ensureSize(changetype<usize>(this), index + 1, alignof<T>());
+      ensureCapacity(changetype<usize>(this), index + 1, alignof<T>());
       this.length_ = index + 1;
     }
     this.__uset(index, value);
@@ -204,7 +211,7 @@ export class Array<T> {
   push(value: T): i32 {
     var length = this.length_;
     var newLength = length + 1;
-    ensureSize(changetype<usize>(this), newLength, alignof<T>());
+    ensureCapacity(changetype<usize>(this), newLength, alignof<T>());
     if (isManaged<T>()) {
       store<usize>(this.dataStart + (<usize>length << alignof<T>()), changetype<usize>(value));
       __link(changetype<usize>(this), changetype<usize>(value), true);
@@ -353,7 +360,7 @@ export class Array<T> {
 
   unshift(value: T): i32 {
     var newLength = this.length_ + 1;
-    ensureSize(changetype<usize>(this), newLength, alignof<T>());
+    ensureCapacity(changetype<usize>(this), newLength, alignof<T>());
     var dataStart = this.dataStart;
     memory.copy(
       dataStart + sizeof<T>(),
@@ -395,7 +402,7 @@ export class Array<T> {
     var length  = this.length_;
     start       = start < 0 ? max<i32>(length + start, 0) : min<i32>(start, length);
     deleteCount = max<i32>(min<i32>(deleteCount, length - start), 0);
-    var result = changetype<Array<T>>(__newArray(deleteCount, alignof<T>(), idof<Array<T>>())); 
+    var result = changetype<Array<T>>(__newArray(deleteCount, alignof<T>(), idof<Array<T>>()));
     var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());

@@ -8,6 +8,8 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $heap/ptr (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
@@ -17,8 +19,6 @@
  (data (i32.const 1176) "\01\00\00\00\1e\00\00\00N\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d")
  (data (i32.const 1228) ",")
  (data (i32.const 1240) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s")
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $heap/ptr (mut i32) (i32.const 0))
  (export "heap.alloc" (func $~lib/memory/heap.alloc))
  (export "heap.realloc" (func $~lib/memory/heap.realloc))
  (export "heap.free" (func $~lib/memory/heap.free))
@@ -623,12 +623,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 1120
    i32.const 1056
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end

@@ -18,6 +18,34 @@
  (type $f64_i32_=>_i32 (func (param f64 i32) (result i32)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $resolve-binary/a (mut i32) (i32.const 0))
+ (global $resolve-binary/f (mut f64) (f64.const 0))
+ (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
+ (global $~lib/util/math/log_tail (mut f64) (f64.const 0))
+ (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
+ (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
+ (global $~lib/util/number/_exp (mut i32) (i32.const 0))
+ (global $~lib/util/number/_K (mut i32) (i32.const 0))
+ (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
+ (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
+ (global $resolve-binary/foo (mut i32) (i32.const 0))
+ (global $resolve-binary/bar (mut i32) (i32.const 0))
+ (global $resolve-binary/bar2 (mut i32) (i32.const 0))
+ (global $~lib/rt/__rtti_base i32 (i32.const 10224))
+ (global $~lib/memory/__data_end i32 (i32.const 10268))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 26652))
+ (global $~lib/memory/__heap_base i32 (i32.const 26652))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e\00\00\00\00\00")
  (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e\00\00\00")
@@ -67,34 +95,6 @@
  (data (i32.const 10188) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00p\00o\00w\00\00\00\00\00\00\00")
  (data (i32.const 10224) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 funcref)
- (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $resolve-binary/a (mut i32) (i32.const 0))
- (global $resolve-binary/f (mut f64) (f64.const 0))
- (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
- (global $~lib/util/math/log_tail (mut f64) (f64.const 0))
- (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
- (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
- (global $~lib/util/number/_exp (mut i32) (i32.const 0))
- (global $~lib/util/number/_K (mut i32) (i32.const 0))
- (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
- (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $resolve-binary/foo (mut i32) (i32.const 0))
- (global $resolve-binary/bar (mut i32) (i32.const 0))
- (global $resolve-binary/bar2 (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 10224))
- (global $~lib/memory/__data_end i32 (i32.const 10268))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 26652))
- (global $~lib/memory/__heap_base i32 (i32.const 26652))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/number/Bool#toString (param $0 i32) (param $1 i32) (result i32)
@@ -1868,12 +1868,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 416
    i32.const 752
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -2367,15 +2367,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 4
-   i32.sub
    local.set $6
    local.get $5
    local.get $4
    i32.store8
    local.get $6
+   i32.const 1
+   i32.sub
    local.get $4
-   i32.store8 offset=3
+   i32.store8
    local.get $3
    i32.const 2
    i32.le_u
@@ -2389,11 +2389,15 @@
    local.get $4
    i32.store8 offset=2
    local.get $6
+   i32.const 2
+   i32.sub
    local.get $4
-   i32.store8 offset=2
+   i32.store8
    local.get $6
+   i32.const 3
+   i32.sub
    local.get $4
-   i32.store8 offset=1
+   i32.store8
    local.get $3
    i32.const 6
    i32.le_u
@@ -2404,6 +2408,8 @@
    local.get $4
    i32.store8 offset=3
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $4
    i32.store8
    local.get $3
@@ -2441,15 +2447,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 28
-   i32.sub
    local.set $6
    local.get $5
    local.get $8
    i32.store
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $8
-   i32.store offset=24
+   i32.store
    local.get $3
    i32.const 8
    i32.le_u
@@ -2463,11 +2469,15 @@
    local.get $8
    i32.store offset=8
    local.get $6
+   i32.const 12
+   i32.sub
    local.get $8
-   i32.store offset=16
+   i32.store
    local.get $6
+   i32.const 8
+   i32.sub
    local.get $8
-   i32.store offset=20
+   i32.store
    local.get $3
    i32.const 24
    i32.le_u
@@ -2487,17 +2497,25 @@
    local.get $8
    i32.store offset=24
    local.get $6
+   i32.const 28
+   i32.sub
    local.get $8
    i32.store
    local.get $6
+   i32.const 24
+   i32.sub
    local.get $8
-   i32.store offset=4
+   i32.store
    local.get $6
+   i32.const 20
+   i32.sub
    local.get $8
-   i32.store offset=8
+   i32.store
    local.get $6
+   i32.const 16
+   i32.sub
    local.get $8
-   i32.store offset=12
+   i32.store
    i32.const 24
    local.get $5
    i32.const 4

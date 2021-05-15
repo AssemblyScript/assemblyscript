@@ -1,10 +1,10 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
- (memory $0 0)
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
+ (memory $0 0)
  (export "add" (func $export/add))
  (export "sub" (func $export/sub))
  (export "renamed_mul" (func $export/mul))

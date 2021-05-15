@@ -9,21 +9,6 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (memory $0 1)
- (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
- (data (i32.const 60) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
- (data (i32.const 108) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
- (data (i32.const 172) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 240) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 272) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 300) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
- (data (i32.const 364) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
- (data (i32.const 416) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 444) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 508) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 636) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\001\006\009\009\00.\00t\00s\00")
- (data (i32.const 688) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\02A\00\00\00\00\00\00")
- (table $0 1 funcref)
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
@@ -40,6 +25,21 @@
  (global $~lib/memory/__data_end i32 (i32.const 732))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17116))
  (global $~lib/memory/__heap_base i32 (i32.const 17116))
+ (memory $0 1)
+ (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h\00")
+ (data (i32.const 60) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00\00\00")
+ (data (i32.const 108) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00\00\00\00\00")
+ (data (i32.const 172) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00r\00t\00/\00i\00t\00c\00m\00s\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 240) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 272) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 300) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 364) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 416) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 444) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 508) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 636) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\001\006\009\009\00.\00t\00s\00")
+ (data (i32.const 688) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00 \00\00\00\00\00\00\00\02A\00\00\00\00\00\00")
+ (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
@@ -1593,12 +1593,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 128
    i32.const 464
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -2092,15 +2092,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 4
-   i32.sub
    local.set $6
    local.get $5
    local.get $4
    i32.store8
    local.get $6
+   i32.const 1
+   i32.sub
    local.get $4
-   i32.store8 offset=3
+   i32.store8
    local.get $3
    i32.const 2
    i32.le_u
@@ -2114,11 +2114,15 @@
    local.get $4
    i32.store8 offset=2
    local.get $6
+   i32.const 2
+   i32.sub
    local.get $4
-   i32.store8 offset=2
+   i32.store8
    local.get $6
+   i32.const 3
+   i32.sub
    local.get $4
-   i32.store8 offset=1
+   i32.store8
    local.get $3
    i32.const 6
    i32.le_u
@@ -2129,6 +2133,8 @@
    local.get $4
    i32.store8 offset=3
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $4
    i32.store8
    local.get $3
@@ -2166,15 +2172,15 @@
    local.get $5
    local.get $3
    i32.add
-   i32.const 28
-   i32.sub
    local.set $6
    local.get $5
    local.get $8
    i32.store
    local.get $6
+   i32.const 4
+   i32.sub
    local.get $8
-   i32.store offset=24
+   i32.store
    local.get $3
    i32.const 8
    i32.le_u
@@ -2188,11 +2194,15 @@
    local.get $8
    i32.store offset=8
    local.get $6
+   i32.const 12
+   i32.sub
    local.get $8
-   i32.store offset=16
+   i32.store
    local.get $6
+   i32.const 8
+   i32.sub
    local.get $8
-   i32.store offset=20
+   i32.store
    local.get $3
    i32.const 24
    i32.le_u
@@ -2212,17 +2222,25 @@
    local.get $8
    i32.store offset=24
    local.get $6
+   i32.const 28
+   i32.sub
    local.get $8
    i32.store
    local.get $6
+   i32.const 24
+   i32.sub
    local.get $8
-   i32.store offset=4
+   i32.store
    local.get $6
+   i32.const 20
+   i32.sub
    local.get $8
-   i32.store offset=8
+   i32.store
    local.get $6
+   i32.const 16
+   i32.sub
    local.get $8
-   i32.store offset=12
+   i32.store
    i32.const 24
    local.get $5
    i32.const 4
@@ -3724,16 +3742,17 @@
   call $~lib/memory/memory.copy
   local.get $3
  )
- (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
+ (func $~lib/array/ensureCapacity (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   local.get $0
   i32.load offset=8
-  local.set $3
+  local.set $4
   local.get $1
-  local.get $3
+  local.get $4
   local.get $2
   i32.shr_u
   i32.gt_u
@@ -3746,47 +3765,75 @@
    if
     i32.const 32
     i32.const 80
-    i32.const 14
+    i32.const 17
     i32.const 48
     call $~lib/builtins/abort
     unreachable
    end
    local.get $0
    i32.load
-   local.set $4
+   local.set $5
    local.get $1
+   local.tee $6
+   i32.const 8
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.gt_u
+   select
    local.get $2
    i32.shl
-   local.set $5
-   local.get $4
-   local.get $5
-   call $~lib/rt/itcms/__renew
    local.set $6
-   local.get $6
    local.get $3
+   if
+    local.get $4
+    i32.const 1
+    i32.shl
+    local.tee $7
+    i32.const 1073741820
+    local.tee $8
+    local.get $7
+    local.get $8
+    i32.lt_u
+    select
+    local.tee $8
+    local.get $6
+    local.tee $7
+    local.get $8
+    local.get $7
+    i32.gt_u
+    select
+    local.set $6
+   end
+   local.get $5
+   local.get $6
+   call $~lib/rt/itcms/__renew
+   local.set $8
+   local.get $8
+   local.get $4
    i32.add
    i32.const 0
-   local.get $5
-   local.get $3
-   i32.sub
-   call $~lib/memory/memory.fill
    local.get $6
    local.get $4
+   i32.sub
+   call $~lib/memory/memory.fill
+   local.get $8
+   local.get $5
    i32.ne
    if
     local.get $0
-    local.get $6
+    local.get $8
     i32.store
     local.get $0
-    local.get $6
+    local.get $8
     i32.store offset=4
     local.get $0
-    local.get $6
+    local.get $8
     i32.const 0
     call $~lib/rt/itcms/__link
    end
    local.get $0
-   local.get $5
+   local.get $6
    i32.store offset=8
   end
  )
@@ -3818,7 +3865,7 @@
    if
     i32.const 320
     i32.const 80
-    i32.const 108
+    i32.const 115
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -3828,7 +3875,8 @@
    i32.const 1
    i32.add
    i32.const 2
-   call $~lib/array/ensureSize
+   i32.const 1
+   call $~lib/array/ensureCapacity
    local.get $0
    local.get $1
    i32.const 1
@@ -4105,6 +4153,8 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -4143,44 +4193,51 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 58
+   i32.const 64
    i32.const 60
    call $~lib/builtins/abort
    unreachable
   end
   local.get $1
+  local.tee $2
+  i32.const 8
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.gt_u
+  select
   i32.const 2
   i32.shl
-  local.set $2
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $4
   i32.const 0
   call $~lib/rt/itcms/__new
-  local.tee $3
+  local.tee $5
   i32.store offset=4
-  local.get $3
+  local.get $5
   i32.const 0
-  local.get $2
+  local.get $4
   call $~lib/memory/memory.fill
   local.get $0
-  local.get $3
+  local.get $5
   call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:buffer
   local.get $0
-  local.get $3
+  local.get $5
   call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:dataStart
   local.get $0
-  local.get $2
+  local.get $4
   call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:byteLength
   local.get $0
   local.get $1
   call $~lib/array/Array<issues/1699/MultiAssignmentTest>#set:length_
   local.get $0
-  local.set $4
+  local.set $6
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $6
  )
  (func $issues/1699/MultiAssignmentTest#constructor (param $0 i32) (result i32)
   (local $1 i32)
@@ -4231,7 +4288,7 @@
   if
    i32.const 320
    i32.const 80
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4256,7 +4313,7 @@
   if
    i32.const 528
    i32.const 80
-   i32.const 96
+   i32.const 103
    i32.const 40
    call $~lib/builtins/abort
    unreachable

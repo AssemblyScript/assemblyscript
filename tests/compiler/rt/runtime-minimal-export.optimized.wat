@@ -7,6 +7,13 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/__rtti_base i32 (i32.const 1456))
  (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
@@ -19,13 +26,6 @@
  (data (i32.const 1356) "<")
  (data (i32.const 1368) "\01\00\00\00(\00\00\00O\00b\00j\00e\00c\00t\00 \00i\00s\00 \00n\00o\00t\00 \00p\00i\00n\00n\00e\00d")
  (data (i32.const 1456) "\03\00\00\00 \00\00\00\00\00\00\00 ")
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/fromSpace (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/tcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 1456))
  (export "__new" (func $~lib/rt/tcms/__new))
  (export "__pin" (func $~lib/rt/tcms/__pin))
  (export "__unpin" (func $~lib/rt/tcms/__unpin))
@@ -763,12 +763,12 @@
   (local $4 i32)
   local.get $1
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 1056
    i32.const 1184
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -999,12 +999,12 @@
   (local $2 i32)
   local.get $0
   i32.const 1073741804
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 1056
    i32.const 1120
    i32.const 125
-   i32.const 31
+   i32.const 30
    call $~lib/builtins/abort
    unreachable
   end
