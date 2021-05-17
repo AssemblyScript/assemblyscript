@@ -103,5 +103,5 @@ newCodeSource.internalPath = internalPath;
 program.replaceSource(newCodeSource);
 console.log(`After replaceSource node kind: ${parser.sources[0].statements[0].kind}`);
 if (parser.sources[0] != newCodeSource) {
-  throw new Error("Program.replace failed");
+  throw new Error("Program.replaceSource failed");
 }
