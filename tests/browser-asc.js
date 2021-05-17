@@ -102,6 +102,6 @@ const newCodeSource = newParser.sources[0];
 newCodeSource.internalPath = internalPath;
 program.replaceSource(newCodeSource);
 console.log(`After replaceSource node kind: ${parser.sources[0].statements[0].kind}`);
-if (parser.sources[0] != newCodeSource) {
+if (program.sources[0] != newCodeSource) {
   throw new Error("Program.replaceSource failed");
 }
