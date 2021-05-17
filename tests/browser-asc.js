@@ -85,15 +85,15 @@ process.stdout.write(output.stdout.toString());
 console.log(">>> .stderr >>>");
 process.stdout.write(output.stderr.toString());
 console.log(">>> .text >>>");
-process.stdout.write(output.text);
-console.log(">>> .binary >>> " + output.binary.length + " bytes");
+// process.stdout.write(output.text);
+// console.log(">>> .binary >>> " + output.binary.length + " bytes");
 
-const code = `let a = "hello"`;
+const code = `"hello world"`;
 const program = newProgram(newOptions());
 const parser = program.parser;
 parser.parseFile(code, "index.ts", true);
-console.log(`Before replaceSource: ${parser.sources[0].statements[0]}`);
-const newCode = `let a = "world"`;
+console.log(`Before replaceSource node kind: ${parser.sources[0].statements[0].kind}`);
+const newCode = `{}`;
 const newParser = new Parser();
 newParser.parseFile(newCode, "index2.ts", true);
 
@@ -101,7 +101,7 @@ const internalPath = parser.sources[0].internalPath;
 const newCodeSource = newParser.sources[0];
 newCodeSource.internalPath = internalPath;
 program.replaceSource(newCodeSource);
-console.log(`After replaceSource: ${parser.sources[0].statements[0]}`);
+console.log(`After replaceSource node kind: ${parser.sources[0].statements[0].kind}`);
 if (parser.sources[0] != newCodeSource) {
-  throw new
+  throw new Error("Program.replace failed");
 }
