@@ -3,7 +3,8 @@ const {
   Parser,
   newProgram,
   newOptions,
-} = require("../dist/assemblyscript");
+} = require("../src");
+
 
 if (typeof asc.definitionFiles.assembly !== "string") throw Error("missing bundled assembly.d.ts");
 if (typeof asc.definitionFiles.portable !== "string") throw Error("missing bundled portable.d.ts");
@@ -99,6 +100,8 @@ newParser.parseFile(newCode, "index2.ts", true);
 const internalPath = parser.sources[0].internalPath;
 const newCodeSource = newParser.sources[0];
 newCodeSource.internalPath = internalPath;
-
 program.replaceSource(newCodeSource);
 console.log(`After replaceSource: ${parser.sources[0].statements[0]}`);
+if (parser.sources[0] != newCodeSource) {
+  throw new
+}
