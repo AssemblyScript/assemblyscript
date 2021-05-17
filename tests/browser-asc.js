@@ -92,7 +92,7 @@ const program = newProgram(newOptions());
 const parser = program.parser;
 parser.parseFile(code, "index.ts", true);
 console.log(`Before replaceSource: ${parser.sources[0].statements[0]}`);
-const newCode = `let a = "world`;
+const newCode = `let a = "world"`;
 const newParser = new Parser();
 newParser.parseFile(newCode, "index2.ts", true);
 
