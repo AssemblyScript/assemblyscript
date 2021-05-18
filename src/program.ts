@@ -944,7 +944,7 @@ export class Program extends DiagnosticEmitter {
       : null;
   }
 
-  /** Replace a old source with a new source according to internalPath */
+  /** Replace an old source with a new source according to internalPath */
   replaceSource(newSource: Source): void {
     var sources = this.sources;
     for (let i = 0, len = sources.length; i < len; i++) {
