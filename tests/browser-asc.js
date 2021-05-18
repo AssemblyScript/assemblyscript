@@ -85,8 +85,8 @@ process.stdout.write(output.stdout.toString());
 console.log(">>> .stderr >>>");
 process.stdout.write(output.stderr.toString());
 console.log(">>> .text >>>");
-// process.stdout.write(output.text);
-// console.log(">>> .binary >>> " + output.binary.length + " bytes");
+process.stdout.write(output.text);
+console.log(">>> .binary >>> " + output.binary.length + " bytes");
 
 const code = `"hello world"`;
 const program = newProgram(newOptions());
