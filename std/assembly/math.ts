@@ -1437,7 +1437,8 @@ export namespace NativeMath {
   // @ts-ignore: decorator
   @inline
   export function round(x: f64): f64 {
-    return builtin_copysign<f64>(builtin_floor<f64>(x + 0.5), x);
+    let roundUp = builtin_ceil<f64>(x);
+    return select<f64>(roundUp, roundUp - 1.0, roundUp - 0.5 <= x);
   }
 
   // @ts-ignore: decorator
@@ -2732,7 +2733,8 @@ export namespace NativeMathf {
   // @ts-ignore: decorator
   @inline
   export function round(x: f32): f32 {
-    return builtin_copysign<f32>(builtin_floor<f32>(x + 0.5), x);
+    let roundUp = builtin_ceil<f32>(x);
+    return select<f32>(roundUp, roundUp - 1.0, roundUp - 0.5 <= x);
   }
 
   // @ts-ignore: decorator
