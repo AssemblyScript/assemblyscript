@@ -845,7 +845,24 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
     this.tryParseSignatureIsSignature = true;
-    if (!parameters) parameters = [];
+    if (!parameters) {
+      parameters = [];
+    } else {
+      // check duplicates
+      let visited = new Set<string>();
+      for (let i = 0, k = parameters.length; i < k; i++) {
+        let paramIdentifier = parameters[i].name;
+        let paramName = paramIdentifier.text;
+        if (!visited.has(paramName)) {
+          visited.add(paramName);
+        } else {
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            paramIdentifier.range, paramName
+          );
+        }
+      }
+    }
     return Node.createFunctionType(
       parameters,
       returnType,
@@ -1484,6 +1501,23 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
+    // check duplicates
+    if (parameters.length >= 2) {
+      let visited = new Set<string>();
+      for (let i = 0, k = parameters.length; i < k; i++) {
+        let paramIdentifier = parameters[i].name;
+        let paramName = paramIdentifier.text;
+        if (!visited.has(paramName)) {
+          visited.add(paramName);
+        } else {
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            paramIdentifier.range, paramName
+          );
+        }
+      }
+    }
+
     var signature = Node.createFunctionType(
       parameters,
       returnType,
@@ -1563,6 +1597,23 @@ export class Parser extends DiagnosticEmitter {
     var signatureStart = tn.pos;
     var parameters = this.parseParameters(tn);
     if (!parameters) return null;
+
+    // check duplicates
+    if (parameters.length >= 2) {
+      let visited = new Set<string>();
+      for (let i = 0, k = parameters.length; i < k; i++) {
+        let paramIdentifier = parameters[i].name;
+        let paramName = paramIdentifier.text;
+        if (!visited.has(paramName)) {
+          visited.add(paramName);
+        } else {
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            paramIdentifier.range, paramName
+          );
+        }
+      }
+    }
 
     return this.parseFunctionExpressionCommon(tn, name, parameters, this.parseParametersThis, arrowKind, startPos, signatureStart);
   }
