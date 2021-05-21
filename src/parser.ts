@@ -848,22 +848,7 @@ export class Parser extends DiagnosticEmitter {
     if (!parameters) {
       parameters = [];
     } else {
-      // check duplicates
-      if (parameters.length >= 2) {
-        let visited = new Set<string>();
-        for (let i = 0, k = parameters.length; i < k; i++) {
-          let paramIdentifier = parameters[i].name;
-          let paramName = paramIdentifier.text;
-          if (!visited.has(paramName)) {
-            visited.add(paramName);
-          } else {
-            this.error(
-              DiagnosticCode.Duplicate_identifier_0,
-              paramIdentifier.range, paramName
-            );
-          }
-        }
-      }
+      this.checkFunctionParameterDuplicates(parameters);
     }
     return Node.createFunctionType(
       parameters,
@@ -1503,22 +1488,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    // check duplicates
-    if (parameters.length >= 2) {
-      let visited = new Set<string>();
-      for (let i = 0, k = parameters.length; i < k; i++) {
-        let paramIdentifier = parameters[i].name;
-        let paramName = paramIdentifier.text;
-        if (!visited.has(paramName)) {
-          visited.add(paramName);
-        } else {
-          this.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            paramIdentifier.range, paramName
-          );
-        }
-      }
-    }
+    this.checkFunctionParameterDuplicates(parameters);
 
     var signature = Node.createFunctionType(
       parameters,
@@ -1600,23 +1570,7 @@ export class Parser extends DiagnosticEmitter {
     var parameters = this.parseParameters(tn);
     if (!parameters) return null;
 
-    // check duplicates
-    if (parameters.length >= 2) {
-      let visited = new Set<string>();
-      for (let i = 0, k = parameters.length; i < k; i++) {
-        let paramIdentifier = parameters[i].name;
-        let paramName = paramIdentifier.text;
-        if (!visited.has(paramName)) {
-          visited.add(paramName);
-        } else {
-          this.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            paramIdentifier.range, paramName
-          );
-        }
-      }
-    }
-
+    this.checkFunctionParameterDuplicates(parameters);
     return this.parseFunctionExpressionCommon(tn, name, parameters, this.parseParametersThis, arrowKind, startPos, signatureStart);
   }
 
@@ -4274,6 +4228,24 @@ export class Parser extends DiagnosticEmitter {
       potentiallyGeneric = false;
     }
     return expr;
+  }
+
+  private checkFunctionParameterDuplicates(parameters: ParameterNode[]): void {
+    if (parameters.length >= 2) {
+      let visited = new Set<string>();
+      for (let i = 0, k = parameters.length; i < k; i++) {
+        let paramIdentifier = parameters[i].name;
+        let paramName = paramIdentifier.text;
+        if (!visited.has(paramName)) {
+          visited.add(paramName);
+        } else {
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            paramIdentifier.range, paramName
+          );
+        }
+      }
+    }
   }
 
   /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */
