@@ -4234,7 +4234,8 @@ export class Parser extends DiagnosticEmitter {
     var numParameters = parameters.length;
     if (numParameters >= 2) {
       let visited = new Set<string>();
-      for (let i = 0; i < numParameters; i++) {
+      visited.add(parameters[0].name.text);
+      for (let i = 1; i < numParameters; i++) {
         let paramIdentifier = parameters[i].name;
         let paramName = paramIdentifier.text;
         if (!visited.has(paramName)) {
