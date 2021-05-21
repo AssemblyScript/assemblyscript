@@ -1570,7 +1570,6 @@ export class Parser extends DiagnosticEmitter {
     var parameters = this.parseParameters(tn);
     if (!parameters) return null;
 
-    this.checkFunctionParameterDuplicates(parameters);
     return this.parseFunctionExpressionCommon(tn, name, parameters, this.parseParametersThis, arrowKind, startPos, signatureStart);
   }
 
@@ -1583,6 +1582,8 @@ export class Parser extends DiagnosticEmitter {
     startPos: i32 = -1,
     signatureStart: i32 = -1
   ): FunctionExpression | null {
+    this.checkFunctionParameterDuplicates(parameters);
+
     if (startPos < 0) startPos = name.range.start;
     if (signatureStart < 0) signatureStart = startPos;
 
