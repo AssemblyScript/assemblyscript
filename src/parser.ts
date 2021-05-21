@@ -4231,9 +4231,10 @@ export class Parser extends DiagnosticEmitter {
   }
 
   private checkFunctionParameterDuplicates(parameters: ParameterNode[]): void {
-    if (parameters.length >= 2) {
+    var numParameters = parameters.length;
+    if (numParameters >= 2) {
       let visited = new Set<string>();
-      for (let i = 0, k = parameters.length; i < k; i++) {
+      for (let i = 0; i < numParameters; i++) {
         let paramIdentifier = parameters[i].name;
         let paramName = paramIdentifier.text;
         if (!visited.has(paramName)) {
