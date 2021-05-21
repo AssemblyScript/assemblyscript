@@ -849,17 +849,19 @@ export class Parser extends DiagnosticEmitter {
       parameters = [];
     } else {
       // check duplicates
-      let visited = new Set<string>();
-      for (let i = 0, k = parameters.length; i < k; i++) {
-        let paramIdentifier = parameters[i].name;
-        let paramName = paramIdentifier.text;
-        if (!visited.has(paramName)) {
-          visited.add(paramName);
-        } else {
-          this.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            paramIdentifier.range, paramName
-          );
+      if (parameters.length >= 2) {
+        let visited = new Set<string>();
+        for (let i = 0, k = parameters.length; i < k; i++) {
+          let paramIdentifier = parameters[i].name;
+          let paramName = paramIdentifier.text;
+          if (!visited.has(paramName)) {
+            visited.add(paramName);
+          } else {
+            this.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              paramIdentifier.range, paramName
+            );
+          }
         }
       }
     }
