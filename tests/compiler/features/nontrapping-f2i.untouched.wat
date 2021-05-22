@@ -18,6 +18,7 @@
  (global $~started (mut i32) (i32.const 0))
  (memory $0 0)
  (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $start:features/nontrapping-f2i

@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
  (import "mutable-globals" "external" (global $features/mutable-globals/external (mut i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $features/mutable-globals/internal (mut i32) (i32.const 124))

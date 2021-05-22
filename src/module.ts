@@ -2318,6 +2318,9 @@ export class Module {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("code-folding");
       }
+      if (optimizeLevel > 1 && (this.getFeatures() & FeatureFlags.GC) != 0) {
+        passes.push("heap2local");
+      }
       // precompute works best after global optimizations
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("precompute-propagate");
