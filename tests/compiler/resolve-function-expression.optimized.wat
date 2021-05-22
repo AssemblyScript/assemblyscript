@@ -1094,20 +1094,17 @@
        local.get $1
        i32.const 15
        i32.and
-       i32.eqz
-       i32.const 0
+       i32.const 1
        local.get $1
        select
        if (result i32)
+        i32.const 1
+       else
         local.get $0
         i32.load
         i32.const 1
         i32.and
-        i32.eqz
-       else
-        i32.const 0
        end
-       i32.eqz
        if
         i32.const 0
         i32.const 1792
@@ -2005,13 +2002,13 @@
     local.tee $2
     i32.const 7
     i32.and
-    i32.eqz
-    i32.const 0
+    i32.const 1
     local.get $1
     local.tee $0
     i32.const 4
     i32.ge_u
     select
+    i32.eqz
     if
      loop $do-continue|01
       local.get $2

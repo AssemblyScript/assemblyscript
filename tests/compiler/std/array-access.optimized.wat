@@ -1,7 +1,7 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17692))
@@ -63,13 +63,13 @@
    local.tee $3
    i32.const 7
    i32.and
-   i32.eqz
-   i32.const 0
+   i32.const 1
    local.get $1
    local.tee $0
    i32.const 4
    i32.ge_u
    select
+   i32.eqz
    if
     loop $do-continue|0
      local.get $3
