@@ -1,9 +1,9 @@
 (module
- (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
- (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17596))
  (memory $0 1)
@@ -81,10 +81,10 @@
    drop
    i32.const 0
    local.get $1
-   i32.eqz
-   i32.const 1
+   i32.const 0
    local.get $0
    select
+   i32.eqz
    br_if $__inlined_func$~lib/string/String.__eq
    drop
    i32.const 0
@@ -113,13 +113,13 @@
     i32.const 7
     i32.and
     i32.or
-    i32.eqz
-    i32.const 0
+    i32.const 1
     local.get $2
     local.tee $0
     i32.const 4
     i32.ge_u
     select
+    i32.eqz
     if
      loop $do-continue|0
       local.get $3
