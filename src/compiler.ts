@@ -1454,39 +1454,6 @@ export class Compiler extends DiagnosticEmitter {
 
   // === Functions ================================================================================
 
-  private ensureNonDuplicateFunctionParameters(instance: Function): void {
-    var parameters = instance.prototype.functionTypeNode.parameters;
-    var numParameters = parameters.length;
-    if (numParameters >= 2) {
-      if (numParameters == 2) {
-        // fast allocation free path for only 2 parameters
-        let secondParamIdentifier = parameters[1].name;
-        let secondParamName = secondParamIdentifier.text;
-        if (parameters[0].name.text == secondParamName) {
-          this.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            secondParamIdentifier.range, secondParamName
-          );
-        }
-      } else {
-        let visited = new Set<string>();
-        visited.add(parameters[0].name.text);
-        for (let i = 1; i < numParameters; i++) {
-          let paramIdentifier = parameters[i].name;
-          let paramName = paramIdentifier.text;
-          if (!visited.has(paramName)) {
-            visited.add(paramName);
-          } else {
-            this.error(
-              DiagnosticCode.Duplicate_identifier_0,
-              paramIdentifier.range, paramName
-            );
-          }
-        }
-      }
-    }
-  }
-
   /** Compiles a priorly resolved function. */
   compileFunction(
     /** Function to compile. */
@@ -1504,7 +1471,25 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    this.ensureNonDuplicateFunctionParameters(instance);
+    // ensure the function hasn't duplicate parameters
+    var parameters = instance.prototype.functionTypeNode.parameters;
+    var numParameters = parameters.length;
+    if (numParameters >= 2) {
+      let visited = new Set<string>();
+      visited.add(parameters[0].name.text);
+      for (let i = 1; i < numParameters; i++) {
+        let paramIdentifier = parameters[i].name;
+        let paramName = paramIdentifier.text;
+        if (!visited.has(paramName)) {
+          visited.add(paramName);
+        } else {
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            paramIdentifier.range, paramName
+          );
+        }
+      }
+    }
 
     instance.set(CommonFlags.COMPILED);
     var pendingElements = this.pendingElements;
