@@ -209,7 +209,6 @@
     "description": [
       "Enables WebAssembly features being disabled by default.",
       "",
-      " sign-extension      Sign-extension operations",
       " nontrapping-f2i     Non-trapping float to integer ops.",
       " bulk-memory         Bulk memory operations.",
       " simd                SIMD types and operations.",
@@ -233,6 +232,7 @@
       "Disables WebAssembly features being enabled by default.",
       "",
       " mutable-globals     Mutable global imports and exports.",
+      " sign-extension      Sign-extension operations",
       ""
     ],
     "type": "S",
@@ -376,7 +376,7 @@
   " ...": {
     "description": "Specifies node.js options (CLI only). See: node --help"
   },
-  
+
   "-Os": { "value": { "optimize": true, "shrinkLevel": 1 } },
   "-Oz": { "value": { "optimize": true, "shrinkLevel": 2 } },
   "-O0": { "value": { "optimizeLevel": 0, "shrinkLevel": 0 } },
