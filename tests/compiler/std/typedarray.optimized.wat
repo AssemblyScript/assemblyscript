@@ -630,7 +630,7 @@
  (data (i32.const 13964) "B\08\00\00\00\00\00\00\02\t")
  (data (i32.const 14332) "\02\19\00\00\00\00\00\00\02\1a\00\00\00\00\00\00B\00\00\00\00\00\00\00\82\08\00\00\00\00\00\00\82\00\00\00\00\00\00\00\02\01\00\00\00\00\00\00\02\n\00\00\00\00\00\00\02\02")
  (table $0 144 funcref)
- (elem $0 (i32.const 1) $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i8>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Int8Array,i8>~anonymous|0 $~lib/util/sort/COMPARATOR<u8>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Uint8Array,u8>~anonymous|0 $~lib/util/sort/COMPARATOR<u8>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Uint8Array,u8>~anonymous|0 $~lib/util/sort/COMPARATOR<i16>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Int16Array,i16>~anonymous|0 $~lib/util/sort/COMPARATOR<u16>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Uint16Array,u16>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Int32Array,i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Uint32Array,u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i64>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Int64Array,i64>~anonymous|0 $~lib/util/sort/COMPARATOR<u64>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Uint64Array,u64>~anonymous|0 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Float64Array,f64>~anonymous|0)
+ (elem $0 (i32.const 1) $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayMap<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int32Array,i32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Int64Array,i64>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float32Array,f32>~anonymous|1 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayFindIndex<~lib/typedarray/Float64Array,f64>~anonymous|1 $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayEvery<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArraySome<~lib/typedarray/Float64Array,f64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int32Array,i32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArrayForEach<~lib/typedarray/Float64Array,f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i8>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Int8Array,i8>~anonymous|0 $~lib/util/sort/COMPARATOR<u8>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Uint8Array,u8>~anonymous|0 $~lib/util/sort/COMPARATOR<u8>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Uint8Array,u8>~anonymous|0 $~lib/util/sort/COMPARATOR<i16>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Int16Array,i16>~anonymous|0 $~lib/util/sort/COMPARATOR<u16>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Uint16Array,u16>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Int32Array,i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Uint32Array,u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i64>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Int64Array,i64>~anonymous|0 $~lib/util/sort/COMPARATOR<u64>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Uint64Array,u64>~anonymous|0 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Float32Array,f32>~anonymous|0 $std/typedarray/testArraySort<~lib/typedarray/Float64Array,f64>~anonymous|0)
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/initLazy (param $0 i32) (result i32)
@@ -4886,10 +4886,7 @@
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 2
   i32.gt_s
  )
@@ -4940,10 +4937,7 @@
  )
  (func $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 2
   i32.gt_s
  )
@@ -4986,8 +4980,7 @@
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 255
-  i32.and
+  i32.extend8_s
   i32.const 2
   i32.eq
  )
@@ -5036,9 +5029,15 @@
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int8Array,i8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
+  i32.extend8_s
+  i32.eqz
+ )
+ (func $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
   i32.const 255
   i32.and
-  i32.eqz
+  i32.const 2
+  i32.eq
  )
  (func $~lib/typedarray/Uint8Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -5083,10 +5082,15 @@
    i32.const 0
   end
  )
+ (func $std/typedarray/testArraySome<~lib/typedarray/Uint8Array,u8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.const 255
+  i32.and
+  i32.eqz
+ )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 2
   i32.eq
  )
@@ -5139,9 +5143,15 @@
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int16Array,i16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
+  i32.extend16_s
+  i32.eqz
+ )
+ (func $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
   i32.const 65535
   i32.and
-  i32.eqz
+  i32.const 2
+  i32.eq
  )
  (func $~lib/typedarray/Uint16Array#some (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -5189,6 +5199,12 @@
    end
    i32.const 0
   end
+ )
+ (func $std/typedarray/testArraySome<~lib/typedarray/Uint16Array,u16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.const 65535
+  i32.and
+  i32.eqz
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int32Array,i32>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
@@ -5553,8 +5569,7 @@
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int8Array,i8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 255
-  i32.and
+  i32.extend8_s
   i32.const 4
   i32.eq
  )
@@ -5598,6 +5613,13 @@
    local.set $2
   end
   local.get $2
+ )
+ (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint8Array,u8>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.const 255
+  i32.and
+  i32.const 4
+  i32.eq
  )
  (func $~lib/typedarray/Int16Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -5646,8 +5668,7 @@
  )
  (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Int16Array,i16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 4
   i32.eq
  )
@@ -5695,6 +5716,13 @@
    local.set $2
   end
   local.get $2
+ )
+ (func $std/typedarray/testArrayFindIndex<~lib/typedarray/Uint16Array,u16>~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.const 65535
+  i32.and
+  i32.const 4
+  i32.eq
  )
  (func $~lib/typedarray/Int32Array#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -5988,12 +6016,10 @@
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  i32.const 1
-  i32.and
+  i32.extend8_s
+  i32.const 2
+  i32.rem_s
+  i32.extend8_s
   i32.eqz
  )
  (func $~lib/typedarray/Int8Array#every (param $0 i32) (param $1 i32) (result i32)
@@ -6092,12 +6118,10 @@
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  i32.const 1
-  i32.and
+  i32.extend16_s
+  i32.const 2
+  i32.rem_s
+  i32.extend16_s
   i32.eqz
  )
  (func $~lib/typedarray/Int16Array#every (param $0 i32) (param $1 i32) (result i32)
@@ -7410,10 +7434,9 @@
      local.tee $3
      local.get $0
      i32.add
-     i32.load8_u
+     i32.load8_s
      local.get $1
-     i32.const 255
-     i32.and
+     i32.extend8_s
      i32.eq
      br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
      local.get $3
@@ -7467,10 +7490,9 @@
      local.tee $3
      local.get $0
      i32.add
-     i32.load8_u
+     i32.load8_s
      local.get $1
-     i32.const 255
-     i32.and
+     i32.extend8_s
      i32.eq
      br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int8Array,i8>|inlined.0
      local.get $3
@@ -7543,10 +7565,7 @@
     i32.const 7024
     local.get $1
     call $~lib/array/Array<i32>#__get
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     call $~lib/typedarray/Int8Array#__set
     local.get $1
     i32.const 1
@@ -7943,6 +7962,144 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $~lib/typedarray/Uint8Array#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const -1
+  local.set $3
+  block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+   local.get $2
+   local.get $0
+   i32.load offset=8
+   local.tee $4
+   i32.ge_s
+   i32.const 1
+   local.get $4
+   select
+   br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+   local.get $2
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $2
+    local.get $4
+    i32.add
+    local.tee $2
+    i32.const 0
+    local.get $2
+    i32.const 0
+    i32.gt_s
+    select
+    local.set $2
+   end
+   local.get $0
+   i32.load offset=4
+   local.set $0
+   loop $while-continue|0
+    local.get $2
+    local.get $4
+    i32.lt_s
+    if
+     local.get $2
+     local.tee $3
+     local.get $0
+     i32.add
+     i32.load8_u
+     local.get $1
+     i32.const 255
+     i32.and
+     i32.eq
+     br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $2
+     br $while-continue|0
+    end
+   end
+   i32.const -1
+   local.set $3
+  end
+  local.get $3
+ )
+ (func $~lib/typedarray/Uint8Array#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const -1
+  local.set $3
+  block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+   local.get $0
+   i32.load offset=8
+   local.tee $4
+   i32.eqz
+   br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+   local.get $2
+   local.get $4
+   i32.add
+   local.get $4
+   i32.const 1
+   i32.sub
+   local.get $2
+   local.get $2
+   local.get $4
+   i32.ge_s
+   select
+   local.get $2
+   i32.const 0
+   i32.lt_s
+   select
+   local.set $2
+   local.get $0
+   i32.load offset=4
+   local.set $0
+   loop $while-continue|0
+    local.get $2
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $2
+     local.tee $3
+     local.get $0
+     i32.add
+     i32.load8_u
+     local.get $1
+     i32.const 255
+     i32.and
+     i32.eq
+     br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint8Array,u8>|inlined.0
+     local.get $3
+     i32.const 1
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
+   end
+   i32.const -1
+   local.set $3
+  end
+  local.get $3
+ )
+ (func $~lib/typedarray/Uint8Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   i32.load offset=8
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Uint8Array#lastIndexOf
+ )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint8Array,u8>
   (local $0 i32)
   (local $1 i32)
@@ -7993,7 +8150,7 @@
   local.get $0
   i32.const 0
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   if
    i32.const 0
    i32.const 1568
@@ -8005,7 +8162,7 @@
   local.get $0
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8019,7 +8176,7 @@
   local.get $0
   i32.const -1
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8033,7 +8190,7 @@
   local.get $0
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -8047,7 +8204,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -8061,7 +8218,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -8075,7 +8232,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8089,7 +8246,7 @@
   local.get $0
   i32.const 1
   i32.const 10
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8103,7 +8260,7 @@
   local.get $0
   i32.const 1
   i32.const -100
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -8118,7 +8275,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1568
@@ -8131,7 +8288,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -8146,7 +8303,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -8161,7 +8318,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -8175,7 +8332,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -8189,7 +8346,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -8203,7 +8360,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -8217,7 +8374,7 @@
   local.get $0
   i32.const 1
   i32.const 100
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -8231,7 +8388,7 @@
   local.get $0
   i32.const 1
   i32.const -10
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -8245,7 +8402,7 @@
   local.get $0
   i32.const 1
   i32.const -11
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -8265,7 +8422,7 @@
   local.get $0
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8279,7 +8436,7 @@
   local.get $0
   i32.const 4
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   if
    i32.const 0
    i32.const 1568
@@ -8291,7 +8448,7 @@
   local.get $0
   i32.const 5
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -8305,7 +8462,7 @@
   local.get $0
   i32.const 9
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8319,7 +8476,7 @@
   local.get $0
   i32.const 10
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8333,7 +8490,7 @@
   local.get $0
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8347,7 +8504,7 @@
   local.get $0
   i32.const 5
   i32.const 1
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -8361,7 +8518,7 @@
   local.get $0
   i32.const 5
   i32.const 2
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8427,7 +8584,7 @@
   local.get $0
   i32.const 0
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   if
    i32.const 0
    i32.const 1568
@@ -8439,7 +8596,7 @@
   local.get $0
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8453,7 +8610,7 @@
   local.get $0
   i32.const -1
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8467,7 +8624,7 @@
   local.get $0
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -8481,7 +8638,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -8495,7 +8652,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -8509,7 +8666,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8523,7 +8680,7 @@
   local.get $0
   i32.const 1
   i32.const 10
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8537,7 +8694,7 @@
   local.get $0
   i32.const 1
   i32.const -100
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -8552,7 +8709,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1568
@@ -8565,7 +8722,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -8580,7 +8737,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -8595,7 +8752,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint8Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -8609,7 +8766,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -8623,7 +8780,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -8637,7 +8794,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -8651,7 +8808,7 @@
   local.get $0
   i32.const 1
   i32.const 100
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -8665,7 +8822,7 @@
   local.get $0
   i32.const 1
   i32.const -10
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -8679,7 +8836,7 @@
   local.get $0
   i32.const 1
   i32.const -11
-  call $~lib/typedarray/Int8Array#lastIndexOf
+  call $~lib/typedarray/Uint8Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -8699,7 +8856,7 @@
   local.get $0
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8713,7 +8870,7 @@
   local.get $0
   i32.const 4
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   if
    i32.const 0
    i32.const 1568
@@ -8725,7 +8882,7 @@
   local.get $0
   i32.const 5
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -8739,7 +8896,7 @@
   local.get $0
   i32.const 9
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8753,7 +8910,7 @@
   local.get $0
   i32.const 10
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8767,7 +8924,7 @@
   local.get $0
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8781,7 +8938,7 @@
   local.get $0
   i32.const 5
   i32.const 1
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -8795,7 +8952,7 @@
   local.get $0
   i32.const 5
   i32.const 2
-  call $~lib/typedarray/Int8Array#indexOf
+  call $~lib/typedarray/Uint8Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -8857,10 +9014,9 @@
      i32.const 1
      i32.shl
      i32.add
-     i32.load16_u
+     i32.load16_s
      local.get $1
-     i32.const 65535
-     i32.and
+     i32.extend16_s
      i32.eq
      br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
      local.get $3
@@ -8918,10 +9074,9 @@
      i32.const 1
      i32.shl
      i32.add
-     i32.load16_u
+     i32.load16_s
      local.get $1
-     i32.const 65535
-     i32.and
+     i32.extend16_s
      i32.eq
      br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
      local.get $3
@@ -8996,10 +9151,7 @@
     i32.const 7024
     local.get $1
     call $~lib/array/Array<i32>#__get
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     call $~lib/typedarray/Int16Array#__set
     local.get $1
     i32.const 1
@@ -9395,6 +9547,154 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $~lib/typedarray/Uint16Array#indexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const -1
+  local.set $3
+  block $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+   local.get $2
+   local.get $0
+   i32.load offset=8
+   i32.const 1
+   i32.shr_u
+   local.tee $4
+   i32.ge_s
+   i32.const 1
+   local.get $4
+   select
+   br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+   local.get $2
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $2
+    local.get $4
+    i32.add
+    local.tee $2
+    i32.const 0
+    local.get $2
+    i32.const 0
+    i32.gt_s
+    select
+    local.set $2
+   end
+   local.get $0
+   i32.load offset=4
+   local.set $0
+   loop $while-continue|0
+    local.get $2
+    local.get $4
+    i32.lt_s
+    if
+     local.get $0
+     local.get $2
+     local.tee $3
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_u
+     local.get $1
+     i32.const 65535
+     i32.and
+     i32.eq
+     br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $2
+     br $while-continue|0
+    end
+   end
+   i32.const -1
+   local.set $3
+  end
+  local.get $3
+ )
+ (func $~lib/typedarray/Uint16Array#lastIndexOf (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const -1
+  local.set $3
+  block $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+   local.get $0
+   i32.load offset=8
+   i32.const 1
+   i32.shr_u
+   local.tee $4
+   i32.eqz
+   br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+   local.get $2
+   local.get $4
+   i32.add
+   local.get $4
+   i32.const 1
+   i32.sub
+   local.get $2
+   local.get $2
+   local.get $4
+   i32.ge_s
+   select
+   local.get $2
+   i32.const 0
+   i32.lt_s
+   select
+   local.set $2
+   local.get $0
+   i32.load offset=4
+   local.set $0
+   loop $while-continue|0
+    local.get $2
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $0
+     local.get $2
+     local.tee $3
+     i32.const 1
+     i32.shl
+     i32.add
+     i32.load16_u
+     local.get $1
+     i32.const 65535
+     i32.and
+     i32.eq
+     br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
+     local.get $3
+     i32.const 1
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
+   end
+   i32.const -1
+   local.set $3
+  end
+  local.get $3
+ )
+ (func $~lib/typedarray/Uint16Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  block $1of1
+   block $0of1
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $0of1 $1of1 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   i32.load offset=8
+   i32.const 1
+   i32.shr_u
+   local.set $2
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/typedarray/Uint16Array#lastIndexOf
+ )
  (func $std/typedarray/testArrayIndexOfAndLastIndexOf<~lib/typedarray/Uint16Array,u16>
   (local $0 i32)
   (local $1 i32)
@@ -9445,7 +9745,7 @@
   local.get $0
   i32.const 0
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   if
    i32.const 0
    i32.const 1568
@@ -9457,7 +9757,7 @@
   local.get $0
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -9471,7 +9771,7 @@
   local.get $0
   i32.const -1
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -9485,7 +9785,7 @@
   local.get $0
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -9499,7 +9799,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -9513,7 +9813,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 3
   i32.ne
   if
@@ -9527,7 +9827,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -9541,7 +9841,7 @@
   local.get $0
   i32.const 1
   i32.const 10
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -9555,7 +9855,7 @@
   local.get $0
   i32.const 1
   i32.const -100
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -9570,7 +9870,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint16Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1568
@@ -9583,7 +9883,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint16Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -9598,7 +9898,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint16Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -9613,7 +9913,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
+  call $~lib/typedarray/Uint16Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -9627,7 +9927,7 @@
   local.get $0
   i32.const 3
   i32.const 4
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -9641,7 +9941,7 @@
   local.get $0
   i32.const 3
   i32.const 3
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const 3
   i32.ne
   if
@@ -9655,7 +9955,7 @@
   local.get $0
   i32.const 3
   i32.const 2
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -9669,7 +9969,7 @@
   local.get $0
   i32.const 1
   i32.const 100
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -9683,7 +9983,7 @@
   local.get $0
   i32.const 1
   i32.const -10
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const 1
   i32.ne
   if
@@ -9697,7 +9997,7 @@
   local.get $0
   i32.const 1
   i32.const -11
-  call $~lib/typedarray/Int16Array#lastIndexOf
+  call $~lib/typedarray/Uint16Array#lastIndexOf
   i32.const -1
   i32.ne
   if
@@ -9717,7 +10017,7 @@
   local.get $0
   i32.const 3
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -9731,7 +10031,7 @@
   local.get $0
   i32.const 4
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   if
    i32.const 0
    i32.const 1568
@@ -9743,7 +10043,7 @@
   local.get $0
   i32.const 5
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -9757,7 +10057,7 @@
   local.get $0
   i32.const 9
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -9771,7 +10071,7 @@
   local.get $0
   i32.const 10
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -9785,7 +10085,7 @@
   local.get $0
   i32.const 11
   i32.const 0
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -9799,7 +10099,7 @@
   local.get $0
   i32.const 5
   i32.const 1
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const 1
   i32.ne
   if
@@ -9813,7 +10113,7 @@
   local.get $0
   i32.const 5
   i32.const 2
-  call $~lib/typedarray/Int16Array#indexOf
+  call $~lib/typedarray/Uint16Array#indexOf
   i32.const -1
   i32.ne
   if
@@ -13359,10 +13659,7 @@
  (func $~lib/util/number/itoa_buffered<i8> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 0
   i32.lt_s
   local.tee $2
@@ -13376,10 +13673,7 @@
    local.set $1
   end
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 10
   i32.lt_u
   if
@@ -13389,10 +13683,7 @@
    i32.shl
    i32.add
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 48
    i32.or
    i32.store16
@@ -13401,21 +13692,17 @@
    i32.add
    return
   end
-  local.get $2
-  local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  local.tee $2
-  call $~lib/util/number/decimalCount32
-  i32.add
-  local.set $1
   local.get $0
+  local.get $1
+  i32.extend8_s
+  local.get $1
+  i32.extend8_s
+  call $~lib/util/number/decimalCount32
   local.get $2
-  local.get $1
+  i32.add
+  local.tee $0
   call $~lib/util/number/utoa_dec_simple<u32>
-  local.get $1
+  local.get $0
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -13566,10 +13853,7 @@
  (func $~lib/util/number/itoa_buffered<i16> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 0
   i32.lt_s
   local.tee $2
@@ -13583,10 +13867,7 @@
    local.set $1
   end
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 10
   i32.lt_u
   if
@@ -13596,10 +13877,7 @@
    i32.shl
    i32.add
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 48
    i32.or
    i32.store16
@@ -13608,21 +13886,17 @@
    i32.add
    return
   end
-  local.get $2
-  local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  local.tee $2
-  call $~lib/util/number/decimalCount32
-  i32.add
-  local.set $1
   local.get $0
+  local.get $1
+  i32.extend16_s
+  local.get $1
+  i32.extend16_s
+  call $~lib/util/number/decimalCount32
   local.get $2
-  local.get $1
+  i32.add
+  local.tee $0
   call $~lib/util/number/utoa_dec_simple<u32>
-  local.get $1
+  local.get $0
  )
  (func $~lib/typedarray/Int16Array#join (param $0 i32) (result i32)
   local.get $0
@@ -16523,34 +16797,22 @@
  )
  (func $~lib/util/sort/COMPARATOR<i8>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.sub
  )
  (func $std/typedarray/testArraySort<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  local.tee $1
+  i32.extend8_s
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  local.tee $0
+  i32.extend8_s
   i32.gt_s
-  local.get $0
   local.get $1
-  i32.gt_s
+  i32.extend8_s
+  local.get $0
+  i32.extend8_s
+  i32.lt_s
   i32.sub
  )
  (func $~lib/util/sort/weakHeapSort<u8> (param $0 i32) (param $1 i32) (param $2 i32)
@@ -17345,34 +17607,22 @@
  )
  (func $~lib/util/sort/COMPARATOR<i16>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.sub
  )
  (func $std/typedarray/testArraySort<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  local.tee $1
+  i32.extend16_s
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  local.tee $0
+  i32.extend16_s
   i32.gt_s
-  local.get $0
   local.get $1
-  i32.gt_s
+  i32.extend16_s
+  local.get $0
+  i32.extend16_s
+  i32.lt_s
   i32.sub
  )
  (func $~lib/util/sort/weakHeapSort<u16> (param $0 i32) (param $1 i32) (param $2 i32)
@@ -23031,13 +23281,11 @@
   i32.const 6448
   i32.store
   local.get $0
-  i32.const 255
-  i32.and
+  i32.extend8_s
   i32.const 6448
   local.get $1
   call $~lib/array/Array<i32>#__get
-  i32.const 255
-  i32.and
+  i32.extend8_s
   i32.ne
   if
    i32.const 0
@@ -23112,10 +23360,7 @@
   i32.const 6448
   i32.const 0
   call $~lib/array/Array<i32>#__get
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/typedarray/Int8Array#__set
   global.get $~lib/memory/__stack_pointer
   i32.const 6448
@@ -23125,10 +23370,7 @@
   i32.const 6448
   i32.const 1
   call $~lib/array/Array<i32>#__get
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/typedarray/Int8Array#__set
   global.get $~lib/memory/__stack_pointer
   i32.const 6448
@@ -23138,10 +23380,7 @@
   i32.const 6448
   i32.const 2
   call $~lib/array/Array<i32>#__get
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   call $~lib/typedarray/Int8Array#__set
   global.get $~lib/memory/__stack_pointer
   i32.const 6496
@@ -23191,6 +23430,66 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
+ (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint8Array,u8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 6448
+  i32.store
+  local.get $0
+  i32.const 255
+  i32.and
+  i32.const 6448
+  local.get $1
+  call $~lib/array/Array<i32>#__get
+  i32.const 255
+  i32.and
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1568
+   i32.const 513
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  global.get $std/typedarray/forEachCallCount
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1568
+   i32.const 514
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
+  global.get $std/typedarray/forEachSelf
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1568
+   i32.const 515
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $std/typedarray/forEachCallCount
+  i32.const 1
+  i32.add
+  global.set $std/typedarray/forEachCallCount
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
@@ -23204,13 +23503,11 @@
   i32.const 6448
   i32.store
   local.get $0
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.const 6448
   local.get $1
   call $~lib/array/Array<i32>#__get
-  i32.const 65535
-  i32.and
+  i32.extend16_s
   i32.ne
   if
    i32.const 0
@@ -23285,10 +23582,7 @@
   i32.const 6448
   i32.const 0
   call $~lib/array/Array<i32>#__get
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/typedarray/Int16Array#__set
   global.get $~lib/memory/__stack_pointer
   i32.const 6448
@@ -23298,10 +23592,7 @@
   i32.const 6448
   i32.const 1
   call $~lib/array/Array<i32>#__get
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/typedarray/Int16Array#__set
   global.get $~lib/memory/__stack_pointer
   i32.const 6448
@@ -23311,10 +23602,7 @@
   i32.const 6448
   i32.const 2
   call $~lib/array/Array<i32>#__get
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   call $~lib/typedarray/Int16Array#__set
   global.get $~lib/memory/__stack_pointer
   i32.const 6592
@@ -23365,6 +23653,66 @@
   end
   global.get $~lib/memory/__stack_pointer
   i32.const 12
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
+ (func $std/typedarray/testArrayForEach<~lib/typedarray/Uint16Array,u16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 6448
+  i32.store
+  local.get $0
+  i32.const 65535
+  i32.and
+  i32.const 6448
+  local.get $1
+  call $~lib/array/Array<i32>#__get
+  i32.const 65535
+  i32.and
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1568
+   i32.const 513
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  global.get $std/typedarray/forEachCallCount
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1568
+   i32.const 514
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
+  global.get $std/typedarray/forEachSelf
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1568
+   i32.const 515
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $std/typedarray/forEachCallCount
+  i32.const 1
+  i32.add
+  global.set $std/typedarray/forEachCallCount
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -24392,20 +24740,14 @@
     i32.const 6912
     local.get $0
     call $~lib/array/Array<i32>#__get
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     call $~lib/typedarray/Int8Array#__set
     local.get $3
     local.get $0
     i32.const 6912
     local.get $0
     call $~lib/array/Array<i32>#__get
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     call $~lib/typedarray/Int8Array#__set
     local.get $0
     i32.const 1
@@ -24434,10 +24776,7 @@
     local.get $0
     i32.sub
     call $~lib/array/Array<i32>#__get
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.ne
     if
      i32.const 0
@@ -24906,20 +25245,14 @@
     i32.const 6912
     local.get $0
     call $~lib/array/Array<i32>#__get
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     call $~lib/typedarray/Int16Array#__set
     local.get $3
     local.get $0
     i32.const 6912
     local.get $0
     call $~lib/array/Array<i32>#__get
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     call $~lib/typedarray/Int16Array#__set
     local.get $0
     i32.const 1
@@ -24948,10 +25281,7 @@
     local.get $0
     i32.sub
     call $~lib/array/Array<i32>#__get
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.ne
     if
      i32.const 0
@@ -27387,10 +27717,7 @@
     i32.const 8768
     local.get $0
     call $~lib/array/Array<i32>#__get
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     call $~lib/typedarray/Int8Array#__set
     local.get $0
     i32.const 1
@@ -27799,10 +28126,7 @@
     i32.const 8768
     local.get $0
     call $~lib/array/Array<i32>#__get
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     call $~lib/typedarray/Int16Array#__set
     local.get $0
     i32.const 1
@@ -37127,8 +37451,7 @@
              block $folding-inner1
               block $folding-inner0
                local.get $2
-               i32.const 255
-               i32.and
+               i32.extend8_s
                i32.const 6
                i32.ne
                br_if $folding-inner0
@@ -37286,8 +37609,7 @@
                 end
                end
                local.get $2
-               i32.const 65535
-               i32.and
+               i32.extend16_s
                i32.const 6
                i32.ne
                br_if $folding-inner0
@@ -38413,8 +38735,7 @@
                 end
                end
                local.get $2
-               i32.const 255
-               i32.and
+               i32.extend8_s
                i32.const 6
                i32.ne
                br_if $folding-inner4
@@ -38572,8 +38893,7 @@
                 end
                end
                local.get $2
-               i32.const 65535
-               i32.and
+               i32.extend16_s
                i32.const 6
                i32.ne
                br_if $folding-inner4

@@ -5,9 +5,9 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_f32_=>_none (func (param i32 f32)))
  (type $i32_f64_=>_none (func (param i32 f64)))
@@ -1810,10 +1810,7 @@
  )
  (func $~lib/util/hash/HASH<i8> (param $0 i32) (result i32)
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const -1028477379
   i32.mul
   i32.const 374761394
@@ -1866,10 +1863,9 @@
      i32.const 0
     else
      local.get $0
-     i32.load8_u
+     i32.load8_s
      local.get $1
-     i32.const 255
-     i32.and
+     i32.extend8_s
      i32.eq
     end
     if
@@ -2560,10 +2556,7 @@
   i32.store
   loop $for-loop|1
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 100
    i32.lt_s
    if
@@ -2616,10 +2609,7 @@
   local.set $1
   loop $for-loop|3
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 100
    i32.lt_s
    if
@@ -2851,10 +2841,7 @@
   local.set $3
   loop $for-loop|6
    local.get $3
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 50
    i32.lt_s
    if
@@ -2907,10 +2894,7 @@
   local.set $3
   loop $for-loop|8
    local.get $3
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 50
    i32.lt_s
    if
@@ -3022,12 +3006,55 @@
   i32.shr_u
   i32.xor
  )
+ (func $~lib/set/Set<u8>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  local.set $0
+  loop $while-continue|0
+   local.get $0
+   if
+    local.get $0
+    i32.load offset=4
+    local.tee $2
+    i32.const 1
+    i32.and
+    if (result i32)
+     i32.const 0
+    else
+     local.get $0
+     i32.load8_u
+     local.get $1
+     i32.const 255
+     i32.and
+     i32.eq
+    end
+    if
+     local.get $0
+     return
+    end
+    local.get $2
+    i32.const -2
+    i32.and
+    local.set $0
+    br $while-continue|0
+   end
+  end
+  i32.const 0
+ )
  (func $~lib/set/Set<u8>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<u8>
-  call $~lib/set/Set<i8>#find
+  call $~lib/set/Set<u8>#find
   i32.const 0
   i32.ne
  )
@@ -3153,7 +3180,7 @@
   local.get $1
   call $~lib/util/hash/HASH<u8>
   local.tee $3
-  call $~lib/set/Set<i8>#find
+  call $~lib/set/Set<u8>#find
   i32.eqz
   if
    local.get $0
@@ -3250,7 +3277,7 @@
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<u8>
-  call $~lib/set/Set<i8>#find
+  call $~lib/set/Set<u8>#find
   local.tee $1
   i32.eqz
   if
@@ -3757,10 +3784,7 @@
  )
  (func $~lib/util/hash/HASH<i16> (param $0 i32) (result i32)
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -1028477379
   i32.mul
   i32.const 374761395
@@ -3813,10 +3837,9 @@
      i32.const 0
     else
      local.get $0
-     i32.load16_u
+     i32.load16_s
      local.get $1
-     i32.const 65535
-     i32.and
+     i32.extend16_s
      i32.eq
     end
     if
@@ -4194,10 +4217,7 @@
   i32.store
   loop $for-loop|1
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 100
    i32.lt_s
    if
@@ -4250,10 +4270,7 @@
   local.set $1
   loop $for-loop|3
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 100
    i32.lt_s
    if
@@ -4487,10 +4504,7 @@
   local.set $3
   loop $for-loop|6
    local.get $3
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 50
    i32.lt_s
    if
@@ -4543,10 +4557,7 @@
   local.set $3
   loop $for-loop|8
    local.get $3
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 50
    i32.lt_s
    if
@@ -4658,12 +4669,55 @@
   i32.shr_u
   i32.xor
  )
+ (func $~lib/set/Set<u16>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+  local.set $0
+  loop $while-continue|0
+   local.get $0
+   if
+    local.get $0
+    i32.load offset=4
+    local.tee $2
+    i32.const 1
+    i32.and
+    if (result i32)
+     i32.const 0
+    else
+     local.get $0
+     i32.load16_u
+     local.get $1
+     i32.const 65535
+     i32.and
+     i32.eq
+    end
+    if
+     local.get $0
+     return
+    end
+    local.get $2
+    i32.const -2
+    i32.and
+    local.set $0
+    br $while-continue|0
+   end
+  end
+  i32.const 0
+ )
  (func $~lib/set/Set<u16>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<u16>
-  call $~lib/set/Set<i16>#find
+  call $~lib/set/Set<u16>#find
   i32.const 0
   i32.ne
  )
@@ -4789,7 +4843,7 @@
   local.get $1
   call $~lib/util/hash/HASH<u16>
   local.tee $3
-  call $~lib/set/Set<i16>#find
+  call $~lib/set/Set<u16>#find
   i32.eqz
   if
    local.get $0
@@ -4888,7 +4942,7 @@
   local.get $1
   local.get $1
   call $~lib/util/hash/HASH<u16>
-  call $~lib/set/Set<i16>#find
+  call $~lib/set/Set<u16>#find
   local.tee $1
   i32.eqz
   if

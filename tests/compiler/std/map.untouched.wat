@@ -2491,10 +2491,7 @@
   i32.le_u
   drop
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.set $2
   i32.const 1
   local.set $1
@@ -2576,10 +2573,7 @@
      local.get $3
      i32.load8_s
      local.get $1
-     i32.const 24
-     i32.shl
-     i32.const 24
-     i32.shr_s
+     i32.extend8_s
      i32.eq
     else
      i32.const 0
@@ -4504,10 +4498,7 @@
      local.get $3
      i32.load8_s
      local.get $1
-     i32.const 24
-     i32.shl
-     i32.const 24
-     i32.shr_s
+     i32.extend8_s
      i32.eq
     else
      i32.const 0
@@ -5088,10 +5079,7 @@
   local.set $1
   loop $for-loop|1
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 100
    i32.lt_s
    local.set $3
@@ -5114,10 +5102,7 @@
     local.get $1
     i32.const 10
     local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.add
     call $~lib/map/Map<i8,i32>#set
     drop
@@ -5138,10 +5123,7 @@
     call $~lib/map/Map<i8,i32>#get
     i32.const 10
     local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.add
     i32.eq
     i32.eqz
@@ -5177,10 +5159,7 @@
   local.set $1
   loop $for-loop|3
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 100
    i32.lt_s
    local.set $4
@@ -5203,10 +5182,7 @@
     call $~lib/map/Map<i8,i32>#get
     i32.const 10
     local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.add
     i32.eq
     i32.eqz
@@ -5222,10 +5198,7 @@
     local.get $1
     i32.const 20
     local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.add
     call $~lib/map/Map<i8,i32>#set
     drop
@@ -5246,10 +5219,7 @@
     call $~lib/map/Map<i8,i32>#get
     i32.const 20
     local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.add
     i32.eq
     i32.eqz
@@ -5396,10 +5366,7 @@
   local.set $7
   loop $for-loop|6
    local.get $7
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 50
    i32.lt_s
    local.set $10
@@ -5422,10 +5389,7 @@
     call $~lib/map/Map<i8,i32>#get
     i32.const 20
     local.get $7
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.add
     i32.eq
     i32.eqz
@@ -5478,10 +5442,7 @@
   local.set $7
   loop $for-loop|8
    local.get $7
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 50
    i32.lt_s
    local.set $9
@@ -5504,10 +5465,7 @@
     local.get $7
     i32.const 10
     local.get $7
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
+    i32.extend8_s
     i32.add
     call $~lib/map/Map<i8,i32>#set
     drop
@@ -6937,10 +6895,7 @@
   i32.le_u
   drop
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   local.set $2
   i32.const 2
   local.set $1
@@ -7022,10 +6977,7 @@
      local.get $3
      i32.load16_s
      local.get $1
-     i32.const 16
-     i32.shl
-     i32.const 16
-     i32.shr_s
+     i32.extend16_s
      i32.eq
     else
      i32.const 0
@@ -7412,10 +7364,7 @@
      local.get $3
      i32.load16_s
      local.get $1
-     i32.const 16
-     i32.shl
-     i32.const 16
-     i32.shr_s
+     i32.extend16_s
      i32.eq
     else
      i32.const 0
@@ -7724,10 +7673,7 @@
   local.set $1
   loop $for-loop|1
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 100
    i32.lt_s
    local.set $3
@@ -7750,10 +7696,7 @@
     local.get $1
     i32.const 10
     local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.add
     call $~lib/map/Map<i16,i32>#set
     drop
@@ -7774,10 +7717,7 @@
     call $~lib/map/Map<i16,i32>#get
     i32.const 10
     local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.add
     i32.eq
     i32.eqz
@@ -7813,10 +7753,7 @@
   local.set $1
   loop $for-loop|3
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 100
    i32.lt_s
    local.set $4
@@ -7839,10 +7776,7 @@
     call $~lib/map/Map<i16,i32>#get
     i32.const 10
     local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.add
     i32.eq
     i32.eqz
@@ -7858,10 +7792,7 @@
     local.get $1
     i32.const 20
     local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.add
     call $~lib/map/Map<i16,i32>#set
     drop
@@ -7882,10 +7813,7 @@
     call $~lib/map/Map<i16,i32>#get
     i32.const 20
     local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.add
     i32.eq
     i32.eqz
@@ -8032,10 +7960,7 @@
   local.set $7
   loop $for-loop|6
    local.get $7
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 50
    i32.lt_s
    local.set $10
@@ -8058,10 +7983,7 @@
     call $~lib/map/Map<i16,i32>#get
     i32.const 20
     local.get $7
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.add
     i32.eq
     i32.eqz
@@ -8114,10 +8036,7 @@
   local.set $7
   loop $for-loop|8
    local.get $7
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 50
    i32.lt_s
    local.set $9
@@ -8140,10 +8059,7 @@
     local.get $7
     i32.const 10
     local.get $7
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
+    i32.extend16_s
     i32.add
     call $~lib/map/Map<i16,i32>#set
     drop

@@ -49565,8 +49565,7 @@
   i32.const 1
   i32.const 3
   call $~lib/math/ipow32
-  i32.const 255
-  i32.and
+  i32.extend8_s
   i32.const 1
   i32.ne
   if
@@ -49580,9 +49579,8 @@
   i32.const -2
   i32.const 3
   call $~lib/math/ipow32
-  i32.const 255
-  i32.and
-  i32.const 248
+  i32.extend8_s
+  i32.const -8
   i32.ne
   if
    i32.const 0

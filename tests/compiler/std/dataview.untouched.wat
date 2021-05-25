@@ -3777,10 +3777,7 @@
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -7946
   i32.eq
   i32.eqz
@@ -3796,10 +3793,7 @@
   i32.const 1
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 22752
   i32.eq
   i32.eqz
@@ -3815,10 +3809,7 @@
   i32.const 2
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -24744
   i32.eq
   i32.eqz
@@ -3834,10 +3825,7 @@
   i32.const 3
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -32097
   i32.eq
   i32.eqz
@@ -3853,10 +3841,7 @@
   i32.const 4
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 25986
   i32.eq
   i32.eqz
@@ -3872,10 +3857,7 @@
   i32.const 5
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 17253
   i32.eq
   i32.eqz
@@ -3891,10 +3873,7 @@
   i32.const 6
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 24387
   i32.eq
   i32.eqz
@@ -3910,10 +3889,7 @@
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -2336
   i32.eq
   i32.eqz
@@ -3929,10 +3905,7 @@
   i32.const 1
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -8104
   i32.eq
   i32.eqz
@@ -3948,10 +3921,7 @@
   i32.const 2
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 22687
   i32.eq
   i32.eqz
@@ -3967,10 +3937,7 @@
   i32.const 3
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -24702
   i32.eq
   i32.eqz
@@ -3986,10 +3953,7 @@
   i32.const 4
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -32155
   i32.eq
   i32.eqz
@@ -4005,10 +3969,7 @@
   i32.const 5
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 25923
   i32.eq
   i32.eqz
@@ -4024,10 +3985,7 @@
   i32.const 6
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 17247
   i32.eq
   i32.eqz
@@ -4856,10 +4814,7 @@
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -13360
   i32.eq
   i32.eqz
@@ -4880,10 +4835,7 @@
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 14689
   i32.eq
   i32.eqz

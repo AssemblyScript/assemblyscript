@@ -240,7 +240,7 @@ export class Options {
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
   /** Features to activate by default. These are the finished proposals. */
-  features: Feature = Feature.MUTABLE_GLOBALS;
+  features: Feature = Feature.MUTABLE_GLOBALS | Feature.SIGN_EXTENSION;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
