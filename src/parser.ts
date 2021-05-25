@@ -845,11 +845,9 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
     this.tryParseSignatureIsSignature = true;
-    if (!parameters) {
-      parameters = [];
-    } else {
-      this.checkFunctionParameterDuplicates(parameters);
-    }
+
+    if (!parameters) parameters = [];
+
     return Node.createFunctionType(
       parameters,
       returnType,
@@ -1488,8 +1486,6 @@ export class Parser extends DiagnosticEmitter {
       }
     }
 
-    this.checkFunctionParameterDuplicates(parameters);
-
     var signature = Node.createFunctionType(
       parameters,
       returnType,
@@ -1582,8 +1578,6 @@ export class Parser extends DiagnosticEmitter {
     startPos: i32 = -1,
     signatureStart: i32 = -1
   ): FunctionExpression | null {
-    this.checkFunctionParameterDuplicates(parameters);
-
     if (startPos < 0) startPos = name.range.start;
     if (signatureStart < 0) signatureStart = startPos;
 
@@ -4229,38 +4223,6 @@ export class Parser extends DiagnosticEmitter {
       potentiallyGeneric = false;
     }
     return expr;
-  }
-
-  private checkFunctionParameterDuplicates(parameters: ParameterNode[]): void {
-    var numParameters = parameters.length;
-    if (numParameters >= 2) {
-      if (numParameters == 2) {
-        // fast allocation free path for only 2 parameters
-        let secondParamIdentifier = parameters[1].name;
-        let secondParamName = secondParamIdentifier.text;
-        if (parameters[0].name.text == secondParamName) {
-          this.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            secondParamIdentifier.range, secondParamName
-          );
-        }
-      } else {
-        let visited = new Set<string>();
-        visited.add(parameters[0].name.text);
-        for (let i = 1; i < numParameters; i++) {
-          let paramIdentifier = parameters[i].name;
-          let paramName = paramIdentifier.text;
-          if (!visited.has(paramName)) {
-            visited.add(paramName);
-          } else {
-            this.error(
-              DiagnosticCode.Duplicate_identifier_0,
-              paramIdentifier.range, paramName
-            );
-          }
-        }
-      }
-    }
   }
 
   /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */

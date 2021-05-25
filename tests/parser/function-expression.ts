@@ -14,7 +14,3 @@ var e = (a: i32, b: i32): i32 => {
   ;
 };
 var f = (a: i32): i32 => a;
-// 2300: Duplicate identifier 'a'
-var g = (a: i32, a: i32): void => {
-  ;
-};
