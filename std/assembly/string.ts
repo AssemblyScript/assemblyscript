@@ -30,16 +30,17 @@ import { Array } from "./array";
   }
 
   static fromCodePoint(code: i32): String {
-    assert(<u32>code <= 0x10FFFF);
-    var hasSur = code > 0xFFFF;
+    var hasSur = <u32>code > 0xFFFF;
     var out = changetype<String>(__new(2 << i32(hasSur), idof<String>()));
     if (!hasSur) {
       store<u16>(changetype<usize>(out), <u16>code);
     } else {
+      // Checks valid code point range
+      assert(<u32>code <= 0x10FFFF);
       code -= 0x10000;
       let hi = (code & 0x03FF) | 0xDC00;
-      let lo = (code >>> 10) | 0xD800;
-      store<u32>(changetype<usize>(out), lo | (hi << 16));
+      let lo = code >>> 10 | 0xD800;
+      store<u32>(changetype<usize>(out), lo | hi << 16);
     }
     return out;
   }

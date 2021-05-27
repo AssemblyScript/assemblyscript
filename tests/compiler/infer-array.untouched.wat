@@ -1609,12 +1609,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 64
    i32.const 400
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -3708,7 +3708,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3734,7 +3734,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3760,7 +3760,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3786,7 +3786,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3828,7 +3828,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4604,7 +4604,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4650,7 +4650,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4696,7 +4696,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4721,7 +4721,7 @@
   if
    i32.const 976
    i32.const 464
-   i32.const 96
+   i32.const 103
    i32.const 40
    call $~lib/builtins/abort
    unreachable

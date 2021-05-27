@@ -1387,12 +1387,12 @@
   (local $4 i32)
   local.get $1
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 1344
    i32.const 1616
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -3199,7 +3199,7 @@
     if
      i32.const 1088
      i32.const 1776
-     i32.const 92
+     i32.const 99
      i32.const 42
      call $~lib/builtins/abort
      unreachable

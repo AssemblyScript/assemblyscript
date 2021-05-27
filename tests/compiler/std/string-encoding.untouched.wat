@@ -1612,12 +1612,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 128
    i32.const 464
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -5959,7 +5959,7 @@
   if
    i32.const 0
    i32.const 688
-   i32.const 748
+   i32.const 749
    i32.const 7
    call $~lib/builtins/abort
    unreachable
