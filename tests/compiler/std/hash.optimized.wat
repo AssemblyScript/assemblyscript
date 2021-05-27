@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17788))
@@ -200,13 +200,6 @@
   end
  )
  (func $~start
-  call $start:std/hash
- )
- (func $start:std/hash
-  (local $0 f32)
-  (local $1 i32)
-  (local $2 f64)
-  (local $3 i64)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub

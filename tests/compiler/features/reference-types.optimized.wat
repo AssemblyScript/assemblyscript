@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $none_=>_externref (func (result externref)))
+ (type $none_=>_none (func))
  (type $externref_=>_externref (func (param externref) (result externref)))
  (type $externref_externref_=>_i32 (func (param externref externref) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -32,7 +32,13 @@
  (func $features/reference-types/someFunc
   nop
  )
- (func $start:features/reference-types
+ (func $features/reference-types/internal (param $0 externref) (result externref)
+  local.get $0
+  call $features/reference-types/external
+  call $features/reference-types/external
+  call $features/reference-types/external
+ )
+ (func $~start
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
@@ -150,14 +156,5 @@
   end
   global.get $features/reference-types/funcGlobal
   global.set $features/reference-types/anyGlobal
- )
- (func $features/reference-types/internal (param $0 externref) (result externref)
-  local.get $0
-  call $features/reference-types/external
-  call $features/reference-types/external
-  call $features/reference-types/external
- )
- (func $~start
-  call $start:features/reference-types
  )
 )
