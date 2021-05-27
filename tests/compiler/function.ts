@@ -39,3 +39,7 @@ iii(1, 2);
 jjj(1, 2);
 fff(1, 2);
 ddd(1, 2);
+
+function duplicateParams(a: i32, a: i32): void {}
+// TS2300: Duplicate identifier 'a'
+duplicateParams(1, 2);
