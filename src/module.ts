@@ -298,7 +298,7 @@ export enum UnaryOp {
   /** i8x16.bitmask */
   BitmaskI8x16 = 71 /* _BinaryenBitmaskVecI8x16 */,
   /** i8x16.popcnt */
-  PopcntI8x16 = 72 /* _BinaryenPopcntVecI8x16 */, // UNIMP
+  PopcntI8x16 = 72 /* _BinaryenPopcntVecI8x16 */,
   /** i16x8.abs */
   AbsI16x8 = 73 /* _BinaryenAbsVecI16x8 */,
   /** i16x8.neg */
@@ -322,7 +322,7 @@ export enum UnaryOp {
   /** i64x2.all_true */
   AllTrueI64x2 = 83 /* _BinaryenAllTrueVecI64x2 */,
   /** i64x2.bitmask */
-  BitmaskI64x2 = 84 /* _BinaryenBitmaskVecI64x2 */, // UNIMP
+  BitmaskI64x2 = 84 /* _BinaryenBitmaskVecI64x2 */,
   /** f32x4.abs */
   AbsF32x4 = 85 /* _BinaryenAbsVecF32x4 */,
   /** f32x4.neg */
@@ -352,13 +352,13 @@ export enum UnaryOp {
   /** f64x2.nearest */
   NearestF64x2 = 98 /* _BinaryenNearestVecF64x2 */,
   /** i16x8.extadd_pairwise_i8x16_s */
-  ExtaddPairwiseI8x16ToI16x8 = 99 /* _BinaryenExtAddPairwiseSVecI8x16ToI16x8 */, // UNIMP
+  ExtaddPairwiseI8x16ToI16x8 = 99 /* _BinaryenExtAddPairwiseSVecI8x16ToI16x8 */,
   /** i16x8.extadd_pairwise.i8x16_u */
-  ExtaddPairwiseU8x16ToU16x8 = 100 /* _BinaryenExtAddPairwiseUVecI8x16ToI16x8 */, // UNIMP
+  ExtaddPairwiseU8x16ToU16x8 = 100 /* _BinaryenExtAddPairwiseUVecI8x16ToI16x8 */,
   /** i32x4.extadd_pairwise.i16x8_s */
-  ExtaddPairwiseI16x8ToI32x4 = 101 /* _BinaryenExtAddPairwiseSVecI16x8ToI32x4 */, // UNIMP
+  ExtaddPairwiseI16x8ToI32x4 = 101 /* _BinaryenExtAddPairwiseSVecI16x8ToI32x4 */,
   /** i32x4.extadd_pairwise.i64x8_u */
-  ExtaddPairwiseU16x8ToU32x4 = 102 /* _BinaryenExtAddPairwiseUVecI16x8ToI32x4 */, // UNIMP
+  ExtaddPairwiseU16x8ToU32x4 = 102 /* _BinaryenExtAddPairwiseUVecI16x8ToI32x4 */,
   /** i32x4.trunc_sat_f32x4_s */
   TruncSatF32x4ToI32x4 = 103 /* _BinaryenTruncSatSVecF32x4ToVecI32x4 */,
   /** i32x4.trunc_sat_f32x4_u */
@@ -392,17 +392,17 @@ export enum UnaryOp {
   /** i64x2.extend_high_i32x4_u */
   ExtendHighU32x4ToU64x2 = 118 /* _BinaryenExtendHighUVecI32x4ToVecI64x2 */,
   /** f32x4.convert_i32x4_s */
-  ConvertLowI32x4ToF64x2 = 119 /* _BinaryenConvertLowSVecI32x4ToVecF64x2 */, // UNIMP
+  ConvertLowI32x4ToF64x2 = 119 /* _BinaryenConvertLowSVecI32x4ToVecF64x2 */,
   /** f32x4.convert_i32x4_u */
-  ConvertLowU32x4ToF64x2 = 120 /* _BinaryenConvertLowUVecI32x4ToVecF64x2 */, // UNIMP
+  ConvertLowU32x4ToF64x2 = 120 /* _BinaryenConvertLowUVecI32x4ToVecF64x2 */,
   /** i32x4.trunc_sat_f64x2_s_zero */
-  TruncSatF64x2ToI32x4Zero = 121 /* _BinaryenTruncSatZeroSVecF64x2ToVecI32x4 */, // UNIMP
+  TruncSatF64x2ToI32x4Zero = 121 /* _BinaryenTruncSatZeroSVecF64x2ToVecI32x4 */,
   /** i32x4.trunc_sat_f64x2_u_zero */
-  TruncSatF64x2ToU32x4Zero = 122 /* _BinaryenTruncSatZeroUVecF64x2ToVecI32x4 */, // UNIMP
+  TruncSatF64x2ToU32x4Zero = 122 /* _BinaryenTruncSatZeroUVecF64x2ToVecI32x4 */,
   /** f32x4.demote_f64x2_zero */
-  DemoteZeroF64x2ToF32x4 = 123 /* _BinaryenDemoteZeroVecF64x2ToVecF32x4 */, // UNIMP
+  DemoteZeroF64x2ToF32x4 = 123 /* _BinaryenDemoteZeroVecF64x2ToVecF32x4 */,
   /** f64x2.promote_low_f32x4 */
-  PromoteLowF32x4ToF64x2 = 124 /* _BinaryenPromoteLowVecF32x4ToVecF64x2 */, // UNIMP
+  PromoteLowF32x4ToF64x2 = 124 /* _BinaryenPromoteLowVecF32x4ToVecF64x2 */,
 
   _last = PromoteLowF32x4ToF64x2,
 
@@ -725,15 +725,15 @@ export enum BinaryOp {
   /** i16x8.avgr_u */
   AvgrU16x8 = 150 /* _BinaryenAvgrUVecI16x8 */,
   /** i16x8.q15mulr_sat_s */
-  Q15mulrSatI16x8 = 151 /* _BinaryenQ15MulrSatSVecI16x8 */, // UNIMP
+  Q15mulrSatI16x8 = 151 /* _BinaryenQ15MulrSatSVecI16x8 */,
   /** i16x8.extmul_low_i8x16_s */
-  ExtmulLowI16x8 = 152 /* _BinaryenExtMulLowSVecI16x8 */, // UNIMP
+  ExtmulLowI16x8 = 152 /* _BinaryenExtMulLowSVecI16x8 */,
   /** i16x8.extmul_high_i8x16_s */
-  ExtmulHighI16x8 = 153 /* _BinaryenExtMulHighSVecI16x8 */, // UNIMP
+  ExtmulHighI16x8 = 153 /* _BinaryenExtMulHighSVecI16x8 */,
   /** i16x8.extmul_low_i8x16_u */
-  ExtmulLowU16x8 = 154 /* _BinaryenExtMulLowUVecI16x8 */, // UNIMP
+  ExtmulLowU16x8 = 154 /* _BinaryenExtMulLowUVecI16x8 */,
   /** i16x8.extmul_high_i8x16_u */
-  ExtmulHighU16x8 = 155 /* _BinaryenExtMulHighUVecI16x8 */, // UNIMP
+  ExtmulHighU16x8 = 155 /* _BinaryenExtMulHighUVecI16x8 */,
   /** i32x4.add */
   AddI32x4 = 156 /* _BinaryenAddVecI32x4 */,
   /** i32x4.sub */
@@ -751,13 +751,13 @@ export enum BinaryOp {
   /** i32x4.dot_i16x8_s */
   DotI16x8 = 163 /* _BinaryenDotSVecI16x8ToVecI32x4 */,
   /** i32x4.extmul_low_i16x8_s */
-  ExtmulLowI32x4 = 164 /* _BinaryenExtMulLowSVecI32x4 */, // UNIMP
+  ExtmulLowI32x4 = 164 /* _BinaryenExtMulLowSVecI32x4 */,
   /** i32x4.extmul_high_i16x8_s */
-  ExtmulHighI32x4 = 165 /* _BinaryenExtMulHighSVecI32x4 */, // UNIMP
+  ExtmulHighI32x4 = 165 /* _BinaryenExtMulHighSVecI32x4 */,
   /** i32x4.extmul_low_i16x8_u */
-  ExtmulLowU32x4 = 166 /* _BinaryenExtMulLowUVecI32x4 */, // UNIMP
+  ExtmulLowU32x4 = 166 /* _BinaryenExtMulLowUVecI32x4 */,
   /** i32x4.extmul_high_i16x8_u */
-  ExtmulHighU32x4 = 167 /* _BinaryenExtMulHighUVecI32x4 */, // UNIMP
+  ExtmulHighU32x4 = 167 /* _BinaryenExtMulHighUVecI32x4 */,
   /** i64x2.add */
   AddI64x2 = 168 /* _BinaryenAddVecI64x2 */,
   /** i64x2.sub */
@@ -765,13 +765,13 @@ export enum BinaryOp {
   /** i64x2.mul */
   MulI64x2 = 170 /* _BinaryenMulVecI64x2 */,
   /** i64x2.extmul_low_i32x4_s */
-  ExtmulLowI64x2 = 171 /* _BinaryenExtMulLowSVecI64x2 */, // UNIMP
+  ExtmulLowI64x2 = 171 /* _BinaryenExtMulLowSVecI64x2 */,
   /** i64x2.extmul_high_i32x4_s */
-  ExtmulHighI64x2 = 172 /* _BinaryenExtMulHighSVecI64x2 */, // UNIMP
+  ExtmulHighI64x2 = 172 /* _BinaryenExtMulHighSVecI64x2 */,
   /** i64x2.extmul_low_i32x4_u */
-  ExtmulLowU64x2 = 173 /* _BinaryenExtMulLowUVecI64x2 */, // UNIMP
+  ExtmulLowU64x2 = 173 /* _BinaryenExtMulLowUVecI64x2 */,
   /** i64x2.extmul_high_i32x4_u */
-  ExtmulHighU64x2 = 174 /* _BinaryenExtMulHighUVecI64x2 */, // UNIMP
+  ExtmulHighU64x2 = 174 /* _BinaryenExtMulHighUVecI64x2 */,
   /** f32x4.add */
   AddF32x4 = 175 /* _BinaryenAddVecF32x4 */,
   /** f32x4.sub */
@@ -969,28 +969,28 @@ export enum SIMDLoadOp {
   /** v128.load32x2_u */
   Load32x2U = 9 /* _BinaryenLoad32x2UVec128 */,
   /** v128.load32_zero */
-  Load32Zero = 10 /* _BinaryenLoad32ZeroVec128 */, // UNIMP
+  Load32Zero = 10 /* _BinaryenLoad32ZeroVec128 */,
   /** v128.load64_zero */
-  Load64Zero = 11 /* _BinaryenLoad64ZeroVec128 */, // UNIMP
+  Load64Zero = 11 /* _BinaryenLoad64ZeroVec128 */,
 }
 
 export enum SIMDLoadStoreLaneOp {
   /** v128.load8_lane */
-  Load8Lane = 0 /* _BinaryenLoad8LaneVec128 */, // UNIMP
+  Load8Lane = 0 /* _BinaryenLoad8LaneVec128 */,
   /** v128.load16_lane */
-  Load16Lane = 1 /* _BinaryenLoad16LaneVec128 */, // UNIMP
+  Load16Lane = 1 /* _BinaryenLoad16LaneVec128 */,
   /** v128.load32_lane */
-  Load32Lane = 2 /* _BinaryenLoad32LaneVec128 */, // UNIMP
+  Load32Lane = 2 /* _BinaryenLoad32LaneVec128 */,
   /** v128.load64_lane */
-  Load64Lane = 3 /* _BinaryenLoad64LaneVec128 */, // UNIMP
+  Load64Lane = 3 /* _BinaryenLoad64LaneVec128 */,
   /** v128.store8_lane */
-  Store8Lane = 4 /* _BinaryenStore8LaneVec128 */, // UNIMP
+  Store8Lane = 4 /* _BinaryenStore8LaneVec128 */,
   /** v128.store16_lane */
-  Store16Lane = 5 /* _BinaryenStore16LaneVec128 */, // UNIMP
+  Store16Lane = 5 /* _BinaryenStore16LaneVec128 */,
   /** v128.store32_lane */
-  Store32Lane = 6 /* _BinaryenStore32LaneVec128 */, // UNIMP
+  Store32Lane = 6 /* _BinaryenStore32LaneVec128 */,
   /** v128.store64_lane */
-  Store64Lane = 7 /* _BinaryenStore64LaneVec128 */, // UNIMP
+  Store64Lane = 7 /* _BinaryenStore64LaneVec128 */,
 }
 
 export enum SIMDTernaryOp {
@@ -1664,6 +1664,17 @@ export class Module {
     align: u32
   ): ExpressionRef {
     return binaryen._BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
+  }
+
+  simd_loadstorelane(
+    op: SIMDLoadStoreLaneOp,
+    ptr: ExpressionRef,
+    offset: u32,
+    align: u32,
+    index: u8,
+    vec: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenSIMDLoadStoreLane(this.ref, op, offset, align, index, ptr, vec);
   }
 
   // reference types / gc
