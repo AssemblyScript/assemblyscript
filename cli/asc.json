@@ -376,7 +376,6 @@
   " ...": {
     "description": "Specifies node.js options (CLI only). See: node --help"
   },
-  
   "-Os": { "value": { "optimizeLevel": 0, "shrinkLevel": 1 } },
   "-Oz": { "value": { "optimizeLevel": 0, "shrinkLevel": 2 } },
   "-O0": { "value": { "optimizeLevel": 0, "shrinkLevel": 0 } },
