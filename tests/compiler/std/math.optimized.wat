@@ -6,23 +6,23 @@
  (type $f32_f32_f32_=>_i32 (func (param f32 f32 f32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
- (type $none_=>_none (func))
- (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $f64_f64_f64_f64_=>_i32 (func (param f64 f64 f64 f64) (result i32)))
  (type $none_=>_f64 (func (result f64)))
- (type $i64_=>_none (func (param i64)))
- (type $f64_=>_none (func (param f64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i64_i64_i64_i64_i64_=>_none (func (param i64 i64 i64 i64 i64)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
- (type $f64_=>_i32 (func (param f64) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i64_=>_i64 (func (param i64) (result i64)))
- (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
- (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
+ (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
+ (type $none_=>_none (func))
  (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $i64_=>_i64 (func (param i64) (result i64)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i64_=>_none (func (param i64)))
  (type $f64_f64_i32_=>_f64 (func (param f64 f64 i32) (result f64)))
+ (type $f64_=>_none (func (param f64)))
+ (type $i64_i64_i64_i64_i64_=>_none (func (param i64 i64 i64 i64 i64)))
+ (type $f64_=>_i32 (func (param f64) (result i32)))
+ (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "Math" "E" (global $~lib/bindings/Math/E f64))
  (import "Math" "LN2" (global $~lib/bindings/Math/LN2 f64))
  (import "Math" "LN10" (global $~lib/bindings/Math/LN10 f64))
@@ -1041,12 +1041,12 @@
     local.get $2
     i64.const 32
     i64.shl
-    i64.eqz
-    i32.const 0
+    i64.const 1
     local.get $1
     i32.const 1072693248
     i32.eq
     select
+    i64.eqz
     if
      f64.const 0
      return
@@ -2825,7 +2825,7 @@
     local.get $3
     i32.const 2139095040
     i32.eq
-    if
+    if (result f32)
      f32.const 2.356194496154785
      f32.const 0.7853981852531433
      local.get $2
@@ -2839,7 +2839,6 @@
      i32.const 1
      i32.and
      select
-     return
     else
      f32.const 3.1415927410125732
      f32.const 0
@@ -2854,9 +2853,8 @@
      i32.const 1
      i32.and
      select
-     return
     end
-    unreachable
+    return
    end
    i32.const 1
    local.get $3
@@ -5435,9 +5433,8 @@
   local.get $3
   f64.reinterpret_i64
   local.set $0
-  i32.const 1
+  i64.const 0
   local.get $2
-  i64.eqz
   local.get $3
   i64.const 52
   i64.shr_u
@@ -5446,6 +5443,7 @@
   i32.const 2047
   i32.eq
   select
+  i64.eqz
   if
    local.get $0
    return
@@ -5595,15 +5593,14 @@
    local.get $1
    return
   end
-  i32.const 1
   local.get $3
   local.get $2
   i32.sub
   i32.const 209715200
   i32.ge_u
   i32.const 1
+  i32.const 0
   local.get $2
-  i32.eqz
   local.get $3
   i32.const 2139095040
   i32.ge_u
@@ -5753,12 +5750,12 @@
     local.get $2
     i64.const 32
     i64.shl
-    i64.eqz
-    i32.const 0
+    i64.const 1
     local.get $1
     i32.const 1072693248
     i32.eq
     select
+    i64.eqz
     if
      f64.const 0
      return
@@ -6142,12 +6139,12 @@
     local.get $2
     i64.const 32
     i64.shl
-    i64.eqz
-    i32.const 0
+    i64.const 1
     local.get $1
     i32.const 1072693248
     i32.eq
     select
+    i64.eqz
     if
      f64.const 0
      return
@@ -7080,39 +7077,31 @@
        i32.const 2146435072
        i32.eq
        if
+        local.get $1
+        f64.const 0
+        local.get $8
+        i32.const 0
+        i32.ge_s
+        select
+        f64.const 0
+        local.get $1
+        f64.neg
+        local.get $8
+        i32.const 0
+        i32.ge_s
+        select
+        local.get $4
+        i32.const 1072693248
+        i32.ge_s
+        select
+        f64.const nan:0x8000000000000
         local.get $18
         local.get $4
         i32.const 1072693248
         i32.sub
         i32.or
-        if
-         local.get $4
-         i32.const 1072693248
-         i32.ge_s
-         if
-          local.get $1
-          f64.const 0
-          local.get $8
-          i32.const 0
-          i32.ge_s
-          select
-          return
-         else
-          f64.const 0
-          local.get $1
-          f64.neg
-          local.get $8
-          i32.const 0
-          i32.ge_s
-          select
-          return
-         end
-         unreachable
-        else
-         f64.const nan:0x8000000000000
-         return
-        end
-        unreachable
+        select
+        return
        end
        local.get $9
        i32.const 1072693248

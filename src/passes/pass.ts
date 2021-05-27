@@ -134,6 +134,10 @@ import {
   _BinaryenSIMDShiftSetVec,
   _BinaryenSIMDShiftSetShift,
   _BinaryenSIMDLoadSetPtr,
+  _BinaryenSIMDLoadStoreLaneGetPtr,
+  _BinaryenSIMDLoadStoreLaneGetVec,
+  _BinaryenSIMDLoadStoreLaneSetPtr,
+  _BinaryenSIMDLoadStoreLaneSetVec,
   _BinaryenMemoryInitSetDest,
   _BinaryenMemoryInitSetOffset,
   _BinaryenMemoryInitSetSize,
@@ -766,9 +770,8 @@ export abstract class Visitor {
       }
       case ExpressionId.SIMDLoadStoreLane: {
         this.stack.push(expr);
-        assert(false); // TODO: missing C-API
-        // this.visit(_BinaryenSIMDLoadStoreLaneGetPtr(expr));
-        // this.visit(_BinaryenSIMDLoadStoreLaneGetVec(expr));
+        this.visit(_BinaryenSIMDLoadStoreLaneGetPtr(expr));
+        this.visit(_BinaryenSIMDLoadStoreLaneGetVec(expr));
         assert(this.stack.pop() == expr);
         this.visitSIMDLoadStoreLane(expr);
         break;
@@ -1438,17 +1441,16 @@ export function replaceChild(
       break;
     }
     case ExpressionId.SIMDLoadStoreLane: {
-      assert(false); // TODO: missing C-API
-      // let ptr = _BinaryenSIMDLoadStoreLaneGetPtr(parent);
-      // if (ptr == search) {
-      //   _BinaryenSIMDLoadStoreLaneSetPtr(parent, replacement);
-      //   return ptr;
-      // }
-      // let vec = _BinaryenSIMDLoadStoreLaneGetVec(parent);
-      // if (vec == search) {
-      //   _BinaryenSIMDLoadStoreLaneSetVec(parent, replacement);
-      //   return ptr;
-      // }
+      let ptr = _BinaryenSIMDLoadStoreLaneGetPtr(parent);
+      if (ptr == search) {
+        _BinaryenSIMDLoadStoreLaneSetPtr(parent, replacement);
+        return ptr;
+      }
+      let vec = _BinaryenSIMDLoadStoreLaneGetVec(parent);
+      if (vec == search) {
+        _BinaryenSIMDLoadStoreLaneSetVec(parent, replacement);
+        return ptr;
+      }
       break;
     }
     case ExpressionId.MemoryInit: {

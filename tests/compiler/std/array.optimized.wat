@@ -11,17 +11,17 @@
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (type $none_=>_f64 (func (result f64)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_i32_=>_f32 (func (param i32 i32 i32) (result f32)))
+ (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
- (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
- (type $i32_i32_i32_=>_f32 (func (param i32 i32 i32) (result f32)))
- (type $i64_=>_none (func (param i64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
- (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
- (type $i64_=>_i64 (func (param i64) (result i64)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
+ (type $i64_=>_i64 (func (param i64) (result i64)))
+ (type $i64_=>_none (func (param i64)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
+ (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
+ (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
  (import "env" "seed" (func $~lib/builtins/seed (result f64)))
@@ -1530,20 +1530,17 @@
   local.get $0
   i32.const 15
   i32.and
-  i32.eqz
-  i32.const 0
+  i32.const 1
   local.get $0
   select
   if (result i32)
+   i32.const 1
+  else
    local.get $1
    i32.load
    i32.const 1
    i32.and
-   i32.eqz
-  else
-   i32.const 0
   end
-  i32.eqz
   if
    i32.const 0
    i32.const 1488
@@ -2431,14 +2428,11 @@
    i32.eqz
    i32.eq
    if
+    local.get $0
+    local.get $1
     local.get $2
-    if
-     local.get $0
-     call $~lib/rt/itcms/Object#makeGray
-    else
-     local.get $1
-     call $~lib/rt/itcms/Object#makeGray
-    end
+    select
+    call $~lib/rt/itcms/Object#makeGray
    else
     global.get $~lib/rt/itcms/state
     i32.const 1
@@ -6045,12 +6039,12 @@
   i32.const 7
   i32.and
   i32.or
-  i32.eqz
-  i32.const 0
+  i32.const 1
   local.get $2
   i32.const 4
   i32.ge_u
   select
+  i32.eqz
   if
    loop $do-continue|0
     local.get $0
@@ -6114,17 +6108,16 @@
  (func $~lib/util/sort/COMPARATOR<~lib/string/String|null>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 1
   local.get $1
-  i32.eqz
-  i32.const 1
+  i32.const 0
+  i32.const 0
   local.get $0
-  i32.eqz
   local.get $0
   local.get $1
   i32.eq
   select
   select
+  i32.eqz
   if
    i32.const 0
    return
@@ -6315,10 +6308,10 @@
    return
   end
   local.get $1
-  i32.eqz
-  i32.const 1
+  i32.const 0
   local.get $0
   select
+  i32.eqz
   if
    i32.const 0
    return
