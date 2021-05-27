@@ -1462,7 +1462,7 @@ export class Module {
     value: ExpressionRef = 0
   ): ExpressionRef {
     var numNames = names.length;
-    var strs = new Array<usize>(numNames);
+    var strs = new Array<CString>(numNames);
     for (let i = 0; i < numNames; ++i) {
       strs[i] = this.allocStringCached(names[i]);
     }
@@ -1560,7 +1560,7 @@ export class Module {
   //   catchBodies: ExpressionRef[]
   // ): ExpressionRef {
   //   var numCatchEvents = catchEvents.length;
-  //   var strs = new Array<usize>(numCatchEvents);
+  //   var strs = new Array<EventRef>(numCatchEvents);
   //   for (let i = 0; i < numCatchEvents; ++i) {
   //     strs[i] = this.allocStringCached(catchEvents[i]);
   //   }
@@ -2022,7 +2022,7 @@ export class Module {
   ): void {
     var cStr = this.allocStringCached(name);
     var numNames = funcs.length;
-    var names = new Array<usize>(numNames);
+    var names = new Array<CString>(numNames);
     for (let i = 0; i < numNames; ++i) {
       names[i] = this.allocStringCached(funcs[i]);
     }
@@ -2045,7 +2045,7 @@ export class Module {
     offset: ExpressionRef
   ): void {
     var numNames = funcs.length;
-    var names = new Array<usize>(numNames);
+    var names = new Array<CString>(numNames);
     for (let i = 0; i < numNames; ++i) {
       names[i] = this.allocStringCached(funcs[i]);
     }
@@ -2177,7 +2177,7 @@ export class Module {
 
   runPasses(passes: string[], func: FunctionRef = 0): void {
     var numNames = passes.length;
-    var cStrs = new Array<usize>(numNames);
+    var cStrs = new Array<CString>(numNames);
     for (let i = 0; i < numNames; ++i) {
       cStrs[i] = allocString(passes[i]);
     }
@@ -2328,6 +2328,9 @@ export class Module {
       }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("code-folding");
+      }
+      if (optimizeLevel > 1 && (this.getFeatures() & FeatureFlags.GC) != 0) {
+        passes.push("heap2local");
       }
       // precompute works best after global optimizations
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
