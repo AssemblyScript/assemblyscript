@@ -605,33 +605,28 @@ export class TSDBuilder extends ExportsWalker {
   build(): string {
     var sb = this.sb;
     var isWasm64 = this.program.options.isWasm64;
-    sb.push("declare module ASModule {\n");
-    sb.push("  type i8 = number;\n");
-    sb.push("  type i16 = number;\n");
-    sb.push("  type i32 = number;\n");
-    sb.push("  type i64 = bigint;\n");
+    sb.push("type i8 = number;\n");
+    sb.push("type i16 = number;\n");
+    sb.push("type i32 = number;\n");
+    sb.push("type i64 = bigint;\n");
     if (isWasm64) {
-      sb.push("  type isize = bigint;\n");
+      sb.push("type isize = bigint;\n");
     } else {
-      sb.push("  type isize = number;\n");
+      sb.push("type isize = number;\n");
     }
-    sb.push("  type u8 = number;\n");
-    sb.push("  type u16 = number;\n");
-    sb.push("  type u32 = number;\n");
-    sb.push("  type u64 = bigint;\n");
+    sb.push("type u8 = number;\n");
+    sb.push("type u16 = number;\n");
+    sb.push("type u32 = number;\n");
+    sb.push("type u64 = bigint;\n");
     if (isWasm64) {
-      sb.push("  type usize = bigint;\n");
+      sb.push("type usize = bigint;\n");
     } else {
-      sb.push("  type usize = number;\n");
+      sb.push("type usize = number;\n");
     }
-    sb.push("  type f32 = number;\n");
-    sb.push("  type f64 = number;\n");
-    sb.push("  type bool = boolean | number;\n");
-    ++this.indentLevel;
+    sb.push("type f32 = number;\n");
+    sb.push("type f64 = number;\n");
+    sb.push("type bool = boolean | number;\n");
     this.walk();
-    --this.indentLevel;
-    sb.push("}\n");
-    sb.push("export default ASModule;\n");
     return this.sb.join("");
   }
 }
