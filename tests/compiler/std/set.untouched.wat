@@ -2487,10 +2487,7 @@
   i32.le_u
   drop
   local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.set $2
   i32.const 1
   local.set $1
@@ -2572,10 +2569,7 @@
      local.get $3
      i32.load8_s
      local.get $1
-     i32.const 24
-     i32.shl
-     i32.const 24
-     i32.shr_s
+     i32.extend8_s
      i32.eq
     else
      i32.const 0
@@ -4472,10 +4466,7 @@
   local.set $1
   loop $for-loop|1
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 100
    i32.lt_s
    local.set $3
@@ -4534,10 +4525,7 @@
   local.set $1
   loop $for-loop|3
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 100
    i32.lt_s
    local.set $4
@@ -4656,10 +4644,7 @@
   local.set $5
   loop $for-loop|6
    local.get $5
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 50
    i32.lt_s
    local.set $7
@@ -4718,10 +4703,7 @@
   local.set $5
   loop $for-loop|8
    local.get $5
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 50
    i32.lt_s
    local.set $8
@@ -5840,10 +5822,7 @@
   i32.le_u
   drop
   local.get $0
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   local.set $2
   i32.const 2
   local.set $1
@@ -5925,10 +5904,7 @@
      local.get $3
      i32.load16_s
      local.get $1
-     i32.const 16
-     i32.shl
-     i32.const 16
-     i32.shr_s
+     i32.extend16_s
      i32.eq
     else
      i32.const 0
@@ -6432,10 +6408,7 @@
   local.set $1
   loop $for-loop|1
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 100
    i32.lt_s
    local.set $3
@@ -6494,10 +6467,7 @@
   local.set $1
   loop $for-loop|3
    local.get $1
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 100
    i32.lt_s
    local.set $4
@@ -6616,10 +6586,7 @@
   local.set $5
   loop $for-loop|6
    local.get $5
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 50
    i32.lt_s
    local.set $7
@@ -6678,10 +6645,7 @@
   local.set $5
   loop $for-loop|8
    local.get $5
-   i32.const 16
-   i32.shl
-   i32.const 16
-   i32.shr_s
+   i32.extend16_s
    i32.const 50
    i32.lt_s
    local.set $8

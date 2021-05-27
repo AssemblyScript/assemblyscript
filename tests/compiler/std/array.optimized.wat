@@ -8343,10 +8343,7 @@
   (local $2 i32)
   (local $3 i32)
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 0
   i32.lt_s
   local.tee $2
@@ -8360,10 +8357,7 @@
    local.set $1
   end
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   i32.const 10
   i32.lt_u
   if
@@ -8373,10 +8367,7 @@
    i32.shl
    i32.add
    local.get $1
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
+   i32.extend8_s
    i32.const 48
    i32.or
    i32.store16
@@ -8386,10 +8377,7 @@
    return
   end
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
+  i32.extend8_s
   local.tee $3
   local.tee $1
   i32.const 100000
