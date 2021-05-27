@@ -1,16 +1,34 @@
 (module
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i64_i32_i64_i32_i64_i32_=>_i32 (func (param i64 i32 i64 i32 i64 i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
+ (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
+ (global $~lib/util/number/_exp (mut i32) (i32.const 0))
+ (global $~lib/util/number/_K (mut i32) (i32.const 0))
+ (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
+ (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22028))
+ (global $~started (mut i32) (i32.const 0))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01\00\00\00\02\00\00\00a")
@@ -108,24 +126,6 @@
  (data (i32.const 5544) "\01\00\00\00$\00\00\00(\00A\00=\00r\00e\00f\00#\001\00,\00 \00B\00=\00r\00e\00f\00#\002\00)")
  (data (i32.const 5600) "\05\00\00\00 \00\00\00\00\00\00\00 ")
  (data (i32.const 5628) "\04A\00\00\00\00\00\00 ")
- (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
- (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
- (global $~lib/util/number/_exp (mut i32) (i32.const 0))
- (global $~lib/util/number/_K (mut i32) (i32.const 0))
- (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
- (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 22028))
- (global $~started (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $~lib/rt/itcms/Object#makeGray (param $0 i32)
@@ -1207,20 +1207,17 @@
        local.get $0
        i32.const 15
        i32.and
-       i32.eqz
-       i32.const 0
+       i32.const 1
        local.get $0
        select
        if (result i32)
+        i32.const 1
+       else
         local.get $1
         i32.load
         i32.const 1
         i32.and
-        i32.eqz
-       else
-        i32.const 0
        end
-       i32.eqz
        if
         i32.const 0
         i32.const 1520
@@ -1465,12 +1462,12 @@
   local.set $3
   local.get $2
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 1392
    i32.const 1520
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -1713,11 +1710,11 @@
    local.get $0
    local.get $3
    i32.add
-   i32.const 4
-   i32.sub
    local.tee $1
+   i32.const 1
+   i32.sub
    i32.const 0
-   i32.store8 offset=3
+   i32.store8
    local.get $0
    i32.const 2
    i32.le_u
@@ -1729,11 +1726,15 @@
    i32.const 0
    i32.store8 offset=2
    local.get $1
+   i32.const 2
+   i32.sub
    i32.const 0
-   i32.store8 offset=2
+   i32.store8
    local.get $1
+   i32.const 3
+   i32.sub
    i32.const 0
-   i32.store8 offset=1
+   i32.store8
    local.get $0
    i32.const 6
    i32.le_u
@@ -1742,6 +1743,8 @@
    i32.const 0
    i32.store8 offset=3
    local.get $1
+   i32.const 4
+   i32.sub
    i32.const 0
    i32.store8
    local.get $0
@@ -1767,11 +1770,11 @@
    i32.and
    local.tee $3
    i32.add
-   i32.const 28
-   i32.sub
    local.tee $0
+   i32.const 4
+   i32.sub
    i32.const 0
-   i32.store offset=24
+   i32.store
    local.get $3
    i32.const 8
    i32.le_u
@@ -1783,11 +1786,15 @@
    i32.const 0
    i32.store offset=8
    local.get $0
+   i32.const 12
+   i32.sub
    i32.const 0
-   i32.store offset=16
+   i32.store
    local.get $0
+   i32.const 8
+   i32.sub
    i32.const 0
-   i32.store offset=20
+   i32.store
    local.get $3
    i32.const 24
    i32.le_u
@@ -1805,17 +1812,25 @@
    i32.const 0
    i32.store offset=24
    local.get $0
+   i32.const 28
+   i32.sub
    i32.const 0
    i32.store
    local.get $0
+   i32.const 24
+   i32.sub
    i32.const 0
-   i32.store offset=4
+   i32.store
    local.get $0
+   i32.const 20
+   i32.sub
    i32.const 0
-   i32.store offset=8
+   i32.store
    local.get $0
+   i32.const 16
+   i32.sub
    i32.const 0
-   i32.store offset=12
+   i32.store
    local.get $5
    local.get $5
    i32.const 4
@@ -3037,10 +3052,10 @@
    return
   end
   local.get $1
-  i32.eqz
-  i32.const 1
+  i32.const 0
   local.get $0
   select
+  i32.eqz
   if
    i32.const 0
    return
@@ -3068,22 +3083,20 @@
    local.set $2
    local.get $1
    local.set $3
+   local.get $2
+   i32.const 7
+   i32.and
+   local.get $3
+   i32.const 7
+   i32.and
+   i32.or
+   i32.const 1
    local.get $4
    local.tee $0
    i32.const 4
    i32.ge_u
-   if (result i32)
-    local.get $2
-    i32.const 7
-    i32.and
-    local.get $3
-    i32.const 7
-    i32.and
-    i32.or
-    i32.eqz
-   else
-    i32.const 0
-   end
+   select
+   i32.eqz
    if
     loop $do-continue|0
      local.get $2

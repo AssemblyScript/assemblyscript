@@ -4,8 +4,6 @@
  (type $none_=>_i64 (func (result i64)))
  (type $none_=>_f32 (func (result f32)))
  (type $none_=>_f64 (func (result f64)))
- (memory $0 0)
- (table $0 1 funcref)
  (global $infer-type/i i32 (i32.const 10))
  (global $infer-type/I i64 (i64.const 4294967296))
  (global $infer-type/F f64 (f64.const 1.5))
@@ -18,6 +16,9 @@
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (memory $0 0)
+ (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
  (func $infer-type/locals

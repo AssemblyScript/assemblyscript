@@ -2,6 +2,7 @@
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $memory/ptr (mut i32) (i32.const 1088))
  (memory $0 1)
  (data (i32.const 1036) ",")
  (data (i32.const 1048) "\01\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s")
@@ -13,7 +14,6 @@
  (data (i32.const 1214) "\01")
  (data (i32.const 1215) "\01")
  (data (i32.const 1216) "\01")
- (global $memory/ptr (mut i32) (i32.const 1088))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:memory

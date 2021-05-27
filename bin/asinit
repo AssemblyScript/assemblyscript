@@ -377,9 +377,14 @@ function ensurePackageJson() {
 function ensureIndexJs() {
   console.log("- Making sure that 'index.js' exists...");
   if (!fs.existsSync(indexFile)) {
+    // since node.js v13.2.0 or v12.17.0 we can use ESM without flags
+    const ver = process.versions.node.split('.');
+    const maj = parseInt(ver[0]);
+    const min = parseInt(ver[1]);
+    const supportESM = maj >= 14 || (maj == 13 && min >= 2) || (maj == 12 && min >= 17);
     fs.writeFileSync(indexFile, [
       "const fs = require(\"fs\");",
-      "const loader = require(\"@assemblyscript/loader\");",
+      "const loader = require(\"@assemblyscript/loader" + (supportESM ? "" : "/umd") + "\");",
       "const imports = { /* imports go here */ };",
       "const wasmModule = loader.instantiateSync(fs.readFileSync(__dirname + \"/build/optimized.wasm\"), imports);",
       "module.exports = wasmModule.exports;"
@@ -408,7 +413,7 @@ function ensureTestsIndexJs() {
     fs.writeFileSync(testsIndexFile, [
       "const assert = require(\"assert\");",
       "const myModule = require(\"..\");",
-      "assert.equal(myModule.add(1, 2), 3);",
+      "assert.strictEqual(myModule.add(1, 2), 3);",
       "console.log(\"ok\");"
     ].join("\n") + "\n");
     console.log(colors.green("  Created: ") + testsIndexFile);

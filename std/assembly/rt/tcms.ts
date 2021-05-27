@@ -122,7 +122,7 @@ function initLazy(space: Object): Object {
 // @ts-ignore: decorator
 @global @unsafe
 export function __new(size: usize, id: i32): usize {
-  if (size >= OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
+  if (size > OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   var obj = changetype<Object>(__alloc(OBJECT_OVERHEAD + size) - BLOCK_OVERHEAD);
   obj.rtId = id;
   obj.rtSize = <u32>size;
@@ -140,7 +140,7 @@ export function __renew(oldPtr: usize, size: usize): usize {
     memory.copy(newPtr, oldPtr, min(size, oldObj.rtSize));
     return newPtr;
   }
-  if (size >= OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
+  if (size > OBJECT_MAXSIZE) throw new Error(E_ALLOCATION_TOO_LARGE);
   total -= oldObj.size;
   var newPtr = __realloc(oldPtr - OBJECT_OVERHEAD, OBJECT_OVERHEAD + size) + OBJECT_OVERHEAD;
   var newObj = changetype<Object>(newPtr - TOTAL_OVERHEAD);

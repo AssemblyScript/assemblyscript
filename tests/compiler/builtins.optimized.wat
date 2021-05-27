@@ -5,6 +5,11 @@
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
+ (global $builtins/i (mut i32) (i32.const 0))
+ (global $builtins/I (mut i64) (i64.const 0))
+ (global $builtins/f (mut f32) (f32.const 0))
+ (global $builtins/F (mut f64) (f64.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18412))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01")
@@ -61,12 +66,7 @@
  (data (i32.const 1996) "\1c")
  (data (i32.const 2008) "\0c\00\00\00\08\00\00\00\03")
  (table $0 4 funcref)
- (elem (i32.const 1) $start:builtins~anonymous|0 $start:builtins~anonymous|1 $start:builtins~anonymous|2)
- (global $builtins/i (mut i32) (i32.const 0))
- (global $builtins/I (mut i64) (i64.const 0))
- (global $builtins/f (mut f32) (f32.const 0))
- (global $builtins/F (mut f64) (f64.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18412))
+ (elem $0 (i32.const 1) $start:builtins~anonymous|0 $start:builtins~anonymous|1 $start:builtins~anonymous|2)
  (export "test" (func $start:builtins~anonymous|1))
  (export "memory" (memory $0))
  (start $~start)
@@ -87,10 +87,10 @@
    return
   end
   local.get $1
-  i32.eqz
-  i32.const 1
+  i32.const 0
   local.get $0
   select
+  i32.eqz
   if
    i32.const 0
    return
@@ -118,22 +118,20 @@
    local.set $2
    local.get $1
    local.set $3
+   local.get $2
+   i32.const 7
+   i32.and
+   local.get $3
+   i32.const 7
+   i32.and
+   i32.or
+   i32.const 1
    local.get $4
    local.tee $0
    i32.const 4
    i32.ge_u
-   if (result i32)
-    local.get $2
-    i32.const 7
-    i32.and
-    local.get $3
-    i32.const 7
-    i32.and
-    i32.or
-    i32.eqz
-   else
-    i32.const 0
-   end
+   select
+   i32.eqz
    if
     loop $do-continue|0
      local.get $2

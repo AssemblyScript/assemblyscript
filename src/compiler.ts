@@ -705,7 +705,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = 0, k = functionTable.length; i < k; ++i) {
       functionTableNames[i] = functionTable[i].internalName;
     }
-    module.setFunctionTable(tableBase + functionTable.length, Module.UNLIMITED_TABLE, functionTableNames, module.i32(tableBase));
+    module.addFunctionTable("0", tableBase + functionTable.length, Module.UNLIMITED_TABLE, functionTableNames, module.i32(tableBase));
 
     // expose the arguments length helper if there are varargs exports
     if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
@@ -1468,6 +1468,26 @@ export class Compiler extends DiagnosticEmitter {
       if (instance.hasDecorator(DecoratorFlags.LAZY)) {
         this.lazyFunctions.add(instance);
         return true;
+      }
+    }
+
+    // ensure the function hasn't duplicate parameters
+    var parameters = instance.prototype.functionTypeNode.parameters;
+    var numParameters = parameters.length;
+    if (numParameters >= 2) {
+      let visited = new Set<string>();
+      visited.add(parameters[0].name.text);
+      for (let i = 1; i < numParameters; i++) {
+        let paramIdentifier = parameters[i].name;
+        let paramName = paramIdentifier.text;
+        if (!visited.has(paramName)) {
+          visited.add(paramName);
+        } else {
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            paramIdentifier.range, paramName
+          );
+        }
       }
     }
 
@@ -3604,14 +3624,14 @@ export class Compiler extends DiagnosticEmitter {
 
           // f32 to f64
           if (toType.kind == TypeKind.F64) {
-            expr = module.unary(UnaryOp.PromoteF32, expr);
+            expr = module.unary(UnaryOp.PromoteF32ToF64, expr);
           }
 
           // otherwise f32 to f32
 
         // f64 to f32
         } else if (toType.kind == TypeKind.F32) {
-          expr = module.unary(UnaryOp.DemoteF64, expr);
+          expr = module.unary(UnaryOp.DemoteF64ToF32, expr);
         }
 
         // otherwise f64 to f64
@@ -3626,16 +3646,16 @@ export class Compiler extends DiagnosticEmitter {
           } else if (toType.isSignedIntegerValue) {
             let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(saturating ? UnaryOp.TruncF32ToI64Sat : UnaryOp.TruncF32ToI64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncSatF32ToI64 : UnaryOp.TruncF32ToI64, expr);
             } else {
-              expr = module.unary(saturating ? UnaryOp.TruncF32ToI32Sat : UnaryOp.TruncF32ToI32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncSatF32ToI32 : UnaryOp.TruncF32ToI32, expr);
             }
           } else {
             let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(saturating ? UnaryOp.TruncF32ToU64Sat : UnaryOp.TruncF32ToU64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncSatF32ToU64 : UnaryOp.TruncF32ToU64, expr);
             } else {
-              expr = module.unary(saturating ? UnaryOp.TruncF32ToU32Sat : UnaryOp.TruncF32ToU32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncSatF32ToU32 : UnaryOp.TruncF32ToU32, expr);
             }
           }
 
@@ -3646,16 +3666,16 @@ export class Compiler extends DiagnosticEmitter {
           } else if (toType.isSignedIntegerValue) {
             let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(saturating ? UnaryOp.TruncF64ToI64Sat : UnaryOp.TruncF64ToI64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncSatF64ToI64 : UnaryOp.TruncF64ToI64, expr);
             } else {
-              expr = module.unary(saturating ? UnaryOp.TruncF64ToI32Sat : UnaryOp.TruncF64ToI32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncSatF64ToI32 : UnaryOp.TruncF64ToI32, expr);
             }
           } else {
             let saturating = this.options.hasFeature(Feature.NONTRAPPING_F2I);
             if (toType.isLongIntegerValue) {
-              expr = module.unary(saturating ? UnaryOp.TruncF64ToU64Sat : UnaryOp.TruncF64ToU64, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncSatF64ToU64 : UnaryOp.TruncF64ToU64, expr);
             } else {
-              expr = module.unary(saturating ? UnaryOp.TruncF64ToU32Sat : UnaryOp.TruncF64ToU32, expr);
+              expr = module.unary(saturating ? UnaryOp.TruncSatF64ToU32 : UnaryOp.TruncF64ToU32, expr);
             }
           }
         }
@@ -3715,13 +3735,13 @@ export class Compiler extends DiagnosticEmitter {
         if (toType.isBooleanValue) {
           expr = module.binary(BinaryOp.NeI64, expr, module.i64(0));
         } else if (!toType.isLongIntegerValue) {
-          expr = module.unary(UnaryOp.WrapI64, expr); // discards upper bits
+          expr = module.unary(UnaryOp.WrapI64ToI32, expr); // discards upper bits
         }
 
       // i32 or smaller to i64
       } else if (toType.isLongIntegerValue) {
         expr = module.unary(
-          fromType.isSignedIntegerValue ? UnaryOp.ExtendI32 : UnaryOp.ExtendU32,
+          fromType.isSignedIntegerValue ? UnaryOp.ExtendI32ToI64 : UnaryOp.ExtendU32ToU64,
           this.ensureSmallIntegerWrap(expr, fromType) // must clear garbage bits
         );
 
@@ -5013,7 +5033,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.binary(BinaryOp.NeF64, leftExpr, rightExpr);
       }
       case TypeKind.V128: {
-        return module.unary(UnaryOp.AnyTrueI8x16,
+        return module.unary(UnaryOp.AnyTrueV128,
           module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
         );
       }
@@ -5837,7 +5857,10 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       default: {
-        assert(false);
+        this.error(
+          DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
+          expression.range, target.internalName
+        );
         return this.module.unreachable();
       }
     }
@@ -6332,7 +6355,17 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.PROPERTY: {
         let propertyInstance = <Property>target;
-        let getterInstance = assert(propertyInstance.getterInstance);
+        let getterInstance = propertyInstance.getterInstance;
+        let type = assert(this.resolver.getTypeOfElement(target));
+
+        if (!getterInstance) {
+          this.error(
+            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+            expression.range, type.toString()
+          );
+          return module.unreachable();
+        }
+
         let thisArg: ExpressionRef = 0;
         if (propertyInstance.is(CommonFlags.INSTANCE)) {
           thisArg = this.compileExpression(
@@ -9049,8 +9082,11 @@ export class Compiler extends DiagnosticEmitter {
           : module.i32(i64_low(offset));
       }
     }
-    assert(false);
-    return module.unreachable();
+    this.error(
+      DiagnosticCode.Expression_refers_to_a_static_element_that_does_not_compile_to_a_value_at_runtime,
+      expression.range
+    );
+    return this.module.unreachable();
   }
 
   private compileTernaryExpression(
@@ -9821,7 +9857,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I8: {
         if (flow.canOverflow(expr, type)) {
           expr = this.options.hasFeature(Feature.SIGN_EXTENSION)
-            ? module.unary(UnaryOp.ExtendI8ToI32, expr)
+            ? module.unary(UnaryOp.Extend8I32, expr)
             : module.binary(BinaryOp.ShrI32,
                 module.binary(BinaryOp.ShlI32,
                   expr,
@@ -9835,7 +9871,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.I16: {
         if (flow.canOverflow(expr, type)) {
           expr = this.options.hasFeature(Feature.SIGN_EXTENSION)
-            ? module.unary(UnaryOp.ExtendI16ToI32, expr)
+            ? module.unary(UnaryOp.Extend16I32, expr)
             : module.binary(BinaryOp.ShrI32,
                 module.binary(BinaryOp.ShlI32,
                   expr,
@@ -10095,7 +10131,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.binary(BinaryOp.LeU32,
           module.binary(BinaryOp.SubI32,
             module.binary(BinaryOp.ShlI32,
-              module.unary(UnaryOp.ReinterpretF32, expr),
+              module.unary(UnaryOp.ReinterpretF32ToI32, expr),
               module.i32(1)
             ),
             module.i32(2) // 1 << 1
@@ -10112,7 +10148,7 @@ export class Compiler extends DiagnosticEmitter {
         return module.binary(BinaryOp.LeU64,
           module.binary(BinaryOp.SubI64,
             module.binary(BinaryOp.ShlI64,
-              module.unary(UnaryOp.ReinterpretF64, expr),
+              module.unary(UnaryOp.ReinterpretF64ToI64, expr),
               module.i64(1)
             ),
             module.i64(2) // 1 << 1

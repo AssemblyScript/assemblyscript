@@ -4,6 +4,16 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18140))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01\00\00\00\06\00\00\001\002\003")
@@ -32,16 +42,6 @@
  (data (i32.const 1676) ",")
  (data (i32.const 1688) "\01\00\00\00\0e\00\00\00d\00o\00T\00h\00r\00o\00w")
  (data (i32.const 1728) "\03\00\00\00 \00\00\00\00\00\00\00 ")
- (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18140))
  (export "doThrow" (func $throw/doThrow))
  (export "memory" (memory $0))
  (start $~start)
@@ -1016,20 +1016,17 @@
       local.get $3
       i32.const 15
       i32.and
-      i32.eqz
-      i32.const 0
+      i32.const 1
       local.get $3
       select
       if (result i32)
+       i32.const 1
+      else
        local.get $0
        i32.load
        i32.const 1
        i32.and
-       i32.eqz
-      else
-       i32.const 0
       end
-      i32.eqz
       if
        i32.const 0
        i32.const 1632

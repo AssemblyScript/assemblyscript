@@ -1,7 +1,5 @@
 (module
  (type $none_=>_none (func))
- (memory $0 0)
- (table $0 1 funcref)
  (global $unary/i (mut i32) (i32.const 0))
  (global $unary/I (mut i64) (i64.const 0))
  (global $unary/f (mut f32) (f32.const 0))
@@ -9,6 +7,9 @@
  (global $~lib/memory/__data_end i32 (i32.const 8))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16392))
  (global $~lib/memory/__heap_base i32 (i32.const 16392))
+ (memory $0 0)
+ (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:unary

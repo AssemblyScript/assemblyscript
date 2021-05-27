@@ -9,6 +9,20 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i64_i32_i64_i32_i64_=>_i32 (func (param i64 i32 i64 i32 i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/util/number/_K (mut i32) (i32.const 0))
+ (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
+ (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 21028))
  (memory $0 1)
  (data (i32.const 1036) "|")
  (data (i32.const 1048) "\01\00\00\00d\00\00\00t\00o\00S\00t\00r\00i\00n\00g\00(\00)\00 \00r\00a\00d\00i\00x\00 \00a\00r\00g\00u\00m\00e\00n\00t\00 \00m\00u\00s\00t\00 \00b\00e\00 \00b\00e\00t\00w\00e\00e\00n\00 \002\00 \00a\00n\00d\00 \003\006")
@@ -58,21 +72,7 @@
  (data (i32.const 4584) "\03\00\00\00\08\00\00\00\04")
  (data (i32.const 4608) "\04\00\00\00 \00\00\00\00\00\00\00 ")
  (table $0 5 funcref)
- (elem (i32.const 1) $start:resolve-ternary~anonymous|0 $start:resolve-ternary~anonymous|1 $resolve-ternary/g1 $resolve-ternary/g2)
- (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/util/number/_K (mut i32) (i32.const 0))
- (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
- (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 21028))
+ (elem $0 (i32.const 1) $start:resolve-ternary~anonymous|0 $start:resolve-ternary~anonymous|1 $resolve-ternary/g1 $resolve-ternary/g2)
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -1088,20 +1088,17 @@
        local.get $0
        i32.const 15
        i32.and
-       i32.eqz
-       i32.const 0
+       i32.const 1
        local.get $0
        select
        if (result i32)
+        i32.const 1
+       else
         local.get $1
         i32.load
         i32.const 1
         i32.and
-        i32.eqz
-       else
-        i32.const 0
        end
-       i32.eqz
        if
         i32.const 0
         i32.const 1616
@@ -1346,12 +1343,12 @@
   local.set $5
   local.get $1
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 1280
    i32.const 1616
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -1594,11 +1591,11 @@
    local.get $0
    local.get $4
    i32.add
-   i32.const 4
-   i32.sub
    local.tee $1
+   i32.const 1
+   i32.sub
    i32.const 0
-   i32.store8 offset=3
+   i32.store8
    local.get $0
    i32.const 2
    i32.le_u
@@ -1610,11 +1607,15 @@
    i32.const 0
    i32.store8 offset=2
    local.get $1
+   i32.const 2
+   i32.sub
    i32.const 0
-   i32.store8 offset=2
+   i32.store8
    local.get $1
+   i32.const 3
+   i32.sub
    i32.const 0
-   i32.store8 offset=1
+   i32.store8
    local.get $0
    i32.const 6
    i32.le_u
@@ -1623,6 +1624,8 @@
    i32.const 0
    i32.store8 offset=3
    local.get $1
+   i32.const 4
+   i32.sub
    i32.const 0
    i32.store8
    local.get $0
@@ -1648,11 +1651,11 @@
    i32.and
    local.tee $4
    i32.add
-   i32.const 28
-   i32.sub
    local.tee $0
+   i32.const 4
+   i32.sub
    i32.const 0
-   i32.store offset=24
+   i32.store
    local.get $4
    i32.const 8
    i32.le_u
@@ -1664,11 +1667,15 @@
    i32.const 0
    i32.store offset=8
    local.get $0
+   i32.const 12
+   i32.sub
    i32.const 0
-   i32.store offset=16
+   i32.store
    local.get $0
+   i32.const 8
+   i32.sub
    i32.const 0
-   i32.store offset=20
+   i32.store
    local.get $4
    i32.const 24
    i32.le_u
@@ -1686,17 +1693,25 @@
    i32.const 0
    i32.store offset=24
    local.get $0
+   i32.const 28
+   i32.sub
    i32.const 0
    i32.store
    local.get $0
+   i32.const 24
+   i32.sub
    i32.const 0
-   i32.store offset=4
+   i32.store
    local.get $0
+   i32.const 20
+   i32.sub
    i32.const 0
-   i32.store offset=8
+   i32.store
    local.get $0
+   i32.const 16
+   i32.sub
    i32.const 0
-   i32.store offset=12
+   i32.store
    local.get $3
    local.get $3
    i32.const 4
@@ -1857,10 +1872,10 @@
    return
   end
   local.get $1
-  i32.eqz
-  i32.const 1
+  i32.const 0
   local.get $0
   select
+  i32.eqz
   if
    i32.const 0
    return
@@ -1888,22 +1903,20 @@
    local.set $2
    local.get $1
    local.set $3
+   local.get $2
+   i32.const 7
+   i32.and
+   local.get $3
+   i32.const 7
+   i32.and
+   i32.or
+   i32.const 1
    local.get $4
    local.tee $0
    i32.const 4
    i32.ge_u
-   if (result i32)
-    local.get $2
-    i32.const 7
-    i32.and
-    local.get $3
-    i32.const 7
-    i32.and
-    i32.or
-    i32.eqz
-   else
-    i32.const 0
-   end
+   select
+   i32.eqz
    if
     loop $do-continue|0
      local.get $2

@@ -136,7 +136,7 @@ export class Parser extends DiagnosticEmitter {
   ): void {
     // the frontend gives us paths with file extensions
     var normalizedPath = normalizePath(path);
-    var internalPath = mangleInternalPath(path);
+    var internalPath = mangleInternalPath(normalizedPath);
 
     // check if already processed
     if (this.donelog.has(internalPath)) return;
@@ -845,7 +845,9 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
     this.tryParseSignatureIsSignature = true;
+
     if (!parameters) parameters = [];
+
     return Node.createFunctionType(
       parameters,
       returnType,

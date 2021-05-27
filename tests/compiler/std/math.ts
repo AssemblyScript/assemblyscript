@@ -3048,6 +3048,12 @@ assert(test_round(-0.999992370605468750, -1.0, 0.0, INEXACT));
 assert(test_round(7.88860905221011805e-31, 0.0, 0.0, INEXACT));
 assert(test_round(-7.88860905221011805e-31, -0.0, 0.0, INEXACT));
 
+assert(NativeMath.round( 9007199254740990.0) ==  9007199254740990.0); // round(+2 ** 53) == +2 ** 53
+assert(NativeMath.round(-9007199254740990.0) == -9007199254740990.0); // round(-2 ** 53) == -2 ** 53
+assert(NativeMath.round( 9007199254740991.0) ==  9007199254740991.0); // round(+(2 ** 53 - 1)) == +(2 ** 53 - 1)
+assert(NativeMath.round(-9007199254740991.0) == -9007199254740991.0); // round(-(2 ** 53 - 1)) == -(2 ** 53 - 1)
+assert(NativeMath.round(-1.7976931348623157e+308) == -1.7976931348623157e+308);
+
 // Mathf.round /////////////////////////////////////////////////////////////////////////////////////
 
 function test_roundf(value: f32, expected: f32, error: f32, flags: i32): bool {

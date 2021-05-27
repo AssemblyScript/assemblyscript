@@ -3,6 +3,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17692))
  (memory $0 1)
  (data (i32.const 1036) "<")
  (data (i32.const 1048) "\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
@@ -12,7 +13,6 @@
  (data (i32.const 1160) "\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
  (data (i32.const 1276) "\1c")
  (data (i32.const 1288) "\01")
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17692))
  (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $export:std/array-access/i32ArrayArrayElementAccess))
  (export "stringArrayPropertyAccess" (func $export:std/array-access/stringArrayPropertyAccess))
@@ -61,13 +61,13 @@
    local.tee $2
    i32.const 7
    i32.and
-   i32.eqz
-   i32.const 0
+   i32.const 1
    local.get $1
    local.tee $0
    i32.const 4
    i32.ge_u
    select
+   i32.eqz
    if
     loop $do-continue|0
      local.get $2
@@ -156,7 +156,7 @@
   if
    i32.const 1056
    i32.const 1120
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -176,7 +176,7 @@
   if
    i32.const 1168
    i32.const 1120
-   i32.const 96
+   i32.const 103
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -227,7 +227,7 @@
    if
     i32.const 1056
     i32.const 1120
-    i32.const 92
+    i32.const 99
     i32.const 42
     call $~lib/builtins/abort
     unreachable

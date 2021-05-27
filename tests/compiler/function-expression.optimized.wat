@@ -1,4 +1,8 @@
 (module
+<<<<<<< HEAD
+=======
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+>>>>>>> master
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
@@ -9,6 +13,17 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i64_=>_i64 (func (param i64) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
+ (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
+ (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18580))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\03\00\00\00\08\00\00\00\01")
@@ -62,18 +77,7 @@
  (data (i32.const 2088) "\t\00\00\00\08\00\00\00\13")
  (data (i32.const 2112) "\n\00\00\00 \00\00\00\00\00\00\00 ")
  (table $0 20 funcref)
- (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|3 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0 $start:function-expression~anonymous|0 $function-expression/semanticallyAnonymous~fnDecl|0)
- (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/state (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/visitCount (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/pinSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/iter (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/toSpace (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
- (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
- (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18580))
+ (elem $0 (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|6 $start:function-expression~anonymous|3 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testGlobal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testLocal~anonymous|0 $function-expression/testGlobal~anonymous|0~anonymous|0 $function-expression/testField~anonymous|0 $start:function-expression~anonymous|0 $function-expression/semanticallyAnonymous~fnDecl|0)
  (export "semanticallyAnonymous" (func $function-expression/semanticallyAnonymous))
  (export "memory" (memory $0))
  (start $~start)
@@ -1115,20 +1119,26 @@
        local.get $0
        i32.const 15
        i32.and
+<<<<<<< HEAD
        i32.eqz
        i32.const 0
        local.get $0
        select
        if (result i32)
         local.get $1
+=======
+       i32.const 1
+       local.get $1
+       select
+       if (result i32)
+        i32.const 1
+       else
+        local.get $0
+>>>>>>> master
         i32.load
         i32.const 1
         i32.and
-        i32.eqz
-       else
-        i32.const 0
        end
-       i32.eqz
        if
         i32.const 0
         i32.const 1936
@@ -1435,6 +1445,7 @@
   i32.store offset=4
   local.get $0
   local.get $1
+<<<<<<< HEAD
   i32.store offset=8
   local.get $1
   local.get $0
@@ -1447,6 +1458,73 @@
   local.get $2
   local.get $0
   i32.store offset=8
+=======
+ )
+ (func $~lib/rt/itcms/__new (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  global.get $~lib/rt/itcms/total
+  global.get $~lib/rt/itcms/threshold
+  i32.ge_u
+  if
+   block $__inlined_func$~lib/rt/itcms/interrupt
+    i32.const 2048
+    local.set $0
+    loop $do-continue|0
+     local.get $0
+     call $~lib/rt/itcms/step
+     i32.sub
+     local.set $0
+     global.get $~lib/rt/itcms/state
+     i32.eqz
+     if
+      global.get $~lib/rt/itcms/total
+      i64.extend_i32_u
+      i64.const 200
+      i64.mul
+      i64.const 100
+      i64.div_u
+      i32.wrap_i64
+      i32.const 1024
+      i32.add
+      global.set $~lib/rt/itcms/threshold
+      br $__inlined_func$~lib/rt/itcms/interrupt
+     end
+     local.get $0
+     i32.const 0
+     i32.gt_s
+     br_if $do-continue|0
+    end
+    global.get $~lib/rt/itcms/total
+    global.get $~lib/rt/itcms/total
+    global.get $~lib/rt/itcms/threshold
+    i32.sub
+    i32.const 1024
+    i32.lt_u
+    i32.const 10
+    i32.shl
+    i32.add
+    global.set $~lib/rt/itcms/threshold
+   end
+  end
+  global.get $~lib/rt/tlsf/ROOT
+  i32.eqz
+  if
+   call $~lib/rt/tlsf/initialize
+  end
+  global.get $~lib/rt/tlsf/ROOT
+  call $~lib/rt/tlsf/allocateBlock
+  local.tee $0
+  i32.const 8
+  i32.store offset=12
+  local.get $0
+  i32.const 4
+  i32.store offset=16
+  local.get $0
+  global.get $~lib/rt/itcms/fromSpace
+  global.get $~lib/rt/itcms/white
+  call $~lib/rt/itcms/Object#linkTo
+>>>>>>> master
   global.get $~lib/rt/itcms/total
   local.get $0
   i32.load
@@ -1463,20 +1541,29 @@
   i32.const 0
   i32.store8
   local.get $0
+  i32.const 4
+  i32.add
+  local.tee $1
+  i32.const 1
+  i32.sub
   i32.const 0
-  i32.store8 offset=3
+  i32.store8
   local.get $0
   i32.const 0
   i32.store8 offset=1
   local.get $0
   i32.const 0
   i32.store8 offset=2
-  local.get $0
+  local.get $1
+  i32.const 2
+  i32.sub
   i32.const 0
-  i32.store8 offset=2
-  local.get $0
+  i32.store8
+  local.get $1
+  i32.const 3
+  i32.sub
   i32.const 0
-  i32.store8 offset=1
+  i32.store8
   local.get $0
  )
  (func $function-expression/semanticallyAnonymous~fnDecl|0 (param $0 i64) (result i64)

@@ -93,6 +93,36 @@ function test_v128(): void {
     );
     __free(ptr);
   }
+  {
+    let ptr = __alloc(16);
+    store<u32>(ptr, 42);
+    assert(
+      v128.load32_zero(ptr)
+      ==
+      v128(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0)
+    );
+    __free(ptr);
+  }
+  {
+    let ptr = __alloc(16);
+    store<u64>(ptr, 42);
+    assert(
+      v128.load64_zero(ptr)
+      ==
+      v128(0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0)
+    );
+    __free(ptr);
+  }
+  // TODO: missing C-API in Binaryen (see also passes/pass.ts)
+  // v128.load8_lane
+  // v128.load16_lane
+  // v128.load32_lane
+  // v128.load64_lane
+  // v128.store8_lane
+  // v128.store16_lane
+  // v128.store32_lane
+  // v128.store64_lane
+
   // generic operations are tested by the aliases below already
 }
 
@@ -222,6 +252,7 @@ function test_i8x16(): void {
       v128(0, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
     );
   }
+  assert(i8x16.popcnt(a) == v128(0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4));
 }
 
 function test_i16x8(): void {
@@ -362,6 +393,15 @@ function test_i16x8(): void {
     );
     __free(ptr);
   }
+
+  // TODO: unimp in Binaryen's interpreter
+  i16x8.extadd_pairwise_i8x16_s(a);
+  i16x8.extadd_pairwise_i8x16_u(a);
+  i16x8.q15mulr_sat_s(a, a);
+  i16x8.extmul_low_i8x16_s(a, a);
+  i16x8.extmul_low_i8x16_u(a, a);
+  i16x8.extmul_high_i8x16_s(a, a);
+  i16x8.extmul_high_i8x16_u(a, a);
 }
 
 function test_i32x4(): void {
@@ -481,6 +521,16 @@ function test_i32x4(): void {
     );
     __free(ptr);
   }
+
+  // TODO: unimp in Binaryen's interpreter
+  i32x4.extadd_pairwise_i16x8_s(a);
+  i32x4.extadd_pairwise_i16x8_u(a);
+  i32x4.trunc_sat_f64x2_s_zero(a);
+  i32x4.trunc_sat_f64x2_u_zero(a);
+  i32x4.extmul_low_i16x8_s(a, a);
+  i32x4.extmul_low_i16x8_u(a, a);
+  i32x4.extmul_high_i16x8_s(a, a);
+  i32x4.extmul_high_i16x8_u(a, a);
 }
 
 function test_i64x2(): void {
@@ -530,6 +580,10 @@ function test_i64x2(): void {
     );
     __free(ptr);
   }
+  i64x2.extmul_low_i32x4_s(a, a);
+  i64x2.extmul_low_i32x4_u(a, a);
+  i64x2.extmul_high_i32x4_s(a, a);
+  i64x2.extmul_high_i32x4_u(a, a);
 }
 
 function test_f32x4(): void {
@@ -581,6 +635,9 @@ function test_f32x4(): void {
     ==
     f32x4.splat(4294967296.0)
   );
+
+  // TODO: unimp in Binaryen's interpreter
+  f32x4.demote_f64x2_zero(a);
 }
 
 function test_f64x2(): void {
@@ -622,6 +679,11 @@ function test_f64x2(): void {
   assert(f64x2.max(negOne, one) == one);
   assert(f64x2.abs(negOne) == one);
   assert(f64x2.sqrt(f64x2(4.0, 9.0)) == f64x2(2.0, 3.0));
+
+  // TODO: unimp in Binaryen's interpreter
+  f64x2.convert_low_i32x4_s(a);
+  f64x2.convert_low_i32x4_u(a);
+  f64x2.promote_low_f32x4(a);
 }
 
 function test_const(): v128 {
