@@ -1,7 +1,7 @@
 (module
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (memory $0 1)
@@ -37,37 +37,11 @@
   i32.add
   i32.add
  )
- (func $start:call-optional
+ (func $~start
   i32.const 1
   global.set $~argumentsLength
-  i32.const 3
-  i32.const 0
-  i32.const 0
-  call $call-optional/opt@varargs
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 4
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 2
   global.set $~argumentsLength
-  i32.const 3
-  i32.const 4
-  i32.const 0
-  call $call-optional/opt@varargs
-  i32.const 5
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 5
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 1
   global.set $~argumentsLength
   i32.const 3
@@ -120,8 +94,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  call $start:call-optional
  )
 )
