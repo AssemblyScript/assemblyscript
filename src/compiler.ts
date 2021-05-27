@@ -1471,6 +1471,26 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    // ensure the function hasn't duplicate parameters
+    var parameters = instance.prototype.functionTypeNode.parameters;
+    var numParameters = parameters.length;
+    if (numParameters >= 2) {
+      let visited = new Set<string>();
+      visited.add(parameters[0].name.text);
+      for (let i = 1; i < numParameters; i++) {
+        let paramIdentifier = parameters[i].name;
+        let paramName = paramIdentifier.text;
+        if (!visited.has(paramName)) {
+          visited.add(paramName);
+        } else {
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            paramIdentifier.range, paramName
+          );
+        }
+      }
+    }
+
     instance.set(CommonFlags.COMPILED);
     var pendingElements = this.pendingElements;
     pendingElements.add(instance);

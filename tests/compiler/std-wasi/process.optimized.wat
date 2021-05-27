@@ -2,16 +2,16 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
+ (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (import "wasi_snapshot_preview1" "args_sizes_get" (func $~lib/bindings/wasi_snapshot_preview1/args_sizes_get (param i32 i32) (result i32)))
@@ -1873,20 +1873,17 @@
   local.get $0
   i32.const 15
   i32.and
-  i32.eqz
-  i32.const 0
+  i32.const 1
   local.get $0
   select
   if (result i32)
+   i32.const 1
+  else
    local.get $1
    i32.load
    i32.const 1
    i32.and
-   i32.eqz
-  else
-   i32.const 0
   end
-  i32.eqz
   if
    i32.const 0
    i32.const 4176
@@ -2916,14 +2913,11 @@
    i32.eqz
    i32.eq
    if
+    local.get $0
+    local.get $1
     local.get $2
-    if
-     local.get $0
-     call $~lib/rt/itcms/Object#makeGray
-    else
-     local.get $1
-     call $~lib/rt/itcms/Object#makeGray
-    end
+    select
+    call $~lib/rt/itcms/Object#makeGray
    else
     global.get $~lib/rt/itcms/state
     i32.const 1
@@ -3307,12 +3301,12 @@
   i32.const 7
   i32.and
   i32.or
-  i32.eqz
-  i32.const 0
+  i32.const 1
   local.get $3
   i32.const 4
   i32.ge_u
   select
+  i32.eqz
   if
    loop $do-continue|0
     local.get $1
@@ -3980,10 +3974,10 @@
       drop
       i32.const 0
       local.get $1
-      i32.eqz
-      i32.const 1
+      i32.const 0
       local.get $0
       select
+      i32.eqz
       br_if $__inlined_func$~lib/string/String.__eq
       drop
       i32.const 0

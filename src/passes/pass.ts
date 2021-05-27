@@ -134,6 +134,10 @@ import {
   _BinaryenSIMDShiftSetVec,
   _BinaryenSIMDShiftSetShift,
   _BinaryenSIMDLoadSetPtr,
+  _BinaryenSIMDLoadStoreLaneGetPtr,
+  _BinaryenSIMDLoadStoreLaneGetVec,
+  _BinaryenSIMDLoadStoreLaneSetPtr,
+  _BinaryenSIMDLoadStoreLaneSetVec,
   _BinaryenMemoryInitSetDest,
   _BinaryenMemoryInitSetOffset,
   _BinaryenMemoryInitSetSize,
@@ -339,6 +343,10 @@ export abstract class Visitor {
   }
 
   visitSIMDLoad(expr: ExpressionRef): void {
+    // unimp
+  }
+
+  visitSIMDLoadStoreLane(expr: ExpressionRef): void {
     // unimp
   }
 
@@ -760,7 +768,14 @@ export abstract class Visitor {
         this.visitSIMDLoad(expr);
         break;
       }
-      // TODO: SIMDLoadStoreLane
+      case ExpressionId.SIMDLoadStoreLane: {
+        this.stack.push(expr);
+        this.visit(_BinaryenSIMDLoadStoreLaneGetPtr(expr));
+        this.visit(_BinaryenSIMDLoadStoreLaneGetVec(expr));
+        assert(this.stack.pop() == expr);
+        this.visitSIMDLoadStoreLane(expr);
+        break;
+      }
       case ExpressionId.MemoryInit: {
         this.stack.push(expr);
         this.visit(_BinaryenMemoryInitGetDest(expr));
@@ -1425,7 +1440,19 @@ export function replaceChild(
       }
       break;
     }
-    // TODO: SIMDLoadStoreLane
+    case ExpressionId.SIMDLoadStoreLane: {
+      let ptr = _BinaryenSIMDLoadStoreLaneGetPtr(parent);
+      if (ptr == search) {
+        _BinaryenSIMDLoadStoreLaneSetPtr(parent, replacement);
+        return ptr;
+      }
+      let vec = _BinaryenSIMDLoadStoreLaneGetVec(parent);
+      if (vec == search) {
+        _BinaryenSIMDLoadStoreLaneSetVec(parent, replacement);
+        return ptr;
+      }
+      break;
+    }
     case ExpressionId.MemoryInit: {
       let dest = _BinaryenMemoryInitGetDest(parent);
       if (dest == search) {
