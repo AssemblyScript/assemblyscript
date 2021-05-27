@@ -2,10 +2,10 @@
  (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (memory $0 1)
@@ -974,20 +974,17 @@
   local.get $0
   i32.const 15
   i32.and
-  i32.eqz
-  i32.const 0
+  i32.const 1
   local.get $0
   select
   if (result i32)
+   i32.const 1
+  else
    local.get $1
    i32.load
    i32.const 1
    i32.and
-   i32.eqz
-  else
-   i32.const 0
   end
-  i32.eqz
   if
    i32.const 0
    i32.const 1056
@@ -1099,12 +1096,54 @@
   end
   local.get $0
   call $~lib/rt/tlsf/__free
+  i32.const 16
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 42
+  i32.store
+  local.get $0
+  v128.load32_zero
+  v128.const i32x4 0x00000000 0x00000000 0x00000000 0x0000002a
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 99
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
+  i32.const 16
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i64.const 42
+  i64.store
+  local.get $0
+  v128.load64_zero
+  v128.const i32x4 0x00000000 0x00000000 0x0000002a 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1184
+   i32.const 109
+   i32.const 5
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/tlsf/__free
  )
  (func $~start
   call $features/simd/test_v128
   i32.const 0
   i32.const 1184
-  i32.const 225
+  i32.const 255
   i32.const 3
   call $~lib/builtins/abort
   unreachable

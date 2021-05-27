@@ -769,6 +769,21 @@ export declare function _BinaryenSIMDLoadSetAlign(expr: BinaryenExpressionRef, a
 export declare function _BinaryenSIMDLoadGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenSIMDLoadSetPtr(expr: BinaryenExpressionRef, ptrExpr: BinaryenExpressionRef): void;
 
+export declare function _BinaryenSIMDLoadStoreLane(module: BinaryenModuleRef, op: BinaryenOp, offset: u32, align: u32, index: u8, ptr: BinaryenExpressionRef, vec: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenSIMDLoadStoreLaneGetOp(expr: BinaryenExpressionRef): BinaryenOp;
+export declare function _BinaryenSIMDLoadStoreLaneSetOp(expr: BinaryenExpressionRef, op: BinaryenOp): void;
+export declare function _BinaryenSIMDLoadStoreLaneGetOffset(expr: BinaryenExpressionRef): u32;
+export declare function _BinaryenSIMDLoadStoreLaneSetOffset(expr: BinaryenExpressionRef, offset: u32): void;
+export declare function _BinaryenSIMDLoadStoreLaneGetAlign(expr: BinaryenExpressionRef): u32;
+export declare function _BinaryenSIMDLoadStoreLaneSetAlign(expr: BinaryenExpressionRef, align: u32): void;
+export declare function _BinaryenSIMDLoadStoreLaneGetIndex(expr: BinaryenExpressionRef): u8;
+export declare function _BinaryenSIMDLoadStoreLaneSetIndex(expr: BinaryenExpressionRef, index: u8): void;
+export declare function _BinaryenSIMDLoadStoreLaneGetPtr(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenSIMDLoadStoreLaneSetPtr(expr: BinaryenExpressionRef, ptrExpr: BinaryenExpressionRef): void;
+export declare function _BinaryenSIMDLoadStoreLaneGetVec(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenSIMDLoadStoreLaneSetVec(expr: BinaryenExpressionRef, vecExpr: BinaryenExpressionRef): void;
+export declare function _BinaryenSIMDLoadStoreLaneIsStore(expr: BinaryenExpressionRef): bool;
+
 export declare function _BinaryenMemoryInit(module: BinaryenModuleRef, segmentIndex: u32, destExpr: BinaryenExpressionRef, offsetExpr: BinaryenExpressionRef, sizeExpr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenMemoryInitGetSegment(expr: BinaryenExpressionRef): u32;
 export declare function _BinaryenMemoryInitSetSegment(expr: BinaryenExpressionRef, segmentIndex: u32): void;
