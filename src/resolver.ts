@@ -439,7 +439,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    const typeArgumentNode = this.assertOneTypeArgument(node, reportMode);
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
     var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
@@ -474,7 +474,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    const typeArgumentNode = this.assertOneTypeArgument(node, reportMode);
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
     var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
@@ -517,7 +517,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    const typeArgumentNode = this.assertOneTypeArgument(node, reportMode);
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
     var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
@@ -545,7 +545,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventualy diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    const typeArgumentNode = this.assertOneTypeArgument(node, reportMode);
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
     var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
@@ -570,7 +570,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    const typeArgumentNode = this.assertOneTypeArgument(node, reportMode);
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
     if (!typeArgumentNode) return null;
     var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;

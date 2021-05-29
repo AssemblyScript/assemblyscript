@@ -1016,20 +1016,17 @@
       local.get $3
       i32.const 15
       i32.and
-      i32.eqz
-      i32.const 0
+      i32.const 1
       local.get $3
       select
       if (result i32)
+       i32.const 1
+      else
        local.get $0
        i32.load
        i32.const 1
        i32.and
-       i32.eqz
-      else
-       i32.const 0
       end
-      i32.eqz
       if
        i32.const 0
        i32.const 1632

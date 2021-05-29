@@ -5,14 +5,14 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
- (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
+ (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_f32_i32_=>_none (func (param i32 f32 i32)))
- (type $i32_f64_i32_=>_none (func (param i32 f64 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_f32 (func (param i32 i32 i32) (result f32)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
+ (type $i32_f32_i32_=>_none (func (param i32 f32 i32)))
+ (type $i32_f64_i32_=>_none (func (param i32 f64 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -1065,20 +1065,17 @@
        local.get $0
        i32.const 15
        i32.and
-       i32.eqz
-       i32.const 0
+       i32.const 1
        local.get $0
        select
        if (result i32)
+        i32.const 1
+       else
         local.get $1
         i32.load
         i32.const 1
         i32.and
-        i32.eqz
-       else
-        i32.const 0
        end
-       i32.eqz
        if
         i32.const 0
         i32.const 1504
