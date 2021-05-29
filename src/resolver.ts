@@ -3342,7 +3342,7 @@ export class Resolver extends DiagnosticEmitter {
     return instance;
   }
 
-  private assertOneTypeArgument(
+  private ensureOneTypeArgument(
     /** The type to resolve. */
     node: NamedTypeNode,
     /** How to proceed with eventual diagnostics. */
