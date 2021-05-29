@@ -6,12 +6,12 @@
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_=>_none (func (param i32 i64)))
- (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_i32_i32_i32_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i32) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/date/_day (mut i32) (i32.const 0))
  (global $~lib/date/_month (mut i32) (i32.const 0))
@@ -1424,17 +1424,20 @@
        local.get $0
        i32.const 15
        i32.and
-       i32.const 1
+       i32.eqz
+       i32.const 0
        local.get $0
        select
        if (result i32)
-        i32.const 1
-       else
         local.get $1
         i32.load
         i32.const 1
         i32.and
+        i32.eqz
+       else
+        i32.const 0
        end
+       i32.eqz
        if
         i32.const 0
         i32.const 1536
@@ -3536,19 +3539,22 @@
   i32.const 1
   i32.shl
   i32.add
-  local.tee $1
-  i32.const 7
-  i32.and
-  local.get $2
-  i32.const 7
-  i32.and
-  i32.or
-  i32.const 1
+  local.set $1
   local.get $3
   i32.const 4
   i32.ge_u
-  select
-  i32.eqz
+  if (result i32)
+   local.get $1
+   i32.const 7
+   i32.and
+   local.get $2
+   i32.const 7
+   i32.and
+   i32.or
+   i32.eqz
+  else
+   i32.const 0
+  end
   if
    loop $do-continue|0
     local.get $1
@@ -3619,10 +3625,10 @@
    return
   end
   local.get $1
-  i32.const 0
+  i32.eqz
+  i32.const 1
   local.get $0
   select
-  i32.eqz
   if
    i32.const 0
    return
@@ -3759,11 +3765,14 @@
    i32.eqz
    i32.eq
    if
-    local.get $0
-    local.get $1
     local.get $2
-    select
-    call $~lib/rt/itcms/Object#makeGray
+    if
+     local.get $0
+     call $~lib/rt/itcms/Object#makeGray
+    else
+     local.get $1
+     call $~lib/rt/itcms/Object#makeGray
+    end
    else
     global.get $~lib/rt/itcms/state
     i32.const 1
@@ -9613,7 +9622,7 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 0
+  i32.const 1
   i32.const 1868
   i32.load
   i32.const 1
@@ -9621,6 +9630,7 @@
   i32.const 1
   i32.shl
   local.tee $3
+  i32.eqz
   local.get $0
   i32.const 20
   i32.sub
@@ -9636,7 +9646,6 @@
   local.tee $2
   i32.gt_u
   select
-  i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4

@@ -87,10 +87,10 @@
    return
   end
   local.get $1
-  i32.const 0
+  i32.eqz
+  i32.const 1
   local.get $0
   select
-  i32.eqz
   if
    i32.const 0
    return
@@ -118,20 +118,22 @@
    local.set $2
    local.get $1
    local.set $3
-   local.get $2
-   i32.const 7
-   i32.and
-   local.get $3
-   i32.const 7
-   i32.and
-   i32.or
-   i32.const 1
    local.get $4
    local.tee $0
    i32.const 4
    i32.ge_u
-   select
-   i32.eqz
+   if (result i32)
+    local.get $2
+    i32.const 7
+    i32.and
+    local.get $3
+    i32.const 7
+    i32.and
+    i32.or
+    i32.eqz
+   else
+    i32.const 0
+   end
    if
     loop $do-continue|0
      local.get $2

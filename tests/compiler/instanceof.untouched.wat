@@ -17,7 +17,6 @@
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1a\00\00\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s\00\00\00")
  (table $0 1 funcref)
- (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
  (func $instanceof/isI32<i32> (param $0 i32) (result i32)

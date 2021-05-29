@@ -4,8 +4,8 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
@@ -1108,17 +1108,20 @@
        local.get $0
        i32.const 15
        i32.and
-       i32.const 1
+       i32.eqz
+       i32.const 0
        local.get $0
        select
        if (result i32)
-        i32.const 1
-       else
         local.get $1
         i32.load
         i32.const 1
         i32.and
+        i32.eqz
+       else
+        i32.const 0
        end
+       i32.eqz
        if
         i32.const 0
         i32.const 1392
@@ -2361,9 +2364,11 @@
   if (result i32)
    global.get $std/operator-overloading/f
    i32.load offset=4
+   i32.eqz
   else
-   i32.const 1
+   i32.const 0
   end
+  i32.eqz
   if
    i32.const 0
    i32.const 1456
@@ -3151,23 +3156,23 @@
   local.get $0
   i32.load
   if (result i32)
-   i32.const 1
+   i32.const 0
   else
    local.get $0
    i32.load offset=4
+   i32.eqz
   end
-  i32.eqz
   global.set $std/operator-overloading/bres
-  global.get $std/operator-overloading/bres
   global.get $std/operator-overloading/excl
   i32.load
   if (result i32)
-   i32.const 1
+   i32.const 0
   else
    global.get $std/operator-overloading/excl
    i32.load offset=4
+   i32.eqz
   end
-  i32.eqz
+  global.get $std/operator-overloading/bres
   i32.ne
   if
    i32.const 0

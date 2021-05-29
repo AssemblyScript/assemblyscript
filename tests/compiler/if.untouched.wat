@@ -10,7 +10,6 @@
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00i\00f\00.\00t\00s\00\00\00")
  (data (i32.const 44) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\n\00\00\00e\00r\00r\00o\00r\00\00\00")
  (table $0 1 funcref)
- (elem $0 (i32.const 1))
  (export "ifThenElse" (func $if/ifThenElse))
  (export "ifThen" (func $if/ifThen))
  (export "ifThenElseBlock" (func $if/ifThenElseBlock))

@@ -1314,6 +1314,8 @@ declare type valueof<T extends unknown[]> = T[0];
 declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
 /** A special type evaluated to the return type of T if T is a callable function. */
 declare type returnof<T extends (...args: any) => any> = ReturnType<T>;
+/** A special type that excludes null and undefined from T. */
+declare type NonNullable<T> = T extends null | undefined ? never : T;
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {

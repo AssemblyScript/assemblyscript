@@ -992,6 +992,12 @@ export class Program extends DiagnosticEmitter {
       this.makeNativeTypeDeclaration(CommonNames.returnof, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
+    this.nativeFile.add(CommonNames.notnullable, new TypeDefinition(
+      CommonNames.notnullable,
+      this.nativeFile,
+      this.makeNativeTypeDeclaration(CommonNames.notnullable, CommonFlags.EXPORT | CommonFlags.GENERIC),
+      DecoratorFlags.BUILTIN
+    ));
 
     // The following types might not be enabled by compiler options, so the
     // compiler needs to check this condition whenever such a value is created

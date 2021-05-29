@@ -11,7 +11,6 @@
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00l\00o\00o\00p\00-\00f\00l\00o\00w\00.\00t\00s\00\00\00\00\00")
  (data (i32.const 60) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\00t\00e\00r\00m\00\00\00\00\00")
  (table $0 1 funcref)
- (elem $0 (i32.const 1))
  (export "whileReturn" (func $loop-flow/whileReturn))
  (export "whileThrow" (func $loop-flow/whileThrow))
  (export "whileContinue" (func $loop-flow/whileContinue))
