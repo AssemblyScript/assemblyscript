@@ -28,7 +28,7 @@
   (local $6 i32)
   i32.const 5
   local.set $3
-  i32.const 1417
+  i32.const 1421
   local.set $4
   i32.const 0
   i32.const 12
