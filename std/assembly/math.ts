@@ -498,7 +498,9 @@ export namespace NativeMath {
 
   export function acosh(x: f64): f64 { // see: musl/src/math/acosh.c
     const s = reinterpret<f64>(0x3FE62E42FEFA39EF);
-    var e = reinterpret<u64>(x) >> 52 & 0x7FF;
+    var u = reinterpret<u64>(x);
+    if (<i64>u < 0x3FF0000000000000) return (x - x) / 0.0;
+    var e = u >> 52 & 0x7FF;
     if (e < 0x3FF + 1) return log1p(x - 1 + builtin_sqrt<f64>((x - 1) * (x - 1) + 2 * (x - 1)));
     if (e < 0x3FF + 26) return log(2 * x - 1 / (x + builtin_sqrt<f64>(x * x - 1)));
     return log(x) + s;

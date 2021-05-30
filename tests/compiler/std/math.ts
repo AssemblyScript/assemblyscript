@@ -351,6 +351,7 @@ assert(test_acosh(NaN, NaN, 0.0, 0));
 assert(test_acosh(Infinity, Infinity, 0.0, 0));
 assert(test_acosh(1.0, 0.0, 0.0, 0));
 assert(test_acosh(0.99999237060546875, NaN, 0.0, INVALID));
+assert(test_acosh(-9784.8207664738350, NaN, 0.0, INVALID));
 assert(test_acosh(0.0, NaN, 0.0, INVALID));
 assert(test_acosh(-0.0, NaN, 0.0, INVALID));
 assert(test_acosh(-Infinity, NaN, 0.0, INVALID));
