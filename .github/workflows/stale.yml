@@ -1,0 +1,19 @@
+name: Stale
+on:
+  schedule:
+  - cron: '30 23 * * *'
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/stale@v3
+      with:
+        stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed in one week if no further activity occurs. Thank you for your contributions!'
+        stale-issue-label: 'stale'
+        exempt-issue-labels: 'bug,enhancement,compatibility'
+        exempt-all-milestones: true
+        exempt-all-assignees: true
+        days-before-stale: 30
+        days-before-close: 7
+        days-before-pr-stale: -1
+        days-before-pr-close: -1
