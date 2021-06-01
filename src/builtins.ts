@@ -4233,9 +4233,11 @@ function builtin_v128_load_lane(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I16:
       case TypeKind.U16: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Load16Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
       case TypeKind.I32:
-      case TypeKind.U32: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Load32Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.U32:
+      case TypeKind.F32: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Load32Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
       case TypeKind.I64:
-      case TypeKind.U64: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Load64Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.U64:
+      case TypeKind.F64: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Load64Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: return module.simd_loadstorelane(compiler.options.isWasm64 ? SIMDLoadStoreLaneOp.Load64Lane : SIMDLoadStoreLaneOp.Load32Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
     }
@@ -4306,9 +4308,11 @@ function builtin_v128_store_lane(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.I16:
       case TypeKind.U16: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Store16Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
       case TypeKind.I32:
-      case TypeKind.U32: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Store32Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.U32:
+      case TypeKind.F32: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Store32Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
       case TypeKind.I64:
-      case TypeKind.U64: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Store64Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.U64:
+      case TypeKind.F64: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Store64Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: return module.simd_loadstorelane(compiler.options.isWasm64 ? SIMDLoadStoreLaneOp.Store64Lane : SIMDLoadStoreLaneOp.Store32Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
     }
