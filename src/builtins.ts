@@ -4160,9 +4160,11 @@ function builtin_v128_load_zero(ctx: BuiltinContext): ExpressionRef {
   if (type.isValue) {
     switch (type.kind) {
       case TypeKind.I32:
-      case TypeKind.U32: return module.simd_load(SIMDLoadOp.Load32Zero, arg0, immOffset, immAlign);
+      case TypeKind.U32:
+      case TypeKind.F32: return module.simd_load(SIMDLoadOp.Load32Zero, arg0, immOffset, immAlign);
       case TypeKind.I64:
-      case TypeKind.U64: return module.simd_load(SIMDLoadOp.Load64Zero, arg0, immOffset, immAlign);
+      case TypeKind.U64:
+      case TypeKind.F64: return module.simd_load(SIMDLoadOp.Load64Zero, arg0, immOffset, immAlign);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: return module.simd_load(compiler.options.isWasm64 ? SIMDLoadOp.Load64Zero : SIMDLoadOp.Load32Zero, arg0, immOffset, immAlign);
     }
