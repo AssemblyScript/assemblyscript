@@ -1,19 +1,23 @@
 (module
  (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/memory/__data_end i32 (i32.const 204))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16588))
- (global $~lib/memory/__heap_base i32 (i32.const 16588))
+ (global $NonNullable/z (mut i32) (i32.const 224))
+ (global $~lib/memory/__data_end i32 (i32.const 300))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16684))
+ (global $~lib/memory/__heap_base i32 (i32.const 16684))
  (memory $0 1)
  (data (i32.const 12) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\06\00\00\00u\003\002\00\00\00\00\00\00\00")
  (data (i32.const 44) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1c\00\00\00N\00o\00n\00N\00u\00l\00l\00a\00b\00l\00e\00.\00t\00s\00")
  (data (i32.const 92) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\0c\00\00\00S\00t\00r\00i\00n\00g\00")
  (data (i32.const 124) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\002\00\00\00A\00r\00r\00a\00y\00<\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00/\00S\00t\00r\00i\00n\00g\00>\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 204) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00z\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 236) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem $0 (i32.const 1))
  (export "memory" (memory $0))
@@ -175,10 +179,28 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $NonNullable/assertNonNull<~lib/string/String>
+ (func $~lib/string/String.__ne (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  call $~lib/string/String.__eq
+  i32.eqz
+ )
+ (func $NonNullable/assertNonNull<~lib/string/String> (param $0 i32)
   i32.const 0
   i32.eqz
   drop
+  local.get $0
+  i32.const 0
+  call $~lib/string/String.__ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 9
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~start
   call $start:NonNullable
@@ -188,8 +210,8 @@
   global.get $~lib/memory/__data_end
   i32.lt_s
   if
-   i32.const 16608
-   i32.const 16656
+   i32.const 16704
+   i32.const 16752
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -198,26 +220,30 @@
  )
  (func $start:NonNullable
   (local $0 i32)
+  (local $1 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  i32.const 32
-  local.set $0
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  i32.const 0
+  i32.store offset=8
+  i32.const 32
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
   i32.store
-  local.get $0
+  local.get $1
   i32.const 32
-  local.set $0
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   i32.store offset=4
-  local.get $0
+  local.get $1
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -229,17 +255,17 @@
    unreachable
   end
   i32.const 112
-  local.set $0
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   i32.store
-  local.get $0
+  local.get $1
   i32.const 112
-  local.set $0
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   i32.store offset=4
-  local.get $0
+  local.get $1
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -251,17 +277,17 @@
    unreachable
   end
   i32.const 144
-  local.set $0
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   i32.store
-  local.get $0
+  local.get $1
   i32.const 144
-  local.set $0
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   i32.store offset=4
-  local.get $0
+  local.get $1
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -272,9 +298,29 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $~lib/memory/__stack_pointer
+  global.get $NonNullable/z
+  local.tee $0
+  i32.store offset=8
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 256
+   i32.const 64
+   i32.const 14
+   i32.const 44
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
   call $NonNullable/assertNonNull<~lib/string/String>
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

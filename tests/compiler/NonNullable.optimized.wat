@@ -3,7 +3,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_none (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17612))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17708))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1048) "\01\00\00\00\06\00\00\00u\003\002")
@@ -13,6 +13,10 @@
  (data (i32.const 1128) "\01\00\00\00\0c\00\00\00S\00t\00r\00i\00n\00g")
  (data (i32.const 1148) "L")
  (data (i32.const 1160) "\01\00\00\002\00\00\00A\00r\00r\00a\00y\00<\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00/\00S\00t\00r\00i\00n\00g\00>")
+ (data (i32.const 1228) "\1c")
+ (data (i32.const 1240) "\01\00\00\00\02\00\00\00z")
+ (data (i32.const 1260) "<")
+ (data (i32.const 1272) "\01\00\00\00\1e\00\00\00u\00n\00e\00x\00p\00e\00c\00t\00e\00d\00 \00n\00u\00l\00l")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
@@ -137,15 +141,15 @@
  (func $~start
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   global.get $~lib/memory/__stack_pointer
-  i32.const 1228
+  i32.const 1324
   i32.lt_s
   if
-   i32.const 17632
-   i32.const 17680
+   i32.const 17728
+   i32.const 17776
    i32.const 1
    i32.const 1
    call $~lib/builtins/abort
@@ -155,6 +159,9 @@
   local.tee $0
   i64.const 0
   i64.store
+  local.get $0
+  i32.const 0
+  i32.store offset=8
   local.get $0
   i32.const 1056
   i32.store
@@ -212,7 +219,25 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  local.tee $0
+  i32.const 1248
+  i32.store offset=8
+  local.get $0
+  i32.const 1248
+  i32.store
+  i32.const 1248
+  i32.const 0
+  call $~lib/string/String.__eq
+  if
+   i32.const 0
+   i32.const 1088
+   i32.const 9
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
  )

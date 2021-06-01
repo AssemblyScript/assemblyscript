@@ -4,8 +4,11 @@ assert(nameof<NonNullable<u32>>() == nameof<u32>());
 assert(nameof<NonNullable<nullableString>>() == nameof<string>());
 assert(nameof<NonNullable<string[] | null>>() == nameof<string[]>());
 
-function assertNonNull<T>(): void {
+function assertNonNull<T>(t: T): void {
   assert(!isNullable<T>(), "T cannot be null");
+  assert(t != null);
 }
 
-assertNonNull<NonNullable<nullableString>>();
+let z: nullableString = "z";
+
+assertNonNull<NonNullable<nullableString>>(z!);
