@@ -93,7 +93,3 @@ export function semanticallyAnonymous(): void {
   assert(fnDecl != exprDecl);
 }
 semanticallyAnonymous();
-
-var duplicateParams = (a: i32, a: i32): void => {};
-// TS2300: Duplicate identifier 'a'
-duplicateParams(1, 2);
