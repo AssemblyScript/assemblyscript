@@ -1,6 +1,4 @@
-
-
-type nullableString = string | null;;
+type nullableString = string | null;
 
 assert(nameof<NonNullable<u32>>() == nameof<u32>());
 assert(nameof<NonNullable<nullableString>>() == nameof<string>());
