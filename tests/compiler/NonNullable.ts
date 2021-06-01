@@ -9,6 +9,13 @@ function assertNonNull<T>(t: T): void {
   assert(t != null);
 }
 
+function safetyCheck<A>(t: A): void {
+  if (t != null) {
+    assertNonNull(<NonNullable<A>>t);
+  }
+}
+
 let z: nullableString = "z";
 
 assertNonNull<NonNullable<nullableString>>(z!);
+safetyCheck(z);

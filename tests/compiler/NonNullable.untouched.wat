@@ -1,10 +1,10 @@
 (module
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_none (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $NonNullable/z (mut i32) (i32.const 224))
@@ -218,6 +218,45 @@
    unreachable
   end
  )
+ (func $NonNullable/safetyCheck<~lib/string/String|null> (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  call $~stack_check
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  call $~lib/string/String.__ne
+  if
+   local.get $0
+   local.tee $1
+   if (result i32)
+    local.get $1
+   else
+    i32.const 256
+    i32.const 64
+    i32.const 14
+    i32.const 35
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.set $2
+   global.get $~lib/memory/__stack_pointer
+   local.get $2
+   i32.store
+   local.get $2
+   call $NonNullable/assertNonNull<~lib/string/String>
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+ )
  (func $start:NonNullable
   (local $0 i32)
   (local $1 i32)
@@ -308,7 +347,7 @@
   else
    i32.const 256
    i32.const 64
-   i32.const 14
+   i32.const 20
    i32.const 44
    call $~lib/builtins/abort
    unreachable
@@ -319,6 +358,13 @@
   i32.store
   local.get $1
   call $NonNullable/assertNonNull<~lib/string/String>
+  global.get $NonNullable/z
+  local.set $1
+  global.get $~lib/memory/__stack_pointer
+  local.get $1
+  i32.store
+  local.get $1
+  call $NonNullable/safetyCheck<~lib/string/String|null>
   global.get $~lib/memory/__stack_pointer
   i32.const 12
   i32.add
