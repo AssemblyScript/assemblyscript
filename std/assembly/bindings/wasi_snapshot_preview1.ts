@@ -1,5 +1,5 @@
 // Phase: wasi_snapshot_preview1
-// See: https://github.com/WebAssembly/WASI/tree/master/phases/snapshot/witx
+// See: https://github.com/WebAssembly/WASI/tree/main/phases/snapshot/witx
 
 // helper types to be more explicit
 type char = u8;

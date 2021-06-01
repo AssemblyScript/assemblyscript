@@ -3,7 +3,7 @@
  *
  * tsc uses the .js file next to it, while asc makes it a Wasm import.
  *
- * See: https://github.com/WebAssembly/binaryen/blob/master/src/binaryen-c.h
+ * See: https://github.com/WebAssembly/binaryen/blob/main/src/binaryen-c.h
  *
  * @license Apache-2.0
  */

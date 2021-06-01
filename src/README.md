@@ -6,7 +6,7 @@ Portable compiler sources that compile to both JavaScript using `tsc` and WebAss
 Architecture
 ------------
 
-![](https://raw.githubusercontent.com/AssemblyScript/assemblyscript/master/media/architecture.svg)
+![](https://raw.githubusercontent.com/AssemblyScript/assemblyscript/main/media/architecture.svg)
 
 Usage
 -----
