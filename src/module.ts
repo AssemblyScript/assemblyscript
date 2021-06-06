@@ -42,7 +42,7 @@ export type RelooperBlockRef = binaryen.RelooperBlockRef;
 // sometimes, because these constants can differ between Binaryen versions.
 
 /** Reference to a Binaryen type. */
-export type TypeRef = binaryen.Type;
+export type TypeRef = binaryen.TypeRef;
 export namespace TypeRef {
   export const None: TypeRef = 0 /* _BinaryenTypeNone */;
   export const Unreachable: TypeRef = 1 /* _BinaryenTypeUnreachable */;
