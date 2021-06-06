@@ -12,17 +12,28 @@ import { BuiltinNames } from "./builtins";
 import { Target } from "./common";
 import * as binaryen from "./glue/binaryen";
 
-export type ModuleRef = usize;
-export type FunctionRef = usize;
-export type ExpressionRef = usize;
-export type GlobalRef = usize;
-export type EventRef = usize;
-export type ImportRef = usize;
-export type ExportRef = usize;
-export type RelooperRef = usize;
-export type RelooperBlockRef = usize;
-export type Index = u32;
-export type CString = usize;
+/** A Binaryen-compatible index. */
+export type Index = binaryen.Index;
+/** Reference to a Binaryen-compatible string. */
+export type StringRef = binaryen.StringRef;
+/** Reference to a Binaryen module. */
+export type ModuleRef = binaryen.ModuleRef;
+/** Reference to a Binaryen function. */
+export type FunctionRef = binaryen.FunctionRef;
+/** Reference to a Binaryen expression. */
+export type ExpressionRef = binaryen.ExpressionRef;
+/** Reference to a Binaryen global. */
+export type GlobalRef = binaryen.GlobalRef;
+/** Reference to a Binaryen event. */
+export type EventRef = binaryen.EventRef;
+/** Reference to a Binaryen import. */
+export type ImportRef = binaryen.ImportRef;
+/** Reference to a Binaryen export. */
+export type ExportRef = binaryen.ExportRef;
+/** Reference to a Binaryen relooper. */
+export type RelooperRef = binaryen.RelooperRef;
+/** Reference to a Binaryen relooper block. */
+export type RelooperBlockRef = binaryen.RelooperBlockRef;
 
 // The following constants must be updated by running scripts/update-constants.
 // This is necessary because the functions are not yet callable with Binaryen
@@ -30,24 +41,26 @@ export type CString = usize;
 // that this essentially fixes the compiler to specific versions of Binaryen
 // sometimes, because these constants can differ between Binaryen versions.
 
-export type NativeType = usize;
-export namespace NativeType {
-  export const None: NativeType = 0 /* _BinaryenTypeNone */;
-  export const Unreachable: NativeType = 1 /* _BinaryenTypeUnreachable */;
-  export const I32: NativeType = 2 /* _BinaryenTypeInt32 */;
-  export const I64: NativeType = 3 /* _BinaryenTypeInt64 */;
-  export const F32: NativeType = 4 /* _BinaryenTypeFloat32 */;
-  export const F64: NativeType = 5 /* _BinaryenTypeFloat64 */;
-  export const V128: NativeType = 6 /* _BinaryenTypeVec128 */;
-  export const Funcref: NativeType = 7 /* _BinaryenTypeFuncref */;
-  export const Externref: NativeType = 8 /* _BinaryenTypeExternref */;
-  export const Anyref: NativeType = 9 /* _BinaryenTypeAnyref */;
-  export const Eqref: NativeType = 10 /* _BinaryenTypeEqref */;
-  export const I31ref: NativeType = 11 /* _BinaryenTypeI31ref */;
-  export const Dataref: NativeType = 12 /* _BinaryenTypeDataref */;
-  export const Auto: NativeType = -1 /* _BinaryenTypeAuto */;
+/** Reference to a Binaryen type. */
+export type TypeRef = binaryen.Type;
+export namespace TypeRef {
+  export const None: TypeRef = 0 /* _BinaryenTypeNone */;
+  export const Unreachable: TypeRef = 1 /* _BinaryenTypeUnreachable */;
+  export const I32: TypeRef = 2 /* _BinaryenTypeInt32 */;
+  export const I64: TypeRef = 3 /* _BinaryenTypeInt64 */;
+  export const F32: TypeRef = 4 /* _BinaryenTypeFloat32 */;
+  export const F64: TypeRef = 5 /* _BinaryenTypeFloat64 */;
+  export const V128: TypeRef = 6 /* _BinaryenTypeVec128 */;
+  export const Funcref: TypeRef = 7 /* _BinaryenTypeFuncref */;
+  export const Externref: TypeRef = 8 /* _BinaryenTypeExternref */;
+  export const Anyref: TypeRef = 9 /* _BinaryenTypeAnyref */;
+  export const Eqref: TypeRef = 10 /* _BinaryenTypeEqref */;
+  export const I31ref: TypeRef = 11 /* _BinaryenTypeI31ref */;
+  export const Dataref: TypeRef = 12 /* _BinaryenTypeDataref */;
+  export const Auto: TypeRef = -1 /* _BinaryenTypeAuto */;
 }
 
+/** Binaryen feature constants. */
 export enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
   Atomics = 1 /* _BinaryenFeatureAtomics */,
@@ -62,10 +75,11 @@ export enum FeatureFlags {
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
-  TypedFunctionReferences  = 4096, /* _BinaryenTypedFunctionReferences */
+  TypedFunctionReferences  = 4096 /* _BinaryenTypedFunctionReferences */,
   All = 8191 /* _BinaryenFeatureAll */
 }
 
+/** Binaryen expression id constants. */
 export enum ExpressionId {
   Invalid = 0 /* _BinaryenInvalidId */,
   Block = 1 /* _BinaryenBlockId */,
@@ -135,14 +149,16 @@ export enum ExpressionId {
   RefAs = 65 /* _BinaryenRefAsId */
 }
 
+/** Binaryen external kind constants. */
 export enum ExternalKind {
-  Function = 0, /* _BinaryenExternalFunction */
-  Table = 1, /* _BinaryenExternalTable */
-  Memory = 2, /* _BinaryenExternalMemory */
-  Global = 3, /* _BinaryenExternalGlobal */
+  Function = 0 /* _BinaryenExternalFunction */,
+  Table = 1 /* _BinaryenExternalTable */,
+  Memory = 2 /* _BinaryenExternalMemory */,
+  Global = 3 /* _BinaryenExternalGlobal */,
   Event = 4 /* _BinaryenExternalEvent */
 }
 
+/** Binaryen unary operation constants. */
 export enum UnaryOp {
   /** i32.clz */
   ClzI32 = 0 /* _BinaryenClzInt32 */,
@@ -418,6 +434,7 @@ export enum UnaryOp {
   EqzSize
 }
 
+/** Binaryen binary operation constants. */
 export enum BinaryOp {
   /** i32.add */
   AddI32 = 0 /* _BinaryenAddInt32 */,
@@ -871,6 +888,7 @@ export enum BinaryOp {
   GeUSize
 }
 
+/** Binaryen atomic read-modify-write operation constants. */
 export enum AtomicRMWOp {
   /** i32.atomic.rmw.add, i32.atomic.rmw8.add_u, i32.atomic.rmw16.add_u, i64.atomic.rmw.add, i64.atomic.rmw8.add_u, i64.atomic.rmw16.add_u, i64.atomic.rmw32.add_u */
   Add = 0 /* _BinaryenAtomicRMWAdd */,
@@ -886,6 +904,7 @@ export enum AtomicRMWOp {
   Xchg = 5 /* _BinaryenAtomicRMWXchg */
 }
 
+/** Binaryen SIMD extract operation constants. */
 export enum SIMDExtractOp {
   /** i8x16.extract_lane_s */
   ExtractLaneI8x16 = 0 /* _BinaryenExtractLaneSVecI8x16 */,
@@ -905,6 +924,7 @@ export enum SIMDExtractOp {
   ExtractLaneF64x2 = 7 /* _BinaryenExtractLaneVecF64x2 */,
 }
 
+/** Binaryen SIMD replace operation constants. */
 export enum SIMDReplaceOp {
   /** i8x16.replace_lane */
   ReplaceLaneI8x16 = 0 /* _BinaryenReplaceLaneVecI8x16 */,
@@ -920,6 +940,7 @@ export enum SIMDReplaceOp {
   ReplaceLaneF64x2 = 5 /* _BinaryenReplaceLaneVecF64x2 */
 }
 
+/** Binaryen SIMD shift operation constants. */
 export enum SIMDShiftOp {
   /** i8x16.shl */
   ShlI8x16 = 0 /* _BinaryenShlVecI8x16 */,
@@ -947,6 +968,7 @@ export enum SIMDShiftOp {
   ShrU64x2 = 11 /* _BinaryenShrUVecI64x2 */
 }
 
+/** Binaryen SIMD load operation constants. */
 export enum SIMDLoadOp {
   /** v128.load8_splat */
   Load8Splat = 0 /* _BinaryenLoad8SplatVec128 */,
@@ -974,6 +996,7 @@ export enum SIMDLoadOp {
   Load64Zero = 11 /* _BinaryenLoad64ZeroVec128 */,
 }
 
+/** Binaryen SIMD load/store lane operation constants. */
 export enum SIMDLoadStoreLaneOp {
   /** v128.load8_lane */
   Load8Lane = 0 /* _BinaryenLoad8LaneVec128 */,
@@ -993,11 +1016,13 @@ export enum SIMDLoadStoreLaneOp {
   Store64Lane = 7 /* _BinaryenStore64LaneVec128 */,
 }
 
+/** Binaryen SIMD ternary operation constants. */
 export enum SIMDTernaryOp {
   /** v128.bitselect */
   Bitselect = 0 /* _BinaryenBitselectVec128 */
 }
 
+/** Binaryen RefIs operation constants. */
 export enum RefIsOp {
   /** ref.is_null */
   RefIsNull = 0 /* _BinaryenRefIsNull */,
@@ -1009,6 +1034,7 @@ export enum RefIsOp {
   RefIsI31 = 3 /* _BinaryenRefIsI31 */
 }
 
+/** Binaryen RefAs operation constants. */
 export enum RefAsOp {
   /** ref.as_non_null */
   RefAsNonNull = 0 /* _BinaryenRefAsNonNull */,
@@ -1020,6 +1046,7 @@ export enum RefAsOp {
   RefAsI31 = 3 /* _BinaryenRefAsI31 */
 }
 
+/** Binaryen BrOn operation constants. */
 export enum BrOnOp {
   /** br_on_null */
   BrOnNull = 0 /* TODO_BinaryenBrOnNull */,
@@ -1033,6 +1060,7 @@ export enum BrOnOp {
   BrOnI31 = 4 /* TODO_BinaryenBrOnI31 */
 }
 
+/** Binaryen expression runner flags. */
 export enum ExpressionRunnerFlags {
   Default = 0 /* _ExpressionRunnerFlagsDefault */,
   PreserveSideeffects = 1 /* _ExpressionRunnerFlagsPreserveSideeffects */,
@@ -1055,19 +1083,19 @@ export class Module {
     /** Whether a shadow stack is used. */
     public useShadowStack: bool,
     /** Architecture-dependent size type. */
-    public sizeType: NativeType
+    public sizeType: TypeRef
   ) {
-    assert(sizeType == NativeType.I32 || sizeType == NativeType.I64);
+    assert(sizeType == TypeRef.I32 || sizeType == TypeRef.I64);
     this.lit = binaryen._malloc(binaryen._BinaryenSizeofLiteral());
   }
 
   private lit: usize;
 
-  static create(useShadowStack: bool, sizeType: NativeType): Module {
+  static create(useShadowStack: bool, sizeType: TypeRef): Module {
     return new Module(binaryen._BinaryenModuleCreate(), useShadowStack, sizeType);
   }
 
-  static createFrom(buffer: Uint8Array, useShadowStack: bool, sizeType: NativeType): Module {
+  static createFrom(buffer: Uint8Array, useShadowStack: bool, sizeType: TypeRef): Module {
     var cArr = allocU8Array(buffer);
     var module = new Module(binaryen._BinaryenModuleRead(cArr, buffer.length), useShadowStack, sizeType);
     binaryen._free(changetype<usize>(cArr));
@@ -1090,26 +1118,26 @@ export class Module {
 
   // isize<T>(value: T): ExpressionRef {
   //   if (i64_is(value)) {
-  //     if (this.sizeType == NativeType.I64) {
+  //     if (this.sizeType == TypeRef.I64) {
   //       return this.i64(i64_low(value), i64_high(value));
   //     }
   //     assert(i64_is_i32(value));
   //     return this.i32(i64_low(value));
   //   }
-  //   return this.sizeType == NativeType.I64
+  //   return this.sizeType == TypeRef.I64
   //     ? this.i64(i32(value), i32(value) < 0 ? -1 : 0)
   //     : this.i32(i32(value));
   // }
 
   usize<T>(value: T): ExpressionRef {
     if (i64_is(value)) {
-      if (this.sizeType == NativeType.I64) {
+      if (this.sizeType == TypeRef.I64) {
         return this.i64(i64_low(value), i64_high(value));
       }
       assert(i64_is_u32(value));
       return this.i32(i64_low(value));
     }
-    return this.sizeType == NativeType.I64
+    return this.sizeType == TypeRef.I64
       ? this.i64(i32(value))
       : this.i32(i32(value));
   }
@@ -1136,7 +1164,7 @@ export class Module {
     return binaryen._BinaryenConst(this.ref, out);
   }
 
-  ref_null(type: NativeType): ExpressionRef {
+  ref_null(type: TypeRef): ExpressionRef {
     return binaryen._BinaryenRefNull(this.ref, type);
   }
 
@@ -1151,7 +1179,7 @@ export class Module {
     value: ExpressionRef
   ): ExpressionRef {
     if (op > UnaryOp._last) {
-      let isWam64 = this.sizeType == NativeType.I64;
+      let isWam64 = this.sizeType == TypeRef.I64;
       switch (op) {
         case UnaryOp.ClzSize: return this.unary(isWam64 ? UnaryOp.ClzI64 : UnaryOp.ClzI32, value);
         case UnaryOp.CtzSize: return this.unary(isWam64 ? UnaryOp.CtzI64 : UnaryOp.CtzI32, value);
@@ -1169,7 +1197,7 @@ export class Module {
     right: ExpressionRef
   ): ExpressionRef {
     if (op > BinaryOp._last) {
-      let isWasm64 = this.sizeType == NativeType.I64;
+      let isWasm64 = this.sizeType == TypeRef.I64;
       switch (op) {
         case BinaryOp.AddSize: return this.binary(isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32, left, right);
         case BinaryOp.SubSize: return this.binary(isWasm64 ? BinaryOp.SubI64 : BinaryOp.SubI32, left, right);
@@ -1212,7 +1240,7 @@ export class Module {
 
   local_get(
     index: i32,
-    type: NativeType
+    type: TypeRef
   ): ExpressionRef {
     return binaryen._BinaryenLocalGet(this.ref, index, type);
   }
@@ -1220,7 +1248,7 @@ export class Module {
   tostack(value: ExpressionRef): ExpressionRef {
     if (this.useShadowStack) {
       let type = binaryen._BinaryenExpressionGetType(value);
-      assert(type == NativeType.I32 || type == NativeType.Unreachable);
+      assert(type == TypeRef.I32 || type == TypeRef.Unreachable);
       return this.call(BuiltinNames.tostack, [ value ], type);
     }
     return value;
@@ -1230,9 +1258,9 @@ export class Module {
     index: i32,
     value: ExpressionRef,
     isManaged: bool,
-    type: NativeType = NativeType.Auto,
+    type: TypeRef = TypeRef.Auto,
   ): ExpressionRef {
-    if (type == NativeType.Auto) type = binaryen._BinaryenExpressionGetType(value);
+    if (type == TypeRef.Auto) type = binaryen._BinaryenExpressionGetType(value);
     if (isManaged && this.useShadowStack) {
       value = this.tostack(value);
     }
@@ -1241,7 +1269,7 @@ export class Module {
 
   global_get(
     name: string,
-    type: NativeType
+    type: TypeRef
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
     return binaryen._BinaryenGlobalGet(this.ref, cStr, type);
@@ -1251,7 +1279,7 @@ export class Module {
     bytes: Index,
     signed: bool,
     ptr: ExpressionRef,
-    type: NativeType,
+    type: TypeRef,
     offset: Index = 0,
     align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
@@ -1262,7 +1290,7 @@ export class Module {
     bytes: Index,
     ptr: ExpressionRef,
     value: ExpressionRef,
-    type: NativeType,
+    type: TypeRef,
     offset: Index = 0,
     align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
@@ -1272,7 +1300,7 @@ export class Module {
   atomic_load(
     bytes: Index,
     ptr: ExpressionRef,
-    type: NativeType,
+    type: TypeRef,
     offset: Index = 0
   ): ExpressionRef {
     return binaryen._BinaryenAtomicLoad(this.ref, bytes, offset, type, ptr);
@@ -1282,7 +1310,7 @@ export class Module {
     bytes: Index,
     ptr: ExpressionRef,
     value: ExpressionRef,
-    type: NativeType,
+    type: TypeRef,
     offset: Index = 0
   ): ExpressionRef {
     return binaryen._BinaryenAtomicStore(this.ref, bytes, offset, ptr, value, type);
@@ -1294,7 +1322,7 @@ export class Module {
     offset: Index,
     ptr: ExpressionRef,
     value: ExpressionRef,
-    type: NativeType
+    type: TypeRef
   ): ExpressionRef {
     return binaryen._BinaryenAtomicRMW(this.ref, op, bytes, offset, ptr, value, type);
   }
@@ -1305,7 +1333,7 @@ export class Module {
     ptr: ExpressionRef,
     expected: ExpressionRef,
     replacement: ExpressionRef,
-    type: NativeType
+    type: TypeRef
   ): ExpressionRef {
     return binaryen._BinaryenAtomicCmpxchg(this.ref, bytes, offset, ptr, expected, replacement, type);
   }
@@ -1314,7 +1342,7 @@ export class Module {
     ptr: ExpressionRef,
     expected: ExpressionRef,
     timeout: ExpressionRef,
-    expectedType: NativeType
+    expectedType: TypeRef
   ): ExpressionRef {
     return binaryen._BinaryenAtomicWait(this.ref, ptr, expected, timeout, expectedType);
   }
@@ -1354,7 +1382,7 @@ export class Module {
   block(
     label: string | null,
     children: ExpressionRef[],
-    type: NativeType = NativeType.None
+    type: TypeRef = TypeRef.None
   ): ExpressionRef {
     var cStr = this.allocStringCached(label);
     var cArr = allocPtrArray(children);
@@ -1366,7 +1394,7 @@ export class Module {
   /** Attempts to trivially flatten a series of expressions instead of emitting a block. */
   flatten(
     stmts: ExpressionRef[],
-    type: NativeType = NativeType.None
+    type: TypeRef = TypeRef.None
   ): ExpressionRef {
     var length = stmts.length;
     if (length == 0) return this.nop(); // usually filtered out again
@@ -1381,7 +1409,7 @@ export class Module {
         }
       }
       let singleType = getExpressionType(single);
-      assert(singleType == NativeType.Unreachable || singleType == type);
+      assert(singleType == TypeRef.Unreachable || singleType == type);
       return single;
     }
     return this.block(null, stmts, type);
@@ -1446,9 +1474,9 @@ export class Module {
     ifTrue: ExpressionRef,
     ifFalse: ExpressionRef,
     condition: ExpressionRef,
-    type: NativeType = NativeType.Auto
+    type: TypeRef = TypeRef.Auto
   ): ExpressionRef {
-    if (type == NativeType.Auto) {
+    if (type == TypeRef.Auto) {
       type = binaryen._BinaryenExpressionGetType(ifTrue);
       assert(type == binaryen._BinaryenExpressionGetType(ifFalse));
     }
@@ -1462,7 +1490,7 @@ export class Module {
     value: ExpressionRef = 0
   ): ExpressionRef {
     var numNames = names.length;
-    var strs = new Array<CString>(numNames);
+    var strs = new Array<StringRef>(numNames);
     for (let i = 0; i < numNames; ++i) {
       strs[i] = this.allocStringCached(names[i]);
     }
@@ -1476,7 +1504,7 @@ export class Module {
   call(
     target: string,
     operands: ExpressionRef[] | null,
-    returnType: NativeType,
+    returnType: TypeRef,
     isReturn: bool = false
   ): ExpressionRef {
     var cStr = this.allocStringCached(target);
@@ -1495,7 +1523,7 @@ export class Module {
   return_call(
     target: string,
     operands: ExpressionRef[] | null,
-    returnType: NativeType
+    returnType: TypeRef
   ): ExpressionRef {
     return this.call(target, operands, returnType, true);
   }
@@ -1503,8 +1531,8 @@ export class Module {
   call_indirect(
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
-    params: NativeType,
-    results: NativeType,
+    params: TypeRef,
+    results: TypeRef,
     isReturn: bool = false
   ): ExpressionRef {
     var cStr = this.allocStringCached("0"); // TODO: multiple tables
@@ -1524,8 +1552,8 @@ export class Module {
     tableName: string,
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
-    params: NativeType,
-    results: NativeType
+    params: TypeRef,
+    results: TypeRef
   ): ExpressionRef {
     return this.call_indirect(index, operands, params, results, true);
   }
@@ -1593,7 +1621,7 @@ export class Module {
   // multi value (pseudo instructions)
 
   pop(
-    type: NativeType
+    type: TypeRef
   ): ExpressionRef {
     return binaryen._BinaryenPop(this.ref, type);
   }
@@ -1695,7 +1723,7 @@ export class Module {
 
   ref_func(
     name: string,
-    type: NativeType
+    type: TypeRef
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
     return binaryen._BinaryenRefFunc(this.ref, cStr, type);
@@ -1718,7 +1746,7 @@ export class Module {
 
   addGlobal(
     name: string,
-    type: NativeType,
+    type: TypeRef,
     mutable: bool,
     initializer: ExpressionRef
   ): GlobalRef {
@@ -1745,8 +1773,8 @@ export class Module {
   addEvent(
     name: string,
     attribute: u32,
-    params: NativeType,
-    results: NativeType
+    params: TypeRef,
+    results: TypeRef
   ): EventRef {
     var cStr = this.allocStringCached(name);
     return binaryen._BinaryenAddEvent(this.ref, cStr, attribute, params, results);
@@ -1770,9 +1798,9 @@ export class Module {
 
   addFunction(
     name: string,
-    params: NativeType,
-    results: NativeType,
-    varTypes: NativeType[] | null,
+    params: TypeRef,
+    results: TypeRef,
+    varTypes: TypeRef[] | null,
     body: ExpressionRef
   ): FunctionRef {
     var cStr = this.allocStringCached(name);
@@ -1810,8 +1838,8 @@ export class Module {
   private hasTemporaryFunction: bool = false;
 
   addTemporaryFunction(
-    result: NativeType,
-    paramTypes: NativeType[] | null,
+    result: TypeRef,
+    paramTypes: TypeRef[] | null,
     body: ExpressionRef
   ): FunctionRef {
     this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
@@ -1901,8 +1929,8 @@ export class Module {
     internalName: string,
     externalModuleName: string,
     externalBaseName: string,
-    params: NativeType,
-    results: NativeType
+    params: TypeRef,
+    results: TypeRef
   ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
@@ -1937,7 +1965,7 @@ export class Module {
     internalName: string,
     externalModuleName: string,
     externalBaseName: string,
-    globalType: NativeType,
+    globalType: TypeRef,
     mutable: bool = false
   ): void {
     var cStr1 = this.allocStringCached(internalName);
@@ -1951,8 +1979,8 @@ export class Module {
     externalModuleName: string,
     externalBaseName: string,
     attribute: u32,
-    params: NativeType,
-    results: NativeType
+    params: TypeRef,
+    results: TypeRef
   ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
@@ -2022,7 +2050,7 @@ export class Module {
   ): void {
     var cStr = this.allocStringCached(name);
     var numNames = funcs.length;
-    var names = new Array<CString>(numNames);
+    var names = new Array<StringRef>(numNames);
     for (let i = 0; i < numNames; ++i) {
       names[i] = this.allocStringCached(funcs[i]);
     }
@@ -2177,7 +2205,7 @@ export class Module {
 
   runPasses(passes: string[], func: FunctionRef = 0): void {
     var numNames = passes.length;
-    var cStrs = new Array<CString>(numNames);
+    var cStrs = new Array<StringRef>(numNames);
     for (let i = 0; i < numNames; ++i) {
       cStrs[i] = allocString(passes[i]);
     }
@@ -2473,27 +2501,27 @@ export class Module {
     switch (binaryen._BinaryenExpressionGetId(expr)) {
       case ExpressionId.Const: {
         switch (<u32>binaryen._BinaryenExpressionGetType(expr)) {
-          case <u32>NativeType.I32: {
+          case <u32>TypeRef.I32: {
             return this.i32(binaryen._BinaryenConstGetValueI32(expr));
           }
-          case <u32>NativeType.I64: {
+          case <u32>TypeRef.I64: {
             return this.i64(
               binaryen._BinaryenConstGetValueI64Low(expr),
               binaryen._BinaryenConstGetValueI64High(expr)
             );
           }
-          case <u32>NativeType.F32: {
+          case <u32>TypeRef.F32: {
             return this.f32(binaryen._BinaryenConstGetValueF32(expr));
           }
-          case <u32>NativeType.F64: {
+          case <u32>TypeRef.F64: {
             return this.f64(binaryen._BinaryenConstGetValueF64(expr));
           }
-          case <u32>NativeType.V128: {
+          case <u32>TypeRef.V128: {
             // TODO
             return 0;
           }
           // Not possible to clone an externref as it is opaque
-          case <u32>NativeType.Externref: {
+          case <u32>TypeRef.Externref: {
             return 0;
           }
           default: {
@@ -2612,10 +2640,10 @@ export class Module {
 
 // types
 
-export function createType(types: NativeType[] | null): NativeType {
-  if (!types) return NativeType.None;
+export function createType(types: TypeRef[] | null): TypeRef {
+  if (!types) return TypeRef.None;
   switch (types.length) {
-    case 0: return NativeType.None;
+    case 0: return TypeRef.None;
     case 1: return types[0];
   }
   var cArr = allocPtrArray(types);
@@ -2624,11 +2652,11 @@ export function createType(types: NativeType[] | null): NativeType {
   return ret;
 }
 
-export function expandType(type: NativeType): NativeType[] {
+export function expandType(type: TypeRef): TypeRef[] {
   var arity = binaryen._BinaryenTypeArity(type);
   var cArr = binaryen._malloc(<usize>arity << 2);
   binaryen._BinaryenTypeExpand(type, cArr);
-  var types = new Array<NativeType>(arity);
+  var types = new Array<TypeRef>(arity);
   for (let i: u32 = 0; i < arity; ++i) {
     types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
   }
@@ -2642,7 +2670,7 @@ export function getExpressionId(expr: ExpressionRef): ExpressionId {
   return binaryen._BinaryenExpressionGetId(expr);
 }
 
-export function getExpressionType(expr: ExpressionRef): NativeType {
+export function getExpressionType(expr: ExpressionRef): TypeRef {
   return binaryen._BinaryenExpressionGetType(expr);
 }
 
@@ -2669,10 +2697,10 @@ export function getConstValueF64(expr: ExpressionRef): f64 {
 export function isConstZero(expr: ExpressionRef): bool {
   if (getExpressionId(expr) != ExpressionId.Const) return false;
   var type = getExpressionType(expr);
-  if (type == NativeType.I32) return getConstValueI32(expr) == 0;
-  if (type == NativeType.I64) return getConstValueI64Low(expr) == 0 && getConstValueI64High(expr) == 0;
-  if (type == NativeType.F32) return getConstValueF32(expr) == 0;
-  if (type == NativeType.F64) return getConstValueF64(expr) == 0;
+  if (type == TypeRef.I32) return getConstValueI32(expr) == 0;
+  if (type == TypeRef.I64) return getConstValueI64Low(expr) == 0 && getConstValueI64High(expr) == 0;
+  if (type == TypeRef.F32) return getConstValueF32(expr) == 0;
+  if (type == TypeRef.F64) return getConstValueF64(expr) == 0;
   return false;
 }
 
@@ -2834,17 +2862,17 @@ export function getFunctionName(func: FunctionRef): string | null {
   return readString(binaryen._BinaryenFunctionGetName(func));
 }
 
-export function getFunctionParams(func: FunctionRef): NativeType {
+export function getFunctionParams(func: FunctionRef): TypeRef {
   return binaryen._BinaryenFunctionGetParams(func);
 }
 
-export function getFunctionResults(func: FunctionRef): NativeType {
+export function getFunctionResults(func: FunctionRef): TypeRef {
   return binaryen._BinaryenFunctionGetResults(func);
 }
 
-export function getFunctionVars(func: FunctionRef): NativeType[] {
+export function getFunctionVars(func: FunctionRef): TypeRef[] {
   var count = binaryen._BinaryenFunctionGetNumVars(func);
-  var types = new Array<NativeType>(count);
+  var types = new Array<TypeRef>(count);
   for (let i: Index = 0; i < count; ++i) {
     types[i] = binaryen._BinaryenFunctionGetVar(func, i);
   }
@@ -2857,7 +2885,7 @@ export function getGlobalName(global: GlobalRef): string | null {
   return readString(binaryen._BinaryenGlobalGetName(global));
 }
 
-export function getGlobalType(global: GlobalRef): NativeType {
+export function getGlobalType(global: GlobalRef): TypeRef {
   return binaryen._BinaryenGlobalGetType(global);
 }
 
@@ -2879,11 +2907,11 @@ export function getEventAttribute(event: EventRef): u32 {
   return binaryen._BinaryenEventGetAttribute(event);
 }
 
-export function getEventParams(event: EventRef): NativeType {
+export function getEventParams(event: EventRef): TypeRef {
   return binaryen._BinaryenEventGetParams(event);
 }
 
-export function getEventResults(event: EventRef): NativeType {
+export function getEventResults(event: EventRef): TypeRef {
   return binaryen._BinaryenEventGetResults(event);
 }
 
@@ -2993,7 +3021,7 @@ export class SwitchBuilder {
       let index = indexes[i];
       entry[1 + i] = module.br(labels[index],
         module.binary(BinaryOp.EqI32,
-          module.local_get(localIndex, NativeType.I32),
+          module.local_get(localIndex, TypeRef.I32),
           module.i32(values[i])
         )
       );
@@ -3211,7 +3239,7 @@ export class BinaryModule {
 /** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */
 export function needsExplicitUnreachable(expr: ExpressionRef): bool {
   // not applicable if pushing a value to the stack
-  if (binaryen._BinaryenExpressionGetType(expr) != NativeType.Unreachable) {
+  if (binaryen._BinaryenExpressionGetType(expr) != TypeRef.Unreachable) {
     return false;
   }
 

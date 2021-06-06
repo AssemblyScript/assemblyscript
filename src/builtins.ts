@@ -61,7 +61,7 @@ import {
   SIMDLoadOp,
   SIMDLoadStoreLaneOp,
   RefIsOp,
-  NativeType,
+  TypeRef,
   ExpressionRef,
   ExpressionId,
   getExpressionId,
@@ -1259,13 +1259,13 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
           ),
           module.binary(
             BinaryOp.ShrU32,
-            module.local_get(temp1.index, NativeType.I32),
+            module.local_get(temp1.index, TypeRef.I32),
             module.binary(
               BinaryOp.AndI32,
               module.binary(
                 BinaryOp.SubI32,
                 module.i32(0),
-                module.local_get(temp2.index, NativeType.I32)
+                module.local_get(temp2.index, TypeRef.I32)
               ),
               module.i32(type.size - 1)
             )
@@ -1340,13 +1340,13 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
           ),
           module.binary(
             BinaryOp.ShlI32,
-            module.local_get(temp1.index, NativeType.I32),
+            module.local_get(temp1.index, TypeRef.I32),
             module.binary(
               BinaryOp.AndI32,
               module.binary(
                 BinaryOp.SubI32,
                 module.i32(0),
-                module.local_get(temp2.index, NativeType.I32)
+                module.local_get(temp2.index, TypeRef.I32)
               ),
               module.i32(type.size - 1)
             )
@@ -1415,9 +1415,9 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
               ),
               false // i32
             ),
-            module.local_get(temp1.index, NativeType.I32)
+            module.local_get(temp1.index, TypeRef.I32)
           ),
-          module.local_get(temp2.index, NativeType.I32)
+          module.local_get(temp2.index, TypeRef.I32)
         );
         flow.freeTempLocal(temp2);
         flow.freeTempLocal(temp1);
@@ -1440,9 +1440,9 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
               ),
               false // i32/i64
             ),
-            module.local_get(temp1.index, options.nativeSizeType)
+            module.local_get(temp1.index, options.sizeTypeRef)
           ),
-          module.local_get(temp2.index, options.nativeSizeType)
+          module.local_get(temp2.index, options.sizeTypeRef)
         );
         flow.freeTempLocal(temp2);
         flow.freeTempLocal(temp1);
@@ -1464,9 +1464,9 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
               ),
               false // i64
             ),
-            module.local_get(temp1.index, NativeType.I64)
+            module.local_get(temp1.index, TypeRef.I64)
           ),
-          module.local_get(temp2.index, NativeType.I64)
+          module.local_get(temp2.index, TypeRef.I64)
         );
         flow.freeTempLocal(temp2);
         flow.freeTempLocal(temp1);
@@ -1543,7 +1543,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
     }
     if (op != -1) {
       let flow = compiler.currentFlow;
-      let nativeType = type.toNativeType();
+      let typeRef = type.toRef();
       let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
       flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
       let temp2 = flow.getTempLocal(type);
@@ -1552,8 +1552,8 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
         module.local_tee(temp1.index, arg0, false), // numeric
         module.local_tee(temp2.index, arg1, false), // numeric
         module.binary(op,
-          module.local_get(temp1.index, nativeType),
-          module.local_get(temp2.index, nativeType)
+          module.local_get(temp1.index, typeRef),
+          module.local_get(temp2.index, typeRef)
         )
       );
       flow.freeTempLocal(temp2);
@@ -1622,7 +1622,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
     }
     if (op != -1) {
       let flow = compiler.currentFlow;
-      let nativeType = type.toNativeType();
+      let typeRef = type.toRef();
       let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
       flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
       let temp2 = flow.getTempLocal(type);
@@ -1631,8 +1631,8 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
         module.local_tee(temp1.index, arg0, false), // numeric
         module.local_tee(temp2.index, arg1, false), // numeric
         module.binary(op,
-          module.local_get(temp1.index, nativeType),
-          module.local_get(temp2.index, nativeType)
+          module.local_get(temp1.index, typeRef),
+          module.local_get(temp2.index, typeRef)
         )
       );
       flow.freeTempLocal(temp2);
@@ -1962,14 +1962,14 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
         if (getExpressionId(arg0) == ExpressionId.LocalGet) {
           return module.binary(BinaryOp.NeF32,
             arg0,
-            module.local_get(getLocalGetIndex(arg0), NativeType.F32)
+            module.local_get(getLocalGetIndex(arg0), TypeRef.F32)
           );
         }
         let flow = compiler.currentFlow;
         let temp = flow.getTempLocal(Type.f32);
         let ret = module.binary(BinaryOp.NeF32,
           module.local_tee(temp.index, arg0, false), // f32
-          module.local_get(temp.index, NativeType.F32)
+          module.local_get(temp.index, TypeRef.F32)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -1978,14 +1978,14 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
         if (getExpressionId(arg0) == ExpressionId.LocalGet) {
           return module.binary(BinaryOp.NeF64,
             arg0,
-            module.local_get(getLocalGetIndex(arg0), NativeType.F64)
+            module.local_get(getLocalGetIndex(arg0), TypeRef.F64)
           );
         }
         let flow = compiler.currentFlow;
         let temp = flow.getTempLocal(Type.f64);
         let ret = module.binary(BinaryOp.NeF64,
           module.local_tee(temp.index, arg0, false), // f64
-          module.local_get(temp.index, NativeType.F64)
+          module.local_get(temp.index, TypeRef.F64)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -2039,7 +2039,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
           return module.binary(BinaryOp.EqF32,
             module.binary(BinaryOp.SubF32,
               arg0,
-              module.local_get(getLocalGetIndex(arg0), NativeType.F32)
+              module.local_get(getLocalGetIndex(arg0), TypeRef.F32)
             ),
             module.f32(0)
           );
@@ -2049,7 +2049,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
         let ret = module.binary(BinaryOp.EqF32,
           module.binary(BinaryOp.SubF32,
             module.local_tee(temp.index, arg0, false), // f32
-            module.local_get(temp.index, NativeType.F32)
+            module.local_get(temp.index, TypeRef.F32)
           ),
           module.f32(0)
         );
@@ -2061,7 +2061,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
           return module.binary(BinaryOp.EqF64,
             module.binary(BinaryOp.SubF64,
               arg0,
-              module.local_get(getLocalGetIndex(arg0), NativeType.F64)
+              module.local_get(getLocalGetIndex(arg0), TypeRef.F64)
             ),
             module.f64(0)
           );
@@ -2071,7 +2071,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
         let ret = module.binary(BinaryOp.EqF64,
           module.binary(BinaryOp.SubF64,
             module.local_tee(temp.index, arg0, false), // f64
-            module.local_get(temp.index, NativeType.F64)
+            module.local_get(temp.index, TypeRef.F64)
           ),
           module.f64(0)
         );
@@ -2131,7 +2131,7 @@ function builtin_load(ctx: BuiltinContext): ExpressionRef {
     type.byteSize,
     type.isSignedIntegerValue,
     arg0,
-    outType.toNativeType(),
+    outType.toRef(),
     immOffset,
     immAlign
   );
@@ -2194,7 +2194,7 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.currentType = Type.void;
-  return module.store(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset, immAlign);
+  return module.store(type.byteSize, arg0, arg1, inType.toRef(), immOffset, immAlign);
 }
 builtins.set(BuiltinNames.store, builtin_store);
 
@@ -2452,7 +2452,7 @@ function builtin_atomic_load(ctx: BuiltinContext): ExpressionRef {
   return module.atomic_load(
     type.byteSize,
     arg0,
-    outType.toNativeType(),
+    outType.toRef(),
     immOffset
   );
 }
@@ -2511,7 +2511,7 @@ function builtin_atomic_store(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   compiler.currentType = Type.void;
-  return module.atomic_store(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset);
+  return module.atomic_store(type.byteSize, arg0, arg1, inType.toRef(), immOffset);
 }
 builtins.set(BuiltinNames.atomic_store, builtin_atomic_store);
 
@@ -2569,7 +2569,7 @@ function builtin_atomic_binary(ctx: BuiltinContext, op: AtomicRMWOp, opName: str
     return module.unreachable();
   }
   compiler.currentType = inType;
-  return module.atomic_rmw(op, type.byteSize, immOffset, arg0, arg1, inType.toNativeType());
+  return module.atomic_rmw(op, type.byteSize, immOffset, arg0, arg1, inType.toRef());
 }
 
 // atomic.add<T!>(ptr, value: T, immOffset?: usize) -> T
@@ -2667,7 +2667,7 @@ function builtin_atomic_cmpxchg(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   compiler.currentType = inType;
-  return module.atomic_cmpxchg(type.byteSize, immOffset, arg0, arg1, arg2, inType.toNativeType());
+  return module.atomic_cmpxchg(type.byteSize, immOffset, arg0, arg1, arg2, inType.toRef());
 }
 builtins.set(BuiltinNames.atomic_cmpxchg, builtin_atomic_cmpxchg);
 
@@ -2696,7 +2696,7 @@ function builtin_atomic_wait(ctx: BuiltinContext): ExpressionRef {
     case TypeKind.ISIZE:
     case TypeKind.U32:
     case TypeKind.U64:
-    case TypeKind.USIZE: return module.atomic_wait(arg0, arg1, arg2, type.toNativeType());
+    case TypeKind.USIZE: return module.atomic_wait(arg0, arg1, arg2, type.toRef());
   }
   compiler.error(
     DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
@@ -3069,25 +3069,25 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
   var evaled = module.runExpression(arg0, ExpressionRunnerFlags.Default);
   if (evaled) {
     switch (<u32>getExpressionType(evaled)) {
-      case <u32>NativeType.I32: {
+      case <u32>TypeRef.I32: {
         if (getConstValueI32(evaled)) {
           return arg0;
         }
         break;
       }
-      case <u32>NativeType.I64: {
+      case <u32>TypeRef.I64: {
         if (getConstValueI64Low(evaled) | getConstValueI64High(evaled)) {
           return arg0;
         }
         break;
       }
-      case <u32>NativeType.F32: {
+      case <u32>TypeRef.F32: {
         if (getConstValueF32(evaled)) {
           return arg0;
         }
         break;
       }
-      case <u32>NativeType.F64: {
+      case <u32>TypeRef.F64: {
         if (getConstValueF64(evaled)) {
           return arg0;
         }
@@ -3149,7 +3149,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         flow.setLocalFlag(temp.index, LocalFlags.WRAPPED); // arg0 is wrapped
         let ret = module.if(
           module.local_tee(temp.index, arg0, false), // numeric
-          module.local_get(temp.index, NativeType.I32),
+          module.local_get(temp.index, TypeRef.I32),
           abort
         );
         flow.freeTempLocal(temp);
@@ -3163,7 +3163,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             module.local_tee(temp.index, arg0, false) // i64
           ),
           abort,
-          module.local_get(temp.index, NativeType.I64)
+          module.local_get(temp.index, TypeRef.I64)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -3179,7 +3179,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             module.local_tee(temp.index, arg0, type.isManaged)
           ),
           abort,
-          module.local_get(temp.index, compiler.options.nativeSizeType)
+          module.local_get(temp.index, compiler.options.sizeTypeRef)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -3192,7 +3192,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             module.f32(0)
           ),
           abort,
-          module.local_get(temp.index, NativeType.F32)
+          module.local_get(temp.index, TypeRef.F32)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -3205,7 +3205,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             module.f64(0)
           ),
           abort,
-          module.local_get(temp.index, NativeType.F64)
+          module.local_get(temp.index, TypeRef.F64)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -3222,7 +3222,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             module.local_tee(temp.index, arg0, false) // ref
           ),
           abort,
-          module.local_get(temp.index, type.toNativeType())
+          module.local_get(temp.index, type.toRef())
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -3276,13 +3276,13 @@ function builtin_call_indirect(ctx: BuiltinContext): ExpressionRef {
   var indexArg = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
   var numOperands = operands.length - 1;
   var operandExprs = new Array<ExpressionRef>(numOperands);
-  var nativeParamTypes = new Array<NativeType>(numOperands);
+  var paramTypeRefs = new Array<TypeRef>(numOperands);
   for (let i = 0; i < numOperands; ++i) {
     operandExprs[i] = compiler.compileExpression(operands[1 + i], Type.auto);
-    nativeParamTypes[i] = compiler.currentType.toNativeType();
+    paramTypeRefs[i] = compiler.currentType.toRef();
   }
   compiler.currentType = returnType;
-  return module.call_indirect(indexArg, operandExprs, createType(nativeParamTypes), returnType.toNativeType());
+  return module.call_indirect(indexArg, operandExprs, createType(paramTypeRefs), returnType.toRef());
 }
 builtins.set(BuiltinNames.call_indirect, builtin_call_indirect);
 
@@ -6058,7 +6058,7 @@ function builtin_visit_globals(ctx: BuiltinContext): ExpressionRef {
   var arg0 = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
   compiler.runtimeFeatures |= RuntimeFeatures.visitGlobals;
   compiler.currentType = Type.void;
-  return module.call(BuiltinNames.visit_globals, [ arg0 ], NativeType.None);
+  return module.call(BuiltinNames.visit_globals, [ arg0 ], TypeRef.None);
 }
 builtins.set(BuiltinNames.visit_globals, builtin_visit_globals);
 
@@ -6078,7 +6078,7 @@ function builtin_visit_members(ctx: BuiltinContext): ExpressionRef {
   var arg1 = compiler.compileExpression(operands[1], Type.u32, Constraints.CONV_IMPLICIT);
   compiler.runtimeFeatures |= RuntimeFeatures.visitMembers;
   compiler.currentType = Type.void;
-  return module.call(BuiltinNames.visit_members, [ arg0, arg1 ], NativeType.None);
+  return module.call(BuiltinNames.visit_members, [ arg0, arg1 ], TypeRef.None);
 }
 builtins.set(BuiltinNames.visit_members, builtin_visit_members);
 
@@ -9454,7 +9454,7 @@ builtins.set(BuiltinNames.f64x2_promote_low_f32x4, builtin_f64x4_promote_low_f32
 export function compileVisitGlobals(compiler: Compiler): void {
   var module = compiler.module;
   var exprs = new Array<ExpressionRef>();
-  var nativeSizeType = compiler.options.nativeSizeType;
+  var sizeTypeRef = compiler.options.sizeTypeRef;
   var visitInstance = assert(compiler.program.visitInstance);
 
   // this function is @lazy: make sure it exists
@@ -9480,30 +9480,30 @@ export function compileVisitGlobals(compiler: Compiler): void {
               compiler.options.isWasm64
                 ? module.i64(i64_low(value), i64_high(value))
                 : module.i32(i64_low(value)),
-              module.local_get(0, NativeType.I32) // cookie
-            ], NativeType.None)
+              module.local_get(0, TypeRef.I32) // cookie
+            ], TypeRef.None)
           );
         }
       } else {
         exprs.push(
           module.if(
             module.local_tee(1,
-              module.global_get(global.internalName, nativeSizeType),
+              module.global_get(global.internalName, sizeTypeRef),
               false // internal
             ),
             module.call(visitInstance.internalName, [
-              module.local_get(1, nativeSizeType), // tempRef != null
-              module.local_get(0, NativeType.I32) // cookie
-            ], NativeType.None)
+              module.local_get(1, sizeTypeRef), // tempRef != null
+              module.local_get(0, TypeRef.I32) // cookie
+            ], TypeRef.None)
           )
         );
       }
     }
   }
   module.addFunction(BuiltinNames.visit_globals,
-    NativeType.I32,  // cookie
-    NativeType.None, // => void
-    [ nativeSizeType ],
+    TypeRef.I32,  // cookie
+    TypeRef.None, // => void
+    [ sizeTypeRef ],
     exprs.length
       ? module.block(null, exprs)
       : module.nop()
@@ -9518,8 +9518,8 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   var program = compiler.program;
   var module = compiler.module;
   var usizeType = program.options.usizeType;
-  var nativeSizeType = usizeType.toNativeType();
-  var nativeSizeSize = usizeType.byteSize;
+  var sizeTypeRef = usizeType.toRef();
+  var sizeTypeSize = usizeType.byteSize;
   var visitInstance = assert(program.visitInstance);
   var body = new Array<ExpressionRef>();
 
@@ -9528,9 +9528,9 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   if (base) {
     body.push(
       module.call(base.internalName + "~visit", [
-        module.local_get(0, nativeSizeType), // this
-        module.local_get(1, NativeType.I32)  // cookie
-      ], NativeType.None)
+        module.local_get(0, sizeTypeRef), // this
+        module.local_get(1, TypeRef.I32)  // cookie
+      ], TypeRef.None)
     );
   }
 
@@ -9557,9 +9557,9 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
         );
         body.push(
           module.call(visitInstance.internalName, [
-            module.local_get(0, nativeSizeType), // this
-            module.local_get(1, NativeType.I32)  // cookie
-          ], NativeType.None)
+            module.local_get(0, sizeTypeRef), // this
+            module.local_get(1, TypeRef.I32)  // cookie
+          ], TypeRef.None)
         );
       }
       hasVisitImpl = true;
@@ -9586,16 +9586,16 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
                 // if ($2 = value) __visit($2, $1)
                 module.if(
                   module.local_tee(2,
-                    module.load(nativeSizeSize, false,
-                      module.local_get(0, nativeSizeType),
-                      nativeSizeType, fieldOffset
+                    module.load(sizeTypeSize, false,
+                      module.local_get(0, sizeTypeRef),
+                      sizeTypeRef, fieldOffset
                     ),
                     false // internal
                   ),
                   module.call(visitInstance.internalName, [
-                    module.local_get(2, nativeSizeType), // value
-                    module.local_get(1, NativeType.I32)  // cookie
-                  ], NativeType.None)
+                    module.local_get(2, sizeTypeRef), // value
+                    module.local_get(1, TypeRef.I32)  // cookie
+                  ], TypeRef.None)
                 )
               );
             }
@@ -9607,10 +9607,10 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
 
   // Create the visitor function
   instance.visitRef = module.addFunction(instance.internalName + "~visit",
-    createType([nativeSizeType, NativeType.I32]),
-    NativeType.None,
-    needsTempValue ? [ nativeSizeType ] : null,
-    module.flatten(body, NativeType.None)
+    createType([sizeTypeRef, TypeRef.I32]),
+    TypeRef.None,
+    needsTempValue ? [ sizeTypeRef ] : null,
+    module.flatten(body, TypeRef.None)
   );
 
   // And make sure the base visitor function exists
@@ -9622,7 +9622,7 @@ export function compileVisitMembers(compiler: Compiler): void {
   var program = compiler.program;
   var module = compiler.module;
   var usizeType = program.options.usizeType;
-  var nativeSizeType = usizeType.toNativeType();
+  var sizeTypeRef = usizeType.toRef();
   var managedClasses = program.managedClasses;
   var visitInstance = assert(program.visitInstance);
   compiler.compileFunction(visitInstance, true); // is lazy, make sure it is compiled
@@ -9642,11 +9642,11 @@ export function compileVisitMembers(compiler: Compiler): void {
     } else {
       cases[i] = module.block(null, [
         module.call(instance.internalName + "~visit", [
-          module.local_get(0, nativeSizeType), // this
-          module.local_get(1, NativeType.I32)  // cookie
-        ], NativeType.None),
+          module.local_get(0, sizeTypeRef), // this
+          module.local_get(1, TypeRef.I32)  // cookie
+        ], TypeRef.None),
         module.return()
-      ], NativeType.None);
+      ], TypeRef.None);
       ensureVisitMembersOf(compiler, instance);
     }
   }
@@ -9656,38 +9656,38 @@ export function compileVisitMembers(compiler: Compiler): void {
     module.switch(names, "invalid",
       // load<u32>(changetype<usize>(this) - 8)
       module.load(4, false,
-        nativeSizeType == NativeType.I64
+        sizeTypeRef == TypeRef.I64
           ? module.binary(BinaryOp.SubI64,
-              module.local_get(0, nativeSizeType),
+              module.local_get(0, sizeTypeRef),
               module.i64(8)
             )
           : module.binary(BinaryOp.SubI32,
-              module.local_get(0, nativeSizeType),
+              module.local_get(0, sizeTypeRef),
               module.i32(8) // rtId is at -8
             ),
-        NativeType.I32, 0
+        TypeRef.I32, 0
       )
     )
-  ], NativeType.None);
+  ], TypeRef.None);
 
   // Wrap blocks in order
   for (let i = 0, k = names.length - 1; i < k; ++i) {
     current = module.block(names[i + 1], [
       current,
       cases[i]
-    ], NativeType.None);
+    ], TypeRef.None);
   }
 
   // Wrap the last id in an 'invalid' block to break out of on invalid ids
   current = module.block("invalid", [
     current,
     cases[names.length - 1]
-  ], NativeType.None);
+  ], TypeRef.None);
 
   // Add the function, executing an unreachable if breaking to 'invalid'
   module.addFunction(BuiltinNames.visit_members,
-    createType([ nativeSizeType, NativeType.I32 ]), // this, cookie
-    NativeType.None, // => void
+    createType([ sizeTypeRef, TypeRef.I32 ]), // this, cookie
+    TypeRef.None, // => void
     null,
     module.flatten([
       current,
@@ -9763,16 +9763,16 @@ export function compileRTTI(compiler: Compiler): void {
   var segment = compiler.addAlignedMemorySegment(data);
   if (usizeType.size == 8) {
     let offset = segment.offset;
-    module.addGlobal(BuiltinNames.rtti_base, NativeType.I64, false, module.i64(i64_low(offset), i64_high(offset)));
+    module.addGlobal(BuiltinNames.rtti_base, TypeRef.I64, false, module.i64(i64_low(offset), i64_high(offset)));
   } else {
-    module.addGlobal(BuiltinNames.rtti_base, NativeType.I32, false, module.i32(i64_low(segment.offset)));
+    module.addGlobal(BuiltinNames.rtti_base, TypeRef.I32, false, module.i32(i64_low(segment.offset)));
   }
 }
 
 /** Compiles a class-specific instanceof helper, checking a ref against all concrete instances. */
 export function compileClassInstanceOf(compiler: Compiler, prototype: ClassPrototype): void {
   var module = compiler.module;
-  var nativeSizeType = compiler.options.nativeSizeType;
+  var sizeTypeRef = compiler.options.sizeTypeRef;
   var instanceofInstance = assert(prototype.program.instanceofInstance);
   compiler.compileFunction(instanceofInstance);
 
@@ -9782,10 +9782,10 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
   stmts.push(
     module.if(
       module.unary(
-        nativeSizeType == NativeType.I64
+        sizeTypeRef == TypeRef.I64
           ? UnaryOp.EqzI64
           : UnaryOp.EqzI32,
-        module.local_get(0, nativeSizeType)
+        module.local_get(0, sizeTypeRef)
       ),
       module.return(
         module.i32(0)
@@ -9802,9 +9802,9 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
       stmts.push(
         module.if(
           module.call(instanceofInstance.internalName, [
-            module.local_get(0, nativeSizeType),
+            module.local_get(0, sizeTypeRef),
             module.i32(instance.id)
-          ], NativeType.I32),
+          ], TypeRef.I32),
           module.return(
             module.i32(1)
           )
@@ -9820,7 +9820,7 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
     )
   );
 
-  module.addFunction(prototype.internalName + "~instanceof", nativeSizeType, NativeType.I32, null, module.flatten(stmts));
+  module.addFunction(prototype.internalName + "~instanceof", sizeTypeRef, TypeRef.I32, null, module.flatten(stmts));
 }
 
 // Helpers

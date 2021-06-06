@@ -126,7 +126,7 @@ import {
   FunctionRef,
   Index,
   BinaryOp,
-  NativeType,
+  TypeRef,
   allocPtrArray,
   Module,
   ExternalKind,
@@ -151,7 +151,7 @@ import {
 type LocalIndex = Index;
 type SlotIndex = Index;
 type SlotMap = Map<LocalIndex,SlotIndex>;
-type TempMap = Map<NativeType,LocalIndex>;
+type TempMap = Map<TypeRef,LocalIndex>;
 
 /** Attempts to match the `__tostack(value)` pattern. Returns `value` if a match, otherwise `0`.  */
 function matchPattern(module: Module, expr: ExpressionRef): ExpressionRef {
@@ -193,17 +193,17 @@ export class ShadowStackPass extends Pass {
   /** Compiler options. */
   get options(): Options { return this.compiler.options; }
   /** Target pointer type. */
-  get ptrType(): NativeType { return this.options.nativeSizeType; }
+  get ptrType(): TypeRef { return this.options.sizeTypeRef; }
   /** Target pointer size. */
-  get ptrSize(): i32 { return this.ptrType == NativeType.I64 ? 8 : 4; }
+  get ptrSize(): i32 { return this.ptrType == TypeRef.I64 ? 8 : 4; }
   /** Target pointer addition operation. */
-  get ptrBinaryAdd(): BinaryOp { return this.ptrType == NativeType.I64 ? BinaryOp.AddI64 : BinaryOp.AddI32; }
+  get ptrBinaryAdd(): BinaryOp { return this.ptrType == TypeRef.I64 ? BinaryOp.AddI64 : BinaryOp.AddI32; }
   /** Target pointer subtraction operation. */
-  get ptrBinarySub(): BinaryOp { return this.ptrType == NativeType.I64 ? BinaryOp.SubI64 : BinaryOp.SubI32; }
+  get ptrBinarySub(): BinaryOp { return this.ptrType == TypeRef.I64 ? BinaryOp.SubI64 : BinaryOp.SubI32; }
 
   /** Gets a constant with the specified value of the target pointer type. */
   ptrConst(value: i32): ExpressionRef {
-    return this.ptrType == NativeType.I64
+    return this.ptrType == TypeRef.I64
       ? this.module.i64(value)
       : this.module.i32(value);
   }
@@ -232,7 +232,7 @@ export class ShadowStackPass extends Pass {
   }
 
   /** Gets a shared temporary local of the given type in the specified functions. */
-  getSharedTemp(func: FunctionRef, type: NativeType): Index {
+  getSharedTemp(func: FunctionRef, type: TypeRef): Index {
     let tempMap: TempMap;
     if (this.tempMaps.has(func)) {
       tempMap = changetype<TempMap>(this.tempMaps.get(func));
@@ -263,7 +263,7 @@ export class ShadowStackPass extends Pass {
     return module.block(null, [
       expr,
       this.makeStackCheck()
-    ], NativeType.None);
+    ], TypeRef.None);
   }
 
   /** Makes a sequence of expressions zeroing the stack frame. */
@@ -286,7 +286,7 @@ export class ShadowStackPass extends Pass {
           module.store(8,
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),
             module.i64(0),
-            NativeType.I64,
+            TypeRef.I64,
             frameSize - remain
           )
         );
@@ -299,7 +299,7 @@ export class ShadowStackPass extends Pass {
           module.store(4,
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),
             module.i32(0),
-            NativeType.I32,
+            TypeRef.I32,
             frameSize - remain
           )
         );
@@ -314,7 +314,7 @@ export class ShadowStackPass extends Pass {
     var module = this.module;
     if (!this.hasStackCheckFunction) {
       this.hasStackCheckFunction = true;
-      module.addFunction("~stack_check", NativeType.None, NativeType.None, null,
+      module.addFunction("~stack_check", TypeRef.None, TypeRef.None, null,
         module.if(
           module.binary(BinaryOp.LtI32,
             module.global_get(BuiltinNames.stack_pointer, this.ptrType),
@@ -324,7 +324,7 @@ export class ShadowStackPass extends Pass {
         )
       );
     }
-    return module.call("~stack_check", null, NativeType.None);
+    return module.call("~stack_check", null, TypeRef.None);
   }
 
   private updateCallOperands(operands: ExpressionRef[]): i32 {
@@ -446,7 +446,7 @@ export class ShadowStackPass extends Pass {
       );
       this.replaceCurrent(module.flatten(stmts, this.ptrType));
     } else {
-      this.replaceCurrent(module.flatten(stmts, NativeType.None));
+      this.replaceCurrent(module.flatten(stmts, TypeRef.None));
     }
   }
 
@@ -457,7 +457,7 @@ export class ShadowStackPass extends Pass {
     let results = _BinaryenFunctionGetResults(funcRef);
     let body = assert(_BinaryenFunctionGetBody(funcRef));
     let numVars = _BinaryenFunctionGetNumVars(funcRef);
-    let vars = new Array<NativeType>();
+    let vars = new Array<TypeRef>();
     for (let i: Index = 0; i < numVars; ++i) {
       vars[i] = _BinaryenFunctionGetVar(funcRef, i);
     }
@@ -490,7 +490,7 @@ export class ShadowStackPass extends Pass {
     var numParams = paramTypes.length;
     var results = _BinaryenFunctionGetResults(funcRef);
     var numLocals = numParams;
-    var vars = new Array<NativeType>();
+    var vars = new Array<TypeRef>();
     var numSlots = assert(managedOperandIndices.length);
     var frameSize = numSlots * this.ptrSize;
     var wrapperName = "export:" + internalName;
@@ -516,7 +516,7 @@ export class ShadowStackPass extends Pass {
       for (let i = 0; i < numParams; ++i) {
         forwardedOperands[i] = module.local_get(i, paramTypes[i]);
       }
-      if (results != NativeType.None) {
+      if (results != TypeRef.None) {
         let tempIndex = numLocals++;
         vars.push(results);
         // t = original(...)
@@ -583,12 +583,12 @@ export class ShadowStackPass extends Pass {
       // Handle implicit return
       let body = _BinaryenFunctionGetBody(func);
       let bodyType = _BinaryenExpressionGetType(body);
-      if (bodyType == NativeType.Unreachable) {
+      if (bodyType == TypeRef.Unreachable) {
         // body
         stmts.push(
           body
         );
-      } else if (bodyType == NativeType.None) {
+      } else if (bodyType == TypeRef.None) {
         // body
         stmts.push(
           body
@@ -673,6 +673,6 @@ class InstrumentReturns extends Pass {
     stmts.push(
       ret
     );
-    this.replaceCurrent(module.flatten(stmts, NativeType.Unreachable));
+    this.replaceCurrent(module.flatten(stmts, TypeRef.Unreachable));
   }
 }

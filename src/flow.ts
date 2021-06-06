@@ -32,7 +32,7 @@ import {
 } from "./program";
 
 import {
-  NativeType,
+  TypeRef,
   ExpressionId,
   ExpressionRef,
   BinaryOp,
@@ -297,18 +297,18 @@ export class Flow {
   getTempLocal(type: Type, except: Set<i32> | null = null): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[] | null;
-    switch (<u32>type.toNativeType()) {
-      case <u32>NativeType.I32: { temps = parentFunction.tempI32s; break; }
-      case <u32>NativeType.I64: { temps = parentFunction.tempI64s; break; }
-      case <u32>NativeType.F32: { temps = parentFunction.tempF32s; break; }
-      case <u32>NativeType.F64: { temps = parentFunction.tempF64s; break; }
-      case <u32>NativeType.V128: { temps = parentFunction.tempV128s; break; }
-      case <u32>NativeType.Funcref: { temps = parentFunction.tempFuncrefs; break; }
-      case <u32>NativeType.Externref: { temps = parentFunction.tempExternrefs; break; }
-      case <u32>NativeType.Anyref: { temps = parentFunction.tempAnyrefs; break; }
-      case <u32>NativeType.Eqref: { temps = parentFunction.tempEqrefs; break; }
-      case <u32>NativeType.I31ref: { temps = parentFunction.tempI31refs; break; }
-      case <u32>NativeType.Dataref: { temps = parentFunction.tempDatarefs; break; }
+    switch (<u32>type.toRef()) {
+      case <u32>TypeRef.I32: { temps = parentFunction.tempI32s; break; }
+      case <u32>TypeRef.I64: { temps = parentFunction.tempI64s; break; }
+      case <u32>TypeRef.F32: { temps = parentFunction.tempF32s; break; }
+      case <u32>TypeRef.F64: { temps = parentFunction.tempF64s; break; }
+      case <u32>TypeRef.V128: { temps = parentFunction.tempV128s; break; }
+      case <u32>TypeRef.Funcref: { temps = parentFunction.tempFuncrefs; break; }
+      case <u32>TypeRef.Externref: { temps = parentFunction.tempExternrefs; break; }
+      case <u32>TypeRef.Anyref: { temps = parentFunction.tempAnyrefs; break; }
+      case <u32>TypeRef.Eqref: { temps = parentFunction.tempEqrefs; break; }
+      case <u32>TypeRef.I31ref: { temps = parentFunction.tempI31refs; break; }
+      case <u32>TypeRef.Dataref: { temps = parentFunction.tempDatarefs; break; }
       default: throw new Error("concrete type expected");
     }
     var local: Local;
@@ -349,68 +349,68 @@ export class Flow {
     var temps: Local[];
     assert(local.type != null); // internal error
     local.resetTemporaryName();
-    switch (<u32>local.type.toNativeType()) {
-      case <u32>NativeType.I32: {
+    switch (<u32>local.type.toRef()) {
+      case <u32>TypeRef.I32: {
         let tempI32s = parentFunction.tempI32s;
         if (tempI32s) temps = tempI32s;
         else parentFunction.tempI32s = temps = [];
         break;
       }
-      case <u32>NativeType.I64: {
+      case <u32>TypeRef.I64: {
         let tempI64s = parentFunction.tempI64s;
         if (tempI64s) temps = tempI64s;
         else parentFunction.tempI64s = temps = [];
         break;
       }
-      case <u32>NativeType.F32: {
+      case <u32>TypeRef.F32: {
         let tempF32s = parentFunction.tempF32s;
         if (tempF32s) temps = tempF32s;
         else parentFunction.tempF32s = temps = [];
         break;
       }
-      case <u32>NativeType.F64: {
+      case <u32>TypeRef.F64: {
         let tempF64s = parentFunction.tempF64s;
         if (tempF64s) temps = tempF64s;
         else parentFunction.tempF64s = temps = [];
         break;
       }
-      case <u32>NativeType.V128: {
+      case <u32>TypeRef.V128: {
         let tempV128s = parentFunction.tempV128s;
         if (tempV128s) temps = tempV128s;
         else parentFunction.tempV128s = temps = [];
         break;
       }
-      case <u32>NativeType.Funcref: {
+      case <u32>TypeRef.Funcref: {
         let tempFuncrefs = parentFunction.tempFuncrefs;
         if (tempFuncrefs) temps = tempFuncrefs;
         else parentFunction.tempFuncrefs = temps = [];
         break;
       }
-      case <u32>NativeType.Externref: {
+      case <u32>TypeRef.Externref: {
         let tempExternrefs = parentFunction.tempExternrefs;
         if (tempExternrefs) temps = tempExternrefs;
         else parentFunction.tempExternrefs = temps = [];
         break;
       }
-      case <u32>NativeType.Anyref: {
+      case <u32>TypeRef.Anyref: {
         let tempAnyrefs = parentFunction.tempAnyrefs;
         if (tempAnyrefs) temps = tempAnyrefs;
         else parentFunction.tempAnyrefs = temps = [];
         break;
       }
-      case <u32>NativeType.Eqref: {
+      case <u32>TypeRef.Eqref: {
         let tempEqrefs = parentFunction.tempEqrefs;
         if (tempEqrefs) temps = tempEqrefs;
         else parentFunction.tempEqrefs = temps = [];
         break;
       }
-      case <u32>NativeType.I31ref: {
+      case <u32>TypeRef.I31ref: {
         let tempI31refs = parentFunction.tempI31refs;
         if (tempI31refs) temps = tempI31refs;
         else parentFunction.tempI31refs = temps = [];
         break;
       }
-      case <u32>NativeType.Dataref: {
+      case <u32>TypeRef.Dataref: {
         let tempDatarefs = parentFunction.tempDatarefs;
         if (tempDatarefs) temps = tempDatarefs;
         else parentFunction.tempDatarefs = temps = [];
@@ -1024,8 +1024,8 @@ export class Flow {
           // Logical AND: (if (condition ifTrue 0))
           // the only way this had become true is if condition and ifTrue are true
           if (
-            (getExpressionType(ifFalse) == NativeType.I32 && getConstValueI32(ifFalse) == 0) ||
-            (getExpressionType(ifFalse) == NativeType.I64 && getConstValueI64Low(ifFalse) == 0 && getConstValueI64High(ifFalse) == 0)
+            (getExpressionType(ifFalse) == TypeRef.I32 && getConstValueI32(ifFalse) == 0) ||
+            (getExpressionType(ifFalse) == TypeRef.I64 && getConstValueI64Low(ifFalse) == 0 && getConstValueI64High(ifFalse) == 0)
           ) {
             this.inheritNonnullIfTrue(getIfCondition(expr), iff);
             this.inheritNonnullIfTrue(getIfTrue(expr), iff);
@@ -1119,8 +1119,8 @@ export class Flow {
           // the only way this had become false is if condition and ifFalse are false
           let exprType = getExpressionType(ifTrue);
           if (
-            (exprType == NativeType.I32 && getConstValueI32(ifTrue) != 0) ||
-            (exprType == NativeType.I64 && (getConstValueI64Low(ifTrue) != 0 || getConstValueI64High(ifTrue) != 0))
+            (exprType == TypeRef.I32 && getConstValueI32(ifTrue) != 0) ||
+            (exprType == TypeRef.I64 && (getConstValueI64Low(ifTrue) != 0 || getConstValueI64High(ifTrue) != 0))
           ) {
             this.inheritNonnullIfFalse(getIfCondition(expr), iff);
             this.inheritNonnullIfFalse(getIfFalse(expr), iff);
@@ -1359,10 +1359,10 @@ export class Flow {
       case ExpressionId.Const: {
         let value: i32 = 0;
         switch (<u32>getExpressionType(expr)) {
-          case <u32>NativeType.I32: { value = getConstValueI32(expr); break; }
-          case <u32>NativeType.I64: { value = getConstValueI64Low(expr); break; } // discards upper bits
-          case <u32>NativeType.F32: { value = i32(getConstValueF32(expr)); break; }
-          case <u32>NativeType.F64: { value = i32(getConstValueF64(expr)); break; }
+          case <u32>TypeRef.I32: { value = getConstValueI32(expr); break; }
+          case <u32>TypeRef.I64: { value = getConstValueI64Low(expr); break; } // discards upper bits
+          case <u32>TypeRef.F32: { value = i32(getConstValueF32(expr)); break; }
+          case <u32>TypeRef.F64: { value = i32(getConstValueF64(expr)); break; }
           default: assert(false);
         }
         switch (type.kind) {

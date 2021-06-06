@@ -22,7 +22,7 @@ import {
   ExternalKind,
   Index,
   Module,
-  NativeType,
+  TypeRef,
   UnaryOp
 } from "../module";
 
@@ -80,7 +80,7 @@ export class MiniStack extends Pass {
       var params = _BinaryenFunctionGetParams(functionRef);
       var results = _BinaryenFunctionGetResults(functionRef);
       let numLocals = _BinaryenFunctionGetNumLocals(functionRef);
-      var vars = new Array<NativeType>();
+      var vars = new Array<TypeRef>();
 
       // Prepare a call to the original function
       var paramTypes = expandType(params);
@@ -97,13 +97,13 @@ export class MiniStack extends Pass {
         stmts.push(
           module.global_set(STACK_DEPTH,
             module.binary(BinaryOp.AddI32,
-              module.global_get(STACK_DEPTH, NativeType.I32),
+              module.global_get(STACK_DEPTH, TypeRef.I32),
               module.i32(1) // only need to know > 0
             )
           )
         );
       }
-      if (results == NativeType.None) {
+      if (results == TypeRef.None) {
         stmts.push(
           call
         );
@@ -117,7 +117,7 @@ export class MiniStack extends Pass {
         stmts.push(
           module.global_set(STACK_DEPTH,
             module.binary(BinaryOp.SubI32,
-              module.global_get(STACK_DEPTH, NativeType.I32),
+              module.global_get(STACK_DEPTH, TypeRef.I32),
               module.i32(1) // only need to know > 0
             )
           )
@@ -134,12 +134,12 @@ export class MiniStack extends Pass {
       stmts.push(
         module.if(
           module.unary(UnaryOp.EqzI32,
-            module.global_get(STACK_DEPTH, NativeType.I32)
+            module.global_get(STACK_DEPTH, TypeRef.I32)
           ),
-          module.call(AUTOCOLLECT, null, NativeType.None)
+          module.call(AUTOCOLLECT, null, TypeRef.None)
         )
       );
-      if (results != NativeType.None) {
+      if (results != TypeRef.None) {
         stmts.push(
           module.local_get(numParams, results)
         );
@@ -173,7 +173,7 @@ export class MiniStack extends Pass {
         for (let i = 0; i < numFunctionExports; ++i) {
           this.instrumentFunctionExport(functionExportRefs[i]);
         }
-        module.addGlobal(STACK_DEPTH, NativeType.I32, true, module.i32(0));
+        module.addGlobal(STACK_DEPTH, TypeRef.I32, true, module.i32(0));
         return true;
       }
     }
