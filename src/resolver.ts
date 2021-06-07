@@ -3347,11 +3347,10 @@ export class Resolver extends DiagnosticEmitter {
     node: NamedTypeNode,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
-  ): TypeNode | null { 
+  ): TypeNode | null {
     var typeArgumentNodes = node.typeArguments;
-    if (!typeArgumentNodes || typeArgumentNodes.length != 1) {
-      let numTypeArguments = 0;
-      if (typeArgumentNodes) numTypeArguments = typeArgumentNodes.length;
+    const numTypeArguments = typeArgumentNodes ? typeArgumentNodes.length : 0;
+    if (typeArgumentNodes == null || numTypeArguments != 0) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
