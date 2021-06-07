@@ -3346,7 +3346,8 @@ export class Resolver extends DiagnosticEmitter {
     /** The type to resolve. */
     node: NamedTypeNode,
     /** How to proceed with eventual diagnostics. */
-    reportMode: ReportMode = ReportMode.REPORT): TypeNode | null { 
+    reportMode: ReportMode = ReportMode.REPORT
+  ): TypeNode | null { 
     var typeArgumentNodes = node.typeArguments;
     if (!typeArgumentNodes || typeArgumentNodes.length != 1) {
       let numTypeArguments = 0;
