@@ -2014,9 +2014,10 @@
       i32.const 0
      else
       local.get $0
-      i32.load8_s
+      i32.load8_u
       local.get $1
-      i32.extend8_s
+      i32.const 255
+      i32.and
       i32.eq
      end
      br_if $__inlined_func$~lib/map/Map<i8,i32>#find
@@ -3419,9 +3420,10 @@
       i32.const 0
      else
       local.get $1
-      i32.load8_s
+      i32.load8_u
       local.get $2
-      i32.extend8_s
+      i32.const 255
+      i32.and
       i32.eq
      end
      br_if $__inlined_func$~lib/map/Map<i8,i32>#find
@@ -3666,9 +3668,10 @@
          i32.const 0
         else
          local.get $3
-         i32.load8_s
+         i32.load8_u
          local.get $1
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find
@@ -3750,9 +3753,10 @@
          i32.const 0
         else
          local.get $3
-         i32.load8_s
+         i32.load8_u
          local.get $1
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find1
@@ -3871,9 +3875,10 @@
          i32.const 0
         else
          local.get $3
-         i32.load8_s
+         i32.load8_u
          local.get $1
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find4
@@ -3972,9 +3977,10 @@
          i32.const 0
         else
          local.get $3
-         i32.load8_s
+         i32.load8_u
          local.get $1
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find7
@@ -4327,9 +4333,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load8_s
+         i32.load8_u
          local.get $2
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find11
@@ -4408,9 +4415,10 @@
          i32.const 0
         else
          local.get $0
-         i32.load8_s
+         i32.load8_u
          local.get $4
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find14
@@ -4501,9 +4509,10 @@
          i32.const 0
         else
          local.get $0
-         i32.load8_s
+         i32.load8_u
          local.get $4
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i8>#find
@@ -4844,9 +4853,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load8_s
+         i32.load8_u
          local.get $2
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find20
@@ -4941,9 +4951,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load8_s
+         i32.load8_u
          local.get $2
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find23
@@ -5045,9 +5056,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load8_s
+         i32.load8_u
          local.get $2
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find26
@@ -5129,9 +5141,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load8_s
+         i32.load8_u
          local.get $2
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find29
@@ -5210,9 +5223,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load8_s
+         i32.load8_u
          local.get $2
-         i32.extend8_s
+         i32.const 255
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i8,i32>#find32
@@ -7661,9 +7675,10 @@
       i32.const 0
      else
       local.get $0
-      i32.load16_s
+      i32.load16_u
       local.get $1
-      i32.extend16_s
+      i32.const 65535
+      i32.and
       i32.eq
      end
      br_if $__inlined_func$~lib/map/Map<i16,i32>#find
@@ -7785,9 +7800,10 @@
       i32.const 0
      else
       local.get $1
-      i32.load16_s
+      i32.load16_u
       local.get $2
-      i32.extend16_s
+      i32.const 65535
+      i32.and
       i32.eq
      end
      br_if $__inlined_func$~lib/map/Map<i16,i32>#find
@@ -8001,9 +8017,10 @@
          i32.const 0
         else
          local.get $3
-         i32.load16_s
+         i32.load16_u
          local.get $1
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find
@@ -8085,9 +8102,10 @@
          i32.const 0
         else
          local.get $3
-         i32.load16_s
+         i32.load16_u
          local.get $1
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find1
@@ -8206,9 +8224,10 @@
          i32.const 0
         else
          local.get $3
-         i32.load16_s
+         i32.load16_u
          local.get $1
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find4
@@ -8307,9 +8326,10 @@
          i32.const 0
         else
          local.get $3
-         i32.load16_s
+         i32.load16_u
          local.get $1
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find7
@@ -8666,9 +8686,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load16_s
+         i32.load16_u
          local.get $2
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find11
@@ -8747,9 +8768,10 @@
          i32.const 0
         else
          local.get $0
-         i32.load16_s
+         i32.load16_u
          local.get $4
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find14
@@ -8840,9 +8862,10 @@
          i32.const 0
         else
          local.get $0
-         i32.load16_s
+         i32.load16_u
          local.get $4
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i16>#find
@@ -9183,9 +9206,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load16_s
+         i32.load16_u
          local.get $2
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find20
@@ -9280,9 +9304,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load16_s
+         i32.load16_u
          local.get $2
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find23
@@ -9384,9 +9409,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load16_s
+         i32.load16_u
          local.get $2
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find26
@@ -9468,9 +9494,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load16_s
+         i32.load16_u
          local.get $2
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find29
@@ -9549,9 +9576,10 @@
          i32.const 0
         else
          local.get $16
-         i32.load16_s
+         i32.load16_u
          local.get $2
-         i32.extend16_s
+         i32.const 65535
+         i32.and
          i32.eq
         end
         br_if $__inlined_func$~lib/map/Map<i16,i32>#find32
@@ -22425,9 +22453,10 @@
       i32.const 0
      else
       local.get $1
-      i32.load8_s
+      i32.load8_u
       local.get $3
-      i32.extend8_s
+      i32.const 255
+      i32.and
       i32.eq
      end
      br_if $__inlined_func$~lib/map/Map<i8,i32>#find
@@ -23196,9 +23225,10 @@
       i32.const 0
      else
       local.get $1
-      i32.load16_s
+      i32.load16_u
       local.get $3
-      i32.extend16_s
+      i32.const 65535
+      i32.and
       i32.eq
      end
      br_if $__inlined_func$~lib/map/Map<i16,i32>#find
