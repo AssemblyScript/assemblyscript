@@ -1587,7 +1587,7 @@ export class Resolver extends DiagnosticEmitter {
         case TypeKind.F64: return Type.f64;
       }
     }
-    // otherwise compile to best fitting native type
+    // otherwise compile to best fitting type
     if (i64_is_i32(intValue)) return Type.i32;
     if (i64_is_u32(intValue)) return Type.u32;
     return Type.i64; // TODO: u64 if positive and larger than i64?

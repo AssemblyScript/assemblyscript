@@ -10,7 +10,7 @@ import {
   FunctionRef,
   GlobalRef,
   Index,
-  CString
+  StringRef
 } from "../module";
 
 import {
@@ -472,11 +472,11 @@ export abstract class Visitor {
 
   // Immediates
 
-  visitName(name: CString): void {
+  visitName(name: StringRef): void {
     // unimp
   }
 
-  visitLabel(name: CString): void {
+  visitLabel(name: StringRef): void {
     // unimp
   }
 
@@ -484,7 +484,7 @@ export abstract class Visitor {
     // unimp
   }
 
-  visitEvent(name: CString): void {
+  visitEvent(name: StringRef): void {
     // unimp
   }
 

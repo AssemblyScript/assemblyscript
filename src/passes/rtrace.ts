@@ -19,7 +19,7 @@ import {
 import {
   createType,
   ExpressionRef,
-  NativeType
+  TypeRef
 } from "../module";
 
 import {
@@ -35,11 +35,11 @@ export class RtraceMemory extends Pass {
   /** Whether we've seen any stores. */
   seenStores: bool = false;
   /** Target pointer type. */
-  ptrType: NativeType;
+  ptrType: TypeRef;
 
   constructor(compiler: Compiler) {
     super(compiler.module);
-    this.ptrType = compiler.options.nativeSizeType;
+    this.ptrType = compiler.options.sizeTypeRef;
   }
 
   checkRT(): bool {
@@ -72,7 +72,7 @@ export class RtraceMemory extends Pass {
     super.walkModule();
     if (this.seenStores) {
       this.module.addFunctionImport("~onstore", "rtrace", "onstore",
-        createType([ this.ptrType, NativeType.I32, NativeType.I32, NativeType.I32 ]),
+        createType([ this.ptrType, TypeRef.I32, TypeRef.I32, TypeRef.I32 ]),
         this.ptrType
       );
     }
