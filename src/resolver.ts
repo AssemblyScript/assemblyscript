@@ -296,7 +296,7 @@ export class Resolver extends DiagnosticEmitter {
         if (text == CommonNames.indexof) return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
         if (text == CommonNames.valueof) return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
         if (text == CommonNames.returnof) return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
-        if (text == CommonNames.notnullable) return this.resolveBuiltinNotNullableType(node, ctxElement, ctxTypes, reportMode);
+        if (text == CommonNames.nonnull) return this.resolveBuiltinNotNullableType(node, ctxElement, ctxTypes, reportMode);
       }
 
       // Resolve normally

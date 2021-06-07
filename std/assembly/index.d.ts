@@ -1316,6 +1316,8 @@ declare type ReturnType<T extends (...args: any) => any> = T extends (...args: a
 declare type returnof<T extends (...args: any) => any> = ReturnType<T>;
 /** A special type that excludes null and undefined from T. */
 declare type NonNullable<T> = T extends null | undefined ? never : T;
+/** A special type that excludes null and undefined from T. */
+declare type nonnull<T> = NonNullable<T>;
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {

@@ -17,5 +17,5 @@ function safetyCheck<A>(t: A): void {
 
 let z: nullableString = "z";
 
-assertNonNull<NonNullable<nullableString>>(z!);
+assertNonNull<nonnull<nullableString>>(z!);
 safetyCheck(z);
