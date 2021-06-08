@@ -296,6 +296,7 @@ export class Resolver extends DiagnosticEmitter {
         if (text == CommonNames.indexof) return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
         if (text == CommonNames.valueof) return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
         if (text == CommonNames.returnof) return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
+        if (text == CommonNames.nonnull) return this.resolveBuiltinNotNullableType(node, ctxElement, ctxTypes, reportMode);
       }
 
       // Resolve normally
@@ -438,19 +439,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    var typeArgumentNodes = node.typeArguments;
-    if (!typeArgumentNodes || typeArgumentNodes.length != 1) {
-      if (reportMode == ReportMode.REPORT) {
-        let numTypeArguments = 0;
-        if (typeArgumentNodes) numTypeArguments = typeArgumentNodes.length;
-        this.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          node.range, "1", numTypeArguments.toString()
-        );
-      }
-      return null;
-    }
-    var typeArgument = this.resolveType(typeArgumentNodes[0], ctxElement, ctxTypes, reportMode);
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
+    if (!typeArgumentNode) return null;
+    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     switch (typeArgument.kind) {
       case TypeKind.I8:
@@ -483,26 +474,16 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    var typeArgumentNodes = node.typeArguments;
-    if (!typeArgumentNodes || typeArgumentNodes.length != 1) {
-      if (reportMode == ReportMode.REPORT) {
-        let numTypeArguments = 0;
-        if (typeArgumentNodes) numTypeArguments = typeArgumentNodes.length;
-        this.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          node.range, "1", numTypeArguments.toString()
-        );
-      }
-      return null;
-    }
-    var typeArgument = this.resolveType(typeArgumentNodes[0], ctxElement, ctxTypes, reportMode);
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
+    if (!typeArgumentNode) return null;
+    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     var classReference = typeArgument.classReference;
     if (!classReference) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
           DiagnosticCode.Index_signature_is_missing_in_type_0,
-          typeArgumentNodes[0].range, typeArgument.toString()
+          typeArgumentNode.range, typeArgument.toString()
         );
       }
       return null;
@@ -520,7 +501,7 @@ export class Resolver extends DiagnosticEmitter {
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Index_signature_is_missing_in_type_0,
-        typeArgumentNodes[0].range, typeArgument.toString()
+        typeArgumentNode.range, typeArgument.toString()
       );
     }
     return null;
@@ -536,19 +517,9 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    var typeArgumentNodes = node.typeArguments;
-    if (!typeArgumentNodes || typeArgumentNodes.length != 1) {
-      let numTypeArguments = 0;
-      if (typeArgumentNodes) numTypeArguments = typeArgumentNodes.length;
-      if (reportMode == ReportMode.REPORT) {
-        this.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          node.range, "1", numTypeArguments.toString()
-        );
-      }
-      return null;
-    }
-    var typeArgument = this.resolveType(typeArgumentNodes[0], ctxElement, ctxTypes, reportMode);
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
+    if (!typeArgumentNode) return null;
+    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     var classReference = typeArgument.getClassOrWrapper(this.program);
     if (classReference) {
@@ -558,7 +529,7 @@ export class Resolver extends DiagnosticEmitter {
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Index_signature_is_missing_in_type_0,
-        typeArgumentNodes[0].range, typeArgument.toString()
+        typeArgumentNode.range, typeArgument.toString()
       );
     }
     return null;
@@ -574,29 +545,37 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventualy diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    var typeArgumentNodes = node.typeArguments;
-    if (!typeArgumentNodes || typeArgumentNodes.length != 1) {
-      if (reportMode == ReportMode.REPORT) {
-        let numTypeArguments = 0;
-        if (typeArgumentNodes) numTypeArguments = typeArgumentNodes.length;
-        this.error(
-          DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          node.range, "1", numTypeArguments.toString()
-        );
-      }
-      return null;
-    }
-    var typeArgument = this.resolveType(typeArgumentNodes[0], ctxElement, ctxTypes, reportMode);
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
+    if (!typeArgumentNode) return null;
+    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
     var signatureReference = typeArgument.getSignature();
     if (signatureReference) return signatureReference.returnType;
     if (reportMode == ReportMode.REPORT) {
       this.error(
         DiagnosticCode.Type_0_has_no_call_signatures,
-        typeArgumentNodes[0].range, typeArgument.toString()
+        typeArgumentNode.range, typeArgument.toString()
       );
     }
     return null;
+  }
+
+  private resolveBuiltinNotNullableType(
+    /** The type to resolve. */
+    node: NamedTypeNode,
+    /** Contextual element. */
+    ctxElement: Element,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> | null = null,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Type | null {
+    const typeArgumentNode = this.ensureOneTypeArgument(node, reportMode);
+    if (!typeArgumentNode) return null;
+    var typeArgument = this.resolveType(typeArgumentNode, ctxElement, ctxTypes, reportMode);
+    if (!typeArgument) return null;
+    if (!typeArgument.isNullableReference) return typeArgument;
+    return typeArgument.nonNullableType;
   }
 
   /** Resolves a type name to the program element it refers to. */
@@ -3361,5 +3340,25 @@ export class Resolver extends DiagnosticEmitter {
       }
     }
     return instance;
+  }
+
+  private ensureOneTypeArgument(
+    /** The type to resolve. */
+    node: NamedTypeNode,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): TypeNode | null {
+    var typeArgumentNodes = node.typeArguments;
+    let numTypeArguments = 0;
+    if (!typeArgumentNodes || (numTypeArguments = typeArgumentNodes.length) != 1) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          node.range, "1", numTypeArguments.toString()
+        );
+      }
+      return null;
+    }
+    return typeArgumentNodes[0];
   }
 }

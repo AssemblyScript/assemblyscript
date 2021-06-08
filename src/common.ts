@@ -147,6 +147,7 @@ export namespace CommonNames {
   export const indexof = "indexof";
   export const valueof = "valueof";
   export const returnof = "returnof";
+  export const nonnull = "nonnull";
   // aliases
   export const null_ = "null";
   export const true_ = "true";
