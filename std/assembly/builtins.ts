@@ -2302,11 +2302,17 @@ export abstract class i31 { // FIXME: usage of 'new' requires a class :(
 
   // @ts-ignore: decorator
   @builtin
-  static new(value: i32): i31ref { return unreachable(); }
+  static new(value: i32): i31ref { 
+    unreachable();
+    return 0;
+  }
 
   // @ts-ignore: decorator
   @builtin
-  static get(i31expr: i31ref): i32 { return unreachable(); }
+  static get(i31expr: i31ref): i32 { 
+    unreachable();
+    return 0;
+  }
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
