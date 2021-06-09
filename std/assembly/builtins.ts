@@ -170,7 +170,7 @@ export declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 
 // @ts-ignore: decorator
 @unsafe @builtin
-export declare function unreachable(): void;
+export declare function unreachable(): auto;
 
 // @ts-ignore: decorator
 @builtin
@@ -2302,7 +2302,7 @@ export abstract class i31 { // FIXME: usage of 'new' requires a class :(
 
   // @ts-ignore: decorator
   @builtin
-  static new(value: i32): i31ref { return unreachable(); }
+  static new(value: i32): i31ref { return changetype<i31ref>(unreachable()); }
 
   // @ts-ignore: decorator
   @builtin
