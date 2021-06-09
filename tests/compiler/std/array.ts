@@ -95,37 +95,37 @@ class Ref {
 
 {
   assert(arr.length == 0);
-  assert(internalCapacity<i32>(arr) == 0);
+  assert(internalCapacity<i32>(arr) == 8);
 
   arr.push(42);
 
   assert(arr[0] == 42);
   assert(arr.length == 1);
-  assert(internalCapacity<i32>(arr) == 1);
+  assert(internalCapacity<i32>(arr) == 8);
 
   let i = arr.pop();
 
   assert(i == 42);
   assert(arr.length == 0);
-  assert(internalCapacity<i32>(arr) == 1);
+  assert(internalCapacity<i32>(arr) == 8);
 
   arr.push(43);
 
   assert(arr.length == 1);
-  assert(internalCapacity<i32>(arr) == 1);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(arr[0] == 43);
 
   arr.push(44);
 
   assert(arr.length == 2);
-  assert(internalCapacity<i32>(arr) == 2);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(arr[0] == 43);
   assert(arr[1] == 44);
 
   arr.push(45);
 
   assert(arr.length == 3);
-  assert(internalCapacity<i32>(arr) == 3);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(arr[0] == 43);
   assert(arr[1] == 44);
   assert(arr[2] == 45);
@@ -156,12 +156,12 @@ class Ref {
   let other = new Array<i32>();
 
   let out = arr.concat(other);
-  assert(internalCapacity<i32>(arr) == 3);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(arr.length == 3);
   assert(out.length == 3);
 
   out.concat([]);
-  assert(internalCapacity<i32>(arr) == 3);
+  assert(internalCapacity<i32>(arr) == 8);
 
   assert(out[0] == 43);
   assert(out[1] == 44);
@@ -172,7 +172,7 @@ class Ref {
 
   out = arr.concat(other);
 
-  assert(internalCapacity<i32>(arr) == 3);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(other.length == 2);
   assert(out.length == 5);
   assert(out[0] == 43);
@@ -231,7 +231,7 @@ class Ref {
   arr.unshift(42);
 
   assert(arr.length == 4);
-  assert(internalCapacity<i32>(arr) == 4);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(arr[0] == 42);
   assert(arr[1] == 43);
   assert(arr[2] == 44);
@@ -240,7 +240,7 @@ class Ref {
   arr.unshift(41);
 
   assert(arr.length == 5);
-  assert(internalCapacity<i32>(arr) == 5);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(arr[0] == 41);
   assert(arr[1] == 42);
   assert(arr[2] == 43);
@@ -256,7 +256,7 @@ var i: i32;
 
   assert(i == 41);
   assert(arr.length == 4);
-  assert(internalCapacity<i32>(arr) == 5);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(arr[0] == 42);
   assert(arr[1] == 43);
   assert(arr[2] == 44);
@@ -266,7 +266,7 @@ var i: i32;
 
   assert(i == 45);
   assert(arr.length == 3);
-  assert(internalCapacity<i32>(arr) == 5);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(arr[0] == 42);
   assert(arr[1] == 43);
   assert(arr[2] == 44);
@@ -309,7 +309,7 @@ var i: i32;
   arr.reverse();
 
   assert(arr.length == 3);
-  assert(internalCapacity<i32>(arr) == 5);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(arr[0] == 44);
   assert(arr[1] == 43);
   assert(arr[2] == 42);
@@ -407,7 +407,7 @@ var i: i32;
   arr.splice(1, 1);
 
   assert(arr.length == 4);
-  assert(internalCapacity<i32>(arr) == 5);
+  assert(internalCapacity<i32>(arr) == 8);
   assert(arr[0] == 44);
   assert(arr[1] == 42);
 }

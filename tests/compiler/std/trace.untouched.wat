@@ -1,7 +1,7 @@
 (module
  (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__data_end i32 (i32.const 396))
@@ -18,6 +18,7 @@
  (data (i32.const 300) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00i\00n\00t\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 348) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00d\00b\00l\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $~start

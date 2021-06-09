@@ -8,9 +8,9 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
- (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
+ (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
+ (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -55,6 +55,7 @@
  (data (i32.const 956) "|\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 1088) "\0c\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\t\00\00\00\00\00\00\02\1a\00\00\00\00\00\00\02\01\00\00\00\00\00\00\02\19\00\00\00\00\00\00 \00\00\00\00\00\00\00\02a\00\00\00\00\00\00\02a\00\00\00\00\00\00\02\01\00\00\00\00\00\00\02A\00\00\00\00\00\00")
  (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
@@ -1608,12 +1609,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 64
    i32.const 400
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -3707,7 +3708,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3733,7 +3734,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3759,7 +3760,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3785,7 +3786,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3827,7 +3828,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4603,7 +4604,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4649,7 +4650,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4695,7 +4696,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -4720,7 +4721,7 @@
   if
    i32.const 976
    i32.const 464
-   i32.const 96
+   i32.const 103
    i32.const 40
    call $~lib/builtins/abort
    unreachable

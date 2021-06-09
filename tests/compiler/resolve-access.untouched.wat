@@ -7,14 +7,14 @@
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
- (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i64_=>_none (func (param i32 i64)))
- (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
- (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
+ (type $i32_i64_=>_none (func (param i32 i64)))
+ (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -52,6 +52,7 @@
  (data (i32.const 2172) "\\\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00H\00\00\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00\00\00\00\00")
  (data (i32.const 2272) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\02\02\00\00\00\00\00\00\02\t\00\00\00\00\00\00 \00\00\00\00\00\00\00")
  (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "arrayAccess" (func $resolve-access/arrayAccess))
  (export "fieldAccess" (func $resolve-access/fieldAccess))
  (export "propertyAccess" (func $resolve-access/propertyAccess))
@@ -1608,12 +1609,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 64
    i32.const 400
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -3707,7 +3708,7 @@
   if
    i32.const 256
    i32.const 464
-   i32.const 92
+   i32.const 99
    i32.const 42
    call $~lib/builtins/abort
    unreachable

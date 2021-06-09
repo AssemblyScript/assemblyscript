@@ -58,8 +58,10 @@ import {
   SIMDReplaceOp,
   SIMDShiftOp,
   SIMDTernaryOp,
+  SIMDLoadOp,
+  SIMDLoadStoreLaneOp,
   RefIsOp,
-  NativeType,
+  TypeRef,
   ExpressionRef,
   ExpressionId,
   getExpressionId,
@@ -69,7 +71,6 @@ import {
   getConstValueI32,
   getConstValueF32,
   getConstValueF64,
-  SIMDLoadOp,
   getLocalGetIndex,
   createType,
   ExpressionRunnerFlags
@@ -353,6 +354,9 @@ export namespace BuiltinNames {
   export const v128_swizzle = "~lib/builtins/v128.swizzle";
   export const v128_load_splat = "~lib/builtins/v128.load_splat";
   export const v128_load_ext = "~lib/builtins/v128.load_ext";
+  export const v128_load_zero = "~lib/builtins/v128.load_zero";
+  export const v128_load_lane = "~lib/builtins/v128.load_lane";
+  export const v128_store_lane = "~lib/builtins/v128.store_lane";
   export const v128_load = "~lib/builtins/v128.load";
   export const v128_load8x8_s = "~lib/builtins/v128.load8x8_s";
   export const v128_load8x8_u = "~lib/builtins/v128.load8x8_u";
@@ -364,6 +368,16 @@ export namespace BuiltinNames {
   export const v128_load16_splat = "~lib/builtins/v128.load16_splat";
   export const v128_load32_splat = "~lib/builtins/v128.load32_splat";
   export const v128_load64_splat = "~lib/builtins/v128.load64_splat";
+  export const v128_load32_zero = "~lib/builtins/v128.load32_zero";
+  export const v128_load64_zero = "~lib/builtins/v128.load64_zero";
+  export const v128_load8_lane = "~lib/builtins/v128.load8_lane";
+  export const v128_load16_lane = "~lib/builtins/v128.load16_lane";
+  export const v128_load32_lane = "~lib/builtins/v128.load32_lane";
+  export const v128_load64_lane = "~lib/builtins/v128.load64_lane";
+  export const v128_store8_lane = "~lib/builtins/v128.store8_lane";
+  export const v128_store16_lane = "~lib/builtins/v128.store16_lane";
+  export const v128_store32_lane = "~lib/builtins/v128.store32_lane";
+  export const v128_store64_lane = "~lib/builtins/v128.store64_lane";
   export const v128_store = "~lib/builtins/v128.store";
   export const v128_add = "~lib/builtins/v128.add";
   export const v128_sub = "~lib/builtins/v128.sub";
@@ -403,10 +417,18 @@ export namespace BuiltinNames {
   export const v128_gt = "~lib/builtins/v128.gt";
   export const v128_ge = "~lib/builtins/v128.ge";
   export const v128_convert = "~lib/builtins/v128.convert";
+  export const v128_convert_low = "~lib/builtins/v128.convert_low";
   export const v128_trunc_sat = "~lib/builtins/v128.trunc_sat";
+  export const v128_trunc_sat_zero = "~lib/builtins/v128.trunc_sat_zero";
   export const v128_narrow = "~lib/builtins/v128.narrow";
   export const v128_extend_low = "~lib/builtins/v128.extend_low";
   export const v128_extend_high = "~lib/builtins/v128.extend_high";
+  export const v128_extadd_pairwise = "~lib/builtins/v128.extadd_pairwise";
+  export const v128_demote_zero = "~lib/builtins/v128.demote_zero";
+  export const v128_promote_low = "~lib/builtins/v128.promote_low";
+  export const v128_q15mulr_sat = "~lib/builtins/v128.q15mulr_sat";
+  export const v128_extmul_low = "~lib/builtins/v128.extmul_low";
+  export const v128_extmul_high = "~lib/builtins/v128.extmul_high";
 
   export const i8x16 = "~lib/builtins/i8x16";
   export const i16x8 = "~lib/builtins/i16x8";
@@ -493,6 +515,13 @@ export namespace BuiltinNames {
   export const i16x8_extend_low_i8x16_u = "~lib/builtins/i16x8.extend_low_i8x16_u";
   export const i16x8_extend_high_i8x16_s = "~lib/builtins/i16x8.extend_high_i8x16_s";
   export const i16x8_extend_high_i8x16_u = "~lib/builtins/i16x8.extend_high_i8x16_u";
+  export const i16x8_extadd_pairwise_i8x16_s = "~lib/builtins/i16x8.extadd_pairwise_i8x16_s";
+  export const i16x8_extadd_pairwise_i8x16_u = "~lib/builtins/i16x8.extadd_pairwise_i8x16_u";
+  export const i16x8_q15mulr_sat_s = "~lib/builtins/i16x8.q15mulr_sat_s";
+  export const i16x8_extmul_low_i8x16_s = "~lib/builtins/i16x8.extmul_low_i8x16_s";
+  export const i16x8_extmul_low_i8x16_u = "~lib/builtins/i16x8.extmul_low_i8x16_u";
+  export const i16x8_extmul_high_i8x16_s = "~lib/builtins/i16x8.extmul_high_i8x16_s";
+  export const i16x8_extmul_high_i8x16_u = "~lib/builtins/i16x8.extmul_high_i8x16_u";
 
   export const i32x4_splat = "~lib/builtins/i32x4.splat";
   export const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
@@ -524,10 +553,18 @@ export namespace BuiltinNames {
   export const i32x4_ge_u = "~lib/builtins/i32x4.ge_u";
   export const i32x4_trunc_sat_f32x4_s = "~lib/builtins/i32x4.trunc_sat_f32x4_s";
   export const i32x4_trunc_sat_f32x4_u = "~lib/builtins/i32x4.trunc_sat_f32x4_u";
+  export const i32x4_trunc_sat_f64x2_s_zero = "~lib/builtins/i32x4.trunc_sat_f64x2_s_zero";
+  export const i32x4_trunc_sat_f64x2_u_zero = "~lib/builtins/i32x4.trunc_sat_f64x2_u_zero";
   export const i32x4_extend_low_i16x8_s = "~lib/builtins/i32x4.extend_low_i16x8_s";
   export const i32x4_extend_low_i16x8_u = "~lib/builtins/i32x4.extend_low_i16x8_u";
   export const i32x4_extend_high_i16x8_s = "~lib/builtins/i32x4.extend_high_i16x8_s";
   export const i32x4_extend_high_i16x8_u = "~lib/builtins/i32x4.extend_high_i16x8_u";
+  export const i32x4_extadd_pairwise_i16x8_s = "~lib/builtins/i32x4.extadd_pairwise_i16x8_s";
+  export const i32x4_extadd_pairwise_i16x8_u = "~lib/builtins/i32x4.extadd_pairwise_i16x8_u";
+  export const i32x4_extmul_low_i16x8_s = "~lib/builtins/i32x4.extmul_low_i16x8_s";
+  export const i32x4_extmul_low_i16x8_u = "~lib/builtins/i32x4.extmul_low_i16x8_u";
+  export const i32x4_extmul_high_i16x8_s = "~lib/builtins/i32x4.extmul_high_i16x8_s";
+  export const i32x4_extmul_high_i16x8_u = "~lib/builtins/i32x4.extmul_high_i16x8_u";
 
   export const i64x2_splat = "~lib/builtins/i64x2.splat";
   export const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
@@ -556,6 +593,10 @@ export namespace BuiltinNames {
   export const i64x2_extend_low_i32x4_u = "~lib/builtins/i64x2.extend_low_i32x4_u";
   export const i64x2_extend_high_i32x4_s = "~lib/builtins/i64x2.extend_high_i32x4_s";
   export const i64x2_extend_high_i32x4_u = "~lib/builtins/i64x2.extend_high_i32x4_u";
+  export const i64x2_extmul_low_i32x4_s = "~lib/builtins/i64x2.extmul_low_i32x4_s";
+  export const i64x2_extmul_low_i32x4_u = "~lib/builtins/i64x2.extmul_low_i32x4_u";
+  export const i64x2_extmul_high_i32x4_s = "~lib/builtins/i64x2.extmul_high_i32x4_s";
+  export const i64x2_extmul_high_i32x4_u = "~lib/builtins/i64x2.extmul_high_i32x4_u";
 
   export const f32x4_splat = "~lib/builtins/f32x4.splat";
   export const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
@@ -583,6 +624,7 @@ export namespace BuiltinNames {
   export const f32x4_ge = "~lib/builtins/f32x4.ge";
   export const f32x4_convert_i32x4_s = "~lib/builtins/f32x4.convert_i32x4_s";
   export const f32x4_convert_i32x4_u = "~lib/builtins/f32x4.convert_i32x4_u";
+  export const f32x4_demote_f64x2_zero = "~lib/builtins/f32x4.demote_f64x2_zero";
 
   export const f64x2_splat = "~lib/builtins/f64x2.splat";
   export const f64x2_extract_lane = "~lib/builtins/f64x2.extract_lane";
@@ -608,6 +650,9 @@ export namespace BuiltinNames {
   export const f64x2_le = "~lib/builtins/f64x2.le";
   export const f64x2_gt = "~lib/builtins/f64x2.gt";
   export const f64x2_ge = "~lib/builtins/f64x2.ge";
+  export const f64x2_convert_low_i32x4_s = "~lib/builtins/f64x2.convert_low_i32x4_s";
+  export const f64x2_convert_low_i32x4_u = "~lib/builtins/f64x2.convert_low_i32x4_u";
+  export const f64x2_promote_low_f32x4 = "~lib/builtins/f64x2.promote_low_f32x4";
 
   export const i31_new = "~lib/builtins/i31.new";
   export const i31_get = "~lib/builtins/i31.get";
@@ -1216,13 +1261,13 @@ function builtin_rotl(ctx: BuiltinContext): ExpressionRef {
           ),
           module.binary(
             BinaryOp.ShrU32,
-            module.local_get(temp1.index, NativeType.I32),
+            module.local_get(temp1.index, TypeRef.I32),
             module.binary(
               BinaryOp.AndI32,
               module.binary(
                 BinaryOp.SubI32,
                 module.i32(0),
-                module.local_get(temp2.index, NativeType.I32)
+                module.local_get(temp2.index, TypeRef.I32)
               ),
               module.i32(type.size - 1)
             )
@@ -1297,13 +1342,13 @@ function builtin_rotr(ctx: BuiltinContext): ExpressionRef {
           ),
           module.binary(
             BinaryOp.ShlI32,
-            module.local_get(temp1.index, NativeType.I32),
+            module.local_get(temp1.index, TypeRef.I32),
             module.binary(
               BinaryOp.AndI32,
               module.binary(
                 BinaryOp.SubI32,
                 module.i32(0),
-                module.local_get(temp2.index, NativeType.I32)
+                module.local_get(temp2.index, TypeRef.I32)
               ),
               module.i32(type.size - 1)
             )
@@ -1372,9 +1417,9 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
               ),
               false // i32
             ),
-            module.local_get(temp1.index, NativeType.I32)
+            module.local_get(temp1.index, TypeRef.I32)
           ),
-          module.local_get(temp2.index, NativeType.I32)
+          module.local_get(temp2.index, TypeRef.I32)
         );
         flow.freeTempLocal(temp2);
         flow.freeTempLocal(temp1);
@@ -1397,9 +1442,9 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
               ),
               false // i32/i64
             ),
-            module.local_get(temp1.index, options.nativeSizeType)
+            module.local_get(temp1.index, options.sizeTypeRef)
           ),
-          module.local_get(temp2.index, options.nativeSizeType)
+          module.local_get(temp2.index, options.sizeTypeRef)
         );
         flow.freeTempLocal(temp2);
         flow.freeTempLocal(temp1);
@@ -1421,9 +1466,9 @@ function builtin_abs(ctx: BuiltinContext): ExpressionRef {
               ),
               false // i64
             ),
-            module.local_get(temp1.index, NativeType.I64)
+            module.local_get(temp1.index, TypeRef.I64)
           ),
-          module.local_get(temp2.index, NativeType.I64)
+          module.local_get(temp2.index, TypeRef.I64)
         );
         flow.freeTempLocal(temp2);
         flow.freeTempLocal(temp1);
@@ -1500,7 +1545,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
     }
     if (op != -1) {
       let flow = compiler.currentFlow;
-      let nativeType = type.toNativeType();
+      let typeRef = type.toRef();
       let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
       flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
       let temp2 = flow.getTempLocal(type);
@@ -1509,8 +1554,8 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
         module.local_tee(temp1.index, arg0, false), // numeric
         module.local_tee(temp2.index, arg1, false), // numeric
         module.binary(op,
-          module.local_get(temp1.index, nativeType),
-          module.local_get(temp2.index, nativeType)
+          module.local_get(temp1.index, typeRef),
+          module.local_get(temp2.index, typeRef)
         )
       );
       flow.freeTempLocal(temp2);
@@ -1579,7 +1624,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
     }
     if (op != -1) {
       let flow = compiler.currentFlow;
-      let nativeType = type.toNativeType();
+      let typeRef = type.toRef();
       let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
       flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
       let temp2 = flow.getTempLocal(type);
@@ -1588,8 +1633,8 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
         module.local_tee(temp1.index, arg0, false), // numeric
         module.local_tee(temp2.index, arg1, false), // numeric
         module.binary(op,
-          module.local_get(temp1.index, nativeType),
-          module.local_get(temp2.index, nativeType)
+          module.local_get(temp1.index, typeRef),
+          module.local_get(temp2.index, typeRef)
         )
       );
       flow.freeTempLocal(temp2);
@@ -1919,14 +1964,14 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
         if (getExpressionId(arg0) == ExpressionId.LocalGet) {
           return module.binary(BinaryOp.NeF32,
             arg0,
-            module.local_get(getLocalGetIndex(arg0), NativeType.F32)
+            module.local_get(getLocalGetIndex(arg0), TypeRef.F32)
           );
         }
         let flow = compiler.currentFlow;
         let temp = flow.getTempLocal(Type.f32);
         let ret = module.binary(BinaryOp.NeF32,
           module.local_tee(temp.index, arg0, false), // f32
-          module.local_get(temp.index, NativeType.F32)
+          module.local_get(temp.index, TypeRef.F32)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -1935,14 +1980,14 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
         if (getExpressionId(arg0) == ExpressionId.LocalGet) {
           return module.binary(BinaryOp.NeF64,
             arg0,
-            module.local_get(getLocalGetIndex(arg0), NativeType.F64)
+            module.local_get(getLocalGetIndex(arg0), TypeRef.F64)
           );
         }
         let flow = compiler.currentFlow;
         let temp = flow.getTempLocal(Type.f64);
         let ret = module.binary(BinaryOp.NeF64,
           module.local_tee(temp.index, arg0, false), // f64
-          module.local_get(temp.index, NativeType.F64)
+          module.local_get(temp.index, TypeRef.F64)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -1996,7 +2041,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
           return module.binary(BinaryOp.EqF32,
             module.binary(BinaryOp.SubF32,
               arg0,
-              module.local_get(getLocalGetIndex(arg0), NativeType.F32)
+              module.local_get(getLocalGetIndex(arg0), TypeRef.F32)
             ),
             module.f32(0)
           );
@@ -2006,7 +2051,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
         let ret = module.binary(BinaryOp.EqF32,
           module.binary(BinaryOp.SubF32,
             module.local_tee(temp.index, arg0, false), // f32
-            module.local_get(temp.index, NativeType.F32)
+            module.local_get(temp.index, TypeRef.F32)
           ),
           module.f32(0)
         );
@@ -2018,7 +2063,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
           return module.binary(BinaryOp.EqF64,
             module.binary(BinaryOp.SubF64,
               arg0,
-              module.local_get(getLocalGetIndex(arg0), NativeType.F64)
+              module.local_get(getLocalGetIndex(arg0), TypeRef.F64)
             ),
             module.f64(0)
           );
@@ -2028,7 +2073,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
         let ret = module.binary(BinaryOp.EqF64,
           module.binary(BinaryOp.SubF64,
             module.local_tee(temp.index, arg0, false), // f64
-            module.local_get(temp.index, NativeType.F64)
+            module.local_get(temp.index, TypeRef.F64)
           ),
           module.f64(0)
         );
@@ -2088,14 +2133,14 @@ function builtin_load(ctx: BuiltinContext): ExpressionRef {
     type.byteSize,
     type.isSignedIntegerValue,
     arg0,
-    outType.toNativeType(),
+    outType.toRef(),
     immOffset,
     immAlign
   );
 }
 builtins.set(BuiltinNames.load, builtin_load);
 
-// store<T!>(offset: usize, value: T*, offset?: usize, align?: usize) -> void
+// store<T!>(ptr: usize, value: T*, immOffset?: usize, immAlign?: usize) -> void
 function builtin_store(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
@@ -2151,7 +2196,7 @@ function builtin_store(ctx: BuiltinContext): ExpressionRef {
     }
   }
   compiler.currentType = Type.void;
-  return module.store(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset, immAlign);
+  return module.store(type.byteSize, arg0, arg1, inType.toRef(), immOffset, immAlign);
 }
 builtins.set(BuiltinNames.store, builtin_store);
 
@@ -2409,7 +2454,7 @@ function builtin_atomic_load(ctx: BuiltinContext): ExpressionRef {
   return module.atomic_load(
     type.byteSize,
     arg0,
-    outType.toNativeType(),
+    outType.toRef(),
     immOffset
   );
 }
@@ -2468,7 +2513,7 @@ function builtin_atomic_store(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   compiler.currentType = Type.void;
-  return module.atomic_store(type.byteSize, arg0, arg1, inType.toNativeType(), immOffset);
+  return module.atomic_store(type.byteSize, arg0, arg1, inType.toRef(), immOffset);
 }
 builtins.set(BuiltinNames.atomic_store, builtin_atomic_store);
 
@@ -2526,7 +2571,7 @@ function builtin_atomic_binary(ctx: BuiltinContext, op: AtomicRMWOp, opName: str
     return module.unreachable();
   }
   compiler.currentType = inType;
-  return module.atomic_rmw(op, type.byteSize, immOffset, arg0, arg1, inType.toNativeType());
+  return module.atomic_rmw(op, type.byteSize, immOffset, arg0, arg1, inType.toRef());
 }
 
 // atomic.add<T!>(ptr, value: T, immOffset?: usize) -> T
@@ -2624,7 +2669,7 @@ function builtin_atomic_cmpxchg(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   compiler.currentType = inType;
-  return module.atomic_cmpxchg(type.byteSize, immOffset, arg0, arg1, arg2, inType.toNativeType());
+  return module.atomic_cmpxchg(type.byteSize, immOffset, arg0, arg1, arg2, inType.toRef());
 }
 builtins.set(BuiltinNames.atomic_cmpxchg, builtin_atomic_cmpxchg);
 
@@ -2653,7 +2698,7 @@ function builtin_atomic_wait(ctx: BuiltinContext): ExpressionRef {
     case TypeKind.ISIZE:
     case TypeKind.U32:
     case TypeKind.U64:
-    case TypeKind.USIZE: return module.atomic_wait(arg0, arg1, arg2, type.toNativeType());
+    case TypeKind.USIZE: return module.atomic_wait(arg0, arg1, arg2, type.toRef());
   }
   compiler.error(
     DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
@@ -3026,25 +3071,25 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
   var evaled = module.runExpression(arg0, ExpressionRunnerFlags.Default);
   if (evaled) {
     switch (<u32>getExpressionType(evaled)) {
-      case <u32>NativeType.I32: {
+      case <u32>TypeRef.I32: {
         if (getConstValueI32(evaled)) {
           return arg0;
         }
         break;
       }
-      case <u32>NativeType.I64: {
+      case <u32>TypeRef.I64: {
         if (getConstValueI64Low(evaled) | getConstValueI64High(evaled)) {
           return arg0;
         }
         break;
       }
-      case <u32>NativeType.F32: {
+      case <u32>TypeRef.F32: {
         if (getConstValueF32(evaled)) {
           return arg0;
         }
         break;
       }
-      case <u32>NativeType.F64: {
+      case <u32>TypeRef.F64: {
         if (getConstValueF64(evaled)) {
           return arg0;
         }
@@ -3106,7 +3151,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         flow.setLocalFlag(temp.index, LocalFlags.WRAPPED); // arg0 is wrapped
         let ret = module.if(
           module.local_tee(temp.index, arg0, false), // numeric
-          module.local_get(temp.index, NativeType.I32),
+          module.local_get(temp.index, TypeRef.I32),
           abort
         );
         flow.freeTempLocal(temp);
@@ -3120,7 +3165,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             module.local_tee(temp.index, arg0, false) // i64
           ),
           abort,
-          module.local_get(temp.index, NativeType.I64)
+          module.local_get(temp.index, TypeRef.I64)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -3136,7 +3181,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             module.local_tee(temp.index, arg0, type.isManaged)
           ),
           abort,
-          module.local_get(temp.index, compiler.options.nativeSizeType)
+          module.local_get(temp.index, compiler.options.sizeTypeRef)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -3149,7 +3194,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             module.f32(0)
           ),
           abort,
-          module.local_get(temp.index, NativeType.F32)
+          module.local_get(temp.index, TypeRef.F32)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -3162,7 +3207,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             module.f64(0)
           ),
           abort,
-          module.local_get(temp.index, NativeType.F64)
+          module.local_get(temp.index, TypeRef.F64)
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -3179,7 +3224,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
             module.local_tee(temp.index, arg0, false) // ref
           ),
           abort,
-          module.local_get(temp.index, type.toNativeType())
+          module.local_get(temp.index, type.toRef())
         );
         flow.freeTempLocal(temp);
         return ret;
@@ -3233,13 +3278,13 @@ function builtin_call_indirect(ctx: BuiltinContext): ExpressionRef {
   var indexArg = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
   var numOperands = operands.length - 1;
   var operandExprs = new Array<ExpressionRef>(numOperands);
-  var nativeParamTypes = new Array<NativeType>(numOperands);
+  var paramTypeRefs = new Array<TypeRef>(numOperands);
   for (let i = 0; i < numOperands; ++i) {
     operandExprs[i] = compiler.compileExpression(operands[1 + i], Type.auto);
-    nativeParamTypes[i] = compiler.currentType.toNativeType();
+    paramTypeRefs[i] = compiler.currentType.toRef();
   }
   compiler.currentType = returnType;
-  return module.call_indirect(indexArg, operandExprs, createType(nativeParamTypes), returnType.toNativeType());
+  return module.call_indirect(indexArg, operandExprs, createType(paramTypeRefs), returnType.toRef());
 }
 builtins.set(BuiltinNames.call_indirect, builtin_call_indirect);
 
@@ -4082,6 +4127,207 @@ function builtin_v128_load_ext(ctx: BuiltinContext): ExpressionRef {
   return module.unreachable();
 }
 builtins.set(BuiltinNames.v128_load_ext, builtin_v128_load_ext);
+
+// v128.load_zero<TFrom!>(ptr: usize, immOffset?: usize, immAlign?: usize) -> v128
+function builtin_v128_load_zero(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx, true) |
+    checkArgsOptional(ctx, 1, 3)
+  ) return module.unreachable();
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  var numOperands = operands.length;
+  var immOffset = 0;
+  var immAlign = type.byteSize;
+  if (numOperands >= 2) {
+    immOffset = evaluateImmediateOffset(operands[1], compiler); // reports
+    if (immOffset < 0) {
+      compiler.currentType = Type.v128;
+      return module.unreachable();
+    }
+    if (numOperands == 3) {
+      immAlign = evaluateImmediateAlign(operands[2], immAlign, compiler); // reports
+      if (immAlign < 0) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+    }
+  }
+  compiler.currentType = Type.v128;
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.I32:
+      case TypeKind.U32:
+      case TypeKind.F32: return module.simd_load(SIMDLoadOp.Load32Zero, arg0, immOffset, immAlign);
+      case TypeKind.I64:
+      case TypeKind.U64:
+      case TypeKind.F64: return module.simd_load(SIMDLoadOp.Load64Zero, arg0, immOffset, immAlign);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.simd_load(compiler.options.isWasm64 ? SIMDLoadOp.Load64Zero : SIMDLoadOp.Load32Zero, arg0, immOffset, immAlign);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.load_zero", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_load_zero, builtin_v128_load_zero);
+
+// v128.load_lane<TFrom!>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize) -> v128
+function builtin_v128_load_lane(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx, true) |
+    checkArgsOptional(ctx, 3, 5)
+  ) return module.unreachable();
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  var arg2 = compiler.compileExpression(operands[2], Type.u8, Constraints.CONV_IMPLICIT);
+  var idx = 0;
+  var precomp = module.runExpression(arg2, ExpressionRunnerFlags.PreserveSideeffects);
+  if (precomp) {
+    idx = getConstValueI32(precomp);
+  } else {
+    compiler.error(
+      DiagnosticCode.Expression_must_be_a_compile_time_constant,
+      operands[2].range
+    );
+  }
+  var numOperands = operands.length;
+  var immOffset = 0;
+  var immAlign = type.byteSize;
+  if (numOperands >= 4) {
+    immOffset = evaluateImmediateOffset(operands[3], compiler); // reports
+    if (immOffset < 0) {
+      compiler.currentType = Type.v128;
+      return module.unreachable();
+    }
+    if (numOperands == 5) {
+      immAlign = evaluateImmediateAlign(operands[4], immAlign, compiler); // reports
+      if (immAlign < 0) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+    }
+  }
+  compiler.currentType = Type.v128;
+  if (type.isValue) {
+    let maxIdx = (16 / assert(type.byteSize)) - 1;
+    if (idx < 0 || idx > maxIdx) {
+      compiler.error(
+        DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+        operands[1].range, "Lane index", "0", maxIdx.toString()
+      );
+      idx = 0;
+    }
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.U8: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Load8Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.I16:
+      case TypeKind.U16: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Load16Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.I32:
+      case TypeKind.U32:
+      case TypeKind.F32: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Load32Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.I64:
+      case TypeKind.U64:
+      case TypeKind.F64: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Load64Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.simd_loadstorelane(compiler.options.isWasm64 ? SIMDLoadStoreLaneOp.Load64Lane : SIMDLoadStoreLaneOp.Load32Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.load_lane", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_load_lane, builtin_v128_load_lane);
+
+// v128.store_lane<TFrom!>(ptr: usize, vec: v128, idx: u8, immOffset?: usize, immAlign?: usize) -> v128
+function builtin_v128_store_lane(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx, true) |
+    checkArgsOptional(ctx, 3, 5)
+  ) return module.unreachable();
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+  var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  var arg2 = compiler.compileExpression(operands[2], Type.u8, Constraints.CONV_IMPLICIT);
+  var idx = 0;
+  var precomp = module.runExpression(arg2, ExpressionRunnerFlags.PreserveSideeffects);
+  if (precomp) {
+    idx = getConstValueI32(precomp);
+  } else {
+    compiler.error(
+      DiagnosticCode.Expression_must_be_a_compile_time_constant,
+      operands[2].range
+    );
+  }
+  var numOperands = operands.length;
+  var immOffset = 0;
+  var immAlign = type.byteSize;
+  if (numOperands >= 4) {
+    immOffset = evaluateImmediateOffset(operands[3], compiler); // reports
+    if (immOffset < 0) {
+      compiler.currentType = Type.v128;
+      return module.unreachable();
+    }
+    if (numOperands == 5) {
+      immAlign = evaluateImmediateAlign(operands[4], immAlign, compiler); // reports
+      if (immAlign < 0) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+    }
+  }
+  compiler.currentType = Type.v128;
+  if (type.isValue) {
+    let maxIdx = (16 / assert(type.byteSize)) - 1;
+    if (idx < 0 || idx > maxIdx) {
+      compiler.error(
+        DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+        operands[1].range, "Lane index", "0", maxIdx.toString()
+      );
+      idx = 0;
+    }
+    switch (type.kind) {
+      case TypeKind.I8:
+      case TypeKind.U8: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Store8Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.I16:
+      case TypeKind.U16: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Store16Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.I32:
+      case TypeKind.U32:
+      case TypeKind.F32: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Store32Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.I64:
+      case TypeKind.U64:
+      case TypeKind.F64: return module.simd_loadstorelane(SIMDLoadStoreLaneOp.Store64Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: return module.simd_loadstorelane(compiler.options.isWasm64 ? SIMDLoadStoreLaneOp.Store64Lane : SIMDLoadStoreLaneOp.Store32Lane, arg0, immOffset, immAlign, <u8>idx, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.store_lane", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_store_lane, builtin_v128_store_lane);
 
 // v128.add<T!>(a: v128, b: v128) -> v128
 function builtin_v128_add(ctx: BuiltinContext): ExpressionRef {
@@ -5094,6 +5340,44 @@ function builtin_v128_convert(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v128_convert, builtin_v128_convert);
 
+// v128.convert_low<T!>(a: v128) -> v128
+function builtin_v128_convert_low(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.ISIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.I32: return module.unary(UnaryOp.ConvertLowI32x4ToF64x2, arg0);
+      case TypeKind.USIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.U32: return module.unary(UnaryOp.ConvertLowU32x4ToF64x2, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.convert_low", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_convert_low, builtin_v128_convert_low);
+
 // v128.trunc_sat<T!>(a: v128) -> v128
 function builtin_v128_trunc_sat(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
@@ -5131,6 +5415,44 @@ function builtin_v128_trunc_sat(ctx: BuiltinContext): ExpressionRef {
   return module.unreachable();
 }
 builtins.set(BuiltinNames.v128_trunc_sat, builtin_v128_trunc_sat);
+
+// v128.trunc_sat_zero<T!>(a: v128) -> v128
+function builtin_v128_trunc_sat_zero(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.ISIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.I32: return module.unary(UnaryOp.TruncSatF64x2ToI32x4Zero, arg0);
+      case TypeKind.USIZE: {
+        if (compiler.options.isWasm64) break;
+        // fall-through
+      }
+      case TypeKind.U32: return module.unary(UnaryOp.TruncSatF64x2ToU32x4Zero, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.trunc_sat_zero", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_trunc_sat_zero, builtin_v128_trunc_sat_zero);
 
 // v128.extend_low<T!>(a: v128) -> v128
 function builtin_v128_extend_low(ctx: BuiltinContext): ExpressionRef {
@@ -5529,6 +5851,198 @@ function builtin_v128_popcnt(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v128_popcnt, builtin_v128_popcnt);
 
+// v128.extadd_pairwise<T!>(a: v128) -> v128
+function builtin_v128_extadd_pairwise(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var type = ctx.typeArguments![0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  compiler.currentType = Type.v128;
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.I8: return module.unary(UnaryOp.ExtaddPairwiseI8x16ToI16x8, arg0);
+      case TypeKind.U8: return module.unary(UnaryOp.ExtaddPairwiseU8x16ToU16x8, arg0);
+      case TypeKind.I16: return module.unary(UnaryOp.ExtaddPairwiseI16x8ToI32x4, arg0);
+      case TypeKind.U16: return module.unary(UnaryOp.ExtaddPairwiseU16x8ToU32x4, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.extadd_pairwise", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_extadd_pairwise, builtin_v128_extadd_pairwise);
+
+// v128.demote_zero<T?>(a: v128) -> v128
+function builtin_v128_demote_zero(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeOptional(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var type = typeArguments ? typeArguments[0] : Type.f64;
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  compiler.currentType = Type.v128;
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.F64: return module.unary(UnaryOp.DemoteZeroF64x2ToF32x4, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.demote_zero", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_demote_zero, builtin_v128_demote_zero);
+
+// v128.promote_low<T?>(a: v128) -> v128
+function builtin_v128_promote_low(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeOptional(ctx) |
+    checkArgsRequired(ctx, 1)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments;
+  var type = typeArguments ? typeArguments[0] : Type.f32;
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  compiler.currentType = Type.v128;
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.unary(UnaryOp.PromoteLowF32x4ToF64x2, arg0);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.promote_low", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_promote_low, builtin_v128_promote_low);
+
+// v128.q15mulr_sat<T!>(a: v128, b: v128) -> v128
+function builtin_v128_q15mulr_sat(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.I16: return module.binary(BinaryOp.Q15mulrSatI16x8, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.q15mulr_sat", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_q15mulr_sat, builtin_v128_q15mulr_sat);
+
+// v128.extmul_low<T!>(a: v128, b: v128) -> v128
+function builtin_v128_extmul_low(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.I8: return module.binary(BinaryOp.ExtmulLowI16x8, arg0, arg1);
+      case TypeKind.U8: return module.binary(BinaryOp.ExtmulLowU16x8, arg0, arg1);
+      case TypeKind.I16: return module.binary(BinaryOp.ExtmulLowI32x4, arg0, arg1);
+      case TypeKind.U16: return module.binary(BinaryOp.ExtmulLowU32x4, arg0, arg1);
+      case TypeKind.I32: return module.binary(BinaryOp.ExtmulLowI64x2, arg0, arg1);
+      case TypeKind.U32: return module.binary(BinaryOp.ExtmulLowU64x2, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.extmul_low", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_extmul_low, builtin_v128_extmul_low);
+
+// v128.extmul_high<T!>(a: v128, b: v128) -> v128
+function builtin_v128_extmul_high(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  if (type.isValue) {
+    switch (type.kind) {
+      case TypeKind.I8: return module.binary(BinaryOp.ExtmulHighI16x8, arg0, arg1);
+      case TypeKind.U8: return module.binary(BinaryOp.ExtmulHighU16x8, arg0, arg1);
+      case TypeKind.I16: return module.binary(BinaryOp.ExtmulHighI32x4, arg0, arg1);
+      case TypeKind.U16: return module.binary(BinaryOp.ExtmulHighU32x4, arg0, arg1);
+      case TypeKind.I32: return module.binary(BinaryOp.ExtmulHighI64x2, arg0, arg1);
+      case TypeKind.U32: return module.binary(BinaryOp.ExtmulHighU64x2, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.extmul_high", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_extmul_high, builtin_v128_extmul_high);
+
 // === Internal runtime =======================================================================
 
 // __visit_globals(cookie: u32) -> void
@@ -5546,7 +6060,7 @@ function builtin_visit_globals(ctx: BuiltinContext): ExpressionRef {
   var arg0 = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
   compiler.runtimeFeatures |= RuntimeFeatures.visitGlobals;
   compiler.currentType = Type.void;
-  return module.call(BuiltinNames.visit_globals, [ arg0 ], NativeType.None);
+  return module.call(BuiltinNames.visit_globals, [ arg0 ], TypeRef.None);
 }
 builtins.set(BuiltinNames.visit_globals, builtin_visit_globals);
 
@@ -5566,7 +6080,7 @@ function builtin_visit_members(ctx: BuiltinContext): ExpressionRef {
   var arg1 = compiler.compileExpression(operands[1], Type.u32, Constraints.CONV_IMPLICIT);
   compiler.runtimeFeatures |= RuntimeFeatures.visitMembers;
   compiler.currentType = Type.void;
-  return module.call(BuiltinNames.visit_members, [ arg0, arg1 ], NativeType.None);
+  return module.call(BuiltinNames.visit_members, [ arg0, arg1 ], TypeRef.None);
 }
 builtins.set(BuiltinNames.visit_members, builtin_visit_members);
 
@@ -6982,6 +7496,96 @@ function builtin_v128_load64_splat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v128_load64_splat, builtin_v128_load64_splat);
 
+// v128.load32_zero -> v128.load_zero<u32>
+function builtin_v128_load32_zero(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_load_zero(ctx);
+}
+builtins.set(BuiltinNames.v128_load32_zero, builtin_v128_load32_zero);
+
+// v128.load64_zero -> v128.load_zero<u64>
+function builtin_v128_load64_zero(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_load_zero(ctx);
+}
+builtins.set(BuiltinNames.v128_load64_zero, builtin_v128_load64_zero);
+
+// v128.load8_lane -> v128.load_lane<u8>
+function builtin_v128_load8_lane(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_load_lane(ctx);
+}
+builtins.set(BuiltinNames.v128_load8_lane, builtin_v128_load8_lane);
+
+// v128.load16_lane -> v128.load_lane<u16>
+function builtin_v128_load16_lane(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_load_lane(ctx);
+}
+builtins.set(BuiltinNames.v128_load16_lane, builtin_v128_load16_lane);
+
+// v128.load32_lane -> v128.load_lane<u32>
+function builtin_v128_load32_lane(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_load_lane(ctx);
+}
+builtins.set(BuiltinNames.v128_load32_lane, builtin_v128_load32_lane);
+
+// v128.load64_lane -> v128.load_lane<u64>
+function builtin_v128_load64_lane(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_load_lane(ctx);
+}
+builtins.set(BuiltinNames.v128_load64_lane, builtin_v128_load64_lane);
+
+// v128.store8_lane -> v128.store_lane<u8>
+function builtin_v128_store8_lane(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_store_lane(ctx);
+}
+builtins.set(BuiltinNames.v128_store8_lane, builtin_v128_store8_lane);
+
+// v128.store16_lane -> v128.store_lane<u16>
+function builtin_v128_store16_lane(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_store_lane(ctx);
+}
+builtins.set(BuiltinNames.v128_store16_lane, builtin_v128_store16_lane);
+
+// v128.store32_lane -> v128.store_lane<u32>
+function builtin_v128_store32_lane(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_store_lane(ctx);
+}
+builtins.set(BuiltinNames.v128_store32_lane, builtin_v128_store32_lane);
+
+// v128.store64_lane -> v128.store_lane<u64>
+function builtin_v128_store64_lane(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_store_lane(ctx);
+}
+builtins.set(BuiltinNames.v128_store64_lane, builtin_v128_store64_lane);
+
 // v128.store -> store<v128 from v128>
 function builtin_v128_store(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -7676,6 +8280,69 @@ function builtin_i16x8_extend_high_i8x16_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_extend_high_i8x16_u, builtin_i16x8_extend_high_i8x16_u);
 
+// i16x8.extadd_pairwise_i8x16_s -> v128.extadd_pairwise<i8>
+function builtin_i16x8_extadd_pairwise_i8x16_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extadd_pairwise(ctx);
+}
+builtins.set(BuiltinNames.i16x8_extadd_pairwise_i8x16_s, builtin_i16x8_extadd_pairwise_i8x16_s);
+
+// i16x8.extadd_pairwise_i8x16_u -> v128.extadd_pairwise<u8>
+function builtin_i16x8_extadd_pairwise_i8x16_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extadd_pairwise(ctx);
+}
+builtins.set(BuiltinNames.i16x8_extadd_pairwise_i8x16_u, builtin_i16x8_extadd_pairwise_i8x16_u);
+
+// i16x8.q15mulr_sat_s -> v128.q15mulr_sat<i16>
+function builtin_i16x8_q15mulr_sat_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_q15mulr_sat(ctx);
+}
+builtins.set(BuiltinNames.i16x8_q15mulr_sat_s, builtin_i16x8_q15mulr_sat_s);
+
+// i16x8.extmul_low_i8x16_s -> v128.extmul_low<i16>
+function builtin_i16x8_extmul_low_i8x16_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_low(ctx);
+}
+builtins.set(BuiltinNames.i16x8_extmul_low_i8x16_s, builtin_i16x8_extmul_low_i8x16_s);
+
+// i16x8.extmul_low_i8x16_u -> v128.extmul_low<u16>
+function builtin_i16x8_extmul_low_i8x16_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_low(ctx);
+}
+builtins.set(BuiltinNames.i16x8_extmul_low_i8x16_u, builtin_i16x8_extmul_low_i8x16_u);
+
+// i16x8.extmul_high_i8x16_s -> v128.extmul_high<i16>
+function builtin_i16x8_extmul_high_i8x16_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_high(ctx);
+}
+builtins.set(BuiltinNames.i16x8_extmul_high_i8x16_s, builtin_i16x8_extmul_high_i8x16_s);
+
+// i16x8.extmul_high_i8x16_u -> v128.extmul_high<u16>
+function builtin_i16x8_extmul_high_i8x16_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u8 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_high(ctx);
+}
+builtins.set(BuiltinNames.i16x8_extmul_high_i8x16_u, builtin_i16x8_extmul_high_i8x16_u);
+
 // i32x4.splat -> v128.splat<i32>
 function builtin_i32x4_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -7946,6 +8613,24 @@ function builtin_i32x4_trunc_sat_f32x4_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_trunc_sat_f32x4_u, builtin_i32x4_trunc_sat_f32x4_u);
 
+// i32x4.trunc_sat_f64x2_s_zero -> v128.trunc_sat_zero<i32>
+function builtin_i32x4_trunc_sat_f64x2_s_zero(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_trunc_sat_zero(ctx);
+}
+builtins.set(BuiltinNames.i32x4_trunc_sat_f64x2_s_zero, builtin_i32x4_trunc_sat_f64x2_s_zero);
+
+// i32x4.trunc_sat_f64x2_u_zero -> v128.trunc_sat_zero<u32>
+function builtin_i32x4_trunc_sat_f64x2_u_zero(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_trunc_sat_zero(ctx);
+}
+builtins.set(BuiltinNames.i32x4_trunc_sat_f64x2_u_zero, builtin_i32x4_trunc_sat_f64x2_u_zero);
+
 // i32x4.extend_low_i16x8_s -> // v128.extend_low<i16>
 function builtin_i32x4_extend_low_i16x8_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -7981,6 +8666,60 @@ function builtin_i32x4_extend_high_i16x8_u(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_extend_high(ctx);
 }
 builtins.set(BuiltinNames.i32x4_extend_high_i16x8_u, builtin_i32x4_extend_high_i16x8_u);
+
+// i32x4.extadd_pairwise_i16x8_s -> v128.extadd_pairwise<i16>
+function builtin_i32x4_extadd_pairwise_i16x8_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extadd_pairwise(ctx);
+}
+builtins.set(BuiltinNames.i32x4_extadd_pairwise_i16x8_s, builtin_i32x4_extadd_pairwise_i16x8_s);
+
+// i32x4.extadd_pairwise_i16x8_u -> v128.extadd_pairwise<u16>
+function builtin_i32x4_extadd_pairwise_i16x8_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extadd_pairwise(ctx);
+}
+builtins.set(BuiltinNames.i32x4_extadd_pairwise_i16x8_u, builtin_i32x4_extadd_pairwise_i16x8_u);
+
+// i32x4.extmul_low_i16x8_s -> v128.extmul_low<i16>
+function builtin_i32x4_extmul_low_i16x8_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_low(ctx);
+}
+builtins.set(BuiltinNames.i32x4_extmul_low_i16x8_s, builtin_i32x4_extmul_low_i16x8_s);
+
+// i32x4.extmul_low_i16x8_u -> v128.extmul_low<u16>
+function builtin_i32x4_extmul_low_i16x8_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_low(ctx);
+}
+builtins.set(BuiltinNames.i32x4_extmul_low_i16x8_u, builtin_i32x4_extmul_low_i16x8_u);
+
+// i32x4.extmul_high_i16x8_s -> v128.extmul_high<i16>
+function builtin_i32x4_extmul_high_i16x8_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_high(ctx);
+}
+builtins.set(BuiltinNames.i32x4_extmul_high_i16x8_s, builtin_i32x4_extmul_high_i16x8_s);
+
+// i32x4.extmul_high_i16x8_u -> v128.extmul_high<u16>
+function builtin_i32x4_extmul_high_i16x8_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u16 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_high(ctx);
+}
+builtins.set(BuiltinNames.i32x4_extmul_high_i16x8_u, builtin_i32x4_extmul_high_i16x8_u);
 
 // i64x2.splat -> v128.splat<i64>
 function builtin_i64x2_splat(ctx: BuiltinContext): ExpressionRef {
@@ -8188,6 +8927,42 @@ function builtin_i64x2_extend_high_i32x4_u(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_extend_high(ctx);
 }
 builtins.set(BuiltinNames.i64x2_extend_high_i32x4_u, builtin_i64x2_extend_high_i32x4_u);
+
+// i64x2.extmul_low_i32x4_s -> v128.extmul_low<i32>
+function builtin_i64x2_extmul_low_i32x4_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_low(ctx);
+}
+builtins.set(BuiltinNames.i64x2_extmul_low_i32x4_s, builtin_i64x2_extmul_low_i32x4_s);
+
+// i64x2.extmul_low_i32x4_u -> v128.extmul_low<u32>
+function builtin_i64x2_extmul_low_i32x4_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_low(ctx);
+}
+builtins.set(BuiltinNames.i64x2_extmul_low_i32x4_u, builtin_i64x2_extmul_low_i32x4_u);
+
+// i64x2.extmul_high_i32x4_s -> v128.extmul_high<i32>
+function builtin_i64x2_extmul_high_i32x4_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_high(ctx);
+}
+builtins.set(BuiltinNames.i64x2_extmul_high_i32x4_s, builtin_i64x2_extmul_high_i32x4_s);
+
+// i64x2.extmul_high_i32x4_u -> v128.extmul_high<u32>
+function builtin_i64x2_extmul_high_i32x4_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_extmul_high(ctx);
+}
+builtins.set(BuiltinNames.i64x2_extmul_high_i32x4_u, builtin_i64x2_extmul_high_i32x4_u);
 
 // f32x4.splat -> v128.splat<f32>
 function builtin_f32x4_splat(ctx: BuiltinContext): ExpressionRef {
@@ -8423,6 +9198,15 @@ function builtin_f32x4_convert_i32x4_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_convert_i32x4_u, builtin_f32x4_convert_i32x4_u);
 
+// f32x4.demote_f64x2_zero -> v128.demote_zero<f64>
+function builtin_f32x4_demote_f64x2_zero(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_demote_zero(ctx);
+}
+builtins.set(BuiltinNames.f32x4_demote_f64x2_zero, builtin_f32x4_demote_f64x2_zero);
+
 // f64x2.splat -> v128.splat<f64>
 function builtin_f64x2_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -8648,13 +9432,42 @@ function builtin_arguments_length(ctx: BuiltinContext): ExpressionRef {
 }
 
 builtins.set(BuiltinNames.arguments_length, builtin_arguments_length);
+
+
+// f64x2.convert_low_i32x4_s -> v128.convert_low<i32>
+function builtin_f64x2_convert_low_i32x4_s(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.i32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_convert_low(ctx);
+}
+builtins.set(BuiltinNames.f64x2_convert_low_i32x4_s, builtin_f64x2_convert_low_i32x4_s);
+
+// f64x2.convert_low_i32x4_u -> v128.convert_low<u32>
+function builtin_f64x2_convert_low_i32x4_u(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.u32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_convert_low(ctx);
+}
+builtins.set(BuiltinNames.f64x2_convert_low_i32x4_u, builtin_f64x2_convert_low_i32x4_u);
+
+// f64x2.promote_low_f32x4 -> v128.promote_low<f32>
+function builtin_f64x4_promote_low_f32x4(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_promote_low(ctx);
+}
+builtins.set(BuiltinNames.f64x2_promote_low_f32x4, builtin_f64x4_promote_low_f32x4);
+
 // === Internal helpers =======================================================================
 
 /** Compiles the `visit_globals` function. */
 export function compileVisitGlobals(compiler: Compiler): void {
   var module = compiler.module;
   var exprs = new Array<ExpressionRef>();
-  var nativeSizeType = compiler.options.nativeSizeType;
+  var sizeTypeRef = compiler.options.sizeTypeRef;
   var visitInstance = assert(compiler.program.visitInstance);
 
   // this function is @lazy: make sure it exists
@@ -8680,30 +9493,30 @@ export function compileVisitGlobals(compiler: Compiler): void {
               compiler.options.isWasm64
                 ? module.i64(i64_low(value), i64_high(value))
                 : module.i32(i64_low(value)),
-              module.local_get(0, NativeType.I32) // cookie
-            ], NativeType.None)
+              module.local_get(0, TypeRef.I32) // cookie
+            ], TypeRef.None)
           );
         }
       } else {
         exprs.push(
           module.if(
             module.local_tee(1,
-              module.global_get(global.internalName, nativeSizeType),
+              module.global_get(global.internalName, sizeTypeRef),
               false // internal
             ),
             module.call(visitInstance.internalName, [
-              module.local_get(1, nativeSizeType), // tempRef != null
-              module.local_get(0, NativeType.I32) // cookie
-            ], NativeType.None)
+              module.local_get(1, sizeTypeRef), // tempRef != null
+              module.local_get(0, TypeRef.I32) // cookie
+            ], TypeRef.None)
           )
         );
       }
     }
   }
   module.addFunction(BuiltinNames.visit_globals,
-    NativeType.I32,  // cookie
-    NativeType.None, // => void
-    [ nativeSizeType ],
+    TypeRef.I32,  // cookie
+    TypeRef.None, // => void
+    [ sizeTypeRef ],
     exprs.length
       ? module.block(null, exprs)
       : module.nop()
@@ -8718,8 +9531,8 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   var program = compiler.program;
   var module = compiler.module;
   var usizeType = program.options.usizeType;
-  var nativeSizeType = usizeType.toNativeType();
-  var nativeSizeSize = usizeType.byteSize;
+  var sizeTypeRef = usizeType.toRef();
+  var sizeTypeSize = usizeType.byteSize;
   var visitInstance = assert(program.visitInstance);
   var body = new Array<ExpressionRef>();
 
@@ -8728,9 +9541,9 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   if (base) {
     body.push(
       module.call(base.internalName + "~visit", [
-        module.local_get(0, nativeSizeType), // this
-        module.local_get(1, NativeType.I32)  // cookie
-      ], NativeType.None)
+        module.local_get(0, sizeTypeRef), // this
+        module.local_get(1, TypeRef.I32)  // cookie
+      ], TypeRef.None)
     );
   }
 
@@ -8757,9 +9570,9 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
         );
         body.push(
           module.call(visitInstance.internalName, [
-            module.local_get(0, nativeSizeType), // this
-            module.local_get(1, NativeType.I32)  // cookie
-          ], NativeType.None)
+            module.local_get(0, sizeTypeRef), // this
+            module.local_get(1, TypeRef.I32)  // cookie
+          ], TypeRef.None)
         );
       }
       hasVisitImpl = true;
@@ -8786,16 +9599,16 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
                 // if ($2 = value) __visit($2, $1)
                 module.if(
                   module.local_tee(2,
-                    module.load(nativeSizeSize, false,
-                      module.local_get(0, nativeSizeType),
-                      nativeSizeType, fieldOffset
+                    module.load(sizeTypeSize, false,
+                      module.local_get(0, sizeTypeRef),
+                      sizeTypeRef, fieldOffset
                     ),
                     false // internal
                   ),
                   module.call(visitInstance.internalName, [
-                    module.local_get(2, nativeSizeType), // value
-                    module.local_get(1, NativeType.I32)  // cookie
-                  ], NativeType.None)
+                    module.local_get(2, sizeTypeRef), // value
+                    module.local_get(1, TypeRef.I32)  // cookie
+                  ], TypeRef.None)
                 )
               );
             }
@@ -8807,10 +9620,10 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
 
   // Create the visitor function
   instance.visitRef = module.addFunction(instance.internalName + "~visit",
-    createType([nativeSizeType, NativeType.I32]),
-    NativeType.None,
-    needsTempValue ? [ nativeSizeType ] : null,
-    module.flatten(body, NativeType.None)
+    createType([sizeTypeRef, TypeRef.I32]),
+    TypeRef.None,
+    needsTempValue ? [ sizeTypeRef ] : null,
+    module.flatten(body, TypeRef.None)
   );
 
   // And make sure the base visitor function exists
@@ -8822,7 +9635,7 @@ export function compileVisitMembers(compiler: Compiler): void {
   var program = compiler.program;
   var module = compiler.module;
   var usizeType = program.options.usizeType;
-  var nativeSizeType = usizeType.toNativeType();
+  var sizeTypeRef = usizeType.toRef();
   var managedClasses = program.managedClasses;
   var visitInstance = assert(program.visitInstance);
   compiler.compileFunction(visitInstance, true); // is lazy, make sure it is compiled
@@ -8842,11 +9655,11 @@ export function compileVisitMembers(compiler: Compiler): void {
     } else {
       cases[i] = module.block(null, [
         module.call(instance.internalName + "~visit", [
-          module.local_get(0, nativeSizeType), // this
-          module.local_get(1, NativeType.I32)  // cookie
-        ], NativeType.None),
+          module.local_get(0, sizeTypeRef), // this
+          module.local_get(1, TypeRef.I32)  // cookie
+        ], TypeRef.None),
         module.return()
-      ], NativeType.None);
+      ], TypeRef.None);
       ensureVisitMembersOf(compiler, instance);
     }
   }
@@ -8856,38 +9669,38 @@ export function compileVisitMembers(compiler: Compiler): void {
     module.switch(names, "invalid",
       // load<u32>(changetype<usize>(this) - 8)
       module.load(4, false,
-        nativeSizeType == NativeType.I64
+        sizeTypeRef == TypeRef.I64
           ? module.binary(BinaryOp.SubI64,
-              module.local_get(0, nativeSizeType),
+              module.local_get(0, sizeTypeRef),
               module.i64(8)
             )
           : module.binary(BinaryOp.SubI32,
-              module.local_get(0, nativeSizeType),
+              module.local_get(0, sizeTypeRef),
               module.i32(8) // rtId is at -8
             ),
-        NativeType.I32, 0
+        TypeRef.I32, 0
       )
     )
-  ], NativeType.None);
+  ], TypeRef.None);
 
   // Wrap blocks in order
   for (let i = 0, k = names.length - 1; i < k; ++i) {
     current = module.block(names[i + 1], [
       current,
       cases[i]
-    ], NativeType.None);
+    ], TypeRef.None);
   }
 
   // Wrap the last id in an 'invalid' block to break out of on invalid ids
   current = module.block("invalid", [
     current,
     cases[names.length - 1]
-  ], NativeType.None);
+  ], TypeRef.None);
 
   // Add the function, executing an unreachable if breaking to 'invalid'
   module.addFunction(BuiltinNames.visit_members,
-    createType([ nativeSizeType, NativeType.I32 ]), // this, cookie
-    NativeType.None, // => void
+    createType([ sizeTypeRef, TypeRef.I32 ]), // this, cookie
+    TypeRef.None, // => void
     null,
     module.flatten([
       current,
@@ -8963,16 +9776,16 @@ export function compileRTTI(compiler: Compiler): void {
   var segment = compiler.addAlignedMemorySegment(data);
   if (usizeType.size == 8) {
     let offset = segment.offset;
-    module.addGlobal(BuiltinNames.rtti_base, NativeType.I64, false, module.i64(i64_low(offset), i64_high(offset)));
+    module.addGlobal(BuiltinNames.rtti_base, TypeRef.I64, false, module.i64(i64_low(offset), i64_high(offset)));
   } else {
-    module.addGlobal(BuiltinNames.rtti_base, NativeType.I32, false, module.i32(i64_low(segment.offset)));
+    module.addGlobal(BuiltinNames.rtti_base, TypeRef.I32, false, module.i32(i64_low(segment.offset)));
   }
 }
 
 /** Compiles a class-specific instanceof helper, checking a ref against all concrete instances. */
 export function compileClassInstanceOf(compiler: Compiler, prototype: ClassPrototype): void {
   var module = compiler.module;
-  var nativeSizeType = compiler.options.nativeSizeType;
+  var sizeTypeRef = compiler.options.sizeTypeRef;
   var instanceofInstance = assert(prototype.program.instanceofInstance);
   compiler.compileFunction(instanceofInstance);
 
@@ -8982,10 +9795,10 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
   stmts.push(
     module.if(
       module.unary(
-        nativeSizeType == NativeType.I64
+        sizeTypeRef == TypeRef.I64
           ? UnaryOp.EqzI64
           : UnaryOp.EqzI32,
-        module.local_get(0, nativeSizeType)
+        module.local_get(0, sizeTypeRef)
       ),
       module.return(
         module.i32(0)
@@ -9002,9 +9815,9 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
       stmts.push(
         module.if(
           module.call(instanceofInstance.internalName, [
-            module.local_get(0, nativeSizeType),
+            module.local_get(0, sizeTypeRef),
             module.i32(instance.id)
-          ], NativeType.I32),
+          ], TypeRef.I32),
           module.return(
             module.i32(1)
           )
@@ -9020,7 +9833,7 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
     )
   );
 
-  module.addFunction(prototype.internalName + "~instanceof", nativeSizeType, NativeType.I32, null, module.flatten(stmts));
+  module.addFunction(prototype.internalName + "~instanceof", sizeTypeRef, TypeRef.I32, null, module.flatten(stmts));
 }
 
 // Helpers

@@ -436,9 +436,7 @@ module.exports.default({
   project: path.resolve(__dirname, "..", "src"),
   prefix: "assemblyscript",
   exclude: [
-    "glue/js/index.ts",
-    "glue/js/node.d.ts",
-    "glue/binaryen.d.ts"
+    "glue/**",
   ],
   verbose: true,
   sendMessage: console.log,
@@ -451,6 +449,20 @@ module.exports.default({
   project: path.resolve(__dirname, "..", "std/assembly/shared"),
   prefix: "assemblyscript/std/assembly/shared",
   exclude: [],
+  verbose: true,
+  sendMessage: console.log,
+  stdout: stdout
+});
+
+stdout.write("\n");
+
+module.exports.default({
+  project: path.resolve(__dirname, "..", "src/glue"),
+  prefix: "assemblyscript/src/glue",
+  exclude: [
+    "js/index.ts",
+    "js/node.d.ts"
+  ],
   verbose: true,
   sendMessage: console.log,
   stdout: stdout

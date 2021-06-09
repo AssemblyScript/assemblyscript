@@ -1,14 +1,14 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_f64 (func (result f64)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
- (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
- (type $i64_=>_none (func (param i64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i64_=>_i64 (func (param i64) (result i64)))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i64_=>_none (func (param i64)))
+ (type $none_=>_none (func))
  (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
@@ -23,6 +23,7 @@
  (memory $0 1)
  (data (i32.const 12) ",\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00\00\00\00\00")
  (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "test" (func $wasi/seed/test))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
@@ -610,7 +611,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 1417
+   i32.const 1421
    i32.const 5
    call $~lib/wasi/index/abort
    unreachable

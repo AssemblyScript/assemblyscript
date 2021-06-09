@@ -351,6 +351,7 @@ assert(test_acosh(NaN, NaN, 0.0, 0));
 assert(test_acosh(Infinity, Infinity, 0.0, 0));
 assert(test_acosh(1.0, 0.0, 0.0, 0));
 assert(test_acosh(0.99999237060546875, NaN, 0.0, INVALID));
+assert(test_acosh(-9784.8207664738350, NaN, 0.0, INVALID));
 assert(test_acosh(0.0, NaN, 0.0, INVALID));
 assert(test_acosh(-0.0, NaN, 0.0, INVALID));
 assert(test_acosh(-Infinity, NaN, 0.0, INVALID));
@@ -3047,6 +3048,12 @@ assert(test_round(0.999992370605468750, 1.0, 0.0, INEXACT));
 assert(test_round(-0.999992370605468750, -1.0, 0.0, INEXACT));
 assert(test_round(7.88860905221011805e-31, 0.0, 0.0, INEXACT));
 assert(test_round(-7.88860905221011805e-31, -0.0, 0.0, INEXACT));
+
+assert(NativeMath.round( 9007199254740990.0) ==  9007199254740990.0); // round(+2 ** 53) == +2 ** 53
+assert(NativeMath.round(-9007199254740990.0) == -9007199254740990.0); // round(-2 ** 53) == -2 ** 53
+assert(NativeMath.round( 9007199254740991.0) ==  9007199254740991.0); // round(+(2 ** 53 - 1)) == +(2 ** 53 - 1)
+assert(NativeMath.round(-9007199254740991.0) == -9007199254740991.0); // round(-(2 ** 53 - 1)) == -(2 ** 53 - 1)
+assert(NativeMath.round(-1.7976931348623157e+308) == -1.7976931348623157e+308);
 
 // Mathf.round /////////////////////////////////////////////////////////////////////////////////////
 

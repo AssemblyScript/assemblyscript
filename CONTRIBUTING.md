@@ -15,7 +15,7 @@ Bugs and enhancement suggestions are tracked as GitHub issues.
 
 #### How Do I Submit A (Good) Bug Report?
 
-After you've determined which repository your bug is related to and that the issue is still present in the latest version of the master branch, create an issue on that repository and provide the following information:
+After you've determined which repository your bug is related to and that the issue is still present in the latest version of the main branch, create an issue on that repository and provide the following information:
 
 * Use a **clear and descriptive title** for the issue to identify the problem.
 * Explain which **behavior you expected** to see instead and why.

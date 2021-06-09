@@ -171,7 +171,7 @@ exports.libraryPrefix = __getString(assemblyscript.LIBRARY_PREFIX.valueOf());
 exports.defaultOptimizeLevel = 3;
 
 /** Default Binaryen shrink level. */
-exports.defaultShrinkLevel = 1;
+exports.defaultShrinkLevel = 0;
 
 /** Bundled library files. */
 exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if not a bundle

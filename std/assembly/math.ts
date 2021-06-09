@@ -498,7 +498,11 @@ export namespace NativeMath {
 
   export function acosh(x: f64): f64 { // see: musl/src/math/acosh.c
     const s = reinterpret<f64>(0x3FE62E42FEFA39EF);
-    var e = reinterpret<u64>(x) >> 52 & 0x7FF;
+    var u = reinterpret<u64>(x);
+    // Prevent propagation for all input values less than 1.0.
+    // Note musl lib didn't fix this yet.
+    if (<i64>u < 0x3FF0000000000000) return (x - x) / 0.0;
+    var e = u >> 52 & 0x7FF;
     if (e < 0x3FF + 1) return log1p(x - 1 + builtin_sqrt<f64>((x - 1) * (x - 1) + 2 * (x - 1)));
     if (e < 0x3FF + 26) return log(2 * x - 1 / (x + builtin_sqrt<f64>(x * x - 1)));
     return log(x) + s;
@@ -1437,7 +1441,8 @@ export namespace NativeMath {
   // @ts-ignore: decorator
   @inline
   export function round(x: f64): f64 {
-    return builtin_copysign<f64>(builtin_floor<f64>(x + 0.5), x);
+    let roundUp = builtin_ceil<f64>(x);
+    return select<f64>(roundUp, roundUp - 1.0, roundUp - 0.5 <= x);
   }
 
   // @ts-ignore: decorator
@@ -2732,7 +2737,8 @@ export namespace NativeMathf {
   // @ts-ignore: decorator
   @inline
   export function round(x: f32): f32 {
-    return builtin_copysign<f32>(builtin_floor<f32>(x + 0.5), x);
+    let roundUp = builtin_ceil<f32>(x);
+    return select<f32>(roundUp, roundUp - 1.0, roundUp - 0.5 <= x);
   }
 
   // @ts-ignore: decorator

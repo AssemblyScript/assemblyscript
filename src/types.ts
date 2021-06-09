@@ -10,7 +10,7 @@ import {
 } from "./program";
 
 import {
-  NativeType,
+  TypeRef,
   createType
 } from "./module";
 
@@ -512,8 +512,8 @@ export class Type {
 
   // Binaryen specific
 
-  /** Converts this type to its respective native type. */
-  toNativeType(): NativeType {
+  /** Converts this type to its respective type reference. */
+  toRef(): TypeRef {
     switch (this.kind) {
       default: assert(false);
       case TypeKind.I8:
@@ -522,22 +522,22 @@ export class Type {
       case TypeKind.U8:
       case TypeKind.U16:
       case TypeKind.U32:
-      case TypeKind.BOOL: return NativeType.I32;
+      case TypeKind.BOOL: return TypeRef.I32;
       case TypeKind.ISIZE:
-      case TypeKind.USIZE: if (this.size != 64) return NativeType.I32;
+      case TypeKind.USIZE: if (this.size != 64) return TypeRef.I32;
       case TypeKind.I64:
-      case TypeKind.U64: return NativeType.I64;
-      case TypeKind.F32: return NativeType.F32;
-      case TypeKind.F64: return NativeType.F64;
-      case TypeKind.V128: return NativeType.V128;
-      // TODO: nullable/non-nullable refs have different native types
-      case TypeKind.FUNCREF: return NativeType.Funcref;
-      case TypeKind.EXTERNREF: return NativeType.Externref;
-      case TypeKind.ANYREF: return NativeType.Anyref;
-      case TypeKind.EQREF: return NativeType.Eqref;
-      case TypeKind.I31REF: return NativeType.I31ref;
-      case TypeKind.DATAREF: return NativeType.Dataref;
-      case TypeKind.VOID: return NativeType.None;
+      case TypeKind.U64: return TypeRef.I64;
+      case TypeKind.F32: return TypeRef.F32;
+      case TypeKind.F64: return TypeRef.F64;
+      case TypeKind.V128: return TypeRef.V128;
+      // TODO: nullable/non-nullable refs have different type refs
+      case TypeKind.FUNCREF: return TypeRef.Funcref;
+      case TypeKind.EXTERNREF: return TypeRef.Externref;
+      case TypeKind.ANYREF: return TypeRef.Anyref;
+      case TypeKind.EQREF: return TypeRef.Eqref;
+      case TypeKind.I31REF: return TypeRef.I31ref;
+      case TypeKind.DATAREF: return TypeRef.Dataref;
+      case TypeKind.VOID: return TypeRef.None;
     }
   }
 
@@ -716,11 +716,11 @@ export class Type {
   static readonly auto: Type = new Type(Type.i32.kind, Type.i32.flags, Type.i32.size);
 }
 
-/** Converts an array of types to an array of native types. */
-export function typesToNativeTypes(types: Type[]): NativeType[] {
+/** Converts an array of types to an array of type references. */
+export function typesToRefs(types: Type[]): TypeRef[] {
   var numTypes = types.length;
-  var ret = new Array<NativeType>(numTypes);
-  for (let i = 0; i < numTypes; ++i) ret[i] = types[i].toNativeType();
+  var ret = new Array<TypeRef>(numTypes);
+  for (let i = 0; i < numTypes; ++i) ret[i] = types[i].toRef();
   return ret;
 }
 
@@ -783,27 +783,27 @@ export class Signature {
     program.uniqueSignatures.push(this);
   }
 
-  get nativeParams(): NativeType {
+  get paramRefs(): TypeRef {
     var thisType = this.thisType;
     var parameterTypes = this.parameterTypes;
     var numParameterTypes = parameterTypes.length;
     if (!numParameterTypes) {
-      if (!thisType) return NativeType.None;
-      return thisType.toNativeType();
+      if (!thisType) return TypeRef.None;
+      return thisType.toRef();
     }
     if (thisType) {
-      let nativeTypes = new Array<NativeType>(1 + numParameterTypes);
-      nativeTypes[0] = thisType.toNativeType();
+      let typeRefs = new Array<TypeRef>(1 + numParameterTypes);
+      typeRefs[0] = thisType.toRef();
       for (let i = 0; i < numParameterTypes; ++i) {
-        nativeTypes[i + 1] = parameterTypes[i].toNativeType();
+        typeRefs[i + 1] = parameterTypes[i].toRef();
       }
-      return createType(nativeTypes);
+      return createType(typeRefs);
     }
-    return createType(typesToNativeTypes(parameterTypes));
+    return createType(typesToRefs(parameterTypes));
   }
 
-  get nativeResults(): NativeType {
-    return this.returnType.toNativeType();
+  get resultRefs(): TypeRef {
+    return this.returnType.toRef();
   }
 
   /** Tests if this signature equals the specified. */

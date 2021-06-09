@@ -1,7 +1,6 @@
 (module
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memory/ptr (mut i32) (i32.const 1088))
  (memory $0 1)
@@ -17,7 +16,7 @@
  (data (i32.const 1216) "\01")
  (export "memory" (memory $0))
  (start $~start)
- (func $memory/test (result i32)
+ (func $start:memory
   (local $0 i32)
   i32.const 1024
   i32.const 1024
@@ -27,10 +26,6 @@
   i32.add
   i32.store
   local.get $0
- )
- (func $start:memory
-  (local $0 i32)
-  call $memory/test
   if
    i32.const 0
    i32.const 1056
@@ -39,7 +34,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $memory/test
+  i32.const 1024
+  i32.const 1024
+  i32.load
+  local.tee $0
+  i32.const 1
+  i32.add
+  i32.store
+  local.get $0
   i32.const 1
   i32.ne
   if
@@ -50,7 +52,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $memory/test
+  i32.const 1024
+  i32.const 1024
+  i32.load
+  local.tee $0
+  i32.const 1
+  i32.add
+  i32.store
+  local.get $0
   i32.const 2
   i32.ne
   if

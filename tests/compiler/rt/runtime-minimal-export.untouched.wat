@@ -28,6 +28,7 @@
  (data (i32.const 400) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 432) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "__new" (func $~lib/rt/tcms/__new))
  (export "__pin" (func $~lib/rt/tcms/__pin))
  (export "__unpin" (func $~lib/rt/tcms/__unpin))
@@ -936,12 +937,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 32
    i32.const 160
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -1470,12 +1471,12 @@
   (local $2 i32)
   local.get $0
   i32.const 1073741804
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 32
    i32.const 96
    i32.const 125
-   i32.const 31
+   i32.const 30
    call $~lib/builtins/abort
    unreachable
   end

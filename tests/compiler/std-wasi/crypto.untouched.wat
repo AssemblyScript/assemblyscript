@@ -8,10 +8,10 @@
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
- (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
+ (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
@@ -146,6 +146,7 @@
  (data (i32.const 5660) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00$\00\00\00s\00t\00d\00-\00w\00a\00s\00i\00/\00c\00r\00y\00p\00t\00o\00.\00t\00s\00\00\00\00\00\00\00\00\00")
  (data (i32.const 5728) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00A\00\00\00\02\00\00\00")
  (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf (param $0 i32) (param $1 i32)
@@ -2144,12 +2145,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 144
    i32.const 480
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/wasi/index/abort
    unreachable
   end

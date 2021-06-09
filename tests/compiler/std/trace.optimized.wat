@@ -1,7 +1,7 @@
 (module
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 17804))
@@ -26,15 +26,13 @@
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $~start
+  (local $0 i32)
   global.get $~started
   if
    return
   end
   i32.const 1
   global.set $~started
-  call $start:std/trace
- )
- (func $start:std/trace
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -51,9 +49,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 0
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1056
   i32.store
   i32.const 1056

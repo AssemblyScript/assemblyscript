@@ -8,12 +8,12 @@
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
- (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "string_casemapping" "toLowerCaseFromIndex" (func $std/string-casemapping/toLowerCaseFromIndex (param i32 i32) (result i32)))
  (import "string_casemapping" "toUpperCaseFromIndex" (func $std/string-casemapping/toUpperCaseFromIndex (param i32 i32) (result i32)))
@@ -217,6 +217,7 @@
  (data (i32.const 19964) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00&\00\00\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00=\00 \00\00\00\00\00\00\00")
  (data (i32.const 20032) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\a4\00\00\00\00\00\00\00")
  (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
@@ -1778,12 +1779,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 64
    i32.const 400
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -8589,20 +8590,8 @@
   i32.const 0
   i32.store
   local.get $0
-  i32.const 1114111
-  i32.le_u
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 14576
-   i32.const 33
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
   i32.const 65535
-  i32.gt_s
+  i32.gt_u
   local.set $1
   global.get $~lib/memory/__stack_pointer
   i32.const 2
@@ -8619,6 +8608,18 @@
    local.get $0
    i32.store16
   else
+   local.get $0
+   i32.const 1114111
+   i32.le_u
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 14576
+    i32.const 39
+    i32.const 7
+    call $~lib/builtins/abort
+    unreachable
+   end
    local.get $0
    i32.const 65536
    i32.sub

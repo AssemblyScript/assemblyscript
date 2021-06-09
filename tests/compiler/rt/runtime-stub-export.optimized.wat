@@ -1,9 +1,9 @@
 (module
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1168))
@@ -53,7 +53,7 @@
    unreachable
   end
   global.get $~lib/rt/stub/offset
-  global.get $~lib/rt/stub/offset
+  local.tee $6
   i32.const 4
   i32.add
   local.tee $4
@@ -108,6 +108,7 @@
   end
   local.get $2
   global.set $~lib/rt/stub/offset
+  local.get $6
   local.get $7
   i32.store
   local.get $4

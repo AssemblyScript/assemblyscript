@@ -992,6 +992,12 @@ export class Program extends DiagnosticEmitter {
       this.makeNativeTypeDeclaration(CommonNames.returnof, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
+    this.nativeFile.add(CommonNames.nonnull, new TypeDefinition(
+      CommonNames.nonnull,
+      this.nativeFile,
+      this.makeNativeTypeDeclaration(CommonNames.nonnull, CommonFlags.EXPORT | CommonFlags.GENERIC),
+      DecoratorFlags.BUILTIN
+    ));
 
     // The following types might not be enabled by compiler options, so the
     // compiler needs to check this condition whenever such a value is created
@@ -2635,8 +2641,6 @@ export enum ElementKind {
   FUNCTION_PROTOTYPE,
   /** A {@link Function}. */
   FUNCTION,
-  /** A {@link FunctionTarget}. */
-  FUNCTION_TARGET,
   /** A {@link ClassPrototype}. */
   CLASS_PROTOTYPE,
   /** A {@link Class}. */

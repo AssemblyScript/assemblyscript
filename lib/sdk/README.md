@@ -18,7 +18,7 @@ Exports
 
 * **asc**<br />
   AssemblyScript compiler frontend that one will interact with
-  ([see](https://github.com/AssemblyScript/assemblyscript/tree/master/cli)).
+  ([see](https://github.com/AssemblyScript/assemblyscript/tree/main/cli)).
 
 Example usage
 -------------
@@ -35,4 +35,4 @@ require(
 );
 ```
 
-There is also the [SDK example](https://github.com/AssemblyScript/examples/tree/master/sdk) showing how to compile some actual code.
+There is also the [SDK example](https://github.com/AssemblyScript/examples/tree/main/sdk) showing how to compile some actual code.

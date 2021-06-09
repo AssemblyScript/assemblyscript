@@ -6,19 +6,19 @@
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
- (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i64_=>_none (func (param i32 i64)))
- (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $i32_i32_i64_=>_i32 (func (param i32 i32 i64) (result i32)))
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
  (type $none_=>_i64 (func (result i64)))
+ (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $i32_i64_i32_i32_=>_none (func (param i32 i64 i32 i32)))
+ (type $i32_i32_i64_=>_i32 (func (param i32 i32 i64) (result i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
@@ -172,6 +172,7 @@
  (data (i32.const 6764) "\1c\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\08\00\00\001\002\003\004\00\00\00\00\00")
  (data (i32.const 6800) "\04\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\10\02\82\00\00\00\00\00")
  (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
@@ -2251,12 +2252,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 3264
    i32.const 3200
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/wasi/index/abort
    unreachable
   end

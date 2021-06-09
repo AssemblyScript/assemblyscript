@@ -3,14 +3,14 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AssemblyScript/assemblyscript/actions?query=workflow%3ATest"><img src="https://img.shields.io/github/workflow/status/AssemblyScript/assemblyscript/Test/master?label=test&logo=github" alt="Test status" /></a>
-  <a href="https://github.com/AssemblyScript/assemblyscript/actions?query=workflow%3APublish"><img src="https://img.shields.io/github/workflow/status/AssemblyScript/assemblyscript/Publish/master?label=publish&logo=github" alt="Publish status" /></a>
+  <a href="https://github.com/AssemblyScript/assemblyscript/actions?query=workflow%3ATest"><img src="https://img.shields.io/github/workflow/status/AssemblyScript/assemblyscript/Test/main?label=test&logo=github" alt="Test status" /></a>
+  <a href="https://github.com/AssemblyScript/assemblyscript/actions?query=workflow%3APublish"><img src="https://img.shields.io/github/workflow/status/AssemblyScript/assemblyscript/Publish/main?label=publish&logo=github" alt="Publish status" /></a>
   <a href="https://www.npmjs.com/package/assemblyscript"><img src="https://img.shields.io/npm/v/assemblyscript.svg?label=compiler&color=007acc&logo=npm" alt="npm compiler version" /></a>
   <a href="https://www.npmjs.com/package/@assemblyscript/loader"><img src="https://img.shields.io/npm/v/@assemblyscript/loader.svg?label=loader&color=007acc&logo=npm" alt="npm loader version" /></a>
   <a href="https://discord.gg/assemblyscript"><img src="https://img.shields.io/discord/721472913886281818.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2" alt="Discord online" /></a>
 </p>
 
-<p align="justify"><strong>AssemblyScript</strong> compiles a strict variant of <a href="http://www.typescriptlang.org">TypeScript</a> (basically JavaScript with types) to <a href="http://webassembly.org">WebAssembly</a> using <a href="https://github.com/WebAssembly/binaryen">Binaryen</a>. It generates lean and mean WebAssembly modules while being just an <code>npm install</code> away.</p>
+<p align="justify"><strong>AssemblyScript</strong> compiles a variant of <a href="http://www.typescriptlang.org">TypeScript</a> (basically JavaScript with types) to <a href="http://webassembly.org">WebAssembly</a> using <a href="https://github.com/WebAssembly/binaryen">Binaryen</a>. It generates lean and mean WebAssembly modules while being just an <code>npm install</code> away.</p>
 
 <h3 align="center">
   <a href="https://assemblyscript.org">About</a> &nbsp;·&nbsp;

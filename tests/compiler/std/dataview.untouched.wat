@@ -3,19 +3,19 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_i64 (func (param i32 i32 i32) (result i64)))
  (type $i32_i32_i64_i32_=>_none (func (param i32 i32 i64 i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
- (type $i32_i32_i32_=>_i64 (func (param i32 i32 i32) (result i64)))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_i32_=>_f32 (func (param i32 i32 i32) (result f32)))
+ (type $i64_=>_i64 (func (param i64) (result i64)))
+ (type $i32_i32_i32_=>_f64 (func (param i32 i32 i32) (result f64)))
  (type $i32_i32_f32_i32_=>_none (func (param i32 i32 f32 i32)))
  (type $i32_i32_f64_i32_=>_none (func (param i32 i32 f64 i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i64_=>_i64 (func (param i64) (result i64)))
- (type $i32_i32_i32_=>_f32 (func (param i32 i32 i32) (result f32)))
- (type $i32_i32_i32_=>_f64 (func (param i32 i32 i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
@@ -50,6 +50,7 @@
  (data (i32.const 652) "<\00\00\00\00\00\00\00\00\00\00\00\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 720) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00\00\00\00\00\00\00\00\00A\00\00\00\02\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
+ (elem $0 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/Object#set:nextWithColor (param $0 i32) (param $1 i32)
@@ -1603,12 +1604,12 @@
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741820
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 144
    i32.const 480
    i32.const 458
-   i32.const 30
+   i32.const 29
    call $~lib/builtins/abort
    unreachable
   end
@@ -3777,10 +3778,7 @@
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -7946
   i32.eq
   i32.eqz
@@ -3796,10 +3794,7 @@
   i32.const 1
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 22752
   i32.eq
   i32.eqz
@@ -3815,10 +3810,7 @@
   i32.const 2
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -24744
   i32.eq
   i32.eqz
@@ -3834,10 +3826,7 @@
   i32.const 3
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -32097
   i32.eq
   i32.eqz
@@ -3853,10 +3842,7 @@
   i32.const 4
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 25986
   i32.eq
   i32.eqz
@@ -3872,10 +3858,7 @@
   i32.const 5
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 17253
   i32.eq
   i32.eqz
@@ -3891,10 +3874,7 @@
   i32.const 6
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 24387
   i32.eq
   i32.eqz
@@ -3910,10 +3890,7 @@
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -2336
   i32.eq
   i32.eqz
@@ -3929,10 +3906,7 @@
   i32.const 1
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -8104
   i32.eq
   i32.eqz
@@ -3948,10 +3922,7 @@
   i32.const 2
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 22687
   i32.eq
   i32.eqz
@@ -3967,10 +3938,7 @@
   i32.const 3
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -24702
   i32.eq
   i32.eqz
@@ -3986,10 +3954,7 @@
   i32.const 4
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -32155
   i32.eq
   i32.eqz
@@ -4005,10 +3970,7 @@
   i32.const 5
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 25923
   i32.eq
   i32.eqz
@@ -4024,10 +3986,7 @@
   i32.const 6
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 17247
   i32.eq
   i32.eqz
@@ -4856,10 +4815,7 @@
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const -13360
   i32.eq
   i32.eqz
@@ -4880,10 +4836,7 @@
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getInt16
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
+  i32.extend16_s
   i32.const 14689
   i32.eq
   i32.eqz

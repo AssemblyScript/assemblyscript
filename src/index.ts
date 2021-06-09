@@ -299,10 +299,6 @@ export * from "./program";
 export * from "./resolver";
 export * from "./tokenizer";
 export * from "./types";
-// TODO: When vTables are pulled, perhaps it would be better to extend an ASTWalker
 export * from "./extra/ast";
 import * as util from "./util/index";
 export { util };
-
-// TODO: compat with 0.9, remove with 0.10
-export * from "./util/index";

@@ -845,7 +845,9 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
     this.tryParseSignatureIsSignature = true;
+
     if (!parameters) parameters = [];
+
     return Node.createFunctionType(
       parameters,
       returnType,
