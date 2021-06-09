@@ -660,6 +660,8 @@ export namespace BuiltinNames {
   export const wasiAbort = "~lib/wasi/index/abort";
   export const wasiTrace = "~lib/wasi/index/trace";
   export const wasiSeed = "~lib/wasi/index/seed";
+
+  export const arguments_length = "~lib/builtins/arguments.get:length";
 }
 
 /** Builtin compilation context. */
@@ -8637,6 +8639,15 @@ function builtin_f64x2_ge(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_ge, builtin_f64x2_ge);
 
+// access arguments.length
+function builtin_arguments_length(ctx: BuiltinContext): ExpressionRef {
+  const compiler = ctx.compiler;
+  const mod = compiler.module;
+  compiler.currentType = Type.i32;
+  return mod.i32(1);
+}
+
+builtins.set(BuiltinNames.arguments_length, builtin_arguments_length);
 // === Internal helpers =======================================================================
 
 /** Compiles the `visit_globals` function. */

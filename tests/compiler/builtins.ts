@@ -583,3 +583,10 @@ function rotr3(a: i8, b: i8, c: i8): i32 {
   return rotr(a, rotr(b, c));
 }
 assert(rotr3(48, 8, 1) == 3);
+
+
+function arglength1(a: i32): void {
+  assert(arguments.length == 1);
+}
+
+arglength1(1);

@@ -2160,4 +2160,11 @@ declare function trace(
 @external("env", "seed")
 declare function seed(): f64;
 
+@final
+export declare class arguments {
+  // @ts-ignore: builtin
+  @builtin
+  static get length(): i32;
+}
+
 /* eslint-enable @typescript-eslint/no-unused-vars */
