@@ -2304,7 +2304,7 @@ export abstract class i31 { // FIXME: usage of 'new' requires a class :(
   @builtin
   static new(value: i32): i31ref { 
     unreachable();
-    return 0;
+    return changetype<i31ref>(0);
   }
 
   // @ts-ignore: decorator
