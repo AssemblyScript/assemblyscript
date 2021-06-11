@@ -635,7 +635,7 @@ export class TSDBuilder extends ExportsWalker {
     if (options.exportRuntime) {
       sb.push("export function __new(size: usize, id: u32): usize;\n");
       sb.push("export function __pin(ptr: usize): usize;\n");
-      sb.push("export function __unpin(ptr: usize): usize;\n");
+      sb.push("export function __unpin(ptr: usize): void;\n");
       sb.push("export function __collect(): void;\n");
       sb.push("export const __rtti_base: usize;\n");
     }
