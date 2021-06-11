@@ -438,23 +438,19 @@ export class TSDBuilder extends ExportsWalker {
   }
 
   visitFunction(name: string, element: Function): void {
-    if (element.isAny(CommonFlags.PRIVATE | CommonFlags.SET)) return;
+    if (element.isAny(CommonFlags.PRIVATE)) return;
     var sb = this.sb;
     var signature = element.signature;
     indent(sb, this.indentLevel);
-    if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
-    if (element.is(CommonFlags.STATIC)) sb.push("static ");
-    if (element.is(CommonFlags.GET)) {
-      sb.push("get ");
-      sb.push(name); // 'get:funcName' internally
-      sb.push("(): ");
-      sb.push(this.typeToString(signature.returnType));
-      sb.push(";\n");
-      return;
+    if (!element.isAny(CommonFlags.STATIC | CommonFlags.INSTANCE)) {
+      sb.push("export function ");
     } else {
-      if (!element.isAny(CommonFlags.STATIC | CommonFlags.INSTANCE)) sb.push("export function ");
-      sb.push(name);
+      if (element.is(CommonFlags.PROTECTED)) sb.push("protected ");
+      if (element.is(CommonFlags.STATIC)) sb.push("static ");
+      if (element.is(CommonFlags.GET)) sb.push("get ");
+      else if (element.is(CommonFlags.SET)) sb.push("set ");
     }
+    sb.push(name);
     sb.push("(");
     var parameters = signature.parameterTypes;
     var numParameters = parameters.length;
@@ -604,12 +600,12 @@ export class TSDBuilder extends ExportsWalker {
 
   build(): string {
     var sb = this.sb;
-    var isWasm64 = this.program.options.isWasm64;
+    var options = this.program.options;
     sb.push("type i8 = number;\n");
     sb.push("type i16 = number;\n");
     sb.push("type i32 = number;\n");
     sb.push("type i64 = bigint;\n");
-    if (isWasm64) {
+    if (options.isWasm64) {
       sb.push("type isize = bigint;\n");
     } else {
       sb.push("type isize = number;\n");
@@ -618,7 +614,7 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("type u16 = number;\n");
     sb.push("type u32 = number;\n");
     sb.push("type u64 = bigint;\n");
-    if (isWasm64) {
+    if (options.isWasm64) {
       sb.push("type usize = bigint;\n");
     } else {
       sb.push("type usize = number;\n");
@@ -627,6 +623,23 @@ export class TSDBuilder extends ExportsWalker {
     sb.push("type f64 = number;\n");
     sb.push("type bool = boolean | number;\n");
     this.walk();
+    if (options.exportMemory) {
+      sb.push("export const memory: WebAssembly.Memory;\n");
+    }
+    if (options.exportTable) {
+      sb.push("export const table: WebAssembly.Table;\n");
+    }
+    if (options.explicitStart) {
+      sb.push("export function _start(): void;\n");
+    }
+    if (options.exportRuntime) {
+      sb.push("export function __new(size: usize, id: u32): usize;\n");
+      sb.push("export function __pin(ptr: usize): usize;\n");
+      sb.push("export function __unpin(ptr: usize): usize;\n");
+      sb.push("export function __collect(): usize;\n");
+      sb.push("export const __rtti_base: usize;\n");
+    }
+    sb.push("export const __setArgumentsLength: ((n: i32) => usize) | undefined;\n");
     return this.sb.join("");
   }
 }
