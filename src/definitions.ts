@@ -639,7 +639,7 @@ export class TSDBuilder extends ExportsWalker {
       sb.push("export function __collect(): usize;\n");
       sb.push("export const __rtti_base: usize;\n");
     }
-    sb.push("export const __setArgumentsLength: ((n: i32) => usize) | undefined;\n");
+    sb.push("export const __setArgumentsLength: ((n: i32) => void) | undefined;\n");
     return this.sb.join("");
   }
 }
