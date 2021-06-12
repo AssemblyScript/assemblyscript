@@ -706,7 +706,7 @@ export namespace BuiltinNames {
   export const wasiTrace = "~lib/wasi/index/trace";
   export const wasiSeed = "~lib/wasi/index/seed";
 
-  export const arguments_length = "~lib/builtins/arguments.get:length";
+  export const arguments_length = "~lib/builtins/arguments.getArgumentsLength";
 }
 
 /** Builtin compilation context. */
@@ -9428,7 +9428,8 @@ function builtin_arguments_length(ctx: BuiltinContext): ExpressionRef {
   const compiler = ctx.compiler;
   const mod = compiler.module;
   compiler.currentType = Type.i32;
-  return mod.i32(1);
+  const local = compiler.currentFlow.getScopedLocal("__arguments_length")!;
+  return mod.local_get(local.index, TypeRef.I32);
 }
 
 builtins.set(BuiltinNames.arguments_length, builtin_arguments_length);

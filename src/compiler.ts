@@ -1599,6 +1599,8 @@ export class Compiler extends DiagnosticEmitter {
       ? assert(flow.lookupLocal(CommonNames.this_))
       : null;
     var bodyStartIndex = stmts.length;
+    var argumentsLengthLocal = flow.lookupLocal("~arguments.length")!;
+    assert(argumentsLengthLocal);
 
     // compile statements
     if (bodyNode.kind == NodeKind.BLOCK) {
@@ -1626,6 +1628,14 @@ export class Compiler extends DiagnosticEmitter {
         flow.set(FlowFlags.RETURNS | FlowFlags.TERMINATES);
       }
     }
+
+    // append arguments.length get
+    var setArgsLength = module.local_set(
+      argumentsLengthLocal.index,
+      module.global_get(BuiltinNames.argumentsLength, TypeRef.I32),
+      false
+    );
+    stmts.unshift(setArgsLength);
 
     // Make constructors return their instance pointer, and prepend a conditional
     // allocation if any code path accesses `this`.

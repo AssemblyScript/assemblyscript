@@ -3747,6 +3747,7 @@ export class Function extends TypedElement {
         );
       }
     }
+    if (!this.localsByName.has("~arguments.length")) this.addLocal(Type.i32, "~arguments.length");
   }
 }
 
