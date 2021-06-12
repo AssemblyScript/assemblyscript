@@ -92,6 +92,20 @@ function testUTF8EncodeNullTerminated(): void {
 }
 testUTF8EncodeNullTerminated();
 
+function testUTF8ErrorMode(): void {
+  // Unpaired lead surrogate
+  var str = String.UTF8.decode(String.UTF8.encode("\uD834", false, String.UTF8.ErrorMode.WTF8));
+  assert(str == "\uD834");
+  str = String.UTF8.decode(String.UTF8.encode("\uD834", false, String.UTF8.ErrorMode.REPLACE));
+  assert(str == "\uFFFD");
+  // Unpaired trail surrogate
+  str = String.UTF8.decode(String.UTF8.encode("\uDD1E", false, String.UTF8.ErrorMode.WTF8));
+  assert(str == "\uDD1E");
+  str = String.UTF8.decode(String.UTF8.encode("\uDD1E", false, String.UTF8.ErrorMode.REPLACE));
+  assert(str == "\uFFFD");
+}
+testUTF8ErrorMode();
+
 function testUTF8Decode(): void {
   var buf = String.UTF8.encode(str);
   assert(String.UTF8.decode(buf) == str);

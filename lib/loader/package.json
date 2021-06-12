@@ -43,5 +43,8 @@
     "umd/index.js",
     "umd/package.json",
     "README.md"
-  ]
+  ],
+  "devDependencies": {
+    "esm2umd": "^0.1.2"
+  }
 }

@@ -1773,12 +1773,21 @@ declare class String {
 declare namespace String {
   /** Encoding helpers for UTF-8. */
   export namespace UTF8 {
+    /** UTF-8 encoding error modes. */
+    export const enum ErrorMode {
+      /** Keeps unpaired surrogates as of WTF-8. This is the default. */
+      WTF8,
+      /** Replaces unpaired surrogates with the replacement character (U+FFFD). */
+      REPLACE,
+      /** Throws an error on unpaired surrogates. */
+      ERROR
+    }
     /** Calculates the byte length of the specified string when encoded as UTF-8, optionally null terminated. */
     export function byteLength(str: string, nullTerminated?: bool): i32;
-    /** Encodes the specified string to UTF-8 bytes, optionally null terminated. */
-    export function encode(str: string, nullTerminated?: bool): ArrayBuffer;
-    /** Encodes the specified raw string to UTF-8 bytes, opionally null terminated. Returns the number of bytes written. */
-    export function encodeUnsafe(str: usize, len: i32, buf: usize, nullTerminated?: bool): usize;
+    /** Encodes the specified string to UTF-8 bytes, optionally null terminated. ErrorMode defaults to WTF-8. */
+    export function encode(str: string, nullTerminated?: bool, errorMode?: ErrorMode): ArrayBuffer;
+    /** Encodes the specified raw string to UTF-8 bytes, opionally null terminated. ErrorMode defaults to WTF-8. Returns the number of bytes written. */
+    export function encodeUnsafe(str: usize, len: i32, buf: usize, nullTerminated?: bool, errorMode?: ErrorMode): usize;
     /** Decodes the specified buffer from UTF-8 bytes to a string, optionally null terminated. */
     export function decode(buf: ArrayBuffer, nullTerminated?: bool): string;
     /** Decodes raw UTF-8 bytes to a string, optionally null terminated. */

@@ -52,3 +52,7 @@ export const E_URI_MALFORMED: string = "URI malformed";
 // @ts-ignore: decorator
 @lazy @inline
 export const E_INVALIDDATE: string = "Invalid Date";
+
+// @ts-ignore: decorator
+@lazy @inline
+export const E_UNPAIRED_SURROGATE: string = "Unpaired surrogate";

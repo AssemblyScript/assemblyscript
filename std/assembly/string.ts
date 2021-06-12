@@ -3,7 +3,7 @@
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { compareImpl, strtol, strtod, isSpace, isAscii, isFinalSigma, toLower8, toUpper8 } from "./util/string";
 import { SPECIALS_UPPER, casemap, bsearch } from "./util/casemap";
-import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_UNPAIRED_SURROGATE } from "./util/error";
 import { idof } from "./builtins";
 import { Array } from "./array";
 
@@ -661,6 +661,12 @@ export namespace String {
 
   export namespace UTF8 {
 
+    export const enum ErrorMode {
+      WTF8,
+      REPLACE,
+      ERROR
+    }
+
     export function byteLength(str: string, nullTerminated: bool = false): i32 {
       var strOff = changetype<usize>(str);
       var strEnd = strOff + <usize>changetype<OBJECT>(changetype<usize>(str) - TOTAL_OVERHEAD).rtSize;
@@ -687,15 +693,15 @@ export namespace String {
       return bufLen;
     }
 
-    export function encode(str: string, nullTerminated: bool = false): ArrayBuffer {
+    export function encode(str: string, nullTerminated: bool = false, errorMode: ErrorMode = ErrorMode.WTF8): ArrayBuffer {
       var buf = changetype<ArrayBuffer>(__new(<usize>byteLength(str, nullTerminated), idof<ArrayBuffer>()));
-      encodeUnsafe(changetype<usize>(str), str.length, changetype<usize>(buf), nullTerminated);
+      encodeUnsafe(changetype<usize>(str), str.length, changetype<usize>(buf), nullTerminated, errorMode);
       return buf;
     }
 
     // @ts-ignore: decorator
     @unsafe
-    export function encodeUnsafe(str: usize, len: i32, buf: usize, nullTerminated: bool = false): usize {
+    export function encodeUnsafe(str: usize, len: i32, buf: usize, nullTerminated: bool = false, errorMode: ErrorMode = ErrorMode.WTF8): usize {
       var strEnd = str + (<usize>len << 1);
       var bufOff = buf;
       while (str < strEnd) {
@@ -709,17 +715,29 @@ export namespace String {
           store<u16>(bufOff, b1 << 8 | b0);
           bufOff += 2;
         } else {
-          if ((c1 & 0xFC00) == 0xD800 && str + 2 < strEnd) {
-            let c2 = <u32>load<u16>(str, 2);
-            if ((c2 & 0xFC00) == 0xDC00) {
-              c1 = 0x10000 + ((c1 & 0x03FF) << 10) | (c2 & 0x03FF);
-              let b0 = c1 >> 18 | 240;
-              let b1 = c1 >> 12 & 63 | 128;
-              let b2 = c1 >> 6  & 63 | 128;
-              let b3 = c1       & 63 | 128;
-              store<u32>(bufOff, b3 << 24 | b2 << 16 | b1 << 8 | b0);
-              bufOff += 4; str += 4;
-              continue;
+          // D800: 11011 0 0000000000 Lead
+          // DBFF: 11011 0 1111111111
+          // DC00: 11011 1 0000000000 Trail
+          // DFFF: 11011 1 1111111111
+          // F800: 11111 0 0000000000 Mask
+          // FC00: 11111 1 0000000000
+          if ((c1 & 0xF800) == 0xD800) {
+            if (c1 < 0xDC00 && str + 2 < strEnd) {
+              let c2 = <u32>load<u16>(str, 2);
+              if ((c2 & 0xFC00) == 0xDC00) {
+                c1 = 0x10000 + ((c1 & 0x03FF) << 10) | (c2 & 0x03FF);
+                let b0 = c1 >> 18 | 240;
+                let b1 = c1 >> 12 & 63 | 128;
+                let b2 = c1 >> 6  & 63 | 128;
+                let b3 = c1       & 63 | 128;
+                store<u32>(bufOff, b3 << 24 | b2 << 16 | b1 << 8 | b0);
+                bufOff += 4; str += 4;
+                continue;
+              }
+            }
+            if (errorMode != ErrorMode.WTF8) { // unlikely
+              if (errorMode == ErrorMode.ERROR) throw new Error(E_UNPAIRED_SURROGATE);
+              c1 = 0xFFFD;
             }
           }
           let b0 = c1 >> 12 | 224;
