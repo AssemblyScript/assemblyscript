@@ -44,6 +44,7 @@
   "Exported generic function or class has no concrete instances.": 232,
   "Property '{0}' is always assigned before being used.": 233,
   "Expression refers to a static element that does not compile to a value at runtime.": 234,
+  "Type '{0}' is not iterable.": 235,
 
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,
@@ -102,6 +103,7 @@
   "Binary digit expected.": 1177,
   "Octal digit expected.": 1178,
   "An implementation cannot be declared in ambient contexts.": 1183,
+  "Only a single variable declaration is allowed in a 'for...of' statement": 1188,
   "The variable declaration of a 'for...of' statement cannot have an initializer.": 1190,
   "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": 1198,
   "Unterminated Unicode escape sequence.": 1199,

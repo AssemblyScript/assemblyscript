@@ -49,6 +49,7 @@ export enum DiagnosticCode {
   Exported_generic_function_or_class_has_no_concrete_instances = 232,
   Property_0_is_always_assigned_before_being_used = 233,
   Expression_refers_to_a_static_element_that_does_not_compile_to_a_value_at_runtime = 234,
+  Type_0_is_not_iterable = 235,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
   Expression_compiles_to_a_dynamic_check_at_runtime = 903,
@@ -105,6 +106,7 @@ export enum DiagnosticCode {
   Binary_digit_expected = 1177,
   Octal_digit_expected = 1178,
   An_implementation_cannot_be_declared_in_ambient_contexts = 1183,
+  Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement = 1188,
   The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer = 1190,
   An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive = 1198,
   Unterminated_Unicode_escape_sequence = 1199,
@@ -229,6 +231,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 232: return "Exported generic function or class has no concrete instances.";
     case 233: return "Property '{0}' is always assigned before being used.";
     case 234: return "Expression refers to a static element that does not compile to a value at runtime.";
+    case 235: return "Type '{0}' is not iterable.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";
     case 903: return "Expression compiles to a dynamic check at runtime.";
@@ -285,6 +288,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1177: return "Binary digit expected.";
     case 1178: return "Octal digit expected.";
     case 1183: return "An implementation cannot be declared in ambient contexts.";
+    case 1188: return "Only a single variable declaration is allowed in a 'for...of' statement";
     case 1190: return "The variable declaration of a 'for...of' statement cannot have an initializer.";
     case 1198: return "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.";
     case 1199: return "Unterminated Unicode escape sequence.";
