@@ -1712,6 +1712,8 @@ declare class Array<T> {
   /** Flattens an array of arrays. If any null entries exist in the array, they are ignored, unlike JavaScript's version of Array#flat(). */
   flat(): T extends unknown[] ? T : never;
   toString(): string;
+
+  [Symbol.iterator](): { next(): { value: T, done: boolean } }
 }
 
 /** Class representing a static (not resizable) sequence of values of type `T`. This class is @final. */

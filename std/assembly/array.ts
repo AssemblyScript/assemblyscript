@@ -35,10 +35,10 @@ class ArrayIterator<T> {
   i: i32 = 0
   constructor(public arr: Array<T>) {}
   next(): T {
-    return this.arr[this.i]
+    return this.arr[this.i];
   }
   done(): bool {
-    return this.i >= this.arr.length
+    return this.i >= this.arr.length;
   }
 }
 
@@ -139,7 +139,7 @@ export class Array<T> {
 
   @iterator
   private __iter(): ArrayIterator<T> {
-    return new ArrayIterator<T>(this)
+    return new ArrayIterator<T>(this);
   }
 
   at(index: i32): T {

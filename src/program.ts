@@ -4367,7 +4367,7 @@ export class Class extends TypedElement {
             if (member.kind == ElementKind.FUNCTION_PROTOTYPE) {
               return this.program.resolver.resolveFunction(<FunctionPrototype>member, null);
             }
-            return <Function>member
+            return <Function>member;
           }
         }
       }

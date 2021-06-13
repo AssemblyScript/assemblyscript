@@ -2681,7 +2681,7 @@ export class Compiler extends DiagnosticEmitter {
   private compileForOfStatement(
     statement: ForOfStatement
   ): ExpressionRef {
-    const compiler = this
+    const compiler = this;
     function earlyBailout(ty: Type) {
       compiler.error(
         DiagnosticCode.Type_0_is_not_iterable,
@@ -2698,7 +2698,7 @@ export class Compiler extends DiagnosticEmitter {
       );
       return this.module.unreachable();
     }
-    const variable = <VariableStatement>statement.variable
+    const variable = <VariableStatement>statement.variable;
     if (variable.declarations.length != 1) {
       this.error(
         DiagnosticCode.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement,
@@ -2706,20 +2706,20 @@ export class Compiler extends DiagnosticEmitter {
       );
       return this.module.unreachable();
     }
-    const iterable = this.compileExpression(statement.iterable, Type.auto)
+    const iterable = this.compileExpression(statement.iterable, Type.auto);
 
     const iterablety = this.resolver.resolveExpression(statement.iterable, this.currentFlow);
     if (!iterablety) return this.module.unreachable();
-    const iterablecls = iterablety.getClass()
+    const iterablecls = iterablety.getClass();
     if (!iterablecls) return earlyBailout(iterablety);
-    const iterableelem = iterablecls.lookupIterator()
+    const iterableelem = iterablecls.lookupIterator();
     if (!iterableelem) return earlyBailout(iterablety);
-    const iterablefn = <Function>iterableelem
-    const iterator = iterablefn.signature.returnType
-    const getiteratorcall = this.compileCallDirect(iterablefn, [], statement.iterable, iterable)
-    const iteratortemp = this.currentFlow.getTempLocal(iterator)
+    const iterablefn = <Function>iterableelem;
+    const iterator = iterablefn.signature.returnType;
+    const getiteratorcall = this.compileCallDirect(iterablefn, [], statement.iterable, iterable);
+    const iteratortemp = this.currentFlow.getTempLocal(iterator);
 
-    const iteratorcls = iterator.getClass()
+    const iteratorcls = iterator.getClass();
     if (!iteratorcls) return earlyBailout(iterablety);
     
     const nextelem = iteratorcls.getMethod('next');
@@ -2728,13 +2728,13 @@ export class Compiler extends DiagnosticEmitter {
     const doneelem = iteratorcls.getMethod('done');
     if (!doneelem) return this.module.unreachable();
     
-    const iteratorvaluetype = (<Function>nextelem).signature.returnType
-    const iter = this.currentFlow.addScopedLocal(variable.declarations[0].name.text, iteratorvaluetype)
-    
-    return this.module.block('for_of_done', [
+    const iteratorvaluetype = (<Function>nextelem).signature.returnType;
+    const iter = this.currentFlow.addScopedLocal(variable.declarations[0].name.text, iteratorvaluetype);
+    const breaklabel = this.currentFlow.pushBreakLabel();
+    const brk = this.module.block('for_of_done|' + breaklabel, [
       this.module.local_set(iteratortemp.index, getiteratorcall, iterator.isManaged),
-      this.module.loop('for_of_loop', this.module.block(null, [
-        this.module.br('for_of_done',
+      this.module.loop('for_of_loop|' + breaklabel, this.module.block(null, [
+        this.module.br('for_of_done|' + breaklabel,
           this.module.binary(
             BinaryOp.EqI32,
             this.compileCallDirect(
@@ -2757,9 +2757,11 @@ export class Compiler extends DiagnosticEmitter {
           iter.type.isManaged
         ),
         this.compileStatement(statement.statement),
-        this.module.br('for_of_loop')
+        this.module.br('for_of_loop|' + breaklabel)
       ]))
     ]);
+    this.currentFlow.popBreakLabel();
+    return brk;
   }
 
   private compileIfStatement(
