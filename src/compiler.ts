@@ -2681,12 +2681,85 @@ export class Compiler extends DiagnosticEmitter {
   private compileForOfStatement(
     statement: ForOfStatement
   ): ExpressionRef {
-    this.error(
-      DiagnosticCode.Not_implemented_0,
-      statement.range,
-      "Iterators"
-    );
-    return this.module.unreachable();
+    const compiler = this
+    function earlyBailout(ty: Type) {
+      compiler.error(
+        DiagnosticCode.Type_0_is_not_iterable,
+        statement.range,
+        ty.toString()
+      );
+      return compiler.module.unreachable();
+    }
+    if (statement.variable.kind != NodeKind.VARIABLE) {
+      this.error(
+        DiagnosticCode.Not_implemented_0,
+        statement.range,
+        "For .. of where the target is not a variable"
+      );
+      return this.module.unreachable();
+    }
+    const variable = <VariableStatement>statement.variable
+    if (variable.declarations.length != 1) {
+      this.error(
+        DiagnosticCode.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement,
+        statement.range
+      );
+      return this.module.unreachable();
+    }
+    const iterable = this.compileExpression(statement.iterable, Type.auto)
+
+    const iterablety = this.resolver.resolveExpression(statement.iterable, this.currentFlow);
+    if (!iterablety) return this.module.unreachable();
+    const iterablecls = iterablety.getClass()
+    if (!iterablecls) return earlyBailout(iterablety);
+    const iterableelem = iterablecls.lookupIterator()
+    if (!iterableelem) return earlyBailout(iterablety);
+    const iterablefn = <Function>iterableelem
+    const iterator = iterablefn.signature.returnType
+    const getiteratorcall = this.compileCallDirect(iterablefn, [], statement.iterable, iterable)
+    const iteratortemp = this.currentFlow.getTempLocal(iterator)
+
+    const iteratorcls = iterator.getClass()
+    if (!iteratorcls) return earlyBailout(iterablety);
+    
+    const nextelem = iteratorcls.getMethod('next');
+    if (!nextelem) return earlyBailout(iterablety);
+
+    const doneelem = iteratorcls.getMethod('done');
+    if (!doneelem) return this.module.unreachable();
+    
+    const iteratorvaluetype = (<Function>nextelem).signature.returnType
+    const iter = this.currentFlow.addScopedLocal(variable.declarations[0].name.text, iteratorvaluetype)
+    
+    return this.module.block('for_of_done', [
+      this.module.local_set(iteratortemp.index, getiteratorcall, iterator.isManaged),
+      this.module.loop('for_of_loop', this.module.block(null, [
+        this.module.br('for_of_done',
+          this.module.binary(
+            BinaryOp.EqI32,
+            this.compileCallDirect(
+              <Function>doneelem,
+              [],
+              statement.iterable,
+              this.module.local_get(iteratortemp.index, iterator.toRef())
+            ),
+            this.module.i32(1)
+          )
+        ),
+        this.module.local_set(
+          iter.index,
+          this.compileCallDirect(
+            <Function>nextelem,
+            [],
+            statement.iterable,
+            this.module.local_get(iteratortemp.index, iterator.toRef())
+          ),
+          iter.type.isManaged
+        ),
+        this.compileStatement(statement.statement),
+        this.module.br('for_of_loop')
+      ]))
+    ]);
   }
 
   private compileIfStatement(
