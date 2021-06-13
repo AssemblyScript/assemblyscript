@@ -706,7 +706,6 @@ export namespace BuiltinNames {
   export const wasiAbort = "~lib/wasi/index/abort";
   export const wasiTrace = "~lib/wasi/index/trace";
   export const wasiSeed = "~lib/wasi/index/seed";
-
   export const arguments_length = "~lib/builtins/arguments.getArgumentsLength";
 }
 
