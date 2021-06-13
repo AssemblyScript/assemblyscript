@@ -649,7 +649,6 @@ export class Program extends DiagnosticEmitter {
 
   /** Gets the standard `abort` instance, if not explicitly disabled. */
   get abortInstance(): Function | null {
-    if (this.options.trapAbort) return null
     var prototype = this.lookup(CommonNames.abort);
     if (!prototype || prototype.kind != ElementKind.FUNCTION_PROTOTYPE) return null;
     return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
