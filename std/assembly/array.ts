@@ -31,6 +31,17 @@ function ensureCapacity(array: usize, newSize: usize, alignLog2: u32, canGrow: b
   }
 }
 
+class ArrayIterator<T> {
+  i: i32 = 0
+  constructor(public arr: Array<T>) {}
+  next(): T {
+    return this.arr[this.i]
+  }
+  done(): bool {
+    return this.i >= this.arr.length
+  }
+}
+
 export class Array<T> {
   [key: number]: T;
 
@@ -124,6 +135,11 @@ export class Array<T> {
     if (isManaged<T>()) {
       __link(changetype<usize>(this), changetype<usize>(value), true);
     }
+  }
+
+  @iterator
+  private __iter(): ArrayIterator<T> {
+    return new ArrayIterator<T>(this)
   }
 
   at(index: i32): T {
