@@ -3651,7 +3651,7 @@ export class Function extends TypedElement {
     }
     this.flow = Flow.createParent(this);
     registerConcreteElement(program, this);
-    this.addLocal(Type.i32, BuiltinNames.argumentsLength);
+    this.addLocal(Type.i32, BuiltinNames.argumentsLengthLocal);
   }
 
   /** Gets the name of the parameter at the specified index. */

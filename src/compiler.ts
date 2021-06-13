@@ -1599,7 +1599,7 @@ export class Compiler extends DiagnosticEmitter {
       ? assert(flow.lookupLocal(CommonNames.this_))
       : null;
     var bodyStartIndex = stmts.length;
-    var argumentsLengthLocal = flow.lookupLocal(BuiltinNames.argumentsLength)!;
+    var argumentsLengthLocal = flow.lookupLocal(BuiltinNames.argumentsLengthLocal)!;
     assert(argumentsLengthLocal);
 
     // compile statements
@@ -1630,12 +1630,12 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // append arguments.length get
-    var setArgsLength = module.local_set(
+    var localSetArgumentsLength = module.local_set(
       argumentsLengthLocal.index,
       module.global_get(BuiltinNames.argumentsLength, TypeRef.I32),
       false
     );
-    stmts.unshift(setArgsLength);
+    stmts.unshift(localSetArgumentsLength);
 
     // Make constructors return their instance pointer, and prepend a conditional
     // allocation if any code path accesses `this`.

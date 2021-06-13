@@ -119,6 +119,7 @@ export namespace BuiltinNames {
   export const start = "~start";
   export const started = "~started";
   export const argumentsLength = "~argumentsLength";
+  export const argumentsLengthLocal = "~argumentsLengthLocal";
   export const setArgumentsLength = "~setArgumentsLength";
 
   // std/builtins.ts
@@ -9428,7 +9429,7 @@ function builtin_arguments_length(ctx: BuiltinContext): ExpressionRef {
   const compiler = ctx.compiler;
   const mod = compiler.module;
   compiler.currentType = Type.i32;
-  const local = compiler.currentFlow.lookupLocal(BuiltinNames.argumentsLength)!;
+  const local = compiler.currentFlow.lookupLocal(BuiltinNames.argumentsLengthLocal)!;
   return mod.local_get(local.index, TypeRef.I32);
 }
 
