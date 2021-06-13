@@ -1938,7 +1938,8 @@ export class Program extends DiagnosticEmitter {
     if (!declaration.is(CommonFlags.GENERIC)) {
       acceptedFlags |= DecoratorFlags.OPERATOR_BINARY
                     |  DecoratorFlags.OPERATOR_PREFIX
-                    |  DecoratorFlags.OPERATOR_POSTFIX;
+                    |  DecoratorFlags.OPERATOR_POSTFIX
+                    |  DecoratorFlags.ITERATOR;
     }
     if (parent.is(CommonFlags.AMBIENT)) {
       acceptedFlags |= DecoratorFlags.EXTERNAL;
@@ -2692,7 +2693,9 @@ export enum DecoratorFlags {
   /** Is compiled lazily. */
   LAZY = 1 << 9,
   /** Is considered unsafe code. */
-  UNSAFE = 1 << 10
+  UNSAFE = 1 << 10,
+  /** Is an iterator. */
+  ITERATOR = 1 << 11
 }
 
 export namespace DecoratorFlags {
@@ -2712,6 +2715,7 @@ export namespace DecoratorFlags {
       case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
       case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
       case DecoratorKind.UNSAFE: return DecoratorFlags.UNSAFE;
+      case DecoratorKind.ITERATOR: return DecoratorFlags.ITERATOR;
       default: return DecoratorFlags.NONE;
     }
   }
@@ -4347,6 +4351,25 @@ export class Class extends TypedElement {
       let overloads = instance.overloads;
       if (overloads != null && overloads.has(kind)) {
         return assert(overloads.get(kind));
+      }
+      instance = instance.base;
+    } while (instance);
+    return null;
+  }
+
+  /** Looks up the iterator for this class. */
+  lookupIterator(): Function | null {
+    var instance: Class | null = this;
+    do {
+      if (instance.members) {
+        for (let member of instance.members.values()) {
+          if (member.decoratorFlags & DecoratorFlags.ITERATOR) {
+            if (member.kind == ElementKind.FUNCTION_PROTOTYPE) {
+              return this.program.resolver.resolveFunction(<FunctionPrototype>member, null);
+            }
+            return <Function>member
+          }
+        }
       }
       instance = instance.base;
     } while (instance);

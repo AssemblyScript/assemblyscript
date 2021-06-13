@@ -978,7 +978,8 @@ export enum DecoratorKind {
   EXTERNAL,
   BUILTIN,
   LAZY,
-  UNSAFE
+  UNSAFE,
+  ITERATOR
 }
 
 export namespace DecoratorKind {
@@ -1007,6 +1008,7 @@ export namespace DecoratorKind {
         }
         case CharCode.i: {
           if (nameStr == "inline") return DecoratorKind.INLINE;
+          if (nameStr == "iterator") return DecoratorKind.ITERATOR;
           break;
         }
         case CharCode.l: {

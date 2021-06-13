@@ -2191,6 +2191,13 @@ declare namespace operator {
   ) => TypedPropertyDescriptor<any> | void;
 }
 
+/** Annotates an element as an iterator. */
+declare function iterator(
+  target: any,
+  propertyKey: string,
+  descriptor: TypedPropertyDescriptor<any>
+): TypedPropertyDescriptor<any> | void;
+
 /** Annotates an element as a program global. */
 declare function global(...args: any[]): any;
 
