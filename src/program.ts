@@ -3651,6 +3651,7 @@ export class Function extends TypedElement {
     }
     this.flow = Flow.createParent(this);
     registerConcreteElement(program, this);
+    this.addLocal(Type.i32, BuiltinNames.argumentsLength);
   }
 
   /** Gets the name of the parameter at the specified index. */
@@ -3747,7 +3748,6 @@ export class Function extends TypedElement {
         );
       }
     }
-    if (!this.localsByName.has("~arguments.length")) this.addLocal(Type.i32, "~arguments.length");
   }
 }
 

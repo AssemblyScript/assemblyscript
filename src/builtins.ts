@@ -9428,7 +9428,7 @@ function builtin_arguments_length(ctx: BuiltinContext): ExpressionRef {
   const compiler = ctx.compiler;
   const mod = compiler.module;
   compiler.currentType = Type.i32;
-  const local = compiler.currentFlow.getScopedLocal("__arguments_length")!;
+  const local = compiler.currentFlow.lookupLocal(BuiltinNames.argumentsLength)!;
   return mod.local_get(local.index, TypeRef.I32);
 }
 

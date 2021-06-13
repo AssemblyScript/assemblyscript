@@ -1599,7 +1599,7 @@ export class Compiler extends DiagnosticEmitter {
       ? assert(flow.lookupLocal(CommonNames.this_))
       : null;
     var bodyStartIndex = stmts.length;
-    var argumentsLengthLocal = flow.lookupLocal("~arguments.length")!;
+    var argumentsLengthLocal = flow.lookupLocal(BuiltinNames.argumentsLength)!;
     assert(argumentsLengthLocal);
 
     // compile statements

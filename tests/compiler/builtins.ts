@@ -586,6 +586,7 @@ assert(rotr3(48, 8, 1) == 3);
 
 
 function arglength1(a: i32): void {
+  trace("arguments length", 1, arguments.length);
   assert(arguments.length == 1);
 }
 
