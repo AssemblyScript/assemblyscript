@@ -4881,7 +4881,7 @@
   loop $for-loop|0
    local.get $1
    local.get $2
-   i32.lt_u
+   i32.lt_s
    if
     local.get $4
     local.get $2
@@ -4903,7 +4903,7 @@
   loop $for-loop|1
    local.get $3
    local.get $6
-   i32.gt_u
+   i32.gt_s
    if
     local.get $4
     local.get $7
@@ -4929,7 +4929,7 @@
   loop $for-loop|2
    local.get $1
    local.get $3
-   i32.le_u
+   i32.le_s
    if
     local.get $4
     local.get $6
@@ -5790,7 +5790,7 @@
   loop $for-loop|0
    local.get $1
    local.get $2
-   i32.lt_u
+   i32.lt_s
    if
     local.get $4
     local.get $2
@@ -5812,7 +5812,7 @@
   loop $for-loop|1
    local.get $3
    local.get $6
-   i32.gt_u
+   i32.gt_s
    if
     local.get $4
     local.get $7
@@ -5838,7 +5838,7 @@
   loop $for-loop|2
    local.get $1
    local.get $3
-   i32.le_u
+   i32.le_s
    if
     local.get $4
     local.get $6
@@ -6654,7 +6654,7 @@
   loop $for-loop|0
    local.get $1
    local.get $2
-   i32.lt_u
+   i32.lt_s
    if
     local.get $4
     local.get $2
@@ -6676,7 +6676,7 @@
   loop $for-loop|1
    local.get $3
    local.get $6
-   i32.gt_u
+   i32.gt_s
    if
     local.get $4
     local.get $7
@@ -6702,7 +6702,7 @@
   loop $for-loop|2
    local.get $1
    local.get $3
-   i32.le_u
+   i32.le_s
    if
     local.get $4
     local.get $6
@@ -7522,7 +7522,7 @@
   loop $for-loop|0
    local.get $1
    local.get $2
-   i32.lt_u
+   i32.lt_s
    if
     local.get $4
     local.get $2
@@ -7544,7 +7544,7 @@
   loop $for-loop|1
    local.get $3
    local.get $6
-   i32.gt_u
+   i32.gt_s
    if
     local.get $4
     local.get $7
@@ -7570,7 +7570,7 @@
   loop $for-loop|2
    local.get $1
    local.get $3
-   i32.le_u
+   i32.le_s
    if
     local.get $4
     local.get $6
@@ -8342,7 +8342,7 @@
   loop $for-loop|0
    local.get $1
    local.get $2
-   i32.lt_u
+   i32.lt_s
    if
     local.get $4
     local.get $2
@@ -8364,7 +8364,7 @@
   loop $for-loop|1
    local.get $3
    local.get $6
-   i32.gt_u
+   i32.gt_s
    if
     local.get $4
     local.get $8
@@ -8390,7 +8390,7 @@
   loop $for-loop|2
    local.get $1
    local.get $3
-   i32.le_u
+   i32.le_s
    if
     global.get $~lib/memory/__stack_pointer
     local.tee $7
@@ -12399,7 +12399,7 @@
   loop $for-loop|0
    local.get $1
    local.get $2
-   i32.lt_u
+   i32.lt_s
    if
     local.get $4
     local.get $2
@@ -12419,7 +12419,7 @@
   loop $for-loop|1
    local.get $3
    local.get $6
-   i32.gt_u
+   i32.gt_s
    if
     local.get $4
     local.get $7
@@ -12441,7 +12441,7 @@
   loop $for-loop|2
    local.get $1
    local.get $3
-   i32.le_u
+   i32.le_s
    if
     local.get $4
     local.get $6

@@ -7087,7 +7087,7 @@
   loop $for-loop|0
    local.get $6
    local.get $1
-   i32.gt_u
+   i32.gt_s
    local.set $10
    local.get $10
    if
@@ -7119,7 +7119,7 @@
   loop $for-loop|1
    local.get $7
    local.get $3
-   i32.lt_u
+   i32.lt_s
    local.set $10
    local.get $10
    if
@@ -7149,7 +7149,7 @@
   loop $for-loop|2
    local.get $8
    local.get $3
-   i32.le_u
+   i32.le_s
    local.set $10
    local.get $10
    if
@@ -8178,7 +8178,7 @@
   loop $for-loop|0
    local.get $6
    local.get $1
-   i32.gt_u
+   i32.gt_s
    local.set $10
    local.get $10
    if
@@ -8210,7 +8210,7 @@
   loop $for-loop|1
    local.get $7
    local.get $3
-   i32.lt_u
+   i32.lt_s
    local.set $10
    local.get $10
    if
@@ -8240,7 +8240,7 @@
   loop $for-loop|2
    local.get $8
    local.get $3
-   i32.le_u
+   i32.le_s
    local.set $10
    local.get $10
    if
@@ -9299,7 +9299,7 @@
   loop $for-loop|0
    local.get $6
    local.get $1
-   i32.gt_u
+   i32.gt_s
    local.set $10
    local.get $10
    if
@@ -9331,7 +9331,7 @@
   loop $for-loop|1
    local.get $7
    local.get $3
-   i32.lt_u
+   i32.lt_s
    local.set $10
    local.get $10
    if
@@ -9361,7 +9361,7 @@
   loop $for-loop|2
    local.get $8
    local.get $3
-   i32.le_u
+   i32.le_s
    local.set $10
    local.get $10
    if
@@ -10282,7 +10282,7 @@
   loop $for-loop|0
    local.get $6
    local.get $1
-   i32.gt_u
+   i32.gt_s
    local.set $10
    local.get $10
    if
@@ -10314,7 +10314,7 @@
   loop $for-loop|1
    local.get $7
    local.get $3
-   i32.lt_u
+   i32.lt_s
    local.set $10
    local.get $10
    if
@@ -10344,7 +10344,7 @@
   loop $for-loop|2
    local.get $8
    local.get $3
-   i32.le_u
+   i32.le_s
    local.set $10
    local.get $10
    if
@@ -11341,7 +11341,7 @@
   loop $for-loop|0
    local.get $6
    local.get $1
-   i32.gt_u
+   i32.gt_s
    local.set $10
    local.get $10
    if
@@ -11373,7 +11373,7 @@
   loop $for-loop|1
    local.get $7
    local.get $3
-   i32.lt_u
+   i32.lt_s
    local.set $10
    local.get $10
    if
@@ -11403,7 +11403,7 @@
   loop $for-loop|2
    local.get $8
    local.get $3
-   i32.le_u
+   i32.le_s
    local.set $10
    local.get $10
    if
@@ -12266,7 +12266,7 @@
   loop $for-loop|0
    local.get $6
    local.get $1
-   i32.gt_u
+   i32.gt_s
    local.set $10
    local.get $10
    if
@@ -12298,7 +12298,7 @@
   loop $for-loop|1
    local.get $7
    local.get $3
-   i32.lt_u
+   i32.lt_s
    local.set $10
    local.get $10
    if
@@ -12328,7 +12328,7 @@
   loop $for-loop|2
    local.get $8
    local.get $3
-   i32.le_u
+   i32.le_s
    local.set $10
    local.get $10
    if
@@ -13104,7 +13104,7 @@
   loop $for-loop|0
    local.get $6
    local.get $1
-   i32.gt_u
+   i32.gt_s
    local.set $10
    local.get $10
    if
@@ -13136,7 +13136,7 @@
   loop $for-loop|1
    local.get $7
    local.get $3
-   i32.lt_u
+   i32.lt_s
    local.set $10
    local.get $10
    if
@@ -13166,7 +13166,7 @@
   loop $for-loop|2
    local.get $8
    local.get $3
-   i32.le_u
+   i32.le_s
    local.set $10
    local.get $10
    if
@@ -14301,7 +14301,7 @@
   loop $for-loop|0
    local.get $6
    local.get $1
-   i32.gt_u
+   i32.gt_s
    local.set $10
    local.get $10
    if
@@ -14333,7 +14333,7 @@
   loop $for-loop|1
    local.get $7
    local.get $3
-   i32.lt_u
+   i32.lt_s
    local.set $10
    local.get $10
    if
@@ -14363,7 +14363,7 @@
   loop $for-loop|2
    local.get $8
    local.get $3
-   i32.le_u
+   i32.le_s
    local.set $10
    local.get $10
    if
@@ -20015,7 +20015,7 @@
   loop $for-loop|0
    local.get $6
    local.get $1
-   i32.gt_u
+   i32.gt_s
    local.set $10
    local.get $10
    if
@@ -20047,7 +20047,7 @@
   loop $for-loop|1
    local.get $7
    local.get $3
-   i32.lt_u
+   i32.lt_s
    local.set $10
    local.get $10
    if
@@ -20077,7 +20077,7 @@
   loop $for-loop|2
    local.get $8
    local.get $3
-   i32.le_u
+   i32.le_s
    local.set $10
    local.get $10
    if

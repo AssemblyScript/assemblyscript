@@ -271,14 +271,14 @@ function extendRunRight<T>(
 // Merges arr[l..m - 1] and arr[m..r]
 function mergeRuns<T>(
   dataStart: usize,
-  l: u32,
-  m: u32,
-  r: u32,
+  l: i32,
+  m: i32,
+  r: i32,
   buffer: usize,
   comparator: (a: T, b: T) => i32
 ): void {
   --m; // accounts for different convention in Sedgewick’s book
-  var i: u32, j: u32, k: u32, t = r + m;
+  var i: i32, j: i32, k: i32, t = r + m;
   for (i = m + 1; i > l; --i) {
     store<T>(buffer + ((i - 1) << alignof<T>()), load<T>(dataStart + ((i - 1) << alignof<T>())));
   }
@@ -291,7 +291,7 @@ function mergeRuns<T>(
     let c = comparator(a, b);
     store<T>(dataStart + (k << alignof<T>()), select(a, b, c >>> 31)); // c < 0
     store<T>(dataStart + (k << alignof<T>()), select(b, a, c >>> 31)); // c < 0
-    j -= u32(c >>> 31); // c < 0
-    i += u32(c >= 0);
+    j -= i32(c >>> 31); // c < 0
+    i += i32(c >= 0);
   }
 }
