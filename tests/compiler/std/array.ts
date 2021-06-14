@@ -948,6 +948,10 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 
 // Tests for default comparator
 {
+  let f32ArrayTypedSmall: f32[] = [2.0, -1.0, 0.0];
+  f32ArrayTypedSmall.sort();
+  assert(isArraysEqual<f32>(f32ArrayTypedSmall, [-1.0, 0.0, 2.0]));
+
   let f32ArrayTyped: f32[] = [1.0, NaN, -Infinity, 1.00000001, 0.0, -1.0, -2.0, +Infinity];
   f32ArrayTyped.sort();
   assert(isArraysEqual<f32>(f32ArrayTyped, [-Infinity, -2.0, -1.0, 0.0, 1.0, 1.00000001, Infinity, NaN]));

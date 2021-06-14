@@ -1,6 +1,19 @@
 import { compareImpl } from "./string";
 
 // @ts-ignore: decorator
+@lazy const EMPTY: u32 = 0xFFFFFFFF;
+// @ts-ignore: decorator
+@lazy const INSERTION_SORT_THRESHOLD = 128;
+// @ts-ignore: decorator
+@lazy const MIN_RUN_LENGTH = 32;
+
+// @ts-ignore: decorator
+@inline
+function log2u(n: u32): u32 {
+  return 31 - clz(n);
+}
+
+// @ts-ignore: decorator
 @inline
 export function COMPARATOR<T>(): (a: T, b: T) => i32 {
   if (isInteger<T>()) {
@@ -43,100 +56,242 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
   }
 }
 
-// @ts-ignore: decorator
-@inline
+// Power Sort implementation (stable) from paper "Nearly-Optimal Mergesorts"
+// https://arxiv.org/pdf/1805.04154.pdf
+// This method usually outperform TimSort.
 export function SORT<T>(
   dataStart: usize,
   length: i32,
   comparator: (a: T, b: T) => i32
 ): void {
-  if (isReference<T>()) {
-    // TODO replace this to faster stable sort (TimSort) when it implemented
-    insertionSort<T>(dataStart, length, comparator);
-  } else {
-    if (length < 256) {
-      insertionSort<T>(dataStart, length, comparator);
-    } else {
-      weakHeapSort<T>(dataStart, length, comparator);
+  var hi = length - 1, n = length;
+  if (n <= INSERTION_SORT_THRESHOLD) {
+    if (ASC_SHRINK_LEVEL < 1) {
+      switch (n) {
+        case 3: {
+          let a = load<T>(dataStart, 1 << alignof<T>());
+          let b = load<T>(dataStart, 2 << alignof<T>());
+          let c = comparator(a, b);
+          store<T>(dataStart, select<T>(a, b, c >>> 31), 1 << alignof<T>());
+          b = select<T>(b, a, c >>> 31);
+          a = load<T>(dataStart, 0);
+          c = comparator(a, b);
+          store<T>(dataStart, select<T>(a, b, c >>> 31), 0);
+          store<T>(dataStart, select<T>(b, a, c >>> 31), 2 << alignof<T>());
+        }
+        case 2: {
+          let a = load<T>(dataStart, 0);
+          let b = load<T>(dataStart, 1 << alignof<T>());
+          let c = comparator(a, b);
+          store<T>(dataStart, select<T>(a, b, c >>> 31), 0);
+          store<T>(dataStart, select<T>(b, a, c >>> 31), 1 << alignof<T>());
+        }
+        case 1:
+        case 0: return;
+      }
+    }
+    insertionSort<T>(dataStart, 0, hi, 0, comparator);
+    return;
+  }
+
+  var lgPlus2         = log2u(n) + 2;
+  var lgPlus2Size     = lgPlus2 << alignof<u32>();
+  var leftRunStartBuf = __alloc(lgPlus2Size);
+  var leftRunEndBuf   = __alloc(lgPlus2Size);
+
+  for (let i: u32 = 0; i < lgPlus2; ++i) {
+    store<u32>(leftRunStartBuf + (i << alignof<u32>()), EMPTY);
+    // store<u32>(leftRunEndBuf + (i << alignof<u32>()), 0); // ?
+  }
+
+  var top: u32 = 0;
+  var buffer = __alloc(n << alignof<T>());
+
+  var startA = 0;
+  var endA   = extendRunRight<T>(dataStart, 0, hi, comparator);
+
+  var lenA = endA + 1;
+  if (lenA < MIN_RUN_LENGTH) {
+    endA = min(hi, MIN_RUN_LENGTH - 1);
+    insertionSort<T>(dataStart, startA, endA, lenA, comparator);
+  }
+
+  while (endA < hi) {
+    let startB = endA + 1;
+    let endB = extendRunRight<T>(dataStart, startB, hi, comparator);
+    let lenB = endB - startB + 1;
+
+    if (lenB < MIN_RUN_LENGTH) {
+      endB = min(hi, startB + MIN_RUN_LENGTH - 1);
+      insertionSort<T>(dataStart, startB, endB, lenB, comparator);
+    }
+
+    let k = nodePower(0, hi, startA, startB, endB);
+
+    for (let i = top; i > k; --i) {
+      let start = load<u32>(leftRunStartBuf + (i << alignof<u32>()));
+      if (start != EMPTY) {
+        mergeRuns<T>(
+          dataStart,
+          start,
+          load<u32>(leftRunEndBuf + (i << alignof<u32>())) + 1,
+          endA,
+          buffer,
+          comparator
+        );
+        startA = start;
+        store<u32>(leftRunStartBuf + (i << alignof<u32>()), EMPTY);
+      }
+    }
+
+    store<u32>(leftRunStartBuf + (k << alignof<u32>()), startA);
+    store<u32>(leftRunEndBuf   + (k << alignof<u32>()), endA);
+    startA = startB;
+    endA = endB;
+    top = k;
+  }
+
+  for (let i = top; i != 0; --i) {
+    let start = load<u32>(leftRunStartBuf + (i << alignof<u32>()));
+    if (start != EMPTY) {
+      mergeRuns<T>(
+        dataStart,
+        start,
+        load<u32>(leftRunEndBuf + (i << alignof<u32>())) + 1,
+        hi,
+        buffer,
+        comparator
+      );
     }
   }
+  // dealloc aux buffers
+  __free(buffer);
+  __free(leftRunEndBuf);
+  __free(leftRunStartBuf);
 }
 
 function insertionSort<T>(
   dataStart: usize,
-  length: i32,
+  left: i32,
+  right: i32,
+  presorted: i32,
   comparator: (a: T, b: T) => i32
 ): void {
-  for (let i = 0; i < length; i++) {
-    let a: T = load<T>(dataStart + (<usize>i << alignof<T>())); // a = arr[i]
-    let j = i - 1;
-    while (j >= 0) {
-      let b: T = load<T>(dataStart + (<usize>j << alignof<T>())); // b = arr[j]
-      if (comparator(a, b) < 0) {
-        store<T>(dataStart + (<usize>(j-- + 1) << alignof<T>()), b); // arr[j + 1] = b
-      } else break;
+  if (ASC_SHRINK_LEVEL >= 1) {
+    // slightly improved original insertion sort
+    for (let i = left + presorted; i <= right; ++i) {
+      let j = i - 1;
+      let a = load<T>(dataStart + (i << alignof<T>()));
+      while (j >= left) {
+        let b = load<T>(dataStart + (j << alignof<T>()));
+        if (comparator(a, b) < 0) {
+          store<T>(dataStart + (j << alignof<T>()), b, 1 << alignof<T>()); --j;
+        } else break;
+      }
+      store<T>(dataStart + (j << alignof<T>()), a, 1 << alignof<T>());
     }
-    store<T>(dataStart + (<usize>(j + 1) << alignof<T>()), a); // arr[j + 1] = a
+  } else {
+    // even-odd two-way insertion sort which allow increase minRunLen
+    let range = right - left + 1;
+    let i = left + select(range & 1, presorted - ((range - presorted) & 1), presorted == 0);
+    for (; i <= right; i += 2) {
+      let a = load<T>(dataStart + (i << alignof<T>()), 0);
+      let b = load<T>(dataStart + (i << alignof<T>()), 1 << alignof<T>());
+      let min = b, max = a;
+      if (comparator(a, b) <= 0) {
+        min = a, max = b;
+      }
+      let j = i - 1;
+      while (j >= left) {
+        a = load<T>(dataStart + (j << alignof<T>()));
+        if (comparator(a, max) > 0) {
+          store<T>(dataStart + (j << alignof<T>()), a, 2 << alignof<T>()); --j;
+        } else break;
+      }
+      store<T>(dataStart + (j << alignof<T>()), max, 2 << alignof<T>());
+      while (j >= left) {
+        a = load<T>(dataStart + (j << alignof<T>()));
+        if (comparator(a, min) > 0) {
+          store<T>(dataStart + (j << alignof<T>()), a, 1 << alignof<T>()); --j;
+        } else break;
+      }
+      store<T>(dataStart + (j << alignof<T>()), min, 1 << alignof<T>());
+    }
   }
 }
 
-function weakHeapSort<T>(
+function nodePower(left: u32, right: u32, startA: u32, startB: u32, endB: u32): u32 {
+  var n: u64 = right - left + 1;
+  var s = startB - (left << 1);
+  var l = startA + s;
+  var r = endB   + s + 1;
+  var a = (<u64>l << 30) / n;
+  var b = (<u64>r << 30) / n;
+  return clz(<u32>(a ^ b));
+}
+
+function extendRunRight<T>(
   dataStart: usize,
-  length: i32,
+  i: i32,
+  right: i32,
+  comparator: (a: T, b: T) => i32
+): i32 {
+  if (i == right) return i;
+  var j = i;
+  if (comparator(
+    load<T>(dataStart + (  j << alignof<T>())),
+    load<T>(dataStart + (++j << alignof<T>()))
+  ) > 0) {
+    while (
+      j < right &&
+      bool(comparator(
+        load<T>(dataStart + (j << alignof<T>()), 1 << alignof<T>()),
+        load<T>(dataStart + (j << alignof<T>()))
+      ) >>> 31) // < 0
+    ) ++j;
+    // reverse
+    let k = j;
+    while (i < k) {
+      let tmp = load<T>(dataStart + (i << alignof<T>()));
+      store<T>(dataStart + (i << alignof<T>()), load<T>(dataStart + (k << alignof<T>()))); ++i;
+      store<T>(dataStart + (k << alignof<T>()), tmp); --k;
+    }
+  } else {
+    while (
+      j < right &&
+      comparator(
+        load<T>(dataStart + (j << alignof<T>()), 1 << alignof<T>()),
+        load<T>(dataStart + (j << alignof<T>()))
+      ) >= 0
+    ) ++j;
+  }
+  return j;
+}
+
+// Merges arr[l..m - 1] and arr[m..r]
+function mergeRuns<T>(
+  dataStart: usize,
+  l: u32,
+  m: u32,
+  r: u32,
+  buffer: usize,
   comparator: (a: T, b: T) => i32
 ): void {
-  const shift32 = alignof<u32>();
-
-  var bitsetSize = (<usize>length + 31) >> 5 << shift32;
-  var bitset = __alloc(bitsetSize); // indexed in 32-bit chunks below
-  memory.fill(bitset, 0, bitsetSize);
-
-  // see: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.21.1863&rep=rep1&type=pdf
-
-  for (let i = length - 1; i > 0; i--) {
-    let j = i;
-    while ((j & 1) == (load<u32>(bitset + (<usize>j >> 6 << shift32)) >> (j >> 1 & 31) & 1)) j >>= 1;
-
-    let p = j >> 1;
-    let a: T = load<T>(dataStart + (<usize>p << alignof<T>())); // a = arr[p]
-    let b: T = load<T>(dataStart + (<usize>i << alignof<T>())); // b = arr[i]
-    if (comparator(a, b) < 0) {
-      store<u32>(
-        bitset + (<usize>i >> 5 << shift32),
-        load<u32>(bitset + (<usize>i >> 5 << shift32)) ^ (1 << (i & 31))
-      );
-      store<T>(dataStart + (<usize>i << alignof<T>()), a); // arr[i] = a
-      store<T>(dataStart + (<usize>p << alignof<T>()), b); // arr[p] = b
-    }
+  --m; // accounts for different convention in Sedgewick’s book
+  var i: u32, j: u32, k: u32, t = r + m;
+  for (i = m + 1; i > l; --i) {
+    store<T>(buffer + ((i - 1) << alignof<T>()), load<T>(dataStart + ((i - 1) << alignof<T>())));
   }
-
-  for (let i = length - 1; i >= 2; i--) {
-    let a: T = load<T>(dataStart); // a = arr[0]
-    store<T>(dataStart, load<T>(dataStart + (<usize>i << alignof<T>()))); // arr[0] = arr[i]
-    store<T>(dataStart + (<usize>i << alignof<T>()), a); // arr[i] = a
-
-    let x = 1, y: i32;
-    while ((y = (x << 1) + ((load<u32>(bitset + (<usize>x >> 5 << shift32)) >> (x & 31)) & 1)) < i) x = y;
-
-    while (x > 0) {
-      a = load<T>(dataStart); // a = arr[0]
-      let b: T = load<T>(dataStart + (<usize>x << alignof<T>())); // b = arr[x]
-
-      if (comparator(a, b) < 0) {
-        store<u32>(
-          bitset + (<usize>x >> 5 << shift32),
-          load<u32>(bitset + (<usize>x >> 5 << shift32)) ^ (1 << (x & 31))
-        );
-        store<T>(dataStart + (<usize>x << alignof<T>()), a); // arr[x] = a
-        store<T>(dataStart, b); // arr[0] = b
-      }
-      x >>= 1;
-    }
+  for (j = m; j < r; ++j) {
+    store<T>(buffer + ((t - j) << alignof<T>()), load<T>(dataStart + (j << alignof<T>()), 1 << alignof<T>()));
   }
-
-  __free(bitset);
-
-  var t: T = load<T>(dataStart, sizeof<T>()); // t = arr[1]
-  store<T>(dataStart, load<T>(dataStart), sizeof<T>()); // arr[1] = arr[0]
-  store<T>(dataStart, t); // arr[0] = t
+  for (k = l; k <= r; ++k) {
+    let a = load<T>(buffer + (j << alignof<T>()));
+    let b = load<T>(buffer + (i << alignof<T>()));
+    let c = comparator(a, b);
+    store<T>(dataStart + (k << alignof<T>()), select(a, b, c >>> 31)); // c < 0
+    store<T>(dataStart + (k << alignof<T>()), select(b, a, c >>> 31)); // c < 0
+    j -= u32(c >>> 31); // c < 0
+    i += u32(c >= 0);
+  }
 }

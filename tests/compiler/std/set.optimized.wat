@@ -2006,10 +2006,9 @@
       i32.const 0
      else
       local.get $2
-      i32.load8_u
+      i32.load8_s
       local.get $1
-      i32.const 255
-      i32.and
+      i32.extend8_s
       i32.eq
      end
      br_if $__inlined_func$~lib/set/Set<i8>#find
@@ -3270,10 +3269,9 @@
       i32.const 0
      else
       local.get $1
-      i32.load8_u
+      i32.load8_s
       local.get $2
-      i32.const 255
-      i32.and
+      i32.extend8_s
       i32.eq
      end
      br_if $__inlined_func$~lib/set/Set<i8>#find
@@ -3461,10 +3459,9 @@
          i32.const 0
         else
          local.get $1
-         i32.load8_u
+         i32.load8_s
          local.get $0
-         i32.const 255
-         i32.and
+         i32.extend8_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i8>#find
@@ -3542,10 +3539,9 @@
          i32.const 0
         else
          local.get $1
-         i32.load8_u
+         i32.load8_s
          local.get $0
-         i32.const 255
-         i32.and
+         i32.extend8_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i8>#find1
@@ -3648,10 +3644,9 @@
          i32.const 0
         else
          local.get $1
-         i32.load8_u
+         i32.load8_s
          local.get $0
-         i32.const 255
-         i32.and
+         i32.extend8_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i8>#find4
@@ -3730,10 +3725,9 @@
          i32.const 0
         else
          local.get $1
-         i32.load8_u
+         i32.load8_s
          local.get $0
-         i32.const 255
-         i32.and
+         i32.extend8_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i8>#find7
@@ -3993,10 +3987,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load8_u
+         i32.load8_s
          local.get $6
-         i32.const 255
-         i32.and
+         i32.extend8_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i8>#find11
@@ -4105,10 +4098,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load8_u
+         i32.load8_s
          local.get $3
-         i32.const 255
-         i32.and
+         i32.extend8_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i8>#find14
@@ -4187,10 +4179,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load8_u
+         i32.load8_s
          local.get $3
-         i32.const 255
-         i32.and
+         i32.extend8_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i8>#find17
@@ -4292,10 +4283,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load8_u
+         i32.load8_s
          local.get $3
-         i32.const 255
-         i32.and
+         i32.extend8_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i8>#find20
@@ -4373,10 +4363,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load8_u
+         i32.load8_s
          local.get $3
-         i32.const 255
-         i32.and
+         i32.extend8_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i8>#find23
@@ -4455,10 +4444,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load8_u
+         i32.load8_s
          local.get $3
-         i32.const 255
-         i32.and
+         i32.extend8_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i8>#find26
@@ -6358,10 +6346,9 @@
       i32.const 0
      else
       local.get $2
-      i32.load16_u
+      i32.load16_s
       local.get $1
-      i32.const 65535
-      i32.and
+      i32.extend16_s
       i32.eq
      end
      br_if $__inlined_func$~lib/set/Set<i16>#find
@@ -6563,10 +6550,9 @@
       i32.const 0
      else
       local.get $1
-      i32.load16_u
+      i32.load16_s
       local.get $2
-      i32.const 65535
-      i32.and
+      i32.extend16_s
       i32.eq
      end
      br_if $__inlined_func$~lib/set/Set<i16>#find
@@ -6723,10 +6709,9 @@
          i32.const 0
         else
          local.get $1
-         i32.load16_u
+         i32.load16_s
          local.get $0
-         i32.const 65535
-         i32.and
+         i32.extend16_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i16>#find
@@ -6804,10 +6789,9 @@
          i32.const 0
         else
          local.get $1
-         i32.load16_u
+         i32.load16_s
          local.get $0
-         i32.const 65535
-         i32.and
+         i32.extend16_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i16>#find1
@@ -6910,10 +6894,9 @@
          i32.const 0
         else
          local.get $1
-         i32.load16_u
+         i32.load16_s
          local.get $0
-         i32.const 65535
-         i32.and
+         i32.extend16_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i16>#find4
@@ -6992,10 +6975,9 @@
          i32.const 0
         else
          local.get $1
-         i32.load16_u
+         i32.load16_s
          local.get $0
-         i32.const 65535
-         i32.and
+         i32.extend16_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i16>#find7
@@ -7257,10 +7239,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load16_u
+         i32.load16_s
          local.get $6
-         i32.const 65535
-         i32.and
+         i32.extend16_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i16>#find11
@@ -7369,10 +7350,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load16_u
+         i32.load16_s
          local.get $3
-         i32.const 65535
-         i32.and
+         i32.extend16_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i16>#find14
@@ -7451,10 +7431,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load16_u
+         i32.load16_s
          local.get $3
-         i32.const 65535
-         i32.and
+         i32.extend16_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i16>#find17
@@ -7556,10 +7535,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load16_u
+         i32.load16_s
          local.get $3
-         i32.const 65535
-         i32.and
+         i32.extend16_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i16>#find20
@@ -7637,10 +7615,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load16_u
+         i32.load16_s
          local.get $3
-         i32.const 65535
-         i32.and
+         i32.extend16_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i16>#find23
@@ -7719,10 +7696,9 @@
          i32.const 0
         else
          local.get $0
-         i32.load16_u
+         i32.load16_s
          local.get $3
-         i32.const 65535
-         i32.and
+         i32.extend16_s
          i32.eq
         end
         br_if $__inlined_func$~lib/set/Set<i16>#find26
