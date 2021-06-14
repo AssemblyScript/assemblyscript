@@ -101,7 +101,6 @@ export function SORT<T>(
 
   for (let i: u32 = 0; i < lgPlus2; ++i) {
     store<u32>(leftRunStartBuf + (i << alignof<u32>()), EMPTY);
-    // store<u32>(leftRunEndBuf + (i << alignof<u32>()), 0); // ?
   }
 
   var top: u32 = 0;
@@ -278,14 +277,14 @@ function mergeRuns<T>(
   comparator: (a: T, b: T) => i32
 ): void {
   --m; // accounts for different convention in Sedgewick’s book
-  var i: i32, j: i32, k: i32, t = r + m;
+  var i: i32, j: i32, t = r + m;
   for (i = m + 1; i > l; --i) {
     store<T>(buffer + ((i - 1) << alignof<T>()), load<T>(dataStart + ((i - 1) << alignof<T>())));
   }
   for (j = m; j < r; ++j) {
     store<T>(buffer + ((t - j) << alignof<T>()), load<T>(dataStart + (j << alignof<T>()), 1 << alignof<T>()));
   }
-  for (k = l; k <= r; ++k) {
+  for (let k = l; k <= r; ++k) {
     let a = load<T>(buffer + (j << alignof<T>()));
     let b = load<T>(buffer + (i << alignof<T>()));
     let c = comparator(a, b);

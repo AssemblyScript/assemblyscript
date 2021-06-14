@@ -7079,7 +7079,7 @@
   local.get $3
   local.get $2
   i32.add
-  local.set $9
+  local.set $8
   local.get $2
   i32.const 1
   i32.add
@@ -7088,8 +7088,8 @@
    local.get $6
    local.get $1
    i32.gt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
     local.get $6
@@ -7120,11 +7120,11 @@
    local.get $7
    local.get $3
    i32.lt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
-    local.get $9
+    local.get $8
     local.get $7
     i32.sub
     i32.const 2
@@ -7145,9 +7145,9 @@
    end
   end
   local.get $1
-  local.set $8
+  local.set $9
   loop $for-loop|2
-   local.get $8
+   local.get $9
    local.get $3
    i32.le_s
    local.set $10
@@ -7176,7 +7176,7 @@
     call_indirect $0 (type $f32_f32_=>_i32)
     local.set $13
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -7188,7 +7188,7 @@
     select
     f32.store
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -7211,10 +7211,10 @@
     i32.ge_s
     i32.add
     local.set $6
-    local.get $8
+    local.get $9
     i32.const 1
     i32.add
-    local.set $8
+    local.set $9
     br $for-loop|2
    end
   end
@@ -8170,7 +8170,7 @@
   local.get $3
   local.get $2
   i32.add
-  local.set $9
+  local.set $8
   local.get $2
   i32.const 1
   i32.add
@@ -8179,8 +8179,8 @@
    local.get $6
    local.get $1
    i32.gt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
     local.get $6
@@ -8211,11 +8211,11 @@
    local.get $7
    local.get $3
    i32.lt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
-    local.get $9
+    local.get $8
     local.get $7
     i32.sub
     i32.const 3
@@ -8236,9 +8236,9 @@
    end
   end
   local.get $1
-  local.set $8
+  local.set $9
   loop $for-loop|2
-   local.get $8
+   local.get $9
    local.get $3
    i32.le_s
    local.set $10
@@ -8267,7 +8267,7 @@
     call_indirect $0 (type $f64_f64_=>_i32)
     local.set $13
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 3
     i32.shl
     i32.add
@@ -8279,7 +8279,7 @@
     select
     f64.store
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 3
     i32.shl
     i32.add
@@ -8302,10 +8302,10 @@
     i32.ge_s
     i32.add
     local.set $6
-    local.get $8
+    local.get $9
     i32.const 1
     i32.add
-    local.set $8
+    local.set $9
     br $for-loop|2
    end
   end
@@ -9291,7 +9291,7 @@
   local.get $3
   local.get $2
   i32.add
-  local.set $9
+  local.set $8
   local.get $2
   i32.const 1
   i32.add
@@ -9300,8 +9300,8 @@
    local.get $6
    local.get $1
    i32.gt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
     local.get $6
@@ -9332,11 +9332,11 @@
    local.get $7
    local.get $3
    i32.lt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
-    local.get $9
+    local.get $8
     local.get $7
     i32.sub
     i32.const 2
@@ -9357,9 +9357,9 @@
    end
   end
   local.get $1
-  local.set $8
+  local.set $9
   loop $for-loop|2
-   local.get $8
+   local.get $9
    local.get $3
    i32.le_s
    local.set $10
@@ -9388,7 +9388,7 @@
     call_indirect $0 (type $i32_i32_=>_i32)
     local.set $13
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -9400,7 +9400,7 @@
     select
     i32.store
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -9423,10 +9423,10 @@
     i32.ge_s
     i32.add
     local.set $6
-    local.get $8
+    local.get $9
     i32.const 1
     i32.add
-    local.set $8
+    local.set $9
     br $for-loop|2
    end
   end
@@ -10274,7 +10274,7 @@
   local.get $3
   local.get $2
   i32.add
-  local.set $9
+  local.set $8
   local.get $2
   i32.const 1
   i32.add
@@ -10283,8 +10283,8 @@
    local.get $6
    local.get $1
    i32.gt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
     local.get $6
@@ -10315,11 +10315,11 @@
    local.get $7
    local.get $3
    i32.lt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
-    local.get $9
+    local.get $8
     local.get $7
     i32.sub
     i32.const 2
@@ -10340,9 +10340,9 @@
    end
   end
   local.get $1
-  local.set $8
+  local.set $9
   loop $for-loop|2
-   local.get $8
+   local.get $9
    local.get $3
    i32.le_s
    local.set $10
@@ -10371,7 +10371,7 @@
     call_indirect $0 (type $i32_i32_=>_i32)
     local.set $13
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -10383,7 +10383,7 @@
     select
     i32.store
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -10406,10 +10406,10 @@
     i32.ge_s
     i32.add
     local.set $6
-    local.get $8
+    local.get $9
     i32.const 1
     i32.add
-    local.set $8
+    local.set $9
     br $for-loop|2
    end
   end
@@ -11333,7 +11333,7 @@
   local.get $3
   local.get $2
   i32.add
-  local.set $9
+  local.set $8
   local.get $2
   i32.const 1
   i32.add
@@ -11342,8 +11342,8 @@
    local.get $6
    local.get $1
    i32.gt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
     local.get $6
@@ -11374,11 +11374,11 @@
    local.get $7
    local.get $3
    i32.lt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
-    local.get $9
+    local.get $8
     local.get $7
     i32.sub
     i32.const 2
@@ -11399,9 +11399,9 @@
    end
   end
   local.get $1
-  local.set $8
+  local.set $9
   loop $for-loop|2
-   local.get $8
+   local.get $9
    local.get $3
    i32.le_s
    local.set $10
@@ -11434,7 +11434,7 @@
     call_indirect $0 (type $i32_i32_=>_i32)
     local.set $13
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -11446,7 +11446,7 @@
     select
     i32.store
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -11469,10 +11469,10 @@
     i32.ge_s
     i32.add
     local.set $6
-    local.get $8
+    local.get $9
     i32.const 1
     i32.add
-    local.set $8
+    local.set $9
     br $for-loop|2
    end
   end
@@ -12258,7 +12258,7 @@
   local.get $3
   local.get $2
   i32.add
-  local.set $9
+  local.set $8
   local.get $2
   i32.const 1
   i32.add
@@ -12267,8 +12267,8 @@
    local.get $6
    local.get $1
    i32.gt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
     local.get $6
@@ -12299,11 +12299,11 @@
    local.get $7
    local.get $3
    i32.lt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
-    local.get $9
+    local.get $8
     local.get $7
     i32.sub
     i32.const 2
@@ -12324,9 +12324,9 @@
    end
   end
   local.get $1
-  local.set $8
+  local.set $9
   loop $for-loop|2
-   local.get $8
+   local.get $9
    local.get $3
    i32.le_s
    local.set $10
@@ -12359,7 +12359,7 @@
     call_indirect $0 (type $i32_i32_=>_i32)
     local.set $13
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -12371,7 +12371,7 @@
     select
     i32.store
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -12394,10 +12394,10 @@
     i32.ge_s
     i32.add
     local.set $6
-    local.get $8
+    local.get $9
     i32.const 1
     i32.add
-    local.set $8
+    local.set $9
     br $for-loop|2
    end
   end
@@ -13096,7 +13096,7 @@
   local.get $3
   local.get $2
   i32.add
-  local.set $9
+  local.set $8
   local.get $2
   i32.const 1
   i32.add
@@ -13105,8 +13105,8 @@
    local.get $6
    local.get $1
    i32.gt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
     local.get $6
@@ -13137,11 +13137,11 @@
    local.get $7
    local.get $3
    i32.lt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
-    local.get $9
+    local.get $8
     local.get $7
     i32.sub
     i32.const 2
@@ -13162,9 +13162,9 @@
    end
   end
   local.get $1
-  local.set $8
+  local.set $9
   loop $for-loop|2
-   local.get $8
+   local.get $9
    local.get $3
    i32.le_s
    local.set $10
@@ -13197,7 +13197,7 @@
     call_indirect $0 (type $i32_i32_=>_i32)
     local.set $13
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -13209,7 +13209,7 @@
     select
     i32.store
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -13232,10 +13232,10 @@
     i32.ge_s
     i32.add
     local.set $6
-    local.get $8
+    local.get $9
     i32.const 1
     i32.add
-    local.set $8
+    local.set $9
     br $for-loop|2
    end
   end
@@ -14293,7 +14293,7 @@
   local.get $3
   local.get $2
   i32.add
-  local.set $9
+  local.set $8
   local.get $2
   i32.const 1
   i32.add
@@ -14302,8 +14302,8 @@
    local.get $6
    local.get $1
    i32.gt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
     local.get $6
@@ -14334,11 +14334,11 @@
    local.get $7
    local.get $3
    i32.lt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
-    local.get $9
+    local.get $8
     local.get $7
     i32.sub
     i32.const 2
@@ -14359,9 +14359,9 @@
    end
   end
   local.get $1
-  local.set $8
+  local.set $9
   loop $for-loop|2
-   local.get $8
+   local.get $9
    local.get $3
    i32.le_s
    local.set $10
@@ -14394,7 +14394,7 @@
     call_indirect $0 (type $i32_i32_=>_i32)
     local.set $13
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -14406,7 +14406,7 @@
     select
     i32.store
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 2
     i32.shl
     i32.add
@@ -14429,10 +14429,10 @@
     i32.ge_s
     i32.add
     local.set $6
-    local.get $8
+    local.get $9
     i32.const 1
     i32.add
-    local.set $8
+    local.set $9
     br $for-loop|2
    end
   end
@@ -20007,7 +20007,7 @@
   local.get $3
   local.get $2
   i32.add
-  local.set $9
+  local.set $8
   local.get $2
   i32.const 1
   i32.add
@@ -20016,8 +20016,8 @@
    local.get $6
    local.get $1
    i32.gt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
     local.get $6
@@ -20048,11 +20048,11 @@
    local.get $7
    local.get $3
    i32.lt_s
-   local.set $10
-   local.get $10
+   local.set $9
+   local.get $9
    if
     local.get $4
-    local.get $9
+    local.get $8
     local.get $7
     i32.sub
     i32.const 0
@@ -20073,9 +20073,9 @@
    end
   end
   local.get $1
-  local.set $8
+  local.set $9
   loop $for-loop|2
-   local.get $8
+   local.get $9
    local.get $3
    i32.le_s
    local.set $10
@@ -20104,7 +20104,7 @@
     call_indirect $0 (type $i32_i32_=>_i32)
     local.set $13
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 0
     i32.shl
     i32.add
@@ -20116,7 +20116,7 @@
     select
     i32.store8
     local.get $0
-    local.get $8
+    local.get $9
     i32.const 0
     i32.shl
     i32.add
@@ -20139,10 +20139,10 @@
     i32.ge_s
     i32.add
     local.set $6
-    local.get $8
+    local.get $9
     i32.const 1
     i32.add
-    local.set $8
+    local.set $9
     br $for-loop|2
    end
   end
