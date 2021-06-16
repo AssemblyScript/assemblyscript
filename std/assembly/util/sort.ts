@@ -251,7 +251,7 @@ function extendRunRight<T>(
     // reverse
     let k = j;
     while (i < k) {
-      let tmp = load<T>(dataStart + (i << alignof<T>()));
+      let tmp = load<T>(dataStart + (<usize>i << alignof<T>()));
       store<T>(dataStart + (<usize>i << alignof<T>()), load<T>(dataStart + (<usize>k << alignof<T>()))); ++i;
       store<T>(dataStart + (<usize>k << alignof<T>()), tmp); --k;
     }
@@ -288,8 +288,8 @@ function mergeRuns<T>(
     let a = load<T>(buffer + (<usize>j << alignof<T>()));
     let b = load<T>(buffer + (<usize>i << alignof<T>()));
     let c = comparator(a, b);
-    store<T>(dataStart + (k << alignof<T>()), select(a, b, c >>> 31)); // c < 0
-    store<T>(dataStart + (k << alignof<T>()), select(b, a, c >>> 31)); // c < 0
+    store<T>(dataStart + (<usize>k << alignof<T>()), select(a, b, c >>> 31)); // c < 0
+    store<T>(dataStart + (<usize>k << alignof<T>()), select(b, a, c >>> 31)); // c < 0
     j -= i32(c >>> 31); // c < 0
     i += i32(c >= 0);
   }
