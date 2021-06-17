@@ -8,6 +8,7 @@
   "Module requires at least '{0}' pages of maximum memory.": 106,
   "Shared memory requires maximum memory to be defined.": 107,
   "Shared memory requires feature 'threads' to be enabled.": 108,
+  "Transform '{0}' message: {1}": 109,
 
   "Conversion from type '{0}' to '{1}' requires an explicit cast.": 200,
   "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.": 201,
