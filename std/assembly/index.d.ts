@@ -278,7 +278,7 @@ declare namespace i8 {
   export const MAX_VALUE: i8;
 }
 /** Converts any other numeric value to a 16-bit signed integer. */
-declare function i16(value: any): i8;
+declare function i16(value: any): i16;
 declare namespace i16 {
   /** Smallest representable value. */
   export const MIN_VALUE: i16;
@@ -543,7 +543,7 @@ declare namespace i64 {
 /** Converts any other numeric value to a 32-bit (in WASM32) respectivel 64-bit (in WASM64) signed integer. */
 declare var isize: typeof i32 | typeof i64;
 /** Converts any other numeric value to an 8-bit unsigned integer. */
-declare function u8(value: any): i8;
+declare function u8(value: any): u8;
 declare namespace u8 {
   /** Smallest representable value. */
   export const MIN_VALUE: u8;
@@ -551,7 +551,7 @@ declare namespace u8 {
   export const MAX_VALUE: u8;
 }
 /** Converts any other numeric value to a 16-bit unsigned integer. */
-declare function u16(value: any): i8;
+declare function u16(value: any): u16;
 declare namespace u16 {
   /** Smallest representable value. */
   export const MIN_VALUE: u16;
@@ -559,7 +559,7 @@ declare namespace u16 {
   export const MAX_VALUE: u16;
 }
 /** Converts any other numeric value to a 32-bit unsigned integer. */
-declare function u32(value: any): i32;
+declare function u32(value: any): u32;
 declare namespace u32 {
   /** Smallest representable value. */
   export const MIN_VALUE: u32;
@@ -567,7 +567,7 @@ declare namespace u32 {
   export const MAX_VALUE: u32;
 }
 /** Converts any other numeric value to a 64-bit unsigned integer. */
-declare function u64(value: any): i64;
+declare function u64(value: any): u64;
 declare namespace u64 {
   /** Smallest representable value. */
   export const MIN_VALUE: u64;
