@@ -1,10 +1,8 @@
 function test<T,U>(x: T): U {
   // @ts-ignore
-  var y1 = x as U;
+  var y = x as U;
   // @ts-ignore
-  var y2 = <U>x;
-  // @ts-ignore
-  return y1 + y2;
+  return y;
 }
 
 test<i8,i8>(0);

@@ -3522,7 +3522,6 @@ export class Compiler extends DiagnosticEmitter {
       if (constraints & Constraints.CONV_EXPLICIT) {
         expr = this.convertExpression(expr, currentType, contextualType, true, expression);
         this.currentType = currentType = contextualType;
-        wrap = false;
       } else if (constraints & Constraints.CONV_IMPLICIT) {
         expr = this.convertExpression(expr, currentType, contextualType, false, expression);
         this.currentType = currentType = contextualType;

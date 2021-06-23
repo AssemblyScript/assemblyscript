@@ -88,7 +88,6 @@
    local.set $0
   end
   local.get $0
-  i32.extend8_s
   i32.eqz
   i32.eqz
   if
@@ -176,7 +175,6 @@
  )
  (func $abi/exportedExported (result i32)
   call $abi/exported
-  i32.extend8_s
  )
  (func $abi/exportedInternal (result i32)
   call $abi/internal

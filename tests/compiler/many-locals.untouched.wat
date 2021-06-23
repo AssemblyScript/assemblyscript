@@ -805,7 +805,6 @@
   end
   i32.const 42
   call $many-locals/testI8
-  i32.extend8_s
   i32.const 42
   i32.eq
   i32.eqz

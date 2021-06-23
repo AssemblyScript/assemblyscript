@@ -1351,6 +1351,13 @@ export class Flow {
           case UnaryOp.ClzI32:
           case UnaryOp.CtzI32:
           case UnaryOp.PopcntI32: return type.size < 7;
+
+          // sign extensions overflow if result can have high garbage bits in the target type
+          case UnaryOp.Extend8I32: return type.size < (type.isUnsignedIntegerValue ? 32 : 8);
+          case UnaryOp.Extend8I64: return type.size < (type.isUnsignedIntegerValue ? 64 : 8);
+          case UnaryOp.Extend16I32: return type.size < (type.isUnsignedIntegerValue ? 32 : 16);
+          case UnaryOp.Extend16I64: return type.size < (type.isUnsignedIntegerValue ? 64 : 16);
+          case UnaryOp.Extend32I64: return type.size < (type.isUnsignedIntegerValue ? 64 : 32);
         }
         break;
       }
