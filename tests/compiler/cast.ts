@@ -86,3 +86,13 @@ test<u64,u32>(0);
 test<u64,i64>(0);
 test<u64,u64>(0);
 test<u64,bool>(0);
+
+test<bool,i8>(0);
+test<bool,u8>(0);
+test<bool,i16>(0);
+test<bool,u16>(0);
+test<bool,i32>(0);
+test<bool,u32>(0);
+test<bool,i64>(0);
+test<bool,u64>(0);
+test<bool,bool>(0);

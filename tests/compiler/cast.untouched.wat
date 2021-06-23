@@ -1,7 +1,7 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_=>_i64 (func (param i32) (result i64)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i64_=>_i64 (func (param i64) (result i64)))
  (type $none_=>_none (func))
  (global $~lib/memory/__data_end i32 (i32.const 8))
@@ -920,6 +920,141 @@
   local.get $2
   i32.add
  )
+ (func $cast/test<bool,i8> (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $1
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $2
+  local.get $1
+  local.get $2
+  i32.add
+ )
+ (func $cast/test<bool,u8> (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $1
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $2
+  local.get $1
+  local.get $2
+  i32.add
+ )
+ (func $cast/test<bool,i16> (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $1
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $2
+  local.get $1
+  local.get $2
+  i32.add
+ )
+ (func $cast/test<bool,u16> (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $1
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $2
+  local.get $1
+  local.get $2
+  i32.add
+ )
+ (func $cast/test<bool,i32> (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $1
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $2
+  local.get $1
+  local.get $2
+  i32.add
+ )
+ (func $cast/test<bool,u32> (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $1
+  local.get $0
+  i32.const 0
+  i32.ne
+  local.set $2
+  local.get $1
+  local.get $2
+  i32.add
+ )
+ (func $cast/test<bool,i64> (param $0 i32) (result i64)
+  (local $1 i64)
+  (local $2 i64)
+  local.get $0
+  i32.const 0
+  i32.ne
+  i64.extend_i32_u
+  local.set $1
+  local.get $0
+  i32.const 0
+  i32.ne
+  i64.extend_i32_u
+  local.set $2
+  local.get $1
+  local.get $2
+  i64.add
+ )
+ (func $cast/test<bool,u64> (param $0 i32) (result i64)
+  (local $1 i64)
+  (local $2 i64)
+  local.get $0
+  i32.const 0
+  i32.ne
+  i64.extend_i32_u
+  local.set $1
+  local.get $0
+  i32.const 0
+  i32.ne
+  i64.extend_i32_u
+  local.set $2
+  local.get $1
+  local.get $2
+  i64.add
+ )
+ (func $cast/test<bool,bool> (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.set $1
+  local.get $0
+  local.set $2
+  local.get $1
+  local.get $2
+  i32.add
+ )
  (func $start:cast
   i32.const 0
   call $cast/test<i8,i8>
@@ -1136,6 +1271,33 @@
   drop
   i64.const 0
   call $cast/test<u64,bool>
+  drop
+  i32.const 0
+  call $cast/test<bool,i8>
+  drop
+  i32.const 0
+  call $cast/test<bool,u8>
+  drop
+  i32.const 0
+  call $cast/test<bool,i16>
+  drop
+  i32.const 0
+  call $cast/test<bool,u16>
+  drop
+  i32.const 0
+  call $cast/test<bool,i32>
+  drop
+  i32.const 0
+  call $cast/test<bool,u32>
+  drop
+  i32.const 0
+  call $cast/test<bool,i64>
+  drop
+  i32.const 0
+  call $cast/test<bool,u64>
+  drop
+  i32.const 0
+  call $cast/test<bool,bool>
   drop
  )
  (func $~start
