@@ -257,7 +257,7 @@ function ensureAsconfigJson() {
           textFile: "build/optimized.wat",
           sourceMap: true,
           optimizeLevel: 3,
-          shrinkLevel: 1,
+          shrinkLevel: 0,
           converge: false,
           noAssert: false
         }
