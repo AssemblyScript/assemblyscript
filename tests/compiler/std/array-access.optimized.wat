@@ -33,8 +33,6 @@
   i32.shr_u
   local.tee $1
   local.get $1
-  i32.const 0
-  i32.gt_s
   select
   local.set $2
   local.get $1
@@ -102,16 +100,16 @@
     local.set $0
     local.get $1
     if
-     local.get $2
+     local.get $3
      i32.load16_u
      local.tee $1
-     local.get $3
+     local.get $2
      i32.load16_u
      local.tee $4
      i32.ne
      if
-      local.get $1
       local.get $4
+      local.get $1
       i32.sub
       br $__inlined_func$~lib/util/string/compareImpl
      end

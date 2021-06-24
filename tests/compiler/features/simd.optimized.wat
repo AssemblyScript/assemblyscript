@@ -1,6 +1,6 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -997,7 +997,7 @@
   local.get $0
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~start
+ (func $features/simd/test_v128
   (local $0 i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
@@ -1189,6 +1189,9 @@
   end
   local.get $0
   call $~lib/rt/tlsf/__free
+ )
+ (func $~start
+  call $features/simd/test_v128
   i32.const 0
   i32.const 1184
   i32.const 255

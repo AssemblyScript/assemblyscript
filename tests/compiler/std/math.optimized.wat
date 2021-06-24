@@ -2,11 +2,10 @@
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (type $f32_f32_f32_=>_i32 (func (param f32 f32 f32) (result i32)))
  (type $f64_f64_f64_=>_i32 (func (param f64 f64 f64) (result i32)))
- (type $f32_=>_f32 (func (param f32) (result f32)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $f64_f64_f64_f64_=>_i32 (func (param f64 f64 f64 f64) (result i32)))
- (type $f32_f32_f32_f32_=>_i32 (func (param f32 f32 f32 f32) (result i32)))
+ (type $f32_=>_f32 (func (param f32) (result f32)))
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
+ (type $f64_f64_f64_f64_=>_i32 (func (param f64 f64 f64 f64) (result i32)))
  (type $none_=>_f64 (func (result f64)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
@@ -15,6 +14,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $f32_i32_f32_=>_i32 (func (param f32 i32 f32) (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $f32_f32_f32_f32_=>_i32 (func (param f32 f32 f32 f32) (result i32)))
  (type $i64_=>_none (func (param i64)))
  (type $f64_f64_i32_=>_f64 (func (param f64 f64 i32) (result f64)))
  (type $f64_=>_none (func (param f64)))
@@ -2937,226 +2937,223 @@
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_atan2 (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
-  (local $4 f64)
+ (func $~lib/math/NativeMath.atan2 (param $0 f64) (param $1 f64) (result f64)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
+  (local $6 i64)
   (local $7 i32)
-  (local $8 i64)
-  (local $9 i32)
-  (local $10 i32)
+  i32.const 1
+  local.get $0
+  local.get $0
+  f64.ne
   local.get $1
-  local.set $4
-  block $__inlined_func$~lib/math/NativeMath.atan2
-   i32.const 1
+  local.get $1
+  f64.ne
+  select
+  if
+   local.get $1
    local.get $0
-   local.tee $1
-   local.get $1
-   f64.ne
-   local.get $4
-   local.get $4
-   f64.ne
-   select
-   if
-    local.get $4
-    local.get $1
-    f64.add
-    local.set $1
-    br $__inlined_func$~lib/math/NativeMath.atan2
-   end
-   local.get $1
-   i64.reinterpret_f64
-   local.tee $8
-   i64.const 32
-   i64.shr_u
-   i32.wrap_i64
-   local.set $6
-   local.get $8
-   i32.wrap_i64
-   local.get $4
-   i64.reinterpret_f64
-   local.tee $8
-   i32.wrap_i64
-   local.tee $10
-   local.get $8
-   i64.const 32
-   i64.shr_u
-   i32.wrap_i64
-   local.tee $7
-   i32.const 1072693248
-   i32.sub
-   i32.or
-   i32.eqz
-   if
-    local.get $1
-    call $~lib/math/NativeMath.atan
-    local.set $1
-    br $__inlined_func$~lib/math/NativeMath.atan2
-   end
-   local.get $7
-   i32.const 30
-   i32.shr_u
-   i32.const 2
-   i32.and
-   local.get $6
-   i32.const 31
-   i32.shr_u
-   i32.or
-   local.set $5
-   local.get $7
-   i32.const 2147483647
-   i32.and
-   local.set $7
-   local.get $6
-   i32.const 2147483647
-   i32.and
-   local.tee $6
-   i32.or
-   i32.eqz
-   if
-    block $break|0
-     block $case3|0
-      block $case2|0
-       local.get $5
+   f64.add
+   return
+  end
+  local.get $0
+  i64.reinterpret_f64
+  local.tee $6
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.set $4
+  local.get $6
+  i32.wrap_i64
+  local.set $3
+  local.get $1
+  i64.reinterpret_f64
+  local.tee $6
+  i32.wrap_i64
+  local.tee $7
+  local.get $6
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.tee $5
+  i32.const 1072693248
+  i32.sub
+  i32.or
+  i32.eqz
+  if
+   local.get $0
+   call $~lib/math/NativeMath.atan
+   return
+  end
+  local.get $5
+  i32.const 30
+  i32.shr_u
+  i32.const 2
+  i32.and
+  local.get $4
+  i32.const 31
+  i32.shr_u
+  i32.or
+  local.set $2
+  local.get $5
+  i32.const 2147483647
+  i32.and
+  local.set $5
+  local.get $4
+  i32.const 2147483647
+  i32.and
+  local.tee $4
+  local.get $3
+  i32.or
+  i32.eqz
+  if
+   block $break|0
+    block $case3|0
+     block $case2|0
+      block $case0|0
+       local.get $2
        i32.eqz
-       br_if $__inlined_func$~lib/math/NativeMath.atan2
+       br_if $case0|0
        block $tablify|0
-        local.get $5
+        local.get $2
         i32.const 1
         i32.sub
-        br_table $__inlined_func$~lib/math/NativeMath.atan2 $case2|0 $case3|0 $tablify|0
+        br_table $case0|0 $case2|0 $case3|0 $tablify|0
        end
        br $break|0
       end
-      f64.const 3.141592653589793
-      local.set $1
-      br $__inlined_func$~lib/math/NativeMath.atan2
+      local.get $0
+      return
      end
-     f64.const -3.141592653589793
-     local.set $1
-     br $__inlined_func$~lib/math/NativeMath.atan2
+     f64.const 3.141592653589793
+     return
     end
+    f64.const -3.141592653589793
+    return
    end
-   block $folding-inner0
-    local.get $7
-    local.get $10
-    i32.or
-    i32.eqz
-    br_if $folding-inner0
-    local.get $7
+  end
+  block $folding-inner0
+   local.get $5
+   local.get $7
+   i32.or
+   i32.eqz
+   br_if $folding-inner0
+   local.get $5
+   i32.const 2146435072
+   i32.eq
+   if
+    local.get $4
     i32.const 2146435072
     i32.eq
-    if
-     local.get $6
-     i32.const 2146435072
-     i32.eq
-     if (result f64)
-      f64.const 2.356194490192345
-      f64.const 0.7853981633974483
-      local.get $5
-      i32.const 2
-      i32.and
-      select
-     else
-      f64.const 3.141592653589793
-      f64.const 0
-      local.get $5
-      i32.const 2
-      i32.and
-      select
-     end
-     local.tee $1
-     f64.neg
-     local.get $1
-     local.get $5
-     i32.const 1
+    if (result f64)
+     f64.const 2.356194490192345
+     f64.const 0.7853981633974483
+     local.get $2
+     i32.const 2
      i32.and
      select
-     local.set $1
-     br $__inlined_func$~lib/math/NativeMath.atan2
+    else
+     f64.const 3.141592653589793
+     f64.const 0
+     local.get $2
+     i32.const 2
+     i32.and
+     select
     end
+    local.tee $0
+    f64.neg
+    local.get $0
+    local.get $2
     i32.const 1
-    local.get $6
-    i32.const 2146435072
-    i32.eq
-    local.get $6
-    local.get $7
-    i32.const 67108864
-    i32.add
-    i32.gt_u
-    select
-    br_if $folding-inner0
-    local.get $7
-    local.get $6
-    i32.const 67108864
-    i32.add
-    i32.gt_u
-    i32.const 0
-    local.get $5
-    i32.const 2
     i32.and
     select
-    if (result f64)
-     f64.const 0
-    else
-     local.get $1
-     local.get $4
-     f64.div
-     f64.abs
-     call $~lib/math/NativeMath.atan
-    end
-    local.set $1
-    block $break|1
-     block $case3|1
-      block $case2|1
-       block $case1|1
-        local.get $5
-        if
-         local.get $5
-         i32.const 1
-         i32.sub
-         br_table $case1|1 $case2|1 $case3|1 $break|1
-        end
-        br $__inlined_func$~lib/math/NativeMath.atan2
-       end
-       local.get $1
-       f64.neg
-       local.set $1
-       br $__inlined_func$~lib/math/NativeMath.atan2
-      end
-      f64.const 3.141592653589793
-      local.get $1
-      f64.const 1.2246467991473532e-16
-      f64.sub
-      f64.sub
-      local.set $1
-      br $__inlined_func$~lib/math/NativeMath.atan2
-     end
-     local.get $1
-     f64.const 1.2246467991473532e-16
-     f64.sub
-     f64.const 3.141592653589793
-     f64.sub
-     local.set $1
-     br $__inlined_func$~lib/math/NativeMath.atan2
-    end
-    unreachable
+    return
    end
-   f64.const -1.5707963267948966
-   f64.const 1.5707963267948966
-   local.get $5
    i32.const 1
+   local.get $4
+   i32.const 2146435072
+   i32.eq
+   local.get $4
+   local.get $5
+   i32.const 67108864
+   i32.add
+   i32.gt_u
+   select
+   br_if $folding-inner0
+   local.get $5
+   local.get $4
+   i32.const 67108864
+   i32.add
+   i32.gt_u
+   i32.const 0
+   local.get $2
+   i32.const 2
    i32.and
    select
-   local.set $1
+   if (result f64)
+    f64.const 0
+   else
+    local.get $0
+    local.get $1
+    f64.div
+    f64.abs
+    call $~lib/math/NativeMath.atan
+   end
+   local.set $0
+   block $break|1
+    block $case3|1
+     block $case2|1
+      block $case1|1
+       local.get $2
+       local.tee $3
+       if
+        local.get $3
+        i32.const 1
+        i32.sub
+        br_table $case1|1 $case2|1 $case3|1 $break|1
+       end
+       local.get $0
+       return
+      end
+      local.get $0
+      f64.neg
+      return
+     end
+     f64.const 3.141592653589793
+     local.get $0
+     f64.const 1.2246467991473532e-16
+     f64.sub
+     f64.sub
+     return
+    end
+    local.get $0
+    f64.const 1.2246467991473532e-16
+    f64.sub
+    f64.const 3.141592653589793
+    f64.sub
+    return
+   end
+   unreachable
   end
+  f64.const -1.5707963267948966
+  f64.const 1.5707963267948966
+  local.get $2
+  i32.const 1
+  i32.and
+  select
+ )
+ (func $std/math/test_atan2 (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (result i32)
+  local.get $0
   local.get $1
+  call $~lib/math/NativeMath.atan2
   local.get $2
   local.get $3
   call $std/math/check<f64>
   if (result i32)
    local.get $0
-   local.get $4
+   local.get $1
    call $~lib/bindings/Math/atan2
    local.get $2
    local.get $3
@@ -3165,11 +3162,12 @@
    i32.const 0
   end
  )
- (func $std/math/test_atan2f (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (result i32)
+ (func $~lib/math/NativeMathf.atan2 (param $0 f32) (param $1 f32) (result f32)
+  (local $2 i32)
+  (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  block $__inlined_func$~lib/math/NativeMathf.atan2
+  block $folding-inner0
    i32.const 1
    local.get $0
    local.get $0
@@ -3182,144 +3180,124 @@
     local.get $1
     local.get $0
     f32.add
-    local.set $0
-    br $__inlined_func$~lib/math/NativeMathf.atan2
+    return
    end
-   local.get $0
-   i32.reinterpret_f32
-   local.set $5
    local.get $1
    i32.reinterpret_f32
-   local.tee $6
+   local.tee $3
    i32.const 1065353216
    i32.eq
    if
     local.get $0
     call $~lib/math/NativeMathf.atan
-    local.set $0
-    br $__inlined_func$~lib/math/NativeMathf.atan2
+    return
    end
-   local.get $6
+   local.get $3
    i32.const 30
    i32.shr_u
    i32.const 2
    i32.and
-   local.get $5
+   local.get $0
+   i32.reinterpret_f32
+   local.tee $5
    i32.const 31
    i32.shr_u
    i32.or
-   local.set $4
-   local.get $6
+   local.set $2
+   local.get $3
    i32.const 2147483647
    i32.and
-   local.set $6
+   local.set $4
    local.get $5
    i32.const 2147483647
    i32.and
-   local.tee $5
+   local.tee $3
    i32.eqz
    if
     block $break|0
      block $case3|0
       block $case2|0
-       local.get $4
-       i32.eqz
-       br_if $__inlined_func$~lib/math/NativeMathf.atan2
-       block $tablify|0
-        local.get $4
-        i32.const 1
-        i32.sub
-        br_table $__inlined_func$~lib/math/NativeMathf.atan2 $case2|0 $case3|0 $tablify|0
+       block $case1|0
+        local.get $2
+        i32.eqz
+        br_if $case1|0
+        block $tablify|0
+         local.get $2
+         i32.const 1
+         i32.sub
+         br_table $case1|0 $case2|0 $case3|0 $tablify|0
+        end
+        br $break|0
        end
-       br $break|0
+       local.get $0
+       return
       end
       f32.const 3.1415927410125732
-      local.set $0
-      br $__inlined_func$~lib/math/NativeMathf.atan2
+      return
      end
      f32.const -3.1415927410125732
-     local.set $0
-     br $__inlined_func$~lib/math/NativeMathf.atan2
+     return
     end
    end
-   local.get $6
+   local.get $4
    i32.eqz
-   if
-    f32.const -1.5707963705062866
-    f32.const 1.5707963705062866
-    local.get $4
-    i32.const 1
-    i32.and
-    select
-    local.set $0
-    br $__inlined_func$~lib/math/NativeMathf.atan2
-   end
-   local.get $6
+   br_if $folding-inner0
+   local.get $4
    i32.const 2139095040
    i32.eq
    if
-    local.get $5
+    local.get $3
     i32.const 2139095040
     i32.eq
     if (result f32)
      f32.const 2.356194496154785
      f32.const 0.7853981852531433
-     local.get $4
+     local.get $2
      i32.const 2
      i32.and
      select
      local.tee $0
      f32.neg
      local.get $0
-     local.get $4
+     local.get $2
      i32.const 1
      i32.and
      select
     else
      f32.const 3.1415927410125732
      f32.const 0
-     local.get $4
+     local.get $2
      i32.const 2
      i32.and
      select
      local.tee $0
      f32.neg
      local.get $0
-     local.get $4
+     local.get $2
      i32.const 1
      i32.and
      select
     end
-    local.set $0
-    br $__inlined_func$~lib/math/NativeMathf.atan2
+    return
    end
    i32.const 1
-   local.get $5
+   local.get $3
    i32.const 2139095040
    i32.eq
-   local.get $5
-   local.get $6
+   local.get $3
+   local.get $4
    i32.const 218103808
    i32.add
    i32.gt_u
    select
-   if
-    f32.const -1.5707963705062866
-    f32.const 1.5707963705062866
-    local.get $4
-    i32.const 1
-    i32.and
-    select
-    local.set $0
-    br $__inlined_func$~lib/math/NativeMathf.atan2
-   end
-   local.get $6
-   local.get $5
+   br_if $folding-inner0
+   local.get $4
+   local.get $3
    i32.const 218103808
    i32.add
    i32.gt_u
    i32.const 0
-   local.get $4
+   local.get $2
    i32.const 2
    i32.and
    select
@@ -3337,42 +3315,43 @@
     block $case3|1
      block $case2|1
       block $case1|1
-       local.get $4
+       local.get $2
+       local.tee $3
        if
-        local.get $4
+        local.get $3
         i32.const 1
         i32.sub
         br_table $case1|1 $case2|1 $case3|1 $break|1
        end
-       br $__inlined_func$~lib/math/NativeMathf.atan2
+       local.get $0
+       return
       end
       local.get $0
       f32.neg
-      local.set $0
-      br $__inlined_func$~lib/math/NativeMathf.atan2
+      return
      end
      f32.const 3.1415927410125732
      local.get $0
      f32.const -8.742277657347586e-08
      f32.sub
      f32.sub
-     local.set $0
-     br $__inlined_func$~lib/math/NativeMathf.atan2
+     return
     end
     local.get $0
     f32.const -8.742277657347586e-08
     f32.sub
     f32.const 3.1415927410125732
     f32.sub
-    local.set $0
-    br $__inlined_func$~lib/math/NativeMathf.atan2
+    return
    end
    unreachable
   end
-  local.get $0
+  f32.const -1.5707963705062866
+  f32.const 1.5707963705062866
   local.get $2
-  local.get $3
-  call $std/math/check<f32>
+  i32.const 1
+  i32.and
+  select
  )
  (func $std/math/test_cbrt (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   (local $3 f64)
@@ -5732,87 +5711,86 @@
   local.get $2
   call $std/math/check<f32>
  )
- (func $std/math/test_exp2 (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
-  (local $3 i32)
+ (func $~lib/math/NativeMath.exp2 (param $0 f64) (result f64)
+  (local $1 i32)
+  (local $2 f64)
+  (local $3 i64)
   (local $4 f64)
   (local $5 i64)
-  (local $6 f64)
+  (local $6 i32)
   (local $7 f64)
-  (local $8 i64)
-  (local $9 i32)
-  (local $10 f64)
   block $~lib/util/math/exp2_lut|inlined.0 (result f64)
    local.get $0
-   local.tee $4
+   local.tee $2
    i64.reinterpret_f64
-   local.tee $5
+   local.tee $3
    i64.const 52
    i64.shr_u
    i64.const 2047
    i64.and
    i32.wrap_i64
-   local.tee $3
+   local.tee $1
    i32.const 969
    i32.sub
    i32.const 63
    i32.ge_u
    if
     f64.const 1
-    local.get $3
+    local.get $1
     i32.const 969
     i32.sub
     i32.const -2147483648
     i32.ge_u
     br_if $~lib/util/math/exp2_lut|inlined.0
     drop
-    local.get $3
+    local.get $1
     i32.const 1033
     i32.ge_u
     if
      f64.const 0
-     local.get $5
+     local.get $3
      i64.const -4503599627370496
      i64.eq
      br_if $~lib/util/math/exp2_lut|inlined.0
      drop
-     local.get $4
+     local.get $2
      f64.const 1
      f64.add
-     local.get $3
+     local.get $1
      i32.const 2047
      i32.ge_u
      br_if $~lib/util/math/exp2_lut|inlined.0
      drop
      f64.const inf
-     local.get $5
+     local.get $3
      i64.const 63
      i64.shr_u
      i64.eqz
      br_if $~lib/util/math/exp2_lut|inlined.0
      drop
      f64.const 0
-     local.get $5
+     local.get $3
      i64.const -4570929321408987136
      i64.ge_u
      br_if $~lib/util/math/exp2_lut|inlined.0
      drop
     end
     i32.const 0
+    local.get $1
     local.get $3
-    local.get $5
     i64.const 1
     i64.shl
     i64.const -9143996093422370816
     i64.gt_u
     select
-    local.set $3
+    local.set $1
    end
-   local.get $4
+   local.get $2
    f64.const 52776558133248
    f64.add
    local.tee $0
    i64.reinterpret_f64
-   local.tee $8
+   local.tee $5
    i64.const 127
    i64.and
    i64.const 1
@@ -5822,14 +5800,14 @@
    i32.shl
    i32.const 5664
    i32.add
-   local.tee $9
+   local.tee $6
    i64.load offset=8
-   local.get $8
+   local.get $5
    i64.const 45
    i64.shl
    i64.add
-   local.set $5
-   local.get $4
+   local.set $3
+   local.get $2
    local.get $0
    f64.const 52776558133248
    f64.sub
@@ -5837,15 +5815,15 @@
    local.tee $0
    local.get $0
    f64.mul
-   local.set $6
-   local.get $9
+   local.set $2
+   local.get $6
    i64.load
    f64.reinterpret_i64
    local.get $0
    f64.const 0.6931471805599453
    f64.mul
    f64.add
-   local.get $6
+   local.get $2
    local.get $0
    f64.const 0.0555041086686087
    f64.mul
@@ -5853,8 +5831,8 @@
    f64.add
    f64.mul
    f64.add
-   local.get $6
-   local.get $6
+   local.get $2
+   local.get $2
    f64.mul
    local.get $0
    f64.const 1.3332074570119598e-03
@@ -5863,57 +5841,57 @@
    f64.add
    f64.mul
    f64.add
-   local.set $6
-   local.get $3
+   local.set $0
+   local.get $1
    i32.eqz
    if
     block $~lib/util/math/specialcase2|inlined.0 (result f64)
-     local.get $8
+     local.get $5
      i64.const 2147483648
      i64.and
      i64.eqz
      if
-      local.get $5
+      local.get $3
       i64.const 4503599627370496
       i64.sub
       f64.reinterpret_i64
-      local.tee $0
-      local.get $6
-      f64.mul
+      local.tee $2
       local.get $0
+      f64.mul
+      local.get $2
       f64.add
       local.tee $0
       local.get $0
       f64.add
       br $~lib/util/math/specialcase2|inlined.0
      end
-     local.get $5
+     local.get $3
      i64.const 4602678819172646912
      i64.add
      f64.reinterpret_i64
-     local.tee $7
-     local.get $6
+     local.tee $4
+     local.get $0
      f64.mul
-     local.get $7
+     local.get $4
      f64.add
-     local.tee $0
+     local.tee $2
      f64.const 1
      f64.lt
      if (result f64)
-      local.get $0
+      local.get $2
       f64.const 1
       f64.add
-      local.tee $10
+      local.tee $7
       f64.const 1
-      local.get $10
+      local.get $7
       f64.sub
-      local.get $0
+      local.get $2
       f64.add
-      local.get $7
-      local.get $0
+      local.get $4
+      local.get $2
       f64.sub
-      local.get $7
-      local.get $6
+      local.get $4
+      local.get $0
       f64.mul
       f64.add
       f64.add
@@ -5921,27 +5899,31 @@
       f64.const 1
       f64.sub
      else
-      local.get $0
+      local.get $2
      end
      f64.const 2.2250738585072014e-308
      f64.mul
     end
     br $~lib/util/math/exp2_lut|inlined.0
    end
-   local.get $5
+   local.get $3
    f64.reinterpret_i64
-   local.tee $0
-   local.get $6
-   f64.mul
+   local.tee $2
    local.get $0
+   f64.mul
+   local.get $2
    f64.add
   end
+ )
+ (func $std/math/test_exp2 (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  local.get $0
+  call $~lib/math/NativeMath.exp2
   local.get $1
   local.get $2
   call $std/math/check<f64>
   if (result i32)
    f64.const 2
-   local.get $4
+   local.get $0
    call $~lib/bindings/Math/pow
    local.get $1
    local.get $2
@@ -6325,229 +6307,208 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_log10 (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $~lib/math/NativeMath.log10 (param $0 f64) (result f64)
+  (local $1 i32)
+  (local $2 i64)
   (local $3 f64)
-  (local $4 i32)
+  (local $4 f64)
   (local $5 f64)
-  (local $6 i64)
-  (local $7 i32)
-  (local $8 f64)
+  (local $6 f64)
+  (local $7 f64)
+  (local $8 i32)
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
-  (local $12 f64)
-  (local $13 f64)
-  (local $14 f64)
-  (local $15 f64)
-  block $__inlined_func$~lib/math/NativeMath.log10
-   i32.const 1
+  i32.const 1
+  local.get $0
+  i64.reinterpret_f64
+  local.tee $2
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.tee $1
+  i32.const 31
+  i32.shr_u
+  local.get $1
+  i32.const 1048576
+  i32.lt_u
+  select
+  if
+   local.get $2
+   i64.const 1
+   i64.shl
+   i64.eqz
+   if
+    f64.const -1
+    local.get $0
+    local.get $0
+    f64.mul
+    f64.div
+    return
+   end
+   local.get $1
+   i32.const 31
+   i32.shr_u
+   if
+    local.get $0
+    local.get $0
+    f64.sub
+    f64.const 0
+    f64.div
+    return
+   end
+   i32.const -54
+   local.set $8
    local.get $0
-   local.tee $3
+   f64.const 18014398509481984
+   f64.mul
    i64.reinterpret_f64
-   local.tee $6
+   local.tee $2
    i64.const 32
    i64.shr_u
    i32.wrap_i64
-   local.tee $4
-   i32.const 31
-   i32.shr_u
-   local.get $4
-   i32.const 1048576
-   i32.lt_u
-   select
+   local.set $1
+  else
+   local.get $1
+   i32.const 2146435072
+   i32.ge_u
    if
-    local.get $6
-    i64.const 1
+    local.get $0
+    return
+   else
+    local.get $2
+    i64.const 32
     i64.shl
+    i64.const 1
+    local.get $1
+    i32.const 1072693248
+    i32.eq
+    select
     i64.eqz
     if
-     f64.const -1
-     local.get $3
-     local.get $3
-     f64.mul
-     f64.div
-     local.set $3
-     br $__inlined_func$~lib/math/NativeMath.log10
-    end
-    local.get $4
-    i32.const 31
-    i32.shr_u
-    if
-     local.get $3
-     local.get $3
-     f64.sub
      f64.const 0
-     f64.div
-     local.set $3
-     br $__inlined_func$~lib/math/NativeMath.log10
-    end
-    i32.const -54
-    local.set $7
-    local.get $3
-    f64.const 18014398509481984
-    f64.mul
-    i64.reinterpret_f64
-    local.tee $6
-    i64.const 32
-    i64.shr_u
-    i32.wrap_i64
-    local.set $4
-   else
-    local.get $4
-    i32.const 2146435072
-    i32.ge_u
-    if
-     br $__inlined_func$~lib/math/NativeMath.log10
-    else
-     local.get $6
-     i64.const 32
-     i64.shl
-     i64.const 1
-     local.get $4
-     i32.const 1072693248
-     i32.eq
-     select
-     i64.eqz
-     if
-      f64.const 0
-      local.set $3
-      br $__inlined_func$~lib/math/NativeMath.log10
-     end
+     return
     end
    end
-   local.get $6
-   i64.const 4294967295
-   i64.and
-   local.get $4
-   i32.const 614242
-   i32.add
-   local.tee $4
-   i32.const 1048575
-   i32.and
-   i32.const 1072079006
-   i32.add
-   i64.extend_i32_u
-   i64.const 32
-   i64.shl
-   i64.or
-   f64.reinterpret_i64
-   f64.const 1
-   f64.sub
-   local.tee $5
-   local.get $5
-   f64.const 2
-   f64.add
-   f64.div
-   local.tee $8
-   local.get $8
-   f64.mul
-   local.tee $9
-   local.get $9
-   f64.mul
-   local.set $3
-   local.get $7
-   local.get $4
-   i32.const 20
-   i32.shr_u
-   i32.const 1023
-   i32.sub
-   i32.add
-   f64.convert_i32_s
-   local.tee $13
-   f64.const 0.30102999566361177
-   f64.mul
-   local.tee $14
-   local.get $5
-   local.get $5
-   f64.const 0.5
-   f64.mul
-   local.get $5
-   f64.mul
-   local.tee $10
-   f64.sub
-   i64.reinterpret_f64
-   i64.const -4294967296
-   i64.and
-   f64.reinterpret_i64
-   local.tee $11
-   f64.const 0.4342944818781689
-   f64.mul
-   local.tee $15
-   f64.add
-   local.set $12
-   local.get $13
-   f64.const 3.694239077158931e-13
-   f64.mul
-   local.get $5
-   local.get $11
-   f64.sub
-   local.get $10
-   f64.sub
-   local.get $8
-   local.get $10
-   local.get $9
-   local.get $3
-   local.get $3
-   local.get $3
-   f64.const 0.14798198605116586
-   f64.mul
-   f64.const 0.1818357216161805
-   f64.add
-   f64.mul
-   f64.const 0.2857142874366239
-   f64.add
-   f64.mul
-   f64.const 0.6666666666666735
-   f64.add
-   f64.mul
-   local.get $3
-   local.get $3
-   local.get $3
-   f64.const 0.15313837699209373
-   f64.mul
-   f64.const 0.22222198432149784
-   f64.add
-   f64.mul
-   f64.const 0.3999999999940942
-   f64.add
-   f64.mul
-   f64.add
-   f64.add
-   f64.mul
-   f64.add
-   local.tee $3
-   local.get $11
-   f64.add
-   f64.const 2.5082946711645275e-11
-   f64.mul
-   f64.add
-   local.get $3
-   f64.const 0.4342944818781689
-   f64.mul
-   f64.add
-   local.get $14
-   local.get $12
-   f64.sub
-   local.get $15
-   f64.add
-   f64.add
-   local.get $12
-   f64.add
-   local.set $3
   end
-  local.get $3
-  local.get $1
   local.get $2
-  call $std/math/check<f64>
-  if (result i32)
-   local.get $0
-   call $~lib/bindings/Math/log10
-   local.get $1
-   local.get $2
-   call $std/math/check<f64>
-  else
-   i32.const 0
-  end
+  i64.const 4294967295
+  i64.and
+  local.get $1
+  i32.const 614242
+  i32.add
+  local.tee $1
+  i32.const 1048575
+  i32.and
+  i32.const 1072079006
+  i32.add
+  i64.extend_i32_u
+  i64.const 32
+  i64.shl
+  i64.or
+  f64.reinterpret_i64
+  f64.const 1
+  f64.sub
+  local.tee $0
+  local.get $0
+  f64.const 2
+  f64.add
+  f64.div
+  local.tee $4
+  local.get $4
+  f64.mul
+  local.set $3
+  local.get $8
+  local.get $1
+  i32.const 20
+  i32.shr_u
+  i32.const 1023
+  i32.sub
+  i32.add
+  f64.convert_i32_s
+  local.tee $9
+  f64.const 0.30102999566361177
+  f64.mul
+  local.tee $10
+  local.get $0
+  local.get $0
+  f64.const 0.5
+  f64.mul
+  local.get $0
+  f64.mul
+  local.tee $5
+  f64.sub
+  i64.reinterpret_f64
+  i64.const -4294967296
+  i64.and
+  f64.reinterpret_i64
+  local.tee $6
+  f64.const 0.4342944818781689
+  f64.mul
+  local.tee $11
+  f64.add
+  local.set $7
+  local.get $9
+  f64.const 3.694239077158931e-13
+  f64.mul
+  local.get $0
+  local.get $6
+  f64.sub
+  local.get $5
+  f64.sub
+  local.get $4
+  local.get $5
+  local.get $3
+  local.get $3
+  local.get $3
+  f64.mul
+  local.tee $0
+  local.get $0
+  local.get $0
+  f64.const 0.14798198605116586
+  f64.mul
+  f64.const 0.1818357216161805
+  f64.add
+  f64.mul
+  f64.const 0.2857142874366239
+  f64.add
+  f64.mul
+  f64.const 0.6666666666666735
+  f64.add
+  f64.mul
+  local.get $0
+  local.get $0
+  local.get $0
+  f64.const 0.15313837699209373
+  f64.mul
+  f64.const 0.22222198432149784
+  f64.add
+  f64.mul
+  f64.const 0.3999999999940942
+  f64.add
+  f64.mul
+  f64.add
+  f64.add
+  f64.mul
+  f64.add
+  local.tee $0
+  local.get $6
+  f64.add
+  f64.const 2.5082946711645275e-11
+  f64.mul
+  f64.add
+  local.get $0
+  f64.const 0.4342944818781689
+  f64.mul
+  f64.add
+  local.get $10
+  local.get $7
+  f64.sub
+  local.get $11
+  f64.add
+  f64.add
+  local.get $7
+  f64.add
  )
  (func $std/math/test_log10f (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   (local $3 i32)
@@ -7114,213 +7075,216 @@
    i32.const 0
   end
  )
- (func $std/math/test_mod (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $~lib/math/NativeMath.mod (param $0 f64) (param $1 f64) (result f64)
+  (local $2 i64)
   (local $3 i64)
   (local $4 i64)
   (local $5 i64)
   (local $6 i64)
   (local $7 i64)
   (local $8 i64)
-  (local $9 f64)
-  (local $10 i64)
-  block $__inlined_func$~lib/math/NativeMath.mod (result f64)
+  local.get $1
+  f64.abs
+  f64.const 1
+  f64.eq
+  if
    local.get $0
    local.get $0
    f64.trunc
    f64.sub
    local.get $0
    f64.copysign
-   local.get $1
-   f64.abs
-   f64.const 1
-   f64.eq
-   br_if $__inlined_func$~lib/math/NativeMath.mod
-   drop
-   local.get $1
-   i64.reinterpret_f64
-   local.tee $4
-   i64.const 52
-   i64.shr_u
-   i64.const 2047
-   i64.and
-   local.set $6
+   return
+  end
+  local.get $1
+  i64.reinterpret_f64
+  local.tee $3
+  i64.const 52
+  i64.shr_u
+  i64.const 2047
+  i64.and
+  local.set $5
+  local.get $0
+  i64.reinterpret_f64
+  local.tee $2
+  i64.const 63
+  i64.shr_u
+  local.set $7
+  i32.const 1
+  local.get $1
+  local.get $1
+  f64.ne
+  i32.const 1
+  local.get $2
+  i64.const 52
+  i64.shr_u
+  i64.const 2047
+  i64.and
+  local.tee $4
+  i64.const 2047
+  i64.eq
+  local.get $3
+  i64.const 1
+  i64.shl
+  local.tee $6
+  i64.eqz
+  select
+  select
+  if
    local.get $0
-   i64.reinterpret_f64
-   local.tee $3
-   i64.const 63
-   i64.shr_u
-   local.set $8
-   i32.const 1
    local.get $1
-   local.get $1
-   f64.ne
-   i32.const 1
-   local.get $3
-   i64.const 52
-   i64.shr_u
-   i64.const 2047
-   i64.and
-   local.tee $5
-   i64.const 2047
-   i64.eq
+   f64.mul
+   local.tee $0
+   local.get $0
+   f64.div
+   return
+  end
+  local.get $6
+  local.get $2
+  i64.const 1
+  i64.shl
+  local.tee $8
+  i64.ge_u
+  if
+   local.get $0
+   local.get $6
+   local.get $8
+   i64.ne
+   f64.convert_i32_u
+   f64.mul
+   return
+  end
+  local.get $4
+  i64.eqz
+  if (result i64)
+   local.get $2
+   i64.const 1
    local.get $4
-   i64.const 1
+   local.get $2
+   i64.const 12
    i64.shl
-   local.tee $7
-   i64.eqz
-   select
-   select
-   if
-    local.get $0
-    local.get $1
-    f64.mul
-    local.tee $9
-    local.get $9
-    f64.div
-    br $__inlined_func$~lib/math/NativeMath.mod
-   end
-   local.get $7
+   i64.clz
+   i64.sub
+   local.tee $4
+   i64.sub
+   i64.shl
+  else
+   local.get $2
+   i64.const 4503599627370495
+   i64.and
+   i64.const 4503599627370496
+   i64.or
+  end
+  local.set $2
+  local.get $5
+  i64.eqz
+  if (result i64)
    local.get $3
    i64.const 1
+   local.get $5
+   local.get $3
+   i64.const 12
    i64.shl
-   local.tee $10
+   i64.clz
+   i64.sub
+   local.tee $5
+   i64.sub
+   i64.shl
+  else
+   local.get $3
+   i64.const 4503599627370495
+   i64.and
+   i64.const 4503599627370496
+   i64.or
+  end
+  local.set $3
+  block $folding-inner0
+   loop $while-continue|0
+    local.get $4
+    local.get $5
+    i64.gt_s
+    if
+     local.get $2
+     local.get $3
+     i64.ge_u
+     if (result i64)
+      local.get $2
+      local.get $3
+      i64.eq
+      br_if $folding-inner0
+      local.get $2
+      local.get $3
+      i64.sub
+     else
+      local.get $2
+     end
+     i64.const 1
+     i64.shl
+     local.set $2
+     local.get $4
+     i64.const 1
+     i64.sub
+     local.set $4
+     br $while-continue|0
+    end
+   end
+   local.get $2
+   local.get $3
    i64.ge_u
    if
-    local.get $0
-    local.get $7
-    local.get $10
-    i64.ne
-    f64.convert_i32_u
-    f64.mul
-    br $__inlined_func$~lib/math/NativeMath.mod
+    local.get $2
+    local.get $3
+    i64.eq
+    br_if $folding-inner0
+    local.get $2
+    local.get $3
+    i64.sub
+    local.set $2
    end
-   local.get $5
-   i64.eqz
+   local.get $2
+   local.get $2
+   i64.const 11
+   i64.shl
+   i64.clz
+   local.tee $3
+   i64.shl
+   local.set $2
+   local.get $4
+   local.get $3
+   i64.sub
+   local.tee $4
+   i64.const 0
+   i64.gt_s
    if (result i64)
-    local.get $3
-    i64.const 1
-    local.get $5
-    local.get $3
-    i64.const 12
-    i64.shl
-    i64.clz
-    i64.sub
-    local.tee $5
-    i64.sub
-    i64.shl
-   else
-    local.get $3
-    i64.const 4503599627370495
-    i64.and
+    local.get $2
     i64.const 4503599627370496
+    i64.sub
+    local.get $4
+    i64.const 52
+    i64.shl
     i64.or
-   end
-   local.set $3
-   local.get $6
-   i64.eqz
-   if (result i64)
-    local.get $4
-    i64.const 1
-    local.get $6
-    local.get $4
-    i64.const 12
-    i64.shl
-    i64.clz
-    i64.sub
-    local.tee $6
-    i64.sub
-    i64.shl
    else
-    local.get $4
-    i64.const 4503599627370495
-    i64.and
-    i64.const 4503599627370496
-    i64.or
-   end
-   local.set $4
-   block $folding-inner0
-    loop $while-continue|0
-     local.get $5
-     local.get $6
-     i64.gt_s
-     if
-      local.get $3
-      local.get $4
-      i64.ge_u
-      if (result i64)
-       local.get $3
-       local.get $4
-       i64.eq
-       br_if $folding-inner0
-       local.get $3
-       local.get $4
-       i64.sub
-      else
-       local.get $3
-      end
-      i64.const 1
-      i64.shl
-      local.set $3
-      local.get $5
-      i64.const 1
-      i64.sub
-      local.set $5
-      br $while-continue|0
-     end
-    end
-    local.get $3
-    local.get $4
-    i64.ge_u
-    if
-     local.get $3
-     local.get $4
-     i64.eq
-     br_if $folding-inner0
-     local.get $3
-     local.get $4
-     i64.sub
-     local.set $3
-    end
-    local.get $3
-    local.get $3
-    i64.const 11
-    i64.shl
-    i64.clz
-    local.tee $4
-    i64.shl
-    local.set $3
-    local.get $5
+    local.get $2
+    i64.const 1
     local.get $4
     i64.sub
-    local.tee $4
-    i64.const 0
-    i64.gt_s
-    if (result i64)
-     local.get $3
-     i64.const 4503599627370496
-     i64.sub
-     local.get $4
-     i64.const 52
-     i64.shl
-     i64.or
-    else
-     local.get $3
-     i64.const 1
-     local.get $4
-     i64.sub
-     i64.shr_u
-    end
-    local.get $8
-    i64.const 63
-    i64.shl
-    i64.or
-    f64.reinterpret_i64
-    br $__inlined_func$~lib/math/NativeMath.mod
+    i64.shr_u
    end
-   local.get $0
-   f64.const 0
-   f64.mul
+   local.get $7
+   i64.const 63
+   i64.shl
+   i64.or
+   f64.reinterpret_i64
+   return
   end
+  local.get $0
+  f64.const 0
+  f64.mul
+ )
+ (func $std/math/test_mod (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  local.get $0
+  local.get $1
+  call $~lib/math/NativeMath.mod
   local.get $2
   f64.const 0
   call $std/math/check<f64>
@@ -7335,210 +7299,206 @@
    i32.const 0
   end
  )
- (func $std/math/test_modf (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $~lib/math/NativeMathf.mod (param $0 f32) (param $1 f32) (result f32)
+  (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  block $__inlined_func$~lib/math/NativeMathf.mod (result f32)
+  local.get $1
+  f32.abs
+  f32.const 1
+  f32.eq
+  if
    local.get $0
    local.get $0
    f32.trunc
    f32.sub
    local.get $0
    f32.copysign
-   local.get $1
-   f32.abs
-   f32.const 1
-   f32.eq
-   br_if $__inlined_func$~lib/math/NativeMathf.mod
-   drop
-   local.get $1
-   i32.reinterpret_f32
-   local.tee $4
-   i32.const 23
-   i32.shr_u
-   i32.const 255
-   i32.and
-   local.set $6
+   return
+  end
+  local.get $1
+  i32.reinterpret_f32
+  local.tee $3
+  i32.const 23
+  i32.shr_u
+  i32.const 255
+  i32.and
+  local.set $5
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $2
+  i32.const -2147483648
+  i32.and
+  local.set $7
+  i32.const 1
+  local.get $1
+  local.get $1
+  f32.ne
+  local.get $2
+  i32.const 23
+  i32.shr_u
+  i32.const 255
+  i32.and
+  local.tee $4
+  i32.const 255
+  i32.eq
+  i32.const 1
+  local.get $3
+  i32.const 1
+  i32.shl
+  local.tee $6
+  select
+  select
+  if
    local.get $0
-   i32.reinterpret_f32
-   local.tee $3
-   i32.const -2147483648
-   i32.and
-   local.set $8
-   i32.const 1
    local.get $1
-   local.get $1
-   f32.ne
-   local.get $3
-   i32.const 23
-   i32.shr_u
-   i32.const 255
+   f32.mul
+   local.tee $0
+   local.get $0
+   f32.div
+   return
+  end
+  local.get $6
+  local.get $2
+  i32.const 1
+  i32.shl
+  local.tee $8
+  i32.ge_u
+  if
+   local.get $0
+   local.get $6
+   local.get $8
+   i32.ne
+   f32.convert_i32_u
+   f32.mul
+   return
+  end
+  local.get $4
+  if (result i32)
+   local.get $2
+   i32.const 8388607
    i32.and
-   local.tee $5
-   i32.const 255
-   i32.eq
+   i32.const 8388608
+   i32.or
+  else
+   local.get $2
    i32.const 1
    local.get $4
-   i32.const 1
+   local.get $2
+   i32.const 9
    i32.shl
-   local.tee $7
-   select
-   select
-   if
-    local.get $0
-    local.get $1
-    f32.mul
-    local.tee $0
-    local.get $0
-    f32.div
-    br $__inlined_func$~lib/math/NativeMathf.mod
-   end
-   local.get $7
+   i32.clz
+   i32.sub
+   local.tee $4
+   i32.sub
+   i32.shl
+  end
+  local.set $2
+  local.get $5
+  if (result i32)
+   local.get $3
+   i32.const 8388607
+   i32.and
+   i32.const 8388608
+   i32.or
+  else
    local.get $3
    i32.const 1
+   local.get $5
+   local.get $3
+   i32.const 9
    i32.shl
-   local.tee $9
+   i32.clz
+   i32.sub
+   local.tee $5
+   i32.sub
+   i32.shl
+  end
+  local.set $3
+  block $folding-inner0
+   loop $while-continue|0
+    local.get $4
+    local.get $5
+    i32.gt_s
+    if
+     local.get $2
+     local.get $3
+     i32.ge_u
+     if (result i32)
+      local.get $2
+      local.get $3
+      i32.eq
+      br_if $folding-inner0
+      local.get $2
+      local.get $3
+      i32.sub
+     else
+      local.get $2
+     end
+     i32.const 1
+     i32.shl
+     local.set $2
+     local.get $4
+     i32.const 1
+     i32.sub
+     local.set $4
+     br $while-continue|0
+    end
+   end
+   local.get $2
+   local.get $3
    i32.ge_u
    if
-    local.get $0
-    local.get $7
-    local.get $9
-    i32.ne
-    f32.convert_i32_u
-    f32.mul
-    br $__inlined_func$~lib/math/NativeMathf.mod
-   end
-   local.get $5
-   if (result i32)
+    local.get $2
     local.get $3
-    i32.const 8388607
-    i32.and
+    i32.eq
+    br_if $folding-inner0
+    local.get $2
+    local.get $3
+    i32.sub
+    local.set $2
+   end
+   local.get $2
+   local.get $2
+   i32.const 8
+   i32.shl
+   i32.clz
+   local.tee $3
+   i32.shl
+   local.set $2
+   local.get $4
+   local.get $3
+   i32.sub
+   local.tee $4
+   i32.const 0
+   i32.gt_s
+   if (result i32)
+    local.get $2
     i32.const 8388608
+    i32.sub
+    local.get $4
+    i32.const 23
+    i32.shl
     i32.or
    else
-    local.get $3
+    local.get $2
     i32.const 1
-    local.get $5
-    local.get $3
-    i32.const 9
-    i32.shl
-    i32.clz
+    local.get $4
     i32.sub
-    local.tee $5
-    i32.sub
-    i32.shl
+    i32.shr_u
    end
-   local.set $3
-   local.get $6
-   if (result i32)
-    local.get $4
-    i32.const 8388607
-    i32.and
-    i32.const 8388608
-    i32.or
-   else
-    local.get $4
-    i32.const 1
-    local.get $6
-    local.get $4
-    i32.const 9
-    i32.shl
-    i32.clz
-    i32.sub
-    local.tee $6
-    i32.sub
-    i32.shl
-   end
-   local.set $4
-   block $folding-inner0
-    loop $while-continue|0
-     local.get $5
-     local.get $6
-     i32.gt_s
-     if
-      local.get $3
-      local.get $4
-      i32.ge_u
-      if (result i32)
-       local.get $3
-       local.get $4
-       i32.eq
-       br_if $folding-inner0
-       local.get $3
-       local.get $4
-       i32.sub
-      else
-       local.get $3
-      end
-      i32.const 1
-      i32.shl
-      local.set $3
-      local.get $5
-      i32.const 1
-      i32.sub
-      local.set $5
-      br $while-continue|0
-     end
-    end
-    local.get $3
-    local.get $4
-    i32.ge_u
-    if
-     local.get $3
-     local.get $4
-     i32.eq
-     br_if $folding-inner0
-     local.get $3
-     local.get $4
-     i32.sub
-     local.set $3
-    end
-    local.get $3
-    local.get $3
-    i32.const 8
-    i32.shl
-    i32.clz
-    local.tee $4
-    i32.shl
-    local.set $3
-    local.get $5
-    local.get $4
-    i32.sub
-    local.tee $4
-    i32.const 0
-    i32.gt_s
-    if (result i32)
-     local.get $3
-     i32.const 8388608
-     i32.sub
-     local.get $4
-     i32.const 23
-     i32.shl
-     i32.or
-    else
-     local.get $3
-     i32.const 1
-     local.get $4
-     i32.sub
-     i32.shr_u
-    end
-    local.get $8
-    i32.or
-    f32.reinterpret_i32
-    br $__inlined_func$~lib/math/NativeMathf.mod
-   end
-   local.get $0
-   f32.const 0
-   f32.mul
+   local.get $7
+   i32.or
+   f32.reinterpret_i32
+   return
   end
-  local.get $2
+  local.get $0
   f32.const 0
-  call $std/math/check<f32>
+  f32.mul
  )
  (func $~lib/math/NativeMath.pow (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
@@ -10305,80 +10265,85 @@
  (func $std/math/test_sinh (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   (local $3 f64)
   (local $4 f64)
-  (local $5 i32)
-  (local $6 i64)
-  block $__inlined_func$~lib/math/NativeMath.sinh (result f64)
-   local.get $0
-   i64.reinterpret_f64
-   i64.const 9223372036854775807
-   i64.and
-   local.tee $6
-   f64.reinterpret_i64
-   local.set $3
-   f64.const 0.5
-   local.get $0
-   f64.copysign
-   local.set $4
-   local.get $6
+  (local $5 f64)
+  (local $6 i32)
+  (local $7 i64)
+  local.get $0
+  local.set $3
+  local.get $0
+  i64.reinterpret_f64
+  i64.const 9223372036854775807
+  i64.and
+  local.tee $7
+  f64.reinterpret_i64
+  local.set $4
+  f64.const 0.5
+  local.get $0
+  f64.copysign
+  local.set $5
+  block $__inlined_func$~lib/math/NativeMath.sinh
+   local.get $7
    i64.const 32
    i64.shr_u
    i32.wrap_i64
-   local.tee $5
+   local.tee $6
    i32.const 1082535490
    i32.lt_u
    if
-    local.get $3
+    local.get $4
     call $~lib/math/NativeMath.expm1
-    local.set $3
-    local.get $5
+    local.set $4
+    local.get $6
     i32.const 1072693248
     i32.lt_u
     if
-     local.get $0
-     local.get $5
+     local.get $6
      i32.const 1045430272
      i32.lt_u
      br_if $__inlined_func$~lib/math/NativeMath.sinh
-     drop
+     local.get $5
      local.get $4
-     local.get $3
-     local.get $3
+     local.get $4
      f64.add
-     local.get $3
-     local.get $3
+     local.get $4
+     local.get $4
      f64.mul
-     local.get $3
+     local.get $4
      f64.const 1
      f64.add
      f64.div
      f64.sub
      f64.mul
+     local.set $3
      br $__inlined_func$~lib/math/NativeMath.sinh
     end
+    local.get $5
     local.get $4
-    local.get $3
-    local.get $3
-    local.get $3
+    local.get $4
+    local.get $4
     f64.const 1
     f64.add
     f64.div
     f64.add
     f64.mul
+    local.set $3
     br $__inlined_func$~lib/math/NativeMath.sinh
    end
-   local.get $3
+   local.get $4
    f64.const 1416.0996898839683
    f64.sub
    call $~lib/math/NativeMath.exp
-   local.get $4
-   local.get $4
+   local.get $5
+   local.get $5
    f64.add
    f64.const 2247116418577894884661631e283
    f64.mul
    f64.mul
    f64.const 2247116418577894884661631e283
    f64.mul
+   local.set $3
   end
+  local.get $3
   local.get $1
   local.get $2
   call $std/math/check<f64>
@@ -11303,13 +11268,12 @@
   (local $4 i32)
   (local $5 i64)
   local.get $0
-  local.tee $3
   i64.reinterpret_f64
   i64.const 9223372036854775807
   i64.and
   local.tee $5
   f64.reinterpret_i64
-  local.set $0
+  local.set $3
   local.get $5
   i64.const 32
   i64.shr_u
@@ -11324,14 +11288,14 @@
    if (result f64)
     f64.const 1
     f64.const 0
-    local.get $0
+    local.get $3
     f64.div
     f64.sub
    else
     f64.const 1
     f64.const 2
-    local.get $0
-    local.get $0
+    local.get $3
+    local.get $3
     f64.add
     call $~lib/math/NativeMath.expm1
     f64.const 2
@@ -11344,12 +11308,12 @@
    i32.const 1070618798
    i32.gt_u
    if (result f64)
-    local.get $0
-    local.get $0
+    local.get $3
+    local.get $3
     f64.add
     call $~lib/math/NativeMath.expm1
-    local.tee $0
-    local.get $0
+    local.tee $3
+    local.get $3
     f64.const 2
     f64.add
     f64.div
@@ -11358,28 +11322,28 @@
     i32.const 1048576
     i32.ge_u
     if (result f64)
-     local.get $0
+     local.get $3
      f64.const -2
      f64.mul
      call $~lib/math/NativeMath.expm1
-     local.tee $0
+     local.tee $3
      f64.neg
-     local.get $0
+     local.get $3
      f64.const 2
      f64.add
      f64.div
     else
-     local.get $0
+     local.get $3
     end
    end
   end
-  local.get $3
+  local.get $0
   f64.copysign
   local.get $1
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   local.get $3
+   local.get $0
    call $~lib/bindings/Math/tanh
    local.get $1
    local.get $2
@@ -18246,9 +18210,10 @@
   end
   f32.const -8.066848754882812
   f32.const 4.535662651062012
+  call $~lib/math/NativeMathf.atan2
   f32.const -1.0585895776748657
   f32.const -0.22352588176727295
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18260,9 +18225,10 @@
   end
   f32.const 4.345239639282227
   f32.const -8.887990951538086
+  call $~lib/math/NativeMathf.atan2
   f32.const 2.686873435974121
   f32.const 0.09464472532272339
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18274,9 +18240,10 @@
   end
   f32.const -8.381433486938477
   f32.const -2.7636072635650635
+  call $~lib/math/NativeMathf.atan2
   f32.const -1.8893001079559326
   f32.const -0.21941901743412018
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18288,9 +18255,10 @@
   end
   f32.const -6.531673431396484
   f32.const 4.567535400390625
+  call $~lib/math/NativeMathf.atan2
   f32.const -0.9605468511581421
   f32.const 0.46015575528144836
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18302,9 +18270,10 @@
   end
   f32.const 9.267057418823242
   f32.const 4.811392307281494
+  call $~lib/math/NativeMathf.atan2
   f32.const 1.0919123888015747
   f32.const -0.05708503723144531
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18316,9 +18285,10 @@
   end
   f32.const -6.450045585632324
   f32.const 0.6620717644691467
+  call $~lib/math/NativeMathf.atan2
   f32.const -1.4685084819793701
   f32.const 0.19611206650733948
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18330,9 +18300,10 @@
   end
   f32.const 7.858890056610107
   f32.const 0.052154526114463806
+  call $~lib/math/NativeMathf.atan2
   f32.const 1.5641601085662842
   f32.const 0.48143187165260315
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18344,9 +18315,10 @@
   end
   f32.const -0.7920545339584351
   f32.const 7.676402568817139
+  call $~lib/math/NativeMathf.atan2
   f32.const -0.10281659662723541
   f32.const -0.4216274917125702
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18358,9 +18330,10 @@
   end
   f32.const 0.6157026886940002
   f32.const 2.0119025707244873
+  call $~lib/math/NativeMathf.atan2
   f32.const 0.29697975516319275
   f32.const 0.2322007566690445
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18372,9 +18345,10 @@
   end
   f32.const -0.5587586760520935
   f32.const 0.03223983198404312
+  call $~lib/math/NativeMathf.atan2
   f32.const -1.5131611824035645
   f32.const 0.16620726883411407
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18386,9 +18360,10 @@
   end
   f32.const 0
   f32.const 0
+  call $~lib/math/NativeMathf.atan2
   f32.const 0
   f32.const 0
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18400,9 +18375,10 @@
   end
   f32.const 0
   f32.const -0
+  call $~lib/math/NativeMathf.atan2
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18414,9 +18390,10 @@
   end
   f32.const 0
   f32.const -1
+  call $~lib/math/NativeMathf.atan2
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18428,9 +18405,10 @@
   end
   f32.const 0
   f32.const -inf
+  call $~lib/math/NativeMathf.atan2
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18442,9 +18420,10 @@
   end
   f32.const 0
   f32.const 1
+  call $~lib/math/NativeMathf.atan2
   f32.const 0
   f32.const 0
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18456,9 +18435,10 @@
   end
   f32.const 0
   f32.const inf
+  call $~lib/math/NativeMathf.atan2
   f32.const 0
   f32.const 0
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18470,9 +18450,10 @@
   end
   f32.const -0
   f32.const 0
+  call $~lib/math/NativeMathf.atan2
   f32.const -0
   f32.const 0
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18484,9 +18465,10 @@
   end
   f32.const -0
   f32.const -0
+  call $~lib/math/NativeMathf.atan2
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18498,9 +18480,10 @@
   end
   f32.const -0
   f32.const -1
+  call $~lib/math/NativeMathf.atan2
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18512,9 +18495,10 @@
   end
   f32.const -0
   f32.const -inf
+  call $~lib/math/NativeMathf.atan2
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18526,9 +18510,10 @@
   end
   f32.const -0
   f32.const 1
+  call $~lib/math/NativeMathf.atan2
   f32.const -0
   f32.const 0
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18540,9 +18525,10 @@
   end
   f32.const -0
   f32.const inf
+  call $~lib/math/NativeMathf.atan2
   f32.const -0
   f32.const 0
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18554,9 +18540,10 @@
   end
   f32.const -1
   f32.const 0
+  call $~lib/math/NativeMathf.atan2
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18568,9 +18555,10 @@
   end
   f32.const -1
   f32.const -0
+  call $~lib/math/NativeMathf.atan2
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18582,9 +18570,10 @@
   end
   f32.const 1
   f32.const 0
+  call $~lib/math/NativeMathf.atan2
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18596,9 +18585,10 @@
   end
   f32.const 1
   f32.const -0
+  call $~lib/math/NativeMathf.atan2
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18610,9 +18600,10 @@
   end
   f32.const -1
   f32.const inf
+  call $~lib/math/NativeMathf.atan2
   f32.const -0
   f32.const 0
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18624,9 +18615,10 @@
   end
   f32.const 1
   f32.const inf
+  call $~lib/math/NativeMathf.atan2
   f32.const 0
   f32.const 0
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18638,9 +18630,10 @@
   end
   f32.const -1
   f32.const -inf
+  call $~lib/math/NativeMathf.atan2
   f32.const -3.1415927410125732
   f32.const -0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18652,9 +18645,10 @@
   end
   f32.const 1
   f32.const -inf
+  call $~lib/math/NativeMathf.atan2
   f32.const 3.1415927410125732
   f32.const 0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18666,9 +18660,10 @@
   end
   f32.const inf
   f32.const 0
+  call $~lib/math/NativeMathf.atan2
   f32.const 1.5707963705062866
   f32.const 0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18680,9 +18675,10 @@
   end
   f32.const -inf
   f32.const 0
+  call $~lib/math/NativeMathf.atan2
   f32.const -1.5707963705062866
   f32.const -0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18694,9 +18690,10 @@
   end
   f32.const inf
   f32.const inf
+  call $~lib/math/NativeMathf.atan2
   f32.const 0.7853981852531433
   f32.const 0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18708,9 +18705,10 @@
   end
   f32.const inf
   f32.const -inf
+  call $~lib/math/NativeMathf.atan2
   f32.const 2.356194496154785
   f32.const 0.02500828728079796
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18722,9 +18720,10 @@
   end
   f32.const -inf
   f32.const inf
+  call $~lib/math/NativeMathf.atan2
   f32.const -0.7853981852531433
   f32.const -0.3666777014732361
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18736,9 +18735,10 @@
   end
   f32.const -inf
   f32.const -inf
+  call $~lib/math/NativeMathf.atan2
   f32.const -2.356194496154785
   f32.const -0.02500828728079796
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18750,9 +18750,10 @@
   end
   f32.const 5.877471754111438e-39
   f32.const 1
+  call $~lib/math/NativeMathf.atan2
   f32.const 5.877471754111438e-39
   f32.const 0
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -18764,9 +18765,10 @@
   end
   f32.const 1
   f32.const 1701411834604692317316873e14
+  call $~lib/math/NativeMathf.atan2
   f32.const 5.877471754111438e-39
   f32.const 0
-  call $std/math/test_atan2f
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -30641,9 +30643,19 @@
    unreachable
   end
   f64.const -8.06684839057968
+  call $~lib/math/NativeMath.log10
   f64.const nan:0x8000000000000
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const -8.06684839057968
+   call $~lib/bindings/Math/log10
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30654,9 +30666,19 @@
    unreachable
   end
   f64.const 4.345239849338305
+  call $~lib/math/NativeMath.log10
   f64.const 0.6380137537120029
   f64.const -0.2088824063539505
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const 4.345239849338305
+   call $~lib/bindings/Math/log10
+   f64.const 0.6380137537120029
+   f64.const -0.2088824063539505
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30667,9 +30689,19 @@
    unreachable
   end
   f64.const -8.38143342755525
+  call $~lib/math/NativeMath.log10
   f64.const nan:0x8000000000000
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const -8.38143342755525
+   call $~lib/bindings/Math/log10
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30680,9 +30712,19 @@
    unreachable
   end
   f64.const -6.531673581913484
+  call $~lib/math/NativeMath.log10
   f64.const nan:0x8000000000000
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const -6.531673581913484
+   call $~lib/bindings/Math/log10
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30693,9 +30735,19 @@
    unreachable
   end
   f64.const 9.267056966972586
+  call $~lib/math/NativeMath.log10
   f64.const 0.9669418327487274
   f64.const -0.06120431795716286
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const 9.267056966972586
+   call $~lib/bindings/Math/log10
+   f64.const 0.9669418327487274
+   f64.const -0.06120431795716286
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30706,9 +30758,19 @@
    unreachable
   end
   f64.const 0.6619858980995045
+  call $~lib/math/NativeMath.log10
   f64.const -0.17915126198447093
   f64.const 0.39090874791145325
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const 0.6619858980995045
+   call $~lib/bindings/Math/log10
+   f64.const -0.17915126198447093
+   f64.const 0.39090874791145325
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30719,9 +30781,19 @@
    unreachable
   end
   f64.const -0.4066039223853553
+  call $~lib/math/NativeMath.log10
   f64.const nan:0x8000000000000
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const -0.4066039223853553
+   call $~lib/bindings/Math/log10
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30732,9 +30804,19 @@
    unreachable
   end
   f64.const 0.5617597462207241
+  call $~lib/math/NativeMath.log10
   f64.const -0.25044938407454437
   f64.const -0.3046841621398926
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const 0.5617597462207241
+   call $~lib/bindings/Math/log10
+   f64.const -0.25044938407454437
+   f64.const -0.3046841621398926
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30745,9 +30827,19 @@
    unreachable
   end
   f64.const 0.7741522965913037
+  call $~lib/math/NativeMath.log10
   f64.const -0.11117359349943837
   f64.const -0.31503361463546753
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const 0.7741522965913037
+   call $~lib/bindings/Math/log10
+   f64.const -0.11117359349943837
+   f64.const -0.31503361463546753
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30758,9 +30850,19 @@
    unreachable
   end
   f64.const -0.6787637026394024
+  call $~lib/math/NativeMath.log10
   f64.const nan:0x8000000000000
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const -0.6787637026394024
+   call $~lib/bindings/Math/log10
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30771,9 +30873,19 @@
    unreachable
   end
   f64.const 0
+  call $~lib/math/NativeMath.log10
   f64.const -inf
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const 0
+   call $~lib/bindings/Math/log10
+   f64.const -inf
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30784,9 +30896,19 @@
    unreachable
   end
   f64.const -0
+  call $~lib/math/NativeMath.log10
   f64.const -inf
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const -0
+   call $~lib/bindings/Math/log10
+   f64.const -inf
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30797,9 +30919,19 @@
    unreachable
   end
   f64.const -7.888609052210118e-31
+  call $~lib/math/NativeMath.log10
   f64.const nan:0x8000000000000
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const -7.888609052210118e-31
+   call $~lib/bindings/Math/log10
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30810,9 +30942,19 @@
    unreachable
   end
   f64.const 1
+  call $~lib/math/NativeMath.log10
   f64.const 0
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const 1
+   call $~lib/bindings/Math/log10
+   f64.const 0
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30823,9 +30965,19 @@
    unreachable
   end
   f64.const -1
+  call $~lib/math/NativeMath.log10
   f64.const nan:0x8000000000000
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const -1
+   call $~lib/bindings/Math/log10
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30836,9 +30988,19 @@
    unreachable
   end
   f64.const inf
+  call $~lib/math/NativeMath.log10
   f64.const inf
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const inf
+   call $~lib/bindings/Math/log10
+   f64.const inf
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30849,9 +31011,19 @@
    unreachable
   end
   f64.const -inf
+  call $~lib/math/NativeMath.log10
   f64.const nan:0x8000000000000
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const -inf
+   call $~lib/bindings/Math/log10
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -30862,9 +31034,19 @@
    unreachable
   end
   f64.const nan:0x8000000000000
+  call $~lib/math/NativeMath.log10
   f64.const nan:0x8000000000000
   f64.const 0
-  call $std/math/test_log10
+  call $std/math/check<f64>
+  if (result i32)
+   f64.const nan:0x8000000000000
+   call $~lib/bindings/Math/log10
+   f64.const nan:0x8000000000000
+   f64.const 0
+   call $std/math/check<f64>
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
@@ -37768,8 +37950,10 @@
   end
   f32.const -8.066848754882812
   f32.const 4.535662651062012
+  call $~lib/math/NativeMathf.mod
   f32.const -3.531186103820801
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37781,8 +37965,10 @@
   end
   f32.const 4.345239639282227
   f32.const -8.887990951538086
+  call $~lib/math/NativeMathf.mod
   f32.const 4.345239639282227
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37794,8 +37980,10 @@
   end
   f32.const -8.381433486938477
   f32.const -2.7636072635650635
+  call $~lib/math/NativeMathf.mod
   f32.const -0.09061169624328613
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37807,8 +37995,10 @@
   end
   f32.const -6.531673431396484
   f32.const 4.567535400390625
+  call $~lib/math/NativeMathf.mod
   f32.const -1.9641380310058594
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37820,8 +38010,10 @@
   end
   f32.const 9.267057418823242
   f32.const 4.811392307281494
+  call $~lib/math/NativeMathf.mod
   f32.const 4.455665111541748
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37833,8 +38025,10 @@
   end
   f32.const -6.450045585632324
   f32.const 0.6620717644691467
+  call $~lib/math/NativeMathf.mod
   f32.const -0.49139970541000366
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37846,8 +38040,10 @@
   end
   f32.const 7.858890056610107
   f32.const 0.052154526114463806
+  call $~lib/math/NativeMathf.mod
   f32.const 0.0357111394405365
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37859,8 +38055,10 @@
   end
   f32.const -0.7920545339584351
   f32.const 7.676402568817139
+  call $~lib/math/NativeMathf.mod
   f32.const -0.7920545339584351
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37872,8 +38070,10 @@
   end
   f32.const 0.6157026886940002
   f32.const 2.0119025707244873
+  call $~lib/math/NativeMathf.mod
   f32.const 0.6157026886940002
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37885,8 +38085,10 @@
   end
   f32.const -0.5587586760520935
   f32.const 0.03223983198404312
+  call $~lib/math/NativeMathf.mod
   f32.const -0.010681532323360443
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37898,8 +38100,10 @@
   end
   f32.const 0
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const 0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37911,8 +38115,10 @@
   end
   f32.const -0
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const -0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37924,8 +38130,10 @@
   end
   f32.const 0.5
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const 0.5
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37937,8 +38145,10 @@
   end
   f32.const -0.5
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const -0.5
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37950,8 +38160,10 @@
   end
   f32.const 1
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const 0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37963,8 +38175,10 @@
   end
   f32.const -1
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const -0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37976,8 +38190,10 @@
   end
   f32.const 1.5
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const 0.5
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -37989,8 +38205,10 @@
   end
   f32.const -1.5
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const -0.5
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38002,8 +38220,10 @@
   end
   f32.const 2
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const 0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38015,8 +38235,10 @@
   end
   f32.const -2
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const -0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38028,8 +38250,10 @@
   end
   f32.const inf
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38041,8 +38265,10 @@
   end
   f32.const -inf
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38054,8 +38280,10 @@
   end
   f32.const nan:0x400000
   f32.const 1
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38067,8 +38295,10 @@
   end
   f32.const 0
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const 0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38080,8 +38310,10 @@
   end
   f32.const -0
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const -0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38093,8 +38325,10 @@
   end
   f32.const 0.5
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const 0.5
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38106,8 +38340,10 @@
   end
   f32.const -0.5
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const -0.5
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38119,8 +38355,10 @@
   end
   f32.const 1
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const 0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38132,8 +38370,10 @@
   end
   f32.const -1
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const -0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38145,8 +38385,10 @@
   end
   f32.const 1.5
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const 0.5
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38158,8 +38400,10 @@
   end
   f32.const -1.5
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const -0.5
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38171,8 +38415,10 @@
   end
   f32.const 2
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const 0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38184,8 +38430,10 @@
   end
   f32.const -2
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const -0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38197,8 +38445,10 @@
   end
   f32.const inf
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38210,8 +38460,10 @@
   end
   f32.const -inf
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38223,8 +38475,10 @@
   end
   f32.const nan:0x400000
   f32.const -1
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38236,8 +38490,10 @@
   end
   f32.const 0
   f32.const 0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38249,8 +38505,10 @@
   end
   f32.const 0
   f32.const -0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38262,8 +38520,10 @@
   end
   f32.const 0
   f32.const inf
+  call $~lib/math/NativeMathf.mod
   f32.const 0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38275,8 +38535,10 @@
   end
   f32.const 0
   f32.const -inf
+  call $~lib/math/NativeMathf.mod
   f32.const 0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38288,8 +38550,10 @@
   end
   f32.const 0
   f32.const nan:0x400000
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38301,8 +38565,10 @@
   end
   f32.const -0
   f32.const 0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38314,8 +38580,10 @@
   end
   f32.const -0
   f32.const -0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38327,8 +38595,10 @@
   end
   f32.const -0
   f32.const inf
+  call $~lib/math/NativeMathf.mod
   f32.const -0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38340,8 +38610,10 @@
   end
   f32.const -0
   f32.const -inf
+  call $~lib/math/NativeMathf.mod
   f32.const -0
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38353,8 +38625,10 @@
   end
   f32.const -0
   f32.const nan:0x400000
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38366,8 +38640,10 @@
   end
   f32.const 1
   f32.const 0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38379,8 +38655,10 @@
   end
   f32.const -1
   f32.const 0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38392,8 +38670,10 @@
   end
   f32.const inf
   f32.const 0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38405,8 +38685,10 @@
   end
   f32.const -inf
   f32.const 0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38418,8 +38700,10 @@
   end
   f32.const nan:0x400000
   f32.const 0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38431,8 +38715,10 @@
   end
   f32.const -1
   f32.const -0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38444,8 +38730,10 @@
   end
   f32.const inf
   f32.const -0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38457,8 +38745,10 @@
   end
   f32.const -inf
   f32.const -0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38470,8 +38760,10 @@
   end
   f32.const nan:0x400000
   f32.const -0
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38483,8 +38775,10 @@
   end
   f32.const inf
   f32.const 2
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38496,8 +38790,10 @@
   end
   f32.const inf
   f32.const -0.5
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38509,8 +38805,10 @@
   end
   f32.const inf
   f32.const nan:0x400000
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38522,8 +38820,10 @@
   end
   f32.const -inf
   f32.const 2
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38535,8 +38835,10 @@
   end
   f32.const -inf
   f32.const -0.5
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38548,8 +38850,10 @@
   end
   f32.const -inf
   f32.const nan:0x400000
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38561,8 +38865,10 @@
   end
   f32.const nan:0x400000
   f32.const nan:0x400000
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38574,8 +38880,10 @@
   end
   f32.const 1
   f32.const nan:0x400000
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38587,8 +38895,10 @@
   end
   f32.const -1
   f32.const nan:0x400000
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38600,8 +38910,10 @@
   end
   f32.const 1
   f32.const inf
+  call $~lib/math/NativeMathf.mod
   f32.const 1
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38613,8 +38925,10 @@
   end
   f32.const -1
   f32.const inf
+  call $~lib/math/NativeMathf.mod
   f32.const -1
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38626,8 +38940,10 @@
   end
   f32.const inf
   f32.const inf
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38639,8 +38955,10 @@
   end
   f32.const -inf
   f32.const inf
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38652,8 +38970,10 @@
   end
   f32.const 1
   f32.const -inf
+  call $~lib/math/NativeMathf.mod
   f32.const 1
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38665,8 +38985,10 @@
   end
   f32.const -1
   f32.const -inf
+  call $~lib/math/NativeMathf.mod
   f32.const -1
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38678,8 +39000,10 @@
   end
   f32.const inf
   f32.const -inf
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38691,8 +39015,10 @@
   end
   f32.const -inf
   f32.const -inf
+  call $~lib/math/NativeMathf.mod
   f32.const nan:0x400000
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38704,8 +39030,10 @@
   end
   f32.const 1.75
   f32.const 0.5
+  call $~lib/math/NativeMathf.mod
   f32.const 0.25
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38717,8 +39045,10 @@
   end
   f32.const -1.75
   f32.const 0.5
+  call $~lib/math/NativeMathf.mod
   f32.const -0.25
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38730,8 +39060,10 @@
   end
   f32.const 1.75
   f32.const -0.5
+  call $~lib/math/NativeMathf.mod
   f32.const 0.25
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0
@@ -38743,8 +39075,10 @@
   end
   f32.const -1.75
   f32.const -0.5
+  call $~lib/math/NativeMathf.mod
   f32.const -0.25
-  call $std/math/test_modf
+  f32.const 0
+  call $std/math/check<f32>
   i32.eqz
   if
    i32.const 0

@@ -1,7 +1,7 @@
 (module
+ (type $none_=>_none (func))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_none (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $memmove/dest (mut i32) (i32.const 0))
  (memory $0 1)
@@ -182,7 +182,7 @@
    end
   end
  )
- (func $~start
+ (func $start:memmove
   i32.const 8
   i64.const 1229782938247303441
   i64.store
@@ -357,5 +357,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $~start
+  call $start:memmove
  )
 )

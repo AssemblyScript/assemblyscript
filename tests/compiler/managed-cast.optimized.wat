@@ -1031,7 +1031,7 @@
       local.get $0
       i32.const 4
       i32.add
-      local.tee $0
+      local.tee $1
       i32.const 18060
       i32.ge_u
       if
@@ -1041,20 +1041,20 @@
         call $~lib/rt/tlsf/initialize
        end
        global.get $~lib/rt/tlsf/ROOT
-       local.get $0
+       local.get $1
        i32.const 4
        i32.sub
-       local.set $1
-       local.get $0
+       local.set $0
+       local.get $1
        i32.const 15
        i32.and
        i32.const 1
-       local.get $0
+       local.get $1
        select
        if (result i32)
         i32.const 1
        else
-        local.get $1
+        local.get $0
         i32.load
         i32.const 1
         i32.and
@@ -1067,14 +1067,11 @@
         call $~lib/builtins/abort
         unreachable
        end
-       local.get $1
-       local.tee $0
+       local.get $0
+       local.get $0
        i32.load
        i32.const 1
        i32.or
-       local.set $1
-       local.get $0
-       local.get $1
        i32.store
        local.get $0
        call $~lib/rt/tlsf/insertBlock
@@ -1087,8 +1084,7 @@
     local.tee $0
     local.get $0
     i32.store offset=4
-    global.get $~lib/rt/itcms/toSpace
-    local.tee $0
+    local.get $0
     local.get $0
     i32.store offset=8
     i32.const 0
@@ -1423,6 +1419,9 @@
   unreachable
  )
  (func $~start
+  call $start:managed-cast
+ )
+ (func $start:managed-cast
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1430,11 +1429,11 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  block $folding-inner0
+  block $folding-inner1
    global.get $~lib/memory/__stack_pointer
    i32.const 1676
    i32.lt_s
-   br_if $folding-inner0
+   br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
@@ -1488,7 +1487,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1676
    i32.lt_s
-   br_if $folding-inner0
+   br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
@@ -1533,7 +1532,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1676
    i32.lt_s
-   br_if $folding-inner0
+   br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
@@ -1596,7 +1595,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1676
    i32.lt_s
-   br_if $folding-inner0
+   br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
@@ -1614,7 +1613,7 @@
    local.get $0
    local.get $1
    i32.store offset=4
-   block $__inlined_func$~lib/rt/__instanceof11 (result i32)
+   block $__inlined_func$~lib/rt/__instanceof0 (result i32)
     local.get $1
     i32.const 20
     i32.sub
@@ -1624,12 +1623,12 @@
     i32.load
     i32.le_u
     if
-     loop $do-continue|012
+     loop $do-continue|01
       i32.const 1
       local.get $0
       i32.const 3
       i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof11
+      br_if $__inlined_func$~lib/rt/__instanceof0
       drop
       local.get $0
       i32.const 3
@@ -1638,7 +1637,7 @@
       i32.add
       i32.load offset=4
       local.tee $0
-      br_if $do-continue|012
+      br_if $do-continue|01
      end
     end
     i32.const 0
@@ -1673,12 +1672,12 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1676
    i32.lt_s
-   br_if $folding-inner0
+   br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
    local.tee $2
    i32.const 0
    i32.store
-   block $__inlined_func$~lib/rt/__instanceof14 (result i32)
+   block $__inlined_func$~lib/rt/__instanceof2 (result i32)
     local.get $1
     i32.const 20
     i32.sub
@@ -1688,12 +1687,12 @@
     i32.load
     i32.le_u
     if
-     loop $do-continue|015
+     loop $do-continue|03
       i32.const 1
       local.get $0
       i32.const 3
       i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof14
+      br_if $__inlined_func$~lib/rt/__instanceof2
       drop
       local.get $0
       i32.const 3
@@ -1702,7 +1701,7 @@
       i32.add
       i32.load offset=4
       local.tee $0
-      br_if $do-continue|015
+      br_if $do-continue|03
      end
     end
     i32.const 0
@@ -1736,12 +1735,12 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1676
    i32.lt_s
-   br_if $folding-inner0
+   br_if $folding-inner1
    global.get $~lib/memory/__stack_pointer
    local.tee $2
    i32.const 0
    i32.store
-   block $__inlined_func$~lib/rt/__instanceof17 (result i32)
+   block $__inlined_func$~lib/rt/__instanceof4 (result i32)
     local.get $1
     i32.const 20
     i32.sub
@@ -1751,12 +1750,12 @@
     i32.load
     i32.le_u
     if
-     loop $do-continue|018
+     loop $do-continue|05
       i32.const 1
       local.get $0
       i32.const 3
       i32.eq
-      br_if $__inlined_func$~lib/rt/__instanceof17
+      br_if $__inlined_func$~lib/rt/__instanceof4
       drop
       local.get $0
       i32.const 3
@@ -1765,7 +1764,7 @@
       i32.add
       i32.load offset=4
       local.tee $0
-      br_if $do-continue|018
+      br_if $do-continue|05
      end
     end
     i32.const 0

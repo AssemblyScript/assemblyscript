@@ -2233,7 +2233,7 @@ export class Module {
     if (optimizeLevel >= 2 && shrinkLevel == 0) {
       this.setAlwaysInlineMaxSize(12);
       this.setFlexibleInlineMaxSize(70);
-      this.setOneCallerInlineMaxSize(200);
+      this.setOneCallerInlineMaxSize(160);
       this.setAllowInliningFunctionsWithLoops(optimizeLevel >= 3);
     } else {
       this.setAlwaysInlineMaxSize(

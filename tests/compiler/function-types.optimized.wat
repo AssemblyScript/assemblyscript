@@ -2,8 +2,8 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $function-types/i32Adder (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
@@ -39,6 +39,9 @@
   f64.add
  )
  (func $~start
+  call $start:function-types
+ )
+ (func $start:function-types
   (local $0 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
