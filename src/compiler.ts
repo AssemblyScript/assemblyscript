@@ -3521,10 +3521,10 @@ export class Compiler extends DiagnosticEmitter {
     if (currentType != contextualType.nonNullableType) { // allow assigning non-nullable to nullable
       if (constraints & Constraints.CONV_EXPLICIT) {
         expr = this.convertExpression(expr, currentType, contextualType, true, expression);
-        this.currentType = contextualType;
+        this.currentType = currentType = contextualType;
       } else if (constraints & Constraints.CONV_IMPLICIT) {
         expr = this.convertExpression(expr, currentType, contextualType, false, expression);
-        this.currentType = contextualType;
+        this.currentType = currentType = contextualType;
       }
     }
     if (wrap) expr = this.ensureSmallIntegerWrap(expr, currentType);

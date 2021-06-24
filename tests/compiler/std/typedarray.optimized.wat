@@ -6180,9 +6180,7 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int8Array,i8>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.extend8_s
-  i32.const 2
-  i32.rem_s
-  i32.const 255
+  i32.const 1
   i32.and
   i32.eqz
  )
@@ -6195,9 +6193,7 @@
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Int16Array,i16>~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.extend16_s
-  i32.const 2
-  i32.rem_s
-  i32.const 65535
+  i32.const 1
   i32.and
   i32.eqz
  )
