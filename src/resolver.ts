@@ -1769,10 +1769,12 @@ export class Resolver extends DiagnosticEmitter {
         return type.intType;
       }
       case Token.DOT_DOT_DOT: {
-        this.error(
-          DiagnosticCode.Not_implemented_0,
-          node.range, "Spread operator"
-        );
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Not_implemented_0,
+            node.range, "Spread operator"
+          );
+        }
         return null;
       }
       default: assert(false);
