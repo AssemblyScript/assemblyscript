@@ -9745,6 +9745,13 @@ export class Compiler extends DiagnosticEmitter {
       case Token.TYPEOF: {
         return this.compileTypeof(expression, contextualType, constraints);
       }
+      case Token.DOT_DOT_DOT: {
+        this.error(
+          DiagnosticCode.Not_implemented_0,
+          expression.range, "Spread operator"
+        );
+        return module.unreachable();
+      }
       default: {
         assert(false);
         return module.unreachable();
