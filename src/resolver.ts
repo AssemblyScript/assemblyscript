@@ -3164,6 +3164,10 @@ export class Resolver extends DiagnosticEmitter {
       let overloadKind = unchecked(_keys[i]);
       let overloadPrototype = assert(overloadPrototypes.get(overloadKind));
       assert(overloadKind != OperatorKind.INVALID);
+      if (overloadPrototype.is(CommonFlags.GENERIC)) {
+        // Already errored during initialization: AS212: Decorator '@operator' is not valid here
+        continue;
+      }
       let operatorInstance: Function | null;
       if (overloadPrototype.is(CommonFlags.INSTANCE)) {
         let boundPrototype = overloadPrototype.toBound(instance);
