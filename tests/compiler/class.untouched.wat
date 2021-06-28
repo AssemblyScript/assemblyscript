@@ -2525,6 +2525,15 @@
    end
   end
  )
+ (func $class/GenericInitializer<i32>#set:foo (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/rt/itcms/__link
+ )
  (func $~lib/array/Array<i32>#set:buffer (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -2548,15 +2557,6 @@
   local.get $0
   local.get $1
   i32.store offset=12
- )
- (func $class/GenericInitializer<i32>#set:foo (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store
-  local.get $0
-  local.get $1
-  i32.const 0
-  call $~lib/rt/itcms/__link
  )
  (func $class/testGenericInitializer
   i32.const 0

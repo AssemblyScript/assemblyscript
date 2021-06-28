@@ -86,3 +86,19 @@ class CtorConditionallyReturnsThis {
 }
 
 var ctorConditionallyReturnsThis = new CtorConditionallyReturnsThis();
+
+class CtorFieldInitOrder {
+  c: i32 = this.a + this.b;
+  constructor(public a: i32, public b: i32 = 2) {
+    assert(a == 1);
+    assert(this.a == 1);
+    assert(b == 2);
+    assert(this.b == 2);
+    assert(this.c == 3);
+  }
+}
+
+var ctorFieldInitOrder = new CtorFieldInitOrder(1);
+assert(ctorFieldInitOrder.a == 1);
+assert(ctorFieldInitOrder.b == 2);
+assert(ctorFieldInitOrder.c == 3);

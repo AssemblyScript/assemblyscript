@@ -6717,6 +6717,8 @@ export class Compiler extends DiagnosticEmitter {
     // Compile omitted arguments with final argument locals blocked. Doesn't need to take care of
     // side-effects within earlier expressions because these already happened on set.
     this.currentFlow = flow;
+    var isConstructor = instance.is(CommonFlags.CONSTRUCTOR);
+    if (isConstructor) flow.set(FlowFlags.CTORPARAM_CONTEXT);
     for (let i = numArguments; i < numParameters; ++i) {
       let initType = parameterTypes[i];
       let initExpr = this.compileExpression(
@@ -6729,12 +6731,13 @@ export class Compiler extends DiagnosticEmitter {
         this.makeLocalAssignment(argumentLocal, initExpr, initType, false)
       );
     }
+    flow.unset(FlowFlags.CTORPARAM_CONTEXT);
 
     // Compile the called function's body in the scope of the inlined flow
     this.compileFunctionBody(instance, body);
 
     // If a constructor, perform field init checks on its flow directly
-    if (instance.is(CommonFlags.CONSTRUCTOR)) {
+    if (isConstructor) {
       let parent = instance.parent;
       assert(parent.kind == ElementKind.CLASS);
       this.checkFieldInitializationInFlow(<Class>parent, flow);
@@ -6815,6 +6818,7 @@ export class Compiler extends DiagnosticEmitter {
     // accounting for additional locals and a proper `this` context.
     var previousFlow = this.currentFlow;
     var flow = stub.flow;
+    if (original.is(CommonFlags.CONSTRUCTOR)) flow.set(FlowFlags.CTORPARAM_CONTEXT);
     this.currentFlow = flow;
 
     // create a br_table switching over the number of optional parameters provided
@@ -7640,10 +7644,18 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = this.options.usizeType;
           return module.unreachable();
         }
-        if (actualFunction.is(CommonFlags.CONSTRUCTOR) && !(constraints & Constraints.IS_THIS)) {
-          let parent = actualFunction.parent;
-          assert(parent.kind == ElementKind.CLASS);
-          this.checkFieldInitialization(<Class>parent, expression);
+        if (actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+          if (flow.is(FlowFlags.CTORPARAM_CONTEXT)) {
+            this.error(
+              DiagnosticCode._this_cannot_be_referenced_in_constructor_arguments,
+              expression.range
+            );
+          }
+          if (!(constraints & Constraints.IS_THIS)) {
+            let parent = actualFunction.parent;
+            assert(parent.kind == ElementKind.CLASS);
+            this.checkFieldInitialization(<Class>parent, expression);
+          }
         }
         let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
         flow.set(FlowFlags.ACCESSES_THIS);
@@ -7651,10 +7663,13 @@ export class Compiler extends DiagnosticEmitter {
         return module.local_get(thisLocal.index, thisType.toRef());
       }
       case NodeKind.SUPER: {
-        let flow = this.currentFlow;
-        let actualFunction = flow.actualFunction;
         if (actualFunction.is(CommonFlags.CONSTRUCTOR)) {
-          if (!flow.is(FlowFlags.CALLS_SUPER)) {
+          if (flow.is(FlowFlags.CTORPARAM_CONTEXT)) {
+            this.error(
+              DiagnosticCode._super_cannot_be_referenced_in_constructor_arguments,
+              expression.range
+            );
+          } else if (!flow.is(FlowFlags.CALLS_SUPER)) {
             // TS1034 in the parser effectively limits this to property accesses
             this.error(
               DiagnosticCode._super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class,
@@ -10284,10 +10299,9 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var flow = this.currentFlow;
     var isInline = flow.isInline;
-    var thisLocalIndex = isInline
-      ? flow.lookupLocal(CommonNames.this_)!.index
-      : 0;
+    var thisLocalIndex = isInline ? flow.lookupLocal(CommonNames.this_)!.index : 0;
     var sizeTypeRef = this.options.sizeTypeRef;
+    var nonParameterFields: Field[] | null = null;
 
     // TODO: for (let member of members.values()) {
     for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
@@ -10296,44 +10310,57 @@ export class Compiler extends DiagnosticEmitter {
         member.kind != ElementKind.FIELD || // not a field
         member.parent != classInstance      // inherited field
       ) continue;
-
       let field = <Field>member;
       assert(!field.isAny(CommonFlags.CONST));
-      let fieldType = field.type;
-      let fieldTypeRef = fieldType.toRef();
       let fieldPrototype = field.prototype;
-      let initializerNode = fieldPrototype.initializerNode;
       let parameterIndex = fieldPrototype.parameterIndex;
-      let initExpr: ExpressionRef;
-      let typeNode = field.typeNode;
-      if (typeNode) this.checkTypeSupported(fieldType, typeNode);
 
-      // if declared as a constructor parameter, use its value
-      if (parameterIndex >= 0) {
-        initExpr = module.local_get(
-          isInline
-            ? flow.lookupLocal(field.name)!.index
-            : 1 + parameterIndex, // this is local 0
-          fieldTypeRef
-        );
-
-      // fall back to use initializer if present
-      } else if (initializerNode) {
-        initExpr = this.compileExpression(initializerNode, fieldType, Constraints.CONV_IMPLICIT);
-
-      // otherwise initialize with zero
-      } else {
-        initExpr = this.makeZero(fieldType, fieldPrototype.declaration);
+      // Defer non-parameter fields until parameter fields are initialized
+      if (parameterIndex < 0) {
+        if (!nonParameterFields) nonParameterFields = new Array();
+        nonParameterFields.push(field);
+        continue;
       }
 
+      // Initialize constructor parameter field
+      let fieldType = field.type;
+      let fieldTypeRef = fieldType.toRef();
+      assert(!fieldPrototype.initializerNode);
       this.compileFieldSetter(field);
       stmts.push(
         module.call(field.internalSetterName, [
           module.local_get(thisLocalIndex, sizeTypeRef),
-          initExpr
+          module.local_get(
+            isInline
+              ? flow.lookupLocal(field.name)!.index
+              : 1 + parameterIndex, // `this` is local 0
+            fieldTypeRef
+          )
         ], TypeRef.None)
       );
     }
+
+    // Initialize deferred non-parameter fields
+    if (nonParameterFields) {
+      for (let i = 0, k = nonParameterFields.length; i < k; ++i) {
+        let field = unchecked(nonParameterFields[i]);
+        let fieldType = field.type;
+        let fieldPrototype = field.prototype;
+        let initializerNode = fieldPrototype.initializerNode;
+        assert(fieldPrototype.parameterIndex < 0);
+        this.compileFieldSetter(field);
+        stmts.push(
+          module.call(field.internalSetterName, [
+            module.local_get(thisLocalIndex, sizeTypeRef),
+            initializerNode // use initializer if present, otherwise initialize with zero
+              ? this.compileExpression(initializerNode, fieldType, Constraints.CONV_IMPLICIT)
+              : this.makeZero(fieldType, fieldPrototype.declaration)
+          ], TypeRef.None)
+        );
+      }
+    }
+
+    this.currentType = Type.void;
     return stmts;
   }
 

@@ -129,6 +129,8 @@ export const enum FlowFlags {
 
   /** This is a flow with explicitly disabled bounds checking. */
   UNCHECKED_CONTEXT = 1 << 15,
+  /** This is a flow compiling a constructor parameter. */
+  CTORPARAM_CONTEXT = 1 << 16,
 
   // masks
 
@@ -757,7 +759,7 @@ export class Flow {
       newFlags |= FlowFlags.TERMINATES;
     }
 
-    this.flags = newFlags | (thisFlags & FlowFlags.UNCHECKED_CONTEXT);
+    this.flags = newFlags | (thisFlags & (FlowFlags.UNCHECKED_CONTEXT | FlowFlags.CTORPARAM_CONTEXT));
 
     // local flags
     var thisLocalFlags = this.localFlags;
@@ -869,7 +871,7 @@ export class Flow {
       newFlags |= FlowFlags.TERMINATES;
     }
 
-    this.flags = newFlags | (this.flags & FlowFlags.UNCHECKED_CONTEXT);
+    this.flags = newFlags | (this.flags & (FlowFlags.UNCHECKED_CONTEXT | FlowFlags.CTORPARAM_CONTEXT));
 
     // local flags
     var thisLocalFlags = this.localFlags;

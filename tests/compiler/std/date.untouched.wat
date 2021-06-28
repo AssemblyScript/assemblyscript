@@ -10739,6 +10739,9 @@
    i32.store
   end
   local.get $0
+  local.get $1
+  call $~lib/date/Date#set:epochMillis
+  local.get $0
   i32.const 0
   call $~lib/date/Date#set:year
   local.get $0
@@ -10747,9 +10750,6 @@
   local.get $0
   i32.const 0
   call $~lib/date/Date#set:day
-  local.get $0
-  local.get $1
-  call $~lib/date/Date#set:epochMillis
   local.get $1
   call $~lib/date/invalidDate
   if
