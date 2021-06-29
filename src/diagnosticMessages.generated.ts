@@ -124,7 +124,9 @@ export enum DiagnosticCode {
   Type_0_is_not_assignable_to_type_1 = 2322,
   Index_signature_is_missing_in_type_0 = 2329,
   _this_cannot_be_referenced_in_current_location = 2332,
+  _this_cannot_be_referenced_in_constructor_arguments = 2333,
   _super_can_only_be_referenced_in_a_derived_class = 2335,
+  _super_cannot_be_referenced_in_constructor_arguments = 2336,
   Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors = 2337,
   Property_0_does_not_exist_on_type_1 = 2339,
   Property_0_is_private_and_only_accessible_within_class_1 = 2341,
@@ -304,7 +306,9 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2322: return "Type '{0}' is not assignable to type '{1}'.";
     case 2329: return "Index signature is missing in type '{0}'.";
     case 2332: return "'this' cannot be referenced in current location.";
+    case 2333: return "'this' cannot be referenced in constructor arguments.";
     case 2335: return "'super' can only be referenced in a derived class.";
+    case 2336: return "'super' cannot be referenced in constructor arguments.";
     case 2337: return "Super calls are not permitted outside constructors or in nested functions inside constructors.";
     case 2339: return "Property '{0}' does not exist on type '{1}'.";
     case 2341: return "Property '{0}' is private and only accessible within class '{1}'.";

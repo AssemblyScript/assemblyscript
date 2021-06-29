@@ -1,0 +1,23 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS2333: 'this' cannot be referenced in constructor arguments.",
+    "b: i32 = this.a, // TS2333",
+    "TS2333: 'this' cannot be referenced in constructor arguments.",
+    "c: i32 = this.foo() // TS2333",
+    "TS2333: 'this' cannot be referenced in constructor arguments.",
+    "e: i32 = this.d, // TS2333",
+    "TS2333: 'this' cannot be referenced in constructor arguments.",
+    "f: i32 = this.bar() // TS2333",
+    "TS2336: 'super' cannot be referenced in constructor arguments.",
+    "h: i32 = super.g, // TS2336",
+    "TS2336: 'super' cannot be referenced in constructor arguments.",
+    "i: i32 = super.baz() // TS2336",
+    "TS2336: 'super' cannot be referenced in constructor arguments.",
+    "j: i32 = super.g, // TS2336",
+    "TS2336: 'super' cannot be referenced in constructor arguments.",
+    "k: i32 = super.baz() // TS2336",
+    "EOF"
+  ]
+}

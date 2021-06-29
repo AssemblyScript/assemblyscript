@@ -2565,14 +2565,14 @@
    i32.store
   end
   local.get $0
+  local.get $1
+  call $issues/1225/X#set:x
+  local.get $0
   i32.const 0
   call $issues/1225/X#set:normal
   local.get $0
   i32.const 0
   call $issues/1225/X#set:viaThis
-  local.get $0
-  local.get $1
-  call $issues/1225/X#set:x
   local.get $0
   local.get $0
   i32.load offset=8
