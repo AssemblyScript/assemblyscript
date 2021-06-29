@@ -6872,7 +6872,8 @@ export class Compiler extends DiagnosticEmitter {
       table
     );
     stmts.push(
-      module.call(original.internalName, forwardedOperands, returnType.toRef())
+      // assume this will always succeed (can just use name as the reportNode)
+      this.makeCallDirect(original, forwardedOperands, original.declaration.name)
     );
     flow.freeScopedLocals();
     this.currentFlow = previousFlow;
