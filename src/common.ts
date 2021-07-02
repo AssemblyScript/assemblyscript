@@ -229,6 +229,10 @@ export namespace CommonNames {
   export const Float64Array = "Float64Array";
   export const TemplateStringsArray = "TemplateStringsArray";
   export const Error = "Error";
+  export const RangeError = "RangeError";
+  export const TypeError = "TypeError";
+  export const SyntaxError = "SyntaxError";
+  export const URIError = "URIError";
   // runtime
   export const abort = "abort";
   export const trace = "trace";
