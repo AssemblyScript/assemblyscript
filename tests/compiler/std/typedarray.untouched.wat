@@ -76,9 +76,6 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/util/sort/INSERTION_SORT_THRESHOLD i32 (i32.const 128))
- (global $~lib/util/sort/EMPTY i32 (i32.const -1))
- (global $~lib/util/sort/MIN_RUN_LENGTH i32 (i32.const 32))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $std/typedarray/forEachCallCount (mut i32) (i32.const 0))
  (global $std/typedarray/forEachSelf (mut i32) (i32.const 0))
@@ -4061,7 +4058,7 @@
   local.get $1
   local.set $4
   local.get $4
-  global.get $~lib/util/sort/INSERTION_SORT_THRESHOLD
+  i32.const 128
   i32.le_s
   if
    i32.const 0
@@ -4206,10 +4203,13 @@
   i32.shl
   local.set $9
   local.get $9
+  i32.const 1
+  i32.shl
   call $~lib/rt/tlsf/__alloc
   local.set $10
+  local.get $10
   local.get $9
-  call $~lib/rt/tlsf/__alloc
+  i32.add
   local.set $11
   i32.const 0
   local.set $5
@@ -4225,7 +4225,7 @@
     i32.const 2
     i32.shl
     i32.add
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.store
     local.get $5
     i32.const 1
@@ -4254,12 +4254,12 @@
   i32.add
   local.set $17
   local.get $17
-  global.get $~lib/util/sort/MIN_RUN_LENGTH
+  i32.const 32
   i32.lt_s
   if
    local.get $3
    local.tee $12
-   global.get $~lib/util/sort/MIN_RUN_LENGTH
+   i32.const 32
    i32.const 1
    i32.sub
    local.tee $5
@@ -4299,13 +4299,13 @@
     i32.add
     local.set $19
     local.get $19
-    global.get $~lib/util/sort/MIN_RUN_LENGTH
+    i32.const 32
     i32.lt_s
     if
      local.get $3
      local.tee $20
      local.get $5
-     global.get $~lib/util/sort/MIN_RUN_LENGTH
+     i32.const 32
      i32.add
      i32.const 1
      i32.sub
@@ -4346,7 +4346,7 @@
       i32.load
       local.set $23
       local.get $23
-      global.get $~lib/util/sort/EMPTY
+      i32.const -1
       i32.ne
       if
        local.get $0
@@ -4370,7 +4370,7 @@
        i32.const 2
        i32.shl
        i32.add
-       global.get $~lib/util/sort/EMPTY
+       i32.const -1
        i32.store
       end
       local.get $21
@@ -4420,7 +4420,7 @@
     i32.load
     local.set $22
     local.get $22
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.ne
     if
      local.get $0
@@ -4446,8 +4446,6 @@
    end
   end
   local.get $14
-  call $~lib/rt/tlsf/__free
-  local.get $11
   call $~lib/rt/tlsf/__free
   local.get $10
   call $~lib/rt/tlsf/__free
@@ -33876,7 +33874,7 @@
   local.get $1
   local.set $4
   local.get $4
-  global.get $~lib/util/sort/INSERTION_SORT_THRESHOLD
+  i32.const 128
   i32.le_s
   if
    i32.const 0
@@ -34021,10 +34019,13 @@
   i32.shl
   local.set $9
   local.get $9
+  i32.const 1
+  i32.shl
   call $~lib/rt/tlsf/__alloc
   local.set $10
+  local.get $10
   local.get $9
-  call $~lib/rt/tlsf/__alloc
+  i32.add
   local.set $11
   i32.const 0
   local.set $7
@@ -34040,7 +34041,7 @@
     i32.const 2
     i32.shl
     i32.add
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.store
     local.get $7
     i32.const 1
@@ -34069,12 +34070,12 @@
   i32.add
   local.set $16
   local.get $16
-  global.get $~lib/util/sort/MIN_RUN_LENGTH
+  i32.const 32
   i32.lt_s
   if
    local.get $3
    local.tee $6
-   global.get $~lib/util/sort/MIN_RUN_LENGTH
+   i32.const 32
    i32.const 1
    i32.sub
    local.tee $7
@@ -34114,13 +34115,13 @@
     i32.add
     local.set $17
     local.get $17
-    global.get $~lib/util/sort/MIN_RUN_LENGTH
+    i32.const 32
     i32.lt_s
     if
      local.get $3
      local.tee $18
      local.get $7
-     global.get $~lib/util/sort/MIN_RUN_LENGTH
+     i32.const 32
      i32.add
      i32.const 1
      i32.sub
@@ -34161,7 +34162,7 @@
       i32.load
       local.set $21
       local.get $21
-      global.get $~lib/util/sort/EMPTY
+      i32.const -1
       i32.ne
       if
        local.get $0
@@ -34185,7 +34186,7 @@
        i32.const 2
        i32.shl
        i32.add
-       global.get $~lib/util/sort/EMPTY
+       i32.const -1
        i32.store
       end
       local.get $19
@@ -34235,7 +34236,7 @@
     i32.load
     local.set $20
     local.get $20
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.ne
     if
      local.get $0
@@ -34261,8 +34262,6 @@
    end
   end
   local.get $13
-  call $~lib/rt/tlsf/__free
-  local.get $11
   call $~lib/rt/tlsf/__free
   local.get $10
   call $~lib/rt/tlsf/__free
@@ -34882,7 +34881,7 @@
   local.get $1
   local.set $4
   local.get $4
-  global.get $~lib/util/sort/INSERTION_SORT_THRESHOLD
+  i32.const 128
   i32.le_s
   if
    i32.const 0
@@ -35027,10 +35026,13 @@
   i32.shl
   local.set $9
   local.get $9
+  i32.const 1
+  i32.shl
   call $~lib/rt/tlsf/__alloc
   local.set $10
+  local.get $10
   local.get $9
-  call $~lib/rt/tlsf/__alloc
+  i32.add
   local.set $11
   i32.const 0
   local.set $7
@@ -35046,7 +35048,7 @@
     i32.const 2
     i32.shl
     i32.add
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.store
     local.get $7
     i32.const 1
@@ -35075,12 +35077,12 @@
   i32.add
   local.set $16
   local.get $16
-  global.get $~lib/util/sort/MIN_RUN_LENGTH
+  i32.const 32
   i32.lt_s
   if
    local.get $3
    local.tee $6
-   global.get $~lib/util/sort/MIN_RUN_LENGTH
+   i32.const 32
    i32.const 1
    i32.sub
    local.tee $7
@@ -35120,13 +35122,13 @@
     i32.add
     local.set $17
     local.get $17
-    global.get $~lib/util/sort/MIN_RUN_LENGTH
+    i32.const 32
     i32.lt_s
     if
      local.get $3
      local.tee $18
      local.get $7
-     global.get $~lib/util/sort/MIN_RUN_LENGTH
+     i32.const 32
      i32.add
      i32.const 1
      i32.sub
@@ -35167,7 +35169,7 @@
       i32.load
       local.set $21
       local.get $21
-      global.get $~lib/util/sort/EMPTY
+      i32.const -1
       i32.ne
       if
        local.get $0
@@ -35191,7 +35193,7 @@
        i32.const 2
        i32.shl
        i32.add
-       global.get $~lib/util/sort/EMPTY
+       i32.const -1
        i32.store
       end
       local.get $19
@@ -35241,7 +35243,7 @@
     i32.load
     local.set $20
     local.get $20
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.ne
     if
      local.get $0
@@ -35267,8 +35269,6 @@
    end
   end
   local.get $13
-  call $~lib/rt/tlsf/__free
-  local.get $11
   call $~lib/rt/tlsf/__free
   local.get $10
   call $~lib/rt/tlsf/__free
@@ -35998,7 +35998,7 @@
   local.get $1
   local.set $4
   local.get $4
-  global.get $~lib/util/sort/INSERTION_SORT_THRESHOLD
+  i32.const 128
   i32.le_s
   if
    i32.const 0
@@ -36143,10 +36143,13 @@
   i32.shl
   local.set $9
   local.get $9
+  i32.const 1
+  i32.shl
   call $~lib/rt/tlsf/__alloc
   local.set $10
+  local.get $10
   local.get $9
-  call $~lib/rt/tlsf/__alloc
+  i32.add
   local.set $11
   i32.const 0
   local.set $7
@@ -36162,7 +36165,7 @@
     i32.const 2
     i32.shl
     i32.add
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.store
     local.get $7
     i32.const 1
@@ -36191,12 +36194,12 @@
   i32.add
   local.set $16
   local.get $16
-  global.get $~lib/util/sort/MIN_RUN_LENGTH
+  i32.const 32
   i32.lt_s
   if
    local.get $3
    local.tee $6
-   global.get $~lib/util/sort/MIN_RUN_LENGTH
+   i32.const 32
    i32.const 1
    i32.sub
    local.tee $7
@@ -36236,13 +36239,13 @@
     i32.add
     local.set $17
     local.get $17
-    global.get $~lib/util/sort/MIN_RUN_LENGTH
+    i32.const 32
     i32.lt_s
     if
      local.get $3
      local.tee $18
      local.get $7
-     global.get $~lib/util/sort/MIN_RUN_LENGTH
+     i32.const 32
      i32.add
      i32.const 1
      i32.sub
@@ -36283,7 +36286,7 @@
       i32.load
       local.set $21
       local.get $21
-      global.get $~lib/util/sort/EMPTY
+      i32.const -1
       i32.ne
       if
        local.get $0
@@ -36307,7 +36310,7 @@
        i32.const 2
        i32.shl
        i32.add
-       global.get $~lib/util/sort/EMPTY
+       i32.const -1
        i32.store
       end
       local.get $19
@@ -36357,7 +36360,7 @@
     i32.load
     local.set $20
     local.get $20
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.ne
     if
      local.get $0
@@ -36383,8 +36386,6 @@
    end
   end
   local.get $13
-  call $~lib/rt/tlsf/__free
-  local.get $11
   call $~lib/rt/tlsf/__free
   local.get $10
   call $~lib/rt/tlsf/__free
@@ -37004,7 +37005,7 @@
   local.get $1
   local.set $4
   local.get $4
-  global.get $~lib/util/sort/INSERTION_SORT_THRESHOLD
+  i32.const 128
   i32.le_s
   if
    i32.const 0
@@ -37149,10 +37150,13 @@
   i32.shl
   local.set $9
   local.get $9
+  i32.const 1
+  i32.shl
   call $~lib/rt/tlsf/__alloc
   local.set $10
+  local.get $10
   local.get $9
-  call $~lib/rt/tlsf/__alloc
+  i32.add
   local.set $11
   i32.const 0
   local.set $7
@@ -37168,7 +37172,7 @@
     i32.const 2
     i32.shl
     i32.add
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.store
     local.get $7
     i32.const 1
@@ -37197,12 +37201,12 @@
   i32.add
   local.set $16
   local.get $16
-  global.get $~lib/util/sort/MIN_RUN_LENGTH
+  i32.const 32
   i32.lt_s
   if
    local.get $3
    local.tee $6
-   global.get $~lib/util/sort/MIN_RUN_LENGTH
+   i32.const 32
    i32.const 1
    i32.sub
    local.tee $7
@@ -37242,13 +37246,13 @@
     i32.add
     local.set $17
     local.get $17
-    global.get $~lib/util/sort/MIN_RUN_LENGTH
+    i32.const 32
     i32.lt_s
     if
      local.get $3
      local.tee $18
      local.get $7
-     global.get $~lib/util/sort/MIN_RUN_LENGTH
+     i32.const 32
      i32.add
      i32.const 1
      i32.sub
@@ -37289,7 +37293,7 @@
       i32.load
       local.set $21
       local.get $21
-      global.get $~lib/util/sort/EMPTY
+      i32.const -1
       i32.ne
       if
        local.get $0
@@ -37313,7 +37317,7 @@
        i32.const 2
        i32.shl
        i32.add
-       global.get $~lib/util/sort/EMPTY
+       i32.const -1
        i32.store
       end
       local.get $19
@@ -37363,7 +37367,7 @@
     i32.load
     local.set $20
     local.get $20
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.ne
     if
      local.get $0
@@ -37389,8 +37393,6 @@
    end
   end
   local.get $13
-  call $~lib/rt/tlsf/__free
-  local.get $11
   call $~lib/rt/tlsf/__free
   local.get $10
   call $~lib/rt/tlsf/__free
@@ -38024,7 +38026,7 @@
   local.get $1
   local.set $4
   local.get $4
-  global.get $~lib/util/sort/INSERTION_SORT_THRESHOLD
+  i32.const 128
   i32.le_s
   if
    i32.const 0
@@ -38169,10 +38171,13 @@
   i32.shl
   local.set $9
   local.get $9
+  i32.const 1
+  i32.shl
   call $~lib/rt/tlsf/__alloc
   local.set $10
+  local.get $10
   local.get $9
-  call $~lib/rt/tlsf/__alloc
+  i32.add
   local.set $11
   i32.const 0
   local.set $7
@@ -38188,7 +38193,7 @@
     i32.const 2
     i32.shl
     i32.add
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.store
     local.get $7
     i32.const 1
@@ -38217,12 +38222,12 @@
   i32.add
   local.set $16
   local.get $16
-  global.get $~lib/util/sort/MIN_RUN_LENGTH
+  i32.const 32
   i32.lt_s
   if
    local.get $3
    local.tee $6
-   global.get $~lib/util/sort/MIN_RUN_LENGTH
+   i32.const 32
    i32.const 1
    i32.sub
    local.tee $7
@@ -38262,13 +38267,13 @@
     i32.add
     local.set $17
     local.get $17
-    global.get $~lib/util/sort/MIN_RUN_LENGTH
+    i32.const 32
     i32.lt_s
     if
      local.get $3
      local.tee $18
      local.get $7
-     global.get $~lib/util/sort/MIN_RUN_LENGTH
+     i32.const 32
      i32.add
      i32.const 1
      i32.sub
@@ -38309,7 +38314,7 @@
       i32.load
       local.set $21
       local.get $21
-      global.get $~lib/util/sort/EMPTY
+      i32.const -1
       i32.ne
       if
        local.get $0
@@ -38333,7 +38338,7 @@
        i32.const 2
        i32.shl
        i32.add
-       global.get $~lib/util/sort/EMPTY
+       i32.const -1
        i32.store
       end
       local.get $19
@@ -38383,7 +38388,7 @@
     i32.load
     local.set $20
     local.get $20
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.ne
     if
      local.get $0
@@ -38409,8 +38414,6 @@
    end
   end
   local.get $13
-  call $~lib/rt/tlsf/__free
-  local.get $11
   call $~lib/rt/tlsf/__free
   local.get $10
   call $~lib/rt/tlsf/__free
@@ -39024,7 +39027,7 @@
   local.get $1
   local.set $4
   local.get $4
-  global.get $~lib/util/sort/INSERTION_SORT_THRESHOLD
+  i32.const 128
   i32.le_s
   if
    i32.const 0
@@ -39169,10 +39172,13 @@
   i32.shl
   local.set $9
   local.get $9
+  i32.const 1
+  i32.shl
   call $~lib/rt/tlsf/__alloc
   local.set $10
+  local.get $10
   local.get $9
-  call $~lib/rt/tlsf/__alloc
+  i32.add
   local.set $11
   i32.const 0
   local.set $7
@@ -39188,7 +39194,7 @@
     i32.const 2
     i32.shl
     i32.add
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.store
     local.get $7
     i32.const 1
@@ -39217,12 +39223,12 @@
   i32.add
   local.set $16
   local.get $16
-  global.get $~lib/util/sort/MIN_RUN_LENGTH
+  i32.const 32
   i32.lt_s
   if
    local.get $3
    local.tee $6
-   global.get $~lib/util/sort/MIN_RUN_LENGTH
+   i32.const 32
    i32.const 1
    i32.sub
    local.tee $7
@@ -39262,13 +39268,13 @@
     i32.add
     local.set $17
     local.get $17
-    global.get $~lib/util/sort/MIN_RUN_LENGTH
+    i32.const 32
     i32.lt_s
     if
      local.get $3
      local.tee $18
      local.get $7
-     global.get $~lib/util/sort/MIN_RUN_LENGTH
+     i32.const 32
      i32.add
      i32.const 1
      i32.sub
@@ -39309,7 +39315,7 @@
       i32.load
       local.set $21
       local.get $21
-      global.get $~lib/util/sort/EMPTY
+      i32.const -1
       i32.ne
       if
        local.get $0
@@ -39333,7 +39339,7 @@
        i32.const 2
        i32.shl
        i32.add
-       global.get $~lib/util/sort/EMPTY
+       i32.const -1
        i32.store
       end
       local.get $19
@@ -39383,7 +39389,7 @@
     i32.load
     local.set $20
     local.get $20
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.ne
     if
      local.get $0
@@ -39409,8 +39415,6 @@
    end
   end
   local.get $13
-  call $~lib/rt/tlsf/__free
-  local.get $11
   call $~lib/rt/tlsf/__free
   local.get $10
   call $~lib/rt/tlsf/__free
@@ -40030,7 +40034,7 @@
   local.get $1
   local.set $4
   local.get $4
-  global.get $~lib/util/sort/INSERTION_SORT_THRESHOLD
+  i32.const 128
   i32.le_s
   if
    i32.const 0
@@ -40175,10 +40179,13 @@
   i32.shl
   local.set $9
   local.get $9
+  i32.const 1
+  i32.shl
   call $~lib/rt/tlsf/__alloc
   local.set $10
+  local.get $10
   local.get $9
-  call $~lib/rt/tlsf/__alloc
+  i32.add
   local.set $11
   i32.const 0
   local.set $5
@@ -40194,7 +40201,7 @@
     i32.const 2
     i32.shl
     i32.add
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.store
     local.get $5
     i32.const 1
@@ -40223,12 +40230,12 @@
   i32.add
   local.set $17
   local.get $17
-  global.get $~lib/util/sort/MIN_RUN_LENGTH
+  i32.const 32
   i32.lt_s
   if
    local.get $3
    local.tee $12
-   global.get $~lib/util/sort/MIN_RUN_LENGTH
+   i32.const 32
    i32.const 1
    i32.sub
    local.tee $5
@@ -40268,13 +40275,13 @@
     i32.add
     local.set $19
     local.get $19
-    global.get $~lib/util/sort/MIN_RUN_LENGTH
+    i32.const 32
     i32.lt_s
     if
      local.get $3
      local.tee $20
      local.get $5
-     global.get $~lib/util/sort/MIN_RUN_LENGTH
+     i32.const 32
      i32.add
      i32.const 1
      i32.sub
@@ -40315,7 +40322,7 @@
       i32.load
       local.set $23
       local.get $23
-      global.get $~lib/util/sort/EMPTY
+      i32.const -1
       i32.ne
       if
        local.get $0
@@ -40339,7 +40346,7 @@
        i32.const 2
        i32.shl
        i32.add
-       global.get $~lib/util/sort/EMPTY
+       i32.const -1
        i32.store
       end
       local.get $21
@@ -40389,7 +40396,7 @@
     i32.load
     local.set $22
     local.get $22
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.ne
     if
      local.get $0
@@ -40415,8 +40422,6 @@
    end
   end
   local.get $14
-  call $~lib/rt/tlsf/__free
-  local.get $11
   call $~lib/rt/tlsf/__free
   local.get $10
   call $~lib/rt/tlsf/__free
@@ -41036,7 +41041,7 @@
   local.get $1
   local.set $4
   local.get $4
-  global.get $~lib/util/sort/INSERTION_SORT_THRESHOLD
+  i32.const 128
   i32.le_s
   if
    i32.const 0
@@ -41181,10 +41186,13 @@
   i32.shl
   local.set $9
   local.get $9
+  i32.const 1
+  i32.shl
   call $~lib/rt/tlsf/__alloc
   local.set $10
+  local.get $10
   local.get $9
-  call $~lib/rt/tlsf/__alloc
+  i32.add
   local.set $11
   i32.const 0
   local.set $5
@@ -41200,7 +41208,7 @@
     i32.const 2
     i32.shl
     i32.add
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.store
     local.get $5
     i32.const 1
@@ -41229,12 +41237,12 @@
   i32.add
   local.set $17
   local.get $17
-  global.get $~lib/util/sort/MIN_RUN_LENGTH
+  i32.const 32
   i32.lt_s
   if
    local.get $3
    local.tee $12
-   global.get $~lib/util/sort/MIN_RUN_LENGTH
+   i32.const 32
    i32.const 1
    i32.sub
    local.tee $5
@@ -41274,13 +41282,13 @@
     i32.add
     local.set $19
     local.get $19
-    global.get $~lib/util/sort/MIN_RUN_LENGTH
+    i32.const 32
     i32.lt_s
     if
      local.get $3
      local.tee $20
      local.get $5
-     global.get $~lib/util/sort/MIN_RUN_LENGTH
+     i32.const 32
      i32.add
      i32.const 1
      i32.sub
@@ -41321,7 +41329,7 @@
       i32.load
       local.set $23
       local.get $23
-      global.get $~lib/util/sort/EMPTY
+      i32.const -1
       i32.ne
       if
        local.get $0
@@ -41345,7 +41353,7 @@
        i32.const 2
        i32.shl
        i32.add
-       global.get $~lib/util/sort/EMPTY
+       i32.const -1
        i32.store
       end
       local.get $21
@@ -41395,7 +41403,7 @@
     i32.load
     local.set $22
     local.get $22
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.ne
     if
      local.get $0
@@ -41421,8 +41429,6 @@
    end
   end
   local.get $14
-  call $~lib/rt/tlsf/__free
-  local.get $11
   call $~lib/rt/tlsf/__free
   local.get $10
   call $~lib/rt/tlsf/__free
@@ -42042,7 +42048,7 @@
   local.get $1
   local.set $4
   local.get $4
-  global.get $~lib/util/sort/INSERTION_SORT_THRESHOLD
+  i32.const 128
   i32.le_s
   if
    i32.const 0
@@ -42187,10 +42193,13 @@
   i32.shl
   local.set $9
   local.get $9
+  i32.const 1
+  i32.shl
   call $~lib/rt/tlsf/__alloc
   local.set $10
+  local.get $10
   local.get $9
-  call $~lib/rt/tlsf/__alloc
+  i32.add
   local.set $11
   i32.const 0
   local.set $5
@@ -42206,7 +42215,7 @@
     i32.const 2
     i32.shl
     i32.add
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.store
     local.get $5
     i32.const 1
@@ -42235,12 +42244,12 @@
   i32.add
   local.set $17
   local.get $17
-  global.get $~lib/util/sort/MIN_RUN_LENGTH
+  i32.const 32
   i32.lt_s
   if
    local.get $3
    local.tee $12
-   global.get $~lib/util/sort/MIN_RUN_LENGTH
+   i32.const 32
    i32.const 1
    i32.sub
    local.tee $5
@@ -42280,13 +42289,13 @@
     i32.add
     local.set $19
     local.get $19
-    global.get $~lib/util/sort/MIN_RUN_LENGTH
+    i32.const 32
     i32.lt_s
     if
      local.get $3
      local.tee $20
      local.get $5
-     global.get $~lib/util/sort/MIN_RUN_LENGTH
+     i32.const 32
      i32.add
      i32.const 1
      i32.sub
@@ -42327,7 +42336,7 @@
       i32.load
       local.set $23
       local.get $23
-      global.get $~lib/util/sort/EMPTY
+      i32.const -1
       i32.ne
       if
        local.get $0
@@ -42351,7 +42360,7 @@
        i32.const 2
        i32.shl
        i32.add
-       global.get $~lib/util/sort/EMPTY
+       i32.const -1
        i32.store
       end
       local.get $21
@@ -42401,7 +42410,7 @@
     i32.load
     local.set $22
     local.get $22
-    global.get $~lib/util/sort/EMPTY
+    i32.const -1
     i32.ne
     if
      local.get $0
@@ -42427,8 +42436,6 @@
    end
   end
   local.get $14
-  call $~lib/rt/tlsf/__free
-  local.get $11
   call $~lib/rt/tlsf/__free
   local.get $10
   call $~lib/rt/tlsf/__free

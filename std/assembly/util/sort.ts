@@ -96,8 +96,8 @@ export function SORT<T>(
 
   var lgPlus2         = log2u(n) + 2;
   var lgPlus2Size     = lgPlus2 << alignof<u32>();
-  var leftRunStartBuf = __alloc(lgPlus2Size);
-  var leftRunEndBuf   = __alloc(lgPlus2Size);
+  var leftRunStartBuf = __alloc(lgPlus2Size << 1);
+  var leftRunEndBuf   = leftRunStartBuf + lgPlus2Size;
 
   for (let i: u32 = 0; i < lgPlus2; ++i) {
     store<u32>(leftRunStartBuf + (<usize>i << alignof<u32>()), EMPTY);
@@ -165,7 +165,6 @@ export function SORT<T>(
   }
   // dealloc aux buffers
   __free(buffer);
-  __free(leftRunEndBuf);
   __free(leftRunStartBuf);
 }
 
