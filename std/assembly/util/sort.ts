@@ -59,6 +59,7 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
 // Power Sort implementation (stable) from paper "Nearly-Optimal Mergesorts"
 // https://arxiv.org/pdf/1805.04154.pdf
 // This method usually outperform TimSort.
+// TODO: refactor c >>> 31 to c < 0 when binaryen will support this opt
 export function SORT<T>(
   dataStart: usize,
   length: i32,
