@@ -375,56 +375,24 @@ globalScope["trace"] = function(message, n) {
   console.error("trace: " + message);
 };
 
-Object.defineProperty(Int8Array, "wrap", {
-  value: function wrap(buffer, byteOffset, length) {
-    return new Int8Array(buffer, byteOffset, length);
-  }
-});
+var wrapTypes = [
+  Int8Array,
+  Uint8Array,
+  Uint8ClampedArray,
+  Int16Array,
+  Uint16Array,
+  Int32Array,
+  Uint32Array,
+  Float32Array,
+  Float64Array
+];
 
-Object.defineProperty(Uint8Array, "wrap", {
-  value: function wrap(buffer, byteOffset, length) {
-    return new Uint8Array(buffer, byteOffset, length);
+for(const type of wrapTypes) {
+  if(!type.wrap) {
+    Object.defineProperty(type, "wrap", {
+      value: function wrap(buffer, byteOffset, length) {
+        return new type(buffer, byteOffset, length);
+      }
+    });
   }
-});
-
-Object.defineProperty(Uint8ClampedArray, "wrap", {
-  value: function wrap(buffer, byteOffset, length) {
-    return new Uint8ClampedArray(buffer, byteOffset, length);
-  }
-});
-
-Object.defineProperty(Int16Array, "wrap", {
-  value: function wrap(buffer, byteOffset, length) {
-    return new Int16Array(buffer, byteOffset, length);
-  }
-});
-
-Object.defineProperty(Uint16Array, "wrap", {
-  value: function wrap(buffer, byteOffset, length) {
-    return new Uint16Array(buffer, byteOffset, length);
-  }
-});
-
-Object.defineProperty(Int32Array, "wrap", {
-  value: function wrap(buffer, byteOffset, length) {
-    return new Int32Array(buffer, byteOffset, length);
-  }
-});
-
-Object.defineProperty(Uint32Array, "wrap", {
-  value: function wrap(buffer, byteOffset, length) {
-    return new Uint32Array(buffer, byteOffset, length);
-  }
-});
-
-Object.defineProperty(Float32Array, "wrap", {
-  value: function wrap(buffer, byteOffset, length) {
-    return new Float32Array(buffer, byteOffset, length);
-  }
-});
-
-Object.defineProperty(Float64Array, "wrap", {
-  value: function wrap(buffer, byteOffset, length) {
-    return new Float64Array(buffer, byteOffset, length);
-  }
-});
+}
