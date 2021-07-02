@@ -1,11 +1,11 @@
 import { compareImpl } from "./string";
 
 // @ts-ignore: decorator
-@lazy const EMPTY: u32 = 0xFFFFFFFF;
+@inline const EMPTY: u32 = 0xFFFFFFFF;
 // @ts-ignore: decorator
-@lazy const INSERTION_SORT_THRESHOLD = 128;
+@inline const INSERTION_SORT_THRESHOLD = 128;
 // @ts-ignore: decorator
-@lazy const MIN_RUN_LENGTH = 32;
+@inline const MIN_RUN_LENGTH = 32;
 
 // @ts-ignore: decorator
 @inline
