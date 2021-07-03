@@ -528,7 +528,6 @@ export declare function _BinaryenGetTag(module: ModuleRef, name: StringRef): Tag
 export declare function _BinaryenRemoveTag(module: ModuleRef, name: StringRef): void;
 
 export declare function _BinaryenTagGetName(tag: TagRef): StringRef;
-export declare function _BinaryenTagGetAttribute(tag: TagRef): u32;
 export declare function _BinaryenTagGetParams(tag: TagRef): TypeRef;
 export declare function _BinaryenTagGetResults(tag: TagRef): TypeRef;
 

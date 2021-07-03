@@ -2903,10 +2903,6 @@ export function getTagName(tag: TagRef): string | null {
   return readString(binaryen._BinaryenTagGetName(tag));
 }
 
-export function getTagAttribute(tag: TagRef): u32 {
-  return binaryen._BinaryenTagGetAttribute(tag);
-}
-
 export function getTagParams(tag: TagRef): TypeRef {
   return binaryen._BinaryenTagGetParams(tag);
 }
