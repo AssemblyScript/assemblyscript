@@ -276,7 +276,7 @@ function mergeRuns<T>(
   buffer: usize,
   comparator: (a: T, b: T) => i32
 ): void {
-  --m; // accounts for different convention in Sedgewick’s book
+  --m;
   var i: i32, j: i32, t = r + m;
   for (i = m + 1; i > l; --i) {
     store<T>(buffer + (<usize>(i - 1) << alignof<T>()), load<T>(dataStart + (<usize>(i - 1) << alignof<T>())));
