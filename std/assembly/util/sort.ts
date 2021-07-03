@@ -1,5 +1,7 @@
 import { compareImpl } from "./string";
 
+type Comparator<T> = (a: T, b: T) => i32;
+
 // @ts-ignore: decorator
 @inline const EMPTY: u32 = 0xFFFFFFFF;
 // @ts-ignore: decorator
@@ -15,33 +17,33 @@ function log2u(n: u32): u32 {
 
 // @ts-ignore: decorator
 @inline
-export function COMPARATOR<T>(): (a: T, b: T) => i32 {
+export function COMPARATOR<T>(): Comparator<T> {
   if (isInteger<T>()) {
     if (isSigned<T>() && sizeof<T>() <= 4) {
-      return (a: T, b: T): i32 => (i32(a) - i32(b));
+      return (a, b) => i32(a) - i32(b);
     } else {
-      return (a: T, b: T): i32 => (i32(a > b) - i32(a < b));
+      return (a, b) => i32(a > b) - i32(a < b);
     }
   } else if (isFloat<T>()) {
     if (sizeof<T>() == 4) {
-      return (a: T, b: T): i32 => {
+      return (a, b) => {
         var ia = reinterpret<i32>(f32(a));
         var ib = reinterpret<i32>(f32(b));
-        ia ^= (ia >> 31) >>> 1;
-        ib ^= (ib >> 31) >>> 1;
+        ia ^= ia >> 31 >>> 1;
+        ib ^= ib >> 31 >>> 1;
         return i32(ia > ib) - i32(ia < ib);
       };
     } else {
-      return (a: T, b: T): i32 => {
+      return (a, b) => {
         var ia = reinterpret<i64>(f64(a));
         var ib = reinterpret<i64>(f64(b));
-        ia ^= (ia >> 63) >>> 1;
-        ib ^= (ib >> 63) >>> 1;
+        ia ^= ia >> 63 >>> 1;
+        ib ^= ib >> 63 >>> 1;
         return i32(ia > ib) - i32(ia < ib);
       };
     }
   } else if (isString<T>()) {
-    return (a: T, b: T): i32 => {
+    return (a, b) => {
       if (a === b || a === null || b === null) return 0;
       var alen = changetype<string>(a).length;
       var blen = changetype<string>(b).length;
@@ -52,7 +54,7 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
       return res ? res : alen - blen;
     };
   } else {
-    return (a: T, b: T): i32 => (i32(a > b) - i32(a < b));
+    return (a, b) => i32(a > b) - i32(a < b);
   }
 }
 
@@ -63,7 +65,7 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
 export function SORT<T>(
   dataStart: usize,
   length: i32,
-  comparator: (a: T, b: T) => i32
+  comparator: Comparator<T>
 ): void {
   var hi = length - 1, n = length;
   if (n <= INSERTION_SORT_THRESHOLD) {
@@ -174,7 +176,7 @@ function insertionSort<T>(
   left: i32,
   right: i32,
   presorted: i32,
-  comparator: (a: T, b: T) => i32
+  comparator: Comparator<T>
 ): void {
   if (ASC_SHRINK_LEVEL >= 1) {
     // slightly improved original insertion sort
@@ -233,7 +235,7 @@ function extendRunRight<T>(
   dataStart: usize,
   i: i32,
   right: i32,
-  comparator: (a: T, b: T) => i32
+  comparator: Comparator<T>
 ): i32 {
   if (i == right) return i;
   var j = i;
@@ -274,7 +276,7 @@ function mergeRuns<T>(
   m: i32,
   r: i32,
   buffer: usize,
-  comparator: (a: T, b: T) => i32
+  comparator: Comparator<T>
 ): void {
   --m;
   var i: i32, j: i32, t = r + m;
