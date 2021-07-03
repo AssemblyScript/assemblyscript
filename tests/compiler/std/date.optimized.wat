@@ -9321,6 +9321,9 @@
   local.tee $1
   i32.store
   local.get $1
+  local.get $0
+  i64.store offset=16
+  local.get $1
   i32.const 0
   i32.store
   local.get $1
@@ -9329,9 +9332,6 @@
   local.get $1
   i32.const 0
   i32.store offset=8
-  local.get $1
-  local.get $0
-  i64.store offset=16
   local.get $0
   i64.const -8640000000000000
   i64.lt_s

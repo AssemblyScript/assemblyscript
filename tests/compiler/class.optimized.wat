@@ -1727,7 +1727,7 @@
   call $~lib/memory/memory.fill
   local.get $1
  )
- (func $~lib/array/Array<i32>#set:buffer (param $0 i32) (param $1 i32)
+ (func $class/GenericInitializer<i32>#set:foo (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
@@ -1826,7 +1826,7 @@
    i32.store
    local.get $0
    i32.const 0
-   call $~lib/array/Array<i32>#set:buffer
+   call $class/GenericInitializer<i32>#set:foo
    local.get $0
    i32.const 0
    i32.store offset=4
@@ -1847,7 +1847,7 @@
    call $~lib/memory/memory.fill
    local.get $0
    local.get $1
-   call $~lib/array/Array<i32>#set:buffer
+   call $class/GenericInitializer<i32>#set:foo
    local.get $0
    local.get $1
    i32.store offset=4
@@ -1863,7 +1863,7 @@
    global.set $~lib/memory/__stack_pointer
    local.get $2
    local.get $0
-   call $~lib/array/Array<i32>#set:buffer
+   call $class/GenericInitializer<i32>#set:foo
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add
