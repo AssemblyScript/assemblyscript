@@ -72,20 +72,20 @@ export function SORT<T>(
         case 3: {
           let a = load<T>(dataStart, 1 << alignof<T>());
           let b = load<T>(dataStart, 2 << alignof<T>());
-          let c = comparator(a, b);
-          store<T>(dataStart, select<T>(a, b, c >>> 31), 1 << alignof<T>());
-          b = select<T>(b, a, c >>> 31);
+          let c = comparator(a, b) >>> 31;
+          store<T>(dataStart, select<T>(a, b, c), 1 << alignof<T>());
+          b = select<T>(b, a, c);
           a = load<T>(dataStart, 0);
-          c = comparator(a, b);
-          store<T>(dataStart, select<T>(a, b, c >>> 31), 0);
-          store<T>(dataStart, select<T>(b, a, c >>> 31), 2 << alignof<T>());
+          c = comparator(a, b) >>> 31;
+          store<T>(dataStart, select<T>(a, b, c), 0);
+          store<T>(dataStart, select<T>(b, a, c), 2 << alignof<T>());
         }
         case 2: {
           let a = load<T>(dataStart, 0);
           let b = load<T>(dataStart, 1 << alignof<T>());
-          let c = comparator(a, b);
-          store<T>(dataStart, select<T>(a, b, c >>> 31), 0);
-          store<T>(dataStart, select<T>(b, a, c >>> 31), 1 << alignof<T>());
+          let c = comparator(a, b) >>> 31;
+          store<T>(dataStart, select<T>(a, b, c), 0);
+          store<T>(dataStart, select<T>(b, a, c), 1 << alignof<T>());
         }
         case 1:
         case 0: return;
