@@ -26,7 +26,7 @@ export type FunctionRef = Ref;
 export type ImportRef = Ref;
 export type ExportRef = Ref;
 export type GlobalRef = Ref;
-export type EventRef = Ref;
+export type TagRef = Ref;
 export type TableRef = Ref;
 export type ElementSegmentRef = Ref;
 export type RelooperRef = Ref;
@@ -410,18 +410,18 @@ export declare function _BinaryenRefEqSetLeft(expr: ExpressionRef, leftExpr: Exp
 export declare function _BinaryenRefEqGetRight(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenRefEqSetRight(expr: ExpressionRef, rightExpr: ExpressionRef): void;
 
-export declare function _BinaryenTry(module: ModuleRef, name: StringRef, bodyExpr: ExpressionRef, catchEvents: ArrayRef<StringRef>, numCatchEvents: Index, catchBodies: ArrayRef<ExpressionRef>, numCatchBodies: Index, delegateTarget: StringRef): ExpressionRef;
+export declare function _BinaryenTry(module: ModuleRef, name: StringRef, bodyExpr: ExpressionRef, catchTags: ArrayRef<StringRef>, numCatchTags: Index, catchBodies: ArrayRef<ExpressionRef>, numCatchBodies: Index, delegateTarget: StringRef): ExpressionRef;
 export declare function _BinaryenTryGetName(expr: ExpressionRef): StringRef;
 export declare function _BinaryenTrySetName(expr: ExpressionRef, name: StringRef): void;
 export declare function _BinaryenTryGetBody(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenTrySetBody(expr: ExpressionRef, bodyExpr: ExpressionRef): void;
-export declare function _BinaryenTryGetNumCatchEvents(expr: ExpressionRef): Index;
+export declare function _BinaryenTryGetNumCatchTags(expr: ExpressionRef): Index;
 export declare function _BinaryenTryGetNumCatchBodies(expr: ExpressionRef): Index;
-export declare function _BinaryenTryGetCatchEventAt(expr: ExpressionRef, index: Index): StringRef;
-export declare function _BinaryenTrySetCatchEventAt(expr: ExpressionRef, index: Index, catchEvent: StringRef): void;
-export declare function _BinaryenTryAppendCatchEvent(expr: ExpressionRef, catchEvent: StringRef): Index;
-export declare function _BinaryenTryInsertCatchEventAt(expr: ExpressionRef, index: Index, catchEvent: StringRef): void;
-export declare function _BinaryenTryRemoveCatchEventAt(expr: ExpressionRef, index: Index): StringRef;
+export declare function _BinaryenTryGetCatchTagAt(expr: ExpressionRef, index: Index): StringRef;
+export declare function _BinaryenTrySetCatchTagAt(expr: ExpressionRef, index: Index, catchTag: StringRef): void;
+export declare function _BinaryenTryAppendCatchTag(expr: ExpressionRef, catchTag: StringRef): Index;
+export declare function _BinaryenTryInsertCatchTagAt(expr: ExpressionRef, index: Index, catchTag: StringRef): void;
+export declare function _BinaryenTryRemoveCatchTagAt(expr: ExpressionRef, index: Index): StringRef;
 export declare function _BinaryenTryGetCatchBodyAt(expr: ExpressionRef, index: Index): ExpressionRef;
 export declare function _BinaryenTrySetCatchBodyAt(expr: ExpressionRef, index: Index, catchExpr: ExpressionRef): void;
 export declare function _BinaryenTryAppendCatchBody(expr: ExpressionRef, catchExpr: ExpressionRef): Index;
@@ -432,9 +432,9 @@ export declare function _BinaryenTryGetDelegateTarget(expr: ExpressionRef): Stri
 export declare function _BinaryenTrySetDelegateTarget(expr: ExpressionRef, delegateTarget: StringRef): void;
 export declare function _BinaryenTryIsDelegate(expr: ExpressionRef): bool;
 
-export declare function _BinaryenThrow(module: ModuleRef, eventName: StringRef, operands: ArrayRef<ExpressionRef>, numOperands: Index): ExpressionRef;
-export declare function _BinaryenThrowGetEvent(expr: ExpressionRef): StringRef;
-export declare function _BinaryenThrowSetEvent(expr: ExpressionRef, eventName: StringRef): void;
+export declare function _BinaryenThrow(module: ModuleRef, tagName: StringRef, operands: ArrayRef<ExpressionRef>, numOperands: Index): ExpressionRef;
+export declare function _BinaryenThrowGetTag(expr: ExpressionRef): StringRef;
+export declare function _BinaryenThrowSetTag(expr: ExpressionRef, tagName: StringRef): void;
 export declare function _BinaryenThrowGetNumOperands(expr: ExpressionRef): Index;
 export declare function _BinaryenThrowGetOperandAt(expr: ExpressionRef, index: Index): ExpressionRef;
 export declare function _BinaryenThrowSetOperandAt(expr: ExpressionRef, index: Index, operandExpr: ExpressionRef): void;
@@ -497,13 +497,13 @@ export declare function _BinaryenAddFunctionImport(module: ModuleRef, internalNa
 export declare function _BinaryenAddTableImport(module: ModuleRef, internalName: StringRef, externalModuleName: StringRef, externalBaseName: StringRef): void;
 export declare function _BinaryenAddMemoryImport(module: ModuleRef, internalName: StringRef, externalModuleName: StringRef, externalBaseName: StringRef, shared:bool): void;
 export declare function _BinaryenAddGlobalImport(module: ModuleRef, internalName: StringRef, externalModuleName: StringRef, externalBaseName: StringRef, globalType: TypeRef, mutable: bool): void;
-export declare function _BinaryenAddEventImport(module: ModuleRef, internalName: StringRef, externalModuleName: StringRef, externalBaseName: StringRef, attribute: u32, params: TypeRef, results: TypeRef): void;
+export declare function _BinaryenAddTagImport(module: ModuleRef, internalName: StringRef, externalModuleName: StringRef, externalBaseName: StringRef, params: TypeRef, results: TypeRef): void;
 
 export declare function _BinaryenAddFunctionExport(module: ModuleRef, internalName: StringRef, externalName: StringRef): ExportRef;
 export declare function _BinaryenAddTableExport(module: ModuleRef, internalName: StringRef, externalName: StringRef): ExportRef;
 export declare function _BinaryenAddMemoryExport(module: ModuleRef, internalName: StringRef, externalName: StringRef): ExportRef;
 export declare function _BinaryenAddGlobalExport(module: ModuleRef, internalName: StringRef, externalName: StringRef): ExportRef;
-export declare function _BinaryenAddEventExport(module: ModuleRef, internalName: StringRef, externalName: StringRef): ExportRef;
+export declare function _BinaryenAddTagExport(module: ModuleRef, internalName: StringRef, externalName: StringRef): ExportRef;
 export declare function _BinaryenGetExport(module: ModuleRef, externalName: StringRef): ExportRef;
 export declare function _BinaryenRemoveExport(module: ModuleRef, externalName: StringRef): void;
 export declare function _BinaryenGetNumExports(module: ModuleRef): Index;
@@ -523,14 +523,13 @@ export declare function _BinaryenGlobalGetType(global: GlobalRef): TypeRef;
 export declare function _BinaryenGlobalIsMutable(global: GlobalRef): bool;
 export declare function _BinaryenGlobalGetInitExpr(global: GlobalRef): ExpressionRef;
 
-export declare function _BinaryenAddEvent(module: ModuleRef, name: StringRef, attribute: u32, params: TypeRef, results: TypeRef): EventRef;
-export declare function _BinaryenGetEvent(module: ModuleRef, name: StringRef): EventRef;
-export declare function _BinaryenRemoveEvent(module: ModuleRef, name: StringRef): void;
+export declare function _BinaryenAddTag(module: ModuleRef, name: StringRef, params: TypeRef, results: TypeRef): TagRef;
+export declare function _BinaryenGetTag(module: ModuleRef, name: StringRef): TagRef;
+export declare function _BinaryenRemoveTag(module: ModuleRef, name: StringRef): void;
 
-export declare function _BinaryenEventGetName(event: EventRef): StringRef;
-export declare function _BinaryenEventGetAttribute(event: EventRef): u32;
-export declare function _BinaryenEventGetParams(event: EventRef): TypeRef;
-export declare function _BinaryenEventGetResults(event: EventRef): TypeRef;
+export declare function _BinaryenTagGetName(tag: TagRef): StringRef;
+export declare function _BinaryenTagGetParams(tag: TagRef): TypeRef;
+export declare function _BinaryenTagGetResults(tag: TagRef): TypeRef;
 
 export declare function _BinaryenAddTable(module: ModuleRef, name: StringRef, initial: Index, maximum: Index): TableRef;
 export declare function _BinaryenRemoveTable(module: ModuleRef, table: StringRef): void;

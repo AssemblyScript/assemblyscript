@@ -24,8 +24,8 @@ export type FunctionRef = binaryen.FunctionRef;
 export type ExpressionRef = binaryen.ExpressionRef;
 /** Reference to a Binaryen global. */
 export type GlobalRef = binaryen.GlobalRef;
-/** Reference to a Binaryen event. */
-export type EventRef = binaryen.EventRef;
+/** Reference to a Binaryen tag. */
+export type TagRef = binaryen.TagRef;
 /** Reference to a Binaryen import. */
 export type ImportRef = binaryen.ImportRef;
 /** Reference to a Binaryen export. */
@@ -155,7 +155,7 @@ export enum ExternalKind {
   Table = 1 /* _BinaryenExternalTable */,
   Memory = 2 /* _BinaryenExternalMemory */,
   Global = 3 /* _BinaryenExternalGlobal */,
-  Event = 4 /* _BinaryenExternalEvent */
+  Tag = 4 /* _BinaryenExternalTag */
 }
 
 /** Binaryen unary operation constants. */
@@ -1584,27 +1584,27 @@ export class Module {
 
   // try(
   //   body: ExpressionRef,
-  //   catchEvents: string[],
+  //   catchTags: string[],
   //   catchBodies: ExpressionRef[]
   // ): ExpressionRef {
-  //   var numCatchEvents = catchEvents.length;
-  //   var strs = new Array<EventRef>(numCatchEvents);
-  //   for (let i = 0; i < numCatchEvents; ++i) {
-  //     strs[i] = this.allocStringCached(catchEvents[i]);
+  //   var numCatchTags = catchTags.length;
+  //   var strs = new Array<TagRef>(numCatchTags);
+  //   for (let i = 0; i < numCatchTags; ++i) {
+  //     strs[i] = this.allocStringCached(catchTags[i]);
   //   }
   //   var cArr1 = allocPtrArray(strs);
   //   var cArr2 = allocPtrArray(catchBodies);
-  //   var ret = binaryen._BinaryenTry(this.ref, body, cArr1, numCatchEvents, cArr2, catchBodies.length);
+  //   var ret = binaryen._BinaryenTry(this.ref, body, cArr1, numCatchTags, cArr2, catchBodies.length);
   //   binaryen._free(cArr2);
   //   binaryen._free(cArr1);
   //   return ret;
   // }
 
   throw(
-    eventName: string,
+    tagName: string,
     operands: ExpressionRef[]
   ): ExpressionRef {
-    var cStr = this.allocStringCached(eventName);
+    var cStr = this.allocStringCached(tagName);
     var cArr = allocPtrArray(operands);
     var ret = binaryen._BinaryenThrow(this.ref, cStr, cArr, operands.length);
     binaryen._free(cArr);
@@ -1768,30 +1768,29 @@ export class Module {
     binaryen._BinaryenRemoveGlobal(this.ref, cStr);
   }
 
-  // events
+  // tags
 
-  addEvent(
+  addTag(
     name: string,
-    attribute: u32,
     params: TypeRef,
     results: TypeRef
-  ): EventRef {
+  ): TagRef {
     var cStr = this.allocStringCached(name);
-    return binaryen._BinaryenAddEvent(this.ref, cStr, attribute, params, results);
+    return binaryen._BinaryenAddTag(this.ref, cStr, params, results);
   }
 
-  getEvent(
+  getTag(
     name: string
-  ): EventRef {
+  ): TagRef {
     var cStr = this.allocStringCached(name);
-    return binaryen._BinaryenGetEvent(this.ref, cStr);
+    return binaryen._BinaryenGetTag(this.ref, cStr);
   }
 
-  removeEvent(
+  removeTag(
     name: string
   ): void {
     var cStr = this.allocStringCached(name);
-    binaryen._BinaryenRemoveEvent(this.ref, cStr);
+    binaryen._BinaryenRemoveTag(this.ref, cStr);
   }
 
   // functions
@@ -1904,13 +1903,13 @@ export class Module {
     return binaryen._BinaryenAddGlobalExport(this.ref, cStr1, cStr2);
   }
 
-  addEventExport(
+  addTagExport(
     internalName: string,
     externalName: string
   ): ExportRef {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalName);
-    return binaryen._BinaryenAddEventExport(this.ref, cStr1, cStr2);
+    return binaryen._BinaryenAddTagExport(this.ref, cStr1, cStr2);
   }
 
   removeExport(externalName: string): void {
@@ -1974,19 +1973,18 @@ export class Module {
     binaryen._BinaryenAddGlobalImport(this.ref, cStr1, cStr2, cStr3, globalType, mutable);
   }
 
-  addEventImport(
+  addTagImport(
     internalName: string,
     externalModuleName: string,
     externalBaseName: string,
-    attribute: u32,
     params: TypeRef,
     results: TypeRef
   ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    binaryen._BinaryenAddEventImport(
-      this.ref, cStr1, cStr2, cStr3, attribute, params, results
+    binaryen._BinaryenAddTagImport(
+      this.ref, cStr1, cStr2, cStr3, params, results
     );
   }
 
@@ -2897,22 +2895,18 @@ export function getGlobalInit(global: GlobalRef): ExpressionRef {
   return binaryen._BinaryenGlobalGetInitExpr(global);
 }
 
-// events
+// tags
 
-export function getEventName(event: EventRef): string | null {
-  return readString(binaryen._BinaryenEventGetName(event));
+export function getTagName(tag: TagRef): string | null {
+  return readString(binaryen._BinaryenTagGetName(tag));
 }
 
-export function getEventAttribute(event: EventRef): u32 {
-  return binaryen._BinaryenEventGetAttribute(event);
+export function getTagParams(tag: TagRef): TypeRef {
+  return binaryen._BinaryenTagGetParams(tag);
 }
 
-export function getEventParams(event: EventRef): TypeRef {
-  return binaryen._BinaryenEventGetParams(event);
-}
-
-export function getEventResults(event: EventRef): TypeRef {
-  return binaryen._BinaryenEventGetResults(event);
+export function getTagResults(tag: TagRef): TypeRef {
+  return binaryen._BinaryenTagGetResults(tag);
 }
 
 export class Relooper {

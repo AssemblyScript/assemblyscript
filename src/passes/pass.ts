@@ -166,7 +166,7 @@ import {
   _BinaryenAtomicNotifyGetNotifyCount,
   _BinaryenAtomicNotifySetNotifyCount,
   _BinaryenRefFuncGetFunc,
-  _BinaryenThrowGetEvent,
+  _BinaryenThrowGetTag,
   _BinaryenTupleExtractGetTuple,
   _BinaryenTupleExtractSetTuple,
   _BinaryenRefEqGetLeft,
@@ -484,7 +484,7 @@ export abstract class Visitor {
     // unimp
   }
 
-  visitEvent(name: StringRef): void {
+  visitTag(name: StringRef): void {
     // unimp
   }
 
@@ -850,7 +850,7 @@ export abstract class Visitor {
       }
       case ExpressionId.Throw: {
         this.stack.push(expr);
-        this.visitEvent(_BinaryenThrowGetEvent(expr));
+        this.visitTag(_BinaryenThrowGetTag(expr));
         let numOperands = _BinaryenThrowGetNumOperands(expr);
         for (let i: Index = 0; i < numOperands; ++i) {
           this.visit(_BinaryenThrowGetOperandAt(expr, i));
