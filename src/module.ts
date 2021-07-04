@@ -1772,12 +1772,11 @@ export class Module {
 
   addTag(
     name: string,
-    attribute: u32,
     params: TypeRef,
     results: TypeRef
   ): TagRef {
     var cStr = this.allocStringCached(name);
-    return binaryen._BinaryenAddTag(this.ref, cStr, attribute, params, results);
+    return binaryen._BinaryenAddTag(this.ref, cStr, params, results);
   }
 
   getTag(
@@ -1978,7 +1977,6 @@ export class Module {
     internalName: string,
     externalModuleName: string,
     externalBaseName: string,
-    attribute: u32,
     params: TypeRef,
     results: TypeRef
   ): void {
@@ -1986,7 +1984,7 @@ export class Module {
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
     binaryen._BinaryenAddTagImport(
-      this.ref, cStr1, cStr2, cStr3, attribute, params, results
+      this.ref, cStr1, cStr2, cStr3, params, results
     );
   }
 

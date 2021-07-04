@@ -497,7 +497,7 @@ export declare function _BinaryenAddFunctionImport(module: ModuleRef, internalNa
 export declare function _BinaryenAddTableImport(module: ModuleRef, internalName: StringRef, externalModuleName: StringRef, externalBaseName: StringRef): void;
 export declare function _BinaryenAddMemoryImport(module: ModuleRef, internalName: StringRef, externalModuleName: StringRef, externalBaseName: StringRef, shared:bool): void;
 export declare function _BinaryenAddGlobalImport(module: ModuleRef, internalName: StringRef, externalModuleName: StringRef, externalBaseName: StringRef, globalType: TypeRef, mutable: bool): void;
-export declare function _BinaryenAddTagImport(module: ModuleRef, internalName: StringRef, externalModuleName: StringRef, externalBaseName: StringRef, attribute: u32, params: TypeRef, results: TypeRef): void;
+export declare function _BinaryenAddTagImport(module: ModuleRef, internalName: StringRef, externalModuleName: StringRef, externalBaseName: StringRef, params: TypeRef, results: TypeRef): void;
 
 export declare function _BinaryenAddFunctionExport(module: ModuleRef, internalName: StringRef, externalName: StringRef): ExportRef;
 export declare function _BinaryenAddTableExport(module: ModuleRef, internalName: StringRef, externalName: StringRef): ExportRef;
@@ -523,7 +523,7 @@ export declare function _BinaryenGlobalGetType(global: GlobalRef): TypeRef;
 export declare function _BinaryenGlobalIsMutable(global: GlobalRef): bool;
 export declare function _BinaryenGlobalGetInitExpr(global: GlobalRef): ExpressionRef;
 
-export declare function _BinaryenAddTag(module: ModuleRef, name: StringRef, attribute: u32, params: TypeRef, results: TypeRef): TagRef;
+export declare function _BinaryenAddTag(module: ModuleRef, name: StringRef, params: TypeRef, results: TypeRef): TagRef;
 export declare function _BinaryenGetTag(module: ModuleRef, name: StringRef): TagRef;
 export declare function _BinaryenRemoveTag(module: ModuleRef, name: StringRef): void;
 
