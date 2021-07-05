@@ -3332,7 +3332,6 @@
   (local $8 i32)
   (local $9 f64)
   (local $10 f64)
-  (local $11 i32)
   local.get $3
   local.get $2
   i32.const 1
@@ -3418,7 +3417,7 @@
     i32.const 3
     i32.shl
     i32.add
-    local.tee $7
+    local.tee $8
     local.get $9
     local.get $10
     local.get $9
@@ -3426,26 +3425,25 @@
     local.get $5
     i32.load
     call_indirect $0 (type $f64_f64_=>_i32)
-    local.tee $8
     i32.const 31
     i32.shr_u
-    local.tee $11
+    local.tee $7
     select
     f64.store
-    local.get $7
+    local.get $8
     local.get $10
     local.get $9
-    local.get $11
+    local.get $7
     select
     f64.store
     local.get $6
-    local.get $11
+    local.get $7
     i32.sub
     local.set $6
     local.get $2
-    local.get $8
-    i32.const 0
-    i32.ge_s
+    local.get $7
+    i32.const 1
+    i32.xor
     i32.add
     local.set $2
     local.get $1
@@ -29556,7 +29554,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $3
   local.get $2
   i32.const 1
@@ -29630,7 +29627,7 @@
     local.get $0
     local.get $1
     i32.add
-    local.tee $7
+    local.tee $8
     local.get $9
     local.get $10
     local.get $9
@@ -29638,26 +29635,25 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    local.tee $8
     i32.const 31
     i32.shr_u
-    local.tee $11
+    local.tee $7
     select
     i32.store8
-    local.get $7
+    local.get $8
     local.get $10
     local.get $9
-    local.get $11
+    local.get $7
     select
     i32.store8
     local.get $6
-    local.get $11
+    local.get $7
     i32.sub
     local.set $6
     local.get $2
-    local.get $8
-    i32.const 0
-    i32.ge_s
+    local.get $7
+    i32.const 1
+    i32.xor
     i32.add
     local.set $2
     local.get $1
@@ -30388,7 +30384,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $3
   local.get $2
   i32.const 1
@@ -30462,7 +30457,7 @@
     local.get $0
     local.get $1
     i32.add
-    local.tee $7
+    local.tee $8
     local.get $9
     local.get $10
     local.get $9
@@ -30470,26 +30465,25 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    local.tee $8
     i32.const 31
     i32.shr_u
-    local.tee $11
+    local.tee $7
     select
     i32.store8
-    local.get $7
+    local.get $8
     local.get $10
     local.get $9
-    local.get $11
+    local.get $7
     select
     i32.store8
     local.get $6
-    local.get $11
+    local.get $7
     i32.sub
     local.set $6
     local.get $2
-    local.get $8
-    i32.const 0
-    i32.ge_s
+    local.get $7
+    i32.const 1
+    i32.xor
     i32.add
     local.set $2
     local.get $1
@@ -31256,7 +31250,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $3
   local.get $2
   i32.const 1
@@ -31342,7 +31335,7 @@
     i32.const 1
     i32.shl
     i32.add
-    local.tee $7
+    local.tee $8
     local.get $9
     local.get $10
     local.get $9
@@ -31350,26 +31343,25 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    local.tee $8
     i32.const 31
     i32.shr_u
-    local.tee $11
+    local.tee $7
     select
     i32.store16
-    local.get $7
+    local.get $8
     local.get $10
     local.get $9
-    local.get $11
+    local.get $7
     select
     i32.store16
     local.get $6
-    local.get $11
+    local.get $7
     i32.sub
     local.set $6
     local.get $2
-    local.get $8
-    i32.const 0
-    i32.ge_s
+    local.get $7
+    i32.const 1
+    i32.xor
     i32.add
     local.set $2
     local.get $1
@@ -32132,7 +32124,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $3
   local.get $2
   i32.const 1
@@ -32218,7 +32209,7 @@
     i32.const 1
     i32.shl
     i32.add
-    local.tee $7
+    local.tee $8
     local.get $9
     local.get $10
     local.get $9
@@ -32226,26 +32217,25 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    local.tee $8
     i32.const 31
     i32.shr_u
-    local.tee $11
+    local.tee $7
     select
     i32.store16
-    local.get $7
+    local.get $8
     local.get $10
     local.get $9
-    local.get $11
+    local.get $7
     select
     i32.store16
     local.get $6
-    local.get $11
+    local.get $7
     i32.sub
     local.set $6
     local.get $2
-    local.get $8
-    i32.const 0
-    i32.ge_s
+    local.get $7
+    i32.const 1
+    i32.xor
     i32.add
     local.set $2
     local.get $1
@@ -33018,7 +33008,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $3
   local.get $2
   i32.const 1
@@ -33104,7 +33093,7 @@
     i32.const 2
     i32.shl
     i32.add
-    local.tee $7
+    local.tee $8
     local.get $9
     local.get $10
     local.get $9
@@ -33112,26 +33101,25 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    local.tee $8
     i32.const 31
     i32.shr_u
-    local.tee $11
+    local.tee $7
     select
     i32.store
-    local.get $7
+    local.get $8
     local.get $10
     local.get $9
-    local.get $11
+    local.get $7
     select
     i32.store
     local.get $6
-    local.get $11
+    local.get $7
     i32.sub
     local.set $6
     local.get $2
-    local.get $8
-    i32.const 0
-    i32.ge_s
+    local.get $7
+    i32.const 1
+    i32.xor
     i32.add
     local.set $2
     local.get $1
@@ -33888,7 +33876,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $3
   local.get $2
   i32.const 1
@@ -33974,7 +33961,7 @@
     i32.const 2
     i32.shl
     i32.add
-    local.tee $7
+    local.tee $8
     local.get $9
     local.get $10
     local.get $9
@@ -33982,26 +33969,25 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    local.tee $8
     i32.const 31
     i32.shr_u
-    local.tee $11
+    local.tee $7
     select
     i32.store
-    local.get $7
+    local.get $8
     local.get $10
     local.get $9
-    local.get $11
+    local.get $7
     select
     i32.store
     local.get $6
-    local.get $11
+    local.get $7
     i32.sub
     local.set $6
     local.get $2
-    local.get $8
-    i32.const 0
-    i32.ge_s
+    local.get $7
+    i32.const 1
+    i32.xor
     i32.add
     local.set $2
     local.get $1
@@ -34763,7 +34749,6 @@
   (local $8 i32)
   (local $9 i64)
   (local $10 i64)
-  (local $11 i32)
   local.get $3
   local.get $2
   i32.const 1
@@ -34849,7 +34834,7 @@
     i32.const 3
     i32.shl
     i32.add
-    local.tee $7
+    local.tee $8
     local.get $9
     local.get $10
     local.get $9
@@ -34857,26 +34842,25 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i64_i64_=>_i32)
-    local.tee $8
     i32.const 31
     i32.shr_u
-    local.tee $11
+    local.tee $7
     select
     i64.store
-    local.get $7
+    local.get $8
     local.get $10
     local.get $9
-    local.get $11
+    local.get $7
     select
     i64.store
     local.get $6
-    local.get $11
+    local.get $7
     i32.sub
     local.set $6
     local.get $2
-    local.get $8
-    i32.const 0
-    i32.ge_s
+    local.get $7
+    i32.const 1
+    i32.xor
     i32.add
     local.set $2
     local.get $1
@@ -35641,7 +35625,6 @@
   (local $8 i32)
   (local $9 i64)
   (local $10 i64)
-  (local $11 i32)
   local.get $3
   local.get $2
   i32.const 1
@@ -35727,7 +35710,7 @@
     i32.const 3
     i32.shl
     i32.add
-    local.tee $7
+    local.tee $8
     local.get $9
     local.get $10
     local.get $9
@@ -35735,26 +35718,25 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i64_i64_=>_i32)
-    local.tee $8
     i32.const 31
     i32.shr_u
-    local.tee $11
+    local.tee $7
     select
     i64.store
-    local.get $7
+    local.get $8
     local.get $10
     local.get $9
-    local.get $11
+    local.get $7
     select
     i64.store
     local.get $6
-    local.get $11
+    local.get $7
     i32.sub
     local.set $6
     local.get $2
-    local.get $8
-    i32.const 0
-    i32.ge_s
+    local.get $7
+    i32.const 1
+    i32.xor
     i32.add
     local.set $2
     local.get $1
@@ -36519,7 +36501,6 @@
   (local $8 i32)
   (local $9 f32)
   (local $10 f32)
-  (local $11 i32)
   local.get $3
   local.get $2
   i32.const 1
@@ -36605,7 +36586,7 @@
     i32.const 2
     i32.shl
     i32.add
-    local.tee $7
+    local.tee $8
     local.get $9
     local.get $10
     local.get $9
@@ -36613,26 +36594,25 @@
     local.get $5
     i32.load
     call_indirect $0 (type $f32_f32_=>_i32)
-    local.tee $8
     i32.const 31
     i32.shr_u
-    local.tee $11
+    local.tee $7
     select
     f32.store
-    local.get $7
+    local.get $8
     local.get $10
     local.get $9
-    local.get $11
+    local.get $7
     select
     f32.store
     local.get $6
-    local.get $11
+    local.get $7
     i32.sub
     local.set $6
     local.get $2
-    local.get $8
-    i32.const 0
-    i32.ge_s
+    local.get $7
+    i32.const 1
+    i32.xor
     i32.add
     local.set $2
     local.get $1

@@ -7171,6 +7171,8 @@
     local.get $5
     i32.load
     call_indirect $0 (type $f32_f32_=>_i32)
+    i32.const 31
+    i32.shr_u
     local.set $13
     local.get $0
     local.get $9
@@ -7180,8 +7182,6 @@
     local.get $11
     local.get $12
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     f32.store
     local.get $0
@@ -7192,20 +7192,16 @@
     local.get $12
     local.get $11
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     f32.store
     local.get $7
     local.get $13
-    i32.const 31
-    i32.shr_u
     i32.sub
     local.set $7
     local.get $6
     local.get $13
-    i32.const 0
-    i32.ge_s
+    i32.const 1
+    i32.xor
     i32.add
     local.set $6
     local.get $9
@@ -8256,6 +8252,8 @@
     local.get $5
     i32.load
     call_indirect $0 (type $f64_f64_=>_i32)
+    i32.const 31
+    i32.shr_u
     local.set $13
     local.get $0
     local.get $9
@@ -8265,8 +8263,6 @@
     local.get $11
     local.get $12
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     f64.store
     local.get $0
@@ -8277,20 +8273,16 @@
     local.get $12
     local.get $11
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     f64.store
     local.get $7
     local.get $13
-    i32.const 31
-    i32.shr_u
     i32.sub
     local.set $7
     local.get $6
     local.get $13
-    i32.const 0
-    i32.ge_s
+    i32.const 1
+    i32.xor
     i32.add
     local.set $6
     local.get $9
@@ -9371,6 +9363,8 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
     local.set $13
     local.get $0
     local.get $9
@@ -9380,8 +9374,6 @@
     local.get $11
     local.get $12
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $0
@@ -9392,20 +9384,16 @@
     local.get $12
     local.get $11
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $7
     local.get $13
-    i32.const 31
-    i32.shr_u
     i32.sub
     local.set $7
     local.get $6
     local.get $13
-    i32.const 0
-    i32.ge_s
+    i32.const 1
+    i32.xor
     i32.add
     local.set $6
     local.get $9
@@ -10348,6 +10336,8 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
     local.set $13
     local.get $0
     local.get $9
@@ -10357,8 +10347,6 @@
     local.get $11
     local.get $12
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $0
@@ -10369,20 +10357,16 @@
     local.get $12
     local.get $11
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $7
     local.get $13
-    i32.const 31
-    i32.shr_u
     i32.sub
     local.set $7
     local.get $6
     local.get $13
-    i32.const 0
-    i32.ge_s
+    i32.const 1
+    i32.xor
     i32.add
     local.set $6
     local.get $9
@@ -11405,6 +11389,8 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
     local.set $13
     local.get $0
     local.get $9
@@ -11414,8 +11400,6 @@
     local.get $11
     local.get $12
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $0
@@ -11426,20 +11410,16 @@
     local.get $12
     local.get $11
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $7
     local.get $13
-    i32.const 31
-    i32.shr_u
     i32.sub
     local.set $7
     local.get $6
     local.get $13
-    i32.const 0
-    i32.ge_s
+    i32.const 1
+    i32.xor
     i32.add
     local.set $6
     local.get $9
@@ -12324,6 +12304,8 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
     local.set $13
     local.get $0
     local.get $9
@@ -12333,8 +12315,6 @@
     local.get $11
     local.get $12
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $0
@@ -12345,20 +12325,16 @@
     local.get $12
     local.get $11
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $7
     local.get $13
-    i32.const 31
-    i32.shr_u
     i32.sub
     local.set $7
     local.get $6
     local.get $13
-    i32.const 0
-    i32.ge_s
+    i32.const 1
+    i32.xor
     i32.add
     local.set $6
     local.get $9
@@ -13156,6 +13132,8 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
     local.set $13
     local.get $0
     local.get $9
@@ -13165,8 +13143,6 @@
     local.get $11
     local.get $12
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $0
@@ -13177,20 +13153,16 @@
     local.get $12
     local.get $11
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $7
     local.get $13
-    i32.const 31
-    i32.shr_u
     i32.sub
     local.set $7
     local.get $6
     local.get $13
-    i32.const 0
-    i32.ge_s
+    i32.const 1
+    i32.xor
     i32.add
     local.set $6
     local.get $9
@@ -14347,6 +14319,8 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
     local.set $13
     local.get $0
     local.get $9
@@ -14356,8 +14330,6 @@
     local.get $11
     local.get $12
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $0
@@ -14368,20 +14340,16 @@
     local.get $12
     local.get $11
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store
     local.get $7
     local.get $13
-    i32.const 31
-    i32.shr_u
     i32.sub
     local.set $7
     local.get $6
     local.get $13
-    i32.const 0
-    i32.ge_s
+    i32.const 1
+    i32.xor
     i32.add
     local.set $6
     local.get $9
@@ -20051,6 +20019,8 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
     local.set $13
     local.get $0
     local.get $9
@@ -20060,8 +20030,6 @@
     local.get $11
     local.get $12
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store8
     local.get $0
@@ -20072,20 +20040,16 @@
     local.get $12
     local.get $11
     local.get $13
-    i32.const 31
-    i32.shr_u
     select
     i32.store8
     local.get $7
     local.get $13
-    i32.const 31
-    i32.shr_u
     i32.sub
     local.set $7
     local.get $6
     local.get $13
-    i32.const 0
-    i32.ge_s
+    i32.const 1
+    i32.xor
     i32.add
     local.set $6
     local.get $9
