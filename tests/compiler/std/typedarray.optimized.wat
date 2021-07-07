@@ -10,9 +10,9 @@
  (type $i64_i32_i32_=>_i32 (func (param i64 i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
- (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $f32_i32_i32_=>_i32 (func (param f32 i32 i32) (result i32)))
  (type $f64_i32_i32_=>_i32 (func (param f64 i32 i32) (result i32)))
+ (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
  (type $i64_i64_i32_i32_=>_i64 (func (param i64 i64 i32 i32) (result i64)))
@@ -2964,7 +2964,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 710
+   i32.const 725
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -2988,7 +2988,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 699
+   i32.const 714
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -3011,7 +3011,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1385
+   i32.const 1415
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -3833,55 +3833,22 @@
  )
  (func $~lib/typedarray/Float64Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 f64)
-  (local $5 f64)
-  block $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
+  local.get $0
+  i32.load offset=8
+  i32.const 3
+  i32.shr_u
+  local.tee $2
+  i32.const 1
+  i32.le_u
+  if
    local.get $0
-   i32.load offset=8
-   i32.const 3
-   i32.shr_u
-   local.tee $3
-   i32.const 1
-   i32.le_u
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $2
-   local.get $3
-   i32.const 2
-   i32.eq
-   if
-    local.get $2
-    f64.load offset=8
-    local.set $4
-    local.get $2
-    f64.load
-    local.set $5
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $4
-    local.get $5
-    local.get $1
-    i32.load
-    call_indirect $0 (type $f64_f64_=>_i32)
-    i32.const 0
-    i32.lt_s
-    if
-     local.get $2
-     local.get $5
-     f64.store offset=8
-     local.get $2
-     local.get $4
-     f64.store
-    end
-    br $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
-   end
-   local.get $2
-   local.get $3
-   local.get $1
-   call $~lib/util/sort/SORT<f64>
+   return
   end
+  local.get $0
+  i32.load offset=4
+  local.get $2
+  local.get $1
+  call $~lib/util/sort/SORT<f64>
   local.get $0
  )
  (func $~lib/util/sort/COMPARATOR<f64>~anonymous|0 (param $0 f64) (param $1 f64) (result i32)
@@ -3923,7 +3890,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1374
+   i32.const 1404
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -3944,7 +3911,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 305
+   i32.const 311
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -3976,7 +3943,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 294
+   i32.const 300
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -5277,7 +5244,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 170
+   i32.const 173
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -5299,7 +5266,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 440
+   i32.const 449
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5323,7 +5290,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 575
+   i32.const 587
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5347,7 +5314,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 845
+   i32.const 863
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5371,7 +5338,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 980
+   i32.const 1001
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5400,7 +5367,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1115
+   i32.const 1139
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5424,7 +5391,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1250
+   i32.const 1277
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5495,7 +5462,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 182
+   i32.const 185
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5524,7 +5491,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 317
+   i32.const 323
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5555,7 +5522,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 452
+   i32.const 461
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5588,7 +5555,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 587
+   i32.const 599
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5621,7 +5588,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 722
+   i32.const 737
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5654,7 +5621,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 857
+   i32.const 875
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5687,7 +5654,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 992
+   i32.const 1013
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5720,7 +5687,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1127
+   i32.const 1151
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5753,7 +5720,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1262
+   i32.const 1289
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5786,7 +5753,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1397
+   i32.const 1427
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -5812,7 +5779,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 159
+   i32.const 162
    i32.const 45
    call $~lib/builtins/abort
    unreachable
@@ -5833,7 +5800,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 429
+   i32.const 438
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5856,7 +5823,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 564
+   i32.const 576
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5879,7 +5846,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 834
+   i32.const 852
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5907,7 +5874,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 969
+   i32.const 990
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5930,7 +5897,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1104
+   i32.const 1128
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -5958,7 +5925,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1239
+   i32.const 1266
    i32.const 64
    call $~lib/builtins/abort
    unreachable
@@ -28089,7 +28056,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1826
+   i32.const 1837
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -28108,7 +28075,7 @@
    else
     i32.const 1056
     i32.const 1632
-    i32.const 1835
+    i32.const 1846
     i32.const 7
     call $~lib/builtins/abort
     unreachable
@@ -28123,7 +28090,7 @@
    if
     i32.const 1056
     i32.const 1632
-    i32.const 1840
+    i32.const 1851
     i32.const 7
     call $~lib/builtins/abort
     unreachable
@@ -28167,7 +28134,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28219,7 +28186,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28269,7 +28236,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28297,7 +28264,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28349,7 +28316,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28374,7 +28341,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1864
+   i32.const 1875
    i32.const 19
    call $~lib/builtins/abort
    unreachable
@@ -28391,7 +28358,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28458,7 +28425,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1864
+   i32.const 1875
    i32.const 19
    call $~lib/builtins/abort
    unreachable
@@ -28475,7 +28442,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28543,7 +28510,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28599,7 +28566,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28655,7 +28622,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28707,7 +28674,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28738,7 +28705,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28788,7 +28755,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28818,7 +28785,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28874,7 +28841,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28928,7 +28895,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28987,7 +28954,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29040,7 +29007,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29094,7 +29061,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29122,7 +29089,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29176,7 +29143,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29235,7 +29202,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1865
+   i32.const 1876
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -30036,52 +30003,20 @@
  )
  (func $~lib/typedarray/Int8Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  block $~lib/typedarray/SORT<~lib/typedarray/Int8Array,i8>|inlined.0
+  local.get $0
+  i32.load offset=8
+  local.tee $2
+  i32.const 1
+  i32.le_s
+  if
    local.get $0
-   i32.load offset=8
-   local.tee $2
-   i32.const 1
-   i32.le_s
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Int8Array,i8>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $3
-   local.get $2
-   i32.const 2
-   i32.eq
-   if
-    local.get $3
-    i32.load8_s offset=1
-    local.set $2
-    local.get $3
-    i32.load8_s
-    local.set $4
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $2
-    local.get $4
-    local.get $1
-    i32.load
-    call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 0
-    i32.lt_s
-    if
-     local.get $3
-     local.get $4
-     i32.store8 offset=1
-     local.get $3
-     local.get $2
-     i32.store8
-    end
-    br $~lib/typedarray/SORT<~lib/typedarray/Int8Array,i8>|inlined.0
-   end
-   local.get $3
-   local.get $2
-   local.get $1
-   call $~lib/util/sort/SORT<i8>
+   return
   end
+  local.get $0
+  i32.load offset=4
+  local.get $2
+  local.get $1
+  call $~lib/util/sort/SORT<i8>
   local.get $0
  )
  (func $~lib/util/sort/COMPARATOR<i8>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
@@ -30866,52 +30801,20 @@
  )
  (func $~lib/typedarray/Uint8Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  block $~lib/typedarray/SORT<~lib/typedarray/Uint8Array,u8>|inlined.0
+  local.get $0
+  i32.load offset=8
+  local.tee $2
+  i32.const 1
+  i32.le_s
+  if
    local.get $0
-   i32.load offset=8
-   local.tee $2
-   i32.const 1
-   i32.le_s
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Uint8Array,u8>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $3
-   local.get $2
-   i32.const 2
-   i32.eq
-   if
-    local.get $3
-    i32.load8_u offset=1
-    local.set $2
-    local.get $3
-    i32.load8_u
-    local.set $4
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $2
-    local.get $4
-    local.get $1
-    i32.load
-    call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 0
-    i32.lt_s
-    if
-     local.get $3
-     local.get $4
-     i32.store8 offset=1
-     local.get $3
-     local.get $2
-     i32.store8
-    end
-    br $~lib/typedarray/SORT<~lib/typedarray/Uint8Array,u8>|inlined.0
-   end
-   local.get $3
-   local.get $2
-   local.get $1
-   call $~lib/util/sort/SORT<u8>
+   return
   end
+  local.get $0
+  i32.load offset=4
+  local.get $2
+  local.get $1
+  call $~lib/util/sort/SORT<u8>
   local.get $0
  )
  (func $~lib/util/sort/COMPARATOR<u8>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
@@ -31748,54 +31651,22 @@
  )
  (func $~lib/typedarray/Int16Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  block $~lib/typedarray/SORT<~lib/typedarray/Int16Array,i16>|inlined.0
+  local.get $0
+  i32.load offset=8
+  i32.const 1
+  i32.shr_u
+  local.tee $2
+  i32.const 1
+  i32.le_u
+  if
    local.get $0
-   i32.load offset=8
-   i32.const 1
-   i32.shr_u
-   local.tee $2
-   i32.const 1
-   i32.le_u
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Int16Array,i16>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $3
-   local.get $2
-   i32.const 2
-   i32.eq
-   if
-    local.get $3
-    i32.load16_s offset=2
-    local.set $2
-    local.get $3
-    i32.load16_s
-    local.set $4
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $2
-    local.get $4
-    local.get $1
-    i32.load
-    call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 0
-    i32.lt_s
-    if
-     local.get $3
-     local.get $4
-     i32.store16 offset=2
-     local.get $3
-     local.get $2
-     i32.store16
-    end
-    br $~lib/typedarray/SORT<~lib/typedarray/Int16Array,i16>|inlined.0
-   end
-   local.get $3
-   local.get $2
-   local.get $1
-   call $~lib/util/sort/SORT<i16>
+   return
   end
+  local.get $0
+  i32.load offset=4
+  local.get $2
+  local.get $1
+  call $~lib/util/sort/SORT<i16>
   local.get $0
  )
  (func $~lib/util/sort/COMPARATOR<i16>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
@@ -32622,54 +32493,22 @@
  )
  (func $~lib/typedarray/Uint16Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  block $~lib/typedarray/SORT<~lib/typedarray/Uint16Array,u16>|inlined.0
+  local.get $0
+  i32.load offset=8
+  i32.const 1
+  i32.shr_u
+  local.tee $2
+  i32.const 1
+  i32.le_u
+  if
    local.get $0
-   i32.load offset=8
-   i32.const 1
-   i32.shr_u
-   local.tee $2
-   i32.const 1
-   i32.le_u
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Uint16Array,u16>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $3
-   local.get $2
-   i32.const 2
-   i32.eq
-   if
-    local.get $3
-    i32.load16_u offset=2
-    local.set $2
-    local.get $3
-    i32.load16_u
-    local.set $4
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $2
-    local.get $4
-    local.get $1
-    i32.load
-    call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 0
-    i32.lt_s
-    if
-     local.get $3
-     local.get $4
-     i32.store16 offset=2
-     local.get $3
-     local.get $2
-     i32.store16
-    end
-    br $~lib/typedarray/SORT<~lib/typedarray/Uint16Array,u16>|inlined.0
-   end
-   local.get $3
-   local.get $2
-   local.get $1
-   call $~lib/util/sort/SORT<u16>
+   return
   end
+  local.get $0
+  i32.load offset=4
+  local.get $2
+  local.get $1
+  call $~lib/util/sort/SORT<u16>
   local.get $0
  )
  (func $~lib/util/sort/COMPARATOR<u16>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
@@ -33506,54 +33345,22 @@
  )
  (func $~lib/typedarray/Int32Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  block $~lib/typedarray/SORT<~lib/typedarray/Int32Array,i32>|inlined.0
+  local.get $0
+  i32.load offset=8
+  i32.const 2
+  i32.shr_u
+  local.tee $2
+  i32.const 1
+  i32.le_u
+  if
    local.get $0
-   i32.load offset=8
-   i32.const 2
-   i32.shr_u
-   local.tee $2
-   i32.const 1
-   i32.le_u
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Int32Array,i32>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $3
-   local.get $2
-   i32.const 2
-   i32.eq
-   if
-    local.get $3
-    i32.load offset=4
-    local.set $2
-    local.get $3
-    i32.load
-    local.set $4
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $2
-    local.get $4
-    local.get $1
-    i32.load
-    call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 0
-    i32.lt_s
-    if
-     local.get $3
-     local.get $4
-     i32.store offset=4
-     local.get $3
-     local.get $2
-     i32.store
-    end
-    br $~lib/typedarray/SORT<~lib/typedarray/Int32Array,i32>|inlined.0
-   end
-   local.get $3
-   local.get $2
-   local.get $1
-   call $~lib/util/sort/SORT<i32>
+   return
   end
+  local.get $0
+  i32.load offset=4
+  local.get $2
+  local.get $1
+  call $~lib/util/sort/SORT<i32>
   local.get $0
  )
  (func $~lib/util/sort/COMPARATOR<i32>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
@@ -34374,54 +34181,22 @@
  )
  (func $~lib/typedarray/Uint32Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  block $~lib/typedarray/SORT<~lib/typedarray/Uint32Array,u32>|inlined.0
+  local.get $0
+  i32.load offset=8
+  i32.const 2
+  i32.shr_u
+  local.tee $2
+  i32.const 1
+  i32.le_u
+  if
    local.get $0
-   i32.load offset=8
-   i32.const 2
-   i32.shr_u
-   local.tee $2
-   i32.const 1
-   i32.le_u
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Uint32Array,u32>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $3
-   local.get $2
-   i32.const 2
-   i32.eq
-   if
-    local.get $3
-    i32.load offset=4
-    local.set $2
-    local.get $3
-    i32.load
-    local.set $4
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $2
-    local.get $4
-    local.get $1
-    i32.load
-    call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 0
-    i32.lt_s
-    if
-     local.get $3
-     local.get $4
-     i32.store offset=4
-     local.get $3
-     local.get $2
-     i32.store
-    end
-    br $~lib/typedarray/SORT<~lib/typedarray/Uint32Array,u32>|inlined.0
-   end
-   local.get $3
-   local.get $2
-   local.get $1
-   call $~lib/util/sort/SORT<u32>
+   return
   end
+  local.get $0
+  i32.load offset=4
+  local.get $2
+  local.get $1
+  call $~lib/util/sort/SORT<u32>
   local.get $0
  )
  (func $~lib/util/sort/COMPARATOR<u32>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
@@ -35249,55 +35024,22 @@
  )
  (func $~lib/typedarray/Int64Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i64)
-  (local $5 i64)
-  block $~lib/typedarray/SORT<~lib/typedarray/Int64Array,i64>|inlined.0
+  local.get $0
+  i32.load offset=8
+  i32.const 3
+  i32.shr_u
+  local.tee $2
+  i32.const 1
+  i32.le_u
+  if
    local.get $0
-   i32.load offset=8
-   i32.const 3
-   i32.shr_u
-   local.tee $3
-   i32.const 1
-   i32.le_u
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Int64Array,i64>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $2
-   local.get $3
-   i32.const 2
-   i32.eq
-   if
-    local.get $2
-    i64.load offset=8
-    local.set $4
-    local.get $2
-    i64.load
-    local.set $5
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $4
-    local.get $5
-    local.get $1
-    i32.load
-    call_indirect $0 (type $i64_i64_=>_i32)
-    i32.const 0
-    i32.lt_s
-    if
-     local.get $2
-     local.get $5
-     i64.store offset=8
-     local.get $2
-     local.get $4
-     i64.store
-    end
-    br $~lib/typedarray/SORT<~lib/typedarray/Int64Array,i64>|inlined.0
-   end
-   local.get $2
-   local.get $3
-   local.get $1
-   call $~lib/util/sort/SORT<i64>
+   return
   end
+  local.get $0
+  i32.load offset=4
+  local.get $2
+  local.get $1
+  call $~lib/util/sort/SORT<i64>
   local.get $0
  )
  (func $~lib/util/sort/COMPARATOR<i64>~anonymous|0 (param $0 i64) (param $1 i64) (result i32)
@@ -36125,55 +35867,22 @@
  )
  (func $~lib/typedarray/Uint64Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i64)
-  (local $5 i64)
-  block $~lib/typedarray/SORT<~lib/typedarray/Uint64Array,u64>|inlined.0
+  local.get $0
+  i32.load offset=8
+  i32.const 3
+  i32.shr_u
+  local.tee $2
+  i32.const 1
+  i32.le_u
+  if
    local.get $0
-   i32.load offset=8
-   i32.const 3
-   i32.shr_u
-   local.tee $3
-   i32.const 1
-   i32.le_u
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Uint64Array,u64>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $2
-   local.get $3
-   i32.const 2
-   i32.eq
-   if
-    local.get $2
-    i64.load offset=8
-    local.set $4
-    local.get $2
-    i64.load
-    local.set $5
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $4
-    local.get $5
-    local.get $1
-    i32.load
-    call_indirect $0 (type $i64_i64_=>_i32)
-    i32.const 0
-    i32.lt_s
-    if
-     local.get $2
-     local.get $5
-     i64.store offset=8
-     local.get $2
-     local.get $4
-     i64.store
-    end
-    br $~lib/typedarray/SORT<~lib/typedarray/Uint64Array,u64>|inlined.0
-   end
-   local.get $2
-   local.get $3
-   local.get $1
-   call $~lib/util/sort/SORT<u64>
+   return
   end
+  local.get $0
+  i32.load offset=4
+  local.get $2
+  local.get $1
+  call $~lib/util/sort/SORT<u64>
   local.get $0
  )
  (func $~lib/util/sort/COMPARATOR<u64>~anonymous|0 (param $0 i64) (param $1 i64) (result i32)
@@ -37002,55 +36711,22 @@
  )
  (func $~lib/typedarray/Float32Array#sort (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 f32)
-  (local $5 f32)
-  block $~lib/typedarray/SORT<~lib/typedarray/Float32Array,f32>|inlined.0
+  local.get $0
+  i32.load offset=8
+  i32.const 2
+  i32.shr_u
+  local.tee $2
+  i32.const 1
+  i32.le_u
+  if
    local.get $0
-   i32.load offset=8
-   i32.const 2
-   i32.shr_u
-   local.tee $3
-   i32.const 1
-   i32.le_u
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Float32Array,f32>|inlined.0
-   local.get $0
-   i32.load offset=4
-   local.set $2
-   local.get $3
-   i32.const 2
-   i32.eq
-   if
-    local.get $2
-    f32.load offset=4
-    local.set $4
-    local.get $2
-    f32.load
-    local.set $5
-    i32.const 2
-    global.set $~argumentsLength
-    local.get $4
-    local.get $5
-    local.get $1
-    i32.load
-    call_indirect $0 (type $f32_f32_=>_i32)
-    i32.const 0
-    i32.lt_s
-    if
-     local.get $2
-     local.get $5
-     f32.store offset=4
-     local.get $2
-     local.get $4
-     f32.store
-    end
-    br $~lib/typedarray/SORT<~lib/typedarray/Float32Array,f32>|inlined.0
-   end
-   local.get $2
-   local.get $3
-   local.get $1
-   call $~lib/util/sort/SORT<f32>
+   return
   end
+  local.get $0
+  i32.load offset=4
+  local.get $2
+  local.get $1
+  call $~lib/util/sort/SORT<f32>
   local.get $0
  )
  (func $~lib/util/sort/COMPARATOR<f32>~anonymous|0 (param $0 f32) (param $1 f32) (result i32)
@@ -43463,7 +43139,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -43855,7 +43531,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -44368,7 +44044,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -44773,7 +44449,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -45178,7 +44854,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -45583,7 +45259,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -45988,7 +45664,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -46393,7 +46069,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -46798,7 +46474,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -47311,7 +46987,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -47850,7 +47526,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1865
+  i32.const 1876
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -63729,7 +63405,7 @@
                   end
                   i32.const 1360
                   i32.const 1632
-                  i32.const 1865
+                  i32.const 1876
                   i32.const 47
                   call $~lib/builtins/abort
                   unreachable
@@ -63841,7 +63517,7 @@
   end
   i32.const 1056
   i32.const 1632
-  i32.const 1831
+  i32.const 1842
   i32.const 9
   call $~lib/builtins/abort
   unreachable

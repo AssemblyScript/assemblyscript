@@ -1,4 +1,4 @@
-import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
+import { COMPARATOR, SORT } from "./util/sort";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_NOTIMPLEMENTED } from "./util/error";
 import { joinIntegerArray, joinFloatArray } from "./util/string";
 import { idof } from "./builtins";
@@ -65,7 +65,10 @@ export class Int8Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: i8, b: i8) => i32 = COMPARATOR<i8>()): Int8Array {
-    return SORT<Int8Array, i8>(this, comparator);
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<i8>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int8Array {
@@ -200,7 +203,10 @@ export class Uint8Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8Array {
-    return SORT<Uint8Array, u8>(this, comparator);
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<u8>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8Array {
@@ -334,8 +340,11 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return FILL<Uint8ClampedArray, u8>(this, value, start, end);
   }
 
-  sort(fn: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8ClampedArray {
-    return SORT<Uint8ClampedArray, u8>(this, fn);
+  sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8ClampedArray {
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<u8>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint8ClampedArray {
@@ -470,7 +479,10 @@ export class Int16Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: i16, b: i16) => i32 = COMPARATOR<i16>()): Int16Array {
-    return SORT<Int16Array, i16>(this, comparator);
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<i16>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int16Array {
@@ -605,7 +617,10 @@ export class Uint16Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: u16, b: u16) => i32 = COMPARATOR<u16>()): Uint16Array {
-    return SORT<Uint16Array, u16>(this, comparator);
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<u16>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint16Array {
@@ -740,7 +755,10 @@ export class Int32Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: i32, b: i32) => i32 = COMPARATOR<i32>()): Int32Array {
-    return SORT<Int32Array, i32>(this, comparator);
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<i32>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int32Array {
@@ -875,7 +893,10 @@ export class Uint32Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: u32, b: u32) => i32 = COMPARATOR<u32>()): Uint32Array {
-    return SORT<Uint32Array, u32>(this, comparator);
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<u32>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint32Array {
@@ -1010,7 +1031,10 @@ export class Int64Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: i64, b: i64) => i32 = COMPARATOR<i64>()): Int64Array {
-    return SORT<Int64Array, i64>(this, comparator);
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<i64>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Int64Array {
@@ -1145,7 +1169,10 @@ export class Uint64Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: u64, b: u64) => i32 = COMPARATOR<u64>()): Uint64Array {
-    return SORT<Uint64Array, u64>(this, comparator);
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<u64>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Uint64Array {
@@ -1280,7 +1307,10 @@ export class Float32Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: f32, b: f32) => i32 = COMPARATOR<f32>()): Float32Array {
-    return SORT<Float32Array, f32>(this, comparator);
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<f32>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float32Array {
@@ -1415,7 +1445,10 @@ export class Float64Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: f64, b: f64) => i32 = COMPARATOR<f64>()): Float64Array {
-    return SORT<Float64Array, f64>(this, comparator);
+    var len = this.length;
+    if (len <= 1) return this;
+    SORT<f64>(this.dataStart, len, comparator);
+    return this;
   }
 
   slice(begin: i32 = 0, end: i32 = i32.MAX_VALUE): Float64Array {
@@ -1508,28 +1541,6 @@ function FILL<TArray extends ArrayBufferView, T extends number>(
       store<T>(dataStart + (<usize>start << alignof<T>()), value);
     }
   }
-  return array;
-}
-
-// @ts-ignore: decorator
-@inline
-function SORT<TArray extends ArrayBufferView, T>(
-  array: TArray,
-  comparator: (a: T, b: T) => i32
-): TArray {
-  var len = array.length;
-  if (len <= 1) return array;
-  var base = array.dataStart;
-  if (len == 2) {
-    let a: T = load<T>(base, sizeof<T>()); // a = arr[1]
-    let b: T = load<T>(base); // b = arr[0]
-    if (comparator(a, b) < 0) {
-      store<T>(base, b, sizeof<T>()); // arr[1] = b
-      store<T>(base, a); // arr[0] = a
-    }
-    return array;
-  }
-  SORT_IMPL<T>(base, len, comparator);
   return array;
 }
 
