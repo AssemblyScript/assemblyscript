@@ -4050,118 +4050,112 @@
   i32.const 128
   i32.le_s
   if
+   local.get $1
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
    i32.const 0
    i32.const 1
    i32.lt_s
    drop
    block $break|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 1
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 0
-        i32.eq
-        br_if $case3|0
-        br $break|0
-       end
-       local.get $0
-       f64.load offset=8
-       local.set $4
-       local.get $0
-       f64.load offset=16
-       local.set $5
-       local.get $4
-       local.get $5
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $f64_f64_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $3
-       local.get $0
-       local.get $4
-       local.get $5
-       local.get $3
-       select
-       f64.store offset=8
-       local.get $5
-       local.get $4
-       local.get $3
-       select
-       local.set $5
-       local.get $0
-       f64.load
-       local.set $4
-       local.get $4
-       local.get $5
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $f64_f64_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $3
-       local.get $0
-       local.get $4
-       local.get $5
-       local.get $3
-       select
-       f64.store
-       local.get $0
-       local.get $5
-       local.get $4
-       local.get $3
-       select
-       f64.store offset=16
-      end
-      local.get $0
-      f64.load
-      local.set $5
-      local.get $0
-      f64.load offset=8
-      local.set $4
-      local.get $5
-      local.get $4
-      i32.const 2
-      global.set $~argumentsLength
-      local.get $2
-      i32.load
-      call_indirect $0 (type $f64_f64_=>_i32)
-      i32.const 31
-      i32.shr_u
+    block $case1|0
+     block $case0|0
+      local.get $1
       local.set $3
-      local.get $0
-      local.get $5
-      local.get $4
       local.get $3
-      select
-      f64.store
-      local.get $0
-      local.get $4
-      local.get $5
+      i32.const 3
+      i32.eq
+      br_if $case0|0
       local.get $3
-      select
-      f64.store offset=8
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
      end
+     local.get $0
+     f64.load offset=8
+     local.set $4
+     local.get $0
+     f64.load offset=16
+     local.set $5
+     local.get $4
+     local.get $5
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $f64_f64_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $3
+     local.get $0
+     local.get $4
+     local.get $5
+     local.get $3
+     select
+     f64.store offset=8
+     local.get $5
+     local.get $4
+     local.get $3
+     select
+     local.set $5
+     local.get $0
+     f64.load
+     local.set $4
+     local.get $4
+     local.get $5
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $f64_f64_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $3
+     local.get $0
+     local.get $4
+     local.get $5
+     local.get $3
+     select
+     f64.store
+     local.get $0
+     local.get $5
+     local.get $4
+     local.get $3
+     select
+     f64.store offset=16
     end
+    local.get $0
+    f64.load
+    local.set $5
+    local.get $0
+    f64.load offset=8
+    local.set $4
+    local.get $5
+    local.get $4
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $2
+    i32.load
+    call_indirect $0 (type $f64_f64_=>_i32)
+    i32.const 31
+    i32.shr_u
+    local.set $3
+    local.get $0
+    local.get $5
+    local.get $4
+    local.get $3
+    select
+    f64.store
+    local.get $0
+    local.get $4
+    local.get $5
+    local.get $3
+    select
+    f64.store offset=8
     return
    end
    local.get $0
@@ -33802,118 +33796,112 @@
   i32.const 128
   i32.le_s
   if
+   local.get $1
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
    i32.const 0
    i32.const 1
    i32.lt_s
    drop
    block $break|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 1
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 0
-        i32.eq
-        br_if $case3|0
-        br $break|0
-       end
-       local.get $0
-       i32.load8_s offset=1
-       local.set $3
-       local.get $0
-       i32.load8_s offset=2
-       local.set $4
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store8 offset=1
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       local.set $4
-       local.get $0
-       i32.load8_s
-       local.set $3
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store8
-       local.get $0
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       i32.store8 offset=2
-      end
-      local.get $0
-      i32.load8_s
-      local.set $5
-      local.get $0
-      i32.load8_s offset=1
-      local.set $4
-      local.get $5
-      local.get $4
-      i32.const 2
-      global.set $~argumentsLength
-      local.get $2
-      i32.load
-      call_indirect $0 (type $i32_i32_=>_i32)
-      i32.const 31
-      i32.shr_u
+    block $case1|0
+     block $case0|0
+      local.get $1
       local.set $3
-      local.get $0
-      local.get $5
-      local.get $4
       local.get $3
-      select
-      i32.store8
-      local.get $0
-      local.get $4
-      local.get $5
+      i32.const 3
+      i32.eq
+      br_if $case0|0
       local.get $3
-      select
-      i32.store8 offset=1
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
      end
+     local.get $0
+     i32.load8_s offset=1
+     local.set $3
+     local.get $0
+     i32.load8_s offset=2
+     local.set $4
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store8 offset=1
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     local.set $4
+     local.get $0
+     i32.load8_s
+     local.set $3
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store8
+     local.get $0
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     i32.store8 offset=2
     end
+    local.get $0
+    i32.load8_s
+    local.set $5
+    local.get $0
+    i32.load8_s offset=1
+    local.set $4
+    local.get $5
+    local.get $4
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $2
+    i32.load
+    call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
+    local.set $3
+    local.get $0
+    local.get $5
+    local.get $4
+    local.get $3
+    select
+    i32.store8
+    local.get $0
+    local.get $4
+    local.get $5
+    local.get $3
+    select
+    i32.store8 offset=1
     return
    end
    local.get $0
@@ -34745,118 +34733,112 @@
   i32.const 128
   i32.le_s
   if
+   local.get $1
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
    i32.const 0
    i32.const 1
    i32.lt_s
    drop
    block $break|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 1
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 0
-        i32.eq
-        br_if $case3|0
-        br $break|0
-       end
-       local.get $0
-       i32.load8_u offset=1
-       local.set $3
-       local.get $0
-       i32.load8_u offset=2
-       local.set $4
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store8 offset=1
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       local.set $4
-       local.get $0
-       i32.load8_u
-       local.set $3
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store8
-       local.get $0
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       i32.store8 offset=2
-      end
-      local.get $0
-      i32.load8_u
-      local.set $5
-      local.get $0
-      i32.load8_u offset=1
-      local.set $4
-      local.get $5
-      local.get $4
-      i32.const 2
-      global.set $~argumentsLength
-      local.get $2
-      i32.load
-      call_indirect $0 (type $i32_i32_=>_i32)
-      i32.const 31
-      i32.shr_u
+    block $case1|0
+     block $case0|0
+      local.get $1
       local.set $3
-      local.get $0
-      local.get $5
-      local.get $4
       local.get $3
-      select
-      i32.store8
-      local.get $0
-      local.get $4
-      local.get $5
+      i32.const 3
+      i32.eq
+      br_if $case0|0
       local.get $3
-      select
-      i32.store8 offset=1
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
      end
+     local.get $0
+     i32.load8_u offset=1
+     local.set $3
+     local.get $0
+     i32.load8_u offset=2
+     local.set $4
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store8 offset=1
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     local.set $4
+     local.get $0
+     i32.load8_u
+     local.set $3
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store8
+     local.get $0
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     i32.store8 offset=2
     end
+    local.get $0
+    i32.load8_u
+    local.set $5
+    local.get $0
+    i32.load8_u offset=1
+    local.set $4
+    local.get $5
+    local.get $4
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $2
+    i32.load
+    call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
+    local.set $3
+    local.get $0
+    local.get $5
+    local.get $4
+    local.get $3
+    select
+    i32.store8
+    local.get $0
+    local.get $4
+    local.get $5
+    local.get $3
+    select
+    i32.store8 offset=1
     return
    end
    local.get $0
@@ -35745,118 +35727,112 @@
   i32.const 128
   i32.le_s
   if
+   local.get $1
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
    i32.const 0
    i32.const 1
    i32.lt_s
    drop
    block $break|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 1
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 0
-        i32.eq
-        br_if $case3|0
-        br $break|0
-       end
-       local.get $0
-       i32.load16_s offset=2
-       local.set $3
-       local.get $0
-       i32.load16_s offset=4
-       local.set $4
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store16 offset=2
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       local.set $4
-       local.get $0
-       i32.load16_s
-       local.set $3
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store16
-       local.get $0
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       i32.store16 offset=4
-      end
-      local.get $0
-      i32.load16_s
-      local.set $5
-      local.get $0
-      i32.load16_s offset=2
-      local.set $4
-      local.get $5
-      local.get $4
-      i32.const 2
-      global.set $~argumentsLength
-      local.get $2
-      i32.load
-      call_indirect $0 (type $i32_i32_=>_i32)
-      i32.const 31
-      i32.shr_u
+    block $case1|0
+     block $case0|0
+      local.get $1
       local.set $3
-      local.get $0
-      local.get $5
-      local.get $4
       local.get $3
-      select
-      i32.store16
-      local.get $0
-      local.get $4
-      local.get $5
+      i32.const 3
+      i32.eq
+      br_if $case0|0
       local.get $3
-      select
-      i32.store16 offset=2
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
      end
+     local.get $0
+     i32.load16_s offset=2
+     local.set $3
+     local.get $0
+     i32.load16_s offset=4
+     local.set $4
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store16 offset=2
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     local.set $4
+     local.get $0
+     i32.load16_s
+     local.set $3
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store16
+     local.get $0
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     i32.store16 offset=4
     end
+    local.get $0
+    i32.load16_s
+    local.set $5
+    local.get $0
+    i32.load16_s offset=2
+    local.set $4
+    local.get $5
+    local.get $4
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $2
+    i32.load
+    call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
+    local.set $3
+    local.get $0
+    local.get $5
+    local.get $4
+    local.get $3
+    select
+    i32.store16
+    local.get $0
+    local.get $4
+    local.get $5
+    local.get $3
+    select
+    i32.store16 offset=2
     return
    end
    local.get $0
@@ -36688,118 +36664,112 @@
   i32.const 128
   i32.le_s
   if
+   local.get $1
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
    i32.const 0
    i32.const 1
    i32.lt_s
    drop
    block $break|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 1
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 0
-        i32.eq
-        br_if $case3|0
-        br $break|0
-       end
-       local.get $0
-       i32.load16_u offset=2
-       local.set $3
-       local.get $0
-       i32.load16_u offset=4
-       local.set $4
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store16 offset=2
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       local.set $4
-       local.get $0
-       i32.load16_u
-       local.set $3
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store16
-       local.get $0
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       i32.store16 offset=4
-      end
-      local.get $0
-      i32.load16_u
-      local.set $5
-      local.get $0
-      i32.load16_u offset=2
-      local.set $4
-      local.get $5
-      local.get $4
-      i32.const 2
-      global.set $~argumentsLength
-      local.get $2
-      i32.load
-      call_indirect $0 (type $i32_i32_=>_i32)
-      i32.const 31
-      i32.shr_u
+    block $case1|0
+     block $case0|0
+      local.get $1
       local.set $3
-      local.get $0
-      local.get $5
-      local.get $4
       local.get $3
-      select
-      i32.store16
-      local.get $0
-      local.get $4
-      local.get $5
+      i32.const 3
+      i32.eq
+      br_if $case0|0
       local.get $3
-      select
-      i32.store16 offset=2
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
      end
+     local.get $0
+     i32.load16_u offset=2
+     local.set $3
+     local.get $0
+     i32.load16_u offset=4
+     local.set $4
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store16 offset=2
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     local.set $4
+     local.get $0
+     i32.load16_u
+     local.set $3
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store16
+     local.get $0
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     i32.store16 offset=4
     end
+    local.get $0
+    i32.load16_u
+    local.set $5
+    local.get $0
+    i32.load16_u offset=2
+    local.set $4
+    local.get $5
+    local.get $4
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $2
+    i32.load
+    call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
+    local.set $3
+    local.get $0
+    local.get $5
+    local.get $4
+    local.get $3
+    select
+    i32.store16
+    local.get $0
+    local.get $4
+    local.get $5
+    local.get $3
+    select
+    i32.store16 offset=2
     return
    end
    local.get $0
@@ -37645,118 +37615,112 @@
   i32.const 128
   i32.le_s
   if
+   local.get $1
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
    i32.const 0
    i32.const 1
    i32.lt_s
    drop
    block $break|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 1
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 0
-        i32.eq
-        br_if $case3|0
-        br $break|0
-       end
-       local.get $0
-       i32.load offset=4
-       local.set $3
-       local.get $0
-       i32.load offset=8
-       local.set $4
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store offset=4
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       local.set $4
-       local.get $0
-       i32.load
-       local.set $3
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store
-       local.get $0
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       i32.store offset=8
-      end
-      local.get $0
-      i32.load
-      local.set $5
-      local.get $0
-      i32.load offset=4
-      local.set $4
-      local.get $5
-      local.get $4
-      i32.const 2
-      global.set $~argumentsLength
-      local.get $2
-      i32.load
-      call_indirect $0 (type $i32_i32_=>_i32)
-      i32.const 31
-      i32.shr_u
+    block $case1|0
+     block $case0|0
+      local.get $1
       local.set $3
-      local.get $0
-      local.get $5
-      local.get $4
       local.get $3
-      select
-      i32.store
-      local.get $0
-      local.get $4
-      local.get $5
+      i32.const 3
+      i32.eq
+      br_if $case0|0
       local.get $3
-      select
-      i32.store offset=4
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
      end
+     local.get $0
+     i32.load offset=4
+     local.set $3
+     local.get $0
+     i32.load offset=8
+     local.set $4
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store offset=4
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     local.set $4
+     local.get $0
+     i32.load
+     local.set $3
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store
+     local.get $0
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     i32.store offset=8
     end
+    local.get $0
+    i32.load
+    local.set $5
+    local.get $0
+    i32.load offset=4
+    local.set $4
+    local.get $5
+    local.get $4
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $2
+    i32.load
+    call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
+    local.set $3
+    local.get $0
+    local.get $5
+    local.get $4
+    local.get $3
+    select
+    i32.store
+    local.get $0
+    local.get $4
+    local.get $5
+    local.get $3
+    select
+    i32.store offset=4
     return
    end
    local.get $0
@@ -38582,118 +38546,112 @@
   i32.const 128
   i32.le_s
   if
+   local.get $1
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
    i32.const 0
    i32.const 1
    i32.lt_s
    drop
    block $break|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 1
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 0
-        i32.eq
-        br_if $case3|0
-        br $break|0
-       end
-       local.get $0
-       i32.load offset=4
-       local.set $3
-       local.get $0
-       i32.load offset=8
-       local.set $4
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store offset=4
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       local.set $4
-       local.get $0
-       i32.load
-       local.set $3
-       local.get $3
-       local.get $4
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i32_i32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $5
-       local.get $0
-       local.get $3
-       local.get $4
-       local.get $5
-       select
-       i32.store
-       local.get $0
-       local.get $4
-       local.get $3
-       local.get $5
-       select
-       i32.store offset=8
-      end
-      local.get $0
-      i32.load
-      local.set $5
-      local.get $0
-      i32.load offset=4
-      local.set $4
-      local.get $5
-      local.get $4
-      i32.const 2
-      global.set $~argumentsLength
-      local.get $2
-      i32.load
-      call_indirect $0 (type $i32_i32_=>_i32)
-      i32.const 31
-      i32.shr_u
+    block $case1|0
+     block $case0|0
+      local.get $1
       local.set $3
-      local.get $0
-      local.get $5
-      local.get $4
       local.get $3
-      select
-      i32.store
-      local.get $0
-      local.get $4
-      local.get $5
+      i32.const 3
+      i32.eq
+      br_if $case0|0
       local.get $3
-      select
-      i32.store offset=4
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
      end
+     local.get $0
+     i32.load offset=4
+     local.set $3
+     local.get $0
+     i32.load offset=8
+     local.set $4
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store offset=4
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     local.set $4
+     local.get $0
+     i32.load
+     local.set $3
+     local.get $3
+     local.get $4
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i32_i32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $5
+     local.get $0
+     local.get $3
+     local.get $4
+     local.get $5
+     select
+     i32.store
+     local.get $0
+     local.get $4
+     local.get $3
+     local.get $5
+     select
+     i32.store offset=8
     end
+    local.get $0
+    i32.load
+    local.set $5
+    local.get $0
+    i32.load offset=4
+    local.set $4
+    local.get $5
+    local.get $4
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $2
+    i32.load
+    call_indirect $0 (type $i32_i32_=>_i32)
+    i32.const 31
+    i32.shr_u
+    local.set $3
+    local.get $0
+    local.get $5
+    local.get $4
+    local.get $3
+    select
+    i32.store
+    local.get $0
+    local.get $4
+    local.get $5
+    local.get $3
+    select
+    i32.store offset=4
     return
    end
    local.get $0
@@ -39525,118 +39483,112 @@
   i32.const 128
   i32.le_s
   if
+   local.get $1
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
    i32.const 0
    i32.const 1
    i32.lt_s
    drop
    block $break|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 1
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 0
-        i32.eq
-        br_if $case3|0
-        br $break|0
-       end
-       local.get $0
-       i64.load offset=8
-       local.set $4
-       local.get $0
-       i64.load offset=16
-       local.set $5
-       local.get $4
-       local.get $5
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i64_i64_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $3
-       local.get $0
-       local.get $4
-       local.get $5
-       local.get $3
-       select
-       i64.store offset=8
-       local.get $5
-       local.get $4
-       local.get $3
-       select
-       local.set $5
-       local.get $0
-       i64.load
-       local.set $4
-       local.get $4
-       local.get $5
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i64_i64_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $3
-       local.get $0
-       local.get $4
-       local.get $5
-       local.get $3
-       select
-       i64.store
-       local.get $0
-       local.get $5
-       local.get $4
-       local.get $3
-       select
-       i64.store offset=16
-      end
-      local.get $0
-      i64.load
-      local.set $5
-      local.get $0
-      i64.load offset=8
-      local.set $4
-      local.get $5
-      local.get $4
-      i32.const 2
-      global.set $~argumentsLength
-      local.get $2
-      i32.load
-      call_indirect $0 (type $i64_i64_=>_i32)
-      i32.const 31
-      i32.shr_u
+    block $case1|0
+     block $case0|0
+      local.get $1
       local.set $3
-      local.get $0
-      local.get $5
-      local.get $4
       local.get $3
-      select
-      i64.store
-      local.get $0
-      local.get $4
-      local.get $5
+      i32.const 3
+      i32.eq
+      br_if $case0|0
       local.get $3
-      select
-      i64.store offset=8
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
      end
+     local.get $0
+     i64.load offset=8
+     local.set $4
+     local.get $0
+     i64.load offset=16
+     local.set $5
+     local.get $4
+     local.get $5
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i64_i64_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $3
+     local.get $0
+     local.get $4
+     local.get $5
+     local.get $3
+     select
+     i64.store offset=8
+     local.get $5
+     local.get $4
+     local.get $3
+     select
+     local.set $5
+     local.get $0
+     i64.load
+     local.set $4
+     local.get $4
+     local.get $5
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i64_i64_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $3
+     local.get $0
+     local.get $4
+     local.get $5
+     local.get $3
+     select
+     i64.store
+     local.get $0
+     local.get $5
+     local.get $4
+     local.get $3
+     select
+     i64.store offset=16
     end
+    local.get $0
+    i64.load
+    local.set $5
+    local.get $0
+    i64.load offset=8
+    local.set $4
+    local.get $5
+    local.get $4
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $2
+    i32.load
+    call_indirect $0 (type $i64_i64_=>_i32)
+    i32.const 31
+    i32.shr_u
+    local.set $3
+    local.get $0
+    local.get $5
+    local.get $4
+    local.get $3
+    select
+    i64.store
+    local.get $0
+    local.get $4
+    local.get $5
+    local.get $3
+    select
+    i64.store offset=8
     return
    end
    local.get $0
@@ -40468,118 +40420,112 @@
   i32.const 128
   i32.le_s
   if
+   local.get $1
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
    i32.const 0
    i32.const 1
    i32.lt_s
    drop
    block $break|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 1
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 0
-        i32.eq
-        br_if $case3|0
-        br $break|0
-       end
-       local.get $0
-       i64.load offset=8
-       local.set $4
-       local.get $0
-       i64.load offset=16
-       local.set $5
-       local.get $4
-       local.get $5
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i64_i64_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $3
-       local.get $0
-       local.get $4
-       local.get $5
-       local.get $3
-       select
-       i64.store offset=8
-       local.get $5
-       local.get $4
-       local.get $3
-       select
-       local.set $5
-       local.get $0
-       i64.load
-       local.set $4
-       local.get $4
-       local.get $5
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $i64_i64_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $3
-       local.get $0
-       local.get $4
-       local.get $5
-       local.get $3
-       select
-       i64.store
-       local.get $0
-       local.get $5
-       local.get $4
-       local.get $3
-       select
-       i64.store offset=16
-      end
-      local.get $0
-      i64.load
-      local.set $5
-      local.get $0
-      i64.load offset=8
-      local.set $4
-      local.get $5
-      local.get $4
-      i32.const 2
-      global.set $~argumentsLength
-      local.get $2
-      i32.load
-      call_indirect $0 (type $i64_i64_=>_i32)
-      i32.const 31
-      i32.shr_u
+    block $case1|0
+     block $case0|0
+      local.get $1
       local.set $3
-      local.get $0
-      local.get $5
-      local.get $4
       local.get $3
-      select
-      i64.store
-      local.get $0
-      local.get $4
-      local.get $5
+      i32.const 3
+      i32.eq
+      br_if $case0|0
       local.get $3
-      select
-      i64.store offset=8
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
      end
+     local.get $0
+     i64.load offset=8
+     local.set $4
+     local.get $0
+     i64.load offset=16
+     local.set $5
+     local.get $4
+     local.get $5
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i64_i64_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $3
+     local.get $0
+     local.get $4
+     local.get $5
+     local.get $3
+     select
+     i64.store offset=8
+     local.get $5
+     local.get $4
+     local.get $3
+     select
+     local.set $5
+     local.get $0
+     i64.load
+     local.set $4
+     local.get $4
+     local.get $5
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $i64_i64_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $3
+     local.get $0
+     local.get $4
+     local.get $5
+     local.get $3
+     select
+     i64.store
+     local.get $0
+     local.get $5
+     local.get $4
+     local.get $3
+     select
+     i64.store offset=16
     end
+    local.get $0
+    i64.load
+    local.set $5
+    local.get $0
+    i64.load offset=8
+    local.set $4
+    local.get $5
+    local.get $4
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $2
+    i32.load
+    call_indirect $0 (type $i64_i64_=>_i32)
+    i32.const 31
+    i32.shr_u
+    local.set $3
+    local.get $0
+    local.get $5
+    local.get $4
+    local.get $3
+    select
+    i64.store
+    local.get $0
+    local.get $4
+    local.get $5
+    local.get $3
+    select
+    i64.store offset=8
     return
    end
    local.get $0
@@ -41411,118 +41357,112 @@
   i32.const 128
   i32.le_s
   if
+   local.get $1
+   i32.const 1
+   i32.le_s
+   if
+    return
+   end
    i32.const 0
    i32.const 1
    i32.lt_s
    drop
    block $break|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 1
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 0
-        i32.eq
-        br_if $case3|0
-        br $break|0
-       end
-       local.get $0
-       f32.load offset=4
-       local.set $4
-       local.get $0
-       f32.load offset=8
-       local.set $5
-       local.get $4
-       local.get $5
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $f32_f32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $3
-       local.get $0
-       local.get $4
-       local.get $5
-       local.get $3
-       select
-       f32.store offset=4
-       local.get $5
-       local.get $4
-       local.get $3
-       select
-       local.set $5
-       local.get $0
-       f32.load
-       local.set $4
-       local.get $4
-       local.get $5
-       i32.const 2
-       global.set $~argumentsLength
-       local.get $2
-       i32.load
-       call_indirect $0 (type $f32_f32_=>_i32)
-       i32.const 31
-       i32.shr_u
-       local.set $3
-       local.get $0
-       local.get $4
-       local.get $5
-       local.get $3
-       select
-       f32.store
-       local.get $0
-       local.get $5
-       local.get $4
-       local.get $3
-       select
-       f32.store offset=8
-      end
-      local.get $0
-      f32.load
-      local.set $5
-      local.get $0
-      f32.load offset=4
-      local.set $4
-      local.get $5
-      local.get $4
-      i32.const 2
-      global.set $~argumentsLength
-      local.get $2
-      i32.load
-      call_indirect $0 (type $f32_f32_=>_i32)
-      i32.const 31
-      i32.shr_u
+    block $case1|0
+     block $case0|0
+      local.get $1
       local.set $3
-      local.get $0
-      local.get $5
-      local.get $4
       local.get $3
-      select
-      f32.store
-      local.get $0
-      local.get $4
-      local.get $5
+      i32.const 3
+      i32.eq
+      br_if $case0|0
       local.get $3
-      select
-      f32.store offset=4
+      i32.const 2
+      i32.eq
+      br_if $case1|0
+      br $break|0
      end
+     local.get $0
+     f32.load offset=4
+     local.set $4
+     local.get $0
+     f32.load offset=8
+     local.set $5
+     local.get $4
+     local.get $5
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $f32_f32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $3
+     local.get $0
+     local.get $4
+     local.get $5
+     local.get $3
+     select
+     f32.store offset=4
+     local.get $5
+     local.get $4
+     local.get $3
+     select
+     local.set $5
+     local.get $0
+     f32.load
+     local.set $4
+     local.get $4
+     local.get $5
+     i32.const 2
+     global.set $~argumentsLength
+     local.get $2
+     i32.load
+     call_indirect $0 (type $f32_f32_=>_i32)
+     i32.const 31
+     i32.shr_u
+     local.set $3
+     local.get $0
+     local.get $4
+     local.get $5
+     local.get $3
+     select
+     f32.store
+     local.get $0
+     local.get $5
+     local.get $4
+     local.get $3
+     select
+     f32.store offset=8
     end
+    local.get $0
+    f32.load
+    local.set $5
+    local.get $0
+    f32.load offset=4
+    local.set $4
+    local.get $5
+    local.get $4
+    i32.const 2
+    global.set $~argumentsLength
+    local.get $2
+    i32.load
+    call_indirect $0 (type $f32_f32_=>_i32)
+    i32.const 31
+    i32.shr_u
+    local.set $3
+    local.get $0
+    local.get $5
+    local.get $4
+    local.get $3
+    select
+    f32.store
+    local.get $0
+    local.get $4
+    local.get $5
+    local.get $3
+    select
+    f32.store offset=4
     return
    end
    local.get $0

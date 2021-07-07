@@ -68,6 +68,7 @@ export function SORT<T>(
   comparator: Comparator<T>
 ): void {
   if (len <= INSERTION_SORT_THRESHOLD) {
+    if (len <= 1) return;
     if (ASC_SHRINK_LEVEL < 1) {
       switch (len) {
         case 3: {
@@ -87,9 +88,8 @@ export function SORT<T>(
           let c = comparator(a, b) >>> 31;
           store<T>(ptr, select<T>(a, b, c), 0);
           store<T>(ptr, select<T>(b, a, c), 1 << alignof<T>());
+          return;
         }
-        case 1:
-        case 0: return;
       }
     }
     insertionSort<T>(ptr, 0, len - 1, 0, comparator);
