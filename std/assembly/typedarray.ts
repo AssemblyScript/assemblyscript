@@ -65,9 +65,7 @@ export class Int8Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: i8, b: i8) => i32 = COMPARATOR<i8>()): Int8Array {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<i8>(this.dataStart, len, comparator);
+    SORT<i8>(this.dataStart, this.length, comparator);
     return this;
   }
 
@@ -203,9 +201,7 @@ export class Uint8Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8Array {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<u8>(this.dataStart, len, comparator);
+    SORT<u8>(this.dataStart, this.length, comparator);
     return this;
   }
 
@@ -341,9 +337,7 @@ export class Uint8ClampedArray extends ArrayBufferView {
   }
 
   sort(comparator: (a: u8, b: u8) => i32 = COMPARATOR<u8>()): Uint8ClampedArray {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<u8>(this.dataStart, len, comparator);
+    SORT<u8>(this.dataStart, this.length, comparator);
     return this;
   }
 
@@ -479,9 +473,7 @@ export class Int16Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: i16, b: i16) => i32 = COMPARATOR<i16>()): Int16Array {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<i16>(this.dataStart, len, comparator);
+    SORT<i16>(this.dataStart, this.length, comparator);
     return this;
   }
 
@@ -617,9 +609,7 @@ export class Uint16Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: u16, b: u16) => i32 = COMPARATOR<u16>()): Uint16Array {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<u16>(this.dataStart, len, comparator);
+    SORT<u16>(this.dataStart, this.length, comparator);
     return this;
   }
 
@@ -755,9 +745,7 @@ export class Int32Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: i32, b: i32) => i32 = COMPARATOR<i32>()): Int32Array {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<i32>(this.dataStart, len, comparator);
+    SORT<i32>(this.dataStart, this.length, comparator);
     return this;
   }
 
@@ -893,9 +881,7 @@ export class Uint32Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: u32, b: u32) => i32 = COMPARATOR<u32>()): Uint32Array {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<u32>(this.dataStart, len, comparator);
+    SORT<u32>(this.dataStart, this.length, comparator);
     return this;
   }
 
@@ -1031,9 +1017,7 @@ export class Int64Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: i64, b: i64) => i32 = COMPARATOR<i64>()): Int64Array {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<i64>(this.dataStart, len, comparator);
+    SORT<i64>(this.dataStart, this.length, comparator);
     return this;
   }
 
@@ -1169,9 +1153,7 @@ export class Uint64Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: u64, b: u64) => i32 = COMPARATOR<u64>()): Uint64Array {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<u64>(this.dataStart, len, comparator);
+    SORT<u64>(this.dataStart, this.length, comparator);
     return this;
   }
 
@@ -1307,9 +1289,7 @@ export class Float32Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: f32, b: f32) => i32 = COMPARATOR<f32>()): Float32Array {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<f32>(this.dataStart, len, comparator);
+    SORT<f32>(this.dataStart, this.length, comparator);
     return this;
   }
 
@@ -1445,9 +1425,7 @@ export class Float64Array extends ArrayBufferView {
   }
 
   sort(comparator: (a: f64, b: f64) => i32 = COMPARATOR<f64>()): Float64Array {
-    var len = this.length;
-    if (len <= 1) return this;
-    SORT<f64>(this.dataStart, len, comparator);
+    SORT<f64>(this.dataStart, this.length, comparator);
     return this;
   }
 
