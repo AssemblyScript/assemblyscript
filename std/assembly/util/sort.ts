@@ -72,7 +72,7 @@ export function SORT<T>(
     if (ASC_SHRINK_LEVEL < 1) {
       switch (len) {
         case 3: {
-          let a = load<T>(ptr, 0 << alignof<T>());
+          let a = load<T>(ptr, 0);
           let b = load<T>(ptr, 1 << alignof<T>());
           let c = comparator(a, b) > 0;
           store<T>(ptr, select<T>(b, a, c), 0);
