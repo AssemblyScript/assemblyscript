@@ -72,22 +72,22 @@ export function SORT<T>(
     if (ASC_SHRINK_LEVEL < 1) {
       switch (len) {
         case 3: {
-          let a = load<T>(ptr, 1 << alignof<T>());
-          let b = load<T>(ptr, 2 << alignof<T>());
-          let c = comparator(a, b) >>> 31;
-          store<T>(ptr, select<T>(a, b, c), 1 << alignof<T>());
-          b = select<T>(b, a, c);
-          a = load<T>(ptr, 0);
-          c = comparator(a, b) >>> 31;
-          store<T>(ptr, select<T>(a, b, c), 0);
-          store<T>(ptr, select<T>(b, a, c), 2 << alignof<T>());
+          let a = load<T>(ptr, 0 << alignof<T>());
+          let b = load<T>(ptr, 1 << alignof<T>());
+          let c = comparator(a, b) > 0;
+          store<T>(ptr, select<T>(b, a, c), 0);
+          a = select<T>(a, b, c);
+          b = load<T>(ptr, 2 << alignof<T>());
+          c = comparator(a, b) > 0;
+          store<T>(ptr, select<T>(b, a, c), 1 << alignof<T>());
+          store<T>(ptr, select<T>(a, b, c), 2 << alignof<T>());
         }
         case 2: {
           let a = load<T>(ptr, 0);
           let b = load<T>(ptr, 1 << alignof<T>());
-          let c = comparator(a, b) >>> 31;
-          store<T>(ptr, select<T>(a, b, c), 0);
-          store<T>(ptr, select<T>(b, a, c), 1 << alignof<T>());
+          let c = comparator(a, b) > 0;
+          store<T>(ptr, select<T>(b, a, c), 0);
+          store<T>(ptr, select<T>(a, b, c), 1 << alignof<T>());
           return;
         }
       }
