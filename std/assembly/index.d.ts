@@ -1581,9 +1581,9 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   /** The lastIndexOf() method returns the last index at which a given element can be found in the typed array, or -1 if it is not present. The typed array is searched backwards, starting at fromIndex. */
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
   /** Returns copied section of an TypedArray from begin inclusive to end exclusive */
-  slice(begin?: i32, end?: i32): this;
+  slice(begin?: i32, end?: i32): TypedArray<T>;
   /** Returns a new TypedArray of this type on the same ArrayBuffer from begin inclusive to end exclusive. */
-  subarray(begin?: i32, end?: i32): this;
+  subarray(begin?: i32, end?: i32): TypedArray<T>;
   /** The copyWithin() method copies the sequence of array elements within the array to the position starting at target. The copy is taken from the index positions of the second and third arguments start and end. The end argument is optional and defaults to the length of the array. */
   copyWithin(target: i32, start: i32, end?: i32): this;
   /**  The reduce() method applies a function against an accumulator and each value of the typed array (from left-to-right) has to reduce it to a single value. This method has the same algorithm as Array.prototype.reduce(). */
@@ -1593,9 +1593,9 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   /** The some() method tests whether some element in the typed array passes the test implemented by the provided function. This method has the same algorithm as Array.prototype.some().*/
   some(callbackfn: (value: T, index: i32, self: this) => bool): bool;
   /** The map() method creates a new typed array with the results of calling a provided function on every element in this typed array. This method has the same algorithm as Array.prototype.map().*/
-  map(callbackfn: (value: T, index: i32, self: this) => T): this;
+  map(callbackfn: (value: T, index: i32, self: this) => T): TypedArray<T>;
   /** The filter() method creates a new typed array with all elements that pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.filter(). */
-  filter(callbackfn: (value: T, index: i32, self: this) => bool): this;
+  filter(callbackfn: (value: T, index: i32, self: this) => bool): TypedArray<T>;
   /** The sort() method sorts the elements of a typed array numerically in place and returns the typed array. This method has the same algorithm as Array.prototype.sort(), except that sorts the values numerically instead of as strings. TypedArray is one of the typed array types here. */
   sort(callback?: (a: T, b: T) => i32): this;
   /** The fill() method fills all the elements of a typed array from a start index to an end index with a static value. This method has the same algorithm as Array.prototype.fill(). */
