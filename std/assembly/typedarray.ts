@@ -94,27 +94,27 @@ export class Int8Array extends ArrayBufferView {
     return REDUCE_RIGHT<Int8Array, i8, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: i8, index: i32, self: Int8Array) => i8): Int8Array {
+  map(fn: (value: i8, index: i32, self: this) => i8): Int8Array {
     return MAP<Int8Array, i8>(this, fn);
   }
 
-  filter(fn: (value: i8, index: i32, self: Int8Array) => bool): Int8Array {
+  filter(fn: (value: i8, index: i32, self: this) => bool): Int8Array {
     return FILTER<Int8Array, i8>(this, fn);
   }
 
-  findIndex(fn: (value: i8, index: i32, self: Int8Array) => bool): i32 {
+  findIndex(fn: (value: i8, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Int8Array, i8>(this, fn);
   }
 
-  some(fn: (value: i8, index: i32, self: Int8Array) => bool): bool {
+  some(fn: (value: i8, index: i32, self: this) => bool): bool {
     return SOME<Int8Array, i8>(this, fn);
   }
 
-  every(fn: (value: i8, index: i32, self: Int8Array) => bool): bool {
+  every(fn: (value: i8, index: i32, self: this) => bool): bool {
     return EVERY<Int8Array, i8>(this, fn);
   }
 
-  forEach(fn: (value: i8, index: i32, self: Int8Array) => void): void {
+  forEach(fn: (value: i8, index: i32, self: this) => void): void {
     FOREACH<Int8Array, i8>(this, fn);
   }
 
@@ -229,27 +229,27 @@ export class Uint8Array extends ArrayBufferView {
     return REDUCE_RIGHT<Uint8Array, u8, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: u8, index: i32, self: Uint8Array) => u8): Uint8Array {
+  map(fn: (value: u8, index: i32, self: this) => u8): Uint8Array {
     return MAP<Uint8Array, u8>(this, fn);
   }
 
-  filter(fn: (value: u8, index: i32, self: Uint8Array) => bool): Uint8Array {
+  filter(fn: (value: u8, index: i32, self: this) => bool): Uint8Array {
     return FILTER<Uint8Array, u8>(this, fn);
   }
 
-  findIndex(fn: (value: u8, index: i32, self: Uint8Array) => bool): i32 {
+  findIndex(fn: (value: u8, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Uint8Array, u8>(this, fn);
   }
 
-  some(fn: (value: u8, index: i32, self: Uint8Array) => bool): bool {
+  some(fn: (value: u8, index: i32, self: this) => bool): bool {
     return SOME<Uint8Array, u8>(this, fn);
   }
 
-  every(fn: (value: u8, index: i32, self: Uint8Array) => bool): bool {
+  every(fn: (value: u8, index: i32, self: this) => bool): bool {
     return EVERY<Uint8Array, u8>(this, fn);
   }
 
-  forEach(fn: (value: u8, index: i32, self: Uint8Array) => void): void {
+  forEach(fn: (value: u8, index: i32, self: this) => void): void {
     FOREACH<Uint8Array, u8>(this, fn);
   }
 
@@ -364,27 +364,27 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return REDUCE_RIGHT<Uint8ClampedArray, u8, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: u8, index: i32, self: Uint8ClampedArray) => u8): Uint8ClampedArray {
+  map(fn: (value: u8, index: i32, self: this) => u8): Uint8ClampedArray {
     return MAP<Uint8ClampedArray, u8>(this, fn);
   }
 
-  filter(fn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): Uint8ClampedArray {
+  filter(fn: (value: u8, index: i32, self: this) => bool): Uint8ClampedArray {
     return FILTER<Uint8ClampedArray, u8>(this, fn);
   }
 
-  findIndex(fn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): i32 {
+  findIndex(fn: (value: u8, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Uint8ClampedArray, u8>(this, fn);
   }
 
-  some(fn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): bool {
+  some(fn: (value: u8, index: i32, self: this) => bool): bool {
     return SOME<Uint8ClampedArray, u8>(this, fn);
   }
 
-  every(fn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): bool {
+  every(fn: (value: u8, index: i32, self: this) => bool): bool {
     return EVERY<Uint8ClampedArray, u8>(this, fn);
   }
 
-  forEach(fn: (value: u8, index: i32, self: Uint8ClampedArray) => void): void {
+  forEach(fn: (value: u8, index: i32, self: this) => void): void {
     FOREACH<Uint8ClampedArray, u8>(this, fn);
   }
 
@@ -499,27 +499,27 @@ export class Int16Array extends ArrayBufferView {
     return REDUCE_RIGHT<Int16Array, i16, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: i16, index: i32, self: Int16Array) => i16): Int16Array {
+  map(fn: (value: i16, index: i32, self: this) => i16): Int16Array {
     return MAP<Int16Array, i16>(this, fn);
   }
 
-  filter(fn: (value: i16, index: i32, self: Int16Array) => bool): Int16Array {
+  filter(fn: (value: i16, index: i32, self: this) => bool): Int16Array {
     return FILTER<Int16Array, i16>(this, fn);
   }
 
-  findIndex(fn: (value: i16, index: i32, self: Int16Array) => bool): i32 {
+  findIndex(fn: (value: i16, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Int16Array, i16>(this, fn);
   }
 
-  some(fn: (value: i16, index: i32, self: Int16Array) => bool): bool {
+  some(fn: (value: i16, index: i32, self: this) => bool): bool {
     return SOME<Int16Array, i16>(this, fn);
   }
 
-  every(fn: (value: i16, index: i32, self: Int16Array) => bool): bool {
+  every(fn: (value: i16, index: i32, self: this) => bool): bool {
     return EVERY<Int16Array, i16>(this, fn);
   }
 
-  forEach(fn: (value: i16, index: i32, self: Int16Array) => void): void {
+  forEach(fn: (value: i16, index: i32, self: this) => void): void {
     FOREACH<Int16Array, i16>(this, fn);
   }
 
@@ -634,27 +634,27 @@ export class Uint16Array extends ArrayBufferView {
     return REDUCE_RIGHT<Uint16Array, u16, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: u16, index: i32, self: Uint16Array) => u16): Uint16Array {
+  map(fn: (value: u16, index: i32, self: this) => u16): Uint16Array {
     return MAP<Uint16Array, u16>(this, fn);
   }
 
-  filter(fn: (value: u16, index: i32, self: Uint16Array) => bool): Uint16Array {
+  filter(fn: (value: u16, index: i32, self: this) => bool): Uint16Array {
     return FILTER<Uint16Array, u16>(this, fn);
   }
 
-  findIndex(fn: (value: u16, index: i32, self: Uint16Array) => bool): i32 {
+  findIndex(fn: (value: u16, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Uint16Array, u16>(this, fn);
   }
 
-  some(fn: (value: u16, index: i32, self: Uint16Array) => bool): bool {
+  some(fn: (value: u16, index: i32, self: this) => bool): bool {
     return SOME<Uint16Array, u16>(this, fn);
   }
 
-  every(fn: (value: u16, index: i32, self: Uint16Array) => bool): bool {
+  every(fn: (value: u16, index: i32, self: this) => bool): bool {
     return EVERY<Uint16Array, u16>(this, fn);
   }
 
-  forEach(fn: (value: u16, index: i32, self: Uint16Array) => void): void {
+  forEach(fn: (value: u16, index: i32, self: this) => void): void {
     FOREACH<Uint16Array, u16>(this, fn);
   }
 
@@ -769,27 +769,27 @@ export class Int32Array extends ArrayBufferView {
     return REDUCE_RIGHT<Int32Array, i32, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: i32, index: i32, self: Int32Array) => i32): Int32Array {
+  map(fn: (value: i32, index: i32, self: this) => i32): Int32Array {
     return MAP<Int32Array, i32>(this, fn);
   }
 
-  filter(fn: (value: i32, index: i32, self: Int32Array) => bool): Int32Array {
+  filter(fn: (value: i32, index: i32, self: this) => bool): Int32Array {
     return FILTER<Int32Array, i32>(this, fn);
   }
 
-  findIndex(fn: (value: i32, index: i32, self: Int32Array) => bool): i32 {
+  findIndex(fn: (value: i32, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Int32Array, i32>(this, fn);
   }
 
-  some(fn: (value: i32, index: i32, self: Int32Array) => bool): bool {
+  some(fn: (value: i32, index: i32, self: this) => bool): bool {
     return SOME<Int32Array, i32>(this, fn);
   }
 
-  every(fn: (value: i32, index: i32, self: Int32Array) => bool): bool {
+  every(fn: (value: i32, index: i32, self: this) => bool): bool {
     return EVERY<Int32Array, i32>(this, fn);
   }
 
-  forEach(fn: (value: i32, index: i32, self: Int32Array) => void): void {
+  forEach(fn: (value: i32, index: i32, self: this) => void): void {
     FOREACH<Int32Array, i32>(this, fn);
   }
 
@@ -904,27 +904,27 @@ export class Uint32Array extends ArrayBufferView {
     return REDUCE_RIGHT<Uint32Array, u32, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: u32, index: i32, self: Uint32Array) => u32): Uint32Array {
+  map(fn: (value: u32, index: i32, self: this) => u32): Uint32Array {
     return MAP<Uint32Array, u32>(this, fn);
   }
 
-  filter(fn: (value: u32, index: i32, self: Uint32Array) => bool): Uint32Array {
+  filter(fn: (value: u32, index: i32, self: this) => bool): Uint32Array {
     return FILTER<Uint32Array, u32>(this, fn);
   }
 
-  findIndex(fn: (value: u32, index: i32, self: Uint32Array) => bool): i32 {
+  findIndex(fn: (value: u32, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Uint32Array, u32>(this, fn);
   }
 
-  some(fn: (value: u32, index: i32, self: Uint32Array) => bool): bool {
+  some(fn: (value: u32, index: i32, self: this) => bool): bool {
     return SOME<Uint32Array, u32>(this, fn);
   }
 
-  every(fn: (value: u32, index: i32, self: Uint32Array) => bool): bool {
+  every(fn: (value: u32, index: i32, self: this) => bool): bool {
     return EVERY<Uint32Array, u32>(this, fn);
   }
 
-  forEach(fn: (value: u32, index: i32, self: Uint32Array) => void): void {
+  forEach(fn: (value: u32, index: i32, self: this) => void): void {
     FOREACH<Uint32Array, u32>(this, fn);
   }
 
@@ -1039,27 +1039,27 @@ export class Int64Array extends ArrayBufferView {
     return REDUCE_RIGHT<Int64Array, i64, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: i64, index: i32, self: Int64Array) => i64): Int64Array {
+  map(fn: (value: i64, index: i32, self: this) => i64): Int64Array {
     return MAP<Int64Array, i64>(this, fn);
   }
 
-  filter(fn: (value: i64, index: i32, self: Int64Array) => bool): Int64Array {
+  filter(fn: (value: i64, index: i32, self: this) => bool): Int64Array {
     return FILTER<Int64Array, i64>(this, fn);
   }
 
-  findIndex(fn: (value: i64, index: i32, self: Int64Array) => bool): i32 {
+  findIndex(fn: (value: i64, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Int64Array, i64>(this, fn);
   }
 
-  some(fn: (value: i64, index: i32, self: Int64Array) => bool): bool {
+  some(fn: (value: i64, index: i32, self: this) => bool): bool {
     return SOME<Int64Array, i64>(this, fn);
   }
 
-  every(fn: (value: i64, index: i32, self: Int64Array) => bool): bool {
+  every(fn: (value: i64, index: i32, self: this) => bool): bool {
     return EVERY<Int64Array, i64>(this, fn);
   }
 
-  forEach(fn: (value: i64, index: i32, self: Int64Array) => void): void {
+  forEach(fn: (value: i64, index: i32, self: this) => void): void {
     FOREACH<Int64Array, i64>(this, fn);
   }
 
@@ -1174,27 +1174,27 @@ export class Uint64Array extends ArrayBufferView {
     return REDUCE_RIGHT<Uint64Array, u64, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: u64, index: i32, self: Uint64Array) => u64): Uint64Array {
+  map(fn: (value: u64, index: i32, self: this) => u64): Uint64Array {
     return MAP<Uint64Array, u64>(this, fn);
   }
 
-  filter(fn: (value: u64, index: i32, self: Uint64Array) => bool): Uint64Array {
+  filter(fn: (value: u64, index: i32, self: this) => bool): Uint64Array {
     return FILTER<Uint64Array, u64>(this, fn);
   }
 
-  findIndex(fn: (value: u64, index: i32, self: Uint64Array) => bool): i32 {
+  findIndex(fn: (value: u64, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Uint64Array, u64>(this, fn);
   }
 
-  some(fn: (value: u64, index: i32, self: Uint64Array) => bool): bool {
+  some(fn: (value: u64, index: i32, self: this) => bool): bool {
     return SOME<Uint64Array, u64>(this, fn);
   }
 
-  every(fn: (value: u64, index: i32, self: Uint64Array) => bool): bool {
+  every(fn: (value: u64, index: i32, self: this) => bool): bool {
     return EVERY<Uint64Array, u64>(this, fn);
   }
 
-  forEach(fn: (value: u64, index: i32, self: Uint64Array) => void): void {
+  forEach(fn: (value: u64, index: i32, self: this) => void): void {
     FOREACH<Uint64Array, u64>(this, fn);
   }
 
@@ -1309,27 +1309,27 @@ export class Float32Array extends ArrayBufferView {
     return REDUCE_RIGHT<Float32Array, f32, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: f32, index: i32, self: Float32Array) => f32): Float32Array {
+  map(fn: (value: f32, index: i32, self: this) => f32): Float32Array {
     return MAP<Float32Array, f32>(this, fn);
   }
 
-  filter(fn: (value: f32, index: i32, self: Float32Array) => bool): Float32Array {
+  filter(fn: (value: f32, index: i32, self: this) => bool): Float32Array {
     return FILTER<Float32Array, f32>(this, fn);
   }
 
-  findIndex(fn: (value: f32, index: i32, self: Float32Array) => bool): i32 {
+  findIndex(fn: (value: f32, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Float32Array, f32>(this, fn);
   }
 
-  some(fn: (value: f32, index: i32, self: Float32Array) => bool): bool {
+  some(fn: (value: f32, index: i32, self: this) => bool): bool {
     return SOME<Float32Array, f32>(this, fn);
   }
 
-  every(fn: (value: f32, index: i32, self: Float32Array) => bool): bool {
+  every(fn: (value: f32, index: i32, self: this) => bool): bool {
     return EVERY<Float32Array, f32>(this, fn);
   }
 
-  forEach(fn: (value: f32, index: i32, self: Float32Array) => void): void {
+  forEach(fn: (value: f32, index: i32, self: this) => void): void {
     FOREACH<Float32Array, f32>(this, fn);
   }
 
@@ -1444,27 +1444,27 @@ export class Float64Array extends ArrayBufferView {
     return REDUCE_RIGHT<Float64Array, f64, T>(this, fn, initialValue);
   }
 
-  map(fn: (value: f64, index: i32, self: Float64Array) => f64): Float64Array {
+  map(fn: (value: f64, index: i32, self: this) => f64): Float64Array {
     return MAP<Float64Array, f64>(this, fn);
   }
 
-  filter(fn: (value: f64, index: i32, self: Float64Array) => bool): Float64Array {
+  filter(fn: (value: f64, index: i32, self: this) => bool): Float64Array {
     return FILTER<Float64Array, f64>(this, fn);
   }
 
-  findIndex(fn: (value: f64, index: i32, self: Float64Array) => bool): i32 {
+  findIndex(fn: (value: f64, index: i32, self: this) => bool): i32 {
     return FIND_INDEX<Float64Array, f64>(this, fn);
   }
 
-  some(fn: (value: f64, index: i32, self: Float64Array) => bool): bool {
+  some(fn: (value: f64, index: i32, self: this) => bool): bool {
     return SOME<Float64Array, f64>(this, fn);
   }
 
-  every(fn: (value: f64, index: i32, self: Float64Array) => bool): bool {
+  every(fn: (value: f64, index: i32, self: this) => bool): bool {
     return EVERY<Float64Array, f64>(this, fn);
   }
 
-  forEach(fn: (value: f64, index: i32, self: Float64Array) => void): void {
+  forEach(fn: (value: f64, index: i32, self: this) => void): void {
     FOREACH<Float64Array, f64>(this, fn);
   }
 
