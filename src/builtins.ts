@@ -1541,7 +1541,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.F32: return module.binary(BinaryOp.MaxF32, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.MaxF64, arg0, arg1);
     }
-    if (op != -1) {
+    if (op as i32 != -1) {
       let flow = compiler.currentFlow;
       let typeRef = type.toRef();
       let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
@@ -1620,7 +1620,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.F32: return module.binary(BinaryOp.MinF32, arg0, arg1);
       case TypeKind.F64: return module.binary(BinaryOp.MinF64, arg0, arg1);
     }
-    if (op != -1) {
+    if (op as i32 != -1) {
       let flow = compiler.currentFlow;
       let typeRef = type.toRef();
       let temp1 = flow.getTempLocal(type, findUsedLocals(arg1));
