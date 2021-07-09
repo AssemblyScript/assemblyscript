@@ -7184,16 +7184,6 @@
     local.get $13
     select
     f32.store
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $12
-    local.get $11
-    local.get $13
-    select
-    f32.store
     local.get $7
     local.get $13
     i32.sub
@@ -8211,16 +8201,6 @@
     i32.add
     local.get $11
     local.get $12
-    local.get $13
-    select
-    f64.store
-    local.get $0
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $12
-    local.get $11
     local.get $13
     select
     f64.store
@@ -9274,16 +9254,6 @@
     local.get $13
     select
     i32.store
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $12
-    local.get $11
-    local.get $13
-    select
-    i32.store
     local.get $7
     local.get $13
     i32.sub
@@ -10193,16 +10163,6 @@
     i32.add
     local.get $11
     local.get $12
-    local.get $13
-    select
-    i32.store
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $12
-    local.get $11
     local.get $13
     select
     i32.store
@@ -11198,16 +11158,6 @@
     local.get $13
     select
     i32.store
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $12
-    local.get $11
-    local.get $13
-    select
-    i32.store
     local.get $7
     local.get $13
     i32.sub
@@ -12120,16 +12070,6 @@
     local.get $13
     select
     i32.store
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $12
-    local.get $11
-    local.get $13
-    select
-    i32.store
     local.get $7
     local.get $13
     i32.sub
@@ -12952,16 +12892,6 @@
     i32.add
     local.get $11
     local.get $12
-    local.get $13
-    select
-    i32.store
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $12
-    local.get $11
     local.get $13
     select
     i32.store
@@ -14146,16 +14076,6 @@
     i32.add
     local.get $11
     local.get $12
-    local.get $13
-    select
-    i32.store
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $12
-    local.get $11
     local.get $13
     select
     i32.store
@@ -19853,16 +19773,6 @@
     i32.add
     local.get $11
     local.get $12
-    local.get $13
-    select
-    i32.store8
-    local.get $0
-    local.get $9
-    i32.const 0
-    i32.shl
-    i32.add
-    local.get $12
-    local.get $11
     local.get $13
     select
     i32.store8

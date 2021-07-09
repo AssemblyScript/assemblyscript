@@ -873,7 +873,7 @@ var i: i32;
 
 // Checks if an array is properly sorted
 function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): bool {
-  for (let i: i32 = 1, len: i32 = data.length; i < len; i++) {
+  for (let i = 1, len = data.length; i < len; i++) {
     if (comparator(data[i - 1], data[i]) > 0) return false;
   }
   return true;

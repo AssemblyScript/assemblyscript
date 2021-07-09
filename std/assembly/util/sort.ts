@@ -290,7 +290,6 @@ function mergeRuns<T>(
     let b = load<T>(buffer + (<usize>i << alignof<T>()));
     let c = comparator(a, b) >>> 31; // c < 0
     store<T>(ptr + (<usize>k << alignof<T>()), select(a, b, c));
-    store<T>(ptr + (<usize>k << alignof<T>()), select(b, a, c));
     j -= c;     // i32(c < 0)
     i += c ^ 1; // i32(c >= 0)
   }
