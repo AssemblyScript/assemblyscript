@@ -3,7 +3,7 @@ import { compareImpl } from "./string";
 type Comparator<T> = (a: T, b: T) => i32;
 
 // @ts-ignore: decorator
-@inline const EMPTY = u32.MAX_VALUE;
+@lazy @inline const EMPTY = u32.MAX_VALUE;
 // @ts-ignore: decorator
 @inline const INSERTION_SORT_THRESHOLD = 128;
 // @ts-ignore: decorator

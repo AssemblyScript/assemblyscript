@@ -11,7 +11,6 @@
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/array-literal/staticArrayI8 i32 (i32.const 64))
- (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $std/array-literal/staticArrayI32 i32 (i32.const 320))
  (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 400))
  (global $std/array-literal/i (mut i32) (i32.const 0))
