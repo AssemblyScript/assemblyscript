@@ -244,7 +244,7 @@ function extendRunRight<T>(
   ) > 0) {
     while (
       j < right &&
-      bool(comparator(
+      (comparator(
         load<T>(ptr + (<usize>j << alignof<T>()), 1 << alignof<T>()),
         load<T>(ptr + (<usize>j << alignof<T>()))
       ) >>> 31) // < 0
@@ -280,10 +280,16 @@ function mergeRuns<T>(
   --m;
   var i: i32, j: i32, t = r + m;
   for (i = m + 1; i > l; --i) {
-    store<T>(buffer + (<usize>(i - 1) << alignof<T>()), load<T>(ptr + (<usize>(i - 1) << alignof<T>())));
+    store<T>(
+      buffer + (<usize>(i - 1) << alignof<T>()),
+      load<T>(ptr + (<usize>(i - 1) << alignof<T>()))
+    );
   }
   for (j = m; j < r; ++j) {
-    store<T>(buffer + (<usize>(t - j) << alignof<T>()), load<T>(ptr + (<usize>j << alignof<T>()), 1 << alignof<T>()));
+    store<T>(
+      buffer + (<usize>(t - j) << alignof<T>()),
+      load<T>(ptr + (<usize>j << alignof<T>()), 1 << alignof<T>())
+    );
   }
   for (let k = l; k <= r; ++k) {
     let a = load<T>(buffer + (<usize>j << alignof<T>()));
