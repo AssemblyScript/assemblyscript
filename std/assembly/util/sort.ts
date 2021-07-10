@@ -3,7 +3,7 @@ import { compareImpl } from "./string";
 type Comparator<T> = (a: T, b: T) => i32;
 
 // @ts-ignore: decorator
-@inline const EMPTY: u32 = 0xFFFFFFFF;
+@inline const EMPTY = u32.MAX_VALUE;
 // @ts-ignore: decorator
 @inline const INSERTION_SORT_THRESHOLD = 128;
 // @ts-ignore: decorator
@@ -50,7 +50,11 @@ export function COMPARATOR<T>(): Comparator<T> {
       if (!(alen | blen)) return 0;
       if (!alen) return -1;
       if (!blen) return  1;
-      let res = compareImpl(changetype<string>(a), 0, changetype<string>(b), 0, <usize>min(alen, blen));
+      let res = compareImpl(
+        changetype<string>(a), 0,
+        changetype<string>(b), 0,
+        <usize>min(alen, blen)
+      );
       return res ? res : alen - blen;
     };
   } else {
