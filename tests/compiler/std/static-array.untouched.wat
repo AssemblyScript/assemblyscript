@@ -19,6 +19,7 @@
  (global $std/static-array/I i32 (i32.const 160))
  (global $std/static-array/f i32 (i32.const 240))
  (global $std/static-array/F i32 (i32.const 336))
+ (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/state (mut i32) (i32.const 0))

@@ -5,6 +5,7 @@
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/memory/__data_end i32 (i32.const 380))
  (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16764))
  (global $~lib/memory/__heap_base i32 (i32.const 16764))

@@ -24,6 +24,7 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $class-overloading/a (mut i32) (i32.const 0))
+ (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $class-overloading/c (mut i32) (i32.const 0))
  (global $class-overloading/ia (mut i32) (i32.const 0))
  (global $class-overloading/ic (mut i32) (i32.const 0))

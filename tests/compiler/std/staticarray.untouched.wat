@@ -14,6 +14,7 @@
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $std/staticarray/arr1 i32 (i32.const 32))
+ (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $std/staticarray/arr2 i32 (i32.const 256))
  (global $~lib/rt/itcms/total (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/threshold (mut i32) (i32.const 0))

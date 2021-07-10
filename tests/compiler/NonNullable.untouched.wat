@@ -6,6 +6,7 @@
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $NonNullable/z (mut i32) (i32.const 224))
  (global $~lib/memory/__data_end i32 (i32.const 300))

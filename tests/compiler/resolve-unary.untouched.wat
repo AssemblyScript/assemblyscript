@@ -25,6 +25,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $resolve-unary/a (mut i32) (i32.const 1))
  (global $resolve-unary/b (mut i32) (i32.const 1))
  (global $resolve-unary/foo (mut i32) (i32.const 0))

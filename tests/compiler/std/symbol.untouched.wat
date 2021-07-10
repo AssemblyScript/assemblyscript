@@ -27,6 +27,7 @@
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/symbol/idToString (mut i32) (i32.const 0))
+ (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $std/symbol/sym3 (mut i32) (i32.const 0))
  (global $std/symbol/sym4 (mut i32) (i32.const 0))
  (global $std/symbol/key1 (mut i32) (i32.const 0))
