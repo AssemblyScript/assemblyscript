@@ -10057,17 +10057,15 @@ export class Compiler extends DiagnosticEmitter {
     return supported;
   }
 
-  /** Evaluates a (boolean) condition, determining whether it is TRUE, FALSE or UNKNOWN. */
+  /** Evaluates a boolean condition, determining whether it is TRUE, FALSE or UNKNOWN. */
   evaluateCondition(expr: ExpressionRef): ConditionKind {
+    assert(getExpressionType(expr) == TypeRef.I32);
     var module = this.module;
     var evaled = module.runExpression(expr, ExpressionRunnerFlags.Default);
     if (evaled) {
-      switch (getExpressionType(evaled)) {
-        case TypeRef.I32: return getConstValueI32(evaled) ? ConditionKind.TRUE : ConditionKind.FALSE;
-        case TypeRef.I64: return getConstValueI64Low(evaled) || getConstValueI64High(evaled) ? ConditionKind.TRUE : ConditionKind.FALSE;
-        case TypeRef.F32: return getConstValueF32(evaled) ? ConditionKind.TRUE : ConditionKind.FALSE;
-        case TypeRef.F64: return getConstValueF64(evaled) ? ConditionKind.TRUE : ConditionKind.FALSE;
-      }
+      return getConstValueI32(evaled)
+        ? ConditionKind.TRUE
+        : ConditionKind.FALSE;
     }
     return ConditionKind.UNKNOWN;
   }
