@@ -1393,7 +1393,7 @@ declare const F64: typeof _Float;
 // User-defined diagnostic macros
 
 /** Emits a user-defined diagnostic error when encountered. */
-declare function ERROR(message?: any): void;
+declare function ERROR(message?: any): never;
 /** Emits a user-defined diagnostic warning when encountered. */
 declare function WARNING(message?: any): void;
 /** Emits a user-defined diagnostic info when encountered. */
