@@ -300,13 +300,8 @@
  )
  (func $~lib/polyfills/bswap16<u8> (param $0 i32) (result i32)
   i32.const 1
-  if (result i32)
-   i32.const 1
-   i32.const 4
-   i32.le_u
-  else
-   i32.const 0
-  end
+  i32.const 4
+  i32.le_u
   drop
   i32.const 1
   i32.const 2
@@ -321,13 +316,8 @@
  )
  (func $~lib/polyfills/bswap16<i8> (param $0 i32) (result i32)
   i32.const 1
-  if (result i32)
-   i32.const 1
-   i32.const 4
-   i32.le_u
-  else
-   i32.const 0
-  end
+  i32.const 4
+  i32.le_u
   drop
   i32.const 1
   i32.const 2
@@ -341,14 +331,9 @@
   return
  )
  (func $~lib/polyfills/bswap16<u16> (param $0 i32) (result i32)
-  i32.const 1
-  if (result i32)
-   i32.const 2
-   i32.const 4
-   i32.le_u
-  else
-   i32.const 0
-  end
+  i32.const 2
+  i32.const 4
+  i32.le_u
   drop
   i32.const 2
   i32.const 2
@@ -372,14 +357,9 @@
   return
  )
  (func $~lib/polyfills/bswap16<i16> (param $0 i32) (result i32)
-  i32.const 1
-  if (result i32)
-   i32.const 2
-   i32.const 4
-   i32.le_u
-  else
-   i32.const 0
-  end
+  i32.const 2
+  i32.const 4
+  i32.le_u
   drop
   i32.const 2
   i32.const 2
@@ -402,14 +382,9 @@
   return
  )
  (func $~lib/polyfills/bswap16<u32> (param $0 i32) (result i32)
-  i32.const 1
-  if (result i32)
-   i32.const 4
-   i32.const 4
-   i32.le_u
-  else
-   i32.const 0
-  end
+  i32.const 4
+  i32.const 4
+  i32.le_u
   drop
   i32.const 4
   i32.const 2
@@ -437,14 +412,9 @@
   return
  )
  (func $~lib/polyfills/bswap16<i32> (param $0 i32) (result i32)
-  i32.const 1
-  if (result i32)
-   i32.const 4
-   i32.const 4
-   i32.le_u
-  else
-   i32.const 0
-  end
+  i32.const 4
+  i32.const 4
+  i32.le_u
   drop
   i32.const 4
   i32.const 2

@@ -2434,11 +2434,6 @@
   i32.const 0
   drop
   i32.const 0
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 0
-  end
   drop
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
@@ -2515,11 +2510,6 @@
   i32.const 0
   i32.store
   i32.const 0
-  if (result i32)
-   unreachable
-  else
-   i32.const 0
-  end
   drop
   f64.const 0
   i64.reinterpret_f64
@@ -2529,18 +2519,8 @@
   i64.sub
   i64.const -9007199254740994
   i64.le_u
-  if (result i32)
-   unreachable
-  else
-   i32.const 0
-  end
   drop
   i32.const 1
-  if (result i32)
-   i32.const 1
-  else
-   unreachable
-  end
   drop
   f64.const 1
   i64.reinterpret_f64
@@ -2550,22 +2530,12 @@
   i64.sub
   i64.const -9007199254740994
   i64.le_u
-  if (result i32)
-   i32.const 1
-  else
-   unreachable
-  end
   drop
   i32.const 1
   if (result i32)
    i32.const 2
   else
    i32.const 1
-  end
-  if (result i32)
-   i32.const 1
-  else
-   unreachable
   end
   drop
   f64.const 1
@@ -2588,11 +2558,6 @@
   i64.sub
   i64.const -9007199254740994
   i64.le_u
-  if (result i32)
-   i32.const 1
-  else
-   unreachable
-  end
   drop
   i32.const 1
   if (result i32)

@@ -4577,15 +4577,26 @@ export class Compiler extends DiagnosticEmitter {
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
-          rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
-          rightType = this.currentType;
-          rightFlow.freeScopedLocals();
+          leftExpr = this.makeIsTrueish(leftExpr, leftType, left);
+
+          // shortcut if lhs is always false
+          let condKind = this.evaluateCondition(leftExpr);
+          if (condKind == ConditionKind.FALSE) {
+            expr = leftExpr;
+          } else {
+            rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
+            rightType = this.currentType;
+            rightFlow.freeScopedLocals();
+            rightExpr = this.makeIsTrueish(rightExpr, rightType, right);
+
+            // simplify if lhs is always true
+            if (condKind == ConditionKind.TRUE) {
+              expr = rightExpr;
+            } else {
+              expr = module.if(leftExpr, rightExpr, module.i32(0));
+            }
+          }
           this.currentFlow = flow;
-          expr = module.if(
-            this.makeIsTrueish(leftExpr, leftType, left),
-            this.makeIsTrueish(rightExpr, rightType, right),
-            module.i32(0)
-          );
           this.currentType = Type.bool;
 
         } else {
@@ -4630,15 +4641,26 @@ export class Compiler extends DiagnosticEmitter {
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
-          rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
-          rightType = this.currentType;
-          rightFlow.freeScopedLocals();
+          leftExpr = this.makeIsTrueish(leftExpr, leftType, left);
+
+          // shortcut if lhs is always true
+          let condKind = this.evaluateCondition(leftExpr);
+          if (condKind == ConditionKind.TRUE) {
+            expr = leftExpr;
+          } else {
+            rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
+            rightType = this.currentType;
+            rightFlow.freeScopedLocals();
+            rightExpr = this.makeIsTrueish(rightExpr, rightType, right);
+
+            // simplify if lhs is always false
+            if (condKind == ConditionKind.FALSE) {
+              expr = rightExpr;
+            } else {
+              expr = module.if(leftExpr, module.i32(1), rightExpr);
+            }
+          }
           this.currentFlow = flow;
-          expr = module.if(
-            this.makeIsTrueish(leftExpr, leftType, left),
-            module.i32(1),
-            this.makeIsTrueish(rightExpr, rightType, right)
-          );
           this.currentType = Type.bool;
 
         } else {
@@ -10035,14 +10057,17 @@ export class Compiler extends DiagnosticEmitter {
     return supported;
   }
 
-  /** Evaluates a boolean condition, determining whether it is TRUE, FALSE or UNKNOWN. */
+  /** Evaluates a (boolean) condition, determining whether it is TRUE, FALSE or UNKNOWN. */
   evaluateCondition(expr: ExpressionRef): ConditionKind {
     var module = this.module;
     var evaled = module.runExpression(expr, ExpressionRunnerFlags.Default);
     if (evaled) {
-      return getConstValueI32(evaled)
-        ? ConditionKind.TRUE
-        : ConditionKind.FALSE;
+      switch (getExpressionType(evaled)) {
+        case TypeRef.I32: return getConstValueI32(evaled) ? ConditionKind.TRUE : ConditionKind.FALSE;
+        case TypeRef.I64: return getConstValueI64Low(evaled) || getConstValueI64High(evaled) ? ConditionKind.TRUE : ConditionKind.FALSE;
+        case TypeRef.F32: return getConstValueF32(evaled) ? ConditionKind.TRUE : ConditionKind.FALSE;
+        case TypeRef.F64: return getConstValueF64(evaled) ? ConditionKind.TRUE : ConditionKind.FALSE;
+      }
     }
     return ConditionKind.UNKNOWN;
   }

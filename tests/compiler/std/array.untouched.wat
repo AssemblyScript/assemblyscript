@@ -2830,14 +2830,9 @@
   i32.store offset=12
  )
  (func $~lib/array/Array.isArray<~lib/array/Array<i32>|null> (param $0 i32) (result i32)
-  i32.const 1
-  if (result i32)
-   local.get $0
-   i32.const 0
-   i32.ne
-  else
-   i32.const 0
-  end
+  local.get $0
+  i32.const 0
+  i32.ne
  )
  (func $std/array/Ref#set:v (param $0 i32) (param $1 i32)
   local.get $0
@@ -2846,13 +2841,6 @@
  )
  (func $~lib/array/Array.isArray<std/array/Ref> (param $0 i32) (result i32)
   i32.const 0
-  if (result i32)
-   local.get $0
-   i32.const 0
-   i32.ne
-  else
-   i32.const 0
-  end
  )
  (func $~lib/arraybuffer/ArrayBufferView#set:buffer (param $0 i32) (param $1 i32)
   local.get $0
@@ -2875,36 +2863,17 @@
  )
  (func $~lib/array/Array.isArray<~lib/typedarray/Uint8Array> (param $0 i32) (result i32)
   i32.const 0
-  if (result i32)
-   local.get $0
-   i32.const 0
-   i32.ne
-  else
-   i32.const 0
-  end
  )
  (func $~lib/array/Array.isArray<i32> (param $0 i32) (result i32)
   i32.const 0
  )
  (func $~lib/array/Array.isArray<~lib/string/String> (param $0 i32) (result i32)
   i32.const 0
-  if (result i32)
-   local.get $0
-   i32.const 0
-   i32.ne
-  else
-   i32.const 0
-  end
  )
  (func $~lib/array/Array.isArray<~lib/array/Array<i32>> (param $0 i32) (result i32)
-  i32.const 1
-  if (result i32)
-   local.get $0
-   i32.const 0
-   i32.ne
-  else
-   i32.const 0
-  end
+  local.get $0
+  i32.const 0
+  i32.ne
  )
  (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -12902,11 +12871,6 @@
   i32.const 0
   drop
   i32.const 0
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 0
-  end
   drop
  )
  (func $~lib/array/Array<u32>#set:buffer (param $0 i32) (param $1 i32)
@@ -17182,14 +17146,9 @@
   block $~lib/util/sort/COMPARATOR<i32>|inlined.1 (result i32)
    i32.const 1
    drop
-   i32.const 1
-   if (result i32)
-    i32.const 4
-    i32.const 4
-    i32.le_u
-   else
-    i32.const 0
-   end
+   i32.const 4
+   i32.const 4
+   i32.le_u
    drop
    i32.const 7312
    br $~lib/util/sort/COMPARATOR<i32>|inlined.1
@@ -29134,14 +29093,9 @@
    block $~lib/util/sort/COMPARATOR<i32>|inlined.0 (result i32)
     i32.const 1
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 4
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
+    i32.const 4
+    i32.const 4
+    i32.le_u
     drop
     i32.const 6912
     br $~lib/util/sort/COMPARATOR<i32>|inlined.0
@@ -29182,13 +29136,6 @@
     i32.const 1
     drop
     i32.const 0
-    if (result i32)
-     i32.const 4
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
     drop
     i32.const 7040
     br $~lib/util/sort/COMPARATOR<u32>|inlined.0
@@ -35269,13 +35216,6 @@
     i32.const 1
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
     drop
     i32.const 13616
     br $~lib/util/sort/COMPARATOR<u8>|inlined.0
