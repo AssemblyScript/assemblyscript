@@ -7097,7 +7097,6 @@
   (local $10 i32)
   (local $11 f32)
   (local $12 f32)
-  (local $13 i32)
   local.get $2
   i32.const 1
   i32.sub
@@ -7200,29 +7199,33 @@
     local.get $5
     i32.load
     call_indirect $0 (type $f32_f32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.set $13
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $11
-    local.get $12
-    local.get $13
-    select
-    f32.store
-    local.get $7
-    local.get $13
-    i32.sub
-    local.set $7
-    local.get $6
-    local.get $13
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $6
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $11
+     f32.store
+     local.get $7
+     i32.const 1
+     i32.sub
+     local.set $7
+    else
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $12
+     f32.store
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
+    end
     local.get $9
     i32.const 1
     i32.add
@@ -8117,7 +8120,6 @@
   (local $10 i32)
   (local $11 f64)
   (local $12 f64)
-  (local $13 i32)
   local.get $2
   i32.const 1
   i32.sub
@@ -8220,29 +8222,33 @@
     local.get $5
     i32.load
     call_indirect $0 (type $f64_f64_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.set $13
-    local.get $0
-    local.get $9
-    i32.const 3
-    i32.shl
-    i32.add
-    local.get $11
-    local.get $12
-    local.get $13
-    select
-    f64.store
-    local.get $7
-    local.get $13
-    i32.sub
-    local.set $7
-    local.get $6
-    local.get $13
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $6
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $9
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $11
+     f64.store
+     local.get $7
+     i32.const 1
+     i32.sub
+     local.set $7
+    else
+     local.get $0
+     local.get $9
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $12
+     f64.store
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
+    end
     local.get $9
     i32.const 1
     i32.add
@@ -9167,7 +9173,6 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
   local.get $2
   i32.const 1
   i32.sub
@@ -9270,29 +9275,33 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.set $13
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $11
-    local.get $12
-    local.get $13
-    select
-    i32.store
-    local.get $7
-    local.get $13
-    i32.sub
-    local.set $7
-    local.get $6
-    local.get $13
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $6
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $11
+     i32.store
+     local.get $7
+     i32.const 1
+     i32.sub
+     local.set $7
+    else
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $12
+     i32.store
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
+    end
     local.get $9
     i32.const 1
     i32.add
@@ -10079,7 +10088,6 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
   local.get $2
   i32.const 1
   i32.sub
@@ -10182,29 +10190,33 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.set $13
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $11
-    local.get $12
-    local.get $13
-    select
-    i32.store
-    local.get $7
-    local.get $13
-    i32.sub
-    local.set $7
-    local.get $6
-    local.get $13
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $6
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $11
+     i32.store
+     local.get $7
+     i32.const 1
+     i32.sub
+     local.set $7
+    else
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $12
+     i32.store
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
+    end
     local.get $9
     i32.const 1
     i32.add
@@ -10962,7 +10974,6 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -11077,29 +11088,33 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.set $13
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $11
-    local.get $12
-    local.get $13
-    select
-    i32.store
-    local.get $7
-    local.get $13
-    i32.sub
-    local.set $7
-    local.get $6
-    local.get $13
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $6
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $11
+     i32.store
+     local.get $7
+     i32.const 1
+     i32.sub
+     local.set $7
+    else
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $12
+     i32.store
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
+    end
     local.get $9
     i32.const 1
     i32.add
@@ -11891,7 +11906,6 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -12006,29 +12020,33 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.set $13
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $11
-    local.get $12
-    local.get $13
-    select
-    i32.store
-    local.get $7
-    local.get $13
-    i32.sub
-    local.set $7
-    local.get $6
-    local.get $13
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $6
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $11
+     i32.store
+     local.get $7
+     i32.const 1
+     i32.sub
+     local.set $7
+    else
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $12
+     i32.store
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
+    end
     local.get $9
     i32.const 1
     i32.add
@@ -12803,7 +12821,6 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -12918,29 +12935,33 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.set $13
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $11
-    local.get $12
-    local.get $13
-    select
-    i32.store
-    local.get $7
-    local.get $13
-    i32.sub
-    local.set $7
-    local.get $6
-    local.get $13
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $6
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $11
+     i32.store
+     local.get $7
+     i32.const 1
+     i32.sub
+     local.set $7
+    else
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $12
+     i32.store
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
+    end
     local.get $9
     i32.const 1
     i32.add
@@ -13628,7 +13649,6 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -13743,29 +13763,33 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.set $13
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $11
-    local.get $12
-    local.get $13
-    select
-    i32.store
-    local.get $7
-    local.get $13
-    i32.sub
-    local.set $7
-    local.get $6
-    local.get $13
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $6
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $11
+     i32.store
+     local.get $7
+     i32.const 1
+     i32.sub
+     local.set $7
+    else
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $12
+     i32.store
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
+    end
     local.get $9
     i32.const 1
     i32.add
@@ -14812,7 +14836,6 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 8
   i32.sub
@@ -14927,29 +14950,33 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.set $13
-    local.get $0
-    local.get $9
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $11
-    local.get $12
-    local.get $13
-    select
-    i32.store
-    local.get $7
-    local.get $13
-    i32.sub
-    local.set $7
-    local.get $6
-    local.get $13
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $6
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $11
+     i32.store
+     local.get $7
+     i32.const 1
+     i32.sub
+     local.set $7
+    else
+     local.get $0
+     local.get $9
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $12
+     i32.store
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
+    end
     local.get $9
     i32.const 1
     i32.add
@@ -20521,7 +20548,6 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
-  (local $13 i32)
   local.get $2
   i32.const 1
   i32.sub
@@ -20624,29 +20650,33 @@
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.set $13
-    local.get $0
-    local.get $9
     i32.const 0
-    i32.shl
-    i32.add
-    local.get $11
-    local.get $12
-    local.get $13
-    select
-    i32.store8
-    local.get $7
-    local.get $13
-    i32.sub
-    local.set $7
-    local.get $6
-    local.get $13
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $6
+    i32.lt_s
+    if
+     local.get $0
+     local.get $9
+     i32.const 0
+     i32.shl
+     i32.add
+     local.get $11
+     i32.store8
+     local.get $7
+     i32.const 1
+     i32.sub
+     local.set $7
+    else
+     local.get $0
+     local.get $9
+     i32.const 0
+     i32.shl
+     i32.add
+     local.get $12
+     i32.store8
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
+    end
     local.get $9
     i32.const 1
     i32.add

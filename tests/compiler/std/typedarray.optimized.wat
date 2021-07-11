@@ -3328,9 +3328,9 @@
  )
  (func $~lib/util/sort/mergeRuns<f64> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  (local $7 f64)
   (local $8 f64)
-  (local $9 f64)
+  (local $9 i32)
   (local $10 i32)
   local.get $3
   local.get $2
@@ -3338,7 +3338,7 @@
   i32.sub
   local.tee $6
   i32.add
-  local.set $10
+  local.set $9
   local.get $6
   i32.const 1
   i32.add
@@ -3355,10 +3355,10 @@
     local.tee $2
     i32.const 3
     i32.shl
-    local.tee $7
+    local.tee $10
     i32.add
     local.get $0
-    local.get $7
+    local.get $10
     i32.add
     f64.load
     f64.store
@@ -3371,7 +3371,7 @@
    i32.gt_s
    if
     local.get $4
-    local.get $10
+    local.get $9
     local.get $6
     i32.sub
     i32.const 3
@@ -3402,43 +3402,48 @@
     i32.shl
     i32.add
     f64.load
-    local.set $8
+    local.set $7
     local.get $4
     local.get $2
     i32.const 3
     i32.shl
     i32.add
     f64.load
-    local.set $9
+    local.set $8
     i32.const 2
     global.set $~argumentsLength
-    local.get $0
-    local.get $1
-    i32.const 3
-    i32.shl
-    i32.add
+    local.get $7
     local.get $8
-    local.get $9
-    local.get $8
-    local.get $9
     local.get $5
     i32.load
     call_indirect $0 (type $f64_f64_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.tee $7
-    select
-    f64.store
-    local.get $6
-    local.get $7
-    i32.sub
-    local.set $6
-    local.get $2
-    local.get $7
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $2
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $1
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $7
+     f64.store
+     local.get $6
+     i32.const 1
+     i32.sub
+     local.set $6
+    else
+     local.get $0
+     local.get $1
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $8
+     f64.store
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -29508,7 +29513,7 @@
   i32.sub
   local.tee $6
   i32.add
-  local.set $8
+  local.set $7
   local.get $6
   i32.const 1
   i32.add
@@ -29523,10 +29528,10 @@
     i32.const 1
     i32.sub
     local.tee $2
-    local.tee $7
+    local.tee $8
     i32.add
     local.get $0
-    local.get $7
+    local.get $8
     i32.add
     i32.load8_s
     i32.store8
@@ -29539,7 +29544,7 @@
    i32.gt_s
    if
     local.get $4
-    local.get $8
+    local.get $7
     local.get $6
     i32.sub
     i32.add
@@ -29564,39 +29569,42 @@
     local.get $6
     i32.add
     i32.load8_s
-    local.set $8
+    local.set $7
     local.get $2
     local.get $4
     i32.add
     i32.load8_s
-    local.set $7
+    local.set $8
     i32.const 2
     global.set $~argumentsLength
-    local.get $0
-    local.get $1
-    i32.add
-    local.get $8
     local.get $7
     local.get $8
-    local.get $7
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.tee $7
-    select
-    i32.store8
-    local.get $6
-    local.get $7
-    i32.sub
-    local.set $6
-    local.get $2
-    local.get $7
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $2
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $1
+     i32.add
+     local.get $7
+     i32.store8
+     local.get $6
+     i32.const 1
+     i32.sub
+     local.set $6
+    else
+     local.get $0
+     local.get $1
+     i32.add
+     local.get $8
+     i32.store8
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -30289,7 +30297,7 @@
   i32.sub
   local.tee $6
   i32.add
-  local.set $8
+  local.set $7
   local.get $6
   i32.const 1
   i32.add
@@ -30304,10 +30312,10 @@
     i32.const 1
     i32.sub
     local.tee $2
-    local.tee $7
+    local.tee $8
     i32.add
     local.get $0
-    local.get $7
+    local.get $8
     i32.add
     i32.load8_u
     i32.store8
@@ -30320,7 +30328,7 @@
    i32.gt_s
    if
     local.get $4
-    local.get $8
+    local.get $7
     local.get $6
     i32.sub
     i32.add
@@ -30345,39 +30353,42 @@
     local.get $6
     i32.add
     i32.load8_u
-    local.set $8
+    local.set $7
     local.get $2
     local.get $4
     i32.add
     i32.load8_u
-    local.set $7
+    local.set $8
     i32.const 2
     global.set $~argumentsLength
-    local.get $0
-    local.get $1
-    i32.add
-    local.get $8
     local.get $7
     local.get $8
-    local.get $7
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.tee $7
-    select
-    i32.store8
-    local.get $6
-    local.get $7
-    i32.sub
-    local.set $6
-    local.get $2
-    local.get $7
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $2
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $1
+     i32.add
+     local.get $7
+     i32.store8
+     local.get $6
+     i32.const 1
+     i32.sub
+     local.set $6
+    else
+     local.get $0
+     local.get $1
+     i32.add
+     local.get $8
+     i32.store8
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -31106,7 +31117,7 @@
   i32.sub
   local.tee $6
   i32.add
-  local.set $8
+  local.set $7
   local.get $6
   i32.const 1
   i32.add
@@ -31123,10 +31134,10 @@
     local.tee $2
     i32.const 1
     i32.shl
-    local.tee $7
+    local.tee $8
     i32.add
     local.get $0
-    local.get $7
+    local.get $8
     i32.add
     i32.load16_s
     i32.store16
@@ -31139,7 +31150,7 @@
    i32.gt_s
    if
     local.get $4
-    local.get $8
+    local.get $7
     local.get $6
     i32.sub
     i32.const 1
@@ -31170,43 +31181,48 @@
     i32.shl
     i32.add
     i32.load16_s
-    local.set $8
+    local.set $7
     local.get $4
     local.get $2
     i32.const 1
     i32.shl
     i32.add
     i32.load16_s
-    local.set $7
+    local.set $8
     i32.const 2
     global.set $~argumentsLength
-    local.get $0
-    local.get $1
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $8
     local.get $7
     local.get $8
-    local.get $7
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.tee $7
-    select
-    i32.store16
-    local.get $6
-    local.get $7
-    i32.sub
-    local.set $6
-    local.get $2
-    local.get $7
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $2
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $1
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $7
+     i32.store16
+     local.get $6
+     i32.const 1
+     i32.sub
+     local.set $6
+    else
+     local.get $0
+     local.get $1
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $8
+     i32.store16
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -31929,7 +31945,7 @@
   i32.sub
   local.tee $6
   i32.add
-  local.set $8
+  local.set $7
   local.get $6
   i32.const 1
   i32.add
@@ -31946,10 +31962,10 @@
     local.tee $2
     i32.const 1
     i32.shl
-    local.tee $7
+    local.tee $8
     i32.add
     local.get $0
-    local.get $7
+    local.get $8
     i32.add
     i32.load16_u
     i32.store16
@@ -31962,7 +31978,7 @@
    i32.gt_s
    if
     local.get $4
-    local.get $8
+    local.get $7
     local.get $6
     i32.sub
     i32.const 1
@@ -31993,43 +32009,48 @@
     i32.shl
     i32.add
     i32.load16_u
-    local.set $8
+    local.set $7
     local.get $4
     local.get $2
     i32.const 1
     i32.shl
     i32.add
     i32.load16_u
-    local.set $7
+    local.set $8
     i32.const 2
     global.set $~argumentsLength
-    local.get $0
-    local.get $1
-    i32.const 1
-    i32.shl
-    i32.add
-    local.get $8
     local.get $7
     local.get $8
-    local.get $7
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.tee $7
-    select
-    i32.store16
-    local.get $6
-    local.get $7
-    i32.sub
-    local.set $6
-    local.get $2
-    local.get $7
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $2
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $1
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $7
+     i32.store16
+     local.get $6
+     i32.const 1
+     i32.sub
+     local.set $6
+    else
+     local.get $0
+     local.get $1
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $8
+     i32.store16
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -32762,7 +32783,7 @@
   i32.sub
   local.tee $6
   i32.add
-  local.set $8
+  local.set $7
   local.get $6
   i32.const 1
   i32.add
@@ -32779,10 +32800,10 @@
     local.tee $2
     i32.const 2
     i32.shl
-    local.tee $7
+    local.tee $8
     i32.add
     local.get $0
-    local.get $7
+    local.get $8
     i32.add
     i32.load
     i32.store
@@ -32795,7 +32816,7 @@
    i32.gt_s
    if
     local.get $4
-    local.get $8
+    local.get $7
     local.get $6
     i32.sub
     i32.const 2
@@ -32826,43 +32847,48 @@
     i32.shl
     i32.add
     i32.load
-    local.set $8
+    local.set $7
     local.get $4
     local.get $2
     i32.const 2
     i32.shl
     i32.add
     i32.load
-    local.set $7
+    local.set $8
     i32.const 2
     global.set $~argumentsLength
-    local.get $0
-    local.get $1
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $8
     local.get $7
     local.get $8
-    local.get $7
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.tee $7
-    select
-    i32.store
-    local.get $6
-    local.get $7
-    i32.sub
-    local.set $6
-    local.get $2
-    local.get $7
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $2
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $1
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $7
+     i32.store
+     local.get $6
+     i32.const 1
+     i32.sub
+     local.set $6
+    else
+     local.get $0
+     local.get $1
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $8
+     i32.store
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -33579,7 +33605,7 @@
   i32.sub
   local.tee $6
   i32.add
-  local.set $8
+  local.set $7
   local.get $6
   i32.const 1
   i32.add
@@ -33596,10 +33622,10 @@
     local.tee $2
     i32.const 2
     i32.shl
-    local.tee $7
+    local.tee $8
     i32.add
     local.get $0
-    local.get $7
+    local.get $8
     i32.add
     i32.load
     i32.store
@@ -33612,7 +33638,7 @@
    i32.gt_s
    if
     local.get $4
-    local.get $8
+    local.get $7
     local.get $6
     i32.sub
     i32.const 2
@@ -33643,43 +33669,48 @@
     i32.shl
     i32.add
     i32.load
-    local.set $8
+    local.set $7
     local.get $4
     local.get $2
     i32.const 2
     i32.shl
     i32.add
     i32.load
-    local.set $7
+    local.set $8
     i32.const 2
     global.set $~argumentsLength
-    local.get $0
-    local.get $1
-    i32.const 2
-    i32.shl
-    i32.add
-    local.get $8
     local.get $7
     local.get $8
-    local.get $7
     local.get $5
     i32.load
     call_indirect $0 (type $i32_i32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.tee $7
-    select
-    i32.store
-    local.get $6
-    local.get $7
-    i32.sub
-    local.set $6
-    local.get $2
-    local.get $7
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $2
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $1
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $7
+     i32.store
+     local.get $6
+     i32.const 1
+     i32.sub
+     local.set $6
+    else
+     local.get $0
+     local.get $1
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $8
+     i32.store
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -34393,9 +34424,9 @@
  )
  (func $~lib/util/sort/mergeRuns<i64> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  (local $7 i64)
   (local $8 i64)
-  (local $9 i64)
+  (local $9 i32)
   (local $10 i32)
   local.get $3
   local.get $2
@@ -34403,7 +34434,7 @@
   i32.sub
   local.tee $6
   i32.add
-  local.set $10
+  local.set $9
   local.get $6
   i32.const 1
   i32.add
@@ -34420,10 +34451,10 @@
     local.tee $2
     i32.const 3
     i32.shl
-    local.tee $7
+    local.tee $10
     i32.add
     local.get $0
-    local.get $7
+    local.get $10
     i32.add
     i64.load
     i64.store
@@ -34436,7 +34467,7 @@
    i32.gt_s
    if
     local.get $4
-    local.get $10
+    local.get $9
     local.get $6
     i32.sub
     i32.const 3
@@ -34467,43 +34498,48 @@
     i32.shl
     i32.add
     i64.load
-    local.set $8
+    local.set $7
     local.get $4
     local.get $2
     i32.const 3
     i32.shl
     i32.add
     i64.load
-    local.set $9
+    local.set $8
     i32.const 2
     global.set $~argumentsLength
-    local.get $0
-    local.get $1
-    i32.const 3
-    i32.shl
-    i32.add
+    local.get $7
     local.get $8
-    local.get $9
-    local.get $8
-    local.get $9
     local.get $5
     i32.load
     call_indirect $0 (type $i64_i64_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.tee $7
-    select
-    i64.store
-    local.get $6
-    local.get $7
-    i32.sub
-    local.set $6
-    local.get $2
-    local.get $7
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $2
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $1
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $7
+     i64.store
+     local.get $6
+     i32.const 1
+     i32.sub
+     local.set $6
+    else
+     local.get $0
+     local.get $1
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $8
+     i64.store
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -35219,9 +35255,9 @@
  )
  (func $~lib/util/sort/mergeRuns<u64> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  (local $7 i64)
   (local $8 i64)
-  (local $9 i64)
+  (local $9 i32)
   (local $10 i32)
   local.get $3
   local.get $2
@@ -35229,7 +35265,7 @@
   i32.sub
   local.tee $6
   i32.add
-  local.set $10
+  local.set $9
   local.get $6
   i32.const 1
   i32.add
@@ -35246,10 +35282,10 @@
     local.tee $2
     i32.const 3
     i32.shl
-    local.tee $7
+    local.tee $10
     i32.add
     local.get $0
-    local.get $7
+    local.get $10
     i32.add
     i64.load
     i64.store
@@ -35262,7 +35298,7 @@
    i32.gt_s
    if
     local.get $4
-    local.get $10
+    local.get $9
     local.get $6
     i32.sub
     i32.const 3
@@ -35293,43 +35329,48 @@
     i32.shl
     i32.add
     i64.load
-    local.set $8
+    local.set $7
     local.get $4
     local.get $2
     i32.const 3
     i32.shl
     i32.add
     i64.load
-    local.set $9
+    local.set $8
     i32.const 2
     global.set $~argumentsLength
-    local.get $0
-    local.get $1
-    i32.const 3
-    i32.shl
-    i32.add
+    local.get $7
     local.get $8
-    local.get $9
-    local.get $8
-    local.get $9
     local.get $5
     i32.load
     call_indirect $0 (type $i64_i64_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.tee $7
-    select
-    i64.store
-    local.get $6
-    local.get $7
-    i32.sub
-    local.set $6
-    local.get $2
-    local.get $7
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $2
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $1
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $7
+     i64.store
+     local.get $6
+     i32.const 1
+     i32.sub
+     local.set $6
+    else
+     local.get $0
+     local.get $1
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $8
+     i64.store
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -36045,9 +36086,9 @@
  )
  (func $~lib/util/sort/mergeRuns<f32> (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   (local $6 i32)
-  (local $7 i32)
+  (local $7 f32)
   (local $8 f32)
-  (local $9 f32)
+  (local $9 i32)
   (local $10 i32)
   local.get $3
   local.get $2
@@ -36055,7 +36096,7 @@
   i32.sub
   local.tee $6
   i32.add
-  local.set $10
+  local.set $9
   local.get $6
   i32.const 1
   i32.add
@@ -36072,10 +36113,10 @@
     local.tee $2
     i32.const 2
     i32.shl
-    local.tee $7
+    local.tee $10
     i32.add
     local.get $0
-    local.get $7
+    local.get $10
     i32.add
     f32.load
     f32.store
@@ -36088,7 +36129,7 @@
    i32.gt_s
    if
     local.get $4
-    local.get $10
+    local.get $9
     local.get $6
     i32.sub
     i32.const 2
@@ -36119,43 +36160,48 @@
     i32.shl
     i32.add
     f32.load
-    local.set $8
+    local.set $7
     local.get $4
     local.get $2
     i32.const 2
     i32.shl
     i32.add
     f32.load
-    local.set $9
+    local.set $8
     i32.const 2
     global.set $~argumentsLength
-    local.get $0
-    local.get $1
-    i32.const 2
-    i32.shl
-    i32.add
+    local.get $7
     local.get $8
-    local.get $9
-    local.get $8
-    local.get $9
     local.get $5
     i32.load
     call_indirect $0 (type $f32_f32_=>_i32)
-    i32.const 31
-    i32.shr_u
-    local.tee $7
-    select
-    f32.store
-    local.get $6
-    local.get $7
-    i32.sub
-    local.set $6
-    local.get $2
-    local.get $7
-    i32.const 1
-    i32.xor
-    i32.add
-    local.set $2
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $0
+     local.get $1
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $7
+     f32.store
+     local.get $6
+     i32.const 1
+     i32.sub
+     local.set $6
+    else
+     local.get $0
+     local.get $1
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $8
+     f32.store
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+    end
     local.get $1
     i32.const 1
     i32.add
