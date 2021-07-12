@@ -440,19 +440,7 @@ export class Array<T> {
   }
 
   sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): this {
-    var length = this.length_;
-    if (length <= 1) return this;
-    var base = this.dataStart;
-    if (length == 2) {
-      let a: T = load<T>(base, sizeof<T>()); // a = arr[1]
-      let b: T = load<T>(base); // b = arr[0]
-      if (comparator(a, b) < 0) {
-        store<T>(base, b, sizeof<T>()); // arr[1] = b;
-        store<T>(base, a); // arr[0] = a;
-      }
-      return this;
-    }
-    SORT<T>(base, length, comparator);
+    SORT<T>(this.dataStart, this.length_, comparator);
     return this;
   }
 

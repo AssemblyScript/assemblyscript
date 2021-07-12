@@ -873,7 +873,7 @@ var i: i32;
 
 // Checks if an array is properly sorted
 function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): bool {
-  for (let i: i32 = 1, len: i32 = data.length; i < len; i++) {
+  for (let i = 1, len = data.length; i < len; i++) {
     if (comparator(data[i - 1], data[i]) > 0) return false;
   }
   return true;
@@ -899,7 +899,7 @@ function createRandomOrderedArray(size: i32): Array<i32> {
 
 function createReverseOrderedNestedArray(size: i32): Array<Array<i32>> {
   var arr = new Array<Array<i32>>(size);
-  for (let i: i32 = 0; i < size; i++) {
+  for (let i = 0; i < size; i++) {
     let inner = new Array<i32>(1);
     inner[0] = size - 1 - i;
     arr[i] = inner;
@@ -911,15 +911,50 @@ class Proxy<T> {
   constructor(public x: T) {}
 }
 
-function createReverseOrderedElementsArray(size: i32): Proxy<i32>[] {
+class Dim {
+  height: i32;
+  width: i32;
+}
+
+function createReverseOrderedElementsArray(size: i32): Array<Proxy<i32>> {
   var arr = new Array<Proxy<i32>>(size);
-  for (let i: i32 = 0; i < size; i++) {
+  for (let i = 0; i < size; i++) {
     arr[i] = new Proxy<i32>(size - 1 - i);
   }
   return arr;
 }
 
 const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-,.+/\\[]{}()<>*&$%^@#!?";
+
+let inputStabArr: Array<Dim> = [
+  { height: 100, width: 80  },
+  { height: 90,  width: 90  },
+  { height: 70,  width: 95  },
+  { height: 100, width: 100 },
+  { height: 80,  width: 110 },
+  { height: 110, width: 115 },
+  { height: 100, width: 120 },
+  { height: 70,  width: 125 },
+  { height: 70,  width: 130 },
+  { height: 100, width: 135 },
+  { height: 75,  width: 140 },
+  { height: 70,  width: 140 }
+];
+
+let outputStabArr: Array<Dim> = [
+  { height: 70,  width: 95  },
+  { height: 70,  width: 125 },
+  { height: 70,  width: 130 },
+  { height: 70,  width: 140 },
+  { height: 75,  width: 140 },
+  { height: 80,  width: 110 },
+  { height: 90,  width: 90  },
+  { height: 100, width: 80  },
+  { height: 100, width: 100 },
+  { height: 100, width: 120 },
+  { height: 100, width: 135 },
+  { height: 110, width: 115 }
+];
 
 function createRandomString(len: i32): string {
   var result = "";
@@ -930,12 +965,26 @@ function createRandomString(len: i32): string {
   return result;
 }
 
-function createRandomStringArray(size: i32): string[] {
+function createRandomStringArray(size: i32): Array<string> {
   var arr = new Array<string>(size);
-  for (let i: i32 = 0; i < size; i++) {
+  for (let i = 0; i < size; i++) {
     arr[i] = createRandomString(<i32>(NativeMath.random() * 32));
   }
   return arr;
+}
+
+function assertStableSortedForComplexObjects(): void {
+  let sorted = inputStabArr.slice(0).sort((a, b) => a.height - b.height);
+  let check = true;
+  for (let i = 0, len = inputStabArr.length; i < len; i++) {
+    let input = sorted[i];
+    let target = outputStabArr[i];
+    if (input.height != target.height || input.width != target.width) {
+      check = false;
+      break;
+    }
+  }
+  assert(check);
 }
 
 function assertSorted<T>(arr: Array<T>, comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): void {
@@ -948,6 +997,10 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 
 // Tests for default comparator
 {
+  let f32ArrayTypedSmall: f32[] = [2.0, -1.0, 0.0];
+  f32ArrayTypedSmall.sort();
+  assert(isArraysEqual<f32>(f32ArrayTypedSmall, [-1.0, 0.0, 2.0]));
+
   let f32ArrayTyped: f32[] = [1.0, NaN, -Infinity, 1.00000001, 0.0, -1.0, -2.0, +Infinity];
   f32ArrayTyped.sort();
   assert(isArraysEqual<f32>(f32ArrayTyped, [-Infinity, -2.0, -1.0, 0.0, 1.0, 1.00000001, Infinity, NaN]));
@@ -1003,6 +1056,8 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assert(isArraysEqual<i32>(reversed10000, expected4, 4));
 
   assertSortedDefault<i32>(randomized512);
+
+  assertStableSortedForComplexObjects();
 }
 
 // Test sorting with custom comparator
@@ -1122,6 +1177,8 @@ export class ArrayStr extends Array<string> {}
 
 // Unleak globals
 arr = changetype<Array<i32>>(0);
+inputStabArr = changetype<Array<Dim>>(0);
+outputStabArr = changetype<Array<Dim>>(0);
 
 __stack_pointer = __heap_base;
 __collect();
