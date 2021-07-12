@@ -23833,27 +23833,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 0
+  i32.const 2
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -23880,20 +23862,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -23982,24 +23952,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -24025,13 +23977,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -24108,27 +24055,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 0
+  i32.const 3
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -24155,20 +24084,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -24241,24 +24158,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -24284,13 +24183,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -24362,27 +24256,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -24439,27 +24314,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -24486,20 +24343,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -24559,27 +24404,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -24636,27 +24462,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 0
+  i32.const 2
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -24683,20 +24491,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -24785,24 +24581,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -24828,13 +24606,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -24911,27 +24684,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 0
+  i32.const 3
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -24958,20 +24713,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -25040,24 +24783,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -25083,13 +24808,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -25161,27 +24881,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -25238,27 +24939,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -25285,20 +24968,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -25358,27 +25029,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -25436,27 +25088,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 0
+  i32.const 2
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 1
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -25579,24 +25213,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 1
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -25704,27 +25320,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 0
+  i32.const 3
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 1
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -25844,24 +25442,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 1
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -25963,27 +25543,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 1
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -26041,27 +25602,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 1
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -26175,26 +25718,7 @@
    unreachable
   end
   i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 1
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -26307,26 +25831,8 @@
    unreachable
   end
   i32.const 1
-  i32.const 1
+  i32.const 2
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -26353,20 +25859,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -26457,24 +25951,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -26500,13 +25976,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -26584,26 +26055,8 @@
    unreachable
   end
   i32.const 1
-  i32.const 1
+  i32.const 3
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -26630,20 +26083,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -26712,24 +26153,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -26755,13 +26178,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -26839,26 +26257,8 @@
    unreachable
   end
   i32.const 1
-  i32.const 1
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -26885,20 +26285,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -26958,27 +26346,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -27036,26 +26405,8 @@
    unreachable
   end
   i32.const 1
-  i32.const 1
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -27082,20 +26433,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -27161,26 +26500,8 @@
    unreachable
   end
   i32.const 1
-  i32.const 1
+  i32.const 2
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -27207,20 +26528,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -27311,24 +26620,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -27354,13 +26645,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -27438,26 +26724,8 @@
    unreachable
   end
   i32.const 1
-  i32.const 1
+  i32.const 3
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -27484,20 +26752,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -27566,24 +26822,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -27609,13 +26847,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -27693,26 +26926,8 @@
    unreachable
   end
   i32.const 1
-  i32.const 1
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -27739,20 +26954,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -27812,27 +27015,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -27890,26 +27074,8 @@
    unreachable
   end
   i32.const 1
-  i32.const 1
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 1
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -27936,20 +27102,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -28009,27 +27163,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -28108,24 +27243,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -28151,13 +27268,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -28234,27 +27346,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 2
+  i32.const 3
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -28281,20 +27375,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -28363,24 +27445,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -28406,13 +27470,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -28489,27 +27548,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 2
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -28536,20 +27577,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -28614,27 +27643,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 2
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -28661,20 +27672,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -28739,27 +27738,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 2
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -28786,20 +27767,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -28859,27 +27828,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -28962,24 +27912,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -29005,13 +27937,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -29088,27 +28015,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 2
+  i32.const 3
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -29135,20 +28044,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -29217,24 +28114,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -29260,13 +28139,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -29343,27 +28217,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 2
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -29390,20 +28246,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -29468,27 +28312,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 2
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -29515,20 +28341,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -29593,27 +28407,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 2
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -29640,20 +28436,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -29718,27 +28502,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 3
+  i32.const 2
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -29765,20 +28531,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -29869,24 +28623,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -29912,13 +28648,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -29990,27 +28721,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -30071,24 +28783,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -30114,13 +28808,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -30197,27 +28886,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 3
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -30244,20 +28915,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -30322,27 +28981,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 3
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -30369,20 +29010,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -30447,27 +29076,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 3
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -30494,20 +29105,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -30572,27 +29171,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 3
+  i32.const 2
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -30619,20 +29200,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -30723,24 +29292,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -30766,13 +29317,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -30844,27 +29390,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 0
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -30925,24 +29452,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -30968,13 +29477,8 @@
    if
     i32.const 0
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $7
     local.get $9
@@ -31051,27 +29555,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 3
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -31098,20 +29584,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -31176,27 +29650,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 3
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -31223,20 +29679,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -31301,27 +29745,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 3
+  i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -31348,20 +29774,8 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     i32.const 0
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
     local.get $6
     local.get $9
@@ -31429,24 +29843,6 @@
   i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -31473,20 +29869,9 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -31566,26 +29951,7 @@
    unreachable
   end
   i32.const 0
-  i32.const 0
-  i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.eqz
   drop
   local.get $5
   i32.load offset=4
@@ -31645,24 +30011,6 @@
   i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -31689,20 +30037,9 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -31771,24 +30108,6 @@
   i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -31815,20 +30134,9 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -31897,24 +30205,6 @@
   i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -31941,20 +30231,9 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -32023,24 +30302,6 @@
   i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 2
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -32067,20 +30328,9 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -32149,24 +30399,6 @@
   i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -32193,20 +30425,9 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -32290,27 +30511,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  i32.const 0
+  i32.const 3
+  i32.const 2
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -32337,20 +30540,10 @@
     i32.const 0
     drop
     i32.const 1
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.eqz
     drop
     i32.const 1
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -32419,24 +30612,6 @@
   i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 3
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -32463,20 +30638,9 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -32545,24 +30709,6 @@
   i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -32589,20 +30735,9 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -32671,24 +30806,6 @@
   i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 1
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -32715,20 +30832,9 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -32797,24 +30903,6 @@
   i32.const 0
   i32.const 1
   i32.eq
-  if (result i32)
-   i32.const 3
-   i32.const 0
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 0
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -32841,20 +30929,9 @@
     i32.const 0
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.eqz
-    else
-     i32.const 0
-    end
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 0
-     i32.eqz
-    else
-     i32.const 0
-    end
+    i32.const 0
+    i32.eqz
     drop
     local.get $6
     local.get $9
@@ -32924,24 +31001,6 @@
   i32.const 1
   i32.const 0
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 1
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -33049,27 +31108,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 0
+  i32.const 2
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 1
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -33184,27 +31225,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
+  i32.const 0
+  i32.const 2
   i32.eq
-  if (result i32)
-   i32.const 0
-   i32.const 2
-   i32.eq
-  else
-   i32.const 0
-  end
-  if (result i32)
-   i32.const 1
-   if (result i32)
-    i32.const 0
-   else
-    i32.const 0
-   end
-   i32.eqz
-  else
-   i32.const 0
-  end
   drop
   local.get $5
   i32.load offset=4
@@ -41778,11 +39801,6 @@
   i32.const 0
   drop
   i32.const 0
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 0
-  end
   drop
  )
  (func $~lib/rt/__visit_globals (param $0 i32)
@@ -71528,13 +69546,8 @@
     i32.const 1
     drop
     i32.const 1
-    if (result i32)
-     i32.const 1
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
+    i32.const 4
+    i32.le_u
     drop
     i32.const 13616
     br $~lib/util/sort/COMPARATOR<i8>|inlined.0
@@ -71575,13 +69588,6 @@
     i32.const 1
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
     drop
     i32.const 13680
     br $~lib/util/sort/COMPARATOR<u8>|inlined.0
@@ -71622,13 +69628,6 @@
     i32.const 1
     drop
     i32.const 0
-    if (result i32)
-     i32.const 1
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
     drop
     i32.const 13744
     br $~lib/util/sort/COMPARATOR<u8>|inlined.1
@@ -71668,14 +69667,9 @@
    block $~lib/util/sort/COMPARATOR<i16>|inlined.0 (result i32)
     i32.const 1
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 2
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
+    i32.const 2
+    i32.const 4
+    i32.le_u
     drop
     i32.const 13808
     br $~lib/util/sort/COMPARATOR<i16>|inlined.0
@@ -71716,13 +69710,6 @@
     i32.const 1
     drop
     i32.const 0
-    if (result i32)
-     i32.const 2
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
     drop
     i32.const 13872
     br $~lib/util/sort/COMPARATOR<u16>|inlined.0
@@ -71762,14 +69749,9 @@
    block $~lib/util/sort/COMPARATOR<i32>|inlined.0 (result i32)
     i32.const 1
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 4
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
+    i32.const 4
+    i32.const 4
+    i32.le_u
     drop
     i32.const 13936
     br $~lib/util/sort/COMPARATOR<i32>|inlined.0
@@ -71810,13 +69792,6 @@
     i32.const 1
     drop
     i32.const 0
-    if (result i32)
-     i32.const 4
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
     drop
     i32.const 14000
     br $~lib/util/sort/COMPARATOR<u32>|inlined.0
@@ -71856,14 +69831,9 @@
    block $~lib/util/sort/COMPARATOR<i64>|inlined.0 (result i32)
     i32.const 1
     drop
-    i32.const 1
-    if (result i32)
-     i32.const 8
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
+    i32.const 8
+    i32.const 4
+    i32.le_u
     drop
     i32.const 14064
     br $~lib/util/sort/COMPARATOR<i64>|inlined.0
@@ -71904,13 +69874,6 @@
     i32.const 1
     drop
     i32.const 0
-    if (result i32)
-     i32.const 8
-     i32.const 4
-     i32.le_u
-    else
-     i32.const 0
-    end
     drop
     i32.const 14128
     br $~lib/util/sort/COMPARATOR<u64>|inlined.0

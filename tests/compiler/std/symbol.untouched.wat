@@ -4785,11 +4785,6 @@
   i32.load offset=8
   local.set $2
   i32.const 1
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 0
-  end
   drop
   local.get $2
   local.set $3
@@ -4858,12 +4853,7 @@
   local.get $0
   i32.load offset=8
   local.set $2
-  i32.const 0
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 1
-  end
+  i32.const 1
   drop
   local.get $2
   local.set $3

@@ -616,18 +616,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/abs
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/abs
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -852,18 +846,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/acos
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/acos
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -1702,18 +1690,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/acosh
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/acosh
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -2339,18 +2321,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/asin
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/asin
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -2545,18 +2521,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/asinh
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/asinh
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -2916,18 +2886,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/atan
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/atan
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -3241,18 +3205,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/atanh
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/atanh
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -3636,19 +3594,13 @@
   local.get $4
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    local.get $1
-    call $~lib/bindings/Math/atan2
-    local.get $2
-    local.get $3
-    local.get $4
-    call $std/math/check<f64>
-   end
+   local.get $0
+   local.get $1
+   call $~lib/bindings/Math/atan2
+   local.get $2
+   local.get $3
+   local.get $4
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -4090,18 +4042,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/cbrt
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/cbrt
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -4241,18 +4187,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/ceil
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/ceil
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -5196,18 +5136,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/cos
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/cos
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -6539,18 +6473,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/cosh
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/cosh
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -7087,18 +7015,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/exp
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/exp
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -7119,18 +7041,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/expm1
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/expm1
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -7418,19 +7334,13 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    f64.const 2
-    local.get $0
-    call $~lib/bindings/Math/pow
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   f64.const 2
+   local.get $0
+   call $~lib/bindings/Math/pow
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -7577,18 +7487,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/floor
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/floor
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -7960,18 +7864,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/log
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/log
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -8252,18 +8150,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/log10
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/log10
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -8484,18 +8376,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/log1p
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/log1p
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -8867,18 +8753,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/log2
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/log2
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -9081,19 +8961,13 @@
   local.get $4
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    local.get $1
-    call $~lib/bindings/Math/max
-    local.get $2
-    local.get $3
-    local.get $4
-    call $std/math/check<f64>
-   end
+   local.get $0
+   local.get $1
+   call $~lib/bindings/Math/max
+   local.get $2
+   local.get $3
+   local.get $4
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -9128,19 +9002,13 @@
   local.get $4
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    local.get $1
-    call $~lib/bindings/Math/min
-    local.get $2
-    local.get $3
-    local.get $4
-    call $std/math/check<f64>
-   end
+   local.get $0
+   local.get $1
+   call $~lib/bindings/Math/min
+   local.get $2
+   local.get $3
+   local.get $4
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -9426,19 +9294,13 @@
   local.get $4
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    local.get $1
-    call $std/math/mod
-    local.get $2
-    local.get $3
-    local.get $4
-    call $std/math/check<f64>
-   end
+   local.get $0
+   local.get $1
+   call $std/math/mod
+   local.get $2
+   local.get $3
+   local.get $4
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -10692,19 +10554,13 @@
   local.get $4
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    local.get $1
-    call $~lib/bindings/Math/pow
-    local.get $2
-    local.get $3
-    local.get $4
-    call $std/math/check<f64>
-   end
+   local.get $0
+   local.get $1
+   call $~lib/bindings/Math/pow
+   local.get $2
+   local.get $3
+   local.get $4
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -11632,18 +11488,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/sign
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/sign
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -12859,18 +12709,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/sin
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/sin
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -13603,18 +13447,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/sinh
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/sinh
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -13731,18 +13569,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/sqrt
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/sqrt
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -14295,18 +14127,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/tan
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/tan
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -15070,18 +14896,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/tanh
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/tanh
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -15191,18 +15011,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   global.get $std/math/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    call $~lib/bindings/Math/trunc
-    local.get $1
-    local.get $2
-    local.get $3
-    call $std/math/check<f64>
-   end
+   local.get $0
+   call $~lib/bindings/Math/trunc
+   local.get $1
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end

@@ -312,17 +312,11 @@
   local.get $2
   call $std/mod/check<f64>
   if (result i32)
-   global.get $std/mod/js
-   i32.eqz
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    local.get $1
-    call $std/mod/mod
-    local.get $2
-    call $std/mod/check<f64>
-   end
+   local.get $0
+   local.get $1
+   call $std/mod/mod
+   local.get $2
+   call $std/mod/check<f64>
   else
    i32.const 0
   end
