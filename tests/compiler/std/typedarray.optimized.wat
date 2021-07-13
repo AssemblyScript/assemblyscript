@@ -3468,7 +3468,7 @@
   (local $15 i32)
   (local $16 f64)
   local.get $1
-  i32.const 128
+  i32.const 48
   i32.le_s
   if
    local.get $1
@@ -29643,7 +29643,7 @@
   (local $12 i64)
   (local $13 i32)
   local.get $1
-  i32.const 128
+  i32.const 48
   i32.le_s
   if
    local.get $1
@@ -30427,7 +30427,7 @@
   (local $12 i64)
   (local $13 i32)
   local.get $1
-  i32.const 128
+  i32.const 48
   i32.le_s
   if
    local.get $1
@@ -31261,7 +31261,7 @@
   (local $12 i64)
   (local $13 i32)
   local.get $1
-  i32.const 128
+  i32.const 48
   i32.le_s
   if
    local.get $1
@@ -32089,7 +32089,7 @@
   (local $12 i64)
   (local $13 i32)
   local.get $1
-  i32.const 128
+  i32.const 48
   i32.le_s
   if
    local.get $1
@@ -32927,7 +32927,7 @@
   (local $12 i64)
   (local $13 i32)
   local.get $1
-  i32.const 128
+  i32.const 48
   i32.le_s
   if
    local.get $1
@@ -33749,7 +33749,7 @@
   (local $12 i64)
   (local $13 i32)
   local.get $1
-  i32.const 128
+  i32.const 48
   i32.le_s
   if
    local.get $1
@@ -34580,7 +34580,7 @@
   (local $14 i32)
   (local $15 i32)
   local.get $1
-  i32.const 128
+  i32.const 48
   i32.le_s
   if
    local.get $1
@@ -35411,7 +35411,7 @@
   (local $14 i32)
   (local $15 i32)
   local.get $1
-  i32.const 128
+  i32.const 48
   i32.le_s
   if
    local.get $1
@@ -36243,7 +36243,7 @@
   (local $15 i32)
   (local $16 f32)
   local.get $1
-  i32.const 128
+  i32.const 48
   i32.le_s
   if
    local.get $1

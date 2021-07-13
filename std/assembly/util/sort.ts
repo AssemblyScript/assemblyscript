@@ -5,7 +5,7 @@ type Comparator<T> = (a: T, b: T) => i32;
 // @ts-ignore: decorator
 @lazy @inline const EMPTY = u32.MAX_VALUE;
 // @ts-ignore: decorator
-@inline const INSERTION_SORT_THRESHOLD = 128;
+@inline const INSERTION_SORT_THRESHOLD = 48;
 // @ts-ignore: decorator
 @inline const MIN_RUN_LENGTH = 32;
 
