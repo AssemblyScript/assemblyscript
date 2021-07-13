@@ -728,7 +728,7 @@ exports.main = function main(argv, options, callback) {
         });
       }
     }
-    var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
+    var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, opts.ignoreWarning);
     if (numErrors) {
       const err = Error(numErrors + " parse error(s)");
       err.stack = err.message; // omit stack
@@ -850,7 +850,7 @@ exports.main = function main(argv, options, callback) {
       };
     }
   });
-  var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
+  var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic, opts.ignoreWarning);
   if (numErrors) {
     if (module) module.dispose();
     const err = Error(numErrors + " compile error(s)");
@@ -1252,12 +1252,16 @@ function getAsconfig(file, baseDir, readFile) {
 exports.getAsconfig = getAsconfig;
 
 /** Checks diagnostics emitted so far for errors. */
-function checkDiagnostics(program, stderr, reportDiagnostic) {
+function checkDiagnostics(program, stderr, reportDiagnostic, ignoreWarning) {
   var numErrors = 0;
   do {
     let diagnosticPtr = assemblyscript.nextDiagnostic(program);
     if (!diagnosticPtr) break;
     __pin(diagnosticPtr);
+    const diagnostic = __wrap(diagnosticPtr, assemblyscript.DiagnosticMessage);
+    if (ignoreWarning && ignoreWarning.indexOf(diagnostic.code) >= 0 && !assemblyscript.isError(diagnosticPtr)) {
+      continue;
+    }
     if (stderr) {
       stderr.write(
         __getString(assemblyscript.formatDiagnostic(diagnosticPtr, stderr.isTTY, true)) +
