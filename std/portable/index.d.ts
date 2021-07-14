@@ -310,7 +310,7 @@ declare interface StringConstructor {
   fromCharCodes(arr: u16[]): string;
   /** Equivalent to calling `String.fromCodePoint` with multiple arguments. */
   fromCodePoints(arr: i32[]): string;
-
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): string;
 }
 
@@ -321,70 +321,91 @@ declare function unmanaged(constructor: Function): void;
 declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
 
 declare interface ArrayConstructor<T> {
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): T;
+  /** Returns an index start searching from the end in the array */
+  findLastIndex(callbackfn: (value: T, index: i32, self: Array<T>) => bool): i32;
 }
 
 declare interface Int8ArrayConstructor {
   /** Equivalent to calling `new Int8Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int8Array;
-
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): i8;
+  /** Returns an index start searching from the end in the typedarray */
+  findLastIndex(callbackfn: (value: i8, index: i32, self: Int8Array) => bool): i32;
 }
 
 declare interface Uint8ArrayConstructor {
   /** Equivalent to calling `new Uint8Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint8Array;
-
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): u8;
+  /** Returns an index start searching from the end in the typedarray */
+  findLastIndex(callbackfn: (value: u8, index: i32, self: Uint8Array) => bool): i32;
 }
 
 declare interface Uint8ClampedArrayConstructor {
   /** Equivalent to calling `new Uint8ClampedArray` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint8ClampedArray;
-
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): u8;
+  /** Returns an index start searching from the end in the typedarray */
+  findLastIndex(callbackfn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): i32;
 }
 
 declare interface Int16ArrayConstructor {
   /** Equivalent to calling `new Int16Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int16Array;
-
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): i16;
+  /** Returns an index start searching from the end in the typedarray */
+  findLastIndex(callbackfn: (value: i16, index: i32, self: Int16Array) => bool): i32;
 }
 
 declare interface Uint16ArrayConstructor {
   /** Equivalent to calling `new Uint16Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint16Array;
-
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): u16;
+  /** Returns an index start searching from the end in the typedarray */
+  findLastIndex(callbackfn: (value: u16, index: i32, self: Uint16Array) => bool): i32;
 }
 
 declare interface Int32ArrayConstructor {
   /** Equivalent to calling `new Int32Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int32Array;
-
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): i32;
+  /** Returns an index start searching from the end in the typedarray */
+  findLastIndex(callbackfn: (value: i32, index: i32, self: Int32Array) => bool): i32;
 }
 
 declare interface Uint32ArrayConstructor {
   /** Equivalent to calling `new Uint32Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint32Array;
-
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): u32;
+  /** Returns an index start searching from the end in the typedarray */
+  findLastIndex(callbackfn: (value: u32, index: i32, self: Uint32Array) => bool): i32;
 }
 
 declare interface Float32ArrayConstructor {
   /** Equivalent to calling `new Float32Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float32Array;
-
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): f32;
+  /** Returns an index start searching from the end in the typedarray */
+  findLastIndex(callbackfn: (value: f32, index: i32, self: Float32Array) => bool): i32;
 }
 
 declare interface Float64ArrayConstructor {
   /** Equivalent to calling `new Float64Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float64Array;
-
+  /** Returns value using relative indexing. Index may be negative */
   at(index: i32): f64;
+  /** Returns an index start searching from the end in the typedarray */
+  findLastIndex(callbackfn: (value: f64, index: i32, self: Float64Array) => bool): i32;
 }
 
 // FIXME: remove
