@@ -107,6 +107,10 @@ export class Int8Array extends ArrayBufferView {
     return FIND_INDEX<Int8Array, i8>(this, fn);
   }
 
+  findLastIndex(fn: (value: i8, index: i32, self: Int8Array) => bool): i32 {
+    return FIND_LAST_INDEX<Int8Array, i8>(this, fn);
+  }
+
   some(fn: (value: i8, index: i32, self: Int8Array) => bool): bool {
     return SOME<Int8Array, i8>(this, fn);
   }
@@ -241,6 +245,10 @@ export class Uint8Array extends ArrayBufferView {
 
   findIndex(fn: (value: u8, index: i32, self: Uint8Array) => bool): i32 {
     return FIND_INDEX<Uint8Array, u8>(this, fn);
+  }
+
+  findLastIndex(fn: (value: u8, index: i32, self: Uint8Array) => bool): i32 {
+    return FIND_LAST_INDEX<Uint8Array, u8>(this, fn);
   }
 
   some(fn: (value: u8, index: i32, self: Uint8Array) => bool): bool {
@@ -379,6 +387,10 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return FIND_INDEX<Uint8ClampedArray, u8>(this, fn);
   }
 
+  findLastIndex(fn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): i32 {
+    return FIND_LAST_INDEX<Uint8ClampedArray, u8>(this, fn);
+  }
+
   some(fn: (value: u8, index: i32, self: Uint8ClampedArray) => bool): bool {
     return SOME<Uint8ClampedArray, u8>(this, fn);
   }
@@ -513,6 +525,10 @@ export class Int16Array extends ArrayBufferView {
 
   findIndex(fn: (value: i16, index: i32, self: Int16Array) => bool): i32 {
     return FIND_INDEX<Int16Array, i16>(this, fn);
+  }
+
+  findLastIndex(fn: (value: i16, index: i32, self: Int16Array) => bool): i32 {
+    return FIND_LAST_INDEX<Int16Array, i16>(this, fn);
   }
 
   some(fn: (value: i16, index: i32, self: Int16Array) => bool): bool {
@@ -651,6 +667,10 @@ export class Uint16Array extends ArrayBufferView {
     return FIND_INDEX<Uint16Array, u16>(this, fn);
   }
 
+  findLastIndex(fn: (value: u16, index: i32, self: Uint16Array) => bool): i32 {
+    return FIND_LAST_INDEX<Uint16Array, u16>(this, fn);
+  }
+
   some(fn: (value: u16, index: i32, self: Uint16Array) => bool): bool {
     return SOME<Uint16Array, u16>(this, fn);
   }
@@ -785,6 +805,10 @@ export class Int32Array extends ArrayBufferView {
 
   findIndex(fn: (value: i32, index: i32, self: Int32Array) => bool): i32 {
     return FIND_INDEX<Int32Array, i32>(this, fn);
+  }
+
+  findLastIndex(fn: (value: i32, index: i32, self: Int32Array) => bool): i32 {
+    return FIND_LAST_INDEX<Int32Array, i32>(this, fn);
   }
 
   some(fn: (value: i32, index: i32, self: Int32Array) => bool): bool {
@@ -923,6 +947,10 @@ export class Uint32Array extends ArrayBufferView {
     return FIND_INDEX<Uint32Array, u32>(this, fn);
   }
 
+  findLastIndex(fn: (value: u32, index: i32, self: Uint32Array) => bool): i32 {
+    return FIND_LAST_INDEX<Uint32Array, u32>(this, fn);
+  }
+
   some(fn: (value: u32, index: i32, self: Uint32Array) => bool): bool {
     return SOME<Uint32Array, u32>(this, fn);
   }
@@ -1057,6 +1085,10 @@ export class Int64Array extends ArrayBufferView {
 
   findIndex(fn: (value: i64, index: i32, self: Int64Array) => bool): i32 {
     return FIND_INDEX<Int64Array, i64>(this, fn);
+  }
+
+  findLastIndex(fn: (value: i64, index: i32, self: Int64Array) => bool): i32 {
+    return FIND_LAST_INDEX<Int64Array, i64>(this, fn);
   }
 
   some(fn: (value: i64, index: i32, self: Int64Array) => bool): bool {
@@ -1195,6 +1227,10 @@ export class Uint64Array extends ArrayBufferView {
     return FIND_INDEX<Uint64Array, u64>(this, fn);
   }
 
+  findLastIndex(fn: (value: u64, index: i32, self: Uint64Array) => bool): i32 {
+    return FIND_LAST_INDEX<Uint64Array, u64>(this, fn);
+  }
+
   some(fn: (value: u64, index: i32, self: Uint64Array) => bool): bool {
     return SOME<Uint64Array, u64>(this, fn);
   }
@@ -1329,6 +1365,10 @@ export class Float32Array extends ArrayBufferView {
 
   findIndex(fn: (value: f32, index: i32, self: Float32Array) => bool): i32 {
     return FIND_INDEX<Float32Array, f32>(this, fn);
+  }
+
+  findLastIndex(fn: (value: f32, index: i32, self: Float32Array) => bool): i32 {
+    return FIND_LAST_INDEX<Float32Array, f32>(this, fn);
   }
 
   some(fn: (value: f32, index: i32, self: Float32Array) => bool): bool {
@@ -1467,6 +1507,10 @@ export class Float64Array extends ArrayBufferView {
     return FIND_INDEX<Float64Array, f64>(this, fn);
   }
 
+  findLastIndex(fn: (value: f64, index: i32, self: Float64Array) => bool): i32 {
+    return FIND_LAST_INDEX<Float64Array, f64>(this, fn);
+  }
+
   some(fn: (value: f64, index: i32, self: Float64Array) => bool): bool {
     return SOME<Float64Array, f64>(this, fn);
   }
@@ -1508,15 +1552,15 @@ function FILL<TArray extends ArrayBufferView, T extends number>(
   start: i32,
   end: i32
 ): TArray {
-  var dataStart = array.dataStart;
+  var ptr = array.dataStart;
   var len = array.length;
   start = start < 0 ? max(len + start, 0) : min(start, len);
   end   = end   < 0 ? max(len + end,   0) : min(end,   len);
   if (sizeof<T>() == 1) {
-    if (start < end) memory.fill(dataStart + <usize>start, <u8>value, <usize>(end - start));
+    if (start < end) memory.fill(ptr + <usize>start, <u8>value, <usize>(end - start));
   } else {
     for (; start < end; ++start) {
-      store<T>(dataStart + (<usize>start << alignof<T>()), value);
+      store<T>(ptr + (<usize>start << alignof<T>()), value);
     }
   }
   return array;
@@ -1572,7 +1616,7 @@ function COPY_WITHIN<TArray extends ArrayBufferView, T>(
   end: i32
 ): TArray {
   var len = array.length;
-  var dataStart = array.dataStart;
+  var ptr = array.dataStart;
 
   end   = min<i32>(end, len);
   var to    = target < 0 ? max(len + target, 0) : min(target, len);
@@ -1581,8 +1625,8 @@ function COPY_WITHIN<TArray extends ArrayBufferView, T>(
   var count = min(last - from, len - to);
 
   memory.copy(
-    dataStart + (<usize>to << alignof<T>()),
-    dataStart + (<usize>from << alignof<T>()),
+    ptr + (<usize>to << alignof<T>()),
+    ptr + (<usize>from << alignof<T>()),
     <usize>count << alignof<T>()
   );
   return array;
@@ -1595,9 +1639,9 @@ function REDUCE<TArray extends ArrayBufferView, T, TRet>(
   fn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var dataStart = array.dataStart;
+  var ptr = array.dataStart;
   for (let i = 0, k = array.length; i < k; i++) {
-    initialValue = fn(initialValue, load<T>(dataStart + (<usize>i << alignof<T>())), i, array);
+    initialValue = fn(initialValue, load<T>(ptr + (<usize>i << alignof<T>())), i, array);
   }
   return initialValue;
 }
@@ -1609,9 +1653,9 @@ function REDUCE_RIGHT<TArray extends ArrayBufferView, T, TRet>(
   fn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
   initialValue: TRet
 ): TRet {
-  var dataStart = array.dataStart;
+  var ptr = array.dataStart;
   for (let i = array.length - 1; i >= 0; i--) {
-    initialValue = fn(initialValue, load<T>(dataStart + (<usize>i << alignof<T>())), i, array);
+    initialValue = fn(initialValue, load<T>(ptr + (<usize>i << alignof<T>())), i, array);
   }
   return initialValue;
 }
@@ -1623,7 +1667,7 @@ function MAP<TArray extends ArrayBufferView, T>(
   fn: (value: T, index: i32, self: TArray) => T,
 ): TArray {
   var len = array.length;
-  var dataStart = array.dataStart;
+  var ptr = array.dataStart;
 
   var byteLength = len << alignof<T>();
   var out = changetype<TArray>(__new(offsetof<TArray>(), idof<TArray>()));
@@ -1631,7 +1675,7 @@ function MAP<TArray extends ArrayBufferView, T>(
   for (let i = 0; i < len; i++) {
     store<T>(
       changetype<usize>(buf) + (<usize>i << alignof<T>()),
-      fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)
+      fn(load<T>(ptr + (<usize>i << alignof<T>())), i, array)
     );
   }
   store<usize>(changetype<usize>(out), changetype<usize>(buf), offsetof<TArray>("buffer"));
@@ -1677,9 +1721,22 @@ function FIND_INDEX<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
 ): i32 {
-  var dataStart = array.dataStart;
+  var ptr = array.dataStart;
   for (let i = 0, k = array.length; i < k; i++) {
-    if (fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)) return i;
+    if (fn(load<T>(ptr + (<usize>i << alignof<T>())), i, array)) return i;
+  }
+  return -1;
+}
+
+// @ts-ignore: decorator
+@inline
+function FIND_LAST_INDEX<TArray extends ArrayBufferView, T>(
+  array: TArray,
+  fn: (value: T, index: i32, array: TArray) => bool,
+): i32 {
+  var ptr = array.dataStart;
+  for (let i = array.length - 1; i >= 0; --i) {
+    if (fn(load<T>(ptr + (<usize>i << alignof<T>())), i, array)) return i;
   }
   return -1;
 }
@@ -1693,11 +1750,11 @@ function INCLUDES<TArray extends ArrayBufferView, T>(
 ): bool {
   if (isFloat<T>()) {
     let index: isize = fromIndex;
-    let length: isize = array.length;
-    if (length == 0 || index >= length) return false;
-    if (index < 0) index = max(length + index, 0);
+    let len: isize = array.length;
+    if (len == 0 || index >= len) return false;
+    if (index < 0) index = max(len + index, 0);
     let dataStart = array.dataStart;
-    while (index < length) {
+    while (index < len) {
       let elem = load<T>(dataStart + (index << alignof<T>()));
       // @ts-ignore
       if (elem == searchElement || isNaN(elem) & isNaN(searchElement)) return true;
@@ -1717,11 +1774,11 @@ function INDEX_OF<TArray extends ArrayBufferView, T>(
   fromIndex: i32,
 ): i32 {
   var index: isize = fromIndex;
-  var length: isize = array.length;
-  if (length == 0 || index >= length) return -1;
-  if (index < 0) index = max(length + index, 0);
+  var len: isize = array.length;
+  if (len == 0 || index >= len) return -1;
+  if (index < 0) index = max(len + index, 0);
   var dataStart = array.dataStart;
-  while (index < length) {
+  while (index < len) {
     if (load<T>(dataStart + (index << alignof<T>())) == searchElement) return <i32>index;
     ++index;
   }
@@ -1736,10 +1793,10 @@ function LAST_INDEX_OF<TArray extends ArrayBufferView, T>(
   fromIndex: i32,
 ): i32 {
   var index: isize = fromIndex;
-  var length: isize = array.length;
-  if (length == 0) return -1;
-  if (index < 0) index = length + index; // no need to clamp
-  else if (index >= length) index = length - 1;
+  var len: isize = array.length;
+  if (len == 0) return -1;
+  if (index < 0) index = len + index; // no need to clamp
+  else if (index >= len) index = len - 1;
   var dataStart = array.dataStart;
   while (index >= 0) {
     if (load<T>(dataStart + (index << alignof<T>())) == searchElement) return <i32>index;
@@ -1754,9 +1811,9 @@ function SOME<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
 ): bool {
-  var dataStart = array.dataStart;
+  var ptr = array.dataStart;
   for (let i = 0, k = array.length; i < k; i++) {
-    if (fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)) return true;
+    if (fn(load<T>(ptr + (<usize>i << alignof<T>())), i, array)) return true;
   }
   return false;
 }
@@ -1767,9 +1824,9 @@ function EVERY<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
 ): bool {
-  var dataStart = array.dataStart;
+  var ptr = array.dataStart;
   for (let i = 0, k = array.length; i < k; i++) {
-    if (fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)) continue;
+    if (fn(load<T>(ptr + (<usize>i << alignof<T>())), i, array)) continue;
     return false;
   }
   return true;
@@ -1781,19 +1838,19 @@ function FOREACH<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => void,
 ): void {
-  var dataStart = array.dataStart;
+  var ptr = array.dataStart;
   for (let i = 0, k = array.length; i < k; i++) {
-    fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array);
+    fn(load<T>(ptr + (<usize>i << alignof<T>())), i, array);
   }
 }
 
 // @ts-ignore: decorator
 @inline
 function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
-  var dataStart = array.dataStart;
+  var ptr = array.dataStart;
   for (let front: usize = 0, back: usize = array.length - 1; front < back; ++front, --back) {
-    let frontPtr = dataStart + (front << alignof<T>());
-    let backPtr = dataStart + (back << alignof<T>());
+    let frontPtr = ptr + (front << alignof<T>());
+    let backPtr = ptr + (back << alignof<T>());
     let temp = load<T>(frontPtr);
     store<T>(frontPtr, load<T>(backPtr));
     store<T>(backPtr, temp);
@@ -1806,7 +1863,7 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 function WRAP<TArray extends ArrayBufferView, T>(
   buffer: ArrayBuffer,
   byteOffset: i32 = 0,
-  length: i32 = -1
+  len: i32 = -1
 ): TArray {
   var byteLength: i32;
   var bufferByteLength = buffer.byteLength;
@@ -1814,8 +1871,8 @@ function WRAP<TArray extends ArrayBufferView, T>(
   if (i32(<u32>byteOffset > <u32>bufferByteLength) | (byteOffset & mask)) {
     throw new RangeError(E_INDEXOUTOFRANGE);
   }
-  if (length < 0) {
-    if (length == -1) {
+  if (len < 0) {
+    if (len == -1) {
       if (bufferByteLength & mask) {
         throw new RangeError(E_INVALIDLENGTH);
       }
@@ -1824,7 +1881,7 @@ function WRAP<TArray extends ArrayBufferView, T>(
       throw new RangeError(E_INVALIDLENGTH);
     }
   } else {
-    byteLength = length << alignof<T>();
+    byteLength = len << alignof<T>();
     if (byteOffset + byteLength > bufferByteLength) {
       throw new RangeError(E_INVALIDLENGTH);
     }

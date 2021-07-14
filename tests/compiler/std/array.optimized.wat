@@ -608,6 +608,7 @@
  (export "ArrayU32#set:length" (func $export:~lib/array/Array<u32>#set:length))
  (export "ArrayU32#every" (func $export:~lib/array/Array<u32>#every))
  (export "ArrayU32#findIndex" (func $export:~lib/array/Array<u32>#findIndex))
+ (export "ArrayU32#findLastIndex" (func $export:~lib/array/Array<u32>#findLastIndex))
  (export "ArrayU32#at" (func $export:~lib/array/Array<u32>#at))
  (export "ArrayU32#fill" (func $export:~lib/array/Array<u32>#fill@varargs))
  (export "ArrayU32#includes" (func $export:~lib/array/Array<u32>#includes@varargs))
@@ -635,6 +636,7 @@
  (export "ArrayU8#set:length" (func $export:~lib/array/Array<u8>#set:length))
  (export "ArrayU8#every" (func $export:~lib/array/Array<u8>#every))
  (export "ArrayU8#findIndex" (func $export:~lib/array/Array<u8>#findIndex))
+ (export "ArrayU8#findLastIndex" (func $export:~lib/array/Array<u8>#findLastIndex))
  (export "ArrayU8#at" (func $export:~lib/array/Array<u8>#at))
  (export "ArrayU8#fill" (func $export:~lib/array/Array<u8>#fill@varargs))
  (export "ArrayU8#includes" (func $export:~lib/array/Array<u8>#includes@varargs))
@@ -662,6 +664,7 @@
  (export "ArrayStr#set:length" (func $export:~lib/array/Array<u32>#set:length))
  (export "ArrayStr#every" (func $export:~lib/array/Array<~lib/string/String>#every))
  (export "ArrayStr#findIndex" (func $export:~lib/array/Array<~lib/string/String>#findIndex))
+ (export "ArrayStr#findLastIndex" (func $export:~lib/array/Array<~lib/string/String>#findLastIndex))
  (export "ArrayStr#at" (func $export:~lib/array/Array<~lib/string/String>#at))
  (export "ArrayStr#fill" (func $export:~lib/array/Array<~lib/string/String>#fill@varargs))
  (export "ArrayStr#includes" (func $export:~lib/array/Array<~lib/string/String>#includes@varargs))
@@ -3507,7 +3510,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 99
+   i32.const 106
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3571,7 +3574,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 99
+   i32.const 106
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3784,7 +3787,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 99
+   i32.const 106
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3808,8 +3811,8 @@
   if
    i32.const 2176
    i32.const 1104
-   i32.const 276
-   i32.const 21
+   i32.const 283
+   i32.const 18
    call $~lib/builtins/abort
    unreachable
   end
@@ -3859,7 +3862,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 132
+   i32.const 139
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -4068,7 +4071,7 @@
    if
     i32.const 1344
     i32.const 1104
-    i32.const 115
+    i32.const 122
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -4321,7 +4324,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 99
+   i32.const 106
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -6335,7 +6338,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 99
+   i32.const 106
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -8817,7 +8820,7 @@
    if
     i32.const 1344
     i32.const 1104
-    i32.const 115
+    i32.const 122
     i32.const 22
     call $~lib/builtins/abort
     unreachable
@@ -15892,8 +15895,8 @@
    if
     i32.const 2176
     i32.const 1104
-    i32.const 335
-    i32.const 21
+    i32.const 342
+    i32.const 18
     call $~lib/builtins/abort
     unreachable
    end
@@ -27184,17 +27187,17 @@
    i64.const 0
    i64.store
    local.get $4
-   i32.load offset=12
+   i32.load offset=4
    local.set $5
    local.get $4
-   i32.load offset=4
+   i32.load offset=12
    local.set $4
    loop $for-loop|0125
     local.get $0
-    local.get $5
+    local.get $4
     i32.lt_s
     if
-     local.get $4
+     local.get $5
      local.get $0
      i32.const 2
      i32.shl
@@ -27252,10 +27255,10 @@
    local.set $0
    loop $for-loop|1126
     local.get $0
-    local.get $5
+    local.get $4
     i32.lt_s
     if
-     local.get $4
+     local.get $5
      local.get $0
      i32.const 2
      i32.shl
@@ -27845,7 +27848,7 @@
   if
    i32.const 1056
    i32.const 1104
-   i32.const 229
+   i32.const 236
    i32.const 60
    call $~lib/builtins/abort
    unreachable
@@ -28240,7 +28243,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 99
+   i32.const 106
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -28260,7 +28263,7 @@
   if
    i32.const 5696
    i32.const 1104
-   i32.const 103
+   i32.const 110
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -28298,7 +28301,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 99
+   i32.const 106
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -29389,17 +29392,17 @@
   i64.const 0
   i64.store
   local.get $0
-  i32.load offset=12
+  i32.load offset=4
   local.set $5
   local.get $0
-  i32.load offset=4
+  i32.load offset=12
   local.set $6
   loop $for-loop|0
    local.get $2
-   local.get $5
+   local.get $6
    i32.lt_s
    if
-    local.get $6
+    local.get $5
     local.get $2
     i32.const 2
     i32.shl
@@ -29457,10 +29460,10 @@
   local.set $2
   loop $for-loop|1
    local.get $2
-   local.get $5
+   local.get $6
    i32.lt_s
    if
-    local.get $6
+    local.get $5
     local.get $2
     i32.const 2
     i32.shl
@@ -29892,6 +29895,73 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
+ (func $export:~lib/array/Array<u32>#findLastIndex (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 15164
+  i32.lt_s
+  if
+   i32.const 31568
+   i32.const 31616
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $2
+  local.get $0
+  i32.store
+  local.get $2
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  i32.load offset=12
+  i32.const 1
+  i32.sub
+  local.set $2
+  block $__inlined_func$~lib/array/Array<u32>#findLastIndex
+   loop $for-loop|0
+    local.get $2
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $0
+     i32.load offset=4
+     local.get $2
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $2
+     local.get $0
+     local.get $1
+     i32.load
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     br_if $__inlined_func$~lib/array/Array<u32>#findLastIndex
+     local.get $2
+     i32.const 1
+     i32.sub
+     local.set $2
+     br $for-loop|0
+    end
+   end
+   i32.const -1
+   local.set $2
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
  (func $export:~lib/array/Array<u32>#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -29928,7 +29998,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 132
+   i32.const 139
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -30424,7 +30494,7 @@
    if
     i32.const 1056
     i32.const 1104
-    i32.const 229
+    i32.const 236
     i32.const 60
     call $~lib/builtins/abort
     unreachable
@@ -30545,8 +30615,8 @@
   if
    i32.const 2176
    i32.const 1104
-   i32.const 276
-   i32.const 21
+   i32.const 283
+   i32.const 18
    call $~lib/builtins/abort
    unreachable
   end
@@ -30771,8 +30841,8 @@
   if
    i32.const 2176
    i32.const 1104
-   i32.const 335
-   i32.const 21
+   i32.const 342
+   i32.const 18
    call $~lib/builtins/abort
    unreachable
   end
@@ -31373,7 +31443,7 @@
   i32.store
   i32.const 14672
   i32.const 1104
-  i32.const 465
+  i32.const 472
   i32.const 7
   call $~lib/builtins/abort
   unreachable
@@ -31739,6 +31809,71 @@
   global.set $~lib/memory/__stack_pointer
   local.get $2
  )
+ (func $export:~lib/array/Array<u8>#findLastIndex (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  global.get $~lib/memory/__stack_pointer
+  i32.const 15164
+  i32.lt_s
+  if
+   i32.const 31568
+   i32.const 31616
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  local.tee $2
+  local.get $0
+  i32.store
+  local.get $2
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  i32.load offset=12
+  i32.const 1
+  i32.sub
+  local.set $2
+  block $__inlined_func$~lib/array/Array<u8>#findLastIndex
+   loop $for-loop|0
+    local.get $2
+    i32.const 0
+    i32.ge_s
+    if
+     local.get $2
+     local.get $0
+     i32.load offset=4
+     i32.add
+     i32.load8_u
+     i32.const 3
+     global.set $~argumentsLength
+     local.get $2
+     local.get $0
+     local.get $1
+     i32.load
+     call_indirect $0 (type $i32_i32_i32_=>_i32)
+     br_if $__inlined_func$~lib/array/Array<u8>#findLastIndex
+     local.get $2
+     i32.const 1
+     i32.sub
+     local.set $2
+     br $for-loop|0
+    end
+   end
+   i32.const -1
+   local.set $2
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.add
+  global.set $~lib/memory/__stack_pointer
+  local.get $2
+ )
  (func $export:~lib/array/Array<u8>#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -31775,7 +31910,7 @@
   if
    i32.const 1344
    i32.const 1104
-   i32.const 132
+   i32.const 139
    i32.const 33
    call $~lib/builtins/abort
    unreachable
@@ -32198,7 +32333,7 @@
    if
     i32.const 1056
     i32.const 1104
-    i32.const 229
+    i32.const 236
     i32.const 60
     call $~lib/builtins/abort
     unreachable
@@ -32406,8 +32541,8 @@
   if
    i32.const 2176
    i32.const 1104
-   i32.const 276
-   i32.const 21
+   i32.const 283
+   i32.const 18
    call $~lib/builtins/abort
    unreachable
   end
@@ -32625,8 +32760,8 @@
   if
    i32.const 2176
    i32.const 1104
-   i32.const 335
-   i32.const 21
+   i32.const 342
+   i32.const 18
    call $~lib/builtins/abort
    unreachable
   end
@@ -33542,6 +33677,100 @@
   call $~lib/builtins/abort
   unreachable
  )
+ (func $export:~lib/array/Array<~lib/string/String>#findLastIndex (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 8
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
+  block $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 15164
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $2
+   local.get $0
+   i32.store
+   local.get $2
+   local.get $1
+   i32.store offset=4
+   local.get $2
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 15164
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.load offset=12
+   i32.const 1
+   i32.sub
+   local.set $2
+   block $__inlined_func$~lib/array/Array<~lib/string/String>#findLastIndex
+    loop $for-loop|0
+     local.get $2
+     i32.const 0
+     i32.ge_s
+     if
+      global.get $~lib/memory/__stack_pointer
+      local.get $0
+      i32.load offset=4
+      local.get $2
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.load
+      local.tee $3
+      i32.store
+      i32.const 3
+      global.set $~argumentsLength
+      local.get $3
+      local.get $2
+      local.get $0
+      local.get $1
+      i32.load
+      call_indirect $0 (type $i32_i32_i32_=>_i32)
+      if
+       global.get $~lib/memory/__stack_pointer
+       i32.const 4
+       i32.add
+       global.set $~lib/memory/__stack_pointer
+       br $__inlined_func$~lib/array/Array<~lib/string/String>#findLastIndex
+      end
+      local.get $2
+      i32.const 1
+      i32.sub
+      local.set $2
+      br $for-loop|0
+     end
+    end
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    i32.const -1
+    local.set $2
+   end
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $2
+   return
+  end
+  i32.const 31568
+  i32.const 31616
+  i32.const 1
+  i32.const 1
+  call $~lib/builtins/abort
+  unreachable
+ )
  (func $export:~lib/array/Array<~lib/string/String>#at (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   global.get $~lib/memory/__stack_pointer
@@ -33584,7 +33813,7 @@
    if
     i32.const 1344
     i32.const 1104
-    i32.const 132
+    i32.const 139
     i32.const 33
     call $~lib/builtins/abort
     unreachable
@@ -33604,7 +33833,7 @@
    if
     i32.const 5696
     i32.const 1104
-    i32.const 136
+    i32.const 143
     i32.const 40
     call $~lib/builtins/abort
     unreachable
@@ -34052,7 +34281,7 @@
    if
     i32.const 1056
     i32.const 1104
-    i32.const 229
+    i32.const 236
     i32.const 60
     call $~lib/builtins/abort
     unreachable
@@ -34192,8 +34421,8 @@
    if
     i32.const 2176
     i32.const 1104
-    i32.const 276
-    i32.const 21
+    i32.const 283
+    i32.const 18
     call $~lib/builtins/abort
     unreachable
    end
@@ -34462,8 +34691,8 @@
    if
     i32.const 2176
     i32.const 1104
-    i32.const 335
-    i32.const 21
+    i32.const 342
+    i32.const 18
     call $~lib/builtins/abort
     unreachable
    end
