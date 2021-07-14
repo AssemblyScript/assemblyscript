@@ -320,11 +320,11 @@ declare function unmanaged(constructor: Function): void;
 /** Environmental tracing function. */
 declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
 
-declare interface ArrayConstructor<T> {
+declare interface ArrayConstructor {
   /** Returns value using relative indexing. Index may be negative */
-  at(index: i32): T;
+  at(index: i32): any;
   /** Returns an index start searching from the end in the array */
-  findLastIndex(callbackfn: (value: T, index: i32, self: Array<T>) => bool): i32;
+  findLastIndex(callbackfn: (value: any, index: i32, self: Array<any>) => bool): i32;
 }
 
 declare interface Int8ArrayConstructor {
