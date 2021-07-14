@@ -310,6 +310,8 @@ declare interface StringConstructor {
   fromCharCodes(arr: u16[]): string;
   /** Equivalent to calling `String.fromCodePoint` with multiple arguments. */
   fromCodePoints(arr: i32[]): string;
+
+  at(index: i32): string;
 }
 
 /** Annotates a class as being unmanaged with limited capabilities. */
@@ -318,49 +320,71 @@ declare function unmanaged(constructor: Function): void;
 /** Environmental tracing function. */
 declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
 
+declare interface ArrayConstructor<T> {
+  at(index: i32): T;
+}
+
 declare interface Int8ArrayConstructor {
   /** Equivalent to calling `new Int8Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int8Array;
+
+  at(index: i32): i8;
 }
 
 declare interface Uint8ArrayConstructor {
   /** Equivalent to calling `new Uint8Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint8Array;
+
+  at(index: i32): u8;
 }
 
 declare interface Uint8ClampedArrayConstructor {
   /** Equivalent to calling `new Uint8ClampedArray` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint8ClampedArray;
+
+  at(index: i32): u8;
 }
 
 declare interface Int16ArrayConstructor {
   /** Equivalent to calling `new Int16Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int16Array;
+
+  at(index: i32): i16;
 }
 
 declare interface Uint16ArrayConstructor {
   /** Equivalent to calling `new Uint16Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint16Array;
+
+  at(index: i32): u16;
 }
 
 declare interface Int32ArrayConstructor {
   /** Equivalent to calling `new Int32Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int32Array;
+
+  at(index: i32): i32;
 }
 
 declare interface Uint32ArrayConstructor {
   /** Equivalent to calling `new Uint32Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint32Array;
+
+  at(index: i32): u32;
 }
 
 declare interface Float32ArrayConstructor {
   /** Equivalent to calling `new Float32Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float32Array;
+
+  at(index: i32): f32;
 }
 
 declare interface Float64ArrayConstructor {
   /** Equivalent to calling `new Float64Array` with multiple arguments. */
   wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float64Array;
+
+  at(index: i32): f64;
 }
 
 // FIXME: remove

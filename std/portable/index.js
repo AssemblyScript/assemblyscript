@@ -292,6 +292,18 @@ Array.prototype.sort = function sort(comparator) {
       configurable: true
     });
   }
+
+  if (!Ctr.prototype.findLastIndex) {
+    Object.defineProperty(Ctr.prototype, "findLastIndex", {
+      value: function findLastIndex(fn) {
+        for (let i = this.length - 1; i >= 0; --i) {
+          if (fn(this[i], i, this)) return i;
+        }
+        return -1;
+      },
+      configurable: true
+    });
+  }
 });
 
 globalScope["isInteger"] = Number.isInteger;
