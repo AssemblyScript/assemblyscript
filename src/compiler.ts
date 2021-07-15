@@ -6992,6 +6992,8 @@ export class Compiler extends DiagnosticEmitter {
       if (classInstances) {
         for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
           let classInstance = _values[j];
+          // Chcek if the parent class is a subtype of instance's class
+          if (!classInstance.isAssignableTo(<Class>instance.parent)) continue;
           let overloadInstance: Function | null;
           if (isProperty) {
             let boundProperty = assert(classInstance.members!.get(unboundOverloadParent.name));
