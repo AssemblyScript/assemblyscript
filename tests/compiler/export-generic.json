@@ -1,5 +1,6 @@
 {
   "asc_flags": [
+    "--pedantic"
   ],
   "stderr": [
     "AS232: Exported generic function or class has no concrete instances.",
