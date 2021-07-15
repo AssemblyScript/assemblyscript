@@ -960,6 +960,9 @@ exports.main = function main(argv, options, callback) {
 
   // Prepare output
   if (!opts.noEmit) {
+    // Collect output files (including output to stdout).
+    let outputFiles = {};
+
     if (opts.outFile != null) {
       if (/\.was?t$/.test(opts.outFile) && opts.textFile == null) {
         opts.textFile = opts.outFile;
@@ -996,6 +999,7 @@ exports.main = function main(argv, options, callback) {
         }
       });
 
+      outputFiles.binaryFile = wasm.binary;
       if (opts.binaryFile.length) {
         writeFile(opts.binaryFile, wasm.binary, baseDir);
       } else {
@@ -1015,10 +1019,12 @@ exports.main = function main(argv, options, callback) {
             contents[index] = text;
           });
           map.sourcesContent = contents;
+          let sourceMap = JSON.stringify(map);
+          outputFiles.sourceMap = sourceMap;
           writeFile(path.join(
             path.dirname(opts.binaryFile),
             path.basename(sourceMapURL)
-          ).replace(/^\.\//, ""), JSON.stringify(map), baseDir);
+          ).replace(/^\.\//, ""), sourceMap, baseDir);
         } else {
           stderr.write("Skipped source map (stdout already occupied)" + EOL);
         }
@@ -1056,6 +1062,7 @@ exports.main = function main(argv, options, callback) {
         });
         writeStdout(out);
       }
+      outputFiles.textFile = out;
     }
 
     // Write WebIDL
@@ -1083,6 +1090,7 @@ exports.main = function main(argv, options, callback) {
         writeStdout(__getString(idl));
         hasStdout = true;
       }
+      outputFiles.idlFile = idl;
     }
 
     // Write TypeScript definition
@@ -1110,6 +1118,7 @@ exports.main = function main(argv, options, callback) {
         writeStdout(__getString(tsd));
         hasStdout = true;
       }
+      outputFiles.tsdFile = tsd;
     }
 
     // Write JS (modifies the binary, so must be last)
@@ -1136,6 +1145,13 @@ exports.main = function main(argv, options, callback) {
         });
         writeStdout(js);
       }
+      outputFiles.jsFile = js;
+    }
+
+    // Call afterEmit transform hook
+    {
+      let error = applyTransform("afterEmit", outputFiles);
+      if (error) return callback(error);
     }
   }
 
