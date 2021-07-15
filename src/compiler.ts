@@ -6947,8 +6947,7 @@ export class Compiler extends DiagnosticEmitter {
     // Wouldn't be here if there wasn't at least one overload
     var overloadPrototypes = assert(instance.prototype.overloads);
 
-    // TODO: handle interfaces
-    assert(instance.parent.kind == ElementKind.CLASS);
+    assert(instance.parent.kind == ElementKind.CLASS || instance.parent.kind == ElementKind.INTERFACE);
     var parentClassInstance = <Class>instance.parent;
     var module = this.module;
     var usizeType = this.options.usizeType;
