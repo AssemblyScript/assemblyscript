@@ -6947,6 +6947,9 @@ export class Compiler extends DiagnosticEmitter {
     // Wouldn't be here if there wasn't at least one overload
     var overloadPrototypes = assert(instance.prototype.overloads);
 
+    // TODO: handle interfaces
+    assert(instance.parent.kind == ElementKind.CLASS);
+    var parentClassInstance = <Class>instance.parent;
     var module = this.module;
     var usizeType = this.options.usizeType;
     var sizeTypeRef = usizeType.toRef();
@@ -6993,7 +6996,7 @@ export class Compiler extends DiagnosticEmitter {
         for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
           let classInstance = _values[j];
           // Chcek if the parent class is a subtype of instance's class
-          if (!classInstance.isAssignableTo(<Class>instance.parent)) continue;
+          if (!classInstance.isAssignableTo(parentClassInstance)) continue;
           let overloadInstance: Function | null;
           if (isProperty) {
             let boundProperty = assert(classInstance.members!.get(unboundOverloadParent.name));
