@@ -152,6 +152,10 @@ function createProject(answer) {
     ensureTestsIndexJs();
   }
 
+  if (useWeb) {
+    ensureIndexHtml();
+  }
+
   console.log([
     colors.green("Done!"),
     "",
@@ -431,6 +435,37 @@ function ensureTestsIndexJs() {
     console.log(colors.green("  Created: ") + testsIndexFile);
   } else {
     console.log(colors.yellow("  Exists: ") + testsIndexFile);
+  }
+  console.log();
+}
+
+function ensureIndexHtml() {
+  console.log("- Making sure that 'index.js' exists...");
+  if (!fs.existsSync(indexHtml)) {
+    fs.writeFileSync(indexHtml, [
+      "<!DOCTYPE html>",
+      "<html lang=\"en\">",
+      "  <head>",
+      "    <script src=\"https://cdn.jsdelivr.net/npm/@assemblyscript/loader/umd/index.js\"></script>",
+      "    <script>",
+      "      const imports = {",
+      "        /* imports go here */",
+      "      };",
+      "",
+      "      loader",
+      "        .instantiateStreaming(fetch(\"build/optimized.wasm\"), imports)",
+      "        .then(wasmModule => {",
+      "          const { add } = wasmModule.exports;",
+      "          document.body.innerText = add(1, 2);",
+      "        });",
+      "    </script>",
+      "  </head>",
+      "  <body></body>",
+      "</html>",
+    ].join("\n") + "\n");
+    console.log(colors.green("  Created: ") + indexHtml);
+  } else {
+    console.log(colors.yellow("  Exists: ") + indexHtml);
   }
   console.log();
 }
