@@ -344,11 +344,13 @@ function ensurePackageJson() {
         "asbuild:untouched": buildUntouched,
         "asbuild:optimized": buildOptimized,
         "asbuild": buildAll,
-        "test": "node tests"
+        ...(useNode && {"test": "node tests"})
       },
-      "dependencies": {
-        "@assemblyscript/loader": "^" + compilerVersion
-      },
+      ...(useNode && {
+        "dependencies": {
+          "@assemblyscript/loader": "^" + compilerVersion
+        }
+      }),
       "devDependencies": {
         "assemblyscript": "^" + compilerVersion
       }
@@ -365,13 +367,13 @@ function ensurePackageJson() {
       pkg["scripts"] = scripts;
       updated = true;
     }
-    if (!scripts["test"] || scripts["test"] == npmDefaultTest) {
+    if (!scripts["test"] || scripts["test"] == npmDefaultTest && useNode) {
       scripts["test"] = "node tests";
       pkg["scripts"] = scripts;
       updated = true;
     }
     let dependencies = pkg["dependencies"] || {};
-    if (!dependencies["@assemblyscript/loader"]) {
+    if (!dependencies["@assemblyscript/loader"] && useNode) {
       dependencies["@assemblyscript/loader"] = "^" + compilerVersion;
       pkg["dependencies"] = dependencies;
       updated = true;
