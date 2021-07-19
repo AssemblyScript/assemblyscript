@@ -117,6 +117,8 @@ const paths = basePaths;
 if (useNode) Array.prototype.push.apply(paths, nodePaths);
 if (useWeb) Array.prototype.push.apply(paths, webPaths);
 
+const formatPath = filePath => "./" + path.relative(projectDir, filePath).replace(/\\/g, "/");
+
 console.log([
   "Version: " + version,
   "",
@@ -124,7 +126,7 @@ console.log([
     "This command will make sure that the following files exist in the project",
     "directory '" + projectDir + "':"
   ].join("\n")),
-  ...paths.map(([path, description]) => "\n  " + colors.cyan(path.relative(projectDir, path)) + "\n  " + description),
+  ...paths.map(([filePath, description]) => "\n  " + colors.cyan(formatPath(filePath)) + "\n  " + description),
   "",
   "The command will try to update existing files to match the correct settings",
   "for this instance of the compiler in '" + compilerDir + "'.",
