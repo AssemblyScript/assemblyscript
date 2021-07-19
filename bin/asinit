@@ -89,8 +89,33 @@ const buildDir = path.join(projectDir, "build");
 const testsDir = path.join(projectDir, "tests");
 const gitignoreFile = path.join(buildDir, ".gitignore");
 const packageFile = path.join(projectDir, "package.json");
+
+const indexHtml = path.join(projectDir, "index.html");
 const indexFile = path.join(projectDir, "index.js");
 const testsIndexFile = path.join(testsDir, "index.js");
+
+const basePaths = [
+  [assemblyDir, "Directory holding the AssemblyScript sources being compiled to WebAssembly."],
+  [tsconfigFile, "TypeScript configuration inheriting recommended AssemblyScript settings."],
+  [entryFile, "Example entry file being compiled to WebAssembly to get you started."],
+  [buildDir, "Build artifact directory where compiled WebAssembly files are stored."],
+  [gitignoreFile, "Git configuration that excludes compiled binaries from source control."],
+  [asconfigFile, "Configuration file defining both a 'debug' and a 'release' target."],
+  [packageFile, "Package info containing the necessary commands to compile to WebAssembly."]
+];
+
+const nodePaths = [
+  [indexFile, "Main file loading the WebAssembly module and exporting its exports."],
+  [testsIndexFile, "Example test to check that your module is indeed working."]
+];
+
+const webPaths = [
+  [indexHtml, "Main file that hosts your webpage and loads your module."]
+];
+
+const paths = basePaths;
+if (useNode) Array.prototype.push.apply(paths, nodePaths);
+if (useWeb) Array.prototype.push.apply(paths, webPaths);
 
 console.log([
   "Version: " + version,
@@ -99,33 +124,7 @@ console.log([
     "This command will make sure that the following files exist in the project",
     "directory '" + projectDir + "':"
   ].join("\n")),
-  "",
-  colors.cyan("  ./assembly"),
-  "  Directory holding the AssemblyScript sources being compiled to WebAssembly.",
-  "",
-  colors.cyan("  ./assembly/tsconfig.json"),
-  "  TypeScript configuration inheriting recommended AssemblyScript settings.",
-  "",
-  colors.cyan("  ./assembly/index.ts"),
-  "  Example entry file being compiled to WebAssembly to get you started.",
-  "",
-  colors.cyan("  ./build"),
-  "  Build artifact directory where compiled WebAssembly files are stored.",
-  "",
-  colors.cyan("  ./build/.gitignore"),
-  "  Git configuration that excludes compiled binaries from source control.",
-  "",
-  colors.cyan("  ./index.js"),
-  "  Main file loading the WebAssembly module and exporting its exports.",
-  "",
-  colors.cyan("  ./tests/index.js"),
-  "  Example test to check that your module is indeed working.",
-  "",
-  colors.cyan("  ./asconfig.json"),
-  "  Configuration file defining both a 'debug' and a 'release' target.",
-  "",
-  colors.cyan("  ./package.json"),
-  "  Package info containing the necessary commands to compile to WebAssembly.",
+  ...paths.map(([path, description]) => "\n  " + colors.cyan(path.relative(projectDir, path)) + "\n  " + description),
   "",
   "The command will try to update existing files to match the correct settings",
   "for this instance of the compiler in '" + compilerDir + "'.",
