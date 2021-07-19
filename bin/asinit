@@ -110,7 +110,7 @@ const nodePaths = [
 ];
 
 const webPaths = [
-  [indexHtml, "Main file that hosts your webpage and loads your module."]
+  [indexHtml, "Starter HTML file that loads your module."]
 ];
 
 const paths = basePaths;
