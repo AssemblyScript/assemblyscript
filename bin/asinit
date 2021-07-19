@@ -47,12 +47,21 @@ const asinitOptions = {
     "description": "Answers all questions with their default option for non-interactive usage.",
     "type": "b",
     "alias": "y"
+  },
+  "web": {
+    "category": "General",
+    "description": "Uses a template for web development rather than NodeJS development.",
+    "type": "b",
+    "alias": "w"
   }
 };
 
 const cliOptions = options.parse(process.argv.slice(2), asinitOptions);
 
 if (cliOptions.options.help || cliOptions.arguments.length === 0) printHelp();
+
+const useWeb = cliOptions.options.web;
+const useNode = !useWeb;
 
 function printHelp() {
   console.log([
