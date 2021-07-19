@@ -144,10 +144,14 @@ function createProject(answer) {
   ensureBuildDirectory();
   ensureGitignore();
   ensurePackageJson();
-  ensureIndexJs();
-  ensureTestsDirectory();
-  ensureTestsIndexJs();
   ensureAsconfigJson();
+
+  if (useNode) {
+    ensureIndexJs();
+    ensureTestsDirectory();
+    ensureTestsIndexJs();
+  }
+
   console.log([
     colors.green("Done!"),
     "",
