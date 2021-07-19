@@ -187,10 +187,12 @@ function createProject(answer) {
     "  ^ The optimized WebAssembly module using default optimization settings.",
     "    You can change the optimization settings in '" + colors.cyan("package.json")+ "'.",
     "",
-    "To run the tests, do:",
-    "",
-    colors.white("  " + commands[pm].test),
-    "",
+    ...(useNode ? [
+      "To run the tests, do:",
+      "",
+      colors.white("  " + commands[pm].test),
+      ""
+    ] : []),
     "The AssemblyScript documentation covers all the details:",
     "",
     "  https://docs.assemblyscript.org",
