@@ -50,9 +50,15 @@ const asinitOptions = {
   },
   "web": {
     "category": "General",
-    "description": "Uses a template for web development rather than NodeJS development.",
+    "description": "Adds an index.html file that can load your module. (Disables node without --node/-n flag)",
     "type": "b",
     "alias": "w"
+  },
+  "node": {
+    "category": "General",
+    "description": "Re-enables node files when using the --web/-w flag",
+    "type": "b",
+    "alias": "n"
   }
 };
 
@@ -61,7 +67,7 @@ const cliOptions = options.parse(process.argv.slice(2), asinitOptions);
 if (cliOptions.options.help || cliOptions.arguments.length === 0) printHelp();
 
 const useWeb = cliOptions.options.web;
-const useNode = !useWeb;
+const useNode = cliOptions.options.node || !useWeb;
 
 function printHelp() {
   console.log([
