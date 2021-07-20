@@ -1117,7 +1117,8 @@ export enum LiteralKind {
   TEMPLATE,
   REGEXP,
   ARRAY,
-  OBJECT
+  OBJECT,
+  PATTERN
 }
 
 /** Base class of all literal expressions. */
@@ -1129,6 +1130,18 @@ export abstract class LiteralExpression extends Expression {
     range: Range
   ) {
     super(NodeKind.LITERAL, range);
+  }
+}
+
+/** Represents an `[]` or `{}` containing identifiers. */
+export class BindingPatternExpression extends LiteralExpression {
+  constructor(
+    /** Nested element expressions. */
+    public elements: IdentifierExpression[],
+    /** Source range. */
+    range: Range
+  ) {
+    super(LiteralKind.PATTERN, range);
   }
 }
 
