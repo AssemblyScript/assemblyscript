@@ -25808,8 +25808,7 @@
      if
       local.get $4
       i64.load
-      i32.wrap_i64
-      i64.extend_i32_s
+      i64.extend32_s
       local.set $2
       global.get $~lib/memory/__stack_pointer
       i32.const 4
