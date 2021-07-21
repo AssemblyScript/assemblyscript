@@ -1084,6 +1084,8 @@ export class ASTBuilder {
       }
       --this.indentLevel;
       sb.push("\n}");
+    } else if (members == null) {
+      sb.push("export *");
     } else {
       sb.push("export {}");
     }
