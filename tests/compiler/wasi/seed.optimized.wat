@@ -299,7 +299,7 @@
   if
    i32.const 0
    i64.load
-   local.set $2
+   local.set $1
    loop $do-continue|0
     i32.const 0
     i32.const 8
@@ -307,19 +307,16 @@
     drop
     i32.const 0
     i64.load
-    local.tee $1
+    local.tee $2
     i64.eqz
     br_if $do-continue|0
    end
    i32.const 0
-   local.get $2
+   local.get $1
    i64.store
    i32.const 1
    global.set $~lib/math/random_seeded
-   local.get $1
-   f64.reinterpret_i64
-   i64.reinterpret_f64
-   local.tee $2
+   local.get $2
    local.get $2
    i64.const 33
    i64.shr_u
