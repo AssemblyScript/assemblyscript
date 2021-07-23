@@ -3,15 +3,15 @@
     "--pedantic"
   ],
   "stderr": [
-    "AS232: Exported generic function or class has no concrete instances.",
+    "AS907: Exported generic function or class has no concrete instances.",
     "export function testFunction<T>",
-    "AS232: Exported generic function or class has no concrete instances.",
+    "AS907: Exported generic function or class has no concrete instances.",
     "export class TestClass<T>",
-    "AS232: Exported generic function or class has no concrete instances.",
+    "AS907: Exported generic function or class has no concrete instances.",
     "public testMethod<T>()",
-    "AS232: Exported generic function or class has no concrete instances.",
+    "AS907: Exported generic function or class has no concrete instances.",
     "export function testNamespacedFunction<T>",
-    "AS232: Exported generic function or class has no concrete instances.",
+    "AS907: Exported generic function or class has no concrete instances.",
     "export class TestNamespacedClass<T>"
   ]
 }
