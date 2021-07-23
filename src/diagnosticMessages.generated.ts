@@ -46,7 +46,6 @@ export enum DiagnosticCode {
   Property_0_only_has_a_setter_and_is_missing_a_getter = 229,
   _0_keyword_cannot_be_used_here = 230,
   A_class_with_a_constructor_explicitly_returning_something_else_than_this_must_be_final = 231,
-  Exported_generic_function_or_class_has_no_concrete_instances = 232,
   Property_0_is_always_assigned_before_being_used = 233,
   Expression_refers_to_a_static_element_that_does_not_compile_to_a_value_at_runtime = 234,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
@@ -55,6 +54,7 @@ export enum DiagnosticCode {
   Indexed_access_may_involve_bounds_checking = 904,
   Explicitly_returning_constructor_drops_this_allocation = 905,
   Unnecessary_definite_assignment = 906,
+  Exported_generic_function_or_class_has_no_concrete_instances = 907,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -228,7 +228,6 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 229: return "Property '{0}' only has a setter and is missing a getter.";
     case 230: return "'{0}' keyword cannot be used here.";
     case 231: return "A class with a constructor explicitly returning something else than 'this' must be '@final'.";
-    case 232: return "Exported generic function or class has no concrete instances.";
     case 233: return "Property '{0}' is always assigned before being used.";
     case 234: return "Expression refers to a static element that does not compile to a value at runtime.";
     case 901: return "Importing the table disables some indirect call optimizations.";
@@ -237,6 +236,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 904: return "Indexed access may involve bounds checking.";
     case 905: return "Explicitly returning constructor drops 'this' allocation.";
     case 906: return "Unnecessary definite assignment.";
+    case 907: return "Exported generic function or class has no concrete instances.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
