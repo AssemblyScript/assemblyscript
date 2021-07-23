@@ -5136,8 +5136,7 @@
    f64.mul
    local.set $2
    local.get $7
-   i64.load
-   f64.reinterpret_i64
+   f64.load
    local.get $0
    f64.add
    local.get $2
@@ -5839,8 +5838,7 @@
    f64.mul
    local.set $6
    local.get $9
-   i64.load
-   f64.reinterpret_i64
+   f64.load
    local.get $0
    f64.const 0.6931471805599453
    f64.mul
@@ -8164,8 +8162,7 @@
     f64.mul
     local.set $0
     local.get $10
-    i64.load
-    f64.reinterpret_i64
+    f64.load
     local.get $1
     f64.add
     local.get $0

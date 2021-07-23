@@ -393,11 +393,14 @@ function test_i16x8(): void {
     );
     __free(ptr);
   }
+  assert(i16x8.q15mulr_sat_s(
+    i16x8(-1, -16383, 32765, <i16>65535, -32768, <i16>65535, -16385, -32768),
+    i16x8(-1, -16384,     1,     -32768, -32768,          1, -16384,    -10)
+  ) == i16x8(0, 8192, 1, 1, 32767, 0, 8193, 1));
 
   // TODO: unimp in Binaryen's interpreter
   i16x8.extadd_pairwise_i8x16_s(a);
   i16x8.extadd_pairwise_i8x16_u(a);
-  i16x8.q15mulr_sat_s(a, a);
   i16x8.extmul_low_i8x16_s(a, a);
   i16x8.extmul_low_i8x16_u(a, a);
   i16x8.extmul_high_i8x16_s(a, a);
@@ -580,6 +583,7 @@ function test_i64x2(): void {
     );
     __free(ptr);
   }
+  // TODO: unimp in Binaryen's interpreter
   i64x2.extmul_low_i32x4_s(a, a);
   i64x2.extmul_low_i32x4_u(a, a);
   i64x2.extmul_high_i32x4_s(a, a);
