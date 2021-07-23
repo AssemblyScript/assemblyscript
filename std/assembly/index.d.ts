@@ -1602,6 +1602,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   fill(value: T, start?: i32, end?: i32): this;
   /** The findIndex() method returns an index in the typed array, if an element in the typed array satisfies the provided testing function. Otherwise -1 is returned. See also the find() [not implemented] method, which returns the value of a found element in the typed array instead of its index. */
   findIndex(callbackfn: (value: T, index: i32, self: this) => bool): i32;
+  /** The findLastIndex() method returns an index start searching from the end in the typed array, if an element in the typed array satisfies the provided testing function. Otherwise -1 is returned. See also the find() [not implemented] method, which returns the value of a found element in the typed array instead of its index. */
+  findLastIndex(callbackfn: (value: T, index: i32, self: this) => bool): i32;
   /** The every() method tests whether all elements in the typed array pass the test implemented by the provided function. This method has the same algorithm as Array.prototype.every(). */
   every(callbackfn: (value: T, index: i32, self: this) => bool): bool;
   /** The forEach() method executes a provided function once per array element. This method has the same algorithm as Array.prototype.forEach().*/
@@ -1688,7 +1690,8 @@ declare class Array<T> {
   at(index: i32): T;
   fill(value: T, start?: i32, end?: i32): this;
   every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
-  findIndex(predicate: (element: T, index: i32, array?: Array<T>) => bool): i32;
+  findIndex(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): i32;
+  findLastIndex(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): i32;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
