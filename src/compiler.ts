@@ -799,10 +799,12 @@ export class Compiler extends DiagnosticEmitter {
             this.ensureModuleExport(instanceName, instance, prefix);
           }
         } else if (functionPrototype.is(CommonFlags.GENERIC)) {
-          this.warning(
-            DiagnosticCode.Exported_generic_function_or_class_has_no_concrete_instances,
-            functionPrototype.identifierNode.range
-          );
+          if (this.options.pedantic) {
+            this.pedantic(
+              DiagnosticCode.Exported_generic_function_or_class_has_no_concrete_instances,
+              functionPrototype.identifierNode.range
+            );
+          }
         }
         break;
       }
@@ -821,10 +823,12 @@ export class Compiler extends DiagnosticEmitter {
             this.ensureModuleExport(instanceName, instance, prefix);
           }
         } else if (classPrototype.is(CommonFlags.GENERIC)) {
-          this.warning(
-            DiagnosticCode.Exported_generic_function_or_class_has_no_concrete_instances,
-            classPrototype.identifierNode.range
-          );
+          if (this.options.pedantic) {
+            this.pedantic(
+              DiagnosticCode.Exported_generic_function_or_class_has_no_concrete_instances,
+              classPrototype.identifierNode.range
+            );
+          }
         }
         break;
       }
