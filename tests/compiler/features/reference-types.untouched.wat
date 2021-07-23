@@ -426,17 +426,19 @@
    call $~lib/builtins/abort
    unreachable
   end
-  ref.func $features/reference-types/someFunc
-  local.set $0
-  local.get $0
-  ref.is_null
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 113
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
+  block
+   ref.func $features/reference-types/someFunc
+   local.set $0
+   local.get $0
+   ref.is_null
+   if
+    i32.const 0
+    i32.const 32
+    i32.const 113
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
   global.get $features/reference-types/funcGlobal
   global.set $features/reference-types/anyGlobal
