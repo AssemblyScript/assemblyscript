@@ -86,6 +86,8 @@ export interface ASUtil {
   __instanceof(ptr: number, baseId: number): boolean;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
   __newString(str: string): number;
+  /** Allocates a new ArrayBuffer in the module's memory and returns a reference (pointer) to it. */
+  __newArrayBuffer(buf: ArrayBuffer): number;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
   __newArray(id: number, values: ArrayLike<number>): number;
 
