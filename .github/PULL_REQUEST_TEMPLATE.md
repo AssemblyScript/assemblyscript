@@ -8,3 +8,4 @@
 ⯈
 
 - [ ] I've read the contributing guidelines
+- [ ] I've added my name and email into NOTICE file
