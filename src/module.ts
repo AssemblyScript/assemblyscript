@@ -2191,18 +2191,6 @@ export class Module {
     binaryen._BinaryenModuleSetFeatures(this.ref, featureFlags);
   }
 
-  runPass(pass: string, func: FunctionRef = 0): void {
-    var cStr = allocString(pass);
-    var cArr = allocPtrArray([cStr]);
-    if (func) {
-      binaryen._BinaryenFunctionRunPasses(func, this.ref, cArr, 1);
-    } else {
-      binaryen._BinaryenModuleRunPasses(this.ref, cArr, 1);
-    }
-    binaryen._free(cArr);
-    binaryen._free(cStr);
-  }
-
   runPasses(passes: string[], func: FunctionRef = 0): void {
     var numNames = passes.length;
     var cStrs = new Array<StringRef>(numNames);
