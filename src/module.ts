@@ -2193,11 +2193,13 @@ export class Module {
 
   runPass(pass: string, func: FunctionRef = 0): void {
     var cStr = allocString(pass);
+    var cArr = allocPtrArray([cStr]);
     if (func) {
-      binaryen._BinaryenFunctionRunPasses(func, this.ref, cStr, 1);
+      binaryen._BinaryenFunctionRunPasses(func, this.ref, cArr, 1);
     } else {
-      binaryen._BinaryenModuleRunPasses(this.ref, cStr, 1);
+      binaryen._BinaryenModuleRunPasses(this.ref, cArr, 1);
     }
+    binaryen._free(cArr);
     binaryen._free(cStr);
   }
 
