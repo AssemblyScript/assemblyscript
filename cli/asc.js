@@ -884,7 +884,7 @@ exports.main = function main(argv, options, callback) {
       try {
         module.runPasses(["trap-mode-clamp"]);
       } catch (e) {
-        crash("runPass", e);
+        crash("runPasses", e);
       }
     });
   } else if (opts.trapMode === "js") {
@@ -893,7 +893,7 @@ exports.main = function main(argv, options, callback) {
       try {
         module.runPasses(["trap-mode-js"]);
       } catch (e) {
-        crash("runPass", e);
+        crash("runPasses", e);
       }
     });
   } else if (opts.trapMode !== "allow") {
