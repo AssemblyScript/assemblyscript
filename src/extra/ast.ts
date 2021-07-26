@@ -150,6 +150,10 @@ export class ASTBuilder {
         this.visitIdentifierExpression(<IdentifierExpression>node);
         break;
       }
+      case NodeKind.PATTERN: {
+        this.visitBindingPatternExpression(<BindingPatternExpression>node);
+        break;
+      }
       case NodeKind.OMITTED: {
         break;
       }
@@ -673,10 +677,6 @@ export class ASTBuilder {
       }
       case LiteralKind.OBJECT: {
         this.visitObjectLiteralExpression(<ObjectLiteralExpression>node);
-        break;
-      }
-      case LiteralKind.PATTERN: {
-        this.visitBindingPatternExpression(<BindingPatternExpression>node);
         break;
       }
       default: {
