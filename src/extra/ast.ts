@@ -86,7 +86,8 @@ import {
   SwitchCase,
   IndexSignatureNode,
 
-  isTypeOmitted
+  isTypeOmitted,
+  BindingPatternExpression
 } from "../ast";
 
 import {
@@ -147,6 +148,9 @@ export class ASTBuilder {
       case NodeKind.CONSTRUCTOR:
       case NodeKind.IDENTIFIER: {
         this.visitIdentifierExpression(<IdentifierExpression>node);
+        break;
+      }
+      case NodeKind.OMITTED: {
         break;
       }
       case NodeKind.ASSERTION: {
@@ -465,6 +469,23 @@ export class ASTBuilder {
     else this.sb.push(node.text);
   }
 
+  visitBindingPatternExpression(node: BindingPatternExpression): void {
+    var sb = this.sb;
+    sb.push(node.array ? "[" : "{");
+    var elements = node.elements;
+    var numElements = elements.length;
+    if (numElements) {
+      let element = elements[0];
+      if (element) this.visitNode(element);
+      for (let i = 1; i < numElements; ++i) {
+        element = elements[i];
+        sb.push(", ");
+        if (element) this.visitNode(element);
+      }
+    }
+    sb.push(node.array ? "]" : "}");
+  }
+
   visitArrayLiteralExpression(node: ArrayLiteralExpression): void {
     var sb = this.sb;
     sb.push("[");
@@ -613,13 +634,13 @@ export class ASTBuilder {
   visitFunctionExpression(node: FunctionExpression): void {
     var declaration = node.declaration;
     if (!declaration.arrowKind) {
-      if (declaration.name.text.length) {
+      if (declaration.getName().text.length) {
         this.sb.push("function ");
       } else {
         this.sb.push("function");
       }
     } else {
-      assert(declaration.name.text.length == 0);
+      assert(declaration.getName().text.length == 0);
     }
     this.visitFunctionCommon(declaration);
   }
@@ -652,6 +673,10 @@ export class ASTBuilder {
       }
       case LiteralKind.OBJECT: {
         this.visitObjectLiteralExpression(<ObjectLiteralExpression>node);
+        break;
+      }
+      case LiteralKind.PATTERN: {
+        this.visitBindingPatternExpression(<BindingPatternExpression>node);
         break;
       }
       default: {
@@ -934,9 +959,9 @@ export class ASTBuilder {
       this.serializeExternalModifiers(node);
     }
     if (node.is(CommonFlags.ABSTRACT)) sb.push("abstract ");
-    if (node.name.text.length) {
+    if (node.getName().text.length) {
       sb.push("class ");
-      this.visitIdentifierExpression(node.name);
+      this.visitIdentifierExpression(node.getName());
     } else {
       sb.push("class");
     }
@@ -1019,7 +1044,7 @@ export class ASTBuilder {
     }
     if (node.is(CommonFlags.CONST)) sb.push("const ");
     sb.push("enum ");
-    this.visitIdentifierExpression(node.name);
+    this.visitIdentifierExpression(node.getName());
     var values = node.values;
     var numValues = values.length;
     if (numValues) {
@@ -1041,7 +1066,7 @@ export class ASTBuilder {
   }
 
   visitEnumValueDeclaration(node: EnumValueDeclaration): void {
-    this.visitIdentifierExpression(node.name);
+    this.visitIdentifierExpression(node.getName());
     var initializer = node.initializer;
     if (initializer) {
       this.sb.push(" = ");
@@ -1134,7 +1159,7 @@ export class ASTBuilder {
       }
     }
     this.serializeAccessModifiers(node);
-    this.visitIdentifierExpression(node.name);
+    this.visitIdentifierExpression(node.getName());
     var sb = this.sb;
     if (node.flags & CommonFlags.DEFINITELY_ASSIGNED) {
       sb.push("!");
@@ -1200,7 +1225,7 @@ export class ASTBuilder {
       this.serializeExternalModifiers(node);
       this.serializeAccessModifiers(node);
     }
-    if (node.name.text.length) {
+    if (node.getName().text.length) {
       sb.push("function ");
     } else {
       sb.push("function");
@@ -1210,7 +1235,7 @@ export class ASTBuilder {
 
   visitFunctionCommon(node: FunctionDeclaration): void {
     var sb = this.sb;
-    this.visitIdentifierExpression(node.name);
+    this.visitIdentifierExpression(node.getName());
     var signature = node.signature;
     var typeParameters = node.typeParameters;
     if (typeParameters) {
@@ -1309,7 +1334,7 @@ export class ASTBuilder {
 
   visitImportDeclaration(node: ImportDeclaration): void {
     var externalName = node.foreignName;
-    var name = node.name;
+    var name = node.getName();
     this.visitIdentifierExpression(externalName);
     if (externalName.text != name.text) {
       this.sb.push(" as ");
@@ -1369,7 +1394,7 @@ export class ASTBuilder {
       this.serializeExternalModifiers(node);
     }
     sb.push("interface ");
-    this.visitIdentifierExpression(node.name);
+    this.visitIdentifierExpression(node.getName());
     var typeParameters = node.typeParameters;
     if (typeParameters != null && typeParameters.length > 0) {
       sb.push("<");
@@ -1427,7 +1452,7 @@ export class ASTBuilder {
       this.serializeExternalModifiers(node);
     }
     sb.push("namespace ");
-    this.visitIdentifierExpression(node.name);
+    this.visitIdentifierExpression(node.getName());
     var members = node.members;
     var numMembers = members.length;
     if (numMembers) {
@@ -1545,7 +1570,7 @@ export class ASTBuilder {
     var sb = this.sb;
     this.serializeExternalModifiers(node);
     sb.push("type ");
-    this.visitIdentifierExpression(node.name);
+    this.visitIdentifierExpression(node.getName());
     var typeParameters = node.typeParameters;
     if (typeParameters) {
       let numTypeParameters = typeParameters.length;
@@ -1562,7 +1587,7 @@ export class ASTBuilder {
   }
 
   visitVariableDeclaration(node: VariableDeclaration): void {
-    this.visitIdentifierExpression(node.name);
+    this.visitNode(node.name);
     var type = node.type;
     var sb = this.sb;
     if (node.flags & CommonFlags.DEFINITELY_ASSIGNED) {

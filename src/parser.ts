@@ -925,6 +925,73 @@ export class Parser extends DiagnosticEmitter {
     return ret;
   }
 
+  parseBindingName(
+    tn: Tokenizer
+  ): Expression | null {
+    if (!tn.skipIdentifier()) {
+      let startPos = tn.range().start;
+      let isArrayPattern = false;
+
+      switch (tn.next()) {
+        case Token.OPENBRACKET:
+          isArrayPattern = true;
+        case Token.OPENBRACE: {
+          let elements = new Array<Expression>();
+
+          do {
+            if (tn.peek() == Token.COMMA) {
+              elements.push(Node.createOmittedExpression(tn.range(tn.pos)));
+            } else {
+              if (!tn.skipIdentifier()) {
+                this.error(
+                  DiagnosticCode.Identifier_expected,
+                  tn.range()
+                );
+                return null;
+              }
+              
+              let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+              assert(identifier.text.charCodeAt(0) != CharCode.SPACE);
+              if (isIllegalVariableIdentifier(identifier.text)) {
+                this.error(
+                  DiagnosticCode.Identifier_expected,
+                  identifier.range
+                );
+                return null;
+              }
+              elements.push(identifier);
+            }
+          } while (tn.skip(Token.COMMA));
+
+          if (!tn.skip(isArrayPattern ? Token.CLOSEBRACKET : Token.CLOSEBRACE)) {
+            this.error(
+              DiagnosticCode._0_expected,
+              tn.range(), isArrayPattern ? "]" : "}"
+            );
+            return null;
+          }
+
+          return Node.createBindingPatternExpression(elements, tn.range(startPos, tn.pos), isArrayPattern);
+        }
+        default: 
+          this.error(
+            DiagnosticCode.Identifier_expected,
+            tn.range()
+          );
+          return null;
+      }
+    } else {
+      var name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      if (isIllegalVariableIdentifier(name.text)) {
+        this.error(
+          DiagnosticCode.Identifier_expected,
+          name.range
+        );
+      }
+      return name;
+    }
+  }
+
   parseVariableDeclaration(
     tn: Tokenizer,
     parentFlags: CommonFlags,
@@ -933,21 +1000,10 @@ export class Parser extends DiagnosticEmitter {
   ): VariableDeclaration | null {
 
     // before: Identifier (':' Type)? ('=' Expression)?
-
-    if (!tn.skipIdentifier()) {
-      this.error(
-        DiagnosticCode.Identifier_expected,
-        tn.range()
-      );
+    var name = this.parseBindingName(tn);
+    if (!name)
       return null;
-    }
-    var identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-    if (isIllegalVariableIdentifier(identifier.text)) {
-      this.error(
-        DiagnosticCode.Identifier_expected,
-        identifier.range
-      );
-    }
+    
     var flags = parentFlags;
     if (tn.skip(Token.EXCLAMATION)) {
       flags |= CommonFlags.DEFINITELY_ASSIGNED;
@@ -973,7 +1029,7 @@ export class Parser extends DiagnosticEmitter {
         if (!(flags & CommonFlags.AMBIENT)) {
           this.error(
             DiagnosticCode._const_declarations_must_be_initialized,
-            identifier.range
+            name.range
           ); // recoverable
         }
       } else if (!type) { // neither type nor initializer
@@ -983,7 +1039,7 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
     }
-    var range = Range.join(identifier.range, tn.range());
+    var range = Range.join(name.range, tn.range());
     if (initializer !== null && (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
@@ -991,7 +1047,7 @@ export class Parser extends DiagnosticEmitter {
       );
     }
     return Node.createVariableDeclaration(
-      identifier,
+      name,
       parentDecorators,
       flags,
       type,
