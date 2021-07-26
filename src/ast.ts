@@ -1725,7 +1725,7 @@ export abstract class DeclarationStatement extends Statement {
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
   /** Attempts to return the name as an identifier. */
-  getName(): IdentifierExpression {
+  get ident(): IdentifierExpression {
     assert(this.name.kind == NodeKind.IDENTIFIER);
     return this.name as IdentifierExpression;
   }
