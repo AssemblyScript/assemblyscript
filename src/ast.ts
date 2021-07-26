@@ -55,6 +55,7 @@ export enum NodeKind {
 
   // expressions
   IDENTIFIER,
+  PATTERN,
   ASSERTION,
   BINARY,
   CALL,
@@ -1125,8 +1126,7 @@ export enum LiteralKind {
   TEMPLATE,
   REGEXP,
   ARRAY,
-  OBJECT,
-  PATTERN
+  OBJECT
 }
 
 /** Base class of all literal expressions. */
@@ -1142,7 +1142,7 @@ export abstract class LiteralExpression extends Expression {
 }
 
 /** Represents an `[]` or `{}` containing identifiers. */
-export class BindingPatternExpression extends LiteralExpression {
+export class BindingPatternExpression extends Expression {
   constructor(
     /** Nested element expressions. Either {@link OmittedExpression} or {@link IdentifierExpression} */
     public elements: Expression[],
@@ -1151,7 +1151,7 @@ export class BindingPatternExpression extends LiteralExpression {
     /** Source range. */
     range: Range
   ) {
-    super(LiteralKind.PATTERN, range);
+    super(NodeKind.PATTERN, range);
   }
 }
 
