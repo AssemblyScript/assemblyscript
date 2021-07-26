@@ -99,14 +99,12 @@ export class Map<K,V> {
     return this.find(key, HASH<K>(key)) !== null;
   }
 
-  @operator("[]")
   get(key: K): V {
     var entry = this.find(key, HASH<K>(key));
     if (!entry) throw new Error(E_KEYNOTFOUND); // cannot represent `undefined`
     return entry.value;
   }
 
-  @operator("[]=")
   set(key: K, value: V): this {
     var hashCode = HASH<K>(key);
     var entry = this.find(key, hashCode); // unmanaged!
