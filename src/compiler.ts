@@ -3030,7 +3030,7 @@ export class Compiler extends DiagnosticEmitter {
 
         if (initializerNode) {
           let pendingElements = this.pendingElements;
-          let dummy = flow.addScopedDummyLocal(name, type); // pending dummy
+          let dummy = flow.addScopedDummyLocal(name, type, statement); // pending dummy
           pendingElements.add(dummy);
           initExpr = this.compileExpression(initializerNode, type, // reports
             Constraints.CONV_IMPLICIT
@@ -3042,7 +3042,7 @@ export class Compiler extends DiagnosticEmitter {
       // Otherwise infer type from initializer
       } else if (initializerNode) {
         let pendingElements = this.pendingElements;
-        let temp = flow.addScopedDummyLocal(name, Type.auto); // pending dummy
+        let temp = flow.addScopedDummyLocal(name, Type.auto, statement); // pending dummy
         pendingElements.add(temp);
         initExpr = this.compileExpression(initializerNode, Type.auto); // reports
         pendingElements.delete(temp);
