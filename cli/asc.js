@@ -46,14 +46,14 @@ const dynrequire = typeof __webpack_require__ === "function"
 
 const WIN = process.platform === "win32";
 const EOL = WIN ? "\r\n" : "\n";
-const SEP = WIN ? "\\" : "/";
+const SEP = WIN ? "\\"   : "/";
 
 // Sets up an extension with its definition counterpart and relevant regexes.
 function setupExtension(ext) {
-  if (!ext.startsWith(".")) ext = "." + ext;
+  if (!ext.startsWith(".")) ext = `.${ext}`;
   return {
     ext,
-    ext_d: ".d" + ext,
+    ext_d: `.d${ext}`,
     re: new RegExp("\\" + ext + "$"),
     re_d: new RegExp("\\.d\\" + ext + "$"),
     re_except_d: new RegExp("^(?!.*\\.d\\" + ext + "$).*\\" + ext + "$"),
@@ -70,7 +70,9 @@ Object.defineProperty(exports, "ready", {
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
 // useless code fragment on top of an actual error. suppress this:
-if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
+if (process.removeAllListeners) {
+  process.removeAllListeners("uncaughtException");
+}
 
 // Use distribution files if present, otherwise run the sources directly.
 function loadAssemblyScriptJS() {
@@ -95,7 +97,7 @@ function loadAssemblyScriptJS() {
         try { // `require("dist/asc.js")` in explicit browser tests
           exports = dynrequire("./assemblyscript");
         } catch (e) {
-          throw Error(e_ts.stack + "\n---\n" + e.stack);
+          throw Error(`${e_ts.stack}\n---\n${e.stack}`);
         }
       }
     }
@@ -107,14 +109,24 @@ function loadAssemblyScriptJS() {
 function loadAssemblyScriptWasm(binaryPath) {
   const loader = require("../lib/loader/umd/index");
   const rtrace = new (require("../lib/rtrace/umd/index").Rtrace)({
-    onerror(err, info) { console.log(err, info); },
-    getMemory() { return exports.memory; },
+    onerror(err, info) {
+      console.log(err, info);
+    },
+    getMemory() {
+      return exports.memory;
+    },
     oncollect() {
       var gcProfile = rtrace.gcProfile;
       if (gcProfile && gcProfile.length && fs.writeFileSync) {
         let timestamp = Date.now();
-        fs.writeFileSync(`rtrace-gc-profile-${timestamp}.json`, JSON.stringify(gcProfile));
-        fs.writeFileSync(`rtrace-gc-profile-${timestamp}.csv`, `time,memory,pause\n${gcProfile.join("\n")}`);
+        fs.writeFileSync(
+          `rtrace-gc-profile-${timestamp}.json`,
+          JSON.stringify(gcProfile)
+        );
+        fs.writeFileSync(
+          `rtrace-gc-profile-${timestamp}.csv`,
+          `time,memory,pause\n${gcProfile.join("\n")}`
+        );
       }
     }
   });
@@ -149,8 +161,8 @@ function loadAssemblyScript() {
     __newString = str => str;
     __getString = ptr => ptr;
     __pin = ptr => ptr;
-    __unpin = ptr => undefined;
-    __collect = incremental => undefined;
+    __unpin = _ => undefined;
+    __collect = _ => undefined;
   }
 }
 loadAssemblyScript();
@@ -188,7 +200,7 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if
 /** Bundled definition files. */
 exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : (() => { // set up if not a bundle
   const readDefinition = name => fs.readFileSync(
-    path.join(__dirname, "..", "std", name, "index" + defaultExtension.ext_d),
+    path.join(__dirname, "..", "std", name, `index${defaultExtension.ext_d}`),
     "utf8"
   );
   return {
@@ -199,7 +211,7 @@ exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : (() => { // se
 
 /** Convenience function that parses and compiles source strings directly. */
 exports.compileString = (sources, options) => {
-  if (typeof sources === "string") sources = { ["input" + defaultExtension.ext]: sources };
+  if (typeof sources === "string") sources = { [`input${defaultExtension.ext}`]: sources };
   const output = Object.create({
     stdout: createMemoryStream(),
     stderr: createMemoryStream()
@@ -212,12 +224,12 @@ exports.compileString = (sources, options) => {
     var val = options[key];
     var opt = exports.options[key];
     if (opt && opt.type === "b") {
-      if (val) argv.push("--" + key);
+      if (val) argv.push(`--${key}`);
     } else {
       if (Array.isArray(val)) {
-        val.forEach(val => { argv.push("--" + key, String(val)); });
+        val.forEach(val => { argv.push(`--${key}`, String(val)); });
       }
-      else argv.push("--" + key, String(val));
+      else argv.push(`--${key}`, String(val));
     }
   });
   exports.main(argv.concat(Object.keys(sources)), {
@@ -277,21 +289,25 @@ exports.main = function main(argv, options, callback) {
   const unknownOpts = optionsResult.unknown;
   if (unknownOpts.length) {
     unknownOpts.forEach(arg => {
-      stderr.write(colorsUtil.stderr.yellow("WARNING ") + "Unknown option '" + arg + "'" + EOL);
+      stderr.write(
+        `${colorsUtil.stderr.yellow("WARNING ")}Unknown option '${arg}'%{EOL}`
+      );
     });
   }
 
   // Check for trailing arguments
   const trailingArgv = optionsResult.trailing;
   if (trailingArgv.length) {
-    stderr.write(colorsUtil.stderr.yellow("WARNING ") + "Unsupported trailing arguments: " + trailingArgv.join(" ") + EOL);
+    stderr.write(
+      `${colorsUtil.stderr.yellow("WARNING ")}Unsupported trailing arguments: ${trailingArgv.join(" ")}${EOL}`
+    );
   }
 
   // Use default callback if none is provided
   if (!callback) callback = function defaultCallback(err) {
     var code = 0;
     if (err) {
-      stderr.write(colorsUtil.stderr.red("FAILURE ") + err.stack.replace(/^ERROR: /i, "") + EOL);
+      stderr.write(`${colorsUtil.stderr.red("FAILURE ")}${err.stack.replace(/^ERROR: /i, "")}${EOL}`);
       code = 1;
     }
     return code;
@@ -299,7 +315,7 @@ exports.main = function main(argv, options, callback) {
 
   // Just print the version if requested
   if (opts.version) {
-    stdout.write("Version " + exports.version + EOL);
+    stdout.write(`Version ${exports.version}${EOL}`);
     return callback(null);
   }
 
@@ -308,7 +324,7 @@ exports.main = function main(argv, options, callback) {
     if (/^\.?[0-9a-zA-Z]{1,14}$/.test(opts.extension)) {
       extension = setupExtension(opts.extension);
     } else {
-      return callback(Error("Invalid extension: " + opts.extension));
+      return callback(Error(`Invalid extension: ${opts.extension}`));
     }
   }
 
@@ -345,7 +361,7 @@ exports.main = function main(argv, options, callback) {
 
   // I/O must be specified if not present in the environment
   if (!fs.readFileSync) {
-    if (readFile === readFileNode) throw Error("'options.readFile' must be specified");
+    if (readFile === readFileNode)   throw Error("'options.readFile' must be specified");
     if (writeFile === writeFileNode) throw Error("'options.writeFile' must be specified");
     if (listFiles === listFilesNode) throw Error("'options.listFiles' must be specified");
   }
@@ -447,10 +463,12 @@ exports.main = function main(argv, options, callback) {
     for (let i = 0, k = aliases.length; i < k; ++i) {
       let part = aliases[i];
       let p = part.indexOf("=");
-      if (p < 0) return callback(Error("Global alias '" + part + "' is invalid."));
+      if (p < 0) return callback(Error(`Global alias '${part}' is invalid.`));
       let alias = part.substring(0, p).trim();
       let name = part.substring(p + 1).trim();
-      if (!alias.length) return callback(Error("Global alias '" + part + "' is invalid."));
+      if (!alias.length) {
+        return callback(Error(`Global alias '${part}' is invalid.`));
+      }
       {
         let aliasPtr = __pin(__newString(alias));
         let namePtr = __newString(name);
@@ -466,8 +484,8 @@ exports.main = function main(argv, options, callback) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
-      let flag = assemblyscript["FEATURE_" + name.replace(/-/g, "_").toUpperCase()];
-      if (!flag) return callback(Error("Feature '" + name + "' is unknown."));
+      let flag = assemblyscript[`FEATURE_${name.replace(/-/g, "_").toUpperCase()}`];
+      if (!flag) return callback(Error(`Feature '${name}' is unknown.`));
       assemblyscript.disableFeature(compilerOptions, flag);
     }
   }
@@ -477,8 +495,8 @@ exports.main = function main(argv, options, callback) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
-      let flag = assemblyscript["FEATURE_" + name.replace(/-/g, "_").toUpperCase()];
-      if (!flag) return callback(Error("Feature '" + name + "' is unknown."));
+      let flag = assemblyscript[`FEATURE_${name.replace(/-/g, "_").toUpperCase()}`];
+      if (!flag) return callback(Error(`Feature '${name}' is unknown.`));
       assemblyscript.enableFeature(compilerOptions, flag);
     }
   }
@@ -513,11 +531,17 @@ exports.main = function main(argv, options, callback) {
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
       if (!tsNodeRegistered && filename.endsWith(".ts")) { // ts-node requires .ts specifically
-        dynrequire("ts-node").register({ transpileOnly: true, skipProject: true, compilerOptions: { target: "ES2016" } });
+        dynrequire("ts-node").register({
+          transpileOnly: true,
+          skipProject: true,
+          compilerOptions: { target: "ES2016" }
+        });
         tsNodeRegistered = true;
       }
       try {
-        transforms.push(dynrequire(dynrequire.resolve(filename, { paths: [baseDir, process.cwd()] })));
+        transforms.push(dynrequire(dynrequire.resolve(filename, {
+          paths: [baseDir, process.cwd()]
+        })));
       } catch (e) {
         return callback(e);
       }
@@ -565,7 +589,7 @@ exports.main = function main(argv, options, callback) {
 
   // Parse library files
   Object.keys(exports.libraryFiles).forEach(libPath => {
-    if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
+    if (libPath.includes("/")) return; // in sub-directory: imported on demand
     stats.parseCount++;
     stats.parseTime += measure(() => {
       let textPtr = __pin(__newString(exports.libraryFiles[libPath]));
@@ -592,7 +616,9 @@ exports.main = function main(argv, options, callback) {
       for (let j = 0, l = libFiles.length; j < l; ++j) {
         let libPath = libFiles[j];
         let libText = readFile(libPath, libDir);
-        if (libText === null) return callback(Error("Library file '" + libPath + "' not found."));
+        if (libText === null) {
+          return callback(Error(`Library file '${libPath}' not found.`));
+        }
         stats.parseCount++;
         exports.libraryFiles[libPath.replace(extension.re, "")] = libText;
         stats.parseTime += measure(() => {
@@ -607,8 +633,8 @@ exports.main = function main(argv, options, callback) {
   opts.path = opts.path || [];
 
   // Maps package names to parent directory
-  var packageMains = new Map();
-  var packageBases = new Map();
+  const packageMains = new Map();
+  const packageBases = new Map();
 
   // Gets the file matching the specified source path, imported at the given dependee path
   function getFile(internalPath, dependeePath) {
@@ -631,7 +657,7 @@ exports.main = function main(argv, options, callback) {
     // Search library in this order: stdlib, custom lib dirs, paths
     } else {
       const plainName = internalPath.substring(libraryPrefix.length);
-      const indexName = plainName + "/index";
+      const indexName = `${plainName}/index`;
       if (Object.prototype.hasOwnProperty.call(libraryFiles, plainName)) {
         sourceText = libraryFiles[plainName];
         sourcePath = libraryPrefix + plainName + extension.ext;
@@ -656,15 +682,24 @@ exports.main = function main(argv, options, callback) {
             const packageName = match[1];
             const isPackageRoot = match[2] === undefined;
             const filePath = isPackageRoot ? "index" : match[2];
-            const basePath = packageBases.has(dependeePath) ? packageBases.get(dependeePath) : ".";
-            if (opts.traceResolution) stderr.write("Looking for package '" + packageName + "' file '" + filePath + "' relative to '" + basePath + "'" + EOL);
+            const basePath = packageBases.has(dependeePath)
+              ? packageBases.get(dependeePath)
+              : ".";
+
+            if (opts.traceResolution) {
+              stderr.write(`Looking for package '${packageName}' file '${filePath}' relative to '${basePath}'${EOL}`);
+            }
             const paths = [];
             const parts = path.resolve(baseDir, basePath).split(SEP);
             for (let i = parts.length, k = WIN ? 1 : 0; i >= k; --i) {
-              if (parts[i - 1] !== "node_modules") paths.push(parts.slice(0, i).join(SEP) + SEP + "node_modules");
+              if (parts[i - 1] !== "node_modules") {
+                paths.push(`${parts.slice(0, i).join(SEP)}${SEP}node_modules`);
+              }
             }
             for (const currentPath of paths.concat(...opts.path).map(p => path.relative(baseDir, p))) {
-              if (opts.traceResolution) stderr.write("  in " + path.join(currentPath, packageName) + EOL);
+              if (opts.traceResolution) {
+                stderr.write(`  in ${path.join(currentPath, packageName)}${EOL}`);
+              }
               let mainPath = "assembly";
               if (packageMains.has(packageName)) { // use cached
                 mainPath = packageMains.get(packageName);
@@ -684,16 +719,20 @@ exports.main = function main(argv, options, callback) {
               const mainDir = path.join(currentPath, packageName, mainPath);
               const plainName = filePath;
               if ((sourceText = readFile(path.join(mainDir, plainName + extension.ext), baseDir)) != null) {
-                sourcePath = libraryPrefix + packageName + "/" + plainName + extension.ext;
+                sourcePath = `${libraryPrefix}${packageName}/${plainName}${extension.ext}`;
                 packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
-                if (opts.traceResolution) stderr.write("  -> " + path.join(mainDir, plainName + extension.ext) + EOL);
+                if (opts.traceResolution) {
+                  stderr.write(`  -> ${path.join(mainDir, plainName + extension.ext)}${EOL}`);
+                }
                 break;
               } else if (!isPackageRoot) {
-                const indexName = filePath + "/index";
+                const indexName = `${filePath}/index`;
                 if ((sourceText = readFile(path.join(mainDir, indexName + extension.ext), baseDir)) !== null) {
-                  sourcePath = libraryPrefix + packageName + "/" + indexName + extension.ext;
+                  sourcePath = `${libraryPrefix}${packageName}/${indexName}${extension.ext}`;
                   packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
-                  if (opts.traceResolution) stderr.write("  -> " + path.join(mainDir, indexName + extension.ext) + EOL);
+                  if (opts.traceResolution) {
+                    stderr.write(`  -> ${path.join(mainDir, indexName + extension.ext)}${EOL}`);
+                  }
                   break;
                 }
               }
@@ -730,7 +769,7 @@ exports.main = function main(argv, options, callback) {
     }
     var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
     if (numErrors) {
-      const err = Error(numErrors + " parse error(s)");
+      const err = Error(`${numErrors} parse error(s)`);
       err.stack = err.message; // omit stack
       return callback(err);
     }
@@ -739,14 +778,14 @@ exports.main = function main(argv, options, callback) {
   // Include runtime before entry files so its setup runs first
   {
     let runtimeName = String(opts.runtime);
-    let runtimePath = "rt/index-" + runtimeName;
+    let runtimePath = `rt/index-${runtimeName}`;
     let runtimeText = exports.libraryFiles[runtimePath];
     if (runtimeText == null) {
       runtimePath = runtimeName;
       runtimeText = readFile(runtimePath + extension.ext, baseDir);
       if (runtimeText == null) return callback(Error(`Runtime '${runtimeName}' not found.`));
     } else {
-      runtimePath = "~lib/" + runtimePath;
+      runtimePath = `~lib/${runtimePath}`;
     }
     stats.parseCount++;
     stats.parseTime += measure(() => {
@@ -760,17 +799,22 @@ exports.main = function main(argv, options, callback) {
   // Include entry files
   for (let i = 0, k = argv.length; i < k; ++i) {
     const filename = argv[i];
-
-    let sourcePath = String(filename).replace(/\\/g, "/").replace(extension.re, "").replace(/[\\/]$/, "");
+    let sourcePath = String(filename)
+      .replace(/\\/g, "/")
+      .replace(extension.re, "")
+      .replace(/[\\/]$/, "");
 
     // Setting the path to relative path
-    sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath).replace(/\\/g, "/") : sourcePath;
+    sourcePath = path.isAbsolute(sourcePath)
+      ? path.relative(baseDir, sourcePath).replace(/\\/g, "/")
+      : sourcePath;
 
     // Try entryPath.ext, then entryPath/index.ext
     let sourceText = readFile(sourcePath + extension.ext, baseDir);
     if (sourceText == null) {
-      sourceText = readFile(sourcePath + "/index" + extension.ext, baseDir);
-      if (sourceText != null) sourcePath += "/index" + extension.ext;
+      const path = `${sourcePath}/index${extension.ext}`;
+      sourceText = readFile(path, baseDir);
+      if (sourceText != null) sourcePath = path;
       else sourcePath += extension.ext;
     } else {
       sourcePath += extension.ext;
@@ -853,7 +897,7 @@ exports.main = function main(argv, options, callback) {
   var numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
   if (numErrors) {
     if (module) module.dispose();
-    const err = Error(numErrors + " compile error(s)");
+    const err = Error(`${numErrors} compile error(s)`);
     err.stack = err.message; // omit stack
     return callback(err);
   }
@@ -878,20 +922,11 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Set Binaryen-specific options
-  if (opts.trapMode === "clamp") {
+  if (opts.trapMode === "clamp" || opts.trapMode === "js") {
     stats.optimizeCount++;
     stats.optimizeTime += measure(() => {
       try {
-        module.runPasses(["trap-mode-clamp"]);
-      } catch (e) {
-        crash("runPasses", e);
-      }
-    });
-  } else if (opts.trapMode === "js") {
-    stats.optimizeCount++;
-    stats.optimizeTime += measure(() => {
-      try {
-        module.runPasses(["trap-mode-js"]);
+        module.runPasses([`trap-mode-${opts.trapMode}`]);
       } catch (e) {
         crash("runPasses", e);
       }
@@ -911,7 +946,7 @@ exports.main = function main(argv, options, callback) {
     }
     if (opts.runPasses.length) {
       opts.runPasses.forEach(pass => {
-        if (runPasses.indexOf(pass = pass.trim()) < 0) {
+        if (!runPasses.includes(pass = pass.trim())) {
           runPasses.push(pass);
         }
       });
@@ -957,7 +992,7 @@ exports.main = function main(argv, options, callback) {
         }
         if (next.length >= last.length) {
           if (next.length > last.length) {
-            stderr.write("Last converge was suboptimial." + EOL);
+            stderr.write(`Last converge was suboptimial.${EOL}`);
           }
           break;
         }
@@ -969,9 +1004,9 @@ exports.main = function main(argv, options, callback) {
   // Prepare output
   if (!opts.noEmit) {
     if (opts.outFile != null) {
-      if (/\.was?t$/.test(opts.outFile) && opts.textFile == null) {
+      if (opts.textFile == null && /\.was?t$/.test(opts.outFile)) {
         opts.textFile = opts.outFile;
-      } else if (/\.js$/.test(opts.outFile) && opts.jsFile == null) {
+      } else if (opts.jsFile == null && /\.js$/.test(opts.outFile)) {
         opts.jsFile = opts.outFile;
       } else if (opts.binaryFile == null) {
         opts.binaryFile = opts.outFile;
@@ -991,7 +1026,7 @@ exports.main = function main(argv, options, callback) {
       let sourceMapURL = opts.sourceMap != null
         ? opts.sourceMap.length
           ? opts.sourceMap
-          : "./" + basename + ".map"
+          : `./${basename}.map`
         : null;
 
       let wasm;
@@ -1015,11 +1050,11 @@ exports.main = function main(argv, options, callback) {
       if (wasm.sourceMap != "") {
         if (opts.binaryFile.length) {
           let map = JSON.parse(wasm.sourceMap);
-          map.sourceRoot = "./" + basename;
+          map.sourceRoot = `./${basename}`;
           let contents = [];
           map.sources.forEach((name, index) => {
             let text = assemblyscript.getSource(program, __newString(name.replace(extension.re, "")));
-            if (text == null) return callback(Error("Source of file '" + name + "' not found."));
+            if (text == null) return callback(Error(`Source of file '${name}' not found.`));
             contents[index] = text;
           });
           map.sourcesContent = contents;
@@ -1028,7 +1063,7 @@ exports.main = function main(argv, options, callback) {
             path.basename(sourceMapURL)
           ).replace(/^\.\//, ""), JSON.stringify(map), baseDir);
         } else {
-          stderr.write("Skipped source map (stdout already occupied)" + EOL);
+          stderr.write(`Skipped source map (stdout already occupied)${EOL}`);
         }
       }
     }
@@ -1039,15 +1074,13 @@ exports.main = function main(argv, options, callback) {
       if (opts.textFile != null && opts.textFile.length) {
         // use superset text format when extension is `.wast`.
         // Otherwise use official stack IR format (wat).
-        let wastFormat = opts.textFile.endsWith('.wast');
+        let wastFormat = opts.textFile.endsWith(".wast");
         stats.emitCount++;
         stats.emitTime += measure(() => {
           try {
-            if (wastFormat) {
-              out = module.emitText();
-            } else {
-              out = module.emitStackIR(true);
-            }
+            out = wastFormat
+              ? module.emitText()
+              : module.emitStackIR(true);
           } catch (e) {
             crash("emitText", e);
           }
@@ -1225,33 +1258,33 @@ function getAsconfig(file, baseDir, readFile) {
   try {
     config = JSON.parse(contents);
   } catch(ex) {
-    throw new Error("Asconfig is not valid json: " + location);
+    throw new Error(`Asconfig is not valid json: ${location}`);
   }
 
   // validate asconfig shape
   if (config.options && !isObject(config.options)) {
-    throw new Error("Asconfig.options is not an object: " + location);
+    throw new Error(`Asconfig.options is not an object: ${location}`);
   }
 
   if (config.include && !Array.isArray(config.include)) {
-    throw new Error("Asconfig.include is not an array: " + location);
+    throw new Error(`Asconfig.include is not an array: ${location}`);
   }
 
   if (config.targets) {
     if (!isObject(config.targets)) {
-      throw new Error("Asconfig.targets is not an object: " + location);
+      throw new Error(`Asconfig.targets is not an object: ${location}`);
     }
     const targets = Object.keys(config.targets);
     for (let i = 0; i < targets.length; i++) {
       const target = targets[i];
       if (!isObject(config.targets[target])) {
-        throw new Error("Asconfig.targets." + target + " is not an object: " + location);
+        throw new Error(`Asconfig.targets.${target} is not an object: ${location}`);
       }
     }
   }
 
   if (config.extends && typeof config.extends !== "string") {
-    throw new Error("Asconfig.extends is not a string: " + location);
+    throw new Error(`Asconfig.extends is not a string: ${location}`);
   }
 
   return config;
@@ -1344,20 +1377,20 @@ function measure(fn) {
 exports.measure = measure;
 
 function pad(str, len) {
-  while (str.length < len) str = " " + str;
+  while (str.length < len) str = ` ${str}`;
   return str;
 }
 
 /** Formats a high resolution time to a human readable string. */
 function formatTime(time) {
-  return time ? (time / 1e6).toFixed(3) + " ms" : "n/a";
+  return time ? `${(time / 1e6).toFixed(3)} ms` : "n/a";
 }
 
 exports.formatTime = formatTime;
 
 /** Formats and prints out the contents of a set of stats. */
 function printStats(stats, output) {
-  const format = (time, count) => pad(formatTime(time), 12) + "  n=" + count;
+  const format = (time, count) => `${pad(formatTime(time), 12)}  n=${count}`;
   (output || process.stdout).write([
     "I/O Read   : " + format(stats.readTime, stats.readCount),
     "I/O Write  : " + format(stats.writeTime, stats.writeCount),
