@@ -650,8 +650,8 @@ exports.main = function main(argv, options, callback) {
 
     // Try file.ext, file/index.ext, file.d.ext
     if (!internalPath.startsWith(libraryPrefix)) {
-      if (!(sourceText = readFile(sourcePath = internalPath + extension.ext, baseDir))) {
-        if (!(sourceText = readFile(sourcePath = internalPath + "/index" + extension.ext, baseDir))) {
+      if ((sourceText = readFile(sourcePath = internalPath + extension.ext, baseDir)) == null) {
+        if ((sourceText = readFile(sourcePath = internalPath + "/index" + extension.ext, baseDir)) == null) {
           // portable d.ext: uses the .js file next to it in JS or becomes an import in Wasm
           sourcePath = internalPath + extension.ext;
           sourceText = readFile(internalPath + extension.ext_d, baseDir);
@@ -670,17 +670,17 @@ exports.main = function main(argv, options, callback) {
         sourcePath = libraryPrefix + indexName + extension.ext;
       } else { // custom lib dirs
         for (const libDir of customLibDirs) {
-          if ((sourceText = readFile(plainName + extension.ext, libDir))) {
+          if ((sourceText = readFile(plainName + extension.ext, libDir)) != null) {
             sourcePath = libraryPrefix + plainName + extension.ext;
             break;
           } else {
-            if ((sourceText = readFile(indexName + extension.ext, libDir))) {
+            if ((sourceText = readFile(indexName + extension.ext, libDir)) != null) {
               sourcePath = libraryPrefix + indexName + extension.ext;
               break;
             }
           }
         }
-        if (!sourceText) { // paths
+        if (sourceText == null) { // paths
           const match = internalPath.match(/^~lib\/((?:@[^/]+\/)?[^/]+)(?:\/(.+))?/); // ~lib/(pkg)/(path), ~lib/(@org/pkg)/(path)
           if (match) {
             const packageName = match[1];
@@ -722,7 +722,7 @@ exports.main = function main(argv, options, callback) {
               }
               const mainDir = path.join(currentPath, packageName, mainPath);
               const plainName = filePath;
-              if ((sourceText = readFile(path.join(mainDir, plainName + extension.ext), baseDir))) {
+              if ((sourceText = readFile(path.join(mainDir, plainName + extension.ext), baseDir)) != null) {
                 sourcePath = `${libraryPrefix}${packageName}/${plainName}${extension.ext}`;
                 packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
                 if (opts.traceResolution) {
@@ -731,7 +731,7 @@ exports.main = function main(argv, options, callback) {
                 break;
               } else if (!isPackageRoot) {
                 const indexName = `${filePath}/index`;
-                if ((sourceText = readFile(path.join(mainDir, indexName + extension.ext), baseDir))) {
+                if ((sourceText = readFile(path.join(mainDir, indexName + extension.ext), baseDir)) !== null) {
                   sourcePath = `${libraryPrefix}${packageName}/${indexName}${extension.ext}`;
                   packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
                   if (opts.traceResolution) {
@@ -746,7 +746,7 @@ exports.main = function main(argv, options, callback) {
       }
     }
     // No such file
-    if (!sourceText) return null;
+    if (sourceText == null) return null;
     return { sourceText, sourcePath };
   }
 
@@ -784,10 +784,10 @@ exports.main = function main(argv, options, callback) {
     let runtimeName = String(opts.runtime);
     let runtimePath = `rt/index-${runtimeName}`;
     let runtimeText = exports.libraryFiles[runtimePath];
-    if (!runtimeText) {
+    if (runtimeText == null) {
       runtimePath = runtimeName;
       runtimeText = readFile(runtimePath + extension.ext, baseDir);
-      if (!runtimeText) return callback(Error(`Runtime '${runtimeName}' not found.`));
+      if (runtimeText == null) return callback(Error(`Runtime '${runtimeName}' not found.`));
     } else {
       runtimePath = `~lib/${runtimePath}`;
     }
@@ -814,15 +814,14 @@ exports.main = function main(argv, options, callback) {
       : sourcePath;
 
     // Try entryPath.ext, then entryPath/index.ext
-    let sourcePathWithExt = sourcePath + extension.ext;
-    let sourceText = readFile(sourcePathWithExt, baseDir);
-    if (!sourceText) {
-      const indexPathWithExt = `${sourcePath}/index${extension.ext}`;
-      sourceText = readFile(indexPathWithExt, baseDir);
-      if (sourceText) sourcePath = indexPathWithExt;
-      else sourcePath = sourcePathWithExt;
+    let sourceText = readFile(sourcePath + extension.ext, baseDir);
+    if (sourceText == null) {
+      const path = `${sourcePath}/index${extension.ext}`;
+      sourceText = readFile(path, baseDir);
+      if (sourceText != null) sourcePath = path;
+      else sourcePath += extension.ext;
     } else {
-      sourcePath = sourcePathWithExt;
+      sourcePath += extension.ext;
     }
 
     stats.parseCount++;
@@ -1059,7 +1058,7 @@ exports.main = function main(argv, options, callback) {
           let contents = [];
           map.sources.forEach((name, index) => {
             let text = assemblyscript.getSource(program, __newString(name.replace(extension.re, "")));
-            if (!text) return callback(Error(`Source of file '${name}' not found.`));
+            if (text == null) return callback(Error(`Source of file '${name}' not found.`));
             contents[index] = text;
           });
           map.sourcesContent = contents;
