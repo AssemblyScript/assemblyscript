@@ -1726,7 +1726,7 @@ export abstract class DeclarationStatement extends Statement {
   set(flag: CommonFlags): void { this.flags |= flag; }
   /** Attempts to return the name as an identifier. */
   get ident(): IdentifierExpression {
-    assert(this.name.kind == NodeKind.IDENTIFIER);
+    assert(this.name.kind == NodeKind.IDENTIFIER || this.name.kind == NodeKind.CONSTRUCTOR);
     return this.name as IdentifierExpression;
   }
 }
