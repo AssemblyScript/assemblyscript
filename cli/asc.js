@@ -48,6 +48,10 @@ const WIN = process.platform === "win32";
 const EOL = WIN ? "\r\n" : "\n";
 const SEP = WIN ? "\\"   : "/";
 
+function toUpperSnakeCase(str) {
+  return str.replace(/-/g, "_").toUpperCase();
+}
+
 // Sets up an extension with its definition counterpart and relevant regexes.
 function setupExtension(ext) {
   if (!ext.startsWith(".")) ext = `.${ext}`;
@@ -484,7 +488,7 @@ exports.main = function main(argv, options, callback) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
-      let flag = assemblyscript[`FEATURE_${name.replace(/-/g, "_").toUpperCase()}`];
+      let flag = assemblyscript[`FEATURE_${toUpperSnakeCase(name)}`];
       if (!flag) return callback(Error(`Feature '${name}' is unknown.`));
       assemblyscript.disableFeature(compilerOptions, flag);
     }
@@ -495,7 +499,7 @@ exports.main = function main(argv, options, callback) {
     if (typeof features === "string") features = features.split(",");
     for (let i = 0, k = features.length; i < k; ++i) {
       let name = features[i].trim();
-      let flag = assemblyscript[`FEATURE_${name.replace(/-/g, "_").toUpperCase()}`];
+      let flag = assemblyscript[`FEATURE_${toUpperSnakeCase(name)}`];
       if (!flag) return callback(Error(`Feature '${name}' is unknown.`));
       assemblyscript.enableFeature(compilerOptions, flag);
     }
@@ -616,7 +620,7 @@ exports.main = function main(argv, options, callback) {
       for (let j = 0, l = libFiles.length; j < l; ++j) {
         let libPath = libFiles[j];
         let libText = readFile(libPath, libDir);
-        if (libText === null) {
+        if (!libText) {
           return callback(Error(`Library file '${libPath}' not found.`));
         }
         stats.parseCount++;
