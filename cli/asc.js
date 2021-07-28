@@ -620,7 +620,7 @@ exports.main = function main(argv, options, callback) {
       for (let j = 0, l = libFiles.length; j < l; ++j) {
         let libPath = libFiles[j];
         let libText = readFile(libPath, libDir);
-        if (!libText) {
+        if (libText == null) {
           return callback(Error(`Library file '${libPath}' not found.`));
         }
         stats.parseCount++;
