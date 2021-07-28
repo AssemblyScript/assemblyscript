@@ -3519,7 +3519,7 @@ export class Compiler extends DiagnosticEmitter {
         this.error(
           DiagnosticCode.Not_implemented_0,
           expression.range,
-          "Class expressions"
+          "Block-scoped class declarations or expressions"
         );
         expr = this.module.unreachable();
         break;
