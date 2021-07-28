@@ -97,7 +97,6 @@
   "Line break not permitted here.": 1142,
   "Declaration expected.": 1146,
   "'const' declarations must be initialized.": 1155,
-  "Destructor declarations must be initialized.": 1156,
   "Unterminated regular expression literal.": 1161,
   "Interface declaration cannot have 'implements' clause.": 1176,
   "Binary digit expected.": 1177,

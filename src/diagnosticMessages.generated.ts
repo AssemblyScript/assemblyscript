@@ -100,7 +100,6 @@ export enum DiagnosticCode {
   Line_break_not_permitted_here = 1142,
   Declaration_expected = 1146,
   _const_declarations_must_be_initialized = 1155,
-  Destructor_declarations_must_be_initialized = 1156,
   Unterminated_regular_expression_literal = 1161,
   Interface_declaration_cannot_have_implements_clause = 1176,
   Binary_digit_expected = 1177,
@@ -285,7 +284,6 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1142: return "Line break not permitted here.";
     case 1146: return "Declaration expected.";
     case 1155: return "'const' declarations must be initialized.";
-    case 1156: return "Destructor declarations must be initialized.";
     case 1161: return "Unterminated regular expression literal.";
     case 1176: return "Interface declaration cannot have 'implements' clause.";
     case 1177: return "Binary digit expected.";
