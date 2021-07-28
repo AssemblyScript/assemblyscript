@@ -3025,22 +3025,22 @@ export class Compiler extends DiagnosticEmitter {
 
           // resolve type of initializier
           let initExpr = this.compileExpression(initializer, Type.auto);
-          let type = this.currentType;
+          let patternType = this.currentType;
 
           // add initializer as local
           let initLocal = flow.parentFunction.addLocal(Type.auto, null, declaration);
           flow.setLocalFlag(initLocal.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
           initializers.push(
-            this.makeLocalAssignment(initLocal, initExpr, type, false)
+            this.makeLocalAssignment(initLocal, initExpr, patternType, false)
           );
 
           let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
-          let classType = type.getClassOrWrapper(program);
+          let classType = patternType.getClassOrWrapper(program);
           let indexedGet;
           if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
             this.error(
               DiagnosticCode.Index_signature_is_missing_in_type_0,
-              initializer.range, type.toString()
+              initializer.range, patternType.toString()
             );
             continue;
           }
@@ -3058,7 +3058,7 @@ export class Compiler extends DiagnosticEmitter {
               this.error(
                 DiagnosticCode.Type_0_is_not_an_array_type,
                 declaration.range,
-                type.toString()
+                patternType.toString()
               );
               continue;
             }
@@ -3072,6 +3072,7 @@ export class Compiler extends DiagnosticEmitter {
                 let name = (<IdentifierExpression>nameNode).text;
                 // add local
                 let local: Local;
+                let type = indexedGet.signature.returnType;
                 if (
                   declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
                   flow.isInline
@@ -3095,7 +3096,7 @@ export class Compiler extends DiagnosticEmitter {
                   } else {
                     local = flow.addScopedLocal(name, type);
                   }
-                  if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
+                  if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
                 } else {
                   let existing = flow.lookupLocal(name);
                   if (existing) {
@@ -3108,7 +3109,7 @@ export class Compiler extends DiagnosticEmitter {
                     continue;
                   }
                   local = flow.parentFunction.addLocal(type, name, declaration);
-                  if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
+                  if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
                 }
 
                 let callExpr = this.compileCallDirect(indexedGet, [
