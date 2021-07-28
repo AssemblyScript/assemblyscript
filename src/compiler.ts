@@ -3025,22 +3025,22 @@ export class Compiler extends DiagnosticEmitter {
 
           // resolve type of initializier
           let initExpr = this.compileExpression(initializer, Type.auto);
-          let patternType = this.currentType;
+          let initType = this.currentType;
 
           // add initializer as local
           let initLocal = flow.parentFunction.addLocal(Type.auto, null, declaration);
           flow.setLocalFlag(initLocal.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
           initializers.push(
-            this.makeLocalAssignment(initLocal, initExpr, patternType, false)
+            this.makeLocalAssignment(initLocal, initExpr, initType, false)
           );
 
           let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
-          let classType = patternType.getClassOrWrapper(program);
+          let classType = initType.getClassOrWrapper(program);
           let indexedGet;
           if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
             this.error(
               DiagnosticCode.Index_signature_is_missing_in_type_0,
-              initializer.range, patternType.toString()
+              initializer.range, initType.toString()
             );
             continue;
           }
@@ -3058,7 +3058,7 @@ export class Compiler extends DiagnosticEmitter {
               this.error(
                 DiagnosticCode.Type_0_is_not_an_array_type,
                 declaration.range,
-                patternType.toString()
+                initType.toString()
               );
               continue;
             }
@@ -3114,7 +3114,7 @@ export class Compiler extends DiagnosticEmitter {
 
                 let callExpr = this.compileCallDirect(indexedGet, [
                   Node.createIntegerLiteralExpression(i64_new(j), nameNode.range)
-                ], nameNode, initExpr);
+                ], nameNode, module.local_get(initLocal.index, initType.toRef()));
 
                 initializers.push(
                   this.makeLocalAssignment(local, callExpr, type, false)

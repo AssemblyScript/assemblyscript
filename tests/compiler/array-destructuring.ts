@@ -16,8 +16,7 @@ class Foo {
 }
 
 {
-  const foo = new Foo();
-  const [a, b, c] = foo;
+  const [a, b, c] = new Foo();
   assert(a == 2);
   assert(b == 3);
   assert(c == 4);

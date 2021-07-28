@@ -3723,13 +3723,13 @@
   (local $4 i32)
   (local $5 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
-  i64.const 0
-  i64.store
+  i32.const 0
+  i32.store
   memory.size
   i32.const 16
   i32.shl
@@ -3757,15 +3757,15 @@
   i32.store
   local.get $1
   local.set $2
-  local.get $1
+  local.get $2
   i32.const 0
   call $~lib/array/Array<i32>#__get
   local.set $0
-  local.get $1
+  local.get $2
   i32.const 1
   call $~lib/array/Array<i32>#__get
   local.set $3
-  local.get $1
+  local.get $2
   i32.const 2
   call $~lib/array/Array<i32>#__get
   local.set $4
@@ -3805,27 +3805,35 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/memory/__stack_pointer
   i32.const 0
   call $array-destructuring/Foo#constructor
-  local.tee $4
-  i32.store offset=4
-  local.get $4
   local.set $5
-  local.get $4
+  local.get $5
   i32.const 0
   call $array-destructuring/Foo#__get
-  local.set $3
-  local.get $4
+  local.set $4
+  local.get $5
   i32.const 1
+  call $array-destructuring/Foo#__get
+  local.set $3
+  local.get $5
+  i32.const 2
   call $array-destructuring/Foo#__get
   local.set $0
   local.get $4
   i32.const 2
-  call $array-destructuring/Foo#__get
-  local.set $1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 512
+   i32.const 20
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $3
-  i32.const 2
+  i32.const 3
   i32.eq
   i32.eqz
   if
@@ -3837,7 +3845,7 @@
    unreachable
   end
   local.get $0
-  i32.const 3
+  i32.const 4
   i32.eq
   i32.eqz
   if
@@ -3848,20 +3856,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
-  i32.const 4
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 512
-   i32.const 23
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
