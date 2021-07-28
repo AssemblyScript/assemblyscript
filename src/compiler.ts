@@ -3036,7 +3036,7 @@ export class Compiler extends DiagnosticEmitter {
 
           let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
           let classType = initType.getClassOrWrapper(program);
-          let indexedGet;
+          let indexedGet: Function | null = null;
           if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
             this.error(
               DiagnosticCode.Index_signature_is_missing_in_type_0,
@@ -3054,7 +3054,7 @@ export class Compiler extends DiagnosticEmitter {
 
           if (pattern.array) {
             // check that the type is valid
-            if (indexedGet.signature.parameterTypes![0] != Type.i32) {
+            if (indexedGet.signature.parameterTypes[0] != Type.i32) {
               this.error(
                 DiagnosticCode.Type_0_is_not_an_array_type,
                 declaration.range,
