@@ -3113,7 +3113,7 @@ export class Compiler extends DiagnosticEmitter {
 
                 let callExpr = this.compileCallDirect(indexedGet, [
                   Node.createIntegerLiteralExpression(i64_new(j), nameNode.range)
-                ], nameNode, Constraints.NONE);
+                ], nameNode, initExpr);
 
                 initializers.push(
                   this.makeLocalAssignment(local, callExpr, type, false)
