@@ -17,7 +17,7 @@
  (global $~lib/rt/itcms/white (mut i32) (i32.const 0))
  (global $~lib/rt/itcms/fromSpace (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18004))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 18012))
  (memory $0 1)
  (data (i32.const 1036) "\1c")
  (data (i32.const 1052) "\0c\00\00\00\01\00\00\00\02\00\00\00\03")
@@ -35,8 +35,8 @@
  (data (i32.const 1480) "\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 1516) "<")
  (data (i32.const 1528) "\01\00\00\00,\00\00\00a\00r\00r\00a\00y\00-\00d\00e\00s\00t\00r\00u\00c\00t\00u\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 1584) "\04\00\00\00 \00\00\00\00\00\00\00 ")
- (data (i32.const 1612) "\02\t")
+ (data (i32.const 1584) "\05\00\00\00 \00\00\00\00\00\00\00 ")
+ (data (i32.const 1612) "\02\t\00\00\00\00\00\00 ")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/itcms/visitRoots
@@ -117,7 +117,7 @@
    if
     i32.const 0
     local.get $0
-    i32.const 18004
+    i32.const 18012
     i32.lt_u
     local.get $0
     i32.load offset=8
@@ -918,7 +918,7 @@
       local.set $0
       loop $while-continue|0
        local.get $0
-       i32.const 18004
+       i32.const 18012
        i32.lt_u
        if
         local.get $0
@@ -1013,7 +1013,7 @@
       unreachable
      end
      local.get $0
-     i32.const 18004
+     i32.const 18012
      i32.lt_u
      if
       local.get $0
@@ -1036,7 +1036,7 @@
       i32.const 4
       i32.add
       local.tee $0
-      i32.const 18004
+      i32.const 18012
       i32.ge_u
       if
        global.get $~lib/rt/tlsf/ROOT
@@ -2513,22 +2513,22 @@
   (local $6 i32)
   (local $7 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 4
+  i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
   block $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   i32.const 1620
+   i32.const 1628
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $6
-   i32.const 0
-   i32.store
+   i64.const 0
+   i64.store
    memory.size
    i32.const 16
    i32.shl
-   i32.const 18004
+   i32.const 18012
    i32.sub
    i32.const 1
    i32.shr_u
@@ -2562,7 +2562,7 @@
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
-   i32.const 1620
+   i32.const 1628
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
@@ -2842,7 +2842,7 @@
    if
     i32.const 0
     i32.const 1536
-    i32.const 4
+    i32.const 13
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -2853,7 +2853,7 @@
    if
     i32.const 0
     i32.const 1536
-    i32.const 5
+    i32.const 14
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -2864,13 +2864,39 @@
    if
     i32.const 0
     i32.const 1536
-    i32.const 6
+    i32.const 15
     i32.const 3
     call $~lib/builtins/abort
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
+   local.tee $1
    i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 1628
+   i32.lt_s
+   br_if $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   local.tee $0
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 0
+   i32.const 4
+   call $~lib/rt/itcms/__new
+   local.tee $0
+   i32.store
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.add
+   global.set $~lib/memory/__stack_pointer
+   local.get $1
+   local.get $0
+   i32.store offset=4
+   global.get $~lib/memory/__stack_pointer
+   i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
    return
@@ -2884,32 +2910,35 @@
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid
-   block $~lib/array/Array<i32>
-    block $~lib/arraybuffer/ArrayBufferView
-     block $~lib/string/String
-      block $~lib/arraybuffer/ArrayBuffer
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $invalid
+   block $array-destructuring/Foo
+    block $~lib/array/Array<i32>
+     block $~lib/arraybuffer/ArrayBufferView
+      block $~lib/string/String
+       block $~lib/arraybuffer/ArrayBuffer
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<i32> $array-destructuring/Foo $invalid
+       end
+       return
       end
       return
+     end
+     local.get $0
+     i32.load
+     local.tee $0
+     if
+      local.get $0
+      call $~lib/rt/itcms/__visit
      end
      return
     end
     local.get $0
     i32.load
-    local.tee $0
-    if
-     local.get $0
-     call $~lib/rt/itcms/__visit
-    end
+    call $~lib/rt/itcms/__visit
     return
    end
-   local.get $0
-   i32.load
-   call $~lib/rt/itcms/__visit
    return
   end
   unreachable
