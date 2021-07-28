@@ -100,10 +100,12 @@ export enum DiagnosticCode {
   Line_break_not_permitted_here = 1142,
   Declaration_expected = 1146,
   _const_declarations_must_be_initialized = 1155,
+  Destructor_declarations_must_be_initialized = 1156,
   Unterminated_regular_expression_literal = 1161,
   Interface_declaration_cannot_have_implements_clause = 1176,
   Binary_digit_expected = 1177,
   Octal_digit_expected = 1178,
+  A_destructuring_declaration_must_have_an_initializer = 1182,
   An_implementation_cannot_be_declared_in_ambient_contexts = 1183,
   The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer = 1190,
   An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive = 1198,
@@ -153,6 +155,7 @@ export enum DiagnosticCode {
   Variable_0_used_before_its_declaration = 2448,
   The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
   Type_0_has_no_property_1 = 2460,
+  Type_0_is_not_an_array_type = 2461,
   The_0_operator_cannot_be_applied_to_type_1 = 2469,
   In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
   Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
@@ -282,10 +285,12 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1142: return "Line break not permitted here.";
     case 1146: return "Declaration expected.";
     case 1155: return "'const' declarations must be initialized.";
+    case 1156: return "Destructor declarations must be initialized.";
     case 1161: return "Unterminated regular expression literal.";
     case 1176: return "Interface declaration cannot have 'implements' clause.";
     case 1177: return "Binary digit expected.";
     case 1178: return "Octal digit expected.";
+    case 1182: return "A destructuring declaration must have an initializer.";
     case 1183: return "An implementation cannot be declared in ambient contexts.";
     case 1190: return "The variable declaration of a 'for...of' statement cannot have an initializer.";
     case 1198: return "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.";
@@ -335,6 +340,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2448: return "Variable '{0}' used before its declaration.";
     case 2453: return "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.";
     case 2460: return "Type '{0}' has no property '{1}'.";
+    case 2461: return "Type '{0}' is not an array type.";
     case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";
     case 2474: return "In 'const' enum declarations member initializer must be constant expression.";
     case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
