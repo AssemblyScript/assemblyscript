@@ -3075,7 +3075,7 @@ export class Compiler extends DiagnosticEmitter {
 
           const pattern = <BindingPatternExpression>declaration.name;
 
-          // resolve type of initializier
+          // resolve type of initializer
           let initExpr = this.compileExpression(initializer, Type.auto);
           let initType = this.currentType;
 
@@ -3288,13 +3288,11 @@ export class Compiler extends DiagnosticEmitter {
               }
             }
           }
-          
           break;
         }
       }
-
-      
     }
+
     this.currentType = Type.void;
     return initializers.length == 0
       ? 0
@@ -5900,11 +5898,111 @@ export class Compiler extends DiagnosticEmitter {
     return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ], reportNode);
   }
 
+  private compileArrayPatternAssignment(
+    expression: ArrayLiteralExpression,
+    valueExpression: Expression,
+    contextualType: Type
+  ): ExpressionRef {
+    var flow = this.currentFlow;
+    var module = this.module;
+    var program = this.program;
+    var exprs = new Array<ExpressionRef>();
+
+    // this is copied code; refactor later
+
+    // resolve type of initializer
+    let initExpr = this.compileExpression(valueExpression, Type.auto);
+    let initType = this.currentType;
+    let initTypeRef = initType.toRef();
+
+    // add initializer as local
+    let initLocal = flow.parentFunction.addLocal(Type.auto, null);
+    flow.setLocalFlag(initLocal.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
+    exprs.push(
+      this.makeLocalAssignment(initLocal, initExpr, initType, false)
+    );
+
+    let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
+    let classType = initType.getClassOrWrapper(program);
+    let indexedGet: Function | null = null;
+    if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
+      this.error(
+        DiagnosticCode.Index_signature_is_missing_in_type_0,
+        valueExpression.range, initType.toString()
+      );
+      return module.unreachable();
+    }
+
+    if (!isUnchecked && this.options.pedantic) {
+      this.pedantic(
+        DiagnosticCode.Indexed_access_may_involve_bounds_checking,
+        valueExpression.range
+      );
+    }
+
+    // check that the type is valid
+    if (indexedGet.signature.parameterTypes[0] != Type.i32) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_an_array_type,
+        valueExpression.range,
+        initType.toString()
+      );
+      return module.unreachable();
+    }
+
+    let idents = expression.elementExpressions;
+    let numIdents = idents.length;
+    for (let j: i32 = 0; j < numIdents; ++j) {
+      let node = idents[j];
+      if (node.kind == NodeKind.IDENTIFIER) {
+        let nameNode = <IdentifierExpression>node;
+        let name = nameNode.text;
+        // add local
+        let type = indexedGet.signature.returnType;
+        let local = flow.lookupLocal(name);
+
+        if (local == null) {
+          this.error(
+            DiagnosticCode.Variable_0_used_before_its_declaration,
+            expression.range,
+            name
+          );
+          return this.module.unreachable();
+        }
+
+        let callExpr = this.compileCallDirect(indexedGet, [
+          Node.createIntegerLiteralExpression(i64_new(j), nameNode.range)
+        ], nameNode, module.local_get(initLocal.index, initTypeRef));
+
+        exprs.push(
+          this.makeAssignment(local, callExpr, type, valueExpression, null, null, false)
+        );
+      } else if (node.kind != NodeKind.OMITTED) {
+        assert(false);
+      }
+    }
+
+    let tee = contextualType != Type.void;
+    if (tee) {
+      this.currentType = initType;
+      exprs.push(
+        module.local_get(initLocal.index, initTypeRef)
+      );
+    }
+    
+    return exprs.length == 0
+      ? 0
+      : this.module.flatten(exprs, tee ? initTypeRef : TypeRef.None);
+  }
+
   private compileAssignment(
     expression: Expression,
     valueExpression: Expression,
     contextualType: Type
   ): ExpressionRef {
+    if (expression.isLiteralKind(LiteralKind.ARRAY))
+      return this.compileArrayPatternAssignment(<ArrayLiteralExpression>expression, valueExpression, contextualType);
+
     var program = this.program;
     var resolver = program.resolver;
     var flow = this.currentFlow;
