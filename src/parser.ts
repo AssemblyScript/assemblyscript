@@ -932,10 +932,11 @@ export class Parser extends DiagnosticEmitter {
       let startPos = tn.range().start;
       let isArrayPattern = false;
 
-      switch (tn.next()) {
+      switch (tn.peek()) {
         case Token.OPENBRACKET:
           isArrayPattern = true;
         case Token.OPENBRACE: {
+          tn.next();
           let elements = new Array<Expression>();
 
           do {
