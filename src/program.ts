@@ -2613,13 +2613,14 @@ export class Program extends DiagnosticEmitter {
       
       switch (nameNode.kind) {
         case NodeKind.PATTERN: {
-          let idents = (<BindingPatternExpression>nameNode).elements;
-          for (let j = 0, n = idents.length; j < n; ++j) {
-            let ident = idents[j];
-            if (ident.kind == NodeKind.IDENTIFIER) {
-              this.initializeVariable((<IdentifierExpression>ident).text, parent, declaration, acceptedFlags);
-            }
-          }
+          this.error(DiagnosticCode.A_destructuring_declaration_must_have_an_initializer, declaration.range);
+          // let idents = (<BindingPatternExpression>nameNode).elements;
+          // for (let j = 0, n = idents.length; j < n; ++j) {
+          //   let ident = idents[j];
+          //   if (ident.kind == NodeKind.IDENTIFIER) {
+          //     this.initializeVariable((<IdentifierExpression>ident).text, parent, declaration, acceptedFlags);
+          //   }
+          // }
           break;
         }
         case NodeKind.IDENTIFIER:
