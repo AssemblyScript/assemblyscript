@@ -111,8 +111,7 @@ import {
   VariableDeclaration,
   VariableLikeDeclarationStatement,
   VariableStatement,
-  ParameterKind,
-  BindingPatternExpression
+  ParameterKind
 } from "./ast";
 
 import {
