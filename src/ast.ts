@@ -2073,7 +2073,7 @@ export class FunctionDeclaration extends DeclarationStatement {
   /** Clones this function declaration. */
   clone(): FunctionDeclaration {
     return new FunctionDeclaration(
-      this.name as IdentifierExpression,
+      this.ident,
       this.decorators,
       this.flags,
       this.typeParameters,
