@@ -3121,8 +3121,9 @@ export class Compiler extends DiagnosticEmitter {
             let idents = pattern.elements;
             let numIdents = idents.length;
             for (let j: i32 = 0; j < numIdents; ++j) {
-              let nameNode = <IdentifierExpression>idents[j];
-              if (nameNode.kind == NodeKind.IDENTIFIER) {
+              let node = idents[j];
+              if (node.kind == NodeKind.IDENTIFIER) {
+                let nameNode = <IdentifierExpression>node;
                 // add local
                 let type = indexedGet.signature.returnType;
                 let local = this.createScopedVariable(nameNode, type, declaration, declaration.is(CommonFlags.CONST));
@@ -3137,7 +3138,7 @@ export class Compiler extends DiagnosticEmitter {
                 initializers.push(
                   this.makeLocalAssignment(local, callExpr, type, false)
                 );
-              } else if (nameNode.kind != NodeKind.OMITTED) {
+              } else if (node.kind != NodeKind.OMITTED) {
                 this.error(
                   DiagnosticCode.Invalid_destructure_pattern,
                   pattern.range
