@@ -177,7 +177,8 @@ import {
 
   findDecorator,
   isTypeOmitted,
-  BindingPatternExpression
+  BindingPatternExpression,
+  VariableDeclaration
 } from "./ast";
 
 import {
@@ -2996,6 +2997,57 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.unreachable();
   }
 
+  private createScopedVariable(
+    nameNode: IdentifierExpression,
+    type: Type,
+    declaration: VariableDeclaration,
+    isConst: boolean
+  ): Local | null {
+    var name = nameNode.text;
+    var flow = this.currentFlow;
+    var local: Local;
+
+    if (
+      declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
+      flow.isInline
+    ) { // here: not top-level
+      let existingLocal = flow.getScopedLocal(name);
+      if (existingLocal) {
+        if (!existingLocal.declaration.range.source.isNative) {
+          this.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            nameNode.range,
+            existingLocal.declaration.name.range,
+            name
+          );
+        } else { // scoped locals are shared temps that don't track declarations
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            nameNode.range, name
+          );
+        }
+        local = existingLocal;
+      } else {
+        local = flow.addScopedLocal(name, type);
+      }
+      if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
+    } else {
+      let existing = flow.lookupLocal(name);
+      if (existing) {
+        this.errorRelated(
+          DiagnosticCode.Duplicate_identifier_0,
+          nameNode.range,
+          existing.declaration.name.range,
+          name
+        );
+        return null;
+      }
+      local = flow.parentFunction.addLocal(type, name, declaration);
+      if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
+    }
+    return local;
+  }
+
   /** Compiles a variable statement. Returns `0` if an initializer is not necessary. */
   private compileVariableStatement(
     statement: VariableStatement
@@ -3066,51 +3118,14 @@ export class Compiler extends DiagnosticEmitter {
             let idents = pattern.elements;
             let numIdents = idents.length;
             for (let j: i32 = 0; j < numIdents; ++j) {
-              let nameNode = idents[j];
-              let isConst = declaration.is(CommonFlags.CONST);
+              let nameNode = <IdentifierExpression>idents[j];
               if (nameNode.kind == NodeKind.IDENTIFIER) {
-                let name = (<IdentifierExpression>nameNode).text;
                 // add local
-                let local: Local;
                 let type = indexedGet.signature.returnType;
-                if (
-                  declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
-                  flow.isInline
-                ) { // here: not top-level
-                  let existingLocal = flow.getScopedLocal(name);
-                  if (existingLocal) {
-                    if (!existingLocal.declaration.range.source.isNative) {
-                      this.errorRelated(
-                        DiagnosticCode.Duplicate_identifier_0,
-                        nameNode.range,
-                        existingLocal.declaration.name.range,
-                        name
-                      );
-                    } else { // scoped locals are shared temps that don't track declarations
-                      this.error(
-                        DiagnosticCode.Duplicate_identifier_0,
-                        nameNode.range, name
-                      );
-                    }
-                    local = existingLocal;
-                  } else {
-                    local = flow.addScopedLocal(name, type);
-                  }
-                  if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
-                } else {
-                  let existing = flow.lookupLocal(name);
-                  if (existing) {
-                    this.errorRelated(
-                      DiagnosticCode.Duplicate_identifier_0,
-                      nameNode.range,
-                      existing.declaration.name.range,
-                      name
-                    );
-                    continue;
-                  }
-                  local = flow.parentFunction.addLocal(type, name, declaration);
-                  if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
-                }
+                let local = this.createScopedVariable(nameNode, type, declaration, declaration.is(CommonFlags.CONST));
+
+                if (local == null)
+                  continue;
 
                 let callExpr = this.compileCallDirect(indexedGet, [
                   Node.createIntegerLiteralExpression(i64_new(j), nameNode.range)
@@ -3258,45 +3273,10 @@ export class Compiler extends DiagnosticEmitter {
 
           // Otherwise compile as mutable
           if (!isStatic) {
-            let local: Local;
-            if (
-              declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
-              flow.isInline
-            ) { // here: not top-level
-              let existingLocal = flow.getScopedLocal(name);
-              if (existingLocal) {
-                if (!existingLocal.declaration.range.source.isNative) {
-                  this.errorRelated(
-                    DiagnosticCode.Duplicate_identifier_0,
-                    nameNode.range,
-                    existingLocal.declaration.name.range,
-                    name
-                  );
-                } else { // scoped locals are shared temps that don't track declarations
-                  this.error(
-                    DiagnosticCode.Duplicate_identifier_0,
-                    nameNode.range, name
-                  );
-                }
-                local = existingLocal;
-              } else {
-                local = flow.addScopedLocal(name, type);
-              }
-              if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
-            } else {
-              let existing = flow.lookupLocal(name);
-              if (existing) {
-                this.errorRelated(
-                  DiagnosticCode.Duplicate_identifier_0,
-                  nameNode.range,
-                  existing.declaration.name.range,
-                  name
-                );
-                continue;
-              }
-              local = flow.parentFunction.addLocal(type, name, declaration);
-              if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
-            }
+            let local = this.createScopedVariable(nameNode, type, declaration, isConst);
+            if (local == null)
+              continue;
+
             if (initExpr) {
               initializers.push(
                 this.makeLocalAssignment(local, initExpr, type, false)
