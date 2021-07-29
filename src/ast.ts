@@ -1707,7 +1707,7 @@ export abstract class DeclarationStatement extends Statement {
     /** Declaration node kind. */
     kind: NodeKind,
     /** Simple name being declared. */
-    public name: Expression,
+    private _name: Expression,
     /** Array of decorators, if any. */
     public decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -1724,10 +1724,16 @@ export abstract class DeclarationStatement extends Statement {
   isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
+
   /** Attempts to return the name as an identifier. */
   get ident(): IdentifierExpression {
-    assert(this.name.kind == NodeKind.IDENTIFIER || this.name.kind == NodeKind.CONSTRUCTOR);
-    return this.name as IdentifierExpression;
+    assert(this._name.kind == NodeKind.IDENTIFIER || this._name.kind == NodeKind.CONSTRUCTOR);
+    return this._name as IdentifierExpression;
+  }
+
+  /** Returns the name without any type assertions.  */
+  get name(): Expression {
+    return this._name;
   }
 }
 
@@ -1823,6 +1829,10 @@ export class ClassDeclaration extends DeclarationStatement {
     var typeParameters = this.typeParameters;
     return typeParameters != null && typeParameters.length > 0;
   }
+
+  get name(): IdentifierExpression {
+    return this.ident;
+  }
 }
 
 /** Represents a `continue` statement. */
@@ -1877,6 +1887,10 @@ export class EnumDeclaration extends DeclarationStatement {
   ) {
     super(NodeKind.ENUMDECLARATION, name, decorators, flags, range);
   }
+
+  get name(): IdentifierExpression {
+    return this.ident;
+  }
 }
 
 /** Represents a value of an `enum` declaration. */
@@ -1892,6 +1906,10 @@ export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
     range: Range
   ) {
     super(NodeKind.ENUMVALUEDECLARATION, name, null, flags, null, initializer, range);
+  }
+
+  get name(): IdentifierExpression {
+    return this.ident;
   }
 }
 
@@ -1995,6 +2013,10 @@ export class FieldDeclaration extends VariableLikeDeclarationStatement {
   ) {
     super(NodeKind.FIELDDECLARATION, name, decorators, flags, type, initializer, range);
   }
+
+  get name(): IdentifierExpression {
+    return this.ident;
+  }
 }
 
 /** Represents a `for` statement. */
@@ -2073,7 +2095,7 @@ export class FunctionDeclaration extends DeclarationStatement {
   /** Clones this function declaration. */
   clone(): FunctionDeclaration {
     return new FunctionDeclaration(
-      this.ident,
+      this.name,
       this.decorators,
       this.flags,
       this.typeParameters,
@@ -2082,6 +2104,10 @@ export class FunctionDeclaration extends DeclarationStatement {
       this.arrowKind,
       this.range
     );
+  }
+
+  get name(): IdentifierExpression {
+    return this.ident;
   }
 }
 
@@ -2112,6 +2138,10 @@ export class ImportDeclaration extends DeclarationStatement {
     range: Range
   ) {
     super(NodeKind.IMPORTDECLARATION, name, null, CommonFlags.NONE, range);
+  }
+
+  get name(): IdentifierExpression {
+    return this.ident;
   }
 }
 
@@ -2164,6 +2194,10 @@ export class InterfaceDeclaration extends ClassDeclaration {
     super(name, decorators, flags, typeParameters, extendsType, implementsTypes, members, range);
     this.kind = NodeKind.INTERFACEDECLARATION;
   }
+
+  get name(): IdentifierExpression {
+    return this.ident;
+  }
 }
 
 /** Represents a method declaration within a `class`. */
@@ -2187,6 +2221,10 @@ export class MethodDeclaration extends FunctionDeclaration {
     super(name, decorators, flags, typeParameters, signature, body, ArrowKind.NONE, range);
     this.kind = NodeKind.METHODDECLARATION;
   }
+
+  get name(): IdentifierExpression {
+    return this.ident;
+  }
 }
 
 /** Represents a `namespace` declaration. */
@@ -2204,6 +2242,10 @@ export class NamespaceDeclaration extends DeclarationStatement {
     range: Range
   ) {
     super(NodeKind.NAMESPACEDECLARATION, name, decorators, flags, range);
+  }
+
+  get name(): IdentifierExpression {
+    return this.ident;
   }
 }
 
@@ -2294,6 +2336,10 @@ export class TypeDeclaration extends DeclarationStatement {
     range: Range
   ) {
     super(NodeKind.TYPEDECLARATION, name, decorators, flags, range);
+  }
+
+  get name(): IdentifierExpression {
+    return this.ident;
   }
 }
 
