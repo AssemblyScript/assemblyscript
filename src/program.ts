@@ -2569,27 +2569,6 @@ export class Program extends DiagnosticEmitter {
     parent.add(name, element); // reports
   }
 
-  /** Initializes a variable that's part of a declaration. */
-  private initializeVariable(
-    /** Name of the variable to initialize. */
-    name: string,
-    /** Parent element, usually a file or namespace. */
-    parent: Element,
-    /** The declaration this variable is a part of. */
-    declaration: VariableDeclaration,
-    /** Decorators to apply. */
-    acceptedFlags: DecoratorFlags
-  ): void {
-    let element = new Global(
-      name,
-      parent,
-      this.checkDecorators(declaration.decorators, acceptedFlags),
-      declaration
-    );
-    
-    parent.add(name, element);
-  }
-
   /** Initializes a variable statement. */
   private initializeVariables(
     /** The statement to initialize. */
@@ -2611,20 +2590,21 @@ export class Program extends DiagnosticEmitter {
       let nameNode = declaration.name;
       
       switch (nameNode.kind) {
-        case NodeKind.PATTERN: {
+        case NodeKind.PATTERN:
           this.error(DiagnosticCode.A_destructuring_declaration_must_have_an_initializer, declaration.range);
-          // let idents = (<BindingPatternExpression>nameNode).elements;
-          // for (let j = 0, n = idents.length; j < n; ++j) {
-          //   let ident = idents[j];
-          //   if (ident.kind == NodeKind.IDENTIFIER) {
-          //     this.initializeVariable((<IdentifierExpression>ident).text, parent, declaration, acceptedFlags);
-          //   }
-          // }
+          break;
+        case NodeKind.IDENTIFIER: {
+          let name = (<IdentifierExpression>nameNode).text;
+          let element = new Global(
+            name,
+            parent,
+            this.checkDecorators(declaration.decorators, acceptedFlags),
+            declaration
+          );
+          
+          parent.add(name, element);
           break;
         }
-        case NodeKind.IDENTIFIER:
-          this.initializeVariable((<IdentifierExpression>nameNode).text, parent, declaration, acceptedFlags);
-          break;
       }
     }
   }
