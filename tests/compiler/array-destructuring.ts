@@ -17,9 +17,15 @@ class Foo {
 }
 
 {
-  const [a, b, c, , d] = new Foo();
+  let [a, b, c, , d] = new Foo();
   assert(a == 2);
   assert(b == 3);
   assert(c == 4);
+  assert(d == 6);
+
+  [, a, b, c, d] = new Foo();
+  assert(a == 3);
+  assert(b == 4);
+  assert(c == 5);
   assert(d == 6);
 }
