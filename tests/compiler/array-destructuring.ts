@@ -34,4 +34,8 @@ class Foo {
   assert(arr2[1] == b);
   assert(arr2[2] == c);
   assert(arr2[3] == d);
+
+  [a, b] = [b, a];
+  assert(a == 2);
+  assert(b == 1);
 }

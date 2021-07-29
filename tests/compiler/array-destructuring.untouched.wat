@@ -3716,6 +3716,18 @@
   i32.const 2
   i32.add
  )
+ (func $~lib/array/Array<i32>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $2
+  i32.store
+  i32.const 0
+  drop
+ )
  (func $start:array-destructuring
   (local $0 i32)
   (local $1 i32)
@@ -3727,14 +3739,20 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 16
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  global.get $~lib/memory/__stack_pointer
+  i64.const 0
+  i64.store offset=8
   memory.size
   i32.const 16
   i32.shl
@@ -4047,7 +4065,62 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 2
+  i32.const 2
+  i32.const 3
+  i32.const 0
+  call $~lib/rt/__newArray
+  local.tee $10
+  i32.store offset=8
+  global.get $~lib/memory/__stack_pointer
+  local.get $10
+  i32.load offset=4
+  local.tee $11
+  i32.store offset=12
+  local.get $10
+  i32.const 0
+  local.get $4
+  call $~lib/array/Array<i32>#__uset
+  local.get $10
+  i32.const 1
+  local.get $5
+  call $~lib/array/Array<i32>#__uset
+  local.get $10
+  local.set $12
+  local.get $12
+  i32.const 0
+  call $~lib/array/Array<i32>#__get
+  local.set $5
+  local.get $12
+  i32.const 1
+  call $~lib/array/Array<i32>#__get
+  local.set $4
+  local.get $5
+  i32.const 2
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 528
+   i32.const 39
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  i32.const 1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 528
+   i32.const 40
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/memory/__stack_pointer
+  i32.const 16
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
