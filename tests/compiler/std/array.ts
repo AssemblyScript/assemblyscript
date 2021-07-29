@@ -546,6 +546,31 @@ var i: i32;
   arr.push(3);
 }
 
+// Array#findLastIndex /////////////////////////////////////////////////////////////////////////////
+
+{
+  let intArr = [0, 1, 2, 3];
+
+  i = intArr.findLastIndex(value => value == 0);
+
+  assert(i == 0);
+
+  i = intArr.findLastIndex(value => value == 1);
+  assert(i == 1);
+
+  i = intArr.findLastIndex(value => value == 100);
+  assert(i == -1);
+
+  // Test side effect pop
+  i = intArr.findLastIndex((value, _, array) => {
+    // @ts-ignore
+    array.pop(); // popped items shouldn't be looked up, and we shouldn't go out of bounds
+    return value == 100;
+  });
+
+  assert(i == -1);
+}
+
 // Array#every /////////////////////////////////////////////////////////////////////////////////////
 
 {

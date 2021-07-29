@@ -46,7 +46,6 @@ export enum DiagnosticCode {
   Property_0_only_has_a_setter_and_is_missing_a_getter = 229,
   _0_keyword_cannot_be_used_here = 230,
   A_class_with_a_constructor_explicitly_returning_something_else_than_this_must_be_final = 231,
-  Exported_generic_function_or_class_has_no_concrete_instances = 232,
   Property_0_is_always_assigned_before_being_used = 233,
   Expression_refers_to_a_static_element_that_does_not_compile_to_a_value_at_runtime = 234,
   Object_destructuring_is_not_supported = 235,
@@ -57,6 +56,7 @@ export enum DiagnosticCode {
   Indexed_access_may_involve_bounds_checking = 904,
   Explicitly_returning_constructor_drops_this_allocation = 905,
   Unnecessary_definite_assignment = 906,
+  Exported_generic_function_or_class_has_no_concrete_instances = 907,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -154,6 +154,7 @@ export enum DiagnosticCode {
   A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
   Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses = 2445,
   Variable_0_used_before_its_declaration = 2448,
+  Cannot_redeclare_block_scoped_variable_0 = 2451,
   The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
   Type_0_has_no_property_1 = 2460,
   Type_0_is_not_an_array_type = 2461,
@@ -232,7 +233,6 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 229: return "Property '{0}' only has a setter and is missing a getter.";
     case 230: return "'{0}' keyword cannot be used here.";
     case 231: return "A class with a constructor explicitly returning something else than 'this' must be '@final'.";
-    case 232: return "Exported generic function or class has no concrete instances.";
     case 233: return "Property '{0}' is always assigned before being used.";
     case 234: return "Expression refers to a static element that does not compile to a value at runtime.";
     case 235: return "Object destructuring is not supported.";
@@ -243,6 +243,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 904: return "Indexed access may involve bounds checking.";
     case 905: return "Explicitly returning constructor drops 'this' allocation.";
     case 906: return "Unnecessary definite assignment.";
+    case 907: return "Exported generic function or class has no concrete instances.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
@@ -340,6 +341,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
     case 2445: return "Property '{0}' is protected and only accessible within class '{1}' and its subclasses.";
     case 2448: return "Variable '{0}' used before its declaration.";
+    case 2451: return "Cannot redeclare block-scoped variable '{0}'";
     case 2453: return "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.";
     case 2460: return "Type '{0}' has no property '{1}'.";
     case 2461: return "Type '{0}' is not an array type.";

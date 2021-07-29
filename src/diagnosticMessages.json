@@ -41,7 +41,6 @@
   "Property '{0}' only has a setter and is missing a getter.": 229,
   "'{0}' keyword cannot be used here.": 230,
   "A class with a constructor explicitly returning something else than 'this' must be '@final'.": 231,
-  "Exported generic function or class has no concrete instances.": 232,
   "Property '{0}' is always assigned before being used.": 233,
   "Expression refers to a static element that does not compile to a value at runtime.": 234,
   "Object destructuring is not supported.": 235,
@@ -53,6 +52,7 @@
   "Indexed access may involve bounds checking.": 904,
   "Explicitly returning constructor drops 'this' allocation.": 905,
   "Unnecessary definite assignment.": 906,
+  "Exported generic function or class has no concrete instances.": 907,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,
@@ -152,6 +152,7 @@
   "A namespace declaration cannot be located prior to a class or function with which it is merged.": 2434,
   "Property '{0}' is protected and only accessible within class '{1}' and its subclasses.": 2445,
   "Variable '{0}' used before its declaration.": 2448,
+  "Cannot redeclare block-scoped variable '{0}'" : 2451,
   "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": 2453,
   "Type '{0}' has no property '{1}'.": 2460,
   "Type '{0}' is not an array type.": 2461,

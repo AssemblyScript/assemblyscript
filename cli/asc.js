@@ -529,7 +529,7 @@ exports.main = function main(argv, options, callback) {
     transforms = transforms.map(classOrModule => {
       // Except if it’s a legacy module, just pass it through.
       if (typeof classOrModule !== "function") {
-        return classOrModule; 
+        return classOrModule;
       }
       Object.assign(classOrModule.prototype, {
         program,
@@ -881,12 +881,20 @@ exports.main = function main(argv, options, callback) {
   if (opts.trapMode === "clamp") {
     stats.optimizeCount++;
     stats.optimizeTime += measure(() => {
-      module.runPass("trap-mode-clamp");
+      try {
+        module.runPasses(["trap-mode-clamp"]);
+      } catch (e) {
+        crash("runPasses", e);
+      }
     });
   } else if (opts.trapMode === "js") {
     stats.optimizeCount++;
     stats.optimizeTime += measure(() => {
-      module.runPass("trap-mode-js");
+      try {
+        module.runPasses(["trap-mode-js"]);
+      } catch (e) {
+        crash("runPasses", e);
+      }
     });
   } else if (opts.trapMode !== "allow") {
     module.dispose();

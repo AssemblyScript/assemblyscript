@@ -10,20 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1.0.0
-    - name: "Check that author is present in the NOTICE file"
-      if: github.event_name == 'pull_request'
-      run: |
-        AUTHOR=$(git log -1 --format="%aE")
-        if [ -z "$AUTHOR" ]; then
-          printf "\Cannot perform NOTICE check: Commit does not include an email address.\n" &&
-          exit 1;
-        elif ! grep -q "$AUTHOR" NOTICE || false; then
-          printf "\nAuthor '$AUTHOR' does not appear to be listed in the NOTICE file, yet.\n" &&
-          printf "Please see https://github.com/AssemblyScript/assemblyscript/blob/main/CONTRIBUTING.md\n" &&
-          exit 1;
-        else
-          printf "\nOK: Author is present in the NOTICE file.\n";
-        fi
     - name: "Check that distribution files are unmodified"
       if: github.event_name == 'pull_request'
       run: |

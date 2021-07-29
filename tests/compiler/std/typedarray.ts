@@ -315,11 +315,11 @@ testInstantiate(5);
 // tests work.
 
 function testReduce<ArrayType extends TypedArray<T>, T extends number>(): void {
-  var array: ArrayType = instantiate<ArrayType>(3);
+  var array = instantiate<ArrayType>(3);
   array[0] = <T>1;
   array[1] = <T>2;
   array[2] = <T>3;
-  var result = array.reduce<T>((acc: T, val: T) => <T>(acc + val), <T>0);
+  var result = array.reduce((acc, val) => <T>(acc + val), <T>0);
   assert(result == <T>6);
 }
 
@@ -336,7 +336,7 @@ testReduce<Float32Array, f32>();
 testReduce<Float64Array, f64>();
 
 function testAt<ArrayType extends TypedArray<T>, T extends number>(): void {
-  var array: ArrayType = instantiate<ArrayType>(3);
+  var array = instantiate<ArrayType>(3);
   array[0] = <T>1;
   array[1] = <T>2;
   array[2] = <T>3;
@@ -359,11 +359,11 @@ testAt<Float32Array, f32>();
 testAt<Float64Array, f64>();
 
 function testReduceRight<ArrayType extends TypedArray<T>, T extends number>(): void {
-  var array: ArrayType = instantiate<ArrayType>(3);
+  var array = instantiate<ArrayType>(3);
   array[0] = <T>1;
   array[1] = <T>2;
   array[2] = <T>3;
-  var result = array.reduceRight<T>((acc: T, val: T) => <T>(acc + val), <T>0);
+  var result = array.reduceRight((acc, val) => <T>(acc + val), <T>0);
   assert(result == <T>6);
 }
 
@@ -380,11 +380,11 @@ testReduceRight<Float32Array, f32>();
 testReduceRight<Float64Array, f64>();
 
 function testArrayMap<ArrayType extends TypedArray<T>, T extends number>(): void {
-  var source: ArrayType = instantiate<ArrayType>(3);
+  var source = instantiate<ArrayType>(3);
   source[0] = <T>1;
   source[1] = <T>2;
   source[2] = <T>3;
-  var result = source.map((value: T) => <T>(value * value));
+  var result = source.map(value => <T>(value * value));
   assert(result[0] == <T>1);
   assert(result[1] == <T>4);
   assert(result[2] == <T>9);
@@ -403,13 +403,13 @@ testArrayMap<Float32Array, f32>();
 testArrayMap<Float64Array, f64>();
 
 function testArrayFilter<ArrayType extends TypedArray<T>, T extends number>(): void {
-  var source: ArrayType = instantiate<ArrayType>(6);
+  var source = instantiate<ArrayType>(6);
   source[0] = <T>1;
   source[1] = <T>2;
   source[2] = <T>3;
   source[3] = <T>4;
   source[5] = <T>5;
-  var result = source.filter((value: T) => value > 2);
+  var result = source.filter(value => value > 2);
   assert(result.byteOffset == 0);
   assert(result.length == 3);
   assert(result[0] == <T>3);
@@ -430,13 +430,13 @@ testArrayFilter<Float32Array, f32>();
 testArrayFilter<Float64Array, f64>();
 
 function testArraySome<ArrayType extends TypedArray<T>, T extends number>(): void {
-  var source: ArrayType = instantiate<ArrayType>(3);
+  var source = instantiate<ArrayType>(3);
   source[0] = <T>2;
   source[1] = <T>4;
   source[2] = <T>6;
-  var result: bool = source.some((value: T) => value == <T>2);
+  var result: bool = source.some(value => value == <T>2);
   assert(result);
-  var failResult = source.some((value: T) => value == <T>0);
+  var failResult = source.some(value => value == <T>0);
   assert(!failResult);
 }
 
@@ -453,13 +453,13 @@ testArraySome<Float32Array, f32>();
 testArraySome<Float64Array, f64>();
 
 function testArrayFindIndex<ArrayType extends TypedArray<T>, T extends number>(): void {
-  var source: ArrayType = instantiate<ArrayType>(3);
+  var source = instantiate<ArrayType>(3);
   source[0] = <T>1;
   source[1] = <T>2;
   source[2] = <T>3;
-  var result = source.findIndex((value: T) => value == <T>2);
+  var result = source.findIndex(value => value == <T>2);
   assert(result == 1);
-  var failResult = source.findIndex((value: T) => value == <T>4);
+  var failResult = source.findIndex(value => value == <T>4);
   assert(failResult == -1);
 }
 
@@ -475,14 +475,37 @@ testArrayFindIndex<Uint64Array, u64>();
 testArrayFindIndex<Float32Array, f32>();
 testArrayFindIndex<Float64Array, f64>();
 
+function testArrayFindLastIndex<ArrayType extends TypedArray<T>, T extends number>(): void {
+  var source = instantiate<ArrayType>(3);
+  source[0] = <T>1;
+  source[1] = <T>2;
+  source[2] = <T>3;
+  var result = source.findLastIndex(value => value == <T>2);
+  assert(result == 1);
+  var failResult = source.findLastIndex(value => value == <T>4);
+  assert(failResult == -1);
+}
+
+testArrayFindLastIndex<Int8Array, i8>();
+testArrayFindLastIndex<Uint8Array, u8>();
+testArrayFindLastIndex<Uint8ClampedArray, u8>();
+testArrayFindLastIndex<Int16Array, i16>();
+testArrayFindLastIndex<Uint16Array, u16>();
+testArrayFindLastIndex<Int32Array, i32>();
+testArrayFindLastIndex<Uint32Array, u32>();
+testArrayFindLastIndex<Int64Array, i64>();
+testArrayFindLastIndex<Uint64Array, u64>();
+testArrayFindLastIndex<Float32Array, f32>();
+testArrayFindLastIndex<Float64Array, f64>();
+
 function testArrayEvery<ArrayType extends TypedArray<T>, T extends number>(): void {
-  var source: ArrayType = instantiate<ArrayType>(3);
+  var source = instantiate<ArrayType>(3);
   source[0] = <T>2;
   source[1] = <T>4;
   source[2] = <T>6;
-  var result = source.every((value: T) => value % <T>2 == <T>0);
+  var result = source.every(value => value % <T>2 == <T>0);
   assert(result);
-  var failResult = source.every((value: T) => value == <T>2);
+  var failResult = source.every(value => value == <T>2);
   assert(!failResult);
 }
 

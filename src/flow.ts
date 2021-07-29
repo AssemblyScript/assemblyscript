@@ -444,11 +444,16 @@ export class Flow {
   }
 
   /** Adds a new scoped dummy local of the specified name. */
-  addScopedDummyLocal(name: string, type: Type): Local {
+  addScopedDummyLocal(name: string, type: Type, declarationNode: Node): Local {
     var scopedDummy = new Local(name, -1, type, this.parentFunction);
     var scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
-    else assert(!scopedLocals.has(name));
+    else if (scopedLocals.has(name)) {
+      this.parentFunction.program.error(
+        DiagnosticCode.Cannot_redeclare_block_scoped_variable_0,
+        declarationNode.range, name
+      );
+    }
     scopedDummy.set(CommonFlags.SCOPED);
     scopedLocals.set(name, scopedDummy);
     return scopedDummy;
