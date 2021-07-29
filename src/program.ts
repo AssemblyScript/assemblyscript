@@ -2927,7 +2927,7 @@ export abstract class DeclaredElement extends Element {
 
   /** Gets the associated identifier node. */
   get identifierNode(): IdentifierExpression {
-    return this.declaration.name;
+    return this.declaration.ident;
   }
 
   /** Gets the signature node, if applicable, along the identifier node. */
