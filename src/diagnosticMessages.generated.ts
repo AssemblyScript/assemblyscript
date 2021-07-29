@@ -49,6 +49,8 @@ export enum DiagnosticCode {
   Exported_generic_function_or_class_has_no_concrete_instances = 232,
   Property_0_is_always_assigned_before_being_used = 233,
   Expression_refers_to_a_static_element_that_does_not_compile_to_a_value_at_runtime = 234,
+  Object_destructuring_is_not_supported = 235,
+  Invalid_destructure_pattern = 236,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
   Expression_compiles_to_a_dynamic_check_at_runtime = 903,
@@ -233,6 +235,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 232: return "Exported generic function or class has no concrete instances.";
     case 233: return "Property '{0}' is always assigned before being used.";
     case 234: return "Expression refers to a static element that does not compile to a value at runtime.";
+    case 235: return "Object destructuring is not supported.";
+    case 236: return "Invalid destructure pattern.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";
     case 903: return "Expression compiles to a dynamic check at runtime.";

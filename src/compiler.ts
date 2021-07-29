@@ -3086,25 +3086,24 @@ export class Compiler extends DiagnosticEmitter {
             this.makeLocalAssignment(initLocal, initExpr, initType, false)
           );
 
-          let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
-          let classType = initType.getClassOrWrapper(program);
-          let indexedGet: Function | null = null;
-          if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
-            this.error(
-              DiagnosticCode.Index_signature_is_missing_in_type_0,
-              initializer.range, initType.toString()
-            );
-            continue;
-          }
-
-          if (!isUnchecked && this.options.pedantic) {
-            this.pedantic(
-              DiagnosticCode.Indexed_access_may_involve_bounds_checking,
-              declaration.range
-            );
-          }
-
           if (pattern.array) {
+            let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
+            let classType = initType.getClassOrWrapper(program);
+            let indexedGet: Function | null = null;
+            if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
+              this.error(
+                DiagnosticCode.Index_signature_is_missing_in_type_0,
+                initializer.range, initType.toString()
+              );
+              continue;
+            }
+
+            if (!isUnchecked && this.options.pedantic) {
+              this.pedantic(
+                DiagnosticCode.Indexed_access_may_involve_bounds_checking,
+                declaration.range
+              );
+            }
             // check that the type is valid
             if (indexedGet.signature.parameterTypes[0] != Type.i32) {
               this.error(
@@ -3135,12 +3134,19 @@ export class Compiler extends DiagnosticEmitter {
                   this.makeLocalAssignment(local, callExpr, type, false)
                 );
               } else if (nameNode.kind != NodeKind.OMITTED) {
-                assert(false);
+                this.error(
+                  DiagnosticCode.Invalid_destructure_pattern,
+                  pattern.range
+                );
+                continue;
               }
             }
           } else {
-            // unimplemented
-            assert(false);
+            this.error(
+              DiagnosticCode.Object_destructuring_is_not_supported,
+              pattern.range
+            );
+            continue;
           }
           break;
         }
@@ -5978,7 +5984,11 @@ export class Compiler extends DiagnosticEmitter {
           this.makeAssignment(local, callExpr, type, valueExpression, null, null, false)
         );
       } else if (node.kind != NodeKind.OMITTED) {
-        assert(false);
+        this.error(
+          DiagnosticCode.Invalid_destructure_pattern,
+          expression.range
+        );
+        return this.module.unreachable();
       }
     }
 
