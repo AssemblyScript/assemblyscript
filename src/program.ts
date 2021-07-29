@@ -111,7 +111,8 @@ import {
   VariableDeclaration,
   VariableLikeDeclarationStatement,
   VariableStatement,
-  ParameterKind
+  ParameterKind,
+  BindingPatternExpression
 } from "./ast";
 
 import {
@@ -899,14 +900,12 @@ export class Program extends DiagnosticEmitter {
   /** Creates a native namespace declaration. */
   makeNativeNamespaceDeclaration(
     /** The simple name of the namespace. */
-    name: string,
+    name: IdentifierExpression,
     /** Flags indicating specific traits, e.g. `EXPORT`. */
     flags: CommonFlags = CommonFlags.NONE
   ): NamespaceDeclaration {
-    var range = this.nativeSource.range;
     return Node.createNamespaceDeclaration(
-      Node.createIdentifierExpression(name, range),
-      null, flags, [], range
+      name, null, flags, [], name.range
     );
   }
 
@@ -1822,7 +1821,7 @@ export class Program extends DiagnosticEmitter {
     /** So far queued `implements` clauses. */
     queuedImplements: ClassPrototype[]
   ): ClassPrototype | null {
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     var element = new ClassPrototype(
       name,
       parent,
@@ -1893,7 +1892,7 @@ export class Program extends DiagnosticEmitter {
     /** Parent class. */
     parent: ClassPrototype
   ): void {
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     var decorators = declaration.decorators;
     var element: DeclaredElement;
     var acceptedFlags: DecoratorFlags = DecoratorFlags.UNSAFE;
@@ -1932,7 +1931,7 @@ export class Program extends DiagnosticEmitter {
     /** Parent class. */
     parent: ClassPrototype
   ): FunctionPrototype | null {
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     var isStatic = declaration.is(CommonFlags.STATIC);
     var acceptedFlags = DecoratorFlags.INLINE | DecoratorFlags.UNSAFE;
     if (!declaration.is(CommonFlags.GENERIC)) {
@@ -2025,7 +2024,7 @@ export class Program extends DiagnosticEmitter {
     /** Parent class. */
     parent: ClassPrototype
   ): PropertyPrototype | null {
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     if (declaration.is(CommonFlags.STATIC)) {
       let parentMembers = parent.members;
       if (parentMembers !== null && parentMembers.has(name)) {
@@ -2063,7 +2062,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var property = this.ensureProperty(declaration, parent);
     if (!property) return;
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     var isGetter = declaration.is(CommonFlags.GET);
     if (isGetter) {
       if (property.getterPrototype) {
@@ -2104,7 +2103,7 @@ export class Program extends DiagnosticEmitter {
     /** Parent element, usually a file or namespace. */
     parent: Element
   ): Enum | null {
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     var element = new Enum(
       name,
       parent,
@@ -2130,7 +2129,7 @@ export class Program extends DiagnosticEmitter {
     /** Parent enum. */
     parent: Enum
   ): void {
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     var element = new EnumValue(
       name,
       parent,
@@ -2345,7 +2344,7 @@ export class Program extends DiagnosticEmitter {
     if (foreignFile) {
       var element = this.lookupForeign(declaration.foreignName.text, foreignFile, queuedExports);
       if (element) {
-        parent.add(declaration.ident.text, element, declaration.ident /* isImport */);
+        parent.add(declaration.name.text, element, declaration.name /* isImport */);
         return;
       }
     }
@@ -2353,7 +2352,7 @@ export class Program extends DiagnosticEmitter {
     // otherwise queue it
     queuedImports.push(new QueuedImport(
       parent,
-      declaration.ident,
+      declaration.name,
       declaration.foreignName,
       foreignPath,
       foreignPathAlt
@@ -2367,7 +2366,7 @@ export class Program extends DiagnosticEmitter {
     /** Parent element, usually a file or namespace. */
     parent: Element
   ): FunctionPrototype | null {
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     var validDecorators = DecoratorFlags.UNSAFE | DecoratorFlags.BUILTIN;
     if (declaration.is(CommonFlags.AMBIENT)) {
       validDecorators |= DecoratorFlags.EXTERNAL;
@@ -2401,7 +2400,7 @@ export class Program extends DiagnosticEmitter {
     /** So far queued `extends` clauses. */
     queuedExtends: ClassPrototype[],
   ): InterfacePrototype | null {
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     var element = new InterfacePrototype(
       name,
       parent,
@@ -2449,7 +2448,7 @@ export class Program extends DiagnosticEmitter {
     if (!typeNode) typeNode = Node.createOmittedType(declaration.name.range.atEnd);
     this.initializeProperty(
       Node.createMethodDeclaration(
-        declaration.ident,
+        declaration.name,
         declaration.decorators,
         declaration.flags | CommonFlags.GET,
         null,
@@ -2468,7 +2467,7 @@ export class Program extends DiagnosticEmitter {
     if (!declaration.is(CommonFlags.READONLY)) {
       this.initializeProperty(
         Node.createMethodDeclaration(
-          declaration.ident,
+          declaration.name,
           declaration.decorators,
           declaration.flags | CommonFlags.SET,
           null,
@@ -2476,7 +2475,7 @@ export class Program extends DiagnosticEmitter {
             [
               Node.createParameter(
                 ParameterKind.DEFAULT,
-                declaration.ident,
+                declaration.name,
                 typeNode,
                 null,
                 declaration.name.range
@@ -2506,7 +2505,7 @@ export class Program extends DiagnosticEmitter {
     /** So far queued `implements` clauses. */
     queuedImplements: ClassPrototype[]
   ): DeclaredElement | null {
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     var original = new Namespace(
       name,
       parent,
@@ -2561,7 +2560,7 @@ export class Program extends DiagnosticEmitter {
     /** Parent element, usually a file or namespace. */
     parent: Element
   ): void {
-    var name = declaration.ident.text;
+    var name = declaration.name.text;
     var element = new TypeDefinition(
       name,
       parent,
@@ -2569,6 +2568,27 @@ export class Program extends DiagnosticEmitter {
       this.checkDecorators(declaration.decorators, DecoratorFlags.NONE)
     );
     parent.add(name, element); // reports
+  }
+
+  /** Initializes a variable that's part of a declaration. */
+  private initializeVariable(
+    /** Name of the variable to initialize. */
+    name: string,
+    /** Parent element, usually a file or namespace. */
+    parent: Element,
+    /** The declaration this variable is a part of. */
+    declaration: VariableDeclaration,
+    /** Decorators to apply. */
+    acceptedFlags: DecoratorFlags
+  ): void {
+    let element = new Global(
+      name,
+      parent,
+      this.checkDecorators(declaration.decorators, acceptedFlags),
+      declaration
+    );
+    
+    parent.add(name, element);
   }
 
   /** Initializes a variable statement. */
@@ -2581,7 +2601,6 @@ export class Program extends DiagnosticEmitter {
     var declarations = statement.declarations;
     for (let i = 0, k = declarations.length; i < k; ++i) {
       let declaration = declarations[i];
-      let name = declaration.ident.text;
       let acceptedFlags = DecoratorFlags.GLOBAL | DecoratorFlags.LAZY;
       if (declaration.is(CommonFlags.DECLARE)) {
         acceptedFlags |= DecoratorFlags.EXTERNAL;
@@ -2589,13 +2608,24 @@ export class Program extends DiagnosticEmitter {
       if (declaration.is(CommonFlags.CONST)) {
         acceptedFlags |= DecoratorFlags.INLINE;
       }
-      let element = new Global(
-        name,
-        parent,
-        this.checkDecorators(declaration.decorators, acceptedFlags),
-        declaration
-      );
-      if (!parent.add(name, element)) continue; // reports
+
+      let nameNode = declaration.name;
+      
+      switch (nameNode.kind) {
+        case NodeKind.PATTERN: {
+          let idents = (<BindingPatternExpression>nameNode).elements;
+          for (let j = 0, n = idents.length; j < n; ++j) {
+            let ident = idents[j];
+            if (ident.kind == NodeKind.IDENTIFIER) {
+              this.initializeVariable((<IdentifierExpression>ident).text, parent, declaration, acceptedFlags);
+            }
+          }
+          break;
+        }
+        case NodeKind.IDENTIFIER:
+          this.initializeVariable((<IdentifierExpression>nameNode).text, parent, declaration, acceptedFlags);
+          break;
+      }
     }
   }
 
@@ -2897,7 +2927,7 @@ export abstract class DeclaredElement extends Element {
 
   /** Gets the associated identifier node. */
   get identifierNode(): IdentifierExpression {
-    return this.declaration.ident;
+    return this.declaration.name;
   }
 
   /** Gets the signature node, if applicable, along the identifier node. */
@@ -3110,8 +3140,7 @@ export class File extends Element {
     parent: Element,
     localIdentifier: IdentifierExpression
   ): Namespace {
-    var declaration = this.program.makeNativeNamespaceDeclaration(name);
-    declaration.name = localIdentifier;
+    var declaration = this.program.makeNativeNamespaceDeclaration(localIdentifier);
     var ns = new Namespace(name, parent, declaration);
     ns.set(CommonFlags.SCOPED);
     this.copyExportsToNamespace(ns);
