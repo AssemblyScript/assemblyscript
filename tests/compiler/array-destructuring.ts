@@ -6,7 +6,6 @@ class Foo {
   }
 }
 
-
 {
   const arr: i32[] = [1, 2, 3, 4, 5];
   const [a, b, c, , d] = arr;
@@ -28,4 +27,11 @@ class Foo {
   assert(b == 4);
   assert(c == 5);
   assert(d == 6);
+
+  let arr: i32[] = [1, 2, 3, 4];
+  let arr2 = [a, b, c, d] = arr;
+  assert(arr2[0] == a);
+  assert(arr2[1] == b);
+  assert(arr2[2] == c);
+  assert(arr2[3] == d);
 }
