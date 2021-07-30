@@ -5,4 +5,5 @@ class Foo {
 
 {
   let { bar, baz } = new Foo();
+  ERROR("EOF");
 }
