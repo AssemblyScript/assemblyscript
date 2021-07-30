@@ -3148,8 +3148,9 @@ export class Compiler extends DiagnosticEmitter {
             }
           } else {
             this.error(
-              DiagnosticCode.Object_destructuring_is_not_supported,
-              pattern.range
+              DiagnosticCode.Not_implemented_0,
+              pattern.range,
+              "Object destructuring"
             );
             continue;
           }
