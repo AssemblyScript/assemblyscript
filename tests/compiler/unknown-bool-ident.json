@@ -2,6 +2,7 @@
   "asc_flags": [
   ],
   "stderr": [
-    "TS2304: Cannot find name 'unknown_var'."
+    "TS2304: Cannot find name 'unknown_var'.",
+    "EOF"
   ]
 }
