@@ -10069,7 +10069,7 @@ export class Compiler extends DiagnosticEmitter {
   evaluateCondition(expr: ExpressionRef): ConditionKind {
     let type = getExpressionType(expr);
     if (type == TypeRef.Unreachable)
-      return ConditionKind.UNKNOWN; // invalid expression given
+      return ConditionKind.UNKNOWN;
 
     assert(type == TypeRef.I32);
     var module = this.module;
