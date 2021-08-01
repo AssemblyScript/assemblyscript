@@ -38,4 +38,9 @@ class Foo {
   [a, b] = [b, a];
   assert(a == 2);
   assert(b == 1);
+
+  const [] = arr;
+  const [,] = arr;
+  [] = arr;
+  [,] = arr;
 }

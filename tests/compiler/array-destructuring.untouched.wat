@@ -3742,6 +3742,10 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.sub
@@ -4119,6 +4123,14 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $8
+  local.set $13
+  local.get $8
+  local.set $14
+  local.get $8
+  local.set $15
+  local.get $8
+  local.set $16
   global.get $~lib/memory/__stack_pointer
   i32.const 16
   i32.add
