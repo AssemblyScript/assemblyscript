@@ -8157,9 +8157,9 @@ export class Compiler extends DiagnosticEmitter {
         return this.ensureStaticString(parts[0]);
       }
 
-      // Shortcut for `${expr}`, `prefix${expr}`, `${expr}suffix`
+      // Shortcut for `${expr}`, `<prefix>${expr}`, `${expr}<suffix>`
       if (numParts == 2) {
-        // Shortcut for `${expr}`
+        // Shortcut for `${expr}`  ->   expr.toString()
         if (!parts[0].length && !parts[1].length) {
           let expression = expressions[0];
           return this.makeToString(
@@ -8167,7 +8167,16 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType, expression
           );
         }
-        // TODO: Add shortcuts for `prefix${expr}` and `${expr}suffix`
+        // Shortcut for `<prefix>${expr}`  ->  "<prefix>" + expr.toString()
+        if (parts[0].length && !parts[1].length) {
+          let expression = expressions[0];
+          let lhs = this.ensureStaticString(parts[0]);
+          let rhs = this.makeToString(
+            this.compileExpression(expression, stringType),
+            this.currentType, expression
+          );
+        }
+        // TODO: Add shortcuts for `${expr}<suffix>`
       }
 
       let length = 2 * numParts - 1;
