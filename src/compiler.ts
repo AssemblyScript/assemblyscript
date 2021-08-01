@@ -8149,9 +8149,7 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var stringType = this.program.stringInstance.type;
 
-    // Compile to a `StaticArray<string>#join("")` if untagged
     if (tag === null) {
-
       // Shortcut if just a (multi-line) string
       if (numParts == 1) {
         return this.ensureStaticString(parts[0]);
@@ -8213,6 +8211,7 @@ export class Compiler extends DiagnosticEmitter {
         return this.makeCallDirect(concatMethod, [ lhs, rhs ], expression);
       }
 
+      // Compile to a `StaticArray<string>#join("") for general case
       let length = 2 * numParts - 1;
       let values = new Array<usize>(length);
       values[0] = this.ensureStaticString(parts[0]);
