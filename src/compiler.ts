@@ -8162,25 +8162,26 @@ export class Compiler extends DiagnosticEmitter {
         let expression = expressions[0];
         let lhsLen = parts[0].length;
         let rhsLen = parts[1].length;
+        // Shortcut for `${expr}`  ->   expr.toString()
         if (!lhsLen && !rhsLen) {
-          // Shortcut for `${expr}`  ->   expr.toString()
           return this.makeToString(
             this.compileExpression(expression, stringType),
             this.currentType, expression
           );
         }
+        // Shortcuts for
+        // `<prefix>${expr}`  ->  "<prefix>" + expr.toString()
+        // `${expr}<suffix>`  ->  expr.toString() + "<suffix>"
         if ((lhsLen && !rhsLen) || (!lhsLen && rhsLen)) {
           let lhs: ExpressionRef;
           let rhs: ExpressionRef;
           if (lhsLen && !rhsLen) {
-            // Shortcut for `<prefix>${expr}`  ->  "<prefix>" + expr.toString()
             lhs = this.ensureStaticString(parts[0]);
             rhs = this.makeToString(
               this.compileExpression(expression, stringType),
               this.currentType, expression
             );
           } else {
-            // Shortcut for `${expr}<suffix>`  ->  expr.toString() + "<suffix>"
             lhs = this.makeToString(
               this.compileExpression(expression, stringType),
               this.currentType, expression
