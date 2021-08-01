@@ -8225,26 +8225,22 @@ export class Compiler extends DiagnosticEmitter {
       let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
       let joinInstance = assert(arrayInstance.getMethod("join"));
       let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true));
-      let stmts = new Array<ExpressionRef>();
+      let stmts = new Array<ExpressionRef>(numParts);
       for (let i = 0, k = numParts - 1; i < k; ++i) {
         let expression = expressions[i];
-        stmts.push(
-          this.makeCallDirect(indexedSetInstance, [
-            module.usize(offset),
-            module.i32(2 * i + 1),
-            this.makeToString(
-              this.compileExpression(expression, stringType),
-              this.currentType, expression
-            )
-          ], expression)
-        );
-      }
-      stmts.push(
-        this.makeCallDirect(joinInstance, [
+        stmts[i] = this.makeCallDirect(indexedSetInstance, [
           module.usize(offset),
-          this.ensureStaticString("")
-        ], expression)
-      );
+          module.i32(2 * i + 1),
+          this.makeToString(
+            this.compileExpression(expression, stringType),
+            this.currentType, expression
+          )
+        ], expression);
+      }
+      stmts[numParts - 1] = this.makeCallDirect(joinInstance, [
+        module.usize(offset),
+        this.ensureStaticString("")
+      ], expression);
       return module.flatten(stmts, stringType.toRef());
     }
 
