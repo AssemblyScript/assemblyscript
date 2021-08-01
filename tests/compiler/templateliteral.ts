@@ -34,6 +34,7 @@ function test_fast_paths_string(): void {
   assert(`pref${b}` == "prefb");
   assert(`${a}suff` == "2suff");
   assert(`${b}suff` == "bsuff");
+  assert(`${a}${b}` == "2b");
 }
 test_fast_paths_string();
 

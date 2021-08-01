@@ -8193,6 +8193,25 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
+      // Shortcut for `${exprA}${exprB}`  ->  exprA.toString() + exprB.toString()
+      if (numParts == 3 && !parts[0].length && !parts[1].length && !parts[2].length) {
+        let exprA = expressions[0];
+        let exprB = expressions[1];
+
+        let lhs = this.makeToString(
+          this.compileExpression(exprA, stringType),
+          this.currentType, exprA
+        );
+        let rhs = this.makeToString(
+          this.compileExpression(exprB, stringType),
+          this.currentType, exprB
+        );
+
+        let stringInstance = this.program.stringInstance;
+        let concatMethod = assert(stringInstance.getMethod("concat"));
+        return this.makeCallDirect(concatMethod, [ lhs, rhs ], expression);
+      }
+
       let length = 2 * numParts - 1;
       let values = new Array<usize>(length);
       values[0] = this.ensureStaticString(parts[0]);
