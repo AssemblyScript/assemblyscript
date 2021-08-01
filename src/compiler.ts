@@ -8185,7 +8185,7 @@ export class Compiler extends DiagnosticEmitter {
               this.compileExpression(expression, stringType),
               this.currentType, expression
             );
-            rhs = this.ensureStaticString(parts[0]);
+            rhs = this.ensureStaticString(parts[1]);
           }
           let stringInstance = this.program.stringInstance;
           let concatMethod = assert(stringInstance.getMethod("concat"));
