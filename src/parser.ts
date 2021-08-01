@@ -931,17 +931,26 @@ export class Parser extends DiagnosticEmitter {
     if (!tn.skipIdentifier()) {
       let startPos = tn.range().start;
       let isArrayPattern = false;
+      let closingToken = Token.CLOSEBRACE;
+      let closingTokenSource = "}";
 
       switch (tn.peek()) {
         case Token.OPENBRACKET:
           isArrayPattern = true;
+          closingToken = Token.CLOSEBRACKET;
+          closingTokenSource = "]";
         case Token.OPENBRACE: {
           tn.next();
           let elements = new Array<Expression>();
 
           do {
-            if (tn.peek() == Token.COMMA) {
+            let tk = tn.peek();
+            let isEnding = tk == closingToken;
+
+            if (tk == Token.COMMA || isEnding) {
               elements.push(Node.createOmittedExpression(tn.range(tn.pos)));
+              if (isEnding)
+                break;
             } else {
               if (!tn.skipIdentifier()) {
                 this.error(
@@ -964,10 +973,10 @@ export class Parser extends DiagnosticEmitter {
             }
           } while (tn.skip(Token.COMMA));
 
-          if (!tn.skip(isArrayPattern ? Token.CLOSEBRACKET : Token.CLOSEBRACE)) {
+          if (!tn.skip(closingToken)) {
             this.error(
               DiagnosticCode._0_expected,
-              tn.range(), isArrayPattern ? "]" : "}"
+              tn.range(), closingTokenSource
             );
             return null;
           }
