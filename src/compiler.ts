@@ -8154,6 +8154,23 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var stringType = this.program.stringInstance.type;
 
+    // Shortcut for `${expr}`, `prefix${expr}`, `${expr}suffix`
+    if (
+      tag === null &&
+      numParts == 2 &&
+      expressions.length == 1
+    ) {
+      // Shortcut for `${expr}`
+      if (!parts[0].length && !parts[1].length) {
+        let expression = expressions[0];
+        return this.makeToString(
+          this.compileExpression(expression, stringType),
+          this.currentType, expression
+        );
+      }
+      // TODO: Add shortcuts for `prefix${expr}` and `${expr}suffix`
+    }
+
     // Compile to a `StaticArray<string>#join("")` if untagged
     if (tag === null) {
       let length = 2 * numParts - 1;
