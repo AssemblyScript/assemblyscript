@@ -8159,24 +8159,38 @@ export class Compiler extends DiagnosticEmitter {
 
       // Shortcut for `${expr}`, `<prefix>${expr}`, `${expr}<suffix>`
       if (numParts == 2) {
-        // Shortcut for `${expr}`  ->   expr.toString()
-        if (!parts[0].length && !parts[1].length) {
-          let expression = expressions[0];
+        let expression = expressions[0];
+        let lhsLen = parts[0].length;
+        let rhsLen = parts[1].length;
+        if (!lhsLen && !rhsLen) {
+          // Shortcut for `${expr}`  ->   expr.toString()
           return this.makeToString(
             this.compileExpression(expression, stringType),
             this.currentType, expression
           );
         }
-        // Shortcut for `<prefix>${expr}`  ->  "<prefix>" + expr.toString()
-        if (parts[0].length && !parts[1].length) {
-          let expression = expressions[0];
-          let lhs = this.ensureStaticString(parts[0]);
-          let rhs = this.makeToString(
-            this.compileExpression(expression, stringType),
-            this.currentType, expression
-          );
+        if ((lhsLen && !rhsLen) || (!lhsLen && rhsLen)) {
+          let lhs: ExpressionRef;
+          let rhs: ExpressionRef;
+          if (lhsLen && !rhsLen) {
+            // Shortcut for `<prefix>${expr}`  ->  "<prefix>" + expr.toString()
+            lhs = this.ensureStaticString(parts[0]);
+            rhs = this.makeToString(
+              this.compileExpression(expression, stringType),
+              this.currentType, expression
+            );
+          } else {
+            // Shortcut for `${expr}<suffix>`  ->  expr.toString() + "<suffix>"
+            lhs = this.makeToString(
+              this.compileExpression(expression, stringType),
+              this.currentType, expression
+            );
+            rhs = this.ensureStaticString(parts[0]);
+          }
+          let stringInstance = this.program.stringInstance;
+          let concatMethod = assert(stringInstance.getMethod("concat"));
+          return this.makeCallDirect(concatMethod, [ lhs, rhs ], expression);
         }
-        // TODO: Add shortcuts for `${expr}<suffix>`
       }
 
       let length = 2 * numParts - 1;

@@ -30,6 +30,10 @@ function test_fast_paths_string(): void {
   var b = "b";
   assert(`${a}` == "2");
   assert(`${b}` == "b");
+  assert(`pref${a}` == "pref2");
+  assert(`pref${b}` == "prefb");
+  assert(`${a}suff` == "2suff");
+  assert(`${b}suff` == "bsuff");
 }
 test_fast_paths_string();
 
