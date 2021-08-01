@@ -27,7 +27,9 @@ test_float();
 
 function test_fast_paths_string(): void {
   var a = 2;
+  var b = "b";
   assert(`${a}` == "2");
+  assert(`${b}` == "b");
 }
 test_fast_paths_string();
 

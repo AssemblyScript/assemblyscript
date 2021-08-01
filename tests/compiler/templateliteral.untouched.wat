@@ -6278,42 +6278,67 @@
  (func $templateliteral/test_fast_paths_string
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
   call $~stack_check
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
+  global.get $~lib/memory/__stack_pointer
+  i32.const 0
+  i32.store offset=8
   i32.const 2
   local.set $0
+  global.get $~lib/memory/__stack_pointer
+  i32.const 64
+  local.tee $1
+  i32.store
   local.get $0
   i32.const 10
   call $~lib/number/I32#toString
-  local.set $1
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.get $1
-  i32.store
-  local.get $1
-  i32.const 4192
-  local.set $1
-  global.get $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $2
   i32.store offset=4
-  local.get $1
+  local.get $2
+  i32.const 4192
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=8
+  local.get $2
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 96
-   i32.const 30
+   i32.const 31
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 64
+  local.set $2
+  global.get $~lib/memory/__stack_pointer
+  local.get $2
+  i32.store offset=8
+  local.get $2
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 96
+   i32.const 32
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  i32.const 8
+  i32.const 12
   i32.add
   global.set $~lib/memory/__stack_pointer
  )
@@ -6401,7 +6426,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 44
+   i32.const 46
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6465,7 +6490,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 45
+   i32.const 47
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -6529,7 +6554,7 @@
   if
    i32.const 0
    i32.const 96
-   i32.const 46
+   i32.const 48
    i32.const 3
    call $~lib/builtins/abort
    unreachable
