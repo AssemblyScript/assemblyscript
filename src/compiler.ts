@@ -8170,8 +8170,8 @@ export class Compiler extends DiagnosticEmitter {
         // Shortcuts for
         // `<prefix>${expr}`  ->  "<prefix>" + expr.toString()
         // `${expr}<suffix>`  ->  expr.toString() + "<suffix>"
-        let hasPrefix = lhsLen && !rhsLen;
-        let hasSuffix = !lhsLen && rhsLen;
+        let hasPrefix = lhsLen != 0 && rhsLen == 0;
+        let hasSuffix = lhsLen == 0 && rhsLen != 0;
         if (hasPrefix || hasSuffix) {
           let lhs: ExpressionRef;
           let rhs: ExpressionRef;
