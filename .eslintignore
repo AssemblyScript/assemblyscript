@@ -8,3 +8,4 @@ tests/parser/
 
 # FIXME: Tagged template literal tests with invalid escapes
 tests/compiler/templateliteral.ts
+tests/compiler/array-destructuring.ts
