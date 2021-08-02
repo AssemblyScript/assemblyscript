@@ -1847,13 +1847,17 @@ function FOREACH<TArray extends ArrayBufferView, T>(
 // @ts-ignore: decorator
 @inline
 function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
-  var ptr = array.dataStart;
-  for (let front: usize = 0, back: usize = array.length - 1; front < back; ++front, --back) {
-    let frontPtr = ptr + (front << alignof<T>());
-    let backPtr = ptr + (back << alignof<T>());
-    let temp = load<T>(frontPtr);
-    store<T>(frontPtr, load<T>(backPtr));
-    store<T>(backPtr, temp);
+  var len = array.length;
+  if (len > 1) {
+    let front = array.dataStart;
+    let back = front + (<usize>(len - 1) << alignof<T>());
+    while (front < back) {
+      let temp = load<T>(front);
+      store<T>(front, load<T>(back));
+      store<T>(back, temp);
+      front += sizeof<T>();
+      back -= sizeof<T>();
+    }
   }
   return array;
 }

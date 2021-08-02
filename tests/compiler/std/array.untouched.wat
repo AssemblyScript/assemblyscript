@@ -5095,12 +5095,13 @@
   i32.load offset=12
   local.set $1
   local.get $1
+  i32.const 1
+  i32.gt_s
   if
    local.get $0
    i32.load offset=4
    local.set $2
-   local.get $0
-   i32.load offset=4
+   local.get $2
    local.get $1
    i32.const 1
    i32.sub
@@ -19378,12 +19379,13 @@
   i32.load offset=12
   local.set $1
   local.get $1
+  i32.const 1
+  i32.gt_s
   if
    local.get $0
    i32.load offset=4
    local.set $2
-   local.get $0
-   i32.load offset=4
+   local.get $2
    local.get $1
    i32.const 1
    i32.sub
@@ -20267,12 +20269,13 @@
   i32.load offset=12
   local.set $1
   local.get $1
+  i32.const 1
+  i32.gt_s
   if
    local.get $0
    i32.load offset=4
    local.set $2
-   local.get $0
-   i32.load offset=4
+   local.get $2
    local.get $1
    i32.const 1
    i32.sub
@@ -43145,12 +43148,13 @@
   i32.load offset=12
   local.set $1
   local.get $1
+  i32.const 1
+  i32.gt_s
   if
    local.get $0
    i32.load offset=4
    local.set $2
-   local.get $0
-   i32.load offset=4
+   local.get $2
    local.get $1
    i32.const 1
    i32.sub

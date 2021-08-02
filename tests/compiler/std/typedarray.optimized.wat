@@ -28087,7 +28087,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1872
+   i32.const 1876
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -28106,7 +28106,7 @@
    else
     i32.const 1056
     i32.const 1632
-    i32.const 1881
+    i32.const 1885
     i32.const 7
     call $~lib/builtins/abort
     unreachable
@@ -28121,7 +28121,7 @@
    if
     i32.const 1056
     i32.const 1632
-    i32.const 1886
+    i32.const 1890
     i32.const 7
     call $~lib/builtins/abort
     unreachable
@@ -28165,7 +28165,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28217,7 +28217,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28267,7 +28267,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28295,7 +28295,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28347,7 +28347,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28372,7 +28372,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1910
+   i32.const 1914
    i32.const 19
    call $~lib/builtins/abort
    unreachable
@@ -28389,7 +28389,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28456,7 +28456,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1910
+   i32.const 1914
    i32.const 19
    call $~lib/builtins/abort
    unreachable
@@ -28473,7 +28473,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28541,7 +28541,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28597,7 +28597,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28653,7 +28653,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28705,7 +28705,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28736,7 +28736,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28782,7 +28782,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1910
+   i32.const 1914
    i32.const 19
    call $~lib/builtins/abort
    unreachable
@@ -28799,7 +28799,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28833,7 +28833,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28889,7 +28889,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -28943,7 +28943,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29002,7 +29002,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29055,7 +29055,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29109,7 +29109,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29137,7 +29137,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29191,7 +29191,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -29250,7 +29250,7 @@
   if
    i32.const 1360
    i32.const 1632
-   i32.const 1911
+   i32.const 1915
    i32.const 47
    call $~lib/builtins/abort
    unreachable
@@ -39694,8 +39694,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -39727,18 +39725,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Int8Array#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Int8Array#constructor
-  local.tee $5
+  local.tee $4
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -39748,7 +39746,7 @@
     call $~lib/array/Array<i32>#__get
     i32.extend8_s
     call $~lib/typedarray/Int8Array#__set
-    local.get $5
+    local.get $4
     local.get $0
     i32.const 7616
     local.get $0
@@ -39762,60 +39760,59 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
+  i32.gt_s
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    local.get $4
-    i32.add
-    local.tee $6
-    i32.load8_s
-    local.set $7
-    local.get $6
-    local.get $3
-    local.get $4
-    i32.add
-    local.tee $6
-    i32.load8_s
-    i32.store8
-    local.get $6
-    local.get $7
-    i32.store8
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     i32.load8_s
+     local.set $5
+     local.get $0
+     local.get $2
+     i32.load8_s
+     i32.store8
+     local.get $2
+     local.get $5
+     i32.store8
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 1
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Int8Array#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -39839,7 +39836,7 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $4
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Int8Array#subarray
@@ -39847,46 +39844,45 @@
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_s
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
+   i32.const 1
+   i32.sub
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    local.get $5
-    i32.add
-    local.tee $4
-    i32.load8_s
-    local.set $6
-    local.get $4
     local.get $3
-    local.get $5
-    i32.add
-    local.tee $4
-    i32.load8_s
-    i32.store8
-    local.get $4
-    local.get $6
-    i32.store8
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     i32.load8_s
+     local.set $4
+     local.get $2
+     local.get $3
+     i32.load8_s
+     i32.store8
+     local.get $3
+     local.get $4
+     i32.store8
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 1
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -39955,8 +39951,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -39988,18 +39982,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Uint8Array#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Uint8Array#constructor
-  local.tee $5
+  local.tee $4
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -40010,7 +40004,7 @@
     i32.const 255
     i32.and
     call $~lib/typedarray/Uint8Array#__set
-    local.get $5
+    local.get $4
     local.get $0
     i32.const 7616
     local.get $0
@@ -40025,60 +40019,59 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
+  i32.gt_s
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    local.get $4
-    i32.add
-    local.tee $6
-    i32.load8_u
-    local.set $7
-    local.get $6
-    local.get $3
-    local.get $4
-    i32.add
-    local.tee $6
-    i32.load8_u
-    i32.store8
-    local.get $6
-    local.get $7
-    i32.store8
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     i32.load8_u
+     local.set $5
+     local.get $0
+     local.get $2
+     i32.load8_u
+     i32.store8
+     local.get $2
+     local.get $5
+     i32.store8
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 1
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Uint8Array#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -40103,53 +40096,52 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $4
   i32.const 8
   call $~lib/typedarray/Uint8Array#subarray
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_s
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
+   i32.const 1
+   i32.sub
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    local.get $5
-    i32.add
-    local.tee $4
-    i32.load8_u
-    local.set $6
-    local.get $4
     local.get $3
-    local.get $5
-    i32.add
-    local.tee $4
-    i32.load8_u
-    i32.store8
-    local.get $4
-    local.get $6
-    i32.store8
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     i32.load8_u
+     local.set $4
+     local.get $2
+     local.get $3
+     i32.load8_u
+     i32.store8
+     local.get $3
+     local.get $4
+     i32.store8
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 1
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -40218,8 +40210,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -40251,18 +40241,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Uint8ClampedArray#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Uint8ClampedArray#constructor
-  local.tee $5
+  local.tee $4
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -40273,7 +40263,7 @@
     i32.const 255
     i32.and
     call $~lib/typedarray/Uint8ClampedArray#__set
-    local.get $5
+    local.get $4
     local.get $0
     i32.const 7616
     local.get $0
@@ -40288,60 +40278,59 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
+  i32.gt_s
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    local.get $4
-    i32.add
-    local.tee $6
-    i32.load8_u
-    local.set $7
-    local.get $6
-    local.get $3
-    local.get $4
-    i32.add
-    local.tee $6
-    i32.load8_u
-    i32.store8
-    local.get $6
-    local.get $7
-    i32.store8
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     i32.load8_u
+     local.set $5
+     local.get $0
+     local.get $2
+     i32.load8_u
+     i32.store8
+     local.get $2
+     local.get $5
+     i32.store8
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 1
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Uint8ClampedArray#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -40366,53 +40355,52 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $4
   i32.const 8
   call $~lib/typedarray/Uint8ClampedArray#subarray
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_s
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
+   i32.const 1
+   i32.sub
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    local.get $5
-    i32.add
-    local.tee $4
-    i32.load8_u
-    local.set $6
-    local.get $4
     local.get $3
-    local.get $5
-    i32.add
-    local.tee $4
-    i32.load8_u
-    i32.store8
-    local.get $4
-    local.get $6
-    i32.store8
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     i32.load8_u
+     local.set $4
+     local.get $2
+     local.get $3
+     i32.load8_u
+     i32.store8
+     local.get $3
+     local.get $4
+     i32.store8
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 1
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -40481,8 +40469,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -40514,18 +40500,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Int16Array#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Int16Array#constructor
-  local.tee $5
+  local.tee $4
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -40535,7 +40521,7 @@
     call $~lib/array/Array<i32>#__get
     i32.extend16_s
     call $~lib/typedarray/Int16Array#__set
-    local.get $5
+    local.get $4
     local.get $0
     i32.const 7616
     local.get $0
@@ -40549,66 +40535,63 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
   i32.const 1
   i32.shr_u
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
-    local.get $4
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.const 1
+   i32.shl
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    i32.const 1
-    i32.shl
-    i32.add
-    local.tee $6
-    i32.load16_s
-    local.set $7
-    local.get $6
-    local.get $4
-    local.get $3
-    i32.const 1
-    i32.shl
-    i32.add
-    local.tee $6
-    i32.load16_s
-    i32.store16
-    local.get $6
-    local.get $7
-    i32.store16
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     i32.load16_s
+     local.set $5
+     local.get $0
+     local.get $2
+     i32.load16_s
+     i32.store16
+     local.get $2
+     local.get $5
+     i32.store16
+     local.get $0
+     i32.const 2
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 2
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Int16Array#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -40632,59 +40615,56 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $4
   i32.const 8
   call $~lib/typedarray/Int16Array#subarray
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
   i32.const 1
   i32.shr_u
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
-    local.get $5
+   i32.const 1
+   i32.sub
+   i32.const 1
+   i32.shl
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    i32.const 1
-    i32.shl
-    i32.add
-    local.tee $4
-    i32.load16_s
-    local.set $6
-    local.get $4
-    local.get $5
     local.get $3
-    i32.const 1
-    i32.shl
-    i32.add
-    local.tee $4
-    i32.load16_s
-    i32.store16
-    local.get $4
-    local.get $6
-    i32.store16
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     i32.load16_s
+     local.set $4
+     local.get $2
+     local.get $3
+     i32.load16_s
+     i32.store16
+     local.get $3
+     local.get $4
+     i32.store16
+     local.get $2
+     i32.const 2
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 2
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -40753,8 +40733,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -40786,18 +40764,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Uint16Array#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Uint16Array#constructor
-  local.tee $5
+  local.tee $4
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -40808,7 +40786,7 @@
     i32.const 65535
     i32.and
     call $~lib/typedarray/Uint16Array#__set
-    local.get $5
+    local.get $4
     local.get $0
     i32.const 7616
     local.get $0
@@ -40823,66 +40801,63 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
   i32.const 1
   i32.shr_u
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
-    local.get $4
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.const 1
+   i32.shl
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    i32.const 1
-    i32.shl
-    i32.add
-    local.tee $6
-    i32.load16_u
-    local.set $7
-    local.get $6
-    local.get $4
-    local.get $3
-    i32.const 1
-    i32.shl
-    i32.add
-    local.tee $6
-    i32.load16_u
-    i32.store16
-    local.get $6
-    local.get $7
-    i32.store16
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     i32.load16_u
+     local.set $5
+     local.get $0
+     local.get $2
+     i32.load16_u
+     i32.store16
+     local.get $2
+     local.get $5
+     i32.store16
+     local.get $0
+     i32.const 2
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 2
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Uint16Array#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -40907,59 +40882,56 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $4
   i32.const 8
   call $~lib/typedarray/Uint16Array#subarray
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
   i32.const 1
   i32.shr_u
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
-    local.get $5
+   i32.const 1
+   i32.sub
+   i32.const 1
+   i32.shl
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    i32.const 1
-    i32.shl
-    i32.add
-    local.tee $4
-    i32.load16_u
-    local.set $6
-    local.get $4
-    local.get $5
     local.get $3
-    i32.const 1
-    i32.shl
-    i32.add
-    local.tee $4
-    i32.load16_u
-    i32.store16
-    local.get $4
-    local.get $6
-    i32.store16
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     i32.load16_u
+     local.set $4
+     local.get $2
+     local.get $3
+     i32.load16_u
+     i32.store16
+     local.get $3
+     local.get $4
+     i32.store16
+     local.get $2
+     i32.const 2
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 2
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -41028,8 +41000,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -41061,18 +41031,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Int32Array#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Int32Array#constructor
-  local.tee $5
+  local.tee $4
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -41081,7 +41051,7 @@
     local.get $0
     call $~lib/array/Array<i32>#__get
     call $~lib/typedarray/Int32Array#__set
-    local.get $5
+    local.get $4
     local.get $0
     i32.const 7616
     local.get $0
@@ -41094,66 +41064,63 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
   i32.const 2
   i32.shr_u
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
-    local.get $4
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.const 2
+   i32.shl
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $6
-    i32.load
-    local.set $7
-    local.get $6
-    local.get $4
-    local.get $3
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $6
-    i32.load
-    i32.store
-    local.get $6
-    local.get $7
-    i32.store
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     i32.load
+     local.set $5
+     local.get $0
+     local.get $2
+     i32.load
+     i32.store
+     local.get $2
+     local.get $5
+     i32.store
+     local.get $0
+     i32.const 4
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 4
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Int32Array#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -41176,7 +41143,7 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $4
   i32.const 4
   i32.const 8
   call $~lib/typedarray/Int32Array#subarray
@@ -41184,52 +41151,49 @@
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
   i32.const 2
   i32.shr_u
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
-    local.get $5
+   i32.const 1
+   i32.sub
+   i32.const 2
+   i32.shl
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $4
-    i32.load
-    local.set $6
-    local.get $4
-    local.get $5
     local.get $3
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $4
-    i32.load
-    i32.store
-    local.get $4
-    local.get $6
-    i32.store
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     i32.load
+     local.set $4
+     local.get $2
+     local.get $3
+     i32.load
+     i32.store
+     local.get $3
+     local.get $4
+     i32.store
+     local.get $2
+     i32.const 4
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 4
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -41298,8 +41262,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -41331,18 +41293,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Uint32Array#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Uint32Array#constructor
-  local.tee $5
+  local.tee $4
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -41351,7 +41313,7 @@
     local.get $0
     call $~lib/array/Array<i32>#__get
     call $~lib/typedarray/Uint32Array#__set
-    local.get $5
+    local.get $4
     local.get $0
     i32.const 7616
     local.get $0
@@ -41364,66 +41326,63 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
   i32.const 2
   i32.shr_u
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
-    local.get $4
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.const 2
+   i32.shl
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $6
-    i32.load
-    local.set $7
-    local.get $6
-    local.get $4
-    local.get $3
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $6
-    i32.load
-    i32.store
-    local.get $6
-    local.get $7
-    i32.store
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     i32.load
+     local.set $5
+     local.get $0
+     local.get $2
+     i32.load
+     i32.store
+     local.get $2
+     local.get $5
+     i32.store
+     local.get $0
+     i32.const 4
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 4
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Uint32Array#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -41446,59 +41405,56 @@
    end
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $5
+  local.get $4
   i32.const 8
   call $~lib/typedarray/Uint32Array#subarray
   local.set $1
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
   i32.const 2
   i32.shr_u
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
-    local.get $5
+   i32.const 1
+   i32.sub
+   i32.const 2
+   i32.shl
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $4
-    i32.load
-    local.set $6
-    local.get $4
-    local.get $5
     local.get $3
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $4
-    i32.load
-    i32.store
-    local.get $4
-    local.get $6
-    i32.store
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     i32.load
+     local.set $4
+     local.get $2
+     local.get $3
+     i32.load
+     i32.store
+     local.get $3
+     local.get $4
+     i32.store
+     local.get $2
+     i32.const 4
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 4
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -41565,10 +41521,8 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 i64)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i64)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -41600,18 +41554,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Int64Array#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Int64Array#constructor
   local.tee $5
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -41635,66 +41589,63 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
   i32.const 3
   i32.shr_u
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
-    local.get $4
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.const 3
+   i32.shl
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $6
-    i64.load
-    local.set $7
-    local.get $6
-    local.get $4
-    local.get $3
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $6
-    i64.load
-    i64.store
-    local.get $6
-    local.get $7
-    i64.store
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     i64.load
+     local.set $4
+     local.get $0
+     local.get $2
+     i64.load
+     i64.store
+     local.get $2
+     local.get $4
+     i64.store
+     local.get $0
+     i32.const 8
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 8
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Int64Array#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -41725,52 +41676,49 @@
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
   i32.const 3
   i32.shr_u
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
-    local.get $5
+   i32.const 1
+   i32.sub
+   i32.const 3
+   i32.shl
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $4
-    i64.load
-    local.set $7
-    local.get $4
-    local.get $5
     local.get $3
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $4
-    i64.load
-    i64.store
-    local.get $4
-    local.get $7
-    i64.store
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     i64.load
+     local.set $4
+     local.get $2
+     local.get $3
+     i64.load
+     i64.store
+     local.get $3
+     local.get $4
+     i64.store
+     local.get $2
+     i32.const 8
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 8
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -41837,10 +41785,8 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 i64)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i64)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -41872,18 +41818,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Uint64Array#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Uint64Array#constructor
   local.tee $5
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -41907,66 +41853,63 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
   i32.const 3
   i32.shr_u
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
-    local.get $4
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.const 3
+   i32.shl
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $6
-    i64.load
-    local.set $7
-    local.get $6
-    local.get $4
-    local.get $3
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $6
-    i64.load
-    i64.store
-    local.get $6
-    local.get $7
-    i64.store
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     i64.load
+     local.set $4
+     local.get $0
+     local.get $2
+     i64.load
+     i64.store
+     local.get $2
+     local.get $4
+     i64.store
+     local.get $0
+     i32.const 8
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 8
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Uint64Array#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -41997,52 +41940,49 @@
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
   i32.const 3
   i32.shr_u
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
-    local.get $5
+   i32.const 1
+   i32.sub
+   i32.const 3
+   i32.shl
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $4
-    i64.load
-    local.set $7
-    local.get $4
-    local.get $5
     local.get $3
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $4
-    i64.load
-    i64.store
-    local.get $4
-    local.get $7
-    i64.store
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     i64.load
+     local.set $4
+     local.get $2
+     local.get $3
+     i64.load
+     i64.store
+     local.get $3
+     local.get $4
+     i64.store
+     local.get $2
+     i32.const 8
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 8
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -42109,10 +42049,8 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 f32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 f32)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -42144,18 +42082,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Float32Array#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Float32Array#constructor
   local.tee $5
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -42179,66 +42117,63 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
   i32.const 2
   i32.shr_u
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
-    local.get $4
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.const 2
+   i32.shl
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $6
-    f32.load
-    local.set $7
-    local.get $6
-    local.get $4
-    local.get $3
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $6
-    f32.load
-    f32.store
-    local.get $6
-    local.get $7
-    f32.store
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     f32.load
+     local.set $4
+     local.get $0
+     local.get $2
+     f32.load
+     f32.store
+     local.get $2
+     local.get $4
+     f32.store
+     local.get $0
+     i32.const 4
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 4
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Float32Array#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -42269,52 +42204,49 @@
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
   i32.const 2
   i32.shr_u
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
-    local.get $5
+   i32.const 1
+   i32.sub
+   i32.const 2
+   i32.shl
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $4
-    f32.load
-    local.set $7
-    local.get $4
-    local.get $5
     local.get $3
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $4
-    f32.load
-    f32.store
-    local.get $4
-    local.get $7
-    f32.store
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     f32.load
+     local.set $4
+     local.get $2
+     local.get $3
+     f32.load
+     f32.store
+     local.get $3
+     local.get $4
+     f32.store
+     local.get $2
+     i32.const 4
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 4
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -42381,10 +42313,8 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
+  (local $4 f64)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 f64)
   global.get $~lib/memory/__stack_pointer
   i32.const 20
   i32.sub
@@ -42416,18 +42346,18 @@
   local.get $1
   i32.const 7628
   i32.load
-  local.tee $2
+  local.tee $3
   call $~lib/typedarray/Float64Array#constructor
   local.tee $1
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
   call $~lib/typedarray/Float64Array#constructor
   local.tee $5
   i32.store offset=8
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
@@ -42451,66 +42381,63 @@
     br $for-loop|0
    end
   end
-  i32.const 0
-  local.set $0
-  local.get $1
-  i32.load offset=4
-  local.set $4
   local.get $1
   i32.load offset=8
   i32.const 3
   i32.shr_u
+  local.tee $2
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|00
-   local.get $0
-   local.get $3
-   i32.lt_u
-   if
-    local.get $4
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $0
+   local.get $2
+   i32.const 1
+   i32.sub
+   i32.const 3
+   i32.shl
+   i32.add
+   local.set $2
+   loop $while-continue|0
     local.get $0
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $6
-    f64.load
-    local.set $7
-    local.get $6
-    local.get $4
-    local.get $3
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $6
-    f64.load
-    f64.store
-    local.get $6
-    local.get $7
-    f64.store
-    local.get $0
-    i32.const 1
-    i32.add
-    local.set $0
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|00
+    local.get $2
+    i32.lt_u
+    if
+     local.get $0
+     f64.load
+     local.set $4
+     local.get $0
+     local.get $2
+     f64.load
+     f64.store
+     local.get $2
+     local.get $4
+     f64.store
+     local.get $0
+     i32.const 8
+     i32.add
+     local.set $0
+     local.get $2
+     i32.const 8
+     i32.sub
+     local.set $2
+     br $while-continue|0
+    end
    end
   end
   i32.const 0
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_s
    if
     local.get $1
     local.get $0
     call $~lib/typedarray/Float64Array#__get
     i32.const 7616
-    local.get $2
+    local.get $3
     i32.const 1
     i32.sub
     local.get $0
@@ -42542,52 +42469,49 @@
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=12
-  i32.const 0
-  local.set $2
-  local.get $1
-  i32.load offset=4
-  local.set $5
   local.get $1
   i32.load offset=8
   i32.const 3
   i32.shr_u
+  local.tee $3
   i32.const 1
-  i32.sub
-  local.set $3
-  loop $for-loop|02
-   local.get $2
+  i32.gt_u
+  if
+   local.get $1
+   i32.load offset=4
+   local.tee $2
    local.get $3
-   i32.lt_u
-   if
-    local.get $5
+   i32.const 1
+   i32.sub
+   i32.const 3
+   i32.shl
+   i32.add
+   local.set $3
+   loop $while-continue|01
     local.get $2
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $4
-    f64.load
-    local.set $7
-    local.get $4
-    local.get $5
     local.get $3
-    i32.const 3
-    i32.shl
-    i32.add
-    local.tee $4
-    f64.load
-    f64.store
-    local.get $4
-    local.get $7
-    f64.store
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    local.get $3
-    i32.const 1
-    i32.sub
-    local.set $3
-    br $for-loop|02
+    i32.lt_u
+    if
+     local.get $2
+     f64.load
+     local.set $4
+     local.get $2
+     local.get $3
+     f64.load
+     f64.store
+     local.get $3
+     local.get $4
+     f64.store
+     local.get $2
+     i32.const 8
+     i32.add
+     local.set $2
+     local.get $3
+     i32.const 8
+     i32.sub
+     local.set $3
+     br $while-continue|01
+    end
    end
   end
   local.get $1
@@ -43067,7 +42991,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -43459,7 +43383,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -43962,7 +43886,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -44367,7 +44291,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -44772,7 +44696,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -45179,7 +45103,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -45586,7 +45510,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -45991,7 +45915,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -46396,7 +46320,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -46894,7 +46818,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -47433,7 +47357,7 @@
   end
   i32.const 1360
   i32.const 1632
-  i32.const 1911
+  i32.const 1915
   i32.const 47
   call $~lib/builtins/abort
   unreachable
@@ -64770,7 +64694,7 @@
                   end
                   i32.const 1360
                   i32.const 1632
-                  i32.const 1911
+                  i32.const 1915
                   i32.const 47
                   call $~lib/builtins/abort
                   unreachable
@@ -64882,7 +64806,7 @@
   end
   i32.const 1056
   i32.const 1632
-  i32.const 1877
+  i32.const 1881
   i32.const 9
   call $~lib/builtins/abort
   unreachable

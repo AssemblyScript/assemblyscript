@@ -432,9 +432,9 @@ export class Array<T> {
 
   reverse(): Array<T> {
     var len = this.length_;
-    if (len) {
+    if (len > 1) {
       let front = this.dataStart;
-      let back = this.dataStart + (<usize>(len - 1) << alignof<T>());
+      let back = front + (<usize>(len - 1) << alignof<T>());
       while (front < back) {
         let temp = load<T>(front);
         store<T>(front, load<T>(back));

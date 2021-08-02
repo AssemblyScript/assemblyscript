@@ -16387,17 +16387,17 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $std/array/arr
-   local.tee $3
+   local.tee $0
    i32.store
-   local.get $3
+   local.get $0
    i32.load offset=12
    local.tee $1
+   i32.const 1
+   i32.gt_s
    if
-    local.get $3
+    local.get $0
     i32.load offset=4
-    local.set $0
-    local.get $3
-    i32.load offset=4
+    local.tee $0
     local.get $1
     i32.const 1
     i32.sub
@@ -31505,12 +31505,12 @@
   local.get $0
   i32.load offset=12
   local.tee $1
+  i32.const 1
+  i32.gt_s
   if
    local.get $0
    i32.load offset=4
-   local.set $2
-   local.get $0
-   i32.load offset=4
+   local.tee $2
    local.get $1
    i32.const 1
    i32.sub
@@ -33432,12 +33432,12 @@
   local.get $0
   i32.load offset=12
   local.tee $1
+  i32.const 1
+  i32.gt_s
   if
    local.get $0
    i32.load offset=4
-   local.set $2
-   local.get $0
-   i32.load offset=4
+   local.tee $2
    local.get $1
    i32.const 1
    i32.sub
@@ -35465,12 +35465,12 @@
    local.get $0
    i32.load offset=12
    local.tee $2
+   i32.const 1
+   i32.gt_s
    if
     local.get $0
     i32.load offset=4
-    local.set $1
-    local.get $0
-    i32.load offset=4
+    local.tee $1
     local.get $2
     i32.const 1
     i32.sub
