@@ -8147,7 +8147,8 @@ export class Compiler extends DiagnosticEmitter {
     assert(numParts - 1 == expressions.length);
 
     var module = this.module;
-    var stringType = this.program.stringInstance.type;
+    var stringInstance = this.program.stringInstance;
+    var stringType = stringInstance.type;
 
     if (tag === null) {
       // Shortcut if just a (multi-line) string
@@ -8187,7 +8188,6 @@ export class Compiler extends DiagnosticEmitter {
             lhs = expr;
             rhs = this.ensureStaticString(parts[1]);
           }
-          let stringInstance = this.program.stringInstance;
           let concatMethod = assert(stringInstance.getMethod("concat"));
           return this.makeCallDirect(concatMethod, [ lhs, rhs ], expression);
         }
@@ -8206,8 +8206,6 @@ export class Compiler extends DiagnosticEmitter {
           this.compileExpression(exprB, stringType),
           this.currentType, exprB
         );
-
-        let stringInstance = this.program.stringInstance;
         let concatMethod = assert(stringInstance.getMethod("concat"));
         return this.makeCallDirect(concatMethod, [ lhs, rhs ], expression);
       }
@@ -8253,7 +8251,12 @@ export class Compiler extends DiagnosticEmitter {
     if (target) {
       switch (target.kind) {
         case ElementKind.FUNCTION_PROTOTYPE: {
-          let instance = this.resolver.resolveFunction(<FunctionPrototype>target, null, uniqueMap<string,Type>(), ReportMode.SWALLOW);
+          let instance = this.resolver.resolveFunction(
+            <FunctionPrototype>target,
+            null,
+            uniqueMap<string,Type>(),
+            ReportMode.SWALLOW
+          );
           if (!instance) break;
           target = instance;
           // fall-through
