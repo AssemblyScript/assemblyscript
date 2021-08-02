@@ -10067,7 +10067,11 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Evaluates a boolean condition, determining whether it is TRUE, FALSE or UNKNOWN. */
   evaluateCondition(expr: ExpressionRef): ConditionKind {
-    assert(getExpressionType(expr) == TypeRef.I32);
+    let type = getExpressionType(expr);
+    if (type == TypeRef.Unreachable)
+      return ConditionKind.UNKNOWN;
+
+    assert(type == TypeRef.I32);
     var module = this.module;
     var evaled = module.runExpression(expr, ExpressionRunnerFlags.Default);
     if (evaled) {
