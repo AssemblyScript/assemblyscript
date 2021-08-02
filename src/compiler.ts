@@ -3514,6 +3514,16 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = compiled.type;
         break;
       }
+      case NodeKind.CLASS: {
+        // TODO: compile as class expression
+        this.error(
+          DiagnosticCode.Not_implemented_0,
+          expression.range,
+          "Block-scoped class declarations or expressions"
+        );
+        expr = this.module.unreachable();
+        break;
+      }
       default: {
         assert(false);
         expr = this.module.unreachable();
