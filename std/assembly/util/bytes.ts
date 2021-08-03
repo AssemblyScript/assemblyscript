@@ -1,8 +1,10 @@
 export function REVERSE<T>(ptr: usize, len: usize): void {
   if (len > 1) {
-    let i: usize = 0;
-    let tail: usize;
-    let hlen: usize = len >> 1;
+    let
+      i: usize = 0,
+      tail: usize,
+      hlen: usize = len >> 1;
+
     if (ASC_SHRINK_LEVEL < 1) {
       if (sizeof<T>() == 1) {
         tail = len - 8;
