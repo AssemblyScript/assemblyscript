@@ -1,6 +1,7 @@
 import { COMPARATOR, SORT } from "./util/sort";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_NOTIMPLEMENTED } from "./util/error";
 import { joinIntegerArray, joinFloatArray } from "./util/string";
+import { REVERSE } from "./util/bytes";
 import { idof } from "./builtins";
 import { ArrayBufferView } from "./arraybuffer";
 
@@ -124,7 +125,8 @@ export class Int8Array extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, i8>(this);
+    REVERSE<u8>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -264,7 +266,8 @@ export class Uint8Array extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, u8>(this);
+    REVERSE<u8>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -404,7 +407,8 @@ export class Uint8ClampedArray extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, u8>(this);
+    REVERSE<u8>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -544,7 +548,8 @@ export class Int16Array extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, i16>(this);
+    REVERSE<u16>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -684,7 +689,8 @@ export class Uint16Array extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, u16>(this);
+    REVERSE<u16>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -824,7 +830,8 @@ export class Int32Array extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, i32>(this);
+    REVERSE<u32>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -964,7 +971,8 @@ export class Uint32Array extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, u32>(this);
+    REVERSE<u32>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -1104,7 +1112,8 @@ export class Int64Array extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, i64>(this);
+    REVERSE<u64>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -1244,7 +1253,8 @@ export class Uint64Array extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, u64>(this);
+    REVERSE<u64>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -1384,7 +1394,8 @@ export class Float32Array extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, f32>(this);
+    REVERSE<f32>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -1524,7 +1535,8 @@ export class Float64Array extends ArrayBufferView {
   }
 
   reverse(): this {
-    return REVERSE<this, f64>(this);
+    REVERSE<f64>(this.dataStart, this.length);
+    return this;
   }
 
   join(separator: string = ","): string {
@@ -1842,24 +1854,6 @@ function FOREACH<TArray extends ArrayBufferView, T>(
   for (let i = 0, k = array.length; i < k; i++) {
     fn(load<T>(ptr + (<usize>i << alignof<T>())), i, array);
   }
-}
-
-// @ts-ignore: decorator
-@inline
-function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
-  var len = array.length;
-  if (len > 1) {
-    let front = array.dataStart;
-    let back = front + (<usize>(len - 1) << alignof<T>());
-    while (front < back) {
-      let temp = load<T>(front);
-      store<T>(front, load<T>(back));
-      store<T>(back, temp);
-      front += sizeof<T>();
-      back -= sizeof<T>();
-    }
-  }
-  return array;
 }
 
 // @ts-ignore: decorator

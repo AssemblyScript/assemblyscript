@@ -4039,7 +4039,7 @@
    if
     i32.const 4560
     i32.const 4608
-    i32.const 17
+    i32.const 18
     i32.const 48
     call $~lib/wasi/index/abort
     unreachable
@@ -4117,7 +4117,7 @@
    if
     i32.const 4784
     i32.const 4608
-    i32.const 122
+    i32.const 123
     i32.const 22
     call $~lib/wasi/index/abort
     unreachable
@@ -6024,7 +6024,7 @@
   if
    i32.const 4560
    i32.const 4608
-   i32.const 64
+   i32.const 65
    i32.const 60
    call $~lib/wasi/index/abort
    unreachable
@@ -6306,7 +6306,7 @@
   if
    i32.const 4784
    i32.const 4608
-   i32.const 106
+   i32.const 107
    i32.const 42
    call $~lib/wasi/index/abort
    unreachable
@@ -6326,7 +6326,7 @@
   if
    i32.const 4976
    i32.const 4608
-   i32.const 110
+   i32.const 111
    i32.const 40
    call $~lib/wasi/index/abort
    unreachable

@@ -2,6 +2,7 @@
 
 import { BLOCK_MAXSIZE } from "./rt/common";
 import { COMPARATOR, SORT } from "./util/sort";
+import { REVERSE } from "./util/bytes";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 import { idof, isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_ILLEGALGENTYPE, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
@@ -431,18 +432,7 @@ export class Array<T> {
   }
 
   reverse(): Array<T> {
-    var len = this.length_;
-    if (len > 1) {
-      let front = this.dataStart;
-      let back = front + (<usize>(len - 1) << alignof<T>());
-      while (front < back) {
-        let temp = load<T>(front);
-        store<T>(front, load<T>(back));
-        store<T>(back, temp);
-        front += sizeof<T>();
-        back -= sizeof<T>();
-      }
-    }
+    REVERSE<T>(this.dataStart, this.length_);
     return this;
   }
 
