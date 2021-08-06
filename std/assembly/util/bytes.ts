@@ -7,6 +7,14 @@ export function REVERSE<T>(ptr: usize, len: usize): void {
 
     if (ASC_SHRINK_LEVEL < 1) {
       if (sizeof<T>() == 1) {
+        if (len == 4) {
+          store<u32>(ptr, bswap(load<u32>(ptr)));
+          return;
+        }
+        if (len == 8) {
+          store<u64>(ptr, bswap(load<u64>(ptr)));
+          return;
+        }
         tail = len - 8;
         while (i + 7 < hlen) {
           let front = ptr + i;
