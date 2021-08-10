@@ -150,7 +150,7 @@ export class ASTBuilder {
         this.visitIdentifierExpression(<IdentifierExpression>node);
         break;
       }
-      case NodeKind.PATTERN: {
+      case NodeKind.BINDINGPATTERN: {
         this.visitBindingPatternExpression(<BindingPatternExpression>node);
         break;
       }

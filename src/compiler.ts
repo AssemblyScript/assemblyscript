@@ -3067,7 +3067,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = 0; i < numDeclarations; ++i) {
       let declaration = declarations[i];
       switch (declaration.name.kind) {
-        case NodeKind.PATTERN: {
+        case NodeKind.BINDINGPATTERN: {
           const initializer = declaration.initializer;
           if (!initializer) {
             this.error(

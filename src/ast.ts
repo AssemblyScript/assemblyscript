@@ -55,7 +55,7 @@ export enum NodeKind {
 
   // expressions
   IDENTIFIER,
-  PATTERN,
+  BINDINGPATTERN,
   ASSERTION,
   BINARY,
   CALL,
@@ -1151,7 +1151,7 @@ export class BindingPatternExpression extends Expression {
     /** Source range. */
     range: Range
   ) {
-    super(NodeKind.PATTERN, range);
+    super(NodeKind.BINDINGPATTERN, range);
   }
 }
 

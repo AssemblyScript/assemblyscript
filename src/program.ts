@@ -2590,7 +2590,7 @@ export class Program extends DiagnosticEmitter {
       let nameNode = declaration.name;
       
       switch (nameNode.kind) {
-        case NodeKind.PATTERN:
+        case NodeKind.BINDINGPATTERN:
           this.error(DiagnosticCode.A_destructuring_declaration_must_have_an_initializer, declaration.range);
           break;
         case NodeKind.IDENTIFIER: {
