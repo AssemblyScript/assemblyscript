@@ -107,8 +107,8 @@
   i32.and
   i32.eq
   if
-   local.get $0
    global.get $~lib/rt/itcms/iter
+   local.get $0
    i32.eq
    if
     local.get $0
@@ -132,7 +132,7 @@
     i32.load offset=4
     i32.const -4
     i32.and
-    local.tee $3
+    local.tee $2
     i32.eqz
     if
      i32.const 0
@@ -165,22 +165,21 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $3
+    local.get $2
     local.get $1
     i32.store offset=8
     local.get $1
-    local.get $3
     local.get $1
     i32.load offset=4
     i32.const 3
     i32.and
+    local.get $2
     i32.or
     i32.store offset=4
    end
    global.get $~lib/rt/itcms/toSpace
-   local.set $3
+   local.set $1
    local.get $0
-   local.tee $1
    i32.load offset=12
    local.tee $2
    i32.const 1
@@ -188,11 +187,10 @@
    if (result i32)
     i32.const 1
    else
-    local.get $2
-    local.tee $0
     i32.const 1728
     i32.load
-    i32.gt_u
+    local.get $2
+    i32.lt_u
     if
      i32.const 1488
      i32.const 1552
@@ -201,7 +199,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $0
+    local.get $2
     i32.const 3
     i32.shl
     i32.const 1732
@@ -216,28 +214,28 @@
    else
     i32.const 2
    end
-   local.set $0
-   local.get $3
-   i32.load offset=8
    local.set $2
    local.get $1
+   i32.load offset=8
+   local.set $3
    local.get $0
-   local.get $3
+   local.get $1
+   local.get $2
    i32.or
    i32.store offset=4
-   local.get $1
-   local.get $2
+   local.get $0
+   local.get $3
    i32.store offset=8
-   local.get $2
-   local.get $1
-   local.get $2
+   local.get $3
+   local.get $3
    i32.load offset=4
    i32.const 3
    i32.and
+   local.get $0
    i32.or
    i32.store offset=4
-   local.get $3
    local.get $1
+   local.get $0
    i32.store offset=8
    global.get $~lib/rt/itcms/visitCount
    i32.const 1
@@ -345,8 +343,6 @@
    local.get $5
    i32.store offset=4
   end
-  local.get $1
-  local.get $0
   local.get $2
   local.get $3
   i32.const 4
@@ -354,11 +350,12 @@
   i32.add
   i32.const 2
   i32.shl
+  local.get $0
   i32.add
   i32.load offset=96
+  local.get $1
   i32.eq
   if
-   local.get $0
    local.get $2
    local.get $3
    i32.const 4
@@ -366,25 +363,26 @@
    i32.add
    i32.const 2
    i32.shl
+   local.get $0
    i32.add
    local.get $4
    i32.store offset=96
    local.get $4
    i32.eqz
    if
+    i32.const -2
+    local.get $2
+    i32.rotl
     local.get $0
     local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.tee $4
+    local.tee $2
     i32.load offset=4
-    i32.const -2
-    local.get $2
-    i32.rotl
     i32.and
     local.set $1
-    local.get $4
+    local.get $2
     local.get $1
     i32.store offset=4
     local.get $1
@@ -593,7 +591,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
   local.get $3
   local.get $5
   i32.const 4
@@ -601,6 +598,7 @@
   i32.add
   i32.const 2
   i32.shl
+  local.get $0
   i32.add
   i32.load offset=96
   local.set $4
@@ -616,7 +614,6 @@
    local.get $1
    i32.store offset=4
   end
-  local.get $0
   local.get $3
   local.get $5
   i32.const 4
@@ -624,6 +621,7 @@
   i32.add
   i32.const 2
   i32.shl
+  local.get $0
   i32.add
   local.get $1
   i32.store offset=96
@@ -654,12 +652,12 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  block $folding-inner0
+  block $break|0
    block $case2|0
     block $case1|0
      block $case0|0
       global.get $~lib/rt/itcms/state
-      br_table $case0|0 $case1|0 $case2|0 $folding-inner0
+      br_table $case0|0 $case1|0 $case2|0 $break|0
      end
      i32.const 1
      global.set $~lib/rt/itcms/state
@@ -668,7 +666,7 @@
      call $~lib/rt/itcms/visitRoots
      global.get $~lib/rt/itcms/toSpace
      global.set $~lib/rt/itcms/iter
-     br $folding-inner0
+     return
     end
     global.get $~lib/rt/itcms/white
     i32.eqz
@@ -706,7 +704,7 @@
        i32.const 20
        i32.add
        call $~lib/rt/__visit_members
-       br $folding-inner0
+       return
       end
       local.get $0
       i32.load offset=4
@@ -797,7 +795,7 @@
      i32.const 2
      global.set $~lib/rt/itcms/state
     end
-    br $folding-inner0
+    return
    end
    global.get $~lib/rt/itcms/iter
    local.tee $0

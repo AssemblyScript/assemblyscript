@@ -2260,15 +2260,12 @@ export class Module {
       if (optimizeLevel >= 3) {
         passes.push("flatten");
         passes.push("vacuum");
+        passes.push("local-cse");
         passes.push("simplify-locals-notee-nostructure");
         passes.push("merge-locals");
-
-        passes.push("code-folding");
-        passes.push("flatten");
-        passes.push("vacuum");
-        passes.push("local-cse");
         passes.push("reorder-locals");
         passes.push("dae-optimizing");
+        passes.push("code-folding");
       }
       passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {

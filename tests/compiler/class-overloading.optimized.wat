@@ -229,16 +229,16 @@
     i32.store offset=4
    end
    global.get $~lib/rt/itcms/toSpace
-   local.set $2
+   local.set $1
    local.get $0
    i32.load offset=12
-   local.tee $1
+   local.tee $2
    i32.const 1
    i32.le_u
    if (result i32)
     i32.const 1
    else
-    local.get $1
+    local.get $2
     i32.const 1792
     i32.load
     i32.gt_u
@@ -250,7 +250,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $2
     i32.const 3
     i32.shl
     i32.const 1796
@@ -266,26 +266,26 @@
     i32.const 2
    end
    local.set $3
-   local.get $2
+   local.get $1
    i32.load offset=8
-   local.set $1
+   local.set $2
    local.get $0
-   local.get $2
+   local.get $1
    local.get $3
    i32.or
    i32.store offset=4
    local.get $0
-   local.get $1
+   local.get $2
    i32.store offset=8
-   local.get $1
+   local.get $2
    local.get $0
-   local.get $1
+   local.get $2
    i32.load offset=4
    i32.const 3
    i32.and
    i32.or
    i32.store offset=4
-   local.get $2
+   local.get $1
    local.get $0
    i32.store offset=8
    global.get $~lib/rt/itcms/visitCount
@@ -394,8 +394,6 @@
    local.get $5
    i32.store offset=4
   end
-  local.get $1
-  local.get $0
   local.get $2
   local.get $3
   i32.const 4
@@ -403,11 +401,12 @@
   i32.add
   i32.const 2
   i32.shl
+  local.get $0
   i32.add
   i32.load offset=96
+  local.get $1
   i32.eq
   if
-   local.get $0
    local.get $2
    local.get $3
    i32.const 4
@@ -415,25 +414,26 @@
    i32.add
    i32.const 2
    i32.shl
+   local.get $0
    i32.add
    local.get $4
    i32.store offset=96
    local.get $4
    i32.eqz
    if
+    i32.const -2
+    local.get $2
+    i32.rotl
     local.get $0
     local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.tee $4
+    local.tee $2
     i32.load offset=4
-    i32.const -2
-    local.get $2
-    i32.rotl
     i32.and
     local.set $1
-    local.get $4
+    local.get $2
     local.get $1
     i32.store offset=4
     local.get $1
@@ -642,7 +642,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
   local.get $3
   local.get $5
   i32.const 4
@@ -650,6 +649,7 @@
   i32.add
   i32.const 2
   i32.shl
+  local.get $0
   i32.add
   i32.load offset=96
   local.set $4
@@ -665,7 +665,6 @@
    local.get $1
    i32.store offset=4
   end
-  local.get $0
   local.get $3
   local.get $5
   i32.const 4
@@ -673,6 +672,7 @@
   i32.add
   i32.const 2
   i32.shl
+  local.get $0
   i32.add
   local.get $1
   i32.store offset=96
@@ -727,11 +727,11 @@
   i32.load offset=1568
   local.tee $2
   if
-   local.get $1
    local.get $2
    i32.const 4
    i32.add
-   i32.lt_u
+   local.get $1
+   i32.gt_u
    if
     i32.const 0
     i32.const 1424
@@ -755,11 +755,11 @@
     local.set $1
    end
   else
-   local.get $1
    local.get $0
    i32.const 1572
    i32.add
-   i32.lt_u
+   local.get $1
+   i32.gt_u
    if
     i32.const 0
     i32.const 1424
@@ -919,17 +919,17 @@
      i32.and
      local.set $0
      loop $while-continue|1
-      local.get $0
       global.get $~lib/rt/itcms/toSpace
+      local.get $0
       i32.ne
       if
        local.get $0
        global.set $~lib/rt/itcms/iter
-       local.get $1
        local.get $0
        i32.load offset=4
        i32.const 3
        i32.and
+       local.get $1
        i32.ne
        if
         local.get $0
@@ -989,15 +989,15 @@
       i32.and
       local.set $0
       loop $while-continue|2
-       local.get $0
        global.get $~lib/rt/itcms/toSpace
+       local.get $0
        i32.ne
        if
-        local.get $1
         local.get $0
         i32.load offset=4
         i32.const 3
         i32.and
+        local.get $1
         i32.ne
         if
          local.get $0
@@ -1125,12 +1125,10 @@
        end
        local.get $1
        local.tee $0
+       local.get $0
        i32.load
        i32.const 1
        i32.or
-       local.set $1
-       local.get $0
-       local.get $1
        i32.store
        local.get $0
        call $~lib/rt/tlsf/insertBlock
@@ -1268,20 +1266,21 @@
    call $~lib/rt/tlsf/initialize
   end
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $2
+  local.tee $3
   call $~lib/rt/tlsf/searchBlock
   local.tee $1
   i32.eqz
   if
-   i32.const 4
    memory.size
-   local.tee $1
+   local.tee $2
+   i32.const 4
+   local.get $3
+   i32.load offset=1568
+   local.get $2
    i32.const 16
    i32.shl
    i32.const 4
    i32.sub
-   local.get $2
-   i32.load offset=1568
    i32.ne
    i32.shl
    i32.const 65563
@@ -1290,18 +1289,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.set $3
+   local.tee $1
    local.get $1
-   local.get $3
-   local.get $1
-   local.get $3
-   i32.gt_s
+   local.get $2
+   i32.lt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $3
+    local.get $1
     memory.grow
     i32.const 0
     i32.lt_s
@@ -1309,15 +1306,15 @@
      unreachable
     end
    end
+   local.get $3
    local.get $2
-   local.get $1
    i32.const 16
    i32.shl
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   local.get $2
+   local.get $3
    call $~lib/rt/tlsf/searchBlock
    local.tee $1
    i32.eqz
@@ -1344,12 +1341,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
   local.get $1
   call $~lib/rt/tlsf/removeBlock
   local.get $1
   i32.load
-  local.tee $3
+  local.tee $2
   i32.const -4
   i32.and
   i32.const 28
@@ -1359,7 +1356,7 @@
   i32.ge_u
   if
    local.get $1
-   local.get $3
+   local.get $2
    i32.const 2
    i32.and
    i32.const 28
@@ -1368,19 +1365,19 @@
    local.get $1
    i32.const 32
    i32.add
-   local.tee $3
+   local.tee $2
    local.get $4
    i32.const 4
    i32.sub
    i32.const 1
    i32.or
    i32.store
-   local.get $2
    local.get $3
+   local.get $2
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $1
-   local.get $3
+   local.get $2
    i32.const -2
    i32.and
    i32.store
@@ -1411,26 +1408,26 @@
   i32.const 0
   i32.store offset=16
   global.get $~lib/rt/itcms/fromSpace
-  local.tee $2
+  local.tee $0
   i32.load offset=8
-  local.set $0
+  local.set $2
   local.get $1
-  local.get $2
+  local.get $0
   global.get $~lib/rt/itcms/white
   i32.or
   i32.store offset=4
   local.get $1
-  local.get $0
+  local.get $2
   i32.store offset=8
-  local.get $0
+  local.get $2
   local.get $1
-  local.get $0
+  local.get $2
   i32.load offset=4
   i32.const 3
   i32.and
   i32.or
   i32.store offset=4
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=8
   global.get $~lib/rt/itcms/total
@@ -1721,11 +1718,11 @@
   i32.const 8
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  block $folding-inner1
+  block $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 1932
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -1959,7 +1956,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1932
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
@@ -2225,30 +2222,30 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@virtual40
-    block $default41
-     block $case242
-      block $case143
-       block $case044
+   block $__inlined_func$class-overloading/A#b@virtual39
+    block $default40
+     block $case241
+      block $case142
+       block $case043
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 4
         i32.sub
-        br_table $case044 $case143 $case044 $case044 $case242 $default41
+        br_table $case043 $case142 $case043 $case043 $case241 $default40
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual40
+       br $__inlined_func$class-overloading/A#b@virtual39
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual40
+      br $__inlined_func$class-overloading/A#b@virtual39
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual40
+     br $__inlined_func$class-overloading/A#b@virtual39
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2310,30 +2307,30 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@virtual49
-    block $default50
-     block $case251
-      block $case152
-       block $case053
+   block $__inlined_func$class-overloading/A#b@virtual48
+    block $default49
+     block $case250
+      block $case151
+       block $case052
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 4
         i32.sub
-        br_table $case053 $case152 $case053 $case053 $case251 $default50
+        br_table $case052 $case151 $case052 $case052 $case250 $default49
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual49
+       br $__inlined_func$class-overloading/A#b@virtual48
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual49
+      br $__inlined_func$class-overloading/A#b@virtual48
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual49
+     br $__inlined_func$class-overloading/A#b@virtual48
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2364,30 +2361,30 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#get:c@virtual58
-    block $default59
-     block $case260
-      block $case161
-       block $case062
+   block $__inlined_func$class-overloading/A#get:c@virtual57
+    block $default58
+     block $case259
+      block $case160
+       block $case061
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 4
         i32.sub
-        br_table $case062 $case161 $case062 $case062 $case260 $default59
+        br_table $case061 $case160 $case061 $case061 $case259 $default58
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#get:c@virtual58
+       br $__inlined_func$class-overloading/A#get:c@virtual57
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#get:c@virtual58
+      br $__inlined_func$class-overloading/A#get:c@virtual57
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#get:c@virtual58
+     br $__inlined_func$class-overloading/A#get:c@virtual57
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2416,30 +2413,30 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@virtual68
-    block $default69
-     block $case270
-      block $case171
-       block $case072
+   block $__inlined_func$class-overloading/A#b@virtual66
+    block $default67
+     block $case268
+      block $case169
+       block $case070
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 4
         i32.sub
-        br_table $case072 $case171 $case072 $case072 $case270 $default69
+        br_table $case070 $case169 $case070 $case070 $case268 $default67
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual68
+       br $__inlined_func$class-overloading/A#b@virtual66
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual68
+      br $__inlined_func$class-overloading/A#b@virtual66
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual68
+     br $__inlined_func$class-overloading/A#b@virtual66
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2471,7 +2468,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1932
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
@@ -2526,30 +2523,30 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@virtual77
-    block $default78
-     block $case279
-      block $case180
-       block $case081
+   block $__inlined_func$class-overloading/A#b@virtual75
+    block $default76
+     block $case277
+      block $case178
+       block $case079
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 4
         i32.sub
-        br_table $case081 $case180 $case081 $case081 $case279 $default78
+        br_table $case079 $case178 $case079 $case079 $case277 $default76
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual77
+       br $__inlined_func$class-overloading/A#b@virtual75
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual77
+      br $__inlined_func$class-overloading/A#b@virtual75
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual77
+     br $__inlined_func$class-overloading/A#b@virtual75
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2580,30 +2577,30 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#get:c@virtual86
-    block $default87
-     block $case288
-      block $case189
-       block $case090
+   block $__inlined_func$class-overloading/A#get:c@virtual84
+    block $default85
+     block $case286
+      block $case187
+       block $case088
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 4
         i32.sub
-        br_table $case090 $case189 $case090 $case090 $case288 $default87
+        br_table $case088 $case187 $case088 $case088 $case286 $default85
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#get:c@virtual86
+       br $__inlined_func$class-overloading/A#get:c@virtual84
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#get:c@virtual86
+      br $__inlined_func$class-overloading/A#get:c@virtual84
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#get:c@virtual86
+     br $__inlined_func$class-overloading/A#get:c@virtual84
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2634,30 +2631,30 @@
    global.get $class-overloading/a
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/A#b@virtual96
-    block $default97
-     block $case298
-      block $case199
-       block $case0100
+   block $__inlined_func$class-overloading/A#b@virtual93
+    block $default94
+     block $case295
+      block $case196
+       block $case097
         local.get $0
         i32.const 8
         i32.sub
         i32.load
         i32.const 4
         i32.sub
-        br_table $case0100 $case199 $case0100 $case0100 $case298 $default97
+        br_table $case097 $case196 $case097 $case097 $case295 $default94
        end
        i32.const 1520
        global.set $class-overloading/which
-       br $__inlined_func$class-overloading/A#b@virtual96
+       br $__inlined_func$class-overloading/A#b@virtual93
       end
       i32.const 1616
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/A#b@virtual96
+      br $__inlined_func$class-overloading/A#b@virtual93
      end
      i32.const 1648
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/A#b@virtual96
+     br $__inlined_func$class-overloading/A#b@virtual93
     end
     i32.const 1488
     global.set $class-overloading/which
@@ -2689,7 +2686,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1932
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
@@ -2712,8 +2709,8 @@
    local.tee $0
    i32.store
    block $__inlined_func$class-overloading/IA#foo@virtual
-    block $default105
-     block $case1106
+    block $default102
+     block $case1103
       local.get $0
       i32.const 8
       i32.sub
@@ -2725,8 +2722,8 @@
        local.get $0
        i32.const 12
        i32.eq
-       br_if $case1106
-       br $default105
+       br_if $case1103
+       br $default102
       end
       i32.const 1680
       global.set $class-overloading/which
@@ -2765,7 +2762,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1932
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
@@ -2787,9 +2784,9 @@
    global.get $class-overloading/ic
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/IA#foo@virtual108
-    block $default109
-     block $case1110
+   block $__inlined_func$class-overloading/IA#foo@virtual105
+    block $default106
+     block $case1107
       local.get $0
       i32.const 8
       i32.sub
@@ -2801,16 +2798,16 @@
        local.get $0
        i32.const 12
        i32.eq
-       br_if $case1110
-       br $default109
+       br_if $case1107
+       br $default106
       end
       i32.const 1680
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/IA#foo@virtual108
+      br $__inlined_func$class-overloading/IA#foo@virtual105
      end
      i32.const 1712
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/IA#foo@virtual108
+     br $__inlined_func$class-overloading/IA#foo@virtual105
     end
     unreachable
    end
@@ -2841,7 +2838,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1932
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i32.const 0
@@ -2859,7 +2856,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1932
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
@@ -2904,7 +2901,7 @@
      global.get $~lib/memory/__stack_pointer
      i32.const 1932
      i32.lt_s
-     br_if $folding-inner1
+     br_if $folding-inner0
      global.get $~lib/memory/__stack_pointer
      local.tee $0
      i32.const 0
@@ -2916,7 +2913,7 @@
      global.get $~lib/memory/__stack_pointer
      i32.const 1932
      i32.lt_s
-     br_if $folding-inner1
+     br_if $folding-inner0
      global.get $~lib/memory/__stack_pointer
      local.tee $0
      i32.const 0
@@ -2934,7 +2931,7 @@
      global.get $~lib/memory/__stack_pointer
      i32.const 1932
      i32.lt_s
-     br_if $folding-inner1
+     br_if $folding-inner0
      global.get $~lib/memory/__stack_pointer
      i32.const 0
      i32.store

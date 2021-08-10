@@ -53,12 +53,12 @@
   i32.shl
   i32.const 1168
   i32.add
-  local.set $5
+  local.set $6
   i32.const 23
   local.set $0
   loop $while-continue|0
    local.get $2
-   local.get $5
+   local.get $6
    i32.lt_u
    if
     local.get $2
@@ -103,7 +103,7 @@
       i32.const 55296
       i32.eq
       if
-       local.get $5
+       local.get $6
        local.get $2
        i32.const 2
        i32.add
@@ -116,13 +116,12 @@
        if
         local.get $2
         i32.load16_u offset=2
-        local.tee $6
+        local.tee $5
         i32.const 64512
         i32.and
         i32.const 56320
         i32.eq
         if
-         local.get $0
          local.get $1
          i32.const 1023
          i32.and
@@ -130,7 +129,7 @@
          i32.shl
          i32.const 65536
          i32.add
-         local.get $6
+         local.get $5
          i32.const 1023
          i32.and
          i32.or
@@ -139,6 +138,14 @@
          i32.and
          i32.const 128
          i32.or
+         local.set $5
+         local.get $0
+         local.get $1
+         i32.const 18
+         i32.shr_u
+         i32.const 240
+         i32.or
+         local.get $5
          i32.const 24
          i32.shl
          local.get $1
@@ -160,11 +167,6 @@
          i32.or
          i32.const 8
          i32.shl
-         i32.or
-         local.get $1
-         i32.const 18
-         i32.shr_u
-         i32.const 240
          i32.or
          i32.or
          i32.store
@@ -365,13 +367,13 @@
    i32.const 1831565813
    i32.add
    local.tee $0
+   i32.const 1
+   i32.or
+   local.get $0
    local.get $0
    i32.const 15
    i32.shr_u
    i32.xor
-   local.get $0
-   i32.const 1
-   i32.or
    i32.mul
    local.tee $0
    local.get $0
@@ -397,13 +399,13 @@
    i32.const 1831565813
    i32.add
    local.tee $0
+   i32.const 1
+   i32.or
+   local.get $0
    local.get $0
    i32.const 15
    i32.shr_u
    i32.xor
-   local.get $0
-   i32.const 1
-   i32.or
    i32.mul
    local.tee $0
    local.get $0
