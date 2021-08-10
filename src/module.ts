@@ -2268,6 +2268,7 @@ export class Module {
         passes.push("vacuum");
         passes.push("local-cse");
         passes.push("reorder-locals");
+        passes.push("dae-optimizing");
       }
       passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {

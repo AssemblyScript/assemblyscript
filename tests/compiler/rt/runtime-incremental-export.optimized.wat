@@ -1692,38 +1692,38 @@
    i32.and
    i32.const 24
    i32.add
-   local.tee $1
+   local.tee $0
    i32.add
-   local.set $0
-   local.get $3
-   local.get $1
-   i32.sub
    local.set $1
+   local.get $3
+   local.get $0
+   i32.sub
+   local.set $0
    loop $while-continue|0
-    local.get $1
+    local.get $0
     i32.const 32
     i32.ge_u
     if
-     local.get $0
+     local.get $1
      i64.const 0
      i64.store
-     local.get $0
+     local.get $1
      i64.const 0
      i64.store offset=8
-     local.get $0
+     local.get $1
      i64.const 0
      i64.store offset=16
-     local.get $0
+     local.get $1
      i64.const 0
      i64.store offset=24
-     local.get $1
-     i32.const 32
-     i32.sub
-     local.set $1
      local.get $0
      i32.const 32
-     i32.add
+     i32.sub
      local.set $0
+     local.get $1
+     i32.const 32
+     i32.add
+     local.set $1
      br $while-continue|0
     end
    end

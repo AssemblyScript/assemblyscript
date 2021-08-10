@@ -1797,14 +1797,14 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
+   local.tee $1
    i32.const 0
    i32.store
-   local.get $0
+   local.get $1
    i32.const 4
    i32.const 4
    call $~lib/rt/itcms/__new
-   local.tee $2
+   local.tee $1
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -1840,16 +1840,16 @@
    i32.const 32
    i32.const 0
    call $~lib/rt/itcms/__new
-   local.tee $1
+   local.tee $2
    i32.store offset=4
-   local.get $1
+   local.get $2
    i32.const 32
    call $~lib/memory/memory.fill
    local.get $0
-   local.get $1
+   local.get $2
    call $class/GenericInitializer<i32>#set:foo
    local.get $0
-   local.get $1
+   local.get $2
    i32.store offset=4
    local.get $0
    i32.const 32
@@ -1861,7 +1861,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $2
+   local.get $1
    local.get $0
    call $class/GenericInitializer<i32>#set:foo
    global.get $~lib/memory/__stack_pointer

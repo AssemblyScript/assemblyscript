@@ -2563,11 +2563,11 @@
   i32.const 12
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  block $folding-inner1
+  block $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 1788
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $0
    i64.const 0
@@ -2614,7 +2614,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1788
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    i32.const 0
@@ -2626,14 +2626,14 @@
    local.tee $1
    i32.store
    global.get $~lib/memory/__stack_pointer
-   local.tee $3
+   local.tee $2
    i32.const 8
    i32.sub
    global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1788
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i64.const 0
    i64.store
@@ -2660,16 +2660,16 @@
    i32.const 8
    i32.const 0
    call $~lib/rt/itcms/__new
-   local.tee $2
+   local.tee $3
    i32.store offset=4
-   local.get $2
+   local.get $3
    i32.const 8
    call $~lib/memory/memory.fill
    local.get $1
-   local.get $2
+   local.get $3
    call $~lib/arraybuffer/ArrayBufferView#set:buffer
    local.get $1
-   local.get $2
+   local.get $3
    i32.store offset=4
    local.get $1
    i32.const 8
@@ -2678,7 +2678,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $3
+   local.get $2
    local.get $1
    i32.store
    global.get $~lib/memory/__stack_pointer
@@ -2721,13 +2721,13 @@
    i32.const 95
    call $~lib/typedarray/Uint8Array#__set
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
+   local.tee $2
    local.get $1
    i32.load
-   local.tee $2
+   local.tee $0
    i32.store offset=4
-   local.get $0
    local.get $2
+   local.get $0
    local.get $1
    i32.load offset=4
    local.get $1
@@ -4239,24 +4239,24 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $2
+   local.tee $0
    local.get $1
    i32.load
-   local.tee $0
+   local.tee $1
    i32.store offset=4
-   local.get $2
    local.get $0
+   local.get $1
    i32.const 0
-   local.get $0
+   local.get $1
    i32.const 20
    i32.sub
    i32.load offset=16
    call $~lib/dataview/DataView#constructor
-   local.tee $0
+   local.tee $1
    i32.store offset=8
-   local.get $0
+   local.get $1
    i32.load offset=4
-   local.get $0
+   local.get $1
    i32.load
    i32.sub
    if
@@ -4267,7 +4267,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $0
+   local.get $1
    i32.load offset=8
    i32.const 8
    i32.ne
