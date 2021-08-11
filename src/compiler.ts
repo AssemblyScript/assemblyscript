@@ -7672,12 +7672,12 @@ export class Compiler extends DiagnosticEmitter {
     assert(!declaration.typeParameters); // function expression cannot be generic
     var flow = this.currentFlow;
     var actualFunction = flow.actualFunction;
-    var isNamed = declaration.ident.text.length > 0;
+    var isNamed = declaration.identifierNode.text.length > 0;
     var isSemanticallyAnonymous = !isNamed || contextualType != Type.void;
     var prototype = new FunctionPrototype(
       isSemanticallyAnonymous
-        ? (isNamed ? declaration.ident.text + "|" : "anonymous|") + (actualFunction.nextAnonymousId++).toString()
-        : declaration.ident.text,
+        ? (isNamed ? declaration.identifierNode.text + "|" : "anonymous|") + (actualFunction.nextAnonymousId++).toString()
+        : declaration.identifierNode.text,
       actualFunction,
       declaration,
       DecoratorFlags.NONE

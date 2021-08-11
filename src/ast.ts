@@ -1726,7 +1726,7 @@ export abstract class DeclarationStatement extends Statement {
   set(flag: CommonFlags): void { this.flags |= flag; }
 
   /** Attempts to return the name as an identifier. */
-  get ident(): IdentifierExpression {
+  get identifierNode(): IdentifierExpression {
     assert(this._name.kind == NodeKind.IDENTIFIER || this._name.kind == NodeKind.CONSTRUCTOR);
     return this._name as IdentifierExpression;
   }
@@ -1831,7 +1831,7 @@ export class ClassDeclaration extends DeclarationStatement {
   }
 
   get name(): IdentifierExpression {
-    return this.ident;
+    return this.identifierNode;
   }
 }
 
@@ -1889,7 +1889,7 @@ export class EnumDeclaration extends DeclarationStatement {
   }
 
   get name(): IdentifierExpression {
-    return this.ident;
+    return this.identifierNode;
   }
 }
 
@@ -1909,7 +1909,7 @@ export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
   }
 
   get name(): IdentifierExpression {
-    return this.ident;
+    return this.identifierNode;
   }
 }
 
@@ -2015,7 +2015,7 @@ export class FieldDeclaration extends VariableLikeDeclarationStatement {
   }
 
   get name(): IdentifierExpression {
-    return this.ident;
+    return this.identifierNode;
   }
 }
 
@@ -2107,7 +2107,7 @@ export class FunctionDeclaration extends DeclarationStatement {
   }
 
   get name(): IdentifierExpression {
-    return this.ident;
+    return this.identifierNode;
   }
 }
 
@@ -2141,7 +2141,7 @@ export class ImportDeclaration extends DeclarationStatement {
   }
 
   get name(): IdentifierExpression {
-    return this.ident;
+    return this.identifierNode;
   }
 }
 
@@ -2196,7 +2196,7 @@ export class InterfaceDeclaration extends ClassDeclaration {
   }
 
   get name(): IdentifierExpression {
-    return this.ident;
+    return this.identifierNode;
   }
 }
 
@@ -2223,7 +2223,7 @@ export class MethodDeclaration extends FunctionDeclaration {
   }
 
   get name(): IdentifierExpression {
-    return this.ident;
+    return this.identifierNode;
   }
 }
 
@@ -2245,7 +2245,7 @@ export class NamespaceDeclaration extends DeclarationStatement {
   }
 
   get name(): IdentifierExpression {
-    return this.ident;
+    return this.identifierNode;
   }
 }
 
@@ -2339,7 +2339,7 @@ export class TypeDeclaration extends DeclarationStatement {
   }
 
   get name(): IdentifierExpression {
-    return this.ident;
+    return this.identifierNode;
   }
 }
 
