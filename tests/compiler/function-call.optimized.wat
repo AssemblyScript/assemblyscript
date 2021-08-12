@@ -399,19 +399,19 @@
    local.get $4
    i32.eqz
    if
-    i32.const -2
-    local.get $2
-    i32.rotl
     local.get $0
     local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.tee $2
+    local.tee $4
     i32.load offset=4
+    i32.const -2
+    local.get $2
+    i32.rotl
     i32.and
     local.set $1
-    local.get $2
+    local.get $4
     local.get $1
     i32.store offset=4
     local.get $1

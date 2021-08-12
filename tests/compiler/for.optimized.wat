@@ -361,19 +361,19 @@
    local.get $4
    i32.eqz
    if
-    i32.const -2
-    local.get $2
-    i32.rotl
     local.get $0
     local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.tee $2
+    local.tee $4
     i32.load offset=4
+    i32.const -2
+    local.get $2
+    i32.rotl
     i32.and
     local.set $1
-    local.get $2
+    local.get $4
     local.get $1
     i32.store offset=4
     local.get $1
@@ -1270,14 +1270,14 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|04
+  loop $for-loop|05
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $for-loop|04
+   br_if $for-loop|05
   end
   local.get $0
   i32.const 10
@@ -1292,7 +1292,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|05
+  loop $for-loop|07
    local.get $0
    i32.const 10
    i32.lt_s
@@ -1301,7 +1301,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|05
+    br $for-loop|07
    end
   end
   local.get $0
@@ -1317,7 +1317,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|06
+  loop $for-loop|08
    local.get $0
    i32.const 10
    i32.lt_s
@@ -1354,7 +1354,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|06
+    br $for-loop|08
    end
   end
   local.get $0
@@ -1441,7 +1441,7 @@
    call $for/Ref#constructor
    local.tee $0
    i32.store
-   loop $for-loop|07
+   loop $for-loop|09
     local.get $0
     if
      local.get $1
@@ -1459,7 +1459,7 @@
       local.tee $0
       i32.store
      end
-     br $for-loop|07
+     br $for-loop|09
     end
    end
    local.get $1
@@ -1507,10 +1507,10 @@
    call $for/Ref#constructor
    local.tee $1
    i32.store
-   loop $for-loop|08
+   loop $for-loop|06
     call $for/Ref#constructor
     if
-     block $for-break09
+     block $for-break07
       local.get $0
       i32.const 1
       i32.add
@@ -1520,13 +1520,13 @@
       if
        i32.const 0
        local.set $1
-       br $for-break09
+       br $for-break07
       end
       global.get $~lib/memory/__stack_pointer
       call $for/Ref#constructor
       local.tee $1
       i32.store
-      br $for-loop|08
+      br $for-loop|06
      end
     end
    end

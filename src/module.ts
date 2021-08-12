@@ -2247,7 +2247,6 @@ export class Module {
       // --- PassRunner::addDefaultFunctionOptimizationPasses ---
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-        passes.push("simplify-locals-notee-nostructure");
         passes.push("rse");
         passes.push("vacuum");
         passes.push("ssa-nomerge");
@@ -2258,6 +2257,7 @@ export class Module {
         passes.push("precompute-propagate");
       }
       if (optimizeLevel >= 3) {
+        passes.push("simplify-locals-notee-nostructure");
         passes.push("flatten");
         passes.push("vacuum");
         passes.push("local-cse");

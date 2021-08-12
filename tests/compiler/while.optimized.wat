@@ -361,19 +361,19 @@
    local.get $4
    i32.eqz
    if
-    i32.const -2
-    local.get $2
-    i32.rotl
     local.get $0
     local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.tee $2
+    local.tee $4
     i32.load offset=4
+    i32.const -2
+    local.get $2
+    i32.rotl
     i32.and
     local.set $1
-    local.get $2
+    local.get $4
     local.get $1
     i32.store offset=4
     local.get $1
@@ -1594,36 +1594,36 @@
    end
    i32.const 0
    local.set $0
-   loop $while-continue|09
+   loop $while-continue|010
     local.get $0
     i32.const 1
     i32.add
     local.tee $0
     i32.const 1
     i32.lt_s
-    br_if $while-continue|09
+    br_if $while-continue|010
    end
    global.get $~lib/rt/itcms/state
    i32.const 0
    i32.gt_s
    if
-    loop $while-continue|010
+    loop $while-continue|012
      global.get $~lib/rt/itcms/state
      if
       call $~lib/rt/itcms/step
       drop
-      br $while-continue|010
+      br $while-continue|012
      end
     end
    end
    call $~lib/rt/itcms/step
    drop
-   loop $while-continue|111
+   loop $while-continue|113
     global.get $~lib/rt/itcms/state
     if
      call $~lib/rt/itcms/step
      drop
-     br $while-continue|111
+     br $while-continue|113
     end
    end
    global.get $~lib/rt/itcms/total

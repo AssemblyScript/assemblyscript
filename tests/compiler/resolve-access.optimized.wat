@@ -386,19 +386,19 @@
    local.get $4
    i32.eqz
    if
-    i32.const -2
-    local.get $2
-    i32.rotl
     local.get $0
     local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.tee $2
+    local.tee $4
     i32.load offset=4
+    i32.const -2
+    local.get $2
+    i32.rotl
     i32.and
     local.set $1
-    local.get $2
+    local.get $4
     local.get $1
     i32.store offset=4
     local.get $1
@@ -2761,6 +2761,14 @@
       i32.rem_u
       local.tee $4
       i32.const 100
+      i32.div_u
+      i32.const 2
+      i32.shl
+      i32.const 1740
+      i32.add
+      i64.load32_u
+      local.get $4
+      i32.const 100
       i32.rem_u
       i32.const 2
       i32.shl
@@ -2769,14 +2777,6 @@
       i64.load32_u
       i64.const 32
       i64.shl
-      local.get $4
-      i32.const 100
-      i32.div_u
-      i32.const 2
-      i32.shl
-      i32.const 1740
-      i32.add
-      i64.load32_u
       i64.or
       i64.store
       local.get $2
@@ -2792,6 +2792,14 @@
       i32.div_u
       local.tee $3
       i32.const 100
+      i32.div_u
+      i32.const 2
+      i32.shl
+      i32.const 1740
+      i32.add
+      i64.load32_u
+      local.get $3
+      i32.const 100
       i32.rem_u
       i32.const 2
       i32.shl
@@ -2800,14 +2808,6 @@
       i64.load32_u
       i64.const 32
       i64.shl
-      local.get $3
-      i32.const 100
-      i32.div_u
-      i32.const 2
-      i32.shl
-      i32.const 1740
-      i32.add
-      i64.load32_u
       i64.or
       i64.store
       br $while-continue|0

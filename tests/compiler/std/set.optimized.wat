@@ -383,19 +383,19 @@
    local.get $4
    i32.eqz
    if
-    i32.const -2
-    local.get $2
-    i32.rotl
     local.get $0
     local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.tee $2
+    local.tee $4
     i32.load offset=4
+    i32.const -2
+    local.get $2
+    i32.rotl
     i32.and
     local.set $1
-    local.get $2
+    local.get $4
     local.get $1
     i32.store offset=4
     local.get $1
@@ -12568,12 +12568,6 @@
   local.get $0
   i32.load offset=4
   local.get $1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  local.get $1
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
@@ -12582,6 +12576,12 @@
   i32.const 17
   i32.rotl
   i32.const 668265263
+  i32.mul
+  local.get $1
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const -1028477379
   i32.mul
   i32.add
   i32.const 17
@@ -12726,12 +12726,6 @@
      local.get $7
      local.get $1
      local.get $6
-     i64.const 32
-     i64.shr_u
-     i32.wrap_i64
-     i32.const -1028477379
-     i32.mul
-     local.get $6
      i32.wrap_i64
      i32.const -1028477379
      i32.mul
@@ -12740,6 +12734,12 @@
      i32.const 17
      i32.rotl
      i32.const 668265263
+     i32.mul
+     local.get $6
+     i64.const 32
+     i64.shr_u
+     i32.wrap_i64
+     i32.const -1028477379
      i32.mul
      i32.add
      i32.const 17
@@ -12821,12 +12821,6 @@
   local.get $0
   i32.load
   local.get $1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  local.get $1
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
@@ -12835,6 +12829,12 @@
   i32.const 17
   i32.rotl
   i32.const 668265263
+  i32.mul
+  local.get $1
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const -1028477379
   i32.mul
   i32.add
   i32.const 17
@@ -13037,12 +13037,6 @@
   local.get $0
   i32.load offset=4
   local.get $1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  local.get $1
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
@@ -13051,6 +13045,12 @@
   i32.const 17
   i32.rotl
   i32.const 668265263
+  i32.mul
+  local.get $1
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const -1028477379
   i32.mul
   i32.add
   i32.const 17
@@ -13681,12 +13681,6 @@
   local.get $0
   i32.load offset=4
   local.get $1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  local.get $1
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
@@ -13695,6 +13689,12 @@
   i32.const 17
   i32.rotl
   i32.const 668265263
+  i32.mul
+  local.get $1
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const -1028477379
   i32.mul
   i32.add
   i32.const 17
@@ -13839,12 +13839,6 @@
      local.get $7
      local.get $1
      local.get $6
-     i64.const 32
-     i64.shr_u
-     i32.wrap_i64
-     i32.const -1028477379
-     i32.mul
-     local.get $6
      i32.wrap_i64
      i32.const -1028477379
      i32.mul
@@ -13853,6 +13847,12 @@
      i32.const 17
      i32.rotl
      i32.const 668265263
+     i32.mul
+     local.get $6
+     i64.const 32
+     i64.shr_u
+     i32.wrap_i64
+     i32.const -1028477379
      i32.mul
      i32.add
      i32.const 17
@@ -13934,12 +13934,6 @@
   local.get $0
   i32.load
   local.get $1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  local.get $1
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
@@ -13948,6 +13942,12 @@
   i32.const 17
   i32.rotl
   i32.const 668265263
+  i32.mul
+  local.get $1
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const -1028477379
   i32.mul
   i32.add
   i32.const 17
@@ -14111,12 +14111,6 @@
   local.get $0
   i32.load offset=4
   local.get $1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  local.get $1
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
@@ -14125,6 +14119,12 @@
   i32.const 17
   i32.rotl
   i32.const 668265263
+  i32.mul
+  local.get $1
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const -1028477379
   i32.mul
   i32.add
   i32.const 17
@@ -16339,12 +16339,6 @@
   local.get $1
   i64.reinterpret_f64
   local.tee $3
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  local.get $3
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
@@ -16353,6 +16347,12 @@
   i32.const 17
   i32.rotl
   i32.const 668265263
+  i32.mul
+  local.get $3
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const -1028477379
   i32.mul
   i32.add
   i32.const 17
@@ -16500,12 +16500,6 @@
      local.get $5
      i64.reinterpret_f64
      local.tee $4
-     i64.const 32
-     i64.shr_u
-     i32.wrap_i64
-     i32.const -1028477379
-     i32.mul
-     local.get $4
      i32.wrap_i64
      i32.const -1028477379
      i32.mul
@@ -16514,6 +16508,12 @@
      i32.const 17
      i32.rotl
      i32.const 668265263
+     i32.mul
+     local.get $4
+     i64.const 32
+     i64.shr_u
+     i32.wrap_i64
+     i32.const -1028477379
      i32.mul
      i32.add
      i32.const 17
@@ -16598,12 +16598,6 @@
   local.get $1
   i64.reinterpret_f64
   local.tee $4
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  local.get $4
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
@@ -16612,6 +16606,12 @@
   i32.const 17
   i32.rotl
   i32.const 668265263
+  i32.mul
+  local.get $4
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const -1028477379
   i32.mul
   i32.add
   i32.const 17
@@ -16778,12 +16778,6 @@
   local.get $1
   i64.reinterpret_f64
   local.tee $4
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  i32.const -1028477379
-  i32.mul
-  local.get $4
   i32.wrap_i64
   i32.const -1028477379
   i32.mul
@@ -16792,6 +16786,12 @@
   i32.const 17
   i32.rotl
   i32.const 668265263
+  i32.mul
+  local.get $4
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  i32.const -1028477379
   i32.mul
   i32.add
   i32.const 17

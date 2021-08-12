@@ -814,19 +814,19 @@
    local.get $4
    i32.eqz
    if
-    i32.const -2
-    local.get $2
-    i32.rotl
     local.get $0
     local.get $3
     i32.const 2
     i32.shl
     i32.add
-    local.tee $2
+    local.tee $4
     i32.load offset=4
+    i32.const -2
+    local.get $2
+    i32.rotl
     i32.and
     local.set $1
-    local.get $2
+    local.get $4
     local.get $1
     i32.store offset=4
     local.get $1
@@ -2169,20 +2169,13 @@
   (local $6 i32)
   block $folding-inner0
    local.get $0
-   i32.const 255
-   i32.and
-   local.tee $5
-   i32.const 3
-   i32.rem_u
-   i32.const 2
-   i32.shl
-   i32.const 5112
-   i32.add
-   i32.load
-   local.get $0
    i32.const 8
    i32.shr_u
    local.tee $3
+   i32.const 6084
+   i32.add
+   i32.load8_u
+   local.get $3
    i32.const 2444
    i32.add
    i32.load8_u
@@ -2190,20 +2183,27 @@
    i32.mul
    i32.const 2444
    i32.add
-   local.get $5
+   local.get $0
+   i32.const 255
+   i32.and
+   local.tee $5
    i32.const 3
    i32.div_u
    i32.add
    i32.load8_u
+   local.get $5
+   i32.const 3
+   i32.rem_u
+   i32.const 2
+   i32.shl
+   i32.const 5112
+   i32.add
+   i32.load
    i32.mul
    i32.const 11
    i32.shr_u
    i32.const 6
    i32.rem_u
-   local.get $3
-   i32.const 6084
-   i32.add
-   i32.load8_u
    i32.add
    i32.const 2
    i32.shl
@@ -3696,6 +3696,14 @@
       i32.rem_u
       local.tee $5
       i32.const 100
+      i32.div_u
+      i32.const 2
+      i32.shl
+      i32.const 19212
+      i32.add
+      i64.load32_u
+      local.get $5
+      i32.const 100
       i32.rem_u
       i32.const 2
       i32.shl
@@ -3704,14 +3712,6 @@
       i64.load32_u
       i64.const 32
       i64.shl
-      local.get $5
-      i32.const 100
-      i32.div_u
-      i32.const 2
-      i32.shl
-      i32.const 19212
-      i32.add
-      i64.load32_u
       i64.or
       i64.store
       local.get $1
@@ -3727,6 +3727,14 @@
       i32.div_u
       local.tee $3
       i32.const 100
+      i32.div_u
+      i32.const 2
+      i32.shl
+      i32.const 19212
+      i32.add
+      i64.load32_u
+      local.get $3
+      i32.const 100
       i32.rem_u
       i32.const 2
       i32.shl
@@ -3735,14 +3743,6 @@
       i64.load32_u
       i64.const 32
       i64.shl
-      local.get $3
-      i32.const 100
-      i32.div_u
-      i32.const 2
-      i32.shl
-      i32.const 19212
-      i32.add
-      i64.load32_u
       i64.or
       i64.store
       br $while-continue|0
@@ -7398,17 +7398,17 @@
           i32.const 65536
           i32.sub
           local.tee $1
+          i32.const 10
+          i32.shr_u
+          i32.const 55296
+          i32.or
+          local.get $1
           i32.const 1023
           i32.and
           i32.const 56320
           i32.or
           i32.const 16
           i32.shl
-          local.get $1
-          i32.const 10
-          i32.shr_u
-          i32.const 55296
-          i32.or
           i32.or
           i32.store
           local.get $5
