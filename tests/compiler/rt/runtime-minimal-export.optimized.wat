@@ -165,17 +165,17 @@
     i32.const 2
     i32.shl
     i32.add
-    local.tee $4
+    local.tee $1
     i32.load offset=4
     i32.const -2
     local.get $2
     i32.rotl
     i32.and
-    local.set $1
-    local.get $4
+    local.set $2
     local.get $1
+    local.get $2
     i32.store offset=4
-    local.get $1
+    local.get $2
     i32.eqz
     if
      local.get $0
@@ -987,26 +987,26 @@
   local.get $0
   i32.store offset=16
   global.get $~lib/rt/tcms/fromSpace
-  local.tee $1
+  local.tee $0
   i32.load offset=8
-  local.set $0
+  local.set $1
   local.get $2
-  local.get $1
+  local.get $0
   global.get $~lib/rt/tcms/white
   i32.or
   i32.store offset=4
   local.get $2
-  local.get $0
+  local.get $1
   i32.store offset=8
-  local.get $0
+  local.get $1
   local.get $2
-  local.get $0
+  local.get $1
   i32.load offset=4
   i32.const 3
   i32.and
   i32.or
   i32.store offset=4
-  local.get $1
+  local.get $0
   local.get $2
   i32.store offset=8
   global.get $~lib/rt/tcms/total

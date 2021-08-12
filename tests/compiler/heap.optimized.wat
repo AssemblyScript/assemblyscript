@@ -157,17 +157,17 @@
     i32.const 2
     i32.shl
     i32.add
-    local.tee $4
+    local.tee $1
     i32.load offset=4
     i32.const -2
     local.get $2
     i32.rotl
     i32.and
-    local.set $1
-    local.get $4
+    local.set $2
     local.get $1
+    local.get $2
     i32.store offset=4
-    local.get $1
+    local.get $2
     i32.eqz
     if
      local.get $0
@@ -1982,52 +1982,53 @@
   else
    block $__inlined_func$~lib/rt/tlsf/reallocateBlock (result i32)
     global.get $~lib/rt/tlsf/ROOT
-    local.set $2
+    local.set $3
     local.get $0
     call $~lib/rt/tlsf/checkUsedBlock
-    local.set $0
+    local.set $2
     block $folding-inner0
      local.get $1
+     local.tee $0
      call $~lib/rt/tlsf/prepareSize
-     local.tee $4
-     local.get $0
+     local.tee $1
+     local.get $2
      i32.load
      local.tee $5
      i32.const -4
      i32.and
-     local.tee $6
+     local.tee $4
      i32.le_u
      br_if $folding-inner0
-     local.get $0
+     local.get $2
      i32.const 4
      i32.add
-     local.get $0
+     local.get $2
      i32.load
      i32.const -4
      i32.and
      i32.add
-     local.tee $7
+     local.tee $6
      i32.load
-     local.tee $3
+     local.tee $7
      i32.const 1
      i32.and
      if
+      local.get $1
       local.get $4
-      local.get $6
       i32.const 4
       i32.add
-      local.get $3
+      local.get $7
       i32.const -4
       i32.and
       i32.add
-      local.tee $3
+      local.tee $4
       i32.le_u
       if
-       local.get $2
-       local.get $7
-       call $~lib/rt/tlsf/removeBlock
-       local.get $0
        local.get $3
+       local.get $6
+       call $~lib/rt/tlsf/removeBlock
+       local.get $2
+       local.get $4
        local.get $5
        i32.const 3
        i32.and
@@ -2036,17 +2037,17 @@
        br $folding-inner0
       end
      end
+     local.get $3
      local.get $2
      local.get $0
-     local.get $1
      call $~lib/rt/tlsf/moveBlock
      br $__inlined_func$~lib/rt/tlsf/reallocateBlock
     end
+    local.get $3
     local.get $2
-    local.get $0
-    local.get $4
+    local.get $1
     call $~lib/rt/tlsf/prepareBlock
-    local.get $0
+    local.get $2
    end
   end
   i32.const 4
