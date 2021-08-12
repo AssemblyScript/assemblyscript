@@ -3131,9 +3131,9 @@ export class Compiler extends DiagnosticEmitter {
                 if (local == null)
                   continue;
 
-                let callExpr = this.compileCallDirect(indexedGet, [
-                  Node.createIntegerLiteralExpression(i64_new(j), nameNode.range)
-                ], nameNode, module.local_get(initLocal.index, initType.toRef()));
+                let callExpr = this.makeCallDirect(indexedGet, [
+                  module.local_get(initLocal.index, initType.toRef()), module.i32(j)
+                ], nameNode, false);
 
                 initializers.push(
                   this.makeLocalAssignment(local, callExpr, type, false)
@@ -5982,9 +5982,9 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.unreachable();
         }
 
-        let callExpr = this.compileCallDirect(indexedGet, [
-          Node.createIntegerLiteralExpression(i64_new(j), nameNode.range)
-        ], nameNode, module.local_get(initLocal.index, initTypeRef));
+        let callExpr = this.makeCallDirect(indexedGet, [
+          module.local_get(initLocal.index, initType.toRef()), module.i32(j)
+        ], nameNode, false);
 
         exprs.push(
           this.makeAssignment(local, callExpr, type, valueExpression, null, null, false)
