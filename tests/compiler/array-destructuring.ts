@@ -43,4 +43,23 @@ class Foo {
   const [,] = arr;
   [] = arr;
   [,] = arr;
+
+  let tarr = new Int32Array(4);
+  tarr[0] = a;
+  tarr[1] = b;
+  tarr[2] = c;
+  tarr[3] = d;
+
+  let [e, f, g, h] = tarr;
+  assert(e == a);
+  assert(f == b);
+  assert(g == c);
+  assert(h == d);
+
+  [a, b, c, d] = StaticArray.fromArray([e, f, g, h]);
+
+  assert(a == e);
+  assert(b == f);
+  assert(c == g);
+  assert(d == h);
 }
