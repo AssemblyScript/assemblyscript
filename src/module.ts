@@ -2261,6 +2261,7 @@ export class Module {
         passes.push("flatten");
         passes.push("vacuum");
         passes.push("local-cse");
+        passes.push("licm");
         passes.push("simplify-locals-notee-nostructure");
         passes.push("merge-locals");
         passes.push("reorder-locals");
@@ -2282,9 +2283,6 @@ export class Module {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("pick-load-signs");
         passes.push("simplify-globals-optimizing");
-      }
-      if (optimizeLevel >= 3 && shrinkLevel <= 1) {
-        passes.push("licm");
       }
       passes.push("simplify-locals-notee-nostructure");
       passes.push("vacuum");
