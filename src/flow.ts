@@ -26,9 +26,9 @@ import {
   Function,
   Element,
   ElementKind,
-  Global,
   Field,
-  Class
+  Class,
+  TypedElement
 } from "./program";
 
 import {
@@ -1218,8 +1218,8 @@ export class Flow {
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
         let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
-        assert(global.kind == ElementKind.GLOBAL);
-        return canConversionOverflow((<Global>global).type, type);
+        assert(global.kind == ElementKind.GLOBAL || global.kind == ElementKind.ENUMVALUE);
+        return canConversionOverflow((<TypedElement>global).type, type);
       }
 
       case ExpressionId.Binary: {

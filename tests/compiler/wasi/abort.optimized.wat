@@ -32,43 +32,42 @@
    unreachable
   end
   local.get $0
-  local.tee $3
   local.get $1
   i32.const 1
   i32.shl
   i32.add
   local.set $4
   local.get $2
-  local.set $0
+  local.set $1
   loop $while-continue|0
-   local.get $3
+   local.get $0
    local.get $4
    i32.lt_u
    if
-    local.get $3
+    local.get $0
     i32.load16_u
-    local.tee $1
+    local.tee $3
     i32.const 128
     i32.lt_u
     if (result i32)
-     local.get $0
      local.get $1
+     local.get $3
      i32.store8
-     local.get $0
+     local.get $1
      i32.const 1
      i32.add
     else
-     local.get $1
+     local.get $3
      i32.const 2048
      i32.lt_u
      if (result i32)
-      local.get $0
       local.get $1
+      local.get $3
       i32.const 6
       i32.shr_u
       i32.const 192
       i32.or
-      local.get $1
+      local.get $3
       i32.const 63
       i32.and
       i32.const 128
@@ -77,28 +76,28 @@
       i32.shl
       i32.or
       i32.store16
-      local.get $0
+      local.get $1
       i32.const 2
       i32.add
      else
-      local.get $1
+      local.get $3
       i32.const 63488
       i32.and
       i32.const 55296
       i32.eq
       if
        local.get $4
-       local.get $3
+       local.get $0
        i32.const 2
        i32.add
        i32.gt_u
        i32.const 0
-       local.get $1
+       local.get $3
        i32.const 56320
        i32.lt_u
        select
        if
-        local.get $3
+        local.get $0
         i32.load16_u offset=2
         local.tee $5
         i32.const 64512
@@ -106,8 +105,8 @@
         i32.const 56320
         i32.eq
         if
-         local.get $0
          local.get $1
+         local.get $3
          i32.const 1023
          i32.and
          i32.const 10
@@ -118,14 +117,14 @@
          i32.const 1023
          i32.and
          i32.or
-         local.tee $1
+         local.tee $3
          i32.const 63
          i32.and
          i32.const 128
          i32.or
          i32.const 24
          i32.shl
-         local.get $1
+         local.get $3
          i32.const 6
          i32.shr_u
          i32.const 63
@@ -135,7 +134,7 @@
          i32.const 16
          i32.shl
          i32.or
-         local.get $1
+         local.get $3
          i32.const 12
          i32.shr_u
          i32.const 63
@@ -145,32 +144,32 @@
          i32.const 8
          i32.shl
          i32.or
-         local.get $1
+         local.get $3
          i32.const 18
          i32.shr_u
          i32.const 240
          i32.or
          i32.or
          i32.store
+         local.get $1
+         i32.const 4
+         i32.add
+         local.set $1
          local.get $0
          i32.const 4
          i32.add
          local.set $0
-         local.get $3
-         i32.const 4
-         i32.add
-         local.set $3
          br $while-continue|0
         end
        end
       end
-      local.get $0
       local.get $1
+      local.get $3
       i32.const 12
       i32.shr_u
       i32.const 224
       i32.or
-      local.get $1
+      local.get $3
       i32.const 6
       i32.shr_u
       i32.const 63
@@ -181,27 +180,27 @@
       i32.shl
       i32.or
       i32.store16
-      local.get $0
       local.get $1
+      local.get $3
       i32.const 63
       i32.and
       i32.const 128
       i32.or
       i32.store8 offset=2
-      local.get $0
+      local.get $1
       i32.const 3
       i32.add
      end
     end
-    local.set $0
-    local.get $3
+    local.set $1
+    local.get $0
     i32.const 2
     i32.add
-    local.set $3
+    local.set $0
     br $while-continue|0
    end
   end
-  local.get $0
+  local.get $1
   local.get $2
   i32.sub
  )
@@ -243,16 +242,14 @@
   local.set $3
   i32.const 3
   global.set $~argumentsLength
-  i32.const 1216
-  local.get $3
   local.get $0
   i32.const 4
   i32.add
   local.tee $0
-  call $~lib/string/String.UTF8.encodeUnsafe@varargs
-  local.set $3
-  local.get $0
+  i32.const 1216
   local.get $3
+  local.get $0
+  call $~lib/string/String.UTF8.encodeUnsafe@varargs
   i32.add
   local.tee $0
   i32.const 40
