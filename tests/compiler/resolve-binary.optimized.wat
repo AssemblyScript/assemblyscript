@@ -3964,7 +3964,7 @@
  (func $~lib/number/F64#toString (result i32)
   (local $0 i64)
   (local $1 i64)
-  (local $2 i32)
+  (local $2 i64)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
