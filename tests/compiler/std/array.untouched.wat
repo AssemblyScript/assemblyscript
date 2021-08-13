@@ -5173,30 +5173,6 @@
   call $~lib/util/bytes/REVERSE<i32>
   local.get $0
  )
- (func $~lib/polyfills/bswap<u32> (param $0 i32) (result i32)
-  i32.const 1
-  drop
-  i32.const 4
-  i32.const 2
-  i32.eq
-  drop
-  i32.const 4
-  i32.const 4
-  i32.eq
-  drop
-  local.get $0
-  i32.const -16711936
-  i32.and
-  i32.const 8
-  i32.rotl
-  local.get $0
-  i32.const 16711935
-  i32.and
-  i32.const 8
-  i32.rotr
-  i32.or
-  return
- )
  (func $~lib/polyfills/bswap<u64> (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
@@ -5279,28 +5255,6 @@
    i32.const 1
    i32.eq
    drop
-   local.get $1
-   i32.const 4
-   i32.eq
-   if
-    local.get $0
-    local.get $0
-    i32.load
-    call $~lib/polyfills/bswap<u32>
-    i32.store
-    return
-   end
-   local.get $1
-   i32.const 8
-   i32.eq
-   if
-    local.get $0
-    local.get $0
-    i64.load
-    call $~lib/polyfills/bswap<u64>
-    i64.store
-    return
-   end
    local.get $1
    i32.const 8
    i32.sub
