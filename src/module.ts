@@ -2247,7 +2247,6 @@ export class Module {
       // --- PassRunner::addDefaultFunctionOptimizationPasses ---
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-        passes.push("simplify-locals-notee-nostructure");
         passes.push("rse");
         passes.push("vacuum");
         passes.push("ssa-nomerge");
@@ -2258,16 +2257,16 @@ export class Module {
         passes.push("precompute-propagate");
       }
       if (optimizeLevel >= 3) {
-        passes.push("flatten");
-        passes.push("vacuum");
         passes.push("simplify-locals-notee-nostructure");
-        passes.push("merge-locals");
-
-        passes.push("code-folding");
         passes.push("flatten");
         passes.push("vacuum");
         passes.push("local-cse");
+        passes.push("licm");
+        passes.push("simplify-locals-notee-nostructure");
+        passes.push("merge-locals");
         passes.push("reorder-locals");
+        passes.push("dae-optimizing");
+        passes.push("code-folding");
       }
       passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
@@ -2285,10 +2284,7 @@ export class Module {
         passes.push("pick-load-signs");
         passes.push("simplify-globals-optimizing");
       }
-      if (optimizeLevel >= 3 && shrinkLevel <= 1) {
-        passes.push("licm");
-      }
-      passes.push("simplify-locals-nostructure");
+      passes.push("simplify-locals-notee-nostructure");
       passes.push("vacuum");
 
       passes.push("reorder-locals");
