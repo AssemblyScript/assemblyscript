@@ -1,0 +1,8 @@
+{
+  "asc_flags": [
+   ],
+  "stderr": [
+    "AS200: Conversion from type 'i32' to 'bool' requires an explicit cast.",
+    "EOF"
+  ]
+}

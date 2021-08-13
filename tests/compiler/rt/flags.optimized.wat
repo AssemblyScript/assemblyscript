@@ -15,10 +15,10 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/__typeinfo (param $0 i32) (result i32)
-  local.get $0
   i32.const 1200
   i32.load
-  i32.gt_u
+  local.get $0
+  i32.lt_u
   if
    i32.const 1056
    i32.const 1120
