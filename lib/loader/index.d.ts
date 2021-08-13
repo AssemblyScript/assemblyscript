@@ -89,7 +89,7 @@ export interface ASUtil {
   /** Allocates a new ArrayBuffer in the module's memory and returns a reference (pointer) to it. */
   __newArrayBuffer(buf: ArrayBuffer): number;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
-  __newArray(id: number, valuesOrCapacity?: ArrayLike<number> | number): number;
+  __newArray(id: number, valuesOrCapacity?: Array<number> | ArrayBufferView | number): number;
 
   /** Allocates an instance of the class represented by the specified id. */
   __new(size: number, id: number): number;
