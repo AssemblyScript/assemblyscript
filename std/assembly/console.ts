@@ -11,43 +11,36 @@ export namespace console {
     if (!condition) {
       let stderr = process.stderr;
       stderr.write("Assertion failed: ");
-      stderr.write(message);
-      stderr.write("\n");
+      stderr.writeLn(message);
     }
   }
 
   export function log(message: string): void {
-    var stdout = process.stdout;
-    stdout.write(message);
-    stdout.write("\n");
+    process.stdout.writeLn(message);
   }
 
   export function debug(message: string): void {
     var stdout = process.stdout;
     stdout.write("Debug: ");
-    stdout.write(message);
-    stdout.write("\n");
+    stdout.writeLn(message);
   }
 
   export function info(message: string): void {
     var stdout = process.stdout;
     stdout.write("Info: ");
-    stdout.write(message);
-    stdout.write("\n");
+    stdout.writeLn(message);
   }
 
   export function warn(message: string): void {
     var stdout = process.stdout;
     stdout.write("Warning: ");
-    stdout.write(message);
-    stdout.write("\n");
+    stdout.writeLn(message);
   }
 
   export function error(message: string): void {
     var stdout = process.stdout;
     stdout.write("Error: ");
-    stdout.write(message);
-    stdout.write("\n");
+    stdout.writeLn(message);
   }
 
   export function time(label: string): void {

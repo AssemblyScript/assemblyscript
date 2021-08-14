@@ -127,6 +127,10 @@ abstract class WritableStream extends Stream {
       ERROR("String or ArrayBuffer expected");
     }
   }
+
+  writeLn(data: string): void {
+    writeString(<u32>changetype<usize>(this), changetype<string>(data), true);
+  }
 }
 
 @unmanaged
@@ -151,37 +155,40 @@ function writeBuffer(fd: fd, data: ArrayBuffer): void {
   if (err) throw new Error(errnoToString(err));
 }
 
-function writeString(fd: fd, data: string): void {
-  var char2 = -1;
-  var char3 = -1;
-  var char4 = -1;
-  switch (data.length) {
-    case 4: { // "null"
-      char4 = <i32>load<u16>(changetype<usize>(data), 6);
-      if (char4 >= 0x80) break;
+function writeString(fd: fd, data: string, newLine: bool = false): void {
+  if (!newLine) {
+    let char2 = -1;
+    let char3 = -1;
+    let char4 = -1;
+    switch (data.length) {
+      case 4: { // "null"
+        char4 = <i32>load<u16>(changetype<usize>(data), 6);
+        if (char4 >= 0x80) break;
+      }
+      case 3: { // "ms\n"
+        char3 = <i32>load<u16>(changetype<usize>(data), 4);
+        if (char3 >= 0x80) break;
+      }
+      case 2: { // "\r\n"
+        char2 = <i32>load<u16>(changetype<usize>(data), 2);
+        if (char2 >= 0x80) break;
+      }
+      case 1: { // "\n"
+        let char1 = <i32>load<u16>(changetype<usize>(data));
+        if (char1 >= 0x80) break;
+        store<usize>(iobuf, iobuf + 2 * sizeof<usize>());
+        store<usize>(iobuf, <i32>1 + i32(char2 != -1) + i32(char3 != -1) + i32(char4 != -1), sizeof<usize>());
+        store<u32>(iobuf, char1 | char2 << 8 | char3 << 16 | char4 << 24, 2 * sizeof<usize>());
+        let err = fd_write(<u32>fd, iobuf, 1, iobuf + 3 * sizeof<usize>());
+        if (err) throw new Error(errnoToString(err));
+      }
+      case 0: return;
     }
-    case 3: { // "ms\n"
-      char3 = <i32>load<u16>(changetype<usize>(data), 4);
-      if (char3 >= 0x80) break;
-    }
-    case 2: { // "\r\n"
-      char2 = <i32>load<u16>(changetype<usize>(data), 2);
-      if (char2 >= 0x80) break;
-    }
-    case 1: { // "\n"
-      let char1 = <i32>load<u16>(changetype<usize>(data));
-      if (char1 >= 0x80) break;
-      store<usize>(iobuf, iobuf + 2 * sizeof<usize>());
-      store<usize>(iobuf, <i32>1 + i32(char2 != -1) + i32(char3 != -1) + i32(char4 != -1), sizeof<usize>());
-      store<u32>(iobuf, char1 | char2 << 8 | char3 << 16 | char4 << 24, 2 * sizeof<usize>());
-      let err = fd_write(<u32>fd, iobuf, 1, iobuf + 3 * sizeof<usize>());
-      if (err) throw new Error(errnoToString(err));
-    }
-    case 0: return;
   }
   var utf8len = <usize>String.UTF8.byteLength(data);
-  var utf8buf = __alloc(utf8len);
+  var utf8buf = __alloc(utf8len + i32(newLine));
   assert(String.UTF8.encodeUnsafe(changetype<usize>(data), data.length, utf8buf) == utf8len);
+  if (newLine) store<u16>(utf8buf + utf8len, 0x0A); // \n
   store<usize>(iobuf, utf8buf);
   store<usize>(iobuf, utf8len, sizeof<usize>());
   var err = fd_write(<u32>fd, iobuf, 1, iobuf + 2 * sizeof<usize>());
