@@ -943,7 +943,10 @@ exports.main = function main(argv, options, callback) {
   // Optimize the module
   const debugInfo = opts.debug;
   const converge = opts.converge;
-  const zeroFilledMemory = opts.zeroFilledMemory;
+  const zeroFilledMemory = opts.importMemory
+    ? opts.zeroFilledMemory
+    : false;
+
   const runPasses = [];
   if (opts.runPasses) {
     if (typeof opts.runPasses === "string") {
