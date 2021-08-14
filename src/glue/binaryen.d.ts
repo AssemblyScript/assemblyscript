@@ -599,6 +599,8 @@ export declare function _BinaryenGetDebugInfo(): bool;
 export declare function _BinaryenSetDebugInfo(on: bool): void;
 export declare function _BinaryenGetLowMemoryUnused(): bool;
 export declare function _BinaryenSetLowMemoryUnused(on: bool): void;
+export declare function _BinaryenGetZeroFilledMemory(): bool;
+export declare function _BinaryenSetZeroFilledMemory(on: bool): void;
 export declare function _BinaryenGetFastMath(): bool;
 export declare function _BinaryenSetFastMath(on: bool): void;
 export declare function _BinaryenGetPassArgument(key: StringRef): StringRef;

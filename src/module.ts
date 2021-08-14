@@ -2125,6 +2125,14 @@ export class Module {
     binaryen._BinaryenSetLowMemoryUnused(on);
   }
 
+  getZeroFilledMemory(): bool {
+    return binaryen._BinaryenGetLowMemoryUnused();
+  }
+
+  setZeroFilledMemory(on: bool): void {
+    binaryen._BinaryenSetLowMemoryUnused(on);
+  }
+
   getFastMath(): bool {
     return binaryen._BinaryenGetFastMath();
   }
@@ -2207,13 +2215,19 @@ export class Module {
     for (let i = numNames - 1; i >= 0; --i) binaryen._free(cStrs[i]);
   }
 
-  optimize(optimizeLevel: i32, shrinkLevel: i32, debugInfo: bool = false): void {
+  optimize(
+    optimizeLevel: i32,
+    shrinkLevel: i32,
+    debugInfo: bool = false,
+    zeroFilledMemory: bool = false
+  ): void {
     // Implicitly run costly non-LLVM optimizations on -O3 or -Oz
     if (optimizeLevel >= 3 || shrinkLevel >= 2) optimizeLevel = 4;
 
     this.setOptimizeLevel(optimizeLevel);
     this.setShrinkLevel(shrinkLevel);
     this.setDebugInfo(debugInfo);
+    this.setZeroFilledMemory(zeroFilledMemory);
     this.setFastMath(true);
     this.clearPassArguments();
 

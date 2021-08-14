@@ -225,6 +225,8 @@ export class Options {
   maximumMemory: u32 = 0;
   /** If true, memory is declared as shared. */
   sharedMemory: bool = false;
+  /** If true, imported memory is zero filled. */
+  zeroFilledMemory: bool = false;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, exports the function table. */
