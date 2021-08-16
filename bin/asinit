@@ -452,7 +452,7 @@ function ensureTestsIndexJs() {
 }
 
 function ensureIndexHtml() {
-  console.log("- Making sure that 'index.js' exists...");
+  console.log("- Making sure that 'index.html' exists...");
   if (!fs.existsSync(indexHtml)) {
     fs.writeFileSync(indexHtml, [
       "<!DOCTYPE html>",
