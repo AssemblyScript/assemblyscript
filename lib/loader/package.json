@@ -10,8 +10,8 @@
     "wasm"
   ],
   "version": "0.0.0",
-  "authors": [
-    "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
+  "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
+  "contributors": [
     "MaxGraey <maxgraey@gmail.com>"
   ],
   "license": "Apache-2.0",
