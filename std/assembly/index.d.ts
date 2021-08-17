@@ -2145,11 +2145,11 @@ declare namespace console {
   /** Outputs `message` to the console, prefixed with "Error:". */
   export function error(message?: string): void;
   /** Starts a new timer using the specified `label`. */
-  export function time(label: string): void;
+  export function time(label?: string): void;
   /** Logs the current value of a timer previously started with `console.time`. */
-  export function timeLog(label: string): void;
+  export function timeLog(label?: string): void;
   /** Logs the current value of a timer previously started with `console.time` and discards the timer. */
-  export function timeEnd(label: string): void;
+  export function timeEnd(label?: string): void;
 }
 
 /** Browser-like crypto utilities on top of WASI. */

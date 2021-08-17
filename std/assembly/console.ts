@@ -43,7 +43,7 @@ export namespace console {
     stderr.writeLn(message);
   }
 
-  export function time(label: string): void {
+  export function time(label: string = "default"): void {
     if (timers.has(label)) {
       let stderr = process.stderr;
       stderr.write("Warning: Label '");
@@ -54,7 +54,7 @@ export namespace console {
     timers.set(label, process.hrtime());
   }
 
-  export function timeLog(label: string): void {
+  export function timeLog(label: string = "default"): void {
     if (!timers.has(label)) {
       let stderr = process.stderr;
       stderr.write("Warning: No such label '");
@@ -65,7 +65,7 @@ export namespace console {
     timeLogImpl(label);
   }
 
-  export function timeEnd(label: string): void {
+  export function timeEnd(label: string = "default"): void {
     if (!timers.has(label)) {
       let stderr = process.stderr;
       stderr.write("Warning: No such label '");
