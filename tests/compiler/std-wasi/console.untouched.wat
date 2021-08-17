@@ -5553,7 +5553,7 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  global.get $~lib/process/process.stdout
+  global.get $~lib/process/process.stderr
   local.set $1
   local.get $1
   i32.const 3792
@@ -5582,7 +5582,7 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  global.get $~lib/process/process.stdout
+  global.get $~lib/process/process.stderr
   local.set $1
   local.get $1
   i32.const 3888
@@ -5687,8 +5687,6 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/process/process.stdout
-  local.set $1
   global.get $~lib/console/timers
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -5698,6 +5696,8 @@
   local.get $0
   call $~lib/map/Map<~lib/string/String,u64>#has
   if
+   global.get $~lib/process/process.stderr
+   local.set $1
    local.get $1
    i32.const 4368
    local.set $2
@@ -5822,8 +5822,6 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/process/process.stdout
-  local.set $1
   global.get $~lib/console/timers
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -5834,6 +5832,8 @@
   call $~lib/map/Map<~lib/string/String,u64>#has
   i32.eqz
   if
+   global.get $~lib/process/process.stderr
+   local.set $1
    local.get $1
    i32.const 4528
    local.set $2
@@ -5877,8 +5877,6 @@
   global.get $~lib/memory/__stack_pointer
   i64.const 0
   i64.store
-  global.get $~lib/process/process.stdout
-  local.set $1
   global.get $~lib/console/timers
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -5889,6 +5887,8 @@
   call $~lib/map/Map<~lib/string/String,u64>#has
   i32.eqz
   if
+   global.get $~lib/process/process.stderr
+   local.set $1
    local.get $1
    i32.const 4528
    local.set $2

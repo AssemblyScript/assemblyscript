@@ -4055,18 +4055,18 @@
     global.get $~lib/memory/__stack_pointer
     i32.const 5392
     i32.store offset=4
-    i32.const 1
+    i32.const 2
     i32.const 5392
     i32.const 0
     call $~lib/process/writeString
-    i32.const 1
+    i32.const 2
     local.get $0
     i32.const 0
     call $~lib/process/writeString
     global.get $~lib/memory/__stack_pointer
     i32.const 5456
     i32.store offset=4
-    i32.const 1
+    i32.const 2
     i32.const 5456
     i32.const 0
     call $~lib/process/writeString
@@ -4321,18 +4321,18 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 5552
    i32.store offset=4
-   i32.const 1
+   i32.const 2
    i32.const 5552
    i32.const 0
    call $~lib/process/writeString
-   i32.const 1
+   i32.const 2
    local.get $0
    i32.const 0
    call $~lib/process/writeString
    global.get $~lib/memory/__stack_pointer
    i32.const 5632
    i32.store offset=4
-   i32.const 1
+   i32.const 2
    i32.const 5632
    i32.const 0
    call $~lib/process/writeString
@@ -4385,18 +4385,18 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 5552
    i32.store offset=4
-   i32.const 1
+   i32.const 2
    i32.const 5552
    i32.const 0
    call $~lib/process/writeString
-   i32.const 1
+   i32.const 2
    local.get $0
    i32.const 0
    call $~lib/process/writeString
    global.get $~lib/memory/__stack_pointer
    i32.const 7664
    i32.store offset=4
-   i32.const 1
+   i32.const 2
    i32.const 7664
    i32.const 0
    call $~lib/process/writeString
@@ -4587,11 +4587,11 @@
    local.get $0
    i32.const 4816
    i32.store
-   i32.const 1
+   i32.const 2
    i32.const 4816
    i32.const 0
    call $~lib/process/writeString
-   i32.const 1
+   i32.const 2
    i32.const 4768
    i32.const 1
    call $~lib/process/writeString
@@ -4618,11 +4618,11 @@
    local.get $0
    i32.const 4912
    i32.store
-   i32.const 1
+   i32.const 2
    i32.const 4912
    i32.const 0
    call $~lib/process/writeString
-   i32.const 1
+   i32.const 2
    i32.const 4864
    i32.const 1
    call $~lib/process/writeString

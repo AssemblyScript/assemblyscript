@@ -32,45 +32,45 @@ export namespace console {
   }
 
   export function warn(message: string = ""): void {
-    var stdout = process.stdout;
-    stdout.write("Warning: ");
-    stdout.writeLn(message);
+    var stderr = process.stderr;
+    stderr.write("Warning: ");
+    stderr.writeLn(message);
   }
 
   export function error(message: string = ""): void {
-    var stdout = process.stdout;
-    stdout.write("Error: ");
-    stdout.writeLn(message);
+    var stderr = process.stderr;
+    stderr.write("Error: ");
+    stderr.writeLn(message);
   }
 
   export function time(label: string): void {
-    var stdout = process.stdout;
     if (timers.has(label)) {
-      stdout.write("Warning: Label '");
-      stdout.write(label);
-      stdout.write("' already exists for console.time()\n");
+      let stderr = process.stderr;
+      stderr.write("Warning: Label '");
+      stderr.write(label);
+      stderr.write("' already exists for console.time()\n");
       return;
     }
     timers.set(label, process.hrtime());
   }
 
   export function timeLog(label: string): void {
-    var stdout = process.stdout;
     if (!timers.has(label)) {
-      stdout.write("Warning: No such label '");
-      stdout.write(label);
-      stdout.write("' for console.timeLog()\n");
+      let stderr = process.stderr;
+      stderr.write("Warning: No such label '");
+      stderr.write(label);
+      stderr.write("' for console.timeLog()\n");
       return;
     }
     timeLogImpl(label);
   }
 
   export function timeEnd(label: string): void {
-    var stdout = process.stdout;
     if (!timers.has(label)) {
-      stdout.write("Warning: No such label '");
-      stdout.write(label);
-      stdout.write("' for console.timeEnd()\n");
+      let stderr = process.stderr;
+      stderr.write("Warning: No such label '");
+      stderr.write(label);
+      stderr.write("' for console.timeEnd()\n");
       return;
     }
     timeLogImpl(label);
