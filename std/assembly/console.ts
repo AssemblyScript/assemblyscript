@@ -15,29 +15,29 @@ export namespace console {
     }
   }
 
-  export function log(message: string): void {
+  export function log(message: string = ""): void {
     process.stdout.writeLn(message);
   }
 
-  export function debug(message: string): void {
+  export function debug(message: string = ""): void {
     var stdout = process.stdout;
     stdout.write("Debug: ");
     stdout.writeLn(message);
   }
 
-  export function info(message: string): void {
+  export function info(message: string = ""): void {
     var stdout = process.stdout;
     stdout.write("Info: ");
     stdout.writeLn(message);
   }
 
-  export function warn(message: string): void {
+  export function warn(message: string = ""): void {
     var stdout = process.stdout;
     stdout.write("Warning: ");
     stdout.writeLn(message);
   }
 
-  export function error(message: string): void {
+  export function error(message: string = ""): void {
     var stdout = process.stdout;
     stdout.write("Error: ");
     stdout.writeLn(message);
