@@ -2133,7 +2133,7 @@ declare namespace process {
 /** Browser-like console on top of WASI. */
 declare namespace console {
   /** Logs `message` to console if `assertion` is false-ish. */
-  export function assert<T>(assertion: T, message: string): void;
+  export function assert<T>(assertion: T, message?: string): void;
   /** Outputs `message` to the console. */
   export function log(message: string): void;
   /** Outputs `message` to the console, prefixed with "Debug:". */
