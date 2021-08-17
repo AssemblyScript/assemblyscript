@@ -159,25 +159,25 @@ function writeString(fd: fd, data: string, newLine: bool = false): void {
   var len = data.length;
   if (!newLine) {
     let
-      char2 = 0,
-      char3 = 0,
-      char4 = 0;
+      char2: u32 = 0,
+      char3: u32 = 0,
+      char4: u32 = 0;
 
     switch (len) {
       case 4: { // "null"
-        char4 = <i32>load<u16>(changetype<usize>(data), 6);
+        char4 = <u32>load<u16>(changetype<usize>(data), 6);
         if (char4 >= 0x80) break;
       }
       case 3: { // "ms\n"
-        char3 = <i32>load<u16>(changetype<usize>(data), 4);
+        char3 = <u32>load<u16>(changetype<usize>(data), 4);
         if (char3 >= 0x80) break;
       }
       case 2: { // "\r\n"
-        char2 = <i32>load<u16>(changetype<usize>(data), 2);
+        char2 = <u32>load<u16>(changetype<usize>(data), 2);
         if (char2 >= 0x80) break;
       }
       case 1: { // "\n"
-        let char1 = <i32>load<u16>(changetype<usize>(data));
+        let char1 = <u32>load<u16>(changetype<usize>(data));
         if (char1 >= 0x80) break;
         store<usize>(iobuf, iobuf + 2 * sizeof<usize>());
         store<usize>(iobuf, len, sizeof<usize>());

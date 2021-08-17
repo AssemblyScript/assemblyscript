@@ -2893,7 +2893,7 @@
         local.set $6
         local.get $6
         i32.const 128
-        i32.ge_s
+        i32.ge_u
         if
          br $break|0
         end
@@ -2903,7 +2903,7 @@
        local.set $5
        local.get $5
        i32.const 128
-       i32.ge_s
+       i32.ge_u
        if
         br $break|0
        end
@@ -2913,7 +2913,7 @@
       local.set $4
       local.get $4
       i32.const 128
-      i32.ge_s
+      i32.ge_u
       if
        br $break|0
       end
@@ -2923,7 +2923,7 @@
      local.set $7
      local.get $7
      i32.const 128
-     i32.ge_s
+     i32.ge_u
      if
       br $break|0
      end
