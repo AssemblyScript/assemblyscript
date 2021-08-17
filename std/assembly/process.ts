@@ -156,11 +156,14 @@ function writeBuffer(fd: fd, data: ArrayBuffer): void {
 }
 
 function writeString(fd: fd, data: string, newLine: bool = false): void {
+  var len = data.length;
   if (!newLine) {
-    let char2 = -1;
-    let char3 = -1;
-    let char4 = -1;
-    switch (data.length) {
+    let
+      char2 = 0,
+      char3 = 0,
+      char4 = 0;
+
+    switch (len) {
       case 4: { // "null"
         char4 = <i32>load<u16>(changetype<usize>(data), 6);
         if (char4 >= 0x80) break;
@@ -177,7 +180,7 @@ function writeString(fd: fd, data: string, newLine: bool = false): void {
         let char1 = <i32>load<u16>(changetype<usize>(data));
         if (char1 >= 0x80) break;
         store<usize>(iobuf, iobuf + 2 * sizeof<usize>());
-        store<usize>(iobuf, <i32>1 + i32(char2 != -1) + i32(char3 != -1) + i32(char4 != -1), sizeof<usize>());
+        store<usize>(iobuf, len, sizeof<usize>());
         store<u32>(iobuf, char1 | char2 << 8 | char3 << 16 | char4 << 24, 2 * sizeof<usize>());
         let err = fd_write(<u32>fd, iobuf, 1, iobuf + 3 * sizeof<usize>());
         if (err) throw new Error(errnoToString(err));
@@ -186,9 +189,9 @@ function writeString(fd: fd, data: string, newLine: bool = false): void {
     }
   }
   var utf8len = <usize>String.UTF8.byteLength(data);
-  var utf8buf = __alloc(utf8len + i32(newLine));
-  assert(String.UTF8.encodeUnsafe(changetype<usize>(data), data.length, utf8buf) == utf8len);
-  if (newLine) store<u16>(utf8buf + utf8len, 0x0A); // \n
+  var utf8buf = __alloc(utf8len + usize(newLine));
+  assert(String.UTF8.encodeUnsafe(changetype<usize>(data), len, utf8buf) == utf8len);
+  if (newLine) store<u8>(utf8buf + utf8len, 0x0A); // \n
   store<usize>(iobuf, utf8buf);
   store<usize>(iobuf, utf8len, sizeof<usize>());
   var err = fd_write(<u32>fd, iobuf, 1, iobuf + 2 * sizeof<usize>());

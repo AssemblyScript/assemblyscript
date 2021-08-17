@@ -1978,32 +1978,29 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1
+  i32.shr_u
+  local.set $6
   local.get $1
   i32.eqz
   if
-   i32.const -1
-   local.set $2
-   i32.const -1
-   local.set $3
-   i32.const -1
-   local.set $4
    block $break|0
     block $case4|0
      block $case3|0
       block $case2|0
        block $case1|0
         block $case0|0
-         local.get $0
-         i32.const 20
-         i32.sub
-         i32.load offset=16
-         i32.const 1
-         i32.shr_u
+         local.get $6
          br_table $case4|0 $case3|0 $case2|0 $case1|0 $case0|0 $break|0
         end
         local.get $0
         i32.load16_u offset=6
-        local.tee $4
+        local.tee $2
         i32.const 128
         i32.ge_u
         br_if $break|0
@@ -2017,7 +2014,7 @@
       end
       local.get $0
       i32.load16_u offset=2
-      local.tee $2
+      local.tee $4
       i32.const 128
       i32.ge_u
       br_if $break|0
@@ -2032,23 +2029,11 @@
      i32.const 1096
      i32.store
      i32.const 1092
-     local.get $2
-     i32.const -1
-     i32.ne
-     i32.const 1
-     i32.add
-     local.get $3
-     i32.const -1
-     i32.ne
-     i32.add
-     local.get $4
-     i32.const -1
-     i32.ne
-     i32.add
+     local.get $6
      i32.store
      i32.const 1096
      local.get $5
-     local.get $2
+     local.get $4
      i32.const 8
      i32.shl
      i32.or
@@ -2056,7 +2041,7 @@
      i32.const 16
      i32.shl
      i32.or
-     local.get $4
+     local.get $2
      i32.const 24
      i32.shl
      i32.or
@@ -2073,7 +2058,7 @@
       local.get $0
       call $~lib/bindings/wasi_snapshot_preview1/errnoToString
       i32.const 4224
-      i32.const 183
+      i32.const 186
       i32.const 18
       call $~lib/wasi/index/abort
       unreachable
@@ -2167,17 +2152,10 @@
   i32.add
   call $~lib/rt/tlsf/__alloc
   local.set $2
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 1
-  i32.shr_u
-  local.set $4
   i32.const 3
   global.set $~argumentsLength
   local.get $0
-  local.get $4
+  local.get $6
   local.get $2
   call $~lib/string/String.UTF8.encodeUnsafe@varargs
   local.get $3
@@ -2185,7 +2163,7 @@
   if
    i32.const 0
    i32.const 4224
-   i32.const 190
+   i32.const 193
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
@@ -2196,7 +2174,7 @@
    local.get $3
    i32.add
    i32.const 10
-   i32.store16
+   i32.store8
   end
   i32.const 1088
   local.get $2
@@ -2219,7 +2197,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4224
-   i32.const 196
+   i32.const 199
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable

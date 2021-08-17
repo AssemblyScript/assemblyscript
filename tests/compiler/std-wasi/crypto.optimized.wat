@@ -3944,6 +3944,14 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.const 20
+  i32.sub
+  i32.load offset=16
+  i32.const 1
+  i32.shr_u
+  local.set $5
   local.get $0
   local.tee $1
   local.get $1
@@ -4024,17 +4032,10 @@
   i32.add
   call $~lib/rt/tlsf/__alloc
   local.set $1
-  local.get $0
-  i32.const 20
-  i32.sub
-  i32.load offset=16
-  i32.const 1
-  i32.shr_u
-  local.set $3
   i32.const 3
   global.set $~argumentsLength
   local.get $0
-  local.get $3
+  local.get $5
   local.get $1
   call $~lib/string/String.UTF8.encodeUnsafe@varargs
   local.get $2
@@ -4042,7 +4043,7 @@
   if
    i32.const 0
    i32.const 6720
-   i32.const 190
+   i32.const 193
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
@@ -4051,7 +4052,7 @@
   local.get $2
   i32.add
   i32.const 10
-  i32.store16
+  i32.store8
   i32.const 6672
   local.get $1
   i32.store
@@ -4073,7 +4074,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 6720
-   i32.const 196
+   i32.const 199
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
