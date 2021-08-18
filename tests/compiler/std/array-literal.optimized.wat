@@ -2182,20 +2182,16 @@
   global.set $std/array-literal/i
   local.get $0
   i32.load offset=4
-  i32.const 1
-  i32.add
   global.get $std/array-literal/i
-  i32.store8
+  i32.store8 offset=1
   global.get $std/array-literal/i
   i32.const 1
   i32.add
   global.set $std/array-literal/i
   local.get $0
   i32.load offset=4
-  i32.const 2
-  i32.add
   global.get $std/array-literal/i
-  i32.store8
+  i32.store8 offset=2
   local.get $0
   global.set $std/array-literal/dynamicArrayI8
   global.get $~lib/memory/__stack_pointer
@@ -2287,20 +2283,16 @@
   global.set $std/array-literal/i
   local.get $0
   i32.load offset=4
-  i32.const 4
-  i32.add
   global.get $std/array-literal/i
-  i32.store
+  i32.store offset=4
   global.get $std/array-literal/i
   i32.const 1
   i32.add
   global.set $std/array-literal/i
   local.get $0
   i32.load offset=4
-  i32.const 8
-  i32.add
   global.get $std/array-literal/i
-  i32.store
+  i32.store offset=8
   local.get $0
   global.set $std/array-literal/dynamicArrayI32
   global.get $~lib/memory/__stack_pointer

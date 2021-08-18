@@ -232,9 +232,7 @@
    end
    local.get $0
    i32.load offset=4
-   i32.const 4
-   i32.add
-   i32.load
+   i32.load offset=4
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.add

@@ -2126,11 +2126,11 @@ export class Module {
   }
 
   getZeroFilledMemory(): bool {
-    return binaryen._BinaryenGetLowMemoryUnused();
+    return binaryen._BinaryenGetZeroFilledMemory();
   }
 
   setZeroFilledMemory(on: bool): void {
-    binaryen._BinaryenSetLowMemoryUnused(on);
+    binaryen._BinaryenSetZeroFilledMemory(on);
   }
 
   getFastMath(): bool {
