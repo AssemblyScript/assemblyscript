@@ -2365,7 +2365,6 @@ export class Module {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("precompute-propagate");
         passes.push("simplify-globals-optimizing");
-        passes.push("local-cse");
       } else {
         passes.push("precompute");
       }
@@ -2387,6 +2386,7 @@ export class Module {
           passes.push("inlining-optimizing");
           passes.push("directize");
           passes.push("dae-optimizing");
+          passes.push("local-cse");
 
           passes.push("merge-locals");
           passes.push("coalesce-locals");
