@@ -146,6 +146,7 @@ export enum ExpressionId {
   ArrayGet = 62 /* _BinaryenArrayGetId */,
   ArraySet = 63 /* _BinaryenArraySetId */,
   ArrayLen = 64 /* _BinaryenArrayLenId */,
+  ArrayCopy = 65 /* _BinaryenArrayCopyId */,
   RefAs = 66 /* _BinaryenRefAsId */
 }
 
