@@ -6,7 +6,6 @@
  *
  * @license Apache-2.0
  */
-
 import {
   CommonFlags,
   LIBRARY_PREFIX,
@@ -903,6 +902,51 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
+  parseDestructedVariableDeclaration(
+    tn: Tokenizer,
+    flags: CommonFlags,
+    decorators: DecoratorNode[] | null,
+    startPos: i32,
+    isFor: bool = false
+  ): VariableStatement | null {
+    var declarations = new Array<VariableDeclaration>();
+    if(!tn.skip(Token.OPENBRACKET)) {
+      return null;
+    }
+    do {
+      const declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor, true);
+      if(declaration) {
+        declarations.push(declaration);
+      } else {
+        throw new Error("Failed to get declaration");
+      }
+    } while (tn.skip(Token.COMMA));
+    if(!tn.skip(Token.CLOSEBRACKET)){
+      throw new Error("Destructuring must end with a closing bracket");
+    }
+    if(tn.skip(Token.EQUALS)) {
+      let expression = this.parseExpression(tn);
+      if(!expression) return null;
+      expression = this.maybeParseCallExpression(tn, expression);
+      var expressionRefCacheKey = expression.kind === NodeKind.CALL ?
+        "_" + ((expression as CallExpression).expression as IdentifierExpression).text : null;
+
+      for(let index = 0; index < declarations.length; index++) {
+        var declaration = declarations[index];
+        var arrayIndexExpression = Node.createIntegerLiteralExpression(i64_new(index), tn.range());
+        declaration.initializer = Node.createElementAccessExpression(
+          expression,
+          arrayIndexExpression,
+          tn.range(startPos, tn.pos),
+          expressionRefCacheKey
+        );
+      }
+      return Node.createDestructedVariableStatement(decorators, declarations);
+    } else {
+      throw new Error("RHS does not include =");
+    }
+  }
+
   parseVariable(
     tn: Tokenizer,
     flags: CommonFlags,
@@ -914,13 +958,18 @@ export class Parser extends DiagnosticEmitter {
     // at ('const' | 'let' | 'var'): VariableDeclaration (',' VariableDeclaration)* ';'?
 
     var declarations = new Array<VariableDeclaration>();
-    do {
-      let declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);
-      if (!declaration) return null;
-      declarations.push(declaration);
-    } while (tn.skip(Token.COMMA));
+    var ret = null;
+    if(tn.peek() == Token.OPENBRACKET && !isFor) {
+      ret = this.parseDestructedVariableDeclaration(tn, flags, decorators, startPos, isFor);
+    } else {
+      do {
+        let declaration = this.parseVariableDeclaration(tn, flags, decorators, isFor);
+        if (!declaration) return null;
+        declarations.push(declaration);
+      } while (tn.skip(Token.COMMA));
+      ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
+    }
 
-    var ret = Node.createVariableStatement(decorators, declarations, tn.range(startPos, tn.pos));
     tn.skip(Token.SEMICOLON);
     return ret;
   }
@@ -929,11 +978,14 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     parentFlags: CommonFlags,
     parentDecorators: DecoratorNode[] | null,
-    isFor: bool = false
+    isFor: bool = false,
+    skipInitializer: boolean = false
   ): VariableDeclaration | null {
 
     // before: Identifier (':' Type)? ('=' Expression)?
-
+    if(tn.peek() == Token.OPENBRACKET) {
+      return null;
+    }
     if (!tn.skipIdentifier()) {
       this.error(
         DiagnosticCode.Identifier_expected,
@@ -967,10 +1019,10 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
       initializer = this.parseExpression(tn, Precedence.COMMA + 1);
-      if (!initializer) return null;
+      if (!initializer && !skipInitializer) return null;
     } else if (!isFor) {
       if (flags & CommonFlags.CONST) {
-        if (!(flags & CommonFlags.AMBIENT)) {
+        if (!skipInitializer && !(flags & CommonFlags.AMBIENT)) {
           this.error(
             DiagnosticCode._const_declarations_must_be_initialized,
             identifier.range
@@ -984,7 +1036,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     var range = Range.join(identifier.range, tn.range());
-    if (initializer !== null && (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0) {
+    if (!skipInitializer && initializer !== null && (flags & CommonFlags.DEFINITELY_ASSIGNED) != 0) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
         range
@@ -3998,7 +4050,8 @@ export class Parser extends DiagnosticEmitter {
           expr = Node.createElementAccessExpression(
             expr,
             next,
-            tn.range(startPos, tn.pos)
+            tn.range(startPos, tn.pos),
+            null
           );
           expr = this.maybeParseCallExpression(tn, expr);
           break;

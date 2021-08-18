@@ -7415,6 +7415,25 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.flatten(exprs, this.currentType.toRef());
   }
 
+  private compileExpressionMaybeCached (targetExpression: Expression, type: Type, expressionRefCacheKey: string | null) {
+    if(expressionRefCacheKey !== null) {
+      var cachedValue = this.currentFlow.getScopedLocal(expressionRefCacheKey);
+      if(cachedValue === null) {
+        var expressionRef = this.currentFlow.addScopedDummyLocalWithIntegerValue(
+          expressionRefCacheKey,
+          type,
+          i64_new(this.compileExpression(targetExpression, type, Constraints.CONV_IMPLICIT))
+        ).constantIntegerValue;
+        return Number(
+          expressionRef
+        );
+      } else {
+        return Number(cachedValue.constantIntegerValue);
+      }
+    }
+    return this.compileExpression(targetExpression, type, Constraints.CONV_IMPLICIT);
+  }
+
   private compileElementAccessExpression(
     expression: ElementAccessExpression,
     contextualType: Type,
@@ -7422,6 +7441,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var module = this.module;
     var targetExpression = expression.expression;
+    var expressionRefCacheKey = expression.expressionRefCacheKey;
     var targetType = this.resolver.resolveExpression(targetExpression, this.currentFlow); // reports
     if (targetType) {
       let classReference = targetType.getClassOrWrapper(this.program);
@@ -7430,9 +7450,7 @@ export class Compiler extends DiagnosticEmitter {
         let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (indexedGet) {
           let thisType = assert(indexedGet.signature.thisType);
-          let thisArg = this.compileExpression(targetExpression, thisType,
-            Constraints.CONV_IMPLICIT
-          );
+          let thisArg = this.compileExpressionMaybeCached(targetExpression, thisType, expressionRefCacheKey);
           if (!isUnchecked && this.options.pedantic) {
             this.pedantic(
               DiagnosticCode.Indexed_access_may_involve_bounds_checking,
