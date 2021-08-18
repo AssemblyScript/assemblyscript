@@ -65,8 +65,8 @@ export enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
   Atomics = 1 /* _BinaryenFeatureAtomics */,
   MutableGloabls = 2 /* _BinaryenFeatureMutableGlobals */,
-  NontrappingFPToInt = 4 /* _BinaryenFeatureNontrappingFPToInt */,
-  SIMD128 = 8 /* _BinaryenFeatureSIMD128 */,
+  TruncSat = 4 /* _BinaryenFeatureNontrappingFPToInt */,
+  SIMD = 8 /* _BinaryenFeatureSIMD128 */,
   BulkMemory = 16 /* _BinaryenFeatureBulkMemory */,
   SignExt = 32 /* _BinaryenFeatureSignExt */,
   ExceptionHandling = 64 /* _BinaryenFeatureExceptionHandling */,
@@ -75,8 +75,8 @@ export enum FeatureFlags {
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
-  TypedFunctionReferences  = 4096 /* _BinaryenTypedFunctionReferences */,
-  All = 8191 /* _BinaryenFeatureAll */
+  TypedFunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
+  All = 16383 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
@@ -146,7 +146,7 @@ export enum ExpressionId {
   ArrayGet = 62 /* _BinaryenArrayGetId */,
   ArraySet = 63 /* _BinaryenArraySetId */,
   ArrayLen = 64 /* _BinaryenArrayLenId */,
-  RefAs = 65 /* _BinaryenRefAsId */
+  RefAs = 66 /* _BinaryenRefAsId */
 }
 
 /** Binaryen external kind constants. */
@@ -3058,7 +3058,8 @@ export enum SideEffects {
   IsAtomic = 512 /* _BinaryenSideEffectIsAtomic */,
   Throws = 1024 /* _BinaryenSideEffectThrows */,
   DanglingPop = 2048 /* _BinaryenSideEffectDanglingPop */,
-  Any = 4095 /* _BinaryenSideEffectAny */
+  TrapsNeverHappen = 4096 /* _BinaryenSideEffectTrapsNeverHappen */,
+  Any = 8191 /* _BinaryenSideEffectAny */
 }
 
 export function getSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): SideEffects {
