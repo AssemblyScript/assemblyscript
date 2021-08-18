@@ -4086,13 +4086,12 @@
   end
  )
  (func $~lib/number/F64#toString (result i32)
-  (local $0 i32)
+  (local $0 i64)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i32)
-  (local $4 i64)
-  (local $5 i64)
-  (local $6 f64)
+  (local $3 i64)
+  (local $4 i32)
+  (local $5 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -4120,17 +4119,17 @@
   i32.load16_s
   global.set $~lib/util/number/_exp_pow
   global.get $~lib/util/number/_frc_pow
-  local.tee $2
+  local.tee $0
   i64.const 4294967295
   i64.and
   local.tee $1
   i64.const 31
   i64.shl
-  local.set $5
-  local.get $2
+  local.set $3
+  local.get $0
   i64.const 32
   i64.shr_u
-  local.tee $2
+  local.tee $0
   i64.const 31
   i64.shl
   local.get $1
@@ -4142,14 +4141,14 @@
   i64.const 32
   i64.shr_u
   i64.add
-  local.tee $4
+  local.tee $2
   i64.const 32
   i64.shr_u
   i64.add
-  local.get $4
+  local.get $2
   i64.const 4294967295
   i64.and
-  local.get $2
+  local.get $0
   i64.const 10
   i64.shl
   i64.add
@@ -4160,15 +4159,15 @@
   i64.add
   i64.const 1
   i64.sub
-  local.set $4
-  local.get $2
+  local.set $2
+  local.get $0
   i64.const 31
   i64.shl
-  local.get $5
+  local.get $3
   i64.const 32
   i64.shr_u
   i64.add
-  local.get $5
+  local.get $3
   i64.const 4294967295
   i64.and
   i64.const 2147483647
@@ -4176,12 +4175,12 @@
   i64.const 32
   i64.shr_u
   i64.add
-  local.get $4
+  local.get $2
   global.get $~lib/util/number/_exp_pow
   i32.const 3
   i32.add
-  local.get $4
   local.get $2
+  local.get $0
   i64.const 2147483647
   i64.mul
   local.get $1
@@ -4197,7 +4196,7 @@
   i64.const 32
   i64.shr_u
   i64.add
-  local.get $2
+  local.get $0
   i64.const 4294966784
   i64.mul
   local.get $1
@@ -4217,22 +4216,22 @@
   call $~lib/util/number/prettify
   i32.const 1
   i32.shl
-  local.set $3
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $4
   i32.const 1
   call $~lib/rt/itcms/__new
-  local.tee $0
+  local.tee $5
   i32.store
-  local.get $0
+  local.get $5
   i32.const 9760
-  local.get $3
+  local.get $4
   call $~lib/memory/memory.copy
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $5
  )
  (func $~lib/rt/__visit_members (param $0 i32)
   block $invalid
