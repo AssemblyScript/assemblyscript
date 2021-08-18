@@ -3068,7 +3068,7 @@
   i32.const 348
   i32.const -61
   global.get $~lib/util/number/_exp
-  local.tee $11
+  local.tee $8
   i32.sub
   f64.convert_i32_s
   f64.const 0.30102999566398114
@@ -3090,10 +3090,10 @@
   local.tee $13
   i32.const 3
   i32.shl
-  local.tee $8
+  local.tee $11
   i32.sub
   global.set $~lib/util/number/_K
-  local.get $8
+  local.get $11
   i32.const 1328
   i32.add
   i64.load
@@ -3223,7 +3223,7 @@
   i64.add
   local.get $12
   global.get $~lib/util/number/_exp_pow
-  local.get $11
+  local.get $8
   i32.add
   i32.const -64
   i32.sub

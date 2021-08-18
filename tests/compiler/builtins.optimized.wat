@@ -691,9 +691,10 @@
   f64.const 24
   call $~lib/builtins/trace
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1376
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1376
   i32.store offset=4
   i32.const 1376

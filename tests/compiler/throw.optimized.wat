@@ -1150,6 +1150,8 @@
     i32.const 12
     i32.add
     global.set $~lib/memory/__stack_pointer
+    i32.const 0
+    local.set $0
     global.get $~lib/memory/__stack_pointer
     i32.const 16
     i32.sub
@@ -1159,27 +1161,27 @@
     i32.lt_s
     br_if $folding-inner0
     global.get $~lib/memory/__stack_pointer
-    local.tee $0
+    local.tee $1
     i64.const 0
     i64.store
-    local.get $0
+    local.get $1
     i64.const 0
     i64.store offset=8
-    local.get $0
+    local.get $1
     i32.const 1056
     i32.store
     loop $while-continue|0
-     local.get $1
+     local.get $0
      i32.const 1
      i32.add
-     local.tee $1
+     local.tee $0
      i32.const 10
      i32.lt_s
      if
       global.get $~lib/memory/__stack_pointer
       i32.const 1088
       i32.store offset=4
-      local.get $1
+      local.get $0
       i32.const 10
       i32.gt_s
       if

@@ -1123,7 +1123,8 @@
     end
     global.get $~lib/rt/itcms/toSpace
     local.tee $0
-    local.get $0
+    local.tee $1
+    local.get $1
     i32.store offset=4
     local.get $0
     local.get $0
@@ -1316,13 +1317,13 @@
     end
     global.get $~lib/rt/itcms/total
     local.tee $2
+    local.get $2
     global.get $~lib/rt/itcms/threshold
     i32.sub
     i32.const 1024
     i32.lt_u
     i32.const 10
     i32.shl
-    local.get $2
     i32.add
     global.set $~lib/rt/itcms/threshold
    end
