@@ -2300,8 +2300,9 @@ export class Module {
       }
       passes.push("simplify-locals-notee-nostructure");
       passes.push("vacuum");
-      passes.push("local-cse");
-
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("local-cse");
+      }
       passes.push("reorder-locals");
       passes.push("remove-unused-brs");
       passes.push("coalesce-locals");
