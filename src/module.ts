@@ -2274,7 +2274,6 @@ export class Module {
         passes.push("simplify-locals-notee-nostructure");
         passes.push("flatten");
         passes.push("vacuum");
-        passes.push("local-cse");
         passes.push("licm");
         passes.push("simplify-locals-notee-nostructure");
         passes.push("merge-locals");
@@ -2300,6 +2299,7 @@ export class Module {
       }
       passes.push("simplify-locals-notee-nostructure");
       passes.push("vacuum");
+      passes.push("local-cse");
 
       passes.push("reorder-locals");
       passes.push("remove-unused-brs");
@@ -2382,6 +2382,7 @@ export class Module {
           passes.push("inlining-optimizing");
           passes.push("directize");
           passes.push("dae-optimizing");
+          passes.push("local-cse");
 
           passes.push("merge-locals");
           passes.push("coalesce-locals");

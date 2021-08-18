@@ -1171,10 +1171,11 @@
  (func $~lib/math/NativeMath.log (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
-  (local $3 f64)
-  (local $4 i32)
+  (local $3 i32)
+  (local $4 f64)
   (local $5 f64)
   (local $6 i64)
+  (local $7 i32)
   block $~lib/util/math/log_lut|inlined.0 (result f64)
    local.get $0
    i64.reinterpret_f64
@@ -1193,7 +1194,7 @@
     local.tee $2
     local.get $0
     f64.mul
-    local.tee $3
+    local.tee $4
     local.get $0
     f64.const -0.24999999999998432
     f64.mul
@@ -1203,7 +1204,7 @@
     f64.const 0.19999999999320328
     f64.mul
     f64.add
-    local.get $3
+    local.get $4
     local.get $0
     f64.const 0.14285715076560868
     f64.mul
@@ -1213,7 +1214,7 @@
     f64.const -0.12499997863982555
     f64.mul
     f64.add
-    local.get $3
+    local.get $4
     local.get $0
     f64.const -0.10000486757818193
     f64.mul
@@ -1223,7 +1224,7 @@
     f64.const 0.09181994006195467
     f64.mul
     f64.add
-    local.get $3
+    local.get $4
     f64.const -0.08328363062289341
     f64.mul
     f64.add
@@ -1249,7 +1250,7 @@
     f64.mul
     local.tee $5
     f64.add
-    local.tee $3
+    local.tee $4
     f64.sub
     local.get $5
     f64.add
@@ -1264,7 +1265,7 @@
     f64.mul
     f64.add
     f64.add
-    local.get $3
+    local.get $4
     f64.add
     br $~lib/util/math/log_lut|inlined.0
    end
@@ -1272,7 +1273,7 @@
    i64.const 48
    i64.shr_u
    i32.wrap_i64
-   local.tee $4
+   local.tee $3
    i32.const 16
    i32.sub
    i32.const 32736
@@ -1298,17 +1299,16 @@
     local.get $0
     local.get $0
     f64.sub
-    local.get $0
-    local.get $0
-    f64.sub
+    local.tee $2
+    local.get $2
     f64.div
     i32.const 1
-    local.get $4
+    local.get $3
     i32.const 32752
     i32.and
     i32.const 32752
     i32.eq
-    local.get $4
+    local.get $3
     i32.const 32768
     i32.and
     select
@@ -1331,50 +1331,44 @@
    i64.const 127
    i64.and
    i32.wrap_i64
-   local.set $4
-   local.get $6
-   i64.const 52
-   i64.shr_s
-   f64.convert_i64_s
-   local.tee $3
-   f64.const 0.6931471805598903
-   f64.mul
-   local.get $4
-   i32.const 4
-   i32.shl
-   i32.const 1088
-   i32.add
-   f64.load offset=8
-   f64.add
-   local.tee $2
+   local.set $3
    local.get $1
    local.get $6
    i64.const -4503599627370496
    i64.and
    i64.sub
    f64.reinterpret_i64
-   local.get $4
+   local.get $3
    i32.const 4
    i32.shl
+   local.tee $3
    i32.const 3136
    i32.add
+   local.tee $7
    f64.load
    f64.sub
-   local.get $4
-   i32.const 4
-   i32.shl
-   i32.const 3136
-   i32.add
+   local.get $7
    f64.load offset=8
    f64.sub
-   local.get $4
-   i32.const 4
-   i32.shl
+   local.get $3
    i32.const 1088
    i32.add
+   local.tee $3
    f64.load
    f64.mul
-   local.tee $0
+   local.set $0
+   local.get $6
+   i64.const 52
+   i64.shr_s
+   f64.convert_i64_s
+   local.tee $4
+   f64.const 0.6931471805598903
+   f64.mul
+   local.get $3
+   f64.load offset=8
+   f64.add
+   local.tee $2
+   local.get $0
    f64.add
    local.set $5
    local.get $2
@@ -1382,7 +1376,7 @@
    f64.sub
    local.get $0
    f64.add
-   local.get $3
+   local.get $4
    f64.const 5.497923018708371e-14
    f64.mul
    f64.add
@@ -1416,61 +1410,59 @@
   end
  )
  (func $std/math/test_acosh (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
-  (local $3 i64)
+  (local $3 f64)
+  (local $4 i64)
   block $__inlined_func$~lib/math/NativeMath.acosh (result f64)
    local.get $0
-   local.get $0
+   local.tee $3
+   i64.reinterpret_f64
+   local.set $4
+   local.get $3
+   local.get $3
    f64.sub
    f64.const 0
    f64.div
-   local.get $0
-   i64.reinterpret_f64
-   local.tee $3
+   local.get $4
    i64.const 4607182418800017408
    i64.lt_s
    br_if $__inlined_func$~lib/math/NativeMath.acosh
    drop
-   local.get $3
+   local.get $4
    i64.const 52
    i64.shr_u
    i64.const 2047
    i64.and
-   local.tee $3
+   local.tee $4
    i64.const 1024
    i64.lt_u
    if
-    local.get $0
+    local.get $3
     f64.const 1
     f64.sub
-    local.get $0
-    f64.const 1
-    f64.sub
-    local.get $0
-    f64.const 1
-    f64.sub
+    local.tee $3
+    local.get $3
+    local.get $3
     f64.mul
-    local.get $0
-    f64.const 1
-    f64.sub
-    f64.const 2
-    f64.mul
+    local.get $3
+    local.get $3
+    f64.add
     f64.add
     f64.sqrt
     f64.add
     call $~lib/math/NativeMath.log1p
     br $__inlined_func$~lib/math/NativeMath.acosh
    end
-   local.get $3
+   local.get $4
    i64.const 1049
    i64.lt_u
    if
-    local.get $0
-    local.get $0
+    local.get $3
+    local.get $3
     f64.add
     f64.const 1
-    local.get $0
-    local.get $0
-    local.get $0
+    local.get $3
+    local.get $3
+    local.get $3
     f64.mul
     f64.const 1
     f64.sub
@@ -1481,7 +1473,7 @@
     call $~lib/math/NativeMath.log
     br $__inlined_func$~lib/math/NativeMath.acosh
    end
-   local.get $0
+   local.get $3
    call $~lib/math/NativeMath.log
    f64.const 0.6931471805599453
    f64.add
@@ -1673,8 +1665,8 @@
   (local $1 i32)
   (local $2 f64)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 f64)
+  (local $4 f64)
+  (local $5 f32)
   block $~lib/util/math/logf_lut|inlined.0 (result f32)
    local.get $0
    i32.reinterpret_f32
@@ -1700,9 +1692,8 @@
     local.get $0
     local.get $0
     f32.sub
-    local.get $0
-    local.get $0
-    f32.sub
+    local.tee $5
+    local.get $5
     f32.div
     i32.const 1
     local.get $1
@@ -1725,26 +1716,25 @@
     local.set $1
    end
    local.get $1
+   local.get $1
    i32.const 1060306944
    i32.sub
    local.tee $3
-   i32.const 19
-   i32.shr_u
-   i32.const 15
-   i32.and
-   local.set $4
-   local.get $1
-   local.get $3
    i32.const -8388608
    i32.and
    i32.sub
    f32.reinterpret_i32
    f64.promote_f32
-   local.get $4
+   local.get $3
+   i32.const 19
+   i32.shr_u
+   i32.const 15
+   i32.and
    i32.const 4
    i32.shl
    i32.const 5184
    i32.add
+   local.tee $1
    f64.load
    f64.mul
    f64.const 1
@@ -1752,23 +1742,19 @@
    local.tee $2
    local.get $2
    f64.mul
-   local.set $5
+   local.set $4
    local.get $2
    f64.const 0.333456765744066
    f64.mul
    f64.const -0.4999997485802103
    f64.add
-   local.get $5
+   local.get $4
    f64.const -0.25089342214237154
    f64.mul
    f64.add
-   local.get $5
-   f64.mul
    local.get $4
-   i32.const 4
-   i32.shl
-   i32.const 5184
-   i32.add
+   f64.mul
+   local.get $1
    f64.load offset=8
    local.get $3
    i32.const 23
@@ -2220,9 +2206,8 @@
      local.get $3
      local.get $3
      f64.mul
+     local.tee $3
      local.get $3
-     local.get $3
-     f64.mul
      f64.const 1
      f64.add
      f64.sqrt
@@ -2298,9 +2283,8 @@
      local.get $3
      local.get $3
      f32.mul
+     local.tee $3
      local.get $3
-     local.get $3
-     f32.mul
      f32.const 1
      f32.add
      f32.sqrt
@@ -2734,6 +2718,7 @@
  (func $std/math/test_atanh (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   (local $3 f64)
   (local $4 i64)
+  (local $5 f64)
   local.get $0
   f64.abs
   local.set $3
@@ -2754,9 +2739,8 @@
     local.get $3
     local.get $3
     f64.add
-    local.get $3
-    local.get $3
-    f64.add
+    local.tee $5
+    local.get $5
     local.get $3
     f64.mul
     f64.const 1
@@ -3368,14 +3352,16 @@
   (local $3 f64)
   (local $4 f64)
   (local $5 i32)
-  (local $6 i32)
+  (local $6 f64)
+  (local $7 i32)
+  (local $8 f64)
   block $__inlined_func$~lib/math/NativeMathf.cbrt (result f32)
    local.get $0
    local.get $0
    f32.add
    local.get $0
    i32.reinterpret_f32
-   local.tee $6
+   local.tee $7
    i32.const 2147483647
    i32.and
    local.tee $5
@@ -3396,7 +3382,7 @@
     f32.const 16777216
     f32.mul
     i32.reinterpret_f32
-    local.tee $6
+    local.tee $7
     i32.const 2147483647
     i32.and
     i32.const 3
@@ -3410,7 +3396,7 @@
     i32.const 709958130
     i32.add
    end
-   local.get $6
+   local.get $7
    i32.const -2147483648
    i32.and
    i32.or
@@ -3425,14 +3411,14 @@
    local.get $3
    local.get $0
    f64.promote_f32
-   local.get $0
-   f64.promote_f32
+   local.tee $6
+   local.get $6
    f64.add
+   local.tee $8
    local.get $4
    f64.add
    f64.mul
-   local.get $0
-   f64.promote_f32
+   local.get $6
    local.get $4
    f64.add
    local.get $4
@@ -3445,16 +3431,11 @@
    f64.mul
    local.set $4
    local.get $3
-   local.get $0
-   f64.promote_f32
-   local.get $0
-   f64.promote_f32
-   f64.add
+   local.get $8
    local.get $4
    f64.add
    f64.mul
-   local.get $0
-   f64.promote_f32
+   local.get $6
    local.get $4
    f64.add
    local.get $4
@@ -3489,7 +3470,7 @@
   local.tee $2
   i64.const 63
   i64.and
-  local.set $3
+  local.set $4
   local.get $2
   i64.const 6
   i64.shr_s
@@ -3507,35 +3488,35 @@
   local.get $7
   i64.load offset=16
   local.set $1
-  local.get $3
+  local.get $4
   i64.const 0
   i64.ne
   if
    local.get $6
-   local.get $3
+   local.get $4
    i64.shl
    local.get $2
    i64.const 64
-   local.get $3
+   local.get $4
    i64.sub
-   local.tee $4
+   local.tee $3
    i64.shr_u
    i64.or
    local.set $6
    local.get $2
-   local.get $3
+   local.get $4
    i64.shl
    local.get $1
-   local.get $4
+   local.get $3
    i64.shr_u
    i64.or
    local.set $2
    local.get $1
-   local.get $3
+   local.get $4
    i64.shl
    local.get $7
    i64.load offset=24
-   local.get $4
+   local.get $3
    i64.shr_u
    i64.or
    local.set $1
@@ -3545,29 +3526,30 @@
   i64.and
   i64.const 4503599627370496
   i64.or
-  local.tee $3
+  local.tee $4
   i64.const 4294967295
   i64.and
-  local.set $4
+  local.set $3
   local.get $2
   i64.const 4294967295
   i64.and
   local.tee $5
-  local.get $3
+  local.get $4
   i64.const 32
   i64.shr_u
   local.tee $8
+  local.tee $9
   i64.mul
-  local.get $4
+  local.get $3
   local.get $2
   i64.const 32
   i64.shr_u
-  local.tee $9
+  local.tee $10
   i64.mul
-  local.get $4
+  local.get $3
   local.get $5
   i64.mul
-  local.tee $4
+  local.tee $3
   i64.const 32
   i64.shr_u
   i64.add
@@ -3576,8 +3558,8 @@
   i64.and
   i64.add
   local.set $2
-  local.get $8
   local.get $9
+  local.get $10
   i64.mul
   local.get $5
   i64.const 32
@@ -3591,12 +3573,10 @@
   local.get $1
   i64.const 32
   i64.shr_u
-  local.get $3
-  i64.const 32
-  i64.shr_u
+  local.get $8
   i64.mul
   local.tee $1
-  local.get $4
+  local.get $3
   i64.const 4294967295
   i64.and
   local.get $2
@@ -3609,12 +3589,12 @@
   i64.lt_u
   i64.extend_i32_u
   global.get $~lib/math/res128_hi
-  local.get $3
+  local.get $4
   local.get $6
   i64.mul
   i64.add
   i64.add
-  local.tee $8
+  local.tee $9
   i64.const 2
   i64.shl
   local.get $2
@@ -3629,32 +3609,32 @@
   i64.const 2
   i64.shl
   i64.xor
-  local.set $3
+  local.set $4
   local.get $6
   i64.const 1
   i64.shr_s
   local.get $1
   i64.xor
-  local.tee $4
+  local.tee $3
   i64.clz
   local.set $2
-  local.get $4
+  local.get $3
   local.get $2
   i64.shl
-  local.get $3
+  local.get $4
   i64.const 64
   local.get $2
   i64.sub
   i64.shr_u
   i64.or
-  local.tee $4
+  local.tee $3
   i64.const 4294967295
   i64.and
   local.set $5
-  local.get $4
+  local.get $3
   i64.const 32
   i64.shr_u
-  local.tee $9
+  local.tee $10
   i64.const 560513588
   i64.mul
   local.get $5
@@ -3663,7 +3643,7 @@
   local.get $5
   i64.const 560513588
   i64.mul
-  local.tee $10
+  local.tee $8
   i64.const 32
   i64.shr_u
   i64.add
@@ -3672,7 +3652,7 @@
   i64.and
   i64.add
   local.set $5
-  local.get $9
+  local.get $10
   i64.const 3373259426
   i64.mul
   local.get $11
@@ -3684,7 +3664,7 @@
   i64.shr_u
   i64.add
   global.set $~lib/math/res128_hi
-  local.get $10
+  local.get $8
   i64.const 4294967295
   i64.and
   local.get $5
@@ -3692,11 +3672,11 @@
   i64.shl
   i64.add
   local.tee $5
-  local.get $4
+  local.get $3
   f64.convert_i64_u
   f64.const 3.753184150245214e-04
   f64.mul
-  local.get $3
+  local.get $4
   local.get $2
   i64.shl
   f64.convert_i64_u
@@ -3704,18 +3684,18 @@
   f64.mul
   f64.add
   i64.trunc_f64_u
-  local.tee $3
+  local.tee $4
   i64.lt_u
   i64.extend_i32_u
   global.get $~lib/math/res128_hi
-  local.tee $4
+  local.tee $3
   i64.const 11
   i64.shr_u
   i64.add
   f64.convert_i64_u
   global.set $~lib/math/rempio2_y0
-  local.get $3
   local.get $4
+  local.get $3
   i64.const 53
   i64.shl
   local.get $5
@@ -3747,7 +3727,7 @@
   local.get $12
   f64.mul
   global.set $~lib/math/rempio2_y1
-  local.get $8
+  local.get $9
   i64.const 62
   i64.shr_s
   local.get $6
@@ -4221,10 +4201,10 @@
     if
      local.get $0
      f64.promote_f32
+     local.tee $9
      f64.const 3.141592653589793
      f64.add
-     local.get $0
-     f64.promote_f32
+     local.get $9
      f64.const 3.141592653589793
      f64.sub
      local.get $5
@@ -4320,10 +4300,10 @@
     if
      local.get $0
      f64.promote_f32
+     local.tee $9
      f64.const 6.283185307179586
      f64.add
-     local.get $0
-     f64.promote_f32
+     local.get $9
      f64.const 6.283185307179586
      f64.sub
      local.get $5
@@ -4406,12 +4386,13 @@
     if
      local.get $0
      f64.promote_f32
-     local.get $0
-     f64.promote_f32
+     local.tee $8
      f64.const 0.6366197723675814
      f64.mul
      f64.nearest
-     local.tee $9
+     local.set $9
+     local.get $8
+     local.get $9
      f64.const 1.5707963109016418
      f64.mul
      f64.sub
@@ -4959,11 +4940,11 @@
    i64.const 1
    i64.shl
    i32.wrap_i64
-   local.tee $7
    i32.const 3
    i32.shl
    i32.const 5664
    i32.add
+   local.tee $7
    i64.load offset=8
    local.get $5
    i64.const 45
@@ -4987,10 +4968,6 @@
    f64.mul
    local.set $2
    local.get $7
-   i32.const 3
-   i32.shl
-   i32.const 5664
-   i32.add
    f64.load
    local.get $0
    f64.add
@@ -6074,7 +6051,8 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f32)
+  (local $7 f64)
+  (local $8 f32)
   block $__inlined_func$~lib/math/NativeMathf.hypot (result f32)
    local.get $1
    i32.reinterpret_f32
@@ -6123,13 +6101,13 @@
    br_if $__inlined_func$~lib/math/NativeMathf.hypot
    drop
    f32.const 1
-   local.set $7
+   local.set $8
    local.get $5
    i32.const 1568669696
    i32.ge_u
    if (result f32)
     f32.const 1237940039285380274899124e3
-    local.set $7
+    local.set $8
     local.get $1
     f32.const 8.077935669463161e-28
     f32.mul
@@ -6143,7 +6121,7 @@
     i32.lt_u
     if (result f32)
      f32.const 8.077935669463161e-28
-     local.set $7
+     local.set $8
      local.get $1
      f32.const 1237940039285380274899124e3
      f32.mul
@@ -6156,16 +6134,16 @@
     end
    end
    local.set $0
+   local.get $8
+   local.get $0
+   f64.promote_f32
+   local.tee $7
    local.get $7
-   local.get $0
-   f64.promote_f32
-   local.get $0
-   f64.promote_f32
    f64.mul
    local.get $1
    f64.promote_f32
-   local.get $1
-   f64.promote_f32
+   local.tee $7
+   local.get $7
    f64.mul
    f64.add
    f32.demote_f64
@@ -6544,6 +6522,7 @@
   (local $7 f64)
   (local $8 i64)
   (local $9 f64)
+  (local $10 i32)
   block $~lib/util/math/log2_lut|inlined.0 (result f64)
    local.get $0
    i64.reinterpret_f64
@@ -6663,9 +6642,8 @@
     local.get $0
     local.get $0
     f64.sub
-    local.get $0
-    local.get $0
-    f64.sub
+    local.tee $2
+    local.get $2
     f64.div
     i32.const 1
     local.get $3
@@ -6697,18 +6675,6 @@
    i64.and
    i32.wrap_i64
    local.set $3
-   local.get $8
-   i64.const 52
-   i64.shr_s
-   f64.convert_i64_s
-   local.get $3
-   i32.const 4
-   i32.shl
-   i32.const 7968
-   i32.add
-   f64.load offset=8
-   f64.add
-   local.tee $5
    local.get $1
    local.get $8
    i64.const -4503599627370496
@@ -6718,22 +6684,19 @@
    local.get $3
    i32.const 4
    i32.shl
+   local.tee $3
    i32.const 8992
    i32.add
+   local.tee $10
    f64.load
    f64.sub
-   local.get $3
-   i32.const 4
-   i32.shl
-   i32.const 8992
-   i32.add
+   local.get $10
    f64.load offset=8
    f64.sub
    local.get $3
-   i32.const 4
-   i32.shl
    i32.const 7968
    i32.add
+   local.tee $3
    f64.load
    f64.mul
    local.tee $0
@@ -6744,7 +6707,16 @@
    local.tee $7
    f64.const 1.4426950407214463
    f64.mul
-   local.tee $4
+   local.set $4
+   local.get $8
+   i64.const 52
+   i64.shr_s
+   f64.convert_i64_s
+   local.get $3
+   f64.load offset=8
+   f64.add
+   local.tee $5
+   local.get $4
    f64.add
    local.set $6
    local.get $5
@@ -6799,8 +6771,8 @@
   (local $3 i32)
   (local $4 f64)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 f64)
+  (local $6 f64)
+  (local $7 f32)
   block $~lib/util/math/log2f_lut|inlined.0 (result f32)
    local.get $0
    i32.reinterpret_f32
@@ -6826,9 +6798,8 @@
     local.get $0
     local.get $0
     f32.sub
-    local.get $0
-    local.get $0
-    f32.sub
+    local.tee $7
+    local.get $7
     f32.div
     i32.const 1
     local.get $3
@@ -6851,26 +6822,25 @@
     local.set $3
    end
    local.get $3
+   local.get $3
    i32.const 1060306944
    i32.sub
    local.tee $5
-   i32.const 19
-   i32.shr_u
-   i32.const 15
-   i32.and
-   local.set $6
-   local.get $3
-   local.get $5
    i32.const -8388608
    i32.and
    i32.sub
    f32.reinterpret_i32
    f64.promote_f32
-   local.get $6
+   local.get $5
+   i32.const 19
+   i32.shr_u
+   i32.const 15
+   i32.and
    i32.const 4
    i32.shl
    i32.const 10016
    i32.add
+   local.tee $3
    f64.load
    f64.mul
    f64.const 1
@@ -6878,26 +6848,22 @@
    local.tee $4
    local.get $4
    f64.mul
-   local.set $7
+   local.set $6
    local.get $4
    f64.const 0.4811247078767291
    f64.mul
    f64.const -0.7213476299867769
    f64.add
-   local.get $7
+   local.get $6
    f64.const -0.36051725506874704
    f64.mul
    f64.add
-   local.get $7
+   local.get $6
    f64.mul
    local.get $4
    f64.const 1.4426950186867042
    f64.mul
-   local.get $6
-   i32.const 4
-   i32.shl
-   i32.const 10016
-   i32.add
+   local.get $3
    f64.load offset=8
    local.get $5
    i32.const 23
@@ -7624,9 +7590,8 @@
      local.get $4
      local.get $4
      f64.sub
-     local.get $4
-     local.get $4
-     f64.sub
+     local.tee $0
+     local.get $0
      f64.div
      local.set $0
      block $~lib/util/math/checkint|inlined.1 (result i32)
@@ -7750,21 +7715,6 @@
    i64.and
    i32.wrap_i64
    local.set $5
-   local.get $9
-   i64.const 52
-   i64.shr_s
-   f64.convert_i64_s
-   local.tee $12
-   f64.const 0.6931471805598903
-   f64.mul
-   local.get $5
-   i32.const 5
-   i32.shl
-   i32.const 10272
-   i32.add
-   f64.load offset=16
-   f64.add
-   local.tee $13
    local.get $2
    local.get $9
    i64.const -4503599627370496
@@ -7782,12 +7732,25 @@
    i32.shl
    i32.const 10272
    i32.add
+   local.tee $5
    f64.load
    local.tee $0
    f64.mul
    f64.const 1
    f64.sub
-   local.tee $1
+   local.set $1
+   local.get $9
+   i64.const 52
+   i64.shr_s
+   f64.convert_i64_s
+   local.tee $12
+   f64.const 0.6931471805598903
+   f64.mul
+   local.get $5
+   f64.load offset=16
+   f64.add
+   local.tee $13
+   local.get $1
    local.get $2
    f64.reinterpret_i64
    local.get $4
@@ -7821,10 +7784,6 @@
    f64.const 5.497923018708371e-14
    f64.mul
    local.get $5
-   i32.const 5
-   i32.shl
-   i32.const 10272
-   i32.add
    f64.load offset=24
    f64.add
    local.get $13
@@ -7973,11 +7932,11 @@
     i64.const 1
     i64.shl
     i32.wrap_i64
-    local.tee $18
     i32.const 3
     i32.shl
     i32.const 5664
     i32.add
+    local.tee $18
     i64.load offset=8
     local.get $5
     i64.extend_i32_u
@@ -8006,10 +7965,6 @@
     f64.mul
     local.set $1
     local.get $18
-    i32.const 3
-    i32.shl
-    i32.const 5664
-    i32.add
     f64.load
     local.get $0
     f64.add
@@ -8364,9 +8319,8 @@
      local.get $1
      local.get $1
      f32.sub
-     local.get $1
-     local.get $1
-     f32.sub
+     local.tee $0
+     local.get $0
      f32.div
      local.set $0
      block $~lib/util/math/checkintf|inlined.1 (result i32)
@@ -8463,6 +8417,7 @@
    i32.shl
    i32.const 10016
    i32.add
+   local.tee $4
    f64.load
    f64.mul
    f64.const 1
@@ -8486,10 +8441,6 @@
    f64.const 1.4426950408774342
    f64.mul
    local.get $4
-   i32.const 4
-   i32.shl
-   i32.const 10016
-   i32.add
    f64.load offset=8
    local.get $5
    i32.const 23
@@ -8595,6 +8546,8 @@
  (func $~lib/math/NativeMath.seedRandom (param $0 i64)
   (local $1 i32)
   (local $2 i64)
+  (local $3 i64)
+  (local $4 i32)
   i32.const 1
   global.set $~lib/math/random_seeded
   local.get $0
@@ -8618,6 +8571,7 @@
   i64.xor
   global.set $~lib/math/random_state0_64
   global.get $~lib/math/random_state0_64
+  local.tee $3
   i64.const -1
   i64.xor
   local.tee $2
@@ -8673,6 +8627,7 @@
   i32.xor
   global.set $~lib/math/random_state0_32
   global.get $~lib/math/random_state0_32
+  local.tee $4
   i32.const 1831565813
   i32.add
   local.tee $1
@@ -8707,13 +8662,13 @@
   i32.const 0
   i32.ne
   i32.const 0
-  global.get $~lib/math/random_state0_32
+  local.get $4
   i32.const 0
   global.get $~lib/math/random_state1_64
   i64.const 0
   i64.ne
   i32.const 0
-  global.get $~lib/math/random_state0_64
+  local.get $3
   i64.const 0
   i64.ne
   select
@@ -9095,9 +9050,8 @@
    local.get $0
    local.get $1
    f32.mul
+   local.tee $0
    local.get $0
-   local.get $1
-   f32.mul
    f32.div
    return
   end
@@ -9816,10 +9770,10 @@
     end
     local.get $0
     f64.promote_f32
+    local.tee $9
     f64.const 3.141592653589793
     f64.add
-    local.get $0
-    f64.promote_f32
+    local.get $9
     f64.const 3.141592653589793
     f64.sub
     local.get $5
@@ -9913,10 +9867,10 @@
     end
     local.get $0
     f64.promote_f32
+    local.tee $9
     f64.const 6.283185307179586
     f64.add
-    local.get $0
-    f64.promote_f32
+    local.get $9
     f64.const 6.283185307179586
     f64.sub
     local.get $5
@@ -9947,12 +9901,13 @@
     if
      local.get $0
      f64.promote_f32
-     local.get $0
-     f64.promote_f32
+     local.tee $8
      f64.const 0.6366197723675814
      f64.mul
      f64.nearest
-     local.tee $9
+     local.set $9
+     local.get $8
+     local.get $9
      f64.const 1.5707963109016418
      f64.mul
      f64.sub
@@ -10809,10 +10764,10 @@
      if
       local.get $0
       f64.promote_f32
+      local.tee $9
       f64.const 1.5707963267948966
       f64.add
-      local.get $0
-      f64.promote_f32
+      local.get $9
       f64.const 1.5707963267948966
       f64.sub
       local.get $5
@@ -10828,10 +10783,10 @@
      else
       local.get $0
       f64.promote_f32
+      local.tee $9
       f64.const 3.141592653589793
       f64.add
-      local.get $0
-      f64.promote_f32
+      local.get $9
       f64.const 3.141592653589793
       f64.sub
       local.get $5
@@ -10857,10 +10812,10 @@
      if
       local.get $0
       f64.promote_f32
+      local.tee $9
       f64.const 4.71238898038469
       f64.add
-      local.get $0
-      f64.promote_f32
+      local.get $9
       f64.const 4.71238898038469
       f64.sub
       local.get $5
@@ -10876,10 +10831,10 @@
      else
       local.get $0
       f64.promote_f32
+      local.tee $9
       f64.const 6.283185307179586
       f64.add
-      local.get $0
-      f64.promote_f32
+      local.get $9
       f64.const 6.283185307179586
       f64.sub
       local.get $5
@@ -10912,12 +10867,13 @@
      if
       local.get $0
       f64.promote_f32
-      local.get $0
-      f64.promote_f32
+      local.tee $8
       f64.const 0.6366197723675814
       f64.mul
       f64.nearest
-      local.tee $9
+      local.set $9
+      local.get $8
+      local.get $9
       f64.const 1.5707963109016418
       f64.mul
       f64.sub
@@ -11305,18 +11261,17 @@
  (func $~lib/math/NativeMath.sincos (param $0 f64)
   (local $1 f64)
   (local $2 f64)
-  (local $3 f64)
-  (local $4 i64)
+  (local $3 i64)
+  (local $4 f64)
   (local $5 i32)
   (local $6 i32)
   (local $7 f64)
   (local $8 i32)
   (local $9 f64)
   (local $10 f64)
-  (local $11 f64)
   local.get $0
   i64.reinterpret_f64
-  local.tee $4
+  local.tee $3
   i64.const 32
   i64.shr_u
   i32.wrap_i64
@@ -11342,15 +11297,18 @@
     return
    end
    local.get $0
-   local.get $0
-   local.get $0
-   f64.mul
    local.tee $1
    local.get $0
    f64.mul
+   local.tee $0
+   local.set $4
    local.get $1
+   local.get $4
    local.get $1
-   local.get $1
+   f64.mul
+   local.get $4
+   local.get $4
+   local.get $4
    f64.const 2.7557313707070068e-06
    f64.mul
    f64.const -1.984126982985795e-04
@@ -11358,12 +11316,12 @@
    f64.mul
    f64.const 0.00833333333332249
    f64.add
-   local.get $1
-   local.get $1
-   local.get $1
+   local.get $4
+   local.get $4
+   local.get $4
    f64.mul
    f64.mul
-   local.get $1
+   local.get $4
    f64.const 1.58969099521155e-10
    f64.mul
    f64.const -2.5050760253406863e-08
@@ -11376,15 +11334,8 @@
    f64.mul
    f64.add
    global.set $~lib/math/NativeMath.sincos_sin
-   local.get $0
-   local.get $0
-   f64.mul
-   local.tee $1
-   local.get $1
-   f64.mul
-   local.set $3
    f64.const 1
-   local.get $1
+   local.get $0
    f64.const 0.5
    f64.mul
    local.tee $2
@@ -11395,10 +11346,10 @@
    f64.sub
    local.get $2
    f64.sub
-   local.get $1
-   local.get $1
-   local.get $1
-   local.get $1
+   local.get $0
+   local.get $0
+   local.get $0
+   local.get $0
    f64.const 2.480158728947673e-05
    f64.mul
    f64.const -0.001388888888887411
@@ -11407,11 +11358,14 @@
    f64.const 0.0416666666666666
    f64.add
    f64.mul
-   local.get $3
-   local.get $3
+   local.get $0
+   local.get $0
    f64.mul
-   local.get $1
-   local.get $1
+   local.tee $4
+   local.get $4
+   f64.mul
+   local.get $0
+   local.get $0
    f64.const -1.1359647557788195e-11
    f64.mul
    f64.const 2.087572321298175e-09
@@ -11422,7 +11376,7 @@
    f64.mul
    f64.add
    f64.mul
-   local.get $0
+   local.get $1
    f64.const 0
    f64.mul
    f64.sub
@@ -11445,7 +11399,7 @@
    return
   end
   block $~lib/math/rempio2|inlined.3 (result i32)
-   local.get $4
+   local.get $3
    i64.const 32
    i64.shr_u
    i32.wrap_i64
@@ -11542,12 +11496,12 @@
     f64.const 0.6366197723675814
     f64.mul
     f64.nearest
-    local.tee $3
+    local.tee $4
     f64.const 1.5707963267341256
     f64.mul
     f64.sub
     local.tee $0
-    local.get $3
+    local.get $4
     f64.const 6.077100506506192e-11
     f64.mul
     local.tee $1
@@ -11565,13 +11519,12 @@
     i32.const 16
     i32.gt_u
     if
-     local.get $3
+     local.get $4
      f64.const 2.0222662487959506e-21
      f64.mul
      local.get $0
-     local.tee $1
-     local.get $1
-     local.get $3
+     local.get $0
+     local.get $4
      f64.const 6.077100506303966e-11
      f64.mul
      local.tee $2
@@ -11599,13 +11552,12 @@
      i32.const 49
      i32.gt_u
      if (result f64)
-      local.get $3
+      local.get $4
       f64.const 8.4784276603689e-32
       f64.mul
       local.get $0
-      local.tee $1
-      local.get $1
-      local.get $3
+      local.get $0
+      local.get $4
       f64.const 2.0222662487111665e-21
       f64.mul
       local.tee $2
@@ -11632,12 +11584,12 @@
     local.get $1
     f64.sub
     global.set $~lib/math/rempio2_y1
-    local.get $3
+    local.get $4
     i32.trunc_f64_s
     br $~lib/math/rempio2|inlined.3
    end
    i32.const 0
-   local.get $4
+   local.get $3
    call $~lib/math/pio2_large_quot
    local.tee $5
    i32.sub
@@ -11650,17 +11602,18 @@
   local.tee $2
   local.get $2
   f64.mul
+  local.tee $1
   local.tee $0
   local.get $2
   f64.mul
-  local.set $1
+  local.set $4
   local.get $2
   local.get $0
   global.get $~lib/math/rempio2_y1
   local.tee $7
   f64.const 0.5
   f64.mul
-  local.get $1
+  local.get $4
   local.get $0
   local.get $0
   f64.const 2.7557313707070068e-06
@@ -11687,32 +11640,24 @@
   f64.mul
   local.get $7
   f64.sub
-  local.get $1
+  local.get $4
   f64.const -0.16666666666666632
   f64.mul
   f64.sub
   f64.sub
-  local.set $3
-  local.get $2
-  local.get $2
-  f64.mul
-  local.tee $1
-  local.get $1
-  f64.mul
-  local.set $9
-  local.get $3
+  local.tee $4
   local.set $0
   f64.const 1
   local.get $1
   f64.const 0.5
   f64.mul
+  local.tee $9
+  f64.sub
   local.tee $10
-  f64.sub
-  local.tee $11
   f64.const 1
-  local.get $11
-  f64.sub
   local.get $10
+  f64.sub
+  local.get $9
   f64.sub
   local.get $1
   local.get $1
@@ -11726,7 +11671,10 @@
   f64.const 0.0416666666666666
   f64.add
   f64.mul
-  local.get $9
+  local.get $1
+  local.get $1
+  f64.mul
+  local.tee $9
   local.get $9
   f64.mul
   local.get $1
@@ -11754,7 +11702,7 @@
   if
    local.get $1
    local.set $0
-   local.get $3
+   local.get $4
    f64.neg
    local.set $1
   end
