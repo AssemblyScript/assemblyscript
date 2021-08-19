@@ -479,6 +479,47 @@ export class Program extends DiagnosticEmitter {
 
   // Standard library
 
+  /** Gets the standard `Error` prototype. */
+  get errorPrototype(): ClassPrototype {
+    var cached = this._errorPrototype;
+    if (!cached) this._errorPrototype = cached = <ClassPrototype>this.require(CommonNames.Error, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _errorPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `RangeError` prototype. */
+  get rangeErrorPrototype(): ClassPrototype {
+    var cached = this._rangeErrorPrototype;
+    if (!cached) this._rangeErrorPrototype = cached = <ClassPrototype>this.require(CommonNames.RangeError, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _rangeErrorPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `TypeError` prototype. */
+  get typeErrorPrototype(): ClassPrototype {
+    var cached = this._typeErrorPrototype;
+    if (!cached) this._typeErrorPrototype = cached = <ClassPrototype>this.require(CommonNames.TypeError, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _typeErrorPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `SyntaxError` prototype. */
+  get syntaxErrorPrototype(): ClassPrototype {
+    var cached = this._syntaxErrorPrototype;
+    if (!cached) this._syntaxErrorPrototype = cached = <ClassPrototype>this.require(CommonNames.SyntaxError, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _syntaxErrorPrototype: ClassPrototype | null = null;
+
+  /** Gets the standard `URIError` prototype. */
+  get URIErrorPrototype(): ClassPrototype {
+    var cached = this._URIErrorPrototype;
+    if (!cached) this._URIErrorPrototype = cached = <ClassPrototype>this.require(CommonNames.URIError, ElementKind.CLASS_PROTOTYPE);
+    return cached;
+  }
+  private _URIErrorPrototype: ClassPrototype | null = null;
+
+
   /** Gets the standard `ArrayBufferView` instance. */
   get arrayBufferViewInstance(): Class {
     var cached = this._arrayBufferViewInstance;
