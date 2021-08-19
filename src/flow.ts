@@ -200,7 +200,7 @@ export class Flow {
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
     var flow = new Flow(parentFunction);
     flow.inlineFunction = inlineFunction;
-    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString();
+    flow.inlineReturnLabel = `${inlineFunction.internalName}|inlined.${inlineFunction.nextInlineId++}`;
     if (inlineFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.initThisFieldFlags();
     }
@@ -919,7 +919,7 @@ export class Flow {
         let key = _keys[i];
         let leftFlags = changetype<FieldFlags>(leftFieldFlags.get(key));
         if (
-          (leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) && 
+          (leftFlags & FieldFlags.INITIALIZED) != 0 && rightFieldFlags.has(key) &&
           (changetype<FieldFlags>(rightFieldFlags.get(key)) & FieldFlags.INITIALIZED)
         ) {
           newFieldFlags.set(key, FieldFlags.INITIALIZED);
@@ -1470,7 +1470,7 @@ export class Flow {
     if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
     if (this.is(FlowFlags.CONDITIONALLY_ACCESSES_THIS)) sb.push("CONDITIONALLY_ACCESSES_THIS");
     if (this.is(FlowFlags.MAY_RETURN_NONTHIS)) sb.push("MAY_RETURN_NONTHIS");
-    return "Flow(" + this.actualFunction.toString() + ")[" + levels.toString() + "] " + sb.join(" ");
+    return `Flow(${this.actualFunction})[${levels}] ${sb.join(" ")}`;
   }
 }
 

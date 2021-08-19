@@ -222,7 +222,7 @@ export class Type {
   get isFloatValue(): bool {
     return this.is(TypeFlags.FLOAT | TypeFlags.VALUE);
   }
-  
+
   /** Tests if this type represents a numeric (integer or floating point) value. */
   get isNumericValue(): bool {
     return this.isIntegerValue || this.isFloatValue;
@@ -237,7 +237,7 @@ export class Type {
   get isVectorValue(): bool {
     return this.is(TypeFlags.VECTOR | TypeFlags.VALUE);
   }
-  
+
   /** Tests if this type represents an internal or external reference. */
   get isReference(): bool {
     return this.is(TypeFlags.REFERENCE);
@@ -479,7 +479,7 @@ export class Type {
         let signatureReference = this.getSignature();
         if (signatureReference) {
           return this.isNullableReference
-            ? "(" + signatureReference.toString(validWat) + ")" + nullablePostfix
+            ? `(${signatureReference.toString(validWat)})${nullablePostfix}`
             : signatureReference.toString(validWat);
         }
       }

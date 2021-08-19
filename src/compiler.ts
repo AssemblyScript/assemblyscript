@@ -2887,7 +2887,7 @@ export class Compiler extends DiagnosticEmitter {
       let case_ = cases[i];
       let label = case_.label;
       if (label) {
-        breaks[breakIndex++] = module.br("case" + i.toString() + "|" + context,
+        breaks[breakIndex++] = module.br(`case${i}|${context}`,
           module.binary(BinaryOp.EqI32,
             module.local_get(tempLocalIndex, TypeRef.I32),
             this.compileExpression(label, Type.u32,
@@ -2903,10 +2903,7 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.freeTempLocal(tempLocal);
 
     // otherwise br to default respectively out of the switch if there is no default case
-    breaks[breakIndex] = module.br((defaultIndex >= 0
-      ? "case" + defaultIndex.toString()
-      : "break"
-    ) + "|" + context);
+    breaks[breakIndex] = module.br(`${(defaultIndex >= 0 ? `case${defaultIndex}` : "break" )}|${context}`);
 
     // nest blocks in order
     var currentBlock = module.block("case0|" + context, breaks, TypeRef.None);
@@ -2924,7 +2921,7 @@ export class Compiler extends DiagnosticEmitter {
       innerFlow.breakLabel = breakLabel;
 
       let isLast = i == numCases - 1;
-      let nextLabel = isLast ? breakLabel : "case" + (i + 1).toString() + "|" + context;
+      let nextLabel = isLast ? breakLabel : `case${i + 1}|${context}`;
       let stmts = new Array<ExpressionRef>(1 + numStatements);
       stmts[0] = currentBlock;
       let count = 1;
@@ -6860,7 +6857,7 @@ export class Compiler extends DiagnosticEmitter {
     // create a br_table switching over the number of optional parameters provided
     var numNames = numOptional + 1; // incl. outer block
     var names = new Array<string>(numNames);
-    var ofN = "of" + numOptional.toString();
+    var ofN = `of${numOptional}`;
     for (let i = 0; i < numNames; ++i) {
       let label = i.toString() + ofN;
       names[i] = label;
@@ -7465,7 +7462,7 @@ export class Compiler extends DiagnosticEmitter {
     var isSemanticallyAnonymous = !isNamed || contextualType != Type.void;
     var prototype = new FunctionPrototype(
       isSemanticallyAnonymous
-        ? (isNamed ? declaration.name.text + "|" : "anonymous|") + (actualFunction.nextAnonymousId++).toString()
+        ? `${isNamed ? declaration.name.text + "|" : "anonymous|"}${actualFunction.nextAnonymousId++}`
         : declaration.name.text,
       actualFunction,
       declaration,
