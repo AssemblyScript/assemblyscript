@@ -40,4 +40,16 @@ export abstract class Transform {
 
   /** Called when compilation is complete, before the module is being validated. */
   afterCompile?(module: Module): void;
+
+  /** Called after all files emitted, before asc exit. Users can output some customized files according to the emitted files */
+  afterEmit?(files: OutputFiles): void;
+}
+
+export interface OutputFiles {
+  binaryFile?: Uint8Array | null;
+  jsFile?: string | null;
+  tsdFile?: string | null;
+  idlFile?: string | null;
+  textFile?: string | null;
+  sourceMap?: string | null;
 }
