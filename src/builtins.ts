@@ -119,6 +119,7 @@ export namespace BuiltinNames {
   export const start = "~start";
   export const started = "~started";
   export const argumentsLength = "~argumentsLength";
+  export const argumentsLengthLocal = "~argumentsLengthLocal";
   export const setArgumentsLength = "~setArgumentsLength";
 
   // std/builtins.ts
@@ -705,6 +706,7 @@ export namespace BuiltinNames {
   export const wasiAbort = "~lib/wasi/index/abort";
   export const wasiTrace = "~lib/wasi/index/trace";
   export const wasiSeed = "~lib/wasi/index/seed";
+  export const arguments_length = "~lib/builtins/arguments.getArgumentsLength";
 }
 
 /** Builtin compilation context. */
@@ -9420,6 +9422,18 @@ function builtin_f64x2_ge(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_ge(ctx);
 }
 builtins.set(BuiltinNames.f64x2_ge, builtin_f64x2_ge);
+
+// access arguments.length
+function builtin_arguments_length(ctx: BuiltinContext): ExpressionRef {
+  const compiler = ctx.compiler;
+  const mod = compiler.module;
+  compiler.currentType = Type.i32;
+  const local = compiler.currentFlow.lookupLocal(BuiltinNames.argumentsLengthLocal)!;
+  return mod.local_get(local.index, TypeRef.I32);
+}
+
+builtins.set(BuiltinNames.arguments_length, builtin_arguments_length);
+
 
 // f64x2.convert_low_i32x4_s -> v128.convert_low<i32>
 function builtin_f64x2_convert_low_i32x4_s(ctx: BuiltinContext): ExpressionRef {
