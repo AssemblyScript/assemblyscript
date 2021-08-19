@@ -4,8 +4,19 @@
  */
 
 import { OptionDescription } from "./util/options";
+import { Source, Range, DiagnosticMessage } from "..";
+
 export { OptionDescription };
 import { Transform } from "./transform";
+
+/** Relevant subset of the Source class for diagnostic reporting. */
+export { Source };
+
+/** Relevant subset of the Range class for diagnostic reporting. */
+export { Range };
+
+/** Relevant subset of the DiagnosticMessage class for diagnostic reporting. */
+export  { DiagnosticMessage };
 
 /** Ready promise resolved once/if the compiler is ready. */
 export const ready: Promise<void>;
@@ -54,36 +65,6 @@ export interface MemoryStream extends OutputStream {
   toBuffer(): Uint8Array;
   /** Converts the output to a string. */
   toString(): string;
-}
-
-/** Relevant subset of the Source class for diagnostic reporting. */
-export interface Source {
-  /** Normalized path with file extension. */
-  normalizedPath: string;
-}
-
-/** Relevant subset of the Range class for diagnostic reporting. */
-export interface Range {
-  /** Start offset within the source file. */
-  start: number;
-  /** End offset within the source file. */
-  end: number;
-  /** Respective source file. */
-  source: Source;
-}
-
-/** Relevant subset of the DiagnosticMessage class for diagnostic reporting. */
-export interface DiagnosticMessage {
-  /** Message code. */
-  code: number;
-  /** Message category. */
-  category: number;
-  /** Message text. */
-  message: string;
-  /** Respective source range, if any. */
-  range: Range | null;
-  /** Related range, if any. */
-  relatedRange: Range | null;
 }
 
 /** A function handling diagnostic messages. */
