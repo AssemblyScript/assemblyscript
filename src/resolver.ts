@@ -2833,6 +2833,59 @@ export class Resolver extends DiagnosticEmitter {
     );
   }
 
+  /** Resolves reachable overloads of the given instance method. */
+  resolveOverloads(instance: Function): Function[] | null {
+    var overloadPrototypes = instance.prototype.overloads;
+    if (!overloadPrototypes) return null;
+
+    var parentClassInstance = assert(instance.getClassOrInterface());
+    var overloads = new Set<Function>();
+
+    // A method's `overloads` property contains its unbound overload prototypes
+    // so we first have to find the concrete classes it became bound to, obtain
+    // their bound prototypes and make sure these are resolved.
+    for (let _values = Set_values(overloadPrototypes), i = 0, k = _values.length; i < k; ++i) {
+      let unboundOverloadPrototype = _values[i];
+      assert(!unboundOverloadPrototype.isBound);
+      let unboundOverloadParent = unboundOverloadPrototype.parent;
+      let isProperty = unboundOverloadParent.kind == ElementKind.PROPERTY_PROTOTYPE;
+      let classInstances: Map<string,Class> | null;
+      if (isProperty) {
+        let propertyParent = (<PropertyPrototype>unboundOverloadParent).parent;
+        assert(propertyParent.kind == ElementKind.CLASS_PROTOTYPE);
+        classInstances = (<ClassPrototype>propertyParent).instances;
+      } else {
+        assert(unboundOverloadParent.kind == ElementKind.CLASS_PROTOTYPE);
+        classInstances = (<ClassPrototype>unboundOverloadParent).instances;
+      }
+      if (!classInstances) continue;
+      for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
+        let classInstance = _values[j];
+        // Check if the parent class is a subtype of instance's class
+        if (!classInstance.isAssignableTo(parentClassInstance)) continue;
+        let overloadInstance: Function | null;
+        if (isProperty) {
+          let boundProperty = assert(classInstance.members!.get(unboundOverloadParent.name));
+          assert(boundProperty.kind == ElementKind.PROPERTY_PROTOTYPE);
+          let boundPropertyInstance = this.resolveProperty(<PropertyPrototype>boundProperty);
+          if (!boundPropertyInstance) continue;
+          if (instance.is(CommonFlags.GET)) {
+            overloadInstance = boundPropertyInstance.getterInstance;
+          } else {
+            assert(instance.is(CommonFlags.SET));
+            overloadInstance = boundPropertyInstance.setterInstance;
+          }
+        } else {
+          let boundPrototype = assert(classInstance.members!.get(unboundOverloadPrototype.name));
+          assert(boundPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          overloadInstance = this.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+        }
+        if (overloadInstance) overloads.add(overloadInstance);
+      }
+    }
+    return Set_values(overloads);
+  }
+
   /** Currently resolving classes. */
   private resolveClassPending: Set<Class> = new Set();
 

@@ -3653,12 +3653,27 @@ export class Function extends TypedElement {
     registerConcreteElement(program, this);
   }
 
+  /** Gets whether this is an accessor method of a property. */
+  get isAccessor(): bool {
+    return this.isAny(CommonFlags.GET | CommonFlags.SET);
+  }
+
   /** Gets the name of the parameter at the specified index. */
   getParameterName(index: i32): string {
     var parameters = (<FunctionDeclaration>this.declaration).signature.parameters;
     return parameters.length > index
       ? parameters[index].name.text
       : getDefaultParameterName(index);
+  }
+
+  /** Gets the class or interface this function belongs to, if an instance method. */
+  getClassOrInterface(): Class | null {
+    var parent = this.parent;
+    if (parent.kind == ElementKind.PROPERTY) parent = parent.parent;
+    if (parent.kind == ElementKind.CLASS || parent.kind == ElementKind.INTERFACE) {
+      return <Class>parent;
+    }
+    return null;
   }
 
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
