@@ -214,7 +214,7 @@ export function main(argv: string[], options: APIOptions, callback?: (err: Error
 export function main(argv: string[], callback?: (err: Error | null) => number): number;
 
 /** Checks diagnostics emitted so far for errors. */
-export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream, reportDiagnostic?: DiagnosticReporter): boolean;
+export function checkDiagnostics(emitter: Record<string,unknown>, stderr?: OutputStream, reportDiagnostic?: DiagnosticReporter, ignoreWarning?: number[]): boolean;
 
 /** An object of stats for the current task. */
 export interface Stats {

@@ -342,6 +342,10 @@
     "type": "b",
     "default": false
   },
+  "ignoreWarning": {
+    "description": "Ignore a specific warning. E.g. 232",
+    "type": "I"
+  },
   "lib": {
     "description": [
       "Adds one or multiple paths to custom library components and",
