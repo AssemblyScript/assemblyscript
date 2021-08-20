@@ -7056,13 +7056,7 @@ export class Compiler extends DiagnosticEmitter {
       let classInstance = assert(overloadInstance.getClassOrInterface());
       builder.addCase(classInstance.id, stmts);
       // Also alias each extendee inheriting this exact overload
-      let extendees = classInstance.getAllExtendees(
-        overloadInstance.isAccessor
-          // FIXME: Parent is not the property, but should be, so we don't need
-          // to use a substring here but can trivially use the property name.
-          ? instance.prototype.name.substring(GETTER_PREFIX.length)
-          : instance.prototype.name
-      );
+      let extendees = classInstance.getAllExtendees(instance.declaration.name.text); // without get:/set:
       for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
         let extendee = _values[a];
         builder.addCase(extendee.id, stmts);
