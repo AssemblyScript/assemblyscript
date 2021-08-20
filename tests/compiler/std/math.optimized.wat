@@ -3356,6 +3356,7 @@
   (local $5 i32)
   (local $6 f64)
   (local $7 i32)
+  (local $8 f64)
   block $__inlined_func$~lib/math/NativeMathf.cbrt (result f32)
    local.get $0
    local.get $0
@@ -3413,13 +3414,13 @@
    local.get $0
    f64.promote_f32
    local.tee $6
-   local.tee $3
-   local.get $3
+   local.get $6
    f64.add
+   local.tee $8
    local.get $4
    f64.add
    f64.mul
-   local.get $3
+   local.get $6
    local.get $4
    f64.add
    local.get $4
@@ -3432,9 +3433,7 @@
    f64.mul
    local.set $4
    local.get $3
-   local.get $6
-   local.get $6
-   f64.add
+   local.get $8
    local.get $4
    f64.add
    f64.mul

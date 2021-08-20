@@ -2264,9 +2264,9 @@ export class Module {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("rse");
         passes.push("vacuum");
-        passes.push("local-cse");
         passes.push("ssa-nomerge");
         passes.push("simplify-globals-optimizing");
+        passes.push("local-cse");
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
         passes.push("merge-blocks");

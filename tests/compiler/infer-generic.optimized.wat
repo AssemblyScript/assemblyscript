@@ -1235,51 +1235,51 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $3
+   local.tee $0
    i64.const 0
    i64.store
-   local.get $3
+   local.get $0
    i32.const 0
    i32.store offset=8
-   local.get $3
+   local.get $0
    i32.const 1152
    i32.store
-   local.get $3
+   local.get $0
    i32.const 1200
    i32.store offset=4
    i32.const 1164
    i32.load
-   local.set $0
+   local.set $1
    loop $for-loop|0
-    local.get $0
+    local.get $1
     i32.const 1164
     i32.load
-    local.tee $3
+    local.tee $0
     local.get $0
-    local.get $3
-    i32.lt_s
-    select
     local.get $1
     i32.gt_s
+    select
+    local.get $2
+    i32.gt_s
     if
-     local.get $2
+     local.get $3
      i32.const 1156
      i32.load
-     local.get $1
+     local.get $2
      i32.const 2
      i32.shl
      i32.add
      f32.load
-     local.get $1
+     local.get $2
      i32.const 1152
      i32.const 1200
      i32.load
      call_indirect $0 (type $i32_f32_i32_i32_=>_i32)
-     local.set $2
-     local.get $1
+     local.set $3
+     local.get $2
      i32.const 1
      i32.add
-     local.set $1
+     local.set $2
      br $for-loop|0
     end
    end
