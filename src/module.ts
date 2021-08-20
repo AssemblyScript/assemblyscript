@@ -2408,7 +2408,6 @@ export class Module {
       }
       // clean up
       passes.push("duplicate-function-elimination");
-      passes.push("remove-unused-nonfunction-module-elements");
       passes.push("memory-packing");
       passes.push("remove-unused-module-elements");
 
