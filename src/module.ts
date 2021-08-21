@@ -2286,8 +2286,8 @@ export class Module {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("dce");
       }
-      passes.push("remove-unused-names");
       passes.push("remove-unused-brs");
+      passes.push("remove-unused-names");
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("inlining");
         passes.push("precompute-propagate");
