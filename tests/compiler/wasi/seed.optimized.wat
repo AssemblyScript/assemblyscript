@@ -365,13 +365,13 @@
    i32.const 1831565813
    i32.add
    local.tee $0
+   i32.const 1
+   i32.or
+   local.get $0
    local.get $0
    i32.const 15
    i32.shr_u
    i32.xor
-   local.get $0
-   i32.const 1
-   i32.or
    i32.mul
    local.tee $0
    local.get $0
@@ -397,13 +397,13 @@
    i32.const 1831565813
    i32.add
    local.tee $0
+   i32.const 1
+   i32.or
+   local.get $0
    local.get $0
    i32.const 15
    i32.shr_u
    i32.xor
-   local.get $0
-   i32.const 1
-   i32.or
    i32.mul
    local.tee $0
    local.get $0

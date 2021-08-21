@@ -55,7 +55,7 @@
   if
    i32.const 1184
    i32.const 1248
-   i32.const 106
+   i32.const 107
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -210,11 +210,11 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  block $folding-inner1
+  block $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 1404
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    local.tee $1
    local.get $0
@@ -226,7 +226,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1404
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
@@ -251,7 +251,7 @@
    global.get $~lib/memory/__stack_pointer
    i32.const 1404
    i32.lt_s
-   br_if $folding-inner1
+   br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 0
    i32.store
@@ -261,7 +261,7 @@
    if
     i32.const 1184
     i32.const 1248
-    i32.const 106
+    i32.const 107
     i32.const 42
     call $~lib/builtins/abort
     unreachable
@@ -277,7 +277,7 @@
    if
     i32.const 1296
     i32.const 1248
-    i32.const 110
+    i32.const 111
     i32.const 40
     call $~lib/builtins/abort
     unreachable

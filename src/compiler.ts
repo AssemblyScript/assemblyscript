@@ -3631,6 +3631,16 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = compiled.type;
         break;
       }
+      case NodeKind.CLASS: {
+        // TODO: compile as class expression
+        this.error(
+          DiagnosticCode.Not_implemented_0,
+          expression.range,
+          "Block-scoped class declarations or expressions"
+        );
+        expr = this.module.unreachable();
+        break;
+      }
       default: {
         assert(false);
         expr = this.module.unreachable();
@@ -8367,16 +8377,71 @@ export class Compiler extends DiagnosticEmitter {
     var expressions = expression.expressions;
     assert(numParts - 1 == expressions.length);
 
-    // Shortcut if just a (multi-line) string
-    if (tag === null && numParts == 1) {
-      return this.ensureStaticString(parts[0]);
-    }
-
     var module = this.module;
-    var stringType = this.program.stringInstance.type;
+    var stringInstance = this.program.stringInstance;
+    var stringType = stringInstance.type;
 
-    // Compile to a `StaticArray<string>#join("")` if untagged
     if (tag === null) {
+      // Shortcut if just a (multi-line) string
+      if (numParts == 1) {
+        return this.ensureStaticString(parts[0]);
+      }
+
+      // Shortcut for `${expr}`, `<prefix>${expr}`, `${expr}<suffix>`
+      if (numParts == 2) {
+        let expression = expressions[0];
+        let lhsLen = parts[0].length;
+        let rhsLen = parts[1].length;
+        // Shortcut for `${expr}`  ->   expr.toString()
+        if (!lhsLen && !rhsLen) {
+          return this.makeToString(
+            this.compileExpression(expression, stringType),
+            this.currentType, expression
+          );
+        }
+        // Shortcuts for
+        // `<prefix>${expr}`  ->  "<prefix>" + expr.toString()
+        // `${expr}<suffix>`  ->  expr.toString() + "<suffix>"
+        let hasPrefix = lhsLen != 0;
+        // @ts-ignore: cast
+        if (hasPrefix ^ (rhsLen != 0)) {
+          let lhs: ExpressionRef;
+          let rhs: ExpressionRef;
+          let expr = this.makeToString(
+            this.compileExpression(expression, stringType),
+            this.currentType, expression
+          );
+          if (hasPrefix) {
+            lhs = this.ensureStaticString(parts[0]);
+            rhs = expr;
+          } else {
+            // suffix
+            lhs = expr;
+            rhs = this.ensureStaticString(parts[1]);
+          }
+          let concatMethod = assert(stringInstance.getMethod("concat"));
+          return this.makeCallDirect(concatMethod, [ lhs, rhs ], expression);
+        }
+      }
+
+      // Shortcut for `${exprA}${exprB}`  ->  exprA.toString() + exprB.toString()
+      if (numParts == 3 && !parts[0].length && !parts[1].length && !parts[2].length) {
+        let exprA = expressions[0];
+        let exprB = expressions[1];
+
+        let lhs = this.makeToString(
+          this.compileExpression(exprA, stringType),
+          this.currentType, exprA
+        );
+        let rhs = this.makeToString(
+          this.compileExpression(exprB, stringType),
+          this.currentType, exprB
+        );
+        let concatMethod = assert(stringInstance.getMethod("concat"));
+        return this.makeCallDirect(concatMethod, [ lhs, rhs ], expression);
+      }
+
+      // Compile to a `StaticArray<string>#join("") for general case
       let length = 2 * numParts - 1;
       let values = new Array<usize>(length);
       values[0] = this.ensureStaticString(parts[0]);
@@ -8389,26 +8454,22 @@ export class Compiler extends DiagnosticEmitter {
       let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
       let joinInstance = assert(arrayInstance.getMethod("join"));
       let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true));
-      let stmts = new Array<ExpressionRef>();
+      let stmts = new Array<ExpressionRef>(numParts);
       for (let i = 0, k = numParts - 1; i < k; ++i) {
         let expression = expressions[i];
-        stmts.push(
-          this.makeCallDirect(indexedSetInstance, [
-            module.usize(offset),
-            module.i32(2 * i + 1),
-            this.makeToString(
-              this.compileExpression(expression, stringType),
-              this.currentType, expression
-            )
-          ], expression)
-        );
-      }
-      stmts.push(
-        this.makeCallDirect(joinInstance, [
+        stmts[i] = this.makeCallDirect(indexedSetInstance, [
           module.usize(offset),
-          this.ensureStaticString("")
-        ], expression)
-      );
+          module.i32(2 * i + 1),
+          this.makeToString(
+            this.compileExpression(expression, stringType),
+            this.currentType, expression
+          )
+        ], expression);
+      }
+      stmts[numParts - 1] = this.makeCallDirect(joinInstance, [
+        module.usize(offset),
+        this.ensureStaticString("")
+      ], expression);
       return module.flatten(stmts, stringType.toRef());
     }
 
@@ -8421,7 +8482,12 @@ export class Compiler extends DiagnosticEmitter {
     if (target) {
       switch (target.kind) {
         case ElementKind.FUNCTION_PROTOTYPE: {
-          let instance = this.resolver.resolveFunction(<FunctionPrototype>target, null, uniqueMap<string,Type>(), ReportMode.SWALLOW);
+          let instance = this.resolver.resolveFunction(
+            <FunctionPrototype>target,
+            null,
+            uniqueMap<string,Type>(),
+            ReportMode.SWALLOW
+          );
           if (!instance) break;
           target = instance;
           // fall-through
@@ -10288,7 +10354,11 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Evaluates a boolean condition, determining whether it is TRUE, FALSE or UNKNOWN. */
   evaluateCondition(expr: ExpressionRef): ConditionKind {
-    assert(getExpressionType(expr) == TypeRef.I32);
+    let type = getExpressionType(expr);
+    if (type == TypeRef.Unreachable)
+      return ConditionKind.UNKNOWN;
+
+    assert(type == TypeRef.I32);
     var module = this.module;
     var evaled = module.runExpression(expr, ExpressionRunnerFlags.Default);
     if (evaled) {
