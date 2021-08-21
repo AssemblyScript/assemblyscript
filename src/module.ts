@@ -2269,7 +2269,6 @@ export class Module {
         passes.push("local-cse");
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
-        passes.push("merge-blocks");
         passes.push("precompute-propagate");
       }
       if (optimizeLevel >= 3) {

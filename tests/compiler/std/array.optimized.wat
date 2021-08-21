@@ -10690,23 +10690,20 @@
   (local $2 i64)
   (local $3 i32)
   (local $4 i64)
-  (local $5 i32)
-  (local $6 i32)
+  (local $5 i64)
+  (local $6 i64)
   (local $7 i32)
-  (local $8 i64)
-  (local $9 i64)
+  (local $8 i32)
+  (local $9 i32)
   (local $10 i64)
   (local $11 i64)
   (local $12 i64)
   (local $13 i64)
   (local $14 i64)
-  (local $15 i64)
-  (local $16 i64)
-  (local $17 i64)
   local.get $1
   f64.const 0
   f64.lt
-  local.tee $6
+  local.tee $8
   if (result f64)
    local.get $0
    i32.const 45
@@ -10749,14 +10746,14 @@
   i64.shl
   i64.const 1
   i64.add
-  local.tee $4
+  local.tee $5
   i64.clz
   i32.wrap_i64
-  local.tee $5
+  local.tee $7
   i32.sub
-  local.set $7
-  local.get $4
+  local.set $9
   local.get $5
+  local.get $7
   i64.extend_i32_s
   i64.shl
   global.set $~lib/util/number/_frc_plus
@@ -10766,25 +10763,25 @@
   i64.eq
   i32.const 1
   i32.add
-  local.tee $5
+  local.tee $7
   i64.extend_i32_s
   i64.shl
   i64.const 1
   i64.sub
   local.get $3
-  local.get $5
-  i32.sub
   local.get $7
+  i32.sub
+  local.get $9
   i32.sub
   i64.extend_i32_s
   i64.shl
   global.set $~lib/util/number/_frc_minus
-  local.get $7
+  local.get $9
   global.set $~lib/util/number/_exp
   i32.const 348
   i32.const -61
   global.get $~lib/util/number/_exp
-  local.tee $7
+  local.tee $9
   i32.sub
   f64.convert_i32_s
   f64.const 0.30102999566398114
@@ -10806,10 +10803,10 @@
   local.tee $3
   i32.const 3
   i32.shl
-  local.tee $5
+  local.tee $7
   i32.sub
   global.set $~lib/util/number/_K
-  local.get $5
+  local.get $7
   i32.const 12008
   i32.add
   i64.load
@@ -10828,99 +10825,103 @@
   local.tee $2
   i64.const 4294967295
   i64.and
-  local.set $9
+  local.set $11
   local.get $2
   i64.const 32
   i64.shr_u
-  local.tee $15
+  local.tee $14
   global.get $~lib/util/number/_frc_pow
-  local.tee $8
+  local.tee $5
   i64.const 4294967295
   i64.and
   local.tee $2
   local.tee $4
   i64.mul
   local.get $4
-  local.get $9
-  i64.mul
-  i64.const 32
-  i64.shr_u
-  i64.add
-  local.set $10
-  global.get $~lib/util/number/_frc_plus
-  local.tee $4
-  i64.const 4294967295
-  i64.and
-  local.set $11
-  local.get $4
-  i64.const 32
-  i64.shr_u
-  local.tee $16
-  local.get $2
-  i64.mul
-  local.get $2
   local.get $11
   i64.mul
   i64.const 32
   i64.shr_u
   i64.add
   local.set $12
-  global.get $~lib/util/number/_frc_minus
+  local.get $5
+  i64.const 32
+  i64.shr_u
+  local.tee $5
+  local.set $13
+  global.get $~lib/util/number/_frc_plus
   local.tee $4
   i64.const 4294967295
   i64.and
-  local.set $13
+  local.set $6
   local.get $4
   i64.const 32
   i64.shr_u
-  local.tee $17
+  local.tee $10
   local.get $2
   i64.mul
   local.get $2
-  local.get $13
+  local.get $6
   i64.mul
   i64.const 32
   i64.shr_u
   i64.add
-  local.set $14
+  local.set $4
+  local.get $5
+  local.get $10
+  i64.mul
+  local.get $4
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.get $5
   local.get $6
+  i64.mul
+  local.get $4
+  i64.const 4294967295
+  i64.and
+  i64.add
+  i64.const 2147483647
+  i64.add
+  i64.const 32
+  i64.shr_u
+  i64.add
+  i64.const 1
+  i64.sub
+  local.set $4
+  global.get $~lib/util/number/_frc_minus
+  local.tee $6
+  i64.const 4294967295
+  i64.and
+  local.set $10
+  local.get $6
+  i64.const 32
+  i64.shr_u
+  local.tee $6
+  local.get $2
+  i64.mul
+  local.get $2
+  local.get $10
+  i64.mul
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.set $2
+  local.get $8
   i32.const 1
   i32.shl
   local.get $0
   i32.add
   local.get $0
-  local.get $15
-  local.get $8
-  i64.const 32
-  i64.shr_u
-  local.tee $2
-  local.tee $8
-  i64.mul
-  local.get $10
-  i64.const 32
-  i64.shr_u
-  i64.add
-  local.get $8
-  local.get $9
-  i64.mul
-  local.get $10
-  i64.const 4294967295
-  i64.and
-  i64.add
-  i64.const 2147483647
-  i64.add
-  i64.const 32
-  i64.shr_u
-  i64.add
-  local.get $2
-  local.get $16
+  local.get $13
+  local.get $14
   i64.mul
   local.get $12
   i64.const 32
   i64.shr_u
   i64.add
-  local.get $2
   local.get $11
+  local.get $13
   i64.mul
   local.get $12
   i64.const 4294967295
@@ -10931,26 +10932,24 @@
   i64.const 32
   i64.shr_u
   i64.add
-  i64.const 1
-  i64.sub
-  local.tee $4
+  local.get $4
   global.get $~lib/util/number/_exp_pow
-  local.get $7
+  local.get $9
   i32.add
   i32.const -64
   i32.sub
   local.get $4
-  local.get $2
-  local.get $17
+  local.get $5
+  local.get $6
   i64.mul
-  local.get $14
+  local.get $2
   i64.const 32
   i64.shr_u
   i64.add
-  local.get $2
-  local.get $13
+  local.get $5
+  local.get $10
   i64.mul
-  local.get $14
+  local.get $2
   i64.const 4294967295
   i64.and
   i64.add
@@ -10962,13 +10961,13 @@
   i64.const 1
   i64.add
   i64.sub
-  local.get $6
+  local.get $8
   call $~lib/util/number/genDigits
-  local.get $6
+  local.get $8
   i32.sub
   global.get $~lib/util/number/_K
   call $~lib/util/number/prettify
-  local.get $6
+  local.get $8
   i32.add
  )
  (func $~lib/util/number/dtoa_buffered (param $0 i32) (param $1 f64) (result i32)
@@ -34862,13 +34861,16 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
+   local.tee $3
    local.tee $2
    local.get $0
    i32.store
    local.get $2
    local.get $1
    i32.store offset=4
-   local.get $2
+   i32.const 0
+   local.set $2
+   local.get $3
    i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -34881,7 +34883,7 @@
    i32.store
    local.get $0
    i32.load offset=12
-   local.tee $3
+   local.tee $4
    local.get $1
    i32.load offset=12
    i32.const 0
@@ -34889,7 +34891,7 @@
    select
    local.tee $6
    i32.add
-   local.tee $2
+   local.tee $3
    i32.const 268435455
    i32.gt_u
    if
@@ -34901,83 +34903,83 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $2
+   local.get $3
    i32.const 2
    i32.const 33
    i32.const 0
    call $~lib/rt/__newArray
-   local.tee $2
+   local.tee $3
    i32.store
-   local.get $2
+   local.get $3
    i32.load offset=4
    local.set $5
-   local.get $3
+   local.get $4
    i32.const 2
    i32.shl
-   local.set $3
+   local.set $4
    local.get $0
    i32.load offset=4
    local.set $0
    loop $for-loop|0
-    local.get $3
+    local.get $2
     local.get $4
-    i32.gt_u
+    i32.lt_u
     if
-     local.get $4
+     local.get $2
      local.get $5
      i32.add
      local.get $0
-     local.get $4
+     local.get $2
      i32.add
      i32.load
      local.tee $7
      i32.store
-     local.get $2
+     local.get $3
      local.get $7
      i32.const 1
      call $~lib/rt/itcms/__link
-     local.get $4
+     local.get $2
      i32.const 4
      i32.add
-     local.set $4
+     local.set $2
      br $for-loop|0
     end
    end
-   local.get $3
+   local.get $4
    local.get $5
    i32.add
-   local.set $0
+   local.set $2
    local.get $1
    i32.load offset=4
-   local.set $4
+   local.set $1
    local.get $6
    i32.const 2
    i32.shl
    local.set $5
    i32.const 0
-   local.set $1
+   local.set $0
    loop $for-loop|1
-    local.get $1
+    local.get $0
     local.get $5
     i32.lt_u
     if
      local.get $0
-     local.get $1
+     local.get $2
      i32.add
+     local.get $0
      local.get $1
-     local.get $4
      i32.add
      i32.load
-     local.tee $3
+     local.tee $4
      i32.store
-     local.get $2
      local.get $3
+     local.get $4
      i32.const 1
      call $~lib/rt/itcms/__link
-     local.get $1
+     local.get $0
      i32.const 4
      i32.add
-     local.set $1
+     local.set $0
      br $for-loop|1
     end
    end
@@ -34989,7 +34991,7 @@
    i32.const 8
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $2
+   local.get $3
    return
   end
   i32.const 32000

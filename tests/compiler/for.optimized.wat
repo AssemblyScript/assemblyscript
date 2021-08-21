@@ -1317,7 +1317,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|08
+  loop $for-loop|09
    local.get $0
    i32.const 10
    i32.lt_s
@@ -1354,7 +1354,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|08
+    br $for-loop|09
    end
   end
   local.get $0
@@ -1441,7 +1441,7 @@
    call $for/Ref#constructor
    local.tee $0
    i32.store
-   loop $for-loop|09
+   loop $for-loop|010
     local.get $0
     if
      local.get $1
@@ -1459,7 +1459,7 @@
       local.tee $0
       i32.store
      end
-     br $for-loop|09
+     br $for-loop|010
     end
    end
    local.get $1
