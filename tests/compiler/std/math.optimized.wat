@@ -1597,7 +1597,7 @@
    else
     f32.const 0
    end
-   local.set $5
+   local.set $6
    local.get $2
    i32.const 8388607
    i32.and
@@ -1616,10 +1616,10 @@
   local.tee $0
   local.get $0
   f32.mul
-  local.tee $6
-  local.get $6
+  local.tee $4
+  local.get $4
   f32.mul
-  local.set $4
+  local.set $5
   local.get $0
   local.get $1
   f32.const 0.5
@@ -1627,15 +1627,15 @@
   local.get $1
   f32.mul
   local.tee $0
-  local.get $6
   local.get $4
+  local.get $5
   f32.const 0.2849878668785095
   f32.mul
   f32.const 0.6666666269302368
   f32.add
   f32.mul
-  local.get $4
-  local.get $4
+  local.get $5
+  local.get $5
   f32.const 0.24279078841209412
   f32.mul
   f32.const 0.40000972151756287
@@ -1649,7 +1649,7 @@
   local.tee $4
   f32.const 9.05800061445916e-06
   f32.mul
-  local.get $5
+  local.get $6
   f32.add
   f32.add
   local.get $0
@@ -11629,13 +11629,13 @@
   local.get $1
   f64.const 0.5
   f64.mul
-  local.tee $9
-  f64.sub
   local.tee $10
-  f64.const 1
-  local.get $10
   f64.sub
+  local.tee $9
+  f64.const 1
   local.get $9
+  f64.sub
+  local.get $10
   f64.sub
   local.get $1
   local.get $1

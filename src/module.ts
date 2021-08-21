@@ -2307,11 +2307,10 @@ export class Module {
       passes.push("remove-unused-brs");
       passes.push("coalesce-locals");
       passes.push("simplify-locals");
-      passes.push("vacuum");
-
-      passes.push("reorder-locals");
       passes.push("coalesce-locals");
       passes.push("reorder-locals");
+      passes.push("vacuum");
+
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("merge-locals");
       }
