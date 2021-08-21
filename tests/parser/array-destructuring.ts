@@ -10,14 +10,14 @@ function test1(): void {
   let [
   ] = n;
 
-  var [,_,] = j ;
+  var [,_,] = j;
   var [,,  ,a,, f ,
-    , g,  g,        ] = 1;
+    , g,  g,        ] = s;
   var [n, a, a, a,v,
     ,h,h,h,h,h,,r
     ,,r,,h
-    ,y, ] = 2;
-  let {aaa , a} = 1;
-  var {f,,,,,,,,,,,,} = 3;
-  const {fff} = 3;
+    ,y, ] = b;
+  let {aaa , a} = g;
+  var {f,,,,,,,,,,,,} = e
+  const {fff} = q;
 }
