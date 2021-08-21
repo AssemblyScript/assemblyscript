@@ -2273,11 +2273,11 @@ export class Module {
         passes.push("precompute-propagate");
       }
       if (optimizeLevel >= 3) {
-        passes.push("simplify-locals-notee-nostructure");
+        passes.push("simplify-locals-nostructure");
         passes.push("flatten");
         passes.push("vacuum");
-        passes.push("licm");
         passes.push("simplify-locals-notee-nostructure");
+        passes.push("licm");
         passes.push("merge-locals");
         passes.push("reorder-locals");
         passes.push("dae-optimizing");

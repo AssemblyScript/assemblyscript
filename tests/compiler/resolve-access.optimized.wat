@@ -2930,10 +2930,10 @@
    local.tee $5
    i32.const 0
    i32.store
-   i32.const 1056
-   local.set $3
    i32.const 8
    local.set $7
+   i32.const 1056
+   local.set $3
    block $~lib/util/memory/memmove|inlined.0
     i32.const 8
     i32.const 0
