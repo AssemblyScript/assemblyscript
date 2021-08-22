@@ -461,6 +461,7 @@
    end
    block $__inlined_func$~lib/rt/itcms/Object#unlink
     local.get $0
+    local.tee $1
     i32.load offset=4
     i32.const -4
     i32.and
@@ -468,10 +469,10 @@
     i32.eqz
     if
      i32.const 0
-     local.get $0
+     local.get $1
      i32.const 27676
      i32.lt_u
-     local.get $0
+     local.get $1
      i32.load offset=8
      select
      i32.eqz
@@ -485,7 +486,7 @@
      end
      br $__inlined_func$~lib/rt/itcms/Object#unlink
     end
-    local.get $0
+    local.get $1
     i32.load offset=8
     local.tee $1
     i32.eqz
@@ -510,8 +511,9 @@
     i32.store offset=4
    end
    global.get $~lib/rt/itcms/toSpace
-   local.set $2
+   local.set $3
    local.get $0
+   local.tee $2
    i32.load offset=12
    local.tee $1
    i32.const 1
@@ -519,10 +521,11 @@
    if (result i32)
     i32.const 1
    else
+    local.get $1
+    local.tee $0
     i32.const 11248
     i32.load
-    local.get $1
-    i32.lt_u
+    i32.gt_u
     if
      i32.const 1632
      i32.const 1696
@@ -531,7 +534,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $0
     i32.const 3
     i32.shl
     i32.const 11252
@@ -546,16 +549,16 @@
    else
     i32.const 2
    end
-   local.set $3
-   local.get $2
+   local.set $0
+   local.get $3
    i32.load offset=8
    local.set $1
-   local.get $0
    local.get $2
+   local.get $0
    local.get $3
    i32.or
    i32.store offset=4
-   local.get $0
+   local.get $2
    local.get $1
    i32.store offset=8
    local.get $1
@@ -563,11 +566,11 @@
    i32.load offset=4
    i32.const 3
    i32.and
-   local.get $0
+   local.get $2
    i32.or
    i32.store offset=4
+   local.get $3
    local.get $2
-   local.get $0
    i32.store offset=8
    global.get $~lib/rt/itcms/visitCount
    i32.const 1
@@ -1837,8 +1840,8 @@
   i32.load offset=8
   local.set $3
   local.get $2
-  global.get $~lib/rt/itcms/white
   local.get $1
+  global.get $~lib/rt/itcms/white
   i32.or
   i32.store offset=4
   local.get $2
@@ -2152,25 +2155,25 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  global.get $~lib/memory/__stack_pointer
-  i32.const 11292
-  i32.lt_s
-  if
-   i32.const 27696
-   i32.const 27744
-   i32.const 1
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/memory/__stack_pointer
-  i32.const 0
-  i32.store
-  block $__inlined_func$~lib/util/number/itoa32
+  block $__inlined_func$~lib/util/number/itoa32 (result i32)
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
+   global.get $~lib/memory/__stack_pointer
+   i32.const 11292
+   i32.lt_s
+   if
+    i32.const 27696
+    i32.const 27744
+    i32.const 1
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/memory/__stack_pointer
+   i32.const 0
+   i32.store
    local.get $0
    i32.eqz
    if
@@ -2179,7 +2182,6 @@
     i32.add
     global.set $~lib/memory/__stack_pointer
     i32.const 1408
-    local.set $0
     br $__inlined_func$~lib/util/number/itoa32
    end
    global.get $~lib/memory/__stack_pointer
@@ -2190,71 +2192,71 @@
    local.get $0
    i32.const 31
    i32.shr_u
-   local.tee $1
-   select
    local.tee $2
+   select
    local.tee $0
+   local.tee $1
    i32.const 100000
    i32.lt_u
    if (result i32)
-    local.get $0
+    local.get $1
     i32.const 100
     i32.lt_u
     if (result i32)
-     local.get $0
+     local.get $1
      i32.const 10
      i32.ge_u
      i32.const 1
      i32.add
     else
-     local.get $0
+     local.get $1
      i32.const 10000
      i32.ge_u
      i32.const 3
      i32.add
-     local.get $0
+     local.get $1
      i32.const 1000
      i32.ge_u
      i32.add
     end
    else
-    local.get $0
+    local.get $1
     i32.const 10000000
     i32.lt_u
     if (result i32)
-     local.get $0
+     local.get $1
      i32.const 1000000
      i32.ge_u
      i32.const 6
      i32.add
     else
-     local.get $0
+     local.get $1
      i32.const 1000000000
      i32.ge_u
      i32.const 8
      i32.add
-     local.get $0
+     local.get $1
      i32.const 100000000
      i32.ge_u
      i32.add
     end
    end
-   local.get $1
+   local.get $2
    i32.add
    local.tee $3
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/itcms/__new
-   local.tee $0
+   local.tee $1
    i32.store
+   local.get $1
    local.get $0
-   local.get $2
    local.get $3
    call $~lib/util/number/utoa32_dec_lut
-   local.get $1
+   local.get $2
    if
-    local.get $0
+    local.get $1
     i32.const 45
     i32.store16
    end
@@ -2262,8 +2264,8 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
+   local.get $1
   end
-  local.get $0
  )
  (func $~lib/util/number/genDigits (param $0 i64) (param $1 i64) (param $2 i32) (param $3 i64) (result i32)
   (local $4 i32)
@@ -3856,13 +3858,13 @@
       i32.const 0
       i32.lt_s
       local.tee $5
-      if
+      if (result i32)
        i32.const 0
        local.get $1
        i32.sub
-       local.set $1
+      else
+       local.get $1
       end
-      local.get $1
       local.tee $3
       i32.const 100000
       i32.lt_u
@@ -3909,9 +3911,9 @@
         i32.add
        end
       end
-      local.set $3
-      local.get $1
+      local.set $1
       local.get $3
+      local.get $1
       i32.const 1
       i32.add
       local.tee $1
@@ -4118,11 +4120,12 @@
  (func $start:resolve-binary
   (local $0 i32)
   (local $1 i32)
-  global.get $~lib/memory/__stack_pointer
-  i32.const 20
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
+  (local $2 i32)
   block $folding-inner0
+   global.get $~lib/memory/__stack_pointer
+   i32.const 20
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 11292
    i32.lt_s
@@ -5070,12 +5073,12 @@
    local.get $0
    global.set $resolve-binary/foo
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
+   local.get $0
    i32.store offset=16
    global.get $~lib/memory/__stack_pointer
    i32.const 10880
@@ -5099,20 +5102,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 10912
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 10912
    i32.store
-   local.get $0
+   local.get $2
    i32.const 10912
    i32.store offset=4
    i32.const 10912
@@ -5128,20 +5132,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 10944
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 10944
    i32.store
-   local.get $0
+   local.get $2
    i32.const 10944
    i32.store offset=4
    i32.const 10944
@@ -5157,20 +5162,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 10976
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 10976
    i32.store
-   local.get $0
+   local.get $2
    i32.const 10976
    i32.store offset=4
    i32.const 10976
@@ -5186,20 +5192,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 11008
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 11008
    i32.store
-   local.get $0
+   local.get $2
    i32.const 11008
    i32.store offset=4
    i32.const 11008
@@ -5215,20 +5222,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 11040
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 11040
    i32.store
-   local.get $0
+   local.get $2
    i32.const 11040
    i32.store offset=4
    i32.const 11040
@@ -5244,20 +5252,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 11072
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 11072
    i32.store
-   local.get $0
+   local.get $2
    i32.const 11072
    i32.store offset=4
    i32.const 11072
@@ -5273,20 +5282,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 11104
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 11104
    i32.store
-   local.get $0
+   local.get $2
    i32.const 11104
    i32.store offset=4
    i32.const 11104
@@ -5302,20 +5312,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 11136
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 11136
    i32.store
-   local.get $0
+   local.get $2
    i32.const 11136
    i32.store offset=4
    i32.const 11136
@@ -5331,20 +5342,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 11168
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 11168
    i32.store
-   local.get $0
+   local.get $2
    i32.const 11168
    i32.store offset=4
    i32.const 11168
@@ -5360,20 +5372,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 11200
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 11200
    i32.store
-   local.get $0
+   local.get $2
    i32.const 11200
    i32.store offset=4
    i32.const 11200
@@ -5389,20 +5402,21 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.tee $0
-   global.get $resolve-binary/foo
+   local.tee $2
    local.tee $1
+   global.get $resolve-binary/foo
+   local.tee $0
    i32.store offset=12
-   local.get $0
    local.get $1
-   i32.store offset=16
    local.get $0
+   i32.store offset=16
+   local.get $2
    i32.const 11232
    i32.store offset=8
-   local.get $0
+   local.get $2
    i32.const 11232
    i32.store
-   local.get $0
+   local.get $2
    i32.const 11232
    i32.store offset=4
    i32.const 11232
@@ -5422,21 +5436,23 @@
    call $resolve-binary/Bar#constructor
    global.set $resolve-binary/bar2
    global.get $~lib/memory/__stack_pointer
+   local.tee $1
    local.tee $0
    global.get $resolve-binary/bar
    i32.store offset=4
    local.get $0
    global.get $resolve-binary/bar2
-   local.tee $1
+   local.tee $2
+   local.tee $0
    i32.store offset=8
-   local.get $1
-   global.set $resolve-binary/bar
    local.get $0
+   global.set $resolve-binary/bar
+   local.get $1
    global.get $resolve-binary/bar
    local.tee $0
    i32.store
    local.get $0
-   local.get $1
+   local.get $2
    i32.ne
    if
     i32.const 0
