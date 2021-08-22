@@ -1416,17 +1416,17 @@
    local.get $0
    local.tee $3
    i64.reinterpret_f64
-   local.set $4
-   local.get $3
-   local.get $3
-   f64.sub
-   f64.const 0
-   f64.div
-   local.get $4
+   local.tee $4
    i64.const 4607182418800017408
    i64.lt_s
-   br_if $__inlined_func$~lib/math/NativeMath.acosh
-   drop
+   if
+    local.get $3
+    local.get $3
+    f64.sub
+    f64.const 0
+    f64.div
+    br $__inlined_func$~lib/math/NativeMath.acosh
+   end
    local.get $4
    i64.const 52
    i64.shr_u

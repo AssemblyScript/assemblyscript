@@ -2304,7 +2304,6 @@ export class Module {
         passes.push("local-cse");
       }
       passes.push("reorder-locals");
-      passes.push("remove-unused-brs");
       passes.push("coalesce-locals");
       passes.push("simplify-locals");
       passes.push("coalesce-locals");
