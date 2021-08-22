@@ -40,11 +40,11 @@
  )
  (func $~start
   (local $0 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1228
    i32.lt_s
@@ -188,9 +188,10 @@
      end
      unreachable
     end
+    i32.const 1056
+    local.set $0
     global.get $~lib/memory/__stack_pointer
     i32.const 1056
-    local.tee $0
     i32.store
    end
    i32.const 2

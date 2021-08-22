@@ -1718,17 +1718,17 @@
   local.get $0
   local.get $2
   call $~lib/rt/tlsf/allocateBlock
-  local.set $6
+  local.tee $6
+  i32.const 4
+  i32.add
+  local.set $2
   local.get $1
   i32.load
   i32.const -4
   i32.and
   local.set $7
   block $~lib/util/memory/memmove|inlined.0
-   local.get $6
-   i32.const 4
-   i32.add
-   local.tee $2
+   local.get $2
    local.get $1
    i32.const 4
    i32.add
@@ -1862,11 +1862,11 @@
        local.get $7
        i32.eqz
        br_if $~lib/util/memory/memmove|inlined.0
+       local.get $2
        local.get $7
        i32.const 1
        i32.sub
        local.tee $7
-       local.get $2
        i32.add
        local.get $5
        local.get $7
@@ -1881,11 +1881,11 @@
       i32.const 8
       i32.ge_u
       if
+       local.get $2
        local.get $7
        i32.const 8
        i32.sub
        local.tee $7
-       local.get $2
        i32.add
        local.get $5
        local.get $7
@@ -1899,11 +1899,11 @@
     loop $while-continue|5
      local.get $7
      if
+      local.get $2
       local.get $7
       i32.const 1
       i32.sub
       local.tee $7
-      local.get $2
       i32.add
       local.get $5
       local.get $7

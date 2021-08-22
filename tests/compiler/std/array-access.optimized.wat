@@ -187,11 +187,11 @@
  )
  (func $export:std/array-access/i32ArrayArrayElementAccess (param $0 i32) (result i32)
   (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1308
    i32.lt_s
@@ -219,7 +219,6 @@
    local.get $0
    i32.store
    local.get $0
-   local.tee $1
    i32.load offset=12
    i32.const 1
    i32.le_u
@@ -231,7 +230,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $1
+   local.get $0
    i32.load offset=4
    i32.load offset=4
    global.get $~lib/memory/__stack_pointer
@@ -253,11 +252,11 @@
  )
  (func $export:std/array-access/stringArrayPropertyAccess (param $0 i32) (result i32)
   (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1308
    i32.lt_s
@@ -309,11 +308,11 @@
  )
  (func $export:std/array-access/stringArrayMethodCall (param $0 i32) (result i32)
   (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1308
    i32.lt_s
@@ -364,11 +363,11 @@
  )
  (func $export:std/array-access/stringArrayArrayPropertyAccess (param $0 i32) (result i32)
   (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1308
    i32.lt_s
@@ -427,11 +426,11 @@
  )
  (func $export:std/array-access/stringArrayArrayMethodCall (param $0 i32) (result i32)
   (local $1 i32)
+  global.get $~lib/memory/__stack_pointer
+  i32.const 4
+  i32.sub
+  global.set $~lib/memory/__stack_pointer
   block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1308
    i32.lt_s

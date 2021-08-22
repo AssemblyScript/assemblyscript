@@ -2273,10 +2273,9 @@ export class Module {
       }
       if (optimizeLevel >= 3) {
         passes.push("simplify-locals-nostructure");
-        passes.push("vacuum");
         passes.push("flatten");
-        passes.push("simplify-locals-notee-nostructure");
         passes.push("vacuum");
+        passes.push("simplify-locals-notee-nostructure");
         passes.push("licm");
         passes.push("merge-locals");
         passes.push("reorder-locals");
