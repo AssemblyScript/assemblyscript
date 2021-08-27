@@ -55,6 +55,7 @@ export enum NodeKind {
 
   // expressions
   IDENTIFIER,
+  BINDINGPATTERN,
   ASSERTION,
   BINARY,
   CALL,
@@ -210,6 +211,14 @@ export abstract class Node {
     isQuoted: bool = false
   ): IdentifierExpression {
     return new IdentifierExpression(text, isQuoted, range);
+  }
+
+  static createBindingPatternExpression(
+    elements: Expression[],
+    range: Range,
+    array: bool
+  ): BindingPatternExpression {
+    return new BindingPatternExpression(elements, array, range);
   }
 
   static createEmptyIdentifierExpression(
@@ -722,7 +731,7 @@ export abstract class Node {
   }
 
   static createVariableDeclaration(
-    name: IdentifierExpression,
+    name: Expression,
     decorators: DecoratorNode[] | null,
     flags: CommonFlags,
     type: TypeNode | null,
@@ -1129,6 +1138,20 @@ export abstract class LiteralExpression extends Expression {
     range: Range
   ) {
     super(NodeKind.LITERAL, range);
+  }
+}
+
+/** Represents an `[]` or `{}` containing identifiers. */
+export class BindingPatternExpression extends Expression {
+  constructor(
+    /** Nested element expressions. Either {@link OmittedExpression} or {@link IdentifierExpression} */
+    public elements: Expression[],
+    /** Whether this is an array pattern or an object pattern */
+    public array: bool,
+    /** Source range. */
+    range: Range
+  ) {
+    super(NodeKind.BINDINGPATTERN, range);
   }
 }
 
@@ -1684,7 +1707,7 @@ export abstract class DeclarationStatement extends Statement {
     /** Declaration node kind. */
     kind: NodeKind,
     /** Simple name being declared. */
-    public name: IdentifierExpression,
+    private _name: Expression,
     /** Array of decorators, if any. */
     public decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -1701,6 +1724,17 @@ export abstract class DeclarationStatement extends Statement {
   isAny(flag: CommonFlags): bool { return (this.flags & flag) != 0; }
   /** Sets a specific flag or flags. */
   set(flag: CommonFlags): void { this.flags |= flag; }
+
+  /** Attempts to return the name as an identifier. */
+  get identifierNode(): IdentifierExpression {
+    assert(this._name.kind == NodeKind.IDENTIFIER || this._name.kind == NodeKind.CONSTRUCTOR);
+    return this._name as IdentifierExpression;
+  }
+
+  /** Returns the name without any type assertions.  */
+  get name(): Expression {
+    return this._name;
+  }
 }
 
 /** Represents an index signature. */
@@ -1725,7 +1759,7 @@ export abstract class VariableLikeDeclarationStatement extends DeclarationStatem
     /** Variable-like declaration node kind. */
     kind: NodeKind,
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -1769,7 +1803,7 @@ export class BreakStatement extends Statement {
 export class ClassDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -1794,6 +1828,10 @@ export class ClassDeclaration extends DeclarationStatement {
   get isGeneric(): bool {
     var typeParameters = this.typeParameters;
     return typeParameters != null && typeParameters.length > 0;
+  }
+
+  get name(): IdentifierExpression {
+    return this.identifierNode;
   }
 }
 
@@ -1837,7 +1875,7 @@ export class EmptyStatement extends Statement {
 export class EnumDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -1849,13 +1887,17 @@ export class EnumDeclaration extends DeclarationStatement {
   ) {
     super(NodeKind.ENUMDECLARATION, name, decorators, flags, range);
   }
+
+  get name(): IdentifierExpression {
+    return this.identifierNode;
+  }
 }
 
 /** Represents a value of an `enum` declaration. */
 export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Common flags indicating specific traits. */
     flags: CommonFlags,
     /** Initializer expression, if any. */
@@ -1864,6 +1906,10 @@ export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
     range: Range
   ) {
     super(NodeKind.ENUMVALUEDECLARATION, name, null, flags, null, initializer, range);
+  }
+
+  get name(): IdentifierExpression {
+    return this.identifierNode;
   }
 }
 
@@ -1951,7 +1997,7 @@ export class ExpressionStatement extends Statement {
 export class FieldDeclaration extends VariableLikeDeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -1966,6 +2012,10 @@ export class FieldDeclaration extends VariableLikeDeclarationStatement {
     range: Range
   ) {
     super(NodeKind.FIELDDECLARATION, name, decorators, flags, type, initializer, range);
+  }
+
+  get name(): IdentifierExpression {
+    return this.identifierNode;
   }
 }
 
@@ -2017,7 +2067,7 @@ export const enum ArrowKind {
 export class FunctionDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -2055,6 +2105,10 @@ export class FunctionDeclaration extends DeclarationStatement {
       this.range
     );
   }
+
+  get name(): IdentifierExpression {
+    return this.identifierNode;
+  }
 }
 
 /** Represents an `if` statement. */
@@ -2077,13 +2131,17 @@ export class IfStatement extends Statement {
 export class ImportDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Identifier being imported. */
     public foreignName: IdentifierExpression,
     /** Source range. */
     range: Range
   ) {
     super(NodeKind.IMPORTDECLARATION, name, null, CommonFlags.NONE, range);
+  }
+
+  get name(): IdentifierExpression {
+    return this.identifierNode;
   }
 }
 
@@ -2117,7 +2175,7 @@ export class ImportStatement extends Statement {
 export class InterfaceDeclaration extends ClassDeclaration {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -2136,13 +2194,17 @@ export class InterfaceDeclaration extends ClassDeclaration {
     super(name, decorators, flags, typeParameters, extendsType, implementsTypes, members, range);
     this.kind = NodeKind.INTERFACEDECLARATION;
   }
+
+  get name(): IdentifierExpression {
+    return this.identifierNode;
+  }
 }
 
 /** Represents a method declaration within a `class`. */
 export class MethodDeclaration extends FunctionDeclaration {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -2159,13 +2221,17 @@ export class MethodDeclaration extends FunctionDeclaration {
     super(name, decorators, flags, typeParameters, signature, body, ArrowKind.NONE, range);
     this.kind = NodeKind.METHODDECLARATION;
   }
+
+  get name(): IdentifierExpression {
+    return this.identifierNode;
+  }
 }
 
 /** Represents a `namespace` declaration. */
 export class NamespaceDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -2176,6 +2242,10 @@ export class NamespaceDeclaration extends DeclarationStatement {
     range: Range
   ) {
     super(NodeKind.NAMESPACEDECLARATION, name, decorators, flags, range);
+  }
+
+  get name(): IdentifierExpression {
+    return this.identifierNode;
   }
 }
 
@@ -2253,7 +2323,7 @@ export class TryStatement extends Statement {
 export class TypeDeclaration extends DeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */
@@ -2267,13 +2337,17 @@ export class TypeDeclaration extends DeclarationStatement {
   ) {
     super(NodeKind.TYPEDECLARATION, name, decorators, flags, range);
   }
+
+  get name(): IdentifierExpression {
+    return this.identifierNode;
+  }
 }
 
 /** Represents a variable declaration part of a {@link VariableStatement}. */
 export class VariableDeclaration extends VariableLikeDeclarationStatement {
   constructor(
     /** Simple name being declared. */
-    name: IdentifierExpression,
+    name: Expression,
     /** Array of decorators, if any. */
     decorators: DecoratorNode[] | null,
     /** Common flags indicating specific traits. */

@@ -86,7 +86,8 @@ import {
   SwitchCase,
   IndexSignatureNode,
 
-  isTypeOmitted
+  isTypeOmitted,
+  BindingPatternExpression
 } from "../ast";
 
 import {
@@ -147,6 +148,13 @@ export class ASTBuilder {
       case NodeKind.CONSTRUCTOR:
       case NodeKind.IDENTIFIER: {
         this.visitIdentifierExpression(<IdentifierExpression>node);
+        break;
+      }
+      case NodeKind.BINDINGPATTERN: {
+        this.visitBindingPatternExpression(<BindingPatternExpression>node);
+        break;
+      }
+      case NodeKind.OMITTED: {
         break;
       }
       case NodeKind.ASSERTION: {
@@ -463,6 +471,23 @@ export class ASTBuilder {
   visitIdentifierExpression(node: IdentifierExpression): void {
     if (node.isQuoted) this.visitStringLiteral(node.text);
     else this.sb.push(node.text);
+  }
+
+  visitBindingPatternExpression(node: BindingPatternExpression): void {
+    var sb = this.sb;
+    sb.push(node.array ? "[" : "{");
+    var elements = node.elements;
+    var numElements = elements.length;
+    if (numElements) {
+      let element = elements[0];
+      if (element) this.visitNode(element);
+      for (let i = 1; i < numElements; ++i) {
+        element = elements[i];
+        sb.push(", ");
+        if (element) this.visitNode(element);
+      }
+    }
+    sb.push(node.array ? "]" : "}");
   }
 
   visitArrayLiteralExpression(node: ArrayLiteralExpression): void {
@@ -1564,7 +1589,7 @@ export class ASTBuilder {
   }
 
   visitVariableDeclaration(node: VariableDeclaration): void {
-    this.visitIdentifierExpression(node.name);
+    this.visitNode(node.name);
     var type = node.type;
     var sb = this.sb;
     if (node.flags & CommonFlags.DEFINITELY_ASSIGNED) {

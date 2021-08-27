@@ -1,0 +1,8 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "AS235: Invalid destructure pattern.",
+    "EOF"
+  ]
+}

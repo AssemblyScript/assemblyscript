@@ -899,14 +899,12 @@ export class Program extends DiagnosticEmitter {
   /** Creates a native namespace declaration. */
   makeNativeNamespaceDeclaration(
     /** The simple name of the namespace. */
-    name: string,
+    name: IdentifierExpression,
     /** Flags indicating specific traits, e.g. `EXPORT`. */
     flags: CommonFlags = CommonFlags.NONE
   ): NamespaceDeclaration {
-    var range = this.nativeSource.range;
     return Node.createNamespaceDeclaration(
-      Node.createIdentifierExpression(name, range),
-      null, flags, [], range
+      name, null, flags, [], name.range
     );
   }
 
@@ -2581,7 +2579,6 @@ export class Program extends DiagnosticEmitter {
     var declarations = statement.declarations;
     for (let i = 0, k = declarations.length; i < k; ++i) {
       let declaration = declarations[i];
-      let name = declaration.name.text;
       let acceptedFlags = DecoratorFlags.GLOBAL | DecoratorFlags.LAZY;
       if (declaration.is(CommonFlags.DECLARE)) {
         acceptedFlags |= DecoratorFlags.EXTERNAL;
@@ -2589,13 +2586,26 @@ export class Program extends DiagnosticEmitter {
       if (declaration.is(CommonFlags.CONST)) {
         acceptedFlags |= DecoratorFlags.INLINE;
       }
-      let element = new Global(
-        name,
-        parent,
-        this.checkDecorators(declaration.decorators, acceptedFlags),
-        declaration
-      );
-      if (!parent.add(name, element)) continue; // reports
+
+      let nameNode = declaration.name;
+      
+      switch (nameNode.kind) {
+        case NodeKind.BINDINGPATTERN:
+          this.error(DiagnosticCode.A_destructuring_declaration_must_have_an_initializer, declaration.range);
+          break;
+        case NodeKind.IDENTIFIER: {
+          let name = (<IdentifierExpression>nameNode).text;
+          let element = new Global(
+            name,
+            parent,
+            this.checkDecorators(declaration.decorators, acceptedFlags),
+            declaration
+          );
+          
+          parent.add(name, element);
+          break;
+        }
+      }
     }
   }
 
@@ -2897,7 +2907,7 @@ export abstract class DeclaredElement extends Element {
 
   /** Gets the associated identifier node. */
   get identifierNode(): IdentifierExpression {
-    return this.declaration.name;
+    return this.declaration.identifierNode;
   }
 
   /** Gets the signature node, if applicable, along the identifier node. */
@@ -3110,8 +3120,7 @@ export class File extends Element {
     parent: Element,
     localIdentifier: IdentifierExpression
   ): Namespace {
-    var declaration = this.program.makeNativeNamespaceDeclaration(name);
-    declaration.name = localIdentifier;
+    var declaration = this.program.makeNativeNamespaceDeclaration(localIdentifier);
     var ns = new Namespace(name, parent, declaration);
     ns.set(CommonFlags.SCOPED);
     this.copyExportsToNamespace(ns);

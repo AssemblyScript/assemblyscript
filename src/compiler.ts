@@ -176,7 +176,9 @@ import {
   NamedTypeNode,
 
   findDecorator,
-  isTypeOmitted
+  isTypeOmitted,
+  BindingPatternExpression,
+  VariableDeclaration
 } from "./ast";
 
 import {
@@ -2999,199 +3001,314 @@ export class Compiler extends DiagnosticEmitter {
     return this.module.unreachable();
   }
 
+  private createScopedVariable(
+    nameNode: IdentifierExpression,
+    type: Type,
+    declaration: VariableDeclaration,
+    isConst: boolean
+  ): Local | null {
+    var name = nameNode.text;
+    var flow = this.currentFlow;
+    var local: Local;
+
+    if (
+      declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
+      flow.isInline
+    ) { // here: not top-level
+      let existingLocal = flow.getScopedLocal(name);
+      if (existingLocal) {
+        if (!existingLocal.declaration.range.source.isNative) {
+          this.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            nameNode.range,
+            existingLocal.declaration.name.range,
+            name
+          );
+        } else { // scoped locals are shared temps that don't track declarations
+          this.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            nameNode.range, name
+          );
+        }
+        local = existingLocal;
+      } else {
+        local = flow.addScopedLocal(name, type);
+      }
+      if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
+    } else {
+      let existing = flow.lookupLocal(name);
+      if (existing) {
+        this.errorRelated(
+          DiagnosticCode.Duplicate_identifier_0,
+          nameNode.range,
+          existing.declaration.name.range,
+          name
+        );
+        return null;
+      }
+      local = flow.parentFunction.addLocal(type, name, declaration);
+      if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
+    }
+    return local;
+  }
+
   /** Compiles a variable statement. Returns `0` if an initializer is not necessary. */
   private compileVariableStatement(
     statement: VariableStatement
   ): ExpressionRef {
+    var flow = this.currentFlow;
+    var program = this.program;
     var module = this.module;
     var declarations = statement.declarations;
     var numDeclarations = declarations.length;
-    var flow = this.currentFlow;
     var initializers = new Array<ExpressionRef>();
     var resolver = this.resolver;
 
     for (let i = 0; i < numDeclarations; ++i) {
       let declaration = declarations[i];
-      let name = declaration.name.text;
-      let type: Type | null = null;
-      let initExpr: ExpressionRef = 0;
-
-      // Resolve type if annotated
-      let typeNode = declaration.type;
-      let initializerNode = declaration.initializer;
-      if (typeNode) {
-        type = resolver.resolveType( // reports
-          typeNode,
-          flow.actualFunction,
-          uniqueMap(flow.contextualTypeArguments)
-        );
-        if (!type) continue;
-        this.checkTypeSupported(type, typeNode);
-
-        if (initializerNode) {
-          let pendingElements = this.pendingElements;
-          let dummy = flow.addScopedDummyLocal(name, type, statement); // pending dummy
-          pendingElements.add(dummy);
-          initExpr = this.compileExpression(initializerNode, type, // reports
-            Constraints.CONV_IMPLICIT
-          );
-          pendingElements.delete(dummy);
-          flow.freeScopedDummyLocal(name);
-        }
-
-      // Otherwise infer type from initializer
-      } else if (initializerNode) {
-        let pendingElements = this.pendingElements;
-        let temp = flow.addScopedDummyLocal(name, Type.auto, statement); // pending dummy
-        pendingElements.add(temp);
-        initExpr = this.compileExpression(initializerNode, Type.auto); // reports
-        pendingElements.delete(temp);
-        flow.freeScopedDummyLocal(name);
-
-        if (this.currentType == Type.void) {
-          this.error(
-            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            declaration.range, this.currentType.toString(), "<auto>"
-          );
-          continue;
-        }
-        type = this.currentType;
-
-      // Error if there's neither a type nor an initializer
-      } else {
-        this.error(
-          DiagnosticCode.Type_expected,
-          declaration.name.range.atEnd
-        );
-        continue;
-      }
-
-      // Handle constants, and try to inline if value is static
-      let isConst = declaration.is(CommonFlags.CONST);
-      let isStatic = false;
-      if (isConst) {
-        if (initExpr) {
-          let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
-          if (precomp) {
-            initExpr = precomp; // always use precomputed initExpr
-            let local: Local | null = null;
-            switch (<u32>getExpressionType(initExpr)) {
-              case <u32>TypeRef.I32: {
-                local = new Local(name, -1, type, flow.parentFunction);
-                local.setConstantIntegerValue(
-                  i64_new(
-                    getConstValueI32(initExpr),
-                    0
-                  ),
-                  type
-                );
-                break;
-              }
-              case <u32>TypeRef.I64: {
-                local = new Local(name, -1, type, flow.parentFunction);
-                local.setConstantIntegerValue(
-                  i64_new(
-                    getConstValueI64Low(initExpr),
-                    getConstValueI64High(initExpr)
-                  ),
-                  type
-                );
-                break;
-              }
-              case <u32>TypeRef.F32: {
-                local = new Local(name, -1, type, flow.parentFunction);
-                local.setConstantFloatValue(<f64>getConstValueF32(initExpr), type);
-                break;
-              }
-              case <u32>TypeRef.F64: {
-                local = new Local(name, -1, type, flow.parentFunction);
-                local.setConstantFloatValue(getConstValueF64(initExpr), type);
-                break;
-              }
-            }
-            if (local) {
-              // Add as a virtual local that doesn't actually exist in WebAssembly
-              let scopedLocals = flow.scopedLocals;
-              if (!scopedLocals) flow.scopedLocals = scopedLocals = new Map();
-              else if (scopedLocals.has(name)) {
-                let existing = assert(scopedLocals.get(name));
-                this.errorRelated(
-                  DiagnosticCode.Duplicate_identifier_0,
-                  declaration.name.range,
-                  existing.declaration.name.range,
-                  name
-                );
-                return this.module.unreachable();
-              }
-              scopedLocals.set(name, local);
-              isStatic = true;
-            }
-          }
-        } else {
-          this.error(
-            DiagnosticCode._const_declarations_must_be_initialized,
-            declaration.range
-          );
-        }
-      }
-
-      // Otherwise compile as mutable
-      if (!isStatic) {
-        let local: Local;
-        if (
-          declaration.isAny(CommonFlags.LET | CommonFlags.CONST) ||
-          flow.isInline
-        ) { // here: not top-level
-          let existingLocal = flow.getScopedLocal(name);
-          if (existingLocal) {
-            if (!existingLocal.declaration.range.source.isNative) {
-              this.errorRelated(
-                DiagnosticCode.Duplicate_identifier_0,
-                declaration.name.range,
-                existingLocal.declaration.name.range,
-                name
-              );
-            } else { // scoped locals are shared temps that don't track declarations
-              this.error(
-                DiagnosticCode.Duplicate_identifier_0,
-                declaration.name.range, name
-              );
-            }
-            local = existingLocal;
-          } else {
-            local = flow.addScopedLocal(name, type);
-          }
-          if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
-        } else {
-          let existing = flow.lookupLocal(name);
-          if (existing) {
-            this.errorRelated(
-              DiagnosticCode.Duplicate_identifier_0,
-              declaration.name.range,
-              existing.declaration.name.range,
-              name
+      switch (declaration.name.kind) {
+        case NodeKind.BINDINGPATTERN: {
+          const initializer = declaration.initializer;
+          if (!initializer) {
+            this.error(
+              DiagnosticCode.A_destructuring_declaration_must_have_an_initializer,
+              declaration.range
             );
             continue;
           }
-          local = flow.parentFunction.addLocal(type, name, declaration);
-          if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
-        }
-        if (initExpr) {
+
+          const pattern = <BindingPatternExpression>declaration.name;
+
+          // resolve type of initializer
+          let initExpr = this.compileExpression(initializer, Type.auto);
+          let initType = this.currentType;
+
+          // add initializer as local
+          let initLocal = flow.parentFunction.addLocal(Type.auto, null, declaration);
+          flow.setLocalFlag(initLocal.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
           initializers.push(
-            this.makeLocalAssignment(local, initExpr, type, false)
+            this.makeLocalAssignment(initLocal, initExpr, initType, false)
           );
-        } else {
-          // no need to assign zero
-          if (local.type.isShortIntegerValue) {
-            flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
+
+          if (pattern.array) {
+            let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
+            let classType = initType.getClassOrWrapper(program);
+            let indexedGet: Function | null = null;
+            if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
+              this.error(
+                DiagnosticCode.Index_signature_is_missing_in_type_0,
+                initializer.range, initType.toString()
+              );
+              continue;
+            }
+
+            if (!isUnchecked && this.options.pedantic) {
+              this.pedantic(
+                DiagnosticCode.Indexed_access_may_involve_bounds_checking,
+                declaration.range
+              );
+            }
+            // check that the type is valid
+            if (indexedGet.signature.parameterTypes[0] != Type.i32) {
+              this.error(
+                DiagnosticCode.Type_0_is_not_an_array_type,
+                declaration.range,
+                initType.toString()
+              );
+              continue;
+            }
+
+            let idents = pattern.elements;
+            let numIdents = idents.length;
+            for (let j: i32 = 0; j < numIdents; ++j) {
+              let node = idents[j];
+              if (node.kind == NodeKind.IDENTIFIER) {
+                let nameNode = <IdentifierExpression>node;
+                // add local
+                let type = indexedGet.signature.returnType;
+                let local = this.createScopedVariable(nameNode, type, declaration, declaration.is(CommonFlags.CONST));
+
+                if (local == null)
+                  continue;
+
+                let callExpr = this.makeCallDirect(indexedGet, [
+                  module.local_get(initLocal.index, initType.toRef()), module.i32(j)
+                ], nameNode, false);
+
+                initializers.push(
+                  this.makeLocalAssignment(local, callExpr, type, false)
+                );
+              } else if (node.kind != NodeKind.OMITTED) {
+                this.error(
+                  DiagnosticCode.Invalid_destructure_pattern,
+                  pattern.range
+                );
+                continue;
+              }
+            }
+          } else {
+            this.error(
+              DiagnosticCode.Not_implemented_0,
+              pattern.range,
+              "Object destructuring"
+            );
+            continue;
           }
+          break;
+        }
+
+        
+        case NodeKind.IDENTIFIER: {
+          let nameNode = <IdentifierExpression>declaration.name;
+          let typeNode = declaration.type;
+          let initializerNode = declaration.initializer;
+          let name = nameNode.text;
+          let type: Type | null = null;
+          let initExpr: ExpressionRef = 0;
+
+          // Resolve type if annotated
+          if (typeNode) {
+            type = resolver.resolveType( // reports
+              typeNode,
+              flow.actualFunction,
+              uniqueMap(flow.contextualTypeArguments)
+            );
+            if (!type) continue;
+            this.checkTypeSupported(type, typeNode);
+
+            if (initializerNode) {
+              let pendingElements = this.pendingElements;
+              let dummy = flow.addScopedDummyLocal(name, type, statement); // pending dummy
+              pendingElements.add(dummy);
+              initExpr = this.compileExpression(initializerNode, type, // reports
+                Constraints.CONV_IMPLICIT
+              );
+              pendingElements.delete(dummy);
+              flow.freeScopedDummyLocal(name);
+            }
+
+          // Otherwise infer type from initializer
+          } else if (initializerNode) {
+            let pendingElements = this.pendingElements;
+            let temp = flow.addScopedDummyLocal(name, Type.auto, statement); // pending dummy
+            pendingElements.add(temp);
+            initExpr = this.compileExpression(initializerNode, Type.auto); // reports
+            pendingElements.delete(temp);
+            flow.freeScopedDummyLocal(name);
+
+            if (this.currentType == Type.void) {
+              this.error(
+                DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+                declaration.range, this.currentType.toString(), "<auto>"
+              );
+              continue;
+            }
+            type = this.currentType;
+
+          // Error if there's neither a type nor an initializer
+          } else {
+            this.error(
+              DiagnosticCode.Type_expected,
+              nameNode.range.atEnd
+            );
+            continue;
+          }
+
+          // Handle constants, and try to inline if value is static
+          let isConst = declaration.is(CommonFlags.CONST);
+          let isStatic = false;
+          if (isConst) {
+            if (initExpr) {
+              let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
+              if (precomp) {
+                initExpr = precomp; // always use precomputed initExpr
+                let local: Local | null = null;
+                switch (<u32>getExpressionType(initExpr)) {
+                  case <u32>TypeRef.I32: {
+                    local = new Local(name, -1, type, flow.parentFunction);
+                    local.setConstantIntegerValue(
+                      i64_new(
+                        getConstValueI32(initExpr),
+                        0
+                      ),
+                      type
+                    );
+                    break;
+                  }
+                  case <u32>TypeRef.I64: {
+                    local = new Local(name, -1, type, flow.parentFunction);
+                    local.setConstantIntegerValue(
+                      i64_new(
+                        getConstValueI64Low(initExpr),
+                        getConstValueI64High(initExpr)
+                      ),
+                      type
+                    );
+                    break;
+                  }
+                  case <u32>TypeRef.F32: {
+                    local = new Local(name, -1, type, flow.parentFunction);
+                    local.setConstantFloatValue(<f64>getConstValueF32(initExpr), type);
+                    break;
+                  }
+                  case <u32>TypeRef.F64: {
+                    local = new Local(name, -1, type, flow.parentFunction);
+                    local.setConstantFloatValue(getConstValueF64(initExpr), type);
+                    break;
+                  }
+                }
+                if (local) {
+                  // Add as a virtual local that doesn't actually exist in WebAssembly
+                  let scopedLocals = flow.scopedLocals;
+                  if (!scopedLocals) flow.scopedLocals = scopedLocals = new Map();
+                  else if (scopedLocals.has(name)) {
+                    let existing = assert(scopedLocals.get(name));
+                    this.errorRelated(
+                      DiagnosticCode.Duplicate_identifier_0,
+                      nameNode.range,
+                      existing.declaration.name.range,
+                      name
+                    );
+                    return this.module.unreachable();
+                  }
+                  scopedLocals.set(name, local);
+                  isStatic = true;
+                }
+              }
+            } else {
+              this.error(
+                DiagnosticCode._const_declarations_must_be_initialized,
+                declaration.range
+              );
+            }
+          }
+
+          // Otherwise compile as mutable
+          if (!isStatic) {
+            let local = this.createScopedVariable(nameNode, type, declaration, isConst);
+            if (local == null)
+              continue;
+
+            if (initExpr) {
+              initializers.push(
+                this.makeLocalAssignment(local, initExpr, type, false)
+              );
+            } else {
+              // no need to assign zero
+              if (local.type.isShortIntegerValue) {
+                flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
+              }
+            }
+          }
+          break;
         }
       }
     }
+
     this.currentType = Type.void;
     return initializers.length == 0
       ? 0
-      : module.flatten(initializers);
+      : this.module.flatten(initializers);
   }
 
   private compileVoidStatement(
@@ -5803,11 +5920,115 @@ export class Compiler extends DiagnosticEmitter {
     return this.makeCallDirect(operatorInstance, [ leftExpr, rightExpr ], reportNode);
   }
 
+  private compileArrayPatternAssignment(
+    expression: ArrayLiteralExpression,
+    valueExpression: Expression,
+    contextualType: Type
+  ): ExpressionRef {
+    var flow = this.currentFlow;
+    var module = this.module;
+    var program = this.program;
+    var exprs = new Array<ExpressionRef>();
+
+    // this is copied code; refactor later
+
+    // resolve type of initializer
+    let initExpr = this.compileExpression(valueExpression, Type.auto);
+    let initType = this.currentType;
+    let initTypeRef = initType.toRef();
+
+    // add initializer as local
+    let initLocal = flow.parentFunction.addLocal(Type.auto, null);
+    flow.setLocalFlag(initLocal.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
+    exprs.push(
+      this.makeLocalAssignment(initLocal, initExpr, initType, false)
+    );
+
+    let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
+    let classType = initType.getClassOrWrapper(program);
+    let indexedGet: Function | null = null;
+    if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
+      this.error(
+        DiagnosticCode.Index_signature_is_missing_in_type_0,
+        valueExpression.range, initType.toString()
+      );
+      return module.unreachable();
+    }
+
+    if (!isUnchecked && this.options.pedantic) {
+      this.pedantic(
+        DiagnosticCode.Indexed_access_may_involve_bounds_checking,
+        valueExpression.range
+      );
+    }
+
+    // check that the type is valid
+    if (indexedGet.signature.parameterTypes[0] != Type.i32) {
+      this.error(
+        DiagnosticCode.Type_0_is_not_an_array_type,
+        valueExpression.range,
+        initType.toString()
+      );
+      return module.unreachable();
+    }
+
+    let idents = expression.elementExpressions;
+    let numIdents = idents.length;
+    for (let j: i32 = 0; j < numIdents; ++j) {
+      let node = idents[j];
+      if (node.kind == NodeKind.IDENTIFIER) {
+        let nameNode = <IdentifierExpression>node;
+        let name = nameNode.text;
+        // add local
+        let type = indexedGet.signature.returnType;
+        let local = flow.lookupLocal(name);
+
+        if (local == null) {
+          this.error(
+            DiagnosticCode.Variable_0_used_before_its_declaration,
+            expression.range,
+            name
+          );
+          return this.module.unreachable();
+        }
+
+        let callExpr = this.makeCallDirect(indexedGet, [
+          module.local_get(initLocal.index, initType.toRef()), module.i32(j)
+        ], nameNode, false);
+
+        exprs.push(
+          this.makeAssignment(local, callExpr, type, valueExpression, null, null, false)
+        );
+      } else if (node.kind != NodeKind.OMITTED) {
+        this.error(
+          DiagnosticCode.Invalid_destructure_pattern,
+          expression.range
+        );
+        return this.module.unreachable();
+      }
+    }
+
+    let tee = contextualType != Type.void;
+    if (tee) {
+      this.currentType = initType;
+      exprs.push(
+        module.local_get(initLocal.index, initTypeRef)
+      );
+    }
+    
+    return exprs.length == 0
+      ? 0
+      : this.module.flatten(exprs, tee ? initTypeRef : TypeRef.None);
+  }
+
   private compileAssignment(
     expression: Expression,
     valueExpression: Expression,
     contextualType: Type
   ): ExpressionRef {
+    if (expression.isLiteralKind(LiteralKind.ARRAY))
+      return this.compileArrayPatternAssignment(<ArrayLiteralExpression>expression, valueExpression, contextualType);
+
     var program = this.program;
     var resolver = program.resolver;
     var flow = this.currentFlow;
@@ -7461,12 +7682,12 @@ export class Compiler extends DiagnosticEmitter {
     assert(!declaration.typeParameters); // function expression cannot be generic
     var flow = this.currentFlow;
     var actualFunction = flow.actualFunction;
-    var isNamed = declaration.name.text.length > 0;
+    var isNamed = declaration.identifierNode.text.length > 0;
     var isSemanticallyAnonymous = !isNamed || contextualType != Type.void;
     var prototype = new FunctionPrototype(
       isSemanticallyAnonymous
-        ? (isNamed ? declaration.name.text + "|" : "anonymous|") + (actualFunction.nextAnonymousId++).toString()
-        : declaration.name.text,
+        ? (isNamed ? declaration.identifierNode.text + "|" : "anonymous|") + (actualFunction.nextAnonymousId++).toString()
+        : declaration.identifierNode.text,
       actualFunction,
       declaration,
       DecoratorFlags.NONE

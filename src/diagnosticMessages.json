@@ -43,6 +43,7 @@
   "A class with a constructor explicitly returning something else than 'this' must be '@final'.": 231,
   "Property '{0}' is always assigned before being used.": 233,
   "Expression refers to a static element that does not compile to a value at runtime.": 234,
+  "Invalid destructure pattern.": 235,
 
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,
@@ -101,6 +102,7 @@
   "Interface declaration cannot have 'implements' clause.": 1176,
   "Binary digit expected.": 1177,
   "Octal digit expected.": 1178,
+  "A destructuring declaration must have an initializer.": 1182,
   "An implementation cannot be declared in ambient contexts.": 1183,
   "The variable declaration of a 'for...of' statement cannot have an initializer.": 1190,
   "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": 1198,
@@ -152,6 +154,7 @@
   "Cannot redeclare block-scoped variable '{0}'" : 2451,
   "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": 2453,
   "Type '{0}' has no property '{1}'.": 2460,
+  "Type '{0}' is not an array type.": 2461,
   "The '{0}' operator cannot be applied to type '{1}'.": 2469,
   "In 'const' enum declarations member initializer must be constant expression.": 2474,
   "Export declaration conflicts with exported declaration of '{0}'.": 2484,

@@ -1,0 +1,8 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS2329: Index signature is missing in type 'i32'.",
+    "EOF"
+  ]
+}
