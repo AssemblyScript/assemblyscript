@@ -7,11 +7,11 @@ import {
 
 export namespace console {
 
-  export function assert<T>(condition: T, message: string | null = null): void {
+  export function assert<T>(condition: T, message: string = ""): void {
     if (!condition) {
       let stderr = process.stderr;
       stderr.write("Assertion failed: ");
-      stderr.write(message !== null ? message : "console.assert");
+      stderr.write(message);
       stderr.write("\n");
     }
   }
