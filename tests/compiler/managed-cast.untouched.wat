@@ -2469,17 +2469,22 @@
   global.get $~lib/memory/__stack_pointer
   local.get $0
   local.tee $1
-  i32.const 3
-  call $~lib/rt/__instanceof
   if (result i32)
    local.get $1
+   i32.const 3
+   call $~lib/rt/__instanceof
+   if (result i32)
+    local.get $1
+   else
+    i32.const 560
+    i32.const 496
+    i32.const 47
+    i32.const 30
+    call $~lib/builtins/abort
+    unreachable
+   end
   else
-   i32.const 560
-   i32.const 496
-   i32.const 47
-   i32.const 30
-   call $~lib/builtins/abort
-   unreachable
+   i32.const 0
   end
   local.tee $2
   i32.store
