@@ -31,10 +31,10 @@
    end
    unreachable
   end
-  local.get $0
   local.get $1
   i32.const 1
   i32.shl
+  local.get $0
   i32.add
   local.set $4
   local.get $2
@@ -242,14 +242,14 @@
   local.set $3
   i32.const 3
   global.set $~argumentsLength
+  i32.const 1216
+  local.get $3
   local.get $0
   i32.const 4
   i32.add
   local.tee $0
-  i32.const 1216
-  local.get $3
-  local.get $0
   call $~lib/string/String.UTF8.encodeUnsafe@varargs
+  local.get $0
   i32.add
   local.tee $0
   i32.const 40

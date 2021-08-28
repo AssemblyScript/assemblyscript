@@ -139,6 +139,8 @@ export interface CompilerOptions {
   maximumMemory?: number;
   /** Declare memory as shared. Requires maximumMemory. */
   sharedMemory?: boolean;
+  /** Assume that imported memory is zero filled. Requires importMemory. */
+  zeroFilledMemory?: boolean;
   /** Sets the start offset of compiler-generated static memory. */
   memoryBase?: number;
   /** Imports the function table provided as 'env.table'. */

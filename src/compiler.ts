@@ -225,6 +225,8 @@ export class Options {
   maximumMemory: u32 = 0;
   /** If true, memory is declared as shared. */
   sharedMemory: bool = false;
+  /** If true, imported memory is zero filled. */
+  zeroFilledMemory: bool = false;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, exports the function table. */
@@ -425,9 +427,9 @@ export class Compiler extends DiagnosticEmitter {
     var featureFlags: FeatureFlags = 0;
     if (options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
     if (options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
-    if (options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.NontrappingFPToInt;
+    if (options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.TruncSat;
     if (options.hasFeature(Feature.BULK_MEMORY)) featureFlags |= FeatureFlags.BulkMemory;
-    if (options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD128;
+    if (options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD;
     if (options.hasFeature(Feature.THREADS)) featureFlags |= FeatureFlags.Atomics;
     if (options.hasFeature(Feature.EXCEPTION_HANDLING)) featureFlags |= FeatureFlags.ExceptionHandling;
     if (options.hasFeature(Feature.TAIL_CALLS)) featureFlags |= FeatureFlags.TailCall;

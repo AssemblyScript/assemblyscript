@@ -184,9 +184,9 @@
   local.get $1
   i64.extend_i32_u
   local.tee $4
-  local.get $4
   i64.const 32
   i64.shl
+  local.get $4
   i64.or
   local.set $4
   loop $while-continue|0

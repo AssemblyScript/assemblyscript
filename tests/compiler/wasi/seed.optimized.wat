@@ -317,9 +317,9 @@
    i32.const 1
    global.set $~lib/math/random_seeded
    local.get $2
-   local.get $2
    i64.const 33
    i64.shr_u
+   local.get $2
    i64.xor
    i64.const -49064778989728563
    i64.mul
@@ -368,9 +368,9 @@
    i32.const 1
    i32.or
    local.get $0
-   local.get $0
    i32.const 15
    i32.shr_u
+   local.get $0
    i32.xor
    i32.mul
    local.tee $0
@@ -379,9 +379,9 @@
    i32.const 61
    i32.or
    local.get $0
-   local.get $0
    i32.const 7
    i32.shr_u
+   local.get $0
    i32.xor
    i32.mul
    i32.add
@@ -400,9 +400,9 @@
    i32.const 1
    i32.or
    local.get $0
-   local.get $0
    i32.const 15
    i32.shr_u
+   local.get $0
    i32.xor
    i32.mul
    local.tee $0
@@ -411,9 +411,9 @@
    i32.const 61
    i32.or
    local.get $0
-   local.get $0
    i32.const 7
    i32.shr_u
+   local.get $0
    i32.xor
    i32.mul
    i32.add
@@ -453,9 +453,9 @@
   global.set $~lib/math/random_state0_64
   local.get $2
   local.get $1
-  local.get $1
   i64.const 23
   i64.shl
+  local.get $1
   i64.xor
   local.tee $1
   local.get $1

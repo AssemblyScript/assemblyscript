@@ -156,6 +156,12 @@
     "type": "b",
     "default": false
   },
+  "zeroFilledMemory": {
+    "category": "Features",
+    "description": "Assume that imported memory is zero filled. Requires importMemory.",
+    "type": "b",
+    "default": false
+  },
   "importTable": {
     "category": "Features",
     "description": "Imports the function table from 'env.table'.",
