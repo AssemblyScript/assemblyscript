@@ -2567,6 +2567,55 @@
   i32.const 624
   global.set $class-overloading/which
  )
+ (func $class-overloading/B#b (param $0 i32) (param $1 i32)
+  i32.const 496
+  global.set $class-overloading/which
+ )
+ (func $class-overloading/F#b (param $0 i32) (param $1 i32)
+  i32.const 624
+  global.set $class-overloading/which
+ )
+ (func $class-overloading/B#get:c (param $0 i32) (result i32)
+  i32.const 496
+  global.set $class-overloading/which
+  i32.const 0
+ )
+ (func $class-overloading/F#get:c (param $0 i32) (result i32)
+  i32.const 624
+  global.set $class-overloading/which
+  i32.const 0
+ )
+ (func $class-overloading/B#set:c (param $0 i32) (param $1 i32)
+  i32.const 496
+  global.set $class-overloading/which
+ )
+ (func $class-overloading/F#set:c (param $0 i32) (param $1 i32)
+  i32.const 624
+  global.set $class-overloading/which
+ )
+ (func $class-overloading/CA#foo (param $0 i32)
+  i32.const 656
+  global.set $class-overloading/which
+ )
+ (func $class-overloading/CC#foo (param $0 i32)
+  i32.const 688
+  global.set $class-overloading/which
+ )
+ (func $class-overloading/A1#baz (param $0 i32) (result i32)
+  i32.const 720
+  i32.const 528
+  i32.const 186
+  i32.const 5
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $class-overloading/A1#bar (param $0 i32) (result i32)
+  local.get $0
+  call $class-overloading/A1#baz@virtual
+ )
+ (func $class-overloading/B1#baz (param $0 i32) (result i32)
+  i32.const 3
+ )
  (func $class-overloading/A#a<i32>@virtual (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $default
@@ -2618,14 +2667,6 @@
   local.get $0
   local.get $1
   call $class-overloading/A#a<i32>
- )
- (func $class-overloading/B#b (param $0 i32) (param $1 i32)
-  i32.const 496
-  global.set $class-overloading/which
- )
- (func $class-overloading/F#b (param $0 i32) (param $1 i32)
-  i32.const 624
-  global.set $class-overloading/which
  )
  (func $class-overloading/A#b@virtual (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2679,16 +2720,6 @@
   local.get $1
   call $class-overloading/A#b
  )
- (func $class-overloading/B#get:c (param $0 i32) (result i32)
-  i32.const 496
-  global.set $class-overloading/which
-  i32.const 0
- )
- (func $class-overloading/F#get:c (param $0 i32) (result i32)
-  i32.const 624
-  global.set $class-overloading/which
-  i32.const 0
- )
  (func $class-overloading/A#get:c@virtual (param $0 i32) (result i32)
   (local $1 i32)
   block $default
@@ -2736,14 +2767,6 @@
   end
   local.get $0
   call $class-overloading/A#get:c
- )
- (func $class-overloading/B#set:c (param $0 i32) (param $1 i32)
-  i32.const 496
-  global.set $class-overloading/which
- )
- (func $class-overloading/F#set:c (param $0 i32) (param $1 i32)
-  i32.const 624
-  global.set $class-overloading/which
  )
  (func $class-overloading/A#set:c@virtual (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -2797,14 +2820,6 @@
   local.get $1
   call $class-overloading/A#set:c
  )
- (func $class-overloading/CA#foo (param $0 i32)
-  i32.const 656
-  global.set $class-overloading/which
- )
- (func $class-overloading/CC#foo (param $0 i32)
-  i32.const 688
-  global.set $class-overloading/which
- )
  (func $class-overloading/IA#foo@virtual (param $0 i32)
   (local $1 i32)
   block $default
@@ -2835,18 +2850,6 @@
   end
   unreachable
  )
- (func $class-overloading/A1#baz (param $0 i32) (result i32)
-  i32.const 720
-  i32.const 528
-  i32.const 186
-  i32.const 5
-  call $~lib/builtins/abort
-  unreachable
- )
- (func $class-overloading/A1#bar (param $0 i32) (result i32)
-  local.get $0
-  call $class-overloading/A1#baz@virtual
- )
  (func $class-overloading/A2#foo@virtual (param $0 i32) (result i32)
   (local $1 i32)
   block $default
@@ -2868,9 +2871,6 @@
   end
   local.get $0
   call $class-overloading/A2#foo
- )
- (func $class-overloading/B1#baz (param $0 i32) (result i32)
-  i32.const 3
  )
  (func $class-overloading/A1#baz@virtual (param $0 i32) (result i32)
   (local $1 i32)
