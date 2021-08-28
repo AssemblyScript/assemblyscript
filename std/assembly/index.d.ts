@@ -1320,6 +1320,7 @@ declare type NonNullable<T> = T extends null | undefined ? never : T;
 declare type nonnull<T> = NonNullable<T>;
 
 /** Pseudo-class representing the backing class of integer types. */
+/** @internal */
 declare class _Integer {
   /** Smallest representable value. */
   static readonly MIN_VALUE: number;
@@ -1332,6 +1333,7 @@ declare class _Integer {
 }
 
 /** Pseudo-class representing the backing class of floating-point types. */
+/** @internal */
 declare class _Float {
   /** Difference between 1 and the smallest representable value greater than 1. */
   static readonly EPSILON: f32 | f64;
@@ -1555,7 +1557,7 @@ interface ArrayBufferView {
   readonly dataStart: usize;
 }
 
-/* @internal */
+/** @internal */
 declare abstract class TypedArray<T> implements ArrayBufferView {
   [key: number]: T;
   /** Number of bytes per element. */
@@ -1963,6 +1965,7 @@ interface SymbolConstructor {
 
 declare const Symbol: SymbolConstructor;
 
+/** @internal */
 interface IMath<T> {
   /** The base of natural logarithms, e, approximately 2.718. */
   readonly E: T;
@@ -2054,6 +2057,7 @@ interface IMath<T> {
   trunc(x: T): T;
 }
 
+/** @internal */
 interface INativeMath<T> extends IMath<T> {
   /** Contains sin value produced after Math/Mathf.sincos */
   sincos_sin: T;
