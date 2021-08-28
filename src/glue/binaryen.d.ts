@@ -531,7 +531,7 @@ export declare function _BinaryenTagGetName(tag: TagRef): StringRef;
 export declare function _BinaryenTagGetParams(tag: TagRef): TypeRef;
 export declare function _BinaryenTagGetResults(tag: TagRef): TypeRef;
 
-export declare function _BinaryenAddTable(module: ModuleRef, name: StringRef, initial: Index, maximum: Index): TableRef;
+export declare function _BinaryenAddTable(module: ModuleRef, name: StringRef, initial: Index, maximum: Index, type: TypeRef): TableRef;
 export declare function _BinaryenRemoveTable(module: ModuleRef, table: StringRef): void;
 export declare function _BinaryenGetNumTables(module: ModuleRef): Index;
 export declare function _BinaryenGetTable(module: ModuleRef, name: StringRef): TableRef;

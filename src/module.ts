@@ -2056,7 +2056,7 @@ export class Module {
     var cArr = allocPtrArray(names);
     var tableRef = binaryen._BinaryenGetTable(this.ref, cStr);
     if (!tableRef) {
-      tableRef = binaryen._BinaryenAddTable(this.ref, cStr, initial, maximum);
+      tableRef = binaryen._BinaryenAddTable(this.ref, cStr, initial, maximum, TypeRef.Funcref);
     } else {
       binaryen._BinaryenTableSetInitial(tableRef, initial);
       binaryen._BinaryenTableSetMax(tableRef, maximum);
