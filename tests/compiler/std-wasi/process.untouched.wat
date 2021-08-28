@@ -2844,38 +2844,41 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  i32.const -1
+  (local $10 i32)
+  local.get $1
+  call $~lib/string/String#get:length
   local.set $2
-  i32.const -1
+  i32.const 0
   local.set $3
-  i32.const -1
+  i32.const 0
   local.set $4
+  i32.const 0
+  local.set $5
   block $break|0
    block $case4|0
     block $case3|0
      block $case2|0
       block $case1|0
        block $case0|0
-        local.get $1
-        call $~lib/string/String#get:length
-        local.set $5
-        local.get $5
+        local.get $2
+        local.set $6
+        local.get $6
         i32.const 4
         i32.eq
         br_if $case0|0
-        local.get $5
+        local.get $6
         i32.const 3
         i32.eq
         br_if $case1|0
-        local.get $5
+        local.get $6
         i32.const 2
         i32.eq
         br_if $case2|0
-        local.get $5
+        local.get $6
         i32.const 1
         i32.eq
         br_if $case3|0
-        local.get $5
+        local.get $6
         i32.const 0
         i32.eq
         br_if $case4|0
@@ -2883,40 +2886,40 @@
        end
        local.get $1
        i32.load16_u offset=6
-       local.set $4
-       local.get $4
+       local.set $5
+       local.get $5
        i32.const 128
-       i32.ge_s
+       i32.ge_u
        if
         br $break|0
        end
       end
       local.get $1
       i32.load16_u offset=4
-      local.set $3
-      local.get $3
+      local.set $4
+      local.get $4
       i32.const 128
-      i32.ge_s
+      i32.ge_u
       if
        br $break|0
       end
      end
      local.get $1
      i32.load16_u offset=2
-     local.set $2
-     local.get $2
+     local.set $3
+     local.get $3
      i32.const 128
-     i32.ge_s
+     i32.ge_u
      if
       br $break|0
      end
     end
     local.get $1
     i32.load16_u
-    local.set $5
-    local.get $5
+    local.set $6
+    local.get $6
     i32.const 128
-    i32.ge_s
+    i32.ge_u
     if
      br $break|0
     end
@@ -2928,31 +2931,19 @@
     i32.add
     i32.store
     global.get $~lib/process/iobuf
-    i32.const 1
     local.get $2
-    i32.const -1
-    i32.ne
-    i32.add
-    local.get $3
-    i32.const -1
-    i32.ne
-    i32.add
-    local.get $4
-    i32.const -1
-    i32.ne
-    i32.add
     i32.store offset=4
     global.get $~lib/process/iobuf
-    local.get $5
-    local.get $2
+    local.get $6
+    local.get $3
     i32.const 8
     i32.shl
     i32.or
-    local.get $3
+    local.get $4
     i32.const 16
     i32.shl
     i32.or
-    local.get $4
+    local.get $5
     i32.const 24
     i32.shl
     i32.or
@@ -2966,15 +2957,15 @@
     i32.mul
     i32.add
     call $~lib/bindings/wasi_snapshot_preview1/fd_write
-    local.set $6
-    local.get $6
+    local.set $7
+    local.get $7
     i32.const 65535
     i32.and
     if
-     local.get $6
+     local.get $7
      call $~lib/bindings/wasi_snapshot_preview1/errnoToString
      i32.const 3200
-     i32.const 178
+     i32.const 180
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -2985,35 +2976,34 @@
   local.get $1
   i32.const 0
   call $~lib/string/String.UTF8.byteLength
-  local.set $7
-  local.get $7
-  call $~lib/rt/tlsf/__alloc
   local.set $8
-  local.get $1
-  local.get $1
-  call $~lib/string/String#get:length
   local.get $8
+  call $~lib/rt/tlsf/__alloc
+  local.set $9
+  local.get $1
+  local.get $2
+  local.get $9
   i32.const 0
   i32.const 3
   global.set $~argumentsLength
   i32.const 0
   call $~lib/string/String.UTF8.encodeUnsafe@varargs
-  local.get $7
+  local.get $8
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 3200
-   i32.const 184
+   i32.const 186
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
   end
   global.get $~lib/process/iobuf
-  local.get $8
+  local.get $9
   i32.store
   global.get $~lib/process/iobuf
-  local.get $7
+  local.get $8
   i32.store offset=4
   local.get $0
   global.get $~lib/process/iobuf
@@ -3024,17 +3014,17 @@
   i32.mul
   i32.add
   call $~lib/bindings/wasi_snapshot_preview1/fd_write
-  local.set $9
-  local.get $8
-  call $~lib/rt/tlsf/__free
+  local.set $10
   local.get $9
+  call $~lib/rt/tlsf/__free
+  local.get $10
   i32.const 65535
   i32.and
   if
-   local.get $9
+   local.get $10
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3200
-   i32.const 189
+   i32.const 191
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
