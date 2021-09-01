@@ -577,7 +577,7 @@ export declare function _BinaryenModuleSetFeatures(module: ModuleRef, featureFla
 
 export declare function _BinaryenAddCustomSection(module: ModuleRef, name: StringRef, contents: ArrayRef<u8>, contentsSize: Index): void;
 
-export declare function _BinaryenExpressionGetSideEffects(expr: ExpressionRef, features: FeatureFlags): SideEffects;
+export declare function _BinaryenExpressionGetSideEffects(expr: ExpressionRef, module: ModuleRef): SideEffects;
 
 export declare function _RelooperCreate(module: ModuleRef): RelooperRef;
 export declare function _RelooperAddBlock(relooper: RelooperRef, code: ExpressionRef): RelooperBlockRef;

@@ -7267,7 +7267,7 @@ export class Compiler extends DiagnosticEmitter {
         // We know the last operand is optional and omitted, so inject setting
         // ~argumentsLength into that operand, which is always safe.
         let lastOperand = operands[maxOperands - 1];
-        assert(!(getSideEffects(lastOperand) & SideEffects.WritesGlobal));
+        assert(!(getSideEffects(lastOperand, module.ref) & SideEffects.WritesGlobal));
         let lastOperandType = parameterTypes[maxArguments - 1];
         operands[maxOperands - 1] = module.block(null, [
           module.global_set(this.ensureArgumentsLength(), module.i32(numArguments)),
@@ -7374,7 +7374,7 @@ export class Compiler extends DiagnosticEmitter {
     // into the index argument, which becomes executed last after any operands.
     var argumentsLength = this.ensureArgumentsLength();
     var sizeTypeRef = this.options.sizeTypeRef;
-    if (getSideEffects(functionArg) & SideEffects.WritesGlobal) {
+    if (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) {
       let flow = this.currentFlow;
       let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(functionArg));
       functionArg = module.block(null, [

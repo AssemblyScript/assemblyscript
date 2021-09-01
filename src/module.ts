@@ -1436,7 +1436,7 @@ export class Module {
     // when encountering a local with an unknown value. This helper only drops
     // the pre-evaluated condition if it has relevant side effects.
     // see WebAssembly/binaryen#1237
-    if ((getSideEffects(condition) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) != 0) {
+    if ((getSideEffects(condition, this.ref) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) != 0) {
       return this.block(null, [
         this.drop(condition),
         result
@@ -3063,12 +3063,12 @@ export enum SideEffects {
   Any = 8191 /* _BinaryenSideEffectAny */
 }
 
-export function getSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): SideEffects {
-  return binaryen._BinaryenExpressionGetSideEffects(expr, features);
+export function getSideEffects(expr: ExpressionRef, module: ModuleRef): SideEffects {
+  return binaryen._BinaryenExpressionGetSideEffects(expr, module);
 }
 
-export function hasSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): bool {
-  return getSideEffects(expr, features) != SideEffects.None;
+export function hasSideEffects(expr: ExpressionRef, module: ModuleRef): bool {
+  return getSideEffects(expr, module) != SideEffects.None;
 }
 
 // helpers
