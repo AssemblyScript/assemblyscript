@@ -3651,11 +3651,6 @@ export class Function extends TypedElement {
     registerConcreteElement(program, this);
   }
 
-  /** Gets whether this is an accessor method of a property. */
-  get isAccessor(): bool {
-    return this.isAny(CommonFlags.GET | CommonFlags.SET);
-  }
-
   /** Gets the name of the parameter at the specified index. */
   getParameterName(index: i32): string {
     var parameters = (<FunctionDeclaration>this.declaration).signature.parameters;
