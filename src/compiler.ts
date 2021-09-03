@@ -450,6 +450,7 @@ export class Compiler extends DiagnosticEmitter {
     var options = this.options;
     var module = this.module;
     var program = this.program;
+    var resolver = this.resolver;
     var hasShadowStack = options.stackSize > 0; // implies runtime=incremental
 
     // initialize lookup maps, built-ins, imports, exports, etc.
@@ -530,7 +531,7 @@ export class Compiler extends DiagnosticEmitter {
       compileClassInstanceOf(this, prototype);
     }
 
-    // set up virtual lookup tables
+    // set up virtual stubs
     var functionTable = this.functionTable;
     var virtualCalls = this.virtualCalls;
     for (let i = 0, k = functionTable.length; i < k; ++i) {
@@ -543,17 +544,24 @@ export class Compiler extends DiagnosticEmitter {
         functionTable[i] = this.ensureVarargsStub(instance);
       }
     }
-    var virtualCallsToFinalize = new Set<Function>();
-    while (virtualCalls.size) {
-      // compiling a stub's dependencies may find more dependencies, so do this in a loop
+    var virtualCallsSeen = new Set<Function>();
+    do {
+      // virtual stubs and overloads have cross-dependencies on each other, in that compiling
+      // either may discover the respective other. do this in a loop until no more are found.
+      resolver.discoveredOverload = false;
       for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
-        this.compileVirtualDependencies(instance);
-        virtualCalls.delete(instance);
-        virtualCallsToFinalize.add(instance);
+        let overloadInstances = resolver.resolveOverloads(instance);
+        if (overloadInstances) {
+          for (let i = 0, k = overloadInstances.length; i < k; ++i) {
+            this.compileFunction(overloadInstances[i]);
+          }
+        }
+        virtualCallsSeen.add(instance);
       }
-    }
-    for (let _values = Set_values(virtualCallsToFinalize), i = 0, k = _values.length; i < k; ++i) {
+    } while (virtualCalls.size > virtualCallsSeen.size || resolver.discoveredOverload);
+    virtualCallsSeen.clear();
+    for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
       this.finalizeVirtualStub(_values[i]);
     }
 
@@ -6956,15 +6964,6 @@ export class Compiler extends DiagnosticEmitter {
     );
     this.virtualCalls.add(original);
     return stub;
-  }
-
-  /** Compiles the specified function's virtual dependencies. */
-  private compileVirtualDependencies(instance: Function): void {
-    var overloadInstances = this.resolver.resolveOverloads(instance);
-    if (!overloadInstances) return;
-    for (let i = 0, k = overloadInstances.length; i < k; ++i) {
-      this.compileFunction(overloadInstances[i]);
-    }
   }
 
   /** Finalizes the virtual stub of the specified function. */

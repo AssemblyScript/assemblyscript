@@ -126,6 +126,8 @@ export class Resolver extends DiagnosticEmitter {
   currentThisExpression: Expression | null = null;
   /** Element expression of the previously resolved element access. */
   currentElementExpression : Expression | null = null;
+  /** Whether a new overload has been discovered. */
+  discoveredOverload: bool = false;
 
   /** Constructs the resolver for the specified program. */
   constructor(
@@ -2757,6 +2759,20 @@ export class Resolver extends DiagnosticEmitter {
       ctxTypes
     );
     prototype.setResolvedInstance(instanceKey, instance);
+
+    // remember discovered overloads for virtual stub finalization
+    if (classInstance) {
+      let methodOrPropertyName = instance.declaration.name.text;
+      let baseClass = classInstance.base;
+      while (baseClass) {
+        let baseMembers = baseClass.members;
+        if (baseMembers && baseMembers.has(methodOrPropertyName)) {
+          this.discoveredOverload = true;
+          break;
+        }
+        baseClass = baseClass.base;
+      }
+    }
     return instance;
   }
 
