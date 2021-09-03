@@ -389,8 +389,8 @@ export class Compiler extends DiagnosticEmitter {
   lazyFunctions: Set<Function> = new Set();
   /** Pending class-specific instanceof helpers. */
   pendingClassInstanceOf: Set<ClassPrototype> = new Set();
-  /** Functions potentially involving a virtual call. */
-  virtualCalls: Set<Function> = new Set();
+  /** Virtually called stubs that may have overloads. */
+  virtualStubs: Set<Function> = new Set();
   /** Elements currently undergoing compilation. */
   pendingElements: Set<Element> = new Set();
   /** Elements, that are module exports, already processed */
@@ -533,23 +533,23 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up virtual stubs
     var functionTable = this.functionTable;
-    var virtualCalls = this.virtualCalls;
+    var virtualStubs = this.virtualStubs;
     for (let i = 0, k = functionTable.length; i < k; ++i) {
       let instance = functionTable[i];
       if (instance.is(CommonFlags.VIRTUAL)) {
         assert(instance.is(CommonFlags.INSTANCE));
         functionTable[i] = this.ensureVirtualStub(instance); // incl. varargs
-        virtualCalls.add(instance);
+        virtualStubs.add(instance);
       } else if (instance.signature.requiredParameters < instance.signature.parameterTypes.length) {
         functionTable[i] = this.ensureVarargsStub(instance);
       }
     }
-    var virtualCallsSeen = new Set<Function>();
+    var virtualStubsSeen = new Set<Function>();
     do {
       // virtual stubs and overloads have cross-dependencies on each other, in that compiling
       // either may discover the respective other. do this in a loop until no more are found.
       resolver.discoveredOverload = false;
-      for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
+      for (let _values = Set_values(virtualStubs), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
         let overloadInstances = resolver.resolveOverloads(instance);
         if (overloadInstances) {
@@ -557,11 +557,11 @@ export class Compiler extends DiagnosticEmitter {
             this.compileFunction(overloadInstances[i]);
           }
         }
-        virtualCallsSeen.add(instance);
+        virtualStubsSeen.add(instance);
       }
-    } while (virtualCalls.size > virtualCallsSeen.size || resolver.discoveredOverload);
-    virtualCallsSeen.clear();
-    for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
+    } while (virtualStubs.size > virtualStubsSeen.size || resolver.discoveredOverload);
+    virtualStubsSeen.clear();
+    for (let _values = Set_values(virtualStubs), i = 0, k = _values.length; i < k; ++i) {
       this.finalizeVirtualStub(_values[i]);
     }
 
@@ -6962,7 +6962,7 @@ export class Compiler extends DiagnosticEmitter {
       null,
       module.unreachable()
     );
-    this.virtualCalls.add(original);
+    this.virtualStubs.add(original);
     return stub;
   }
 
@@ -6970,8 +6970,6 @@ export class Compiler extends DiagnosticEmitter {
   private finalizeVirtualStub(instance: Function): void {
     var stub = this.ensureVirtualStub(instance);
     if (stub.is(CommonFlags.COMPILED)) return;
-
-    var overloadInstances = assert(this.resolver.resolveOverloads(instance));
 
     assert(instance.parent.kind == ElementKind.CLASS || instance.parent.kind == ElementKind.INTERFACE);
     var module = this.module;
@@ -6997,68 +6995,66 @@ export class Compiler extends DiagnosticEmitter {
         TypeRef.I32
       )
     );
-
-    // A method's `overloads` property contains its unbound overload prototypes
-    // so we first have to find the concrete classes it became bound to, obtain
-    // their bound prototypes and make sure these are resolved and compiled as
-    // we are going to call them conditionally based on this's class id.
-    for (let i = 0, k = overloadInstances.length; i < k; ++i) {
-      let overloadInstance = overloadInstances[i];
-      if (!overloadInstance.is(CommonFlags.COMPILED)) continue; // errored
-      let overloadType = overloadInstance.type;
-      let originalType = instance.type;
-      if (!overloadType.isAssignableTo(originalType)) {
-        this.error(
-          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-          overloadInstance.identifierNode.range, overloadType.toString(), originalType.toString()
-        );
-        continue;
-      }
-      // TODO: additional optional parameters are not permitted by `isAssignableTo` yet
-      let overloadSignature = overloadInstance.signature;
-      let overloadParameterTypes = overloadSignature.parameterTypes;
-      let overloadNumParameters = overloadParameterTypes.length;
-      let paramExprs = new Array<ExpressionRef>(1 + overloadNumParameters);
-      paramExprs[0] = module.local_get(0, sizeTypeRef); // this
-      for (let n = 1; n <= numParameters; ++n) {
-        paramExprs[n] = module.local_get(n, parameterTypes[n - 1].toRef());
-      }
-      let needsVarargsStub = false;
-      for (let n = numParameters; n < overloadNumParameters; ++n) {
-        // TODO: inline constant initializers and skip varargs stub
-        paramExprs[1 + n] = this.makeZero(overloadParameterTypes[n], overloadInstance.declaration);
-        needsVarargsStub = true;
-      }
-      let calledName = needsVarargsStub
-        ? this.ensureVarargsStub(overloadInstance).internalName
-        : overloadInstance.internalName;
-      let returnTypeRef = overloadSignature.returnType.toRef();
-      let stmts = new Array<ExpressionRef>();
-      if (needsVarargsStub) {
-        // Safe to prepend since paramExprs are local.get's
-        stmts.push(module.global_set(this.ensureArgumentsLength(), module.i32(numParameters)));
-      }
-      if (returnType == Type.void) {
-        stmts.push(
-          module.call(calledName, paramExprs, returnTypeRef)
-        );
-        stmts.push(
-          module.return()
-        );
-      } else {
-        stmts.push(
-          module.return(
+    var overloadInstances = this.resolver.resolveOverloads(instance);
+    if (overloadInstances) {
+      for (let i = 0, k = overloadInstances.length; i < k; ++i) {
+        let overloadInstance = overloadInstances[i];
+        if (!overloadInstance.is(CommonFlags.COMPILED)) continue; // errored
+        let overloadType = overloadInstance.type;
+        let originalType = instance.type;
+        if (!overloadType.isAssignableTo(originalType)) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            overloadInstance.identifierNode.range, overloadType.toString(), originalType.toString()
+          );
+          continue;
+        }
+        // TODO: additional optional parameters are not permitted by `isAssignableTo` yet
+        let overloadSignature = overloadInstance.signature;
+        let overloadParameterTypes = overloadSignature.parameterTypes;
+        let overloadNumParameters = overloadParameterTypes.length;
+        let paramExprs = new Array<ExpressionRef>(1 + overloadNumParameters);
+        paramExprs[0] = module.local_get(0, sizeTypeRef); // this
+        for (let n = 1; n <= numParameters; ++n) {
+          paramExprs[n] = module.local_get(n, parameterTypes[n - 1].toRef());
+        }
+        let needsVarargsStub = false;
+        for (let n = numParameters; n < overloadNumParameters; ++n) {
+          // TODO: inline constant initializers and skip varargs stub
+          paramExprs[1 + n] = this.makeZero(overloadParameterTypes[n], overloadInstance.declaration);
+          needsVarargsStub = true;
+        }
+        let calledName = needsVarargsStub
+          ? this.ensureVarargsStub(overloadInstance).internalName
+          : overloadInstance.internalName;
+        let returnTypeRef = overloadSignature.returnType.toRef();
+        let stmts = new Array<ExpressionRef>();
+        if (needsVarargsStub) {
+          // Safe to prepend since paramExprs are local.get's
+          stmts.push(module.global_set(this.ensureArgumentsLength(), module.i32(numParameters)));
+        }
+        if (returnType == Type.void) {
+          stmts.push(
             module.call(calledName, paramExprs, returnTypeRef)
-          )
-        );
-      }
-      let classInstance = assert(overloadInstance.getClassOrInterface());
-      builder.addCase(classInstance.id, stmts);
-      // Also alias each extendee inheriting this exact overload
-      let extendees = classInstance.getAllExtendees(instance.declaration.name.text); // without get:/set:
-      for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
-        let extendee = _values[a];
-        builder.addCase(extendee.id, stmts);
+          );
+          stmts.push(
+            module.return()
+          );
+        } else {
+          stmts.push(
+            module.return(
+              module.call(calledName, paramExprs, returnTypeRef)
+            )
+          );
+        }
+        let classInstance = assert(overloadInstance.getClassOrInterface());
+        builder.addCase(classInstance.id, stmts);
+        // Also alias each extendee inheriting this exact overload
+        let extendees = classInstance.getAllExtendees(instance.declaration.name.text); // without get:/set:
+        for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
+          let extendee = _values[a];
+          builder.addCase(extendee.id, stmts);
+        }
       }
     }
 
