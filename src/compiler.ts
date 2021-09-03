@@ -538,8 +538,7 @@ export class Compiler extends DiagnosticEmitter {
       let instance = functionTable[i];
       if (instance.is(CommonFlags.VIRTUAL)) {
         assert(instance.is(CommonFlags.INSTANCE));
-        functionTable[i] = this.ensureVirtualStub(instance); // incl. varargs
-        virtualStubs.add(instance);
+        functionTable[i] = this.ensureVirtualStub(instance); // includes varargs stub
       } else if (instance.signature.requiredParameters < instance.signature.parameterTypes.length) {
         functionTable[i] = this.ensureVarargsStub(instance);
       }
