@@ -1320,6 +1320,7 @@ declare type NonNullable<T> = T extends null | undefined ? never : T;
 declare type nonnull<T> = NonNullable<T>;
 
 /** Pseudo-class representing the backing class of integer types. */
+/** @internal */
 declare class _Integer {
   /** Smallest representable value. */
   static readonly MIN_VALUE: number;
@@ -1332,6 +1333,7 @@ declare class _Integer {
 }
 
 /** Pseudo-class representing the backing class of floating-point types. */
+/** @internal */
 declare class _Float {
   /** Difference between 1 and the smallest representable value greater than 1. */
   static readonly EPSILON: f32 | f64;
@@ -1555,7 +1557,7 @@ interface ArrayBufferView {
   readonly dataStart: usize;
 }
 
-/* @internal */
+/** @internal */
 declare abstract class TypedArray<T> implements ArrayBufferView {
   [key: number]: T;
   /** Number of bytes per element. */
@@ -1963,6 +1965,7 @@ interface SymbolConstructor {
 
 declare const Symbol: SymbolConstructor;
 
+/** @internal */
 interface IMath<T> {
   /** The base of natural logarithms, e, approximately 2.718. */
   readonly E: T;
@@ -2054,6 +2057,7 @@ interface IMath<T> {
   trunc(x: T): T;
 }
 
+/** @internal */
 interface INativeMath<T> extends IMath<T> {
   /** Contains sin value produced after Math/Mathf.sincos */
   sincos_sin: T;
@@ -2133,23 +2137,23 @@ declare namespace process {
 /** Browser-like console on top of WASI. */
 declare namespace console {
   /** Logs `message` to console if `assertion` is false-ish. */
-  export function assert<T>(assertion: T, message: string): void;
+  export function assert<T>(assertion: T, message?: string): void;
   /** Outputs `message` to the console. */
-  export function log(message: string): void;
+  export function log(message?: string): void;
   /** Outputs `message` to the console, prefixed with "Debug:". */
-  export function debug(message: string): void;
+  export function debug(message?: string): void;
   /** Outputs `message` to the console, prefixed with "Info:". */
-  export function info(message: string): void;
+  export function info(message?: string): void;
   /** Outputs `message` to the console, prefixed with "Warning:". */
-  export function warn(message: string): void;
+  export function warn(message?: string): void;
   /** Outputs `message` to the console, prefixed with "Error:". */
-  export function error(message: string): void;
+  export function error(message?: string): void;
   /** Starts a new timer using the specified `label`. */
-  export function time(label: string): void;
+  export function time(label?: string): void;
   /** Logs the current value of a timer previously started with `console.time`. */
-  export function timeLog(label: string): void;
+  export function timeLog(label?: string): void;
   /** Logs the current value of a timer previously started with `console.time` and discards the timer. */
-  export function timeEnd(label: string): void;
+  export function timeEnd(label?: string): void;
 }
 
 /** Browser-like crypto utilities on top of WASI. */
