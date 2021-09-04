@@ -943,6 +943,10 @@ exports.main = function main(argv, options, callback) {
   // Optimize the module
   const debugInfo = opts.debug;
   const converge = opts.converge;
+  const zeroFilledMemory = opts.importMemory
+    ? opts.zeroFilledMemory
+    : false;
+
   const runPasses = [];
   if (opts.runPasses) {
     if (typeof opts.runPasses === "string") {
@@ -960,7 +964,7 @@ exports.main = function main(argv, options, callback) {
   stats.optimizeTime += measure(() => {
     stats.optimizeCount++;
     try {
-      module.optimize(optimizeLevel, shrinkLevel, debugInfo);
+      module.optimize(optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
     } catch (e) {
       crash("optimize", e);
     }
@@ -979,7 +983,7 @@ exports.main = function main(argv, options, callback) {
       do {
         stats.optimizeCount++;
         try {
-          module.optimize(optimizeLevel, shrinkLevel, debugInfo);
+          module.optimize(optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
         } catch (e) {
           crash("optimize (converge)", e);
         }

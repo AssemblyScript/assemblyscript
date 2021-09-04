@@ -225,6 +225,8 @@ export class Options {
   maximumMemory: u32 = 0;
   /** If true, memory is declared as shared. */
   sharedMemory: bool = false;
+  /** If true, imported memory is zero filled. */
+  zeroFilledMemory: bool = false;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, exports the function table. */
@@ -425,9 +427,9 @@ export class Compiler extends DiagnosticEmitter {
     var featureFlags: FeatureFlags = 0;
     if (options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
     if (options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
-    if (options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.NontrappingFPToInt;
+    if (options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.TruncSat;
     if (options.hasFeature(Feature.BULK_MEMORY)) featureFlags |= FeatureFlags.BulkMemory;
-    if (options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD128;
+    if (options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD;
     if (options.hasFeature(Feature.THREADS)) featureFlags |= FeatureFlags.Atomics;
     if (options.hasFeature(Feature.EXCEPTION_HANDLING)) featureFlags |= FeatureFlags.ExceptionHandling;
     if (options.hasFeature(Feature.TAIL_CALLS)) featureFlags |= FeatureFlags.TailCall;
@@ -7232,7 +7234,7 @@ export class Compiler extends DiagnosticEmitter {
         // We know the last operand is optional and omitted, so inject setting
         // ~argumentsLength into that operand, which is always safe.
         let lastOperand = operands[maxOperands - 1];
-        assert(!(getSideEffects(lastOperand) & SideEffects.WritesGlobal));
+        assert(!(getSideEffects(lastOperand, module.ref) & SideEffects.WritesGlobal));
         let lastOperandType = parameterTypes[maxArguments - 1];
         operands[maxOperands - 1] = module.block(null, [
           module.global_set(this.ensureArgumentsLength(), module.i32(numArguments)),
@@ -7339,7 +7341,7 @@ export class Compiler extends DiagnosticEmitter {
     // into the index argument, which becomes executed last after any operands.
     var argumentsLength = this.ensureArgumentsLength();
     var sizeTypeRef = this.options.sizeTypeRef;
-    if (getSideEffects(functionArg) & SideEffects.WritesGlobal) {
+    if (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) {
       let flow = this.currentFlow;
       let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(functionArg));
       functionArg = module.block(null, [

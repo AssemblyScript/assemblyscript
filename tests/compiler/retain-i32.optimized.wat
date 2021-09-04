@@ -24,8 +24,5 @@
   i32.const 0
   i32.load8_s
   drop
-  i32.const 0
-  i32.load8_s
-  drop
  )
 )

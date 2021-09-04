@@ -531,7 +531,7 @@ export declare function _BinaryenTagGetName(tag: TagRef): StringRef;
 export declare function _BinaryenTagGetParams(tag: TagRef): TypeRef;
 export declare function _BinaryenTagGetResults(tag: TagRef): TypeRef;
 
-export declare function _BinaryenAddTable(module: ModuleRef, name: StringRef, initial: Index, maximum: Index): TableRef;
+export declare function _BinaryenAddTable(module: ModuleRef, name: StringRef, initial: Index, maximum: Index, type: TypeRef): TableRef;
 export declare function _BinaryenRemoveTable(module: ModuleRef, table: StringRef): void;
 export declare function _BinaryenGetNumTables(module: ModuleRef): Index;
 export declare function _BinaryenGetTable(module: ModuleRef, name: StringRef): TableRef;
@@ -577,7 +577,7 @@ export declare function _BinaryenModuleSetFeatures(module: ModuleRef, featureFla
 
 export declare function _BinaryenAddCustomSection(module: ModuleRef, name: StringRef, contents: ArrayRef<u8>, contentsSize: Index): void;
 
-export declare function _BinaryenExpressionGetSideEffects(expr: ExpressionRef, features: FeatureFlags): SideEffects;
+export declare function _BinaryenExpressionGetSideEffects(expr: ExpressionRef, module: ModuleRef): SideEffects;
 
 export declare function _RelooperCreate(module: ModuleRef): RelooperRef;
 export declare function _RelooperAddBlock(relooper: RelooperRef, code: ExpressionRef): RelooperBlockRef;
@@ -599,6 +599,8 @@ export declare function _BinaryenGetDebugInfo(): bool;
 export declare function _BinaryenSetDebugInfo(on: bool): void;
 export declare function _BinaryenGetLowMemoryUnused(): bool;
 export declare function _BinaryenSetLowMemoryUnused(on: bool): void;
+export declare function _BinaryenGetZeroFilledMemory(): bool;
+export declare function _BinaryenSetZeroFilledMemory(on: bool): void;
 export declare function _BinaryenGetFastMath(): bool;
 export declare function _BinaryenSetFastMath(on: bool): void;
 export declare function _BinaryenGetPassArgument(key: StringRef): StringRef;

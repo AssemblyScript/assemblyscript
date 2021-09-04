@@ -451,21 +451,6 @@
   i32.load
   global.set $builtins/i
   i32.const 8
-  i32.load8_u
-  drop
-  i32.const 8
-  i32.load16_u
-  drop
-  i32.const 8
-  i32.load
-  drop
-  i32.const 8
-  i32.load8_s
-  drop
-  i32.const 8
-  i32.load16_s
-  drop
-  i32.const 8
   i32.load
   drop
   i32.const 8
@@ -576,10 +561,10 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1168
   i32.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  local.tee $0
+  local.get $0
   i32.const 1056
   i32.store
   local.get $0
@@ -598,16 +583,16 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
+  local.tee $0
   i32.const 1168
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1168
   i32.store
-  global.get $~lib/memory/__stack_pointer
+  local.get $0
   i32.const 1168
   i32.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  local.tee $0
+  local.get $0
   i32.const 1200
   i32.store
   local.get $0
