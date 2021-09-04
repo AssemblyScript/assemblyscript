@@ -3456,7 +3456,7 @@ export class FunctionPrototype extends DeclaredElement {
   /** Methods overloading this one, if any. These are unbound. */
   overloads: Set<FunctionPrototype> | null = null;
 
-  /** Clones of this prototype that are bounds to specific classes. */
+  /** Clones of this prototype that are bound to specific classes. */
   private boundPrototypes: Map<Class,FunctionPrototype> | null = null;
 
   /** Constructs a new function prototype. */
@@ -3504,11 +3504,9 @@ export class FunctionPrototype extends DeclaredElement {
   /** Tests if this prototype is bound to a class. */
   get isBound(): bool {
     var parent = this.parent;
-    return parent.kind == ElementKind.CLASS ||
-           parent.kind == ElementKind.PROPERTY_PROTOTYPE && (
-             parent.parent.kind == ElementKind.CLASS ||
-             parent.parent.kind == ElementKind.INTERFACE
-           );
+    var parentKind = parent.kind;
+    if (parentKind == ElementKind.PROPERTY_PROTOTYPE) parentKind = parent.parent.kind;
+    return parentKind == ElementKind.CLASS || parentKind == ElementKind.INTERFACE;
   }
 
   /** Creates a clone of this prototype that is bound to a concrete class instead. */
@@ -3659,6 +3657,16 @@ export class Function extends TypedElement {
     return parameters.length > index
       ? parameters[index].name.text
       : getDefaultParameterName(index);
+  }
+
+  /** Gets the class or interface this function belongs to, if an instance method. */
+  getClassOrInterface(): Class | null {
+    var parent = this.parent;
+    if (parent.kind == ElementKind.PROPERTY) parent = parent.parent;
+    if (parent.kind == ElementKind.CLASS || parent.kind == ElementKind.INTERFACE) {
+      return <Class>parent;
+    }
+    return null;
   }
 
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
