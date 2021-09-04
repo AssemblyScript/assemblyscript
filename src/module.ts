@@ -2260,7 +2260,9 @@ export class Module {
       passes.push("remove-unused-module-elements"); // +
 
       // --- PassRunner::addDefaultFunctionOptimizationPasses ---
-
+      if (optimizeLevel >= 2) {
+        passes.push("once-reduction");
+      }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("rse");
         passes.push("vacuum");
