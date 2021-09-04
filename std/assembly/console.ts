@@ -7,7 +7,7 @@ import {
 
 export namespace console {
 
-  export function assert<T>(condition: T, message: string): void {
+  export function assert<T>(condition: T, message: string = ""): void {
     if (!condition) {
       let stderr = process.stderr;
       stderr.write("Assertion failed: ");
@@ -16,41 +16,41 @@ export namespace console {
     }
   }
 
-  export function log(message: string): void {
+  export function log(message: string = ""): void {
     var stdout = process.stdout;
     stdout.write(message);
     stdout.write("\n");
   }
 
-  export function debug(message: string): void {
+  export function debug(message: string = ""): void {
     var stdout = process.stdout;
     stdout.write("Debug: ");
     stdout.write(message);
     stdout.write("\n");
   }
 
-  export function info(message: string): void {
+  export function info(message: string = ""): void {
     var stdout = process.stdout;
     stdout.write("Info: ");
     stdout.write(message);
     stdout.write("\n");
   }
 
-  export function warn(message: string): void {
+  export function warn(message: string = ""): void {
     var stdout = process.stdout;
     stdout.write("Warning: ");
     stdout.write(message);
     stdout.write("\n");
   }
 
-  export function error(message: string): void {
+  export function error(message: string = ""): void {
     var stdout = process.stdout;
     stdout.write("Error: ");
     stdout.write(message);
     stdout.write("\n");
   }
 
-  export function time(label: string): void {
+  export function time(label: string = "default"): void {
     var stdout = process.stdout;
     if (timers.has(label)) {
       stdout.write("Warning: Label '");
@@ -61,7 +61,7 @@ export namespace console {
     timers.set(label, process.hrtime());
   }
 
-  export function timeLog(label: string): void {
+  export function timeLog(label: string = "default"): void {
     var stdout = process.stdout;
     if (!timers.has(label)) {
       stdout.write("Warning: No such label '");
@@ -72,7 +72,7 @@ export namespace console {
     timeLogImpl(label);
   }
 
-  export function timeEnd(label: string): void {
+  export function timeEnd(label: string = "default"): void {
     var stdout = process.stdout;
     if (!timers.has(label)) {
       stdout.write("Warning: No such label '");
