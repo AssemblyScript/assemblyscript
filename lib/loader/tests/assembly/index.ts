@@ -69,6 +69,10 @@ export function dotrace(num: f64): void {
   trace("The answer is", 1, num);
 }
 
+export function getVaraddFunc(): (a: i32, b: i32) => i32 {
+  return varadd;
+}
+
 export const UINT8ARRAY_ID = idof<Uint8Array>();
 export const INT16ARRAY_ID = idof<Int16Array>();
 export const UINT16ARRAY_ID = idof<Uint16Array>();
