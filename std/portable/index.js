@@ -441,4 +441,6 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
       return new Float64Array(buffer, byteOffset, length);
     }
   });
+} else {
+  console.warn("compiler mismatch: std/portable included twice");
 }
