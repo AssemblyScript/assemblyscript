@@ -2080,10 +2080,10 @@
   local.get $1
   local.tee $5
   local.tee $4
+  local.get $4
   i32.const 20
   i32.sub
   i32.load offset=16
-  local.get $4
   i32.add
   local.set $1
   loop $while-continue|0

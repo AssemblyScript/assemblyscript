@@ -2025,7 +2025,6 @@
     local.get $5
     i32.store
     i32.const 1096
-    local.get $4
     local.get $3
     i32.const 8
     i32.shl
