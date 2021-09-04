@@ -2527,6 +2527,9 @@
  (func $class-overloading-cast/B<i32,f64>#foo (param $0 i32) (param $1 i32) (result i32)
   i32.const 464
  )
+ (func $class-overloading-cast/B<f64,~lib/string/String>#foo (param $0 i32) (param $1 f64) (result i32)
+  i32.const 464
+ )
  (func $class-overloading-cast/A<i32>#foo@virtual (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block $default
@@ -2560,9 +2563,6 @@
   local.get $0
   local.get $1
   call $class-overloading-cast/A<i32>#foo
- )
- (func $class-overloading-cast/B<f64,~lib/string/String>#foo (param $0 i32) (param $1 f64) (result i32)
-  i32.const 464
  )
  (func $class-overloading-cast/A<f64>#foo@virtual (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
