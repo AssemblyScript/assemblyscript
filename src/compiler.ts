@@ -10532,14 +10532,31 @@ export class Compiler extends DiagnosticEmitter {
     var temp = flow.getTempLocal(type);
     var instanceofInstance = this.program.instanceofInstance;
     assert(this.compileFunction(instanceofInstance));
-    expr = module.if(
-      module.call(instanceofInstance.internalName, [
+    if (!toType.isNullableReference || flow.isNonnull(expr, type)) {
+      // Simplify if the value cannot be `null`. If toType is non-nullable, a
+      // null-check would have been emitted separately so is not necessary here.
+      expr = module.if(
+        module.call(instanceofInstance.internalName, [
+          module.local_tee(temp.index, expr, type.isManaged),
+          module.i32(toType.classReference!.id)
+        ], TypeRef.I32),
+        module.local_get(temp.index, type.toRef()),
+        this.makeStaticAbort(this.ensureStaticString("unexpected upcast"), reportNode) // TODO: throw
+      );
+    } else {
+      expr = module.if(
         module.local_tee(temp.index, expr, type.isManaged),
-        module.i32(toType.classReference!.id)
-      ], TypeRef.I32),
-      module.local_get(temp.index, type.toRef()),
-      this.makeStaticAbort(this.ensureStaticString("unexpected upcast"), reportNode) // TODO: throw
-    );
+        module.if(
+          module.call(instanceofInstance.internalName, [
+            module.local_get(temp.index, type.toRef()),
+            module.i32(toType.classReference!.id)
+          ], TypeRef.I32),
+          module.local_get(temp.index, type.toRef()),
+          this.makeStaticAbort(this.ensureStaticString("unexpected upcast"), reportNode) // TODO: throw
+        ),
+        module.usize(0)
+      );
+    }
     flow.freeTempLocal(temp);
     this.currentType = toType;
     return expr;
