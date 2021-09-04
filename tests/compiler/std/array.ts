@@ -316,6 +316,36 @@ var i: i32;
 
   arr.push(43);
   arr.push(44);
+
+  let bytes4 = ([0, 1, 2, 3] as u8[]).reverse();
+  for (let i = 0, l = bytes4.length; i < l; i++) {
+    assert(bytes4[i] == bytes4.length - i - 1);
+  }
+
+  let bytes8 = ([0, 1, 2, 3, 4, 5, 6, 7] as u8[]).reverse();
+  for (let i = 0, l = bytes8.length; i < l; i++) {
+    assert(bytes8[i] == bytes8.length - i - 1);
+  }
+
+  let bytes17 = ([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] as u8[]).reverse();
+  for (let i = 0, l = bytes17.length; i < l; i++) {
+    assert(bytes17[i] == bytes17.length - i - 1);
+  }
+
+  let shorts7 = ([0, 1, 2, 3, 4, 5, 6] as u16[]).reverse();
+  for (let i = 0, l = shorts7.length; i < l; i++) {
+    assert(shorts7[i] == shorts7.length - i - 1);
+  }
+
+  let shorts8 = ([0, 1, 2, 3, 4, 5, 6, 7] as u16[]).reverse();
+  for (let i = 0, l = shorts8.length; i < l; i++) {
+    assert(shorts8[i] == shorts8.length - i - 1);
+  }
+
+  let shorts9 = ([0, 1, 2, 3, 4, 5, 6, 7, 8] as u16[]).reverse();
+  for (let i = 0, l = shorts9.length; i < l; i++) {
+    assert(shorts9[i] == shorts9.length - i - 1);
+  }
 }
 
 // Array#indexOf ///////////////////////////////////////////////////////////////////////////////////

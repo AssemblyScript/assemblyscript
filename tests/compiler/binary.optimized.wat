@@ -142,12 +142,6 @@
  (func $~start
   (local $0 f32)
   (local $1 f64)
-  block $__inlined_func$~lib/math/ipow32
-   global.get $binary/i
-   i32.const 2
-   i32.eq
-   br_if $__inlined_func$~lib/math/ipow32
-  end
   global.get $binary/i
   i32.const 1
   i32.add
@@ -166,13 +160,9 @@
   global.set $binary/i
   i32.const 0
   global.set $binary/i
-  global.get $binary/i
-  i32.const 1
-  i32.and
+  i32.const 0
   global.set $binary/i
-  global.get $binary/i
   i32.const 1
-  i32.or
   global.set $binary/i
   global.get $binary/i
   i32.const 1
@@ -218,13 +208,9 @@
   global.set $binary/I
   i64.const 0
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.and
+  i64.const 0
   global.set $binary/I
-  global.get $binary/I
   i64.const 1
-  i64.or
   global.set $binary/I
   global.get $binary/I
   i64.const 1
