@@ -65,11 +65,11 @@
  (global $~lib/math/res128_hi (mut i64) (i64.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
  (global $~lib/util/math/log_tail (mut f64) (f64.const 0))
- (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
+ (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/NativeMath.sincos_sin (mut f64) (f64.const 0))
  (global $~lib/math/NativeMath.sincos_cos (mut f64) (f64.const 0))
  (memory $0 1)
@@ -8529,9 +8529,12 @@
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
-  i32.const 1
-  global.set $~lib/math/random_seeded
+  i64.const 4294967296
   local.get $0
+  local.get $0
+  i64.eqz
+  select
+  local.tee $0
   i64.const 33
   i64.shr_u
   local.get $0
@@ -8639,6 +8642,8 @@
   local.get $1
   i32.xor
   global.set $~lib/math/random_state1_32
+  i32.const 1
+  global.set $~lib/math/random_seeded
   global.get $~lib/math/random_state1_32
   i32.const 0
   i32.ne
@@ -8659,7 +8664,7 @@
   if
    i32.const 0
    i32.const 14400
-   i32.const 1421
+   i32.const 1423
    i32.const 5
    call $~lib/builtins/abort
    unreachable

@@ -624,8 +624,13 @@
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
  )
  (func $~lib/math/NativeMath.seedRandom (param $0 i64)
-  i32.const 1
-  global.set $~lib/math/random_seeded
+  local.get $0
+  i64.const 0
+  i64.eq
+  if
+   i64.const 4294967296
+   local.set $0
+  end
   local.get $0
   call $~lib/math/murmurHash3
   global.set $~lib/math/random_state0_64
@@ -641,6 +646,8 @@
   global.get $~lib/math/random_state0_32
   call $~lib/math/splitMix32
   global.set $~lib/math/random_state1_32
+  i32.const 1
+  global.set $~lib/math/random_seeded
   global.get $~lib/math/random_state0_64
   i64.const 0
   i64.ne
@@ -669,7 +676,7 @@
   if
    i32.const 0
    i32.const 144
-   i32.const 1421
+   i32.const 1423
    i32.const 5
    call $~lib/wasi/index/abort
    unreachable

@@ -1413,11 +1413,13 @@ export namespace NativeMath {
   }
 
   export function seedRandom(value: i64): void {
-    random_seeded = true;
+    // Simply avoid zero seed
+    if (value == 0) value = 4294967296;
     random_state0_64 = murmurHash3(value);
     random_state1_64 = murmurHash3(~random_state0_64);
     random_state0_32 = splitMix32(<u32>value);
     random_state1_32 = splitMix32(random_state0_32);
+    random_seeded = true;
     assert(
       random_state0_64 != 0 && random_state1_64 != 0 &&
       random_state0_32 != 0 && random_state1_32 != 0
