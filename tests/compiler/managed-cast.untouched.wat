@@ -1512,7 +1512,6 @@
  )
  (func $~lib/rt/itcms/interrupt
   (local $0 i32)
-  (local $1 i32)
   i32.const 0
   drop
   i32.const 0
@@ -1523,7 +1522,7 @@
   i32.const 100
   i32.div_u
   local.set $0
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    call $~lib/rt/itcms/step
    i32.sub
@@ -1551,9 +1550,7 @@
    local.get $0
    i32.const 0
    i32.gt_s
-   local.set $1
-   local.get $1
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   i32.const 0
   drop
@@ -2377,7 +2374,6 @@
  (func $~lib/rt/__instanceof (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   i32.const 20
   i32.sub
@@ -2390,7 +2386,7 @@
   i32.load
   i32.le_u
   if
-   loop $do-continue|0
+   loop $do-loop|0
     local.get $2
     local.get $1
     i32.eq
@@ -2407,9 +2403,7 @@
     i32.add
     i32.load offset=4
     local.tee $2
-    local.set $4
-    local.get $4
-    br_if $do-continue|0
+    br_if $do-loop|0
    end
   end
   i32.const 0

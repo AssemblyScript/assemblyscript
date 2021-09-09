@@ -44,12 +44,11 @@
  (func $do/testSimple
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
   i32.const 10
   local.set $0
   i32.const 0
   local.set $1
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    i32.const 1
    i32.sub
@@ -59,9 +58,7 @@
    i32.add
    local.set $1
    local.get $0
-   local.set $2
-   local.get $2
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   local.get $0
   i32.const 0
@@ -95,7 +92,7 @@
   (local $1 i32)
   i32.const 10
   local.set $0
-  loop $do-continue|0
+  loop $do-loop|0
    nop
    local.get $0
    local.tee $1
@@ -103,9 +100,7 @@
    i32.sub
    local.set $0
    local.get $1
-   local.set $1
-   local.get $1
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   local.get $0
   i32.const -1
@@ -126,14 +121,13 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   i32.const 10
   local.set $0
   i32.const 0
   local.set $1
   i32.const 0
   local.set $2
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    i32.const 1
    i32.sub
@@ -142,7 +136,7 @@
    i32.const 1
    i32.add
    local.set $1
-   loop $do-continue|1
+   loop $do-loop|1
     local.get $0
     i32.const 1
     i32.sub
@@ -152,9 +146,7 @@
     i32.add
     local.set $2
     local.get $0
-    local.set $3
-    local.get $3
-    br_if $do-continue|1
+    br_if $do-loop|1
    end
    local.get $0
    i32.const 0
@@ -181,9 +173,7 @@
     unreachable
    end
    local.get $0
-   local.set $3
-   local.get $3
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   local.get $0
   i32.const 0
@@ -226,11 +216,10 @@
  )
  (func $do/testAlwaysTrue
   (local $0 i32)
-  (local $1 i32)
   i32.const 0
   local.set $0
   block $do-break|0
-   loop $do-continue|0
+   loop $do-loop|0
     local.get $0
     i32.const 1
     i32.add
@@ -241,9 +230,7 @@
      br $do-break|0
     end
     i32.const 1
-    local.set $1
-    local.get $1
-    br_if $do-continue|0
+    br_if $do-loop|0
    end
   end
   local.get $0
@@ -265,7 +252,7 @@
   (local $0 i32)
   i32.const 0
   local.set $0
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    i32.const 1
    i32.add
@@ -278,7 +265,7 @@
    end
    i32.const 1
    drop
-   br $do-continue|0
+   br $do-loop|0
   end
   unreachable
  )
@@ -286,7 +273,7 @@
   (local $0 i32)
   i32.const 0
   local.set $0
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    i32.const 1
    i32.add
@@ -314,7 +301,7 @@
   i32.const 0
   local.set $0
   block $do-break|0
-   loop $do-continue|0
+   loop $do-loop|0
     local.get $0
     i32.const 1
     i32.add
@@ -342,7 +329,7 @@
   (local $0 i32)
   i32.const 0
   local.set $0
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    i32.const 1
    i32.add
@@ -358,19 +345,22 @@
   i32.const 0
   local.set $0
   block $do-break|0
-   loop $do-continue|0
-    local.get $0
-    i32.const 1
-    i32.add
-    local.tee $0
-    i32.const 10
-    i32.eq
-    if
-     br $do-break|0
+   loop $do-loop|0
+    block $do-continue|0
+     local.get $0
+     i32.const 1
+     i32.add
+     local.tee $0
+     i32.const 10
+     i32.eq
+     if
+      br $do-break|0
+     end
+     br $do-continue|0
     end
-    br $do-continue|0
+    local.get $0
+    br_if $do-loop|0
    end
-   unreachable
   end
   local.get $0
   i32.const 10
@@ -395,36 +385,42 @@
   i32.const 0
   local.set $1
   block $do-break|0
-   loop $do-continue|0
-    local.get $0
-    i32.const 1
-    i32.add
-    local.tee $0
-    i32.const 10
-    i32.eq
-    if
-     br $do-break|0
-    end
-    block $do-break|1
-     loop $do-continue|1
-      local.get $1
-      i32.const 1
-      i32.add
-      local.tee $1
-      i32.const 10
-      i32.rem_s
-      i32.const 0
-      i32.eq
-      if
-       br $do-break|1
-      end
-      br $do-continue|1
+   loop $do-loop|0
+    block $do-continue|0
+     local.get $0
+     i32.const 1
+     i32.add
+     local.tee $0
+     i32.const 10
+     i32.eq
+     if
+      br $do-break|0
      end
-     unreachable
+     block $do-break|1
+      loop $do-loop|1
+       block $do-continue|1
+        local.get $1
+        i32.const 1
+        i32.add
+        local.tee $1
+        i32.const 10
+        i32.rem_s
+        i32.const 0
+        i32.eq
+        if
+         br $do-break|1
+        end
+        br $do-continue|1
+       end
+       local.get $1
+       br_if $do-loop|1
+      end
+     end
+     br $do-continue|0
     end
-    br $do-continue|0
+    local.get $0
+    br_if $do-loop|0
    end
-   unreachable
   end
   local.get $0
   i32.const 10
@@ -1923,7 +1919,6 @@
  )
  (func $~lib/rt/itcms/interrupt
   (local $0 i32)
-  (local $1 i32)
   i32.const 0
   drop
   i32.const 0
@@ -1934,7 +1929,7 @@
   i32.const 100
   i32.div_u
   local.set $0
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    call $~lib/rt/itcms/step
    i32.sub
@@ -1962,9 +1957,7 @@
    local.get $0
    i32.const 0
    i32.gt_s
-   local.set $1
-   local.get $1
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   i32.const 0
   drop
@@ -2761,7 +2754,6 @@
  (func $do/testRef
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2777,7 +2769,7 @@
   call $do/Ref#constructor
   local.tee $1
   i32.store
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    i32.const 1
    i32.add
@@ -2795,9 +2787,7 @@
     i32.store
    end
    local.get $1
-   local.set $2
-   local.get $2
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   local.get $0
   i32.const 10
@@ -2836,7 +2826,6 @@
  (func $do/testRefAutorelease
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.sub
@@ -2853,7 +2842,7 @@
   local.tee $1
   i32.store
   block $do-break|0
-   loop $do-continue|0
+   loop $do-loop|0
     local.get $0
     i32.const 1
     i32.add
@@ -2866,9 +2855,7 @@
      br $do-break|0
     end
     call $do/getRef
-    local.set $2
-    local.get $2
-    br_if $do-continue|0
+    br_if $do-loop|0
    end
   end
   local.get $0
