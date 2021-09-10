@@ -308,8 +308,7 @@
     i64.eqz
     br_if $do-loop|0
    end
-   i32.const 1
-   global.set $~lib/math/random_seeded
+   i64.const -7046029254386353131
    local.get $2
    local.get $2
    i64.eqz
