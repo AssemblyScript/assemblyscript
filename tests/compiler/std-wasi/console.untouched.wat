@@ -23,7 +23,7 @@
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (import "wasi_snapshot_preview1" "clock_time_get" (func $~lib/bindings/wasi_snapshot_preview1/clock_time_get (param i32 i64 i32) (result i32)))
  (global $~lib/process/process.stderr i32 (i32.const 2))
- (global $~lib/process/iobuf i32 (i32.const 112))
+ (global $~lib/bindings/wasi/tempbuf i32 (i32.const 112))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
@@ -2920,17 +2920,17 @@
     if
      br $break|0
     end
-    global.get $~lib/process/iobuf
-    global.get $~lib/process/iobuf
+    global.get $~lib/bindings/wasi/tempbuf
+    global.get $~lib/bindings/wasi/tempbuf
     i32.const 2
     i32.const 4
     i32.mul
     i32.add
     i32.store
-    global.get $~lib/process/iobuf
+    global.get $~lib/bindings/wasi/tempbuf
     local.get $2
     i32.store offset=4
-    global.get $~lib/process/iobuf
+    global.get $~lib/bindings/wasi/tempbuf
     local.get $6
     local.get $3
     i32.const 8
@@ -2946,9 +2946,9 @@
     i32.or
     i32.store offset=8
     local.get $0
-    global.get $~lib/process/iobuf
+    global.get $~lib/bindings/wasi/tempbuf
     i32.const 1
-    global.get $~lib/process/iobuf
+    global.get $~lib/bindings/wasi/tempbuf
     i32.const 3
     i32.const 4
     i32.mul
@@ -2962,7 +2962,7 @@
      local.get $7
      call $~lib/bindings/wasi_snapshot_preview1/errnoToString
      i32.const 3248
-     i32.const 180
+     i32.const 178
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -2991,21 +2991,21 @@
   if
    i32.const 0
    i32.const 3248
-   i32.const 186
+   i32.const 184
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
   end
-  global.get $~lib/process/iobuf
+  global.get $~lib/bindings/wasi/tempbuf
   local.get $9
   i32.store
-  global.get $~lib/process/iobuf
+  global.get $~lib/bindings/wasi/tempbuf
   local.get $8
   i32.store offset=4
   local.get $0
-  global.get $~lib/process/iobuf
+  global.get $~lib/bindings/wasi/tempbuf
   i32.const 1
-  global.get $~lib/process/iobuf
+  global.get $~lib/bindings/wasi/tempbuf
   i32.const 2
   i32.const 4
   i32.mul
@@ -3021,7 +3021,7 @@
    local.get $10
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3248
-   i32.const 191
+   i32.const 189
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -4427,7 +4427,7 @@
   (local $0 i32)
   i32.const 1
   i64.const 0
-  global.get $~lib/process/iobuf
+  global.get $~lib/bindings/wasi/tempbuf
   call $~lib/bindings/wasi_snapshot_preview1/clock_time_get
   local.set $0
   local.get $0
@@ -4437,12 +4437,12 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 3248
-   i32.const 59
+   i32.const 57
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable
   end
-  global.get $~lib/process/iobuf
+  global.get $~lib/bindings/wasi/tempbuf
   i64.load
  )
  (func $~lib/map/MapEntry<~lib/string/String,u64>#set:value (param $0 i32) (param $1 i64)
