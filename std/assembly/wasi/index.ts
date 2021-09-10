@@ -2,7 +2,8 @@ import {
   proc_exit,
   fd_write,
   iovec,
-  random_get
+  random_get,
+  tempbuf
 } from "bindings/wasi";
 
 import {
@@ -108,13 +109,11 @@ function trace( // eslint-disable-line @typescript-eslint/no-unused-vars
 }
 
 function seed(): f64 { // eslint-disable-line @typescript-eslint/no-unused-vars
-  var temp = load<u64>(0);
   var rand: u64;
   do {
-    random_get(0, 8); // to be sure
-    rand = load<u64>(0);
+    random_get(tempbuf, 8);
+    rand = load<u64>(tempbuf);
   } while (!rand);
-  store<u64>(0, temp);
   return reinterpret<f64>(rand);
 }
 

@@ -2051,7 +2051,7 @@
      local.get $0
      call $~lib/bindings/wasi_snapshot_preview1/errnoToString
      i32.const 4224
-     i32.const 180
+     i32.const 178
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -2151,7 +2151,7 @@
   if
    i32.const 0
    i32.const 4224
-   i32.const 186
+   i32.const 184
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
@@ -2177,7 +2177,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4224
-   i32.const 191
+   i32.const 189
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -4817,7 +4817,7 @@
     local.get $0
     call $~lib/bindings/wasi_snapshot_preview1/errnoToString
     i32.const 4224
-    i32.const 87
+    i32.const 85
     i32.const 12
     call $~lib/wasi/index/abort
     unreachable
@@ -4845,7 +4845,7 @@
     local.get $0
     call $~lib/bindings/wasi_snapshot_preview1/errnoToString
     i32.const 4224
-    i32.const 94
+    i32.const 92
     i32.const 12
     call $~lib/wasi/index/abort
     unreachable
@@ -5139,7 +5139,7 @@
     local.get $1
     call $~lib/bindings/wasi_snapshot_preview1/errnoToString
     i32.const 4224
-    i32.const 66
+    i32.const 64
     i32.const 12
     call $~lib/wasi/index/abort
     unreachable
@@ -5167,7 +5167,7 @@
     local.get $5
     call $~lib/bindings/wasi_snapshot_preview1/errnoToString
     i32.const 4224
-    i32.const 73
+    i32.const 71
     i32.const 12
     call $~lib/wasi/index/abort
     unreachable
@@ -5432,7 +5432,7 @@
     local.get $0
     call $~lib/bindings/wasi_snapshot_preview1/errnoToString
     i32.const 4224
-    i32.const 53
+    i32.const 51
     i32.const 14
     call $~lib/wasi/index/abort
     unreachable
@@ -5640,7 +5640,7 @@
     local.get $0
     call $~lib/bindings/wasi_snapshot_preview1/errnoToString
     i32.const 4224
-    i32.const 59
+    i32.const 57
     i32.const 14
     call $~lib/wasi/index/abort
     unreachable
@@ -5846,7 +5846,7 @@
     local.get $0
     call $~lib/bindings/wasi_snapshot_preview1/errnoToString
     i32.const 4224
-    i32.const 142
+    i32.const 140
     i32.const 14
     call $~lib/wasi/index/abort
     unreachable
