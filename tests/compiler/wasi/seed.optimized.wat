@@ -13,12 +13,12 @@
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
  (memory $0 1)
- (data (i32.const 1036) "<")
- (data (i32.const 1048) "\01\00\00\00$\00\00\00U\00n\00p\00a\00i\00r\00e\00d\00 \00s\00u\00r\00r\00o\00g\00a\00t\00e")
- (data (i32.const 1100) ",")
- (data (i32.const 1112) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
- (data (i32.const 1148) ",")
- (data (i32.const 1160) "\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
+ (data (i32.const 1052) "<")
+ (data (i32.const 1064) "\01\00\00\00$\00\00\00U\00n\00p\00a\00i\00r\00e\00d\00 \00s\00u\00r\00r\00o\00g\00a\00t\00e")
+ (data (i32.const 1116) ",")
+ (data (i32.const 1128) "\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 1164) ",")
+ (data (i32.const 1176) "\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
  (export "test" (func $wasi/seed/test))
  (export "memory" (memory $0))
  (export "_start" (func $~start))
@@ -43,15 +43,15 @@
   i32.const 19
   i32.const 544106784
   i32.store
-  i32.const 1168
+  i32.const 1184
   local.set $2
-  i32.const 1164
+  i32.const 1180
   i32.load
   i32.const 1
   i32.shr_u
   i32.const 1
   i32.shl
-  i32.const 1168
+  i32.const 1184
   i32.add
   local.set $5
   i32.const 23
@@ -297,24 +297,19 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 0
-   i64.load
-   local.set $1
    loop $do-loop|0
-    i32.const 0
+    i32.const 1024
     i32.const 8
     call $~lib/bindings/wasi_snapshot_preview1/random_get
     drop
-    i32.const 0
+    i32.const 1024
     i64.load
     local.tee $2
     i64.eqz
     br_if $do-loop|0
    end
-   i32.const 0
-   local.get $1
-   i64.store
-   i64.const -7046029254386353131
+   i32.const 1
+   global.set $~lib/math/random_seeded
    local.get $2
    local.get $2
    i64.eqz
