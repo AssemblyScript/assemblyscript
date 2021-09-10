@@ -473,7 +473,8 @@ export class Array<T> {
     }
 
     // calculate the byteLength of the resulting backing ArrayBuffer
-    var byteLength = <usize>size << usize(alignof<valueof<T>>());
+    const align = alignof<valueof<T>>();
+    var byteLength = <usize>size << align;
     var outBuffer = changetype<ArrayBuffer>(__new(byteLength, idof<ArrayBuffer>()));
 
     // create the return value and initialize it
@@ -492,14 +493,14 @@ export class Array<T> {
       let child = load<usize>(ptr + (<usize>i << alignof<T>()));
 
       // ignore null arrays
-      if (child == 0) continue;
+      if (!child) continue;
 
       // copy the underlying buffer data to the result buffer
-      let childDataLength = load<i32>(child, offsetof<T>("byteLength"));
+      let childDataLength = <usize>load<i32>(child, offsetof<T>("length_")) << align;
       memory.copy(
         changetype<usize>(outBuffer) + resultOffset,
         load<usize>(child, offsetof<T>("dataStart")),
-        <usize>childDataLength
+        childDataLength
       );
 
       // advance the result length
