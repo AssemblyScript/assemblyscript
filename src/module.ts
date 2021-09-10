@@ -2315,8 +2315,8 @@ export class Module {
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("merge-locals");
+        passes.push("vacuum");
       }
-      passes.push("vacuum");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("simplify-globals-optimizing");
       }
