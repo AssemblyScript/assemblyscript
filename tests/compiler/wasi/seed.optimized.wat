@@ -224,7 +224,7 @@
   i32.const 5
   i32.add
   local.set $0
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    i32.const 1
    i32.sub
@@ -239,7 +239,7 @@
    i32.const 10
    i32.div_u
    local.tee $4
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   local.get $0
   i32.const 4
@@ -251,7 +251,7 @@
   i32.const 2
   i32.add
   local.set $0
-  loop $do-continue|1
+  loop $do-loop|1
    local.get $0
    i32.const 1
    i32.sub
@@ -266,7 +266,7 @@
    i32.const 10
    i32.div_u
    local.tee $3
-   br_if $do-continue|1
+   br_if $do-loop|1
   end
   local.get $0
   i32.const 1
@@ -300,7 +300,7 @@
    i32.const 0
    i64.load
    local.set $1
-   loop $do-continue|0
+   loop $do-loop|0
     i32.const 0
     i32.const 8
     call $~lib/bindings/wasi_snapshot_preview1/random_get
@@ -309,7 +309,7 @@
     i64.load
     local.tee $2
     i64.eqz
-    br_if $do-continue|0
+    br_if $do-loop|0
    end
    i32.const 0
    local.get $1

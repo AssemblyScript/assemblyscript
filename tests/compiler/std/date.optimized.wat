@@ -1804,7 +1804,7 @@
    block $__inlined_func$~lib/rt/itcms/interrupt
     i32.const 2048
     local.set $2
-    loop $do-continue|0
+    loop $do-loop|0
      local.get $2
      call $~lib/rt/itcms/step
      i32.sub
@@ -1827,7 +1827,7 @@
      local.get $2
      i32.const 0
      i32.gt_s
-     br_if $do-continue|0
+     br_if $do-loop|0
     end
     global.get $~lib/rt/itcms/total
     local.tee $2
@@ -3718,7 +3718,7 @@
   select
   i32.eqz
   if
-   loop $do-continue|0
+   loop $do-loop|0
     local.get $1
     i64.load
     local.get $2
@@ -3739,7 +3739,7 @@
      local.tee $3
      i32.const 4
      i32.ge_u
-     br_if $do-continue|0
+     br_if $do-loop|0
     end
    end
   end
