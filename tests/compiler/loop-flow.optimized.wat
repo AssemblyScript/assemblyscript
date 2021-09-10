@@ -70,21 +70,23 @@
   end
  )
  (func $loop-flow/doAny (param $0 i32) (result i32)
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    i32.const 1
    i32.ne
    if
     local.get $0
     i32.const 2
-    i32.ne
-    br_if $do-continue|0
-    i32.const 1104
-    i32.const 1056
-    i32.const 78
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
+    i32.eq
+    if
+     i32.const 1104
+     i32.const 1056
+     i32.const 78
+     i32.const 22
+     call $~lib/builtins/abort
+     unreachable
+    end
+    br $do-loop|0
    end
   end
   i32.const 1

@@ -1602,6 +1602,28 @@
     i32.lt_s
     br_if $while-continue|010
    end
+   i32.const 0
+   local.set $0
+   loop $do-loop|0
+    local.get $0
+    i32.const 1
+    i32.add
+    local.tee $0
+    i32.const 3
+    i32.lt_s
+    br_if $do-loop|0
+   end
+   local.get $0
+   i32.const 3
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1056
+    i32.const 217
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
    global.get $~lib/rt/itcms/state
    i32.const 0
    i32.gt_s
@@ -1708,7 +1730,7 @@
    block $__inlined_func$~lib/rt/itcms/interrupt
     i32.const 2048
     local.set $0
-    loop $do-continue|0
+    loop $do-loop|0
      local.get $0
      call $~lib/rt/itcms/step
      i32.sub
@@ -1731,7 +1753,7 @@
      local.get $0
      i32.const 0
      i32.gt_s
-     br_if $do-continue|0
+     br_if $do-loop|0
     end
     global.get $~lib/rt/itcms/total
     local.tee $0

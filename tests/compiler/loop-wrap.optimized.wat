@@ -8,7 +8,7 @@
  (export "memory" (memory $0))
  (func $loop-wrap/testAlwaysWrapped
   (local $0 i32)
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    i32.const 10
    i32.ne
@@ -19,13 +19,13 @@
     i32.const 255
     i32.and
     local.tee $0
-    br_if $do-continue|0
+    br_if $do-loop|0
    end
   end
  )
  (func $loop-wrap/testFirstWrapped
   (local $0 i32)
-  loop $do-continue|1
+  loop $do-loop|1
    local.get $0
    i32.const 255
    i32.and
@@ -38,12 +38,12 @@
     local.tee $0
     i32.const 255
     i32.and
-    br_if $do-continue|1
+    br_if $do-loop|1
    end
   end
  )
  (func $loop-wrap/testSubsequentWrapped (param $0 i32)
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    i32.const 255
    i32.and
@@ -56,7 +56,7 @@
     i32.const 255
     i32.and
     local.tee $0
-    br_if $do-continue|0
+    br_if $do-loop|0
    end
   end
  )

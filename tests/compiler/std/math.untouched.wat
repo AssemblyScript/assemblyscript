@@ -11678,7 +11678,7 @@
   i32.const 0
   local.set $9
   block $do-break|0
-   loop $do-continue|0
+   loop $do-loop|0
     local.get $4
     local.get $5
     i64.lt_s
@@ -11994,7 +11994,7 @@
   i32.const 0
   local.set $8
   block $do-break|0
-   loop $do-continue|0
+   loop $do-loop|0
     local.get $4
     local.get $5
     i32.lt_s

@@ -1965,7 +1965,6 @@
  )
  (func $~lib/rt/itcms/interrupt
   (local $0 i32)
-  (local $1 i32)
   i32.const 0
   drop
   i32.const 0
@@ -1976,7 +1975,7 @@
   i32.const 100
   i32.div_u
   local.set $0
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    call $~lib/rt/itcms/step
    i32.sub
@@ -2004,9 +2003,7 @@
    local.get $0
    i32.const 0
    i32.gt_s
-   local.set $1
-   local.get $1
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   i32.const 0
   drop
@@ -3007,6 +3004,38 @@
   i32.const 1
   global.set $while/ran
  )
+ (func $while/testConditionalContinue
+  (local $0 i32)
+  i32.const 0
+  local.set $0
+  loop $do-loop|0
+   block $do-continue|0
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $do-continue|0
+   end
+   local.get $0
+   i32.const 3
+   i32.lt_s
+   br_if $do-loop|0
+  end
+  local.get $0
+  i32.const 3
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 217
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $while/ran
+ )
  (func $~lib/rt/itcms/__collect
   (local $0 i32)
   i32.const 0
@@ -3252,6 +3281,19 @@
    i32.const 0
    i32.const 32
    i32.const 209
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  global.set $while/ran
+  call $while/testConditionalContinue
+  global.get $while/ran
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 222
    i32.const 1
    call $~lib/builtins/abort
    unreachable
