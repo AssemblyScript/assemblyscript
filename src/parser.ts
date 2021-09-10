@@ -4296,8 +4296,16 @@ export class Parser extends DiagnosticEmitter {
           tn.readIdentifier();
           break;
         }
-        case Token.STRINGLITERAL: {
+        case Token.STRINGLITERAL:{
           tn.readString();
+          break;
+        }
+        case Token.TEMPLATELITERAL: {
+          tn.readString();
+          while(tn.readingTemplateString){
+            this.skipBlock(tn);
+            tn.readString(CharCode.BACKTICK);
+          }
           break;
         }
         case Token.INTEGERLITERAL: {

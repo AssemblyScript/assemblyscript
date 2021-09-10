@@ -208,4 +208,17 @@ ran = false;
 testIfImplicitContinueElse();
 assert(ran);
 
+function testConditionalContinue(): void {
+  let i = 0;
+  do {
+    i++;
+    continue;
+  } while (i < 3);
+  assert(i == 3);
+  ran = true;
+}
+ran = false;
+testConditionalContinue();
+assert(ran);
+
 __collect();

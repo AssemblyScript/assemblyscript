@@ -3284,7 +3284,7 @@ export abstract class VariableLikeElement extends TypedElement {
     super(
       kind,
       name,
-      mangleInternalName(name, parent, false),
+      mangleInternalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
       parent.program,
       parent,
       declaration

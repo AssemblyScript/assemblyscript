@@ -74,7 +74,7 @@
    select
    i32.eqz
    if
-    loop $do-continue|0
+    loop $do-loop|0
      local.get $3
      i64.load
      local.get $1
@@ -95,7 +95,7 @@
       local.tee $0
       i32.const 4
       i32.ge_u
-      br_if $do-continue|0
+      br_if $do-loop|0
      end
     end
    end

@@ -574,7 +574,7 @@
   i32.add
   i32.add
   local.set $4
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $4
    i32.const 1
    i32.sub
@@ -589,7 +589,7 @@
    i32.const 10
    i32.div_u
    local.tee $2
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   local.get $0
   local.get $4
@@ -649,7 +649,7 @@
   i32.add
   i32.add
   local.set $4
-  loop $do-continue|1
+  loop $do-loop|1
    local.get $4
    i32.const 1
    i32.sub
@@ -664,7 +664,7 @@
    i32.const 10
    i32.div_u
    local.tee $3
-   br_if $do-continue|1
+   br_if $do-loop|1
   end
   local.get $0
   local.get $4
@@ -2065,7 +2065,7 @@
      local.get $0
      call $~lib/bindings/wasi_snapshot_preview1/errnoToString
      i32.const 4272
-     i32.const 180
+     i32.const 178
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -2168,7 +2168,7 @@
   if
    i32.const 0
    i32.const 4272
-   i32.const 186
+   i32.const 184
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
@@ -2194,7 +2194,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4272
-   i32.const 191
+   i32.const 189
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
@@ -2834,7 +2834,7 @@
    block $__inlined_func$~lib/rt/itcms/interrupt
     i32.const 2048
     local.set $2
-    loop $do-continue|0
+    loop $do-loop|0
      local.get $2
      call $~lib/rt/itcms/step
      i32.sub
@@ -2857,7 +2857,7 @@
      local.get $2
      i32.const 0
      i32.gt_s
-     br_if $do-continue|0
+     br_if $do-loop|0
     end
     global.get $~lib/rt/itcms/total
     local.tee $2
@@ -3190,7 +3190,7 @@
    local.get $0
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 4272
-   i32.const 59
+   i32.const 57
    i32.const 14
    call $~lib/wasi/index/abort
    unreachable
@@ -3948,7 +3948,7 @@
        select
        i32.eqz
        if
-        loop $do-continue|0
+        loop $do-loop|0
          local.get $4
          i64.load
          local.get $2
@@ -3969,7 +3969,7 @@
           local.tee $0
           i32.const 4
           i32.ge_u
-          br_if $do-continue|0
+          br_if $do-loop|0
          end
         end
        end

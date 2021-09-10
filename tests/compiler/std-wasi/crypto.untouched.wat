@@ -32,7 +32,7 @@
  (global $std-wasi/crypto/ab (mut i32) (i32.const 0))
  (global $std-wasi/crypto/buf (mut i32) (i32.const 0))
  (global $~lib/process/process.stdout i32 (i32.const 1))
- (global $~lib/process/iobuf i32 (i32.const 5648))
+ (global $~lib/bindings/wasi/tempbuf i32 (i32.const 5648))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $std-wasi/crypto/b1 (mut i32) (i32.const 0))
  (global $std-wasi/crypto/b2 (mut i32) (i32.const 0))
@@ -494,7 +494,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   i32.const 0
   i32.const 12
   call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
@@ -563,7 +562,7 @@
   local.get $6
   i32.add
   local.set $4
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $2
    i32.const 10
    i32.div_u
@@ -581,9 +580,7 @@
    local.get $5
    local.set $2
    local.get $2
-   local.set $7
-   local.get $7
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   local.get $4
   local.get $6
@@ -604,7 +601,7 @@
   local.get $6
   i32.add
   local.set $4
-  loop $do-continue|1
+  loop $do-loop|1
    local.get $3
    i32.const 10
    i32.div_u
@@ -622,9 +619,7 @@
    local.get $7
    local.set $3
    local.get $3
-   local.set $8
-   local.get $8
-   br_if $do-continue|1
+   br_if $do-loop|1
   end
   local.get $4
   local.get $6
@@ -2121,7 +2116,6 @@
  )
  (func $~lib/rt/itcms/interrupt
   (local $0 i32)
-  (local $1 i32)
   i32.const 0
   drop
   i32.const 0
@@ -2132,7 +2126,7 @@
   i32.const 100
   i32.div_u
   local.set $0
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $0
    call $~lib/rt/itcms/step
    i32.sub
@@ -2160,9 +2154,7 @@
    local.get $0
    i32.const 0
    i32.gt_s
-   local.set $1
-   local.get $1
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   i32.const 0
   drop
@@ -3963,7 +3955,6 @@
   (local $4 i64)
   (local $5 i64)
   (local $6 i64)
-  (local $7 i32)
   local.get $3
   i64.extend_i32_s
   local.set $4
@@ -3985,7 +3976,7 @@
    i64.const 1
    i64.sub
    local.set $6
-   loop $do-continue|0
+   loop $do-loop|0
     local.get $2
     i32.const 1
     i32.sub
@@ -4012,12 +4003,10 @@
     local.get $1
     i64.const 0
     i64.ne
-    local.set $7
-    local.get $7
-    br_if $do-continue|0
+    br_if $do-loop|0
    end
   else
-   loop $do-continue|1
+   loop $do-loop|1
     local.get $2
     i32.const 1
     i32.sub
@@ -4048,9 +4037,7 @@
     local.get $1
     i64.const 0
     i64.ne
-    local.set $7
-    local.get $7
-    br_if $do-continue|1
+    br_if $do-loop|1
    end
   end
  )
@@ -5575,17 +5562,17 @@
     if
      br $break|0
     end
-    global.get $~lib/process/iobuf
-    global.get $~lib/process/iobuf
+    global.get $~lib/bindings/wasi/tempbuf
+    global.get $~lib/bindings/wasi/tempbuf
     i32.const 2
     i32.const 4
     i32.mul
     i32.add
     i32.store
-    global.get $~lib/process/iobuf
+    global.get $~lib/bindings/wasi/tempbuf
     local.get $2
     i32.store offset=4
-    global.get $~lib/process/iobuf
+    global.get $~lib/bindings/wasi/tempbuf
     local.get $6
     local.get $3
     i32.const 8
@@ -5601,9 +5588,9 @@
     i32.or
     i32.store offset=8
     local.get $0
-    global.get $~lib/process/iobuf
+    global.get $~lib/bindings/wasi/tempbuf
     i32.const 1
-    global.get $~lib/process/iobuf
+    global.get $~lib/bindings/wasi/tempbuf
     i32.const 3
     i32.const 4
     i32.mul
@@ -5617,7 +5604,7 @@
      local.get $7
      call $~lib/bindings/wasi_snapshot_preview1/errnoToString
      i32.const 5696
-     i32.const 180
+     i32.const 178
      i32.const 16
      call $~lib/wasi/index/abort
      unreachable
@@ -5646,21 +5633,21 @@
   if
    i32.const 0
    i32.const 5696
-   i32.const 186
+   i32.const 184
    i32.const 3
    call $~lib/wasi/index/abort
    unreachable
   end
-  global.get $~lib/process/iobuf
+  global.get $~lib/bindings/wasi/tempbuf
   local.get $9
   i32.store
-  global.get $~lib/process/iobuf
+  global.get $~lib/bindings/wasi/tempbuf
   local.get $8
   i32.store offset=4
   local.get $0
-  global.get $~lib/process/iobuf
+  global.get $~lib/bindings/wasi/tempbuf
   i32.const 1
-  global.get $~lib/process/iobuf
+  global.get $~lib/bindings/wasi/tempbuf
   i32.const 2
   i32.const 4
   i32.mul
@@ -5676,7 +5663,7 @@
    local.get $10
    call $~lib/bindings/wasi_snapshot_preview1/errnoToString
    i32.const 5696
-   i32.const 191
+   i32.const 189
    i32.const 12
    call $~lib/wasi/index/abort
    unreachable
