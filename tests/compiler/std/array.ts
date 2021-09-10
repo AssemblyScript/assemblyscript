@@ -1203,15 +1203,15 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 
 // Array#flat //////////////////////////////////////////////////////////////////////////////////
 {
-  let flatTarget: i32[][] = [[0], [1, 2, 3], [4, 5, 6], [7, 8, 9]];
-  let result = flatTarget.flat();
-  assert(result.length == 10);
+  let plainTarget: i32[][] = [[0], [1, 2, 3], [4, 5, 6], [7, 8, 9]];
+  let plainResult = plainTarget.flat();
+  assert(plainResult.length == 10);
   for (let i = 0; i < 10; i++) {
-    assert(result[i] == i);
+    assert(plainResult[i] == i);
   }
 
-  let flatStringTarget: Array<Array<string | null>> = [["one"], ["two", null, "three"], ["four", "five", "six"], ["seven"]];
-  let stringResult = flatStringTarget.flat();
+  let stringTarget: Array<Array<string | null>> = [["one"], ["two", null, "three"], ["four", "five", "six"], ["seven"]];
+  let stringResult = stringTarget.flat();
   let expected = ["one", "two", null, "three", "four", "five", "six", "seven"];
   assert(stringResult.length == 8);
   for (let i = 0; i < expected.length; i++) {
@@ -1220,6 +1220,20 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 
   let testArray: i32[][] = [[], []];
   assert(testArray.flat().length == 0);
+
+  // see: https://github.com/AssemblyScript/assemblyscript/issues/2018
+  let mapTarget: i32[][] = [[1], [2]];
+  let mapResult = mapTarget.map<i32[]>(nestedArray => {
+    assert(nestedArray.length == 1);
+    nestedArray.push(3);
+    assert(nestedArray.length == 2);
+    return nestedArray;
+  }).flat();
+  assert(mapResult.length == 4);
+  assert(mapResult[0] == 1);
+  assert(mapResult[1] == 3);
+  assert(mapResult[2] == 2);
+  assert(mapResult[3] == 3);
 }
 
 // export extended arrays
