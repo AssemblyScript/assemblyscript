@@ -1193,7 +1193,6 @@ export class Flow {
   canOverflow(expr: ExpressionRef, type: Type): bool {
     // TODO: the following catches most common and a few uncommon cases, but there are additional
     // opportunities here, obviously.
-    assert(type != Type.void);
 
     // types other than i8, u8, i16, u16 and bool do not overflow
     if (!type.isShortIntegerValue) return false;
