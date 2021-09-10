@@ -2299,6 +2299,7 @@ export class Module {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("pick-load-signs");
         passes.push("simplify-globals-optimizing");
+        passes.push("simplify-globals-optimizing");
       }
       passes.push("simplify-locals-notee-nostructure");
       passes.push("vacuum");
