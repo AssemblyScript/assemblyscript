@@ -9212,20 +9212,32 @@ export class Compiler extends DiagnosticEmitter {
     var ifElseExpr = this.compileExpression(ifElse, ctxType == Type.auto ? ifThenType : ctxType);
     var ifElseType = this.currentType;
 
-    var commonType = Type.commonDenominator(ifThenType, ifElseType, false);
-    if (!commonType) {
-      this.error(
-        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-        ifElse.range, ifElseType.toString(), ifThenType.toString()
-      );
-      this.currentType = ctxType;
-      return module.unreachable();
+    if (ctxType == Type.void) { // values, including type mismatch, are irrelevant
+      if (ifThenType != Type.void) {
+        ifThenExpr = module.drop(ifThenExpr);
+        ifThenType = Type.void;
+      }
+      if (ifElseType != Type.void) {
+        ifElseExpr = module.drop(ifElseExpr);
+        ifElseType = Type.void;
+      }
+      this.currentType = Type.void;
+    } else {
+      let commonType = Type.commonDenominator(ifThenType, ifElseType, false);
+      if (!commonType) {
+        this.error(
+          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+          ifElse.range, ifElseType.toString(), ifThenType.toString()
+        );
+        this.currentType = ctxType;
+        return module.unreachable();
+      }
+      ifThenExpr = this.convertExpression(ifThenExpr, ifThenType, commonType, false, ifThen);
+      ifThenType = commonType;
+      ifElseExpr = this.convertExpression(ifElseExpr, ifElseType, commonType, false, ifElse);
+      ifElseType = commonType;
+      this.currentType = commonType;
     }
-    ifThenExpr = this.convertExpression(ifThenExpr, ifThenType, commonType, false, ifThen);
-    ifThenType = commonType;
-    ifElseExpr = this.convertExpression(ifElseExpr, ifElseType, commonType, false, ifElse);
-    ifElseType = commonType;
-    this.currentType = commonType;
 
     ifThenFlow.freeScopedLocals();
     ifElseFlow.freeScopedLocals();
