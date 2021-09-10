@@ -144,7 +144,7 @@ arr4 = changetype<StaticArray<Ref>>(0);
 
 // join + toString
 {
-  const elements = ['Fire', 'Air', 'Water'];
+  const elements: StaticArray<string> = ['Fire', 'Air', 'Water'];
   assert(elements.join() == "Fire,Air,Water");
   assert(elements.join('') == "FireAirWater");
   assert(elements.join('-') == "Fire-Air-Water");
@@ -154,13 +154,24 @@ arr4 = changetype<StaticArray<Ref>>(0);
 
 // lastIndexOf
 {
-  var numbers = [2, 5, 9, 2];
+  const numbers: StaticArray<i32> = [2, 5, 9, 2];
   assert(numbers.lastIndexOf(2) == 3);
   assert(numbers.lastIndexOf(7) == -1);
   assert(numbers.lastIndexOf(2, 3) == 3);
   assert(numbers.lastIndexOf(2, 2) == 0);
   assert(numbers.lastIndexOf(2, -2) == 0);
   assert(numbers.lastIndexOf(2, -1) == 3);
+}
+
+// sort
+{
+  const array: StaticArray<i32> = [0, 3, 2, 1];
+  array.sort();
+
+  assert(array[0] == 0);
+  assert(array[1] == 1);
+  assert(array[2] == 2);
+  assert(array[3] == 3);
 }
 
 __stack_pointer = __heap_base;

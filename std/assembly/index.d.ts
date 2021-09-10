@@ -1733,6 +1733,7 @@ declare class StaticArray<T> {
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
   concat(items: Array<T>): Array<T>;
   slice(from: i32, to?: i32): Array<T>;
+  sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   toString(): string;
 }
