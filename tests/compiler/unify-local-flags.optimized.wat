@@ -24,7 +24,7 @@
  )
  (func $unify-local-flags/testDo
   (local $0 i32)
-  loop $do-continue|1
+  loop $do-loop|1
    local.get $0
    i32.const 1
    i32.add
@@ -33,7 +33,7 @@
    i32.and
    i32.const 255
    i32.lt_u
-   br_if $do-continue|1
+   br_if $do-loop|1
   end
  )
 )

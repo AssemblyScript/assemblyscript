@@ -123,37 +123,42 @@
   unreachable
  )
  (func $loop-flow/doReturn (result i32)
-  loop $do-continue|0
+  loop $do-loop|0
    i32.const 1
    return
   end
   unreachable
  )
  (func $loop-flow/doAny (param $0 i32) (result i32)
-  loop $do-continue|0
-   local.get $0
-   i32.const 1
-   i32.eq
-   if
-    i32.const 1
-    return
-   else
+  loop $do-loop|0
+   block $do-continue|0
     local.get $0
-    i32.const 2
+    i32.const 1
     i32.eq
     if
-     i32.const 80
-     i32.const 32
-     i32.const 78
-     i32.const 22
-     call $~lib/builtins/abort
-     unreachable
+     i32.const 1
+     return
     else
-     br $do-continue|0
+     local.get $0
+     i32.const 2
+     i32.eq
+     if
+      i32.const 80
+      i32.const 32
+      i32.const 78
+      i32.const 22
+      call $~lib/builtins/abort
+      unreachable
+     else
+      br $do-continue|0
+     end
+     unreachable
     end
     unreachable
    end
-   unreachable
+   i32.const 1
+   drop
+   br $do-loop|0
   end
   unreachable
  )
@@ -296,7 +301,7 @@
   unreachable
  )
  (func $loop-flow/doThrow (result i32)
-  loop $do-continue|0
+  loop $do-loop|0
    i32.const 80
    i32.const 32
    i32.const 71

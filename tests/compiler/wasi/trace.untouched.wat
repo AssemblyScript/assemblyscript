@@ -493,7 +493,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   i32.const 0
   i32.const 12
   call $~lib/bindings/wasi_snapshot_preview1/iovec#set:buf
@@ -562,7 +561,7 @@
   local.get $6
   i32.add
   local.set $4
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $2
    i32.const 10
    i32.div_u
@@ -580,9 +579,7 @@
    local.get $5
    local.set $2
    local.get $2
-   local.set $7
-   local.get $7
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   local.get $4
   local.get $6
@@ -603,7 +600,7 @@
   local.get $6
   i32.add
   local.set $4
-  loop $do-continue|1
+  loop $do-loop|1
    local.get $3
    i32.const 10
    i32.div_u
@@ -621,9 +618,7 @@
    local.get $7
    local.set $3
    local.get $3
-   local.set $8
-   local.get $8
-   br_if $do-continue|1
+   br_if $do-loop|1
   end
   local.get $4
   local.get $6

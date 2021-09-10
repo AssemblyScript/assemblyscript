@@ -1176,7 +1176,7 @@
    block $__inlined_func$~lib/rt/itcms/interrupt
     i32.const 2048
     local.set $1
-    loop $do-continue|0
+    loop $do-loop|0
      local.get $1
      call $~lib/rt/itcms/step
      i32.sub
@@ -1199,7 +1199,7 @@
      local.get $1
      i32.const 0
      i32.gt_s
-     br_if $do-continue|0
+     br_if $do-loop|0
     end
     global.get $~lib/rt/itcms/total
     local.tee $1
@@ -1546,7 +1546,7 @@
      i32.load
      i32.le_u
      if
-      loop $do-continue|0
+      loop $do-loop|0
        i32.const 1
        local.get $0
        i32.const 3
@@ -1560,7 +1560,7 @@
        i32.add
        i32.load offset=4
        local.tee $0
-       br_if $do-continue|0
+       br_if $do-loop|0
       end
      end
      i32.const 0
@@ -1578,7 +1578,7 @@
      i32.load
      i32.le_u
      if
-      loop $do-continue|07
+      loop $do-loop|07
        i32.const 1
        local.get $0
        i32.const 6
@@ -1592,7 +1592,7 @@
        i32.add
        i32.load offset=4
        local.tee $0
-       br_if $do-continue|07
+       br_if $do-loop|07
       end
      end
      i32.const 0
