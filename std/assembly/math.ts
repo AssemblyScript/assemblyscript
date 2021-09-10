@@ -1422,10 +1422,6 @@ export namespace NativeMath {
     random_state0_32 = splitMix32(<u32>value);
     random_state1_32 = splitMix32(random_state0_32);
     random_seeded = true;
-    assert(
-      random_state0_64 != 0 && random_state1_64 != 0 &&
-      random_state0_32 != 0 && random_state1_32 != 0
-    );
   }
 
   export function random(): f64 { // see: v8/src/base/utils/random-number-generator.cc

@@ -214,8 +214,6 @@
  (data (i32.const 14289) "\a08\07\ae\"\d5?Y\c7d\81p\be.=\00\00\00\00\00\e0\e6?")
  (data (i32.const 14321) "\d0\c8S\f7{\d5?\ef@]\ee\ed\ad\1f=\00\00\00\00\00\c0\e6?")
  (data (i32.const 14353) "`Y\df\bd\d5\d5?\dce\a4\08*\0b\n\bd")
- (data (i32.const 14380) ",")
- (data (i32.const 14392) "\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/math/NativeMath.scalbn (param $0 f64) (param $1 i32) (result f64)
@@ -8527,8 +8525,6 @@
  (func $~lib/math/NativeMath.seedRandom (param $0 i64)
   (local $1 i32)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 i32)
   i64.const -7046029254386353131
   local.get $0
   local.get $0
@@ -8555,7 +8551,6 @@
   i64.xor
   global.set $~lib/math/random_state0_64
   global.get $~lib/math/random_state0_64
-  local.tee $3
   i64.const -1
   i64.xor
   local.tee $2
@@ -8611,7 +8606,6 @@
   i32.xor
   global.set $~lib/math/random_state0_32
   global.get $~lib/math/random_state0_32
-  local.tee $4
   i32.const 1831565813
   i32.add
   local.tee $1
@@ -8644,31 +8638,6 @@
   global.set $~lib/math/random_state1_32
   i32.const 1
   global.set $~lib/math/random_seeded
-  global.get $~lib/math/random_state1_32
-  i32.const 0
-  i32.ne
-  i32.const 0
-  local.get $4
-  i32.const 0
-  global.get $~lib/math/random_state1_64
-  i64.const 0
-  i64.ne
-  i32.const 0
-  local.get $3
-  i64.const 0
-  i64.ne
-  select
-  select
-  select
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 14400
-   i32.const 1425
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
  (func $std/math/test_round (param $0 f64) (param $1 f64) (result i32)
   (local $2 f64)
