@@ -7032,7 +7032,7 @@
   i64.const 0
   i64.eq
   if
-   i64.const 4294967296
+   i64.const -7046029254386353131
    local.set $0
   end
   local.get $0
@@ -7080,7 +7080,7 @@
   if
    i32.const 0
    i32.const 6672
-   i32.const 1423
+   i32.const 1425
    i32.const 5
    call $~lib/builtins/abort
    unreachable

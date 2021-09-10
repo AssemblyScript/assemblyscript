@@ -32,7 +32,7 @@
   (local $6 i32)
   i32.const 5
   local.set $3
-  i32.const 1423
+  i32.const 1425
   local.set $4
   i32.const 0
   i32.const 12
@@ -314,7 +314,7 @@
    i32.const 0
    local.get $1
    i64.store
-   i64.const 4294967296
+   i64.const -7046029254386353131
    local.get $2
    local.get $2
    i64.eqz

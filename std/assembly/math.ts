@@ -1413,8 +1413,10 @@ export namespace NativeMath {
   }
 
   export function seedRandom(value: i64): void {
-    // Simply avoid zero seed
-    if (value == 0) value = 4294967296;
+    // Instead zero seed use golden ratio:
+    // phi = (1 + sqrt(5)) / 2
+    // trunc(2^64 / phi) = 0x9e3779b97f4a7c15
+    if (value == 0) value = 0x9e3779b97f4a7c15;
     random_state0_64 = murmurHash3(value);
     random_state1_64 = murmurHash3(~random_state0_64);
     random_state0_32 = splitMix32(<u32>value);
