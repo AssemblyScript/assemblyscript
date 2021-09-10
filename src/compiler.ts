@@ -2391,13 +2391,15 @@ export class Compiler extends DiagnosticEmitter {
     var outerFlow = this.currentFlow;
 
     // (block $break                          └►┐ flow
-    //  (loop $continue                         ├◄───────────┐ recompile?
-    //   (body)                                 └─┐ bodyFlow │
-    //                                          ┌─┘          │
+    //  (loop $loop                             ├◄───────────┐ recompile?
+    //   (?block $continue                      └─┐          │
+    //    (body)                                  │ bodyFlow │
+    //   )                                      ┌─┘          │
     //                                        ┌◄┼►╢          │ breaks or terminates?
-    //   (local.set $tcond (condition))       │ └─┐ condFlow │
+    //                                        │ └─┐          │ but does not continue
+    //   (br_if (cond) $loop)                 │   │ condFlow │
     //                                        │ ┌─┘          │
-    //   (br_if (local.get $tcond) $continue) ├◄┴────────────┘ condition?
+    //                                        ├◄┴────────────┘ condition?
     //  )                                     └─┐
     // )                                      ┌─┘
 
@@ -2411,6 +2413,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.breakLabel = breakLabel;
     var continueLabel = "do-continue|" + label;
     flow.continueLabel = continueLabel;
+    var loopLabel = "do-loop|" + label;
 
     // Compile the body (always executes)
     var bodyFlow = flow.fork();
@@ -2424,7 +2427,8 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Shortcut if body never falls through
-    if (bodyFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
+    var possiblyContinues = bodyFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
+    if (bodyFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS) && !possiblyContinues) {
       bodyStmts.push(
         module.unreachable()
       );
@@ -2441,6 +2445,12 @@ export class Compiler extends DiagnosticEmitter {
       );
       let condKind = this.evaluateCondition(condExpr);
 
+      if (possiblyContinues) {
+        bodyStmts = [
+          module.block(continueLabel, bodyStmts)
+        ];
+      }
+
       // Shortcut if condition is always false
       if (condKind == ConditionKind.FALSE) {
         bodyStmts.push(
@@ -2454,21 +2464,16 @@ export class Compiler extends DiagnosticEmitter {
           module.drop(condExpr)
         );
         bodyStmts.push(
-          module.br(continueLabel)
+          module.br(loopLabel)
         );
         flow.set(FlowFlags.TERMINATES);
 
       } else {
-        let tcond = condFlow.getTempLocal(Type.bool);
         bodyStmts.push(
-          module.local_set(tcond.index, condExpr, false) // bool
-        );
-        bodyStmts.push(
-          module.br(continueLabel,
-            module.local_get(tcond.index, TypeRef.I32)
+          module.br(loopLabel,
+            condExpr
           )
         );
-        condFlow.freeTempLocal(tcond);
         flow.inherit(condFlow);
 
         // Detect if local flags are incompatible before and after looping, and
@@ -2488,7 +2493,7 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
     var expr = module.block(breakLabel, [
-      module.loop(continueLabel,
+      module.loop(loopLabel,
         module.flatten(bodyStmts)
       )
     ]);

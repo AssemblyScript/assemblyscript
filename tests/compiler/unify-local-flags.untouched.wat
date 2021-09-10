@@ -69,12 +69,11 @@
  (func $unify-local-flags/testDo
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
   i32.const 0
   local.set $0
   i32.const 0
   local.set $1
-  loop $do-continue|1
+  loop $do-loop|1
    local.get $1
    local.set $0
    local.get $1
@@ -85,9 +84,7 @@
    i32.and
    i32.const 255
    i32.lt_u
-   local.set $2
-   local.get $2
-   br_if $do-continue|1
+   br_if $do-loop|1
   end
  )
 )
