@@ -9223,7 +9223,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       this.currentType = Type.void;
     } else {
-      var commonType = Type.commonDenominator(ifThenType, ifElseType, false);
+      let commonType = Type.commonDenominator(ifThenType, ifElseType, false);
       if (!commonType) {
         this.error(
           DiagnosticCode.Type_0_is_not_assignable_to_type_1,
