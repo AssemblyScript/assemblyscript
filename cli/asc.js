@@ -1488,7 +1488,9 @@ function crash(stage, e) {
           BAR, "run again, which should then show the actual code location in the sources.", EOL,
         ]
       : [
-          BAR, "There is no stack trace. Perhaps a Binaryen exception above / in console?", EOL
+          BAR, "There is no stack trace. Perhaps a Binaryen exception above / in console?", EOL,
+          BAR, EOL,
+          BAR, "> " + e.stack, EOL
         ]
     ).join(""),
     BAR, EOL,
