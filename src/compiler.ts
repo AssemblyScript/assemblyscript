@@ -2849,25 +2849,27 @@ export class Compiler extends DiagnosticEmitter {
 
     // Handle inline return
     if (flow.isInline) {
-      return expr != 0
+      return !expr
         ? isLastInBody
+          ? module.nop()
+          : module.br(assert(flow.inlineReturnLabel))
+        : isLastInBody
           ? expr
           : this.currentType == Type.void
             ? module.block(null, [ expr, module.br(assert(flow.inlineReturnLabel)) ])
-            : module.br(assert(flow.inlineReturnLabel), 0, expr)
-        : module.br(assert(flow.inlineReturnLabel));
+            : module.br(assert(flow.inlineReturnLabel), 0, expr);
     }
 
     // Otherwise emit a normal return
-    return expr != 0
+    return !expr
       ? isLastInBody
+        ? module.nop()
+        : module.return()
+      : isLastInBody
         ? expr
         : this.currentType == Type.void
           ? module.block(null, [ expr, module.return() ])
-          : module.return(expr)
-      : isLastInBody
-        ? module.nop()
-        : module.return();
+          : module.return(expr);
   }
 
   private compileSwitchStatement(
