@@ -143,11 +143,12 @@ export enum ExpressionId {
   StructGet = 59 /* _BinaryenStructGetId */,
   StructSet = 60 /* _BinaryenStructSetId */,
   ArrayNew = 61 /* _BinaryenArrayNewId */,
-  ArrayGet = 62 /* _BinaryenArrayGetId */,
-  ArraySet = 63 /* _BinaryenArraySetId */,
-  ArrayLen = 64 /* _BinaryenArrayLenId */,
-  ArrayCopy = 65 /* _BinaryenArrayCopyId */,
-  RefAs = 66 /* _BinaryenRefAsId */
+  ArrayInit = 62 /* _BinaryenArrayInitId */,
+  ArrayGet = 63 /* _BinaryenArrayGetId */,
+  ArraySet = 64 /* _BinaryenArraySetId */,
+  ArrayLen = 65 /* _BinaryenArrayLenId */,
+  ArrayCopy = 66 /* _BinaryenArrayCopyId */,
+  RefAs = 67 /* _BinaryenRefAsId */
 }
 
 /** Binaryen external kind constants. */
