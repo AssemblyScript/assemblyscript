@@ -1478,7 +1478,7 @@ function crash(stage, e) {
     EOL,
     BAR, "Whoops, the AssemblyScript compiler has crashed during ", stage, " :-(", EOL,
     BAR, EOL,
-    (e.stack != null
+    (typeof e.stack === "string"
       ? [
           BAR, "Here is a stack trace that may or may not be useful:", EOL,
           BAR, EOL,
