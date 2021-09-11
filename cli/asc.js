@@ -1480,7 +1480,7 @@ function crash(stage, e) {
     BAR, EOL,
     (typeof e.stack === "string"
       ? [
-          BAR, "Here is a stack trace that may or may not be useful:", EOL,
+          BAR, "Here is the stack trace hinting at the problem, perhaps it's useful?", EOL,
           BAR, EOL,
           e.stack.replace(/^/mg, BAR), EOL,
           BAR, EOL,
