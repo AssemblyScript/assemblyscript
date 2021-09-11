@@ -1478,12 +1478,19 @@ function crash(stage, e) {
     EOL,
     BAR, "Whoops, the AssemblyScript compiler has crashed during ", stage, " :-(", EOL,
     BAR, EOL,
-    BAR, "Here is a stack trace that may or may not be useful:", EOL,
-    BAR, EOL,
-    e.stack.replace(/^/mg, BAR), EOL,
-    BAR, EOL,
-    BAR, "If it refers to the dist files, try to 'npm install source-map-support' and", EOL,
-    BAR, "run again, which should then show the actual code location in the sources.", EOL,
+    (e.stack != null
+      ? [
+          BAR, "Here is a stack trace that may or may not be useful:", EOL,
+          BAR, EOL,
+          e.stack.replace(/^/mg, BAR), EOL,
+          BAR, EOL,
+          BAR, "If it refers to the dist files, try to 'npm install source-map-support' and", EOL,
+          BAR, "run again, which should then show the actual code location in the sources.", EOL,
+        ]
+      : [
+          BAR, "Sadly, there is no stack trace. Perhaps a Binaryen exception above?", EOL
+        ]
+    ).join(""),
     BAR, EOL,
     BAR, "If you see where the error is, feel free to send us a pull request. If not,", EOL,
     BAR, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues", EOL,
