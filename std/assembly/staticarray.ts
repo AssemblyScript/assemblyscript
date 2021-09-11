@@ -1,6 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
+import { COMPARATOR, SORT } from "./util/sort";
 import { idof } from "./builtins";
 import { Array } from "./array";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
@@ -227,6 +228,11 @@ export class StaticArray<T> {
       memory.copy(sliceBase, thisBase, length << alignof<T>());
     }
     return slice;
+  }
+
+  sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): this {
+    SORT<T>(changetype<usize>(this), this.length, comparator);
+    return this;
   }
 
   join(separator: string = ","): string {
