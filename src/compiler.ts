@@ -2825,14 +2825,6 @@ export class Compiler extends DiagnosticEmitter {
 
     var valueExpression = statement.value;
     if (valueExpression) {
-      if (returnType == Type.void) {
-        this.error(
-          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-          valueExpression.range, this.currentType.toString(), returnType.toString()
-        );
-        this.currentType = Type.void;
-        return module.unreachable();
-      }
       let constraints = Constraints.CONV_IMPLICIT;
       if (flow.actualFunction.is(CommonFlags.MODULE_EXPORT)) constraints |= Constraints.MUST_WRAP;
 
@@ -2857,15 +2849,25 @@ export class Compiler extends DiagnosticEmitter {
 
     // Handle inline return
     if (flow.isInline) {
-      return isLastInBody && expr != 0
-        ? expr
-        : module.br(assert(flow.inlineReturnLabel), 0, expr);
+      return expr != 0
+        ? isLastInBody
+          ? expr
+          : this.currentType == Type.void
+            ? module.block(null, [ expr, module.br(assert(flow.inlineReturnLabel)) ])
+            : module.br(assert(flow.inlineReturnLabel), 0, expr)
+        : module.br(assert(flow.inlineReturnLabel));
     }
 
     // Otherwise emit a normal return
-    return isLastInBody && expr != 0
-      ? expr
-      : module.return(expr);
+    return expr != 0
+      ? isLastInBody
+        ? expr
+        : this.currentType == Type.void
+          ? module.block(null, [ expr, module.return() ])
+          : module.return(expr)
+      : isLastInBody
+        ? module.nop()
+        : module.return();
   }
 
   private compileSwitchStatement(
