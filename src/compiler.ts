@@ -948,7 +948,11 @@ export class Compiler extends DiagnosticEmitter {
             module.addGlobal(internalName, TypeRef.I32, false, module.i32(classInstance.id));
             this.doneModuleExports.add(element);
           }
-          module.addGlobalExport(internalName, prefix + name);
+
+          let exportName = prefix + name;
+          if (!module.hasExport(exportName)) {
+            module.addGlobalExport(internalName, prefix + name);
+          }
         }
         break;
       }
