@@ -276,6 +276,71 @@ export class StaticArray<T> {
     return slice;
   }
 
+  forEach(fn: (value: T, index: i32, array: StaticArray<T>) => void): void {
+    for (let i = 0, len = this.length; i < len; ++i) {
+      fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
+    }
+  }
+
+  map<U>(fn: (value: T, index: i32, array: StaticArray<T>) => U): Array<U> {
+    var len = this.length;
+    var out = changetype<Array<U>>(__newArray(len, alignof<U>(), idof<Array<U>>()));
+    var outStart = out.dataStart;
+    for (let i = 0; i < len; ++i) {
+      let result = fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
+      store<U>(outStart + (<usize>i << alignof<U>()), result);
+      if (isManaged<U>()) {
+        __link(changetype<usize>(out), changetype<usize>(result), true);
+      }
+    }
+    return out;
+  }
+
+  filter(fn: (value: T, index: i32, array: StaticArray<T>) => bool): Array<T> {
+    var result = changetype<Array<T>>(__newArray(0, alignof<T>(), idof<Array<T>>()));
+    for (let i = 0, len = this.length; i < len; ++i) {
+      let value = load<T>(changetype<usize>(this) + (<usize>i << alignof<T>()));
+      if (fn(value, i, this)) result.push(value);
+    }
+    return result;
+  }
+
+  reduce<U>(
+    fn: (previousValue: U, currentValue: T, currentIndex: i32, array: StaticArray<T>) => U,
+    initialValue: U
+  ): U {
+    var acc = initialValue;
+    for (let i = 0, len = this.length; i < len; ++i) {
+      acc = fn(acc, load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
+    }
+    return acc;
+  }
+
+  reduceRight<U>(
+    fn: (previousValue: U, currentValue: T, currentIndex: i32, array: StaticArray<T>) => U,
+    initialValue: U
+  ): U {
+    var acc = initialValue;
+    for (let i = this.length - 1; i >= 0; --i) {
+      acc = fn(acc, load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
+    }
+    return acc;
+  }
+
+  every(fn: (value: T, index: i32, array: StaticArray<T>) => bool): bool {
+    for (let i = 0, len = this.length; i < len; ++i) {
+      if (!fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this)) return false;
+    }
+    return true;
+  }
+
+  some(fn: (value: T, index: i32, array: StaticArray<T>) => bool): bool {
+    for (let i = 0, len = this.length; i < len; ++i) {
+      if (fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this)) return true;
+    }
+    return false;
+  }
+
   sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): this {
     SORT<T>(changetype<usize>(this), this.length, comparator);
     return this;
