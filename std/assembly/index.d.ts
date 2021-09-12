@@ -1713,7 +1713,7 @@ declare class Array<T> {
   splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
-  reverse(): T[];
+  reverse(): this;
   /** Flattens an array of arrays. If any null entries exist in the array, they are ignored, unlike JavaScript's version of Array#flat(). */
   flat(): T extends unknown[] ? T : never;
   toString(): string;
@@ -1728,6 +1728,8 @@ declare class StaticArray<T> {
   readonly length: i32;
   constructor(length?: i32);
   at(index: i32): T;
+  fill(value: T, start?: i32, end?: i32): this;
+  copyWithin(target: i32, start: i32, end?: i32): this;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
@@ -1735,6 +1737,7 @@ declare class StaticArray<T> {
   slice(from: i32, to?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
+  reverse(): this;
   toString(): string;
 }
 

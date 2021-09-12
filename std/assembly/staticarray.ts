@@ -2,6 +2,7 @@
 
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { COMPARATOR, SORT } from "./util/sort";
+import { REVERSE } from "./util/bytes";
 import { idof } from "./builtins";
 import { Array } from "./array";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
@@ -290,6 +291,11 @@ export class StaticArray<T> {
     if (isReference<T>()) return joinReferenceArray<T>(changetype<usize>(this), this.length, separator);
     ERROR("unspported element type");
     return <string>unreachable();
+  }
+
+  reverse(): this {
+    REVERSE<T>(changetype<usize>(this), this.length);
+    return this;
   }
 
   toString(): string {
