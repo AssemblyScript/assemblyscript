@@ -1,0 +1,8 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "AS207: Unmanaged classes cannot extend managed classes", "Foo extends Base",
+    "EOF"
+  ]
+}

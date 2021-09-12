@@ -9614,7 +9614,10 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   );
 
   // And make sure the base visitor function exists
-  if (base) ensureVisitMembersOf(compiler, base);
+  if (base && base.type.isManaged) {
+    // errored earlier if not managed
+    ensureVisitMembersOf(compiler, base);
+  }
 }
 
 /** Compiles the `__visit_members` function. */
