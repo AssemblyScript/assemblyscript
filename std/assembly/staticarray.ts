@@ -137,6 +137,51 @@ export class StaticArray<T> {
     }
   }
 
+  fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    var ptr = changetype<usize>(this);
+    var len = this.length;
+    start = start < 0 ? max(len + start, 0) : min(start, len);
+    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+    if (isManaged<T>()) {
+      for (; start < end; ++start) {
+        store<usize>(ptr + (<usize>start << alignof<T>()), changetype<usize>(value));
+        __link(changetype<usize>(this), changetype<usize>(value), true);
+      }
+    } else if (sizeof<T>() == 1) {
+      if (start < end) {
+        memory.fill(
+          ptr + <usize>start,
+          u8(value),
+          <usize>(end - start)
+        );
+      }
+    } else {
+      for (; start < end; ++start) {
+        store<T>(ptr + (<usize>start << alignof<T>()), value);
+      }
+    }
+    return this;
+  }
+
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
+    var ptr = changetype<usize>(this);
+    var len = this.length;
+
+    end = min<i32>(end, len);
+
+    var to    = target < 0 ? max(len + target, 0) : min(target, len);
+    var from  = start < 0 ? max(len + start, 0) : min(start, len);
+    var last  = end < 0 ? max(len + end, 0) : min(end, len);
+    var count = min(last - from, len - to);
+
+    memory.copy( // is memmove
+      ptr + (<usize>to << alignof<T>()),
+      ptr + (<usize>from << alignof<T>()),
+      <usize>count << alignof<T>()
+    );
+    return this;
+  }
+
   includes(value: T, fromIndex: i32 = 0): bool {
     if (isFloat<T>()) {
       let length = this.length;
