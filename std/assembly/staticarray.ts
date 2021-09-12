@@ -276,6 +276,20 @@ export class StaticArray<T> {
     return slice;
   }
 
+  findIndex(fn: (value: T, index: i32, array: StaticArray<T>) => bool): i32 {
+    for (let i = 0, len = this.length; i < len; ++i) {
+      if (fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this)) return i;
+    }
+    return -1;
+  }
+
+  findLastIndex(fn: (value: T, index: i32, array: StaticArray<T>) => bool): i32 {
+    for (let i = this.length - 1; i >= 0; --i) {
+      if (fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this)) return i;
+    }
+    return -1;
+  }
+
   forEach(fn: (value: T, index: i32, array: StaticArray<T>) => void): void {
     for (let i = 0, len = this.length; i < len; ++i) {
       fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
