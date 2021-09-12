@@ -163,6 +163,37 @@ arr4 = changetype<StaticArray<Ref>>(0);
   assert(numbers.lastIndexOf(2, -1) == 3);
 }
 
+// fill
+{
+  const numbers: StaticArray<i32> = [0, 0];
+  numbers.fill(1, 1);
+
+  assert(numbers[0] == 0);
+  assert(numbers[1] == 1);
+}
+
+// reverse
+{
+  const numbers: StaticArray<i32> = [1, 2, 3];
+  numbers.reverse();
+
+  assert(numbers[0] == 3);
+  assert(numbers[1] == 2);
+  assert(numbers[2] == 1);
+}
+
+// copyWithin
+{
+  const numbers: StaticArray<i32> = [1, 2, 3, 4, 5];
+  numbers.copyWithin(0, 3);
+
+  assert(numbers[0] == 4);
+  assert(numbers[1] == 5);
+  assert(numbers[2] == 3);
+  assert(numbers[3] == 4);
+  assert(numbers[4] == 5);
+}
+
 // sort
 {
   const array: StaticArray<i32> = [0, 3, 2, 1];
