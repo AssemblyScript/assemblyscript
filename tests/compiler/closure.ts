@@ -23,10 +23,10 @@ testLet();
 
 // see: https://github.com/AssemblyScript/assemblyscript/issues/2073
 
-function testSelect(): (value: i32) => i32 {
+function testSelect(): (value: i32, cond: bool) => i32 {
   let $local0 = 0;
-  return function inner($arg0: i32): i32 {
-    return max($local0, $arg0); // closure 4
+  return function inner($arg0: i32, $arg1: bool): i32 {
+    return select($local0, $arg0, $arg1); // closure 4
   };
 }
 testSelect();

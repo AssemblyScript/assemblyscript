@@ -9,7 +9,7 @@
     "AS100: Not implemented: Closures",
     "$local0; // closure 3",
     "AS100: Not implemented: Closures",
-    "max($local0, $arg0); // closure 4",
+    "select($local0, $arg0, $arg1); // closure 4",
     "EOF"
   ]
 }
