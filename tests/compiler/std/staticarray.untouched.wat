@@ -4689,6 +4689,61 @@
   i32.const 1
   i32.add
  )
+ (func $start:std/staticarray~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  global.get $std/staticarray/maxVal
+  local.tee $3
+  local.get $0
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_s
+  select
+  global.set $std/staticarray/maxVal
+ )
+ (func $~lib/staticarray/StaticArray<i32>#forEach (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 0
+  local.set $2
+  local.get $0
+  call $~lib/staticarray/StaticArray<i32>#get:length
+  local.set $3
+  loop $for-loop|0
+   local.get $2
+   local.get $3
+   i32.lt_s
+   local.set $4
+   local.get $4
+   if
+    local.get $0
+    local.get $2
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.load
+    local.get $2
+    local.get $0
+    i32.const 3
+    global.set $~argumentsLength
+    local.get $1
+    i32.load
+    call_indirect $0 (type $i32_i32_i32_=>_none)
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    br $for-loop|0
+   end
+  end
+ )
+ (func $start:std/staticarray~anonymous|2 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  i32.const 2
+  i32.ge_s
+ )
  (func $~lib/rt/itcms/__renew (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
@@ -4833,108 +4888,6 @@
   local.get $0
   local.get $1
   i32.store offset=12
- )
- (func $~lib/array/Array<i32>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $2
-  i32.store
-  i32.const 0
-  drop
- )
- (func $~lib/array/Array<i32>#__set (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   local.get $1
-   i32.const 0
-   i32.lt_s
-   if
-    i32.const 64
-    i32.const 752
-    i32.const 123
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.const 2
-   i32.const 1
-   call $~lib/array/ensureCapacity
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   call $~lib/array/Array<i32>#set:length_
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<i32>#__uset
- )
- (func $start:std/staticarray~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  global.get $std/staticarray/maxVal
-  local.tee $3
-  local.get $0
-  local.tee $4
-  local.get $3
-  local.get $4
-  i32.gt_s
-  select
-  global.set $std/staticarray/maxVal
- )
- (func $~lib/staticarray/StaticArray<i32>#forEach (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  i32.const 0
-  local.set $2
-  local.get $0
-  call $~lib/staticarray/StaticArray<i32>#get:length
-  local.set $3
-  loop $for-loop|0
-   local.get $2
-   local.get $3
-   i32.lt_s
-   local.set $4
-   local.get $4
-   if
-    local.get $0
-    local.get $2
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load
-    local.get $2
-    local.get $0
-    i32.const 3
-    global.set $~argumentsLength
-    local.get $1
-    i32.load
-    call_indirect $0 (type $i32_i32_i32_=>_none)
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    br $for-loop|0
-   end
-  end
- )
- (func $start:std/staticarray~anonymous|2 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $0
-  i32.const 2
-  i32.ge_s
  )
  (func $~lib/array/Array<i32>#push (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -8370,14 +8323,10 @@
   local.tee $0
   i32.store offset=4
   local.get $0
-  local.tee $2
   i32.const 0
-  local.tee $1
-  i32.const 2
-  call $~lib/array/Array<i32>#__set
-  local.get $2
-  local.get $1
   call $~lib/array/Array<i32>#__get
+  i32.const 2
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -8388,14 +8337,10 @@
    unreachable
   end
   local.get $0
-  local.tee $2
   i32.const 1
-  local.tee $1
-  i32.const 3
-  call $~lib/array/Array<i32>#__set
-  local.get $2
-  local.get $1
   call $~lib/array/Array<i32>#__get
+  i32.const 3
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -8406,14 +8351,10 @@
    unreachable
   end
   local.get $0
-  local.tee $2
   i32.const 2
-  local.tee $1
-  i32.const 4
-  call $~lib/array/Array<i32>#__set
-  local.get $2
-  local.get $1
   call $~lib/array/Array<i32>#__get
+  i32.const 4
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -8468,14 +8409,10 @@
    unreachable
   end
   local.get $2
-  local.tee $1
   i32.const 0
-  local.tee $4
-  i32.const 2
-  call $~lib/array/Array<i32>#__set
-  local.get $1
-  local.get $4
   call $~lib/array/Array<i32>#__get
+  i32.const 2
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -8486,14 +8423,10 @@
    unreachable
   end
   local.get $2
-  local.tee $1
   i32.const 1
-  local.tee $4
-  i32.const 3
-  call $~lib/array/Array<i32>#__set
-  local.get $1
-  local.get $4
   call $~lib/array/Array<i32>#__get
+  i32.const 3
+  i32.eq
   i32.eqz
   if
    i32.const 0

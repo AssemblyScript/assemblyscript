@@ -200,9 +200,9 @@ let maxVal = 0;
 
   // map
   const incNums = numbers.map<i32>(x => x + 1);
-  assert(incNums[0] = 2);
-  assert(incNums[1] = 3);
-  assert(incNums[2] = 4);
+  assert(incNums[0] == 2);
+  assert(incNums[1] == 3);
+  assert(incNums[2] == 4);
 
   // forEach
   numbers.forEach(x => { maxVal = max(maxVal, x); } );
@@ -211,8 +211,8 @@ let maxVal = 0;
   // filter
   const filtered = numbers.filter(x => x >= 2);
   assert(filtered.length == 2);
-  assert(filtered[0] = 2);
-  assert(filtered[1] = 3);
+  assert(filtered[0] == 2);
+  assert(filtered[1] == 3);
 
   // reduce
   const sum1 = numbers.reduce((x, y) => x + y, 0);
