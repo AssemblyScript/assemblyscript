@@ -1475,12 +1475,8 @@ export class Module {
     ifTrue: ExpressionRef,
     ifFalse: ExpressionRef,
     condition: ExpressionRef,
-    type: TypeRef = TypeRef.Auto
+    type: TypeRef
   ): ExpressionRef {
-    if (type == TypeRef.Auto) {
-      type = binaryen._BinaryenExpressionGetType(ifTrue);
-      if (type == TypeRef.Unreachable) type = binaryen._BinaryenExpressionGetType(ifFalse);
-    }
     return binaryen._BinaryenSelect(this.ref, condition, ifTrue, ifFalse, type);
   }
 

@@ -8,8 +8,6 @@
     "$local0; // closure 2",
     "AS100: Not implemented: Closures",
     "$local0; // closure 3",
-    "AS100: Not implemented: Closures",
-    "select($local0, $arg0, $arg1); // closure 4",
     "EOF"
   ]
 }

@@ -5245,7 +5245,8 @@ export class Compiler extends DiagnosticEmitter {
         return module.select(
           module.i32(1),
           module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
-          leftExpr
+          leftExpr,
+          TypeRef.I32
         );
       }
       case TypeKind.I8:
