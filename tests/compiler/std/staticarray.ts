@@ -142,16 +142,6 @@ arr4 = changetype<StaticArray<Ref>>(0);
   assert(array.indexOf(2, -3) == 0);
 }
 
-// join + toString
-{
-  const elements: StaticArray<string> = ['Fire', 'Air', 'Water'];
-  assert(elements.join() == "Fire,Air,Water");
-  assert(elements.join('') == "FireAirWater");
-  assert(elements.join('-') == "Fire-Air-Water");
-  assert(elements.join(' + ') == "Fire + Air + Water");
-  assert(elements.join() == elements.toString());
-}
-
 // lastIndexOf
 {
   const numbers: StaticArray<i32> = [2, 5, 9, 2];
@@ -162,6 +152,93 @@ arr4 = changetype<StaticArray<Ref>>(0);
   assert(numbers.lastIndexOf(2, -2) == 0);
   assert(numbers.lastIndexOf(2, -1) == 3);
 }
+
+// join + toString
+{
+  const elements: StaticArray<string> = ['Fire', 'Air', 'Water'];
+  assert(elements.join() == "Fire,Air,Water");
+  assert(elements.join('') == "FireAirWater");
+  assert(elements.join('-') == "Fire-Air-Water");
+  assert(elements.join(' + ') == "Fire + Air + Water");
+  assert(elements.join() == elements.toString());
+}
+
+// fill
+{
+  const numbers: StaticArray<i32> = [0, 0];
+  numbers.fill(1, 1);
+
+  assert(numbers[0] == 0);
+  assert(numbers[1] == 1);
+}
+
+// reverse
+{
+  const numbers: StaticArray<i32> = [1, 2, 3];
+  numbers.reverse();
+
+  assert(numbers[0] == 3);
+  assert(numbers[1] == 2);
+  assert(numbers[2] == 1);
+}
+
+// copyWithin
+{
+  const numbers: StaticArray<i32> = [1, 2, 3, 4, 5];
+  numbers.copyWithin(0, 3);
+
+  assert(numbers[0] == 4);
+  assert(numbers[1] == 5);
+  assert(numbers[2] == 3);
+  assert(numbers[3] == 4);
+  assert(numbers[4] == 5);
+}
+
+let maxVal = 0;
+{
+  const numbers: StaticArray<i32> = [1, 2, 3];
+
+  // map
+  const incNums = numbers.map<i32>(x => x + 1);
+  assert(incNums[0] == 2);
+  assert(incNums[1] == 3);
+  assert(incNums[2] == 4);
+
+  // forEach
+  numbers.forEach(x => { maxVal = max(maxVal, x); } );
+  assert(maxVal == 3);
+
+  // filter
+  const filtered = numbers.filter(x => x >= 2);
+  assert(filtered.length == 2);
+  assert(filtered[0] == 2);
+  assert(filtered[1] == 3);
+
+  // reduce
+  const sum1 = numbers.reduce((x, y) => x + y, 0);
+  assert(sum1 == 6);
+
+  // reduceRight
+  const sum2 = numbers.reduceRight((x, y) => x + y, 0);
+  assert(sum2 == 6);
+
+  // some
+  assert(numbers.some(x => x == 2));
+  assert(!numbers.some(x => x == 4));
+
+  // every
+  assert(numbers.every(x => x <= 3));
+  assert(!numbers.every(x => x > 3));
+
+  // findIndex
+  assert(numbers.findIndex(x => x == 2) == 1);
+  assert(numbers.findIndex(x => x == 4) == -1);
+
+  // findLastIndex
+  assert(numbers.findLastIndex(x => x == 2) == 1);
+  assert(numbers.findLastIndex(x => x == 4) == -1);
+}
+
 
 // sort
 {
