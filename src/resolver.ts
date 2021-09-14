@@ -589,7 +589,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    var element = ctxElement.lookup(node.identifier.text);
+    var element = ctxElement.lookup(node.identifier.text, true);
     if (!element) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
@@ -602,7 +602,7 @@ export class Resolver extends DiagnosticEmitter {
     var prev = node;
     var next = node.next;
     while (next) {
-      if (!(element = element.lookupInSelf(next.identifier.text))) {
+      if (!(element = element.getMember(next.identifier.text))) {
         if (reportMode == ReportMode.REPORT) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
@@ -3221,7 +3221,7 @@ export class Resolver extends DiagnosticEmitter {
 
       // Link _own_ constructor if present
       {
-        let ctorPrototype = instance.lookupInSelf(CommonNames.constructor);
+        let ctorPrototype = instance.getMember(CommonNames.constructor);
         if (ctorPrototype !== null && ctorPrototype.parent === instance) {
           assert(ctorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
           let ctorInstance = this.resolveFunction(

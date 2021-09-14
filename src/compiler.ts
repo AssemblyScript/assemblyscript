@@ -8428,7 +8428,7 @@ export class Compiler extends DiagnosticEmitter {
       )
     );
     // tempData = tempThis.dataStart
-    var dataStartMember = assert(arrayInstance.lookupInSelf("dataStart"));
+    var dataStartMember = assert(arrayInstance.getMember("dataStart"));
     assert(dataStartMember.kind == ElementKind.FIELD);
     stmts.push(
       module.local_set(tempDataStart.index,
