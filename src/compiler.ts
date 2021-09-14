@@ -88,8 +88,7 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName,
-  DeclaredElement
+  mangleInternalName
 } from "./program";
 
 import {
