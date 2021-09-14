@@ -1337,8 +1337,8 @@ export class Resolver extends DiagnosticEmitter {
           break;
         } else if (!target.is(CommonFlags.GENERIC)) {
           // Inherit from 'Function' if not overridden, i.e. fn.call
-          let members = target.members;
-          if (!members || !members.has(propertyName)) {
+          let ownMember = target.getMember(propertyName);
+          if (!ownMember) {
             let functionInstance = this.resolveFunction(<FunctionPrototype>target, null, uniqueMap<string,Type>(), ReportMode.SWALLOW);
             if (functionInstance) {
               let wrapper = functionInstance.type.getClassOrWrapper(this.program);
@@ -1357,9 +1357,8 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.CLASS:
       case ElementKind.INTERFACE: {
         do {
-          let members = target.members;
-          if (members !== null && members.has(propertyName)) {
-            let member = assert(members.get(propertyName));
+          let member = target.getMember(propertyName);
+          if (member) {
             if (member.kind == ElementKind.PROPERTY_PROTOTYPE) {
               let propertyInstance = this.resolveProperty(<PropertyPrototype>member, reportMode);
               if (!propertyInstance) return null;
@@ -1406,11 +1405,11 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       default: { // enums or other namespace-like elements
-        let members = target.members;
-        if (members !== null && members.has(propertyName)) {
+        let member = target.getMember(propertyName);
+        if (member) {
           this.currentThisExpression = targetNode;
           this.currentElementExpression = null;
-          return assert(members.get(propertyName)); // static ENUMVALUE, static GLOBAL, static FUNCTION_PROTOTYPE...
+          return member; // static ENUMVALUE, static GLOBAL, static FUNCTION_PROTOTYPE...
         }
         break;
       }

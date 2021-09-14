@@ -8677,8 +8677,8 @@ export class Compiler extends DiagnosticEmitter {
     // Iterate through the members defined in our expression
     for (let i = 0; i < numNames; ++i) {
       let memberName = names[i].text;
-      let member: DeclaredElement;
-      if (!members || !members.has(memberName) || (member = assert(members.get(memberName))).kind != ElementKind.FIELD) {
+      let member = classReference.getMember(memberName);
+      if (!member || member.kind != ElementKind.FIELD) {
         this.error(
           DiagnosticCode.Property_0_does_not_exist_on_type_1,
           names[i].range, memberName, classType.toString()

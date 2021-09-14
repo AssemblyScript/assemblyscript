@@ -2778,7 +2778,7 @@ export abstract class Element {
   /** Get the member with the specified name, if any. */
   getMember(name: string): DeclaredElement | null {
     var members = this.members;
-    if (members !== null && members.has(name)) return assert(members.get(name));
+    if (members && members.has(name)) return assert(members.get(name));
     return null;
   }
 
@@ -4322,23 +4322,18 @@ export class Class extends TypedElement {
 
   /** Gets the method of the specified name, resolved with the given type arguments. */
   getMethod(name: string, typeArguments: Type[] | null = null): Function | null {
-    var members = this.members;
-    if (members !== null && members.has(name)) {
-      let bound = changetype<Element>(members.get(name));
-      if (bound.kind == ElementKind.FUNCTION_PROTOTYPE) {
-        return this.program.resolver.resolveFunction(<FunctionPrototype>bound, typeArguments);
-      }
+    var member = this.getMember(name);
+    if (member && member.kind == ElementKind.FUNCTION_PROTOTYPE) {
+      return this.program.resolver.resolveFunction(<FunctionPrototype>member, typeArguments);
     }
     return null;
   }
 
   /** Calculates the memory offset of the specified field. */
   offsetof(fieldName: string): u32 {
-    var members = assert(this.members);
-    assert(members.has(fieldName));
-    var field = <Element>members.get(fieldName);
-    assert(field.kind == ElementKind.FIELD);
-    return (<Field>field).memoryOffset;
+    var member = assert(this.getMember(fieldName));
+    assert(member.kind == ElementKind.FIELD);
+    return (<Field>member).memoryOffset;
   }
 
   /** Creates a buffer suitable to hold a runtime instance of this class. */
