@@ -14,6 +14,7 @@ export enum DiagnosticCode {
   Module_requires_at_least_0_pages_of_maximum_memory = 106,
   Shared_memory_requires_maximum_memory_to_be_defined = 107,
   Shared_memory_requires_feature_threads_to_be_enabled = 108,
+  Transform_0_1 = 109,
   Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
   Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
   Type_0_cannot_be_changed_to_type_1 = 202,
@@ -197,6 +198,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 106: return "Module requires at least '{0}' pages of maximum memory.";
     case 107: return "Shared memory requires maximum memory to be defined.";
     case 108: return "Shared memory requires feature 'threads' to be enabled.";
+    case 109: return "Transform '{0}': {1}";
     case 200: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
     case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
     case 202: return "Type '{0}' cannot be changed to type '{1}'.";
