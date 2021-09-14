@@ -15,7 +15,7 @@ testVar();
 
 function testLet(): (value: i32) => i32 {
   let $local0 = 0;
-  return function inner(value: i32) {
+  return function inner(value: i32): i32 {
     return $local0; // closure 3
   };
 }

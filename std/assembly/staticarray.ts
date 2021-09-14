@@ -2,6 +2,7 @@
 
 import { OBJECT, BLOCK_MAXSIZE, TOTAL_OVERHEAD } from "./rt/common";
 import { COMPARATOR, SORT } from "./util/sort";
+import { REVERSE } from "./util/bytes";
 import { idof } from "./builtins";
 import { Array } from "./array";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
@@ -137,6 +138,51 @@ export class StaticArray<T> {
     }
   }
 
+  fill(value: T, start: i32 = 0, end: i32 = i32.MAX_VALUE): this {
+    var ptr = changetype<usize>(this);
+    var len = this.length;
+    start = start < 0 ? max(len + start, 0) : min(start, len);
+    end   = end   < 0 ? max(len + end,   0) : min(end,   len);
+    if (isManaged<T>()) {
+      for (; start < end; ++start) {
+        store<usize>(ptr + (<usize>start << alignof<T>()), changetype<usize>(value));
+        __link(changetype<usize>(this), changetype<usize>(value), true);
+      }
+    } else if (sizeof<T>() == 1) {
+      if (start < end) {
+        memory.fill(
+          ptr + <usize>start,
+          u8(value),
+          <usize>(end - start)
+        );
+      }
+    } else {
+      for (; start < end; ++start) {
+        store<T>(ptr + (<usize>start << alignof<T>()), value);
+      }
+    }
+    return this;
+  }
+
+  copyWithin(target: i32, start: i32, end: i32 = i32.MAX_VALUE): this {
+    var ptr = changetype<usize>(this);
+    var len = this.length;
+
+    end = min<i32>(end, len);
+
+    var to    = target < 0 ? max(len + target, 0) : min(target, len);
+    var from  = start < 0 ? max(len + start, 0) : min(start, len);
+    var last  = end < 0 ? max(len + end, 0) : min(end, len);
+    var count = min(last - from, len - to);
+
+    memory.copy( // is memmove
+      ptr + (<usize>to << alignof<T>()),
+      ptr + (<usize>from << alignof<T>()),
+      <usize>count << alignof<T>()
+    );
+    return this;
+  }
+
   includes(value: T, fromIndex: i32 = 0): bool {
     if (isFloat<T>()) {
       let length = this.length;
@@ -230,6 +276,85 @@ export class StaticArray<T> {
     return slice;
   }
 
+  findIndex(fn: (value: T, index: i32, array: StaticArray<T>) => bool): i32 {
+    for (let i = 0, len = this.length; i < len; ++i) {
+      if (fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this)) return i;
+    }
+    return -1;
+  }
+
+  findLastIndex(fn: (value: T, index: i32, array: StaticArray<T>) => bool): i32 {
+    for (let i = this.length - 1; i >= 0; --i) {
+      if (fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this)) return i;
+    }
+    return -1;
+  }
+
+  forEach(fn: (value: T, index: i32, array: StaticArray<T>) => void): void {
+    for (let i = 0, len = this.length; i < len; ++i) {
+      fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
+    }
+  }
+
+  map<U>(fn: (value: T, index: i32, array: StaticArray<T>) => U): Array<U> {
+    var len = this.length;
+    var out = changetype<Array<U>>(__newArray(len, alignof<U>(), idof<Array<U>>()));
+    var outStart = out.dataStart;
+    for (let i = 0; i < len; ++i) {
+      let result = fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
+      store<U>(outStart + (<usize>i << alignof<U>()), result);
+      if (isManaged<U>()) {
+        __link(changetype<usize>(out), changetype<usize>(result), true);
+      }
+    }
+    return out;
+  }
+
+  filter(fn: (value: T, index: i32, array: StaticArray<T>) => bool): Array<T> {
+    var result = changetype<Array<T>>(__newArray(0, alignof<T>(), idof<Array<T>>()));
+    for (let i = 0, len = this.length; i < len; ++i) {
+      let value = load<T>(changetype<usize>(this) + (<usize>i << alignof<T>()));
+      if (fn(value, i, this)) result.push(value);
+    }
+    return result;
+  }
+
+  reduce<U>(
+    fn: (previousValue: U, currentValue: T, currentIndex: i32, array: StaticArray<T>) => U,
+    initialValue: U
+  ): U {
+    var acc = initialValue;
+    for (let i = 0, len = this.length; i < len; ++i) {
+      acc = fn(acc, load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
+    }
+    return acc;
+  }
+
+  reduceRight<U>(
+    fn: (previousValue: U, currentValue: T, currentIndex: i32, array: StaticArray<T>) => U,
+    initialValue: U
+  ): U {
+    var acc = initialValue;
+    for (let i = this.length - 1; i >= 0; --i) {
+      acc = fn(acc, load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this);
+    }
+    return acc;
+  }
+
+  every(fn: (value: T, index: i32, array: StaticArray<T>) => bool): bool {
+    for (let i = 0, len = this.length; i < len; ++i) {
+      if (!fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this)) return false;
+    }
+    return true;
+  }
+
+  some(fn: (value: T, index: i32, array: StaticArray<T>) => bool): bool {
+    for (let i = 0, len = this.length; i < len; ++i) {
+      if (fn(load<T>(changetype<usize>(this) + (<usize>i << alignof<T>())), i, this)) return true;
+    }
+    return false;
+  }
+
   sort(comparator: (a: T, b: T) => i32 = COMPARATOR<T>()): this {
     SORT<T>(changetype<usize>(this), this.length, comparator);
     return this;
@@ -245,6 +370,11 @@ export class StaticArray<T> {
     if (isReference<T>()) return joinReferenceArray<T>(changetype<usize>(this), this.length, separator);
     ERROR("unspported element type");
     return <string>unreachable();
+  }
+
+  reverse(): this {
+    REVERSE<T>(changetype<usize>(this), this.length);
+    return this;
   }
 
   toString(): string {

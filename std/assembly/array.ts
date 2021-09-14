@@ -431,7 +431,7 @@ export class Array<T> {
     return result;
   }
 
-  reverse(): Array<T> {
+  reverse(): this {
     REVERSE<T>(this.dataStart, this.length_);
     return this;
   }

@@ -1691,9 +1691,8 @@ declare class Array<T> {
   constructor(length?: i32);
   at(index: i32): T;
   fill(value: T, start?: i32, end?: i32): this;
-  every(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
-  findIndex(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): i32;
-  findLastIndex(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): i32;
+  findIndex(callbackfn: (value: T, index: i32, array: Array<T>) => bool): i32;
+  findLastIndex(callbackfn: (value: T, index: i32, array: Array<T>) => bool): i32;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
@@ -1706,14 +1705,15 @@ declare class Array<T> {
   filter(callbackfn: (value: T, index: i32, array: Array<T>) => bool): Array<T>;
   reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U, initialValue: U): U;
   reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: Array<T>) => U, initialValue: U): U;
+  every(callbackfn: (value: T, index: i32, array: Array<T>) => bool): bool;
+  some(callbackfn: (value: T, index: i32, array: Array<T>) => bool): bool;
   shift(): T;
-  some(callbackfn: (element: T, index: i32, array?: Array<T>) => bool): bool;
   unshift(element: T): i32;
   slice(from: i32, to?: i32): Array<T>;
   splice(start: i32, deleteCount?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
-  reverse(): T[];
+  reverse(): this;
   /** Flattens an array of arrays. If any null entries exist in the array, they are ignored, unlike JavaScript's version of Array#flat(). */
   flat(): T extends unknown[] ? T : never;
   toString(): string;
@@ -1728,13 +1728,25 @@ declare class StaticArray<T> {
   readonly length: i32;
   constructor(length?: i32);
   at(index: i32): T;
+  fill(value: T, start?: i32, end?: i32): this;
+  findIndex(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): i32;
+  findLastIndex(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): i32;
+  copyWithin(target: i32, start: i32, end?: i32): this;
   includes(searchElement: T, fromIndex?: i32): bool;
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
+  forEach(callbackfn: (value: T, index: i32, array: StaticArray<T>) => void): void;
+  map<U>(callbackfn: (value: T, index: i32, array: StaticArray<T>) => U): Array<U>;
+  filter(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): Array<T>;
+  reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: StaticArray<T>) => U, initialValue: U): U;
+  reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: i32, array: StaticArray<T>) => U, initialValue: U): U;
+  every(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
+  some(callbackfn: (value: T, index: i32, array: StaticArray<T>) => bool): bool;
   concat(items: Array<T>): Array<T>;
   slice(from: i32, to?: i32): Array<T>;
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
+  reverse(): this;
   toString(): string;
 }
 

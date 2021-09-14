@@ -948,7 +948,11 @@ export class Compiler extends DiagnosticEmitter {
             module.addGlobal(internalName, TypeRef.I32, false, module.i32(classInstance.id));
             this.doneModuleExports.add(element);
           }
-          module.addGlobalExport(internalName, prefix + name);
+
+          let exportName = prefix + name;
+          if (!module.hasExport(exportName)) {
+            module.addGlobalExport(internalName, exportName);
+          }
         }
         break;
       }
@@ -2825,14 +2829,6 @@ export class Compiler extends DiagnosticEmitter {
 
     var valueExpression = statement.value;
     if (valueExpression) {
-      if (returnType == Type.void) {
-        this.error(
-          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-          valueExpression.range, this.currentType.toString(), returnType.toString()
-        );
-        this.currentType = Type.void;
-        return module.unreachable();
-      }
       let constraints = Constraints.CONV_IMPLICIT;
       if (flow.actualFunction.is(CommonFlags.MODULE_EXPORT)) constraints |= Constraints.MUST_WRAP;
 
@@ -2857,15 +2853,27 @@ export class Compiler extends DiagnosticEmitter {
 
     // Handle inline return
     if (flow.isInline) {
-      return isLastInBody && expr != 0
-        ? expr
-        : module.br(assert(flow.inlineReturnLabel), 0, expr);
+      return !expr
+        ? isLastInBody
+          ? module.nop()
+          : module.br(assert(flow.inlineReturnLabel))
+        : isLastInBody
+          ? expr
+          : this.currentType == Type.void
+            ? module.block(null, [ expr, module.br(assert(flow.inlineReturnLabel)) ])
+            : module.br(assert(flow.inlineReturnLabel), 0, expr);
     }
 
     // Otherwise emit a normal return
-    return isLastInBody && expr != 0
-      ? expr
-      : module.return(expr);
+    return !expr
+      ? isLastInBody
+        ? module.nop()
+        : module.return()
+      : isLastInBody
+        ? expr
+        : this.currentType == Type.void
+          ? module.block(null, [ expr, module.return() ])
+          : module.return(expr);
   }
 
   private compileSwitchStatement(
@@ -5237,7 +5245,8 @@ export class Compiler extends DiagnosticEmitter {
         return module.select(
           module.i32(1),
           module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
-          leftExpr
+          leftExpr,
+          TypeRef.I32
         );
       }
       case TypeKind.I8:
@@ -8128,7 +8137,8 @@ export class Compiler extends DiagnosticEmitter {
     var parts = expression.parts;
     var numParts = parts.length;
     var expressions = expression.expressions;
-    assert(numParts - 1 == expressions.length);
+    var numExpressions = expressions.length;
+    assert(numExpressions == numParts - 1);
 
     var module = this.module;
     var stringInstance = this.program.stringInstance;
@@ -8194,8 +8204,8 @@ export class Compiler extends DiagnosticEmitter {
         return this.makeCallDirect(concatMethod, [ lhs, rhs ], expression);
       }
 
-      // Compile to a `StaticArray<string>#join("") for general case
-      let length = 2 * numParts - 1;
+      // Compile to a `StaticArray<string>#join("") in the general case
+      let length = numParts + numExpressions;
       let values = new Array<usize>(length);
       values[0] = this.ensureStaticString(parts[0]);
       for (let i = 1; i < numParts; ++i) {
@@ -8207,19 +8217,33 @@ export class Compiler extends DiagnosticEmitter {
       let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
       let joinInstance = assert(arrayInstance.getMethod("join"));
       let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true));
-      let stmts = new Array<ExpressionRef>(numParts);
-      for (let i = 0, k = numParts - 1; i < k; ++i) {
+      let stmts = new Array<ExpressionRef>(2 * numExpressions + 1);
+      // Use one local per toString'ed subexpression, since otherwise recursion on the same
+      // static array would overwrite already prepared parts. Avoids a temporary array.
+      let temps = new Array<Local>(numExpressions);
+      let flow = this.currentFlow;
+      for (let i = 0; i < numExpressions; ++i) {
         let expression = expressions[i];
-        stmts[i] = this.makeCallDirect(indexedSetInstance, [
-          module.usize(offset),
-          module.i32(2 * i + 1),
+        let temp = flow.getTempLocal(stringType);
+        temps[i] = temp;
+        stmts[i] = module.local_set(temp.index,
           this.makeToString(
             this.compileExpression(expression, stringType),
             this.currentType, expression
-          )
-        ], expression);
+          ),
+          true
+        );
       }
-      stmts[numParts - 1] = this.makeCallDirect(joinInstance, [
+      // Populate the static array with the toString'ed subexpressions and call .join("")
+      for (let i = 0; i < numExpressions; ++i) {
+        stmts[numExpressions + i] = this.makeCallDirect(indexedSetInstance, [
+          module.usize(offset),
+          module.i32(2 * i + 1),
+          module.local_get(temps[i].index, stringType.toRef())
+        ], expression);
+        flow.freeTempLocal(temps[i]);
+      }
+      stmts[2 * numExpressions] = this.makeCallDirect(joinInstance, [
         module.usize(offset),
         this.ensureStaticString("")
       ], expression);
@@ -8377,19 +8401,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
-        // __newArray(length, alignLog2, classId, staticBuffer)
-        let expr = this.makeCallDirect(program.newArrayInstance, [
-          module.i32(length),
-          program.options.isWasm64
-            ? module.i64(elementType.alignLog2)
-            : module.i32(elementType.alignLog2),
-          module.i32(arrayInstance.id),
-          program.options.isWasm64
-            ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
-            : module.i32(i64_low(bufferAddress))
-        ], expression);
-        this.currentType = arrayType;
-        return expr;
+        return this.makeNewArray(arrayInstance, length, bufferAddress, expression);
       }
     }
 
@@ -8411,16 +8423,7 @@ export class Compiler extends DiagnosticEmitter {
     // tempThis = __newArray(length, alignLog2, classId, source = 0)
     stmts.push(
       module.local_set(tempThis.index,
-        this.makeCallDirect(program.newArrayInstance, [
-          module.i32(length),
-          program.options.isWasm64
-            ? module.i64(elementType.alignLog2)
-            : module.i32(elementType.alignLog2),
-          module.i32(arrayInstance.id),
-          program.options.isWasm64
-            ? module.i64(0)
-            : module.i32(0)
-        ], expression),
+        this.makeNewArray(arrayInstance, length, i64_new(0), expression),
         arrayType.isManaged
       )
     );
@@ -8456,6 +8459,37 @@ export class Compiler extends DiagnosticEmitter {
     if (length) this.compileFunction(indexedSet);
     this.currentType = arrayType;
     return module.flatten(stmts, arrayTypeRef);
+  }
+
+  /** Makes a new array instance from a static buffer segment. */
+  private makeNewArray(
+    /** Concrete array class. */
+    arrayInstance: Class,
+    /** Length of the array. */
+    length: i32,
+    /** Source address to copy from. Array is zeroed if `0`. */
+    source: i64,
+    /** Report node. */
+    reportNode: Node
+  ): ExpressionRef {
+    var program = this.program;
+    var module = this.module;
+    assert(!arrayInstance.extends(program.staticArrayPrototype));
+    var elementType = arrayInstance.getArrayValueType(); // asserts
+
+    // __newArray(length, alignLog2, classId, staticBuffer)
+    var expr = this.makeCallDirect(program.newArrayInstance, [
+      module.i32(length),
+      program.options.isWasm64
+        ? module.i64(elementType.alignLog2)
+        : module.i32(elementType.alignLog2),
+      module.i32(arrayInstance.id),
+      program.options.isWasm64
+        ? module.i64(i64_low(source), i64_high(source))
+        : module.i32(i64_low(source))
+    ], reportNode);
+    this.currentType = arrayInstance.type;
+    return expr;
   }
 
   /** Compiles a special `fixed` array literal. */
