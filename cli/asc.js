@@ -867,7 +867,7 @@ exports.main = function main(argv, options, callback) {
   numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
   if (numErrors) {
     if (module) module.dispose();
-    const err = Error(numErrors + " afterCompile error(s)");
+    const err = Error(`${numErrors} afterCompile error(s)`);
     err.stack = err.message; // omit stack
     return callback(err);
   }
