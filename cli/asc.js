@@ -912,6 +912,14 @@ exports.main = function main(argv, options, callback) {
     if (error) return callback(error);
   }
 
+  numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
+  if (numErrors) {
+    if (module) module.dispose();
+    const err = Error(`${numErrors} afterCompile error(s)`);
+    err.stack = err.message; // omit stack
+    return callback(err);
+  }
+
   // Validate the module if requested
   if (!opts.noValidate) {
     stats.validateCount++;
