@@ -685,11 +685,10 @@
   local.get $2
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $3
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -950,11 +949,10 @@
   local.tee $3
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $5
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1522,11 +1520,10 @@
   local.get $1
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $2
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -3936,11 +3933,10 @@
     global.get $~lib/rt/itcms/state
     i32.const 1
     i32.eq
-    i32.const 0
     local.get $3
     i32.const 3
     i32.eq
-    select
+    i32.and
     if
      local.get $1
      call $~lib/rt/itcms/Object#makeGray
@@ -4112,6 +4108,7 @@
   loop $while-continue|0
    block $__inlined_func$~lib/util/string/isSpace (result i32)
     local.get $1
+    local.tee $3
     i32.const 128
     i32.or
     i32.const 160
@@ -4128,7 +4125,7 @@
     br_if $__inlined_func$~lib/util/string/isSpace
     drop
     i32.const 1
-    local.get $1
+    local.get $3
     i32.const -8192
     i32.add
     i32.const 10
@@ -4137,31 +4134,31 @@
     drop
     block $break|0
      block $case6|0
-      local.get $1
+      local.get $3
       i32.const 5760
       i32.eq
       br_if $case6|0
-      local.get $1
+      local.get $3
       i32.const 8232
       i32.eq
       br_if $case6|0
-      local.get $1
+      local.get $3
       i32.const 8233
       i32.eq
       br_if $case6|0
-      local.get $1
+      local.get $3
       i32.const 8239
       i32.eq
       br_if $case6|0
-      local.get $1
+      local.get $3
       i32.const 8287
       i32.eq
       br_if $case6|0
-      local.get $1
+      local.get $3
       i32.const 12288
       i32.eq
       br_if $case6|0
-      local.get $1
+      local.get $3
       i32.const 65279
       i32.eq
       br_if $case6|0
@@ -4188,15 +4185,14 @@
   end
   i32.const 1
   local.set $3
-  i32.const 1
   local.get $1
   i32.const 43
   i32.eq
   local.get $1
   i32.const 45
   i32.eq
-  select
-  if
+  i32.or
+  if (result i32)
    local.get $2
    i32.const 1
    i32.sub
@@ -4218,16 +4214,15 @@
    i32.add
    local.tee $0
    i32.load16_u
-   local.set $1
+  else
+   local.get $1
   end
+  i32.const 48
+  i32.eq
   local.get $2
   i32.const 2
   i32.gt_s
-  i32.const 0
-  local.get $1
-  i32.const 48
-  i32.eq
-  select
+  i32.and
   if
    block $break|1
     block $case2|1
@@ -4544,13 +4539,11 @@
   local.tee $1
   i32.const 0
   i32.lt_s
-  local.set $2
-  i32.const 1
+  local.tee $2
   local.get $1
   i32.const 10000
   i32.ge_s
-  local.get $2
-  select
+  i32.or
   if
    global.get $~lib/memory/__stack_pointer
    local.tee $3
@@ -9522,7 +9515,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 0
   i32.const 1868
   i32.load
   i32.const 1
@@ -9530,6 +9522,7 @@
   i32.const 1
   i32.shl
   local.tee $2
+  i32.eqz
   local.get $0
   i32.const 20
   i32.sub
@@ -9544,8 +9537,7 @@
   i32.shl
   local.tee $1
   i32.gt_u
-  select
-  i32.eqz
+  i32.or
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4

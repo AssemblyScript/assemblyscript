@@ -316,11 +316,10 @@
    local.get $1
    local.get $1
    f64.ne
-   i32.const 0
    local.get $0
    local.get $0
    f64.ne
-   select
+   i32.and
    br_if $__inlined_func$std/math/ulperr
    drop
    local.get $0
@@ -415,11 +414,10 @@
    local.get $1
    local.get $1
    f32.ne
-   i32.const 0
    local.get $0
    local.get $0
    f32.ne
-   select
+   i32.and
    br_if $__inlined_func$std/math/ulperrf
    drop
    local.get $0
@@ -978,7 +976,6 @@
   (local $7 f64)
   i32.const 1
   local.set $3
-  i32.const 1
   local.get $0
   i64.reinterpret_f64
   i64.const 32
@@ -990,7 +987,7 @@
   local.get $2
   i32.const 1071284858
   i32.lt_u
-  select
+  i32.or
   if
    local.get $2
    i32.const -1074790400
@@ -1498,7 +1495,6 @@
   (local $6 f32)
   i32.const 1
   local.set $3
-  i32.const 1
   local.get $0
   i32.reinterpret_f32
   local.tee $2
@@ -1507,7 +1503,7 @@
   local.get $2
   i32.const 1054086096
   i32.lt_u
-  select
+  i32.or
   if
    local.get $2
    i32.const -1082130432
@@ -1687,16 +1683,15 @@
     i32.eq
     br_if $~lib/util/math/logf_lut|inlined.0
     drop
-    i32.const 1
+    local.get $1
+    i32.const 31
+    i32.shr_u
     local.get $1
     i32.const 1
     i32.shl
     i32.const -16777216
     i32.ge_u
-    local.get $1
-    i32.const 31
-    i32.shr_u
-    select
+    i32.or
     if
      local.get $0
      local.get $0
@@ -1869,13 +1864,12 @@
   i32.lt_u
   if
    local.get $2
-   i32.const 1048576
-   i32.ge_u
-   i32.const 0
-   local.get $2
    i32.const 1045430272
    i32.lt_u
-   select
+   local.get $2
+   i32.const 1048576
+   i32.ge_u
+   i32.and
    if
     local.get $0
     return
@@ -2076,13 +2070,12 @@
   i32.lt_u
   if
    local.get $1
-   i32.const 8388608
-   i32.ge_u
-   i32.const 0
-   local.get $1
    i32.const 964689920
    i32.lt_u
-   select
+   local.get $1
+   i32.const 8388608
+   i32.ge_u
+   i32.and
    if
     local.get $0
     return
@@ -2841,7 +2834,6 @@
   (local $9 i32)
   (local $10 i32)
   block $__inlined_func$~lib/math/NativeMath.atan2
-   i32.const 1
    local.get $0
    local.tee $4
    local.get $4
@@ -2849,7 +2841,7 @@
    local.get $1
    local.get $1
    f64.ne
-   select
+   i32.or
    if
     local.get $1
     local.get $4
@@ -2961,7 +2953,6 @@
      local.set $4
      br $__inlined_func$~lib/math/NativeMath.atan2
     end
-    i32.const 1
     local.get $7
     i32.const 2146435072
     i32.eq
@@ -2970,7 +2961,7 @@
     i32.const 67108864
     i32.add
     i32.gt_u
-    select
+    i32.or
     br_if $folding-inner0
     local.get $5
     local.get $7
@@ -3053,14 +3044,13 @@
   (local $3 i32)
   (local $4 i32)
   block $folding-inner0
-   i32.const 1
    local.get $0
    local.get $0
    f32.ne
    local.get $1
    local.get $1
    f32.ne
-   select
+   i32.or
    if
     local.get $1
     local.get $0
@@ -3158,7 +3148,6 @@
     end
     return
    end
-   i32.const 1
    local.get $3
    i32.const 2139095040
    i32.eq
@@ -3167,7 +3156,7 @@
    i32.const 218103808
    i32.add
    i32.gt_u
-   select
+   i32.or
    br_if $folding-inner0
    local.get $4
    local.get $3
@@ -4805,14 +4794,13 @@
   i64.shl
   f64.reinterpret_i64
   local.set $4
-  i32.const 1
-  local.get $3
-  i32.const 56
-  i32.gt_s
   local.get $3
   i32.const 0
   i32.lt_s
-  select
+  local.get $3
+  i32.const 56
+  i32.gt_s
+  i32.or
   if
    local.get $0
    local.get $1
@@ -5347,14 +5335,13 @@
   i32.shl
   f32.reinterpret_i32
   local.set $4
-  i32.const 1
-  local.get $3
-  i32.const 56
-  i32.gt_s
   local.get $3
   i32.const 0
   i32.lt_s
-  select
+  local.get $3
+  i32.const 56
+  i32.gt_s
+  i32.or
   if
    local.get $0
    local.get $1
@@ -5918,8 +5905,8 @@
   local.get $3
   f64.reinterpret_i64
   local.set $0
-  i64.const 0
   local.get $2
+  i64.eqz
   local.get $3
   i64.const 52
   i64.shr_u
@@ -5927,8 +5914,7 @@
   local.tee $8
   i32.const 2047
   i32.eq
-  select
-  i64.eqz
+  i32.or
   if
    local.get $0
    return
@@ -6080,19 +6066,18 @@
    local.get $0
    local.get $1
    f32.add
+   local.get $4
+   i32.eqz
+   local.get $5
+   i32.const 2139095040
+   i32.ge_u
+   i32.or
    local.get $5
    local.get $4
    i32.sub
    i32.const 209715200
    i32.ge_u
-   i32.const 1
-   i32.const 0
-   local.get $4
-   local.get $5
-   i32.const 2139095040
-   i32.ge_u
-   select
-   select
+   i32.or
    br_if $__inlined_func$~lib/math/NativeMathf.hypot
    drop
    f32.const 1
@@ -6158,7 +6143,6 @@
   (local $6 f64)
   (local $7 f64)
   (local $8 i32)
-  i32.const 1
   local.get $0
   i64.reinterpret_f64
   local.tee $5
@@ -6171,7 +6155,7 @@
   local.get $1
   i32.const 1048576
   i32.lt_u
-  select
+  i32.or
   if
    local.get $5
    i64.const 1
@@ -6218,12 +6202,11 @@
     local.get $5
     i64.const 32
     i64.shl
-    i64.const 1
+    i64.eqz
     local.get $1
     i32.const 1072693248
     i32.eq
-    select
-    i64.eqz
+    i32.and
     if
      f64.const 0
      return
@@ -6359,7 +6342,6 @@
   (local $5 f32)
   (local $6 i32)
   (local $7 f32)
-  i32.const 1
   local.get $0
   i32.reinterpret_f32
   local.tee $1
@@ -6368,7 +6350,7 @@
   local.get $1
   i32.const 8388608
   i32.lt_u
-  select
+  i32.or
   if
    local.get $1
    i32.const 1
@@ -6790,16 +6772,15 @@
     i32.eq
     br_if $~lib/util/math/log2f_lut|inlined.0
     drop
-    i32.const 1
+    local.get $3
+    i32.const 31
+    i32.shr_u
     local.get $3
     i32.const 1
     i32.shl
     i32.const -16777216
     i32.ge_u
-    local.get $3
-    i32.const 31
-    i32.shr_u
-    select
+    i32.or
     if
      local.get $0
      local.get $0
@@ -6940,11 +6921,11 @@
    i64.const 2047
    i64.and
    local.set $6
-   i32.const 1
-   local.get $1
-   local.get $1
-   f64.ne
-   i32.const 1
+   local.get $4
+   i64.const 1
+   i64.shl
+   local.tee $7
+   i64.eqz
    local.get $0
    i64.reinterpret_f64
    local.tee $3
@@ -6955,13 +6936,11 @@
    local.tee $5
    i64.const 2047
    i64.eq
-   local.get $4
-   i64.const 1
-   i64.shl
-   local.tee $7
-   i64.eqz
-   select
-   select
+   i32.or
+   local.get $1
+   local.get $1
+   f64.ne
+   i32.or
    if
     local.get $0
     local.get $1
@@ -7459,7 +7438,6 @@
       local.get $1
       local.get $4
       f64.add
-      i32.const 1
       local.get $6
       i64.const 1
       i64.shl
@@ -7470,7 +7448,7 @@
       i64.shl
       i64.const -9007199254740992
       i64.gt_u
-      select
+      i32.or
       br_if $~lib/util/math/pow_lut|inlined.0
       drop
       f64.const nan:0x8000000000000
@@ -8185,7 +8163,6 @@
      local.get $0
      local.get $1
      f32.add
-     i32.const 1
      local.get $4
      i32.const 1
      i32.shl
@@ -8196,7 +8173,7 @@
      i32.shl
      i32.const -16777216
      i32.gt_u
-     select
+     i32.or
      br_if $~lib/util/math/powf_lut|inlined.0
      drop
      f32.const nan:0x400000
@@ -8732,11 +8709,10 @@
   i64.const 2047
   i64.and
   local.set $5
-  i32.const 1
-  local.get $1
-  local.get $1
-  f64.ne
-  i32.const 1
+  local.get $4
+  i64.const 1
+  i64.shl
+  i64.eqz
   local.get $0
   i64.reinterpret_f64
   local.tee $2
@@ -8747,12 +8723,11 @@
   local.tee $3
   i64.const 2047
   i64.eq
-  local.get $4
-  i64.const 1
-  i64.shl
-  i64.eqz
-  select
-  select
+  i32.or
+  local.get $1
+  local.get $1
+  f64.ne
+  i32.or
   if
    local.get $0
    local.get $1
@@ -8941,19 +8916,17 @@
    i64.add
    i64.eq
    if (result i32)
-    i32.const 1
     local.get $6
     i32.const 1
     i32.and
-    i32.const 0
     local.get $1
     local.get $7
     f64.eq
-    select
+    i32.and
     local.get $1
     local.get $7
     f64.lt
-    select
+    i32.or
    else
     i32.const 0
    end
@@ -9185,19 +9158,17 @@
    i32.add
    i32.eq
    if (result i32)
-    i32.const 1
     local.get $6
     i32.const 1
     i32.and
-    i32.const 0
     local.get $1
     local.get $7
     f32.eq
-    select
+    i32.and
     local.get $1
     local.get $7
     f32.lt
-    select
+    i32.or
    else
     i32.const 0
    end
@@ -44564,11 +44535,10 @@
     local.tee $0
     f64.const 1
     f64.lt
-    i32.const 0
     local.get $0
     f64.const 0
     f64.ge
-    select
+    i32.and
     i32.eqz
     if
      i32.const 0
@@ -44638,11 +44608,10 @@
     local.tee $6
     f32.const 1
     f32.lt
-    i32.const 0
     local.get $6
     f32.const 0
     f32.ge
-    select
+    i32.and
     i32.eqz
     if
      i32.const 0

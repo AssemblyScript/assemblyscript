@@ -86,16 +86,15 @@
       i32.const 55296
       i32.eq
       if
+       local.get $3
+       i32.const 56320
+       i32.lt_u
        local.get $4
        local.get $0
        i32.const 2
        i32.add
        i32.gt_u
-       i32.const 0
-       local.get $3
-       i32.const 56320
-       i32.lt_u
-       select
+       i32.and
        if
         local.get $0
         i32.load16_u offset=2

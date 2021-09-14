@@ -969,11 +969,10 @@
   local.get $2
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $3
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1234,11 +1233,10 @@
   local.tee $3
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $5
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1811,11 +1809,10 @@
   local.get $1
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $2
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -2445,11 +2442,10 @@
     global.get $~lib/rt/itcms/state
     i32.const 1
     i32.eq
-    i32.const 0
     local.get $0
     i32.const 3
     i32.eq
-    select
+    i32.and
     if
      local.get $1
      call $~lib/rt/itcms/Object#makeGray
@@ -27055,18 +27051,16 @@
      i32.load16_u
      local.set $3
      loop $while-continue|3
+      local.get $1
+      local.get $10
+      i64.lt_u
       local.get $2
       local.get $4
       local.get $1
       i64.sub
       i64.le_u
-      i32.const 0
-      local.get $1
-      local.get $10
-      i64.lt_u
-      select
+      i32.and
       if (result i32)
-       i32.const 1
        local.get $10
        local.get $1
        i64.sub
@@ -27080,7 +27074,7 @@
        local.get $7
        local.get $10
        i64.lt_u
-       select
+       i32.or
       else
        i32.const 0
       end
@@ -27182,18 +27176,16 @@
   i32.load16_u
   local.set $3
   loop $while-continue|6
+   local.get $1
+   local.get $2
+   i64.lt_u
    local.get $12
    local.get $4
    local.get $1
    i64.sub
    i64.le_u
-   i32.const 0
-   local.get $1
-   local.get $2
-   i64.lt_u
-   select
+   i32.and
    if (result i32)
-    i32.const 1
     local.get $2
     local.get $1
     i64.sub
@@ -27207,7 +27199,7 @@
     local.get $2
     local.get $7
     i64.gt_u
-    select
+    i32.or
    else
     i32.const 0
    end
@@ -27254,11 +27246,10 @@
   local.tee $4
   i32.const 21
   i32.le_s
-  i32.const 0
   local.get $1
   local.get $4
   i32.le_s
-  select
+  i32.and
   if (result i32)
    loop $for-loop|0
     local.get $1
@@ -27293,11 +27284,10 @@
    local.get $4
    i32.const 21
    i32.le_s
-   i32.const 0
    local.get $4
    i32.const 0
    i32.gt_s
-   select
+   i32.and
    if (result i32)
     local.get $4
     i32.const 1
@@ -27324,11 +27314,10 @@
     local.get $4
     i32.const 0
     i32.le_s
-    i32.const 0
     local.get $4
     i32.const -6
     i32.gt_s
-    select
+    i32.and
     if (result i32)
      i32.const 2
      local.get $4
@@ -59653,7 +59642,6 @@
                                         i32.gt_s
                                         if
                                          i32.const 1
-                                         i32.const 1
                                          local.get $5
                                          i32.const 3
                                          i32.shl
@@ -59661,12 +59649,12 @@
                                          i32.add
                                          f64.load
                                          local.tee $12
-                                         local.get $12
-                                         f64.ne
-                                         local.get $12
                                          f64.const nan:0x8000000000000
                                          f64.eq
-                                         select
+                                         local.get $12
+                                         local.get $12
+                                         f64.ne
+                                         i32.or
                                          br_if $~lib/typedarray/INCLUDES<~lib/typedarray/Float64Array,f64>|inlined.0
                                          drop
                                          local.get $5
@@ -59774,7 +59762,6 @@
                                         i32.gt_s
                                         if
                                          i32.const 1
-                                         i32.const 1
                                          local.get $5
                                          i32.const 2
                                          i32.shl
@@ -59782,12 +59769,12 @@
                                          i32.add
                                          f32.load
                                          local.tee $11
-                                         local.get $11
-                                         f32.ne
-                                         local.get $11
                                          f32.const nan:0x400000
                                          f32.eq
-                                         select
+                                         local.get $11
+                                         local.get $11
+                                         f32.ne
+                                         i32.or
                                          br_if $~lib/typedarray/INCLUDES<~lib/typedarray/Float32Array,f32>|inlined.0
                                          drop
                                          local.get $5

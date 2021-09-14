@@ -1351,11 +1351,10 @@
   local.get $2
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $3
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1616,11 +1615,10 @@
   local.tee $3
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $5
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -2188,11 +2186,10 @@
   local.get $1
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $2
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -3763,11 +3760,10 @@
     global.get $~lib/rt/itcms/state
     i32.const 1
     i32.eq
-    i32.const 0
     local.get $3
     i32.const 3
     i32.eq
-    select
+    i32.and
     if
      local.get $1
      call $~lib/rt/itcms/Object#makeGray
@@ -4085,14 +4081,13 @@
   end
   f64.const 1
   local.set $4
-  i32.const 1
   local.get $2
   i32.const 43
   i32.eq
   local.get $2
   i32.const 45
   i32.eq
-  select
+  i32.or
   if
    local.get $3
    i32.const 1
@@ -4119,14 +4114,13 @@
   end
   local.get $1
   if
-   i32.const 1
-   local.get $1
-   i32.const 36
-   i32.gt_s
    local.get $1
    i32.const 2
    i32.lt_s
-   select
+   local.get $1
+   i32.const 36
+   i32.gt_s
+   i32.or
    if
     f64.const nan:0x8000000000000
     return
@@ -4138,11 +4132,10 @@
     local.get $2
     i32.const 48
     i32.eq
-    i32.const 0
     local.get $3
     i32.const 2
     i32.gt_s
-    select
+    i32.and
     if (result i32)
      local.get $0
      i32.load16_u offset=2
@@ -4165,14 +4158,13 @@
     end
    end
   else
-   local.get $3
-   i32.const 2
-   i32.gt_s
-   i32.const 0
    local.get $2
    i32.const 48
    i32.eq
-   select
+   local.get $3
+   i32.const 2
+   i32.gt_s
+   i32.and
    if
     block $break|1
      block $case2|1
@@ -4419,15 +4411,14 @@
   end
   i32.const 1
   local.set $2
-  i32.const 1
   local.get $0
   i32.const 43
   i32.eq
   local.get $0
   i32.const 45
   i32.eq
-  select
-  if
+  i32.or
+  if (result i32)
    local.get $1
    i32.const 1
    i32.sub
@@ -4449,16 +4440,15 @@
    i32.add
    local.tee $5
    i32.load16_u
-   local.set $0
+  else
+   local.get $0
   end
+  i32.const 48
+  i32.eq
   local.get $1
   i32.const 2
   i32.gt_s
-  i32.const 0
-  local.get $0
-  i32.const 48
-  i32.eq
-  select
+  i32.and
   if
    block $break|1
     block $case2|1
@@ -4696,15 +4686,14 @@
   end
   i64.const 1
   local.set $2
-  i32.const 1
   local.get $0
   i32.const 43
   i32.eq
   local.get $0
   i32.const 45
   i32.eq
-  select
-  if
+  i32.or
+  if (result i32)
    local.get $1
    i32.const 1
    i32.sub
@@ -4726,16 +4715,15 @@
    i32.add
    local.tee $5
    i32.load16_u
-   local.set $0
+  else
+   local.get $0
   end
+  i32.const 48
+  i32.eq
   local.get $1
   i32.const 2
   i32.gt_s
-  i32.const 0
-  local.get $0
-  i32.const 48
-  i32.eq
-  select
+  i32.and
   if
    block $break|1
     block $case2|1
@@ -5260,11 +5248,10 @@
    local.tee $5
    i32.const 73
    i32.eq
-   i32.const 0
    local.get $7
    i32.const 8
    i32.ge_s
-   select
+   i32.and
    if
     local.get $0
     i64.load
@@ -5287,15 +5274,14 @@
     br $folding-inner0
    end
    local.get $5
+   i32.const 46
+   i32.ne
+   local.get $5
    i32.const 48
    i32.sub
    i32.const 10
    i32.ge_u
-   i32.const 0
-   local.get $5
-   i32.const 46
-   i32.ne
-   select
+   i32.and
    br_if $folding-inner0
    local.get $0
    local.set $2
@@ -5393,18 +5379,16 @@
    i32.sub
    local.set $2
    loop $for-loop|3
-    i32.const 0
     local.get $13
-    i32.const 1
+    i32.eqz
     local.get $5
     i32.const 46
     i32.eq
-    select
+    i32.and
     local.get $2
     i32.const 10
     i32.lt_u
-    select
-    i32.eqz
+    i32.or
     if
      block $for-break3
       local.get $2
@@ -5461,7 +5445,8 @@
    end
    block $~lib/util/string/scientific|inlined.0 (result f64)
     f64.const 0
-    i32.const 1
+    local.get $6
+    i64.eqz
     local.get $3
     local.get $1
     local.get $13
@@ -5611,9 +5596,7 @@
     local.tee $0
     i32.const -342
     i32.lt_s
-    local.get $6
-    i64.eqz
-    select
+    i32.or
     br_if $~lib/util/string/scientific|inlined.0
     drop
     f64.const inf
@@ -5632,11 +5615,10 @@
     local.get $0
     i32.const 37
     i32.le_s
-    i32.const 0
     local.get $0
     i32.const 22
     i32.gt_s
-    select
+    i32.and
     if
      local.get $11
      local.get $0
@@ -6693,18 +6675,16 @@
      i32.load16_u
      local.set $5
      loop $while-continue|3
+      local.get $0
+      local.get $9
+      i64.lt_u
       local.get $1
       local.get $3
       local.get $0
       i64.sub
       i64.le_u
-      i32.const 0
-      local.get $0
-      local.get $9
-      i64.lt_u
-      select
+      i32.and
       if (result i32)
-       i32.const 1
        local.get $9
        local.get $0
        i64.sub
@@ -6718,7 +6698,7 @@
        local.get $6
        local.get $9
        i64.lt_u
-       select
+       i32.or
       else
        i32.const 0
       end
@@ -6818,18 +6798,16 @@
   i32.load16_u
   local.set $5
   loop $while-continue|6
+   local.get $0
+   local.get $1
+   i64.lt_u
    local.get $11
    local.get $3
    local.get $0
    i64.sub
    i64.le_u
-   i32.const 0
-   local.get $0
-   local.get $1
-   i64.lt_u
-   select
+   i32.and
    if (result i32)
-    i32.const 1
     local.get $1
     local.get $0
     i64.sub
@@ -6843,7 +6821,7 @@
     local.get $1
     local.get $6
     i64.gt_u
-    select
+    i32.or
    else
     i32.const 0
    end
@@ -6890,11 +6868,10 @@
   local.tee $4
   i32.const 21
   i32.le_s
-  i32.const 0
   local.get $1
   local.get $4
   i32.le_s
-  select
+  i32.and
   if (result i32)
    loop $for-loop|0
     local.get $1
@@ -6929,11 +6906,10 @@
    local.get $4
    i32.const 21
    i32.le_s
-   i32.const 0
    local.get $4
    i32.const 0
    i32.gt_s
-   select
+   i32.and
    if (result i32)
     local.get $4
     i32.const 1
@@ -6960,11 +6936,10 @@
     local.get $4
     i32.const 0
     i32.le_s
-    i32.const 0
     local.get $4
     i32.const -6
     i32.gt_s
-    select
+    i32.and
     if (result i32)
      i32.const 2
      local.get $4
@@ -8031,7 +8006,6 @@
    i32.const 1
    i32.le_u
    br_if $__inlined_func$~lib/string/String#codePointAt
-   i32.const 1
    local.get $3
    i32.const 2
    i32.eq
@@ -8042,7 +8016,7 @@
    i32.and
    i32.const 55296
    i32.ne
-   select
+   i32.or
    br_if $__inlined_func$~lib/string/String#codePointAt
    local.get $1
    i32.load16_u offset=4
@@ -21982,7 +21956,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 0
   local.get $2
   i32.const 20
   i32.sub
@@ -21992,6 +21965,7 @@
   i32.const 1
   i32.shl
   local.tee $4
+  i32.eqz
   local.get $0
   i32.const 20
   i32.sub
@@ -22006,8 +21980,7 @@
   i32.shl
   local.tee $3
   i32.gt_u
-  select
-  i32.eqz
+  i32.or
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
@@ -22092,7 +22065,6 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 0
   local.get $2
   i32.const 20
   i32.sub
@@ -22102,6 +22074,7 @@
   i32.const 1
   i32.shl
   local.tee $5
+  i32.eqz
   local.get $0
   i32.const 20
   i32.sub
@@ -22116,8 +22089,7 @@
   i32.shl
   local.tee $4
   i32.gt_u
-  select
-  i32.eqz
+  i32.or
   if
    global.get $~lib/memory/__stack_pointer
    i32.const 4
@@ -23798,14 +23770,13 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 1
-  local.get $1
-  i32.const 36
-  i32.gt_s
   local.get $1
   i32.const 2
   i32.lt_s
-  select
+  local.get $1
+  i32.const 36
+  i32.gt_s
+  i32.or
   if
    i32.const 15632
    i32.const 15760
@@ -24093,14 +24064,13 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 1
-  local.get $1
-  i32.const 36
-  i32.gt_s
   local.get $1
   i32.const 2
   i32.lt_s
-  select
+  local.get $1
+  i32.const 36
+  i32.gt_s
+  i32.or
   if
    i32.const 15632
    i32.const 15760
@@ -24368,14 +24338,13 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 1
-  local.get $1
-  i32.const 36
-  i32.gt_s
   local.get $1
   i32.const 2
   i32.lt_s
-  select
+  local.get $1
+  i32.const 36
+  i32.gt_s
+  i32.or
   if
    i32.const 15632
    i32.const 15760
@@ -24708,14 +24677,13 @@
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.store
-  i32.const 1
-  local.get $1
-  i32.const 36
-  i32.gt_s
   local.get $1
   i32.const 2
   i32.lt_s
-  select
+  local.get $1
+  i32.const 36
+  i32.gt_s
+  i32.or
   if
    i32.const 15632
    i32.const 15760

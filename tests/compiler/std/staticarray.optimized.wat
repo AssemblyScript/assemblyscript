@@ -498,11 +498,10 @@
   local.get $2
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $3
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -763,11 +762,10 @@
   local.tee $3
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $5
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1340,11 +1338,10 @@
   local.get $1
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $2
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -2864,11 +2861,10 @@
     global.get $~lib/rt/itcms/state
     i32.const 1
     i32.eq
-    i32.const 0
     local.get $3
     i32.const 3
     i32.eq
-    select
+    i32.and
     if
      local.get $1
      call $~lib/rt/itcms/Object#makeGray
@@ -5421,7 +5417,6 @@
      i32.gt_s
      if
       i32.const 1
-      i32.const 1
       local.get $16
       i32.const 3
       i32.shl
@@ -5429,12 +5424,12 @@
       i32.add
       f64.load
       local.tee $7
-      local.get $7
-      f64.ne
-      local.get $7
       f64.const nan:0x8000000000000
       f64.eq
-      select
+      local.get $7
+      local.get $7
+      f64.ne
+      i32.or
       br_if $__inlined_func$~lib/staticarray/StaticArray<f64>#includes
       drop
       local.get $16
@@ -5488,7 +5483,6 @@
      i32.gt_s
      if
       i32.const 1
-      i32.const 1
       local.get $16
       i32.const 2
       i32.shl
@@ -5496,12 +5490,12 @@
       i32.add
       f32.load
       local.tee $8
-      local.get $8
-      f32.ne
-      local.get $8
       f32.const nan:0x400000
       f32.eq
-      select
+      local.get $8
+      local.get $8
+      f32.ne
+      i32.or
       br_if $__inlined_func$~lib/staticarray/StaticArray<f32>#includes
       drop
       local.get $16

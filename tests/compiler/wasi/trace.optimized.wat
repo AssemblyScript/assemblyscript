@@ -107,16 +107,15 @@
       i32.const 55296
       i32.eq
       if
+       local.get $3
+       i32.const 56320
+       i32.lt_u
        local.get $4
        local.get $0
        i32.const 2
        i32.add
        i32.gt_u
-       i32.const 0
-       local.get $3
-       i32.const 56320
-       i32.lt_u
-       select
+       i32.and
        if
         local.get $0
         i32.load16_u offset=2
@@ -515,11 +514,10 @@
   local.get $2
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $3
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -780,11 +778,10 @@
   local.tee $3
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $5
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1088,11 +1085,10 @@
   local.get $1
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $2
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1433,18 +1429,16 @@
      i32.load16_u
      local.set $3
      loop $while-continue|3
+      local.get $1
+      local.get $10
+      i64.lt_u
       local.get $2
       local.get $4
       local.get $1
       i64.sub
       i64.le_u
-      i32.const 0
-      local.get $1
-      local.get $10
-      i64.lt_u
-      select
+      i32.and
       if (result i32)
-       i32.const 1
        local.get $10
        local.get $1
        i64.sub
@@ -1458,7 +1452,7 @@
        local.get $7
        local.get $10
        i64.lt_u
-       select
+       i32.or
       else
        i32.const 0
       end
@@ -1560,18 +1554,16 @@
   i32.load16_u
   local.set $3
   loop $while-continue|6
+   local.get $1
+   local.get $2
+   i64.lt_u
    local.get $12
    local.get $4
    local.get $1
    i64.sub
    i64.le_u
-   i32.const 0
-   local.get $1
-   local.get $2
-   i64.lt_u
-   select
+   i32.and
    if (result i32)
-    i32.const 1
     local.get $2
     local.get $1
     i64.sub
@@ -1585,7 +1577,7 @@
     local.get $2
     local.get $7
     i64.gt_u
-    select
+    i32.or
    else
     i32.const 0
    end
@@ -2637,11 +2629,10 @@
   local.tee $4
   i32.const 21
   i32.le_s
-  i32.const 0
   local.get $1
   local.get $4
   i32.le_s
-  select
+  i32.and
   if (result i32)
    loop $for-loop|0
     local.get $1
@@ -2676,11 +2667,10 @@
    local.get $4
    i32.const 21
    i32.le_s
-   i32.const 0
    local.get $4
    i32.const 0
    i32.gt_s
-   select
+   i32.and
    if (result i32)
     local.get $4
     i32.const 1
@@ -2707,11 +2697,10 @@
     local.get $4
     i32.const 0
     i32.le_s
-    i32.const 0
     local.get $4
     i32.const -6
     i32.gt_s
-    select
+    i32.and
     if (result i32)
      i32.const 2
      local.get $4
@@ -3341,18 +3330,17 @@
       i32.const 2
       i32.add
      else
-      local.get $8
-      local.get $6
-      i32.const 2
-      i32.add
-      i32.gt_u
-      i32.const 0
       local.get $9
       i32.const 64512
       i32.and
       i32.const 55296
       i32.eq
-      select
+      local.get $8
+      local.get $6
+      i32.const 2
+      i32.add
+      i32.gt_u
+      i32.and
       if
        local.get $6
        i32.load16_u offset=2

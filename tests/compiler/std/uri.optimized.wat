@@ -422,11 +422,10 @@
   local.get $2
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $3
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -687,11 +686,10 @@
   local.tee $3
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $5
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1259,11 +1257,10 @@
   local.get $1
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $2
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -2872,11 +2869,10 @@
       local.get $4
       i32.const 57343
       i32.le_u
-      i32.const 0
       local.get $4
       i32.const 56320
       i32.ge_u
-      select
+      i32.and
       if
        i32.const 1584
        i32.const 1632
@@ -2900,7 +2896,6 @@
         call $~lib/builtins/abort
         unreachable
        end
-       i32.const 1
        local.get $7
        i32.const 1
        i32.add
@@ -2911,12 +2906,12 @@
        i32.add
        i32.load16_u
        local.tee $5
-       i32.const 57343
-       i32.gt_u
-       local.get $5
        i32.const 56320
        i32.lt_u
-       select
+       local.get $5
+       i32.const 57343
+       i32.gt_u
+       i32.or
        if
         i32.const 1584
         i32.const 1632
@@ -3421,7 +3416,6 @@
       i32.le_u
       br_if $while-break|0
      end
-     i32.const 1
      local.get $5
      i32.const 37
      i32.ne
@@ -3430,7 +3424,7 @@
      i32.const 2
      i32.add
      i32.le_u
-     select
+     i32.or
      if (result i32)
       i32.const 1
      else
@@ -3708,31 +3702,25 @@
         end
        end
       end
-      i32.const 1
       local.get $5
-      i32.const 1114111
-      i32.gt_u
-      i32.const 1
+      i32.const 57344
+      i32.lt_u
+      local.get $5
+      i32.const 55296
+      i32.ge_u
+      i32.and
       local.get $10
       i32.const -1
       i32.eq
       local.get $5
       local.get $10
       i32.lt_u
-      select
-      select
-      if (result i32)
-       i32.const 1
-      else
-       local.get $5
-       i32.const 57344
-       i32.lt_u
-       i32.const 0
-       local.get $5
-       i32.const 55296
-       i32.ge_u
-       select
-      end
+      i32.or
+      local.get $5
+      i32.const 1114111
+      i32.gt_u
+      i32.or
+      i32.or
       if
        i32.const 1584
        i32.const 1632

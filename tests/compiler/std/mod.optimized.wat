@@ -43,11 +43,11 @@
     i64.const 2047
     i64.and
     local.set $7
-    i32.const 1
-    local.get $4
-    local.get $4
-    f64.ne
-    i32.const 1
+    local.get $5
+    i64.const 1
+    i64.shl
+    local.tee $8
+    i64.eqz
     local.get $0
     i64.reinterpret_f64
     local.tee $3
@@ -58,13 +58,11 @@
     local.tee $6
     i64.const 2047
     i64.eq
-    local.get $5
-    i64.const 1
-    i64.shl
-    local.tee $8
-    i64.eqz
-    select
-    select
+    i32.or
+    local.get $4
+    local.get $4
+    f64.ne
+    i32.or
     if
      local.get $0
      local.get $4

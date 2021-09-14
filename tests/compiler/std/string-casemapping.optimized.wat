@@ -756,11 +756,10 @@
   local.get $2
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $3
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1021,11 +1020,10 @@
   local.tee $3
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $5
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1593,11 +1591,10 @@
   local.get $1
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $2
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -3935,18 +3932,17 @@
     i32.shr_u
     if
      block $for-continue|0
-      local.get $8
-      i32.const 1
-      i32.sub
-      local.get $7
-      i32.gt_u
-      i32.const 0
       local.get $2
       i32.const 55295
       i32.sub
       i32.const 1025
       i32.lt_u
-      select
+      local.get $8
+      i32.const 1
+      i32.sub
+      local.get $7
+      i32.gt_u
+      i32.and
       if
        local.get $7
        i32.const 1
@@ -6259,7 +6255,6 @@
       local.set $9
       br $__inlined_func$~lib/string/String#codePointAt
      end
-     i32.const 1
      local.get $9
      i32.const 1
      i32.eq
@@ -6270,7 +6265,7 @@
      i32.and
      i32.const 55296
      i32.ne
-     select
+     i32.or
      br_if $__inlined_func$~lib/string/String#codePointAt
      local.get $5
      i32.load16_u offset=2
@@ -6307,7 +6302,6 @@
       local.set $9
       br $__inlined_func$~lib/string/String#codePointAt0
      end
-     i32.const 1
      local.get $9
      i32.const 2
      i32.eq
@@ -6318,7 +6312,7 @@
      i32.and
      i32.const 55296
      i32.ne
-     select
+     i32.or
      br_if $__inlined_func$~lib/string/String#codePointAt0
      local.get $5
      i32.load16_u offset=4
@@ -6365,7 +6359,6 @@
       local.set $9
       br $__inlined_func$~lib/string/String#codePointAt1
      end
-     i32.const 1
      local.get $9
      i32.const 3
      i32.eq
@@ -6376,7 +6369,7 @@
      i32.and
      i32.const 55296
      i32.ne
-     select
+     i32.or
      br_if $__inlined_func$~lib/string/String#codePointAt1
      local.get $5
      i32.load16_u offset=6
@@ -6423,7 +6416,6 @@
       local.set $9
       br $__inlined_func$~lib/string/String#codePointAt2
      end
-     i32.const 1
      local.get $9
      i32.const 1
      i32.eq
@@ -6434,7 +6426,7 @@
      i32.and
      i32.const 55296
      i32.ne
-     select
+     i32.or
      br_if $__inlined_func$~lib/string/String#codePointAt2
      local.get $5
      i32.load16_u offset=2
@@ -6471,7 +6463,6 @@
       local.set $9
       br $__inlined_func$~lib/string/String#codePointAt3
      end
-     i32.const 1
      local.get $9
      i32.const 2
      i32.eq
@@ -6482,7 +6473,7 @@
      i32.and
      i32.const 55296
      i32.ne
-     select
+     i32.or
      br_if $__inlined_func$~lib/string/String#codePointAt3
      local.get $5
      i32.load16_u offset=4
@@ -6529,7 +6520,6 @@
       local.set $9
       br $__inlined_func$~lib/string/String#codePointAt4
      end
-     i32.const 1
      local.get $9
      i32.const 3
      i32.eq
@@ -6540,7 +6530,7 @@
      i32.and
      i32.const 55296
      i32.ne
-     select
+     i32.or
      br_if $__inlined_func$~lib/string/String#codePointAt4
      local.get $5
      i32.load16_u offset=6
@@ -6853,18 +6843,17 @@
     i32.shr_u
     if
      block $for-continue|0
-      local.get $8
-      i32.const 1
-      i32.sub
-      local.get $4
-      i32.gt_u
-      i32.const 0
       local.get $3
       i32.const 55295
       i32.sub
       i32.const 1025
       i32.lt_u
-      select
+      local.get $8
+      i32.const 1
+      i32.sub
+      local.get $4
+      i32.gt_u
+      i32.and
       if
        local.get $4
        i32.const 1

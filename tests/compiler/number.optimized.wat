@@ -350,11 +350,10 @@
   local.get $2
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $3
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -615,11 +614,10 @@
   local.tee $3
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $5
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -1187,11 +1185,10 @@
   local.get $1
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $2
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -2348,18 +2345,16 @@
      i32.load16_u
      local.set $5
      loop $while-continue|3
+      local.get $0
+      local.get $9
+      i64.lt_u
       local.get $1
       local.get $3
       local.get $0
       i64.sub
       i64.le_u
-      i32.const 0
-      local.get $0
-      local.get $9
-      i64.lt_u
-      select
+      i32.and
       if (result i32)
-       i32.const 1
        local.get $9
        local.get $0
        i64.sub
@@ -2373,7 +2368,7 @@
        local.get $6
        local.get $9
        i64.lt_u
-       select
+       i32.or
       else
        i32.const 0
       end
@@ -2473,18 +2468,16 @@
   i32.load16_u
   local.set $5
   loop $while-continue|6
+   local.get $0
+   local.get $1
+   i64.lt_u
    local.get $11
    local.get $3
    local.get $0
    i64.sub
    i64.le_u
-   i32.const 0
-   local.get $0
-   local.get $1
-   i64.lt_u
-   select
+   i32.and
    if (result i32)
-    i32.const 1
     local.get $1
     local.get $0
     i64.sub
@@ -2498,7 +2491,7 @@
     local.get $1
     local.get $6
     i64.gt_u
-    select
+    i32.or
    else
     i32.const 0
    end
@@ -3446,11 +3439,10 @@
   local.tee $3
   i32.const 21
   i32.le_s
-  i32.const 0
   local.get $0
   local.get $3
   i32.le_s
-  select
+  i32.and
   if (result i32)
    loop $for-loop|0
     local.get $0
@@ -3485,11 +3477,10 @@
    local.get $3
    i32.const 21
    i32.le_s
-   i32.const 0
    local.get $3
    i32.const 0
    i32.gt_s
-   select
+   i32.and
    if (result i32)
     local.get $3
     i32.const 1
@@ -3516,11 +3507,10 @@
     local.get $3
     i32.const 0
     i32.le_s
-    i32.const 0
     local.get $3
     i32.const -6
     i32.gt_s
-    select
+    i32.and
     if (result i32)
      i32.const 2
      local.get $3
