@@ -1,6 +1,8 @@
 {
   "mutable-globals": {
   },
+  "bigint-integration": {
+  },
   "nontrapping-f2i": {
     "asc_flags": [
       "--enable nontrapping-f2i"
@@ -38,11 +40,6 @@
     "v8_flags": [
       "--experimental-wasm-reftypes",
       "--experimental-wasm-gc"
-    ]
-  },
-  "bigint-integration": {
-    "v8_flags": [
-      "--experimental-wasm-bigint"
     ]
   },
   "exception-handling": {

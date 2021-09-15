@@ -342,7 +342,6 @@ function runTest(basename) {
         }
         let rtracedBuffer = stdout.toBuffer();
         const instantiateRtrace = section("instantiate rtrace");
-        v8.setFlagsFromString("--experimental-wasm-bigint");
         if (!testInstantiate(basename, rtracedBuffer, glue, stderr, config.asc_wasi)) {
           failed = true;
           failedTests.add(basename);
@@ -350,7 +349,6 @@ function runTest(basename) {
         } else {
           instantiateRtrace.end(SUCCESS);
         }
-        v8.setFlagsFromString("--no-experimental-wasm-bigint");
       });
     });
     if (failed) return 1;
