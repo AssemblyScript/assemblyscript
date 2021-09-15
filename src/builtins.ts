@@ -9540,7 +9540,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   // for example to visit all members of a collection, e.g. arrays and maps.
   var hasVisitImpl = false;
   if (instance.isDeclaredInLibrary) {
-    let visitPrototype = instance.lookupInSelf("__visit");
+    let visitPrototype = instance.getMember("__visit");
     if (visitPrototype) {
       assert(visitPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
       let visitInstance = program.resolver.resolveFunction(<FunctionPrototype>visitPrototype, null);

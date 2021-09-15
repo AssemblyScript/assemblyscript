@@ -88,8 +88,7 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName,
-  DeclaredElement
+  mangleInternalName
 } from "./program";
 
 import {
@@ -8428,7 +8427,7 @@ export class Compiler extends DiagnosticEmitter {
       )
     );
     // tempData = tempThis.dataStart
-    var dataStartMember = assert(arrayInstance.lookupInSelf("dataStart"));
+    var dataStartMember = assert(arrayInstance.getMember("dataStart"));
     assert(dataStartMember.kind == ElementKind.FIELD);
     stmts.push(
       module.local_set(tempDataStart.index,
@@ -8677,8 +8676,8 @@ export class Compiler extends DiagnosticEmitter {
     // Iterate through the members defined in our expression
     for (let i = 0; i < numNames; ++i) {
       let memberName = names[i].text;
-      let member: DeclaredElement;
-      if (!members || !members.has(memberName) || (member = assert(members.get(memberName))).kind != ElementKind.FIELD) {
+      let member = classReference.getMember(memberName);
+      if (!member || member.kind != ElementKind.FIELD) {
         this.error(
           DiagnosticCode.Property_0_does_not_exist_on_type_1,
           names[i].range, memberName, classType.toString()
