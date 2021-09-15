@@ -6,8 +6,5 @@
     "args": [],
     "env": {},
     "returnOnExit": true
-  },
-  "features": [
-    "bigint-integration"
-  ]
+  }
 }

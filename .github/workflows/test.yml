@@ -123,7 +123,7 @@ jobs:
       run: npm run clean
     - name: Test experimental features
       env:
-        ASC_FEATURES: mutable-globals,threads,reference-types,bigint-integration,gc
+        ASC_FEATURES: mutable-globals,threads,reference-types,gc
       run: |
         npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/threads std-wasi/process std-wasi/crypto
   test-runtimes:
