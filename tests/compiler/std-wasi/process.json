@@ -14,5 +14,8 @@
       "THIRDENV": "thirdEnv"
     },
     "returnOnExit": true
-  }
+  },
+  "features": [
+    "bigint-integration"
+  ]
 }

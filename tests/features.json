@@ -1,6 +1,8 @@
 {
   "mutable-globals": {
   },
+  "bigint-integration": {
+  },
   "nontrapping-f2i": {
     "asc_flags": [
       "--enable nontrapping-f2i"

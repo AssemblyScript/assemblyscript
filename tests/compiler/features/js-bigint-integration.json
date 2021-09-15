@@ -1,4 +1,7 @@
 {
+  "features": [
+    "bigint-integration"
+  ],
   "asc_flags": [
     "--explicitStart"
   ]
