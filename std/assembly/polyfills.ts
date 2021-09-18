@@ -32,7 +32,7 @@ export function bswap16<T extends number>(value: T): T {
       return value;
     }
     if (sizeof<T>() == 2) {
-      return <T>(<u16>value << 8 | (<u16>value >>> 8));
+      return <T>(<u16>value << 8 | (<u16>value >> 8));
     }
     if (sizeof<T>() == 4) {
       return <T>(
