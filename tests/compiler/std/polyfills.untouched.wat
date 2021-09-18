@@ -241,7 +241,7 @@
   local.set $3
   local.get $3
   i64.const 16
-  i64.shr_s
+  i64.shr_u
   i64.const 281470681808895
   i64.and
   local.set $1
