@@ -17,7 +17,7 @@ export function bswap<T extends number>(value: T): T {
       let b = (value & 0x00FF00FF00FF00FF) << 8;
       let v = a | b;
 
-      a = (v >> 16) & 0x0000FFFF0000FFFF;
+      a = (v >>> 16) & 0x0000FFFF0000FFFF;
       b = (v & 0x0000FFFF0000FFFF) << 16;
 
       return <T>rotr<u64>(a | b, 32);
