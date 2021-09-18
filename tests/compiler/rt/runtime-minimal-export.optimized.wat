@@ -1176,11 +1176,11 @@
   (local $5 i32)
   (local $6 i32)
   i32.const 1056
-  call $~lib/rt/tcms/__visit
+  call $byn-split-outlined-A$~lib/rt/tcms/__visit
   i32.const 1280
-  call $~lib/rt/tcms/__visit
+  call $byn-split-outlined-A$~lib/rt/tcms/__visit
   i32.const 1376
-  call $~lib/rt/tcms/__visit
+  call $byn-split-outlined-A$~lib/rt/tcms/__visit
   global.get $~lib/rt/tcms/pinSpace
   local.tee $1
   i32.load offset=4
@@ -1374,14 +1374,64 @@
   local.get $4
   global.set $~lib/rt/tcms/white
  )
- (func $~lib/rt/tcms/__visit (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.eqz
-  if
+ (func $~lib/rt/__visit_members (param $0 i32)
+  block $invalid
+   block $~lib/arraybuffer/ArrayBufferView
+    block $~lib/string/String
+     block $~lib/arraybuffer/ArrayBuffer
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
+     end
+     return
+    end
+    return
+   end
+   local.get $0
+   i32.load
+   local.tee $0
+   if
+    local.get $0
+    if
+     local.get $0
+     call $byn-split-outlined-A$~lib/rt/tcms/__visit
+    end
+   end
    return
   end
+  unreachable
+ )
+ (func $~start
+  i32.const 1236
+  i32.const 1232
+  i32.store
+  i32.const 1240
+  i32.const 1232
+  i32.store
+  i32.const 1232
+  global.set $~lib/rt/tcms/fromSpace
+  i32.const 1332
+  i32.const 1328
+  i32.store
+  i32.const 1336
+  i32.const 1328
+  i32.store
+  i32.const 1328
+  global.set $~lib/rt/tcms/pinSpace
+  i32.const 1428
+  i32.const 1424
+  i32.store
+  i32.const 1432
+  i32.const 1424
+  i32.store
+  i32.const 1424
+  global.set $~lib/rt/tcms/toSpace
+ )
+ (func $byn-split-outlined-A$~lib/rt/tcms/__visit (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
   global.get $~lib/rt/tcms/white
   local.get $0
   i32.const 20
@@ -1419,57 +1469,5 @@
    local.get $0
    i32.store offset=8
   end
- )
- (func $~lib/rt/__visit_members (param $0 i32)
-  block $invalid
-   block $~lib/arraybuffer/ArrayBufferView
-    block $~lib/string/String
-     block $~lib/arraybuffer/ArrayBuffer
-      local.get $0
-      i32.const 8
-      i32.sub
-      i32.load
-      br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $invalid
-     end
-     return
-    end
-    return
-   end
-   local.get $0
-   i32.load
-   local.tee $0
-   if
-    local.get $0
-    call $~lib/rt/tcms/__visit
-   end
-   return
-  end
-  unreachable
- )
- (func $~start
-  i32.const 1236
-  i32.const 1232
-  i32.store
-  i32.const 1240
-  i32.const 1232
-  i32.store
-  i32.const 1232
-  global.set $~lib/rt/tcms/fromSpace
-  i32.const 1332
-  i32.const 1328
-  i32.store
-  i32.const 1336
-  i32.const 1328
-  i32.store
-  i32.const 1328
-  global.set $~lib/rt/tcms/pinSpace
-  i32.const 1428
-  i32.const 1424
-  i32.store
-  i32.const 1432
-  i32.const 1424
-  i32.store
-  i32.const 1424
-  global.set $~lib/rt/tcms/toSpace
  )
 )

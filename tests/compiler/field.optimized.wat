@@ -38,9 +38,9 @@
   (local $0 i32)
   (local $1 i32)
   i32.const 1248
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 1056
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1
   i32.load offset=4
@@ -212,30 +212,6 @@
   local.get $2
   local.get $0
   i32.store offset=8
- )
- (func $~lib/rt/itcms/__visit (param $0 i32)
-  local.get $0
-  i32.eqz
-  if
-   return
-  end
-  global.get $~lib/rt/itcms/white
-  local.get $0
-  i32.const 20
-  i32.sub
-  local.tee $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   local.get $0
-   call $~lib/rt/itcms/Object#makeGray
-   global.get $~lib/rt/itcms/visitCount
-   i32.const 1
-   i32.add
-   global.set $~lib/rt/itcms/visitCount
-  end
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -916,7 +892,11 @@
        if
         local.get $0
         i32.load
-        call $~lib/rt/itcms/__visit
+        local.tee $2
+        if
+         local.get $2
+         call $byn-split-outlined-A$~lib/rt/itcms/__visit
+        end
         local.get $0
         i32.const 4
         i32.add
@@ -1703,60 +1683,6 @@
   end
   local.get $3
  )
- (func $~lib/rt/itcms/__link (param $0 i32) (param $1 i32)
-  local.get $1
-  i32.eqz
-  if
-   return
-  end
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1120
-   i32.const 294
-   i32.const 14
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/rt/itcms/white
-  local.get $1
-  i32.const 20
-  i32.sub
-  local.tee $1
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   local.get $0
-   i32.const 20
-   i32.sub
-   i32.load offset=4
-   i32.const 3
-   i32.and
-   local.tee $0
-   global.get $~lib/rt/itcms/white
-   i32.eqz
-   i32.eq
-   if
-    local.get $1
-    call $~lib/rt/itcms/Object#makeGray
-   else
-    global.get $~lib/rt/itcms/state
-    i32.const 1
-    i32.eq
-    local.get $0
-    i32.const 3
-    i32.eq
-    i32.and
-    if
-     local.get $1
-     call $~lib/rt/itcms/Object#makeGray
-    end
-   end
-  end
- )
  (func $~lib/util/memory/memcpy (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2507,268 +2433,359 @@
   i32.const 4
   i32.sub
   global.set $~lib/memory/__stack_pointer
-  block $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1524
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $5
-   i32.const 0
-   i32.store
-   local.get $5
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1524
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $2
-   i32.const 0
-   i32.store
-   local.get $2
-   i32.const 4
-   i32.const 3
-   call $~lib/rt/itcms/__new
-   local.tee $6
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.sub
-   global.set $~lib/memory/__stack_pointer
-   global.get $~lib/memory/__stack_pointer
-   i32.const 1524
-   i32.lt_s
-   br_if $folding-inner0
-   global.get $~lib/memory/__stack_pointer
-   local.tee $4
-   i32.const 0
-   i32.store
-   i32.const 1456
-   local.set $2
-   block $~lib/util/memory/memmove|inlined.0
-    i32.const 0
-    i32.const 0
-    call $~lib/rt/itcms/__new
+  block $folding-inner1
+   block $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1524
+    i32.lt_s
+    br_if $folding-inner0
+    global.get $~lib/memory/__stack_pointer
     local.tee $7
+    i32.const 0
+    i32.store
+    local.get $7
+    i32.const 4
+    i32.sub
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1524
+    i32.lt_s
+    br_if $folding-inner0
+    global.get $~lib/memory/__stack_pointer
     local.tee $3
-    i32.const 1456
-    i32.eq
-    br_if $~lib/util/memory/memmove|inlined.0
+    i32.const 0
+    i32.store
     local.get $3
+    i32.const 4
+    i32.const 3
+    call $~lib/rt/itcms/__new
+    local.tee $5
+    i32.store
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.sub
+    global.set $~lib/memory/__stack_pointer
+    global.get $~lib/memory/__stack_pointer
+    i32.const 1524
+    i32.lt_s
+    br_if $folding-inner0
+    global.get $~lib/memory/__stack_pointer
+    local.tee $6
+    i32.const 0
+    i32.store
     i32.const 1456
-    i32.eq
-    if
-     local.get $3
-     call $~lib/util/memory/memcpy
-     br $~lib/util/memory/memmove|inlined.0
-    end
-    local.get $3
-    i32.const 1456
-    i32.lt_u
-    if
-     local.get $3
-     i32.const 7
-     i32.and
-     i32.eqz
+    local.set $3
+    block $~lib/util/memory/memmove|inlined.0
+     i32.const 0
+     i32.const 0
+     call $~lib/rt/itcms/__new
+     local.tee $4
+     local.tee $0
+     i32.const 1456
+     i32.eq
+     br_if $~lib/util/memory/memmove|inlined.0
+     local.get $0
+     i32.const 1456
+     i32.eq
      if
-      loop $while-continue|0
-       local.get $3
-       i32.const 7
-       i32.and
+      local.get $0
+      call $~lib/util/memory/memcpy
+      br $~lib/util/memory/memmove|inlined.0
+     end
+     local.get $0
+     i32.const 1456
+     i32.lt_u
+     if
+      local.get $0
+      i32.const 7
+      i32.and
+      i32.eqz
+      if
+       loop $while-continue|0
+        local.get $0
+        i32.const 7
+        i32.and
+        if
+         local.get $8
+         i32.eqz
+         br_if $~lib/util/memory/memmove|inlined.0
+         local.get $8
+         i32.const 1
+         i32.sub
+         local.set $8
+         local.get $0
+         local.tee $1
+         i32.const 1
+         i32.add
+         local.set $0
+         local.get $3
+         local.tee $2
+         i32.const 1
+         i32.add
+         local.set $3
+         local.get $1
+         local.get $2
+         i32.load8_u
+         i32.store8
+         br $while-continue|0
+        end
+       end
+       loop $while-continue|1
+        local.get $8
+        i32.const 8
+        i32.ge_u
+        if
+         local.get $0
+         local.get $3
+         i64.load
+         i64.store
+         local.get $8
+         i32.const 8
+         i32.sub
+         local.set $8
+         local.get $0
+         i32.const 8
+         i32.add
+         local.set $0
+         local.get $3
+         i32.const 8
+         i32.add
+         local.set $3
+         br $while-continue|1
+        end
+       end
+      end
+      loop $while-continue|2
+       local.get $8
        if
-        local.get $8
-        i32.eqz
-        br_if $~lib/util/memory/memmove|inlined.0
-        local.get $8
-        i32.const 1
-        i32.sub
-        local.set $8
-        local.get $3
+        local.get $0
         local.tee $1
         i32.const 1
         i32.add
-        local.set $3
-        local.get $2
-        local.tee $0
+        local.set $0
+        local.get $3
+        local.tee $2
         i32.const 1
         i32.add
-        local.set $2
+        local.set $3
         local.get $1
-        local.get $0
+        local.get $2
         i32.load8_u
         i32.store8
-        br $while-continue|0
-       end
-      end
-      loop $while-continue|1
-       local.get $8
-       i32.const 8
-       i32.ge_u
-       if
-        local.get $3
-        local.get $2
-        i64.load
-        i64.store
         local.get $8
-        i32.const 8
+        i32.const 1
         i32.sub
         local.set $8
-        local.get $3
-        i32.const 8
-        i32.add
-        local.set $3
-        local.get $2
-        i32.const 8
-        i32.add
-        local.set $2
-        br $while-continue|1
+        br $while-continue|2
        end
       end
-     end
-     loop $while-continue|2
-      local.get $8
+     else
+      local.get $0
+      i32.const 7
+      i32.and
+      i32.eqz
       if
-       local.get $3
-       local.tee $1
-       i32.const 1
-       i32.add
-       local.set $3
-       local.get $2
-       local.tee $0
-       i32.const 1
-       i32.add
-       local.set $2
-       local.get $1
-       local.get $0
-       i32.load8_u
-       i32.store8
-       local.get $8
-       i32.const 1
-       i32.sub
-       local.set $8
-       br $while-continue|2
-      end
-     end
-    else
-     local.get $3
-     i32.const 7
-     i32.and
-     i32.eqz
-     if
-      loop $while-continue|3
-       local.get $3
-       local.get $8
-       i32.add
-       i32.const 7
-       i32.and
-       if
+       loop $while-continue|3
+        local.get $0
         local.get $8
-        i32.eqz
-        br_if $~lib/util/memory/memmove|inlined.0
+        i32.add
+        i32.const 7
+        i32.and
+        if
+         local.get $8
+         i32.eqz
+         br_if $~lib/util/memory/memmove|inlined.0
+         local.get $0
+         local.get $8
+         i32.const 1
+         i32.sub
+         local.tee $8
+         i32.add
+         local.get $8
+         i32.const 1456
+         i32.add
+         i32.load8_u
+         i32.store8
+         br $while-continue|3
+        end
+       end
+       loop $while-continue|4
+        local.get $8
+        i32.const 8
+        i32.ge_u
+        if
+         local.get $0
+         local.get $8
+         i32.const 8
+         i32.sub
+         local.tee $8
+         i32.add
+         local.get $8
+         i32.const 1456
+         i32.add
+         i64.load
+         i64.store
+         br $while-continue|4
+        end
+       end
+      end
+      loop $while-continue|5
+       local.get $8
+       if
+        local.get $0
         local.get $8
         i32.const 1
         i32.sub
         local.tee $8
-        local.get $3
         i32.add
         local.get $8
         i32.const 1456
         i32.add
         i32.load8_u
         i32.store8
-        br $while-continue|3
+        br $while-continue|5
        end
-      end
-      loop $while-continue|4
-       local.get $8
-       i32.const 8
-       i32.ge_u
-       if
-        local.get $8
-        i32.const 8
-        i32.sub
-        local.tee $8
-        local.get $3
-        i32.add
-        local.get $8
-        i32.const 1456
-        i32.add
-        i64.load
-        i64.store
-        br $while-continue|4
-       end
-      end
-     end
-     loop $while-continue|5
-      local.get $8
-      if
-       local.get $8
-       i32.const 1
-       i32.sub
-       local.tee $8
-       local.get $3
-       i32.add
-       local.get $8
-       i32.const 1456
-       i32.add
-       i32.load8_u
-       i32.store8
-       br $while-continue|5
       end
      end
     end
+    local.get $6
+    local.get $4
+    local.tee $0
+    i32.store
+    i32.const 16
+    i32.const 4
+    call $~lib/rt/itcms/__new
+    local.tee $3
+    local.get $0
+    i32.store
+    local.get $0
+    if
+     local.get $3
+     i32.eqz
+     br_if $folding-inner1
+     global.get $~lib/rt/itcms/white
+     local.get $0
+     i32.const 20
+     i32.sub
+     local.tee $1
+     i32.load offset=4
+     i32.const 3
+     i32.and
+     i32.eq
+     if
+      local.get $3
+      i32.const 20
+      i32.sub
+      i32.load offset=4
+      i32.const 3
+      i32.and
+      local.tee $2
+      global.get $~lib/rt/itcms/white
+      i32.eqz
+      i32.eq
+      if
+       local.get $1
+       call $~lib/rt/itcms/Object#makeGray
+      else
+       global.get $~lib/rt/itcms/state
+       i32.const 1
+       i32.eq
+       local.get $2
+       i32.const 3
+       i32.eq
+       i32.and
+       if
+        local.get $1
+        call $~lib/rt/itcms/Object#makeGray
+       end
+      end
+     end
+    end
+    local.get $3
+    local.get $0
+    i32.store offset=4
+    local.get $3
+    i32.const 0
+    i32.store offset=8
+    local.get $3
+    i32.const 0
+    i32.store offset=12
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $5
+    local.get $3
+    i32.store
+    local.get $5
+    local.set $0
+    local.get $3
+    if
+     local.get $0
+     i32.eqz
+     br_if $folding-inner1
+     global.get $~lib/rt/itcms/white
+     local.get $3
+     i32.const 20
+     i32.sub
+     local.tee $2
+     i32.load offset=4
+     i32.const 3
+     i32.and
+     i32.eq
+     if
+      local.get $0
+      i32.const 20
+      i32.sub
+      i32.load offset=4
+      i32.const 3
+      i32.and
+      local.tee $3
+      global.get $~lib/rt/itcms/white
+      i32.eqz
+      i32.eq
+      if
+       local.get $2
+       call $~lib/rt/itcms/Object#makeGray
+      else
+       global.get $~lib/rt/itcms/state
+       i32.const 1
+       i32.eq
+       local.get $3
+       i32.const 3
+       i32.eq
+       i32.and
+       if
+        local.get $2
+        call $~lib/rt/itcms/Object#makeGray
+       end
+      end
+     end
+    end
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    local.get $7
+    local.get $0
+    i32.store
+    global.get $~lib/memory/__stack_pointer
+    i32.const 4
+    i32.add
+    global.set $~lib/memory/__stack_pointer
+    return
    end
-   local.get $4
-   local.get $7
-   i32.store
-   i32.const 16
-   i32.const 4
-   call $~lib/rt/itcms/__new
-   local.tee $2
-   local.get $7
-   i32.store
-   local.get $2
-   local.get $7
-   call $~lib/rt/itcms/__link
-   local.get $2
-   local.get $7
-   i32.store offset=4
-   local.get $2
-   i32.const 0
-   i32.store offset=8
-   local.get $2
-   i32.const 0
-   i32.store offset=12
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $6
-   local.get $2
-   i32.store
-   local.get $6
-   local.get $2
-   call $~lib/rt/itcms/__link
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   local.get $5
-   local.get $6
-   i32.store
-   global.get $~lib/memory/__stack_pointer
-   i32.const 4
-   i32.add
-   global.set $~lib/memory/__stack_pointer
-   return
+   i32.const 17936
+   i32.const 17984
+   i32.const 1
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
   end
-  i32.const 17936
-  i32.const 17984
-  i32.const 1
-  i32.const 1
+  i32.const 0
+  i32.const 1120
+  i32.const 294
+  i32.const 14
   call $~lib/builtins/abort
   unreachable
  )
@@ -2812,7 +2829,10 @@
        local.tee $0
        if
         local.get $0
-        call $~lib/rt/itcms/__visit
+        if
+         local.get $0
+         call $byn-split-outlined-A$~lib/rt/itcms/__visit
+        end
        end
        local.get $2
        i32.const 4
@@ -2823,12 +2843,20 @@
      end
      local.get $1
      i32.load
-     call $~lib/rt/itcms/__visit
+     local.tee $0
+     if
+      local.get $0
+      call $byn-split-outlined-A$~lib/rt/itcms/__visit
+     end
      return
     end
     local.get $0
     i32.load
-    call $~lib/rt/itcms/__visit
+    local.tee $0
+    if
+     local.get $0
+     call $byn-split-outlined-A$~lib/rt/itcms/__visit
+    end
     return
    end
    unreachable
@@ -2838,7 +2866,10 @@
   local.tee $0
   if
    local.get $0
-   call $~lib/rt/itcms/__visit
+   if
+    local.get $0
+    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   end
   end
  )
  (func $~start
@@ -2908,5 +2939,24 @@
   i32.const 1024
   i32.add
   global.set $~lib/rt/itcms/threshold
+ )
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
+  global.get $~lib/rt/itcms/white
+  local.get $0
+  i32.const 20
+  i32.sub
+  local.tee $0
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  i32.eq
+  if
+   local.get $0
+   call $~lib/rt/itcms/Object#makeGray
+   global.get $~lib/rt/itcms/visitCount
+   i32.const 1
+   i32.add
+   global.set $~lib/rt/itcms/visitCount
+  end
  )
 )

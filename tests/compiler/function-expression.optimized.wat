@@ -106,9 +106,9 @@
   (local $0 i32)
   (local $1 i32)
   i32.const 1792
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 1600
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1
   i32.load offset=4
@@ -280,30 +280,6 @@
   local.get $2
   local.get $0
   i32.store offset=8
- )
- (func $~lib/rt/itcms/__visit (param $0 i32)
-  local.get $0
-  i32.eqz
-  if
-   return
-  end
-  global.get $~lib/rt/itcms/white
-  local.get $0
-  i32.const 20
-  i32.sub
-  local.tee $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   local.get $0
-   call $~lib/rt/itcms/Object#makeGray
-   global.get $~lib/rt/itcms/visitCount
-   i32.const 1
-   i32.add
-   global.set $~lib/rt/itcms/visitCount
-  end
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -984,7 +960,11 @@
        if
         local.get $0
         i32.load
-        call $~lib/rt/itcms/__visit
+        local.tee $2
+        if
+         local.get $2
+         call $byn-split-outlined-A$~lib/rt/itcms/__visit
+        end
         local.get $0
         i32.const 4
         i32.add
@@ -1271,7 +1251,11 @@
    end
    local.get $0
    i32.load offset=4
-   call $~lib/rt/itcms/__visit
+   local.tee $0
+   if
+    local.get $0
+    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   end
    return
   end
   local.get $0
@@ -1279,7 +1263,10 @@
   local.tee $0
   if
    local.get $0
-   call $~lib/rt/itcms/__visit
+   if
+    local.get $0
+    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   end
   end
  )
  (func $~start
@@ -2032,5 +2019,24 @@
   i32.add
   global.set $~lib/memory/__stack_pointer
   i32.const 2000
+ )
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
+  global.get $~lib/rt/itcms/white
+  local.get $0
+  i32.const 20
+  i32.sub
+  local.tee $0
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  i32.eq
+  if
+   local.get $0
+   call $~lib/rt/itcms/Object#makeGray
+   global.get $~lib/rt/itcms/visitCount
+   i32.const 1
+   i32.add
+   global.set $~lib/rt/itcms/visitCount
+  end
  )
 )

@@ -648,38 +648,54 @@
   local.tee $0
   if
    local.get $0
-   call $~lib/rt/itcms/__visit
+   local.tee $1
+   if
+    local.get $1
+    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   end
   end
   global.get $std-wasi/crypto/buf
   local.tee $0
   if
    local.get $0
-   call $~lib/rt/itcms/__visit
+   local.tee $1
+   if
+    local.get $1
+    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   end
   end
   global.get $std-wasi/crypto/b1
   local.tee $0
   if
    local.get $0
-   call $~lib/rt/itcms/__visit
+   local.tee $1
+   if
+    local.get $1
+    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   end
   end
   global.get $std-wasi/crypto/b2
   local.tee $0
   if
    local.get $0
-   call $~lib/rt/itcms/__visit
+   local.tee $1
+   if
+    local.get $1
+    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   end
   end
   i32.const 1472
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 1168
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 1280
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 1056
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 5504
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 6560
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1
   i32.load offset=4
@@ -851,30 +867,6 @@
   local.get $2
   local.get $0
   i32.store offset=8
- )
- (func $~lib/rt/itcms/__visit (param $0 i32)
-  local.get $0
-  i32.eqz
-  if
-   return
-  end
-  global.get $~lib/rt/itcms/white
-  local.get $0
-  i32.const 20
-  i32.sub
-  local.tee $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   local.get $0
-   call $~lib/rt/itcms/Object#makeGray
-   global.get $~lib/rt/itcms/visitCount
-   i32.const 1
-   i32.add
-   global.set $~lib/rt/itcms/visitCount
-  end
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1523,6 +1515,7 @@
  (func $~lib/rt/itcms/step (result i32)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
   block $folding-inner0
    block $break|0
     block $case2|0
@@ -1605,7 +1598,11 @@
        if
         local.get $0
         i32.load
-        call $~lib/rt/itcms/__visit
+        local.tee $2
+        if
+         local.get $2
+         call $byn-split-outlined-A$~lib/rt/itcms/__visit
+        end
         local.get $0
         i32.const 4
         i32.add
@@ -2358,60 +2355,6 @@
   local.get $0
   call $~lib/memory/memory.fill
   local.get $1
- )
- (func $~lib/rt/itcms/__link (param $0 i32) (param $1 i32)
-  local.get $1
-  i32.eqz
-  if
-   return
-  end
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1344
-   i32.const 294
-   i32.const 14
-   call $~lib/wasi/index/abort
-   unreachable
-  end
-  global.get $~lib/rt/itcms/white
-  local.get $1
-  i32.const 20
-  i32.sub
-  local.tee $1
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   local.get $0
-   i32.const 20
-   i32.sub
-   i32.load offset=4
-   i32.const 3
-   i32.and
-   local.tee $0
-   global.get $~lib/rt/itcms/white
-   i32.eqz
-   i32.eq
-   if
-    local.get $1
-    call $~lib/rt/itcms/Object#makeGray
-   else
-    global.get $~lib/rt/itcms/state
-    i32.const 1
-    i32.eq
-    local.get $0
-    i32.const 3
-    i32.eq
-    i32.and
-    if
-     local.get $1
-     call $~lib/rt/itcms/Object#makeGray
-    end
-   end
-  end
  )
  (func $~lib/bindings/wasi_snapshot_preview1/errnoToString (param $0 i32) (result i32)
   block $break|0
@@ -4507,7 +4450,10 @@
   local.tee $0
   if
    local.get $0
-   call $~lib/rt/itcms/__visit
+   if
+    local.get $0
+    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   end
   end
  )
  (func $~start
@@ -4869,11 +4815,12 @@
   i32.const 0
   i32.store
   local.get $1
+  local.tee $3
   local.get $0
   i32.const 20
   i32.sub
   i32.load offset=16
-  local.tee $3
+  local.tee $1
   i32.gt_u
   if
    i32.const 1472
@@ -4891,8 +4838,8 @@
    i32.const -1
    i32.eq
    if (result i32)
-    local.get $3
     local.get $1
+    local.get $3
     i32.sub
    else
     i32.const 1168
@@ -4904,9 +4851,9 @@
    end
    local.set $2
   else
-   local.get $3
    local.get $1
    local.get $2
+   local.get $3
    i32.add
    i32.lt_s
    if
@@ -4922,27 +4869,30 @@
   i32.const 12
   i32.const 3
   call $~lib/rt/itcms/__new
-  local.tee $3
+  local.tee $1
   i32.store
-  local.get $3
+  local.get $1
   local.get $0
   i32.store
-  local.get $3
   local.get $0
-  call $~lib/rt/itcms/__link
-  local.get $3
+  if
+   local.get $1
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__link
+  end
+  local.get $1
   local.get $2
   i32.store offset=8
-  local.get $3
-  local.get $0
   local.get $1
+  local.get $0
+  local.get $3
   i32.add
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $1
  )
  (func $~lib/typedarray/Uint8Array#slice (param $0 i32) (result i32)
   (local $1 i32)
@@ -4962,12 +4912,12 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $4
+   local.tee $1
    i32.const 0
    i32.store
    i32.const 0
    local.get $0
-   local.tee $1
+   local.tee $3
    i32.load offset=8
    local.tee $0
    local.get $0
@@ -4975,6 +4925,8 @@
    i32.gt_s
    select
    local.set $5
+   local.get $1
+   local.set $2
    local.get $0
    local.get $5
    i32.sub
@@ -4985,8 +4937,8 @@
    i32.gt_s
    select
    local.tee $6
-   local.set $2
-   local.get $4
+   local.set $1
+   local.get $2
    i32.const 4
    i32.sub
    global.set $~lib/memory/__stack_pointer
@@ -5031,14 +4983,11 @@
    i32.store
    local.get $0
    i32.const 0
-   call $~lib/rt/itcms/__link
-   local.get $0
-   i32.const 0
    i32.store offset=4
    local.get $0
    i32.const 0
    i32.store offset=8
-   local.get $2
+   local.get $1
    i32.const 1073741820
    i32.gt_u
    if
@@ -5050,25 +4999,28 @@
     unreachable
    end
    global.get $~lib/memory/__stack_pointer
-   local.get $2
+   local.get $1
    i32.const 0
    call $~lib/rt/itcms/__new
-   local.tee $3
+   local.tee $4
    i32.store offset=4
-   local.get $3
-   local.get $2
+   local.get $4
+   local.get $1
    call $~lib/memory/memory.fill
    local.get $0
-   local.get $3
+   local.get $4
    i32.store
+   local.get $4
+   if
+    local.get $0
+    local.get $4
+    call $byn-split-outlined-A$~lib/rt/itcms/__link
+   end
    local.get $0
-   local.get $3
-   call $~lib/rt/itcms/__link
-   local.get $0
-   local.get $3
+   local.get $4
    i32.store offset=4
    local.get $0
-   local.get $2
+   local.get $1
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 8
@@ -5080,13 +5032,13 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $4
+   local.get $2
    local.get $0
    i32.store
    local.get $0
    i32.load offset=4
    local.get $5
-   local.get $1
+   local.get $3
    i32.load offset=4
    i32.add
    local.get $6
@@ -5104,5 +5056,73 @@
   i32.const 1
   call $~lib/wasi/index/abort
   unreachable
+ )
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
+  global.get $~lib/rt/itcms/white
+  local.get $0
+  i32.const 20
+  i32.sub
+  local.tee $0
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  i32.eq
+  if
+   local.get $0
+   call $~lib/rt/itcms/Object#makeGray
+   global.get $~lib/rt/itcms/visitCount
+   i32.const 1
+   i32.add
+   global.set $~lib/rt/itcms/visitCount
+  end
+ )
+ (func $byn-split-outlined-A$~lib/rt/itcms/__link (param $0 i32) (param $1 i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1344
+   i32.const 294
+   i32.const 14
+   call $~lib/wasi/index/abort
+   unreachable
+  end
+  global.get $~lib/rt/itcms/white
+  local.get $1
+  i32.const 20
+  i32.sub
+  local.tee $1
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  i32.eq
+  if
+   local.get $0
+   i32.const 20
+   i32.sub
+   i32.load offset=4
+   i32.const 3
+   i32.and
+   local.tee $0
+   global.get $~lib/rt/itcms/white
+   i32.eqz
+   i32.eq
+   if
+    local.get $1
+    call $~lib/rt/itcms/Object#makeGray
+   else
+    global.get $~lib/rt/itcms/state
+    i32.const 1
+    i32.eq
+    local.get $0
+    i32.const 3
+    i32.eq
+    i32.and
+    if
+     local.get $1
+     call $~lib/rt/itcms/Object#makeGray
+    end
+   end
+  end
  )
 )

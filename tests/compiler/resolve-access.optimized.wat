@@ -56,13 +56,13 @@
   (local $0 i32)
   (local $1 i32)
   i32.const 1280
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 1088
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 2160
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 3216
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1
   i32.load offset=4
@@ -234,30 +234,6 @@
   local.get $2
   local.get $0
   i32.store offset=8
- )
- (func $~lib/rt/itcms/__visit (param $0 i32)
-  local.get $0
-  i32.eqz
-  if
-   return
-  end
-  global.get $~lib/rt/itcms/white
-  local.get $0
-  i32.const 20
-  i32.sub
-  local.tee $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   local.get $0
-   call $~lib/rt/itcms/Object#makeGray
-   global.get $~lib/rt/itcms/visitCount
-   i32.const 1
-   i32.add
-   global.set $~lib/rt/itcms/visitCount
-  end
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -938,7 +914,11 @@
        if
         local.get $0
         i32.load
-        call $~lib/rt/itcms/__visit
+        local.tee $2
+        if
+         local.get $2
+         call $byn-split-outlined-A$~lib/rt/itcms/__visit
+        end
         local.get $0
         i32.const 4
         i32.add
@@ -2819,45 +2799,45 @@
   local.get $2
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $invalid
-   block $resolve-access/Container
-    block $~lib/array/Array<i32>
-     block $~lib/array/Array<u64>
-      block $~lib/arraybuffer/ArrayBufferView
-       block $~lib/string/String
-        block $~lib/arraybuffer/ArrayBuffer
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<u64> $~lib/array/Array<i32> $resolve-access/Container $invalid
-        end
-        return
+  block $folding-inner0
+   block $invalid
+    block $resolve-access/Container
+     block $~lib/arraybuffer/ArrayBufferView
+      block $~lib/string/String
+       block $~lib/arraybuffer/ArrayBuffer
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $folding-inner0 $folding-inner0 $resolve-access/Container $invalid
        end
        return
-      end
-      local.get $0
-      i32.load
-      local.tee $0
-      if
-       local.get $0
-       call $~lib/rt/itcms/__visit
       end
       return
      end
      local.get $0
      i32.load
-     call $~lib/rt/itcms/__visit
+     local.tee $0
+     if
+      local.get $0
+      if
+       local.get $0
+       call $byn-split-outlined-A$~lib/rt/itcms/__visit
+      end
+     end
      return
     end
-    local.get $0
-    i32.load
-    call $~lib/rt/itcms/__visit
     return
    end
-   return
+   unreachable
   end
-  unreachable
+  local.get $0
+  i32.load
+  local.tee $0
+  if
+   local.get $0
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
+  end
  )
  (func $~start
   memory.size
@@ -3408,5 +3388,24 @@
   i32.const 1
   call $~lib/builtins/abort
   unreachable
+ )
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
+  global.get $~lib/rt/itcms/white
+  local.get $0
+  i32.const 20
+  i32.sub
+  local.tee $0
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  i32.eq
+  if
+   local.get $0
+   call $~lib/rt/itcms/Object#makeGray
+   global.get $~lib/rt/itcms/visitCount
+   i32.const 1
+   i32.add
+   global.set $~lib/rt/itcms/visitCount
+  end
  )
 )
