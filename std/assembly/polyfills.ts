@@ -4,17 +4,17 @@ export function bswap<T extends number>(value: T): T {
       return value;
     }
     if (sizeof<T>() == 2) {
-      return <T>(value << 8 | (value >>> 8 & 0xFF));
+      return <T>(<u16>value << 8 | (<u16>value >> 8));
     }
     if (sizeof<T>() == 4) {
       return <T>(
-        rotl(value & 0xFF00FF00, 8) |
-        rotr(value & 0x00FF00FF, 8)
+        rotl(<u32>value & 0xFF00FF00, 8) |
+        rotr(<u32>value & 0x00FF00FF, 8)
       );
     }
     if (sizeof<T>() == 8) {
-      let a = (value >>> 8) & 0x00FF00FF00FF00FF;
-      let b = (value & 0x00FF00FF00FF00FF) << 8;
+      let a = (<u64>value >> 8) & 0x00FF00FF00FF00FF;
+      let b = (<u64>value & 0x00FF00FF00FF00FF) << 8;
       let v = a | b;
 
       a = (v >>> 16) & 0x0000FFFF0000FFFF;
@@ -32,13 +32,13 @@ export function bswap16<T extends number>(value: T): T {
       return value;
     }
     if (sizeof<T>() == 2) {
-      return <T>(value << 8 | (value >>> 8 & 0xFF));
+      return <T>(<u16>value << 8 | (<u16>value >>> 8));
     }
     if (sizeof<T>() == 4) {
       return <T>(
-        (((value & 0xFF) << 8)) |
-        ((value >>> 8) & 0xFF)  |
-        (value & 0xFFFF0000)
+        (((<u32>value & 0xFF) << 8)) |
+        ((<u32>value >> 8) & 0xFF)  |
+        (<u32>value & 0xFFFF0000)
       );
     }
   }

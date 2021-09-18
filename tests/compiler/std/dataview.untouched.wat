@@ -2693,8 +2693,6 @@
   i32.const 15
   i32.and
   i32.shr_u
-  i32.const 255
-  i32.and
   i32.or
   return
  )
