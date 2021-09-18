@@ -405,10 +405,10 @@
   i32.eq
   drop
   local.get $0
+  i32.const 255
+  i32.and
   i32.const 8
   i32.shl
-  i32.const 65280
-  i32.and
   local.get $0
   i32.const 8
   i32.shr_u
@@ -437,10 +437,10 @@
   i32.eq
   drop
   local.get $0
+  i32.const 255
+  i32.and
   i32.const 8
   i32.shl
-  i32.const 65280
-  i32.and
   local.get $0
   i32.const 8
   i32.shr_u
