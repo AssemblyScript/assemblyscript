@@ -2639,9 +2639,9 @@
    global.get $class-overloading/ic
    local.tee $0
    i32.store
-   block $__inlined_func$class-overloading/IA#foo@virtual104
-    block $default105
-     block $case1106
+   block $__inlined_func$class-overloading/IA#foo@virtual105
+    block $default106
+     block $case1107
       local.get $0
       i32.const 8
       i32.sub
@@ -2653,16 +2653,16 @@
        local.get $0
        i32.const 12
        i32.eq
-       br_if $case1106
-       br $default105
+       br_if $case1107
+       br $default106
       end
       i32.const 1680
       global.set $class-overloading/which
-      br $__inlined_func$class-overloading/IA#foo@virtual104
+      br $__inlined_func$class-overloading/IA#foo@virtual105
      end
      i32.const 1712
      global.set $class-overloading/which
-     br $__inlined_func$class-overloading/IA#foo@virtual104
+     br $__inlined_func$class-overloading/IA#foo@virtual105
     end
     unreachable
    end

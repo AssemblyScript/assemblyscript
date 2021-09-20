@@ -1204,7 +1204,7 @@
   local.set $0
   i32.const 0
   local.set $1
-  loop $do-loop|06
+  loop $do-loop|05
    local.get $0
    i32.const 1
    i32.add
@@ -1212,7 +1212,7 @@
    i32.const 10
    i32.ne
    if
-    loop $do-loop|18
+    loop $do-loop|17
      local.get $1
      i32.const 1
      i32.add
@@ -1222,10 +1222,10 @@
      i32.const 0
      local.get $1
      select
-     br_if $do-loop|18
+     br_if $do-loop|17
     end
     local.get $0
-    br_if $do-loop|06
+    br_if $do-loop|05
    end
   end
   local.get $0
@@ -1300,7 +1300,7 @@
    local.get $0
    call $do/Ref#constructor
    i32.store
-   loop $do-loop|09
+   loop $do-loop|08
     local.get $1
     i32.const 1
     i32.add
@@ -1317,7 +1317,7 @@
      i32.store
     end
     local.get $0
-    br_if $do-loop|09
+    br_if $do-loop|08
    end
    local.get $1
    i32.const 10
@@ -1361,8 +1361,8 @@
    call $do/Ref#constructor
    local.tee $0
    i32.store
-   loop $do-loop|07
-    block $do-break|08
+   loop $do-loop|06
+    block $do-break|07
      local.get $1
      i32.const 1
      i32.add
@@ -1372,10 +1372,10 @@
      if
       i32.const 0
       local.set $0
-      br $do-break|08
+      br $do-break|07
      end
      call $do/Ref#constructor
-     br_if $do-loop|07
+     br_if $do-loop|06
     end
    end
    local.get $1
