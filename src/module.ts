@@ -2317,7 +2317,6 @@ export class Module {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("simplify-globals-optimizing");
       }
-      passes.push("merge-blocks");
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
       passes.push("merge-blocks");
