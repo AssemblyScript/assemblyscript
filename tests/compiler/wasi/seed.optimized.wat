@@ -40,15 +40,15 @@
    i64.xor
    i64.const -49064778989728563
    i64.mul
-   local.tee $2
-   local.get $2
+   local.tee $0
+   local.get $0
    i64.const 33
    i64.shr_u
    i64.xor
    i64.const -4265267296055464877
    i64.mul
-   local.tee $2
-   local.get $2
+   local.tee $0
+   local.get $0
    i64.const 33
    i64.shr_u
    i64.xor
@@ -56,22 +56,22 @@
    global.get $~lib/math/random_state0_64
    i64.const -1
    i64.xor
-   local.tee $2
-   local.get $2
+   local.tee $0
+   local.get $0
    i64.const 33
    i64.shr_u
    i64.xor
    i64.const -49064778989728563
    i64.mul
-   local.tee $2
-   local.get $2
+   local.tee $0
+   local.get $0
    i64.const 33
    i64.shr_u
    i64.xor
    i64.const -4265267296055464877
    i64.mul
-   local.tee $2
-   local.get $2
+   local.tee $0
+   local.get $0
    i64.const 33
    i64.shr_u
    i64.xor

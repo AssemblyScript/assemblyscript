@@ -61,6 +61,7 @@
    i32.and
    i32.const 1
    local.get $1
+   local.tee $0
    i32.const 4
    i32.ge_u
    select
@@ -81,10 +82,10 @@
       i32.const 8
       i32.add
       local.set $3
-      local.get $1
+      local.get $0
       i32.const 4
       i32.sub
-      local.tee $1
+      local.tee $0
       i32.const 4
       i32.ge_u
       br_if $do-loop|0
@@ -92,23 +93,23 @@
     end
    end
    loop $while-continue|1
-    local.get $1
-    local.tee $0
+    local.get $0
+    local.tee $1
     i32.const 1
     i32.sub
-    local.set $1
-    local.get $0
+    local.set $0
+    local.get $1
     if
      local.get $3
      i32.load16_u
-     local.tee $0
+     local.tee $1
      local.get $2
      i32.load16_u
      local.tee $4
      i32.ne
      if
       local.get $4
-      local.get $0
+      local.get $1
       i32.sub
       br $__inlined_func$~lib/util/string/compareImpl
      end

@@ -36,20 +36,20 @@
     drop
     local.get $1
     i64.reinterpret_f64
-    local.tee $8
+    local.tee $6
     i64.const 52
     i64.shr_u
     i64.const 2047
     i64.and
     local.set $5
-    local.get $8
+    local.get $6
     i64.const 1
     i64.shl
-    local.tee $3
+    local.tee $7
     i64.eqz
     local.get $0
     i64.reinterpret_f64
-    local.tee $7
+    local.tee $8
     i64.const 52
     i64.shr_u
     i64.const 2047
@@ -71,32 +71,32 @@
      f64.div
      br $__inlined_func$~lib/math/NativeMath.mod
     end
-    local.get $3
     local.get $7
+    local.get $8
     i64.const 1
     i64.shl
-    local.tee $6
+    local.tee $3
     i64.ge_u
     if
      local.get $0
      local.get $3
-     local.get $6
+     local.get $7
      i64.ne
      f64.convert_i32_u
      f64.mul
      br $__inlined_func$~lib/math/NativeMath.mod
     end
-    local.get $7
+    local.get $8
     i64.const 63
     i64.shr_u
-    local.set $6
+    local.set $7
     local.get $4
     i64.eqz
     if (result i64)
-     local.get $7
+     local.get $8
      i64.const 1
      local.get $4
-     local.get $7
+     local.get $8
      i64.const 12
      i64.shl
      i64.clz
@@ -105,7 +105,7 @@
      i64.sub
      i64.shl
     else
-     local.get $7
+     local.get $8
      i64.const 4503599627370495
      i64.and
      i64.const 4503599627370496
@@ -115,10 +115,10 @@
     local.get $5
     i64.eqz
     if (result i64)
-     local.get $8
+     local.get $6
      i64.const 1
      local.get $5
-     local.get $8
+     local.get $6
      i64.const 12
      i64.shl
      i64.clz
@@ -127,13 +127,13 @@
      i64.sub
      i64.shl
     else
-     local.get $8
+     local.get $6
      i64.const 4503599627370495
      i64.and
      i64.const 4503599627370496
      i64.or
     end
-    local.set $7
+    local.set $6
     block $folding-inner0
      loop $while-continue|0
       local.get $4
@@ -141,15 +141,15 @@
       i64.gt_s
       if
        local.get $3
-       local.get $7
+       local.get $6
        i64.ge_u
        if (result i64)
         local.get $3
-        local.get $7
+        local.get $6
         i64.eq
         br_if $folding-inner0
         local.get $3
-        local.get $7
+        local.get $6
         i64.sub
        else
         local.get $3
@@ -166,15 +166,15 @@
      end
      local.get $4
      local.get $3
-     local.get $7
+     local.get $6
      i64.ge_u
      if
       local.get $3
-      local.get $7
+      local.get $6
       i64.eq
       br_if $folding-inner0
       local.get $3
-      local.get $7
+      local.get $6
       i64.sub
       local.set $3
      end
@@ -207,7 +207,7 @@
       i64.sub
       i64.shr_u
      end
-     local.get $6
+     local.get $7
      i64.const 63
      i64.shl
      i64.or
@@ -298,7 +298,7 @@
     drop
     local.get $1
     i32.reinterpret_f32
-    local.tee $8
+    local.tee $6
     i32.const 23
     i32.shr_u
     i32.const 255
@@ -319,10 +319,10 @@
     i32.const 255
     i32.eq
     i32.const 1
-    local.get $8
+    local.get $6
     i32.const 1
     i32.shl
-    local.tee $3
+    local.tee $8
     select
     select
     if
@@ -334,16 +334,16 @@
      f32.div
      br $__inlined_func$~lib/math/NativeMathf.mod
     end
-    local.get $3
+    local.get $8
     local.get $7
     i32.const 1
     i32.shl
-    local.tee $6
+    local.tee $3
     i32.ge_u
     if
      local.get $0
      local.get $3
-     local.get $6
+     local.get $8
      i32.ne
      f32.convert_i32_u
      f32.mul
@@ -352,7 +352,7 @@
     local.get $7
     i32.const -2147483648
     i32.and
-    local.set $6
+    local.set $8
     local.get $4
     if (result i32)
      local.get $7
@@ -376,16 +376,16 @@
     local.set $3
     local.get $5
     if (result i32)
-     local.get $8
+     local.get $6
      i32.const 8388607
      i32.and
      i32.const 8388608
      i32.or
     else
-     local.get $8
+     local.get $6
      i32.const 1
      local.get $5
-     local.get $8
+     local.get $6
      i32.const 9
      i32.shl
      i32.clz
@@ -394,7 +394,7 @@
      i32.sub
      i32.shl
     end
-    local.set $7
+    local.set $6
     block $folding-inner0
      loop $while-continue|0
       local.get $4
@@ -402,15 +402,15 @@
       i32.gt_s
       if
        local.get $3
-       local.get $7
+       local.get $6
        i32.ge_u
        if (result i32)
         local.get $3
-        local.get $7
+        local.get $6
         i32.eq
         br_if $folding-inner0
         local.get $3
-        local.get $7
+        local.get $6
         i32.sub
        else
         local.get $3
@@ -427,15 +427,15 @@
      end
      local.get $4
      local.get $3
-     local.get $7
+     local.get $6
      i32.ge_u
      if
       local.get $3
-      local.get $7
+      local.get $6
       i32.eq
       br_if $folding-inner0
       local.get $3
-      local.get $7
+      local.get $6
       i32.sub
       local.set $3
      end
@@ -468,7 +468,7 @@
       i32.sub
       i32.shr_u
      end
-     local.get $6
+     local.get $8
      i32.or
      f32.reinterpret_i32
      br $__inlined_func$~lib/math/NativeMathf.mod

@@ -2374,7 +2374,6 @@ export class Module {
         passes.push("code-pushing");
         if (optimizeLevel >= 3) {
           // very expensive, so O3 only
-          passes.push("ssa-nomerge");
           passes.push("simplify-globals");
           passes.push("vacuum");
 
@@ -2395,6 +2394,7 @@ export class Module {
           passes.push("precompute-propagate");
           passes.push("vacuum");
 
+          passes.push("ssa-nomerge");
           passes.push("coalesce-locals");
         }
         passes.push("remove-unused-brs");
