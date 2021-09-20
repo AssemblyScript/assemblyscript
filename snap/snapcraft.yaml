@@ -12,7 +12,13 @@ confinement: strict
 apps:
   asc:
     command: asc
+  asinit:
+    command: asinit
 parts:
   assemblyscript:
     source: .
-    plugin: nodejs
+    plugin: npm
+    npm-node-version: 16.9.1
+architectures: 
+  - build-on: amd64 
+    run-on: [amd64, armhf, arm64, i386]
