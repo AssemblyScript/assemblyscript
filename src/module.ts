@@ -2395,7 +2395,6 @@ export class Module {
           passes.push("vacuum");
 
           passes.push("ssa-nomerge");
-          passes.push("reorder-locals");
           passes.push("coalesce-locals");
         }
         passes.push("remove-unused-brs");
