@@ -2496,6 +2496,7 @@ export class Module {
   }
 
   copyExpression(expr: ExpressionRef): ExpressionRef {
+    // TODO: Copy debug location as well (needs Binaryen support)
     return binaryen._BinaryenExpressionCopy(expr, this.ref);
   }
 
