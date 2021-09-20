@@ -1038,11 +1038,10 @@
   local.get $2
   i32.const 256
   i32.lt_u
-  if
+  if (result i32)
    local.get $2
    i32.const 4
    i32.shr_u
-   local.set $2
   else
    i32.const 31
    local.get $2
@@ -1054,21 +1053,19 @@
    local.tee $2
    i32.clz
    i32.sub
+   local.tee $4
+   i32.const 7
+   i32.sub
    local.set $3
    local.get $2
-   local.get $3
+   local.get $4
    i32.const 4
    i32.sub
    i32.shr_u
    i32.const 16
    i32.xor
-   local.set $2
-   local.get $3
-   i32.const 7
-   i32.sub
-   local.set $3
   end
-  local.get $2
+  local.tee $2
   i32.const 16
   i32.lt_u
   local.get $3
@@ -2145,13 +2142,14 @@
    end
   end
   local.get $2
+  local.tee $4
   call $~lib/rt/tlsf/__alloc
-  local.set $4
+  local.set $5
   i32.const 3
   global.set $~argumentsLength
   local.get $1
   local.get $3
-  local.get $4
+  local.get $5
   call $~lib/string/String.UTF8.encodeUnsafe@varargs
   local.get $2
   i32.ne
@@ -2164,10 +2162,10 @@
    unreachable
   end
   i32.const 1136
-  local.get $4
+  local.get $5
   i32.store
   i32.const 1140
-  local.get $2
+  local.get $4
   i32.store
   local.get $0
   i32.const 1136
@@ -2175,7 +2173,7 @@
   i32.const 1144
   call $~lib/bindings/wasi_snapshot_preview1/fd_write
   local.set $0
-  local.get $4
+  local.get $5
   call $~lib/rt/tlsf/__free
   local.get $0
   i32.const 65535

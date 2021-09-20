@@ -124,11 +124,10 @@
   local.get $2
   i32.const 256
   i32.lt_u
-  if
+  if (result i32)
    local.get $2
    i32.const 4
    i32.shr_u
-   local.set $2
   else
    i32.const 31
    local.get $2
@@ -140,21 +139,19 @@
    local.tee $2
    i32.clz
    i32.sub
+   local.tee $4
+   i32.const 7
+   i32.sub
    local.set $3
    local.get $2
-   local.get $3
+   local.get $4
    i32.const 4
    i32.sub
    i32.shr_u
    i32.const 16
    i32.xor
-   local.set $2
-   local.get $3
-   i32.const 7
-   i32.sub
-   local.set $3
   end
-  local.get $2
+  local.tee $2
   i32.const 16
   i32.lt_u
   local.get $3

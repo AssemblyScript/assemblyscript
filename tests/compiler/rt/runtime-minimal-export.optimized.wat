@@ -69,11 +69,10 @@
   local.get $2
   i32.const 256
   i32.lt_u
-  if
+  if (result i32)
    local.get $2
    i32.const 4
    i32.shr_u
-   local.set $2
   else
    i32.const 31
    local.get $2
@@ -85,21 +84,19 @@
    local.tee $2
    i32.clz
    i32.sub
+   local.tee $4
+   i32.const 7
+   i32.sub
    local.set $3
    local.get $2
-   local.get $3
+   local.get $4
    i32.const 4
    i32.sub
    i32.shr_u
    i32.const 16
    i32.xor
-   local.set $2
-   local.get $3
-   i32.const 7
-   i32.sub
-   local.set $3
   end
-  local.get $2
+  local.tee $2
   i32.const 16
   i32.lt_u
   local.get $3
@@ -1220,23 +1217,23 @@
   end
   global.get $~lib/rt/tcms/white
   i32.eqz
-  local.set $5
+  local.set $4
   global.get $~lib/rt/tcms/toSpace
-  local.tee $4
+  local.tee $3
   i32.load offset=4
   i32.const -4
   i32.and
   local.set $1
   loop $while-continue|1
    local.get $1
-   local.get $4
+   local.get $3
    i32.ne
    if
     local.get $1
     i32.load offset=4
     i32.const 3
     i32.and
-    local.get $5
+    local.get $4
     i32.ne
     if
      i32.const 0
@@ -1259,14 +1256,14 @@
    end
   end
   global.get $~lib/rt/tcms/fromSpace
-  local.tee $6
+  local.tee $5
   i32.load offset=4
   i32.const -4
   i32.and
   local.set $1
   loop $while-continue|2
    local.get $1
-   local.get $6
+   local.get $5
    i32.ne
    if
     global.get $~lib/rt/tcms/white
@@ -1310,7 +1307,7 @@
      local.get $1
      i32.const 4
      i32.add
-     local.tee $2
+     local.tee $1
      i32.const 1484
      i32.ge_u
      if
@@ -1320,20 +1317,20 @@
        call $~lib/rt/tlsf/initialize
       end
       global.get $~lib/rt/tlsf/ROOT
-      local.get $2
+      local.get $1
       i32.const 4
       i32.sub
-      local.set $1
-      local.get $2
+      local.set $6
+      local.get $1
       i32.const 15
       i32.and
       i32.const 1
-      local.get $2
+      local.get $1
       select
       if (result i32)
        i32.const 1
       else
-       local.get $1
+       local.get $6
        i32.load
        i32.const 1
        i32.and
@@ -1346,13 +1343,13 @@
        call $~lib/builtins/abort
        unreachable
       end
-      local.get $1
-      local.get $1
+      local.get $6
+      local.get $6
       i32.load
       i32.const 1
       i32.or
       i32.store
-      local.get $1
+      local.get $6
       call $~lib/rt/tlsf/insertBlock
      end
     end
@@ -1360,17 +1357,17 @@
     br $while-continue|2
    end
   end
-  local.get $6
-  local.get $6
-  i32.store offset=4
-  local.get $6
-  local.get $6
-  i32.store offset=8
-  local.get $4
-  global.set $~lib/rt/tcms/fromSpace
-  local.get $6
-  global.set $~lib/rt/tcms/toSpace
   local.get $5
+  local.get $5
+  i32.store offset=4
+  local.get $5
+  local.get $5
+  i32.store offset=8
+  local.get $3
+  global.set $~lib/rt/tcms/fromSpace
+  local.get $5
+  global.set $~lib/rt/tcms/toSpace
+  local.get $4
   global.set $~lib/rt/tcms/white
  )
  (func $~lib/rt/__visit_members (param $0 i32)
