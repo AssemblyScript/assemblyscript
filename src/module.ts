@@ -2374,6 +2374,7 @@ export class Module {
         passes.push("code-pushing");
         if (optimizeLevel >= 3) {
           // very expensive, so O3 only
+          passes.push("ssa-nomerge");
           passes.push("simplify-globals");
           passes.push("vacuum");
 

@@ -617,19 +617,19 @@
   end
   local.get $1
   i32.load offset=8
-  local.set $4
+  local.set $5
   local.get $1
   i32.load offset=4
-  local.tee $5
+  local.tee $4
   if
-   local.get $5
    local.get $4
+   local.get $5
    i32.store offset=8
   end
-  local.get $4
+  local.get $5
   if
-   local.get $4
    local.get $5
+   local.get $4
    i32.store offset=4
   end
   local.get $2
@@ -654,9 +654,9 @@
    i32.shl
    local.get $0
    i32.add
-   local.get $4
+   local.get $5
    i32.store offset=96
-   local.get $4
+   local.get $5
    i32.eqz
    if
     local.get $3
@@ -664,17 +664,17 @@
     i32.shl
     local.get $0
     i32.add
-    local.tee $4
+    local.tee $1
     i32.load offset=4
     i32.const -2
     local.get $2
     i32.rotl
     i32.and
-    local.set $1
-    local.get $4
+    local.set $2
     local.get $1
+    local.get $2
     i32.store offset=4
-    local.get $1
+    local.get $2
     i32.eqz
     if
      local.get $0
@@ -962,10 +962,10 @@
   i32.and
   local.get $0
   i32.load offset=1568
-  local.tee $2
+  local.tee $4
   if
    local.get $1
-   local.get $2
+   local.get $4
    i32.const 4
    i32.add
    i32.lt_u
@@ -977,15 +977,15 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $2
+   local.get $4
    local.get $1
    i32.const 16
    i32.sub
    i32.eq
    if
-    local.get $2
+    local.get $4
     i32.load
-    local.set $4
+    local.set $3
     local.get $1
     i32.const 16
     i32.sub
@@ -1015,7 +1015,7 @@
    return
   end
   local.get $1
-  local.get $4
+  local.get $3
   i32.const 2
   i32.and
   local.get $2
@@ -1328,7 +1328,7 @@
       local.get $0
       i32.const 4
       i32.add
-      local.tee $0
+      local.tee $1
       i32.const 37476
       i32.ge_u
       if
@@ -1338,20 +1338,20 @@
         call $~lib/rt/tlsf/initialize
        end
        global.get $~lib/rt/tlsf/ROOT
-       local.get $0
+       local.get $1
        i32.const 4
        i32.sub
-       local.set $1
-       local.get $0
+       local.set $0
+       local.get $1
        i32.const 15
        i32.and
        i32.const 1
-       local.get $0
+       local.get $1
        select
        if (result i32)
         i32.const 1
        else
-        local.get $1
+        local.get $0
         i32.load
         i32.const 1
         i32.and
@@ -1364,8 +1364,7 @@
         call $~lib/builtins/abort
         unreachable
        end
-       local.get $1
-       local.tee $0
+       local.get $0
        local.get $0
        i32.load
        i32.const 1
@@ -1545,12 +1544,12 @@
   if
    block $__inlined_func$~lib/rt/itcms/interrupt
     i32.const 2048
-    local.set $3
+    local.set $2
     loop $do-loop|0
-     local.get $3
+     local.get $2
      call $~lib/rt/itcms/step
      i32.sub
-     local.set $3
+     local.set $2
      global.get $~lib/rt/itcms/state
      i32.eqz
      if
@@ -1566,14 +1565,14 @@
       global.set $~lib/rt/itcms/threshold
       br $__inlined_func$~lib/rt/itcms/interrupt
      end
-     local.get $3
+     local.get $2
      i32.const 0
      i32.gt_s
      br_if $do-loop|0
     end
     global.get $~lib/rt/itcms/total
-    local.tee $3
-    local.get $3
+    local.tee $2
+    local.get $2
     global.get $~lib/rt/itcms/threshold
     i32.sub
     i32.const 1024
@@ -1587,15 +1586,15 @@
   local.get $0
   i32.const 16
   i32.add
-  local.set $3
+  local.set $2
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
    call $~lib/rt/tlsf/initialize
   end
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $6
-  local.get $3
+  local.tee $3
+  local.get $2
   i32.const 1073741820
   i32.gt_u
   if
@@ -1606,13 +1605,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.const 12
   i32.le_u
   if (result i32)
    i32.const 12
   else
-   local.get $3
+   local.get $2
    i32.const 19
    i32.add
    i32.const -16
@@ -1620,34 +1619,34 @@
    i32.const 4
    i32.sub
   end
-  local.tee $3
+  local.tee $4
   call $~lib/rt/tlsf/searchBlock
   local.tee $2
   i32.eqz
   if
    memory.size
-   local.tee $5
-   local.get $3
+   local.tee $2
+   local.get $4
    i32.const 536870910
    i32.lt_u
    if (result i32)
     i32.const 1
     i32.const 27
-    local.get $3
+    local.get $4
     i32.clz
     i32.sub
     i32.shl
     i32.const 1
     i32.sub
-    local.get $3
+    local.get $4
     i32.add
    else
-    local.get $3
+    local.get $4
    end
    i32.const 4
-   local.get $6
+   local.get $3
    i32.load offset=1568
-   local.get $5
+   local.get $2
    i32.const 16
    i32.shl
    i32.const 4
@@ -1661,16 +1660,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $2
+   local.tee $5
    local.get $2
    local.get $5
-   i32.lt_s
+   i32.gt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $2
+    local.get $5
     memory.grow
     i32.const 0
     i32.lt_s
@@ -1678,16 +1677,16 @@
      unreachable
     end
    end
-   local.get $6
-   local.get $5
+   local.get $3
+   local.get $2
    i32.const 16
    i32.shl
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   local.get $6
    local.get $3
+   local.get $4
    call $~lib/rt/tlsf/searchBlock
    local.tee $2
    i32.eqz
@@ -1704,7 +1703,7 @@
   i32.load
   i32.const -4
   i32.and
-  local.get $3
+  local.get $4
   i32.lt_u
   if
    i32.const 0
@@ -1714,13 +1713,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $6
+  local.get $3
   local.get $2
   call $~lib/rt/tlsf/removeBlock
   local.get $2
   i32.load
   local.set $5
-  local.get $3
+  local.get $4
   i32.const 4
   i32.add
   i32.const 15
@@ -1736,9 +1735,9 @@
   local.get $5
   i32.const -4
   i32.and
-  local.get $3
+  local.get $4
   i32.sub
-  local.tee $4
+  local.tee $6
   i32.const 16
   i32.ge_u
   if
@@ -1746,23 +1745,23 @@
    local.get $5
    i32.const 2
    i32.and
-   local.get $3
+   local.get $4
    i32.or
    i32.store
-   local.get $3
+   local.get $4
    local.get $2
    i32.const 4
    i32.add
    i32.add
-   local.tee $3
-   local.get $4
+   local.tee $4
+   local.get $6
    i32.const 4
    i32.sub
    i32.const 1
    i32.or
    i32.store
-   local.get $6
    local.get $3
+   local.get $4
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $2
@@ -1826,19 +1825,19 @@
   local.get $2
   i32.const 20
   i32.add
-  local.tee $3
-  local.set $2
+  local.tee $2
+  local.set $1
   block $~lib/util/memory/memset|inlined.0
    local.get $0
    i32.eqz
    br_if $~lib/util/memory/memset|inlined.0
-   local.get $2
+   local.get $1
    i32.const 0
    i32.store8
    local.get $0
-   local.get $2
+   local.get $1
    i32.add
-   local.tee $1
+   local.tee $3
    i32.const 1
    i32.sub
    i32.const 0
@@ -1847,18 +1846,18 @@
    i32.const 2
    i32.le_u
    br_if $~lib/util/memory/memset|inlined.0
-   local.get $2
+   local.get $1
    i32.const 0
    i32.store8 offset=1
-   local.get $2
+   local.get $1
    i32.const 0
    i32.store8 offset=2
-   local.get $1
+   local.get $3
    i32.const 2
    i32.sub
    i32.const 0
    i32.store8
-   local.get $1
+   local.get $3
    i32.const 3
    i32.sub
    i32.const 0
@@ -1867,10 +1866,10 @@
    i32.const 6
    i32.le_u
    br_if $~lib/util/memory/memset|inlined.0
-   local.get $2
+   local.get $1
    i32.const 0
    i32.store8 offset=3
-   local.get $1
+   local.get $3
    i32.const 4
    i32.sub
    i32.const 0
@@ -1879,97 +1878,97 @@
    i32.const 8
    i32.le_u
    br_if $~lib/util/memory/memset|inlined.0
-   local.get $2
+   local.get $1
    i32.const 0
-   local.get $2
+   local.get $1
    i32.sub
    i32.const 3
    i32.and
-   local.tee $1
+   local.tee $3
    i32.add
-   local.tee $4
+   local.tee $1
    i32.const 0
    i32.store
-   local.get $4
-   local.get $0
    local.get $1
+   local.get $0
+   local.get $3
    i32.sub
    i32.const -4
    i32.and
-   local.tee $2
-   i32.add
    local.tee $0
+   i32.add
+   local.tee $3
    i32.const 4
    i32.sub
    i32.const 0
    i32.store
-   local.get $2
+   local.get $0
    i32.const 8
    i32.le_u
    br_if $~lib/util/memory/memset|inlined.0
-   local.get $4
+   local.get $1
    i32.const 0
    i32.store offset=4
-   local.get $4
+   local.get $1
    i32.const 0
    i32.store offset=8
-   local.get $0
+   local.get $3
    i32.const 12
    i32.sub
    i32.const 0
    i32.store
-   local.get $0
+   local.get $3
    i32.const 8
    i32.sub
    i32.const 0
    i32.store
-   local.get $2
+   local.get $0
    i32.const 24
    i32.le_u
    br_if $~lib/util/memory/memset|inlined.0
-   local.get $4
+   local.get $1
    i32.const 0
    i32.store offset=12
-   local.get $4
+   local.get $1
    i32.const 0
    i32.store offset=16
-   local.get $4
+   local.get $1
    i32.const 0
    i32.store offset=20
-   local.get $4
+   local.get $1
    i32.const 0
    i32.store offset=24
-   local.get $0
+   local.get $3
    i32.const 28
    i32.sub
    i32.const 0
    i32.store
-   local.get $0
+   local.get $3
    i32.const 24
    i32.sub
    i32.const 0
    i32.store
-   local.get $0
+   local.get $3
    i32.const 20
    i32.sub
    i32.const 0
    i32.store
-   local.get $0
+   local.get $3
    i32.const 16
    i32.sub
    i32.const 0
    i32.store
-   local.get $4
-   local.get $4
+   local.get $1
+   local.get $1
    i32.const 4
    i32.and
    i32.const 24
    i32.add
-   local.tee $0
+   local.tee $3
    i32.add
    local.set $1
-   local.get $2
    local.get $0
+   local.get $3
    i32.sub
    local.set $0
    loop $while-continue|0
@@ -2001,7 +2000,7 @@
     end
    end
   end
-  local.get $3
+  local.get $2
  )
  (func $~lib/util/casemap/casemap (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2027,12 +2026,12 @@
   local.get $0
   i32.const 255
   i32.and
-  local.tee $5
+  local.tee $4
   i32.const 3
   i32.div_u
   i32.add
   i32.load8_u
-  local.get $5
+  local.get $4
   i32.const 3
   i32.rem_u
   i32.const 2
@@ -2054,54 +2053,54 @@
   local.tee $2
   i32.const 255
   i32.and
-  local.set $4
+  local.set $3
   local.get $2
   i32.const 8
   i32.shr_s
-  local.set $3
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 2
   i32.lt_u
   if
    i32.const 0
    local.get $1
-   local.get $4
+   local.get $3
    i32.xor
    i32.sub
-   local.get $3
+   local.get $5
    i32.and
    local.get $0
    i32.add
    return
   end
-  local.get $3
+  local.get $5
   i32.const 255
   i32.and
   local.set $2
-  local.get $3
+  local.get $5
   i32.const 8
   i32.shr_u
-  local.set $4
+  local.set $3
   loop $while-continue|0
    local.get $2
    if
-    local.get $5
+    local.get $4
     local.get $2
     i32.const 1
     i32.shr_u
-    local.tee $3
-    local.get $4
+    local.tee $6
+    local.get $3
     i32.add
     i32.const 1
     i32.shl
     i32.const 6596
     i32.add
     i32.load8_u
-    local.tee $6
+    local.tee $5
     i32.eq
     if (result i32)
      local.get $3
-     local.get $4
+     local.get $6
      i32.add
      i32.const 1
      i32.shl
@@ -2145,18 +2144,18 @@
      i32.sub
      return
     else
+     local.get $4
      local.get $5
-     local.get $6
      i32.lt_u
      if (result i32)
-      local.get $3
+      local.get $6
      else
       local.get $3
-      local.get $4
+      local.get $6
       i32.add
-      local.set $4
+      local.set $3
       local.get $2
-      local.get $3
+      local.get $6
       i32.sub
      end
     end
@@ -2179,17 +2178,17 @@
    select
    if
     local.get $0
-    local.tee $4
+    local.tee $3
     i32.const 1
     i32.add
     local.set $0
     local.get $1
-    local.tee $3
+    local.tee $4
     i32.const 1
     i32.add
     local.set $1
-    local.get $4
     local.get $3
+    local.get $4
     i32.load8_u
     i32.store8
     local.get $2
@@ -2335,19 +2334,19 @@
       local.get $0
       i32.const 2
       i32.add
-      local.tee $4
+      local.tee $3
       i32.const 1
       i32.add
       local.set $0
       local.get $1
       i32.const 2
       i32.add
-      local.tee $3
+      local.tee $4
       i32.const 1
       i32.add
       local.set $1
-      local.get $4
       local.get $3
+      local.get $4
       i32.load8_u
       i32.store8
       local.get $2
@@ -2362,7 +2361,7 @@
         local.get $0
         local.get $1
         i32.load offset=1
-        local.tee $4
+        local.tee $3
         i32.const 8
         i32.shl
         local.get $5
@@ -2373,10 +2372,10 @@
         local.get $0
         local.get $1
         i32.load offset=5
-        local.tee $3
+        local.tee $4
         i32.const 8
         i32.shl
-        local.get $4
+        local.get $3
         i32.const 24
         i32.shr_u
         i32.or
@@ -2384,10 +2383,10 @@
         local.get $0
         local.get $1
         i32.load offset=9
-        local.tee $4
+        local.tee $3
         i32.const 8
         i32.shl
-        local.get $3
+        local.get $4
         i32.const 24
         i32.shr_u
         i32.or
@@ -2398,7 +2397,7 @@
         local.tee $5
         i32.const 8
         i32.shl
-        local.get $4
+        local.get $3
         i32.const 24
         i32.shr_u
         i32.or
@@ -2453,7 +2452,7 @@
        local.get $0
        local.get $1
        i32.load offset=2
-       local.tee $4
+       local.tee $3
        i32.const 16
        i32.shl
        local.get $5
@@ -2464,10 +2463,10 @@
        local.get $0
        local.get $1
        i32.load offset=6
-       local.tee $3
+       local.tee $4
        i32.const 16
        i32.shl
-       local.get $4
+       local.get $3
        i32.const 16
        i32.shr_u
        i32.or
@@ -2475,10 +2474,10 @@
        local.get $0
        local.get $1
        i32.load offset=10
-       local.tee $4
+       local.tee $3
        i32.const 16
        i32.shl
-       local.get $3
+       local.get $4
        i32.const 16
        i32.shr_u
        i32.or
@@ -2489,7 +2488,7 @@
        local.tee $5
        i32.const 16
        i32.shl
-       local.get $4
+       local.get $3
        i32.const 16
        i32.shr_u
        i32.or
@@ -2515,17 +2514,17 @@
     i32.load
     local.set $5
     local.get $0
-    local.tee $4
+    local.tee $3
     i32.const 1
     i32.add
     local.set $0
     local.get $1
-    local.tee $3
+    local.tee $4
     i32.const 1
     i32.add
     local.set $1
-    local.get $4
     local.get $3
+    local.get $4
     i32.load8_u
     i32.store8
     local.get $2
@@ -2540,7 +2539,7 @@
       local.get $0
       local.get $1
       i32.load offset=3
-      local.tee $4
+      local.tee $3
       i32.const 24
       i32.shl
       local.get $5
@@ -2551,10 +2550,10 @@
       local.get $0
       local.get $1
       i32.load offset=7
-      local.tee $3
+      local.tee $4
       i32.const 24
       i32.shl
-      local.get $4
+      local.get $3
       i32.const 8
       i32.shr_u
       i32.or
@@ -2562,10 +2561,10 @@
       local.get $0
       local.get $1
       i32.load offset=11
-      local.tee $4
+      local.tee $3
       i32.const 24
       i32.shl
-      local.get $3
+      local.get $4
       i32.const 8
       i32.shr_u
       i32.or
@@ -2576,7 +2575,7 @@
       local.tee $5
       i32.const 24
       i32.shl
-      local.get $4
+      local.get $3
       i32.const 8
       i32.shr_u
       i32.or
@@ -2613,131 +2612,135 @@
    local.get $0
    i32.const 2
    i32.add
-   local.tee $4
-   local.get $1
-   i32.const 2
-   i32.add
    local.tee $3
+   local.get $1
+   i32.const 2
+   i32.add
+   local.tee $4
    i32.load8_u
    i32.store8
    local.get $3
-   local.tee $0
-   i32.const 2
-   i32.add
-   local.set $3
-   local.get $4
-   local.get $0
-   i32.load8_u offset=1
-   i32.store8 offset=1
-   local.get $4
-   i32.const 2
-   i32.add
    local.tee $1
-   local.get $3
-   i32.load8_u
-   i32.store8
-   local.get $1
-   local.tee $4
-   i32.const 2
-   i32.add
-   local.set $1
-   local.get $3
-   local.tee $0
    i32.const 2
    i32.add
    local.set $3
    local.get $4
+   local.tee $0
+   i32.const 2
+   i32.add
+   local.set $4
+   local.get $1
    local.get $0
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $1
    local.get $3
+   local.get $4
    i32.load8_u
    i32.store8
-   local.get $1
-   local.tee $4
-   i32.const 2
-   i32.add
-   local.set $1
    local.get $3
-   local.tee $0
+   local.tee $1
    i32.const 2
    i32.add
    local.set $3
    local.get $4
+   local.tee $0
+   i32.const 2
+   i32.add
+   local.set $4
+   local.get $1
    local.get $0
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $1
    local.get $3
+   local.get $4
    i32.load8_u
    i32.store8
-   local.get $1
-   local.tee $4
-   i32.const 2
-   i32.add
-   local.set $1
    local.get $3
-   local.tee $0
+   local.tee $1
    i32.const 2
    i32.add
    local.set $3
    local.get $4
+   local.tee $0
+   i32.const 2
+   i32.add
+   local.set $4
+   local.get $1
    local.get $0
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $1
    local.get $3
+   local.get $4
    i32.load8_u
    i32.store8
-   local.get $1
-   local.tee $4
-   i32.const 2
-   i32.add
-   local.set $1
    local.get $3
-   local.tee $0
+   local.tee $1
    i32.const 2
    i32.add
    local.set $3
    local.get $4
+   local.tee $0
+   i32.const 2
+   i32.add
+   local.set $4
+   local.get $1
    local.get $0
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $1
    local.get $3
+   local.get $4
    i32.load8_u
    i32.store8
-   local.get $1
-   local.tee $4
-   i32.const 2
-   i32.add
-   local.set $1
    local.get $3
-   local.tee $0
+   local.tee $1
    i32.const 2
    i32.add
    local.set $3
    local.get $4
+   local.tee $0
+   i32.const 2
+   i32.add
+   local.set $4
+   local.get $1
    local.get $0
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $1
    local.get $3
+   local.get $4
    i32.load8_u
    i32.store8
+   local.get $3
+   local.tee $1
+   i32.const 2
+   i32.add
+   local.set $3
+   local.get $4
+   local.tee $0
+   i32.const 2
+   i32.add
+   local.set $5
    local.get $1
+   local.get $0
+   i32.load8_u offset=1
+   i32.store8 offset=1
+   local.get $3
+   local.get $5
+   i32.load8_u
+   i32.store8
+   local.get $3
+   local.tee $4
    i32.const 2
    i32.add
    local.set $0
-   local.get $1
-   local.get $3
-   i32.load8_u offset=1
-   i32.store8 offset=1
-   local.get $3
+   local.get $5
+   local.tee $3
    i32.const 2
    i32.add
    local.set $1
+   local.get $4
+   local.get $3
+   i32.load8_u offset=1
+   i32.store8 offset=1
   end
   local.get $2
   i32.const 8
@@ -2754,59 +2757,63 @@
    local.get $0
    i32.const 2
    i32.add
-   local.tee $4
-   local.get $1
-   i32.const 2
-   i32.add
    local.tee $3
-   i32.load8_u
-   i32.store8
-   local.get $3
-   local.tee $0
-   i32.const 2
-   i32.add
-   local.set $3
-   local.get $4
-   local.get $0
-   i32.load8_u offset=1
-   i32.store8 offset=1
-   local.get $4
-   i32.const 2
-   i32.add
-   local.tee $1
-   local.get $3
-   i32.load8_u
-   i32.store8
    local.get $1
+   i32.const 2
+   i32.add
    local.tee $4
-   i32.const 2
-   i32.add
-   local.set $1
+   i32.load8_u
+   i32.store8
    local.get $3
-   local.tee $0
+   local.tee $1
    i32.const 2
    i32.add
    local.set $3
    local.get $4
+   local.tee $0
+   i32.const 2
+   i32.add
+   local.set $4
+   local.get $1
    local.get $0
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $1
    local.get $3
+   local.get $4
    i32.load8_u
    i32.store8
+   local.get $3
+   local.tee $1
+   i32.const 2
+   i32.add
+   local.set $3
+   local.get $4
+   local.tee $0
+   i32.const 2
+   i32.add
+   local.set $5
    local.get $1
+   local.get $0
+   i32.load8_u offset=1
+   i32.store8 offset=1
+   local.get $3
+   local.get $5
+   i32.load8_u
+   i32.store8
+   local.get $3
+   local.tee $4
    i32.const 2
    i32.add
    local.set $0
-   local.get $1
-   local.get $3
-   i32.load8_u offset=1
-   i32.store8 offset=1
-   local.get $3
+   local.get $5
+   local.tee $3
    i32.const 2
    i32.add
    local.set $1
+   local.get $4
+   local.get $3
+   i32.load8_u offset=1
+   i32.store8 offset=1
   end
   local.get $2
   i32.const 4
@@ -3073,7 +3080,7 @@
   local.get $0
   i32.const 20
   i32.sub
-  local.tee $2
+  local.tee $3
   i32.load
   i32.const -4
   i32.and
@@ -3082,28 +3089,28 @@
   local.get $1
   i32.ge_u
   if
-   local.get $2
+   local.get $3
    local.get $1
    i32.store offset=16
    local.get $0
    return
   end
   local.get $1
-  local.get $2
+  local.get $3
   i32.load offset=12
   call $~lib/rt/itcms/__new
-  local.tee $3
+  local.tee $2
   local.get $0
   local.get $1
-  local.get $2
+  local.get $3
   i32.load offset=16
-  local.tee $2
+  local.tee $0
+  local.get $0
   local.get $1
-  local.get $2
-  i32.lt_u
+  i32.gt_u
   select
   call $~lib/memory/memory.copy
-  local.get $3
+  local.get $2
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3195,14 +3202,14 @@
     if
      local.get $3
      i32.load16_u
-     local.tee $2
+     local.tee $4
      local.get $1
      i32.load16_u
-     local.tee $4
+     local.tee $2
      i32.ne
      if
-      local.get $2
       local.get $4
+      local.get $2
       i32.sub
       br $__inlined_func$~lib/util/string/compareImpl
      end
@@ -3369,7 +3376,7 @@
    i64.const 63
    i64.shr_u
    i32.wrap_i64
-   local.tee $4
+   local.tee $3
    select
    local.tee $0
    i64.const 4294967295
@@ -3378,7 +3385,7 @@
     global.get $~lib/memory/__stack_pointer
     local.get $0
     i32.wrap_i64
-    local.tee $3
+    local.tee $2
     local.tee $1
     i32.const 100000
     i32.lt_u
@@ -3425,9 +3432,9 @@
       i32.add
      end
     end
-    local.get $4
+    local.get $3
     i32.add
-    local.tee $2
+    local.tee $4
     i32.const 1
     i32.shl
     i32.const 1
@@ -3435,8 +3442,8 @@
     local.tee $1
     i32.store
     local.get $1
-    local.get $3
     local.get $2
+    local.get $4
     call $~lib/util/number/utoa32_dec_lut
    else
     global.get $~lib/memory/__stack_pointer
@@ -3490,7 +3497,7 @@
       i32.add
      end
     end
-    local.get $4
+    local.get $3
     i32.add
     local.tee $2
     i32.const 1
@@ -3507,7 +3514,7 @@
       local.get $2
       i32.const 4
       i32.sub
-      local.tee $2
+      local.tee $4
       i32.const 1
       i32.shl
       local.get $1
@@ -3521,10 +3528,10 @@
       i64.mul
       i64.sub
       i32.wrap_i64
-      local.tee $3
+      local.tee $5
       i32.const 10000
       i32.rem_u
-      local.tee $5
+      local.tee $2
       i32.const 100
       i32.div_u
       i32.const 2
@@ -3532,7 +3539,7 @@
       i32.const 19212
       i32.add
       i64.load32_u
-      local.get $5
+      local.get $2
       i32.const 100
       i32.rem_u
       i32.const 2
@@ -3544,7 +3551,7 @@
       i64.shl
       i64.or
       i64.store
-      local.get $2
+      local.get $4
       i32.const 4
       i32.sub
       local.tee $2
@@ -3552,10 +3559,10 @@
       i32.shl
       local.get $1
       i32.add
-      local.get $3
+      local.get $5
       i32.const 10000
       i32.div_u
-      local.tee $3
+      local.tee $4
       i32.const 100
       i32.div_u
       i32.const 2
@@ -3563,7 +3570,7 @@
       i32.const 19212
       i32.add
       i64.load32_u
-      local.get $3
+      local.get $4
       i32.const 100
       i32.rem_u
       i32.const 2
@@ -3584,7 +3591,7 @@
     local.get $2
     call $~lib/util/number/utoa32_dec_lut
    end
-   local.get $4
+   local.get $3
    if
     local.get $1
     i32.const 45
@@ -3931,22 +3938,22 @@
         i32.shl
         i32.const 1488
         i32.add
-        local.tee $2
+        local.tee $1
         i32.load16_u offset=6
-        local.set $1
+        local.set $2
         local.get $5
         i32.const 1
         i32.shl
         local.get $6
         i32.add
         local.tee $4
-        local.get $2
+        local.get $1
         i32.load offset=2
         i32.store
         local.get $4
-        local.get $1
+        local.get $2
         i32.store16 offset=4
-        local.get $1
+        local.get $2
         i32.const 0
         i32.ne
         i32.const 1
@@ -4042,10 +4049,10 @@
   (local $3 i64)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i64)
+  (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
+  (local $9 i64)
   global.get $~lib/memory/__stack_pointer
   i32.const 28
   i32.sub
@@ -4062,16 +4069,16 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $9
+  local.tee $4
   i64.const 0
   i64.store
-  local.get $9
+  local.get $4
   i64.const 0
   i64.store offset=8
-  local.get $9
+  local.get $4
   i64.const 0
   i64.store offset=16
-  local.get $9
+  local.get $4
   i32.const 0
   i32.store offset=24
   memory.size
@@ -4106,19 +4113,19 @@
   i32.store
   i32.const 1376
   global.set $~lib/rt/itcms/fromSpace
-  local.get $9
+  local.get $4
   i32.const 1056
   i32.store offset=8
   i32.const 1056
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 1056
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 1056
   call $~lib/string/String.__eq
   i32.eqz
@@ -4135,14 +4142,14 @@
   i32.store offset=8
   i32.const 1056
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 1056
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 1056
   call $~lib/string/String.__eq
   i32.eqz
@@ -4159,14 +4166,14 @@
   i32.store offset=8
   i32.const 11808
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 11856
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 11856
   call $~lib/string/String.__eq
   i32.eqz
@@ -4183,14 +4190,14 @@
   i32.store offset=8
   i32.const 11904
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 11952
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 11952
   call $~lib/string/String.__eq
   i32.eqz
@@ -4207,14 +4214,14 @@
   i32.store offset=8
   i32.const 12000
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 12096
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 12096
   call $~lib/string/String.__eq
   i32.eqz
@@ -4231,14 +4238,14 @@
   i32.store offset=8
   i32.const 12096
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 12192
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 12192
   call $~lib/string/String.__eq
   i32.eqz
@@ -4255,14 +4262,14 @@
   i32.store offset=8
   i32.const 12288
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 12352
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 12352
   call $~lib/string/String.__eq
   i32.eqz
@@ -4279,14 +4286,14 @@
   i32.store offset=8
   i32.const 12352
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 12416
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 12416
   call $~lib/string/String.__eq
   i32.eqz
@@ -4303,14 +4310,14 @@
   i32.store offset=8
   i32.const 12480
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 12576
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 12576
   call $~lib/string/String.__eq
   i32.eqz
@@ -4327,14 +4334,14 @@
   i32.store offset=8
   i32.const 12576
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 12672
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 12672
   call $~lib/string/String.__eq
   i32.eqz
@@ -4351,14 +4358,14 @@
   i32.store offset=8
   i32.const 12768
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 12864
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 12864
   call $~lib/string/String.__eq
   i32.eqz
@@ -4375,14 +4382,14 @@
   i32.store offset=8
   i32.const 12864
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 12960
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 12960
   call $~lib/string/String.__eq
   i32.eqz
@@ -4399,14 +4406,14 @@
   i32.store offset=8
   i32.const 13056
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 13136
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 13136
   call $~lib/string/String.__eq
   i32.eqz
@@ -4423,14 +4430,14 @@
   i32.store offset=8
   i32.const 13216
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 13296
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 13296
   call $~lib/string/String.__eq
   i32.eqz
@@ -4447,14 +4454,14 @@
   i32.store offset=8
   i32.const 13376
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 13440
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 13440
   call $~lib/string/String.__eq
   i32.eqz
@@ -4471,14 +4478,14 @@
   i32.store offset=8
   i32.const 13504
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 13584
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 13584
   call $~lib/string/String.__eq
   i32.eqz
@@ -4495,14 +4502,14 @@
   i32.store offset=8
   i32.const 13664
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 13744
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 13744
   call $~lib/string/String.__eq
   i32.eqz
@@ -4519,14 +4526,14 @@
   i32.store offset=8
   i32.const 13824
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 13888
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 13888
   call $~lib/string/String.__eq
   i32.eqz
@@ -4543,14 +4550,14 @@
   i32.store offset=8
   i32.const 13952
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 14032
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 14032
   call $~lib/string/String.__eq
   i32.eqz
@@ -4567,14 +4574,14 @@
   i32.store offset=8
   i32.const 14112
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 14192
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 14192
   call $~lib/string/String.__eq
   i32.eqz
@@ -4591,14 +4598,14 @@
   i32.store offset=8
   i32.const 14272
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 14432
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 14432
   call $~lib/string/String.__eq
   i32.eqz
@@ -4615,14 +4622,14 @@
   i32.store offset=8
   i32.const 14272
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 14592
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 14592
   call $~lib/string/String.__eq
   i32.eqz
@@ -4639,14 +4646,14 @@
   i32.store offset=8
   i32.const 14752
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 14784
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 14784
   call $~lib/string/String.__eq
   i32.eqz
@@ -4663,14 +4670,14 @@
   i32.store offset=8
   i32.const 14816
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 14848
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 14848
   call $~lib/string/String.__eq
   i32.eqz
@@ -4687,14 +4694,14 @@
   i32.store offset=8
   i32.const 14880
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15088
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15088
   call $~lib/string/String.__eq
   i32.eqz
@@ -4711,20 +4718,20 @@
   i32.store offset=12
   i32.const 14752
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store offset=8
-  local.get $9
+  local.get $4
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15296
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15296
   call $~lib/string/String.__eq
   i32.eqz
@@ -4741,20 +4748,20 @@
   i32.store offset=12
   i32.const 15328
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store offset=8
-  local.get $9
+  local.get $4
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15360
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15360
   call $~lib/string/String.__eq
   i32.eqz
@@ -4771,20 +4778,20 @@
   i32.store offset=12
   i32.const 15392
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store offset=8
-  local.get $9
+  local.get $4
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15392
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15392
   call $~lib/string/String.__eq
   i32.eqz
@@ -4798,20 +4805,20 @@
   end
   i32.const 65536
   call $~lib/string/String.fromCodePoint
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store offset=8
-  local.get $9
+  local.get $4
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15648
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15648
   call $~lib/string/String.__eq
   i32.eqz
@@ -4825,20 +4832,20 @@
   end
   i32.const 65536
   call $~lib/string/String.fromCodePoint
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store offset=8
-  local.get $9
+  local.get $4
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15648
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15648
   call $~lib/string/String.__eq
   i32.eqz
@@ -4855,14 +4862,14 @@
   i32.store offset=8
   i32.const 15680
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15712
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15712
   call $~lib/string/String.__eq
   i32.eqz
@@ -4879,14 +4886,14 @@
   i32.store offset=8
   i32.const 15744
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15776
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15776
   call $~lib/string/String.__eq
   i32.eqz
@@ -4903,14 +4910,14 @@
   i32.store offset=8
   i32.const 15808
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15840
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15840
   call $~lib/string/String.__eq
   i32.eqz
@@ -4927,14 +4934,14 @@
   i32.store offset=8
   i32.const 15872
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15904
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15904
   call $~lib/string/String.__eq
   i32.eqz
@@ -4951,14 +4958,14 @@
   i32.store offset=8
   i32.const 15936
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 15968
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 15968
   call $~lib/string/String.__eq
   i32.eqz
@@ -4975,14 +4982,14 @@
   i32.store offset=8
   i32.const 16000
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16032
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16032
   call $~lib/string/String.__eq
   i32.eqz
@@ -4999,14 +5006,14 @@
   i32.store offset=8
   i32.const 16064
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16096
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16096
   call $~lib/string/String.__eq
   i32.eqz
@@ -5023,14 +5030,14 @@
   i32.store offset=8
   i32.const 16128
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16160
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16160
   call $~lib/string/String.__eq
   i32.eqz
@@ -5047,14 +5054,14 @@
   i32.store offset=8
   i32.const 16192
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16224
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16224
   call $~lib/string/String.__eq
   i32.eqz
@@ -5071,14 +5078,14 @@
   i32.store offset=8
   i32.const 16256
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16288
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16288
   call $~lib/string/String.__eq
   i32.eqz
@@ -5095,14 +5102,14 @@
   i32.store offset=8
   i32.const 16320
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16352
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16352
   call $~lib/string/String.__eq
   i32.eqz
@@ -5119,14 +5126,14 @@
   i32.store offset=8
   i32.const 16384
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16416
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16416
   call $~lib/string/String.__eq
   i32.eqz
@@ -5143,14 +5150,14 @@
   i32.store offset=8
   i32.const 16448
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16480
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16480
   call $~lib/string/String.__eq
   i32.eqz
@@ -5167,14 +5174,14 @@
   i32.store offset=8
   i32.const 16512
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16544
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16544
   call $~lib/string/String.__eq
   i32.eqz
@@ -5191,14 +5198,14 @@
   i32.store offset=8
   i32.const 16576
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16608
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16608
   call $~lib/string/String.__eq
   i32.eqz
@@ -5215,14 +5222,14 @@
   i32.store offset=8
   i32.const 16640
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16672
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16672
   call $~lib/string/String.__eq
   i32.eqz
@@ -5239,14 +5246,14 @@
   i32.store offset=8
   i32.const 16704
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16736
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16736
   call $~lib/string/String.__eq
   i32.eqz
@@ -5263,14 +5270,14 @@
   i32.store offset=8
   i32.const 16768
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16800
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16800
   call $~lib/string/String.__eq
   i32.eqz
@@ -5287,14 +5294,14 @@
   i32.store offset=8
   i32.const 16832
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16864
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16864
   call $~lib/string/String.__eq
   i32.eqz
@@ -5311,14 +5318,14 @@
   i32.store offset=8
   i32.const 16896
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16928
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16928
   call $~lib/string/String.__eq
   i32.eqz
@@ -5335,14 +5342,14 @@
   i32.store offset=8
   i32.const 16960
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16992
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16992
   call $~lib/string/String.__eq
   i32.eqz
@@ -5359,14 +5366,14 @@
   i32.store offset=8
   i32.const 17024
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17056
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17056
   call $~lib/string/String.__eq
   i32.eqz
@@ -5383,14 +5390,14 @@
   i32.store offset=8
   i32.const 17088
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17120
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17120
   call $~lib/string/String.__eq
   i32.eqz
@@ -5407,14 +5414,14 @@
   i32.store offset=8
   i32.const 17152
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17184
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17184
   call $~lib/string/String.__eq
   i32.eqz
@@ -5431,14 +5438,14 @@
   i32.store offset=8
   i32.const 17216
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17248
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17248
   call $~lib/string/String.__eq
   i32.eqz
@@ -5455,14 +5462,14 @@
   i32.store offset=8
   i32.const 17280
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 16352
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 16352
   call $~lib/string/String.__eq
   i32.eqz
@@ -5479,14 +5486,14 @@
   i32.store offset=8
   i32.const 17312
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17344
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17344
   call $~lib/string/String.__eq
   i32.eqz
@@ -5503,14 +5510,14 @@
   i32.store offset=8
   i32.const 17376
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17408
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17408
   call $~lib/string/String.__eq
   i32.eqz
@@ -5527,14 +5534,14 @@
   i32.store offset=8
   i32.const 17440
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17472
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17472
   call $~lib/string/String.__eq
   i32.eqz
@@ -5551,14 +5558,14 @@
   i32.store offset=8
   i32.const 17504
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17536
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17536
   call $~lib/string/String.__eq
   i32.eqz
@@ -5575,14 +5582,14 @@
   i32.store offset=8
   i32.const 17568
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17600
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17600
   call $~lib/string/String.__eq
   i32.eqz
@@ -5599,14 +5606,14 @@
   i32.store offset=8
   i32.const 17632
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17664
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17664
   call $~lib/string/String.__eq
   i32.eqz
@@ -5623,14 +5630,14 @@
   i32.store offset=8
   i32.const 17696
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17728
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17728
   call $~lib/string/String.__eq
   i32.eqz
@@ -5647,14 +5654,14 @@
   i32.store offset=8
   i32.const 17760
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17792
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17792
   call $~lib/string/String.__eq
   i32.eqz
@@ -5671,14 +5678,14 @@
   i32.store offset=8
   i32.const 17824
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17856
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17856
   call $~lib/string/String.__eq
   i32.eqz
@@ -5695,14 +5702,14 @@
   i32.store offset=8
   i32.const 17888
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17920
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17920
   call $~lib/string/String.__eq
   i32.eqz
@@ -5719,14 +5726,14 @@
   i32.store offset=8
   i32.const 17952
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 17984
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 17984
   call $~lib/string/String.__eq
   i32.eqz
@@ -5743,14 +5750,14 @@
   i32.store offset=8
   i32.const 18016
   call $~lib/string/String#toLowerCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18048
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18048
   call $~lib/string/String.__eq
   i32.eqz
@@ -5767,14 +5774,14 @@
   i32.store offset=8
   i32.const 18080
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18112
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18112
   call $~lib/string/String.__eq
   i32.eqz
@@ -5791,14 +5798,14 @@
   i32.store offset=8
   i32.const 15328
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18144
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18144
   call $~lib/string/String.__eq
   i32.eqz
@@ -5815,14 +5822,14 @@
   i32.store offset=8
   i32.const 18176
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18208
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18208
   call $~lib/string/String.__eq
   i32.eqz
@@ -5839,14 +5846,14 @@
   i32.store offset=8
   i32.const 18240
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18272
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18272
   call $~lib/string/String.__eq
   i32.eqz
@@ -5863,14 +5870,14 @@
   i32.store offset=8
   i32.const 18304
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18336
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18336
   call $~lib/string/String.__eq
   i32.eqz
@@ -5887,14 +5894,14 @@
   i32.store offset=8
   i32.const 18368
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18400
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18400
   call $~lib/string/String.__eq
   i32.eqz
@@ -5911,14 +5918,14 @@
   i32.store offset=8
   i32.const 18432
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18400
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18400
   call $~lib/string/String.__eq
   i32.eqz
@@ -5935,14 +5942,14 @@
   i32.store offset=8
   i32.const 18464
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18496
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18496
   call $~lib/string/String.__eq
   i32.eqz
@@ -5959,14 +5966,14 @@
   i32.store offset=8
   i32.const 18528
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18560
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18560
   call $~lib/string/String.__eq
   i32.eqz
@@ -5983,14 +5990,14 @@
   i32.store offset=8
   i32.const 18592
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18624
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18624
   call $~lib/string/String.__eq
   i32.eqz
@@ -6007,14 +6014,14 @@
   i32.store offset=8
   i32.const 18656
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18688
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18688
   call $~lib/string/String.__eq
   i32.eqz
@@ -6031,14 +6038,14 @@
   i32.store offset=8
   i32.const 18720
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18752
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18752
   call $~lib/string/String.__eq
   i32.eqz
@@ -6055,14 +6062,14 @@
   i32.store offset=8
   i32.const 18784
   call $~lib/string/String#toUpperCase
-  local.set $9
+  local.set $4
   global.get $~lib/memory/__stack_pointer
-  local.get $9
+  local.get $4
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 18816
   i32.store offset=4
-  local.get $9
+  local.get $4
   i32.const 18816
   call $~lib/string/String.__eq
   i32.eqz
@@ -6075,334 +6082,368 @@
    unreachable
   end
   loop $for-loop|0
-   local.get $8
+   local.get $6
    i32.const 1114111
    i32.le_s
    if
     global.get $~lib/memory/__stack_pointer
-    local.get $8
+    local.get $6
     call $~lib/string/String.fromCodePoint
-    local.tee $9
+    local.tee $4
     i32.store offset=16
     global.get $~lib/memory/__stack_pointer
-    local.get $9
+    local.get $4
     call $~lib/string/String#toLowerCase
-    local.tee $5
+    local.tee $7
     i32.store offset=20
     global.get $~lib/memory/__stack_pointer
-    local.get $9
+    local.get $4
     call $~lib/string/String#toUpperCase
     local.tee $4
     i32.store offset=24
     block $__inlined_func$~lib/string/String#codePointAt
-     local.get $5
+     local.get $7
      i32.const 20
      i32.sub
      i32.load offset=16
      i32.const 1
      i32.shr_u
-     local.tee $9
+     local.tee $5
      i32.eqz
      if
       i32.const -1
-      local.set $9
+      local.set $5
       br $__inlined_func$~lib/string/String#codePointAt
      end
-     local.get $9
+     local.get $5
      i32.const 1
      i32.eq
-     local.get $5
+     local.get $7
      i32.load16_u
-     local.tee $9
-     i32.const 64512
-     i32.and
-     i32.const 55296
-     i32.ne
-     i32.or
-     br_if $__inlined_func$~lib/string/String#codePointAt
-     local.get $5
-     i32.load16_u offset=2
-     local.tee $7
-     i32.const 64512
-     i32.and
-     i32.const 56320
-     i32.ne
-     br_if $__inlined_func$~lib/string/String#codePointAt
-     local.get $7
-     local.get $9
-     i32.const 10
-     i32.shl
-     i32.add
-     i32.const 56613888
-     i32.sub
-     local.set $9
-    end
-    local.get $9
-    i64.extend_i32_s
-    local.set $0
-    block $__inlined_func$~lib/string/String#codePointAt0
-     local.get $5
-     i32.const 20
-     i32.sub
-     i32.load offset=16
-     i32.const 1
-     i32.shr_u
-     local.tee $9
-     i32.const 1
-     i32.le_u
-     if
-      i32.const -1
-      local.set $9
-      br $__inlined_func$~lib/string/String#codePointAt0
-     end
-     local.get $9
-     i32.const 2
-     i32.eq
-     local.get $5
-     i32.load16_u offset=2
-     local.tee $9
-     i32.const 64512
-     i32.and
-     i32.const 55296
-     i32.ne
-     i32.or
-     br_if $__inlined_func$~lib/string/String#codePointAt0
-     local.get $5
-     i32.load16_u offset=4
-     local.tee $7
-     i32.const 64512
-     i32.and
-     i32.const 56320
-     i32.ne
-     br_if $__inlined_func$~lib/string/String#codePointAt0
-     local.get $7
-     local.get $9
-     i32.const 10
-     i32.shl
-     i32.add
-     i32.const 56613888
-     i32.sub
-     local.set $9
-    end
-    local.get $9
-    i64.extend_i32_s
-    local.tee $3
-    i64.const 0
-    i64.ge_s
-    if
-     local.get $3
-     i64.const 16
-     i64.shl
-     local.get $0
-     i64.add
-     local.set $0
-    end
-    block $__inlined_func$~lib/string/String#codePointAt1
-     local.get $5
-     i32.const 20
-     i32.sub
-     i32.load offset=16
-     i32.const 1
-     i32.shr_u
-     local.tee $9
-     i32.const 2
-     i32.le_u
-     if
-      i32.const -1
-      local.set $9
-      br $__inlined_func$~lib/string/String#codePointAt1
-     end
-     local.get $9
-     i32.const 3
-     i32.eq
-     local.get $5
-     i32.load16_u offset=4
-     local.tee $9
-     i32.const 64512
-     i32.and
-     i32.const 55296
-     i32.ne
-     i32.or
-     br_if $__inlined_func$~lib/string/String#codePointAt1
-     local.get $5
-     i32.load16_u offset=6
      local.tee $5
      i32.const 64512
      i32.and
+     i32.const 55296
+     i32.ne
+     i32.or
+     br_if $__inlined_func$~lib/string/String#codePointAt
+     local.get $7
+     i32.load16_u offset=2
+     local.tee $8
+     i32.const 64512
+     i32.and
      i32.const 56320
      i32.ne
-     br_if $__inlined_func$~lib/string/String#codePointAt1
+     br_if $__inlined_func$~lib/string/String#codePointAt
+     local.get $8
      local.get $5
-     local.get $9
      i32.const 10
      i32.shl
      i32.add
      i32.const 56613888
      i32.sub
-     local.set $9
+     local.set $5
     end
-    local.get $9
+    local.get $5
     i64.extend_i32_s
-    local.tee $3
+    local.set $3
+    block $__inlined_func$~lib/string/String#codePointAt0
+     local.get $7
+     i32.const 20
+     i32.sub
+     i32.load offset=16
+     i32.const 1
+     i32.shr_u
+     local.tee $5
+     i32.const 1
+     i32.le_u
+     if
+      i32.const -1
+      local.set $5
+      br $__inlined_func$~lib/string/String#codePointAt0
+     end
+     local.get $5
+     i32.const 2
+     i32.eq
+     local.get $7
+     i32.load16_u offset=2
+     local.tee $5
+     i32.const 64512
+     i32.and
+     i32.const 55296
+     i32.ne
+     i32.or
+     br_if $__inlined_func$~lib/string/String#codePointAt0
+     local.get $7
+     i32.load16_u offset=4
+     local.tee $8
+     i32.const 64512
+     i32.and
+     i32.const 56320
+     i32.ne
+     br_if $__inlined_func$~lib/string/String#codePointAt0
+     local.get $8
+     local.get $5
+     i32.const 10
+     i32.shl
+     i32.add
+     i32.const 56613888
+     i32.sub
+     local.set $5
+    end
+    local.get $5
+    i64.extend_i32_s
+    local.tee $0
     i64.const 0
     i64.ge_s
     if
+     local.get $0
+     i64.const 16
+     i64.shl
      local.get $3
+     i64.add
+     local.set $3
+    end
+    block $__inlined_func$~lib/string/String#codePointAt1
+     local.get $7
+     i32.const 20
+     i32.sub
+     i32.load offset=16
+     i32.const 1
+     i32.shr_u
+     local.tee $5
+     i32.const 2
+     i32.le_u
+     if
+      i32.const -1
+      local.set $5
+      br $__inlined_func$~lib/string/String#codePointAt1
+     end
+     local.get $5
+     i32.const 3
+     i32.eq
+     local.get $7
+     i32.load16_u offset=4
+     local.tee $5
+     i32.const 64512
+     i32.and
+     i32.const 55296
+     i32.ne
+     i32.or
+     br_if $__inlined_func$~lib/string/String#codePointAt1
+     local.get $7
+     i32.load16_u offset=6
+     local.tee $7
+     i32.const 64512
+     i32.and
+     i32.const 56320
+     i32.ne
+     br_if $__inlined_func$~lib/string/String#codePointAt1
+     local.get $7
+     local.get $5
+     i32.const 10
+     i32.shl
+     i32.add
+     i32.const 56613888
+     i32.sub
+     local.set $5
+    end
+    local.get $5
+    i64.extend_i32_s
+    local.tee $0
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $0
      i64.const 32
      i64.shl
-     local.get $0
+     local.get $3
      i64.add
-     local.set $0
+     local.set $3
     end
     block $__inlined_func$~lib/string/String#codePointAt2
      local.get $4
-     local.tee $5
      i32.const 20
      i32.sub
      i32.load offset=16
      i32.const 1
      i32.shr_u
-     local.tee $9
+     local.tee $5
      i32.eqz
      if
       i32.const -1
-      local.set $9
+      local.set $5
       br $__inlined_func$~lib/string/String#codePointAt2
      end
-     local.get $9
+     local.get $5
      i32.const 1
      i32.eq
-     local.get $5
+     local.get $4
      i32.load16_u
-     local.tee $9
-     i32.const 64512
-     i32.and
-     i32.const 55296
-     i32.ne
-     i32.or
-     br_if $__inlined_func$~lib/string/String#codePointAt2
-     local.get $5
-     i32.load16_u offset=2
-     local.tee $4
-     i32.const 64512
-     i32.and
-     i32.const 56320
-     i32.ne
-     br_if $__inlined_func$~lib/string/String#codePointAt2
-     local.get $4
-     local.get $9
-     i32.const 10
-     i32.shl
-     i32.add
-     i32.const 56613888
-     i32.sub
-     local.set $9
-    end
-    local.get $9
-    i64.extend_i32_s
-    local.set $3
-    block $__inlined_func$~lib/string/String#codePointAt3
-     local.get $5
-     i32.const 20
-     i32.sub
-     i32.load offset=16
-     i32.const 1
-     i32.shr_u
-     local.tee $9
-     i32.const 1
-     i32.le_u
-     if
-      i32.const -1
-      local.set $9
-      br $__inlined_func$~lib/string/String#codePointAt3
-     end
-     local.get $9
-     i32.const 2
-     i32.eq
-     local.get $5
-     i32.load16_u offset=2
-     local.tee $9
-     i32.const 64512
-     i32.and
-     i32.const 55296
-     i32.ne
-     i32.or
-     br_if $__inlined_func$~lib/string/String#codePointAt3
-     local.get $5
-     i32.load16_u offset=4
-     local.tee $4
-     i32.const 64512
-     i32.and
-     i32.const 56320
-     i32.ne
-     br_if $__inlined_func$~lib/string/String#codePointAt3
-     local.get $4
-     local.get $9
-     i32.const 10
-     i32.shl
-     i32.add
-     i32.const 56613888
-     i32.sub
-     local.set $9
-    end
-    local.get $9
-    i64.extend_i32_s
-    local.tee $2
-    i64.const 0
-    i64.ge_s
-    if
-     local.get $2
-     i64.const 16
-     i64.shl
-     local.get $3
-     i64.add
-     local.set $3
-    end
-    block $__inlined_func$~lib/string/String#codePointAt4
-     local.get $5
-     i32.const 20
-     i32.sub
-     i32.load offset=16
-     i32.const 1
-     i32.shr_u
-     local.tee $9
-     i32.const 2
-     i32.le_u
-     if
-      i32.const -1
-      local.set $9
-      br $__inlined_func$~lib/string/String#codePointAt4
-     end
-     local.get $9
-     i32.const 3
-     i32.eq
-     local.get $5
-     i32.load16_u offset=4
-     local.tee $9
-     i32.const 64512
-     i32.and
-     i32.const 55296
-     i32.ne
-     i32.or
-     br_if $__inlined_func$~lib/string/String#codePointAt4
-     local.get $5
-     i32.load16_u offset=6
      local.tee $5
      i32.const 64512
      i32.and
+     i32.const 55296
+     i32.ne
+     i32.or
+     br_if $__inlined_func$~lib/string/String#codePointAt2
+     local.get $4
+     i32.load16_u offset=2
+     local.tee $7
+     i32.const 64512
+     i32.and
      i32.const 56320
      i32.ne
-     br_if $__inlined_func$~lib/string/String#codePointAt4
+     br_if $__inlined_func$~lib/string/String#codePointAt2
+     local.get $7
      local.get $5
-     local.get $9
      i32.const 10
      i32.shl
      i32.add
      i32.const 56613888
      i32.sub
-     local.set $9
+     local.set $5
     end
-    local.get $9
+    local.get $5
+    i64.extend_i32_s
+    local.set $0
+    block $__inlined_func$~lib/string/String#codePointAt3
+     local.get $4
+     i32.const 20
+     i32.sub
+     i32.load offset=16
+     i32.const 1
+     i32.shr_u
+     local.tee $5
+     i32.const 1
+     i32.le_u
+     if
+      i32.const -1
+      local.set $5
+      br $__inlined_func$~lib/string/String#codePointAt3
+     end
+     local.get $5
+     i32.const 2
+     i32.eq
+     local.get $4
+     i32.load16_u offset=2
+     local.tee $5
+     i32.const 64512
+     i32.and
+     i32.const 55296
+     i32.ne
+     i32.or
+     br_if $__inlined_func$~lib/string/String#codePointAt3
+     local.get $4
+     i32.load16_u offset=4
+     local.tee $7
+     i32.const 64512
+     i32.and
+     i32.const 56320
+     i32.ne
+     br_if $__inlined_func$~lib/string/String#codePointAt3
+     local.get $7
+     local.get $5
+     i32.const 10
+     i32.shl
+     i32.add
+     i32.const 56613888
+     i32.sub
+     local.set $5
+    end
+    local.get $5
+    i64.extend_i32_s
+    local.tee $1
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $1
+     i64.const 16
+     i64.shl
+     local.get $0
+     i64.add
+     local.set $0
+    end
+    block $__inlined_func$~lib/string/String#codePointAt4
+     local.get $4
+     i32.const 20
+     i32.sub
+     i32.load offset=16
+     i32.const 1
+     i32.shr_u
+     local.tee $5
+     i32.const 2
+     i32.le_u
+     if
+      i32.const -1
+      local.set $5
+      br $__inlined_func$~lib/string/String#codePointAt4
+     end
+     local.get $5
+     i32.const 3
+     i32.eq
+     local.get $4
+     i32.load16_u offset=4
+     local.tee $5
+     i32.const 64512
+     i32.and
+     i32.const 55296
+     i32.ne
+     i32.or
+     br_if $__inlined_func$~lib/string/String#codePointAt4
+     local.get $4
+     i32.load16_u offset=6
+     local.tee $4
+     i32.const 64512
+     i32.and
+     i32.const 56320
+     i32.ne
+     br_if $__inlined_func$~lib/string/String#codePointAt4
+     local.get $4
+     local.get $5
+     i32.const 10
+     i32.shl
+     i32.add
+     i32.const 56613888
+     i32.sub
+     local.set $5
+    end
+    local.get $5
+    i64.extend_i32_s
+    local.tee $1
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $1
+     i64.const 32
+     i64.shl
+     local.get $0
+     i64.add
+     local.set $0
+    end
+    local.get $6
+    i32.const 0
+    call $std/string-casemapping/toLowerCaseFromIndex
+    i64.extend_i32_s
+    local.set $1
+    local.get $6
+    i32.const 1
+    call $std/string-casemapping/toLowerCaseFromIndex
+    i64.extend_i32_s
+    local.tee $2
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $2
+     i64.const 16
+     i64.shl
+     local.get $1
+     i64.add
+     local.set $1
+    end
+    local.get $6
+    i32.const 2
+    call $std/string-casemapping/toLowerCaseFromIndex
     i64.extend_i32_s
     local.tee $2
     i64.const 0
@@ -6411,155 +6452,120 @@
      local.get $2
      i64.const 32
      i64.shl
-     local.get $3
+     local.get $1
      i64.add
-     local.set $3
+     local.set $1
     end
-    local.get $8
+    local.get $6
     i32.const 0
-    call $std/string-casemapping/toLowerCaseFromIndex
+    call $std/string-casemapping/toUpperCaseFromIndex
     i64.extend_i32_s
     local.set $2
-    local.get $8
+    local.get $6
     i32.const 1
-    call $std/string-casemapping/toLowerCaseFromIndex
+    call $std/string-casemapping/toUpperCaseFromIndex
     i64.extend_i32_s
-    local.tee $1
+    local.tee $9
     i64.const 0
     i64.ge_s
     if
-     local.get $1
+     local.get $9
      i64.const 16
      i64.shl
      local.get $2
      i64.add
      local.set $2
     end
-    local.get $8
+    local.get $6
     i32.const 2
-    call $std/string-casemapping/toLowerCaseFromIndex
+    call $std/string-casemapping/toUpperCaseFromIndex
     i64.extend_i32_s
-    local.tee $1
+    local.tee $9
     i64.const 0
     i64.ge_s
     if
-     local.get $1
+     local.get $9
      i64.const 32
      i64.shl
      local.get $2
      i64.add
      local.set $2
-    end
-    local.get $8
-    i32.const 0
-    call $std/string-casemapping/toUpperCaseFromIndex
-    i64.extend_i32_s
-    local.set $1
-    local.get $8
-    i32.const 1
-    call $std/string-casemapping/toUpperCaseFromIndex
-    i64.extend_i32_s
-    local.tee $6
-    i64.const 0
-    i64.ge_s
-    if
-     local.get $6
-     i64.const 16
-     i64.shl
-     local.get $1
-     i64.add
-     local.set $1
-    end
-    local.get $8
-    i32.const 2
-    call $std/string-casemapping/toUpperCaseFromIndex
-    i64.extend_i32_s
-    local.tee $6
-    i64.const 0
-    i64.ge_s
-    if
-     local.get $6
-     i64.const 32
-     i64.shl
-     local.get $1
-     i64.add
-     local.set $1
-    end
-    local.get $0
-    local.get $2
-    i64.ne
-    if
-     global.get $~lib/memory/__stack_pointer
-     i32.const 18848
-     i32.store
-     i32.const 18848
-     i32.const 1
-     local.get $8
-     f64.convert_i32_s
-     f64.const 0
-     f64.const 0
-     f64.const 0
-     f64.const 0
-     call $~lib/builtins/trace
-     global.get $~lib/memory/__stack_pointer
-     i32.const 18944
-     i32.store offset=4
-     local.get $0
-     call $~lib/number/I64#toString
-     local.set $9
-     global.get $~lib/memory/__stack_pointer
-     local.get $9
-     i32.store offset=8
-     i32.const 18944
-     local.get $9
-     call $~lib/string/String.__concat
-     local.set $9
-     global.get $~lib/memory/__stack_pointer
-     local.get $9
-     i32.store
-     local.get $9
-     i32.const 0
-     f64.const 0
-     f64.const 0
-     f64.const 0
-     f64.const 0
-     f64.const 0
-     call $~lib/builtins/trace
-     global.get $~lib/memory/__stack_pointer
-     i32.const 20784
-     i32.store offset=4
-     local.get $2
-     call $~lib/number/I64#toString
-     local.set $9
-     global.get $~lib/memory/__stack_pointer
-     local.get $9
-     i32.store offset=8
-     i32.const 20784
-     local.get $9
-     call $~lib/string/String.__concat
-     local.set $9
-     global.get $~lib/memory/__stack_pointer
-     local.get $9
-     i32.store
-     local.get $9
-     i32.const 0
-     f64.const 0
-     f64.const 0
-     f64.const 0
-     f64.const 0
-     f64.const 0
-     call $~lib/builtins/trace
     end
     local.get $1
     local.get $3
     i64.ne
     if
      global.get $~lib/memory/__stack_pointer
+     i32.const 18848
+     i32.store
+     i32.const 18848
+     i32.const 1
+     local.get $6
+     f64.convert_i32_s
+     f64.const 0
+     f64.const 0
+     f64.const 0
+     f64.const 0
+     call $~lib/builtins/trace
+     global.get $~lib/memory/__stack_pointer
+     i32.const 18944
+     i32.store offset=4
+     local.get $3
+     call $~lib/number/I64#toString
+     local.set $4
+     global.get $~lib/memory/__stack_pointer
+     local.get $4
+     i32.store offset=8
+     i32.const 18944
+     local.get $4
+     call $~lib/string/String.__concat
+     local.set $4
+     global.get $~lib/memory/__stack_pointer
+     local.get $4
+     i32.store
+     local.get $4
+     i32.const 0
+     f64.const 0
+     f64.const 0
+     f64.const 0
+     f64.const 0
+     f64.const 0
+     call $~lib/builtins/trace
+     global.get $~lib/memory/__stack_pointer
+     i32.const 20784
+     i32.store offset=4
+     local.get $1
+     call $~lib/number/I64#toString
+     local.set $4
+     global.get $~lib/memory/__stack_pointer
+     local.get $4
+     i32.store offset=8
+     i32.const 20784
+     local.get $4
+     call $~lib/string/String.__concat
+     local.set $4
+     global.get $~lib/memory/__stack_pointer
+     local.get $4
+     i32.store
+     local.get $4
+     i32.const 0
+     f64.const 0
+     f64.const 0
+     f64.const 0
+     f64.const 0
+     f64.const 0
+     call $~lib/builtins/trace
+    end
+    local.get $0
+    local.get $2
+    i64.ne
+    if
+     global.get $~lib/memory/__stack_pointer
      i32.const 20848
      i32.store
      i32.const 20848
      i32.const 1
-     local.get $8
+     local.get $6
      f64.convert_i32_s
      f64.const 0
      f64.const 0
@@ -6569,20 +6575,20 @@
      global.get $~lib/memory/__stack_pointer
      i32.const 20944
      i32.store offset=4
-     local.get $3
+     local.get $0
      call $~lib/number/I64#toString
-     local.set $9
+     local.set $4
      global.get $~lib/memory/__stack_pointer
-     local.get $9
+     local.get $4
      i32.store offset=8
      i32.const 20944
-     local.get $9
+     local.get $4
      call $~lib/string/String.__concat
-     local.set $9
+     local.set $4
      global.get $~lib/memory/__stack_pointer
-     local.get $9
+     local.get $4
      i32.store
-     local.get $9
+     local.get $4
      i32.const 0
      f64.const 0
      f64.const 0
@@ -6593,20 +6599,20 @@
      global.get $~lib/memory/__stack_pointer
      i32.const 21008
      i32.store offset=4
-     local.get $1
+     local.get $2
      call $~lib/number/I64#toString
-     local.set $9
+     local.set $4
      global.get $~lib/memory/__stack_pointer
-     local.get $9
+     local.get $4
      i32.store offset=8
      i32.const 21008
-     local.get $9
+     local.get $4
      call $~lib/string/String.__concat
-     local.set $9
+     local.set $4
      global.get $~lib/memory/__stack_pointer
-     local.get $9
+     local.get $4
      i32.store
-     local.get $9
+     local.get $4
      i32.const 0
      f64.const 0
      f64.const 0
@@ -6615,10 +6621,10 @@
      f64.const 0
      call $~lib/builtins/trace
     end
-    local.get $8
+    local.get $6
     i32.const 1
     i32.add
-    local.set $8
+    local.set $6
     br $for-loop|0
    end
   end
@@ -6662,7 +6668,7 @@
   i32.load offset=16
   i32.const 1
   i32.shr_u
-  local.tee $8
+  local.tee $7
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
@@ -6673,7 +6679,7 @@
    return
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $8
+  local.get $7
   i32.const 2
   i32.shl
   i32.const 1
@@ -6682,7 +6688,7 @@
   i32.store
   loop $for-loop|0
    local.get $4
-   local.get $8
+   local.get $7
    i32.lt_u
    if
     local.get $4
@@ -6701,7 +6707,7 @@
       i32.sub
       i32.const 1025
       i32.lt_u
-      local.get $8
+      local.get $7
       i32.const 1
       i32.sub
       local.get $4
@@ -6714,7 +6720,7 @@
        local.get $0
        i32.add
        i32.load16_u offset=2
-       local.tee $7
+       local.tee $2
        i32.const 56319
        i32.sub
        i32.const 1025
@@ -6724,7 +6730,7 @@
         i32.const 1
         i32.add
         local.set $4
-        local.get $7
+        local.get $2
         i32.const 1023
         i32.and
         local.get $3
@@ -6745,7 +6751,7 @@
          i32.shl
          local.get $6
          i32.add
-         local.get $7
+         local.get $2
          i32.const 16
          i32.shl
          local.get $1
@@ -6786,7 +6792,7 @@
         i32.add
         i32.const 962
         i32.const 963
-        local.get $8
+        local.get $7
         i32.const 1
         i32.gt_u
         if (result i32)
@@ -6803,10 +6809,10 @@
           i32.const 0
           i32.lt_s
           select
-          local.set $9
+          local.set $8
           loop $while-continue|1
            local.get $3
-           local.get $9
+           local.get $8
            i32.gt_s
            if
             i32.const -1
@@ -6824,7 +6830,7 @@
              local.get $0
              i32.add
              i32.load16_u
-             local.tee $7
+             local.tee $10
              i32.const 64512
              i32.and
              i32.const 56320
@@ -6836,7 +6842,7 @@
              i32.ge_s
              i32.and
              if
-              local.get $7
+              local.get $10
               i32.const 1023
               i32.and
               local.get $3
@@ -6847,7 +6853,7 @@
               local.get $0
               i32.add
               i32.load16_u
-              local.tee $10
+              local.tee $9
               i32.const 1023
               i32.and
               i32.const 10
@@ -6856,7 +6862,7 @@
               i32.const 65536
               i32.add
               local.set $1
-              local.get $10
+              local.get $9
               i32.const 64512
               i32.and
               i32.const 55296
@@ -6864,8 +6870,8 @@
               br_if $~lib/util/string/codePointBefore|inlined.0
              end
              i32.const 65533
-             local.get $7
-             local.get $7
+             local.get $10
+             local.get $10
              i32.const 63488
              i32.and
              i32.const 55296
@@ -6965,9 +6971,9 @@
           i32.const 30
           i32.add
           local.tee $1
-          local.get $8
+          local.get $7
           local.get $1
-          local.get $8
+          local.get $7
           i32.lt_s
           select
           local.set $2
@@ -6987,7 +6993,7 @@
             i32.and
             i32.const 55296
             i32.eq
-            local.get $8
+            local.get $7
             local.get $3
             i32.const 1
             i32.add
@@ -7000,13 +7006,13 @@
              local.get $0
              i32.add
              i32.load16_u offset=2
-             local.tee $7
+             local.tee $8
              i32.const 64512
              i32.and
              i32.const 56320
              i32.eq
              if
-              local.get $7
+              local.get $8
               local.get $1
               i32.const 10
               i32.shl
@@ -7224,13 +7230,13 @@
   local.get $0
   i32.const 65535
   i32.gt_u
-  local.tee $2
+  local.tee $1
   i32.shl
   i32.const 1
   call $~lib/rt/itcms/__new
-  local.tee $1
+  local.tee $2
   i32.store
-  local.get $2
+  local.get $1
   if
    local.get $0
    i32.const 1114111
@@ -7243,7 +7249,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $1
+   local.get $2
    local.get $0
    i32.const 65536
    i32.sub
@@ -7262,7 +7268,7 @@
    i32.or
    i32.store
   else
-   local.get $1
+   local.get $2
    local.get $0
    i32.store16
   end
@@ -7270,7 +7276,7 @@
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $1
+  local.get $2
  )
  (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
   (local $1 i32)
@@ -7280,19 +7286,19 @@
   local.get $0
   i32.const 20
   i32.sub
-  local.tee $0
+  local.tee $1
   i32.load offset=4
   i32.const 3
   i32.and
   i32.eq
   if
    global.get $~lib/rt/itcms/iter
-   local.get $0
+   local.get $1
    i32.eq
    if
-    local.get $0
+    local.get $1
     i32.load offset=8
-    local.tee $1
+    local.tee $0
     i32.eqz
     if
      i32.const 0
@@ -7302,22 +7308,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $0
     global.set $~lib/rt/itcms/iter
    end
    block $__inlined_func$~lib/rt/itcms/Object#unlink
-    local.get $0
+    local.get $1
     i32.load offset=4
     i32.const -4
     i32.and
-    local.tee $2
+    local.tee $0
     i32.eqz
     if
      i32.const 0
-     local.get $0
+     local.get $1
      i32.const 37476
      i32.lt_u
-     local.get $0
+     local.get $1
      i32.load offset=8
      select
      i32.eqz
@@ -7331,9 +7337,9 @@
      end
      br $__inlined_func$~lib/rt/itcms/Object#unlink
     end
-    local.get $0
+    local.get $1
     i32.load offset=8
-    local.tee $1
+    local.tee $2
     i32.eqz
     if
      i32.const 0
@@ -7343,23 +7349,23 @@
      call $~lib/builtins/abort
      unreachable
     end
+    local.get $0
     local.get $2
-    local.get $1
     i32.store offset=8
-    local.get $1
-    local.get $1
+    local.get $2
+    local.get $2
     i32.load offset=4
     i32.const 3
     i32.and
-    local.get $2
+    local.get $0
     i32.or
     i32.store offset=4
    end
    global.get $~lib/rt/itcms/toSpace
    local.set $2
-   local.get $0
+   local.get $1
    i32.load offset=12
-   local.tee $1
+   local.tee $0
    i32.const 1
    i32.le_u
    if (result i32)
@@ -7367,7 +7373,7 @@
    else
     i32.const 21056
     i32.load
-    local.get $1
+    local.get $0
     i32.lt_u
     if
      i32.const 1280
@@ -7377,7 +7383,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $0
     i32.const 3
     i32.shl
     i32.const 21060
@@ -7392,28 +7398,28 @@
    else
     i32.const 2
    end
-   local.set $3
+   local.set $0
    local.get $2
    i32.load offset=8
-   local.set $1
+   local.set $3
+   local.get $1
    local.get $0
    local.get $2
-   local.get $3
    i32.or
    i32.store offset=4
-   local.get $0
    local.get $1
+   local.get $3
    i32.store offset=8
-   local.get $1
-   local.get $1
+   local.get $3
+   local.get $3
    i32.load offset=4
    i32.const 3
    i32.and
-   local.get $0
+   local.get $1
    i32.or
    i32.store offset=4
    local.get $2
-   local.get $0
+   local.get $1
    i32.store offset=8
    global.get $~lib/rt/itcms/visitCount
    i32.const 1
