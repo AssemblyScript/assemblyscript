@@ -2484,7 +2484,8 @@ export class Module {
     return Relooper.create(this);
   }
 
-  tryCopySimpleExpression(expr: ExpressionRef): ExpressionRef {
+  /** Makes a copy of a trivial expression (doesn't contain subexpressions). Returns `0` if non-trivial. */
+  tryCopyTrivialExpression(expr: ExpressionRef): ExpressionRef {
     switch (binaryen._BinaryenExpressionGetId(expr)) {
       case ExpressionId.LocalGet:
       case ExpressionId.GlobalGet:
@@ -2495,6 +2496,7 @@ export class Module {
     return 0;
   }
 
+  /** Makes a copy of any expression including all subexpressions. */
   copyExpression(expr: ExpressionRef): ExpressionRef {
     // TODO: Copy debug location as well (needs Binaryen support)
     return binaryen._BinaryenExpressionCopy(expr, this.ref);

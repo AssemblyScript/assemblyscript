@@ -4646,7 +4646,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentFlow = flow;
 
           // simplify if copying left is trivial
-          if (expr = module.tryCopySimpleExpression(leftExpr)) {
+          if (expr = module.tryCopyTrivialExpression(leftExpr)) {
             expr = module.if(
               this.makeIsTrueish(leftExpr, this.currentType, left),
               rightExpr,
@@ -4710,7 +4710,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentFlow = flow;
 
           // simplify if copying left is trivial
-          if (expr = module.tryCopySimpleExpression(leftExpr)) {
+          if (expr = module.tryCopyTrivialExpression(leftExpr)) {
             expr = module.if(
               this.makeIsTrueish(leftExpr, leftType, left),
               expr,
