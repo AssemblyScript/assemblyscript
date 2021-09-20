@@ -2396,6 +2396,7 @@ export class Module {
 
           passes.push("ssa-nomerge");
           passes.push("coalesce-locals");
+          passes.push("simplify-locals");
         }
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");

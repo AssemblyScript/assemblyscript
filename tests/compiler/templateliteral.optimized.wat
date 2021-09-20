@@ -2374,83 +2374,73 @@
    i32.load8_u
    i32.store8
    local.get $0
-   i32.const 2
-   i32.add
-   local.set $3
-   local.get $1
-   i32.const 2
-   i32.add
-   local.set $4
-   local.get $0
    local.get $1
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $3
-   local.get $4
+   local.get $0
+   i32.const 2
+   i32.add
+   local.tee $3
+   local.get $1
+   i32.const 2
+   i32.add
+   local.tee $4
    i32.load8_u
    i32.store8
    local.get $3
-   i32.const 2
-   i32.add
-   local.set $0
-   local.get $4
-   i32.const 2
-   i32.add
-   local.set $1
-   local.get $3
    local.get $4
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $0
-   local.get $1
+   local.get $3
+   i32.const 2
+   i32.add
+   local.tee $0
+   local.get $4
+   i32.const 2
+   i32.add
+   local.tee $1
    i32.load8_u
    i32.store8
    local.get $0
-   i32.const 2
-   i32.add
-   local.set $3
-   local.get $1
-   i32.const 2
-   i32.add
-   local.set $4
-   local.get $0
    local.get $1
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $3
-   local.get $4
+   local.get $0
+   i32.const 2
+   i32.add
+   local.tee $3
+   local.get $1
+   i32.const 2
+   i32.add
+   local.tee $4
    i32.load8_u
    i32.store8
    local.get $3
-   i32.const 2
-   i32.add
-   local.set $0
-   local.get $4
-   i32.const 2
-   i32.add
-   local.set $1
-   local.get $3
    local.get $4
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $0
-   local.get $1
+   local.get $3
+   i32.const 2
+   i32.add
+   local.tee $0
+   local.get $4
+   i32.const 2
+   i32.add
+   local.tee $1
    i32.load8_u
    i32.store8
    local.get $0
-   i32.const 2
-   i32.add
-   local.set $3
-   local.get $1
-   i32.const 2
-   i32.add
-   local.set $4
-   local.get $0
    local.get $1
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $3
-   local.get $4
+   local.get $0
+   i32.const 2
+   i32.add
+   local.tee $3
+   local.get $1
+   i32.const 2
+   i32.add
+   local.tee $4
    i32.load8_u
    i32.store8
    local.get $3
@@ -2504,19 +2494,17 @@
    i32.load8_u
    i32.store8
    local.get $0
-   i32.const 2
-   i32.add
-   local.set $3
-   local.get $1
-   i32.const 2
-   i32.add
-   local.set $4
-   local.get $0
    local.get $1
    i32.load8_u offset=1
    i32.store8 offset=1
-   local.get $3
-   local.get $4
+   local.get $0
+   i32.const 2
+   i32.add
+   local.tee $3
+   local.get $1
+   i32.const 2
+   i32.add
+   local.tee $4
    i32.load8_u
    i32.store8
    local.get $3
