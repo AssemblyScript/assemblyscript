@@ -2490,8 +2490,12 @@ export class Module {
       case ExpressionId.LocalGet:
       case ExpressionId.GlobalGet:
       case ExpressionId.Const:
+      case ExpressionId.MemorySize:
+      case ExpressionId.Nop:
       case ExpressionId.Unreachable:
-      case ExpressionId.RefNull: return this.copyExpression(expr);
+      case ExpressionId.DataDrop:
+      case ExpressionId.RefNull:
+      case ExpressionId.RttCanon: return this.copyExpression(expr);
     }
     return 0;
   }
