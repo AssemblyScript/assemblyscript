@@ -35,13 +35,17 @@
    else
     local.get $0
     i32.const 2
-    i32.ne
-    br_if $while-continue|0
-    i32.const 1104
-    i32.const 1056
-    i32.const 24
-    i32.const 22
-    call $~lib/builtins/abort
+    i32.eq
+    if
+     i32.const 1104
+     i32.const 1056
+     i32.const 24
+     i32.const 22
+     call $~lib/builtins/abort
+     unreachable
+    else
+     br $while-continue|0
+    end
     unreachable
    end
   end

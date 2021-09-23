@@ -2276,6 +2276,7 @@ export class Module {
         passes.push("flatten");
         passes.push("vacuum");
         passes.push("simplify-locals-notee-nostructure");
+        passes.push("vacuum");
         passes.push("licm");
         passes.push("merge-locals");
         passes.push("reorder-locals");
