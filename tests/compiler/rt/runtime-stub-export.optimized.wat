@@ -41,7 +41,7 @@
   local.get $0
   i32.const 16
   i32.add
-  local.tee $3
+  local.tee $4
   i32.const 1073741820
   i32.gt_u
   if
@@ -53,22 +53,22 @@
    unreachable
   end
   global.get $~lib/rt/stub/offset
-  local.tee $4
+  local.tee $3
   i32.const 4
   i32.add
   local.tee $2
-  local.get $3
+  local.get $4
   i32.const 19
   i32.add
   i32.const -16
   i32.and
   i32.const 4
   i32.sub
-  local.tee $5
+  local.tee $4
   i32.add
-  local.tee $3
-  memory.size
   local.tee $6
+  memory.size
+  local.tee $5
   i32.const 16
   i32.shl
   i32.const 15
@@ -78,8 +78,8 @@
   local.tee $7
   i32.gt_u
   if
+   local.get $5
    local.get $6
-   local.get $3
    local.get $7
    i32.sub
    i32.const 65535
@@ -89,7 +89,7 @@
    i32.const 16
    i32.shr_u
    local.tee $7
-   local.get $6
+   local.get $5
    local.get $7
    i32.gt_s
    select
@@ -106,10 +106,10 @@
     end
    end
   end
-  local.get $3
+  local.get $6
   global.set $~lib/rt/stub/offset
+  local.get $3
   local.get $4
-  local.get $5
   i32.store
   local.get $2
   i32.const 4

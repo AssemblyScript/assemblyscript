@@ -109,14 +109,14 @@
     if
      local.get $2
      i32.load16_u
-     local.tee $4
+     local.tee $3
      local.get $1
      i32.load16_u
-     local.tee $3
+     local.tee $4
      i32.ne
      if
-      local.get $4
       local.get $3
+      local.get $4
       i32.sub
       br $__inlined_func$~lib/util/string/compareImpl
      end

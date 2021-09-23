@@ -437,9 +437,6 @@
   i32.const 4
   i32.sub
   local.set $1
-  local.get $2
-  i32.const -16
-  i32.and
   local.get $0
   i32.load offset=1568
   local.tee $4
@@ -486,6 +483,9 @@
     unreachable
    end
   end
+  local.get $2
+  i32.const -16
+  i32.and
   local.get $1
   i32.sub
   local.tee $2

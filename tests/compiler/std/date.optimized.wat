@@ -317,61 +317,61 @@
   local.get $0
   i32.const 719468
   i32.add
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   i32.const 146096
   i32.sub
-  local.get $0
+  local.get $1
   i32.const 0
   i32.ge_s
   select
   i32.const 146097
   i32.div_s
-  local.set $1
-  local.get $0
+  local.set $0
   local.get $1
+  local.get $0
   i32.const 146097
   i32.mul
   i32.sub
-  local.tee $2
-  local.get $2
+  local.tee $1
+  local.get $1
   i32.const 1460
   i32.div_u
   i32.sub
-  local.get $2
+  local.get $1
   i32.const 36524
   i32.div_u
   i32.add
-  local.get $2
+  local.get $1
   i32.const 146096
   i32.div_u
   i32.sub
   i32.const 365
   i32.div_u
-  local.set $0
+  local.set $2
+  local.get $1
   local.get $2
-  local.get $0
   i32.const 365
   i32.mul
-  local.get $0
+  local.get $2
   i32.const 2
   i32.shr_u
   i32.add
-  local.get $0
+  local.get $2
   i32.const 100
   i32.div_u
   i32.sub
   i32.sub
-  local.tee $2
+  local.tee $3
   i32.const 5
   i32.mul
   i32.const 2
   i32.add
   i32.const 153
   i32.div_s
-  local.set $3
-  local.get $2
+  local.set $1
   local.get $3
+  local.get $1
   i32.const 153
   i32.mul
   i32.const 2
@@ -384,20 +384,20 @@
   global.set $~lib/date/_day
   i32.const 3
   i32.const -9
-  local.get $3
+  local.get $1
   i32.const 10
   i32.lt_s
   select
-  local.get $3
-  i32.add
-  local.tee $2
-  global.set $~lib/date/_month
   local.get $1
+  i32.add
+  local.tee $1
+  global.set $~lib/date/_month
+  local.get $0
   i32.const 400
   i32.mul
-  local.get $0
-  i32.add
   local.get $2
+  i32.add
+  local.get $1
   i32.const 2
   i32.le_s
   i32.add
@@ -482,18 +482,17 @@
   end
   block $__inlined_func$~lib/rt/itcms/Object#unlink
    local.get $0
-   local.tee $1
    i32.load offset=4
    i32.const -4
    i32.and
-   local.tee $2
+   local.tee $1
    i32.eqz
    if
     i32.const 0
-    local.get $1
+    local.get $0
     i32.const 23948
     i32.lt_u
-    local.get $1
+    local.get $0
     i32.load offset=8
     select
     i32.eqz
@@ -507,9 +506,9 @@
     end
     br $__inlined_func$~lib/rt/itcms/Object#unlink
    end
-   local.get $1
+   local.get $0
    i32.load offset=8
-   local.tee $1
+   local.tee $2
    i32.eqz
    if
     i32.const 0
@@ -519,15 +518,15 @@
     call $~lib/builtins/abort
     unreachable
    end
+   local.get $1
    local.get $2
-   local.get $1
    i32.store offset=8
-   local.get $1
-   local.get $1
+   local.get $2
+   local.get $2
    i32.load offset=4
    i32.const 3
    i32.and
-   local.get $2
+   local.get $1
    i32.or
    i32.store offset=4
   end
@@ -568,20 +567,20 @@
   else
    i32.const 2
   end
-  local.set $1
+  local.set $3
   local.get $2
   i32.load offset=8
-  local.set $3
+  local.set $1
   local.get $0
-  local.get $1
   local.get $2
+  local.get $3
   i32.or
   i32.store offset=4
   local.get $0
-  local.get $3
+  local.get $1
   i32.store offset=8
-  local.get $3
-  local.get $3
+  local.get $1
+  local.get $1
   i32.load offset=4
   i32.const 3
   i32.and
@@ -1013,9 +1012,6 @@
   i32.const 4
   i32.sub
   local.set $1
-  local.get $2
-  i32.const -16
-  i32.and
   local.get $0
   i32.load offset=1568
   local.tee $4
@@ -1062,6 +1058,9 @@
     unreachable
    end
   end
+  local.get $2
+  i32.const -16
+  i32.and
   local.get $1
   i32.sub
   local.tee $2
@@ -1815,18 +1814,17 @@
     global.set $~lib/rt/itcms/threshold
    end
   end
-  local.get $0
-  i32.const 16
-  i32.add
-  local.set $2
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
    call $~lib/rt/tlsf/initialize
   end
   global.get $~lib/rt/tlsf/ROOT
+  local.tee $3
+  local.get $0
+  i32.const 16
+  i32.add
   local.tee $4
-  local.get $2
   i32.const 1073741820
   i32.gt_u
   if
@@ -1837,13 +1835,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $4
   i32.const 12
   i32.le_u
   if (result i32)
    i32.const 12
   else
-   local.get $2
+   local.get $4
    i32.const 19
    i32.add
    i32.const -16
@@ -1851,32 +1849,32 @@
    i32.const 4
    i32.sub
   end
-  local.tee $3
+  local.tee $5
   call $~lib/rt/tlsf/searchBlock
   local.tee $2
   i32.eqz
   if
    memory.size
    local.tee $2
-   local.get $3
+   local.get $5
    i32.const 536870910
    i32.lt_u
    if (result i32)
     i32.const 1
     i32.const 27
-    local.get $3
+    local.get $5
     i32.clz
     i32.sub
     i32.shl
     i32.const 1
     i32.sub
-    local.get $3
+    local.get $5
     i32.add
    else
-    local.get $3
+    local.get $5
    end
    i32.const 4
-   local.get $4
+   local.get $3
    i32.load offset=1568
    local.get $2
    i32.const 16
@@ -1892,16 +1890,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $5
+   local.tee $4
    local.get $2
-   local.get $5
+   local.get $4
    i32.gt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $5
+    local.get $4
     memory.grow
     i32.const 0
     i32.lt_s
@@ -1909,7 +1907,7 @@
      unreachable
     end
    end
-   local.get $4
+   local.get $3
    local.get $2
    i32.const 16
    i32.shl
@@ -1917,8 +1915,8 @@
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   local.get $4
    local.get $3
+   local.get $5
    call $~lib/rt/tlsf/searchBlock
    local.tee $2
    i32.eqz
@@ -1935,7 +1933,7 @@
   i32.load
   i32.const -4
   i32.and
-  local.get $3
+  local.get $5
   i32.lt_u
   if
    i32.const 0
@@ -1945,13 +1943,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $3
   local.get $2
   call $~lib/rt/tlsf/removeBlock
   local.get $2
   i32.load
-  local.set $5
-  local.get $3
+  local.set $6
+  local.get $5
   i32.const 4
   i32.add
   i32.const 15
@@ -1964,40 +1962,40 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $6
   i32.const -4
   i32.and
-  local.get $3
+  local.get $5
   i32.sub
-  local.tee $6
+  local.tee $4
   i32.const 16
   i32.ge_u
   if
    local.get $2
-   local.get $5
+   local.get $6
    i32.const 2
    i32.and
-   local.get $3
+   local.get $5
    i32.or
    i32.store
-   local.get $3
+   local.get $5
    local.get $2
    i32.const 4
    i32.add
    i32.add
-   local.tee $3
-   local.get $6
+   local.tee $5
+   local.get $4
    i32.const 4
    i32.sub
    i32.const 1
    i32.or
    i32.store
-   local.get $4
    local.get $3
+   local.get $5
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $2
-   local.get $5
+   local.get $6
    i32.const -2
    i32.and
    i32.store
@@ -2211,8 +2209,8 @@
   call $~lib/date/Date#setTime
  )
  (func $~lib/date/Date#setUTCDate (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i64)
+  (local $2 i64)
+  (local $3 i32)
   (local $4 i32)
   local.get $1
   local.get $0
@@ -2228,39 +2226,39 @@
   i64.load offset=16
   i64.const 86400000
   i64.rem_s
-  local.tee $3
+  local.tee $2
   i64.const 0
   i64.lt_s
   select
-  local.get $3
+  local.get $2
   i64.add
   local.get $0
   i32.load
   local.get $0
   i32.load offset=4
-  local.tee $0
+  local.tee $4
   i32.const 2
   i32.le_s
   i32.sub
-  local.tee $4
-  local.get $4
+  local.tee $3
+  local.get $3
   i32.const 399
   i32.sub
-  local.get $4
+  local.get $3
   i32.const 0
   i32.ge_s
   select
   i32.const 400
   i32.div_s
-  local.set $2
+  local.set $0
   local.get $1
   i32.const -3
   i32.const 9
-  local.get $0
+  local.get $4
   i32.const 2
   i32.gt_s
   select
-  local.get $0
+  local.get $4
   i32.add
   i32.const 153
   i32.mul
@@ -2269,24 +2267,24 @@
   i32.const 5
   i32.div_u
   i32.add
-  local.get $4
-  local.get $2
+  local.get $3
+  local.get $0
   i32.const 400
   i32.mul
   i32.sub
-  local.tee $0
+  local.tee $1
   i32.const 365
   i32.mul
-  local.get $0
+  local.get $1
   i32.const 2
   i32.shr_u
   i32.add
-  local.get $0
+  local.get $1
   i32.const 100
   i32.div_u
   i32.sub
   i32.add
-  local.get $2
+  local.get $0
   i32.const 146097
   i32.mul
   i32.add
@@ -2299,8 +2297,8 @@
   call $~lib/date/Date#setTime
  )
  (func $~lib/date/Date#setUTCMonth (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i64)
+  (local $2 i64)
+  (local $3 i32)
   (local $4 i32)
   local.get $1
   local.get $0
@@ -2315,42 +2313,42 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $1
+  local.tee $4
   i32.const 2
   i32.le_s
   i32.sub
-  local.tee $4
-  local.get $4
+  local.tee $3
+  local.get $3
   i32.const 399
   i32.sub
-  local.get $4
+  local.get $3
   i32.const 0
   i32.ge_s
   select
   i32.const 400
   i32.div_s
-  local.set $2
+  local.set $1
   i64.const 86400000
   i64.const 0
   local.get $0
   i64.load offset=16
   i64.const 86400000
   i64.rem_s
-  local.tee $3
+  local.tee $2
   i64.const 0
   i64.lt_s
   select
-  local.get $3
+  local.get $2
   i64.add
   local.get $0
   i32.load offset=8
   i32.const -3
   i32.const 9
-  local.get $1
+  local.get $4
   i32.const 2
   i32.gt_s
   select
-  local.get $1
+  local.get $4
   i32.add
   i32.const 153
   i32.mul
@@ -2359,8 +2357,8 @@
   i32.const 5
   i32.div_u
   i32.add
-  local.get $4
-  local.get $2
+  local.get $3
+  local.get $1
   i32.const 400
   i32.mul
   i32.sub
@@ -2376,7 +2374,7 @@
   i32.div_u
   i32.sub
   i32.add
-  local.get $2
+  local.get $1
   i32.const 146097
   i32.mul
   i32.add
@@ -2389,8 +2387,8 @@
   call $~lib/date/Date#setTime
  )
  (func $~lib/date/Date#setUTCFullYear (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i64)
+  (local $2 i64)
+  (local $3 i32)
   (local $4 i32)
   local.get $1
   local.get $0
@@ -2403,42 +2401,42 @@
   local.get $1
   local.get $0
   i32.load offset=4
-  local.tee $1
+  local.tee $4
   i32.const 2
   i32.le_s
   i32.sub
-  local.tee $4
-  local.get $4
+  local.tee $3
+  local.get $3
   i32.const 399
   i32.sub
-  local.get $4
+  local.get $3
   i32.const 0
   i32.ge_s
   select
   i32.const 400
   i32.div_s
-  local.set $2
+  local.set $1
   i64.const 86400000
   i64.const 0
   local.get $0
   i64.load offset=16
   i64.const 86400000
   i64.rem_s
-  local.tee $3
+  local.tee $2
   i64.const 0
   i64.lt_s
   select
-  local.get $3
+  local.get $2
   i64.add
   local.get $0
   i32.load offset=8
   i32.const -3
   i32.const 9
-  local.get $1
+  local.get $4
   i32.const 2
   i32.gt_s
   select
-  local.get $1
+  local.get $4
   i32.add
   i32.const 153
   i32.mul
@@ -2447,8 +2445,8 @@
   i32.const 5
   i32.div_u
   i32.add
-  local.get $4
-  local.get $2
+  local.get $3
+  local.get $1
   i32.const 400
   i32.mul
   i32.sub
@@ -2464,7 +2462,7 @@
   i32.div_u
   i32.sub
   i32.add
-  local.get $2
+  local.get $1
   i32.const 146097
   i32.mul
   i32.add
@@ -2518,7 +2516,7 @@
    local.get $0
    i32.const 31
    i32.shr_u
-   local.tee $3
+   local.tee $2
    select
    local.tee $0
    local.tee $1
@@ -2567,14 +2565,14 @@
      i32.add
     end
    end
-   local.get $3
+   local.get $2
    i32.add
-   local.tee $2
+   local.tee $1
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/itcms/__new
-   local.tee $1
+   local.tee $4
    i32.store
    loop $while-continue|0
     local.get $0
@@ -2584,20 +2582,20 @@
      local.get $0
      i32.const 10000
      i32.rem_u
-     local.set $4
+     local.set $3
      local.get $0
      i32.const 10000
      i32.div_u
      local.set $0
-     local.get $2
+     local.get $1
      i32.const 4
      i32.sub
-     local.tee $2
+     local.tee $1
      i32.const 1
      i32.shl
-     local.get $1
-     i32.add
      local.get $4
+     i32.add
+     local.get $3
      i32.const 100
      i32.div_u
      i32.const 2
@@ -2605,7 +2603,7 @@
      i32.const 1884
      i32.add
      i64.load32_u
-     local.get $4
+     local.get $3
      i32.const 100
      i32.rem_u
      i32.const 2
@@ -2624,13 +2622,13 @@
    i32.const 100
    i32.ge_u
    if
-    local.get $2
+    local.get $1
     i32.const 2
     i32.sub
-    local.tee $2
+    local.tee $1
     i32.const 1
     i32.shl
-    local.get $1
+    local.get $4
     i32.add
     local.get $0
     i32.const 100
@@ -2650,12 +2648,12 @@
    i32.const 10
    i32.ge_u
    if
-    local.get $2
+    local.get $1
     i32.const 2
     i32.sub
     i32.const 1
     i32.shl
-    local.get $1
+    local.get $4
     i32.add
     local.get $0
     i32.const 2
@@ -2665,21 +2663,21 @@
     i32.load
     i32.store
    else
-    local.get $2
+    local.get $1
     i32.const 1
     i32.sub
     i32.const 1
     i32.shl
-    local.get $1
+    local.get $4
     i32.add
     local.get $0
     i32.const 48
     i32.add
     i32.store16
    end
-   local.get $3
+   local.get $2
    if
-    local.get $1
+    local.get $4
     i32.const 45
     i32.store16
    end
@@ -2687,7 +2685,7 @@
    i32.const 4
    i32.add
    global.set $~lib/memory/__stack_pointer
-   local.get $1
+   local.get $4
   end
  )
  (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
@@ -3151,95 +3149,95 @@
    local.get $0
    i32.const 2
    i32.add
+   local.tee $0
+   local.get $1
+   i32.const 2
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   local.get $1
+   i32.load8_u offset=1
+   i32.store8 offset=1
+   local.get $0
+   i32.const 2
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 2
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   local.get $1
+   i32.load8_u offset=1
+   i32.store8 offset=1
+   local.get $0
+   i32.const 2
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 2
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   local.get $1
+   i32.load8_u offset=1
+   i32.store8 offset=1
+   local.get $0
+   i32.const 2
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 2
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   local.get $1
+   i32.load8_u offset=1
+   i32.store8 offset=1
+   local.get $0
+   i32.const 2
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 2
+   i32.add
+   local.tee $1
+   i32.load8_u
+   i32.store8
+   local.get $0
+   local.get $1
+   i32.load8_u offset=1
+   i32.store8 offset=1
+   local.get $0
+   i32.const 2
+   i32.add
+   local.tee $0
+   local.get $1
+   i32.const 2
+   i32.add
    local.tee $3
-   local.get $1
-   i32.const 2
-   i32.add
-   local.tee $0
    i32.load8_u
    i32.store8
-   local.get $3
-   local.get $0
-   i32.load8_u offset=1
-   i32.store8 offset=1
-   local.get $3
-   i32.const 2
-   i32.add
-   local.tee $1
-   local.get $0
-   i32.const 2
-   i32.add
-   local.tee $0
-   i32.load8_u
-   i32.store8
-   local.get $1
-   local.get $0
-   i32.load8_u offset=1
-   i32.store8 offset=1
-   local.get $1
-   i32.const 2
-   i32.add
-   local.tee $1
-   local.get $0
-   i32.const 2
-   i32.add
-   local.tee $0
-   i32.load8_u
-   i32.store8
-   local.get $1
-   local.get $0
-   i32.load8_u offset=1
-   i32.store8 offset=1
-   local.get $1
-   i32.const 2
-   i32.add
-   local.tee $1
-   local.get $0
-   i32.const 2
-   i32.add
-   local.tee $0
-   i32.load8_u
-   i32.store8
-   local.get $1
-   local.get $0
-   i32.load8_u offset=1
-   i32.store8 offset=1
-   local.get $1
-   i32.const 2
-   i32.add
-   local.tee $1
-   local.get $0
-   i32.const 2
-   i32.add
-   local.tee $0
-   i32.load8_u
-   i32.store8
-   local.get $1
-   local.get $0
-   i32.load8_u offset=1
-   i32.store8 offset=1
-   local.get $1
-   i32.const 2
-   i32.add
-   local.tee $1
-   local.get $0
-   i32.const 2
-   i32.add
-   local.tee $3
-   i32.load8_u
-   i32.store8
-   local.get $1
-   i32.const 2
-   i32.add
-   local.set $0
-   local.get $1
-   local.get $3
-   i32.load8_u offset=1
-   i32.store8 offset=1
    local.get $3
    i32.const 2
    i32.add
    local.set $1
+   local.get $0
+   local.get $3
+   i32.load8_u offset=1
+   i32.store8 offset=1
+   local.get $0
+   i32.const 2
+   i32.add
+   local.set $0
   end
   local.get $2
   i32.const 8
@@ -3270,39 +3268,39 @@
    local.get $0
    i32.const 2
    i32.add
-   local.tee $3
-   local.get $1
-   i32.const 2
-   i32.add
    local.tee $0
-   i32.load8_u
-   i32.store8
-   local.get $3
-   local.get $0
-   i32.load8_u offset=1
-   i32.store8 offset=1
-   local.get $3
+   local.get $1
    i32.const 2
    i32.add
    local.tee $1
+   i32.load8_u
+   i32.store8
    local.get $0
+   local.get $1
+   i32.load8_u offset=1
+   i32.store8 offset=1
+   local.get $0
+   i32.const 2
+   i32.add
+   local.tee $0
+   local.get $1
    i32.const 2
    i32.add
    local.tee $3
    i32.load8_u
    i32.store8
-   local.get $1
-   i32.const 2
-   i32.add
-   local.set $0
-   local.get $1
-   local.get $3
-   i32.load8_u offset=1
-   i32.store8 offset=1
    local.get $3
    i32.const 2
    i32.add
    local.set $1
+   local.get $0
+   local.get $3
+   i32.load8_u offset=1
+   i32.store8 offset=1
+   local.get $0
+   i32.const 2
+   i32.add
+   local.set $0
   end
   local.get $2
   i32.const 4
@@ -3694,14 +3692,14 @@
    if
     local.get $1
     i32.load16_u
-    local.tee $4
+    local.tee $0
     local.get $2
     i32.load16_u
-    local.tee $0
+    local.tee $4
     i32.ne
     if
-     local.get $4
      local.get $0
+     local.get $4
      i32.sub
      return
     end
@@ -3843,19 +3841,19 @@
   local.get $0
   local.tee $2
   i32.load offset=12
-  local.tee $4
+  local.tee $3
   i32.const 1
   i32.add
+  local.tee $4
   local.tee $5
-  local.tee $3
   local.get $2
   i32.load offset=8
-  local.tee $8
+  local.tee $6
   i32.const 2
   i32.shr_u
   i32.gt_u
   if
-   local.get $3
+   local.get $5
    i32.const 268435455
    i32.gt_u
    if
@@ -3867,38 +3865,38 @@
     unreachable
    end
    block $__inlined_func$~lib/rt/itcms/__renew (result i32)
-    local.get $8
+    local.get $6
     i32.const 1
     i32.shl
-    local.tee $6
+    local.tee $7
     i32.const 1073741820
-    local.get $6
+    local.get $7
     i32.const 1073741820
     i32.lt_u
     select
-    local.tee $6
-    local.get $3
+    local.tee $7
+    local.get $5
     i32.const 8
-    local.get $3
+    local.get $5
     i32.const 8
     i32.gt_u
     select
     i32.const 2
     i32.shl
-    local.tee $3
-    local.get $3
-    local.get $6
+    local.tee $5
+    local.get $5
+    local.get $7
     i32.lt_u
     select
-    local.tee $9
-    local.tee $10
+    local.tee $7
+    local.tee $8
     local.get $2
     i32.load
-    local.tee $6
-    local.tee $3
+    local.tee $10
+    local.tee $11
     i32.const 20
     i32.sub
-    local.tee $11
+    local.tee $9
     i32.load
     i32.const -4
     i32.and
@@ -3906,61 +3904,61 @@
     i32.sub
     i32.le_u
     if
-     local.get $11
-     local.get $10
+     local.get $9
+     local.get $8
      i32.store offset=16
-     local.get $3
+     local.get $11
      br $__inlined_func$~lib/rt/itcms/__renew
     end
-    local.get $10
-    local.get $11
+    local.get $8
+    local.get $9
     i32.load offset=12
     call $~lib/rt/itcms/__new
-    local.tee $7
-    local.get $3
-    local.get $10
+    local.tee $5
     local.get $11
+    local.get $8
+    local.get $9
     i32.load offset=16
-    local.tee $3
-    local.get $3
-    local.get $10
-    i32.gt_u
+    local.tee $9
+    local.get $8
+    local.get $9
+    i32.lt_u
     select
     call $~lib/memory/memory.copy
-    local.get $7
+    local.get $5
    end
-   local.tee $3
-   local.get $8
+   local.tee $5
+   local.get $6
    i32.add
-   local.get $9
-   local.get $8
+   local.get $7
+   local.get $6
    i32.sub
    call $~lib/memory/memory.fill
-   local.get $3
-   local.get $6
+   local.get $5
+   local.get $10
    i32.ne
    if
     local.get $2
-    local.get $3
+    local.get $5
     i32.store
     local.get $2
-    local.get $3
+    local.get $5
     i32.store offset=4
-    local.get $3
+    local.get $5
     if
      local.get $2
-     local.get $3
+     local.get $5
      i32.const 0
      call $byn-split-outlined-A$~lib/rt/itcms/__link
     end
    end
    local.get $2
-   local.get $9
+   local.get $7
    i32.store offset=8
   end
   local.get $0
   i32.load offset=4
-  local.get $4
+  local.get $3
   i32.const 2
   i32.shl
   i32.add
@@ -3974,7 +3972,7 @@
    call $byn-split-outlined-A$~lib/rt/itcms/__link
   end
   local.get $2
-  local.get $5
+  local.get $4
   i32.store offset=12
  )
  (func $~lib/util/string/strtol<i32> (param $0 i32) (result i32)
@@ -3989,7 +3987,7 @@
   i32.load offset=16
   i32.const 1
   i32.shr_u
-  local.tee $2
+  local.tee $1
   i32.eqz
   if
    i32.const 0
@@ -3997,28 +3995,27 @@
   end
   local.get $0
   i32.load16_u
-  local.set $1
+  local.set $2
   loop $while-continue|0
    block $__inlined_func$~lib/util/string/isSpace (result i32)
-    local.get $1
-    local.tee $3
+    local.get $2
     i32.const 128
     i32.or
     i32.const 160
     i32.eq
-    local.get $3
+    local.get $2
     i32.const 9
     i32.sub
     i32.const 4
     i32.le_u
     i32.or
-    local.get $3
+    local.get $2
     i32.const 5760
     i32.lt_u
     br_if $__inlined_func$~lib/util/string/isSpace
     drop
     i32.const 1
-    local.get $3
+    local.get $2
     i32.const -8192
     i32.add
     i32.const 10
@@ -4027,31 +4024,31 @@
     drop
     block $break|0
      block $case6|0
-      local.get $3
+      local.get $2
       i32.const 5760
       i32.eq
       br_if $case6|0
-      local.get $3
+      local.get $2
       i32.const 8232
       i32.eq
       br_if $case6|0
-      local.get $3
+      local.get $2
       i32.const 8233
       i32.eq
       br_if $case6|0
-      local.get $3
+      local.get $2
       i32.const 8239
       i32.eq
       br_if $case6|0
-      local.get $3
+      local.get $2
       i32.const 8287
       i32.eq
       br_if $case6|0
-      local.get $3
+      local.get $2
       i32.const 12288
       i32.eq
       br_if $case6|0
-      local.get $3
+      local.get $2
       i32.const 65279
       i32.eq
       br_if $case6|0
@@ -4068,28 +4065,28 @@
     i32.add
     local.tee $0
     i32.load16_u
-    local.set $1
-    local.get $2
+    local.set $2
+    local.get $1
     i32.const 1
     i32.sub
-    local.set $2
+    local.set $1
     br $while-continue|0
    end
   end
   i32.const 1
   local.set $3
-  local.get $1
+  local.get $2
   i32.const 43
   i32.eq
-  local.get $1
+  local.get $2
   i32.const 45
   i32.eq
   i32.or
   if (result i32)
-   local.get $2
+   local.get $1
    i32.const 1
    i32.sub
-   local.tee $2
+   local.tee $1
    i32.eqz
    if
     i32.const 0
@@ -4097,7 +4094,7 @@
    end
    i32.const -1
    i32.const 1
-   local.get $1
+   local.get $2
    i32.const 45
    i32.eq
    select
@@ -4108,11 +4105,11 @@
    local.tee $0
    i32.load16_u
   else
-   local.get $1
+   local.get $2
   end
   i32.const 48
   i32.eq
-  local.get $2
+  local.get $1
   i32.const 2
   i32.gt_s
   i32.and
@@ -4124,15 +4121,15 @@
       i32.load16_u offset=2
       i32.const 32
       i32.or
-      local.tee $1
+      local.tee $2
       i32.const 98
       i32.ne
       if
-       local.get $1
+       local.get $2
        i32.const 111
        i32.eq
        br_if $case1|1
-       local.get $1
+       local.get $2
        i32.const 120
        i32.eq
        br_if $case2|1
@@ -4142,10 +4139,10 @@
       i32.const 4
       i32.add
       local.set $0
-      local.get $2
+      local.get $1
       i32.const 2
       i32.sub
-      local.set $2
+      local.set $1
       i32.const 2
       local.set $4
       br $break|1
@@ -4154,10 +4151,10 @@
      i32.const 4
      i32.add
      local.set $0
-     local.get $2
+     local.get $1
      i32.const 2
      i32.sub
-     local.set $2
+     local.set $1
      i32.const 8
      local.set $4
      br $break|1
@@ -4166,10 +4163,10 @@
     i32.const 4
     i32.add
     local.set $0
-    local.get $2
+    local.get $1
     i32.const 2
     i32.sub
-    local.set $2
+    local.set $1
     i32.const 16
     local.set $4
    end
@@ -4181,40 +4178,40 @@
   local.set $4
   loop $while-continue|2
    block $while-break|2
-    local.get $2
-    local.tee $1
+    local.get $1
+    local.tee $2
     i32.const 1
     i32.sub
-    local.set $2
-    local.get $1
+    local.set $1
+    local.get $2
     if
      local.get $0
      i32.load16_u
-     local.tee $1
+     local.tee $2
      i32.const 48
      i32.sub
      i32.const 10
      i32.lt_u
      if (result i32)
-      local.get $1
+      local.get $2
       i32.const 48
       i32.sub
      else
-      local.get $1
+      local.get $2
       i32.const 65
       i32.sub
       i32.const 25
       i32.le_u
       if (result i32)
-       local.get $1
+       local.get $2
        i32.const 55
        i32.sub
       else
-       local.get $1
+       local.get $2
        i32.const 87
        i32.sub
-       local.get $1
-       local.get $1
+       local.get $2
+       local.get $2
        i32.const 97
        i32.sub
        i32.const 25
@@ -4222,7 +4219,7 @@
        select
       end
      end
-     local.tee $1
+     local.tee $2
      local.get $4
      i32.ge_u
      if
@@ -4234,7 +4231,7 @@
       end
       br $while-break|2
      end
-     local.get $1
+     local.get $2
      local.get $4
      local.get $5
      i32.mul
@@ -4289,19 +4286,18 @@
       return
      end
      local.get $0
-     local.tee $1
-     local.get $0
      i32.const 20
      i32.sub
      i32.load offset=16
+     local.get $0
      i32.add
-     local.set $0
+     local.set $1
      loop $while-continue|0
       local.get $0
       local.get $1
-      i32.gt_u
+      i32.lt_u
       if
-       local.get $1
+       local.get $0
        i32.load
        local.tee $2
        if
@@ -4311,48 +4307,47 @@
          call $byn-split-outlined-A$~lib/rt/itcms/__visit
         end
        end
-       local.get $1
+       local.get $0
        i32.const 4
        i32.add
-       local.set $1
+       local.set $0
        br $while-continue|0
       end
      end
      return
     end
     local.get $0
-    local.tee $1
     i32.load offset=4
-    local.tee $2
+    local.tee $1
     local.get $0
     i32.load offset=12
     i32.const 2
     i32.shl
     i32.add
-    local.set $0
+    local.set $3
     loop $while-continue|01
-     local.get $0
-     local.get $2
-     i32.gt_u
+     local.get $1
+     local.get $3
+     i32.lt_u
      if
-      local.get $2
+      local.get $1
       i32.load
-      local.tee $3
+      local.tee $2
       if
-       local.get $3
+       local.get $2
        if
-        local.get $3
+        local.get $2
         call $byn-split-outlined-A$~lib/rt/itcms/__visit
        end
       end
-      local.get $2
+      local.get $1
       i32.const 4
       i32.add
-      local.set $2
+      local.set $1
       br $while-continue|01
      end
     end
-    local.get $1
+    local.get $0
     i32.load
     local.tee $0
     if
@@ -4447,64 +4442,64 @@
   i64.store offset=104
   local.get $0
   i32.load
-  local.tee $3
+  local.tee $1
   i32.const 0
   i32.lt_s
-  local.tee $4
-  local.get $3
+  local.tee $3
+  local.get $1
   i32.const 10000
   i32.ge_s
   i32.or
   if
    global.get $~lib/memory/__stack_pointer
-   local.tee $5
-   local.get $5
+   local.tee $4
+   local.get $4
    i32.const 1616
    i32.const 1648
-   local.get $4
-   select
-   local.tee $4
-   i32.store
    local.get $3
+   select
+   local.tee $3
+   i32.store
+   local.get $1
    i32.const 31
    i32.shr_s
-   local.tee $5
-   local.get $3
-   local.get $5
+   local.tee $4
+   local.get $1
+   local.get $4
    i32.add
    i32.xor
    call $~lib/number/I32#toString
-   local.set $3
+   local.set $1
    global.get $~lib/memory/__stack_pointer
-   local.get $3
+   local.get $1
    i32.store offset=8
    global.get $~lib/memory/__stack_pointer
    i32.const 1872
    i32.store offset=12
-   local.get $3
+   local.get $1
    i32.const 6
    call $~lib/string/String#padStart
-   local.set $3
+   local.set $1
    global.get $~lib/memory/__stack_pointer
-   local.get $3
+   local.get $1
    i32.store offset=4
-   local.get $4
    local.get $3
+   local.get $1
    call $~lib/string/String.__concat
    local.tee $1
    i32.store offset=16
   else
    global.get $~lib/memory/__stack_pointer
-   local.get $3
+   local.get $1
    call $~lib/number/I32#toString
-   local.set $3
+   local.set $1
    global.get $~lib/memory/__stack_pointer
-   local.get $3
+   local.get $1
    i32.store
    global.get $~lib/memory/__stack_pointer
    i32.const 1872
    i32.store offset=8
-   local.get $3
+   local.get $1
    i32.const 4
    call $~lib/string/String#padStart
    local.tee $1
@@ -4803,74 +4798,74 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $2
+  local.tee $1
   i64.const 0
   i64.store
-  local.get $2
+  local.get $1
   i64.const 0
   i64.store offset=8
-  local.get $2
+  local.get $1
   i64.const 0
   i64.store offset=16
-  local.get $2
+  local.get $1
   i64.const 0
   i64.store offset=24
-  local.get $2
+  local.get $1
   i64.const 0
   i64.store offset=32
-  local.get $2
+  local.get $1
   i32.const 0
   i32.store offset=40
   i32.const 28
   i32.const 4
   call $~lib/rt/itcms/__new
-  local.tee $1
+  local.tee $6
   i32.const 4560
   i32.const 28
   call $~lib/memory/memory.copy
-  local.get $2
   local.get $1
+  local.get $6
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 48
   i32.const 4
   call $~lib/rt/itcms/__new
-  local.tee $4
+  local.tee $3
   i32.const 4992
   i32.const 48
   call $~lib/memory/memory.copy
-  local.get $4
+  local.get $3
   i32.store offset=4
   local.get $0
   i32.load
-  local.tee $5
+  local.tee $2
   local.get $0
   i32.load offset=4
-  local.tee $2
+  local.tee $5
   i32.const 3
   i32.lt_s
   i32.sub
-  local.tee $6
+  local.tee $1
   i32.const 0
   i32.ge_s
   local.set $7
   local.get $0
   i32.load offset=8
-  local.tee $3
-  local.get $2
+  local.tee $4
+  local.get $5
   i32.const 1579
   i32.add
   i32.load8_u
-  local.get $6
-  local.get $6
+  local.get $1
+  local.get $1
   i32.const 3
   i32.sub
   local.get $7
   select
   i32.const 4
   i32.div_s
-  local.get $6
-  local.get $6
+  local.get $1
+  local.get $1
   i32.const 99
   i32.sub
   local.get $7
@@ -4878,8 +4873,8 @@
   i32.const 100
   i32.div_s
   i32.sub
-  local.get $6
-  local.get $6
+  local.get $1
+  local.get $1
   i32.const 399
   i32.sub
   local.get $7
@@ -4887,7 +4882,7 @@
   i32.const 400
   i32.div_s
   i32.add
-  local.get $6
+  local.get $1
   i32.add
   i32.add
   i32.add
@@ -4901,10 +4896,10 @@
   i32.lt_s
   select
   i32.add
-  local.set $6
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $5
-  local.get $5
+  local.get $2
+  local.get $2
   i32.const 31
   i32.shr_s
   local.tee $7
@@ -4924,15 +4919,15 @@
   call $~lib/string/String#padStart
   local.tee $0
   i32.store offset=16
-  local.get $5
+  local.get $2
   i32.const 0
   i32.lt_s
   if
    global.get $~lib/memory/__stack_pointer
-   local.tee $5
+   local.tee $2
    i32.const 1616
    i32.store offset=8
-   local.get $5
+   local.get $2
    i32.const 1616
    local.get $0
    call $~lib/string/String.__concat
@@ -4940,22 +4935,22 @@
    i32.store offset=16
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $5
-  local.get $6
+  local.tee $2
+  local.get $1
   i32.const 2
   i32.shl
-  local.get $1
+  local.get $6
   i32.add
   i32.load
   local.tee $1
   i32.store offset=32
-  local.get $5
   local.get $2
+  local.get $5
   i32.const 1
   i32.sub
   i32.const 2
   i32.shl
-  local.get $4
+  local.get $3
   i32.add
   i32.load
   local.tee $2
@@ -4967,7 +4962,7 @@
   global.get $~lib/memory/__stack_pointer
   local.get $1
   i32.store offset=24
-  local.get $3
+  local.get $4
   call $~lib/number/I32#toString
   local.set $2
   global.get $~lib/memory/__stack_pointer
@@ -5101,15 +5096,15 @@
   i32.const 60000
   i32.div_s
   call $~lib/number/I32#toString
-  local.set $4
+  local.set $2
   global.get $~lib/memory/__stack_pointer
-  local.tee $2
-  local.get $4
-  i32.store offset=24
+  local.tee $4
   local.get $2
+  i32.store offset=24
+  local.get $4
   i32.const 1872
   i32.store offset=32
-  local.get $4
+  local.get $2
   i32.const 2
   call $~lib/string/String#padStart
   local.set $2
@@ -5237,40 +5232,40 @@
   i32.const 28
   i32.const 4
   call $~lib/rt/itcms/__new
-  local.tee $7
+  local.tee $3
   i32.const 5616
   i32.const 28
   call $~lib/memory/memory.copy
   local.get $1
-  local.get $7
+  local.get $3
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 48
   i32.const 4
   call $~lib/rt/itcms/__new
-  local.tee $8
+  local.tee $4
   i32.const 6048
   i32.const 48
   call $~lib/memory/memory.copy
-  local.get $8
+  local.get $4
   i32.store offset=4
   local.get $0
   i32.load
-  local.tee $3
+  local.tee $5
   local.get $0
   i32.load offset=4
-  local.tee $4
+  local.tee $6
   i32.const 3
   i32.lt_s
   i32.sub
   local.tee $1
   i32.const 0
   i32.ge_s
-  local.set $6
+  local.set $7
   local.get $0
   i32.load offset=8
-  local.tee $5
-  local.get $4
+  local.tee $8
+  local.get $6
   i32.const 1579
   i32.add
   i32.load8_u
@@ -5278,7 +5273,7 @@
   local.get $1
   i32.const 3
   i32.sub
-  local.get $6
+  local.get $7
   select
   i32.const 4
   i32.div_s
@@ -5286,7 +5281,7 @@
   local.get $1
   i32.const 99
   i32.sub
-  local.get $6
+  local.get $7
   select
   i32.const 100
   i32.div_s
@@ -5295,7 +5290,7 @@
   local.get $1
   i32.const 399
   i32.sub
-  local.get $6
+  local.get $7
   select
   i32.const 400
   i32.div_s
@@ -5314,10 +5309,10 @@
   i32.lt_s
   select
   i32.add
-  local.set $6
+  local.set $7
   global.get $~lib/memory/__stack_pointer
-  local.get $3
-  local.get $3
+  local.get $5
+  local.get $5
   i32.const 31
   i32.shr_s
   local.tee $9
@@ -5337,15 +5332,15 @@
   call $~lib/string/String#padStart
   local.tee $1
   i32.store offset=16
-  local.get $3
+  local.get $5
   i32.const 0
   i32.lt_s
   if
    global.get $~lib/memory/__stack_pointer
-   local.tee $3
+   local.tee $5
    i32.const 1616
    i32.store offset=8
-   local.get $3
+   local.get $5
    i32.const 1616
    local.get $1
    call $~lib/string/String.__concat
@@ -5353,15 +5348,15 @@
    i32.store offset=16
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $6
+  local.get $7
   i32.const 2
   i32.shl
-  local.get $7
+  local.get $3
   i32.add
   i32.load
   local.tee $3
   i32.store offset=80
-  local.get $5
+  local.get $8
   call $~lib/number/I32#toString
   local.set $5
   global.get $~lib/memory/__stack_pointer
@@ -5385,12 +5380,12 @@
   local.get $3
   i32.store offset=72
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $6
   i32.const 1
   i32.sub
   i32.const 2
   i32.shl
-  local.get $8
+  local.get $4
   i32.add
   i32.load
   local.tee $4
@@ -5632,16 +5627,16 @@
      i32.load offset=16
      i32.const 1
      i32.shr_u
-     local.set $5
+     local.set $8
      local.get $1
      i32.const 20
      i32.sub
      i32.load offset=16
      i32.const 1
      i32.shr_u
-     local.tee $6
+     local.tee $5
      if
-      local.get $5
+      local.get $8
       i32.eqz
       if
        global.get $~lib/memory/__stack_pointer
@@ -5656,7 +5651,7 @@
        br $folding-inner1
       end
      else
-      local.get $5
+      local.get $8
       i32.eqz
       if
        i32.const 0
@@ -5665,31 +5660,31 @@
        br $folding-inner1
       end
       global.get $~lib/memory/__stack_pointer
-      local.get $5
+      local.get $8
       i32.const 2147483647
-      local.get $5
+      local.get $8
       i32.const 2147483647
       i32.ne
       select
-      local.tee $4
+      local.tee $2
       call $~lib/rt/__newArray
       local.tee $1
       i32.store
       local.get $1
       i32.load offset=4
-      local.set $5
+      local.set $4
       loop $for-loop|0
+       local.get $2
        local.get $3
-       local.get $4
-       i32.lt_s
+       i32.gt_s
        if
         global.get $~lib/memory/__stack_pointer
         i32.const 2
         i32.const 1
         call $~lib/rt/itcms/__new
-        local.tee $2
+        local.tee $5
         i32.store offset=8
-        local.get $2
+        local.get $5
         local.get $3
         i32.const 1
         i32.shl
@@ -5700,14 +5695,14 @@
         local.get $3
         i32.const 2
         i32.shl
-        local.get $5
+        local.get $4
         i32.add
-        local.get $2
+        local.get $5
         i32.store
-        local.get $2
+        local.get $5
         if
          local.get $1
-         local.get $2
+         local.get $5
          i32.const 1
          call $byn-split-outlined-A$~lib/rt/itcms/__link
         end
@@ -5723,49 +5718,49 @@
      global.get $~lib/memory/__stack_pointer
      i32.const 0
      call $~lib/rt/__newArray
-     local.tee $7
+     local.tee $3
      i32.store offset=12
      loop $while-continue|1
       local.get $0
       local.get $1
       local.get $2
       call $~lib/string/String#indexOf
-      local.tee $8
+      local.tee $6
       i32.const -1
       i32.xor
       if
-       local.get $8
+       local.get $6
        local.get $2
        i32.sub
-       local.tee $3
+       local.tee $7
        i32.const 0
        i32.gt_s
        if
         global.get $~lib/memory/__stack_pointer
-        local.get $3
+        local.get $7
         i32.const 1
         i32.shl
-        local.tee $3
+        local.tee $9
         i32.const 1
         call $~lib/rt/itcms/__new
-        local.tee $9
+        local.tee $7
         i32.store offset=16
-        local.get $9
+        local.get $7
         local.get $2
         i32.const 1
         i32.shl
         local.get $0
         i32.add
-        local.get $3
-        call $~lib/memory/memory.copy
-        local.get $7
         local.get $9
+        call $~lib/memory/memory.copy
+        local.get $3
+        local.get $7
         call $~lib/array/Array<~lib/string/String>#push
        else
         global.get $~lib/memory/__stack_pointer
         i32.const 3456
         i32.store offset=20
-        local.get $7
+        local.get $3
         i32.const 3456
         call $~lib/array/Array<~lib/string/String>#push
        end
@@ -5776,8 +5771,8 @@
        i32.const 2147483647
        i32.eq
        br_if $folding-inner2
+       local.get $5
        local.get $6
-       local.get $8
        i32.add
        local.set $2
        br $while-continue|1
@@ -5786,12 +5781,12 @@
      local.get $2
      i32.eqz
      if
-      local.get $7
+      local.get $3
       local.get $0
       call $~lib/array/Array<~lib/string/String>#push
       br $folding-inner2
      end
-     local.get $5
+     local.get $8
      local.get $2
      i32.sub
      local.tee $1
@@ -5805,9 +5800,9 @@
       local.tee $1
       i32.const 1
       call $~lib/rt/itcms/__new
-      local.tee $3
+      local.tee $4
       i32.store offset=4
-      local.get $3
+      local.get $4
       local.get $2
       i32.const 1
       i32.shl
@@ -5815,14 +5810,14 @@
       i32.add
       local.get $1
       call $~lib/memory/memory.copy
-      local.get $7
       local.get $3
+      local.get $4
       call $~lib/array/Array<~lib/string/String>#push
      else
       global.get $~lib/memory/__stack_pointer
       i32.const 3456
       i32.store offset=20
-      local.get $7
+      local.get $3
       i32.const 3456
       call $~lib/array/Array<~lib/string/String>#push
      end
@@ -5830,7 +5825,7 @@
      i32.const 24
      i32.add
      global.set $~lib/memory/__stack_pointer
-     local.get $7
+     local.get $3
      return
     end
     global.get $~lib/memory/__stack_pointer
@@ -5851,7 +5846,7 @@
   i32.const 24
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $7
+  local.get $3
  )
  (func $~lib/date/Date.fromString (param $0 i32) (result i32)
   (local $1 i32)
@@ -6035,26 +6030,26 @@
   local.get $1
   i32.const 1616
   call $~lib/string/String#split
-  local.tee $6
+  local.tee $0
   i32.store offset=24
-  local.get $6
+  local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/string/String>#__get
-  local.set $0
+  local.set $1
   global.get $~lib/memory/__stack_pointer
-  local.get $0
+  local.get $1
   i32.store offset=16
-  local.get $0
+  local.get $1
   call $~lib/util/string/strtol<i32>
   i32.const 1
   local.set $1
-  local.get $6
+  local.get $0
   i32.load offset=12
-  local.tee $0
+  local.tee $7
   i32.const 2
   i32.ge_s
   if (result i32)
-   local.get $6
+   local.get $0
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.set $1
@@ -6064,11 +6059,11 @@
    local.get $1
    call $~lib/util/string/strtol<i32>
    local.set $1
-   local.get $0
+   local.get $7
    i32.const 3
    i32.ge_s
    if (result i32)
-    local.get $6
+    local.get $0
     i32.const 2
     call $~lib/array/Array<~lib/string/String>#__get
     local.set $0
@@ -9470,25 +9465,25 @@
   local.get $1
   local.get $4
   i32.sub
-  local.tee $6
+  local.tee $1
   i32.lt_u
   if
    local.get $2
-   local.get $6
+   local.get $1
    i32.const 2
    i32.sub
    local.get $2
    i32.div_u
-   local.tee $7
-   i32.mul
-   local.set $1
-   local.get $2
-   local.get $7
+   local.tee $6
    i32.mul
    local.set $7
+   local.get $2
+   local.get $6
+   i32.mul
+   local.set $6
    loop $while-continue|0
     local.get $3
-    local.get $7
+    local.get $6
     i32.lt_u
     if
      local.get $3
@@ -9504,22 +9499,22 @@
      br $while-continue|0
     end
    end
-   local.get $1
    local.get $5
+   local.get $7
    i32.add
    i32.const 1872
-   local.get $6
    local.get $1
+   local.get $7
    i32.sub
    call $~lib/memory/memory.copy
   else
    local.get $5
    i32.const 1872
-   local.get $6
+   local.get $1
    call $~lib/memory/memory.copy
   end
+  local.get $1
   local.get $5
-  local.get $6
   i32.add
   local.get $0
   local.get $4
@@ -9557,51 +9552,51 @@
   i32.const 0
   i32.gt_s
   select
-  local.tee $1
+  local.tee $3
   local.get $0
   i32.const 20
   i32.sub
   i32.load offset=16
   i32.const 1
   i32.shr_u
-  local.tee $3
-  local.get $1
-  local.get $3
-  i32.lt_s
-  select
-  local.tee $4
-  local.get $2
-  i32.const 0
-  local.get $2
-  i32.const 0
-  i32.gt_s
-  select
   local.tee $1
-  local.get $3
   local.get $1
   local.get $3
-  i32.lt_s
+  i32.gt_s
+  select
+  local.tee $3
+  local.get $2
+  i32.const 0
+  local.get $2
+  i32.const 0
+  i32.gt_s
+  select
+  local.tee $2
+  local.get $1
+  local.get $1
+  local.get $2
+  i32.gt_s
   select
   local.tee $2
   local.get $2
-  local.get $4
+  local.get $3
   i32.gt_s
   select
   i32.const 1
   i32.shl
-  local.set $1
-  local.get $4
+  local.set $4
+  local.get $3
   local.get $2
   local.get $2
-  local.get $4
+  local.get $3
   i32.lt_s
   select
   i32.const 1
   i32.shl
   local.tee $2
-  local.get $1
+  local.get $4
   i32.sub
-  local.tee $4
+  local.tee $3
   i32.eqz
   if
    global.get $~lib/memory/__stack_pointer
@@ -9612,12 +9607,12 @@
    return
   end
   i32.const 0
-  local.get $3
+  local.get $1
   i32.const 1
   i32.shl
   local.get $2
   i32.eq
-  local.get $1
+  local.get $4
   select
   if
    global.get $~lib/memory/__stack_pointer
@@ -9628,22 +9623,22 @@
    return
   end
   global.get $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $3
   i32.const 1
   call $~lib/rt/itcms/__new
-  local.tee $2
+  local.tee $1
   i32.store
-  local.get $2
-  local.get $0
   local.get $1
-  i32.add
+  local.get $0
   local.get $4
+  i32.add
+  local.get $3
   call $~lib/memory/memory.copy
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $1
  )
  (func $~lib/rt/__newArray (param $0 i32) (result i32)
   (local $1 i32)
@@ -9672,38 +9667,38 @@
   local.get $0
   i32.const 2
   i32.shl
-  local.tee $2
+  local.tee $1
   i32.const 0
   call $~lib/rt/itcms/__new
-  local.tee $1
+  local.tee $3
   i32.store
   i32.const 16
   i32.const 5
   call $~lib/rt/itcms/__new
-  local.tee $3
-  local.get $1
+  local.tee $2
+  local.get $3
   i32.store
-  local.get $1
+  local.get $3
   if
+   local.get $2
    local.get $3
-   local.get $1
    i32.const 0
    call $byn-split-outlined-A$~lib/rt/itcms/__link
   end
-  local.get $3
-  local.get $1
-  i32.store offset=4
-  local.get $3
   local.get $2
-  i32.store offset=8
   local.get $3
+  i32.store offset=4
+  local.get $2
+  local.get $1
+  i32.store offset=8
+  local.get $2
   local.get $0
   i32.store offset=12
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $3
+  local.get $2
  )
  (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/memory/__stack_pointer
@@ -9806,16 +9801,16 @@
    local.get $0
    i32.const 20
    i32.sub
-   local.tee $3
+   local.tee $0
    i32.load offset=4
    i32.const 3
    i32.and
-   local.tee $0
+   local.tee $3
    global.get $~lib/rt/itcms/white
    i32.eqz
    i32.eq
    if
-    local.get $3
+    local.get $0
     local.get $1
     local.get $2
     select
@@ -9824,7 +9819,7 @@
     global.get $~lib/rt/itcms/state
     i32.const 1
     i32.eq
-    local.get $0
+    local.get $3
     i32.const 3
     i32.eq
     i32.and

@@ -2366,6 +2366,7 @@ export class Module {
       } else {
         passes.push("precompute");
       }
+      passes.push("ssa-nomerge");
       passes.push("directize"); // replace indirect with direct calls
       passes.push("dae-optimizing"); // reduce arity
       passes.push("inlining-optimizing"); // and inline if possible

@@ -40,6 +40,7 @@
  )
  (func $~start
   (local $0 i32)
+  (local $1 i32)
   block $folding-inner0
    global.get $~lib/memory/__stack_pointer
    i32.const 4
@@ -107,13 +108,13 @@
    end
    global.get $~lib/memory/__stack_pointer
    global.get $function-types/i32Adder
-   local.tee $0
+   local.tee $1
    i32.store
    i32.const 2
    global.set $~argumentsLength
    i32.const 2
    i32.const 3
-   local.get $0
+   local.get $1
    i32.load
    call_indirect $0 (type $i32_i32_=>_i32)
    i32.const 5
@@ -165,8 +166,6 @@
    end
    i32.const 2
    global.set $~argumentsLength
-   i32.const 0
-   local.set $0
    global.get $~lib/memory/__stack_pointer
    i32.const 4
    i32.sub
