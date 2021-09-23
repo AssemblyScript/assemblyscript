@@ -2366,11 +2366,11 @@ export class Module {
       } else {
         passes.push("precompute");
       }
-      passes.push("ssa-nomerge");
       passes.push("directize"); // replace indirect with direct calls
       passes.push("dae-optimizing"); // reduce arity
       passes.push("inlining-optimizing"); // and inline if possible
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("ssa-nomerge");
         passes.push("rse");
         // move code on early return (after CFG cleanup)
         passes.push("code-pushing");
