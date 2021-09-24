@@ -64,57 +64,57 @@
   (local $1 i32)
   global.get $class-overloading/which
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $class-overloading/a
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $class-overloading/c
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $class-overloading/ia
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $class-overloading/ic
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $class-overloading/b2
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   i32.const 1280
   call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -1475,12 +1475,12 @@
                  local.get $0
                  i32.load
                  local.tee $0
+                 i32.const 0
+                 local.get $0
+                 select
                  if
                   local.get $0
-                  if
-                   local.get $0
-                   call $byn-split-outlined-A$~lib/rt/itcms/__visit
-                  end
+                  call $byn-split-outlined-A$~lib/rt/itcms/__visit
                  end
                  return
                 end

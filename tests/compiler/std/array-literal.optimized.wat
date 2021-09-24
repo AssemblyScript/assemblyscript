@@ -104,48 +104,48 @@
   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   global.get $std/array-literal/emptyArrayI32
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/array-literal/dynamicArrayI8
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/array-literal/dynamicArrayI32
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/array-literal/dynamicArrayRef
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/array-literal/dynamicArrayRefWithCtor
   local.tee $0
+  i32.const 0
+  local.get $0
+  select
   if
    local.get $0
-   if
-    local.get $0
-    call $byn-split-outlined-A$~lib/rt/itcms/__visit
-   end
+   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   i32.const 1200
   call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -1826,12 +1826,12 @@
     local.get $1
     i32.load
     local.tee $2
+    i32.const 0
+    local.get $2
+    select
     if
      local.get $2
-     if
-      local.get $2
-      call $byn-split-outlined-A$~lib/rt/itcms/__visit
-     end
+     call $byn-split-outlined-A$~lib/rt/itcms/__visit
     end
     local.get $1
     i32.const 4
@@ -1871,12 +1871,12 @@
         local.get $0
         i32.load
         local.tee $0
+        i32.const 0
+        local.get $0
+        select
         if
          local.get $0
-         if
-          local.get $0
-          call $byn-split-outlined-A$~lib/rt/itcms/__visit
-         end
+         call $byn-split-outlined-A$~lib/rt/itcms/__visit
         end
         return
        end

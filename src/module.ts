@@ -76,7 +76,8 @@ export enum FeatureFlags {
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
   TypedFunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
-  All = 16383 /* _BinaryenFeatureAll */
+  RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
+  All = 32767 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
