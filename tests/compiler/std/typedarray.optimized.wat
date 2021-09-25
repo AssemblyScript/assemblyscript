@@ -14504,19 +14504,12 @@
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
    drop
    local.get $0
-   local.get $2
-   i32.add
-   local.get $0
    i32.const 1
    i32.sub
    local.get $2
    local.get $0
    local.get $2
    i32.le_s
-   select
-   local.get $2
-   i32.const 0
-   i32.lt_s
    select
    local.set $0
    local.get $1
@@ -14573,19 +14566,12 @@
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.05
    drop
    local.get $0
-   local.get $2
-   i32.add
-   local.get $0
    i32.const 1
    i32.sub
    local.get $2
    local.get $0
    local.get $2
    i32.le_s
-   select
-   local.get $2
-   i32.const 0
-   i32.lt_s
    select
    local.set $0
    local.get $1
@@ -14645,19 +14631,12 @@
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.011
    drop
    local.get $0
-   local.get $2
-   i32.add
-   local.get $0
    i32.const 1
    i32.sub
    local.get $2
    local.get $0
    local.get $2
    i32.le_s
-   select
-   local.get $2
-   i32.const 0
-   i32.lt_s
    select
    local.set $0
    local.get $1
@@ -14717,19 +14696,12 @@
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.017
    drop
    local.get $0
-   local.get $2
-   i32.add
-   local.get $0
    i32.const 1
    i32.sub
    local.get $2
    local.get $0
    local.get $2
    i32.le_s
-   select
-   local.get $2
-   i32.const 0
-   i32.lt_s
    select
    local.set $0
    local.get $1
@@ -16118,19 +16090,12 @@
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0
    drop
    local.get $0
-   local.get $2
-   i32.add
-   local.get $0
    i32.const 1
    i32.sub
    local.get $2
    local.get $0
    local.get $2
    i32.le_s
-   select
-   local.get $2
-   i32.const 0
-   i32.lt_s
    select
    local.set $0
    local.get $1
@@ -16187,19 +16152,12 @@
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.05
    drop
    local.get $0
-   local.get $2
-   i32.add
-   local.get $0
    i32.const 1
    i32.sub
    local.get $2
    local.get $0
    local.get $2
    i32.le_s
-   select
-   local.get $2
-   i32.const 0
-   i32.lt_s
    select
    local.set $0
    local.get $1
@@ -16259,19 +16217,12 @@
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.011
    drop
    local.get $0
-   local.get $2
-   i32.add
-   local.get $0
    i32.const 1
    i32.sub
    local.get $2
    local.get $0
    local.get $2
    i32.le_s
-   select
-   local.get $2
-   i32.const 0
-   i32.lt_s
    select
    local.set $0
    local.get $1
@@ -16331,19 +16282,12 @@
    br_if $~lib/typedarray/LAST_INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.017
    drop
    local.get $0
-   local.get $2
-   i32.add
-   local.get $0
    i32.const 1
    i32.sub
    local.get $2
    local.get $0
    local.get $2
    i32.le_s
-   select
-   local.get $2
-   i32.const 0
-   i32.lt_s
    select
    local.set $0
    local.get $1

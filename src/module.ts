@@ -2396,8 +2396,8 @@ export class Module {
 
           passes.push("inlining");
           passes.push("precompute-propagate");
+          passes.push("rse");
           passes.push("vacuum");
-
           passes.push("ssa-nomerge");
           passes.push("simplify-locals");
           passes.push("coalesce-locals");
