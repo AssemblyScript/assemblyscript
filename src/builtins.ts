@@ -9538,34 +9538,33 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
 
   // Some standard library components provide a custom visitor implementation,
   // for example to visit all members of a collection, e.g. arrays and maps.
+  // if __visit with unsafe decorder, it alse works.
   var hasVisitImpl = false;
-  if (instance.isDeclaredInLibrary) {
-    let visitPrototype = instance.getMember("__visit");
-    if (visitPrototype) {
-      assert(visitPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-      let visitInstance = program.resolver.resolveFunction(<FunctionPrototype>visitPrototype, null);
-      if (!visitInstance || !compiler.compileFunction(visitInstance)) {
-        body.push(
-          module.unreachable()
-        );
-      } else {
-        let visitSignature = visitInstance.signature;
-        let visitThisType = assert(visitSignature.thisType);
-        assert(
-          visitSignature.parameterTypes.length == 1 &&
-          visitSignature.parameterTypes[0] == Type.u32 &&
-          visitSignature.returnType == Type.void &&
-          instance.type.isStrictlyAssignableTo(visitThisType) // incl. implemented on super
-        );
-        body.push(
-          module.call(visitInstance.internalName, [
-            module.local_get(0, sizeTypeRef), // this
-            module.local_get(1, TypeRef.I32)  // cookie
-          ], TypeRef.None)
-        );
-      }
-      hasVisitImpl = true;
+  let visitPrototype = instance.getVisitPrototype();
+  if (visitPrototype) {
+    assert(visitPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+    let visitInstance = program.resolver.resolveFunction(<FunctionPrototype>visitPrototype, null);
+    if (!visitInstance || !compiler.compileFunction(visitInstance)) {
+      body.push(
+        module.unreachable()
+      );
+    } else {
+      let visitSignature = visitInstance.signature;
+      let visitThisType = assert(visitSignature.thisType);
+      assert(
+        visitSignature.parameterTypes.length == 1 &&
+        visitSignature.parameterTypes[0] == Type.u32 &&
+        visitSignature.returnType == Type.void &&
+        instance.type.isStrictlyAssignableTo(visitThisType) // incl. implemented on super
+      );
+      body.push(
+        module.call(visitInstance.internalName, [
+          module.local_get(0, sizeTypeRef), // this
+          module.local_get(1, TypeRef.I32)  // cookie
+        ], TypeRef.None)
+      );
     }
+    hasVisitImpl = true;
   }
 
   // Otherwise, if there is no custom visitor, generate a visitor function

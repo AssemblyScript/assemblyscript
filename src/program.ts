@@ -4533,6 +4533,22 @@ export class Class extends TypedElement {
     }
     return out;
   }
+
+  getVisitPrototype(): DeclaredElement | null {
+    let visitPrototype = this.getMember("__visit");
+    if (visitPrototype == null) {
+      return null;
+    }
+    if (this.isDeclaredInLibrary) {
+      return visitPrototype;
+    }
+    let decorator = visitPrototype.declaration.decorators;
+    if (!decorator || (decorator && decorator.every((v) => v.decoratorKind != DecoratorKind.UNSAFE))) {
+      return null;
+    } else {
+      return visitPrototype;
+    }
+  }
 }
 
 /** A yet unresolved interface. */
