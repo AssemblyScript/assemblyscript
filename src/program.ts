@@ -4535,19 +4535,22 @@ export class Class extends TypedElement {
   }
 
   getVisitPrototype(): DeclaredElement | null {
-    let visitPrototype = this.getMember("__visit");
+    const visitPrototype = this.getMember("__visit");
     if (visitPrototype == null) {
       return null;
     }
     if (this.isDeclaredInLibrary) {
       return visitPrototype;
     }
-    let decorator = visitPrototype.declaration.decorators;
+    const decorator = visitPrototype.declaration.decorators;
     if (!decorator || (decorator && decorator.every((v) => v.decoratorKind != DecoratorKind.UNSAFE))) {
       return null;
-    } else {
-      return visitPrototype;
     }
+    const base = this.base;
+    if (base && visitPrototype == base.getMember("__visit")){
+      return null;
+    }
+    return visitPrototype;
   }
 }
 
