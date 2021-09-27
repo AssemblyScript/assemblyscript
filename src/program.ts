@@ -147,6 +147,7 @@ import {
 import {
   BuiltinNames
 } from "./builtins";
+import { Compiler } from "./compiler";
 
 // Memory manager constants
 const AL_SIZE = 16;
@@ -4534,7 +4535,7 @@ export class Class extends TypedElement {
     return out;
   }
 
-  getVisitPrototype(): DeclaredElement | null {
+  getVisitPrototype(compiler: Compiler): DeclaredElement | null {
     const visitPrototype = this.getMember("__visit");
     if (visitPrototype == null) {
       return null;
@@ -4544,6 +4545,7 @@ export class Class extends TypedElement {
     }
     const decorator = visitPrototype.declaration.decorators;
     if (!decorator || (decorator && decorator.every((v) => v.decoratorKind != DecoratorKind.UNSAFE))) {
+      compiler.warning(DiagnosticCode.override___visit_need_unsafe_decorator,visitPrototype.declaration.name.range);
       return null;
     }
     const base = this.base;

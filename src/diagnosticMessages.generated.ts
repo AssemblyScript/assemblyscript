@@ -182,6 +182,7 @@ export enum DiagnosticCode {
   File_0_not_found = 6054,
   Numeric_separators_are_not_allowed_here = 6188,
   Multiple_consecutive_numeric_separators_are_not_permitted = 6189,
+  override___visit_need_unsafe_decorator = 6190,
   _super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class = 17009,
   _super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class = 17011
 }
@@ -366,6 +367,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 6054: return "File '{0}' not found.";
     case 6188: return "Numeric separators are not allowed here.";
     case 6189: return "Multiple consecutive numeric separators are not permitted.";
+    case 6190: return "override '__visit' need @unsafe decorator";
     case 17009: return "'super' must be called before accessing 'this' in the constructor of a derived class.";
     case 17011: return "'super' must be called before accessing a property of 'super' in the constructor of a derived class.";
     default: return "";

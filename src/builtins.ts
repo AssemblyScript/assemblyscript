@@ -9540,7 +9540,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   // for example to visit all members of a collection, e.g. arrays and maps.
   // if __visit with unsafe decorder, it alse works.
   var hasVisitImpl = false;
-  let visitPrototype = instance.getVisitPrototype();
+  let visitPrototype = instance.getVisitPrototype(compiler);
   if (visitPrototype) {
     assert(visitPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
     let visitInstance = program.resolver.resolveFunction(<FunctionPrototype>visitPrototype, null);
