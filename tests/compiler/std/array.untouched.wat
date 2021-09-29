@@ -5179,6 +5179,10 @@
   i32.const 1
   drop
   i32.const 8
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 8
   i32.const 2
   i32.eq
   drop
