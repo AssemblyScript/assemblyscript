@@ -1,18 +1,31 @@
 name: assemblyscript
-version: git
+title: AssemblyScript
 summary: A TypeScript-like language for WebAssembly.
 description: |
   AssemblyScript compiles a variant of TypeScript to WebAssembly using Binaryen.
 
   See the AssemblyScript website for documentation:
   https://www.assemblyscript.org
+type: app
 icon: media/icon.svg
+issues: https://github.com/AssemblyScript/assemblyscript/issues
+donation: https://opencollective.com/assemblyscript
+source-code: https://github.com/AssemblyScript/assemblyscript.git
+website: https://www.assemblyscript.org
+license: Apache-2.0
+version: git
 grade: stable
 confinement: strict
 apps:
   asc:
     command: asc
+  asinit:
+    command: asinit
 parts:
   assemblyscript:
     source: .
-    plugin: nodejs
+    plugin: npm
+    npm-node-version: 16.9.1
+architectures: 
+  - build-on: amd64 
+    run-on: [amd64, armhf, arm64, i386]
