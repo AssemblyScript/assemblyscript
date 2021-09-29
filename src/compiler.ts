@@ -4645,8 +4645,8 @@ export class Compiler extends DiagnosticEmitter {
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
 
-          // simplify if cloning left without side effects is possible
-          if (expr = module.cloneExpression(leftExpr, true, 0)) {
+          // simplify if copying left is trivial
+          if (expr = module.tryCopyTrivialExpression(leftExpr)) {
             expr = module.if(
               this.makeIsTrueish(leftExpr, this.currentType, left),
               rightExpr,
@@ -4709,8 +4709,8 @@ export class Compiler extends DiagnosticEmitter {
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
 
-          // simplify if cloning left without side effects is possible
-          if (expr = module.cloneExpression(leftExpr, true, 0)) {
+          // simplify if copying left is trivial
+          if (expr = module.tryCopyTrivialExpression(leftExpr)) {
             expr = module.if(
               this.makeIsTrueish(leftExpr, leftType, left),
               expr,

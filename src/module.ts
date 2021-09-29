@@ -2484,115 +2484,25 @@ export class Module {
     return Relooper.create(this);
   }
 
-  cloneExpression(
-    expr: ExpressionRef,
-    noSideEffects: bool = false,
-    maxDepth: i32 = i32.MAX_VALUE
-  ): ExpressionRef { // currently supports side effect free expressions only
-    if (maxDepth < 0) return 0;
-    maxDepth -= 1;
-
-    var nested1: ExpressionRef,
-        nested2: ExpressionRef;
-
+  /** Makes a copy of a trivial expression (doesn't contain subexpressions). Returns `0` if non-trivial. */
+  tryCopyTrivialExpression(expr: ExpressionRef): ExpressionRef {
     switch (binaryen._BinaryenExpressionGetId(expr)) {
-      case ExpressionId.Const: {
-        switch (<u32>binaryen._BinaryenExpressionGetType(expr)) {
-          case <u32>TypeRef.I32: {
-            return this.i32(binaryen._BinaryenConstGetValueI32(expr));
-          }
-          case <u32>TypeRef.I64: {
-            return this.i64(
-              binaryen._BinaryenConstGetValueI64Low(expr),
-              binaryen._BinaryenConstGetValueI64High(expr)
-            );
-          }
-          case <u32>TypeRef.F32: {
-            return this.f32(binaryen._BinaryenConstGetValueF32(expr));
-          }
-          case <u32>TypeRef.F64: {
-            return this.f64(binaryen._BinaryenConstGetValueF64(expr));
-          }
-          case <u32>TypeRef.V128: {
-            // TODO
-            return 0;
-          }
-          // Not possible to clone an externref as it is opaque
-          case <u32>TypeRef.Externref: {
-            return 0;
-          }
-          default: {
-            throw new Error("concrete type expected");
-          }
-        }
-      }
-      case ExpressionId.LocalGet: {
-        return binaryen._BinaryenLocalGet(this.ref,
-          binaryen._BinaryenLocalGetGetIndex(expr),
-          binaryen._BinaryenExpressionGetType(expr)
-        );
-      }
-      case ExpressionId.GlobalGet: {
-        let globalName = binaryen._BinaryenGlobalGetGetName(expr);
-        if (!globalName) break;
-        return binaryen._BinaryenGlobalGet(
-          this.ref, globalName, binaryen._BinaryenExpressionGetType(expr)
-        );
-      }
-      case ExpressionId.Load: {
-        if (!(nested1 = this.cloneExpression(
-          binaryen._BinaryenLoadGetPtr(expr), noSideEffects, maxDepth)
-        )) {
-          break;
-        }
-        return (
-          binaryen._BinaryenLoadIsAtomic(expr)
-            ? binaryen._BinaryenAtomicLoad(this.ref,
-                binaryen._BinaryenLoadGetBytes(expr),
-                binaryen._BinaryenLoadGetOffset(expr),
-                binaryen._BinaryenExpressionGetType(expr),
-                nested1
-              )
-            : binaryen._BinaryenLoad(this.ref,
-                binaryen._BinaryenLoadGetBytes(expr),
-                binaryen._BinaryenLoadIsSigned(expr),
-                binaryen._BinaryenLoadGetOffset(expr),
-                binaryen._BinaryenLoadGetAlign(expr),
-                binaryen._BinaryenExpressionGetType(expr),
-                nested1
-              )
-        );
-      }
-      case ExpressionId.Unary: {
-        if (!(nested1 = this.cloneExpression(
-          binaryen._BinaryenUnaryGetValue(expr), noSideEffects, maxDepth)
-        )) {
-          break;
-        }
-        return binaryen._BinaryenUnary(
-          this.ref, binaryen._BinaryenUnaryGetOp(expr), nested1
-        );
-      }
-      case ExpressionId.Binary: {
-        if (!(nested1 = this.cloneExpression(
-          binaryen._BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth)
-        )) {
-          break;
-        }
-        if (!(nested2 = this.cloneExpression(
-          binaryen._BinaryenBinaryGetRight(expr), noSideEffects, maxDepth)
-        )) {
-          break;
-        }
-        return binaryen._BinaryenBinary(
-          this.ref, binaryen._BinaryenBinaryGetOp(expr), nested1, nested2
-        );
-      }
+      case ExpressionId.LocalGet:
+      case ExpressionId.GlobalGet:
+      case ExpressionId.Const:
+      case ExpressionId.MemorySize:
+      case ExpressionId.Nop:
+      case ExpressionId.Unreachable:
+      case ExpressionId.DataDrop:
+      case ExpressionId.RefNull:
+      case ExpressionId.RttCanon: return this.copyExpression(expr);
     }
     return 0;
   }
 
+  /** Makes a copy of any expression including all subexpressions. */
   copyExpression(expr: ExpressionRef): ExpressionRef {
+    // TODO: Copy debug location as well (needs Binaryen support)
     return binaryen._BinaryenExpressionCopy(expr, this.ref);
   }
 
