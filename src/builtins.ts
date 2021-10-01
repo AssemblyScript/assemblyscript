@@ -9538,7 +9538,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
 
   // Some standard library components provide a custom visitor implementation,
   // for example to visit all members of a collection, e.g. arrays and maps.
-  // if __visit with unsafe decorder, it alse works.
+  // __visit can be overridden with the @unsafe decorator
   var hasVisitImpl = false;
   let visitPrototype = instance.getVisitPrototype(compiler);
   if (visitPrototype) {

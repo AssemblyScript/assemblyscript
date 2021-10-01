@@ -181,7 +181,7 @@
   "File '{0}' not found.": 6054,
   "Numeric separators are not allowed here.": 6188,
   "Multiple consecutive numeric separators are not permitted.": 6189,
-  "override '__visit' need @unsafe decorator": 6190,
+  "Overriding '__visit' needs an @unsafe decorator.": 6190,
   "'super' must be called before accessing 'this' in the constructor of a derived class.": 17009,
   "'super' must be called before accessing a property of 'super' in the constructor of a derived class.": 17011
 }

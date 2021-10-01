@@ -4545,7 +4545,7 @@ export class Class extends TypedElement {
     }
     const decorator = visitPrototype.declaration.decorators;
     if (!decorator || (decorator && decorator.every((v) => v.decoratorKind != DecoratorKind.UNSAFE))) {
-      compiler.warning(DiagnosticCode.override___visit_need_unsafe_decorator,visitPrototype.declaration.name.range);
+      compiler.warning(DiagnosticCode.Overriding___visit_needs_an_unsafe_decorator, visitPrototype.declaration.name.range);
       return null;
     }
     const base = this.base;
