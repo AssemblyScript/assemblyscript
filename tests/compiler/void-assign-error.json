@@ -1,0 +1,9 @@
+{
+  "asc_flags": [
+   ],
+  "stderr": [
+    "AS235: Variable declarations of type 'void' are forbidden.",
+    "AS235: Variable declarations of type 'void' are forbidden.",
+    "EOF"
+  ]
+}

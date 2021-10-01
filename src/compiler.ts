@@ -3052,6 +3052,13 @@ export class Compiler extends DiagnosticEmitter {
           uniqueMap(flow.contextualTypeArguments)
         );
         if (!type) continue;
+        if (type.kind == TypeKind.VOID) {
+          this.error(
+            DiagnosticCode.Variable_declarations_of_type_void_are_forbidden,
+            typeNode.range
+          );
+          continue;
+        }
         this.checkTypeSupported(type, typeNode);
 
         if (initializerNode) {

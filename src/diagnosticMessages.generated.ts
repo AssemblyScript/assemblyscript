@@ -49,6 +49,7 @@ export enum DiagnosticCode {
   A_class_with_a_constructor_explicitly_returning_something_else_than_this_must_be_final = 231,
   Property_0_is_always_assigned_before_being_used = 233,
   Expression_refers_to_a_static_element_that_does_not_compile_to_a_value_at_runtime = 234,
+  Variable_declarations_of_type_void_are_forbidden = 235,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
   Expression_compiles_to_a_dynamic_check_at_runtime = 903,
@@ -233,6 +234,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 231: return "A class with a constructor explicitly returning something else than 'this' must be '@final'.";
     case 233: return "Property '{0}' is always assigned before being used.";
     case 234: return "Expression refers to a static element that does not compile to a value at runtime.";
+    case 235: return "Variable declarations of type 'void' are forbidden.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";
     case 903: return "Expression compiles to a dynamic check at runtime.";
