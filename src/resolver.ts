@@ -2761,7 +2761,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // remember discovered overloads for virtual stub finalization
     if (classInstance) {
-      let methodOrPropertyName = instance.declaration.name.text;
+      let methodOrPropertyName = instance.declaration.identifierNode.text;
       let baseClass = classInstance.base;
       while (baseClass) {
         let baseMembers = baseClass.members;
