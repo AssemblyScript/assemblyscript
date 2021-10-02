@@ -55,7 +55,6 @@ export enum NodeKind {
 
   // expressions
   IDENTIFIER,
-  BINDINGPATTERN,
   ASSERTION,
   BINARY,
   CALL,
@@ -211,14 +210,6 @@ export abstract class Node {
     isQuoted: bool = false
   ): IdentifierExpression {
     return new IdentifierExpression(text, isQuoted, range);
-  }
-
-  static createBindingPatternExpression(
-    elements: Expression[],
-    range: Range,
-    array: bool
-  ): BindingPatternExpression {
-    return new BindingPatternExpression(elements, array, range);
   }
 
   static createEmptyIdentifierExpression(
@@ -1138,20 +1129,6 @@ export abstract class LiteralExpression extends Expression {
     range: Range
   ) {
     super(NodeKind.LITERAL, range);
-  }
-}
-
-/** Represents an `[]` or `{}` containing identifiers. */
-export class BindingPatternExpression extends Expression {
-  constructor(
-    /** Nested element expressions. Either {@link OmittedExpression} or {@link IdentifierExpression} */
-    public elements: Expression[],
-    /** Whether this is an array pattern or an object pattern */
-    public array: bool,
-    /** Source range. */
-    range: Range
-  ) {
-    super(NodeKind.BINDINGPATTERN, range);
   }
 }
 

@@ -89,6 +89,7 @@ import {
 
   mangleInternalPath
 } from "./ast";
+import { ArrayLiteralExpression, ObjectLiteralExpression } from ".";
 
 /** Represents a dependee. */
 class Dependee {
@@ -930,59 +931,14 @@ export class Parser extends DiagnosticEmitter {
   ): Expression | null {
     if (!tn.skipIdentifier()) {
       let startPos = tn.range().start;
-      let isArrayPattern = false;
-      let closingToken = Token.CLOSEBRACE;
-      let closingTokenSource = "}";
 
       switch (tn.peek()) {
         case Token.OPENBRACKET:
-          isArrayPattern = true;
-          closingToken = Token.CLOSEBRACKET;
-          closingTokenSource = "]";
-        case Token.OPENBRACE: {
           tn.next();
-          let elements = new Array<Expression>();
-
-          do {
-            let tk = tn.peek();
-            let isEnding = tk == closingToken;
-
-            if (tk == Token.COMMA || isEnding) {
-              elements.push(Node.createOmittedExpression(tn.range(tn.pos)));
-              if (isEnding)
-                break;
-            } else {
-              if (!tn.skipIdentifier()) {
-                this.error(
-                  DiagnosticCode.Identifier_expected,
-                  tn.range()
-                );
-                return null;
-              }
-              
-              let identifier = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-              assert(identifier.text.charCodeAt(0) != CharCode.SPACE);
-              if (isIllegalVariableIdentifier(identifier.text)) {
-                this.error(
-                  DiagnosticCode.Identifier_expected,
-                  identifier.range
-                );
-                return null;
-              }
-              elements.push(identifier);
-            }
-          } while (tn.skip(Token.COMMA));
-
-          if (!tn.skip(closingToken)) {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), closingTokenSource
-            );
-            return null;
-          }
-
-          return Node.createBindingPatternExpression(elements, tn.range(startPos, tn.pos), isArrayPattern);
-        }
+          return this.parseArrayLiteral(tn, startPos);
+        case Token.OPENBRACE:
+          tn.next();
+          return this.parseObjectLiteral(tn, startPos);
         default: 
           this.error(
             DiagnosticCode.Identifier_expected,
@@ -3739,77 +3695,11 @@ export class Parser extends DiagnosticEmitter {
       }
       // ArrayLiteralExpression
       case Token.OPENBRACKET: {
-        let elementExpressions = new Array<Expression>();
-        while (!tn.skip(Token.CLOSEBRACKET)) {
-          let expr: Expression | null;
-          if (tn.peek() == Token.COMMA) {
-            expr = Node.createOmittedExpression(tn.range(tn.pos));
-          } else {
-            expr = this.parseExpression(tn, Precedence.COMMA + 1);
-            if (!expr) return null;
-          }
-          elementExpressions.push(expr);
-          if (!tn.skip(Token.COMMA)) {
-            if (tn.skip(Token.CLOSEBRACKET)) {
-              break;
-            } else {
-              this.error(
-                DiagnosticCode._0_expected,
-                tn.range(), "]"
-              );
-              return null;
-            }
-          }
-        }
-        return Node.createArrayLiteralExpression(elementExpressions, tn.range(startPos, tn.pos));
+        return this.parseArrayLiteral(tn, startPos);
       }
       // ObjectLiteralExpression
       case Token.OPENBRACE: {
-        let startPos = tn.tokenPos;
-        let names = new Array<IdentifierExpression>();
-        let values = new Array<Expression>();
-        let name: IdentifierExpression;
-        while (!tn.skip(Token.CLOSEBRACE)) {
-          if (!tn.skipIdentifier()) {
-            if (!tn.skip(Token.STRINGLITERAL)) {
-              this.error(
-                DiagnosticCode.Identifier_expected,
-                tn.range(),
-              );
-              return null;
-            }
-            name = Node.createIdentifierExpression(tn.readString(), tn.range());
-            name.isQuoted = true;
-          } else {
-            name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-          }
-          names.push(name);
-          if (tn.skip(Token.COLON)) {
-            let value = this.parseExpression(tn, Precedence.COMMA + 1);
-            if (!value) return null;
-            values.push(value);
-          } else if (!name.isQuoted) {
-            values.push(name);
-          } else {
-            this.error(
-              DiagnosticCode._0_expected,
-              tn.range(), ":"
-            );
-            return null;
-          }
-          if (!tn.skip(Token.COMMA)) {
-            if (tn.skip(Token.CLOSEBRACE)) {
-              break;
-            } else {
-              this.error(
-                DiagnosticCode._0_expected,
-                tn.range(), "}"
-              );
-              return null;
-            }
-          }
-        }
-        return Node.createObjectLiteralExpression(names, values, tn.range(startPos, tn.pos));
+        return this.parseObjectLiteral(tn, startPos);
       }
       // AssertionExpression (unary prefix)
       case Token.LESSTHAN: {
@@ -3924,6 +3814,79 @@ export class Parser extends DiagnosticEmitter {
         return null;
       }
     }
+  }
+
+  parseObjectLiteral(tn: Tokenizer, startPos: i32): ObjectLiteralExpression | null {
+    var names = new Array<IdentifierExpression>();
+    var values = new Array<Expression>();
+    var name: IdentifierExpression;
+    while (!tn.skip(Token.CLOSEBRACE)) {
+      if (!tn.skipIdentifier()) {
+        if (!tn.skip(Token.STRINGLITERAL)) {
+          this.error(
+            DiagnosticCode.Identifier_expected,
+            tn.range(),
+          );
+          return null;
+        }
+        name = Node.createIdentifierExpression(tn.readString(), tn.range());
+        name.isQuoted = true;
+      } else {
+        name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+      }
+      names.push(name);
+      if (tn.skip(Token.COLON)) {
+        let value = this.parseExpression(tn, Precedence.COMMA + 1);
+        if (!value) return null;
+        values.push(value);
+      } else if (!name.isQuoted) {
+        values.push(name);
+      } else {
+        this.error(
+          DiagnosticCode._0_expected,
+          tn.range(), ":"
+        );
+        return null;
+      }
+      if (!tn.skip(Token.COMMA)) {
+        if (tn.skip(Token.CLOSEBRACE)) {
+          break;
+        } else {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), "}"
+          );
+          return null;
+        }
+      }
+    }
+    return Node.createObjectLiteralExpression(names, values, tn.range(startPos, tn.pos));
+  }
+
+  parseArrayLiteral(tn: Tokenizer, startPos: i32): ArrayLiteralExpression | null {
+    var elementExpressions = new Array<Expression>();
+    while (!tn.skip(Token.CLOSEBRACKET)) {
+      let expr: Expression | null;
+      if (tn.peek() == Token.COMMA) {
+        expr = Node.createOmittedExpression(tn.range(tn.pos));
+      } else {
+        expr = this.parseExpression(tn, Precedence.COMMA + 1);
+        if (!expr) return null;
+      }
+      elementExpressions.push(expr);
+      if (!tn.skip(Token.COMMA)) {
+        if (tn.skip(Token.CLOSEBRACKET)) {
+          break;
+        } else {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), "]"
+          );
+          return null;
+        }
+      }
+    }
+    return Node.createArrayLiteralExpression(elementExpressions, tn.range(startPos, tn.pos));
   }
 
   tryParseTypeArgumentsBeforeArguments(

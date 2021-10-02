@@ -3944,17 +3944,6 @@
   (local $11 i32)
   (local $12 i32)
   (local $13 i32)
-  (local $14 i32)
-  (local $15 i32)
-  (local $16 i32)
-  (local $17 i32)
-  (local $18 i32)
-  (local $19 i32)
-  (local $20 i32)
-  (local $21 i32)
-  (local $22 i32)
-  (local $23 i32)
-  (local $24 i32)
   global.get $~lib/memory/__stack_pointer
   i32.const 28
   i32.sub
@@ -3998,24 +3987,24 @@
   local.tee $1
   i32.store
   local.get $1
-  local.set $2
-  local.get $2
+  local.set $0
+  local.get $0
   i32.const 0
   call $~lib/array/Array<i32>#__get
-  local.set $0
-  local.get $2
+  local.set $2
+  local.get $0
   i32.const 1
   call $~lib/array/Array<i32>#__get
   local.set $3
-  local.get $2
+  local.get $0
   i32.const 2
   call $~lib/array/Array<i32>#__get
   local.set $4
-  local.get $2
+  local.get $0
   i32.const 4
   call $~lib/array/Array<i32>#__get
   local.set $5
-  local.get $0
+  local.get $2
   i32.const 1
   i32.eq
   i32.eqz
@@ -4065,24 +4054,24 @@
   end
   i32.const 0
   call $array-destructuring/Foo#constructor
-  local.set $6
-  local.get $6
+  local.set $5
+  local.get $5
   i32.const 0
   call $array-destructuring/Foo#__get
-  local.set $5
-  local.get $6
+  local.set $4
+  local.get $5
   i32.const 1
   call $array-destructuring/Foo#__get
-  local.set $4
-  local.get $6
+  local.set $3
+  local.get $5
   i32.const 2
   call $array-destructuring/Foo#__get
-  local.set $3
-  local.get $6
+  local.set $2
+  local.get $5
   i32.const 4
   call $array-destructuring/Foo#__get
-  local.set $0
-  local.get $5
+  local.set $1
+  local.get $4
   i32.const 2
   i32.eq
   i32.eqz
@@ -4094,7 +4083,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $3
   i32.const 3
   i32.eq
   i32.eqz
@@ -4106,7 +4095,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.const 4
   i32.eq
   i32.eqz
@@ -4118,7 +4107,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 6
   i32.eq
   i32.eqz
@@ -4132,24 +4121,24 @@
   end
   i32.const 0
   call $array-destructuring/Foo#constructor
-  local.set $7
-  local.get $7
+  local.set $5
+  local.get $5
   i32.const 1
   call $array-destructuring/Foo#__get
-  local.set $5
-  local.get $7
+  local.set $4
+  local.get $5
   i32.const 2
   call $array-destructuring/Foo#__get
-  local.set $4
-  local.get $7
+  local.set $3
+  local.get $5
   i32.const 3
   call $array-destructuring/Foo#__get
-  local.set $3
-  local.get $7
+  local.set $2
+  local.get $5
   i32.const 4
   call $array-destructuring/Foo#__get
-  local.set $0
-  local.get $5
+  local.set $1
+  local.get $4
   i32.const 3
   i32.eq
   i32.eqz
@@ -4161,7 +4150,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $3
   i32.const 4
   i32.eq
   i32.eqz
@@ -4173,7 +4162,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   i32.const 5
   i32.eq
   i32.eqz
@@ -4185,7 +4174,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 6
   i32.eq
   i32.eqz
@@ -4203,34 +4192,34 @@
   i32.const 3
   i32.const 592
   call $~lib/rt/__newArray
-  local.tee $8
+  local.tee $0
   i32.store offset=4
   global.get $~lib/memory/__stack_pointer
-  local.get $8
-  local.set $9
-  local.get $9
-  i32.const 0
-  call $~lib/array/Array<i32>#__get
+  local.get $0
   local.set $5
-  local.get $9
-  i32.const 1
+  local.get $5
+  i32.const 0
   call $~lib/array/Array<i32>#__get
   local.set $4
-  local.get $9
-  i32.const 2
+  local.get $5
+  i32.const 1
   call $~lib/array/Array<i32>#__get
   local.set $3
-  local.get $9
+  local.get $5
+  i32.const 2
+  call $~lib/array/Array<i32>#__get
+  local.set $2
+  local.get $5
   i32.const 3
   call $~lib/array/Array<i32>#__get
-  local.set $0
-  local.get $9
-  local.tee $1
-  i32.store
-  local.get $1
+  local.set $1
+  local.get $5
+  local.tee $5
+  i32.store offset=8
+  local.get $5
   i32.const 0
   call $~lib/array/Array<i32>#__get
-  local.get $5
+  local.get $4
   i32.eq
   i32.eqz
   if
@@ -4241,10 +4230,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $5
   i32.const 1
   call $~lib/array/Array<i32>#__get
-  local.get $4
+  local.get $3
   i32.eq
   i32.eqz
   if
@@ -4255,10 +4244,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $5
   i32.const 2
   call $~lib/array/Array<i32>#__get
-  local.get $3
+  local.get $2
   i32.eq
   i32.eqz
   if
@@ -4269,10 +4258,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $5
   i32.const 3
   call $~lib/array/Array<i32>#__get
-  local.get $0
+  local.get $1
   i32.eq
   i32.eqz
   if
@@ -4289,32 +4278,32 @@
   i32.const 3
   i32.const 0
   call $~lib/rt/__newArray
-  local.tee $10
-  i32.store offset=8
-  global.get $~lib/memory/__stack_pointer
-  local.get $10
-  i32.load offset=4
-  local.tee $11
+  local.tee $6
   i32.store offset=12
-  local.get $10
+  global.get $~lib/memory/__stack_pointer
+  local.get $6
+  i32.load offset=4
+  local.tee $7
+  i32.store offset=16
+  local.get $6
   i32.const 0
+  local.get $3
+  call $~lib/array/Array<i32>#__uset
+  local.get $6
+  i32.const 1
   local.get $4
   call $~lib/array/Array<i32>#__uset
-  local.get $10
-  i32.const 1
-  local.get $5
-  call $~lib/array/Array<i32>#__uset
-  local.get $10
-  local.set $12
-  local.get $12
+  local.get $6
+  local.set $7
+  local.get $7
   i32.const 0
   call $~lib/array/Array<i32>#__get
-  local.set $5
-  local.get $12
+  local.set $4
+  local.get $7
   i32.const 1
   call $~lib/array/Array<i32>#__get
-  local.set $4
-  local.get $5
+  local.set $3
+  local.get $4
   i32.const 2
   i32.eq
   i32.eqz
@@ -4326,7 +4315,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $3
   i32.const 1
   i32.eq
   i32.eqz
@@ -4338,56 +4327,56 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $8
-  local.set $13
-  local.get $8
-  local.set $14
-  local.get $8
-  local.set $15
-  local.get $8
-  local.set $16
+  local.get $0
+  local.set $7
+  local.get $0
+  local.set $7
+  local.get $0
+  local.set $7
+  local.get $0
+  local.set $7
   global.get $~lib/memory/__stack_pointer
   i32.const 0
   i32.const 4
   call $~lib/typedarray/Int32Array#constructor
-  local.tee $11
-  i32.store offset=12
-  local.get $11
+  local.tee $7
+  i32.store offset=16
+  local.get $7
   i32.const 0
-  local.get $5
-  call $~lib/typedarray/Int32Array#__set
-  local.get $11
-  i32.const 1
   local.get $4
   call $~lib/typedarray/Int32Array#__set
-  local.get $11
-  i32.const 2
+  local.get $7
+  i32.const 1
   local.get $3
   call $~lib/typedarray/Int32Array#__set
-  local.get $11
-  i32.const 3
-  local.get $0
+  local.get $7
+  i32.const 2
+  local.get $2
   call $~lib/typedarray/Int32Array#__set
-  local.get $11
-  local.set $17
-  local.get $17
+  local.get $7
+  i32.const 3
+  local.get $1
+  call $~lib/typedarray/Int32Array#__set
+  local.get $7
+  local.set $6
+  local.get $6
   i32.const 0
   call $~lib/typedarray/Int32Array#__get
-  local.set $10
-  local.get $17
+  local.set $8
+  local.get $6
   i32.const 1
   call $~lib/typedarray/Int32Array#__get
-  local.set $18
-  local.get $17
+  local.set $9
+  local.get $6
   i32.const 2
   call $~lib/typedarray/Int32Array#__get
-  local.set $19
-  local.get $17
+  local.set $10
+  local.get $6
   i32.const 3
   call $~lib/typedarray/Int32Array#__get
-  local.set $20
-  local.get $10
-  local.get $5
+  local.set $11
+  local.get $8
+  local.get $4
   i32.eq
   i32.eqz
   if
@@ -4398,8 +4387,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $18
-  local.get $4
+  local.get $9
+  local.get $3
   i32.eq
   i32.eqz
   if
@@ -4410,8 +4399,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $19
-  local.get $3
+  local.get $10
+  local.get $2
   i32.eq
   i32.eqz
   if
@@ -4422,8 +4411,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $20
-  local.get $0
+  local.get $11
+  local.get $1
   i32.eq
   i32.eqz
   if
@@ -4440,55 +4429,55 @@
   i32.const 3
   i32.const 0
   call $~lib/rt/__newArray
-  local.tee $21
-  i32.store offset=20
+  local.tee $6
+  i32.store offset=12
   global.get $~lib/memory/__stack_pointer
-  local.get $21
+  local.get $6
   i32.load offset=4
-  local.tee $22
+  local.tee $12
   i32.store offset=24
-  local.get $21
+  local.get $6
   i32.const 0
+  local.get $8
+  call $~lib/array/Array<i32>#__uset
+  local.get $6
+  i32.const 1
+  local.get $9
+  call $~lib/array/Array<i32>#__uset
+  local.get $6
+  i32.const 2
   local.get $10
   call $~lib/array/Array<i32>#__uset
-  local.get $21
-  i32.const 1
-  local.get $18
-  call $~lib/array/Array<i32>#__uset
-  local.get $21
-  i32.const 2
-  local.get $19
-  call $~lib/array/Array<i32>#__uset
-  local.get $21
+  local.get $6
   i32.const 3
-  local.get $20
+  local.get $11
   call $~lib/array/Array<i32>#__uset
-  local.get $21
-  local.set $24
+  local.get $6
+  local.set $13
   global.get $~lib/memory/__stack_pointer
-  local.get $24
-  i32.store offset=16
-  local.get $24
+  local.get $13
+  i32.store offset=20
+  local.get $13
   call $~lib/staticarray/StaticArray.fromArray<i32>
-  local.set $23
-  local.get $23
+  local.set $12
+  local.get $12
   i32.const 0
-  call $~lib/staticarray/StaticArray<i32>#__get
-  local.set $5
-  local.get $23
-  i32.const 1
   call $~lib/staticarray/StaticArray<i32>#__get
   local.set $4
-  local.get $23
-  i32.const 2
+  local.get $12
+  i32.const 1
   call $~lib/staticarray/StaticArray<i32>#__get
   local.set $3
-  local.get $23
+  local.get $12
+  i32.const 2
+  call $~lib/staticarray/StaticArray<i32>#__get
+  local.set $2
+  local.get $12
   i32.const 3
   call $~lib/staticarray/StaticArray<i32>#__get
-  local.set $0
-  local.get $5
-  local.get $10
+  local.set $1
+  local.get $4
+  local.get $8
   i32.eq
   i32.eqz
   if
@@ -4499,8 +4488,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
-  local.get $18
+  local.get $3
+  local.get $9
   i32.eq
   i32.eqz
   if
@@ -4511,8 +4500,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
-  local.get $19
+  local.get $2
+  local.get $10
   i32.eq
   i32.eqz
   if
@@ -4523,8 +4512,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $20
+  local.get $1
+  local.get $11
   i32.eq
   i32.eqz
   if

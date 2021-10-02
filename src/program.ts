@@ -147,6 +147,7 @@ import {
 import {
   BuiltinNames
 } from "./builtins";
+import { LiteralExpression } from ".";
 
 // Memory manager constants
 const AL_SIZE = 16;
@@ -2590,9 +2591,15 @@ export class Program extends DiagnosticEmitter {
       let nameNode = declaration.name;
       
       switch (nameNode.kind) {
-        case NodeKind.BINDINGPATTERN:
-          this.error(DiagnosticCode.A_destructuring_declaration_must_have_an_initializer, declaration.range);
-          break;
+        case NodeKind.LITERAL:
+          switch ((<LiteralExpression>nameNode).literalKind) {
+            case LiteralKind.OBJECT:
+            case LiteralKind.ARRAY:
+              this.error(DiagnosticCode.A_destructuring_declaration_must_have_an_initializer, declaration.range);
+              break;
+            default:
+              assert(false);
+          }
         case NodeKind.IDENTIFIER: {
           let name = (<IdentifierExpression>nameNode).text;
           let element = new Global(

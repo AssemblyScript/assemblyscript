@@ -176,7 +176,6 @@ import {
 
   findDecorator,
   isTypeOmitted,
-  BindingPatternExpression,
   VariableDeclaration
 } from "./ast";
 
@@ -3093,97 +3092,102 @@ export class Compiler extends DiagnosticEmitter {
     for (let i = 0; i < numDeclarations; ++i) {
       let declaration = declarations[i];
       switch (declaration.name.kind) {
-        case NodeKind.BINDINGPATTERN: {
-          const initializer = declaration.initializer;
-          if (!initializer) {
-            this.error(
-              DiagnosticCode.A_destructuring_declaration_must_have_an_initializer,
-              declaration.range
-            );
-            continue;
-          }
-
-          const pattern = <BindingPatternExpression>declaration.name;
-
-          // resolve type of initializer
-          let initExpr = this.compileExpression(initializer, Type.auto);
-          let initType = this.currentType;
-
-          // add initializer as local
-          let initLocal = flow.parentFunction.addLocal(Type.auto, null, declaration);
-          flow.setLocalFlag(initLocal.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
-          initializers.push(
-            this.makeLocalAssignment(initLocal, initExpr, initType, false)
-          );
-
-          if (pattern.array) {
-            let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
-            let classType = initType.getClassOrWrapper(program);
-            let indexedGet: Function | null = null;
-            if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
+        case NodeKind.LITERAL: {
+          switch((<LiteralExpression>declaration.name).literalKind) {
+            case LiteralKind.OBJECT:
               this.error(
-                DiagnosticCode.Index_signature_is_missing_in_type_0,
-                initializer.range, initType.toString()
+                DiagnosticCode.Not_implemented_0,
+                declaration.name.range,
+                "Object destructuring"
               );
               continue;
-            }
-
-            if (!isUnchecked && this.options.pedantic) {
-              this.pedantic(
-                DiagnosticCode.Indexed_access_may_involve_bounds_checking,
-                declaration.range
-              );
-            }
-            // check that the type is valid
-            if (indexedGet.signature.parameterTypes[0] != Type.i32) {
-              this.error(
-                DiagnosticCode.Type_0_is_not_an_array_type,
-                declaration.range,
-                initType.toString()
-              );
-              continue;
-            }
-
-            let idents = pattern.elements;
-            let numIdents = idents.length;
-            for (let j: i32 = 0; j < numIdents; ++j) {
-              let node = idents[j];
-              if (node.kind == NodeKind.IDENTIFIER) {
-                let nameNode = <IdentifierExpression>node;
-                // add local
-                let type = indexedGet.signature.returnType;
-                let local = this.createScopedVariable(nameNode, type, declaration, declaration.is(CommonFlags.CONST));
-
-                if (local == null)
-                  continue;
-
-                let callExpr = this.makeCallDirect(indexedGet, [
-                  module.local_get(initLocal.index, initType.toRef()), module.i32(j)
-                ], nameNode, false);
-
-                initializers.push(
-                  this.makeLocalAssignment(local, callExpr, type, false)
-                );
-              } else if (node.kind != NodeKind.OMITTED) {
+            case LiteralKind.ARRAY: {
+              const initializer = declaration.initializer;
+              if (!initializer) {
                 this.error(
-                  DiagnosticCode.Invalid_destructure_pattern,
-                  pattern.range
+                  DiagnosticCode.A_destructuring_declaration_must_have_an_initializer,
+                  declaration.range
                 );
                 continue;
               }
-            }
-          } else {
-            this.error(
-              DiagnosticCode.Not_implemented_0,
-              pattern.range,
-              "Object destructuring"
-            );
-            continue;
-          }
-          break;
-        }
 
-        
+              const pattern = <ArrayLiteralExpression>declaration.name;
+
+              // resolve type of initializer
+              let initExpr = this.compileExpression(initializer, Type.auto);
+              let initType = this.currentType;
+
+              // add initializer as local
+              let initLocal = flow.getTempLocal(Type.auto);
+              flow.setLocalFlag(initLocal.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
+              initializers.push(
+                this.makeLocalAssignment(initLocal, initExpr, initType, false)
+              );
+
+              let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
+              let classType = initType.getClassOrWrapper(program);
+              let indexedGet: Function | null = null;
+              if (classType == null || (indexedGet = classType.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked)) == null) {
+                this.error(
+                  DiagnosticCode.Index_signature_is_missing_in_type_0,
+                  initializer.range, initType.toString()
+                );
+                continue;
+              }
+
+              if (!isUnchecked && this.options.pedantic) {
+                this.pedantic(
+                  DiagnosticCode.Indexed_access_may_involve_bounds_checking,
+                  declaration.range
+                );
+              }
+              // check that the type is valid
+              if (indexedGet.signature.parameterTypes[0] != Type.i32) {
+                this.error(
+                  DiagnosticCode.Type_0_is_not_an_array_type,
+                  declaration.range,
+                  initType.toString()
+                );
+                continue;
+              }
+
+              let idents = pattern.elementExpressions;
+              let numIdents = idents.length;
+              for (let j: i32 = 0; j < numIdents; ++j) {
+                let node = idents[j];
+                if (node.kind == NodeKind.IDENTIFIER) {
+                  let nameNode = <IdentifierExpression>node;
+                  // add local
+                  let type = indexedGet.signature.returnType;
+                  let local = this.createScopedVariable(nameNode, type, declaration, declaration.is(CommonFlags.CONST));
+
+                  if (local == null)
+                    continue;
+
+                  let callExpr = this.makeCallDirect(indexedGet, [
+                    module.local_get(initLocal.index, initType.toRef()), module.i32(j)
+                  ], nameNode, false);
+
+                  initializers.push(
+                    this.makeLocalAssignment(local, callExpr, type, false)
+                  );
+                } else if (node.kind != NodeKind.OMITTED) {
+                  this.error(
+                    DiagnosticCode.Invalid_destructure_pattern,
+                    pattern.range
+                  );
+                  continue;
+                }
+              }
+
+              flow.freeTempLocal(initLocal);
+              break;
+            }
+            default:
+              assert(false);
+          }
+          break; 
+        }
         case NodeKind.IDENTIFIER: {
           let nameNode = <IdentifierExpression>declaration.name;
           let typeNode = declaration.type;
@@ -5965,7 +5969,7 @@ export class Compiler extends DiagnosticEmitter {
     let initTypeRef = initType.toRef();
 
     // add initializer as local
-    let initLocal = flow.parentFunction.addLocal(Type.auto, null);
+    let initLocal = flow.getTempLocal(Type.auto);
     flow.setLocalFlag(initLocal.index, LocalFlags.CONSTANT | LocalFlags.INITIALIZED);
     exprs.push(
       this.makeLocalAssignment(initLocal, initExpr, initType, false)
@@ -6042,6 +6046,8 @@ export class Compiler extends DiagnosticEmitter {
         module.local_get(initLocal.index, initTypeRef)
       );
     }
+
+    flow.freeTempLocal(initLocal);
     
     return exprs.length == 0
       ? 0
