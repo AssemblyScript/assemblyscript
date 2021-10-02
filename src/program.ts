@@ -1221,7 +1221,7 @@ export class Program extends DiagnosticEmitter {
             );
           }
         } else { // i.e. export { foo [as bar] }
-          let element = file.lookupInSelf(localName);
+          let element = file.getMember(localName);
           if (element) {
             file.ensureExport(exportName, element);
           } else {
@@ -1749,7 +1749,7 @@ export class Program extends DiagnosticEmitter {
           }
 
           // exported from this file
-          element = foreignFile.lookupInSelf(queuedExport.localIdentifier.text);
+          element = foreignFile.getMember(queuedExport.localIdentifier.text);
           if (element) return element;
         }
       }
@@ -2198,7 +2198,7 @@ export class Program extends DiagnosticEmitter {
     if (foreignPath === null) {
 
       // resolve right away if the local element already exists
-      if (element = localFile.lookupInSelf(localName)) {
+      if (element = localFile.getMember(localName)) {
         localFile.ensureExport(foreignName, element);
 
       // otherwise queue it
@@ -2512,7 +2512,7 @@ export class Program extends DiagnosticEmitter {
       this.checkDecorators(declaration.decorators, DecoratorFlags.GLOBAL)
     );
     if (!parent.add(name, original)) return null;
-    var element = assert(parent.lookupInSelf(name)); // possibly merged
+    var element = assert(parent.getMember(name)); // possibly merged
     var members = declaration.members;
     for (let i = 0, k = members.length; i < k; ++i) {
       let member = members[i];
@@ -2785,15 +2785,17 @@ export abstract class Element {
   /** Tests if this element has a specific decorator flag or flags. */
   hasDecorator(flag: DecoratorFlags): bool { return (this.decoratorFlags & flag) == flag; }
 
-  /** Looks up the element with the specified name within this element. */
-  lookupInSelf(name: string): DeclaredElement | null {
+  /** Get the member with the specified name, if any. */
+  getMember(name: string): DeclaredElement | null {
     var members = this.members;
-    if (members !== null && members.has(name)) return assert(members.get(name));
+    if (members && members.has(name)) return assert(members.get(name));
     return null;
   }
 
-  /** Looks up the element with the specified name relative to this element, like in JS. */
-  abstract lookup(name: string): Element | null;
+  /** Looks up the element with the specified name relative to this element. */
+  lookup(name: string, isType: bool = false): Element | null {
+    return this.parent.lookup(name, isType);
+  }
 
   /** Adds an element as a member of this one. Reports and returns `false` if a duplicate. */
   add(name: string, element: DeclaredElement, localIdentifierIfImport: IdentifierExpression | null = null): bool {
@@ -3048,7 +3050,7 @@ export class File extends Element {
       element = this.program.ensureGlobal(name, element); // possibly merged globally
     }
     if (!super.add(name, element, localIdentifierIfImport)) return false;
-    element = assert(this.lookupInSelf(name)); // possibly merged locally
+    element = assert(this.getMember(name)); // possibly merged locally
     if (element.is(CommonFlags.EXPORT) && !localIdentifierIfImport) {
       this.ensureExport(
         element.name,
@@ -3059,23 +3061,23 @@ export class File extends Element {
   }
 
   /* @override */
-  lookupInSelf(name: string): DeclaredElement | null {
-    var element = super.lookupInSelf(name);
+  getMember(name: string): DeclaredElement | null {
+    var element = super.getMember(name);
     if (element) return element;
     var exportsStar = this.exportsStar;
     if (exportsStar) {
       for (let i = 0, k = exportsStar.length; i < k; ++i) {
-        if (element = exportsStar[i].lookupInSelf(name)) return element;
+        if (element = exportsStar[i].getMember(name)) return element;
       }
     }
     return null;
   }
 
   /* @override */
-  lookup(name: string): Element | null {
-    var element = this.lookupInSelf(name);
+  lookup(name: string, isType: bool = false): Element | null {
+    var element = this.getMember(name);
     if (element) return element;
-    return this.program.lookup(name);
+    return this.program.lookup(name); // has no meaningful parent
   }
 
   /** Ensures that an element is an export of this file. */
@@ -3185,11 +3187,6 @@ export class TypeDefinition extends TypedElement {
   get typeNode(): TypeNode {
     return (<TypeDeclaration>this.declaration).type;
   }
-
-  /* @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
-  }
 }
 
 /** A namespace that differs from a file in being user-declared with a name. */
@@ -3218,10 +3215,10 @@ export class Namespace extends DeclaredElement {
   }
 
   /* @override */
-  lookup(name: string): Element | null {
-    var inSelf = this.lookupInSelf(name);
-    if (inSelf) return inSelf;
-    return this.parent.lookup(name);
+  lookup(name: string, isType: bool = false): Element | null {
+    var member = this.getMember(name);
+    if (member) return member;
+    return super.lookup(name, isType);
   }
 }
 
@@ -3252,10 +3249,10 @@ export class Enum extends TypedElement {
   }
 
   /* @override */
-  lookup(name: string): Element | null {
-    var inSelf = this.lookupInSelf(name);
-    if (inSelf) return inSelf;
-    return this.parent.lookup(name);
+  lookup(name: string, isType: bool = false): Element | null {
+    var member = this.getMember(name);
+    if (member) return member;
+    return super.lookup(name, isType);
   }
 }
 
@@ -3293,7 +3290,7 @@ export abstract class VariableLikeElement extends TypedElement {
     super(
       kind,
       name,
-      mangleInternalName(name, parent, false),
+      mangleInternalName(name, parent, declaration.is(CommonFlags.INSTANCE)),
       parent.program,
       parent,
       declaration
@@ -3328,11 +3325,6 @@ export abstract class VariableLikeElement extends TypedElement {
     this.constantFloatValue = value;
     this.set(CommonFlags.CONST | CommonFlags.INLINED | CommonFlags.RESOLVED);
   }
-
-  /** @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
-  }
 }
 
 /** An enum value. */
@@ -3365,11 +3357,6 @@ export class EnumValue extends VariableLikeElement {
   /** Gets the associated value node. */
   get valueNode(): Expression | null {
     return (<EnumValueDeclaration>this.declaration).initializer;
-  }
-
-  /* @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
   }
 }
 
@@ -3465,7 +3452,7 @@ export class FunctionPrototype extends DeclaredElement {
   /** Methods overloading this one, if any. These are unbound. */
   overloads: Set<FunctionPrototype> | null = null;
 
-  /** Clones of this prototype that are bounds to specific classes. */
+  /** Clones of this prototype that are bound to specific classes. */
   private boundPrototypes: Map<Class,FunctionPrototype> | null = null;
 
   /** Constructs a new function prototype. */
@@ -3513,11 +3500,9 @@ export class FunctionPrototype extends DeclaredElement {
   /** Tests if this prototype is bound to a class. */
   get isBound(): bool {
     var parent = this.parent;
-    return parent.kind == ElementKind.CLASS ||
-           parent.kind == ElementKind.PROPERTY_PROTOTYPE && (
-             parent.parent.kind == ElementKind.CLASS ||
-             parent.parent.kind == ElementKind.INTERFACE
-           );
+    var parentKind = parent.kind;
+    if (parentKind == ElementKind.PROPERTY_PROTOTYPE) parentKind = parent.parent.kind;
+    return parentKind == ElementKind.CLASS || parentKind == ElementKind.INTERFACE;
   }
 
   /** Creates a clone of this prototype that is bound to a concrete class instead. */
@@ -3556,11 +3541,6 @@ export class FunctionPrototype extends DeclaredElement {
     if (!instances) this.instances = instances = new Map();
     else assert(!instances.has(instanceKey));
     instances.set(instanceKey, instance);
-  }
-
-  /* @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
   }
 }
 
@@ -3670,6 +3650,16 @@ export class Function extends TypedElement {
       : getDefaultParameterName(index);
   }
 
+  /** Gets the class or interface this function belongs to, if an instance method. */
+  getClassOrInterface(): Class | null {
+    var parent = this.parent;
+    if (parent.kind == ElementKind.PROPERTY) parent = parent.parent;
+    if (parent.kind == ElementKind.CLASS || parent.kind == ElementKind.INTERFACE) {
+      return <Class>parent;
+    }
+    return null;
+  }
+
   /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
   newStub(postfix: string): Function {
     var stub = new Function(
@@ -3710,10 +3700,12 @@ export class Function extends TypedElement {
   }
 
   /* @override */
-  lookup(name: string): Element | null {
-    var locals = this.localsByName;
-    if (locals.has(name)) return assert(locals.get(name));
-    return this.parent.lookup(name);
+  lookup(name: string, isType: bool = false): Element | null {
+    if (!isType) {
+      let locals = this.localsByName;
+      if (locals.has(name)) return assert(locals.get(name));
+    }
+    return super.lookup(name, isType);
   }
 
   // used by flows to keep track of temporary locals
@@ -3797,11 +3789,6 @@ export class FieldPrototype extends DeclaredElement {
   /** Gets the associated parameter index. Set if declared as a constructor parameter, otherwise `-1`. */
   get parameterIndex(): i32 {
     return (<FieldDeclaration>this.declaration).parameterIndex;
-  }
-
-  /* @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
   }
 }
 
@@ -3913,11 +3900,6 @@ export class PropertyPrototype extends DeclaredElement {
     this.flags &= ~(CommonFlags.GET | CommonFlags.SET);
   }
 
-  /* @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
-  }
-
   /** Tests if this prototype is bound to a class. */
   get isBound(): bool {
     switch (this.parent.kind) {
@@ -3993,11 +3975,6 @@ export class Property extends VariableLikeElement {
       registerConcreteElement(this.program, this);
     }
   }
-
-  /* @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
-  }
 }
 
 /** A resolved index signature. */
@@ -4026,11 +4003,6 @@ export class IndexSignature extends TypedElement {
   /** Obtains the setter instance. */
   getSetterInstance(isUnchecked: bool): Function | null {
     return (<Class>this.parent).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
-  }
-
-  /* @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
   }
 }
 
@@ -4156,11 +4128,6 @@ export class ClassPrototype extends DeclaredElement {
     else assert(!instances.has(instanceKey));
     instances.set(instanceKey, instance);
   }
-
-  /* @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
-  }
 }
 
 /** A resolved class. */
@@ -4212,7 +4179,7 @@ export class Class extends TypedElement {
   /** Tests if this class is array-like. */
   get isArrayLike(): bool {
     if (this.isBuiltinArray) return true;
-    var lengthField = this.lookupInSelf("length");
+    var lengthField = this.getMember("length");
     return lengthField !== null && (
       lengthField.kind == ElementKind.FIELD ||
       (
@@ -4362,30 +4329,20 @@ export class Class extends TypedElement {
     return null;
   }
 
-  /* @override */
-  lookup(name: string): Element | null {
-    return this.parent.lookup(name);
-  }
-
   /** Gets the method of the specified name, resolved with the given type arguments. */
   getMethod(name: string, typeArguments: Type[] | null = null): Function | null {
-    var members = this.members;
-    if (members !== null && members.has(name)) {
-      let bound = changetype<Element>(members.get(name));
-      if (bound.kind == ElementKind.FUNCTION_PROTOTYPE) {
-        return this.program.resolver.resolveFunction(<FunctionPrototype>bound, typeArguments);
-      }
+    var member = this.getMember(name);
+    if (member && member.kind == ElementKind.FUNCTION_PROTOTYPE) {
+      return this.program.resolver.resolveFunction(<FunctionPrototype>member, typeArguments);
     }
     return null;
   }
 
   /** Calculates the memory offset of the specified field. */
   offsetof(fieldName: string): u32 {
-    var members = assert(this.members);
-    assert(members.has(fieldName));
-    var field = <Element>members.get(fieldName);
-    assert(field.kind == ElementKind.FIELD);
-    return (<Field>field).memoryOffset;
+    var member = assert(this.getMember(fieldName));
+    assert(member.kind == ElementKind.FIELD);
+    return (<Field>member).memoryOffset;
   }
 
   /** Creates a buffer suitable to hold a runtime instance of this class. */
@@ -4405,9 +4362,9 @@ export class Class extends TypedElement {
 
   /** Writes a field value to a buffer and returns the number of bytes written. */
   writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32 = this.program.totalOverhead): i32 {
-    var element = this.lookupInSelf(name);
-    if (element !== null && element.kind == ElementKind.FIELD) {
-      let fieldInstance = <Field>element;
+    var member = this.getMember(name);
+    if (member !== null && member.kind == ElementKind.FIELD) {
+      let fieldInstance = <Field>member;
       let offset = baseOffset + fieldInstance.memoryOffset;
       let typeKind = fieldInstance.type.kind;
       switch (typeKind) {

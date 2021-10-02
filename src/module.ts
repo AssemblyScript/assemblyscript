@@ -65,8 +65,8 @@ export enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
   Atomics = 1 /* _BinaryenFeatureAtomics */,
   MutableGloabls = 2 /* _BinaryenFeatureMutableGlobals */,
-  NontrappingFPToInt = 4 /* _BinaryenFeatureNontrappingFPToInt */,
-  SIMD128 = 8 /* _BinaryenFeatureSIMD128 */,
+  TruncSat = 4 /* _BinaryenFeatureNontrappingFPToInt */,
+  SIMD = 8 /* _BinaryenFeatureSIMD128 */,
   BulkMemory = 16 /* _BinaryenFeatureBulkMemory */,
   SignExt = 32 /* _BinaryenFeatureSignExt */,
   ExceptionHandling = 64 /* _BinaryenFeatureExceptionHandling */,
@@ -75,8 +75,8 @@ export enum FeatureFlags {
   MultiValue = 512 /* _BinaryenFeatureMultivalue */,
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
-  TypedFunctionReferences  = 4096 /* _BinaryenTypedFunctionReferences */,
-  All = 8191 /* _BinaryenFeatureAll */
+  TypedFunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
+  All = 16383 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
@@ -146,7 +146,8 @@ export enum ExpressionId {
   ArrayGet = 62 /* _BinaryenArrayGetId */,
   ArraySet = 63 /* _BinaryenArraySetId */,
   ArrayLen = 64 /* _BinaryenArrayLenId */,
-  RefAs = 65 /* _BinaryenRefAsId */
+  ArrayCopy = 65 /* _BinaryenArrayCopyId */,
+  RefAs = 66 /* _BinaryenRefAsId */
 }
 
 /** Binaryen external kind constants. */
@@ -1435,7 +1436,7 @@ export class Module {
     // when encountering a local with an unknown value. This helper only drops
     // the pre-evaluated condition if it has relevant side effects.
     // see WebAssembly/binaryen#1237
-    if ((getSideEffects(condition) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) != 0) {
+    if ((getSideEffects(condition, this.ref) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) != 0) {
       return this.block(null, [
         this.drop(condition),
         result
@@ -1474,12 +1475,8 @@ export class Module {
     ifTrue: ExpressionRef,
     ifFalse: ExpressionRef,
     condition: ExpressionRef,
-    type: TypeRef = TypeRef.Auto
+    type: TypeRef
   ): ExpressionRef {
-    if (type == TypeRef.Auto) {
-      type = binaryen._BinaryenExpressionGetType(ifTrue);
-      assert(type == binaryen._BinaryenExpressionGetType(ifFalse));
-    }
     return binaryen._BinaryenSelect(this.ref, condition, ifTrue, ifFalse, type);
   }
 
@@ -2055,7 +2052,7 @@ export class Module {
     var cArr = allocPtrArray(names);
     var tableRef = binaryen._BinaryenGetTable(this.ref, cStr);
     if (!tableRef) {
-      tableRef = binaryen._BinaryenAddTable(this.ref, cStr, initial, maximum);
+      tableRef = binaryen._BinaryenAddTable(this.ref, cStr, initial, maximum, TypeRef.Funcref);
     } else {
       binaryen._BinaryenTableSetInitial(tableRef, initial);
       binaryen._BinaryenTableSetMax(tableRef, maximum);
@@ -2123,6 +2120,14 @@ export class Module {
 
   setLowMemoryUnused(on: bool): void {
     binaryen._BinaryenSetLowMemoryUnused(on);
+  }
+
+  getZeroFilledMemory(): bool {
+    return binaryen._BinaryenGetZeroFilledMemory();
+  }
+
+  setZeroFilledMemory(on: bool): void {
+    binaryen._BinaryenSetZeroFilledMemory(on);
   }
 
   getFastMath(): bool {
@@ -2207,13 +2212,19 @@ export class Module {
     for (let i = numNames - 1; i >= 0; --i) binaryen._free(cStrs[i]);
   }
 
-  optimize(optimizeLevel: i32, shrinkLevel: i32, debugInfo: bool = false): void {
+  optimize(
+    optimizeLevel: i32,
+    shrinkLevel: i32,
+    debugInfo: bool = false,
+    zeroFilledMemory: bool = false
+  ): void {
     // Implicitly run costly non-LLVM optimizations on -O3 or -Oz
     if (optimizeLevel >= 3 || shrinkLevel >= 2) optimizeLevel = 4;
 
     this.setOptimizeLevel(optimizeLevel);
     this.setShrinkLevel(shrinkLevel);
     this.setDebugInfo(debugInfo);
+    this.setZeroFilledMemory(zeroFilledMemory);
     this.setFastMath(true);
     this.clearPassArguments();
 
@@ -2245,24 +2256,25 @@ export class Module {
       passes.push("remove-unused-module-elements"); // +
 
       // --- PassRunner::addDefaultFunctionOptimizationPasses ---
-
+      if (optimizeLevel >= 2) {
+        passes.push("once-reduction");
+      }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("rse");
         passes.push("vacuum");
         passes.push("ssa-nomerge");
         passes.push("simplify-globals-optimizing");
+        passes.push("local-cse");
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
-        passes.push("merge-blocks");
         passes.push("precompute-propagate");
       }
       if (optimizeLevel >= 3) {
-        passes.push("simplify-locals-notee-nostructure");
+        passes.push("simplify-locals-nostructure");
         passes.push("flatten");
         passes.push("vacuum");
-        passes.push("local-cse");
-        passes.push("licm");
         passes.push("simplify-locals-notee-nostructure");
+        passes.push("licm");
         passes.push("merge-locals");
         passes.push("reorder-locals");
         passes.push("dae-optimizing");
@@ -2272,8 +2284,8 @@ export class Module {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("dce");
       }
-      passes.push("remove-unused-names");
       passes.push("remove-unused-brs");
+      passes.push("remove-unused-names");
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("inlining");
         passes.push("precompute-propagate");
@@ -2286,16 +2298,16 @@ export class Module {
       }
       passes.push("simplify-locals-notee-nostructure");
       passes.push("vacuum");
-
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("local-cse");
+      }
       passes.push("reorder-locals");
-      passes.push("remove-unused-brs");
       passes.push("coalesce-locals");
       passes.push("simplify-locals");
-      passes.push("vacuum");
-
-      passes.push("reorder-locals");
       passes.push("coalesce-locals");
       passes.push("reorder-locals");
+      passes.push("vacuum");
+
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("merge-locals");
       }
@@ -2347,6 +2359,7 @@ export class Module {
       // precompute works best after global optimizations
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("precompute-propagate");
+        passes.push("simplify-globals-optimizing");
       } else {
         passes.push("precompute");
       }
@@ -2368,6 +2381,7 @@ export class Module {
           passes.push("inlining-optimizing");
           passes.push("directize");
           passes.push("dae-optimizing");
+          passes.push("local-cse");
 
           passes.push("merge-locals");
           passes.push("coalesce-locals");
@@ -2389,7 +2403,6 @@ export class Module {
       }
       // clean up
       passes.push("duplicate-function-elimination");
-      passes.push("remove-unused-nonfunction-module-elements");
       passes.push("memory-packing");
       passes.push("remove-unused-module-elements");
 
@@ -2471,115 +2484,25 @@ export class Module {
     return Relooper.create(this);
   }
 
-  cloneExpression(
-    expr: ExpressionRef,
-    noSideEffects: bool = false,
-    maxDepth: i32 = i32.MAX_VALUE
-  ): ExpressionRef { // currently supports side effect free expressions only
-    if (maxDepth < 0) return 0;
-    maxDepth -= 1;
-
-    var nested1: ExpressionRef,
-        nested2: ExpressionRef;
-
+  /** Makes a copy of a trivial expression (doesn't contain subexpressions). Returns `0` if non-trivial. */
+  tryCopyTrivialExpression(expr: ExpressionRef): ExpressionRef {
     switch (binaryen._BinaryenExpressionGetId(expr)) {
-      case ExpressionId.Const: {
-        switch (<u32>binaryen._BinaryenExpressionGetType(expr)) {
-          case <u32>TypeRef.I32: {
-            return this.i32(binaryen._BinaryenConstGetValueI32(expr));
-          }
-          case <u32>TypeRef.I64: {
-            return this.i64(
-              binaryen._BinaryenConstGetValueI64Low(expr),
-              binaryen._BinaryenConstGetValueI64High(expr)
-            );
-          }
-          case <u32>TypeRef.F32: {
-            return this.f32(binaryen._BinaryenConstGetValueF32(expr));
-          }
-          case <u32>TypeRef.F64: {
-            return this.f64(binaryen._BinaryenConstGetValueF64(expr));
-          }
-          case <u32>TypeRef.V128: {
-            // TODO
-            return 0;
-          }
-          // Not possible to clone an externref as it is opaque
-          case <u32>TypeRef.Externref: {
-            return 0;
-          }
-          default: {
-            throw new Error("concrete type expected");
-          }
-        }
-      }
-      case ExpressionId.LocalGet: {
-        return binaryen._BinaryenLocalGet(this.ref,
-          binaryen._BinaryenLocalGetGetIndex(expr),
-          binaryen._BinaryenExpressionGetType(expr)
-        );
-      }
-      case ExpressionId.GlobalGet: {
-        let globalName = binaryen._BinaryenGlobalGetGetName(expr);
-        if (!globalName) break;
-        return binaryen._BinaryenGlobalGet(
-          this.ref, globalName, binaryen._BinaryenExpressionGetType(expr)
-        );
-      }
-      case ExpressionId.Load: {
-        if (!(nested1 = this.cloneExpression(
-          binaryen._BinaryenLoadGetPtr(expr), noSideEffects, maxDepth)
-        )) {
-          break;
-        }
-        return (
-          binaryen._BinaryenLoadIsAtomic(expr)
-            ? binaryen._BinaryenAtomicLoad(this.ref,
-                binaryen._BinaryenLoadGetBytes(expr),
-                binaryen._BinaryenLoadGetOffset(expr),
-                binaryen._BinaryenExpressionGetType(expr),
-                nested1
-              )
-            : binaryen._BinaryenLoad(this.ref,
-                binaryen._BinaryenLoadGetBytes(expr),
-                binaryen._BinaryenLoadIsSigned(expr),
-                binaryen._BinaryenLoadGetOffset(expr),
-                binaryen._BinaryenLoadGetAlign(expr),
-                binaryen._BinaryenExpressionGetType(expr),
-                nested1
-              )
-        );
-      }
-      case ExpressionId.Unary: {
-        if (!(nested1 = this.cloneExpression(
-          binaryen._BinaryenUnaryGetValue(expr), noSideEffects, maxDepth)
-        )) {
-          break;
-        }
-        return binaryen._BinaryenUnary(
-          this.ref, binaryen._BinaryenUnaryGetOp(expr), nested1
-        );
-      }
-      case ExpressionId.Binary: {
-        if (!(nested1 = this.cloneExpression(
-          binaryen._BinaryenBinaryGetLeft(expr), noSideEffects, maxDepth)
-        )) {
-          break;
-        }
-        if (!(nested2 = this.cloneExpression(
-          binaryen._BinaryenBinaryGetRight(expr), noSideEffects, maxDepth)
-        )) {
-          break;
-        }
-        return binaryen._BinaryenBinary(
-          this.ref, binaryen._BinaryenBinaryGetOp(expr), nested1, nested2
-        );
-      }
+      case ExpressionId.LocalGet:
+      case ExpressionId.GlobalGet:
+      case ExpressionId.Const:
+      case ExpressionId.MemorySize:
+      case ExpressionId.Nop:
+      case ExpressionId.Unreachable:
+      case ExpressionId.DataDrop:
+      case ExpressionId.RefNull:
+      case ExpressionId.RttCanon: return this.copyExpression(expr);
     }
     return 0;
   }
 
+  /** Makes a copy of any expression including all subexpressions. */
   copyExpression(expr: ExpressionRef): ExpressionRef {
+    // TODO: Copy debug location as well (needs Binaryen support)
     return binaryen._BinaryenExpressionCopy(expr, this.ref);
   }
 
@@ -3044,15 +2967,16 @@ export enum SideEffects {
   IsAtomic = 512 /* _BinaryenSideEffectIsAtomic */,
   Throws = 1024 /* _BinaryenSideEffectThrows */,
   DanglingPop = 2048 /* _BinaryenSideEffectDanglingPop */,
-  Any = 4095 /* _BinaryenSideEffectAny */
+  TrapsNeverHappen = 4096 /* _BinaryenSideEffectTrapsNeverHappen */,
+  Any = 8191 /* _BinaryenSideEffectAny */
 }
 
-export function getSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): SideEffects {
-  return binaryen._BinaryenExpressionGetSideEffects(expr, features);
+export function getSideEffects(expr: ExpressionRef, module: ModuleRef): SideEffects {
+  return binaryen._BinaryenExpressionGetSideEffects(expr, module);
 }
 
-export function hasSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): bool {
-  return getSideEffects(expr, features) != SideEffects.None;
+export function hasSideEffects(expr: ExpressionRef, module: ModuleRef): bool {
+  return getSideEffects(expr, module) != SideEffects.None;
 }
 
 // helpers

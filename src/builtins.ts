@@ -1554,7 +1554,8 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
         module.binary(op,
           module.local_get(temp1.index, typeRef),
           module.local_get(temp2.index, typeRef)
-        )
+        ),
+        typeRef
       );
       flow.freeTempLocal(temp2);
       flow.freeTempLocal(temp1);
@@ -1633,7 +1634,8 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
         module.binary(op,
           module.local_get(temp1.index, typeRef),
           module.local_get(temp2.index, typeRef)
-        )
+        ),
+        typeRef
       );
       flow.freeTempLocal(temp2);
       flow.freeTempLocal(temp1);
@@ -2770,7 +2772,7 @@ function builtin_select(ctx: BuiltinContext): ExpressionRef {
     operands[2]
   );
   compiler.currentType = type;
-  return module.select(arg0, arg1, arg2);
+  return module.select(arg0, arg1, arg2, type.toRef());
 }
 builtins.set(BuiltinNames.select, builtin_select);
 
@@ -9538,7 +9540,7 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   // for example to visit all members of a collection, e.g. arrays and maps.
   var hasVisitImpl = false;
   if (instance.isDeclaredInLibrary) {
-    let visitPrototype = instance.lookupInSelf("__visit");
+    let visitPrototype = instance.getMember("__visit");
     if (visitPrototype) {
       assert(visitPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
       let visitInstance = program.resolver.resolveFunction(<FunctionPrototype>visitPrototype, null);
@@ -9614,7 +9616,10 @@ function ensureVisitMembersOf(compiler: Compiler, instance: Class): void {
   );
 
   // And make sure the base visitor function exists
-  if (base) ensureVisitMembersOf(compiler, base);
+  if (base && base.type.isManaged) {
+    // errored earlier if not managed
+    ensureVisitMembersOf(compiler, base);
+  }
 }
 
 /** Compiles the `__visit_members` function. */

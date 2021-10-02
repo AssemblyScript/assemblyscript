@@ -4362,8 +4362,16 @@ export class Parser extends DiagnosticEmitter {
           tn.readIdentifier();
           break;
         }
-        case Token.STRINGLITERAL: {
+        case Token.STRINGLITERAL:{
           tn.readString();
+          break;
+        }
+        case Token.TEMPLATELITERAL: {
+          tn.readString();
+          while(tn.readingTemplateString){
+            this.skipBlock(tn);
+            tn.readString(CharCode.BACKTICK);
+          }
           break;
         }
         case Token.INTEGERLITERAL: {
@@ -4453,7 +4461,6 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.PLUS_PLUS:
     case Token.MINUS_MINUS: return Precedence.UNARY_POSTFIX;
     case Token.DOT:
-    case Token.NEW:
     case Token.OPENBRACKET:
     case Token.EXCLAMATION: return Precedence.MEMBERACCESS;
   }

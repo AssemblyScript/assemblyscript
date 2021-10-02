@@ -99,8 +99,8 @@
   i32.and
   i32.eq
   if
-   local.get $0
    global.get $~lib/rt/itcms/iter
+   local.get $0
    i32.eq
    if
     local.get $0
@@ -160,11 +160,11 @@
     local.get $1
     i32.store offset=8
     local.get $1
-    local.get $2
     local.get $1
     i32.load offset=4
     i32.const 3
     i32.and
+    local.get $2
     i32.or
     i32.store offset=4
    end
@@ -178,10 +178,10 @@
    if (result i32)
     i32.const 1
    else
-    local.get $1
     i32.const 1472
     i32.load
-    i32.gt_u
+    local.get $1
+    i32.lt_u
     if
      i32.const 1280
      i32.const 1344
@@ -218,11 +218,11 @@
    local.get $1
    i32.store offset=8
    local.get $1
-   local.get $0
    local.get $1
    i32.load offset=4
    i32.const 3
    i32.and
+   local.get $0
    i32.or
    i32.store offset=4
    local.get $2
@@ -361,22 +361,22 @@
    local.get $4
    i32.eqz
    if
-    local.get $0
     local.get $3
     i32.const 2
     i32.shl
+    local.get $0
     i32.add
-    local.tee $1
+    local.tee $4
     i32.load offset=4
     i32.const -2
     local.get $2
     i32.rotl
     i32.and
-    local.set $2
+    local.set $1
+    local.get $4
     local.get $1
-    local.get $2
     i32.store offset=4
-    local.get $2
+    local.get $1
     i32.eqz
     if
      local.get $0
@@ -624,10 +624,10 @@
   i32.shl
   i32.or
   i32.store
-  local.get $0
   local.get $5
   i32.const 2
   i32.shl
+  local.get $0
   i32.add
   local.tee $0
   local.get $0
@@ -667,11 +667,11 @@
   i32.load offset=1568
   local.tee $2
   if
+   local.get $1
    local.get $2
    i32.const 4
    i32.add
-   local.get $1
-   i32.gt_u
+   i32.lt_u
    if
     i32.const 0
     i32.const 1424
@@ -695,11 +695,11 @@
     local.set $1
    end
   else
+   local.get $1
    local.get $0
    i32.const 1572
    i32.add
-   local.get $1
-   i32.gt_u
+   i32.lt_u
    if
     i32.const 0
     i32.const 1424
@@ -986,13 +986,13 @@
     if
      local.get $0
      i32.load offset=4
+     local.tee $1
      i32.const -4
      i32.and
      global.set $~lib/rt/itcms/iter
      global.get $~lib/rt/itcms/white
      i32.eqz
-     local.get $0
-     i32.load offset=4
+     local.get $1
      i32.const 3
      i32.and
      i32.ne
@@ -1079,10 +1079,10 @@
     end
     global.get $~lib/rt/itcms/toSpace
     local.tee $0
-    local.get $0
+    local.tee $1
+    local.get $1
     i32.store offset=4
-    global.get $~lib/rt/itcms/toSpace
-    local.tee $0
+    local.get $0
     local.get $0
     i32.store offset=8
     i32.const 0
@@ -1102,11 +1102,11 @@
   i32.and
   local.tee $2
   if (result i32)
-   local.get $0
    local.get $2
    i32.ctz
    i32.const 2
    i32.shl
+   local.get $0
    i32.add
    i32.load offset=96
   else
@@ -1116,12 +1116,12 @@
    i32.and
    local.tee $1
    if (result i32)
-    local.get $0
     local.get $1
     i32.ctz
     local.tee $1
     i32.const 2
     i32.shl
+    local.get $0
     i32.add
     i32.load offset=4
     local.tee $2
@@ -1134,7 +1134,6 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $0
     local.get $2
     i32.ctz
     local.get $1
@@ -1143,6 +1142,7 @@
     i32.add
     i32.const 2
     i32.shl
+    local.get $0
     i32.add
     i32.load offset=96
    else
@@ -1157,7 +1157,7 @@
   (local $3 i32)
   i32.const 10
   local.set $0
-  loop $do-continue|0
+  loop $do-loop|0
    local.get $2
    i32.const 1
    i32.add
@@ -1166,7 +1166,7 @@
    i32.const 1
    i32.sub
    local.tee $0
-   br_if $do-continue|0
+   br_if $do-loop|0
   end
   local.get $0
   if
@@ -1190,14 +1190,14 @@
   end
   i32.const 10
   local.set $0
-  loop $do-continue|00
+  loop $do-loop|00
    local.get $0
    local.tee $1
    i32.const 1
    i32.sub
    local.set $0
    local.get $1
-   br_if $do-continue|00
+   br_if $do-loop|00
   end
   local.get $0
   i32.const -1
@@ -1214,7 +1214,7 @@
   local.set $2
   i32.const 10
   local.set $0
-  loop $do-continue|01
+  loop $do-loop|01
    local.get $0
    i32.const 1
    i32.sub
@@ -1223,7 +1223,7 @@
    i32.const 1
    i32.add
    local.set $3
-   loop $do-continue|1
+   loop $do-loop|1
     local.get $2
     i32.const 1
     i32.add
@@ -1232,7 +1232,7 @@
     i32.const 1
     i32.sub
     local.tee $0
-    br_if $do-continue|1
+    br_if $do-loop|1
    end
    local.get $0
    if
@@ -1255,7 +1255,7 @@
     unreachable
    end
    local.get $0
-   br_if $do-continue|01
+   br_if $do-loop|01
   end
   local.get $0
   if
@@ -1290,14 +1290,14 @@
   end
   i32.const 0
   local.set $0
-  loop $do-continue|02
+  loop $do-loop|02
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $do-continue|02
+   br_if $do-loop|02
   end
   local.get $0
   i32.const 10
@@ -1312,14 +1312,14 @@
   end
   i32.const 0
   local.set $0
-  loop $do-continue|03
+  loop $do-loop|03
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $do-continue|03
+   br_if $do-loop|03
   end
   local.get $0
   i32.const 10
@@ -1334,14 +1334,17 @@
   end
   i32.const 0
   local.set $0
-  loop $do-continue|04
+  loop $do-loop|04
    local.get $0
    i32.const 1
    i32.add
    local.tee $0
    i32.const 10
    i32.ne
-   br_if $do-continue|04
+   i32.const 0
+   local.get $0
+   select
+   br_if $do-loop|04
   end
   local.get $0
   i32.const 10
@@ -1358,7 +1361,7 @@
   local.set $0
   i32.const 0
   local.set $2
-  loop $do-continue|05
+  loop $do-loop|06
    local.get $0
    i32.const 1
    i32.add
@@ -1366,16 +1369,20 @@
    i32.const 10
    i32.ne
    if
-    loop $do-continue|17
+    loop $do-loop|18
      local.get $2
      i32.const 1
      i32.add
      local.tee $2
      i32.const 10
      i32.rem_s
-     br_if $do-continue|17
+     i32.const 0
+     local.get $2
+     select
+     br_if $do-loop|18
     end
-    br $do-continue|05
+    local.get $0
+    br_if $do-loop|06
    end
   end
   local.get $0
@@ -1450,7 +1457,7 @@
    local.get $1
    call $do/Ref#constructor
    i32.store
-   loop $do-continue|08
+   loop $do-loop|09
     local.get $2
     i32.const 1
     i32.add
@@ -1467,7 +1474,7 @@
      i32.store
     end
     local.get $0
-    br_if $do-continue|08
+    br_if $do-loop|09
    end
    local.get $2
    i32.const 10
@@ -1511,8 +1518,8 @@
    call $do/Ref#constructor
    local.tee $0
    i32.store
-   loop $do-continue|06
-    block $do-break|07
+   loop $do-loop|07
+    block $do-break|08
      local.get $2
      i32.const 1
      i32.add
@@ -1522,10 +1529,10 @@
      if
       i32.const 0
       local.set $0
-      br $do-break|07
+      br $do-break|08
      end
      call $do/Ref#constructor
-     br_if $do-continue|06
+     br_if $do-loop|07
     end
    end
    local.get $2
@@ -1658,7 +1665,7 @@
    block $__inlined_func$~lib/rt/itcms/interrupt
     i32.const 2048
     local.set $0
-    loop $do-continue|0
+    loop $do-loop|0
      local.get $0
      call $~lib/rt/itcms/step
      i32.sub
@@ -1681,7 +1688,7 @@
      local.get $0
      i32.const 0
      i32.gt_s
-     br_if $do-continue|0
+     br_if $do-loop|0
     end
     global.get $~lib/rt/itcms/total
     local.tee $0
@@ -1820,18 +1827,13 @@
    local.get $0
    i32.const 4
    i32.add
+   local.get $0
+   i32.load
+   i32.const -4
+   i32.and
+   i32.add
    local.tee $1
-   local.get $0
-   i32.load
-   i32.const -4
-   i32.and
-   i32.add
    local.get $1
-   local.get $0
-   i32.load
-   i32.const -4
-   i32.and
-   i32.add
    i32.load
    i32.const -3
    i32.and
@@ -1848,19 +1850,19 @@
   i32.load offset=8
   local.set $3
   local.get $0
-  local.get $1
   global.get $~lib/rt/itcms/white
+  local.get $1
   i32.or
   i32.store offset=4
   local.get $0
   local.get $3
   i32.store offset=8
   local.get $3
-  local.get $0
   local.get $3
   i32.load offset=4
   i32.const 3
   i32.and
+  local.get $0
   i32.or
   i32.store offset=4
   local.get $1

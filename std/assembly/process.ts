@@ -10,15 +10,13 @@ import {
   clock_time_get,
   clockid,
   errnoToString,
-  fd
-} from "bindings/wasi_snapshot_preview1";
+  fd,
+  tempbuf
+} from "bindings/wasi";
 
 import {
   E_INDEXOUTOFRANGE
 } from "util/error";
-
-// @ts-ignore: decorator
-@lazy const iobuf = memory.data(4 * sizeof<usize>());
 
 export namespace process {
 
@@ -49,24 +47,24 @@ export namespace process {
   @lazy export const stderr = changetype<WritableStream>(2);
 
   export function time(): i64 {
-    var err = clock_time_get(clockid.REALTIME, 1000000, iobuf);
+    var err = clock_time_get(clockid.REALTIME, 1000000, tempbuf);
     if (err) throw new Error(errnoToString(err));
-    return load<u64>(iobuf) / 1000000;
+    return load<u64>(tempbuf) / 1000000;
   }
 
   export function hrtime(): u64 {
-    var err = clock_time_get(clockid.MONOTONIC, 0, iobuf);
+    var err = clock_time_get(clockid.MONOTONIC, 0, tempbuf);
     if (err) throw new Error(errnoToString(err));
-    return load<u64>(iobuf);
+    return load<u64>(tempbuf);
   }
 }
 
 function lazyArgv(): string[] {
-  var err = args_sizes_get(iobuf, iobuf + sizeof<usize>());
+  var err = args_sizes_get(tempbuf, tempbuf + sizeof<usize>());
   if (err) throw new Error(errnoToString(err));
-  var count = load<usize>(iobuf);
+  var count = load<usize>(tempbuf);
   var ptrsSize = count * sizeof<usize>();
-  var dataSize = load<usize>(iobuf, sizeof<usize>());
+  var dataSize = load<usize>(tempbuf, sizeof<usize>());
   var bufSize = ptrsSize + dataSize;
   var buf = __alloc(bufSize);
   err = args_get(buf, buf + ptrsSize);
@@ -83,11 +81,11 @@ function lazyArgv(): string[] {
 }
 
 function lazyEnv(): Map<string,string> {
-  var err = environ_sizes_get(iobuf, iobuf + 4);
+  var err = environ_sizes_get(tempbuf, tempbuf + 4);
   if (err) throw new Error(errnoToString(err));
-  var count = load<usize>(iobuf);
+  var count = load<usize>(tempbuf);
   var ptrsSize = count * sizeof<usize>();
-  var dataSize = load<usize>(iobuf, sizeof<usize>());
+  var dataSize = load<usize>(tempbuf, sizeof<usize>());
   var bufSize = ptrsSize + dataSize;
   var buf = __alloc(bufSize);
   err = environ_get(buf, buf + ptrsSize);
@@ -136,55 +134,57 @@ abstract class ReadableStream extends Stream {
     if (offset < 0 || <usize>offset > end) {
       throw new Error(E_INDEXOUTOFRANGE);
     }
-    store<usize>(iobuf, changetype<usize>(buffer) + offset);
-    store<usize>(iobuf, end - offset, sizeof<usize>());
-    var err = fd_read(<u32>changetype<usize>(this), iobuf, 1, iobuf + 2 * sizeof<usize>());
+    store<usize>(tempbuf, changetype<usize>(buffer) + offset);
+    store<usize>(tempbuf, end - offset, sizeof<usize>());
+    var err = fd_read(<u32>changetype<usize>(this), tempbuf, 1, tempbuf + 2 * sizeof<usize>());
     if (err) throw new Error(errnoToString(err));
-    return <i32>load<isize>(iobuf, 2 * sizeof<usize>());
+    return <i32>load<isize>(tempbuf, 2 * sizeof<usize>());
   }
 }
 
 function writeBuffer(fd: fd, data: ArrayBuffer): void {
-  store<usize>(iobuf, changetype<usize>(data));
-  store<usize>(iobuf, data.byteLength, sizeof<usize>());
-  var err = fd_write(<u32>fd, iobuf, 1, iobuf + 2 * sizeof<usize>());
+  store<usize>(tempbuf, changetype<usize>(data));
+  store<usize>(tempbuf, data.byteLength, sizeof<usize>());
+  var err = fd_write(<u32>fd, tempbuf, 1, tempbuf + 2 * sizeof<usize>());
   if (err) throw new Error(errnoToString(err));
 }
 
 function writeString(fd: fd, data: string): void {
-  var char2 = -1;
-  var char3 = -1;
-  var char4 = -1;
-  switch (data.length) {
+  var len = data.length;
+  var
+    char2: u32 = 0,
+    char3: u32 = 0,
+    char4: u32 = 0;
+  switch (len) {
     case 4: { // "null"
-      char4 = <i32>load<u16>(changetype<usize>(data), 6);
+      char4 = <u32>load<u16>(changetype<usize>(data), 6);
       if (char4 >= 0x80) break;
     }
     case 3: { // "ms\n"
-      char3 = <i32>load<u16>(changetype<usize>(data), 4);
+      char3 = <u32>load<u16>(changetype<usize>(data), 4);
       if (char3 >= 0x80) break;
     }
     case 2: { // "\r\n"
-      char2 = <i32>load<u16>(changetype<usize>(data), 2);
+      char2 = <u32>load<u16>(changetype<usize>(data), 2);
       if (char2 >= 0x80) break;
     }
     case 1: { // "\n"
-      let char1 = <i32>load<u16>(changetype<usize>(data));
+      let char1 = <u32>load<u16>(changetype<usize>(data));
       if (char1 >= 0x80) break;
-      store<usize>(iobuf, iobuf + 2 * sizeof<usize>());
-      store<usize>(iobuf, <i32>1 + i32(char2 != -1) + i32(char3 != -1) + i32(char4 != -1), sizeof<usize>());
-      store<u32>(iobuf, char1 | char2 << 8 | char3 << 16 | char4 << 24, 2 * sizeof<usize>());
-      let err = fd_write(<u32>fd, iobuf, 1, iobuf + 3 * sizeof<usize>());
+      store<usize>(tempbuf, tempbuf + 2 * sizeof<usize>());
+      store<usize>(tempbuf, len, sizeof<usize>());
+      store<u32>(tempbuf, char1 | char2 << 8 | char3 << 16 | char4 << 24, 2 * sizeof<usize>());
+      let err = fd_write(<u32>fd, tempbuf, 1, tempbuf + 3 * sizeof<usize>());
       if (err) throw new Error(errnoToString(err));
     }
     case 0: return;
   }
   var utf8len = <usize>String.UTF8.byteLength(data);
   var utf8buf = __alloc(utf8len);
-  assert(String.UTF8.encodeUnsafe(changetype<usize>(data), data.length, utf8buf) == utf8len);
-  store<usize>(iobuf, utf8buf);
-  store<usize>(iobuf, utf8len, sizeof<usize>());
-  var err = fd_write(<u32>fd, iobuf, 1, iobuf + 2 * sizeof<usize>());
+  assert(String.UTF8.encodeUnsafe(changetype<usize>(data), len, utf8buf) == utf8len);
+  store<usize>(tempbuf, utf8buf);
+  store<usize>(tempbuf, utf8len, sizeof<usize>());
+  var err = fd_write(<u32>fd, tempbuf, 1, tempbuf + 2 * sizeof<usize>());
   __free(utf8buf);
   if (err) throw new Error(errnoToString(err));
 }

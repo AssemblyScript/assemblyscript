@@ -147,7 +147,7 @@
   end
   if
    block $do-break|0
-    loop $do-continue|0
+    loop $do-loop|0
      local.get $5
      i64.load
      local.get $6
@@ -171,9 +171,7 @@
      local.get $4
      i32.const 4
      i32.ge_u
-     local.set $7
-     local.get $7
-     br_if $do-continue|0
+     br_if $do-loop|0
     end
    end
   end

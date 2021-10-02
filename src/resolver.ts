@@ -126,6 +126,8 @@ export class Resolver extends DiagnosticEmitter {
   currentThisExpression: Expression | null = null;
   /** Element expression of the previously resolved element access. */
   currentElementExpression : Expression | null = null;
+  /** Whether a new overload has been discovered. */
+  discoveredOverload: bool = false;
 
   /** Constructs the resolver for the specified program. */
   constructor(
@@ -587,7 +589,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    var element = ctxElement.lookup(node.identifier.text);
+    var element = ctxElement.lookup(node.identifier.text, true);
     if (!element) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
@@ -600,7 +602,7 @@ export class Resolver extends DiagnosticEmitter {
     var prev = node;
     var next = node.next;
     while (next) {
-      if (!(element = element.lookupInSelf(next.identifier.text))) {
+      if (!(element = element.getMember(next.identifier.text))) {
         if (reportMode == ReportMode.REPORT) {
           this.error(
             DiagnosticCode.Property_0_does_not_exist_on_type_1,
@@ -1335,8 +1337,8 @@ export class Resolver extends DiagnosticEmitter {
           break;
         } else if (!target.is(CommonFlags.GENERIC)) {
           // Inherit from 'Function' if not overridden, i.e. fn.call
-          let members = target.members;
-          if (!members || !members.has(propertyName)) {
+          let ownMember = target.getMember(propertyName);
+          if (!ownMember) {
             let functionInstance = this.resolveFunction(<FunctionPrototype>target, null, uniqueMap<string,Type>(), ReportMode.SWALLOW);
             if (functionInstance) {
               let wrapper = functionInstance.type.getClassOrWrapper(this.program);
@@ -1355,9 +1357,8 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.CLASS:
       case ElementKind.INTERFACE: {
         do {
-          let members = target.members;
-          if (members !== null && members.has(propertyName)) {
-            let member = assert(members.get(propertyName));
+          let member = target.getMember(propertyName);
+          if (member) {
             if (member.kind == ElementKind.PROPERTY_PROTOTYPE) {
               let propertyInstance = this.resolveProperty(<PropertyPrototype>member, reportMode);
               if (!propertyInstance) return null;
@@ -1404,11 +1405,11 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       default: { // enums or other namespace-like elements
-        let members = target.members;
-        if (members !== null && members.has(propertyName)) {
+        let member = target.getMember(propertyName);
+        if (member) {
           this.currentThisExpression = targetNode;
           this.currentElementExpression = null;
-          return assert(members.get(propertyName)); // static ENUMVALUE, static GLOBAL, static FUNCTION_PROTOTYPE...
+          return member; // static ENUMVALUE, static GLOBAL, static FUNCTION_PROTOTYPE...
         }
         break;
       }
@@ -2757,6 +2758,20 @@ export class Resolver extends DiagnosticEmitter {
       ctxTypes
     );
     prototype.setResolvedInstance(instanceKey, instance);
+
+    // remember discovered overloads for virtual stub finalization
+    if (classInstance) {
+      let methodOrPropertyName = instance.declaration.name.text;
+      let baseClass = classInstance.base;
+      while (baseClass) {
+        let baseMembers = baseClass.members;
+        if (baseMembers && baseMembers.has(methodOrPropertyName)) {
+          this.discoveredOverload = true;
+          break;
+        }
+        baseClass = baseClass.base;
+      }
+    }
     return instance;
   }
 
@@ -2831,6 +2846,59 @@ export class Resolver extends DiagnosticEmitter {
       ctxTypes,
       reportMode
     );
+  }
+
+  /** Resolves reachable overloads of the given instance method. */
+  resolveOverloads(instance: Function): Function[] | null {
+    var overloadPrototypes = instance.prototype.overloads;
+    if (!overloadPrototypes) return null;
+
+    var parentClassInstance = assert(instance.getClassOrInterface());
+    var overloads = new Set<Function>();
+
+    // A method's `overloads` property contains its unbound overload prototypes
+    // so we first have to find the concrete classes it became bound to, obtain
+    // their bound prototypes and make sure these are resolved.
+    for (let _values = Set_values(overloadPrototypes), i = 0, k = _values.length; i < k; ++i) {
+      let unboundOverloadPrototype = _values[i];
+      assert(!unboundOverloadPrototype.isBound);
+      let unboundOverloadParent = unboundOverloadPrototype.parent;
+      let isProperty = unboundOverloadParent.kind == ElementKind.PROPERTY_PROTOTYPE;
+      let classInstances: Map<string,Class> | null;
+      if (isProperty) {
+        let propertyParent = (<PropertyPrototype>unboundOverloadParent).parent;
+        assert(propertyParent.kind == ElementKind.CLASS_PROTOTYPE);
+        classInstances = (<ClassPrototype>propertyParent).instances;
+      } else {
+        assert(unboundOverloadParent.kind == ElementKind.CLASS_PROTOTYPE);
+        classInstances = (<ClassPrototype>unboundOverloadParent).instances;
+      }
+      if (!classInstances) continue;
+      for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
+        let classInstance = _values[j];
+        // Check if the parent class is a subtype of instance's class
+        if (!classInstance.isAssignableTo(parentClassInstance)) continue;
+        let overloadInstance: Function | null;
+        if (isProperty) {
+          let boundProperty = assert(classInstance.members!.get(unboundOverloadParent.name));
+          assert(boundProperty.kind == ElementKind.PROPERTY_PROTOTYPE);
+          let boundPropertyInstance = this.resolveProperty(<PropertyPrototype>boundProperty);
+          if (!boundPropertyInstance) continue;
+          if (instance.is(CommonFlags.GET)) {
+            overloadInstance = boundPropertyInstance.getterInstance;
+          } else {
+            assert(instance.is(CommonFlags.SET));
+            overloadInstance = boundPropertyInstance.setterInstance;
+          }
+        } else {
+          let boundPrototype = assert(classInstance.members!.get(unboundOverloadPrototype.name));
+          assert(boundPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          overloadInstance = this.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+        }
+        if (overloadInstance) overloads.add(overloadInstance);
+      }
+    }
+    return Set_values(overloads);
   }
 
   /** Currently resolving classes. */
@@ -3152,7 +3220,7 @@ export class Resolver extends DiagnosticEmitter {
 
       // Link _own_ constructor if present
       {
-        let ctorPrototype = instance.lookupInSelf(CommonNames.constructor);
+        let ctorPrototype = instance.getMember(CommonNames.constructor);
         if (ctorPrototype !== null && ctorPrototype.parent === instance) {
           assert(ctorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
           let ctorInstance = this.resolveFunction(

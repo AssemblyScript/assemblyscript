@@ -88,8 +88,7 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName,
-  DeclaredElement
+  mangleInternalName
 } from "./program";
 
 import {
@@ -227,6 +226,8 @@ export class Options {
   maximumMemory: u32 = 0;
   /** If true, memory is declared as shared. */
   sharedMemory: bool = false;
+  /** If true, imported memory is zero filled. */
+  zeroFilledMemory: bool = false;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, exports the function table. */
@@ -391,8 +392,8 @@ export class Compiler extends DiagnosticEmitter {
   lazyFunctions: Set<Function> = new Set();
   /** Pending class-specific instanceof helpers. */
   pendingClassInstanceOf: Set<ClassPrototype> = new Set();
-  /** Functions potentially involving a virtual call. */
-  virtualCalls: Set<Function> = new Set();
+  /** Virtually called stubs that may have overloads. */
+  virtualStubs: Set<Function> = new Set();
   /** Elements currently undergoing compilation. */
   pendingElements: Set<Element> = new Set();
   /** Elements, that are module exports, already processed */
@@ -427,9 +428,9 @@ export class Compiler extends DiagnosticEmitter {
     var featureFlags: FeatureFlags = 0;
     if (options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
     if (options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
-    if (options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.NontrappingFPToInt;
+    if (options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.TruncSat;
     if (options.hasFeature(Feature.BULK_MEMORY)) featureFlags |= FeatureFlags.BulkMemory;
-    if (options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD128;
+    if (options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD;
     if (options.hasFeature(Feature.THREADS)) featureFlags |= FeatureFlags.Atomics;
     if (options.hasFeature(Feature.EXCEPTION_HANDLING)) featureFlags |= FeatureFlags.ExceptionHandling;
     if (options.hasFeature(Feature.TAIL_CALLS)) featureFlags |= FeatureFlags.TailCall;
@@ -452,6 +453,7 @@ export class Compiler extends DiagnosticEmitter {
     var options = this.options;
     var module = this.module;
     var program = this.program;
+    var resolver = this.resolver;
     var hasShadowStack = options.stackSize > 0; // implies runtime=incremental
 
     // initialize lookup maps, built-ins, imports, exports, etc.
@@ -532,26 +534,37 @@ export class Compiler extends DiagnosticEmitter {
       compileClassInstanceOf(this, prototype);
     }
 
-    // set up virtual lookup tables
+    // set up virtual stubs
     var functionTable = this.functionTable;
+    var virtualStubs = this.virtualStubs;
     for (let i = 0, k = functionTable.length; i < k; ++i) {
       let instance = functionTable[i];
       if (instance.is(CommonFlags.VIRTUAL)) {
         assert(instance.is(CommonFlags.INSTANCE));
-        functionTable[i] = this.ensureVirtualStub(instance); // incl. varargs
-        this.finalizeVirtualStub(instance);
+        functionTable[i] = this.ensureVirtualStub(instance); // includes varargs stub
       } else if (instance.signature.requiredParameters < instance.signature.parameterTypes.length) {
         functionTable[i] = this.ensureVarargsStub(instance);
       }
     }
-    var virtualCalls = this.virtualCalls;
-    while (virtualCalls.size) {
-      // finalizing a stub may discover more virtual calls, so do this in a loop
-      for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
+    var virtualStubsSeen = new Set<Function>();
+    do {
+      // virtual stubs and overloads have cross-dependencies on each other, in that compiling
+      // either may discover the respective other. do this in a loop until no more are found.
+      resolver.discoveredOverload = false;
+      for (let _values = Set_values(virtualStubs), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
-        this.finalizeVirtualStub(instance);
-        virtualCalls.delete(instance);
+        let overloadInstances = resolver.resolveOverloads(instance);
+        if (overloadInstances) {
+          for (let i = 0, k = overloadInstances.length; i < k; ++i) {
+            this.compileFunction(overloadInstances[i]);
+          }
+        }
+        virtualStubsSeen.add(instance);
       }
+    } while (virtualStubs.size > virtualStubsSeen.size || resolver.discoveredOverload);
+    virtualStubsSeen.clear();
+    for (let _values = Set_values(virtualStubs), i = 0, k = _values.length; i < k; ++i) {
+      this.finalizeVirtualStub(_values[i]);
     }
 
     // finalize runtime features
@@ -936,7 +949,11 @@ export class Compiler extends DiagnosticEmitter {
             module.addGlobal(internalName, TypeRef.I32, false, module.i32(classInstance.id));
             this.doneModuleExports.add(element);
           }
-          module.addGlobalExport(internalName, prefix + name);
+
+          let exportName = prefix + name;
+          if (!module.hasExport(exportName)) {
+            module.addGlobalExport(internalName, exportName);
+          }
         }
         break;
       }
@@ -2379,13 +2396,15 @@ export class Compiler extends DiagnosticEmitter {
     var outerFlow = this.currentFlow;
 
     // (block $break                          └►┐ flow
-    //  (loop $continue                         ├◄───────────┐ recompile?
-    //   (body)                                 └─┐ bodyFlow │
-    //                                          ┌─┘          │
+    //  (loop $loop                             ├◄───────────┐ recompile?
+    //   (?block $continue                      └─┐          │
+    //    (body)                                  │ bodyFlow │
+    //   )                                      ┌─┘          │
     //                                        ┌◄┼►╢          │ breaks or terminates?
-    //   (local.set $tcond (condition))       │ └─┐ condFlow │
+    //                                        │ └─┐          │ but does not continue
+    //   (br_if (cond) $loop)                 │   │ condFlow │
     //                                        │ ┌─┘          │
-    //   (br_if (local.get $tcond) $continue) ├◄┴────────────┘ condition?
+    //                                        ├◄┴────────────┘ condition?
     //  )                                     └─┐
     // )                                      ┌─┘
 
@@ -2399,6 +2418,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.breakLabel = breakLabel;
     var continueLabel = "do-continue|" + label;
     flow.continueLabel = continueLabel;
+    var loopLabel = "do-loop|" + label;
 
     // Compile the body (always executes)
     var bodyFlow = flow.fork();
@@ -2412,7 +2432,8 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Shortcut if body never falls through
-    if (bodyFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
+    var possiblyContinues = bodyFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
+    if (bodyFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS) && !possiblyContinues) {
       bodyStmts.push(
         module.unreachable()
       );
@@ -2429,6 +2450,12 @@ export class Compiler extends DiagnosticEmitter {
       );
       let condKind = this.evaluateCondition(condExpr);
 
+      if (possiblyContinues) {
+        bodyStmts = [
+          module.block(continueLabel, bodyStmts)
+        ];
+      }
+
       // Shortcut if condition is always false
       if (condKind == ConditionKind.FALSE) {
         bodyStmts.push(
@@ -2442,21 +2469,16 @@ export class Compiler extends DiagnosticEmitter {
           module.drop(condExpr)
         );
         bodyStmts.push(
-          module.br(continueLabel)
+          module.br(loopLabel)
         );
         flow.set(FlowFlags.TERMINATES);
 
       } else {
-        let tcond = condFlow.getTempLocal(Type.bool);
         bodyStmts.push(
-          module.local_set(tcond.index, condExpr, false) // bool
-        );
-        bodyStmts.push(
-          module.br(continueLabel,
-            module.local_get(tcond.index, TypeRef.I32)
+          module.br(loopLabel,
+            condExpr
           )
         );
-        condFlow.freeTempLocal(tcond);
         flow.inherit(condFlow);
 
         // Detect if local flags are incompatible before and after looping, and
@@ -2476,7 +2498,7 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
     var expr = module.block(breakLabel, [
-      module.loop(continueLabel,
+      module.loop(loopLabel,
         module.flatten(bodyStmts)
       )
     ]);
@@ -2808,14 +2830,6 @@ export class Compiler extends DiagnosticEmitter {
 
     var valueExpression = statement.value;
     if (valueExpression) {
-      if (returnType == Type.void) {
-        this.error(
-          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-          valueExpression.range, this.currentType.toString(), returnType.toString()
-        );
-        this.currentType = Type.void;
-        return module.unreachable();
-      }
       let constraints = Constraints.CONV_IMPLICIT;
       if (flow.actualFunction.is(CommonFlags.MODULE_EXPORT)) constraints |= Constraints.MUST_WRAP;
 
@@ -2840,15 +2854,27 @@ export class Compiler extends DiagnosticEmitter {
 
     // Handle inline return
     if (flow.isInline) {
-      return isLastInBody && expr != 0
-        ? expr
-        : module.br(assert(flow.inlineReturnLabel), 0, expr);
+      return !expr
+        ? isLastInBody
+          ? module.nop()
+          : module.br(assert(flow.inlineReturnLabel))
+        : isLastInBody
+          ? expr
+          : this.currentType == Type.void
+            ? module.block(null, [ expr, module.br(assert(flow.inlineReturnLabel)) ])
+            : module.br(assert(flow.inlineReturnLabel), 0, expr);
     }
 
     // Otherwise emit a normal return
-    return isLastInBody && expr != 0
-      ? expr
-      : module.return(expr);
+    return !expr
+      ? isLastInBody
+        ? module.nop()
+        : module.return()
+      : isLastInBody
+        ? expr
+        : this.currentType == Type.void
+          ? module.block(null, [ expr, module.return() ])
+          : module.return(expr);
   }
 
   private compileSwitchStatement(
@@ -4736,8 +4762,8 @@ export class Compiler extends DiagnosticEmitter {
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
 
-          // simplify if cloning left without side effects is possible
-          if (expr = module.cloneExpression(leftExpr, true, 0)) {
+          // simplify if copying left is trivial
+          if (expr = module.tryCopyTrivialExpression(leftExpr)) {
             expr = module.if(
               this.makeIsTrueish(leftExpr, this.currentType, left),
               rightExpr,
@@ -4800,8 +4826,8 @@ export class Compiler extends DiagnosticEmitter {
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
 
-          // simplify if cloning left without side effects is possible
-          if (expr = module.cloneExpression(leftExpr, true, 0)) {
+          // simplify if copying left is trivial
+          if (expr = module.tryCopyTrivialExpression(leftExpr)) {
             expr = module.if(
               this.makeIsTrueish(leftExpr, leftType, left),
               expr,
@@ -5335,7 +5361,8 @@ export class Compiler extends DiagnosticEmitter {
         return module.select(
           module.i32(1),
           module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
-          leftExpr
+          leftExpr,
+          TypeRef.I32
         );
       }
       case TypeKind.I8:
@@ -7170,7 +7197,7 @@ export class Compiler extends DiagnosticEmitter {
       null,
       module.unreachable()
     );
-    this.virtualCalls.add(original);
+    this.virtualStubs.add(original);
     return stub;
   }
 
@@ -7179,11 +7206,7 @@ export class Compiler extends DiagnosticEmitter {
     var stub = this.ensureVirtualStub(instance);
     if (stub.is(CommonFlags.COMPILED)) return;
 
-    // Wouldn't be here if there wasn't at least one overload
-    var overloadPrototypes = assert(instance.prototype.overloads);
-
     assert(instance.parent.kind == ElementKind.CLASS || instance.parent.kind == ElementKind.INTERFACE);
-    var parentClassInstance = <Class>instance.parent;
     var module = this.module;
     var usizeType = this.options.usizeType;
     var sizeTypeRef = usizeType.toRef();
@@ -7207,106 +7230,65 @@ export class Compiler extends DiagnosticEmitter {
         TypeRef.I32
       )
     );
-
-    // A method's `overloads` property contains its unbound overload prototypes
-    // so we first have to find the concrete classes it became bound to, obtain
-    // their bound prototypes and make sure these are resolved and compiled as
-    // we are going to call them conditionally based on this's class id.
-    for (let _values = Set_values(overloadPrototypes), i = 0, k = _values.length; i < k; ++i) {
-      let unboundOverloadPrototype = _values[i];
-      assert(!unboundOverloadPrototype.isBound);
-      let unboundOverloadParent = unboundOverloadPrototype.parent;
-      let isProperty = unboundOverloadParent.kind == ElementKind.PROPERTY_PROTOTYPE;
-      let classInstances: Map<string,Class> | null;
-      if (isProperty) {
-        let propertyParent = (<PropertyPrototype>unboundOverloadParent).parent;
-        assert(propertyParent.kind == ElementKind.CLASS_PROTOTYPE);
-        classInstances = (<ClassPrototype>propertyParent).instances;
-      } else {
-        assert(unboundOverloadParent.kind == ElementKind.CLASS_PROTOTYPE);
-        classInstances = (<ClassPrototype>unboundOverloadParent).instances;
-      }
-      if (classInstances) {
-        for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
-          let classInstance = _values[j];
-          // Chcek if the parent class is a subtype of instance's class
-          if (!classInstance.isAssignableTo(parentClassInstance)) continue;
-          let overloadInstance: Function | null;
-          if (isProperty) {
-            let boundProperty = assert(classInstance.members!.get(unboundOverloadParent.name));
-            assert(boundProperty.kind == ElementKind.PROPERTY_PROTOTYPE);
-            let boundPropertyInstance = this.resolver.resolveProperty(<PropertyPrototype>boundProperty);
-            if (!boundPropertyInstance) continue;
-            if (instance.is(CommonFlags.GET)) {
-              overloadInstance = boundPropertyInstance.getterInstance;
-            } else {
-              assert(instance.is(CommonFlags.SET));
-              overloadInstance = boundPropertyInstance.setterInstance;
-            }
-          } else {
-            let boundPrototype = assert(classInstance.members!.get(unboundOverloadPrototype.name));
-            assert(boundPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-            overloadInstance = this.resolver.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
-          }
-          if (!overloadInstance || !this.compileFunction(overloadInstance)) continue;
-          let overloadType = overloadInstance.type;
-          let originalType = instance.type;
-          if (!overloadType.isAssignableTo(originalType)) {
-            this.error(
-              DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-              overloadInstance.identifierNode.range, overloadType.toString(), originalType.toString()
-            );
-            continue;
-          }
-          // TODO: additional optional parameters are not permitted by `isAssignableTo` yet
-          let overloadSignature = overloadInstance.signature;
-          let overloadParameterTypes = overloadSignature.parameterTypes;
-          let overloadNumParameters = overloadParameterTypes.length;
-          let paramExprs = new Array<ExpressionRef>(1 + overloadNumParameters);
-          paramExprs[0] = module.local_get(0, sizeTypeRef); // this
-          for (let n = 1; n <= numParameters; ++n) {
-            paramExprs[n] = module.local_get(n, parameterTypes[n - 1].toRef());
-          }
-          let needsVarargsStub = false;
-          for (let n = numParameters; n < overloadNumParameters; ++n) {
-            // TODO: inline constant initializers and skip varargs stub
-            paramExprs[1 + n] = this.makeZero(overloadParameterTypes[n], overloadInstance.declaration);
-            needsVarargsStub = true;
-          }
-          let calledName = needsVarargsStub
-            ? this.ensureVarargsStub(overloadInstance).internalName
-            : overloadInstance.internalName;
-          let returnTypeRef = overloadSignature.returnType.toRef();
-          let stmts = new Array<ExpressionRef>();
-          if (needsVarargsStub) {
-            // Safe to prepend since paramExprs are local.get's
-            stmts.push(module.global_set(this.ensureArgumentsLength(), module.i32(numParameters)));
-          }
-          if (returnType == Type.void) {
-            stmts.push(
-              module.call(calledName, paramExprs, returnTypeRef)
-            );
-            stmts.push(
-              module.return()
-            );
-          } else {
-            stmts.push(
-              module.return(
-                module.call(calledName, paramExprs, returnTypeRef)
-              )
-            );
-          }
-          builder.addCase(classInstance.id, stmts);
-          // Also alias each extendee inheriting this exact overload
-          let extendees = classInstance.getAllExtendees(
-            isProperty
-              ? unboundOverloadParent.name
-              : instance.prototype.name
+    var overloadInstances = this.resolver.resolveOverloads(instance);
+    if (overloadInstances) {
+      for (let i = 0, k = overloadInstances.length; i < k; ++i) {
+        let overloadInstance = overloadInstances[i];
+        if (!overloadInstance.is(CommonFlags.COMPILED)) continue; // errored
+        let overloadType = overloadInstance.type;
+        let originalType = instance.type;
+        if (!overloadType.isAssignableTo(originalType)) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            overloadInstance.identifierNode.range, overloadType.toString(), originalType.toString()
           );
-          for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
-            let extendee = _values[a];
-            builder.addCase(extendee.id, stmts);
-          }
+          continue;
+        }
+        // TODO: additional optional parameters are not permitted by `isAssignableTo` yet
+        let overloadSignature = overloadInstance.signature;
+        let overloadParameterTypes = overloadSignature.parameterTypes;
+        let overloadNumParameters = overloadParameterTypes.length;
+        let paramExprs = new Array<ExpressionRef>(1 + overloadNumParameters);
+        paramExprs[0] = module.local_get(0, sizeTypeRef); // this
+        for (let n = 1; n <= numParameters; ++n) {
+          paramExprs[n] = module.local_get(n, parameterTypes[n - 1].toRef());
+        }
+        let needsVarargsStub = false;
+        for (let n = numParameters; n < overloadNumParameters; ++n) {
+          // TODO: inline constant initializers and skip varargs stub
+          paramExprs[1 + n] = this.makeZero(overloadParameterTypes[n], overloadInstance.declaration);
+          needsVarargsStub = true;
+        }
+        let calledName = needsVarargsStub
+          ? this.ensureVarargsStub(overloadInstance).internalName
+          : overloadInstance.internalName;
+        let returnTypeRef = overloadSignature.returnType.toRef();
+        let stmts = new Array<ExpressionRef>();
+        if (needsVarargsStub) {
+          // Safe to prepend since paramExprs are local.get's
+          stmts.push(module.global_set(this.ensureArgumentsLength(), module.i32(numParameters)));
+        }
+        if (returnType == Type.void) {
+          stmts.push(
+            module.call(calledName, paramExprs, returnTypeRef)
+          );
+          stmts.push(
+            module.return()
+          );
+        } else {
+          stmts.push(
+            module.return(
+              module.call(calledName, paramExprs, returnTypeRef)
+            )
+          );
+        }
+        let classInstance = assert(overloadInstance.getClassOrInterface());
+        builder.addCase(classInstance.id, stmts);
+        // Also alias each extendee inheriting this exact overload
+        let extendees = classInstance.getAllExtendees(instance.declaration.name.text); // without get:/set:
+        for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
+          let extendee = _values[a];
+          builder.addCase(extendee.id, stmts);
         }
       }
     }
@@ -7486,7 +7468,7 @@ export class Compiler extends DiagnosticEmitter {
         // We know the last operand is optional and omitted, so inject setting
         // ~argumentsLength into that operand, which is always safe.
         let lastOperand = operands[maxOperands - 1];
-        assert(!(getSideEffects(lastOperand) & SideEffects.WritesGlobal));
+        assert(!(getSideEffects(lastOperand, module.ref) & SideEffects.WritesGlobal));
         let lastOperandType = parameterTypes[maxArguments - 1];
         operands[maxOperands - 1] = module.block(null, [
           module.global_set(this.ensureArgumentsLength(), module.i32(numArguments)),
@@ -7593,7 +7575,7 @@ export class Compiler extends DiagnosticEmitter {
     // into the index argument, which becomes executed last after any operands.
     var argumentsLength = this.ensureArgumentsLength();
     var sizeTypeRef = this.options.sizeTypeRef;
-    if (getSideEffects(functionArg) & SideEffects.WritesGlobal) {
+    if (getSideEffects(functionArg, module.ref) & SideEffects.WritesGlobal) {
       let flow = this.currentFlow;
       let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(functionArg));
       functionArg = module.block(null, [
@@ -8375,7 +8357,8 @@ export class Compiler extends DiagnosticEmitter {
     var parts = expression.parts;
     var numParts = parts.length;
     var expressions = expression.expressions;
-    assert(numParts - 1 == expressions.length);
+    var numExpressions = expressions.length;
+    assert(numExpressions == numParts - 1);
 
     var module = this.module;
     var stringInstance = this.program.stringInstance;
@@ -8441,8 +8424,8 @@ export class Compiler extends DiagnosticEmitter {
         return this.makeCallDirect(concatMethod, [ lhs, rhs ], expression);
       }
 
-      // Compile to a `StaticArray<string>#join("") for general case
-      let length = 2 * numParts - 1;
+      // Compile to a `StaticArray<string>#join("") in the general case
+      let length = numParts + numExpressions;
       let values = new Array<usize>(length);
       values[0] = this.ensureStaticString(parts[0]);
       for (let i = 1; i < numParts; ++i) {
@@ -8454,19 +8437,33 @@ export class Compiler extends DiagnosticEmitter {
       let offset = i64_add(segment.offset, i64_new(this.program.totalOverhead));
       let joinInstance = assert(arrayInstance.getMethod("join"));
       let indexedSetInstance = assert(arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true));
-      let stmts = new Array<ExpressionRef>(numParts);
-      for (let i = 0, k = numParts - 1; i < k; ++i) {
+      let stmts = new Array<ExpressionRef>(2 * numExpressions + 1);
+      // Use one local per toString'ed subexpression, since otherwise recursion on the same
+      // static array would overwrite already prepared parts. Avoids a temporary array.
+      let temps = new Array<Local>(numExpressions);
+      let flow = this.currentFlow;
+      for (let i = 0; i < numExpressions; ++i) {
         let expression = expressions[i];
-        stmts[i] = this.makeCallDirect(indexedSetInstance, [
-          module.usize(offset),
-          module.i32(2 * i + 1),
+        let temp = flow.getTempLocal(stringType);
+        temps[i] = temp;
+        stmts[i] = module.local_set(temp.index,
           this.makeToString(
             this.compileExpression(expression, stringType),
             this.currentType, expression
-          )
-        ], expression);
+          ),
+          true
+        );
       }
-      stmts[numParts - 1] = this.makeCallDirect(joinInstance, [
+      // Populate the static array with the toString'ed subexpressions and call .join("")
+      for (let i = 0; i < numExpressions; ++i) {
+        stmts[numExpressions + i] = this.makeCallDirect(indexedSetInstance, [
+          module.usize(offset),
+          module.i32(2 * i + 1),
+          module.local_get(temps[i].index, stringType.toRef())
+        ], expression);
+        flow.freeTempLocal(temps[i]);
+      }
+      stmts[2 * numExpressions] = this.makeCallDirect(joinInstance, [
         module.usize(offset),
         this.ensureStaticString("")
       ], expression);
@@ -8624,19 +8621,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
-        // __newArray(length, alignLog2, classId, staticBuffer)
-        let expr = this.makeCallDirect(program.newArrayInstance, [
-          module.i32(length),
-          program.options.isWasm64
-            ? module.i64(elementType.alignLog2)
-            : module.i32(elementType.alignLog2),
-          module.i32(arrayInstance.id),
-          program.options.isWasm64
-            ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
-            : module.i32(i64_low(bufferAddress))
-        ], expression);
-        this.currentType = arrayType;
-        return expr;
+        return this.makeNewArray(arrayInstance, length, bufferAddress, expression);
       }
     }
 
@@ -8658,21 +8643,12 @@ export class Compiler extends DiagnosticEmitter {
     // tempThis = __newArray(length, alignLog2, classId, source = 0)
     stmts.push(
       module.local_set(tempThis.index,
-        this.makeCallDirect(program.newArrayInstance, [
-          module.i32(length),
-          program.options.isWasm64
-            ? module.i64(elementType.alignLog2)
-            : module.i32(elementType.alignLog2),
-          module.i32(arrayInstance.id),
-          program.options.isWasm64
-            ? module.i64(0)
-            : module.i32(0)
-        ], expression),
+        this.makeNewArray(arrayInstance, length, i64_new(0), expression),
         arrayType.isManaged
       )
     );
     // tempData = tempThis.dataStart
-    var dataStartMember = assert(arrayInstance.lookupInSelf("dataStart"));
+    var dataStartMember = assert(arrayInstance.getMember("dataStart"));
     assert(dataStartMember.kind == ElementKind.FIELD);
     stmts.push(
       module.local_set(tempDataStart.index,
@@ -8703,6 +8679,37 @@ export class Compiler extends DiagnosticEmitter {
     if (length) this.compileFunction(indexedSet);
     this.currentType = arrayType;
     return module.flatten(stmts, arrayTypeRef);
+  }
+
+  /** Makes a new array instance from a static buffer segment. */
+  private makeNewArray(
+    /** Concrete array class. */
+    arrayInstance: Class,
+    /** Length of the array. */
+    length: i32,
+    /** Source address to copy from. Array is zeroed if `0`. */
+    source: i64,
+    /** Report node. */
+    reportNode: Node
+  ): ExpressionRef {
+    var program = this.program;
+    var module = this.module;
+    assert(!arrayInstance.extends(program.staticArrayPrototype));
+    var elementType = arrayInstance.getArrayValueType(); // asserts
+
+    // __newArray(length, alignLog2, classId, staticBuffer)
+    var expr = this.makeCallDirect(program.newArrayInstance, [
+      module.i32(length),
+      program.options.isWasm64
+        ? module.i64(elementType.alignLog2)
+        : module.i32(elementType.alignLog2),
+      module.i32(arrayInstance.id),
+      program.options.isWasm64
+        ? module.i64(i64_low(source), i64_high(source))
+        : module.i32(i64_low(source))
+    ], reportNode);
+    this.currentType = arrayInstance.type;
+    return expr;
   }
 
   /** Compiles a special `fixed` array literal. */
@@ -8890,8 +8897,8 @@ export class Compiler extends DiagnosticEmitter {
     // Iterate through the members defined in our expression
     for (let i = 0; i < numNames; ++i) {
       let memberName = names[i].text;
-      let member: DeclaredElement;
-      if (!members || !members.has(memberName) || (member = assert(members.get(memberName))).kind != ElementKind.FIELD) {
+      let member = classReference.getMember(memberName);
+      if (!member || member.kind != ElementKind.FIELD) {
         this.error(
           DiagnosticCode.Property_0_does_not_exist_on_type_1,
           names[i].range, memberName, classType.toString()
@@ -9459,20 +9466,32 @@ export class Compiler extends DiagnosticEmitter {
     var ifElseExpr = this.compileExpression(ifElse, ctxType == Type.auto ? ifThenType : ctxType);
     var ifElseType = this.currentType;
 
-    var commonType = Type.commonDenominator(ifThenType, ifElseType, false);
-    if (!commonType) {
-      this.error(
-        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-        ifElse.range, ifElseType.toString(), ifThenType.toString()
-      );
-      this.currentType = ctxType;
-      return module.unreachable();
+    if (ctxType == Type.void) { // values, including type mismatch, are irrelevant
+      if (ifThenType != Type.void) {
+        ifThenExpr = module.drop(ifThenExpr);
+        ifThenType = Type.void;
+      }
+      if (ifElseType != Type.void) {
+        ifElseExpr = module.drop(ifElseExpr);
+        ifElseType = Type.void;
+      }
+      this.currentType = Type.void;
+    } else {
+      let commonType = Type.commonDenominator(ifThenType, ifElseType, false);
+      if (!commonType) {
+        this.error(
+          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+          ifElse.range, ifElseType.toString(), ifThenType.toString()
+        );
+        this.currentType = ctxType;
+        return module.unreachable();
+      }
+      ifThenExpr = this.convertExpression(ifThenExpr, ifThenType, commonType, false, ifThen);
+      ifThenType = commonType;
+      ifElseExpr = this.convertExpression(ifElseExpr, ifElseType, commonType, false, ifElse);
+      ifElseType = commonType;
+      this.currentType = commonType;
     }
-    ifThenExpr = this.convertExpression(ifThenExpr, ifThenType, commonType, false, ifThen);
-    ifThenType = commonType;
-    ifElseExpr = this.convertExpression(ifElseExpr, ifElseType, commonType, false, ifElse);
-    ifElseType = commonType;
-    this.currentType = commonType;
 
     ifThenFlow.freeScopedLocals();
     ifElseFlow.freeScopedLocals();
@@ -10786,14 +10805,31 @@ export class Compiler extends DiagnosticEmitter {
     var temp = flow.getTempLocal(type);
     var instanceofInstance = this.program.instanceofInstance;
     assert(this.compileFunction(instanceofInstance));
-    expr = module.if(
-      module.call(instanceofInstance.internalName, [
+    if (!toType.isNullableReference || flow.isNonnull(expr, type)) {
+      // Simplify if the value cannot be `null`. If toType is non-nullable, a
+      // null-check would have been emitted separately so is not necessary here.
+      expr = module.if(
+        module.call(instanceofInstance.internalName, [
+          module.local_tee(temp.index, expr, type.isManaged),
+          module.i32(toType.classReference!.id)
+        ], TypeRef.I32),
+        module.local_get(temp.index, type.toRef()),
+        this.makeStaticAbort(this.ensureStaticString("unexpected upcast"), reportNode) // TODO: throw
+      );
+    } else {
+      expr = module.if(
         module.local_tee(temp.index, expr, type.isManaged),
-        module.i32(toType.classReference!.id)
-      ], TypeRef.I32),
-      module.local_get(temp.index, type.toRef()),
-      this.makeStaticAbort(this.ensureStaticString("unexpected upcast"), reportNode) // TODO: throw
-    );
+        module.if(
+          module.call(instanceofInstance.internalName, [
+            module.local_get(temp.index, type.toRef()),
+            module.i32(toType.classReference!.id)
+          ], TypeRef.I32),
+          module.local_get(temp.index, type.toRef()),
+          this.makeStaticAbort(this.ensureStaticString("unexpected upcast"), reportNode) // TODO: throw
+        ),
+        module.usize(0)
+      );
+    }
     flow.freeTempLocal(temp);
     this.currentType = toType;
     return expr;

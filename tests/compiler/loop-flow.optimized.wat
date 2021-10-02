@@ -26,13 +26,10 @@
   i32.const 1
  )
  (func $loop-flow/whileAny (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 1
-  i32.eq
-  local.set $1
   loop $while-continue|0 (result i32)
-   local.get $1
+   local.get $0
+   i32.const 1
+   i32.eq
    if (result i32)
     i32.const 1
    else
@@ -50,13 +47,10 @@
   end
  )
  (func $loop-flow/forAny (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 1
-  i32.eq
-  local.set $1
   loop $for-loop|0 (result i32)
-   local.get $1
+   local.get $0
+   i32.const 1
+   i32.eq
    if (result i32)
     i32.const 1
    else
@@ -76,25 +70,23 @@
   end
  )
  (func $loop-flow/doAny (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 1
-  i32.eq
-  local.set $1
-  loop $do-continue|0
-   local.get $1
-   i32.eqz
+  loop $do-loop|0
+   local.get $0
+   i32.const 1
+   i32.ne
    if
     local.get $0
     i32.const 2
-    i32.ne
-    br_if $do-continue|0
-    i32.const 1104
-    i32.const 1056
-    i32.const 78
-    i32.const 22
-    call $~lib/builtins/abort
-    unreachable
+    i32.eq
+    if
+     i32.const 1104
+     i32.const 1056
+     i32.const 78
+     i32.const 22
+     call $~lib/builtins/abort
+     unreachable
+    end
+    br $do-loop|0
    end
   end
   i32.const 1

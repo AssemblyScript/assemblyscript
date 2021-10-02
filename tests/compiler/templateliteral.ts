@@ -96,3 +96,25 @@ function test_raw(): void {
   assert(raw`\u1000` == "\\u1000");
 }
 // test_raw(); // TODO: Requires ReadonlyArray to be safe
+
+class RecursiveObject  {
+  constructor(
+    public key: string,
+    public val: RecursiveObject | null = null
+  ) {}
+  toString(): string {
+    let val = this.val;
+    if (!val) return this.key;
+    // see: https://github.com/AssemblyScript/assemblyscript/issues/1944
+    // trigger general case by wrapping three times below (2x with value)
+    return `${this.key}:${val}`;
+  }
+}
+
+function test_recursive(): void {
+  const c = new RecursiveObject("c");
+  const b = new RecursiveObject("b", c);
+  const a = new RecursiveObject("a", b);
+  assert(a.toString() == "a:b:c");
+}
+test_recursive();

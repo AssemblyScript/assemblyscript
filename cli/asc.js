@@ -912,6 +912,14 @@ exports.main = function main(argv, options, callback) {
     if (error) return callback(error);
   }
 
+  numErrors = checkDiagnostics(program, stderr, options.reportDiagnostic);
+  if (numErrors) {
+    if (module) module.dispose();
+    const err = Error(`${numErrors} afterCompile error(s)`);
+    err.stack = err.message; // omit stack
+    return callback(err);
+  }
+
   // Validate the module if requested
   if (!opts.noValidate) {
     stats.validateCount++;
@@ -943,6 +951,10 @@ exports.main = function main(argv, options, callback) {
   // Optimize the module
   const debugInfo = opts.debug;
   const converge = opts.converge;
+  const zeroFilledMemory = opts.importMemory
+    ? opts.zeroFilledMemory
+    : false;
+
   const runPasses = [];
   if (opts.runPasses) {
     if (typeof opts.runPasses === "string") {
@@ -960,7 +972,7 @@ exports.main = function main(argv, options, callback) {
   stats.optimizeTime += measure(() => {
     stats.optimizeCount++;
     try {
-      module.optimize(optimizeLevel, shrinkLevel, debugInfo);
+      module.optimize(optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
     } catch (e) {
       crash("optimize", e);
     }
@@ -979,7 +991,7 @@ exports.main = function main(argv, options, callback) {
       do {
         stats.optimizeCount++;
         try {
-          module.optimize(optimizeLevel, shrinkLevel, debugInfo);
+          module.optimize(optimizeLevel, shrinkLevel, debugInfo, zeroFilledMemory);
         } catch (e) {
           crash("optimize (converge)", e);
         }
@@ -1474,12 +1486,21 @@ function crash(stage, e) {
     EOL,
     BAR, "Whoops, the AssemblyScript compiler has crashed during ", stage, " :-(", EOL,
     BAR, EOL,
-    BAR, "Here is a stack trace that may or may not be useful:", EOL,
-    BAR, EOL,
-    e.stack.replace(/^/mg, BAR), EOL,
-    BAR, EOL,
-    BAR, "If it refers to the dist files, try to 'npm install source-map-support' and", EOL,
-    BAR, "run again, which should then show the actual code location in the sources.", EOL,
+    (typeof e.stack === "string"
+      ? [
+          BAR, "Here is the stack trace hinting at the problem, perhaps it's useful?", EOL,
+          BAR, EOL,
+          e.stack.replace(/^/mg, BAR), EOL,
+          BAR, EOL,
+          BAR, "If it refers to the dist files, try to 'npm install source-map-support' and", EOL,
+          BAR, "run again, which should then show the actual code location in the sources.", EOL,
+        ]
+      : [
+          BAR, "There is no stack trace. Perhaps a Binaryen exception above / in console?", EOL,
+          BAR, EOL,
+          BAR, "> " + e.stack, EOL
+        ]
+    ).join(""),
     BAR, EOL,
     BAR, "If you see where the error is, feel free to send us a pull request. If not,", EOL,
     BAR, "please let us know: https://github.com/AssemblyScript/assemblyscript/issues", EOL,

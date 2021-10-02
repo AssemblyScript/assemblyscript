@@ -82,6 +82,9 @@ export interface ASUtil {
   /** Gets a live view on a Float64Array's values in the module's memory. */
   __getFloat64ArrayView(ptr: number): Float64Array;
 
+  /** Gets a function from poiner which contain table's index. */
+  __getFunction(ptr: number): ((...args: unknown[]) => unknown) | null;
+
   /** Tests whether a managed object is an instance of the class represented by the specified base id. */
   __instanceof(ptr: number, baseId: number): boolean;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
@@ -89,7 +92,7 @@ export interface ASUtil {
   /** Allocates a new ArrayBuffer in the module's memory and returns a reference (pointer) to it. */
   __newArrayBuffer(buf: ArrayBuffer): number;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
-  __newArray(id: number, values: ArrayLike<number>): number;
+  __newArray(id: number, valuesOrCapacity?: Array<number> | ArrayBufferView | number): number;
 
   /** Allocates an instance of the class represented by the specified id. */
   __new(size: number, id: number): number;
