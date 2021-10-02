@@ -51,6 +51,8 @@ import {
   FunctionExpression,
   IdentifierExpression,
   StringLiteralExpression,
+  ArrayLiteralExpression, 
+  ObjectLiteralExpression,
 
   Statement,
   BlockStatement,
@@ -89,7 +91,6 @@ import {
 
   mangleInternalPath
 } from "./ast";
-import { ArrayLiteralExpression, ObjectLiteralExpression } from ".";
 
 /** Represents a dependee. */
 class Dependee {
