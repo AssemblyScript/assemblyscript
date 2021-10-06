@@ -359,27 +359,18 @@
   (local $1 i32)
   global.get $resolve-binary/foo
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $resolve-binary/bar
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $resolve-binary/bar2
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -3912,9 +3903,6 @@
      local.get $0
      i32.load
      local.tee $0
-     i32.const 0
-     local.get $0
-     select
      if
       local.get $0
       call $byn-split-outlined-A$~lib/rt/itcms/__visit

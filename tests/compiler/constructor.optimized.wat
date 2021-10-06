@@ -51,99 +51,66 @@
   (local $1 i32)
   global.get $constructor/emptyCtor
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $constructor/emptyCtorWithFieldInit
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $constructor/emptyCtorWithFieldNoInit
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $constructor/emptyCtorWithFieldAccess
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $constructor/none
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $constructor/justFieldInit
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $constructor/justFieldNoInit
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $constructor/ctorReturns
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $constructor/ctorConditionallyReturns
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $constructor/ctorConditionallyReturnsThis
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $constructor/ctorFieldInitOrder
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -2072,9 +2039,6 @@
               local.get $0
               i32.load
               local.tee $0
-              i32.const 0
-              local.get $0
-              select
               if
                local.get $0
                call $byn-split-outlined-A$~lib/rt/itcms/__visit

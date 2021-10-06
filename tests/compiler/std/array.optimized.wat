@@ -716,9 +716,6 @@
   (local $1 i32)
   global.get $std/array/arr
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -727,18 +724,12 @@
   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   global.get $std/array/inputStabArr
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/array/outputStabArr
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -13450,9 +13441,6 @@
     local.get $1
     i32.load
     local.tee $2
-    i32.const 0
-    local.get $2
-    select
     if
      local.get $2
      call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -13473,24 +13461,21 @@
   end
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner4
-   block $folding-inner3
-    block $folding-inner2
-     block $folding-inner1
-      block $invalid
-       block $std/array/ArrayStr
-        block $std/array/Proxy<i32>
-         block $std/array/Dim
-          block $std/array/Ref
-           block $~lib/string/String
-            block $~lib/arraybuffer/ArrayBuffer
-             local.get $0
-             i32.const 8
-             i32.sub
-             i32.load
-             br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner3 $folding-inner4 $std/array/Ref $folding-inner3 $folding-inner4 $folding-inner4 $folding-inner1 $folding-inner4 $folding-inner4 $folding-inner4 $folding-inner1 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $std/array/Dim $folding-inner1 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner1 $folding-inner2 $std/array/Proxy<i32> $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner4 $folding-inner4 $folding-inner4 $folding-inner4 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner4 $folding-inner4 $std/array/ArrayStr $folding-inner2 $invalid
-            end
-            return
+  block $folding-inner3
+   block $folding-inner2
+    block $folding-inner1
+     block $invalid
+      block $std/array/ArrayStr
+       block $std/array/Proxy<i32>
+        block $std/array/Dim
+         block $std/array/Ref
+          block $~lib/string/String
+           block $~lib/arraybuffer/ArrayBuffer
+            local.get $0
+            i32.const 8
+            i32.sub
+            i32.load
+            br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner3 $folding-inner3 $std/array/Ref $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner1 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner1 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $std/array/Dim $folding-inner1 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner2 $folding-inner1 $folding-inner2 $std/array/Proxy<i32> $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner1 $folding-inner2 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner3 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner1 $folding-inner2 $folding-inner3 $folding-inner3 $std/array/ArrayStr $folding-inner2 $invalid
            end
            return
           end
@@ -13500,31 +13485,21 @@
         end
         return
        end
-       local.get $0
-       call $~lib/array/Array<std/array/Ref>~visit
        return
       end
-      unreachable
+      local.get $0
+      call $~lib/array/Array<std/array/Ref>~visit
+      return
      end
-     local.get $0
-     call $~lib/array/Array<std/array/Ref>~visit
-     return
+     unreachable
     end
     local.get $0
-    i32.load offset=4
-    local.tee $0
-    if
-     local.get $0
-     call $byn-split-outlined-A$~lib/rt/itcms/__visit
-    end
+    call $~lib/array/Array<std/array/Ref>~visit
     return
    end
    local.get $0
-   i32.load
+   i32.load offset=4
    local.tee $0
-   i32.const 0
-   local.get $0
-   select
    if
     local.get $0
     call $byn-split-outlined-A$~lib/rt/itcms/__visit

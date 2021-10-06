@@ -102,54 +102,36 @@
   (local $1 i32)
   global.get $~lib/symbol/stringToId
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $~lib/symbol/idToString
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/symbol/key1
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/symbol/key2
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/symbol/key3
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/symbol/key4
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -3166,9 +3148,6 @@
       local.get $0
       i32.load
       local.tee $0
-      i32.const 0
-      local.get $0
-      select
       if
        local.get $0
        call $byn-split-outlined-A$~lib/rt/itcms/__visit

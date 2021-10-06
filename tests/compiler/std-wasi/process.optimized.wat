@@ -2181,45 +2181,30 @@
   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   global.get $~lib/process/process.argv
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $~lib/process/process.env
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std-wasi/process/argv
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std-wasi/process/env
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std-wasi/process/envKeys
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -4455,9 +4440,6 @@
      local.get $0
      i32.load
      local.tee $0
-     i32.const 0
-     local.get $0
-     select
      if
       local.get $0
       call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -4481,9 +4463,6 @@
       local.get $1
       i32.load
       local.tee $3
-      i32.const 0
-      local.get $3
-      select
       if
        local.get $3
        call $byn-split-outlined-A$~lib/rt/itcms/__visit

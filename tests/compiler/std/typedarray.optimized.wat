@@ -11233,9 +11233,6 @@
    i32.const 1
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.0
    local.get $3
@@ -11284,9 +11281,6 @@
    i32.const 1
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.01
    local.get $3
@@ -11338,9 +11332,6 @@
    i32.const 1
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.04
    local.get $3
@@ -11392,9 +11383,6 @@
    i32.const 1
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.07
    local.get $3
@@ -12123,9 +12111,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.027
    local.get $1
@@ -12177,9 +12162,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.030
    local.get $1
@@ -12229,9 +12211,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.033
    local.get $1
@@ -12283,9 +12262,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.036
    local.get $1
@@ -12337,9 +12313,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.039
    local.get $1
@@ -12391,9 +12364,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int16Array,i16>|inlined.042
    local.get $1
@@ -12619,9 +12589,6 @@
    i32.const 1
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.0
    local.get $3
@@ -12670,9 +12637,6 @@
    i32.const 1
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.01
    local.get $3
@@ -12724,9 +12688,6 @@
    i32.const 1
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.04
    local.get $3
@@ -12778,9 +12739,6 @@
    i32.const 1
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.07
    local.get $3
@@ -13509,9 +13467,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.027
    local.get $1
@@ -13563,9 +13518,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.030
    local.get $1
@@ -13615,9 +13567,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.033
    local.get $1
@@ -13669,9 +13618,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.036
    local.get $1
@@ -13723,9 +13669,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.039
    local.get $1
@@ -13777,9 +13720,6 @@
    i32.const 1
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint16Array,u16>|inlined.042
    local.get $1
@@ -14000,9 +13940,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.0
    local.get $3
@@ -14051,9 +13988,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.01
    local.get $3
@@ -14105,9 +14039,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.05
    local.get $3
@@ -14159,9 +14090,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.09
    local.get $3
@@ -15095,9 +15023,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.055
    local.get $4
@@ -15149,9 +15074,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.059
    local.get $4
@@ -15201,9 +15123,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.063
    local.get $4
@@ -15255,9 +15174,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.067
    local.get $4
@@ -15309,9 +15225,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.071
    local.get $4
@@ -15363,9 +15276,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int32Array,i32>|inlined.075
    local.get $4
@@ -15586,9 +15496,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.0
    local.get $3
@@ -15637,9 +15544,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.01
    local.get $3
@@ -15691,9 +15595,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.05
    local.get $3
@@ -15745,9 +15646,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.09
    local.get $3
@@ -16680,9 +16578,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.055
    local.get $4
@@ -16734,9 +16629,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.059
    local.get $4
@@ -16786,9 +16678,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.063
    local.get $4
@@ -16840,9 +16729,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.067
    local.get $4
@@ -16894,9 +16780,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.071
    local.get $4
@@ -16948,9 +16831,6 @@
    i32.const 2
    i32.shr_u
    local.tee $2
-   i32.const 0
-   local.get $2
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint32Array,u32>|inlined.075
    local.get $4
@@ -17172,9 +17052,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.0
    local.get $2
@@ -17223,9 +17100,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.01
    local.get $2
@@ -17277,9 +17151,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.05
    local.get $2
@@ -17331,9 +17202,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.09
    local.get $2
@@ -18283,9 +18151,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.055
    local.get $4
@@ -18337,9 +18202,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.059
    local.get $4
@@ -18389,9 +18251,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.063
    local.get $4
@@ -18443,9 +18302,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.067
    local.get $4
@@ -18497,9 +18353,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.071
    local.get $4
@@ -18551,9 +18404,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Int64Array,i64>|inlined.075
    local.get $4
@@ -18775,9 +18625,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.0
    local.get $2
@@ -18826,9 +18673,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.01
    local.get $2
@@ -18880,9 +18724,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.05
    local.get $2
@@ -18934,9 +18775,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.09
    local.get $2
@@ -19886,9 +19724,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.055
    local.get $4
@@ -19940,9 +19775,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.059
    local.get $4
@@ -19992,9 +19824,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.063
    local.get $4
@@ -20046,9 +19875,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.067
    local.get $4
@@ -20100,9 +19926,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.071
    local.get $4
@@ -20154,9 +19977,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Uint64Array,u64>|inlined.075
    local.get $4
@@ -20378,9 +20198,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
    local.get $2
@@ -20430,9 +20247,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.01
    local.get $2
@@ -20484,9 +20298,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.05
    local.get $2
@@ -20538,9 +20349,6 @@
    i32.const 2
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.09
    local.get $2
@@ -21491,9 +21299,6 @@
    i32.const 2
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.055
    local.get $4
@@ -21545,9 +21350,6 @@
    i32.const 2
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.059
    local.get $4
@@ -21597,9 +21399,6 @@
    i32.const 2
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.063
    local.get $4
@@ -21651,9 +21450,6 @@
    i32.const 2
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.067
    local.get $4
@@ -21705,9 +21501,6 @@
    i32.const 2
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.071
    local.get $4
@@ -21759,9 +21552,6 @@
    i32.const 2
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.075
    local.get $4
@@ -21983,9 +21773,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
    local.get $2
@@ -22035,9 +21822,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.01
    local.get $2
@@ -22089,9 +21873,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.05
    local.get $2
@@ -22143,9 +21924,6 @@
    i32.const 3
    i32.shr_u
    local.tee $4
-   i32.const 0
-   local.get $4
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.09
    local.get $2
@@ -23097,9 +22875,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.055
    local.get $4
@@ -23151,9 +22926,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.059
    local.get $4
@@ -23203,9 +22975,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.063
    local.get $4
@@ -23257,9 +23026,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.067
    local.get $4
@@ -23311,9 +23077,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.071
    local.get $4
@@ -23365,9 +23128,6 @@
    i32.const 3
    i32.shr_u
    local.tee $3
-   i32.const 0
-   local.get $3
-   select
    i32.eqz
    br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.075
    local.get $4
@@ -36298,9 +36058,6 @@
   local.get $0
   i32.load
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -44846,14 +44603,12 @@
                                       local.get $4
                                       i32.load offset=4
                                       local.set $2
-                                      i32.const 0
                                       local.get $4
                                       i32.load offset=8
                                       i32.const 2
                                       i32.shr_u
-                                      local.tee $0
-                                      local.get $0
-                                      select
+                                      local.set $0
+                                      i32.const 0
                                       local.set $1
                                       loop $for-loop|01
                                        local.get $0
@@ -44899,15 +44654,11 @@
                                       i32.load offset=4
                                       local.set $2
                                       i32.const 0
+                                      local.set $0
                                       local.get $4
                                       i32.load offset=8
                                       i32.const 2
                                       i32.shr_u
-                                      local.tee $1
-                                      local.get $1
-                                      select
-                                      local.set $0
-                                      local.get $1
                                       i32.const 3
                                       i32.sub
                                       local.tee $1
@@ -45016,32 +44767,27 @@
                                       end
                                       local.get $4
                                       i32.load offset=4
-                                      local.set $2
+                                      local.set $1
                                       i32.const 1
                                       local.get $4
                                       i32.load offset=8
                                       i32.const 2
                                       i32.shr_u
-                                      local.tee $1
-                                      local.get $1
+                                      local.tee $0
+                                      local.get $0
                                       i32.const 1
                                       i32.gt_u
                                       select
                                       local.set $0
-                                      i32.const 0
-                                      local.get $1
-                                      local.get $1
-                                      select
-                                      local.set $1
                                       loop $for-loop|07
                                        local.get $0
-                                       local.get $1
+                                       i32.const 0
                                        i32.lt_s
                                        if
                                         local.get $0
                                         i32.const 2
                                         i32.shl
-                                        local.get $2
+                                        local.get $1
                                         i32.add
                                         i32.const 0
                                         i32.store
@@ -45083,14 +44829,12 @@
                                       local.get $3
                                       i32.load offset=4
                                       local.set $2
-                                      i32.const 0
                                       local.get $3
                                       i32.load offset=8
                                       i32.const 2
                                       i32.shr_u
-                                      local.tee $0
-                                      local.get $0
-                                      select
+                                      local.set $0
+                                      i32.const 0
                                       local.set $1
                                       loop $for-loop|09
                                        local.get $0
@@ -58830,9 +58574,6 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.tee $3
-                                       i32.const 0
-                                       local.get $3
-                                       select
                                        i32.eqz
                                        br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float64Array,f64>|inlined.0
                                        local.get $4
@@ -58883,9 +58624,6 @@
                                        i32.const 3
                                        i32.shr_u
                                        local.tee $2
-                                       i32.const 0
-                                       local.get $2
-                                       select
                                        i32.eqz
                                        br_if $~lib/typedarray/INCLUDES<~lib/typedarray/Float64Array,f64>|inlined.0
                                        drop
@@ -58950,9 +58688,6 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.tee $3
-                                       i32.const 0
-                                       local.get $3
-                                       select
                                        i32.eqz
                                        br_if $~lib/typedarray/INDEX_OF<~lib/typedarray/Float32Array,f32>|inlined.0
                                        local.get $4
@@ -59003,9 +58738,6 @@
                                        i32.const 2
                                        i32.shr_u
                                        local.tee $2
-                                       i32.const 0
-                                       local.get $2
-                                       select
                                        i32.eqz
                                        br_if $~lib/typedarray/INCLUDES<~lib/typedarray/Float32Array,f32>|inlined.0
                                        drop

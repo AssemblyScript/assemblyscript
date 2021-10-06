@@ -1884,28 +1884,18 @@
  (func $~lib/rt/__visit_members (param $0 i32)
   block $folding-inner0
    block $invalid
-    block $~lib/array/Array<i32>
-     block $class/Animal<f64>
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $class/Animal<f64> $folding-inner0 $~lib/array/Array<i32> $invalid
-       end
-       return
+    block $class/Animal<f64>
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $class/Animal<f64> $folding-inner0 $folding-inner0 $invalid
       end
       return
      end
      return
-    end
-    local.get $0
-    i32.load
-    local.tee $0
-    if
-     local.get $0
-     call $byn-split-outlined-A$~lib/rt/itcms/__visit
     end
     return
    end
@@ -1914,9 +1904,6 @@
   local.get $0
   i32.load
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit

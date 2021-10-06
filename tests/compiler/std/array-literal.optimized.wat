@@ -104,45 +104,30 @@
   call $byn-split-outlined-A$~lib/rt/itcms/__visit
   global.get $std/array-literal/emptyArrayI32
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/array-literal/dynamicArrayI8
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/array-literal/dynamicArrayI32
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/array-literal/dynamicArrayRef
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
   end
   global.get $std/array-literal/dynamicArrayRefWithCtor
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -1826,9 +1811,6 @@
     local.get $1
     i32.load
     local.tee $2
-    i32.const 0
-    local.get $2
-    select
     if
      local.get $2
      call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -1855,28 +1837,15 @@
      block $std/array-literal/RefWithCtor
       block $~lib/array/Array<std/array-literal/Ref>
        block $std/array-literal/Ref
-        block $~lib/arraybuffer/ArrayBufferView
-         block $~lib/string/String
-          block $~lib/arraybuffer/ArrayBuffer
-           local.get $0
-           i32.const 8
-           i32.sub
-           i32.load
-           br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $folding-inner0 $folding-inner0 $std/array-literal/Ref $~lib/array/Array<std/array-literal/Ref> $std/array-literal/RefWithCtor $~lib/array/Array<std/array-literal/RefWithCtor> $invalid
-          end
-          return
+        block $~lib/string/String
+         block $~lib/arraybuffer/ArrayBuffer
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $folding-inner0 $folding-inner0 $std/array-literal/Ref $~lib/array/Array<std/array-literal/Ref> $std/array-literal/RefWithCtor $~lib/array/Array<std/array-literal/RefWithCtor> $invalid
          end
          return
-        end
-        local.get $0
-        i32.load
-        local.tee $0
-        i32.const 0
-        local.get $0
-        select
-        if
-         local.get $0
-         call $byn-split-outlined-A$~lib/rt/itcms/__visit
         end
         return
        end

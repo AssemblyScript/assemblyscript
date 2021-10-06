@@ -2571,25 +2571,15 @@
   block $folding-inner1
    block $folding-inner0
     block $invalid
-     block $~lib/array/Array<i32>
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner1 $~lib/array/Array<i32> $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner1 $invalid
-       end
-       return
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner1 $folding-inner1 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner1 $invalid
       end
       return
-     end
-     local.get $0
-     i32.load
-     local.tee $0
-     if
-      local.get $0
-      call $byn-split-outlined-A$~lib/rt/itcms/__visit
      end
      return
     end
@@ -2598,9 +2588,6 @@
    local.get $0
    i32.load
    local.tee $0
-   i32.const 0
-   local.get $0
-   select
    if
     local.get $0
     call $byn-split-outlined-A$~lib/rt/itcms/__visit
@@ -2610,9 +2597,6 @@
   local.get $0
   i32.load
   local.tee $0
-  i32.const 0
-  local.get $0
-  select
   if
    local.get $0
    call $byn-split-outlined-A$~lib/rt/itcms/__visit

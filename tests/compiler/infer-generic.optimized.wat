@@ -1279,50 +1279,37 @@
   local.get $0
  )
  (func $~lib/rt/__visit_members (param $0 i32)
-  block $folding-inner0
-   block $invalid
-    block $infer-generic/Ref
-     block $~lib/array/Array<f32>
-      block $~lib/arraybuffer/ArrayBufferView
-       block $~lib/string/String
-        block $~lib/arraybuffer/ArrayBuffer
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $~lib/array/Array<f32> $folding-inner0 $infer-generic/Ref $folding-inner0 $folding-inner0 $invalid
-        end
-        return
+  block $folding-inner1
+   block $folding-inner0
+    block $invalid
+     block $infer-generic/Ref
+      block $~lib/string/String
+       block $~lib/arraybuffer/ArrayBuffer
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner1 $folding-inner1 $folding-inner0 $infer-generic/Ref $folding-inner0 $folding-inner0 $invalid
        end
        return
       end
-      local.get $0
-      i32.load
-      local.tee $0
-      i32.const 0
-      local.get $0
-      select
-      if
-       local.get $0
-       call $byn-split-outlined-A$~lib/rt/itcms/__visit
-      end
       return
-     end
-     local.get $0
-     i32.load
-     local.tee $0
-     if
-      local.get $0
-      call $byn-split-outlined-A$~lib/rt/itcms/__visit
      end
      return
     end
-    return
+    unreachable
    end
-   unreachable
+   local.get $0
+   i32.load offset=4
+   local.tee $0
+   if
+    local.get $0
+    call $byn-split-outlined-A$~lib/rt/itcms/__visit
+   end
+   return
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.tee $0
   if
    local.get $0

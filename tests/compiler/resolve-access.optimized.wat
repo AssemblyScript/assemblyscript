@@ -2746,28 +2746,15 @@
   block $folding-inner0
    block $invalid
     block $resolve-access/Container
-     block $~lib/arraybuffer/ArrayBufferView
-      block $~lib/string/String
-       block $~lib/arraybuffer/ArrayBuffer
-        local.get $0
-        i32.const 8
-        i32.sub
-        i32.load
-        br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $~lib/arraybuffer/ArrayBufferView $folding-inner0 $folding-inner0 $resolve-access/Container $invalid
-       end
-       return
+     block $~lib/string/String
+      block $~lib/arraybuffer/ArrayBuffer
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $~lib/arraybuffer/ArrayBuffer $~lib/string/String $folding-inner0 $folding-inner0 $folding-inner0 $resolve-access/Container $invalid
       end
       return
-     end
-     local.get $0
-     i32.load
-     local.tee $0
-     i32.const 0
-     local.get $0
-     select
-     if
-      local.get $0
-      call $byn-split-outlined-A$~lib/rt/itcms/__visit
      end
      return
     end
