@@ -2673,14 +2673,14 @@ function builtin_atomic_cmpxchg(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.atomic_cmpxchg, builtin_atomic_cmpxchg);
 
-// atomic.wait<T!>(ptr: usize, expected: T, timeout: i64) -> i32
+// atomic.wait<T!>(ptr: usize, expected: T, timeout?: i64) -> i32
 function builtin_atomic_wait(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
   if (
     checkFeatureEnabled(ctx, Feature.THREADS) |
     checkTypeRequired(ctx) |
-    checkArgsRequired(ctx, 3)
+    checkArgsOptional(ctx, 2, 3)
   ) {
     compiler.currentType = Type.i32;
     return module.unreachable();
@@ -2690,7 +2690,9 @@ function builtin_atomic_wait(ctx: BuiltinContext): ExpressionRef {
   var type = typeArguments![0];
   var arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT);
-  var arg2 = compiler.compileExpression(operands[2], Type.i64, Constraints.CONV_IMPLICIT);
+  var arg2 = operands.length == 3
+    ? compiler.compileExpression(operands[2], Type.i64, Constraints.CONV_IMPLICIT)
+    : module.i64(-1, -1); // Infinite timeout
   compiler.currentType = Type.i32;
   switch (type.kind) {
     case TypeKind.I32:
