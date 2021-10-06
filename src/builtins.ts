@@ -2710,21 +2710,23 @@ function builtin_atomic_wait(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.atomic_wait, builtin_atomic_wait);
 
-// atomic.notify(ptr: usize, count: i32) -> i32
+// atomic.notify(ptr: usize, count?: i32) -> i32
 function builtin_atomic_notify(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
   if (
     checkFeatureEnabled(ctx, Feature.THREADS) |
     checkTypeAbsent(ctx) |
-    checkArgsRequired(ctx, 2)
+    checkArgsOptional(ctx, 1, 2)
   ) {
     compiler.currentType = Type.i32;
     return module.unreachable();
   }
   var operands = ctx.operands;
   var arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
-  var arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.CONV_IMPLICIT);
+  var arg1 = operands.length == 2
+    ? compiler.compileExpression(operands[1], Type.i32, Constraints.CONV_IMPLICIT)
+    : module.i32(-1); // Inifinity count of waiters
   compiler.currentType = Type.i32;
   return module.atomic_notify(arg0, arg1);
 }
