@@ -128,29 +128,31 @@ export enum ExpressionId {
   RefFunc = 43 /* _BinaryenRefFuncId */,
   RefEq = 44 /* _BinaryenRefEqId */,
   TableGet = 45 /* _BinaryenTableGetId */,
-  Try = 46 /* _BinaryenTryId */,
-  Throw = 47 /* _BinaryenThrowId */,
-  Rethrow = 48 /* _BinaryenRethrowId */,
-  TupleMake = 49 /* _BinaryenTupleMakeId */,
-  TupleExtract = 50 /* _BinaryenTupleExtractId */,
-  I31New = 51 /* _BinaryenI31NewId */,
-  I31Get = 52 /* _BinaryenI31GetId */,
-  CallRef = 53 /* _BinaryenCallRefId */,
-  RefTest = 54 /* _BinaryenRefTestId */,
-  RefCast = 55 /* _BinaryenRefCastId */,
-  BrOn = 56 /* _BinaryenBrOnId */,
-  RttCanon = 57 /* _BinaryenRttCanonId */,
-  RttSub = 58 /* _BinaryenRttSubId */,
-  StructNew = 59 /* _BinaryenStructNewId */,
-  StructGet = 60 /* _BinaryenStructGetId */,
-  StructSet = 61 /* _BinaryenStructSetId */,
-  ArrayNew = 62 /* _BinaryenArrayNewId */,
-  ArrayInit = 63 /* _BinaryenArrayInitId */,
-  ArrayGet = 64 /* _BinaryenArrayGetId */,
-  ArraySet = 65 /* _BinaryenArraySetId */,
-  ArrayLen = 66 /* _BinaryenArrayLenId */,
-  ArrayCopy = 67 /* _BinaryenArrayCopyId */,
-  RefAs = 68 /* _BinaryenRefAsId */
+  TableSet = 46 /* _BinaryenTableSetId */,
+  TableSize = 47 /* _BinaryenTableSizeId */,
+  Try = 48 /* _BinaryenTryId */,
+  Throw = 49 /* _BinaryenThrowId */,
+  Rethrow = 50 /* _BinaryenRethrowId */,
+  TupleMake = 51 /* _BinaryenTupleMakeId */,
+  TupleExtract = 52 /* _BinaryenTupleExtractId */,
+  I31New = 53 /* _BinaryenI31NewId */,
+  I31Get = 54 /* _BinaryenI31GetId */,
+  CallRef = 55 /* _BinaryenCallRefId */,
+  RefTest = 56 /* _BinaryenRefTestId */,
+  RefCast = 57 /* _BinaryenRefCastId */,
+  BrOn = 58 /* _BinaryenBrOnId */,
+  RttCanon = 59 /* _BinaryenRttCanonId */,
+  RttSub = 60 /* _BinaryenRttSubId */,
+  StructNew = 61 /* _BinaryenStructNewId */,
+  StructGet = 62 /* _BinaryenStructGetId */,
+  StructSet = 63 /* _BinaryenStructSetId */,
+  ArrayNew = 64 /* _BinaryenArrayNewId */,
+  ArrayInit = 65 /* _BinaryenArrayInitId */,
+  ArrayGet = 66 /* _BinaryenArrayGetId */,
+  ArraySet = 67 /* _BinaryenArraySetId */,
+  ArrayLen = 68 /* _BinaryenArrayLenId */,
+  ArrayCopy = 69 /* _BinaryenArrayCopyId */,
+  RefAs = 70 /* _BinaryenRefAsId */
 }
 
 /** Binaryen external kind constants. */
@@ -1242,6 +1244,11 @@ export class Module {
     return binaryen._BinaryenMemoryGrow(this.ref, delta);
   }
 
+  table_size(name: string): ExpressionRef {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenTableSize(this.ref, cStr);
+  }
+
   local_get(
     index: i32,
     type: TypeRef
@@ -1277,6 +1284,15 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
     return binaryen._BinaryenGlobalGet(this.ref, cStr, type);
+  }
+
+  table_get(
+    name: string,
+    index: ExpressionRef,
+    type: TypeRef
+  ): ExpressionRef {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenTableGet(this.ref, cStr, index, type);
   }
 
   load(
@@ -1381,6 +1397,15 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
     return binaryen._BinaryenGlobalSet(this.ref, cStr, value);
+  }
+
+  table_set(
+    name: string,
+    index: ExpressionRef,
+    value: ExpressionRef
+  ): ExpressionRef {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenTableSet(this.ref, cStr, index, value);
   }
 
   block(
@@ -3062,12 +3087,14 @@ export enum SideEffects {
   WritesGlobal = 32 /* _BinaryenSideEffectWritesGlobal */,
   ReadsMemory = 64 /* _BinaryenSideEffectReadsMemory */,
   WritesMemory = 128 /* _BinaryenSideEffectWritesMemory */,
-  ImplicitTrap = 256 /* _BinaryenSideEffectImplicitTrap */,
-  IsAtomic = 512 /* _BinaryenSideEffectIsAtomic */,
-  Throws = 1024 /* _BinaryenSideEffectThrows */,
-  DanglingPop = 2048 /* _BinaryenSideEffectDanglingPop */,
-  TrapsNeverHappen = 4096 /* _BinaryenSideEffectTrapsNeverHappen */,
-  Any = 8191 /* _BinaryenSideEffectAny */
+  ReadsTable = 256 /* _BinaryenSideEffectReadsTable */,
+  WritesTable = 512 /* _BinaryenSideEffectWritesTable */,
+  ImplicitTrap = 1024 /* _BinaryenSideEffectImplicitTrap */,
+  IsAtomic = 2048 /* _BinaryenSideEffectIsAtomic */,
+  Throws = 4096 /* _BinaryenSideEffectThrows */,
+  DanglingPop = 8192 /* _BinaryenSideEffectDanglingPop */,
+  TrapsNeverHappen = 16384 /* _BinaryenSideEffectTrapsNeverHappen */,
+  Any = 32767 /* _BinaryenSideEffectAny */
 }
 
 export function getSideEffects(expr: ExpressionRef, module: ModuleRef): SideEffects {

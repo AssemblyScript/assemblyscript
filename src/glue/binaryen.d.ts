@@ -410,6 +410,10 @@ export declare function _BinaryenRefEqSetLeft(expr: ExpressionRef, leftExpr: Exp
 export declare function _BinaryenRefEqGetRight(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenRefEqSetRight(expr: ExpressionRef, rightExpr: ExpressionRef): void;
 
+export declare function _BinaryenTableGet(module: ModuleRef, name: StringRef, index: ExpressionRef, type: TypeRef): ExpressionRef;
+export declare function _BinaryenTableSet(module: ModuleRef, name: StringRef, index: ExpressionRef, value: ExpressionRef): ExpressionRef;
+export declare function _BinaryenTableSize(module: ModuleRef, name: StringRef): ExpressionRef;
+
 export declare function _BinaryenTry(module: ModuleRef, name: StringRef, bodyExpr: ExpressionRef, catchTags: ArrayRef<StringRef>, numCatchTags: Index, catchBodies: ArrayRef<ExpressionRef>, numCatchBodies: Index, delegateTarget: StringRef): ExpressionRef;
 export declare function _BinaryenTryGetName(expr: ExpressionRef): StringRef;
 export declare function _BinaryenTrySetName(expr: ExpressionRef, name: StringRef): void;
