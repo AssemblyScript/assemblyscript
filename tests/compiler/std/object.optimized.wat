@@ -64,13 +64,12 @@
    i32.const 7
    i32.and
    i32.or
-   i32.const 1
+   i32.eqz
    local.get $3
    local.tee $0
    i32.const 4
    i32.ge_u
-   select
-   i32.eqz
+   i32.and
    if
     loop $do-loop|0
      local.get $2
