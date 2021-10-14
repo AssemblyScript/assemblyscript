@@ -4274,14 +4274,17 @@
   i32.sub
   i32.const 10
   i32.lt_u
-  local.get $4
-  i32.const 32
-  i32.or
-  i32.const 97
-  i32.sub
-  i32.const 6
-  i32.lt_u
-  i32.or
+  if (result i32)
+   i32.const 1
+  else
+   local.get $4
+   i32.const 32
+   i32.or
+   i32.const 97
+   i32.sub
+   i32.const 6
+   i32.lt_u
+  end
   if (result i32)
    local.get $3
    local.set $4
@@ -4290,14 +4293,17 @@
    i32.sub
    i32.const 10
    i32.lt_u
-   local.get $4
-   i32.const 32
-   i32.or
-   i32.const 97
-   i32.sub
-   i32.const 6
-   i32.lt_u
-   i32.or
+   if (result i32)
+    i32.const 1
+   else
+    local.get $4
+    i32.const 32
+    i32.or
+    i32.const 97
+    i32.sub
+    i32.const 6
+    i32.lt_u
+   end
   else
    i32.const 0
   end
