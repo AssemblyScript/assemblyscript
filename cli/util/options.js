@@ -247,7 +247,7 @@ function resolvePath(p, baseDir, useNodeResolution = false) {
   if (useNodeResolution && !p.startsWith(".")) {
     return dynrequire.resolve(p, { paths: [ baseDir ] });
   }
-  return path.join(baseDir, p);
+  return path.resolve(baseDir, p);
 }
 
 exports.resolvePath = resolvePath;
