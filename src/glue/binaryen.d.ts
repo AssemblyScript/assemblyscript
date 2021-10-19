@@ -427,14 +427,14 @@ export declare function _BinaryenTableSetSetValue(expr: ExpressionRef, value: Ex
 export declare function _BinaryenTableSize(module: ModuleRef, name: StringRef): ExpressionRef;
 export declare function _BinaryenTableSizeGetTable(expr: ExpressionRef): StringRef;
 export declare function _BinaryenTableSizeSetTable(expr: ExpressionRef, table: StringRef): void;
-export declare function _BinaryenTableGrowGetValue(expr: ExpressionRef): ExpressionRef;
-export declare function _BinaryenTableGrowSetValue(expr: ExpressionRef, value: ExpressionRef): void;
-export declare function _BinaryenTableGrowGetDelta(expr: ExpressionRef): ExpressionRef;
-export declare function _BinaryenTableGrowSetDelta(expr: ExpressionRef, delta: ExpressionRef): void;
 
 export declare function _BinaryenTableGrow(module: ModuleRef, name: StringRef, value: ExpressionRef, delta: ExpressionRef): ExpressionRef;
 export declare function _BinaryenTableGrowGetTable(expr: ExpressionRef): StringRef;
 export declare function _BinaryenTableGrowSetTable(expr: ExpressionRef, table: StringRef): void;
+export declare function _BinaryenTableGrowGetValue(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenTableGrowSetValue(expr: ExpressionRef, value: ExpressionRef): void;
+export declare function _BinaryenTableGrowGetDelta(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenTableGrowSetDelta(expr: ExpressionRef, delta: ExpressionRef): void;
 
 export declare function _BinaryenTry(module: ModuleRef, name: StringRef, bodyExpr: ExpressionRef, catchTags: ArrayRef<StringRef>, numCatchTags: Index, catchBodies: ArrayRef<ExpressionRef>, numCatchBodies: Index, delegateTarget: StringRef): ExpressionRef;
 export declare function _BinaryenTryGetName(expr: ExpressionRef): StringRef;
