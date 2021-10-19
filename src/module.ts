@@ -130,29 +130,30 @@ export enum ExpressionId {
   TableGet = 45 /* _BinaryenTableGetId */,
   TableSet = 46 /* _BinaryenTableSetId */,
   TableSize = 47 /* _BinaryenTableSizeId */,
-  Try = 48 /* _BinaryenTryId */,
-  Throw = 49 /* _BinaryenThrowId */,
-  Rethrow = 50 /* _BinaryenRethrowId */,
-  TupleMake = 51 /* _BinaryenTupleMakeId */,
-  TupleExtract = 52 /* _BinaryenTupleExtractId */,
-  I31New = 53 /* _BinaryenI31NewId */,
-  I31Get = 54 /* _BinaryenI31GetId */,
-  CallRef = 55 /* _BinaryenCallRefId */,
-  RefTest = 56 /* _BinaryenRefTestId */,
-  RefCast = 57 /* _BinaryenRefCastId */,
-  BrOn = 58 /* _BinaryenBrOnId */,
-  RttCanon = 59 /* _BinaryenRttCanonId */,
-  RttSub = 60 /* _BinaryenRttSubId */,
-  StructNew = 61 /* _BinaryenStructNewId */,
-  StructGet = 62 /* _BinaryenStructGetId */,
-  StructSet = 63 /* _BinaryenStructSetId */,
-  ArrayNew = 64 /* _BinaryenArrayNewId */,
-  ArrayInit = 65 /* _BinaryenArrayInitId */,
-  ArrayGet = 66 /* _BinaryenArrayGetId */,
-  ArraySet = 67 /* _BinaryenArraySetId */,
-  ArrayLen = 68 /* _BinaryenArrayLenId */,
-  ArrayCopy = 69 /* _BinaryenArrayCopyId */,
-  RefAs = 70 /* _BinaryenRefAsId */
+  TableGrow = 48 /* _BinaryenTableGrowId */,
+  Try = 49 /* _BinaryenTryId */,
+  Throw = 50 /* _BinaryenThrowId */,
+  Rethrow = 51 /* _BinaryenRethrowId */,
+  TupleMake = 52 /* _BinaryenTupleMakeId */,
+  TupleExtract = 53 /* _BinaryenTupleExtractId */,
+  I31New = 54 /* _BinaryenI31NewId */,
+  I31Get = 55 /* _BinaryenI31GetId */,
+  CallRef = 56 /* _BinaryenCallRefId */,
+  RefTest = 57 /* _BinaryenRefTestId */,
+  RefCast = 58 /* _BinaryenRefCastId */,
+  BrOn = 59 /* _BinaryenBrOnId */,
+  RttCanon = 60 /* _BinaryenRttCanonId */,
+  RttSub = 61 /* _BinaryenRttSubId */,
+  StructNew = 62 /* _BinaryenStructNewId */,
+  StructGet = 63 /* _BinaryenStructGetId */,
+  StructSet = 64 /* _BinaryenStructSetId */,
+  ArrayNew = 65 /* _BinaryenArrayNewId */,
+  ArrayInit = 66 /* _BinaryenArrayInitId */,
+  ArrayGet = 67 /* _BinaryenArrayGetId */,
+  ArraySet = 68 /* _BinaryenArraySetId */,
+  ArrayLen = 69 /* _BinaryenArrayLenId */,
+  ArrayCopy = 70 /* _BinaryenArrayCopyId */,
+  RefAs = 71 /* _BinaryenRefAsId */
 }
 
 /** Binaryen external kind constants. */
@@ -1247,6 +1248,11 @@ export class Module {
   table_size(name: string): ExpressionRef {
     var cStr = this.allocStringCached(name);
     return binaryen._BinaryenTableSize(this.ref, cStr);
+  }
+
+  table_grow(name: string, delta: ExpressionRef, value: ExpressionRef = 0): ExpressionRef {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenTableGrow(this.ref, cStr, value, delta);
   }
 
   local_get(
