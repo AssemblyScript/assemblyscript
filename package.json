@@ -67,7 +67,7 @@
   },
   "scripts": {
     "build": "npm run build:bundle && npm run build:dts && npm run build:sdk",
-    "build:bundle": "webpack --config webpack.config.js",
+    "build:bundle": "NODE_OPTIONS=--openssl-legacy-provider && webpack --config webpack.config.js",
     "build:dts": "node scripts/build-dts && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index-release",
     "build:sdk": "node scripts/build-sdk",
     "clean": "node scripts/clean",
