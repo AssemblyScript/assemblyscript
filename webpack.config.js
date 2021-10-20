@@ -39,7 +39,8 @@ const lib = {
     path: path.resolve(__dirname, "dist"),
     library: "assemblyscript",
     libraryTarget: "umd",
-    globalObject: "typeof self !== 'undefined' ? self : this"
+    globalObject: "typeof self !== 'undefined' ? self : this",
+    hashFunction: "xxhash64"
   },
   devtool: "source-map",
   performance: {
