@@ -3404,8 +3404,6 @@
  (func $~lib/util/number/prettify (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
   local.get $1
   i32.eqz
   if
@@ -3424,17 +3422,17 @@
   local.get $0
   local.get $1
   i32.add
-  local.tee $3
+  local.tee $2
   i32.const 21
   i32.le_s
   local.get $0
-  local.get $3
+  local.get $2
   i32.le_s
   i32.and
   if (result i32)
    loop $for-loop|0
     local.get $0
-    local.get $3
+    local.get $2
     i32.lt_s
     if
      local.get $0
@@ -3451,26 +3449,26 @@
      br $for-loop|0
     end
    end
-   local.get $3
+   local.get $2
    i32.const 1
    i32.shl
    i32.const 9760
    i32.add
    i32.const 3145774
    i32.store
-   local.get $3
+   local.get $2
    i32.const 2
    i32.add
   else
-   local.get $3
+   local.get $2
    i32.const 21
    i32.le_s
-   local.get $3
+   local.get $2
    i32.const 0
    i32.gt_s
    i32.and
    if (result i32)
-    local.get $3
+    local.get $2
     i32.const 1
     i32.shl
     i32.const 9760
@@ -3492,16 +3490,16 @@
     i32.const 1
     i32.add
    else
-    local.get $3
+    local.get $2
     i32.const 0
     i32.le_s
-    local.get $3
+    local.get $2
     i32.const -6
     i32.gt_s
     i32.and
     if (result i32)
      i32.const 2
-     local.get $3
+     local.get $2
      i32.sub
      local.tee $2
      i32.const 1
@@ -3548,7 +3546,8 @@
       i32.const 9762
       i32.const 101
       i32.store16
-      local.get $3
+      i32.const 9764
+      local.get $2
       i32.const 1
       i32.sub
       local.tee $0
@@ -3561,6 +3560,7 @@
        i32.sub
        local.set $0
       end
+      local.get $0
       local.get $0
       i32.const 100000
       i32.lt_u
@@ -3607,10 +3607,6 @@
         i32.add
        end
       end
-      local.set $2
-      i32.const 9764
-      local.get $0
-      local.get $2
       i32.const 1
       i32.add
       local.tee $0
@@ -3640,25 +3636,26 @@
       local.get $1
       i32.const 9760
       i32.add
-      local.tee $4
+      local.tee $3
       i32.const 101
       i32.store16 offset=2
-      local.get $4
+      local.get $3
       i32.const 4
       i32.add
-      local.get $3
+      local.get $2
       i32.const 1
       i32.sub
       local.tee $1
       i32.const 0
       i32.lt_s
-      local.tee $5
+      local.tee $2
       if
        i32.const 0
        local.get $1
        i32.sub
        local.set $1
       end
+      local.get $1
       local.get $1
       i32.const 100000
       i32.lt_u
@@ -3705,17 +3702,14 @@
         i32.add
        end
       end
-      local.set $3
-      local.get $1
-      local.get $3
       i32.const 1
       i32.add
       local.tee $1
       call $~lib/util/number/utoa32_dec_lut
-      local.get $4
+      local.get $3
       i32.const 45
       i32.const 43
-      local.get $5
+      local.get $2
       select
       i32.store16 offset=4
       local.get $0
