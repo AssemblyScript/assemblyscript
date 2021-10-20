@@ -41,7 +41,7 @@ jobs:
     - name: Test sources
       run: npm test
     - name: Build distribution files
-      run: NODE_OPTIONS=--openssl-legacy-provider && npm run build
+      run: npm run build
     - name: Test distribution
       run: npm test
     - name: Test browser build
@@ -62,7 +62,7 @@ jobs:
     - name: Test sources
       run: npm test
     - name: Build distribution files
-      run: NODE_OPTIONS=--openssl-legacy-provider && npm run build
+      run: npm run build
     - name: Test distribution
       run: npm test
     - name: Test browser build
@@ -83,7 +83,7 @@ jobs:
     - name: Test sources
       run: npm test
     - name: Build distribution files
-      run: NODE_OPTIONS=--openssl-legacy-provider && npm run build
+      run: npm run build
     - name: Test distribution
       run: npm test
     - name: Test browser build
