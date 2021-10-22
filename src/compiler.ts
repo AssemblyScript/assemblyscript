@@ -2969,7 +2969,8 @@ export class Compiler extends DiagnosticEmitter {
       if (terminates || isLast || innerFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
         commonCategorical &= innerFlow.flags;
       }
-      commonConditional |= innerFlow.flags & FlowFlags.ANY_CONDITIONAL;
+
+      commonConditional |= innerFlow.getConditionFlags();
 
       // Switch back to the parent flow
       innerFlow.unset(

@@ -266,6 +266,26 @@ export class Flow {
   /** Unsets the specified flag or flags. */
   unset(flag: FlowFlags): void { this.flags &= ~flag; }
 
+  getConditionFlags(): FlowFlags {
+    let condiFlags = this.flags & FlowFlags.ANY_CONDITIONAL;
+    if (this.is(FlowFlags.RETURNS)) {
+      condiFlags |= FlowFlags.CONDITIONALLY_RETURNS;
+    }
+    if (this.is(FlowFlags.THROWS)) {
+      condiFlags |= FlowFlags.CONDITIONALLY_THROWS;
+    }
+    if (this.is(FlowFlags.BREAKS)) {
+      condiFlags |= FlowFlags.CONDITIONALLY_BREAKS;
+    }
+    if (this.is(FlowFlags.CONTINUES)) {
+      condiFlags |= FlowFlags.CONDITIONALLY_CONTINUES;
+    }
+    if (this.is(FlowFlags.ACCESSES_THIS)) {
+      condiFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
+    }
+    return condiFlags;
+  }
+
   /** Forks this flow to a child flow. */
   fork(resetBreakContext: bool = false): Flow {
     var branch = new Flow(this.parentFunction);
