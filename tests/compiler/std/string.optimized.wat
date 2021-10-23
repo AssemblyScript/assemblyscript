@@ -3865,7 +3865,7 @@
   local.get $2
   local.get $3
   i32.mul
-  local.set $4
+  local.set $5
   block $break|0
    block $case4|0
     block $case3|0
@@ -3884,67 +3884,61 @@
       call $~lib/memory/memory.fill
       return
      end
-     i32.const 0
-     local.set $2
      loop $while-continue|1
-      local.get $2
       local.get $4
+      local.get $5
       i32.lt_u
       if
        local.get $0
-       local.get $2
+       local.get $4
        i32.add
        local.get $1
        i32.load16_u
        i32.store16
-       local.get $2
+       local.get $4
        i32.const 2
        i32.add
-       local.set $2
+       local.set $4
        br $while-continue|1
       end
      end
      return
     end
-    i32.const 0
-    local.set $2
     loop $while-continue|2
-     local.get $2
      local.get $4
+     local.get $5
      i32.lt_u
      if
       local.get $0
-      local.get $2
+      local.get $4
       i32.add
       local.get $1
       i32.load
       i32.store
-      local.get $2
+      local.get $4
       i32.const 4
       i32.add
-      local.set $2
+      local.set $4
       br $while-continue|2
      end
     end
     return
    end
-   i32.const 0
-   local.set $2
    loop $while-continue|3
-    local.get $2
     local.get $4
+    local.get $5
     i32.lt_u
     if
      local.get $0
-     local.get $2
+     local.get $4
      i32.add
      local.get $1
      i64.load
      i64.store
-     local.get $2
+     local.get $4
      i32.const 8
      i32.add
-     local.set $2
+     local.set $4
      br $while-continue|3
     end
    end
@@ -3953,18 +3947,18 @@
   loop $while-continue|4
    local.get $4
    local.get $5
-   i32.gt_u
+   i32.lt_u
    if
     local.get $0
-    local.get $5
+    local.get $4
     i32.add
     local.get $1
     local.get $2
     call $~lib/memory/memory.copy
     local.get $2
-    local.get $5
+    local.get $4
     i32.add
-    local.set $5
+    local.set $4
     br $while-continue|4
    end
   end

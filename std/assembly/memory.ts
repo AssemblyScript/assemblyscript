@@ -57,7 +57,6 @@ export namespace memory {
           return;
         }
         case 2: {
-          let index: usize = 0;
           while (index < total) {
             store<u16>(dst + index, load<u16>(src));
             index += 2;
@@ -65,7 +64,6 @@ export namespace memory {
           return;
         }
         case 4: {
-          let index: usize = 0;
           while (index < total) {
             store<u32>(dst + index, load<u32>(src));
             index += 4;
@@ -73,7 +71,6 @@ export namespace memory {
           return;
         }
         case 8: {
-          let index: usize = 0;
           while (index < total) {
             store<u64>(dst + index, load<u64>(src));
             index += 8;

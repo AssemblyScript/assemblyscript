@@ -2886,7 +2886,7 @@
   drop
   i32.const 160
   i32.const 224
-  i32.const 145
+  i32.const 142
   i32.const 7
   call $~lib/builtins/abort
   unreachable

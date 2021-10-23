@@ -9547,7 +9547,7 @@
   i32.shr_u
   i32.const 1
   i32.shl
-  local.tee $3
+  local.tee $4
   local.get $0
   i32.const 20
   i32.sub
@@ -9556,7 +9556,7 @@
   i32.shr_u
   i32.const 1
   i32.shl
-  local.tee $7
+  local.tee $6
   local.get $1
   i32.const 1
   i32.shl
@@ -9576,154 +9576,145 @@
   local.get $1
   i32.const 1
   call $~lib/rt/itcms/__new
-  local.tee $2
+  local.tee $3
   i32.store
-  local.get $3
+  local.get $4
   local.get $1
-  local.get $7
+  local.get $6
   i32.sub
-  local.tee $4
+  local.tee $5
   i32.lt_u
   if
    local.get $4
+   local.get $5
    i32.const 2
    i32.sub
-   local.get $3
+   local.get $4
    i32.div_u
+   local.tee $8
+   i32.mul
    local.tee $1
-   local.get $3
-   i32.mul
-   local.set $8
-   local.get $1
-   local.get $3
-   i32.mul
-   local.set $5
+   local.set $7
    block $__inlined_func$~lib/memory/memory.repeat
     block $break|0
      block $case4|0
       block $case3|0
        block $case2|0
         block $case1|0
-         local.get $3
+         local.get $4
          br_table $__inlined_func$~lib/memory/memory.repeat $case1|0 $case2|0 $break|0 $case3|0 $break|0 $break|0 $break|0 $case4|0 $break|0
         end
-        local.get $2
+        local.get $3
         i32.const 1872
         i32.load8_u
-        local.get $1
+        local.get $8
         call $~lib/memory/memory.fill
         br $__inlined_func$~lib/memory/memory.repeat
        end
-       i32.const 0
-       local.set $1
        loop $while-continue|1
         local.get $1
-        local.get $5
-        i32.lt_u
+        local.get $2
+        i32.gt_u
         if
-         local.get $1
          local.get $2
+         local.get $3
          i32.add
          i32.const 1872
          i32.load16_u
          i32.store16
-         local.get $1
+         local.get $2
          i32.const 2
          i32.add
-         local.set $1
+         local.set $2
          br $while-continue|1
         end
        end
        br $__inlined_func$~lib/memory/memory.repeat
       end
-      i32.const 0
-      local.set $1
       loop $while-continue|2
        local.get $1
-       local.get $5
-       i32.lt_u
+       local.get $2
+       i32.gt_u
        if
-        local.get $1
         local.get $2
+        local.get $3
         i32.add
         i32.const 1872
         i32.load
         i32.store
-        local.get $1
+        local.get $2
         i32.const 4
         i32.add
-        local.set $1
+        local.set $2
         br $while-continue|2
        end
       end
       br $__inlined_func$~lib/memory/memory.repeat
      end
-     i32.const 0
-     local.set $1
      loop $while-continue|3
       local.get $1
-      local.get $5
-      i32.lt_u
+      local.get $2
+      i32.gt_u
       if
-       local.get $1
        local.get $2
+       local.get $3
        i32.add
        i32.const 1872
        i64.load
        i64.store
-       local.get $1
+       local.get $2
        i32.const 8
        i32.add
-       local.set $1
+       local.set $2
        br $while-continue|3
       end
      end
      br $__inlined_func$~lib/memory/memory.repeat
     end
     loop $while-continue|4
-     local.get $5
-     local.get $6
+     local.get $1
+     local.get $2
      i32.gt_u
      if
       local.get $2
-      local.get $6
+      local.get $3
       i32.add
       i32.const 1872
-      local.get $3
+      local.get $4
       call $~lib/memory/memory.copy
-      local.get $3
-      local.get $6
+      local.get $2
+      local.get $4
       i32.add
-      local.set $6
+      local.set $2
       br $while-continue|4
      end
     end
    end
-   local.get $2
-   local.get $8
+   local.get $3
+   local.get $7
    i32.add
    i32.const 1872
-   local.get $4
-   local.get $8
+   local.get $5
+   local.get $7
    i32.sub
    call $~lib/memory/memory.copy
   else
-   local.get $2
+   local.get $3
    i32.const 1872
-   local.get $4
+   local.get $5
    call $~lib/memory/memory.copy
   end
-  local.get $2
-  local.get $4
+  local.get $3
+  local.get $5
   i32.add
   local.get $0
-  local.get $7
+  local.get $6
   call $~lib/memory/memory.copy
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $2
+  local.get $3
  )
  (func $~lib/string/String#substring (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
