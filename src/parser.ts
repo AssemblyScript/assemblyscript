@@ -4395,7 +4395,6 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.PLUS_PLUS:
     case Token.MINUS_MINUS: return Precedence.UNARY_POSTFIX;
     case Token.DOT:
-    case Token.NEW:
     case Token.OPENBRACKET:
     case Token.EXCLAMATION: return Precedence.MEMBERACCESS;
   }

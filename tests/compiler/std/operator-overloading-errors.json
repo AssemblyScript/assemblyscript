@@ -1,0 +1,11 @@
+{
+  "asc_flags": [
+  ],
+  "stderr": [
+    "TS2322: Type '~lib/string/String | null' is not assignable to type '~lib/string/String'",
+    "a.b + a.c",
+    "TS2322: Type '~lib/string/String | null' is not assignable to type '~lib/string/String'",
+    "a.c + a.b",
+    "EOF"
+  ]
+}
