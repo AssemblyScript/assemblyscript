@@ -4845,13 +4845,132 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   i32.const 0
   local.set $4
   local.get $2
   local.get $3
   i32.mul
   local.set $5
-  loop $while-continue|0
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
+  block $break|0
+   block $case5|0
+    block $case4|0
+     block $case3|0
+      block $case2|0
+       block $case1|0
+        block $case0|0
+         local.get $2
+         local.set $6
+         local.get $6
+         i32.const 0
+         i32.eq
+         br_if $case0|0
+         local.get $6
+         i32.const 1
+         i32.eq
+         br_if $case1|0
+         local.get $6
+         i32.const 2
+         i32.eq
+         br_if $case2|0
+         local.get $6
+         i32.const 4
+         i32.eq
+         br_if $case3|0
+         local.get $6
+         i32.const 8
+         i32.eq
+         br_if $case4|0
+         br $case5|0
+        end
+        return
+       end
+       local.get $0
+       local.get $1
+       i32.load8_u
+       local.get $3
+       call $~lib/memory/memory.fill
+       return
+      end
+      i32.const 0
+      local.set $6
+      loop $while-continue|1
+       local.get $6
+       local.get $5
+       i32.lt_u
+       local.set $7
+       local.get $7
+       if
+        local.get $0
+        local.get $6
+        i32.add
+        local.get $1
+        i32.load16_u
+        i32.store16
+        local.get $6
+        i32.const 2
+        i32.add
+        local.set $6
+        br $while-continue|1
+       end
+      end
+      return
+     end
+     i32.const 0
+     local.set $6
+     loop $while-continue|2
+      local.get $6
+      local.get $5
+      i32.lt_u
+      local.set $7
+      local.get $7
+      if
+       local.get $0
+       local.get $6
+       i32.add
+       local.get $1
+       i32.load
+       i32.store
+       local.get $6
+       i32.const 4
+       i32.add
+       local.set $6
+       br $while-continue|2
+      end
+     end
+     return
+    end
+    i32.const 0
+    local.set $6
+    loop $while-continue|3
+     local.get $6
+     local.get $5
+     i32.lt_u
+     local.set $7
+     local.get $7
+     if
+      local.get $0
+      local.get $6
+      i32.add
+      local.get $1
+      i64.load
+      i64.store
+      local.get $6
+      i32.const 8
+      i32.add
+      local.set $6
+      br $while-continue|3
+     end
+    end
+    return
+   end
+   br $break|0
+  end
+  loop $while-continue|4
    local.get $4
    local.get $5
    i32.lt_u
@@ -4868,7 +4987,7 @@
     local.get $2
     i32.add
     local.set $4
-    br $while-continue|0
+    br $while-continue|4
    end
   end
  )

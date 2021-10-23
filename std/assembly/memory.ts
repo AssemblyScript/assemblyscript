@@ -45,9 +45,45 @@ export namespace memory {
   /** Repeats a section of memory at a specific address. */
   // @ts-ignore: decorator
   @unsafe
-  export function repeat(dst: usize, src: usize, srcLength: usize, count: usize): void {
-    var index: usize = 0;
-    var total = srcLength * count;
+  export function repeat(dst: usize, src: usize, srcLength: u32, count: u32): void {
+    let index: usize = 0;
+    let total: usize = srcLength * count;
+
+    if (ASC_SHRINK_LEVEL < 1) {
+      switch (srcLength) {
+        case 0: return;
+        case 1: {
+          memory.fill(dst, load<u8>(src), count);
+          return;
+        }
+        case 2: {
+          let index: usize = 0;
+          while (index < total) {
+            store<u16>(dst + index, load<u16>(src));
+            index += 2;
+          }
+          return;
+        }
+        case 4: {
+          let index: usize = 0;
+          while (index < total) {
+            store<u32>(dst + index, load<u32>(src));
+            index += 4;
+          }
+          return;
+        }
+        case 8: {
+          let index: usize = 0;
+          while (index < total) {
+            store<u64>(dst + index, load<u64>(src));
+            index += 8;
+          }
+          return;
+        }
+        default: break;
+      }
+    }
+
     while (index < total) {
       memory.copy(dst + index, src, srcLength);
       index += srcLength;
