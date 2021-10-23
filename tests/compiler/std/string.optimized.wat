@@ -3862,6 +3862,7 @@
  (func $~lib/memory/memory.repeat (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i64)
   local.get $2
   local.get $3
   i32.mul
@@ -3884,6 +3885,9 @@
       call $~lib/memory/memory.fill
       return
      end
+     local.get $1
+     i32.load16_u
+     local.set $1
      loop $while-continue|1
       local.get $4
       local.get $5
@@ -3893,7 +3897,6 @@
        local.get $4
        i32.add
        local.get $1
-       i32.load16_u
        i32.store16
        local.get $4
        i32.const 2
@@ -3904,6 +3907,9 @@
      end
      return
     end
+    local.get $1
+    i32.load
+    local.set $1
     loop $while-continue|2
      local.get $4
      local.get $5
@@ -3913,7 +3919,6 @@
       local.get $4
       i32.add
       local.get $1
-      i32.load
       i32.store
       local.get $4
       i32.const 4
@@ -3924,6 +3929,9 @@
     end
     return
    end
+   local.get $1
+   i64.load
+   local.set $6
    loop $while-continue|3
     local.get $4
     local.get $5
@@ -3932,8 +3940,7 @@
      local.get $0
      local.get $4
      i32.add
-     local.get $1
-     i64.load
+     local.get $6
      i64.store
      local.get $4
      i32.const 8

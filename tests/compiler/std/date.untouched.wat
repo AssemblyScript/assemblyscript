@@ -4845,6 +4845,8 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i64)
   i32.const 0
   local.set $4
   local.get $2
@@ -4895,18 +4897,20 @@
        call $~lib/memory/memory.fill
        return
       end
+      local.get $1
+      i32.load16_u
+      local.set $6
       loop $while-continue|1
        local.get $4
        local.get $5
        i32.lt_u
-       local.set $6
-       local.get $6
+       local.set $7
+       local.get $7
        if
         local.get $0
         local.get $4
         i32.add
-        local.get $1
-        i32.load16_u
+        local.get $6
         i32.store16
         local.get $4
         i32.const 2
@@ -4917,18 +4921,20 @@
       end
       return
      end
+     local.get $1
+     i32.load
+     local.set $6
      loop $while-continue|2
       local.get $4
       local.get $5
       i32.lt_u
-      local.set $6
-      local.get $6
+      local.set $7
+      local.get $7
       if
        local.get $0
        local.get $4
        i32.add
-       local.get $1
-       i32.load
+       local.get $6
        i32.store
        local.get $4
        i32.const 4
@@ -4939,6 +4945,9 @@
      end
      return
     end
+    local.get $1
+    i64.load
+    local.set $8
     loop $while-continue|3
      local.get $4
      local.get $5
@@ -4949,8 +4958,7 @@
       local.get $0
       local.get $4
       i32.add
-      local.get $1
-      i64.load
+      local.get $8
       i64.store
       local.get $4
       i32.const 8
