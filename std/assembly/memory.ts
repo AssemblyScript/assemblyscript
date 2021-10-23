@@ -47,7 +47,7 @@ export namespace memory {
   @unsafe
   export function repeat(dst: usize, src: usize, srcLength: u32, count: u32): void {
     let index: usize = 0;
-    let total: usize = srcLength * count;
+    let total: usize = <usize>srcLength * <usize>count;
 
     if (ASC_SHRINK_LEVEL < 1) {
       switch (srcLength) {
