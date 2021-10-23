@@ -243,7 +243,7 @@ const dynrequire = typeof __webpack_require__ === "function"
 
 /** Resolves a single possibly relative path. Keeps absolute paths, otherwise prepends baseDir. */
 function resolvePath(p, baseDir, useNodeResolution = false) {
-  if (path.isAbsolute(p)) return p;
+  if (path.isAbsolute(p) || (baseDir == "." && p.startsWith("./"))) return p;
   if (useNodeResolution && !p.startsWith(".")) {
     return dynrequire.resolve(p, { paths: [ baseDir ] });
   }
