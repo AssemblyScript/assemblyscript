@@ -21,13 +21,13 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "102.0.0-nightly.20211020",
+    "binaryen": "102.0.0-nightly.20211022",
     "long": "^4.0.0",
     "source-map-support": "^0.5.20",
     "ts-node": "^6.2.0"
   },
   "devDependencies": {
-    "@types/node": "^16.11.1",
+    "@types/node": "^16.11.4",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "diff": "^5.0.0",
