@@ -137,10 +137,10 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
   globalScope["floor"] = Math.floor;
 
   globalScope["nearest"] = function nearest(value) {
-    const TO_INT64 = 4503599627370496.0;
+    const INV_EPS64 = 4503599627370496.0;
     const y = Math.abs(value);
-    return y < TO_INT64
-      ? Math.abs(y + TO_INT64 - TO_INT64) * Math.sign(value)
+    return y < INV_EPS64
+      ? Math.abs(y + INV_EPS64 - INV_EPS64) * Math.sign(value)
       : value;
   };
 
