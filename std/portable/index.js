@@ -136,12 +136,12 @@ if (typeof globalScope.ASC_TARGET === "undefined") {
 
   globalScope["floor"] = Math.floor;
 
-  // Adopt code from https://github.com/rfk/wasm-polyfill
   globalScope["nearest"] = function nearest(value) {
-    if (Math.abs(value - Math.trunc(value)) === 0.5) {
-      return 2.0 * Math.round(value * 0.5);
-    }
-    return Math.round(value);
+    const TO_INT64 = 4503599627370496.0;
+    const y = Math.abs(value);
+    return y < TO_INT64
+      ? Math.abs(y + TO_INT64 - TO_INT64) * Math.sign(value)
+      : value;
   };
 
   globalScope["select"] = function select(ifTrue, ifFalse, condition) {
