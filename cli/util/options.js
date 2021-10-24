@@ -237,17 +237,27 @@ function merge(config, currentOptions, parentOptions, parentBaseDir) {
 
 exports.merge = merge;
 
+function normalizePath(p) {
+  const parsed = path.parse(p);
+  if (!parsed.root) {
+    parsed.root = "./";
+  }
+  return path.format(parsed);
+}
+
+exports.normalizePath = normalizePath;
+
 const dynrequire = typeof __webpack_require__ === "function"
   ? __non_webpack_require__
   : require;
 
 /** Resolves a single possibly relative path. Keeps absolute paths, otherwise prepends baseDir. */
 function resolvePath(p, baseDir, useNodeResolution = false) {
-  if (path.isAbsolute(p) || (baseDir == "." && p.startsWith("./"))) return p;
+  if (path.isAbsolute(p)) return p;
   if (useNodeResolution && !p.startsWith(".")) {
     return dynrequire.resolve(p, { paths: [ baseDir ] });
   }
-  return path.resolve(baseDir, p);
+  return normalizePath(path.join(baseDir, p));
 }
 
 exports.resolvePath = resolvePath;
