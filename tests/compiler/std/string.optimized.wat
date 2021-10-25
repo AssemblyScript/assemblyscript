@@ -6028,7 +6028,7 @@
    i32.const 1
    call $byn-split-outlined-A$~lib/rt/itcms/__link
   end
-  local.get $2
+  local.get $0
   local.get $4
   i32.store offset=12
  )
@@ -21646,38 +21646,38 @@
   local.get $0
   i32.const 2
   i32.shl
-  local.tee $3
   local.tee $4
+  local.tee $5
   i32.const 0
   call $~lib/rt/itcms/__new
-  local.set $5
+  local.set $3
   local.get $2
   if
-   local.get $5
+   local.get $3
    local.get $2
-   local.get $4
+   local.get $5
    call $~lib/memory/memory.copy
   end
-  local.get $5
+  local.get $3
   i32.store
   i32.const 16
   local.get $1
   call $~lib/rt/itcms/__new
   local.tee $1
-  local.get $5
+  local.get $3
   i32.store
-  local.get $5
+  local.get $3
   if
    local.get $1
-   local.get $5
+   local.get $3
    i32.const 0
    call $byn-split-outlined-A$~lib/rt/itcms/__link
   end
   local.get $1
-  local.get $5
+  local.get $3
   i32.store offset=4
   local.get $1
-  local.get $3
+  local.get $4
   i32.store offset=8
   local.get $1
   local.get $0

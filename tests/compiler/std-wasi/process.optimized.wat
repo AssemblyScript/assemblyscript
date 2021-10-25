@@ -2112,13 +2112,15 @@
     br $while-continue|0
    end
   end
+  local.get $2
+  local.set $1
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
    call $~lib/rt/tlsf/initialize
   end
   global.get $~lib/rt/tlsf/ROOT
-  local.get $2
+  local.get $1
   call $~lib/rt/tlsf/allocateBlock
   i32.const 4
   i32.add

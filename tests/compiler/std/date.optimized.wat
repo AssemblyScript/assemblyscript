@@ -3964,7 +3964,7 @@
    i32.const 1
    call $byn-split-outlined-A$~lib/rt/itcms/__link
   end
-  local.get $2
+  local.get $0
   local.get $4
   i32.store offset=12
  )

@@ -2344,7 +2344,10 @@ export class Module {
       passes.push("coalesce-locals");
       passes.push("reorder-locals");
       passes.push("vacuum");
-
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("rse");
+        passes.push("vacuum");
+      }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("merge-locals");
         passes.push("vacuum");
@@ -2358,10 +2361,6 @@ export class Module {
       passes.push("merge-blocks");
       if (optimizeLevel >= 3) {
         passes.push("optimize-instructions");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        passes.push("rse");
-        passes.push("vacuum");
       }
 
       // --- PassRunner::addDefaultGlobalOptimizationPostPasses ---
