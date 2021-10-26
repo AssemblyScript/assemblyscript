@@ -2391,6 +2391,10 @@ export class Module {
       }
       if (optimizeLevel > 1 && (this.getFeatures() & FeatureFlags.GC) != 0) {
         passes.push("heap2local");
+        if (optimizeLevel >= 2) {
+          passes.push("merge-locals");
+        }
+        passes.push("local-subtyping");
       }
       // precompute works best after global optimizations
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
