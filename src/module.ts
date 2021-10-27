@@ -2389,11 +2389,9 @@ export class Module {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("code-folding");
       }
-      if (optimizeLevel > 1 && (this.getFeatures() & FeatureFlags.GC) != 0) {
+      if (optimizeLevel >= 2 && (this.getFeatures() & FeatureFlags.GC) != 0) {
         passes.push("heap2local");
-        if (optimizeLevel >= 2) {
-          passes.push("merge-locals");
-        }
+        passes.push("merge-locals");
         passes.push("local-subtyping");
       }
       // precompute works best after global optimizations
