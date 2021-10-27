@@ -1438,8 +1438,8 @@
   (local $1 i32)
   memory.size
   local.tee $0
-  i32.const 1
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if (result i32)
    i32.const 1
    local.get $0
@@ -3655,8 +3655,8 @@
   local.get $0
   i32.load offset=12
   local.tee $1
-  i32.const 1
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if
    i32.const 2176
    i32.const 1104
@@ -4281,8 +4281,8 @@
  )
  (func $start:std/array~anonymous|16 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i32.const -1
-  i32.le_s
+  i32.const 0
+  i32.lt_s
  )
  (func $start:std/array~anonymous|17 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
@@ -16632,8 +16632,8 @@
    local.get $0
    i32.load offset=12
    local.tee $1
-   i32.const 1
-   i32.lt_s
+   i32.const 0
+   i32.le_s
    if
     i32.const 2176
     i32.const 1104
@@ -31278,8 +31278,8 @@
   local.get $0
   i32.load offset=12
   local.tee $1
-  i32.const 1
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if
    i32.const 2176
    i32.const 1104
@@ -31502,8 +31502,8 @@
   local.get $0
   i32.load offset=12
   local.tee $3
-  i32.const 1
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if
    i32.const 2176
    i32.const 1104
@@ -33201,8 +33201,8 @@
   local.get $0
   i32.load offset=12
   local.tee $1
-  i32.const 1
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if
    i32.const 2176
    i32.const 1104
@@ -33418,8 +33418,8 @@
   local.get $0
   i32.load offset=12
   local.tee $3
-  i32.const 1
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if
    i32.const 2176
    i32.const 1104
@@ -35042,8 +35042,8 @@
    local.get $0
    i32.load offset=12
    local.tee $2
-   i32.const 1
-   i32.lt_s
+   i32.const 0
+   i32.le_s
    if
     i32.const 2176
     i32.const 1104
@@ -35312,8 +35312,8 @@
    local.get $0
    i32.load offset=12
    local.tee $2
-   i32.const 1
-   i32.lt_s
+   i32.const 0
+   i32.le_s
    if
     i32.const 2176
     i32.const 1104

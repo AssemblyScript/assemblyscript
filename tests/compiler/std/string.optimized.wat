@@ -1773,8 +1773,8 @@
   (local $1 i32)
   memory.size
   local.tee $0
-  i32.const 1
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if (result i32)
    i32.const 1
    local.get $0
@@ -23887,8 +23887,8 @@
      end
      loop $while-continue|1
       local.get $3
-      i64.const 1
-      i64.ge_u
+      i64.const 0
+      i64.ne
       if
        local.get $3
        local.get $7
@@ -24169,8 +24169,8 @@
      end
      loop $while-continue|1
       local.get $3
-      i64.const 1
-      i64.ge_u
+      i64.const 0
+      i64.ne
       if
        local.get $3
        local.get $6
@@ -24507,8 +24507,8 @@
      end
      loop $while-continue|1
       local.get $2
-      i64.const 1
-      i64.ge_u
+      i64.const 0
+      i64.ne
       if
        local.get $2
        local.get $5
@@ -24863,8 +24863,8 @@
      end
      loop $while-continue|1
       local.get $2
-      i64.const 1
-      i64.ge_u
+      i64.const 0
+      i64.ne
       if
        local.get $2
        local.get $6

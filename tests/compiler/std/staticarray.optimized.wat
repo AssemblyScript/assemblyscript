@@ -921,8 +921,8 @@
   (local $1 i32)
   memory.size
   local.tee $0
-  i32.const 1
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if (result i32)
    i32.const 1
    local.get $0
@@ -5564,11 +5564,7 @@
     i32.const 2
     i32.shr_u
     local.tee $1
-    i32.const -1
-    i32.le_s
-    i32.const 1
-    local.get $1
-    select
+    i32.eqz
     br_if $__inlined_func$~lib/staticarray/StaticArray<i32>#indexOf34
     local.get $1
     i32.const 1

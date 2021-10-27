@@ -698,8 +698,8 @@
       if
        memory.size
        local.tee $1
-       i32.const 1
-       i32.lt_s
+       i32.const 0
+       i32.le_s
        if (result i32)
         i32.const 1
         local.get $1

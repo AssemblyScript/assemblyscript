@@ -596,8 +596,8 @@
   (local $1 i32)
   memory.size
   local.tee $0
-  i32.const 1
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if (result i32)
    i32.const 1
    local.get $0
@@ -1431,8 +1431,8 @@
     i32.const 1
     i32.add
     local.tee $0
-    i32.const 1
-    i32.lt_s
+    i32.const 0
+    i32.le_s
     br_if $while-continue|07
    end
    i32.const 0
@@ -1442,8 +1442,8 @@
     i32.const 1
     i32.add
     local.tee $0
-    i32.const 1
-    i32.lt_s
+    i32.const 0
+    i32.le_s
     br_if $while-continue|09
    end
    i32.const 0
