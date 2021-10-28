@@ -40,7 +40,7 @@
    unreachable
   end
   global.get $portable-conversions/f
-  i32.trunc_f32_s
+  i32.trunc_sat_f32_s
   i32.extend8_s
   i32.eqz
   if
@@ -52,7 +52,7 @@
    unreachable
   end
   global.get $portable-conversions/F
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   i32.extend8_s
   i32.eqz
   if
@@ -87,7 +87,7 @@
    unreachable
   end
   global.get $portable-conversions/f
-  i32.trunc_f32_s
+  i32.trunc_sat_f32_s
   i32.extend16_s
   i32.eqz
   if
@@ -99,7 +99,7 @@
    unreachable
   end
   global.get $portable-conversions/F
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   i32.extend16_s
   i32.eqz
   if
@@ -132,7 +132,7 @@
    unreachable
   end
   global.get $portable-conversions/f
-  i32.trunc_f32_s
+  i32.trunc_sat_f32_s
   i32.eqz
   if
    i32.const 0
@@ -143,7 +143,7 @@
    unreachable
   end
   global.get $portable-conversions/F
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   i32.eqz
   if
    i32.const 0
@@ -175,7 +175,7 @@
    unreachable
   end
   global.get $portable-conversions/f
-  i64.trunc_f32_s
+  i64.trunc_sat_f32_s
   i64.eqz
   if
    i32.const 0
@@ -186,7 +186,7 @@
    unreachable
   end
   global.get $portable-conversions/F
-  i64.trunc_f64_s
+  i64.trunc_sat_f64_s
   i64.eqz
   if
    i32.const 0
@@ -218,7 +218,7 @@
    unreachable
   end
   global.get $portable-conversions/f
-  i32.trunc_f32_s
+  i32.trunc_sat_f32_s
   i32.eqz
   if
    i32.const 0
@@ -229,7 +229,7 @@
    unreachable
   end
   global.get $portable-conversions/F
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   i32.eqz
   if
    i32.const 0
@@ -265,7 +265,7 @@
    unreachable
   end
   global.get $portable-conversions/f
-  i32.trunc_f32_u
+  i32.trunc_sat_f32_u
   i32.const 255
   i32.and
   i32.eqz
@@ -278,7 +278,7 @@
    unreachable
   end
   global.get $portable-conversions/F
-  i32.trunc_f64_u
+  i32.trunc_sat_f64_u
   i32.const 255
   i32.and
   i32.eqz
@@ -316,7 +316,7 @@
    unreachable
   end
   global.get $portable-conversions/f
-  i32.trunc_f32_u
+  i32.trunc_sat_f32_u
   i32.const 65535
   i32.and
   i32.eqz
@@ -329,7 +329,7 @@
    unreachable
   end
   global.get $portable-conversions/F
-  i32.trunc_f64_u
+  i32.trunc_sat_f64_u
   i32.const 65535
   i32.and
   i32.eqz
@@ -363,7 +363,7 @@
    unreachable
   end
   global.get $portable-conversions/f
-  i32.trunc_f32_u
+  i32.trunc_sat_f32_u
   i32.eqz
   if
    i32.const 0
@@ -374,7 +374,7 @@
    unreachable
   end
   global.get $portable-conversions/F
-  i32.trunc_f64_u
+  i32.trunc_sat_f64_u
   i32.eqz
   if
    i32.const 0
@@ -406,7 +406,7 @@
    unreachable
   end
   global.get $portable-conversions/f
-  i64.trunc_f32_u
+  i64.trunc_sat_f32_u
   i64.eqz
   if
    i32.const 0
@@ -417,7 +417,7 @@
    unreachable
   end
   global.get $portable-conversions/F
-  i64.trunc_f64_u
+  i64.trunc_sat_f64_u
   i64.eqz
   if
    i32.const 0
@@ -449,7 +449,7 @@
    unreachable
   end
   global.get $portable-conversions/f
-  i32.trunc_f32_u
+  i32.trunc_sat_f32_u
   i32.eqz
   if
    i32.const 0
@@ -460,7 +460,7 @@
    unreachable
   end
   global.get $portable-conversions/F
-  i32.trunc_f64_u
+  i32.trunc_sat_f64_u
   i32.eqz
   if
    i32.const 0

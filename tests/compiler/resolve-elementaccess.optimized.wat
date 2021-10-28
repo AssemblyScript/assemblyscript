@@ -3766,7 +3766,7 @@
   f64.const 347
   f64.add
   local.tee $0
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   local.tee $2
   local.get $0
   local.get $2

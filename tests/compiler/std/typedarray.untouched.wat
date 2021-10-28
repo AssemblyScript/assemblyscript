@@ -23873,7 +23873,7 @@
   f64.add
   local.set $16
   local.get $16
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   local.set $15
   local.get $15
   local.get $15
@@ -24713,7 +24713,7 @@
     f32.eq
     if (result i32)
      local.get $11
-     i32.trunc_f32_s
+     i32.trunc_sat_f32_s
     else
      i32.const 0
     end
@@ -24919,7 +24919,7 @@
     f64.eq
     if (result i32)
      local.get $11
-     i32.trunc_f64_s
+     i32.trunc_sat_f64_s
     else
      i32.const 0
     end
@@ -25342,7 +25342,7 @@
     f32.eq
     if (result i32)
      local.get $11
-     i32.trunc_f32_u
+     i32.trunc_sat_f32_u
     else
      i32.const 0
     end
@@ -25544,7 +25544,7 @@
     f64.eq
     if (result i32)
      local.get $11
-     i32.trunc_f64_u
+     i32.trunc_sat_f64_u
     else
      i32.const 0
     end
@@ -25977,7 +25977,7 @@
      local.get $11
      f32.min
      f32.max
-     i32.trunc_f32_u
+     i32.trunc_sat_f32_u
     else
      i32.const 0
     end
@@ -26206,7 +26206,7 @@
      local.get $11
      f64.min
      f64.max
-     i32.trunc_f64_u
+     i32.trunc_sat_f64_u
     else
      i32.const 0
     end
@@ -26712,7 +26712,7 @@
     f32.eq
     if (result i32)
      local.get $11
-     i32.trunc_f32_s
+     i32.trunc_sat_f32_s
     else
      i32.const 0
     end
@@ -26914,7 +26914,7 @@
     f64.eq
     if (result i32)
      local.get $11
-     i32.trunc_f64_s
+     i32.trunc_sat_f64_s
     else
      i32.const 0
     end
@@ -27381,7 +27381,7 @@
     f32.eq
     if (result i32)
      local.get $11
-     i32.trunc_f32_u
+     i32.trunc_sat_f32_u
     else
      i32.const 0
     end
@@ -27583,7 +27583,7 @@
     f64.eq
     if (result i32)
      local.get $11
-     i32.trunc_f64_u
+     i32.trunc_sat_f64_u
     else
      i32.const 0
     end
@@ -28004,7 +28004,7 @@
     f32.eq
     if (result i32)
      local.get $11
-     i32.trunc_f32_s
+     i32.trunc_sat_f32_s
     else
      i32.const 0
     end
@@ -28206,7 +28206,7 @@
     f64.eq
     if (result i32)
      local.get $11
-     i32.trunc_f64_s
+     i32.trunc_sat_f64_s
     else
      i32.const 0
     end
@@ -28673,7 +28673,7 @@
     f32.eq
     if (result i32)
      local.get $11
-     i32.trunc_f32_u
+     i32.trunc_sat_f32_u
     else
      i32.const 0
     end
@@ -28875,7 +28875,7 @@
     f64.eq
     if (result i32)
      local.get $11
-     i32.trunc_f64_u
+     i32.trunc_sat_f64_u
     else
      i32.const 0
     end
@@ -29384,7 +29384,7 @@
     f32.eq
     if (result i64)
      local.get $11
-     i64.trunc_f32_s
+     i64.trunc_sat_f32_s
     else
      i64.const 0
     end
@@ -29544,7 +29544,7 @@
     f64.eq
     if (result i64)
      local.get $11
-     i64.trunc_f64_s
+     i64.trunc_sat_f64_s
     else
      i64.const 0
     end
@@ -30053,7 +30053,7 @@
     f32.eq
     if (result i64)
      local.get $11
-     i64.trunc_f32_u
+     i64.trunc_sat_f32_u
     else
      i64.const 0
     end
@@ -30213,7 +30213,7 @@
     f64.eq
     if (result i64)
      local.get $11
-     i64.trunc_f64_u
+     i64.trunc_sat_f64_u
     else
      i64.const 0
     end
@@ -31765,7 +31765,7 @@
      local.get $11
      f32.min
      f32.max
-     i32.trunc_f32_u
+     i32.trunc_sat_f32_u
     else
      i32.const 0
     end

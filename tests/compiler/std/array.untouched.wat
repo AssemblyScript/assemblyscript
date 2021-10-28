@@ -17525,7 +17525,7 @@
   f64.add
   local.set $16
   local.get $16
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   local.set $15
   local.get $15
   local.get $15
@@ -25473,7 +25473,7 @@
     local.set $4
     local.get $4
     f64.floor
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     call $~lib/string/String#charAt
     local.set $5
     global.get $~lib/memory/__stack_pointer
@@ -25531,7 +25531,7 @@
     call $~lib/math/NativeMath.random
     f64.const 32
     f64.mul
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     call $std/array/createRandomString
     local.set $4
     global.get $~lib/memory/__stack_pointer
@@ -38449,7 +38449,7 @@
     local.get $0
     f64.convert_i32_s
     f64.mul
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     call $~lib/array/Array<i32>#__set
     local.get $2
     i32.const 1

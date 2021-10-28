@@ -10710,7 +10710,7 @@
   f64.const 347
   f64.add
   local.tee $1
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   local.tee $3
   local.get $1
   local.get $3
@@ -25906,7 +25906,7 @@
      call $~lib/math/NativeMath.random
      f64.const 32
      f64.mul
-     i32.trunc_f64_s
+     i32.trunc_sat_f64_s
      local.set $5
      i32.const 0
      local.set $8
@@ -25952,7 +25952,7 @@
        f64.convert_i32_s
        f64.mul
        f64.floor
-       i32.trunc_f64_s
+       i32.trunc_sat_f64_s
        local.set $7
        global.get $~lib/memory/__stack_pointer
        i32.const 4
@@ -29745,7 +29745,7 @@
     local.get $0
     f64.convert_i32_s
     f64.mul
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     call $~lib/array/Array<i32>#__set
     local.get $2
     i32.const 1

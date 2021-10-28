@@ -4362,7 +4362,7 @@
   f64.add
   local.set $16
   local.get $16
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   local.set $15
   local.get $15
   local.get $15

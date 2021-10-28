@@ -2649,7 +2649,7 @@
   f64.convert_i64_s
   f64.const 1
   call $~lib/math/NativeMath.pow
-  i64.trunc_f64_s
+  i64.trunc_sat_f64_s
   global.set $binary/I
   global.get $binary/I
   i64.const 1

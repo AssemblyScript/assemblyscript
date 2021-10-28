@@ -14767,7 +14767,7 @@
     local.get $1
     i32.const 10
     local.get $1
-    i32.trunc_f32_s
+    i32.trunc_sat_f32_s
     i32.add
     call $~lib/map/Map<f32,i32>#set
     drop
@@ -14788,7 +14788,7 @@
     call $~lib/map/Map<f32,i32>#get
     i32.const 10
     local.get $1
-    i32.trunc_f32_s
+    i32.trunc_sat_f32_s
     i32.add
     i32.eq
     i32.eqz
@@ -14846,7 +14846,7 @@
     call $~lib/map/Map<f32,i32>#get
     i32.const 10
     local.get $1
-    i32.trunc_f32_s
+    i32.trunc_sat_f32_s
     i32.add
     i32.eq
     i32.eqz
@@ -14862,7 +14862,7 @@
     local.get $1
     i32.const 20
     local.get $1
-    i32.trunc_f32_s
+    i32.trunc_sat_f32_s
     i32.add
     call $~lib/map/Map<f32,i32>#set
     drop
@@ -14883,7 +14883,7 @@
     call $~lib/map/Map<f32,i32>#get
     i32.const 20
     local.get $1
-    i32.trunc_f32_s
+    i32.trunc_sat_f32_s
     i32.add
     i32.eq
     i32.eqz
@@ -15053,7 +15053,7 @@
     call $~lib/map/Map<f32,i32>#get
     i32.const 20
     local.get $1
-    i32.trunc_f32_s
+    i32.trunc_sat_f32_s
     i32.add
     i32.eq
     i32.eqz
@@ -15128,7 +15128,7 @@
     local.get $1
     i32.const 10
     local.get $1
-    i32.trunc_f32_s
+    i32.trunc_sat_f32_s
     i32.add
     call $~lib/map/Map<f32,i32>#set
     drop
@@ -16067,7 +16067,7 @@
     local.get $1
     i32.const 10
     local.get $1
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     i32.add
     call $~lib/map/Map<f64,i32>#set
     drop
@@ -16088,7 +16088,7 @@
     call $~lib/map/Map<f64,i32>#get
     i32.const 10
     local.get $1
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     i32.add
     i32.eq
     i32.eqz
@@ -16146,7 +16146,7 @@
     call $~lib/map/Map<f64,i32>#get
     i32.const 10
     local.get $1
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     i32.add
     i32.eq
     i32.eqz
@@ -16162,7 +16162,7 @@
     local.get $1
     i32.const 20
     local.get $1
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     i32.add
     call $~lib/map/Map<f64,i32>#set
     drop
@@ -16183,7 +16183,7 @@
     call $~lib/map/Map<f64,i32>#get
     i32.const 20
     local.get $1
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     i32.add
     i32.eq
     i32.eqz
@@ -16353,7 +16353,7 @@
     call $~lib/map/Map<f64,i32>#get
     i32.const 20
     local.get $1
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     i32.add
     i32.eq
     i32.eqz
@@ -16428,7 +16428,7 @@
     local.get $1
     i32.const 10
     local.get $1
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     i32.add
     call $~lib/map/Map<f64,i32>#set
     drop

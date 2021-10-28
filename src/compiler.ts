@@ -241,7 +241,7 @@ export class Options {
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
   /** Features to activate by default. These are the finished proposals. */
-  features: Feature = Feature.MUTABLE_GLOBALS | Feature.SIGN_EXTENSION;
+  features: Feature = Feature.MUTABLE_GLOBALS | Feature.SIGN_EXTENSION | Feature.NONTRAPPING_F2I;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
@@ -425,7 +425,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var featureFlags: FeatureFlags = 0;
     if (options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
-    if (options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
+    if (options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGlobals;
     if (options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.TruncSat;
     if (options.hasFeature(Feature.BULK_MEMORY)) featureFlags |= FeatureFlags.BulkMemory;
     if (options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD;

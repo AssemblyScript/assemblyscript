@@ -5730,7 +5730,7 @@
         f64.const 0.00004294967296
         f64.mul
         f64.nearest
-        i64.trunc_f64_u
+        i64.trunc_sat_f64_u
         local.get $6
         local.get $9
         i64.shl
@@ -5771,7 +5771,7 @@
       local.get $10
       f64.convert_i64_u
       f64.div
-      i64.trunc_f64_u
+      i64.trunc_sat_f64_u
       local.get $14
       local.get $9
       i64.shl
@@ -7307,7 +7307,7 @@
   f64.const 347
   f64.add
   local.tee $0
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   local.tee $2
   local.get $0
   local.get $2

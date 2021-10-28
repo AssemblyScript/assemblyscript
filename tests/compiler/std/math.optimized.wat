@@ -3682,7 +3682,7 @@
   f64.const 3.834951969714103e-04
   f64.mul
   f64.add
-  i64.trunc_f64_u
+  i64.trunc_sat_f64_u
   local.tee $1
   i64.lt_u
   i64.extend_i32_u
@@ -4017,7 +4017,7 @@
     f64.sub
     global.set $~lib/math/rempio2_y1
     local.get $4
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     br $~lib/math/rempio2|inlined.0
    end
    i32.const 0
@@ -4399,7 +4399,7 @@
      f64.sub
      global.set $~lib/math/rempio2f_y
      local.get $8
-     i32.trunc_f64_s
+     i32.trunc_sat_f64_s
      br $~lib/math/rempio2f|inlined.0
     end
     local.get $1
@@ -4655,7 +4655,7 @@
    local.get $0
    f64.copysign
    f64.add
-   i32.trunc_f64_s
+   i32.trunc_sat_f64_s
    local.get $5
    i32.const 1072734898
    i32.lt_u
@@ -5214,7 +5214,7 @@
    local.get $0
    f32.copysign
    f32.add
-   i32.trunc_f32_s
+   i32.trunc_sat_f32_s
    local.get $5
    i32.const 1065686418
    i32.lt_u
@@ -9475,7 +9475,7 @@
     f64.sub
     global.set $~lib/math/rempio2_y1
     local.get $4
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     br $~lib/math/rempio2|inlined.1
    end
    i32.const 0
@@ -9870,7 +9870,7 @@
      f64.sub
      global.set $~lib/math/rempio2f_y
      local.get $9
-     i32.trunc_f64_s
+     i32.trunc_sat_f64_s
      br $~lib/math/rempio2f|inlined.1
     end
     local.get $1
@@ -10638,7 +10638,7 @@
     f64.sub
     global.set $~lib/math/rempio2_y1
     local.get $6
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     local.set $3
     br $~lib/math/rempio2|inlined.2
    end
@@ -10835,7 +10835,7 @@
       f64.sub
       global.set $~lib/math/rempio2f_y
       local.get $7
-      i32.trunc_f64_s
+      i32.trunc_sat_f64_s
       br $~lib/math/rempio2f|inlined.2
      end
      local.get $1
@@ -11537,7 +11537,7 @@
     f64.sub
     global.set $~lib/math/rempio2_y1
     local.get $4
-    i32.trunc_f64_s
+    i32.trunc_sat_f64_s
     br $~lib/math/rempio2|inlined.3
    end
    i32.const 0
@@ -11729,7 +11729,7 @@
   i64.le_u
   if (result i32)
    local.get $0
-   i32.trunc_f64_s
+   i32.trunc_sat_f64_s
   else
    local.get $3
    i64.const 1106
@@ -11772,7 +11772,7 @@
   i64.le_u
   if (result i32)
    local.get $1
-   i32.trunc_f64_s
+   i32.trunc_sat_f64_s
   else
    local.get $3
    i64.const 1106

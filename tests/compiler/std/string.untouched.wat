@@ -6822,7 +6822,7 @@
        f64.convert_i64_u
        f64.mul
        f64.nearest
-       i64.trunc_f64_u
+       i64.trunc_sat_f64_u
        i64.add
        local.set $19
        local.get $20
@@ -6868,7 +6868,7 @@
      local.get $23
      f64.convert_i64_u
      f64.div
-     i64.trunc_f64_u
+     i64.trunc_sat_f64_u
      i64.add
      local.set $19
      local.get $20
@@ -8949,7 +8949,7 @@
   f64.add
   local.set $16
   local.get $16
-  i32.trunc_f64_s
+  i32.trunc_sat_f64_s
   local.set $15
   local.get $15
   local.get $15
