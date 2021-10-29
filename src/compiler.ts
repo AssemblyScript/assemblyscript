@@ -10265,7 +10265,7 @@ export class Compiler extends DiagnosticEmitter {
           this.options.shrinkLevelHint > 1 &&
           this.options.hasFeature(Feature.NONTRAPPING_F2I)
         ) {
-          // Use more compact but slower 5-byte approach
+          // Use more compact but slower 5-byte (3 bytes in best case) approach
           // !!(i32.trunc_sat_f32_u(f32.ceil(f32.abs(x))))
           return module.unary(UnaryOp.EqzI32,
             module.unary(UnaryOp.EqzI32,
@@ -10299,7 +10299,7 @@ export class Compiler extends DiagnosticEmitter {
           this.options.shrinkLevelHint > 1 &&
           this.options.hasFeature(Feature.NONTRAPPING_F2I)
         ) {
-          // Use more compact but slower 5-byte approach
+          // Use more compact but slower 5-byte (3 bytes in best case) approach
           // !!(i32.trunc_sat_f64_u(f64.ceil(f64.abs(x))))
           return module.unary(UnaryOp.EqzI32,
             module.unary(UnaryOp.EqzI32,
