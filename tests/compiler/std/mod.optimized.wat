@@ -20,6 +20,7 @@
   (local $7 i64)
   (local $8 i64)
   (local $9 i64)
+  (local $10 i64)
   block $__inlined_func$std/mod/check<f64> (result i32)
    block $__inlined_func$~lib/math/NativeMath.mod (result f64)
     local.get $0
@@ -29,200 +30,194 @@
     local.get $0
     f64.copysign
     local.get $1
-    local.tee $4
     f64.abs
     f64.const 1
     f64.eq
     br_if $__inlined_func$~lib/math/NativeMath.mod
     drop
-    local.get $4
+    local.get $1
+    i64.reinterpret_f64
+    local.tee $8
+    i64.const 52
+    i64.shr_u
+    i64.const 2047
+    i64.and
+    local.set $9
+    local.get $8
+    i64.const 1
+    i64.shl
+    local.tee $6
+    i64.eqz
+    local.get $0
     i64.reinterpret_f64
     local.tee $5
     i64.const 52
     i64.shr_u
     i64.const 2047
     i64.and
-    local.set $7
-    i32.const 1
-    local.get $4
-    local.get $4
-    f64.ne
-    i32.const 1
-    local.get $0
-    i64.reinterpret_f64
-    local.tee $3
-    i64.const 52
-    i64.shr_u
-    i64.const 2047
-    i64.and
-    local.tee $6
+    local.tee $10
     i64.const 2047
     i64.eq
-    local.get $5
-    i64.const 1
-    i64.shl
-    local.tee $8
-    i64.eqz
-    select
-    select
+    i32.or
+    local.get $1
+    local.get $1
+    f64.ne
+    i32.or
     if
      local.get $0
-     local.get $4
-     f64.mul
-     local.tee $1
      local.get $1
+     f64.mul
+     local.tee $4
+     local.get $4
      f64.div
      br $__inlined_func$~lib/math/NativeMath.mod
     end
-    local.get $8
-    local.get $3
+    local.get $6
+    local.get $5
     i64.const 1
     i64.shl
-    local.tee $9
+    local.tee $3
     i64.ge_u
     if
      local.get $0
-     local.get $8
-     local.get $9
+     local.get $3
+     local.get $6
      i64.ne
      f64.convert_i32_u
      f64.mul
      br $__inlined_func$~lib/math/NativeMath.mod
     end
-    local.get $3
+    local.get $5
     i64.const 63
     i64.shr_u
-    local.set $8
-    local.get $6
+    local.get $10
     i64.eqz
     if (result i64)
-     local.get $3
+     local.get $5
      i64.const 1
-     local.get $6
-     local.get $3
+     local.get $10
+     local.get $5
      i64.const 12
      i64.shl
      i64.clz
      i64.sub
-     local.tee $6
+     local.tee $10
      i64.sub
      i64.shl
     else
-     local.get $3
+     local.get $5
      i64.const 4503599627370495
      i64.and
      i64.const 4503599627370496
      i64.or
     end
     local.set $3
-    local.get $7
+    local.get $9
     i64.eqz
     if (result i64)
-     local.get $5
+     local.get $8
      i64.const 1
-     local.get $7
-     local.get $5
+     local.get $9
+     local.get $8
      i64.const 12
      i64.shl
      i64.clz
      i64.sub
-     local.tee $7
+     local.tee $9
      i64.sub
      i64.shl
     else
-     local.get $5
+     local.get $8
      i64.const 4503599627370495
      i64.and
      i64.const 4503599627370496
      i64.or
     end
     local.set $5
-    block $folding-inner0
-     loop $while-continue|0
-      local.get $6
-      local.get $7
-      i64.gt_s
-      if
-       local.get $3
-       local.get $5
-       i64.ge_u
-       if (result i64)
-        local.get $3
-        local.get $5
-        i64.eq
-        br_if $folding-inner0
-        local.get $3
-        local.get $5
-        i64.sub
-       else
-        local.get $3
-       end
-       i64.const 1
-       i64.shl
-       local.set $3
-       local.get $6
-       i64.const 1
-       i64.sub
-       local.set $6
-       br $while-continue|0
-      end
-     end
-     local.get $6
-     local.get $3
-     local.get $5
-     i64.ge_u
+    loop $while-continue|0
+     local.get $9
+     local.get $10
+     i64.lt_s
      if
       local.get $3
       local.get $5
-      i64.eq
-      br_if $folding-inner0
-      local.get $3
-      local.get $5
-      i64.sub
-      local.set $3
-     end
-     local.get $3
-     i64.const 11
-     i64.shl
-     i64.clz
-     local.tee $6
-     i64.sub
-     local.set $5
-     local.get $3
-     local.get $6
-     i64.shl
-     local.set $3
-     local.get $5
-     i64.const 0
-     i64.gt_s
-     if (result i64)
-      local.get $3
-      i64.const 4503599627370496
-      i64.sub
-      local.get $5
-      i64.const 52
-      i64.shl
-      i64.or
-     else
-      local.get $3
+      i64.ge_u
+      if (result i64)
+       local.get $0
+       f64.const 0
+       f64.mul
+       local.get $3
+       local.get $5
+       i64.eq
+       br_if $__inlined_func$~lib/math/NativeMath.mod
+       drop
+       local.get $3
+       local.get $5
+       i64.sub
+      else
+       local.get $3
+      end
       i64.const 1
-      local.get $5
+      i64.shl
+      local.set $3
+      local.get $10
+      i64.const 1
       i64.sub
-      i64.shr_u
+      local.set $10
+      br $while-continue|0
      end
-     local.get $8
-     i64.const 63
-     i64.shl
-     i64.or
-     f64.reinterpret_i64
-     br $__inlined_func$~lib/math/NativeMath.mod
     end
-    local.get $0
-    f64.const 0
-    f64.mul
+    local.get $10
+    local.get $3
+    local.get $5
+    i64.ge_u
+    if
+     local.get $0
+     f64.const 0
+     f64.mul
+     local.get $3
+     local.get $5
+     i64.eq
+     br_if $__inlined_func$~lib/math/NativeMath.mod
+     drop
+     local.get $3
+     local.get $5
+     i64.sub
+     local.set $3
+    end
+    local.get $3
+    i64.const 11
+    i64.shl
+    i64.clz
+    local.tee $6
+    i64.sub
+    local.set $5
+    i64.const 63
+    i64.shl
+    local.get $3
+    local.get $6
+    i64.shl
+    local.tee $3
+    i64.const 4503599627370496
+    i64.sub
+    local.get $5
+    i64.const 52
+    i64.shl
+    i64.or
+    local.get $3
+    i64.const 1
+    local.get $5
+    i64.sub
+    i64.shr_u
+    local.get $5
+    i64.const 0
+    i64.gt_s
+    select
+    i64.or
+    f64.reinterpret_i64
    end
-   local.tee $1
-   local.get $1
+   local.tee $4
+   local.get $4
    f64.ne
    local.get $2
    local.get $2
@@ -233,7 +228,7 @@
    local.get $2
    f64.div
    f64.const 1
-   local.get $1
+   local.get $4
    f64.div
    f64.eq
    local.get $2
@@ -241,14 +236,14 @@
    f64.eq
    br_if $__inlined_func$std/mod/check<f64>
    drop
-   local.get $1
    local.get $2
+   local.get $4
    f64.eq
   end
   if (result i32)
    block $__inlined_func$std/mod/check<f64>0 (result i32)
     local.get $0
-    local.get $4
+    local.get $1
     call $std/mod/mod
     local.tee $0
     local.get $0
@@ -285,6 +280,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   block $__inlined_func$std/mod/check<f32> (result i32)
    block $__inlined_func$~lib/math/NativeMathf.mod (result f32)
     local.get $0
@@ -301,31 +297,31 @@
     drop
     local.get $1
     i32.reinterpret_f32
-    local.tee $4
+    local.tee $7
     i32.const 23
     i32.shr_u
     i32.const 255
     i32.and
-    local.set $6
+    local.set $8
     i32.const 1
     local.get $1
     local.get $1
     f32.ne
     local.get $0
     i32.reinterpret_f32
-    local.tee $3
+    local.tee $5
     i32.const 23
     i32.shr_u
     i32.const 255
     i32.and
-    local.tee $5
+    local.tee $9
     i32.const 255
     i32.eq
     i32.const 1
-    local.get $4
+    local.get $7
     i32.const 1
     i32.shl
-    local.tee $7
+    local.tee $4
     select
     select
     if
@@ -337,148 +333,147 @@
      f32.div
      br $__inlined_func$~lib/math/NativeMathf.mod
     end
-    local.get $7
-    local.get $3
+    local.get $4
+    local.get $5
     i32.const 1
     i32.shl
-    local.tee $8
+    local.tee $3
     i32.ge_u
     if
      local.get $0
-     local.get $7
-     local.get $8
+     local.get $3
+     local.get $4
      i32.ne
      f32.convert_i32_u
      f32.mul
      br $__inlined_func$~lib/math/NativeMathf.mod
     end
-    local.get $3
+    local.get $5
     i32.const -2147483648
     i32.and
-    local.set $7
-    local.get $5
+    local.set $6
+    local.get $9
     if (result i32)
-     local.get $3
+     local.get $5
      i32.const 8388607
      i32.and
      i32.const 8388608
      i32.or
     else
-     local.get $3
-     i32.const 1
      local.get $5
-     local.get $3
+     i32.const 1
+     local.get $9
+     local.get $5
      i32.const 9
      i32.shl
      i32.clz
      i32.sub
-     local.tee $5
+     local.tee $9
      i32.sub
      i32.shl
     end
     local.set $3
-    local.get $6
+    local.get $8
     if (result i32)
-     local.get $4
+     local.get $7
      i32.const 8388607
      i32.and
      i32.const 8388608
      i32.or
     else
-     local.get $4
+     local.get $7
      i32.const 1
-     local.get $6
-     local.get $4
+     local.get $8
+     local.get $7
      i32.const 9
      i32.shl
      i32.clz
      i32.sub
-     local.tee $6
+     local.tee $8
      i32.sub
      i32.shl
     end
     local.set $4
-    block $folding-inner0
-     loop $while-continue|0
-      local.get $5
-      local.get $6
-      i32.gt_s
-      if
-       local.get $3
-       local.get $4
-       i32.ge_u
-       if (result i32)
-        local.get $3
-        local.get $4
-        i32.eq
-        br_if $folding-inner0
-        local.get $3
-        local.get $4
-        i32.sub
-       else
-        local.get $3
-       end
-       i32.const 1
-       i32.shl
-       local.set $3
-       local.get $5
-       i32.const 1
-       i32.sub
-       local.set $5
-       br $while-continue|0
-      end
-     end
-     local.get $5
-     local.get $3
-     local.get $4
-     i32.ge_u
+    loop $while-continue|0
+     local.get $8
+     local.get $9
+     i32.lt_s
      if
       local.get $3
       local.get $4
-      i32.eq
-      br_if $folding-inner0
-      local.get $3
-      local.get $4
-      i32.sub
-      local.set $3
-     end
-     local.get $3
-     i32.const 8
-     i32.shl
-     i32.clz
-     local.tee $5
-     i32.sub
-     local.set $4
-     local.get $3
-     local.get $5
-     i32.shl
-     local.set $3
-     local.get $4
-     i32.const 0
-     i32.gt_s
-     if (result i32)
-      local.get $3
-      i32.const 8388608
-      i32.sub
-      local.get $4
-      i32.const 23
-      i32.shl
-      i32.or
-     else
-      local.get $3
+      i32.ge_u
+      if (result i32)
+       local.get $0
+       f32.const 0
+       f32.mul
+       local.get $3
+       local.get $4
+       i32.eq
+       br_if $__inlined_func$~lib/math/NativeMathf.mod
+       drop
+       local.get $3
+       local.get $4
+       i32.sub
+      else
+       local.get $3
+      end
       i32.const 1
-      local.get $4
+      i32.shl
+      local.set $3
+      local.get $9
+      i32.const 1
       i32.sub
-      i32.shr_u
+      local.set $9
+      br $while-continue|0
      end
-     local.get $7
-     i32.or
-     f32.reinterpret_i32
-     br $__inlined_func$~lib/math/NativeMathf.mod
     end
-    local.get $0
-    f32.const 0
-    f32.mul
+    local.get $9
+    local.get $3
+    local.get $4
+    i32.ge_u
+    if
+     local.get $0
+     f32.const 0
+     f32.mul
+     local.get $3
+     local.get $4
+     i32.eq
+     br_if $__inlined_func$~lib/math/NativeMathf.mod
+     drop
+     local.get $3
+     local.get $4
+     i32.sub
+     local.set $3
+    end
+    local.get $3
+    i32.const 8
+    i32.shl
+    i32.clz
+    local.tee $5
+    i32.sub
+    local.set $4
+    local.get $3
+    local.get $5
+    i32.shl
+    local.tee $3
+    i32.const 8388608
+    i32.sub
+    local.get $4
+    i32.const 23
+    i32.shl
+    i32.or
+    local.get $3
+    i32.const 1
+    local.get $4
+    i32.sub
+    i32.shr_u
+    local.get $4
+    i32.const 0
+    i32.gt_s
+    select
+    local.get $6
+    i32.or
+    f32.reinterpret_i32
    end
    local.tee $0
    local.get $0

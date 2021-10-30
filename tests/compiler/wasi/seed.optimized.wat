@@ -12,8 +12,8 @@
  (export "_start" (func $~start))
  (func $wasi/seed/test (result f64)
   (local $0 i64)
-  (local $1 i64)
-  (local $2 i32)
+  (local $1 i32)
+  (local $2 i64)
   global.get $~lib/math/random_seeded
   i32.eqz
   if
@@ -24,17 +24,17 @@
     drop
     i32.const 1024
     i64.load
-    local.tee $1
+    local.tee $0
     i64.eqz
     br_if $do-loop|0
    end
    i64.const -7046029254386353131
-   local.get $1
-   local.get $1
+   local.get $0
+   local.get $0
    i64.eqz
    select
-   local.tee $1
-   local.get $1
+   local.tee $0
+   local.get $0
    i64.const 33
    i64.shr_u
    i64.xor
@@ -82,9 +82,9 @@
   global.get $~lib/math/random_state0_64
   local.set $0
   global.get $~lib/math/random_state1_64
-  local.tee $1
+  local.tee $2
   global.set $~lib/math/random_state0_64
-  local.get $1
+  local.get $2
   local.get $0
   i64.const 23
   i64.shl
@@ -96,12 +96,12 @@
   i64.shr_u
   i64.xor
   i64.xor
-  local.get $1
+  local.get $2
   i64.const 26
   i64.shr_u
   i64.xor
   global.set $~lib/math/random_state1_64
-  local.get $1
+  local.get $2
   i64.const 12
   i64.shr_u
   i64.const 4607182418800017408
