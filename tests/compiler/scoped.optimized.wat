@@ -7,8 +7,8 @@
   (local $0 i32)
   loop $for-loop|0
    local.get $0
-   i32.const 1
-   i32.lt_s
+   i32.const 0
+   i32.le_s
    if
     local.get $0
     i32.const 1
@@ -21,8 +21,8 @@
   local.set $0
   loop $for-loop|1
    local.get $0
-   i32.const 1
-   i32.lt_s
+   i32.const 0
+   i32.le_s
    if
     local.get $0
     i32.const 1

@@ -76,7 +76,8 @@ export enum FeatureFlags {
   GC = 1024 /* _BinaryenFeatureGC */,
   Memory64 = 2048 /* _BinaryenFeatureMemory64 */,
   TypedFunctionReferences = 4096 /* _BinaryenFeatureTypedFunctionReferences */,
-  All = 16383 /* _BinaryenFeatureAll */
+  RelaxedSIMD = 16384 /* _BinaryenFeatureRelaxedSIMD */,
+  All = 32767 /* _BinaryenFeatureAll */
 }
 
 /** Binaryen expression id constants. */
@@ -126,28 +127,33 @@ export enum ExpressionId {
   RefIs = 42 /* _BinaryenRefIsId */,
   RefFunc = 43 /* _BinaryenRefFuncId */,
   RefEq = 44 /* _BinaryenRefEqId */,
-  Try = 45 /* _BinaryenTryId */,
-  Throw = 46 /* _BinaryenThrowId */,
-  Rethrow = 47 /* _BinaryenRethrowId */,
-  TupleMake = 48 /* _BinaryenTupleMakeId */,
-  TupleExtract = 49 /* _BinaryenTupleExtractId */,
-  I31New = 50 /* _BinaryenI31NewId */,
-  I31Get = 51 /* _BinaryenI31GetId */,
-  CallRef = 52 /* _BinaryenCallRefId */,
-  RefTest = 53 /* _BinaryenRefTestId */,
-  RefCast = 54 /* _BinaryenRefCastId */,
-  BrOn = 55 /* _BinaryenBrOnId */,
-  RttCanon = 56 /* _BinaryenRttCanonId */,
-  RttSub = 57 /* _BinaryenRttSubId */,
-  StructNew = 58 /* _BinaryenStructNewId */,
-  StructGet = 59 /* _BinaryenStructGetId */,
-  StructSet = 60 /* _BinaryenStructSetId */,
-  ArrayNew = 61 /* _BinaryenArrayNewId */,
-  ArrayGet = 62 /* _BinaryenArrayGetId */,
-  ArraySet = 63 /* _BinaryenArraySetId */,
-  ArrayLen = 64 /* _BinaryenArrayLenId */,
-  ArrayCopy = 65 /* _BinaryenArrayCopyId */,
-  RefAs = 66 /* _BinaryenRefAsId */
+  TableGet = 45 /* _BinaryenTableGetId */,
+  TableSet = 46 /* _BinaryenTableSetId */,
+  TableSize = 47 /* _BinaryenTableSizeId */,
+  TableGrow = 48 /* _BinaryenTableGrowId */,
+  Try = 49 /* _BinaryenTryId */,
+  Throw = 50 /* _BinaryenThrowId */,
+  Rethrow = 51 /* _BinaryenRethrowId */,
+  TupleMake = 52 /* _BinaryenTupleMakeId */,
+  TupleExtract = 53 /* _BinaryenTupleExtractId */,
+  I31New = 54 /* _BinaryenI31NewId */,
+  I31Get = 55 /* _BinaryenI31GetId */,
+  CallRef = 56 /* _BinaryenCallRefId */,
+  RefTest = 57 /* _BinaryenRefTestId */,
+  RefCast = 58 /* _BinaryenRefCastId */,
+  BrOn = 59 /* _BinaryenBrOnId */,
+  RttCanon = 60 /* _BinaryenRttCanonId */,
+  RttSub = 61 /* _BinaryenRttSubId */,
+  StructNew = 62 /* _BinaryenStructNewId */,
+  StructGet = 63 /* _BinaryenStructGetId */,
+  StructSet = 64 /* _BinaryenStructSetId */,
+  ArrayNew = 65 /* _BinaryenArrayNewId */,
+  ArrayInit = 66 /* _BinaryenArrayInitId */,
+  ArrayGet = 67 /* _BinaryenArrayGetId */,
+  ArraySet = 68 /* _BinaryenArraySetId */,
+  ArrayLen = 69 /* _BinaryenArrayLenId */,
+  ArrayCopy = 70 /* _BinaryenArrayCopyId */,
+  RefAs = 71 /* _BinaryenRefAsId */
 }
 
 /** Binaryen external kind constants. */
@@ -1239,6 +1245,16 @@ export class Module {
     return binaryen._BinaryenMemoryGrow(this.ref, delta);
   }
 
+  table_size(name: string): ExpressionRef {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenTableSize(this.ref, cStr);
+  }
+
+  table_grow(name: string, delta: ExpressionRef, value: ExpressionRef = 0): ExpressionRef {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenTableGrow(this.ref, cStr, value, delta);
+  }
+
   local_get(
     index: i32,
     type: TypeRef
@@ -1274,6 +1290,15 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
     return binaryen._BinaryenGlobalGet(this.ref, cStr, type);
+  }
+
+  table_get(
+    name: string,
+    index: ExpressionRef,
+    type: TypeRef
+  ): ExpressionRef {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenTableGet(this.ref, cStr, index, type);
   }
 
   load(
@@ -1378,6 +1403,15 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
     return binaryen._BinaryenGlobalSet(this.ref, cStr, value);
+  }
+
+  table_set(
+    name: string,
+    index: ExpressionRef,
+    value: ExpressionRef
+  ): ExpressionRef {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenTableSet(this.ref, cStr, index, value);
   }
 
   block(
@@ -2267,6 +2301,7 @@ export class Module {
         passes.push("local-cse");
         passes.push("remove-unused-brs");
         passes.push("remove-unused-names");
+        passes.push("merge-blocks");
         passes.push("precompute-propagate");
       }
       if (optimizeLevel >= 3) {
@@ -2274,6 +2309,7 @@ export class Module {
         passes.push("flatten");
         passes.push("vacuum");
         passes.push("simplify-locals-notee-nostructure");
+        passes.push("vacuum");
         passes.push("licm");
         passes.push("merge-locals");
         passes.push("reorder-locals");
@@ -2295,6 +2331,7 @@ export class Module {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("pick-load-signs");
         passes.push("simplify-globals-optimizing");
+        passes.push("simplify-globals-optimizing");
       }
       passes.push("simplify-locals-notee-nostructure");
       passes.push("vacuum");
@@ -2307,24 +2344,23 @@ export class Module {
       passes.push("coalesce-locals");
       passes.push("reorder-locals");
       passes.push("vacuum");
-
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("rse");
+        passes.push("vacuum");
+      }
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("merge-locals");
+        passes.push("vacuum");
       }
-      passes.push("vacuum");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("simplify-globals-optimizing");
+        passes.push("simplify-globals-optimizing");
       }
-      passes.push("merge-blocks");
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
       passes.push("merge-blocks");
       if (optimizeLevel >= 3) {
         passes.push("optimize-instructions");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        passes.push("rse");
-        passes.push("vacuum");
       }
 
       // --- PassRunner::addDefaultGlobalOptimizationPostPasses ---
@@ -2353,8 +2389,10 @@ export class Module {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("code-folding");
       }
-      if (optimizeLevel > 1 && (this.getFeatures() & FeatureFlags.GC) != 0) {
+      if (optimizeLevel >= 2 && (this.getFeatures() & FeatureFlags.GC) != 0) {
         passes.push("heap2local");
+        passes.push("merge-locals");
+        passes.push("local-subtyping");
       }
       // precompute works best after global optimizations
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
@@ -2367,6 +2405,7 @@ export class Module {
       passes.push("dae-optimizing"); // reduce arity
       passes.push("inlining-optimizing"); // and inline if possible
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("ssa-nomerge");
         passes.push("rse");
         // move code on early return (after CFG cleanup)
         passes.push("code-pushing");
@@ -2390,8 +2429,10 @@ export class Module {
 
           passes.push("inlining");
           passes.push("precompute-propagate");
+          passes.push("rse");
           passes.push("vacuum");
-
+          passes.push("ssa-nomerge");
+          passes.push("simplify-locals");
           passes.push("coalesce-locals");
         }
         passes.push("remove-unused-brs");
@@ -2963,12 +3004,14 @@ export enum SideEffects {
   WritesGlobal = 32 /* _BinaryenSideEffectWritesGlobal */,
   ReadsMemory = 64 /* _BinaryenSideEffectReadsMemory */,
   WritesMemory = 128 /* _BinaryenSideEffectWritesMemory */,
-  ImplicitTrap = 256 /* _BinaryenSideEffectImplicitTrap */,
-  IsAtomic = 512 /* _BinaryenSideEffectIsAtomic */,
-  Throws = 1024 /* _BinaryenSideEffectThrows */,
-  DanglingPop = 2048 /* _BinaryenSideEffectDanglingPop */,
-  TrapsNeverHappen = 4096 /* _BinaryenSideEffectTrapsNeverHappen */,
-  Any = 8191 /* _BinaryenSideEffectAny */
+  ReadsTable = 256 /* _BinaryenSideEffectReadsTable */,
+  WritesTable = 512 /* _BinaryenSideEffectWritesTable */,
+  ImplicitTrap = 1024 /* _BinaryenSideEffectImplicitTrap */,
+  IsAtomic = 2048 /* _BinaryenSideEffectIsAtomic */,
+  Throws = 4096 /* _BinaryenSideEffectThrows */,
+  DanglingPop = 8192 /* _BinaryenSideEffectDanglingPop */,
+  TrapsNeverHappen = 16384 /* _BinaryenSideEffectTrapsNeverHappen */,
+  Any = 32767 /* _BinaryenSideEffectAny */
 }
 
 export function getSideEffects(expr: ExpressionRef, module: ModuleRef): SideEffects {

@@ -410,6 +410,32 @@ export declare function _BinaryenRefEqSetLeft(expr: ExpressionRef, leftExpr: Exp
 export declare function _BinaryenRefEqGetRight(expr: ExpressionRef): ExpressionRef;
 export declare function _BinaryenRefEqSetRight(expr: ExpressionRef, rightExpr: ExpressionRef): void;
 
+export declare function _BinaryenTableGet(module: ModuleRef, name: StringRef, index: ExpressionRef, type: TypeRef): ExpressionRef;
+export declare function _BinaryenTableGetGetTable(expr: ExpressionRef): StringRef;
+export declare function _BinaryenTableGetSetTable(expr: ExpressionRef, table: StringRef): void;
+export declare function _BinaryenTableGetGetIndex(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenTableGetSetIndex(expr: ExpressionRef, index: ExpressionRef): void;
+
+export declare function _BinaryenTableSet(module: ModuleRef, name: StringRef, index: ExpressionRef, value: ExpressionRef): ExpressionRef;
+export declare function _BinaryenTableSetGetTable(expr: ExpressionRef): StringRef;
+export declare function _BinaryenTableSetSetTable(expr: ExpressionRef, table: StringRef): void;
+export declare function _BinaryenTableSetGetIndex(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenTableSetSetIndex(expr: ExpressionRef, index: ExpressionRef): void;
+export declare function _BinaryenTableSetGetValue(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenTableSetSetValue(expr: ExpressionRef, value: ExpressionRef): void;
+
+export declare function _BinaryenTableSize(module: ModuleRef, name: StringRef): ExpressionRef;
+export declare function _BinaryenTableSizeGetTable(expr: ExpressionRef): StringRef;
+export declare function _BinaryenTableSizeSetTable(expr: ExpressionRef, table: StringRef): void;
+
+export declare function _BinaryenTableGrow(module: ModuleRef, name: StringRef, value: ExpressionRef, delta: ExpressionRef): ExpressionRef;
+export declare function _BinaryenTableGrowGetTable(expr: ExpressionRef): StringRef;
+export declare function _BinaryenTableGrowSetTable(expr: ExpressionRef, table: StringRef): void;
+export declare function _BinaryenTableGrowGetValue(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenTableGrowSetValue(expr: ExpressionRef, value: ExpressionRef): void;
+export declare function _BinaryenTableGrowGetDelta(expr: ExpressionRef): ExpressionRef;
+export declare function _BinaryenTableGrowSetDelta(expr: ExpressionRef, delta: ExpressionRef): void;
+
 export declare function _BinaryenTry(module: ModuleRef, name: StringRef, bodyExpr: ExpressionRef, catchTags: ArrayRef<StringRef>, numCatchTags: Index, catchBodies: ArrayRef<ExpressionRef>, numCatchBodies: Index, delegateTarget: StringRef): ExpressionRef;
 export declare function _BinaryenTryGetName(expr: ExpressionRef): StringRef;
 export declare function _BinaryenTrySetName(expr: ExpressionRef, name: StringRef): void;

@@ -166,13 +166,9 @@
   global.set $binary/i
   i32.const 0
   global.set $binary/i
-  global.get $binary/i
   i32.const 1
-  i32.add
   global.set $binary/i
-  global.get $binary/i
-  i32.const 1
-  i32.sub
+  i32.const 0
   global.set $binary/i
   i32.const 0
   global.set $binary/i
@@ -212,13 +208,9 @@
   global.set $binary/I
   i64.const 0
   global.set $binary/I
-  global.get $binary/I
   i64.const 1
-  i64.add
   global.set $binary/I
-  global.get $binary/I
-  i64.const 1
-  i64.sub
+  i64.const 0
   global.set $binary/I
   i64.const 0
   global.set $binary/I

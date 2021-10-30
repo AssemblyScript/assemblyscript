@@ -1,8 +1,8 @@
 (module
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
@@ -39,9 +39,9 @@
   (local $0 i32)
   (local $1 i32)
   i32.const 1280
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   i32.const 1088
-  call $~lib/rt/itcms/__visit
+  call $byn-split-outlined-A$~lib/rt/itcms/__visit
   global.get $~lib/rt/itcms/pinSpace
   local.tee $1
   i32.load offset=4
@@ -80,160 +80,6 @@
    end
   end
  )
- (func $~lib/rt/itcms/__visit (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  i32.eqz
-  if
-   return
-  end
-  global.get $~lib/rt/itcms/white
-  local.get $0
-  i32.const 20
-  i32.sub
-  local.tee $0
-  i32.load offset=4
-  i32.const 3
-  i32.and
-  i32.eq
-  if
-   global.get $~lib/rt/itcms/iter
-   local.get $0
-   i32.eq
-   if
-    local.get $0
-    i32.load offset=8
-    local.tee $1
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 1152
-     i32.const 147
-     i32.const 30
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    global.set $~lib/rt/itcms/iter
-   end
-   block $__inlined_func$~lib/rt/itcms/Object#unlink
-    local.get $0
-    i32.load offset=4
-    i32.const -4
-    i32.and
-    local.tee $2
-    i32.eqz
-    if
-     i32.const 0
-     local.get $0
-     i32.const 17892
-     i32.lt_u
-     local.get $0
-     i32.load offset=8
-     select
-     i32.eqz
-     if
-      i32.const 0
-      i32.const 1152
-      i32.const 127
-      i32.const 18
-      call $~lib/builtins/abort
-      unreachable
-     end
-     br $__inlined_func$~lib/rt/itcms/Object#unlink
-    end
-    local.get $0
-    i32.load offset=8
-    local.tee $1
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 1152
-     i32.const 131
-     i32.const 16
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $2
-    local.get $1
-    i32.store offset=8
-    local.get $1
-    local.get $1
-    i32.load offset=4
-    i32.const 3
-    i32.and
-    local.get $2
-    i32.or
-    i32.store offset=4
-   end
-   global.get $~lib/rt/itcms/toSpace
-   local.set $2
-   local.get $0
-   i32.load offset=12
-   local.tee $1
-   i32.const 1
-   i32.le_u
-   if (result i32)
-    i32.const 1
-   else
-    i32.const 1472
-    i32.load
-    local.get $1
-    i32.lt_u
-    if
-     i32.const 1280
-     i32.const 1344
-     i32.const 22
-     i32.const 28
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    i32.const 3
-    i32.shl
-    i32.const 1476
-    i32.add
-    i32.load
-    i32.const 32
-    i32.and
-   end
-   if (result i32)
-    global.get $~lib/rt/itcms/white
-    i32.eqz
-   else
-    i32.const 2
-   end
-   local.set $3
-   local.get $2
-   i32.load offset=8
-   local.set $1
-   local.get $0
-   local.get $2
-   local.get $3
-   i32.or
-   i32.store offset=4
-   local.get $0
-   local.get $1
-   i32.store offset=8
-   local.get $1
-   local.get $1
-   i32.load offset=4
-   i32.const 3
-   i32.and
-   local.get $0
-   i32.or
-   i32.store offset=4
-   local.get $2
-   local.get $0
-   i32.store offset=8
-   global.get $~lib/rt/itcms/visitCount
-   i32.const 1
-   i32.add
-   global.set $~lib/rt/itcms/visitCount
-  end
- )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -270,11 +116,10 @@
   local.get $2
   i32.const 256
   i32.lt_u
-  if
+  if (result i32)
    local.get $2
    i32.const 4
    i32.shr_u
-   local.set $2
   else
    i32.const 31
    local.get $2
@@ -286,28 +131,25 @@
    local.tee $2
    i32.clz
    i32.sub
+   local.tee $4
+   i32.const 7
+   i32.sub
    local.set $3
    local.get $2
-   local.get $3
+   local.get $4
    i32.const 4
    i32.sub
    i32.shr_u
    i32.const 16
    i32.xor
-   local.set $2
-   local.get $3
-   i32.const 7
-   i32.sub
-   local.set $3
   end
-  local.get $2
+  local.tee $2
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $3
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -319,19 +161,19 @@
   end
   local.get $1
   i32.load offset=8
-  local.set $4
+  local.set $5
   local.get $1
   i32.load offset=4
-  local.tee $5
+  local.tee $4
   if
-   local.get $5
    local.get $4
+   local.get $5
    i32.store offset=8
   end
-  local.get $4
+  local.get $5
   if
-   local.get $4
    local.get $5
+   local.get $4
    i32.store offset=4
   end
   local.get $2
@@ -356,9 +198,9 @@
    i32.shl
    local.get $0
    i32.add
-   local.get $4
+   local.get $5
    i32.store offset=96
-   local.get $4
+   local.get $5
    i32.eqz
    if
     local.get $3
@@ -366,17 +208,17 @@
     i32.shl
     local.get $0
     i32.add
-    local.tee $4
+    local.tee $1
     i32.load offset=4
     i32.const -2
     local.get $2
     i32.rotl
     i32.and
-    local.set $1
-    local.get $4
+    local.set $2
     local.get $1
+    local.get $2
     i32.store offset=4
-    local.get $1
+    local.get $2
     i32.eqz
     if
      local.get $0
@@ -504,7 +346,7 @@
   local.get $3
   i32.const -4
   i32.and
-  local.tee $3
+  local.tee $2
   i32.const 12
   i32.lt_u
   if
@@ -515,7 +357,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   local.get $1
   i32.const 4
   i32.add
@@ -535,44 +377,43 @@
   i32.sub
   local.get $1
   i32.store
-  local.get $3
+  local.get $2
   i32.const 256
   i32.lt_u
   if (result i32)
-   local.get $3
+   local.get $2
    i32.const 4
    i32.shr_u
   else
    i32.const 31
-   local.get $3
+   local.get $2
    i32.const 1073741820
-   local.get $3
+   local.get $2
    i32.const 1073741820
    i32.lt_u
    select
-   local.tee $3
+   local.tee $2
    i32.clz
    i32.sub
-   local.tee $4
+   local.tee $3
    i32.const 7
    i32.sub
    local.set $5
+   local.get $2
    local.get $3
-   local.get $4
    i32.const 4
    i32.sub
    i32.shr_u
    i32.const 16
    i32.xor
   end
-  local.tee $3
+  local.tee $2
   i32.const 16
   i32.lt_u
-  i32.const 0
   local.get $5
   i32.const 23
   i32.lt_u
-  select
+  i32.and
   i32.eqz
   if
    i32.const 0
@@ -582,7 +423,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $2
   local.get $5
   i32.const 4
   i32.shl
@@ -592,20 +433,20 @@
   local.get $0
   i32.add
   i32.load offset=96
-  local.set $4
+  local.set $3
   local.get $1
   i32.const 0
   i32.store offset=4
   local.get $1
-  local.get $4
+  local.get $3
   i32.store offset=8
-  local.get $4
+  local.get $3
   if
-   local.get $4
+   local.get $3
    local.get $1
    i32.store offset=4
   end
-  local.get $3
+  local.get $2
   local.get $5
   i32.const 4
   i32.shl
@@ -633,7 +474,7 @@
   local.get $0
   i32.load offset=4
   i32.const 1
-  local.get $3
+  local.get $2
   i32.shl
   i32.or
   i32.store offset=4
@@ -660,15 +501,12 @@
   i32.const 4
   i32.sub
   local.set $1
-  local.get $2
-  i32.const -16
-  i32.and
   local.get $0
   i32.load offset=1568
-  local.tee $2
+  local.tee $4
   if
    local.get $1
-   local.get $2
+   local.get $4
    i32.const 4
    i32.add
    i32.lt_u
@@ -680,15 +518,15 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $2
+   local.get $4
    local.get $1
    i32.const 16
    i32.sub
    i32.eq
    if
-    local.get $2
+    local.get $4
     i32.load
-    local.set $4
+    local.set $3
     local.get $1
     i32.const 16
     i32.sub
@@ -709,6 +547,9 @@
     unreachable
    end
   end
+  local.get $2
+  i32.const -16
+  i32.and
   local.get $1
   i32.sub
   local.tee $2
@@ -718,7 +559,7 @@
    return
   end
   local.get $1
-  local.get $4
+  local.get $3
   i32.const 2
   i32.and
   local.get $2
@@ -755,8 +596,8 @@
   (local $1 i32)
   memory.size
   local.tee $0
-  i32.const 1
-  i32.lt_s
+  i32.const 0
+  i32.le_s
   if (result i32)
    i32.const 1
    local.get $0
@@ -915,7 +756,11 @@
        if
         local.get $0
         i32.load
-        call $~lib/rt/itcms/__visit
+        local.tee $2
+        if
+         local.get $2
+         call $byn-split-outlined-A$~lib/rt/itcms/__visit
+        end
         local.get $0
         i32.const 4
         i32.add
@@ -1040,7 +885,7 @@
        local.get $0
        i32.const 4
        i32.sub
-       local.set $1
+       local.set $2
        local.get $0
        i32.const 15
        i32.and
@@ -1050,7 +895,7 @@
        if (result i32)
         i32.const 1
        else
-        local.get $1
+        local.get $2
         i32.load
         i32.const 1
         i32.and
@@ -1063,14 +908,13 @@
         call $~lib/builtins/abort
         unreachable
        end
-       local.get $1
-       local.tee $0
-       local.get $0
+       local.get $2
+       local.get $2
        i32.load
        i32.const 1
        i32.or
        i32.store
-       local.get $0
+       local.get $2
        call $~lib/rt/tlsf/insertBlock
       end
      end
@@ -1100,9 +944,9 @@
   i32.load offset=4
   i32.const -2
   i32.and
-  local.tee $2
+  local.tee $1
   if (result i32)
-   local.get $2
+   local.get $1
    i32.ctz
    i32.const 2
    i32.shl
@@ -1118,13 +962,13 @@
    if (result i32)
     local.get $1
     i32.ctz
-    local.tee $1
+    local.tee $2
     i32.const 2
     i32.shl
     local.get $0
     i32.add
     i32.load offset=4
-    local.tee $2
+    local.tee $1
     i32.eqz
     if
      i32.const 0
@@ -1134,9 +978,9 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
-    i32.ctz
     local.get $1
+    i32.ctz
+    local.get $2
     i32.const 4
     i32.shl
     i32.add
@@ -1154,314 +998,313 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  i32.const 10
-  local.set $0
-  loop $do-loop|0
-   local.get $2
-   i32.const 1
-   i32.add
-   local.set $2
-   local.get $0
-   i32.const 1
-   i32.sub
-   local.tee $0
-   br_if $do-loop|0
-  end
-  local.get $0
-  if
-   i32.const 0
-   i32.const 1056
+  block $folding-inner0
    i32.const 10
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  i32.const 10
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 11
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 10
-  local.set $0
-  loop $do-loop|00
-   local.get $0
-   local.tee $1
-   i32.const 1
-   i32.sub
    local.set $0
-   local.get $1
-   br_if $do-loop|00
-  end
-  local.get $0
-  i32.const -1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 21
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  local.set $2
-  i32.const 10
-  local.set $0
-  loop $do-loop|01
-   local.get $0
-   i32.const 1
-   i32.sub
-   local.set $0
-   local.get $3
-   i32.const 1
-   i32.add
-   local.set $3
-   loop $do-loop|1
-    local.get $2
+   loop $do-loop|0
+    local.get $1
     i32.const 1
     i32.add
-    local.set $2
+    local.set $1
     local.get $0
     i32.const 1
     i32.sub
     local.tee $0
-    br_if $do-loop|1
+    br_if $do-loop|0
    end
    local.get $0
    if
     i32.const 0
     i32.const 1056
-    i32.const 39
-    i32.const 5
+    i32.const 10
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
+   i32.const 10
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1056
+    i32.const 11
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 10
+   local.set $0
+   loop $do-loop|00
+    local.get $0
+    local.tee $1
+    i32.const 1
+    i32.sub
+    local.set $0
+    local.get $1
+    br_if $do-loop|00
+   end
+   local.get $0
+   i32.const -1
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1056
+    i32.const 21
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 0
+   local.set $1
+   i32.const 10
+   local.set $0
+   loop $do-loop|01
+    local.get $0
+    i32.const 1
+    i32.sub
+    local.set $0
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    loop $do-loop|1
+     local.get $1
+     i32.const 1
+     i32.add
+     local.set $1
+     local.get $0
+     i32.const 1
+     i32.sub
+     local.tee $0
+     br_if $do-loop|1
+    end
+    local.get $0
+    if
+     i32.const 0
+     i32.const 1056
+     i32.const 39
+     i32.const 5
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $1
+    i32.const 9
+    i32.ne
+    if
+     i32.const 0
+     i32.const 1056
+     i32.const 40
+     i32.const 5
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    br_if $do-loop|01
+   end
+   local.get $0
+   if
+    i32.const 0
+    i32.const 1056
+    i32.const 42
+    i32.const 3
     call $~lib/builtins/abort
     unreachable
    end
    local.get $2
+   i32.const 1
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1056
+    i32.const 43
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
    i32.const 9
    i32.ne
    if
     i32.const 0
     i32.const 1056
-    i32.const 40
-    i32.const 5
+    i32.const 44
+    i32.const 3
     call $~lib/builtins/abort
     unreachable
    end
+   i32.const 0
+   local.set $0
+   loop $do-loop|02
+    local.get $0
+    i32.const 1
+    i32.add
+    local.tee $0
+    i32.const 10
+    i32.ne
+    br_if $do-loop|02
+   end
    local.get $0
-   br_if $do-loop|01
-  end
-  local.get $0
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 42
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $3
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 43
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  i32.const 9
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 44
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  local.set $0
-  loop $do-loop|02
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $0
-   i32.const 10
-   i32.ne
-   br_if $do-loop|02
-  end
-  local.get $0
-  i32.const 10
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 56
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  local.set $0
-  loop $do-loop|03
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $0
-   i32.const 10
-   i32.ne
-   br_if $do-loop|03
-  end
-  local.get $0
-  i32.const 10
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 70
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  local.set $0
-  loop $do-loop|04
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $0
-   i32.const 10
-   i32.ne
-   i32.const 0
-   local.get $0
-   select
-   br_if $do-loop|04
-  end
-  local.get $0
-  i32.const 10
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 116
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  local.set $0
-  i32.const 0
-  local.set $2
-  loop $do-loop|06
-   local.get $0
-   i32.const 1
-   i32.add
-   local.tee $0
    i32.const 10
    i32.ne
    if
-    loop $do-loop|18
-     local.get $2
-     i32.const 1
-     i32.add
-     local.tee $2
-     i32.const 10
-     i32.rem_s
-     i32.const 0
-     local.get $2
-     select
-     br_if $do-loop|18
-    end
-    local.get $0
-    br_if $do-loop|06
+    i32.const 0
+    i32.const 1056
+    i32.const 56
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
    end
-  end
-  local.get $0
-  i32.const 10
-  i32.ne
-  if
    i32.const 0
-   i32.const 1056
-   i32.const 134
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  i32.const 90
-  i32.ne
-  if
+   local.set $0
+   loop $do-loop|03
+    local.get $0
+    i32.const 1
+    i32.add
+    local.tee $0
+    i32.const 10
+    i32.ne
+    br_if $do-loop|03
+   end
+   local.get $0
+   i32.const 10
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1056
+    i32.const 70
+    i32.const 1
+    call $~lib/builtins/abort
+    unreachable
+   end
    i32.const 0
-   i32.const 1056
-   i32.const 135
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  memory.size
-  i32.const 16
-  i32.shl
-  i32.const 17892
-  i32.sub
-  i32.const 1
-  i32.shr_u
-  global.set $~lib/rt/itcms/threshold
-  i32.const 1204
-  i32.const 1200
-  i32.store
-  i32.const 1208
-  i32.const 1200
-  i32.store
-  i32.const 1200
-  global.set $~lib/rt/itcms/pinSpace
-  i32.const 1236
-  i32.const 1232
-  i32.store
-  i32.const 1240
-  i32.const 1232
-  i32.store
-  i32.const 1232
-  global.set $~lib/rt/itcms/toSpace
-  i32.const 1380
-  i32.const 1376
-  i32.store
-  i32.const 1384
-  i32.const 1376
-  i32.store
-  i32.const 1376
-  global.set $~lib/rt/itcms/fromSpace
-  i32.const 0
-  local.set $2
-  global.get $~lib/memory/__stack_pointer
-  i32.const 4
-  i32.sub
-  global.set $~lib/memory/__stack_pointer
-  block $folding-inner0
+   local.set $0
+   loop $do-loop|04
+    local.get $0
+    i32.const 1
+    i32.add
+    local.tee $0
+    i32.const 10
+    i32.ne
+    i32.const 0
+    local.get $0
+    select
+    br_if $do-loop|04
+   end
+   local.get $0
+   i32.const 10
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1056
+    i32.const 116
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 0
+   local.set $0
+   i32.const 0
+   local.set $1
+   loop $do-loop|05
+    local.get $0
+    i32.const 1
+    i32.add
+    local.tee $0
+    i32.const 10
+    i32.ne
+    if
+     loop $do-loop|17
+      local.get $1
+      i32.const 1
+      i32.add
+      local.tee $1
+      i32.const 10
+      i32.rem_s
+      i32.const 0
+      local.get $1
+      select
+      br_if $do-loop|17
+     end
+     local.get $0
+     br_if $do-loop|05
+    end
+   end
+   local.get $0
+   i32.const 10
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1056
+    i32.const 134
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
+   i32.const 90
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1056
+    i32.const 135
+    i32.const 3
+    call $~lib/builtins/abort
+    unreachable
+   end
+   memory.size
+   i32.const 16
+   i32.shl
+   i32.const 17892
+   i32.sub
+   i32.const 1
+   i32.shr_u
+   global.set $~lib/rt/itcms/threshold
+   i32.const 1204
+   i32.const 1200
+   i32.store
+   i32.const 1208
+   i32.const 1200
+   i32.store
+   i32.const 1200
+   global.set $~lib/rt/itcms/pinSpace
+   i32.const 1236
+   i32.const 1232
+   i32.store
+   i32.const 1240
+   i32.const 1232
+   i32.store
+   i32.const 1232
+   global.set $~lib/rt/itcms/toSpace
+   i32.const 1380
+   i32.const 1376
+   i32.store
+   i32.const 1384
+   i32.const 1376
+   i32.store
+   i32.const 1376
+   global.set $~lib/rt/itcms/fromSpace
+   i32.const 0
+   local.set $1
+   global.get $~lib/memory/__stack_pointer
+   i32.const 4
+   i32.sub
+   global.set $~lib/memory/__stack_pointer
    global.get $~lib/memory/__stack_pointer
    i32.const 1508
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
+   local.tee $0
    i32.const 0
    i32.store
-   local.get $1
+   local.get $0
    call $do/Ref#constructor
    i32.store
-   loop $do-loop|09
-    local.get $2
+   loop $do-loop|06
+    local.get $1
     i32.const 1
     i32.add
-    local.tee $2
+    local.tee $1
     i32.const 10
     i32.eq
     if
@@ -1474,9 +1317,9 @@
      i32.store
     end
     local.get $0
-    br_if $do-loop|09
+    br_if $do-loop|06
    end
-   local.get $2
+   local.get $1
    i32.const 10
    i32.ne
    if
@@ -1511,15 +1354,15 @@
    i32.lt_s
    br_if $folding-inner0
    global.get $~lib/memory/__stack_pointer
-   local.tee $1
+   local.tee $0
    i32.const 0
    i32.store
-   local.get $1
+   local.get $0
    call $do/Ref#constructor
-   local.tee $0
+   local.tee $1
    i32.store
-   loop $do-loop|07
-    block $do-break|08
+   loop $do-loop|08
+    block $do-break|09
      local.get $2
      i32.const 1
      i32.add
@@ -1528,11 +1371,11 @@
      i32.eq
      if
       i32.const 0
-      local.set $0
-      br $do-break|08
+      local.set $1
+      br $do-break|09
      end
      call $do/Ref#constructor
-     br_if $do-loop|07
+     br_if $do-loop|08
     end
    end
    local.get $2
@@ -1546,7 +1389,7 @@
     call $~lib/builtins/abort
     unreachable
    end
-   local.get $0
+   local.get $1
    if
     i32.const 0
     i32.const 1056
@@ -1622,7 +1465,7 @@
     local.tee $0
     if
      local.get $0
-     call $~lib/rt/itcms/__visit
+     call $byn-split-outlined-A$~lib/rt/itcms/__visit
     end
     return
    end
@@ -1655,7 +1498,7 @@
    unreachable
   end
   global.get $~lib/memory/__stack_pointer
-  local.tee $4
+  local.tee $1
   i32.const 0
   i32.store
   global.get $~lib/rt/itcms/total
@@ -1709,17 +1552,17 @@
    call $~lib/rt/tlsf/initialize
   end
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $2
+  local.tee $3
   call $~lib/rt/tlsf/searchBlock
   local.tee $0
   i32.eqz
   if
    memory.size
-   local.tee $1
+   local.tee $0
    i32.const 4
-   local.get $2
+   local.get $3
    i32.load offset=1568
-   local.get $1
+   local.get $0
    i32.const 16
    i32.shl
    i32.const 4
@@ -1732,16 +1575,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $0
+   local.tee $2
    local.get $0
-   local.get $1
-   i32.lt_s
+   local.get $2
+   i32.gt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $0
+    local.get $2
     memory.grow
     i32.const 0
     i32.lt_s
@@ -1749,15 +1592,15 @@
      unreachable
     end
    end
-   local.get $2
-   local.get $1
+   local.get $3
+   local.get $0
    i32.const 16
    i32.shl
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   local.get $2
+   local.get $3
    call $~lib/rt/tlsf/searchBlock
    local.tee $0
    i32.eqz
@@ -1784,22 +1627,22 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
   local.get $0
   call $~lib/rt/tlsf/removeBlock
   local.get $0
   i32.load
-  local.tee $1
+  local.tee $4
   i32.const -4
   i32.and
   i32.const 28
   i32.sub
-  local.tee $3
+  local.tee $2
   i32.const 16
   i32.ge_u
   if
    local.get $0
-   local.get $1
+   local.get $4
    i32.const 2
    i32.and
    i32.const 28
@@ -1808,19 +1651,19 @@
    local.get $0
    i32.const 32
    i32.add
-   local.tee $1
-   local.get $3
+   local.tee $4
+   local.get $2
    i32.const 4
    i32.sub
    i32.const 1
    i32.or
    i32.store
-   local.get $2
-   local.get $1
+   local.get $3
+   local.get $4
    call $~lib/rt/tlsf/insertBlock
   else
    local.get $0
-   local.get $1
+   local.get $4
    i32.const -2
    i32.and
    i32.store
@@ -1832,8 +1675,8 @@
    i32.const -4
    i32.and
    i32.add
-   local.tee $1
-   local.get $1
+   local.tee $2
+   local.get $2
    i32.load
    i32.const -3
    i32.and
@@ -1846,12 +1689,12 @@
   i32.const 0
   i32.store offset=16
   global.get $~lib/rt/itcms/fromSpace
-  local.tee $1
+  local.tee $2
   i32.load offset=8
   local.set $3
   local.get $0
+  local.get $2
   global.get $~lib/rt/itcms/white
-  local.get $1
   i32.or
   i32.store offset=4
   local.get $0
@@ -1865,7 +1708,7 @@
   local.get $0
   i32.or
   i32.store offset=4
-  local.get $1
+  local.get $2
   local.get $0
   i32.store offset=8
   global.get $~lib/rt/itcms/total
@@ -1877,16 +1720,165 @@
   i32.add
   i32.add
   global.set $~lib/rt/itcms/total
-  local.get $4
+  local.get $1
   local.get $0
   i32.const 20
   i32.add
-  local.tee $4
+  local.tee $0
   i32.store
   global.get $~lib/memory/__stack_pointer
   i32.const 4
   i32.add
   global.set $~lib/memory/__stack_pointer
-  local.get $4
+  local.get $0
+ )
+ (func $byn-split-outlined-A$~lib/rt/itcms/__visit (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  global.get $~lib/rt/itcms/white
+  local.get $0
+  i32.const 20
+  i32.sub
+  local.tee $1
+  i32.load offset=4
+  i32.const 3
+  i32.and
+  i32.eq
+  if
+   global.get $~lib/rt/itcms/iter
+   local.get $1
+   i32.eq
+   if
+    local.get $1
+    i32.load offset=8
+    local.tee $0
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 1152
+     i32.const 147
+     i32.const 30
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    global.set $~lib/rt/itcms/iter
+   end
+   block $__inlined_func$~lib/rt/itcms/Object#unlink
+    local.get $1
+    i32.load offset=4
+    i32.const -4
+    i32.and
+    local.tee $0
+    i32.eqz
+    if
+     i32.const 0
+     local.get $1
+     i32.const 17892
+     i32.lt_u
+     local.get $1
+     i32.load offset=8
+     select
+     i32.eqz
+     if
+      i32.const 0
+      i32.const 1152
+      i32.const 127
+      i32.const 18
+      call $~lib/builtins/abort
+      unreachable
+     end
+     br $__inlined_func$~lib/rt/itcms/Object#unlink
+    end
+    local.get $1
+    i32.load offset=8
+    local.tee $2
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 1152
+     i32.const 131
+     i32.const 16
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $2
+    i32.store offset=8
+    local.get $2
+    local.get $2
+    i32.load offset=4
+    i32.const 3
+    i32.and
+    local.get $0
+    i32.or
+    i32.store offset=4
+   end
+   global.get $~lib/rt/itcms/toSpace
+   local.set $2
+   local.get $1
+   i32.load offset=12
+   local.tee $0
+   i32.const 1
+   i32.le_u
+   if (result i32)
+    i32.const 1
+   else
+    i32.const 1472
+    i32.load
+    local.get $0
+    i32.lt_u
+    if
+     i32.const 1280
+     i32.const 1344
+     i32.const 22
+     i32.const 28
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    i32.const 3
+    i32.shl
+    i32.const 1476
+    i32.add
+    i32.load
+    i32.const 32
+    i32.and
+   end
+   if (result i32)
+    global.get $~lib/rt/itcms/white
+    i32.eqz
+   else
+    i32.const 2
+   end
+   local.set $3
+   local.get $2
+   i32.load offset=8
+   local.set $0
+   local.get $1
+   local.get $2
+   local.get $3
+   i32.or
+   i32.store offset=4
+   local.get $1
+   local.get $0
+   i32.store offset=8
+   local.get $0
+   local.get $0
+   i32.load offset=4
+   i32.const 3
+   i32.and
+   local.get $1
+   i32.or
+   i32.store offset=4
+   local.get $2
+   local.get $1
+   i32.store offset=8
+   global.get $~lib/rt/itcms/visitCount
+   i32.const 1
+   i32.add
+   global.set $~lib/rt/itcms/visitCount
+  end
  )
 )
