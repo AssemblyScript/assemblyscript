@@ -48,12 +48,9 @@
   global.set $unary/i
   i32.const -1
   global.set $unary/i
-  i32.const -1
-  local.tee $0
-  i32.const 1
-  i32.sub
+  i32.const -2
   global.set $unary/i
-  local.get $0
+  i32.const -1
   global.set $unary/i
   global.get $unary/I
   i64.const 1
@@ -93,12 +90,9 @@
   global.set $unary/I
   i64.const -1
   global.set $unary/I
-  i64.const -1
-  local.tee $1
-  i64.const 1
-  i64.sub
+  i64.const -2
   global.set $unary/I
-  local.get $1
+  i64.const -1
   global.set $unary/I
   global.get $unary/f
   f32.const 1

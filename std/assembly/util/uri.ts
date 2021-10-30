@@ -271,6 +271,5 @@ function loadHex(src: usize, offset: usize): u32 {
 
 // @ts-ignore: decorator
 @inline function isHex(ch: u32): bool {
-  // @ts-ignore
-  return (ch - CharCode._0 < 10) | ((ch | 32) - CharCode.a < 6);
+  return (ch - CharCode._0 < 10) || ((ch | 32) - CharCode.a < 6);
 }

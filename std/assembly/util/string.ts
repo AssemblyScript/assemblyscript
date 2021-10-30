@@ -512,8 +512,7 @@ export function isSpace(c: u32): bool {
   if (c < 0x1680) { // < <LS> (1)
     // <SP>, <TAB>, <LF>, <VT>, <FF>, <CR> and <NBSP>
     // (c == 0x20 || c == 0xA0) was optimized to (c | 0x80) == 0xA0
-    // @ts-ignore: cast
-    return ((c | 0x80) == 0xA0) | (c - 0x09 <= 0x0D - 0x09);
+    return ((c | 0x80) == 0xA0) || (c - 0x09 <= 0x0D - 0x09);
   }
   if (c - 0x2000 <= 0x200A - 0x2000) return true;
   switch (c) {
