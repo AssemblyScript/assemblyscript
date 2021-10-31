@@ -3079,7 +3079,7 @@ export function allocPtrArray(ptrs: usize[] | null): usize {
 function stringLengthUTF8(str: string): usize {
   var len = 0;
   for (let i = 0, k = str.length; i < k; ++i) {
-    let u = str.charCodeAt(i);
+    let u = str.charCodeAt(i) >>> 0;
     if (u <= 0x7F) {
       len += 1;
     } else if (u <= 0x7FF) {
@@ -3096,11 +3096,12 @@ function stringLengthUTF8(str: string): usize {
 
 function allocString(str: string | null): usize {
   if (str === null) return 0;
-  var ptr = binaryen._malloc(stringLengthUTF8(str) + 1) >>> 0;
+  var len = stringLengthUTF8(str);
+  var ptr = binaryen._malloc(len + 1) >>> 0;
   // the following is based on Emscripten's stringToUTF8Array
   var idx = ptr;
   for (let i = 0, k = str.length; i < k; ++i) {
-    let u = str.charCodeAt(i);
+    let u = str.charCodeAt(i) >>> 0;
     if (u <= 0x7F) {
       binaryen.__i32_store8(idx++, u as u8);
     } else if (u <= 0x7FF) {
