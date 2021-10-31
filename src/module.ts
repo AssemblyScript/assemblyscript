@@ -2501,7 +2501,7 @@ export class Module {
     // avoid quite a bit of unnecessary garbage.
     if (ptr == 0) return null;
     var cached = this.cachedPointersToStrings;
-    if (cached.has(ptr)) return changetype<string>(this.cachedPointersToStrings.get(ptr));
+    if (cached.has(ptr)) return changetype<string>(cached.get(ptr));
     var str = readString(ptr);
     cached.set(ptr, str);
     return str;
